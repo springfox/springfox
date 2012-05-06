@@ -11,10 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.server.test.context.WebContextLoader;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.springmvc.controller.DocumentationController;
 import com.wordnik.swagger.core.Documentation;
+import com.wordnik.swagger.core.DocumentationEndPoint;
+import com.wordnik.swagger.core.DocumentationOperation;
+import com.wordnik.swagger.core.DocumentationParameter;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
@@ -38,5 +42,9 @@ public class MvcApiReaderTests {
 	public void findsExpectedMethods()
 	{
 		ControllerDocumentation petsDocumentation = controller.getApiDocumentation("pets");
+		DocumentationOperation operation = petsDocumentation.getEndPoint("/pets/{petId}",RequestMethod.GET);
+		assertThat(operation, is(notNullValue()));
+		assertThat(operation.getParameters(),hasSize(1));
+		DocumentationParameter parameter = operation.getParameters().get(0);
 	}
 }

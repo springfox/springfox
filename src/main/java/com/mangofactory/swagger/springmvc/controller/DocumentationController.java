@@ -25,12 +25,12 @@ public class DocumentationController implements InitializingBean {
 	private static final String CONTROLLER_ENDPOINT = "apidoc";
 	
 	@Getter @Setter
-	private String apiVersion;
+	private String apiVersion = "1.0";
 	@Getter @Setter
-	private String swaggerVersion;
+	private String swaggerVersion = "1.0";
 	
 	@Getter @Setter
-	private String basePath;
+	private String basePath = "/";
 	
 	@Autowired
 	private WebApplicationContext wac;

@@ -2,6 +2,8 @@ package com.mangofactory.swagger;
 
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.RequestMethod;
+
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,6 +12,7 @@ import com.mangofactory.swagger.springmvc.MvcApiResource;
 import com.wordnik.swagger.core.Api;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
+import com.wordnik.swagger.core.DocumentationOperation;
 
 @Slf4j
 public class ControllerDocumentation extends Documentation {
@@ -57,5 +60,16 @@ public class ControllerDocumentation extends Documentation {
 		
 		return getResourcePath().equals(nameWithoutForwardSlash) || 
 				getResourcePath().equals(nameWithForwardSlash); 
+	}
+	public DocumentationOperation getEndPoint(String requestUri, RequestMethod method) {
+		DocumentationEndPoint endPoint = getEndPoint(requestUri);
+		if (endPoint == null || endPoint.getOperations() == null)
+			return null;
+		for (DocumentationOperation operation : endPoint.getOperations())
+		{
+			if (operation.getHttpMethod().equals(method.name()))
+				return operation;
+		}
+		return null;
 	}
 }
