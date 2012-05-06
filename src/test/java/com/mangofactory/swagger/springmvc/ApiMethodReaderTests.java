@@ -18,9 +18,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
+import com.mangofactory.swagger.ApiError;
+import com.mangofactory.swagger.ApiErrors;
 import com.wordnik.swagger.core.ApiParam;
+import com.wordnik.swagger.core.DocumentationError;
 import com.wordnik.swagger.core.DocumentationOperation;
 import com.wordnik.swagger.core.DocumentationParameter;
+import com.wordnik.swagger.sample.exception.BadRequestException;
+import com.wordnik.swagger.sample.exception.NotFoundException;
 
 public class ApiMethodReaderTests {
 
@@ -63,17 +68,70 @@ public class ApiMethodReaderTests {
 //		assertThat(parameters.get(3).getName(), equalTo("variableD"));
 	}
 	
+	@Test
+	public void detectsErrorsUsingSwaggerDeclaration()
+	{
+		methodReader = getExceptionMethod("exceptionMethodB");
+		List<DocumentationError> errors = methodReader.getErrors();
+		assertThat(errors, hasSize(2));
+		DocumentationError error = errors.get(0);
+		assertThat(error.code(), equalTo(302));
+		assertThat(error.reason(), equalTo("Malformed request"));
+	}
+	@Test
+	public void detectsErrorsUsingSpringMVCDeclaration()
+	{
+		methodReader = getExceptionMethod("exceptionMethodA");
+		List<DocumentationError> errors = methodReader.getErrors();
+		assertThat(errors, hasSize(2));
+		DocumentationError error = errors.get(0);
+		assertThat(error.code(), equalTo(404));
+		assertThat(error.reason(), equalToIgnoringCase("Invalid ID supplied"));
+	}
+	@Test
+	public void detectsErrorsUsingThrowsDeclaration()
+	{
+		methodReader = getExceptionMethod("exceptionMethodC");
+		List<DocumentationError> errors = methodReader.getErrors();
+		assertThat(errors, hasSize(1));
+		DocumentationError error = errors.get(0);
+		assertThat(error.code(), equalTo(404));
+		assertThat(error.reason(), equalToIgnoringCase("Invalid ID supplied"));
+	}
+	
+	
+	
+	
+	/// TEST SUPPORT
+	@SneakyThrows
+	private ApiMethodReader getExceptionMethod(String methodName) {
+		SampleClass instance = new SampleClass();
+		Method method = instance.getClass().getMethod(methodName);
+		handlerMethod = new HandlerMethod(instance, method);
+		methodReader = new ApiMethodReader(handlerMethod);
+		return methodReader;
+		
+	}
+
+	@SuppressWarnings("unused")
 	private final class SampleClass
 	{
-	@SuppressWarnings("unused")
 	public void sampleMethod(
 			@ApiParam(name="documentationNameA") @PathVariable("mvcNameA") String variableA,
 			@PathVariable("mvcNameB") String variableB,
 			@ModelAttribute("modelAttributeC") String variableC,
-			String variableD
-				)
-		{
-		}
+			String variableD) {}
+	
+	@ApiErrors({NotFoundException.class,BadRequestException.class})
+	public void exceptionMethodA() {};
+	
+	@com.wordnik.swagger.core.ApiErrors({
+			@com.wordnik.swagger.core.ApiError(code=302,reason="Malformed request"),
+			@com.wordnik.swagger.core.ApiError(code=404,reason="Not found")}
+			)
+	public void exceptionMethodB() {};
+	
+	public void exceptionMethodC() throws NotFoundException {};
 		
 	}
 }

@@ -1,10 +1,12 @@
 package com.mangofactory.swagger.springmvc;
 
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.model;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javax.management.OperationsException;
 
 import lombok.Getter;
 import lombok.val;
@@ -18,10 +20,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
 import com.google.common.collect.Lists;
+import com.wordnik.swagger.core.ApiError;
+import com.wordnik.swagger.core.ApiErrors;
 import com.wordnik.swagger.core.ApiOperation;
 import com.wordnik.swagger.core.ApiParam;
 import com.wordnik.swagger.core.DocumentationAllowableListValues;
 import com.wordnik.swagger.core.DocumentationAllowableValues;
+import com.wordnik.swagger.core.DocumentationError;
 import com.wordnik.swagger.core.DocumentationOperation;
 import com.wordnik.swagger.core.DocumentationParameter;
 
@@ -40,12 +45,15 @@ public class ApiMethodReader {
 	private String nickname;
 
 	private boolean deprecated;
+	@Getter
+	private final List<DocumentationError> errors = Lists.newArrayList();
 	private final List<DocumentationParameter> parameters = Lists.newArrayList();
 
 	public ApiMethodReader(HandlerMethod handlerMethod) {
 		this.handlerMethod = handlerMethod;
 		documentOperation();
 		documentParameters();
+		documentExceptions();
 	}
 
 	private void documentOperation() {
@@ -58,7 +66,6 @@ public class ApiMethodReader {
 		}
 		nickname = handlerMethod.getMethod().getName();
 		deprecated = handlerMethod.getMethodAnnotation(Deprecated.class) != null;
-
 	}
 
 	public DocumentationOperation getOperation(RequestMethod requestMethod) {
@@ -68,6 +75,9 @@ public class ApiMethodReader {
 		for (DocumentationParameter parameter : parameters)
 			operation.addParameter(parameter);
 		setTags(operation);
+		
+		for (DocumentationError error : errors)
+			operation.addErrorResponse(error);
 		return operation;
 	}
 	private void setTags(DocumentationOperation operation) {
@@ -139,5 +149,47 @@ public class ApiMethodReader {
 			return null;
 		val params = Arrays.asList(csvString.split(","));
 		return new DocumentationAllowableListValues(params);
+	}
+	
+	private void documentExceptions() {
+		discoverSwaggerAnnotatedExceptions();
+		discoverSpringMvcExceptions();
+		discoverThrowsExceptions();
+	}
+
+	private void discoverThrowsExceptions() {
+		Class<?>[] exceptionTypes = handlerMethod.getMethod().getExceptionTypes();
+		for (Class<?> exceptionType : exceptionTypes)
+		{
+			appendErrorFromClass((Class<? extends Throwable>) exceptionType);
+		}
+	}
+
+	private void discoverSpringMvcExceptions() {
+		com.mangofactory.swagger.ApiErrors apiErrors = handlerMethod.getMethodAnnotation(com.mangofactory.swagger.ApiErrors.class);
+		if (apiErrors == null)
+			return;
+		for (Class<? extends Throwable> exceptionClass : apiErrors.value())
+		{
+			appendErrorFromClass(exceptionClass);
+		}
+		
+	}
+
+	void appendErrorFromClass(Class<? extends Throwable> exceptionClass) {
+		com.mangofactory.swagger.ApiError apiError = exceptionClass.getAnnotation(com.mangofactory.swagger.ApiError.class);
+		if (apiError == null)
+			return;
+		errors.add(new DocumentationError(apiError.code(),apiError.reason()));
+	}
+
+	private void discoverSwaggerAnnotatedExceptions() {
+		ApiErrors apiErrors = handlerMethod.getMethodAnnotation(ApiErrors.class);
+		if (apiErrors == null)
+			return;
+		for (ApiError apiError : apiErrors.value())
+		{
+			errors.add(new DocumentationError(apiError.code(), apiError.reason()));
+		}
 	}
 }

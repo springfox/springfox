@@ -16,6 +16,9 @@
 
 package com.wordnik.swagger.sample.exception;
 
+import com.mangofactory.swagger.ApiError;
+
+@ApiError(code=302,reason="Malformed request")
 public class BadRequestException extends ApiException{
 	private int code;
 	public BadRequestException (int code, String msg) {
