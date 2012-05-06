@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.springmvc.MvcApiReader;
 import com.wordnik.swagger.core.Documentation;
@@ -21,6 +22,8 @@ import com.wordnik.swagger.core.Documentation;
 @RequestMapping("/apidoc")
 public class DocumentationController implements InitializingBean {
 
+	private static final String CONTROLLER_ENDPOINT = "apidoc";
+	
 	@Getter @Setter
 	private String apiVersion;
 	@Getter @Setter
@@ -42,7 +45,7 @@ public class DocumentationController implements InitializingBean {
 	}
 	
 	@RequestMapping(value="/{apiName}",method=RequestMethod.GET, produces="application/json")
-	public @ResponseBody Documentation getApiDocumentation(@PathVariable("apiName") String apiName)
+	public @ResponseBody ControllerDocumentation getApiDocumentation(@PathVariable("apiName") String apiName)
 	{
 		return apiReader.getDocumentation(apiName);
 	}
@@ -53,7 +56,12 @@ public class DocumentationController implements InitializingBean {
 	// A better approach would be to use a custom xml declaration
 	// and parser - like <swagger:documentation ... />
 	public void afterPropertiesSet() throws Exception {
-		SwaggerConfiguration config = new SwaggerConfiguration(apiVersion,swaggerVersion,basePath);
+		String documentationBasePath = basePath;
+		if (!basePath.endsWith("/"))
+			documentationBasePath += "/";
+		documentationBasePath += CONTROLLER_ENDPOINT;
+		
+		SwaggerConfiguration config = new SwaggerConfiguration(apiVersion,swaggerVersion,documentationBasePath);
 		apiReader = new MvcApiReader(wac, config);
 	}
 	

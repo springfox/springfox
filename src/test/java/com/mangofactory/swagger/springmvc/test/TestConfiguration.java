@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.springmvc.sample;
+package com.mangofactory.swagger.springmvc.test;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

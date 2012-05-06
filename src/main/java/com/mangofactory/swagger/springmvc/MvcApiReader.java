@@ -108,9 +108,9 @@ public class MvcApiReader {
 
 	private void appendOperationsToEndpoint(
 			RequestMappingInfo mappingInfo, HandlerMethod handlerMethod, DocumentationEndPoint endPoint) {
+		MethodApiReader methodDoc = new MethodApiReader(handlerMethod);
 		for (RequestMethod requestMethod : mappingInfo.getMethodsCondition().getMethods())
 		{
-			MethodApiReader methodDoc = new MethodApiReader(handlerMethod);
 			DocumentationOperation operation = methodDoc.getOperation(requestMethod);
 			endPoint.addOperation(operation);
 		}
