@@ -15,6 +15,8 @@
  */
 package org.springframework.test.web.server.test.context;
 
+import javax.servlet.RequestDispatcher;
+
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotatedBeanDefinitionReader;
@@ -28,8 +30,6 @@ import org.springframework.test.context.MergedContextConfiguration;
 import org.springframework.test.context.support.AbstractContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.GenericWebApplicationContext;
-
-import javax.servlet.RequestDispatcher;
 
 public class GenericWebContextLoader extends AbstractContextLoader {
 	protected final MockServletContext servletContext;

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
-import com.mangofactory.swagger.ApiError;
 import com.mangofactory.swagger.ApiErrors;
 import com.wordnik.swagger.core.ApiParam;
 import com.wordnik.swagger.core.DocumentationError;

@@ -1,12 +1,7 @@
 package com.mangofactory.swagger.springmvc;
 
-import static org.springframework.test.web.server.result.MockMvcResultMatchers.forwardedUrl;
-import static org.springframework.test.web.server.result.MockMvcResultMatchers.model;
-
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import javax.management.OperationsException;
 
 import lombok.Getter;
 import lombok.val;

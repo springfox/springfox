@@ -2,10 +2,9 @@ package com.mangofactory.swagger;
 
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.common.collect.Maps;
 import com.mangofactory.swagger.springmvc.MvcApiResource;
