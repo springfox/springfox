@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.springmvc.test;
+package com.mangofactory.swagger.springmvc;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.springmvc.controller.DocumentationController;
+import com.mangofactory.swagger.springmvc.test.TestConfiguration;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationOperation;
 import com.wordnik.swagger.core.DocumentationParameter;
@@ -23,7 +24,7 @@ import com.wordnik.swagger.core.DocumentationParameter;
 @ContextConfiguration(
 		loader=WebContextLoader.class,
 		classes=TestConfiguration.class)
-public class MvcApiReaderTests {
+public class MvcApiReaderTest {
 
 	@Autowired
 	private DocumentationController controller;

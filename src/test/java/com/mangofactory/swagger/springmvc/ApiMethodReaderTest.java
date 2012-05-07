@@ -26,7 +26,7 @@ import com.wordnik.swagger.core.DocumentationParameter;
 import com.wordnik.swagger.sample.exception.BadRequestException;
 import com.wordnik.swagger.sample.exception.NotFoundException;
 
-public class ApiMethodReaderTests {
+public class ApiMethodReaderTest {
 
 	HandlerMethod handlerMethod;
 	private ApiMethodReader methodReader;
