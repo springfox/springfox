@@ -12,7 +12,6 @@ All `@Controller` classes are parsed, and methods annotated with `@RequestMappin
 Additionally, `@Api` at the class level, and `@ApiOperation` at the method level are both supported.
 
 ### Not supported
- * `@ApiErrors` and `@ApiError` [Issue](https://github.com/martypitt/swagger-springmvc/issues/1)
  * JSON models are not documented [Issue](https://github.com/martypitt/swagger-springmvc/issues/2)
 
 ## Getting started
@@ -50,7 +49,5 @@ or, simply using a `throws` declaration:
 
 	public void someApiMethod() throws NotFoundException, BadRequestException {};
 
-
- * Annotating an Exception class 
 ## Example project
 An example of Swaggers PetStore in Spring MVC is available [here](https://github.com/martypitt/swagger-springmvc-example)
