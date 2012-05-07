@@ -27,5 +27,30 @@ The `basePath` property is external-facing url the maps to your SpringMVC dispat
 
 This creates a controller at `/apidoc` from this uri, which serves swagger's raw documentation in JSON format.  (eg., In the above example,  `http://www.mydomain.com/swagger-springmvc-example/apidoc`)
 
+## Deviations from default Swagger API
+Some deviations from the default Swagger API exist.  Wherever possible, these are inteded to be implemented as-well-as the default Swagger implementation, rather than as a replacement.
+
+The overarching goal is to support generation of the Swagger JSON, with minimal intrusion to the code itself.
+
+### Errors
+Declaration of errors supports the standard Swagger `@ApiErrors` and `@ApiError` annotations.
+In addition, there are `com.mangofactory.swagger` implementations of these that reduce the amount of per-method code (notably, at the cost of some flexibility)
+
+`@ApiError` is now supported at the exception class level, as shown here:
+
+    @ApiError(code=302,reason="Malformed request")
+    public class BadRequestException {}
+
+This allows errors to be delcared as follows:
+
+	@ApiErrors({NotFoundException.class,BadRequestException.class})
+	public void someApiMethod() {};
+
+or, simply using a `throws` declaration:
+
+	public void someApiMethod() throws NotFoundException, BadRequestException {};
+
+
+ * Annotating an Exception class 
 ## Example project
 An example of Swaggers PetStore in Spring MVC is available [here](https://github.com/martypitt/swagger-springmvc-example)
