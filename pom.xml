@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mangofactory</groupId>
 	<artifactId>swagger-springmvc</artifactId>
-	<version>0.1.2-SNAPSHOT</version>
+	<version>0.1.1</version>
 	<name>Swagger SpringMVC</name>
 	<url>https://github.com/martypitt/swagger-springmvc</url>
 	<description>Provides integration for SpringMVC @Controller's as endpoints for Swagger.   </description>
