@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mangofactory</groupId>
 	<artifactId>swagger-springmvc</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<properties>
 		<spring.version>3.1.0.RELEASE</spring.version>
 	</properties>
@@ -19,24 +19,9 @@
 			<url>https://oss.sonatype.org/</url>
 		</repository>
 		<repository>
-			<id>com.springsource.repository.bundles.external</id>
-			<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
-			<url>http://repository.springsource.com/maven/bundles/external</url>
-		</repository>
-		<repository>
 			<id>com.springsource.repository.libraries.release</id>
 			<name>SpringSource Enterprise Bundle Repository - SpringSource Library Releases</name>
 			<url>http://repository.springsource.com/maven/libraries/release</url>
-		</repository>
-		<repository>
-			<id>spring-milestone</id>
-			<name>Spring Maven MILESTONE Repository</name>
-			<url>http://maven.springframework.org/milestone</url>
-		</repository>
-		<repository>
-			<id>com.springsource.repository.libraries.external</id>
-			<name>SpringSource Enterprise Bundle Repository - External Library Releases</name>
-			<url>http://repository.springsource.com/maven/libraries/external</url>
 		</repository>
 		<repository>
 			<id>com.springsource.repository.snapshot</id>
@@ -112,4 +97,20 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<scm>
+		<url>git@github.com:martypitt/swagger-springmvc.git</url>
+		<connection>git@github.com:martypitt/swagger-springmvc.git</connection>
+		<developerConnection>git@github.com:martypitt/swagger-springmvc.git</developerConnection>
+	</scm>
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/martypitt/swagger-springmvc/issues</url>
+	</issueManagement>
+	<name>Swagger SpringMVC</name>
+	<url>https://github.com/martypitt/swagger-springmvc</url>
+	<description>Provides integration for SpringMVC @Controller's as endpoints for Swagger.   </description>
+	<inceptionYear>May 2012</inceptionYear>
+	<organization>
+		<name>The Mango Factory</name>
+	</organization>
 </project>
