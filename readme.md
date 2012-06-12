@@ -4,6 +4,16 @@ This project provides integration between [Swagger](https://github.com/wordnik/s
 
 Spring beans annotated with `@Controller` are detected and parsed for documentation.
 
+## Getting started
+The project is available from maven:
+
+	<dependency>
+  		<groupId>com.mangofactory</groupId>
+  		<artifactId>swagger-springmvc</artifactId>
+  		<version>0.1.5</version>
+	</dependency>
+	
+
 ## Supported annotations
 Currently, a subset of Swagger annotations are supported.  Support will improve over the coming releases.
 
