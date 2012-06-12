@@ -2,9 +2,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mangofactory</groupId>
 	<artifactId>swagger-springmvc</artifactId>
-	<version>0.1.2-SNAPSHOT</version>
+	<version>0.1.6-SNAPSHOT</version>
 	<name>Swagger SpringMVC</name>
 	<url>https://github.com/martypitt/swagger-springmvc</url>
+	<licenses>
+		<license>
+			<name>Apache License 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	<description>Provides integration for SpringMVC @Controller's as endpoints for Swagger.   </description>
 	<inceptionYear>May 2012</inceptionYear>
 	<organization>
@@ -19,6 +26,14 @@
 		<system>Github</system>
 		<url>https://github.com/martypitt/swagger-springmvc/issues</url>
 	</issueManagement>
+	<developers>
+		<developer>
+			<id>martypitt@me.com</id>
+			<name>Marty Pitt</name>
+			<organization>The Mango Factory</organization>
+			<email>martypitt@me.com</email>
+		</developer>
+	</developers>
 	<properties>
 		<spring.version>3.1.0.RELEASE</spring.version>
 	</properties>
@@ -146,6 +161,22 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.2.2</version>
+				<configuration>
+					<mavenExecutorId>forked-path</mavenExecutorId>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
