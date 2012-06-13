@@ -3,6 +3,7 @@ package com.mangofactory.swagger.springmvc;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
 
@@ -28,7 +29,9 @@ public class MvcApiResource {
 	public MvcApiResource(HandlerMethod handlerMethod, SwaggerConfiguration configuration) {
 		this.handlerMethod = handlerMethod;
 		this.configuration = configuration;
-		this.controllerClass = handlerMethod.getBeanType();
+		// Workaround until SPR-9490 is fixed (see also issue #4 on github
+		// Avoid NPE when handler.getBeanType() returns the CGLIB-generated class
+		this.controllerClass = ClassUtils.getUserClass(handlerMethod.getBeanType());
 	}
 
 	public DocumentationEndPoint describeAsEndpoint()
