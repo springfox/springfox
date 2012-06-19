@@ -10,7 +10,7 @@ The project is available from maven:
 	<dependency>
   		<groupId>com.mangofactory</groupId>
   		<artifactId>swagger-springmvc</artifactId>
-  		<version>0.1.5</version>
+  		<version>0.2.1</version>
 	</dependency>
 	
 
