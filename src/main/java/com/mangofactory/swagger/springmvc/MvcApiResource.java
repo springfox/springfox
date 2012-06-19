@@ -13,6 +13,8 @@ import com.mangofactory.swagger.springmvc.controller.DocumentationController;
 import com.wordnik.swagger.core.Api;
 import com.wordnik.swagger.core.DocumentationEndPoint;
 
+import java.lang.reflect.AnnotatedElement;
+
 /**
  * Generates a Resource listing for a given Api class.
  * @author martypitt
@@ -56,25 +58,47 @@ public class MvcApiResource {
 		return apiAnnotation.description();
 		
 	}
-	public String getControllerUri() {
-		RequestMapping requestMapping = controllerClass.getAnnotation(RequestMapping.class);
+    
+	public String getControllerUri() 
+	{ 
+		String requestUri = resolveRequestUri(controllerClass);
+		if (requestUri == null)
+		{
+			log.info("Class {} has handler methods, but no class-level @RequestMapping. Continue with method-level {}",
+							 controllerClass.getName(), handlerMethod.getMethod().getName());
+
+			requestUri = resolveRequestUri(handlerMethod.getMethod());
+			if (requestUri == null)
+			{
+				log.warn("Unable to resolve the uri for class {} and method {}. No documentation will be generated",
+								 controllerClass.getName(), handlerMethod.getMethod().getName());
+				return null;
+			}
+		}
+		return requestUri;
+	}
+    
+	protected String resolveRequestUri(AnnotatedElement annotatedElement)
+	{
+		RequestMapping requestMapping = annotatedElement.getAnnotation( RequestMapping.class );
 		if (requestMapping == null)
 		{
-			log.warn("Class {} has handler methods, but no class-level @RequestMapping.  No documentation will be generated",controllerClass.getName());
+			log.info("Class {} has no @RequestMapping", ( (Class) annotatedElement ).getName());
 			return null;
 		}
 		String[] requestUris = requestMapping.value();
 		if (requestUris == null || requestUris.length == 0)
 		{
-			log.warn("Class {} contains a @RequestMapping, but could not resolve the uri.  No documentation will be generated", controllerClass.getName());
+			log.info("Class {} contains a @RequestMapping, but could not resolve the uri",
+							 ( (Class) annotatedElement ).getName());
 			return null;
 		}
 		if (requestUris.length > 1)
 		{
-			log.warn("Class {} contains a @RequestMapping with multiple uri's.  Only the first one will be documented.");
+			log.info("Class {} contains a @RequestMapping with multiple uri's. Only the first one will be documented.",
+							 ( (Class) annotatedElement ).getName());
 		}
-		String requestUri = requestUris[0];
-		return requestUri;
+		return requestUris[0];
 	}
 	
 	@Override
