@@ -86,7 +86,8 @@ public class ApiMethodReader {
 			ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
 			if (apiParam == null)
 			{
-				log.warn("{} is missing @ApiParam annotation - so generating default documentation");
+				log.warn("{} is missing @ApiParam annotation - so generating default documentation", 
+                         methodParameter.getMethod());
 				generateDefaultParameterDocumentation(methodParameter);
 				continue;
 			}
