@@ -83,20 +83,19 @@ public class MvcApiResource {
 		RequestMapping requestMapping = annotatedElement.getAnnotation( RequestMapping.class );
 		if (requestMapping == null)
 		{
-			log.info("Class {} has no @RequestMapping", ( (Class) annotatedElement ).getName());
+			log.info("Class {} has no @RequestMapping", annotatedElement);
 			return null;
 		}
 		String[] requestUris = requestMapping.value();
 		if (requestUris == null || requestUris.length == 0)
 		{
-			log.info("Class {} contains a @RequestMapping, but could not resolve the uri",
-							 ( (Class) annotatedElement ).getName());
+			log.info("Class {} contains a @RequestMapping, but could not resolve the uri", annotatedElement);
 			return null;
 		}
 		if (requestUris.length > 1)
 		{
 			log.info("Class {} contains a @RequestMapping with multiple uri's. Only the first one will be documented.",
-							 ( (Class) annotatedElement ).getName());
+							 annotatedElement);
 		}
 		return requestUris[0];
 	}
