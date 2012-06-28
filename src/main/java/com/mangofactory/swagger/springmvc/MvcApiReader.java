@@ -1,5 +1,8 @@
 package com.mangofactory.swagger.springmvc;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -34,6 +37,9 @@ public class MvcApiReader {
 	
 	private final Map<Class<?>,DocumentationEndPoint> resourceListCache = Maps.newHashMap();
 	private final Map<Class<?>,ControllerDocumentation> apiCache = Maps.newHashMap();
+    
+	private static final List<RequestMethod> allRequestMethods = 
+			Arrays.asList( RequestMethod.GET, RequestMethod.DELETE, RequestMethod.POST, RequestMethod.PUT );
 	
 	public MvcApiReader(WebApplicationContext context, SwaggerConfiguration swaggerConfiguration)
 	{
@@ -109,7 +115,22 @@ public class MvcApiReader {
 	private void appendOperationsToEndpoint(
 			RequestMappingInfo mappingInfo, HandlerMethod handlerMethod, DocumentationEndPoint endPoint) {
 		ApiMethodReader methodDoc = new ApiMethodReader(handlerMethod);
-		for (RequestMethod requestMethod : mappingInfo.getMethodsCondition().getMethods())
+		
+		if (mappingInfo.getMethodsCondition().getMethods().isEmpty())
+		{
+			// no methods have been specified, it means the endpoint is accessible for all methods
+			appendOperationsToEndpoint( methodDoc, endPoint, allRequestMethods );
+		}
+		else
+		{
+			appendOperationsToEndpoint( methodDoc,endPoint, mappingInfo.getMethodsCondition().getMethods() );
+		}
+	}
+	
+	private void appendOperationsToEndpoint(ApiMethodReader methodDoc, DocumentationEndPoint endPoint,
+                                            Collection<RequestMethod> methods)
+	{
+		for (RequestMethod requestMethod : methods)
 		{
 			DocumentationOperation operation = methodDoc.getOperation(requestMethod);
 			endPoint.addOperation(operation);

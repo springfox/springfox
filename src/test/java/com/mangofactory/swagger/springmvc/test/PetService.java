@@ -65,4 +65,10 @@ public class PetService {
 			@ApiParam(value = "Tags to filter by", required = true, allowMultiple = true) @RequestParam("tags") String tags) {
 		throw new NotImplementedException();
 	}
+	
+	@RequestMapping("/allMethodsAllowed")
+	public void allMethodAllowed() {
+		throw new NotImplementedException();
+	}
+		
 }
