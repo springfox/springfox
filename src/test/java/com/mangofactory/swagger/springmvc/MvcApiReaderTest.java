@@ -46,5 +46,14 @@ public class MvcApiReaderTest {
 		assertThat(operation, is(notNullValue()));
 		assertThat(operation.getParameters(),hasSize(1));
 		DocumentationParameter parameter = operation.getParameters().get(0);
+
+		operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.GET);
+		assertThat(operation, is(notNullValue()));
+		operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.POST);
+		assertThat(operation, is(notNullValue()));
+		operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.DELETE);
+		assertThat(operation, is(notNullValue()));
+		operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.PUT);
+		assertThat(operation, is(notNullValue()));
 	}
 }
