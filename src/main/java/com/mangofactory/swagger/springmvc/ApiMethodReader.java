@@ -12,6 +12,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.method.HandlerMethod;
 
 import com.google.common.collect.Lists;
@@ -116,6 +117,9 @@ public class ApiMethodReader {
 		ModelAttribute modelAttribute = methodParameter.getParameterAnnotation(ModelAttribute.class);
 		if (modelAttribute != null && !StringUtils.isEmpty(modelAttribute.value()))
 			return modelAttribute.value();
+		RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
+		if (requestParam != null && !StringUtils.isEmpty(requestParam.value()))
+			return requestParam.value();
 		// Default
 		return methodParameter.getParameterName();
 		
