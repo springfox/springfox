@@ -10,7 +10,7 @@ The project is available from maven:
 	<dependency>
   		<groupId>com.mangofactory</groupId>
   		<artifactId>swagger-springmvc</artifactId>
-  		<version>0.2.1</version>
+  		<version>0.2.2</version>
 	</dependency>
 	
 
@@ -18,7 +18,7 @@ The project is available from maven:
 Currently, a subset of Swagger annotations are supported.  Support will improve over the coming releases.
 
 All `@Controller` classes are parsed, and methods annotated with `@RequestMapping` are generated.
-
+  
 Additionally, `@Api` at the class level, and `@ApiOperation` at the method level are both supported.
 
 ### Not supported
