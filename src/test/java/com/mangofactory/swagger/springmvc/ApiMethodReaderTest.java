@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Method;
@@ -16,6 +17,7 @@ import org.junit.Test;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
 
@@ -36,7 +38,7 @@ public class ApiMethodReaderTest {
 	public void setup()
 	{
 		SampleClass instance = new SampleClass();
-		Method method = instance.getClass().getMethod("sampleMethod", String.class, String.class, String.class, String.class);
+		Method method = instance.getClass().getMethod("sampleMethod", String.class, String.class, String.class, String.class, String.class);
 		handlerMethod = new HandlerMethod(instance, method);
 		methodReader = new ApiMethodReader(handlerMethod);
 	}
@@ -60,10 +62,11 @@ public class ApiMethodReaderTest {
 	{
 		DocumentationOperation operation = methodReader.getOperation(RequestMethod.GET);
 		List<DocumentationParameter> parameters = operation.getParameters();
-		assertThat(parameters, hasSize(4));	
+		assertThat(parameters, hasSize(5));	
 		assertThat(parameters.get(0).getName(), equalTo("documentationNameA"));
 		assertThat(parameters.get(1).getName(), equalTo("mvcNameB"));
 		assertThat(parameters.get(2).getName(), equalTo("modelAttributeC"));
+    assertThat(parameters.get(4).getName(), equalTo("requestParam1"));
 		
 		// Only available if debug data compiled in, so test excluded.
 //		assertThat(parameters.get(3).getName(), equalTo("variableD"));
@@ -105,8 +108,12 @@ public class ApiMethodReaderTest {
         .getOperation(RequestMethod.GET);
     assertThat(operation.getResponseClass(), equalToIgnoringCase("pet"));
   }
-	
-	
+	@Test
+  public void requestParamRequired() {
+    DocumentationOperation operation = methodReader
+        .getOperation(RequestMethod.GET);
+    assertEquals(false,operation.getParameters().get(4).getRequired());
+  }
 	
 	
 	/// TEST SUPPORT
@@ -127,7 +134,7 @@ public class ApiMethodReaderTest {
 			@ApiParam(name="documentationNameA") @PathVariable("mvcNameA") String variableA,
 			@PathVariable("mvcNameB") String variableB,
 			@ModelAttribute("modelAttributeC") String variableC,
-			String variableD) {
+			String variableD, @ApiParam(name="requestParam1") @RequestParam(value="requestP1", required=false) String variableE) {
 	      return new Pet();
 	}
 	

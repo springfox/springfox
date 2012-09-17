@@ -101,11 +101,14 @@ public class ApiMethodReader {
 				name = methodParameter.getParameterName();
 			String paramType = "path";
 			String dataType = methodParameter.getParameterType().getSimpleName();
-			DocumentationParameter documentationParameter = new DocumentationParameter(name, description, apiParam.internalDescription(),
-								paramType,apiParam.defaultValue(), allowableValues,apiParam.required(),apiParam.allowMultiple());
+			RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
+      boolean isRequired = apiParam.required();
+      if (requestParam != null)
+        isRequired = requestParam.required();
+      DocumentationParameter documentationParameter = new DocumentationParameter(name, description, apiParam.internalDescription(),
+                paramType,apiParam.defaultValue(), allowableValues,isRequired,apiParam.allowMultiple());
 			documentationParameter.setDataType(dataType);
 			parameters.add(documentationParameter);
-
 		}
 	}
 
