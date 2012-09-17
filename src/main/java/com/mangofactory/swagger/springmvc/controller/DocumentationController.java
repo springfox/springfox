@@ -26,7 +26,7 @@ public class DocumentationController implements InitializingBean {
 	@Getter @Setter
 	private String apiVersion = "1.0";
 	@Getter @Setter
-	private String swaggerVersion = "1.0";
+	private String swaggerVersion = "1.1";
 	
 	@Getter @Setter
 	private String basePath = "/";
@@ -37,7 +37,7 @@ public class DocumentationController implements InitializingBean {
 	@Getter
 	private MvcApiReader apiReader;
 	
-	@RequestMapping(method=RequestMethod.GET, produces="application/json")
+	@RequestMapping(value="/resources", method=RequestMethod.GET, produces="application/json")
 	public @ResponseBody Documentation getResourceListing()
 	{
 		return apiReader.getResourceListing();
