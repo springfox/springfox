@@ -62,6 +62,7 @@ public class ApiMethodReader {
 		}
 		nickname = handlerMethod.getMethod().getName();
 		deprecated = handlerMethod.getMethodAnnotation(Deprecated.class) != null;
+    responseClass = handlerMethod.getReturnType().getParameterType();
 	}
 
 	public DocumentationOperation getOperation(RequestMethod requestMethod) {
@@ -71,6 +72,7 @@ public class ApiMethodReader {
 		for (DocumentationParameter parameter : parameters)
 			operation.addParameter(parameter);
 		setTags(operation);
+    operation.setResponseClass(responseClass.getSimpleName());
 		
 		for (DocumentationError error : errors)
 			operation.addErrorResponse(error);

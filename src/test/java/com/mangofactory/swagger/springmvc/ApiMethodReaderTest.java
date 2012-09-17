@@ -16,9 +16,11 @@ import org.junit.Test;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
 
 import com.mangofactory.swagger.ApiErrors;
+import com.mangofactory.swagger.springmvc.test.Pet;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.core.DocumentationError;
 import com.wordnik.swagger.core.DocumentationOperation;
@@ -97,6 +99,12 @@ public class ApiMethodReaderTest {
 		assertThat(error.code(), equalTo(404));
 		assertThat(error.reason(), equalToIgnoringCase("Invalid ID supplied"));
 	}
+	@Test
+  public void responseClass() {
+    DocumentationOperation operation = methodReader
+        .getOperation(RequestMethod.GET);
+    assertThat(operation.getResponseClass(), equalToIgnoringCase("pet"));
+  }
 	
 	
 	
@@ -115,11 +123,13 @@ public class ApiMethodReaderTest {
 	@SuppressWarnings("unused")
 	private final class SampleClass
 	{
-	public void sampleMethod(
+	public @ResponseBody Pet sampleMethod(
 			@ApiParam(name="documentationNameA") @PathVariable("mvcNameA") String variableA,
 			@PathVariable("mvcNameB") String variableB,
 			@ModelAttribute("modelAttributeC") String variableC,
-			String variableD) {}
+			String variableD) {
+	      return new Pet();
+	}
 	
 	@ApiErrors({NotFoundException.class,BadRequestException.class})
 	public void exceptionMethodA() {};
