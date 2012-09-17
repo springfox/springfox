@@ -10,7 +10,7 @@ import org.springframework.web.method.HandlerMethod;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.springmvc.controller.DocumentationController;
-import com.wordnik.swagger.core.Api;
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.core.DocumentationEndPoint;
 
 import java.lang.reflect.AnnotatedElement;

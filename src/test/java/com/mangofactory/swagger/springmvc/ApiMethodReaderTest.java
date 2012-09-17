@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
 import com.mangofactory.swagger.ApiErrors;
-import com.wordnik.swagger.core.ApiParam;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.core.DocumentationError;
 import com.wordnik.swagger.core.DocumentationOperation;
 import com.wordnik.swagger.core.DocumentationParameter;
@@ -124,9 +124,9 @@ public class ApiMethodReaderTest {
 	@ApiErrors({NotFoundException.class,BadRequestException.class})
 	public void exceptionMethodA() {};
 	
-	@com.wordnik.swagger.core.ApiErrors({
-			@com.wordnik.swagger.core.ApiError(code=302,reason="Malformed request"),
-			@com.wordnik.swagger.core.ApiError(code=404,reason="Not found")}
+	@com.wordnik.swagger.annotations.ApiErrors({
+			@com.wordnik.swagger.annotations.ApiError(code=302,reason="Malformed request"),
+			@com.wordnik.swagger.annotations.ApiError(code=404,reason="Not found")}
 			)
 	public void exceptionMethodB() {};
 	
