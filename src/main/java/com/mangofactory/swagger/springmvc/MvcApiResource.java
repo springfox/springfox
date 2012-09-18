@@ -1,5 +1,7 @@
 package com.mangofactory.swagger.springmvc;
 
+import java.lang.reflect.AnnotatedElement;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,8 +14,6 @@ import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.springmvc.controller.DocumentationController;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.core.DocumentationEndPoint;
-
-import java.lang.reflect.AnnotatedElement;
 
 /**
  * Generates a Resource listing for a given Api class.
@@ -38,10 +38,18 @@ public class MvcApiResource {
 
 	public DocumentationEndPoint describeAsEndpoint()
 	{
-		DocumentationEndPoint endPoint = new DocumentationEndPoint(getControllerUri(),getApiDescription());
+		DocumentationEndPoint endPoint = new DocumentationEndPoint(getListingPath(),getApiDescription());
 		return endPoint;
 	}
-	public ControllerDocumentation createEmptyApiDocumentation()
+	
+	private String getListingPath() {
+    Api apiAnnotation = controllerClass.getAnnotation(Api.class);
+    if (apiAnnotation == null || apiAnnotation.listingPath().equals(""))
+      return getControllerUri();
+    return apiAnnotation.listingPath();
+  }
+
+  public ControllerDocumentation createEmptyApiDocumentation()
 	{
 		String resourcePath = getControllerUri();
 		if (resourcePath == null)

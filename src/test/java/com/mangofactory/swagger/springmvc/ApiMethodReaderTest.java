@@ -134,7 +134,7 @@ public class ApiMethodReaderTest {
 			@ApiParam(name="documentationNameA") @PathVariable("mvcNameA") String variableA,
 			@PathVariable("mvcNameB") String variableB,
 			@ModelAttribute("modelAttributeC") String variableC,
-			String variableD, @ApiParam(name="requestParam1") @RequestParam(value="requestP1", required=false) String variableE) {
+			String variableD, @RequestParam(value="requestParam1", required=false) String variableE) {
 	      return new Pet();
 	}
 	

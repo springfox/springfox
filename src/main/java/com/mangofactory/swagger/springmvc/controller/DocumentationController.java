@@ -18,10 +18,10 @@ import com.mangofactory.swagger.springmvc.MvcApiReader;
 import com.wordnik.swagger.core.Documentation;
 
 @Controller
-@RequestMapping("/apidoc")
+@RequestMapping('/' + DocumentationController.CONTROLLER_ENDPOINT)
 public class DocumentationController implements InitializingBean {
 
-	private static final String CONTROLLER_ENDPOINT = "apidoc";
+	public static final String CONTROLLER_ENDPOINT = "resources";
 	
 	@Getter @Setter
 	private String apiVersion = "1.0";
@@ -36,8 +36,8 @@ public class DocumentationController implements InitializingBean {
 	
 	@Getter
 	private MvcApiReader apiReader;
-	
-	@RequestMapping(value="/resources", method=RequestMethod.GET, produces="application/json")
+	 
+	@RequestMapping(method=RequestMethod.GET, produces="application/json")
 	public @ResponseBody Documentation getResourceListing()
 	{
 		return apiReader.getResourceListing();
@@ -58,7 +58,7 @@ public class DocumentationController implements InitializingBean {
 		String documentationBasePath = basePath;
 		if (!basePath.endsWith("/"))
 			documentationBasePath += "/";
-		documentationBasePath += CONTROLLER_ENDPOINT;
+//		documentationBasePath += CONTROLLER_ENDPOINT;
 		
 		SwaggerConfiguration config = new SwaggerConfiguration(apiVersion,swaggerVersion,documentationBasePath);
 		apiReader = new MvcApiReader(wac, config);

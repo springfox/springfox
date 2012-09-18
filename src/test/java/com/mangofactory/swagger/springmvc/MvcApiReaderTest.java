@@ -3,6 +3,7 @@ package com.mangofactory.swagger.springmvc;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
@@ -17,6 +18,7 @@ import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.springmvc.controller.DocumentationController;
 import com.mangofactory.swagger.springmvc.test.TestConfiguration;
 import com.wordnik.swagger.core.Documentation;
+import com.wordnik.swagger.core.DocumentationEndPoint;
 import com.wordnik.swagger.core.DocumentationOperation;
 import com.wordnik.swagger.core.DocumentationParameter;
 
@@ -36,6 +38,8 @@ public class MvcApiReaderTest {
 		assertThat(resourceListing.getApis(),hasSize(1));
 		Documentation petsDocumentation = controller.getApiDocumentation("pets");
 		assertThat(petsDocumentation, is(notNullValue()));
+		DocumentationEndPoint documentationEndPoint = resourceListing.getApis().get(0);
+		assertEquals("resources/pets" ,documentationEndPoint.getPath());
 	}
 	
 	@Test

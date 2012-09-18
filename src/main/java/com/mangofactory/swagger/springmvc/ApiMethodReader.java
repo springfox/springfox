@@ -135,7 +135,11 @@ public class ApiMethodReader {
 		String name = selectBestParameterName(methodParameter);
 		String dataType = methodParameter.getParameterType().getSimpleName();
 		String paramType = "path";
-		DocumentationParameter documentationParameter = new DocumentationParameter(name, "", "",	paramType,"", null, true, false);
+    boolean isRequired = false;
+    RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
+    if (requestParam != null)
+      isRequired = requestParam.required();
+		DocumentationParameter documentationParameter = new DocumentationParameter(name, "", "",	paramType,"", null, isRequired, false);
 		documentationParameter.setDataType(dataType);
 		parameters.add(documentationParameter);
 	}
