@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.method.HandlerMethod;
@@ -99,7 +100,7 @@ public class ApiMethodReader {
 			String description = apiParam.value();
 			if (StringUtils.isEmpty(name))
 				name = methodParameter.getParameterName();
-			String paramType = "path";
+			String paramType = getParameterType(methodParameter);
 			String dataType = methodParameter.getParameterType().getSimpleName();
 			RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
       boolean isRequired = apiParam.required();
@@ -112,7 +113,23 @@ public class ApiMethodReader {
 		}
 	}
 
-	private String selectBestParameterName(MethodParameter methodParameter) {
+	private String getParameterType(MethodParameter methodParameter) {
+	   RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
+	   if (requestParam != null) 
+	     return "query";
+	   PathVariable pathVariable = methodParameter.getParameterAnnotation(PathVariable.class);
+     if (pathVariable != null) 
+       return "path";
+     RequestBody requestBody = methodParameter.getParameterAnnotation(RequestBody.class);
+     if (requestBody != null)
+       return "body";
+     ModelAttribute modelAttribute = methodParameter.getParameterAnnotation(ModelAttribute.class);
+     if (modelAttribute != null)
+       return "body";
+     return "query";
+  }
+
+  private String selectBestParameterName(MethodParameter methodParameter) {
 		ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
 		if (apiParam != null && !StringUtils.isEmpty(apiParam.name()))
 			return apiParam.name();
@@ -134,7 +151,7 @@ public class ApiMethodReader {
 			MethodParameter methodParameter) {
 		String name = selectBestParameterName(methodParameter);
 		String dataType = methodParameter.getParameterType().getSimpleName();
-		String paramType = "path";
+		String paramType = getParameterType(methodParameter);
     boolean isRequired = false;
     RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
     if (requestParam != null)

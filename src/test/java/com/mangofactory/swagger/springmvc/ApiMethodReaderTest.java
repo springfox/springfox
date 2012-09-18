@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,13 +35,20 @@ public class ApiMethodReaderTest {
 
 	HandlerMethod handlerMethod;
 	private ApiMethodReader methodReader;
-	@Before @SneakyThrows
+  private HandlerMethod handlerMethod2;
+  private ApiMethodReader methodReader2;
+
+  @Before @SneakyThrows
 	public void setup()
 	{
 		SampleClass instance = new SampleClass();
 		Method method = instance.getClass().getMethod("sampleMethod", String.class, String.class, String.class, String.class, String.class);
 		handlerMethod = new HandlerMethod(instance, method);
 		methodReader = new ApiMethodReader(handlerMethod);
+
+		Method method2 = instance.getClass().getMethod("sampleMethod2", Pet.class);
+		handlerMethod2 = new HandlerMethod(instance, method2);
+    methodReader2 = new ApiMethodReader(handlerMethod2);
 	}
 	@Test
 	public void paramDataTypeDetectedCorrectly()
@@ -114,6 +122,21 @@ public class ApiMethodReaderTest {
         .getOperation(RequestMethod.GET);
     assertEquals(false,operation.getParameters().get(4).getRequired());
   }
+	@Test
+  public void paramType1() {
+    DocumentationOperation operation = methodReader
+        .getOperation(RequestMethod.GET);
+    assertEquals("path",operation.getParameters().get(0).getParamType());
+    assertEquals("path",operation.getParameters().get(1).getParamType());
+    assertEquals("body",operation.getParameters().get(2).getParamType());
+    assertEquals("query",operation.getParameters().get(4).getParamType());
+  }
+	@Test
+  public void paramType() {
+	  DocumentationOperation operation = methodReader2
+        .getOperation(RequestMethod.POST);
+    assertEquals("body",operation.getParameters().get(0).getParamType());
+  }
 	
 	
 	/// TEST SUPPORT
@@ -136,6 +159,9 @@ public class ApiMethodReaderTest {
 			@ModelAttribute("modelAttributeC") String variableC,
 			String variableD, @RequestParam(value="requestParam1", required=false) String variableE) {
 	      return new Pet();
+	}      
+
+  public void sampleMethod2(@ApiParam(name = "pet") @RequestBody Pet pet) {
 	}
 	
 	@ApiErrors({NotFoundException.class,BadRequestException.class})
