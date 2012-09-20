@@ -43,13 +43,13 @@ public class MvcApiResource {
 	}
 	
 	private String getListingPath() {
-    Api apiAnnotation = controllerClass.getAnnotation(Api.class);
-    if (apiAnnotation == null || apiAnnotation.listingPath().equals(""))
-      return getControllerUri();
-    return apiAnnotation.listingPath();
-  }
+		Api apiAnnotation = controllerClass.getAnnotation(Api.class);
+		if (apiAnnotation == null || apiAnnotation.listingPath().equals(""))
+			return getControllerUri();
+		return apiAnnotation.listingPath();
+	}
 
-  public ControllerDocumentation createEmptyApiDocumentation()
+    public ControllerDocumentation createEmptyApiDocumentation()
 	{
 		String resourcePath = getControllerUri();
 		if (resourcePath == null)

@@ -110,33 +110,37 @@ public class ApiMethodReaderTest {
 		assertThat(error.code(), equalTo(404));
 		assertThat(error.reason(), equalToIgnoringCase("Invalid ID supplied"));
 	}
+
 	@Test
-  public void responseClass() {
-    DocumentationOperation operation = methodReader
-        .getOperation(RequestMethod.GET);
-    assertThat(operation.getResponseClass(), equalToIgnoringCase("pet"));
-  }
+	public void responseClass() {
+		DocumentationOperation operation = methodReader
+				.getOperation(RequestMethod.GET);
+		assertThat(operation.getResponseClass(), equalToIgnoringCase("pet"));
+	}
+
 	@Test
-  public void requestParamRequired() {
-    DocumentationOperation operation = methodReader
-        .getOperation(RequestMethod.GET);
-    assertEquals(false,operation.getParameters().get(4).getRequired());
-  }
+	public void requestParamRequired() {
+		DocumentationOperation operation = methodReader
+				.getOperation(RequestMethod.GET);
+		assertEquals(false, operation.getParameters().get(4).getRequired());
+	}
+
 	@Test
-  public void paramType1() {
-    DocumentationOperation operation = methodReader
-        .getOperation(RequestMethod.GET);
-    assertEquals("path",operation.getParameters().get(0).getParamType());
-    assertEquals("path",operation.getParameters().get(1).getParamType());
-    assertEquals("body",operation.getParameters().get(2).getParamType());
-    assertEquals("query",operation.getParameters().get(4).getParamType());
-  }
+	public void paramType1() {
+		DocumentationOperation operation = methodReader
+				.getOperation(RequestMethod.GET);
+		assertEquals("path", operation.getParameters().get(0).getParamType());
+		assertEquals("path", operation.getParameters().get(1).getParamType());
+		assertEquals("body", operation.getParameters().get(2).getParamType());
+		assertEquals("query", operation.getParameters().get(4).getParamType());
+	}
+
 	@Test
-  public void paramType() {
-	  DocumentationOperation operation = methodReader2
-        .getOperation(RequestMethod.POST);
-    assertEquals("body",operation.getParameters().get(0).getParamType());
-  }
+	public void paramType() {
+		DocumentationOperation operation = methodReader2
+				.getOperation(RequestMethod.POST);
+		assertEquals("body", operation.getParameters().get(0).getParamType());
+	}
 	
 	
 	/// TEST SUPPORT
