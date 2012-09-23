@@ -11,15 +11,16 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.method.HandlerMethod;
 
 import com.google.common.collect.Lists;
-import com.wordnik.swagger.core.ApiError;
-import com.wordnik.swagger.core.ApiErrors;
-import com.wordnik.swagger.core.ApiOperation;
-import com.wordnik.swagger.core.ApiParam;
+import com.wordnik.swagger.annotations.ApiError;
+import com.wordnik.swagger.annotations.ApiErrors;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.core.DocumentationAllowableListValues;
 import com.wordnik.swagger.core.DocumentationAllowableValues;
 import com.wordnik.swagger.core.DocumentationError;
@@ -62,6 +63,7 @@ public class ApiMethodReader {
 		}
 		nickname = handlerMethod.getMethod().getName();
 		deprecated = handlerMethod.getMethodAnnotation(Deprecated.class) != null;
+		responseClass = handlerMethod.getReturnType().getParameterType();
 	}
 
 	public DocumentationOperation getOperation(RequestMethod requestMethod) {
@@ -71,6 +73,7 @@ public class ApiMethodReader {
 		for (DocumentationParameter parameter : parameters)
 			operation.addParameter(parameter);
 		setTags(operation);
+		operation.setResponseClass(responseClass.getSimpleName());
 		
 		for (DocumentationError error : errors)
 			operation.addErrorResponse(error);
@@ -97,17 +100,42 @@ public class ApiMethodReader {
 			String description = apiParam.value();
 			if (StringUtils.isEmpty(name))
 				name = methodParameter.getParameterName();
-			String paramType = "path";
+			String paramType = getParameterType(methodParameter);
 			String dataType = methodParameter.getParameterType().getSimpleName();
-			DocumentationParameter documentationParameter = new DocumentationParameter(name, description, apiParam.internalDescription(),
-								paramType,apiParam.defaultValue(), allowableValues,apiParam.required(),apiParam.allowMultiple());
+			RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
+			boolean isRequired = apiParam.required();
+			if (requestParam != null)
+				isRequired = requestParam.required();
+			DocumentationParameter documentationParameter = new DocumentationParameter(
+					name, description, apiParam.internalDescription(),
+					paramType, apiParam.defaultValue(), allowableValues,
+					isRequired, apiParam.allowMultiple());
 			documentationParameter.setDataType(dataType);
 			parameters.add(documentationParameter);
-
 		}
 	}
 
-	private String selectBestParameterName(MethodParameter methodParameter) {
+	private String getParameterType(MethodParameter methodParameter) {
+		RequestParam requestParam = methodParameter
+				.getParameterAnnotation(RequestParam.class);
+		if (requestParam != null)
+			return "query";
+		PathVariable pathVariable = methodParameter
+				.getParameterAnnotation(PathVariable.class);
+		if (pathVariable != null)
+			return "path";
+		RequestBody requestBody = methodParameter
+				.getParameterAnnotation(RequestBody.class);
+		if (requestBody != null)
+			return "body";
+		ModelAttribute modelAttribute = methodParameter
+				.getParameterAnnotation(ModelAttribute.class);
+		if (modelAttribute != null)
+			return "body";
+		return "query";
+  }
+
+  private String selectBestParameterName(MethodParameter methodParameter) {
 		ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
 		if (apiParam != null && !StringUtils.isEmpty(apiParam.name()))
 			return apiParam.name();
@@ -129,8 +157,14 @@ public class ApiMethodReader {
 			MethodParameter methodParameter) {
 		String name = selectBestParameterName(methodParameter);
 		String dataType = methodParameter.getParameterType().getSimpleName();
-		String paramType = "path";
-		DocumentationParameter documentationParameter = new DocumentationParameter(name, "", "",	paramType,"", null, true, false);
+		String paramType = getParameterType(methodParameter);
+		boolean isRequired = false;
+		RequestParam requestParam = methodParameter
+				.getParameterAnnotation(RequestParam.class);
+		if (requestParam != null)
+			isRequired = requestParam.required();
+		DocumentationParameter documentationParameter = new DocumentationParameter(
+				name, "", "", paramType, "", null, isRequired, false);
 		documentationParameter.setDataType(dataType);
 		parameters.add(documentationParameter);
 	}
