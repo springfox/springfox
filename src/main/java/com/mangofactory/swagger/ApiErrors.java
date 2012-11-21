@@ -18,4 +18,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface ApiErrors {
 	Class<? extends Throwable>[] value() default {};
+	ApiError[] errors() default {};
 }

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
 
+import com.mangofactory.swagger.ApiError;
 import com.mangofactory.swagger.ApiErrors;
 import com.mangofactory.swagger.springmvc.test.Pet;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -112,6 +113,16 @@ public class ApiMethodReaderTest {
 	}
 
 	@Test
+	public void detectsApiErrorsDeclaredWithSpringMvcApiErrorList()
+	{
+		methodReader = getExceptionMethod("exceptionMethodD");
+		List<DocumentationError> errors = methodReader.getErrors();
+		assertThat(errors, hasSize(2));
+		DocumentationError error = errors.get(0);
+		assertThat(error.code(), equalTo(302));
+		assertThat(error.reason(), equalTo("Malformed request"));
+	}
+	@Test
 	public void responseClass() {
 		DocumentationOperation operation = methodReader
 				.getOperation(RequestMethod.GET);
@@ -178,6 +189,11 @@ public class ApiMethodReaderTest {
 		public void exceptionMethodB() {};
 
 		public void exceptionMethodC() throws NotFoundException {};
-
+		
+		@ApiErrors(errors={
+			@ApiError(code=302,reason="Malformed request"),
+			@ApiError(code=404,reason="Not found")
+		})
+		public void exceptionMethodD() {}
 	}
 }

@@ -207,7 +207,10 @@ public class ApiMethodReader {
 		{
 			appendErrorFromClass(exceptionClass);
 		}
-		
+		for (com.mangofactory.swagger.ApiError apiError : apiErrors.errors())
+		{
+			errors.add(new DocumentationError(apiError.code(), apiError.reason()));	
+		}
 	}
 
 	void appendErrorFromClass(Class<? extends Throwable> exceptionClass) {
