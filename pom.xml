@@ -37,6 +37,7 @@
 	<properties>
 		<spring.version>3.1.0.RELEASE</spring.version>
         <swagger.version>1.2.0</swagger.version>
+        <skipGpgSigning>true</skipGpgSigning>
 	</properties>
 	<repositories>
 		<repository>
@@ -182,6 +183,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
+                <configuration>
+                    <skip>${skipGpgSigning}</skip>
+                </configuration>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>
