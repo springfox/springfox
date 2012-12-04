@@ -36,6 +36,8 @@
 	</developers>
 	<properties>
 		<spring.version>3.1.0.RELEASE</spring.version>
+        <swagger.version>1.2.0</swagger.version>
+        <skipGpgSigning>true</skipGpgSigning>
 	</properties>
 	<repositories>
 		<repository>
@@ -72,8 +74,13 @@
 		<dependency>
 			<groupId>com.wordnik</groupId>
 			<artifactId>swagger-core_2.9.1</artifactId>
-			<version>1.1.0</version>
+			<version>${swagger.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>com.wordnik</groupId>
+            <artifactId>swagger-annotations_2.9.1</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -176,6 +183,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
+                <configuration>
+                    <skip>${skipGpgSigning}</skip>
+                </configuration>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>

@@ -36,8 +36,18 @@ public class DocumentationController implements InitializingBean {
 	
 	@Getter
 	private MvcApiReader apiReader;
-	 
-	@RequestMapping(method=RequestMethod.GET, produces="application/json")
+
+    private String resourcePath;
+
+    public String getResourcePath() {
+        return resourcePath;
+    }
+
+    public void setResourcePath(String resourcePath) {
+        this.resourcePath = resourcePath;
+    }
+
+    @RequestMapping(method=RequestMethod.GET, produces="application/json")
 	public @ResponseBody Documentation getResourceListing()
 	{
 		return apiReader.getResourceListing();
@@ -55,13 +65,23 @@ public class DocumentationController implements InitializingBean {
 	// A better approach would be to use a custom xml declaration
 	// and parser - like <swagger:documentation ... />
 	public void afterPropertiesSet() throws Exception {
-		String documentationBasePath = basePath;
-		if (!basePath.endsWith("/"))
-			documentationBasePath += "/";
+		String documentationBasePath = normalizePath(basePath);
+
 //		documentationBasePath += CONTROLLER_ENDPOINT;
-		
-		SwaggerConfiguration config = new SwaggerConfiguration(apiVersion,swaggerVersion,documentationBasePath);
+
+        SwaggerConfiguration config = new SwaggerConfiguration(apiVersion, swaggerVersion, documentationBasePath, resourcePath);
 		apiReader = new MvcApiReader(wac, config);
 	}
-	
+
+    private String normalizePath(String path) {
+        if (path == null) {
+            return path;
+        }
+        if (path.endsWith("/")) {
+            return path;
+        } else {
+            return path + "/";
+        }
+    }
+
 }
