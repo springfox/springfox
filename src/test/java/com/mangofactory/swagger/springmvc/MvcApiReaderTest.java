@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.springmvc;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -30,16 +30,23 @@ public class MvcApiReaderTest {
 
 	@Autowired
 	private DocumentationController controller;
-	
+
+	@Test
+	public void givenADocumentedApi_that_thePathReferencesTheDocumentationEndPoint()
+	{
+		Documentation resourceListing = controller.getResourceListing();
+		DocumentationEndPoint documentationEndPoint = resourceListing.getApis().get(0);
+		assertThat(documentationEndPoint.getPath(),equalTo("resources/pets"));
+	}
 	@Test
 	public void findsDeclaredHandlerMethods()
 	{
 		Documentation resourceListing = controller.getResourceListing();
-		assertThat(resourceListing.getApis(),hasSize(1));
+		assertThat(resourceListing.getApis().size(),equalTo(1));
 		Documentation petsDocumentation = controller.getApiDocumentation("pets");
 		assertThat(petsDocumentation, is(notNullValue()));
 		DocumentationEndPoint documentationEndPoint = resourceListing.getApis().get(0);
-		assertEquals("resources/pets" ,documentationEndPoint.getPath());
+		assertEquals("/pets" ,documentationEndPoint.getPath());
 	}
 	
 	@Test
@@ -48,7 +55,7 @@ public class MvcApiReaderTest {
 		ControllerDocumentation petsDocumentation = controller.getApiDocumentation("pets");
 		DocumentationOperation operation = petsDocumentation.getEndPoint("/pets/{petId}",RequestMethod.GET);
 		assertThat(operation, is(notNullValue()));
-		assertThat(operation.getParameters(),hasSize(1));
+		assertThat(operation.getParameters().size(),equalTo(1));
 		DocumentationParameter parameter = operation.getParameters().get(0);
 
 		operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.GET);

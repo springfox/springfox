@@ -16,9 +16,9 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.sample.exception.NotFoundException;
 
 @Controller
-@RequestMapping("/pets")
-@Api(value="", description="Operations about pets")
-public class PetService {
+@RequestMapping("/alternativePets")
+@Api(value="", description="Operations about pets", listingPath = "resources/pets")
+public class PetServiceWithAlternativeListingPath {
 
 	@RequestMapping(value="/{petId}",method=RequestMethod.GET)
 	@ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. "

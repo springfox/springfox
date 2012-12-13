@@ -3,7 +3,6 @@ package com.mangofactory.swagger.springmvc;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -71,7 +70,7 @@ public class ApiMethodReaderTest {
 	{
 		DocumentationOperation operation = methodReader.getOperation(RequestMethod.GET);
 		List<DocumentationParameter> parameters = operation.getParameters();
-		assertThat(parameters, hasSize(5));	
+		assertThat(parameters.size(), equalTo(5));	
 		assertThat(parameters.get(0).getName(), equalTo("documentationNameA"));
 		assertThat(parameters.get(1).getName(), equalTo("mvcNameB"));
 		assertThat(parameters.get(2).getName(), equalTo("modelAttributeC"));
@@ -86,7 +85,7 @@ public class ApiMethodReaderTest {
 	{
 		methodReader = getExceptionMethod("exceptionMethodB");
 		List<DocumentationError> errors = methodReader.getErrors();
-		assertThat(errors, hasSize(2));
+		assertThat(errors.size(), equalTo(2));
 		DocumentationError error = errors.get(0);
 		assertThat(error.code(), equalTo(302));
 		assertThat(error.reason(), equalTo("Malformed request"));
@@ -96,7 +95,7 @@ public class ApiMethodReaderTest {
 	{
 		methodReader = getExceptionMethod("exceptionMethodA");
 		List<DocumentationError> errors = methodReader.getErrors();
-		assertThat(errors, hasSize(2));
+		assertThat(errors.size(), equalTo(2));
 		DocumentationError error = errors.get(0);
 		assertThat(error.code(), equalTo(404));
 		assertThat(error.reason(), equalToIgnoringCase("Invalid ID supplied"));
@@ -106,7 +105,7 @@ public class ApiMethodReaderTest {
 	{
 		methodReader = getExceptionMethod("exceptionMethodC");
 		List<DocumentationError> errors = methodReader.getErrors();
-		assertThat(errors, hasSize(1));
+		assertThat(errors.size(), equalTo(1));
 		DocumentationError error = errors.get(0);
 		assertThat(error.code(), equalTo(404));
 		assertThat(error.reason(), equalToIgnoringCase("Invalid ID supplied"));
@@ -117,7 +116,7 @@ public class ApiMethodReaderTest {
 	{
 		methodReader = getExceptionMethod("exceptionMethodD");
 		List<DocumentationError> errors = methodReader.getErrors();
-		assertThat(errors, hasSize(2));
+		assertThat(errors.size(), equalTo(2));
 		DocumentationError error = errors.get(0);
 		assertThat(error.code(), equalTo(302));
 		assertThat(error.reason(), equalTo("Malformed request"));
