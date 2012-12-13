@@ -36,13 +36,14 @@ public class MvcApiReaderTest {
 	{
 		Documentation resourceListing = controller.getResourceListing();
 		DocumentationEndPoint documentationEndPoint = resourceListing.getApis().get(0);
-		assertThat(documentationEndPoint.getPath(),equalTo("resources/pets"));
+		// TODO : Add support for listingPath
+		assertThat(documentationEndPoint.getPath(),equalTo("/api-docs/pets"));
 	}
 	@Test
 	public void findsDeclaredHandlerMethods()
 	{
 		Documentation resourceListing = controller.getResourceListing();
-		assertThat(resourceListing.getApis().size(),equalTo(1));
+		assertThat(resourceListing.getApis().size(),equalTo(2));
 		Documentation petsDocumentation = controller.getApiDocumentation("pets");
 		assertThat(petsDocumentation, is(notNullValue()));
 		DocumentationEndPoint documentationEndPoint = resourceListing.getApis().get(0);
