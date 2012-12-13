@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mangofactory</groupId>
 	<artifactId>swagger-springmvc</artifactId>
@@ -35,27 +36,28 @@
 		</developer>
 	</developers>
 	<properties>
-		<spring.version>3.1.0.RELEASE</spring.version>
+		<spring.version>3.1.2.RELEASE</spring.version>
 	</properties>
 	<repositories>
-		<repository>
-			<id>com.springsource.repository.bundles.release</id>
-			<name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
-			<url>http://repository.springsource.com/maven/bundles/release</url>
-		</repository>
 		<repository>
 			<id>sonatype</id>
 			<name>Sonatype</name>
 			<url>https://oss.sonatype.org/</url>
 		</repository>
 		<repository>
-			<id>com.springsource.repository.libraries.release</id>
-			<name>SpringSource Enterprise Bundle Repository - SpringSource Library Releases</name>
-			<url>http://repository.springsource.com/maven/libraries/release</url>
+			<id>spring-ga</id>
+			<name>spring GA releases</name>
+			<url>http://repo.springsource.org/libs-release/</url>
 		</repository>
 		<repository>
-			<id>com.springsource.repository.snapshot</id>
-			<url>http://maven.springframework.org/snapshot/</url>
+			<id>spring-release</id>
+			<name>spring GA releases</name>
+			<url>http://repo.springsource.org/libs-release/</url>
+		</repository>
+		<repository>
+			<id>spring-milestone</id>
+			<name>spring milestone releases</name>
+			<url>http://repo.springsource.org/libs-milestone/</url>
 		</repository>
 	</repositories>
 	<distributionManagement>
@@ -75,6 +77,11 @@
 			<version>1.1.0</version>
 		</dependency>
 		<dependency>
+			<groupId>com.wordnik</groupId>
+			<artifactId>swagger-annotations_2.9.1</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
@@ -88,6 +95,16 @@
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.9.5</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -104,6 +121,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test-mvc</artifactId>
+			<version>1.0.0.M2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -125,9 +148,16 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>0.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-library</artifactId>
-			<version>1.2.1</version>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
