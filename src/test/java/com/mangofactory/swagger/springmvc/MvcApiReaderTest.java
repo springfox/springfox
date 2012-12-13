@@ -47,7 +47,7 @@ public class MvcApiReaderTest {
 		Documentation petsDocumentation = controller.getApiDocumentation("pets");
 		assertThat(petsDocumentation, is(notNullValue()));
 		DocumentationEndPoint documentationEndPoint = resourceListing.getApis().get(0);
-		assertEquals("/pets" ,documentationEndPoint.getPath());
+		assertEquals("/api-docs/pets" ,documentationEndPoint.getPath());
 	}
 	
 	@Test
