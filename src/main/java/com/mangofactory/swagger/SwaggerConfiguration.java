@@ -8,15 +8,18 @@ import com.wordnik.swagger.core.Documentation;
 @Data
 public class SwaggerConfiguration {
 
+	private final String documentationBasePath;
+	private final String swaggerVersion;
+	private final String apiVersion;
+	private final String basePath;
+
 	public SwaggerConfiguration(String apiVersion, String swaggerVersion,
-			String basePath) {
+			String basePath, String documentationBasePath) {
 		this.apiVersion = apiVersion;
 		this.swaggerVersion = swaggerVersion;
 		this.basePath = basePath;
+		this.documentationBasePath = documentationBasePath;
 	}
-	private String swaggerVersion;
-	private String apiVersion;
-	private String basePath;
 
 	public ControllerDocumentation newDocumentation(MvcApiResource resource) {
 		return new ControllerDocumentation(apiVersion, swaggerVersion, basePath, resource);
