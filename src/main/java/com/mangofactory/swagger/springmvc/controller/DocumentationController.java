@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,7 @@ import com.wordnik.swagger.core.Documentation;
 @RequestMapping('/' + DocumentationController.CONTROLLER_ENDPOINT)
 public class DocumentationController implements InitializingBean {
 
-	public static final String CONTROLLER_ENDPOINT = "resources";
+	public static final String CONTROLLER_ENDPOINT = "api-docs";
 	
 	@Getter @Setter
 	private String apiVersion = "1.0";
@@ -55,12 +56,8 @@ public class DocumentationController implements InitializingBean {
 	// A better approach would be to use a custom xml declaration
 	// and parser - like <swagger:documentation ... />
 	public void afterPropertiesSet() throws Exception {
-		String documentationBasePath = basePath;
-		if (!basePath.endsWith("/"))
-			documentationBasePath += "/";
-//		documentationBasePath += CONTROLLER_ENDPOINT;
-		
-		SwaggerConfiguration config = new SwaggerConfiguration(apiVersion,swaggerVersion,documentationBasePath);
+		String documentationBasePath = "/" + CONTROLLER_ENDPOINT;
+		SwaggerConfiguration config = new SwaggerConfiguration(apiVersion,swaggerVersion,basePath,documentationBasePath);
 		apiReader = new MvcApiReader(wac, config);
 	}
 	
