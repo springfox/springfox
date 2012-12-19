@@ -1,17 +1,18 @@
 package com.mangofactory.swagger.springmvc.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import lombok.Getter;
 import lombok.Setter;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
@@ -44,9 +45,11 @@ public class DocumentationController implements InitializingBean {
 		return apiReader.getResourceListing();
 	}
 	
-	@RequestMapping(value="/{apiName}",method=RequestMethod.GET, produces="application/json")
-	public @ResponseBody ControllerDocumentation getApiDocumentation(@PathVariable("apiName") String apiName)
+	@RequestMapping(value="/**",method=RequestMethod.GET, produces="application/json")
+	public @ResponseBody ControllerDocumentation getApiDocumentation(HttpServletRequest request)
 	{
+	    String requestPath = (String) request.getAttribute( HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+        String apiName = requestPath.replace('/' + DocumentationController.CONTROLLER_ENDPOINT, "");
 		return apiReader.getDocumentation(apiName);
 	}
 
