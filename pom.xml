@@ -62,16 +62,19 @@
 			<url>http://repo.springsource.org/libs-milestone/</url>
 		</repository>
 	</repositories>
-	<distributionManagement>
-		<snapshotRepository>
-			<id>sonatype-snapshot</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>sonatype-release</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
-	</distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>nexus-pmsi</id>
+            <name>PMSI releases</name>
+            <url>http://srv-nexus/nexus/content/repositories/releases</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>nexus-pmsi</id>
+            <name>PMSI snapshots</name>
+            <url>http://srv-nexus/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 	<dependencies>
 		<dependency>
 			<groupId>com.wordnik</groupId>

@@ -6,13 +6,17 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.server.test.context.WebContextLoader;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.springmvc.controller.DocumentationController;
@@ -42,9 +46,12 @@ public class MvcApiReaderTest {
 	@Test
 	public void findsDeclaredHandlerMethods()
 	{
+	    HttpServletRequest fakeRequest = new MockHttpServletRequest();
+	    fakeRequest.setAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE, "pets");
+	    
 		Documentation resourceListing = controller.getResourceListing();
 		assertThat(resourceListing.getApis().size(),equalTo(2));
-		Documentation petsDocumentation = controller.getApiDocumentation("pets");
+		Documentation petsDocumentation = controller.getApiDocumentation(fakeRequest);
 		assertThat(petsDocumentation, is(notNullValue()));
 		DocumentationEndPoint documentationEndPoint = resourceListing.getApis().get(0);
 		assertEquals("/api-docs/pets" ,documentationEndPoint.getPath());
@@ -53,7 +60,10 @@ public class MvcApiReaderTest {
 	@Test
 	public void findsExpectedMethods()
 	{
-		ControllerDocumentation petsDocumentation = controller.getApiDocumentation("pets");
+	    HttpServletRequest fakeRequest = new MockHttpServletRequest();
+        fakeRequest.setAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE, "pets");
+        
+		ControllerDocumentation petsDocumentation = controller.getApiDocumentation(fakeRequest);
 		DocumentationOperation operation = petsDocumentation.getEndPoint("/pets/{petId}",RequestMethod.GET);
 		assertThat(operation, is(notNullValue()));
 		assertThat(operation.getParameters().size(),equalTo(1));
