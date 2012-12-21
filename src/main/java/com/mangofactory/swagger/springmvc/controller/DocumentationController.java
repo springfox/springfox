@@ -1,5 +1,8 @@
 package com.mangofactory.swagger.springmvc.controller;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 import javax.servlet.http.HttpServletRequest;
 
 import lombok.Getter;
@@ -18,12 +21,13 @@ import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.springmvc.MvcApiReader;
 import com.wordnik.swagger.core.Documentation;
+import com.wordnik.swagger.core.DocumentationEndPoint;
 
 @Controller
 @RequestMapping('/' + DocumentationController.CONTROLLER_ENDPOINT)
 public class DocumentationController implements InitializingBean {
 
-	public static final String CONTROLLER_ENDPOINT = "api-docs";
+    public static final String CONTROLLER_ENDPOINT = "api-docs";
 	
 	@Getter @Setter
 	private String apiVersion = "1.0";
@@ -42,7 +46,9 @@ public class DocumentationController implements InitializingBean {
 	@RequestMapping(method=RequestMethod.GET, produces="application/json")
 	public @ResponseBody Documentation getResourceListing()
 	{
-		return apiReader.getResourceListing();
+		Documentation resourceListing = apiReader.getResourceListing();
+		Collections.sort(resourceListing.getApis(), new DocumentationEndPointPathComparator());
+        return resourceListing;
 	}
 	
 	@RequestMapping(value="/**",method=RequestMethod.GET, produces="application/json")
@@ -50,7 +56,9 @@ public class DocumentationController implements InitializingBean {
 	{
 	    String requestPath = (String) request.getAttribute( HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
         String apiName = requestPath.replace('/' + DocumentationController.CONTROLLER_ENDPOINT, "");
-		return apiReader.getDocumentation(apiName);
+		ControllerDocumentation documentation = apiReader.getDocumentation(apiName);
+		Collections.sort(documentation.getApis(), new DocumentationEndPointPathComparator());
+        return documentation;
 	}
 
 	// TODO : 
@@ -64,4 +72,10 @@ public class DocumentationController implements InitializingBean {
 		apiReader = new MvcApiReader(wac, config);
 	}
 	
+   protected final class DocumentationEndPointPathComparator implements Comparator<DocumentationEndPoint> {
+        @Override
+        public int compare(DocumentationEndPoint o1, DocumentationEndPoint o2) {
+            return o1.getPath().compareTo(o2.getPath());
+        }
+    }
 }
