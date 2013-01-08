@@ -86,7 +86,7 @@ public class MvcApiReader {
 			MvcApiResource resource = new MvcApiResource(handlerMethod,config);
 			
 			// Don't document our own controllers
-			if (resource.isInternalResource())
+			if (!resource.isDocumentable())
 				continue;
 			
 			addApiListingIfMissing(resource);
