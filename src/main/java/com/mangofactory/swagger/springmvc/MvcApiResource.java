@@ -127,5 +127,8 @@ public class MvcApiResource {
 		return controllerClass == DocumentationController.class;
 	}
 
+    public boolean isDocumentable() {
+        return controllerClass.getAnnotation(Api.class) != null;
+    }
 	
 }
