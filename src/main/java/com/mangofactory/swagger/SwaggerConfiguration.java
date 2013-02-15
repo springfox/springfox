@@ -19,6 +19,7 @@ import com.wordnik.swagger.core.DocumentationParameter;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -74,10 +75,11 @@ public class SwaggerConfiguration  implements InitializingBean {
         errorFilters.addAll(newArrayList(errorFilter, annotatedErrorFilter));
     }
 
-    public Documentation newDocumentation() {
+    public Documentation newDocumentation(WebApplicationContext webApplicationContext) {
         FilterContext<Documentation> context = new FilterContext<Documentation>(new Documentation(null, swaggerVersion,
                 basePath, null));
         context.put("swagger", this);
+        context.put("webApplicationContext", webApplicationContext);
         applyFilters(documentationFilters, context);
         return context.subject();
     }

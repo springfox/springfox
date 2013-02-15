@@ -6,11 +6,9 @@ import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -34,29 +32,23 @@ public class DocumentationReader {
     private final EndpointReader endpointReader;
     private final OperationReader operationReader;
     @Getter
-    private Map<String, HandlerMapping> handlerMappingBeans;
+    private RequestMappingHandlerMapping handlerMapping;
     @Getter
     private Documentation documentation;
 
-    public DocumentationReader(WebApplicationContext context, SwaggerConfiguration swaggerConfiguration) {
+    public DocumentationReader(SwaggerConfiguration swaggerConfiguration, WebApplicationContext context,
+                               RequestMappingHandlerMapping handlerMapping) {
+
         configuration = swaggerConfiguration;
+        this.handlerMapping = handlerMapping;
         endpointReader = new EndpointReader(configuration);
         operationReader = new OperationReader(configuration);
-        handlerMappingBeans = BeanFactoryUtils.beansOfTypeIncludingAncestors(context, HandlerMapping.class, true, false);
-        buildMappingDocuments();
+        buildMappingDocuments(context);
     }
 
-    private void buildMappingDocuments() {
-        documentation = configuration.newDocumentation();
-
-        DocumentationReader.log.debug("Discovered {} candidates for documentation", handlerMappingBeans.size());
-        for (HandlerMapping handlerMapping : handlerMappingBeans.values()) {
-            if (RequestMappingHandlerMapping.class.isAssignableFrom(handlerMapping.getClass())) {
-                processMethod((RequestMappingHandlerMapping) handlerMapping);
-            } else {
-                DocumentationReader.log.debug("Not documenting mapping of type {}, as it is not of a recognized type.", handlerMapping.getClass().getName());
-            }
-        }
+    private void buildMappingDocuments(WebApplicationContext context) {
+        documentation = configuration.newDocumentation(context);
+        processMethod(handlerMapping);
     }
 
     private ControllerDocumentation addChildDocumentIfMissing(ControllerAdapter resource,
