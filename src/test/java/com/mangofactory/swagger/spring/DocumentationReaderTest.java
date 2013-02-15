@@ -24,12 +24,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
-		loader=WebContextLoader.class,
-		classes=TestConfiguration.class)
+        loader = WebContextLoader.class,
+        classes = TestConfiguration.class)
 public class DocumentationReaderTest {
 
 	@Autowired
@@ -43,11 +43,10 @@ public class DocumentationReaderTest {
     }
 
     @Test
-	public void givenADocumentedApi_that_thePathReferencesTheDocumentationEndPoint()
+	public void rootDocumentationEndpointPointsToApiDocs()
 	{
 		Documentation resourceListing = controller.getResourceListing();
 		DocumentationEndPoint documentationEndPoint = resourceListing.getApis().get(0);
-		// TODO : Add support for listingPath
 		assertThat(documentationEndPoint.getPath(),equalTo("/api-docs/pets"));
 	}
 	@Test

@@ -18,7 +18,7 @@ package org.springframework.test.web.server.test.context;
 public class WebContextLoader extends GenericWebContextLoader {
 
 	public WebContextLoader() {
-		super("src/test/resources/META-INF/web-resources", false);
+		super("src/test/resources", false);
 	}
 
 }
