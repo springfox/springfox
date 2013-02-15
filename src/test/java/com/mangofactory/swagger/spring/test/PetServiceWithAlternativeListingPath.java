@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/alternativePets")
-@Api(value="", description="Operations about pets", listingPath = "resources/pets")
+@Api(value="", description="Operations about pets", listingPath = "pets")
 public class PetServiceWithAlternativeListingPath {
 
 	@RequestMapping(value="/{petId}",method=RequestMethod.GET)
