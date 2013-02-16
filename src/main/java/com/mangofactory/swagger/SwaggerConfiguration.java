@@ -19,8 +19,13 @@ import com.wordnik.swagger.core.DocumentationParameter;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
@@ -40,11 +45,14 @@ public class SwaggerConfiguration  implements InitializingBean {
     @Getter private final List<Filter<DocumentationOperation>> operationFilters = newArrayList();
     @Getter private final List<Filter<DocumentationParameter>> parameterFilters = newArrayList();
     @Getter private final List<Filter<List<DocumentationError>>> errorFilters = newArrayList();
+    @Getter private final List<Class<?>> ignorableParameterTypes = newArrayList();
 
     public SwaggerConfiguration(boolean applyDefaults) {
         this.swaggerVersion = SWAGGER_VERSION;
         this.documentationBasePath = API_DOCS_PATH;
         this.excludedResources = newArrayList();
+        ignorableParameterTypes.addAll(newArrayList(ModelMap.class, ServletContext.class, HttpServletRequest.class,
+                HttpServletResponse.class, HashMap.class));
         if(applyDefaults) {
             applyDefaults();
         }
@@ -92,10 +100,15 @@ public class SwaggerConfiguration  implements InitializingBean {
             operationFilters.addAll(extensions.getOperationFilters());
             parameterFilters.addAll(extensions.getParameterFilters());
             errorFilters.addAll(extensions.getErrorFilters());
+            ignorableParameterTypes.addAll(extensions.getIgnorableParameterTypes());
         }
     }
 
     public boolean isExcluded(String controllerUri) {
         return excludedResources.contains(controllerUri);
+    }
+
+    public boolean isParameterTypeIgnoreable(Class<?> parameterType) {
+        return ignorableParameterTypes.contains(parameterType);
     }
 }

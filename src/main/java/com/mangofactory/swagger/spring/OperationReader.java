@@ -30,6 +30,9 @@ public class OperationReader {
 
         for (MethodParameter methodParameter : handlerMethod.getMethodParameters()) {
             DocumentationParameter parameter = new DocumentationParameter();
+            if (configuration.isParameterTypeIgnoreable(methodParameter.getParameterType())) {
+                continue;
+            }
             FilterContext<DocumentationParameter> parameterContext = new FilterContext<DocumentationParameter>(parameter);
             parameterContext.put("methodParameter", methodParameter);
             parameterContext.put("controllerDocumentation", controllerDocumentation);

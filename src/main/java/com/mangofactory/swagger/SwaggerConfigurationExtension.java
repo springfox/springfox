@@ -19,5 +19,6 @@ public class SwaggerConfigurationExtension {
     private List<Filter<DocumentationOperation>> operationFilters = newArrayList();
     private List<Filter<DocumentationParameter>> parameterFilters = newArrayList();
     private List<Filter<List<DocumentationError>>> errorFilters = newArrayList();
+    private List<Class<?>> ignorableParameterTypes = newArrayList();
 
 }

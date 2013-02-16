@@ -77,7 +77,7 @@ public class ControllerDocumentation extends Documentation {
             @Override
             public DocumentationSchema apply(Model input) {
                 ObjectMapper mapper = new ObjectMapper();
-                JsonSchema jsonSchema = null;
+                JsonSchema jsonSchema;
                 DocumentationSchema schema = new DocumentationSchema();
                 schema.setId(input.getName());
                 try {
