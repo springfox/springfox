@@ -27,14 +27,25 @@ Additionally, `@Api` at the class level, and `@ApiOperation` at the method level
 ## Getting started
 To wire up support, add the following into your ``*-servlet.xml` context:
 
-    <bean id="documentationController" class="com.mangofactory.swagger.springmvc.controller.DocumentationController"
-	    p:apiVersion="1.0"
-    	p:swaggerVersion="1.0"
-        p:basePath="http://www.mydomain.com/swagger-springmvc-example/" />
+
+    <context:component-scan base-package="com.mangofactory.swagger.spring.controller" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <bean id="swaggerConfiguration" class="com.mangofactory.swagger.SwaggerConfiguration">
+        <property name="basePath" value="http://www.mydomain.com/swagger-springmvc-example/"/>
+        <property name="apiVersion" value="1.0"/>
+        <property name="excludedResources">
+            <list>
+                <value>/controller-uri-to-exclude</value>
+
+            </list>
+        </property>
+    </bean>
 
 The `basePath` property is external-facing url the maps to your SpringMVC dispatcher servlet.
 
-This creates a controller at `/apidoc` from this uri, which serves swagger's raw documentation in JSON format.  (eg., In the above example,  `http://www.mydomain.com/swagger-springmvc-example/apidoc`)
+This creates a controller at `/api-docs` from this uri, which serves swagger's raw documentation in JSON format.  (eg
+., In the above example,  `http://www.mydomain.com/swagger-springmvc-example/api-docs`)
 
 ## Deviations from default Swagger API
 Some deviations from the default Swagger API exist.  Wherever possible, these are inteded to be implemented as-well-as the default Swagger implementation, rather than as a replacement.
@@ -50,7 +61,7 @@ In addition, there are `com.mangofactory.swagger` implementations of these that 
     @ApiError(code=302,reason="Malformed request")
     public class BadRequestException {}
 
-This allows errors to be delcared as follows:
+This allows errors to be declared as follows:
 
 	@ApiErrors({NotFoundException.class,BadRequestException.class})
 	public void someApiMethod() {};
@@ -61,3 +72,7 @@ or, simply using a `throws` declaration:
 
 ## Example project
 An example of Swaggers PetStore in Spring MVC is available [here](https://github.com/martypitt/swagger-springmvc-example)
+
+## TODO:
+- Make ignoreable models like HttpServlet, ModelMap, etc.
+- Automatically detect models without annotations and render documentation schema

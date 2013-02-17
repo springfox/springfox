@@ -16,7 +16,7 @@
 
 package com.wordnik.swagger.sample.exception;
 
-import com.mangofactory.swagger.ApiError;
+import com.mangofactory.swagger.annotations.ApiError;
 
 @ApiError(code=404,reason="Invalid ID Supplied")
 public class NotFoundException extends ApiException {
