@@ -10,7 +10,7 @@ The project is available from maven:
 	<dependency>
   		<groupId>com.mangofactory</groupId>
   		<artifactId>swagger-springmvc</artifactId>
-  		<version>0.2.4</version>
+  		<version>0.3.0</version>
 	</dependency>
 	
 
@@ -20,10 +20,7 @@ Currently, a subset of Swagger annotations are supported.  Support will improve 
 All `@Controller` classes are parsed, and methods annotated with `@RequestMapping` are generated.
   
 Additionally, `@Api` at the class level, and `@ApiOperation` at the method level are both supported.
-
-### Not supported
- * JSON models are not documented [Issue](https://github.com/martypitt/swagger-springmvc/issues/2)
-
+			
 ## Getting started
 To wire up support, add the following into your ``*-servlet.xml` context:
 
