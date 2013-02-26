@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.spring.DocumentationEndPoints.*;
+import static com.mangofactory.swagger.spring.UriExtractor.getClassLevelUri;
 
 @Slf4j
 public class DocumentationReader {
@@ -54,20 +55,20 @@ public class DocumentationReader {
     private ControllerDocumentation addChildDocumentIfMissing(ControllerAdapter resource,
                                                     ControllerDocumentation resourceDocumentation) {
 
-        if (!resourceDocumentationLookup.containsKey(resource.getControllerUri())) {
-            resourceDocumentationLookup.put(resource.getControllerUri(), resourceDocumentation);
+        if (!resourceDocumentationLookup.containsKey(getClassLevelUri(resource.getControllerClass()))) {
+            resourceDocumentationLookup.put(getClassLevelUri(resource.getControllerClass()), resourceDocumentation);
         }
-        return resourceDocumentationLookup.get(resource.getControllerUri());
+        return resourceDocumentationLookup.get(getClassLevelUri(resource.getControllerClass()));
     }
 
     private DocumentationEndPoint addEndpointDocumentationIfMissing(ControllerAdapter resource) {
-        if (endpointLookup.containsKey(resource.getControllerUri())) {
-            return endpointLookup.get(resource.getControllerUri());
+        if (endpointLookup.containsKey(getClassLevelUri(resource.getControllerClass()))) {
+            return endpointLookup.get(getClassLevelUri(resource.getControllerClass()));
         }
 
         DocumentationEndPoint endpoint = resource.describeAsDocumentationEndpoint();
         if (endpoint != null) {
-            endpointLookup.put(resource.getControllerUri(), endpoint);
+            endpointLookup.put(getClassLevelUri(resource.getControllerClass()), endpoint);
             DocumentationReader.log.debug("Added resource listing: {}", resource.toString());
             documentation.addApi(endpoint);
         }
