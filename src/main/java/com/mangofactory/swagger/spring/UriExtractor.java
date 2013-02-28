@@ -7,13 +7,16 @@ import org.springframework.web.method.HandlerMethod;
 import java.lang.reflect.AnnotatedElement;
 
 import static com.google.common.base.Strings.*;
+import static com.mangofactory.swagger.spring.Descriptions.splitCamelCase;
 
 @Slf4j
 public class UriExtractor {
-    public static String getClassLevelUri(AnnotatedElement controllerClass) {
-        String classLevelUri = resolveRequestUri(controllerClass);
+
+    public static String getDocumentationEndpointUri(Class<?> controllerClass) {
+        String classLevelUri = resolveRequestUri(requestMapping(controllerClass));
+        String defaultUri = splitCamelCase(controllerClass.getSimpleName(), "-").toLowerCase();
         if (isNullOrEmpty(classLevelUri)) {
-            classLevelUri = "/";
+            classLevelUri = "/" + defaultUri;
         }
         if (!classLevelUri.startsWith("/")) {
             classLevelUri = String.format("/%s", classLevelUri);
@@ -23,15 +26,15 @@ public class UriExtractor {
         return builder.toString();
     }
 
-    public static String getMethodLevelUri(AnnotatedElement controllerClass, HandlerMethod handlerMethod) {
-        String classLevelUri = resolveRequestUri(controllerClass);
+    public static String getMethodLevelUri(Class<?> controllerClass, HandlerMethod handlerMethod) {
+        String classLevelUri = resolveRequestUri(requestMapping(controllerClass));
         if (isNullOrEmpty(classLevelUri)) {
             classLevelUri = "/";
         }
         if (!classLevelUri.startsWith("/")) {
             classLevelUri = String.format("/%s", classLevelUri);
         }
-        String methodLevelUri = resolveRequestUri(handlerMethod.getMethod());
+        String methodLevelUri = resolveRequestUri(requestMapping(handlerMethod.getMethod()));
         UriBuilder builder = new UriBuilder();
 
         maybeAppendPath(builder, classLevelUri);
@@ -45,20 +48,23 @@ public class UriExtractor {
         }
     }
 
-    protected static String resolveRequestUri(AnnotatedElement annotatedElement) {
-        RequestMapping requestMapping = annotatedElement.getAnnotation(RequestMapping.class);
+    private static RequestMapping requestMapping(AnnotatedElement annotated) {
+        return annotated.getAnnotation(RequestMapping.class);
+    }
+
+    protected static String resolveRequestUri(RequestMapping requestMapping) {
         if (requestMapping == null) {
-            log.info("Class {} has no @RequestMapping", annotatedElement);
+            log.info("Class {} has no @RequestMapping", requestMapping);
             return null;
         }
         String[] requestUris = requestMapping.value();
         if (requestUris == null || requestUris.length == 0) {
-            log.info("Class {} contains a @RequestMapping, but could not resolve the uri", annotatedElement);
+            log.info("Class {} contains a @RequestMapping, but could not resolve the uri", requestMapping);
             return null;
         }
         if (requestUris.length > 1) {
             log.info("Class {} contains a @RequestMapping with multiple uri's. Only the first one will be documented.",
-                    annotatedElement);
+                    requestMapping);
         }
         return requestUris[0];
     }

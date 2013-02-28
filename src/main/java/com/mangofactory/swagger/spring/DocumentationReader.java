@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -20,7 +21,7 @@ import java.util.Map.Entry;
 
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.spring.DocumentationEndPoints.*;
-import static com.mangofactory.swagger.spring.UriExtractor.getClassLevelUri;
+import static com.mangofactory.swagger.spring.UriExtractor.*;
 
 @Slf4j
 public class DocumentationReader {
@@ -55,20 +56,21 @@ public class DocumentationReader {
     private ControllerDocumentation addChildDocumentIfMissing(ControllerAdapter resource,
                                                     ControllerDocumentation resourceDocumentation) {
 
-        if (!resourceDocumentationLookup.containsKey(getClassLevelUri(resource.getControllerClass()))) {
-            resourceDocumentationLookup.put(getClassLevelUri(resource.getControllerClass()), resourceDocumentation);
+        if (!resourceDocumentationLookup.containsKey(getDocumentationEndpointUri(resource.getControllerClass()))) {
+            resourceDocumentationLookup.put(getDocumentationEndpointUri(resource.getControllerClass()),
+                    resourceDocumentation);
         }
-        return resourceDocumentationLookup.get(getClassLevelUri(resource.getControllerClass()));
+        return resourceDocumentationLookup.get(getDocumentationEndpointUri(resource.getControllerClass()));
     }
 
     private DocumentationEndPoint addEndpointDocumentationIfMissing(ControllerAdapter resource) {
-        if (endpointLookup.containsKey(getClassLevelUri(resource.getControllerClass()))) {
-            return endpointLookup.get(getClassLevelUri(resource.getControllerClass()));
+        if (endpointLookup.containsKey(getDocumentationEndpointUri(resource.getControllerClass()))) {
+            return endpointLookup.get(getDocumentationEndpointUri(resource.getControllerClass()));
         }
 
         DocumentationEndPoint endpoint = resource.describeAsDocumentationEndpoint();
         if (endpoint != null) {
-            endpointLookup.put(getClassLevelUri(resource.getControllerClass()), endpoint);
+            endpointLookup.put(getDocumentationEndpointUri(resource.getControllerClass()), endpoint);
             DocumentationReader.log.debug("Added resource listing: {}", resource.toString());
             documentation.addApi(endpoint);
         }
@@ -92,9 +94,11 @@ public class DocumentationReader {
                     asDocumentation(documentation, endPoint, resource));
 
             for (String requestUri : mappingInfo.getPatternsCondition().getPatterns()) {
-                DocumentationEndPoint childEndPoint = endpointReader.readEndpoint(handlerMethod, resource, requestUri);
+                DocumentationEndPoint childEndPoint = endpointReader.readEndpoint(handlerMethod, resource,
+                        requestUri);
                 controllerDocumentation.addEndpoint(childEndPoint);
-                appendOperationsToEndpoint(controllerDocumentation, mappingInfo, handlerMethod, childEndPoint);
+                appendOperationsToEndpoint(controllerDocumentation, mappingInfo, handlerMethod, childEndPoint,
+                        mappingInfo.getParamsCondition());
             }
         }
     }
@@ -103,23 +107,25 @@ public class DocumentationReader {
 
     private void appendOperationsToEndpoint(ControllerDocumentation controllerDocumentation,
                                             RequestMappingInfo mappingInfo, HandlerMethod handlerMethod,
-                                            DocumentationEndPoint endPoint) {
+                                            DocumentationEndPoint endPoint, ParamsRequestCondition paramsCondition) {
 
         if (mappingInfo.getMethodsCondition().getMethods().isEmpty()) {
             // no methods have been specified, it means the endpoint is accessible for all methods
-            appendOperationsToEndpoint(controllerDocumentation, handlerMethod, endPoint, allRequestMethods);
+            appendOperationsToEndpoint(controllerDocumentation, handlerMethod, endPoint, allRequestMethods,
+                    paramsCondition);
         } else {
             appendOperationsToEndpoint(controllerDocumentation, handlerMethod, endPoint,
-                    mappingInfo.getMethodsCondition().getMethods());
+                    mappingInfo.getMethodsCondition().getMethods(), paramsCondition);
         }
     }
 
     private void appendOperationsToEndpoint(ControllerDocumentation controllerDocumentation, HandlerMethod handlerMethod,
                                             DocumentationEndPoint endPoint,
-                                            Collection<RequestMethod> methods) {
+                                            Collection<RequestMethod> methods, ParamsRequestCondition paramsCondition) {
 
         for (RequestMethod requestMethod : methods) {
-            endPoint.addOperation(operationReader.readOperation(controllerDocumentation, handlerMethod, requestMethod));
+            endPoint.addOperation(operationReader.readOperation(controllerDocumentation, handlerMethod,
+                    paramsCondition, requestMethod));
         }
     }
 
