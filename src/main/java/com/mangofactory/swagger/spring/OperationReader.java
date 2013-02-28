@@ -8,6 +8,7 @@ import com.wordnik.swagger.core.DocumentationAllowableListValues;
 import com.wordnik.swagger.core.DocumentationError;
 import com.wordnik.swagger.core.DocumentationOperation;
 import com.wordnik.swagger.core.DocumentationParameter;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -33,6 +34,8 @@ public class OperationReader {
         operationContext.put("controllerDocumentation", controllerDocumentation);
         Filters.Fn.applyFilters(configuration.getOperationFilters(), operationContext);
         int parameterIndex = 0;
+        String [] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(handlerMethod
+                .getMethod());
         for (MethodParameter methodParameter : handlerMethod.getMethodParameters()) {
             DocumentationParameter parameter = new DocumentationParameter();
             if (configuration.isParameterTypeIgnoreable(methodParameter.getParameterType())) {
@@ -40,7 +43,7 @@ public class OperationReader {
             }
             FilterContext<DocumentationParameter> parameterContext = new FilterContext<DocumentationParameter>(parameter);
             parameterContext.put("methodParameter", methodParameter);
-            parameterContext.put("parameterIndex", parameterIndex++);
+            parameterContext.put("defaultParameterName", parameterNames[parameterIndex++]);
             parameterContext.put("controllerDocumentation", controllerDocumentation);
             Filters.Fn.applyFilters(configuration.getParameterFilters(), parameterContext);
             operation.addParameter(parameter);

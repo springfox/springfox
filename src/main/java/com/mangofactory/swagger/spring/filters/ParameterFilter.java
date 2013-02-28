@@ -28,15 +28,16 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
     public void apply(FilterContext<DocumentationParameter> context) {
         DocumentationParameter parameter = context.subject();
         MethodParameter methodParameter = context.get("methodParameter");
+        String defaultParameterName = context.get("defaultParameterName");
         ControllerDocumentation controllerDocumentation = context.get("controllerDocumentation");
 
-        documentParameter(controllerDocumentation, parameter, methodParameter);
+        documentParameter(controllerDocumentation, parameter, methodParameter, defaultParameterName);
     }
 
     private void documentParameter(ControllerDocumentation controllerDocumentation, DocumentationParameter parameter,
-                                   MethodParameter methodParameter) {
+                                   MethodParameter methodParameter, String defaultParameterName) {
 
-        String name = selectBestParameterName(methodParameter);
+        String name = selectBestParameterName(methodParameter, defaultParameterName);
         String description = splitCamelCase(name);
         if (StringUtils.isEmpty(name)) {
             name = methodParameter.getParameterName();
@@ -139,7 +140,7 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         return "query";
     }
 
-    private String selectBestParameterName(MethodParameter methodParameter) {
+    private String selectBestParameterName(MethodParameter methodParameter, String defaultParameterName) {
         PathVariable pathVariable = methodParameter.getParameterAnnotation(PathVariable.class);
         if (pathVariable != null && !StringUtils.isEmpty(pathVariable.value())) {
             return pathVariable.value();
@@ -151,6 +152,9 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
         if (requestParam != null && !StringUtils.isEmpty(requestParam.value())) {
             return requestParam.value();
+        }
+        if (!isNullOrEmpty(defaultParameterName)) {
+            return defaultParameterName;
         }
         if (isNullOrEmpty(methodParameter.getParameterName())) {
             return String.format("param%s", methodParameter.getParameterIndex());
