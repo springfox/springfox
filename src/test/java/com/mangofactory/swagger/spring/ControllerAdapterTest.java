@@ -59,10 +59,10 @@ public class ControllerAdapterTest
 		assertThat(methodLevelUri, is(notNullValue()));
         assertThat(methodLevelUri, is(equalTo("/no-classlevel-requestmapping")));
 
-        String classLevelUri = getClassLevelUri(sampleController.getClass());
+        String classLevelUri = getDocumentationEndpointUri(sampleController.getClass());
 
         assertThat(classLevelUri, is(notNullValue()));
-        assertThat(classLevelUri, is(equalTo("/")));
+        assertThat(classLevelUri, is(equalTo("/sample-controller")));
 
 	}
 
@@ -74,7 +74,7 @@ public class ControllerAdapterTest
         Method sampleMethod = controller.getClass().getMethod("getEffective", UriComponentsBuilder.class);
         HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
 
-        String classLevelUri = getClassLevelUri(controller.getClass());
+        String classLevelUri = getDocumentationEndpointUri(controller.getClass());
         String methodLevelUri = getMethodLevelUri(controller.getClass(), handlerMethod);
 
         assertThat(classLevelUri, is(notNullValue()));

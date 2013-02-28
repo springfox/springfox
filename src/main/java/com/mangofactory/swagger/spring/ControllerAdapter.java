@@ -47,7 +47,7 @@ public class ControllerAdapter {
     private String getListingPath() {
         Api apiAnnotation = controllerClass.getAnnotation(Api.class);
         if (apiAnnotation == null || apiAnnotation.listingPath().equals("")) {
-            return getClassLevelUri(controllerClass);
+            return getDocumentationEndpointUri(controllerClass);
         }
         return apiAnnotation.listingPath();
     }
