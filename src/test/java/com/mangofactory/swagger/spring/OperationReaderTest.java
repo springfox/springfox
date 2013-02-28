@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -60,7 +61,8 @@ public class OperationReaderTest {
     @Test
     public void paramDataTypeDetectedCorrectly() {
 
-        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod, RequestMethod.GET);
+        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod,
+                new ParamsRequestCondition(), RequestMethod.GET);
         List<DocumentationParameter> parameters = operation.getParameters();
         assertThat(parameters.get(0).dataType(), is(equalToIgnoringCase("string")));
         assertThat(parameters.get(1).dataType(), is(equalToIgnoringCase("string")));
@@ -68,13 +70,15 @@ public class OperationReaderTest {
 
     @Test
     public void setsNickanameCorrectly() {
-        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod, RequestMethod.GET);
+        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod,
+                new ParamsRequestCondition(), RequestMethod.GET);
         assertThat(operation.getNickname(), is(equalTo("sampleMethod")));
     }
 
     @Test
     public void apiParamNameTakesFirstPriority() {
-        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod, RequestMethod.GET);
+        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod,
+                new ParamsRequestCondition(), RequestMethod.GET);
         List<DocumentationParameter> parameters = operation.getParameters();
         assertThat(parameters.size(), equalTo(5));
         assertThat(parameters.get(0).getName(), equalTo("documentationNameA"));
@@ -128,19 +132,22 @@ public class OperationReaderTest {
 
     @Test
     public void responseClass() {
-        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod, RequestMethod.GET);
+        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod,
+                new ParamsRequestCondition(), RequestMethod.GET);
         assertThat(operation.getResponseClass(), equalToIgnoringCase("pet"));
     }
 
     @Test
     public void requestParamRequired() {
-        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod, RequestMethod.GET);
+        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod,
+                new ParamsRequestCondition(), RequestMethod.GET);
         assertEquals(false, operation.getParameters().get(4).getRequired());
     }
 
     @Test
     public void paramType1() {
-        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod, RequestMethod.GET);
+        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod,
+                new ParamsRequestCondition(), RequestMethod.GET);
         assertEquals("path", operation.getParameters().get(0).getParamType());
         assertEquals("path", operation.getParameters().get(1).getParamType());
         assertEquals("body", operation.getParameters().get(2).getParamType());
@@ -149,7 +156,8 @@ public class OperationReaderTest {
 
     @Test
     public void paramType() {
-        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod2, RequestMethod.POST);
+        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod2,
+                new ParamsRequestCondition(), RequestMethod.POST);
         assertEquals("body", operation.getParameters().get(0).getParamType());
     }
 
@@ -159,7 +167,8 @@ public class OperationReaderTest {
         SampleClass instance = new SampleClass();
         Method method = instance.getClass().getMethod(methodName);
         handlerMethod = new HandlerMethod(instance, method);
-        return new OperationReader(swaggerConfiguration).readOperation(controllerDocumentation, handlerMethod, RequestMethod.GET);
+        return new OperationReader(swaggerConfiguration).readOperation(controllerDocumentation, handlerMethod,
+                new ParamsRequestCondition(), RequestMethod.GET);
     }
 
     @SuppressWarnings("unused")

@@ -34,7 +34,6 @@ To wire up support, add the following into your ``*-servlet.xml` context:
         <property name="excludedResources">
             <list>
                 <value>/controller-uri-to-exclude</value>
-
             </list>
         </property>
     </bean>
@@ -71,5 +70,6 @@ or, simply using a `throws` declaration:
 An example of Swaggers PetStore in Spring MVC is available [here](https://github.com/martypitt/swagger-springmvc-example)
 
 ## TODO:
-- Make ignoreable models like HttpServlet, ModelMap, etc.
-- Automatically detect models without annotations and render documentation schema
+- Handle the case where RequestMapping may represent more than one value
+- Handle the case where RequestMapping might have wildcards
+

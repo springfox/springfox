@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.spring.Descriptions.*;
 
@@ -29,7 +30,7 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         MethodParameter methodParameter = context.get("methodParameter");
         ControllerDocumentation controllerDocumentation = context.get("controllerDocumentation");
 
-        documentParameter(controllerDocumentation, parameter,  methodParameter);
+        documentParameter(controllerDocumentation, parameter, methodParameter);
     }
 
     private void documentParameter(ControllerDocumentation controllerDocumentation, DocumentationParameter parameter,
@@ -151,7 +152,9 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         if (requestParam != null && !StringUtils.isEmpty(requestParam.value())) {
             return requestParam.value();
         }
-        // Default
+        if (isNullOrEmpty(methodParameter.getParameterName())) {
+            return String.format("param%s", methodParameter.getParameterIndex());
+        }
         return methodParameter.getParameterName();
     }
 }

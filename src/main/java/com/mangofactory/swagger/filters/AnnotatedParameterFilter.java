@@ -15,6 +15,7 @@ import org.springframework.core.MethodParameter;
 
 import java.util.Arrays;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.mangofactory.swagger.annotations.Annotations.*;
 
 @Slf4j
@@ -42,8 +43,12 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
         boolean isRequired = apiParam.required();
 
         String name = selectBestParameterName(methodParameter);
-        parameter.setName(name);
-        parameter.setDescription(description);
+        if (!isNullOrEmpty(name)) {
+            parameter.setName(name);
+        }
+        if (!isNullOrEmpty(description)) {
+            parameter.setDescription(description);
+        }
         parameter.setNotes(apiParam.internalDescription());
         parameter.setDefaultValue(apiParam.defaultValue());
         parameter.setAllowableValues(allowableValues);

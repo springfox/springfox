@@ -3,15 +3,19 @@ package com.mangofactory.swagger.spring;
 import com.wordnik.swagger.core.Documentation;
 import lombok.SneakyThrows;
 import org.junit.Test;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.lang.reflect.Method;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static com.mangofactory.swagger.spring.UriExtractor.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class ControllerAdapterTest
 {
@@ -24,6 +28,24 @@ public class ControllerAdapterTest
 		}
 	}
 
+    class Example {
+
+    }
+
+    @Controller
+    @RequestMapping("api/examples")
+    public class ExampleServiceController {
+
+        private static final String EFFECTIVE = "/effective";
+
+        @RequestMapping(value = EFFECTIVE, method = RequestMethod.GET)
+        @ResponseBody
+        public ResponseEntity<Example> getEffective(UriComponentsBuilder builder) {
+            return null;
+        }
+
+    }
+
 	@Test
 	@SneakyThrows
 	public void assertHandleNoClassLevelRequestMapping()
@@ -32,10 +54,34 @@ public class ControllerAdapterTest
 		Method sampleMethod = sampleController.getClass().getMethod("sampleMethod");
 		HandlerMethod handlerMethod = new HandlerMethod(sampleController, sampleMethod);
 
-		ControllerAdapter controllerAdapter = new ControllerAdapter(new Documentation(), handlerMethod, null);
-		String controllerUri = controllerAdapter.getControllerUri();
+        String methodLevelUri = getMethodLevelUri(sampleController.getClass(), handlerMethod);
 
-		assertThat(controllerUri, is(notNullValue()));
+		assertThat(methodLevelUri, is(notNullValue()));
+        assertThat(methodLevelUri, is(equalTo("/no-classlevel-requestmapping")));
+
+        String classLevelUri = getDocumentationEndpointUri(sampleController.getClass());
+
+        assertThat(classLevelUri, is(notNullValue()));
+        assertThat(classLevelUri, is(equalTo("/sample-controller")));
+
 	}
+
+    @Test
+    @SneakyThrows
+    public void assertThatExampleServiceWorksAsExpected()
+    {
+        ExampleServiceController controller = new ExampleServiceController();
+        Method sampleMethod = controller.getClass().getMethod("getEffective", UriComponentsBuilder.class);
+        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
+
+        String classLevelUri = getDocumentationEndpointUri(controller.getClass());
+        String methodLevelUri = getMethodLevelUri(controller.getClass(), handlerMethod);
+
+        assertThat(classLevelUri, is(notNullValue()));
+        assertThat(classLevelUri, is(equalTo("/api/examples")));
+
+        assertThat(methodLevelUri, is(notNullValue()));
+        assertThat(methodLevelUri, is(equalTo("/api/examples/effective")));
+    }
 
 }
