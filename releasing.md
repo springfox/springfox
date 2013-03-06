@@ -1,6 +1,12 @@
 # Releasing
 Follow these steps when preparing a release
 
+Note - the maven release plugin is used for managing releases.
+This plugin requires that releases be performed from a `-SNAPSHOT` version.
+
+Therefore, pom version numbers should be managed exclusively via the release plugin.
+
+
 ## Branch
 Assuming this is the first release of a new release set -- eg., `x.x.0` release:
 
