@@ -32,50 +32,63 @@ import static org.mockito.Mockito.*;
         classes = TestConfiguration.class)
 public class DocumentationReaderTest {
 
-	@Autowired
-	private DocumentationController controller;
-    @Mock private HttpServletRequest request;
+    @Autowired
+    private DocumentationController controller;
+    @Mock
+    private HttpServletRequest request;
+    private Documentation resourceListing;
+    private DocumentationEndPoint petsEndpoint;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         when(request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).thenReturn("/pets");
+        resourceListing = controller.getResourceListing();
+        for (DocumentationEndPoint endPoint : resourceListing.getApis()) {
+            if("/api-docs/pets".equals(endPoint.getPath())) {
+                petsEndpoint = endPoint;
+            }
+        }
+
     }
 
     @Test
-	public void rootDocumentationEndpointPointsToApiDocs()
-	{
-		Documentation resourceListing = controller.getResourceListing();
-		DocumentationEndPoint documentationEndPoint = resourceListing.getApis().get(0);
-		assertThat(documentationEndPoint.getPath(),equalTo("/api-docs/pets"));
-	}
-	@Test
-	public void findsDeclaredHandlerMethods()
-	{
-		Documentation resourceListing = controller.getResourceListing();
-		assertThat(resourceListing.getApis().size(), equalTo(2));
-		Documentation petsDocumentation = controller.getApiDocumentation(request);
-		assertThat(petsDocumentation, is(notNullValue()));
-		DocumentationEndPoint documentationEndPoint = resourceListing.getApis().get(0);
-		assertEquals("/api-docs/pets" ,documentationEndPoint.getPath());
-	}
-	
-	@Test
-	public void findsExpectedMethods()
-	{
-		ControllerDocumentation petsDocumentation = controller.getApiDocumentation(request);
-		DocumentationOperation operation = petsDocumentation.getEndPoint("/pets/{petId}",
+    public void rootDocumentationEndpointPointsToApiDocs() {
+        assertThat(petsEndpoint.getPath(), equalTo("/api-docs/pets"));
+    }
+
+    @Test
+    public void expectExcludedResourcesToBeExcluded() {
+        for (DocumentationEndPoint endPoint : resourceListing.getApis()) {
+            if("/api-docs/excluded".equals(endPoint.getPath())) {
+                fail("Excluded resources should not be documented");
+            }
+        }
+    }
+
+    @Test
+    public void findsDeclaredHandlerMethods() {
+        assertThat(resourceListing.getApis().size(), equalTo(2));
+        assertEquals("/api-docs/pets", petsEndpoint.getPath());
+        Documentation petsDocumentation = controller.getApiDocumentation(request);
+        assertThat(petsDocumentation, is(notNullValue()));
+    }
+
+    @Test
+    public void findsExpectedMethods() {
+        ControllerDocumentation petsDocumentation = controller.getApiDocumentation(request);
+        DocumentationOperation operation = petsDocumentation.getEndPoint("/pets/{petId}",
                 RequestMethod.GET).iterator().next();
-		assertThat(operation, is(notNullValue()));
-		assertThat(operation.getParameters().size(),equalTo(1));
+        assertThat(operation, is(notNullValue()));
+        assertThat(operation.getParameters().size(), equalTo(1));
 
         operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.GET).iterator().next();
-		assertThat(operation, is(notNullValue()));
-		operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.POST).iterator().next();
-		assertThat(operation, is(notNullValue()));
-		operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.DELETE).iterator().next();
-		assertThat(operation, is(notNullValue()));
-		operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.PUT).iterator().next();
-		assertThat(operation, is(notNullValue()));
-	}
+        assertThat(operation, is(notNullValue()));
+        operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.POST).iterator().next();
+        assertThat(operation, is(notNullValue()));
+        operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.DELETE).iterator().next();
+        assertThat(operation, is(notNullValue()));
+        operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.PUT).iterator().next();
+        assertThat(operation, is(notNullValue()));
+    }
 }
