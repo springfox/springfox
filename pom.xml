@@ -33,6 +33,12 @@
 			<organization>The Mango Factory</organization>
 			<email>martypitt@me.com</email>
 		</developer>
+        <developer>
+            <id>dilipkrish</id>
+            <name>Dilip Krishnan</name>
+            <organization>The Container Store</organization>
+            <email>dilipkrish_subscriptions@yahoo.com</email>
+        </developer>
 	</developers>
 	<properties>
 		<skipGpgSigning>true</skipGpgSigning>

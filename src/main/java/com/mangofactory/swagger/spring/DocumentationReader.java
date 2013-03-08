@@ -85,7 +85,8 @@ public class DocumentationReader {
             ControllerAdapter resource = new ControllerAdapter(documentation, handlerMethod, configuration);
 
             // Don't document our own controllers
-            if (resource.isInternalResource()) {
+            if (resource.isInternalResource() || configuration.isExcluded(getMethodLevelUri(resource
+                    .getControllerClass(), handlerMethod))) {
                 continue;
             }
 

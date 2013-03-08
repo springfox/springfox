@@ -8,6 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.mangofactory.swagger.spring.test")
@@ -23,6 +25,7 @@ public class TestConfiguration {
         SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
         swaggerConfiguration.setApiVersion("2.0");
         swaggerConfiguration.setBasePath("/some-path");
+        swaggerConfiguration.setExcludedResources(newArrayList("/excluded"));
         return swaggerConfiguration;
     }
 
