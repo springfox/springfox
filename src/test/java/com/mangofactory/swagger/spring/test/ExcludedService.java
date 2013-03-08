@@ -16,4 +16,10 @@ public class ExcludedService {
             @ApiParam(value = "Pet object that needs to be added to the store", required = true) Pet pet) {
         throw new NotImplementedException();
     }
+
+    @RequestMapping(value = "/another", method= RequestMethod.POST)
+    public void anotherExcludedOperation(
+            @ApiParam(value = "Pet object that needs to be added to the store", required = true) Pet pet) {
+        throw new NotImplementedException();
+    }
 }

@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.filters.Filters.Fn.*;
 
@@ -104,7 +105,14 @@ public class SwaggerConfiguration  implements InitializingBean {
         }
     }
 
-    public boolean isExcluded(String controllerUri) {
+    public boolean isExcluded(String documentationEndpointUri) {
+        if(isNullOrEmpty(documentationEndpointUri)) {
+            return false;
+        }
+        String controllerUri = documentationEndpointUri;
+        if (documentationEndpointUri.contains(API_DOCS_PATH)) {
+           controllerUri = documentationEndpointUri.substring(API_DOCS_PATH.length());
+        }
         return excludedResources.contains(controllerUri);
     }
 
