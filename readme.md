@@ -10,7 +10,7 @@ The project is available from maven:
 	<dependency>
   		<groupId>com.mangofactory</groupId>
   		<artifactId>swagger-springmvc</artifactId>
-  		<version>0.3.3</version>
+  		<version>0.3.4</version>
 	</dependency>
 	
 
@@ -72,4 +72,5 @@ An example of Swaggers PetStore in Spring MVC is available [here](https://github
 ## TODO:
 - Handle the case where RequestMapping may represent more than one value
 - Handle the case where RequestMapping might have wildcards
+- Handle enums in models do not currently get rendered correctly in the model schema. Fix this to accomodate DocumentSchema shortcomings
 

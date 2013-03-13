@@ -42,7 +42,7 @@
 	</developers>
 	<properties>
 		<skipGpgSigning>true</skipGpgSigning>
-		<swagger.version>1.1.0</swagger.version>
+		<swagger.version>1.2.0</swagger.version>
 		<spring.version>3.2.1.RELEASE</spring.version>
 	</properties>
 	<repositories>

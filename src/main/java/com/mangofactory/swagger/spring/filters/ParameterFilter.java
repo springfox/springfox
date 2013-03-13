@@ -28,14 +28,15 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
     public void apply(FilterContext<DocumentationParameter> context) {
         DocumentationParameter parameter = context.subject();
         MethodParameter methodParameter = context.get("methodParameter");
+        Class parameterType = context.get("parameterType");
         String defaultParameterName = context.get("defaultParameterName");
         ControllerDocumentation controllerDocumentation = context.get("controllerDocumentation");
 
-        documentParameter(controllerDocumentation, parameter, methodParameter, defaultParameterName);
+        documentParameter(controllerDocumentation, parameter, methodParameter, parameterType, defaultParameterName);
     }
 
     private void documentParameter(ControllerDocumentation controllerDocumentation, DocumentationParameter parameter,
-                                   MethodParameter methodParameter, String defaultParameterName) {
+                                   MethodParameter methodParameter, Class parameterType, String defaultParameterName) {
 
         String name = selectBestParameterName(methodParameter, defaultParameterName);
         String description = splitCamelCase(name);
@@ -43,7 +44,6 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
             name = methodParameter.getParameterName();
         }
         String paramType = getParameterType(methodParameter);
-        Class<?> parameterType = methodParameter.getParameterType();
         String dataType = parameterType.getSimpleName();
         parameter.setDataType(dataType);
         maybeAddParameterTypeToModels(controllerDocumentation, parameterType, dataType);

@@ -36,13 +36,17 @@ public class OperationReader {
         int parameterIndex = 0;
         String [] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(handlerMethod
                 .getMethod());
-        for (MethodParameter methodParameter : handlerMethod.getMethodParameters()) {
+        Class<?>[] parameterTypes = handlerMethod.getMethod().getParameterTypes();
+        MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
+        for (int index = 0; index < handlerMethod.getMethodParameters().length; index++) {
             DocumentationParameter parameter = new DocumentationParameter();
-            if (configuration.isParameterTypeIgnoreable(methodParameter.getParameterType())) {
+
+            if (configuration.isParameterTypeIgnoreable(parameterTypes[index])) {
                 continue;
             }
             FilterContext<DocumentationParameter> parameterContext = new FilterContext<DocumentationParameter>(parameter);
-            parameterContext.put("methodParameter", methodParameter);
+            parameterContext.put("methodParameter", methodParameters[index]);
+            parameterContext.put("parameterType", parameterTypes[index]);
             parameterContext.put("defaultParameterName", parameterNames[parameterIndex++]);
             parameterContext.put("controllerDocumentation", controllerDocumentation);
             Filters.Fn.applyFilters(configuration.getParameterFilters(), parameterContext);

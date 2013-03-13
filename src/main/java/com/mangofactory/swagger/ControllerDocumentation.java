@@ -1,9 +1,5 @@
 package com.mangofactory.swagger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
-import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
@@ -13,15 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.Models.Fn.modelToSchema;
 
 @Slf4j
 public class ControllerDocumentation extends Documentation {
@@ -73,34 +67,11 @@ public class ControllerDocumentation extends Documentation {
 
     @Override
     public HashMap<String, DocumentationSchema> getModels() {
-        return newHashMap(Maps.transformValues(modelMap, new Function<Model, DocumentationSchema>() {
-            @Override
-            public DocumentationSchema apply(Model input) {
-                ObjectMapper mapper = new ObjectMapper();
-                JsonSchema jsonSchema;
-                DocumentationSchema schema = new DocumentationSchema();
-                schema.setId(input.getName());
-                try {
-                    jsonSchema = mapper.generateJsonSchema(input.getType());
-                    ObjectWriter writer = mapper.writer();
-                    Writer stringWriter = new StringWriter();
-                    writer.writeValue(stringWriter, jsonSchema);
-                    String schemaAsString = stringWriter.toString();
-                    schema.setItems(mapper.readValue(schemaAsString, DocumentationSchema.class));
-                    return fixup(schema);
-                } catch (IOException e) {
-                    return schema;
-                }
-
-            }
-        }));
+        return newHashMap(Maps.transformValues(modelMap, modelToSchema()));
     }
 
-    private DocumentationSchema fixup(DocumentationSchema schema) {
-        DocumentationSchema fixup = new DocumentationSchema();
-        fixup.setId(schema.getId());
-        fixup.setProperties(schema.getItems().getProperties());
-        return fixup;
-    }
+
+
+
 
 }
