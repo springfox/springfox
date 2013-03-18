@@ -33,14 +33,14 @@ public class DocumentationController implements ServletContextAware {
     @Getter
     private DocumentationReader apiReader;
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET)
     public
     @ResponseBody
     Documentation getResourceListing() {
         return apiReader.getDocumentation();
     }
 
-    @RequestMapping(value = "/**", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/**", method = RequestMethod.GET)
     public
     @ResponseBody
     ControllerDocumentation getApiDocumentation(HttpServletRequest request) {

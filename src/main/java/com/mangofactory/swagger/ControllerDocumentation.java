@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,10 +19,16 @@ import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.Models.Fn.modelToSchema;
 
 @Slf4j
+@XmlRootElement
 public class ControllerDocumentation extends Documentation {
 
     private final List<DocumentationEndPoint> endpoints = newArrayList();
     private final Map<String, Model> modelMap = newHashMap();
+
+
+    //Used by JAXB
+    ControllerDocumentation() {
+    }
 
     public ControllerDocumentation(String apiVersion, String swaggerVersion,
                                    String basePath, String resourceUri) {
@@ -69,9 +76,4 @@ public class ControllerDocumentation extends Documentation {
     public HashMap<String, DocumentationSchema> getModels() {
         return newHashMap(Maps.transformValues(modelMap, modelToSchema()));
     }
-
-
-
-
-
 }
