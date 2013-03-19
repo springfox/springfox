@@ -25,10 +25,11 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.filters.Filters.Fn.*;
 
@@ -47,6 +48,9 @@ public class SwaggerConfiguration  implements InitializingBean {
     @Getter private final List<Filter<DocumentationParameter>> parameterFilters = newArrayList();
     @Getter private final List<Filter<List<DocumentationError>>> errorFilters = newArrayList();
     @Getter private final List<Class<?>> ignorableParameterTypes = newArrayList();
+    @Getter private DocumentationTransformer documentationTransformer = new DefaultDocumentationTransformer(this);
+    @Getter private Comparator<DocumentationEndPoint> endPointComparator;
+    @Getter private Comparator<DocumentationOperation> operationComparator;
 
     public SwaggerConfiguration(boolean applyDefaults) {
         this.swaggerVersion = SWAGGER_VERSION;
@@ -102,6 +106,11 @@ public class SwaggerConfiguration  implements InitializingBean {
             parameterFilters.addAll(extensions.getParameterFilters());
             errorFilters.addAll(extensions.getErrorFilters());
             ignorableParameterTypes.addAll(extensions.getIgnorableParameterTypes());
+            if (extensions.getDocumentationTransformer() != null) {
+                documentationTransformer = extensions.getDocumentationTransformer();
+            }
+            endPointComparator = extensions.getEndPointComparator();
+            operationComparator = extensions.getOperationComparator();
         }
     }
 

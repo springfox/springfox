@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.spring.controller;
 
 import com.mangofactory.swagger.ControllerDocumentation;
+import com.mangofactory.swagger.DocumentationTransformer;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.spring.DocumentationReader;
 import com.wordnik.swagger.core.Documentation;
@@ -28,6 +29,7 @@ public class DocumentationController implements ServletContextAware {
     @Getter
     @Setter
     private SwaggerConfiguration swaggerConfiguration;
+
     @Autowired
     private RequestMappingHandlerMapping handlerMapping;
     @Getter
@@ -37,7 +39,9 @@ public class DocumentationController implements ServletContextAware {
     public
     @ResponseBody
     Documentation getResourceListing() {
-        return apiReader.getDocumentation();
+        Documentation documentation = apiReader.getDocumentation();
+        DocumentationTransformer transformer = swaggerConfiguration.getDocumentationTransformer();
+        return transformer.applySorting(transformer.applyTransformation(documentation));
     }
 
     @RequestMapping(value = "/**", method = RequestMethod.GET)

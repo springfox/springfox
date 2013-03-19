@@ -8,6 +8,7 @@ import com.wordnik.swagger.core.DocumentationOperation;
 import com.wordnik.swagger.core.DocumentationParameter;
 import lombok.Data;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
@@ -20,5 +21,8 @@ public class SwaggerConfigurationExtension {
     private List<Filter<DocumentationParameter>> parameterFilters = newArrayList();
     private List<Filter<List<DocumentationError>>> errorFilters = newArrayList();
     private List<Class<?>> ignorableParameterTypes = newArrayList();
+    private DocumentationTransformer documentationTransformer;
+    private Comparator<DocumentationEndPoint> endPointComparator;
+    private Comparator<DocumentationOperation> operationComparator;
 
 }
