@@ -21,7 +21,7 @@ public class PetServiceWithAlternativeListingPath {
 
 	@RequestMapping(value="/{petId}",method=RequestMethod.GET)
 	@ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. "
-			+ "ID > 10 or nonintegers will simulate API error conditions", responseClass = "com.wordnik.swagger.sample.model.Pet"
+			+ "ID > 10 or nonintegers will simulate API error conditions", responseClass = "ccom.mangofactory.swagger.spring.test.Pet"
 		)
 	@ApiErrors(NotFoundException.class)
 	public Pet getPetById (
@@ -49,7 +49,7 @@ public class PetServiceWithAlternativeListingPath {
 	}
 
 	@RequestMapping(value="/findByStatus",method=RequestMethod.GET)
-	@ApiOperation(value = "Finds Pets by status", notes = "Multiple status values can be provided with comma seperated strings", responseClass = "com.wordnik.swagger.sample.model.Pet", multiValueResponse = true)
+	@ApiOperation(value = "Finds Pets by status", notes = "Multiple status values can be provided with comma seperated strings", responseClass = "com.mangofactory.swagger.spring.test.Pet", multiValueResponse = true)
 	@ApiErrors(errors = { @ApiError(code = 400, reason = "Invalid status value") })
 	public void findPetsByStatus(
 			@ApiParam(value = "Status values that need to be considered for filter", required = true, defaultValue = "available", allowableValues = "available,pending,sold", allowMultiple = true) @RequestParam("status") String status) {
@@ -57,7 +57,7 @@ public class PetServiceWithAlternativeListingPath {
 	}
 
 	@RequestMapping(value="/findByTags",method=RequestMethod.GET)
-	@ApiOperation(value = "Finds Pets by tags", notes = "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.", responseClass = "com.wordnik.swagger.sample.model.Pet", multiValueResponse = true)
+	@ApiOperation(value = "Finds Pets by tags", notes = "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.", responseClass = "com.mangofactory.swagger.spring.test.Pet", multiValueResponse = true)
 	@ApiErrors(errors = { @ApiError(code = 400, reason = "Invalid tag value") })
 	@Deprecated
 	public void findPetsByTags(

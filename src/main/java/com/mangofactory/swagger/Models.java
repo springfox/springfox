@@ -1,17 +1,23 @@
 package com.mangofactory.swagger;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
 import com.google.common.base.Function;
 import com.wordnik.swagger.core.DocumentationSchema;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
-class Models {
+@Slf4j
+public class Models {
     public static class Fn {
         private Fn() {
             throw new UnsupportedOperationException();
@@ -21,6 +27,7 @@ class Models {
                 @Override
                 public DocumentationSchema apply(Model input) {
                     ObjectMapper mapper = new ObjectMapper();
+                    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                     JsonSchema jsonSchema;
                     DocumentationSchema schema = new DocumentationSchema();
@@ -35,6 +42,9 @@ class Models {
                         return fixup(schema);
                     } catch (IOException e) {
                         return schema;
+                    } catch (StackOverflowError e) {
+                        log.error(String.format("Unable to serialize: %s -> %s", input.getName(), input.getType()));
+                        return schema;
                     }
                 }
             };
@@ -46,5 +56,43 @@ class Models {
             fixup.setProperties(schema.getItems().getProperties());
             return fixup;
         }
+    }
+
+    public static void maybeAddParameterTypeToModels(ControllerDocumentation controllerDocumentation,
+                                              Class<?> parameterType, String dataType) {
+
+        if (isKnownType(parameterType)) {
+            return;
+        }
+        if (parameterType.isArray()) {
+
+            String componentType = parameterType.getComponentType().getSimpleName();
+            if (isComplexType(parameterType.getComponentType())) {
+                controllerDocumentation.putModel(componentType, new Model(String.format("Array[%s]", componentType),
+                        parameterType.getComponentType()));
+            }
+
+        } else {
+            controllerDocumentation.putModel(dataType, new Model(dataType, parameterType));
+        }
+    }
+
+    private static boolean isKnownType(Class<?> parameterType) {
+        return parameterType.isAssignableFrom(List.class) ||
+                parameterType.isAssignableFrom(Set.class) ||
+                parameterType.isPrimitive() ||
+                parameterType.isEnum() ||
+                parameterType.isAssignableFrom(String.class) ||
+                parameterType.isAssignableFrom(Date.class);
+    }
+
+    private static boolean isComplexType(Class<?> parameterType) {
+        return !parameterType.isEnum() &&
+                !parameterType.isPrimitive() &&
+                !parameterType.isArray() &&
+                !parameterType.isAssignableFrom(List.class) &&
+                !parameterType.isAssignableFrom(Set.class) &&
+                !parameterType.isAssignableFrom(String.class) &&
+                !parameterType.isAssignableFrom(Date.class);
     }
 }

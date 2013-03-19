@@ -54,7 +54,7 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
         parameter.setAllowableValues(allowableValues);
         parameter.setRequired(isRequired);
         parameter.setAllowMultiple(apiParam.allowMultiple());
-        ApiModel apiModel = methodParameter.getMethodAnnotation(ApiModel.class);
+        ApiModel apiModel = methodParameter.getParameterAnnotation(ApiModel.class);
         if (apiModel != null) {
             parameter.setDataType(getAnnotatedType(apiModel));
             String simpleName = apiModel.type().getSimpleName();

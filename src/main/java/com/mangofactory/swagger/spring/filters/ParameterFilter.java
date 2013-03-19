@@ -2,7 +2,6 @@ package com.mangofactory.swagger.spring.filters;
 
 import com.google.common.base.Function;
 import com.mangofactory.swagger.ControllerDocumentation;
-import com.mangofactory.swagger.Model;
 import com.mangofactory.swagger.filters.Filter;
 import com.mangofactory.swagger.filters.FilterContext;
 import com.wordnik.swagger.core.DocumentationAllowableListValues;
@@ -15,12 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static com.mangofactory.swagger.Models.*;
 import static com.mangofactory.swagger.spring.Descriptions.*;
 
 public class ParameterFilter implements Filter<DocumentationParameter> {
@@ -82,43 +78,7 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         };
     }
 
-    private void maybeAddParameterTypeToModels(ControllerDocumentation controllerDocumentation,
-                                               Class<?> parameterType, String dataType) {
 
-        if (isKnownType(parameterType)) {
-            return;
-        }
-        if (parameterType.isArray()) {
-
-            String componentType = parameterType.getComponentType().getSimpleName();
-            if (isComplexType(parameterType.getComponentType())) {
-                controllerDocumentation.putModel(componentType, new Model(String.format("Array[%s]", componentType),
-                        parameterType.getComponentType()));
-            }
-
-        } else {
-            controllerDocumentation.putModel(dataType, new Model(dataType, parameterType));
-        }
-    }
-
-    private boolean isKnownType(Class<?> parameterType) {
-        return parameterType.isAssignableFrom(List.class) ||
-                parameterType.isAssignableFrom(Set.class) ||
-                parameterType.isPrimitive() ||
-                parameterType.isEnum() ||
-                parameterType.isAssignableFrom(String.class) ||
-                parameterType.isAssignableFrom(Date.class);
-    }
-
-    private boolean isComplexType(Class<?> parameterType) {
-        return !parameterType.isEnum() &&
-                !parameterType.isPrimitive() &&
-                !parameterType.isArray() &&
-                !parameterType.isAssignableFrom(List.class) &&
-                !parameterType.isAssignableFrom(Set.class) &&
-                !parameterType.isAssignableFrom(String.class) &&
-                !parameterType.isAssignableFrom(Date.class);
-    }
 
     private String getParameterType(MethodParameter methodParameter) {
         RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);

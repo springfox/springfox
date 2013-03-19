@@ -134,7 +134,7 @@ public class OperationReaderTest {
     public void responseClass() {
         DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod,
                 new ParamsRequestCondition(), RequestMethod.GET);
-        assertThat(operation.getResponseClass(), equalToIgnoringCase("pet"));
+        assertThat(operation.getResponseClass(), equalToIgnoringCase("Pet"));
     }
 
     @Test
@@ -183,7 +183,7 @@ public class OperationReaderTest {
             return new Pet();
         }
 
-        public void sampleMethod2(@ApiParam(name = "pet") @RequestBody Pet pet) {
+        public void sampleMethod2(@ApiParam(name = "com.mangofactory.swagger.spring.test.Pet") @RequestBody Pet pet) {
         }
 
         @ApiErrors({ NotFoundException.class, BadRequestException.class })
