@@ -1,6 +1,8 @@
 package com.mangofactory.swagger.spring;
 
 import com.mangofactory.swagger.SwaggerConfiguration;
+import com.mangofactory.swagger.annotations.ApiIgnore;
+import com.mangofactory.swagger.annotations.ApiInclude;
 import com.mangofactory.swagger.spring.controller.DocumentationController;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.core.Documentation;
@@ -77,5 +79,26 @@ public class ControllerAdapter {
 
     public Documentation documentation() {
         return parent;
+    }
+
+    public boolean isIgnored() {
+        ApiIgnore annotation = handlerMethod.getMethodAnnotation(ApiIgnore.class);
+        return annotation != null;
+    }
+
+    public boolean hasIncludeOverride() {
+        ApiInclude annotation = handlerMethod.getMethodAnnotation(ApiInclude.class);
+        return annotation != null;
+    }
+
+    public boolean shouldSkipDocumentation() {
+        return isInternalResource()
+                || excludedControllerIsNotExplicitlyIncluded()
+                || isIgnored();
+    }
+
+    private boolean excludedControllerIsNotExplicitlyIncluded() {
+        return configuration.isExcluded(getDocumentationEndpointUri(controllerClass))
+                        && !hasIncludeOverride();
     }
 }
