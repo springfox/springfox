@@ -23,12 +23,12 @@ public abstract class DocumentationTransformer {
      * a Comparator&lt;DocumentationOperation&gt; via the swagger configuration extensions
      */
     public Documentation applySorting(Documentation transformed) {
-        if (configuration.getEndPointComparator() != null) {
+        if (configuration.getEndPointComparator() != null && transformed.getApis() != null) {
             Collections.sort(transformed.getApis(), configuration.getEndPointComparator());
-        }
-        for (DocumentationEndPoint endpoint : transformed.getApis()) {
-            if (configuration.getOperationComparator() != null) {
-                Collections.sort(endpoint.getOperations(), configuration.getOperationComparator());
+            for (DocumentationEndPoint endpoint : transformed.getApis()) {
+                if (configuration.getOperationComparator() != null && endpoint.getOperations() != null) {
+                    Collections.sort(endpoint.getOperations(), configuration.getOperationComparator());
+                }
             }
         }
         return transformed;
