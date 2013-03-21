@@ -18,9 +18,9 @@
 		<name>The Mango Factory</name>
 	</organization>
 	<scm>
-		<url>scm:git:https://github.com/martypitt/swagger-springmvc.git</url>
-		<connection>scm:git:https://github.com/martypitt/swagger-springmvc.git</connection>
-		<developerConnection>scm:git:https://github.com/martypitt/swagger-springmvc.git</developerConnection>
+		<url>scm:git:git@github.com:martypitt/swagger-springmvc.git</url>
+		<connection>scm:git:git@github.com:martypitt/swagger-springmvc.git</connection>
+		<developerConnection>scm:git:git@github.com:martypitt/swagger-springmvc.git</developerConnection>
 	</scm>
 	<issueManagement>
 		<system>Github</system>
