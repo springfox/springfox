@@ -219,8 +219,8 @@
                 <version>1.4</version>
                 <configuration>
                     <skip>${skipGpgSigning}</skip>
-                    <useAgent>true</useAgent>
-                    <executable>gpg2</executable>
+                    <keyname>${gpg.key}</keyname>
+                    <passphrase>${gpg.passphrase}</passphrase>
                 </configuration>
                 <executions>
                     <execution>
