@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.4.0</version>
     <name>Swagger SpringMVC</name>
     <url>https://github.com/martypitt/swagger-springmvc</url>
     <licenses>
@@ -21,7 +21,7 @@
         <url>scm:git:git@github.com:martypitt/swagger-springmvc.git</url>
         <connection>scm:git:git@github.com:martypitt/swagger-springmvc.git</connection>
         <developerConnection>scm:git:git@github.com:martypitt/swagger-springmvc.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>swagger-springmvc-0.4.0</tag>
   </scm>
     <issueManagement>
         <system>Github</system>
