@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.4.0</version>
+    <version>0.4.1-SNAPSHOT</version>
     <name>Swagger SpringMVC</name>
     <url>https://github.com/martypitt/swagger-springmvc</url>
     <licenses>
@@ -208,10 +208,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.2.2</version>
-                <configuration>
-                    <mavenExecutorId>forked-path</mavenExecutorId>
-                </configuration>
+                <version>2.4</version>
+                <!--<configuration>-->
+                    <!--<mavenExecutorId>forked-path</mavenExecutorId>-->
+                <!--</configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

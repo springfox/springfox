@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.spring.filters;
 
 import com.mangofactory.swagger.ControllerDocumentation;
+import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.filters.Filter;
 import com.mangofactory.swagger.filters.FilterContext;
 import com.wordnik.swagger.core.DocumentationOperation;
@@ -17,13 +18,13 @@ public class OperationFilter implements Filter<DocumentationOperation> {
         DocumentationOperation operation = context.subject();
         HandlerMethod handlerMethod = context.get("handlerMethod");
         ControllerDocumentation controllerDocumentation = context.get("controllerDocumentation");
-
-        documentOperation(controllerDocumentation, operation, handlerMethod);
+        SwaggerConfiguration configuration = context.get("swaggerConfiguration");
+        documentOperation(configuration, controllerDocumentation, operation, handlerMethod);
 
     }
 
-    private void documentOperation(ControllerDocumentation controllerDocumentation, DocumentationOperation operation,
-                                   HandlerMethod handlerMethod) {
+    private void documentOperation(SwaggerConfiguration configuration, ControllerDocumentation controllerDocumentation,
+                                   DocumentationOperation operation, HandlerMethod handlerMethod) {
         operation.setSummary(splitCamelCase(handlerMethod.getMethod().getName()));
         operation.setNotes("");
 
@@ -31,6 +32,9 @@ public class OperationFilter implements Filter<DocumentationOperation> {
         operation.setDeprecated(handlerMethod.getMethodAnnotation(Deprecated.class) != null);
         Class<?> parameterType = handlerMethod.getReturnType().getParameterType();
         operation.setResponseClass(parameterType.getSimpleName());
+        if (configuration.isParameterTypeIgnoreable(parameterType)) {
+            return;
+        }
         maybeAddParameterTypeToModels(controllerDocumentation, parameterType, parameterType.getSimpleName());
 
     }
