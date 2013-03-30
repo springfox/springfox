@@ -65,13 +65,11 @@ public class Models {
             return;
         }
         if (parameterType.isArray()) {
-
             String componentType = parameterType.getComponentType().getSimpleName();
             if (isComplexType(parameterType.getComponentType())) {
                 controllerDocumentation.putModel(componentType, new Model(String.format("Array[%s]", componentType),
                         parameterType.getComponentType()));
             }
-
         } else {
             controllerDocumentation.putModel(dataType, new Model(dataType, parameterType));
         }

@@ -32,6 +32,7 @@ public class OperationReader {
         FilterContext<DocumentationOperation> operationContext = new FilterContext<DocumentationOperation>(operation);
         operationContext.put("handlerMethod", handlerMethod);
         operationContext.put("controllerDocumentation", controllerDocumentation);
+        operationContext.put("swaggerConfiguration", configuration);
         Filters.Fn.applyFilters(configuration.getOperationFilters(), operationContext);
         int parameterIndex = 0;
         String [] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(handlerMethod
@@ -40,7 +41,6 @@ public class OperationReader {
         MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
         for (int index = 0; index < handlerMethod.getMethodParameters().length; index++) {
             DocumentationParameter parameter = new DocumentationParameter();
-
             if (configuration.isParameterTypeIgnoreable(parameterTypes[index])) {
                 continue;
             }

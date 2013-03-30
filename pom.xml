@@ -22,7 +22,7 @@
         <url>scm:git:git@github.com:martypitt/swagger-springmvc.git</url>
         <connection>scm:git:git@github.com:martypitt/swagger-springmvc.git</connection>
         <developerConnection>scm:git:git@github.com:martypitt/swagger-springmvc.git</developerConnection>
-        <tag>swagger-springmvc-0.4.0</tag>
+        <tag>swagger-springmvc-0.4.1</tag>
     </scm>
     <issueManagement>
         <system>Github</system>
