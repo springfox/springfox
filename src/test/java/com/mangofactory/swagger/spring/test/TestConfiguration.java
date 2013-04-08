@@ -1,14 +1,18 @@
 package com.mangofactory.swagger.spring.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.SwaggerConfigurationExtension;
+import com.mangofactory.swagger.models.DocumentationSchemaProvider;
+import com.mangofactory.swagger.models.Jackson2SchemaDescriptor;
+import com.mangofactory.swagger.models.SchemaDescriptor;
 import com.mangofactory.swagger.spring.controller.DocumentationController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.*;
 
 @Configuration
 @EnableWebMvc
@@ -32,6 +36,16 @@ public class TestConfiguration {
     @Bean
     public SwaggerConfigurationExtension swaggerConfigurationExtension() {
         return new SwaggerConfigurationExtension();
+    }
+
+    @Bean
+    public DocumentationSchemaProvider documentationSchemaProvider() {
+        return new DocumentationSchemaProvider();
+    }
+
+    @Bean
+    public SchemaDescriptor schemaDescriptor() {
+        return new Jackson2SchemaDescriptor(new ObjectMapper());
     }
 
 }

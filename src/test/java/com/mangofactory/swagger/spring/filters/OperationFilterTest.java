@@ -4,6 +4,7 @@ import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.SwaggerConfigurationExtension;
 import com.mangofactory.swagger.filters.FilterContext;
+import com.mangofactory.swagger.models.DocumentationSchemaProvider;
 import com.wordnik.swagger.core.DocumentationOperation;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +53,7 @@ public class OperationFilterTest {
     @Before
     public void setup() throws Exception {
         DocumentationOperation operation = new DocumentationOperation();
-        controllerDocumentation= new ControllerDocumentation("", "", "", "");
+        controllerDocumentation= new ControllerDocumentation("", "", "", "", new DocumentationSchemaProvider());
         context = new FilterContext<DocumentationOperation>(operation);
         context.put("controllerDocumentation", controllerDocumentation);
 

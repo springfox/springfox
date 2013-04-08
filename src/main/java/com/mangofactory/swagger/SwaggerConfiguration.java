@@ -6,6 +6,7 @@ import com.mangofactory.swagger.filters.AnnotatedOperationFilter;
 import com.mangofactory.swagger.filters.AnnotatedParameterFilter;
 import com.mangofactory.swagger.filters.Filter;
 import com.mangofactory.swagger.filters.FilterContext;
+import com.mangofactory.swagger.models.DocumentationSchemaProvider;
 import com.mangofactory.swagger.spring.filters.ApplicationFilter;
 import com.mangofactory.swagger.spring.filters.EndPointFilter;
 import com.mangofactory.swagger.spring.filters.ErrorsFilter;
@@ -19,6 +20,7 @@ import com.wordnik.swagger.core.DocumentationParameter;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -51,6 +53,7 @@ public class SwaggerConfiguration  implements InitializingBean {
     @Getter private DocumentationTransformer documentationTransformer = new DefaultDocumentationTransformer(this);
     @Getter private Comparator<DocumentationEndPoint> endPointComparator;
     @Getter private Comparator<DocumentationOperation> operationComparator;
+    @Autowired private DocumentationSchemaProvider schemaProvider;
 
     public SwaggerConfiguration(boolean applyDefaults) {
         this.swaggerVersion = SWAGGER_VERSION;
@@ -125,7 +128,14 @@ public class SwaggerConfiguration  implements InitializingBean {
         return excludedResources.contains(controllerUri);
     }
 
-    public boolean isParameterTypeIgnoreable(Class<?> parameterType) {
+    public boolean isParameterTypeIgnorable(Class<?> parameterType) {
         return ignorableParameterTypes.contains(parameterType);
+    }
+
+    public DocumentationSchemaProvider getSchemaProvider() {
+        if (schemaProvider == null) {
+            schemaProvider = new DocumentationSchemaProvider();
+        }
+        return schemaProvider;
     }
 }

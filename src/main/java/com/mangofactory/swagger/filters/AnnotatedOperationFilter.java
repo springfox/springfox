@@ -2,7 +2,7 @@ package com.mangofactory.swagger.filters;
 
 import com.google.common.base.Splitter;
 import com.mangofactory.swagger.ControllerDocumentation;
-import com.mangofactory.swagger.Model;
+import com.mangofactory.swagger.models.Model;
 import com.mangofactory.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.core.DocumentationOperation;
@@ -26,14 +26,20 @@ public class AnnotatedOperationFilter implements Filter<DocumentationOperation> 
         if (apiOperation != null) {
             operation.setSummary(apiOperation.value());
             operation.setNotes(apiOperation.notes());
-            operation.setResponseClass(apiOperation.responseClass());
+            if (operation.responseClass() == null) {
+                if (apiOperation.multiValueResponse()) {
+                    operation.setResponseClass(String.format("Array[%s]", apiOperation.responseClass()));
+                } else {
+                    operation.setResponseClass(apiOperation.responseClass());
+                }
+            }
             operation.setTags(newArrayList(Splitter.on(",").omitEmptyStrings().split(apiOperation.tags())));
         }
         ApiModel apiModel = handlerMethod.getMethodAnnotation(ApiModel.class);
         if (apiModel != null) {
             operation.setResponseClass(getAnnotatedType(apiModel));
             String simpleName = apiModel.type().getSimpleName();
-            controllerDocumentation.putModel(simpleName, new Model(simpleName,  apiModel.type()));
+            controllerDocumentation.putModel(simpleName, new Model(simpleName,  apiModel.type(), true));
         }
     }
 

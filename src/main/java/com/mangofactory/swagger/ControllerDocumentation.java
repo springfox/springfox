@@ -1,6 +1,7 @@
 package com.mangofactory.swagger;
 
-import com.google.common.collect.Maps;
+import com.mangofactory.swagger.models.DocumentationSchemaProvider;
+import com.mangofactory.swagger.models.Model;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
 import com.wordnik.swagger.core.DocumentationOperation;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
-import static com.mangofactory.swagger.Models.Fn.modelToSchema;
+import static com.mangofactory.swagger.models.Models.Fn.*;
 
 @Slf4j
 @XmlRootElement
@@ -24,6 +25,7 @@ public class ControllerDocumentation extends Documentation {
 
     private final List<DocumentationEndPoint> endpoints = newArrayList();
     private final Map<String, Model> modelMap = newHashMap();
+    private DocumentationSchemaProvider schemaProvider;
 
 
     //Used by JAXB
@@ -31,9 +33,10 @@ public class ControllerDocumentation extends Documentation {
     }
 
     public ControllerDocumentation(String apiVersion, String swaggerVersion,
-                                   String basePath, String resourceUri) {
+                                   String basePath, String resourceUri, DocumentationSchemaProvider schemaProvider) {
 
         super(apiVersion, swaggerVersion, basePath, resourceUri);
+        this.schemaProvider = schemaProvider;
     }
 
 
@@ -74,6 +77,10 @@ public class ControllerDocumentation extends Documentation {
 
     @Override
     public HashMap<String, DocumentationSchema> getModels() {
-        return newHashMap(Maps.transformValues(modelMap, modelToSchema()));
+        HashMap<String, DocumentationSchema> models = newHashMap();
+        for (Model model: modelMap.values()) {
+            models.putAll(modelToSchema(schemaProvider).apply(model));
+        }
+        return models;
     }
 }

@@ -91,7 +91,7 @@ public class DocumentationReader {
 
             DocumentationEndPoint endPoint = addEndpointDocumentationIfMissing(resource);
             ControllerDocumentation controllerDocumentation = addChildDocumentIfMissing(resource,
-                    asDocumentation(documentation, endPoint, resource));
+                    asDocumentation(documentation, endPoint, resource, configuration.getSchemaProvider()));
 
             for (String requestUri : mappingInfo.getPatternsCondition().getPatterns()) {
                 DocumentationEndPoint childEndPoint = endpointReader.readEndpoint(handlerMethod, resource,

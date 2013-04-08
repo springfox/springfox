@@ -1,0 +1,38 @@
+package com.mangofactory.swagger.models;
+
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
+
+public class ClassMemberInfo implements MemberInfoSource {
+    private final Class<?> clazz;
+
+    public ClassMemberInfo(Class<?> clazz) {
+        this.clazz = clazz;
+    }
+
+    @Override
+    public Class<?> getType() {
+        return clazz;
+    }
+
+    @Override
+    public String getName() {
+        return clazz.getSimpleName();
+    }
+
+    @Override
+    public ResolvedType getResolvedType() {
+        TypeResolver resolver = new TypeResolver();
+        return resolver.resolve(clazz);
+    }
+
+    @Override
+    public boolean isAssignableFrom(Class<?> clazz) {
+        return getType().isAssignableFrom(clazz);
+    }
+
+    @Override
+    public boolean isEnum() {
+        return EnumHelper.isEnum(getType());
+    }
+}

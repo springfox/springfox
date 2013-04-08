@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.filters;
 
 import com.mangofactory.swagger.ControllerDocumentation;
-import com.mangofactory.swagger.Model;
+import com.mangofactory.swagger.models.Model;
 import com.mangofactory.swagger.annotations.ApiModel;
 import com.mangofactory.swagger.spring.AllowableRangesParser;
 import com.wordnik.swagger.annotations.ApiParam;

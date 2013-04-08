@@ -4,6 +4,7 @@ import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.annotations.ApiError;
 import com.mangofactory.swagger.annotations.ApiErrors;
+import com.mangofactory.swagger.models.DocumentationSchemaProvider;
 import com.mangofactory.swagger.spring.test.Pet;
 import com.mangofactory.swagger.spring.test.TestConfiguration;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -55,7 +56,7 @@ public class OperationReaderTest {
 
         controllerDocumentation = new ControllerDocumentation(swaggerConfiguration.getApiVersion(),
                 swaggerConfiguration.getSwaggerVersion(), swaggerConfiguration.getBasePath(),
-                swaggerConfiguration.getDocumentationBasePath());
+                swaggerConfiguration.getDocumentationBasePath(), new DocumentationSchemaProvider());
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.mangofactory.swagger.spring.filters;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.filters.Filter;
 import com.mangofactory.swagger.filters.FilterContext;
+import com.mangofactory.swagger.models.DocumentationSchemaProvider;
 import com.wordnik.swagger.core.DocumentationAllowableListValues;
 import com.wordnik.swagger.core.DocumentationParameter;
 import lombok.SneakyThrows;
@@ -90,7 +91,7 @@ public class ParameterFilterTest {
     @Before
     public void setup() {
         docParam = new DocumentationParameter();
-        documentation = new ControllerDocumentation("1", "2", "", "");
+        documentation = new ControllerDocumentation("1", "2", "", "", new DocumentationSchemaProvider());
         context = new FilterContext<DocumentationParameter>(docParam);
         context.put("controllerDocumentation", documentation);
         paramFilters = newArrayList();
@@ -106,7 +107,8 @@ public class ParameterFilterTest {
         Class<?>[] parameterTypes = handlerMethod.getMethod().getParameterTypes();
         for (int index = 0; index < methodParameters.length; index++) {
             DocumentationParameter docParam = new DocumentationParameter();
-            ControllerDocumentation documentation = new ControllerDocumentation("1", "2", "", "");
+            ControllerDocumentation documentation = new ControllerDocumentation("1", "2", "", "",
+                    new DocumentationSchemaProvider());
             FilterContext context = new FilterContext<DocumentationParameter>(docParam);
             context.put("controllerDocumentation", documentation);
             context.put("methodParameter", methodParameters[index]);
@@ -143,7 +145,7 @@ public class ParameterFilterTest {
         context.put("parameterType", handlerMethod.getMethod().getParameterTypes()[0]);
         applyFilters(paramFilters, context);
 
-        assertEquals(1, documentation.getModels().size());
+        assertEquals(2, documentation.getModels().size());
         assertNull(docParam.allowableValues());
     }
 
@@ -191,7 +193,7 @@ public class ParameterFilterTest {
         context.put("parameterType", handlerMethod.getMethod().getParameterTypes()[0]);
         applyFilters(paramFilters, context);
 
-        assertEquals(1, documentation.getModels().size());
+        assertEquals(2, documentation.getModels().size());
         assertNull(docParam.allowableValues());
     }
 

@@ -1,12 +1,20 @@
-package com.mangofactory.swagger;
+package com.mangofactory.swagger.models;
 
 public class Model {
     private String name;
     private Class<?> type;
+    private final boolean returnType;
 
     public Model(String name, Class<?> type) {
         this.name = name;
         this.type = type;
+        this.returnType = false;
+    }
+
+    public Model(String name, Class<?> type, boolean returnType) {
+        this.name = name;
+        this.type = type;
+        this.returnType = returnType;
     }
 
     public String getName() {
@@ -15,6 +23,10 @@ public class Model {
 
     public Class<?> getType() {
         return type;
+    }
+
+    public boolean isReturnType() {
+        return returnType;
     }
 
     @Override
@@ -34,7 +46,9 @@ public class Model {
         if (!type.equals(model.type)) {
             return false;
         }
-
+        if (!returnType == model.returnType) {
+            return false;
+        }
         return true;
     }
 
@@ -42,6 +56,7 @@ public class Model {
     public int hashCode() {
         int result = name.hashCode();
         result = 31 * result + type.hashCode();
+        result = 31 * result + Boolean.valueOf(returnType).hashCode();
         return result;
     }
 }
