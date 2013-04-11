@@ -24,7 +24,7 @@ Additionally, `@Api` at the class level, and `@ApiOperation` at the method level
 ## Getting started
 To wire up support, add the following into your ``*-servlet.xml` context:
 
-
+    <beans:bean id="documentationController" class="com.mangofactory.swagger.spring.controller.DocumentationController" />	
     <context:component-scan base-package="com.mangofactory.swagger.spring.controller" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
