@@ -13,7 +13,7 @@ import static com.mangofactory.swagger.spring.Descriptions.splitCamelCase;
 public class UriExtractor {
 
     public static String getDocumentationEndpointUri(Class<?> controllerClass) {
-        String classLevelUri = resolveRequestUri(requestMapping(controllerClass));
+        String classLevelUri = resolveRequestUri(controllerClass, requestMapping(controllerClass));
         String defaultUri = splitCamelCase(controllerClass.getSimpleName(), "-").toLowerCase();
         if (isNullOrEmpty(classLevelUri)) {
             classLevelUri = "/" + defaultUri;
@@ -27,14 +27,14 @@ public class UriExtractor {
     }
 
     public static String getMethodLevelUri(Class<?> controllerClass, HandlerMethod handlerMethod) {
-        String classLevelUri = resolveRequestUri(requestMapping(controllerClass));
+        String classLevelUri = resolveRequestUri(controllerClass, requestMapping(controllerClass));
         if (isNullOrEmpty(classLevelUri)) {
             classLevelUri = "/";
         }
         if (!classLevelUri.startsWith("/")) {
             classLevelUri = String.format("/%s", classLevelUri);
         }
-        String methodLevelUri = resolveRequestUri(requestMapping(handlerMethod.getMethod()));
+        String methodLevelUri = resolveRequestUri(controllerClass, requestMapping(handlerMethod.getMethod()));
         UriBuilder builder = new UriBuilder();
 
         maybeAppendPath(builder, classLevelUri);
@@ -52,19 +52,19 @@ public class UriExtractor {
         return annotated.getAnnotation(RequestMapping.class);
     }
 
-    protected static String resolveRequestUri(RequestMapping requestMapping) {
+    protected static String resolveRequestUri(Class clazz, RequestMapping requestMapping) {
         if (requestMapping == null) {
-            log.info("Class {} has no @RequestMapping", requestMapping);
+            log.info("Class {} has no @RequestMapping", clazz);
             return null;
         }
         String[] requestUris = requestMapping.value();
         if (requestUris == null || requestUris.length == 0) {
-            log.info("Class {} contains a @RequestMapping, but could not resolve the uri", requestMapping);
+            log.info("Class {} contains a @RequestMapping, but could not resolve the uri", clazz);
             return null;
         }
         if (requestUris.length > 1) {
             log.info("Class {} contains a @RequestMapping with multiple uri's. Only the first one will be documented.",
-                    requestMapping);
+                    clazz);
         }
         return requestUris[0];
     }
