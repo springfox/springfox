@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
 import static org.junit.Assert.*;
 
 public class SimpleModelTest {
@@ -92,7 +93,7 @@ public class SimpleModelTest {
     public void setup() {
         modelMap = newHashMap();
         DocumentationSchemaProvider provider = new DocumentationSchemaProvider();
-        modelMap = provider.getModelMap(new Model("SimpleType", SimpleType.class));
+        modelMap = provider.getModelMap(new Model("SimpleType", asResolvedType(SimpleType.class)));
     }
 
     @Test

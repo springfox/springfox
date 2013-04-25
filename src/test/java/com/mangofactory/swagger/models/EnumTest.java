@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
@@ -36,7 +37,7 @@ public class EnumTest {
     public void setup() {
         modelMap = newHashMap();
         DocumentationSchemaProvider provider = new DocumentationSchemaProvider();
-        modelMap = provider.getModelMap(new Model("ExampleWithEnums", ExampleWithEnums.class));
+        modelMap = provider.getModelMap(new Model("ExampleWithEnums", asResolvedType(ExampleWithEnums.class)));
     }
 
 

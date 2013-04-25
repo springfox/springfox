@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.spring;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.filters.FilterContext;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.methodParameters;
 
 public class OperationReader {
     private final SwaggerConfiguration configuration;
@@ -37,16 +39,16 @@ public class OperationReader {
         int parameterIndex = 0;
         String [] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(handlerMethod
                 .getMethod());
-        Class<?>[] parameterTypes = handlerMethod.getMethod().getParameterTypes();
+        List<ResolvedType> resolvedParameters = methodParameters(handlerMethod.getMethod());
         MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
         for (int index = 0; index < handlerMethod.getMethodParameters().length; index++) {
             DocumentationParameter parameter = new DocumentationParameter();
-            if (configuration.isParameterTypeIgnorable(parameterTypes[index])) {
+            if (configuration.isParameterTypeIgnorable(resolvedParameters.get(index).getErasedType())) {
                 continue;
             }
             FilterContext<DocumentationParameter> parameterContext = new FilterContext<DocumentationParameter>(parameter);
             parameterContext.put("methodParameter", methodParameters[index]);
-            parameterContext.put("parameterType", parameterTypes[index]);
+            parameterContext.put("parameterType", resolvedParameters.get(index));
             parameterContext.put("defaultParameterName", parameterNames[parameterIndex++]);
             parameterContext.put("controllerDocumentation", controllerDocumentation);
             Filters.Fn.applyFilters(configuration.getParameterFilters(), parameterContext);

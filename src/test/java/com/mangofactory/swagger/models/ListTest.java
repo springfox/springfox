@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.models.DocumentationSchemaMatchers.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.collection.IsIterableContainingInOrder.*;
 import static org.hamcrest.collection.IsMapContaining.*;
@@ -113,7 +114,7 @@ public class ListTest {
     public void setup() {
         modelMap = newHashMap();
         DocumentationSchemaProvider provider = new DocumentationSchemaProvider();
-        modelMap = provider.getModelMap(new Model("ToTest", ToTest.class));
+        modelMap = provider.getModelMap(new Model("ToTest", asResolvedType(ToTest.class)));
     }
 
     @Test

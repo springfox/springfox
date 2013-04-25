@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
 import static org.junit.Assert.*;
 
 public class ComplexTypeTest {
@@ -58,7 +59,7 @@ public class ComplexTypeTest {
     public void setup() {
         modelMap = newHashMap();
         DocumentationSchemaProvider provider = new DocumentationSchemaProvider();
-        modelMap = provider.getModelMap(new Model("pet", Pet.class));
+        modelMap = provider.getModelMap(new Model("pet", asResolvedType(Pet.class)));
     }
 
     @Test

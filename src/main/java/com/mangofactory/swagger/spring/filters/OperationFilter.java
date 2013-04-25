@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.spring.filters;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.filters.Filter;
@@ -8,7 +9,8 @@ import com.wordnik.swagger.core.DocumentationOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 
-import static com.mangofactory.swagger.models.Models.maybeAddParameterTypeToModels;
+import static com.mangofactory.swagger.models.Models.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
 import static com.mangofactory.swagger.spring.Descriptions.*;
 
 @Slf4j
@@ -30,12 +32,19 @@ public class OperationFilter implements Filter<DocumentationOperation> {
 
         operation.setNickname(handlerMethod.getMethod().getName());
         operation.setDeprecated(handlerMethod.getMethodAnnotation(Deprecated.class) != null);
-        Class<?> parameterType = handlerMethod.getReturnType().getParameterType();
-        operation.setResponseClass(parameterType.getSimpleName());
-        if (configuration.isParameterTypeIgnorable(parameterType)) {
-            return;
+        ResolvedType parameterType = methodReturnType(handlerMethod.getMethod());
+        if (parameterType != null) {
+            if (parameterType.getTypeParameters().size() > 0) {
+                operation.setResponseClass(parameterType.getBriefDescription());
+            } else {
+                operation.setResponseClass(parameterType.getErasedType().getSimpleName());
+            }
+            if (configuration.isParameterTypeIgnorable(parameterType.getErasedType())) {
+                return;
+            }
+            maybeAddParameterTypeToModels(controllerDocumentation, parameterType,
+                    parameterType.getBriefDescription(), true);
         }
-        maybeAddParameterTypeToModels(controllerDocumentation, parameterType, parameterType.getSimpleName(), true);
 
     }
 }

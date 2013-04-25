@@ -1,5 +1,7 @@
 package com.mangofactory.swagger.models;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.google.common.base.Function;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.wordnik.swagger.core.DocumentationSchema;
@@ -28,16 +30,17 @@ public class Models {
     }
 
     public static void maybeAddParameterTypeToModels(ControllerDocumentation controllerDocumentation,
-                                                     Class<?> parameterType, String dataType, boolean isReturnType) {
+                                                     ResolvedType parameterType, String dataType, boolean isReturnType) {
 
-        if (isKnownType(parameterType)) {
+        if (isKnownType(parameterType.getErasedType())) {
             return;
         }
         if (parameterType.isArray()) {
-            String componentType = parameterType.getComponentType().getSimpleName();
-            if (isComplexType(parameterType.getComponentType())) {
+            ResolvedArrayType arrayType = (ResolvedArrayType) parameterType;
+            String componentType = arrayType.getArrayElementType().getBriefDescription();
+            if (isComplexType(arrayType.getArrayElementType().getErasedType())) {
                 controllerDocumentation.putModel(componentType, new Model(String.format("Array[%s]", componentType),
-                        parameterType.getComponentType(), isReturnType));
+                        arrayType.getArrayElementType(), isReturnType));
             }
         } else {
             controllerDocumentation.putModel(dataType, new Model(dataType, parameterType, isReturnType));

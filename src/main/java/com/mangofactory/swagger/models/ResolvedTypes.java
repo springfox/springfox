@@ -87,4 +87,49 @@ public class ResolvedTypes {
         });
     }
 
+    public static List<ResolvedType> methodParameters(final Method methodToResolve) {
+
+        ResolvedMethod resolvedMethod = getResolvedMethod(methodToResolve);
+        List<ResolvedType> parameters = newArrayList();
+        if (resolvedMethod != null) {
+            for (int index = 0; index < resolvedMethod.getArgumentCount(); index++) {
+                parameters.add(resolvedMethod.getArgumentType(index));
+            }
+        }
+        return parameters;
+
+    }
+
+    public static ResolvedType methodReturnType(final Method methodToResolve) {
+
+        ResolvedMethod resolvedMethod = getResolvedMethod(methodToResolve);
+        if (resolvedMethod != null) {
+            return resolvedMethod.getReturnType();
+        }
+        return asResolvedType(methodToResolve.getReturnType());
+
+    }
+
+    private static ResolvedMethod getResolvedMethod(final Method methodToResolve) {
+        TypeResolver typeResolver = new TypeResolver();
+        ResolvedType enclosingType = typeResolver.resolve(methodToResolve.getDeclaringClass());
+        MemberResolver resolver = new MemberResolver(typeResolver);
+        resolver.setIncludeLangObject(false);
+        ResolvedTypeWithMembers typeWithMembers = resolver.resolve(enclosingType, null, null);
+        return getFirst(filter(newArrayList(typeWithMembers.getMemberMethods()), new Predicate<ResolvedMethod>() {
+            @Override
+            public boolean apply(ResolvedMethod input) {
+                return input.getRawMember().equals(methodToResolve);
+            }
+        }), null);
+    }
+
+    public static ResolvedType asResolvedType(Class clazz) {
+        return new TypeResolver().resolve(clazz);
+    }
+
+    public static ResolvedType asResolvedType(TypeResolver typeResolver, Class clazz) {
+        return typeResolver.resolve(clazz);
+    }
+
 }

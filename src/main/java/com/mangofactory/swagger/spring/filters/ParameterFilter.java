@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.spring.filters;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.filters.Filter;
@@ -24,7 +25,7 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
     public void apply(FilterContext<DocumentationParameter> context) {
         DocumentationParameter parameter = context.subject();
         MethodParameter methodParameter = context.get("methodParameter");
-        Class parameterType = context.get("parameterType");
+        ResolvedType parameterType = context.get("parameterType");
         String defaultParameterName = context.get("defaultParameterName");
         ControllerDocumentation controllerDocumentation = context.get("controllerDocumentation");
 
@@ -32,7 +33,7 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
     }
 
     private void documentParameter(ControllerDocumentation controllerDocumentation, DocumentationParameter parameter,
-                                   MethodParameter methodParameter, Class parameterType, String defaultParameterName) {
+                                   MethodParameter methodParameter, ResolvedType parameterType, String defaultParameterName) {
 
         String name = selectBestParameterName(methodParameter, defaultParameterName);
         String description = splitCamelCase(name);
@@ -40,7 +41,13 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
             name = methodParameter.getParameterName();
         }
         String paramType = getParameterType(methodParameter);
-        String dataType = parameterType.getSimpleName();
+
+        String dataType;
+        if (parameterType.getTypeParameters().size() > 0) {
+            dataType = parameterType.getBriefDescription();
+        } else {
+            dataType = parameterType.getErasedType().getSimpleName();
+        }
         parameter.setDataType(dataType);
         maybeAddParameterTypeToModels(controllerDocumentation, parameterType, dataType, false);
         RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
@@ -53,7 +60,7 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         parameter.setNotes("");
         parameter.setParamType(paramType);
         parameter.setDefaultValue("");
-        parameter.setAllowableValues(maybeGetAllowableValues(parameterType));
+        parameter.setAllowableValues(maybeGetAllowableValues(parameterType.getErasedType()));
         parameter.setRequired(isRequired);
         parameter.setAllowMultiple(false);
         parameter.setDataType(dataType);

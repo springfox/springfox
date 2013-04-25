@@ -17,6 +17,7 @@ import java.util.Arrays;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.mangofactory.swagger.annotations.Annotations.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
 
 @Slf4j
 public class AnnotatedParameterFilter implements Filter<DocumentationParameter> {
@@ -58,7 +59,7 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
         if (apiModel != null) {
             parameter.setDataType(getAnnotatedType(apiModel));
             String simpleName = apiModel.type().getSimpleName();
-            controllerDocumentation.putModel(simpleName, new Model(simpleName, apiModel.type()));
+            controllerDocumentation.putModel(simpleName, new Model(simpleName, asResolvedType(apiModel.type())));
         }
 
     }

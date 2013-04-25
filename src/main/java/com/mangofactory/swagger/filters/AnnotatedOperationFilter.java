@@ -10,6 +10,7 @@ import org.springframework.web.method.HandlerMethod;
 
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.annotations.Annotations.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
 
 public class AnnotatedOperationFilter implements Filter<DocumentationOperation> {
     @Override
@@ -39,7 +40,7 @@ public class AnnotatedOperationFilter implements Filter<DocumentationOperation> 
         if (apiModel != null) {
             operation.setResponseClass(getAnnotatedType(apiModel));
             String simpleName = apiModel.type().getSimpleName();
-            controllerDocumentation.putModel(simpleName, new Model(simpleName,  apiModel.type(), true));
+            controllerDocumentation.putModel(simpleName, new Model(simpleName, asResolvedType(apiModel.type()), true));
         }
     }
 

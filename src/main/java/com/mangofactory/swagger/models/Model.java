@@ -1,17 +1,19 @@
 package com.mangofactory.swagger.models;
 
+import com.fasterxml.classmate.ResolvedType;
+
 public class Model {
     private String name;
-    private Class<?> type;
+    private ResolvedType type;
     private final boolean returnType;
 
-    public Model(String name, Class<?> type) {
+    public Model(String name, ResolvedType type) {
         this.name = name;
         this.type = type;
         this.returnType = false;
     }
 
-    public Model(String name, Class<?> type, boolean returnType) {
+    public Model(String name, ResolvedType type, boolean returnType) {
         this.name = name;
         this.type = type;
         this.returnType = returnType;
@@ -21,7 +23,7 @@ public class Model {
         return name;
     }
 
-    public Class<?> getType() {
+    public ResolvedType getType() {
         return type;
     }
 
