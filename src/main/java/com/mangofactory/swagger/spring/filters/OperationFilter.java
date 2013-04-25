@@ -34,11 +34,7 @@ public class OperationFilter implements Filter<DocumentationOperation> {
         operation.setDeprecated(handlerMethod.getMethodAnnotation(Deprecated.class) != null);
         ResolvedType parameterType = methodReturnType(handlerMethod.getMethod());
         if (parameterType != null) {
-            if (parameterType.getTypeParameters().size() > 0) {
-                operation.setResponseClass(parameterType.getBriefDescription());
-            } else {
-                operation.setResponseClass(parameterType.getErasedType().getSimpleName());
-            }
+            operation.setResponseClass(modelName(parameterType));
             if (configuration.isParameterTypeIgnorable(parameterType.getErasedType())) {
                 return;
             }

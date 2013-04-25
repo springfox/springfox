@@ -132,4 +132,21 @@ public class ResolvedTypes {
         return typeResolver.resolve(clazz);
     }
 
+    public static String modelName(ResolvedType resolvedType) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(resolvedType.getErasedType().getSimpleName());
+        boolean first = true;
+        for (ResolvedType typeParam:  resolvedType.getTypeParameters()) {
+            if (first) {
+                sb.append(String.format("[%s", typeParam.getErasedType().getSimpleName()));
+                first = false;
+            } else {
+                sb.append(String.format(",%s", typeParam.getErasedType().getSimpleName()));
+            }
+        }
+        if (!first) {
+            sb.append("]");
+        }
+        return sb.toString();
+    }
 }

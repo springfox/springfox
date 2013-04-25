@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.modelName;
 
 public class ResolvedTypeMemberVisitor implements MemberVisitor {
 
@@ -35,7 +36,7 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
 
         if (context.getSchemaMap().containsKey(member.getType().getSimpleName())) {
             DocumentationSchema schema = new DocumentationSchema();
-            schema.setType(member.getType().getSimpleName());
+            schema.setType(modelName(member.getResolvedType()));
             schema.setName(member.getName());
             return schema;
         }
@@ -46,7 +47,7 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
                 return PrimitiveMemberVisitor.factory().apply(context).schema(new ClassMemberInfo(erasedClass));
             } else if (EnumHelper.isEnum(resolvedMember.getErasedType())) {
                 DocumentationSchema schema = new DocumentationSchema();
-                schema.setType(resolvedMember.getErasedType().getSimpleName());
+                schema.setType(modelName(resolvedMember));
                 schema.setName(resolvedMember.getErasedType().getName());
                 DocumentationAllowableListValues list = new DocumentationAllowableListValues();
                 list.setValues(EnumHelper.getEnumValues(resolvedMember.getErasedType()));
@@ -79,7 +80,7 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
 
         DocumentationSchema objectSchema = new DocumentationSchema();
         objectSchema.setName(member.getName());
-        objectSchema.setType(resolvedMember.getErasedType().getSimpleName());
+        objectSchema.setType(modelName(resolvedMember));
         context.getSchemaMap().put(resolvedMember.getErasedType().getSimpleName(), objectSchema);
         Map<String, DocumentationSchema> propertyMap = newHashMap();
         for (ResolvedField childField: context.getResolvedFields(resolvedMember)){

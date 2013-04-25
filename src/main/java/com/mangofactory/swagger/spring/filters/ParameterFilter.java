@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.models.Models.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.modelName;
 import static com.mangofactory.swagger.spring.Descriptions.*;
 
 public class ParameterFilter implements Filter<DocumentationParameter> {
@@ -42,12 +43,7 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         }
         String paramType = getParameterType(methodParameter);
 
-        String dataType;
-        if (parameterType.getTypeParameters().size() > 0) {
-            dataType = parameterType.getBriefDescription();
-        } else {
-            dataType = parameterType.getErasedType().getSimpleName();
-        }
+        String dataType = modelName(parameterType);
         parameter.setDataType(dataType);
         maybeAddParameterTypeToModels(controllerDocumentation, parameterType, dataType, false);
         RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);

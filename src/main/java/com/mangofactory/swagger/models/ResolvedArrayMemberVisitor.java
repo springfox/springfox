@@ -5,6 +5,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.wordnik.swagger.core.DocumentationSchema;
 
+import static com.mangofactory.swagger.models.ResolvedTypes.modelName;
+
 public class ResolvedArrayMemberVisitor implements MemberVisitor {
     private final SchemaProvider context;
 
@@ -27,7 +29,7 @@ public class ResolvedArrayMemberVisitor implements MemberVisitor {
         Preconditions.checkArgument(member.getResolvedType() instanceof ResolvedArrayType);
         if (context.getSchemaMap().containsKey(member.getType().getSimpleName())) {
             DocumentationSchema schema = new DocumentationSchema();
-            schema.setType(member.getType().getSimpleName());
+            schema.setType(modelName(member.getResolvedType()));
             schema.setName(member.getName());
             return schema;
         }
