@@ -9,8 +9,12 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Ordering;
+import com.google.common.primitives.Ints;
 
 import java.lang.reflect.Method;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -116,12 +120,25 @@ public class ResolvedTypes {
         MemberResolver resolver = new MemberResolver(typeResolver);
         resolver.setIncludeLangObject(false);
         ResolvedTypeWithMembers typeWithMembers = resolver.resolve(enclosingType, null, null);
-        return getFirst(filter(newArrayList(typeWithMembers.getMemberMethods()), new Predicate<ResolvedMethod>() {
+        Iterable<ResolvedMethod> filtered = filter(newArrayList(typeWithMembers.getMemberMethods()), new Predicate<ResolvedMethod>() {
             @Override
             public boolean apply(ResolvedMethod input) {
-                return input.getRawMember().equals(methodToResolve);
+                return input.getRawMember().getName().equals(methodToResolve.getName());
             }
-        }), null);
+        });
+        return resolveToMethodWithMaxResolvedTypes(filtered);
+    }
+
+    private static ResolvedMethod resolveToMethodWithMaxResolvedTypes(Iterable<ResolvedMethod> filtered) {
+        if (Iterables.size(filtered) > 0) {
+            return Ordering.from(new Comparator<ResolvedMethod>() {
+                @Override
+                public int compare(ResolvedMethod first, ResolvedMethod second) {
+                    return Ints.compare(first.getArgumentCount(), second.getArgumentCount());
+                }
+            }).max(filtered);
+        }
+        return null;
     }
 
     public static ResolvedType asResolvedType(Class clazz) {
