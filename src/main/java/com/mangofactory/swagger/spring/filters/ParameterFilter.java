@@ -41,8 +41,7 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         if (StringUtils.isEmpty(name)) {
             name = methodParameter.getParameterName();
         }
-        String paramType = getParameterType(methodParameter);
-
+        String paramType = getParameterType(methodParameter, parameterType);
         String dataType = modelName(parameterType);
         parameter.setDataType(dataType);
         maybeAddParameterTypeToModels(controllerDocumentation, parameterType, dataType, false);
@@ -83,7 +82,7 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
 
 
 
-    private String getParameterType(MethodParameter methodParameter) {
+    private String getParameterType(MethodParameter methodParameter, ResolvedType parameterType) {
         RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
         if (requestParam != null) {
             return "query";
@@ -100,7 +99,10 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         if (modelAttribute != null) {
             return "body";
         }
-        return "query";
+        if (isPrimitive(parameterType.getErasedType())) {
+            return "query";
+        }
+        return "body";
     }
 
     private String selectBestParameterName(MethodParameter methodParameter, String defaultParameterName) {

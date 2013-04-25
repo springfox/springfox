@@ -65,4 +65,17 @@ public class Models {
                 !parameterType.isAssignableFrom(String.class) &&
                 !parameterType.isAssignableFrom(Date.class);
     }
+
+    public static boolean isPrimitive(Class<?> parameterType) {
+        return parameterType.isEnum() ||
+                parameterType.isPrimitive() ||
+                String.class.isAssignableFrom(parameterType) ||
+                Date.class.isAssignableFrom(parameterType) ||
+                Byte.class.isAssignableFrom(parameterType) ||
+                Boolean.class.isAssignableFrom(parameterType) ||
+                Integer.class.isAssignableFrom(parameterType) ||
+                Long.class.isAssignableFrom(parameterType) ||
+                Float.class.isAssignableFrom(parameterType) ||
+                Double.class.isAssignableFrom(parameterType);
+    }
 }
