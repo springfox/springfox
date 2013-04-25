@@ -20,6 +20,7 @@ public class Models {
         }
         public static Function<Model, Map<String, DocumentationSchema>>
             modelToSchema(final DocumentationSchemaProvider provider) {
+
             return new Function<Model, Map<String, DocumentationSchema>>() {
                 @Override
                 public Map<String, DocumentationSchema> apply(Model input) {

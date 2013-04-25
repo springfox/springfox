@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.spring.filters;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.filters.Filter;
 import com.mangofactory.swagger.filters.FilterContext;
@@ -18,9 +19,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.filters.Filters.Fn.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.methodParameters;
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
 import static org.junit.Assert.*;
 
 public class ParameterFilterTest {
@@ -89,11 +90,14 @@ public class ParameterFilterTest {
     private ControllerDocumentation documentation;
     private FilterContext<DocumentationParameter> context;
     private List<Filter<DocumentationParameter>> paramFilters;
+    private static final TypeResolver typeResolver = new TypeResolver();
+
 
     @Before
     public void setup() {
         docParam = new DocumentationParameter();
-        documentation = new ControllerDocumentation("1", "2", "", "", new DocumentationSchemaProvider());
+        documentation = new ControllerDocumentation("1", "2", "", "",
+                new DocumentationSchemaProvider(new TypeResolver()));
         context = new FilterContext<DocumentationParameter>(docParam);
         context.put("controllerDocumentation", documentation);
         paramFilters = newArrayList();
@@ -106,11 +110,11 @@ public class ParameterFilterTest {
         HandlerMethod handlerMethod = handlerMethod("methodWithSupportedPrimitives", byte.class, boolean.class,
                 int.class, long.class, float.class, double.class, String.class, Date.class);
         MethodParameter[] methodParams = handlerMethod.getMethodParameters();
-        List<ResolvedType> parameterTypes = methodParameters(handlerMethod.getMethod());
+        List<ResolvedType> parameterTypes = methodParameters(typeResolver, handlerMethod.getMethod());
         for (int index = 0; index < methodParams.length; index++) {
             DocumentationParameter docParam = new DocumentationParameter();
             ControllerDocumentation documentation = new ControllerDocumentation("1", "2", "", "",
-                    new DocumentationSchemaProvider());
+                    new DocumentationSchemaProvider(new TypeResolver()));
             FilterContext context = new FilterContext<DocumentationParameter>(docParam);
             context.put("controllerDocumentation", documentation);
             context.put("methodParameter", methodParams[index]);
@@ -130,7 +134,7 @@ public class ParameterFilterTest {
     public void whenParameterIsAnEnum() {
         HandlerMethod handlerMethod = handlerMethod("methodWithEnum", SampleEnum.class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
-        context.put("parameterType", methodParameters(handlerMethod.getMethod()).get(0));
+        context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
         applyFilters(paramFilters, context);
 
         assertEquals(0, documentation.getModels().size());
@@ -144,7 +148,7 @@ public class ParameterFilterTest {
     public void whenParameterIsAType() {
         HandlerMethod handlerMethod = handlerMethod("methodWithType", SampleType.class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
-        context.put("parameterType", methodParameters(handlerMethod.getMethod()).get(0));
+        context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
         applyFilters(paramFilters, context);
 
         assertEquals(2, documentation.getModels().size());
@@ -156,7 +160,7 @@ public class ParameterFilterTest {
     public void whenParameterIsAGenericList() {
         HandlerMethod handlerMethod = handlerMethod("methodWithGenericList", List.class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
-        context.put("parameterType", methodParameters(handlerMethod.getMethod()).get(0));
+        context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
         applyFilters(paramFilters, context);
 
         assertEquals(0, documentation.getModels().size());
@@ -168,7 +172,7 @@ public class ParameterFilterTest {
     public void whenParameterIsGenericSet() {
         HandlerMethod handlerMethod = handlerMethod("methodWithGenericSet", Set.class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
-        context.put("parameterType", methodParameters(handlerMethod.getMethod()).get(0));
+        context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
         applyFilters(paramFilters, context);
 
         assertEquals(0, documentation.getModels().size());
@@ -180,7 +184,7 @@ public class ParameterFilterTest {
     public void whenArrayTypeIsAPrimitive() {
         HandlerMethod handlerMethod = handlerMethod("methodWithPrimitiveArray", String[].class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
-        context.put("parameterType", methodParameters(handlerMethod.getMethod()).get(0));
+        context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
         applyFilters(paramFilters, context);
 
         assertEquals(0, documentation.getModels().size());
@@ -192,7 +196,7 @@ public class ParameterFilterTest {
     public void whenArrayTypeIsAClass() {
         HandlerMethod handlerMethod = handlerMethod("methodWithTypeArray", SampleType[].class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
-        context.put("parameterType", methodParameters(handlerMethod.getMethod()).get(0));
+        context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
         applyFilters(paramFilters, context);
 
         assertEquals(2, documentation.getModels().size());
@@ -204,7 +208,7 @@ public class ParameterFilterTest {
     public void whenArrayTypeIsAnEnum() {
         HandlerMethod handlerMethod = handlerMethod("methodWithEnumArray", SampleEnum[].class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
-        context.put("parameterType", methodParameters(handlerMethod.getMethod()).get(0));
+        context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
 
         applyFilters(paramFilters, context);
 

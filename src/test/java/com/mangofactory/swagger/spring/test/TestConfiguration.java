@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.spring.test;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.SwaggerConfigurationExtension;
@@ -7,6 +8,7 @@ import com.mangofactory.swagger.models.DocumentationSchemaProvider;
 import com.mangofactory.swagger.models.Jackson2SchemaDescriptor;
 import com.mangofactory.swagger.models.SchemaDescriptor;
 import com.mangofactory.swagger.spring.controller.DocumentationController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -39,8 +41,9 @@ public class TestConfiguration {
     }
 
     @Bean
-    public DocumentationSchemaProvider documentationSchemaProvider() {
-        return new DocumentationSchemaProvider();
+    @Autowired
+    public DocumentationSchemaProvider documentationSchemaProvider(SchemaDescriptor schemaDescriptor) {
+        return new DocumentationSchemaProvider(new TypeResolver(), schemaDescriptor);
     }
 
     @Bean

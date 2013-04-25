@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.spring.filters;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.SwaggerConfigurationExtension;
@@ -53,7 +54,8 @@ public class OperationFilterTest {
     @Before
     public void setup() throws Exception {
         DocumentationOperation operation = new DocumentationOperation();
-        controllerDocumentation= new ControllerDocumentation("", "", "", "", new DocumentationSchemaProvider());
+        controllerDocumentation= new ControllerDocumentation("", "", "", "",
+                new DocumentationSchemaProvider(new TypeResolver()));
         context = new FilterContext<DocumentationOperation>(operation);
         context.put("controllerDocumentation", controllerDocumentation);
 

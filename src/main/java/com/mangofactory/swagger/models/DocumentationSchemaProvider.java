@@ -17,19 +17,19 @@ public class DocumentationSchemaProvider {
     private TypeResolver typeResolver;
 
     @Autowired
-    public DocumentationSchemaProvider(SchemaDescriptor descriptor) {
+    public DocumentationSchemaProvider(TypeResolver typeResolver, SchemaDescriptor descriptor) {
+        this.typeResolver = typeResolver;
         this.descriptor = descriptor;
-        this.typeResolver = new TypeResolver();
     }
 
-    public DocumentationSchemaProvider() {
+    public DocumentationSchemaProvider(TypeResolver typeResolver) {
+        this.typeResolver = typeResolver;
         this.descriptor = new Jackson2SchemaDescriptor(new ObjectMapper());
-        this.typeResolver = new TypeResolver();
     }
 
     public Map<String, DocumentationSchema> getModelMap(Model model) {
         SchemaProvider providers = new SchemaProvider(descriptor, typeResolver, model.isReturnType());
-        providers.schema(typeResolver.resolve(model.getType()));
+        providers.schema(model.getType());
         return providers.getSchemaMap();
     }
 

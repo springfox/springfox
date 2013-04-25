@@ -91,9 +91,9 @@ public class ResolvedTypes {
         });
     }
 
-    public static List<ResolvedType> methodParameters(final Method methodToResolve) {
+    public static List<ResolvedType> methodParameters(TypeResolver typeResolver, final Method methodToResolve) {
 
-        ResolvedMethod resolvedMethod = getResolvedMethod(methodToResolve);
+        ResolvedMethod resolvedMethod = getResolvedMethod(typeResolver, methodToResolve);
         List<ResolvedType> parameters = newArrayList();
         if (resolvedMethod != null) {
             for (int index = 0; index < resolvedMethod.getArgumentCount(); index++) {
@@ -104,9 +104,8 @@ public class ResolvedTypes {
 
     }
 
-    public static ResolvedType methodReturnType(final Method methodToResolve) {
-
-        ResolvedMethod resolvedMethod = getResolvedMethod(methodToResolve);
+    public static ResolvedType methodReturnType(TypeResolver typeResolver, final Method methodToResolve) {
+        ResolvedMethod resolvedMethod = getResolvedMethod(typeResolver, methodToResolve);
         if (resolvedMethod != null) {
             return resolvedMethod.getReturnType();
         }
@@ -114,8 +113,7 @@ public class ResolvedTypes {
 
     }
 
-    private static ResolvedMethod getResolvedMethod(final Method methodToResolve) {
-        TypeResolver typeResolver = new TypeResolver();
+    private static ResolvedMethod getResolvedMethod(TypeResolver typeResolver, final Method methodToResolve) {
         ResolvedType enclosingType = typeResolver.resolve(methodToResolve.getDeclaringClass());
         MemberResolver resolver = new MemberResolver(typeResolver);
         resolver.setIncludeLangObject(false);

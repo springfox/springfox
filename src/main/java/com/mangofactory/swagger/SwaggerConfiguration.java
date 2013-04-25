@@ -1,5 +1,6 @@
 package com.mangofactory.swagger;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.filters.AnnotatedEndpointFilter;
 import com.mangofactory.swagger.filters.AnnotatedErrorsFilter;
 import com.mangofactory.swagger.filters.AnnotatedOperationFilter;
@@ -53,7 +54,8 @@ public class SwaggerConfiguration  implements InitializingBean {
     @Getter private DocumentationTransformer documentationTransformer = new DefaultDocumentationTransformer(this);
     @Getter private Comparator<DocumentationEndPoint> endPointComparator;
     @Getter private Comparator<DocumentationOperation> operationComparator;
-    @Autowired private DocumentationSchemaProvider schemaProvider;
+    @Autowired(required = false) private DocumentationSchemaProvider schemaProvider;
+    @Autowired(required = false) private TypeResolver typeResolver;
 
     public SwaggerConfiguration(boolean applyDefaults) {
         this.swaggerVersion = SWAGGER_VERSION;
@@ -134,8 +136,15 @@ public class SwaggerConfiguration  implements InitializingBean {
 
     public DocumentationSchemaProvider getSchemaProvider() {
         if (schemaProvider == null) {
-            schemaProvider = new DocumentationSchemaProvider();
+            schemaProvider = new DocumentationSchemaProvider(getTypeResolver());
         }
         return schemaProvider;
+    }
+
+    public TypeResolver getTypeResolver() {
+        if (typeResolver == null) {
+            typeResolver = new TypeResolver();
+        }
+        return typeResolver;
     }
 }

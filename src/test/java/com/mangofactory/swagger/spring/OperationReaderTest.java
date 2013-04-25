@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.spring;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.annotations.ApiError;
@@ -56,7 +57,7 @@ public class OperationReaderTest {
 
         controllerDocumentation = new ControllerDocumentation(swaggerConfiguration.getApiVersion(),
                 swaggerConfiguration.getSwaggerVersion(), swaggerConfiguration.getBasePath(),
-                swaggerConfiguration.getDocumentationBasePath(), new DocumentationSchemaProvider());
+                swaggerConfiguration.getDocumentationBasePath(), new DocumentationSchemaProvider(new TypeResolver()));
     }
 
     @Test

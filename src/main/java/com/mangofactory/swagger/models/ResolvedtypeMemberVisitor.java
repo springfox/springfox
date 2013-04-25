@@ -44,7 +44,7 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
         Class<?> erasedClass = resolvedMember.getErasedType();
         if (resolvedMember.getTypeParameters().size() == 0) {
             if (resolvedMember.isPrimitive() || SchemaProvider.isSimpleType(resolvedMember.getErasedType())) {
-                return PrimitiveMemberVisitor.factory().apply(context).schema(new ClassMemberInfo(erasedClass));
+                return PrimitiveMemberVisitor.factory().apply(context).schema(new PrimitiveMemberInfo(erasedClass));
             } else if (EnumHelper.isEnum(resolvedMember.getErasedType())) {
                 DocumentationSchema schema = new DocumentationSchema();
                 schema.setType(modelName(resolvedMember));

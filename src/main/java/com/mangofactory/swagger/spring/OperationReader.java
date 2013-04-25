@@ -39,7 +39,8 @@ public class OperationReader {
         int parameterIndex = 0;
         String [] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(handlerMethod
                 .getMethod());
-        List<ResolvedType> resolvedParameters = methodParameters(handlerMethod.getMethod());
+        List<ResolvedType> resolvedParameters = methodParameters(configuration.getTypeResolver(),
+                handlerMethod.getMethod());
         MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
         for (int index = 0; index < handlerMethod.getMethodParameters().length; index++) {
             DocumentationParameter parameter = new DocumentationParameter();

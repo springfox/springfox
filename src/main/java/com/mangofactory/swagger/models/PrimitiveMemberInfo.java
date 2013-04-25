@@ -3,10 +3,10 @@ package com.mangofactory.swagger.models;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 
-public class ClassMemberInfo implements MemberInfoSource {
+public class PrimitiveMemberInfo implements MemberInfoSource {
     private final Class<?> clazz;
 
-    public ClassMemberInfo(Class<?> clazz) {
+    public PrimitiveMemberInfo(Class<?> clazz) {
         this.clazz = clazz;
     }
 

@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.models;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.wordnik.swagger.core.DocumentationAllowableListValues;
 import com.wordnik.swagger.core.DocumentationSchema;
 import org.junit.Before;
@@ -107,7 +108,7 @@ public class ArrayTest {
     @Before
     public void setup() {
         modelMap = newHashMap();
-        DocumentationSchemaProvider provider = new DocumentationSchemaProvider();
+        DocumentationSchemaProvider provider = new DocumentationSchemaProvider(new TypeResolver());
         modelMap = provider.getModelMap(new Model("ToTest", asResolvedType(ToTest.class)));
     }
 
