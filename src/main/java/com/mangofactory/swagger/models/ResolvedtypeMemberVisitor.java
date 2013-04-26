@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.modelName;
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 public class ResolvedTypeMemberVisitor implements MemberVisitor {
 
@@ -61,20 +61,26 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
             DocumentationSchema schema = new DocumentationSchema();
             schema.setType("List");
             schema.setName(member.getName());
-            DocumentationSchema itemSchema = context.schema(ResolvedCollection.listElementType(member));
-            DocumentationSchema itemSchemaRef = new DocumentationSchema();
-            itemSchemaRef.ref_$eq(itemSchema.getType());
-            schema.setItems(itemSchemaRef);
+            ResolvedType resolvedType = ResolvedCollection.listElementType(member);
+            if (!ResolvedTypes.ignorable(resolvedType)) {
+                DocumentationSchema itemSchema = context.schema(resolvedType);
+                DocumentationSchema itemSchemaRef = new DocumentationSchema();
+                itemSchemaRef.ref_$eq(itemSchema.getType());
+                schema.setItems(itemSchemaRef);
+            }
             return schema;
         }
         if (ResolvedCollection.isSet(member)) {
             DocumentationSchema schema = new DocumentationSchema();
             schema.setType("Set");
             schema.setName(member.getName());
-            DocumentationSchema itemSchema = context.schema(ResolvedCollection.setElementType(member));
-            DocumentationSchema itemSchemaRef = new DocumentationSchema();
-            itemSchemaRef.ref_$eq(itemSchema.getType());
-            schema.setItems(itemSchemaRef);
+            ResolvedType resolvedType = ResolvedCollection.setElementType(member);
+            if (!ResolvedTypes.ignorable(resolvedType)) {
+                DocumentationSchema itemSchema = context.schema(resolvedType);
+                DocumentationSchema itemSchemaRef = new DocumentationSchema();
+                itemSchemaRef.ref_$eq(itemSchema.getType());
+                schema.setItems(itemSchemaRef);
+            }
             return schema;
         }
 
@@ -85,13 +91,13 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
         Map<String, DocumentationSchema> propertyMap = newHashMap();
         for (ResolvedField childField: context.getResolvedFields(resolvedMember)){
             DocumentationSchema childSchema = context.schema(childField);
-            if (childSchema != null) {
+            if (childSchema != null && !ignorable(childField.getType())) {
                 propertyMap.put(childField.getName(), childSchema);
             }
         }
         for (ResolvedProperty childProperty: context.getResolvedProperties(resolvedMember)) {
             DocumentationSchema childPropertySchema = context.schema(childProperty);
-            if (childPropertySchema != null) {
+            if (childPropertySchema != null && !ignorable(childProperty.getResolvedType())) {
                 propertyMap.put(childProperty.getName(), childPropertySchema);
             }
         }

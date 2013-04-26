@@ -38,8 +38,7 @@ public class OperationFilter implements Filter<DocumentationOperation> {
             if (configuration.isParameterTypeIgnorable(parameterType.getErasedType())) {
                 return;
             }
-            maybeAddParameterTypeToModels(controllerDocumentation, parameterType,
-                    parameterType.getBriefDescription(), true);
+            maybeAddParameterTypeToModels(controllerDocumentation, parameterType, modelName(parameterType), true);
         }
 
     }

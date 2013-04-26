@@ -8,9 +8,9 @@ import com.wordnik.swagger.core.DocumentationSchema;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 @Slf4j
 public class Models {
@@ -33,38 +33,34 @@ public class Models {
     public static void maybeAddParameterTypeToModels(ControllerDocumentation controllerDocumentation,
                                                      ResolvedType parameterType, String dataType, boolean isReturnType) {
 
-        if (isKnownType(parameterType.getErasedType())) {
+        if (isPrimitive(parameterType.getErasedType())) {
             return;
         }
+        ResolvedTypeMemberSource member = new ResolvedTypeMemberSource(parameterType);
         if (parameterType.isArray()) {
             ResolvedArrayType arrayType = (ResolvedArrayType) parameterType;
-            String componentType = arrayType.getArrayElementType().getBriefDescription();
-            if (isComplexType(arrayType.getArrayElementType().getErasedType())) {
+            String componentType = modelName(arrayType.getArrayElementType());
+            if (!isPrimitive(arrayType.getArrayElementType().getErasedType())) {
                 controllerDocumentation.putModel(componentType, new Model(String.format("Array[%s]", componentType),
                         arrayType.getArrayElementType(), isReturnType));
+            }
+        } else if (ResolvedCollection.isList(member)) {
+            ResolvedType elementType = ResolvedCollection.listElementType(member);
+            String componentType = modelName(elementType);
+            if (!isPrimitive(elementType.getErasedType())) {
+                controllerDocumentation.putModel(componentType, new Model(String.format("List[%s]", componentType),
+                        elementType, isReturnType));
+            }
+        } else if (ResolvedCollection.isSet(member)) {
+            ResolvedType elementType = ResolvedCollection.setElementType(member);
+            String componentType = modelName(elementType);
+            if (!isPrimitive(elementType.getErasedType())) {
+                controllerDocumentation.putModel(componentType, new Model(String.format("Set[%s]", componentType),
+                        elementType, isReturnType));
             }
         } else {
             controllerDocumentation.putModel(dataType, new Model(dataType, parameterType, isReturnType));
         }
-    }
-
-    private static boolean isKnownType(Class<?> parameterType) {
-        return parameterType.isAssignableFrom(List.class) ||
-                parameterType.isAssignableFrom(Set.class) ||
-                parameterType.isPrimitive() ||
-                parameterType.isEnum() ||
-                parameterType.isAssignableFrom(String.class) ||
-                parameterType.isAssignableFrom(Date.class);
-    }
-
-    private static boolean isComplexType(Class<?> parameterType) {
-        return !parameterType.isEnum() &&
-                !parameterType.isPrimitive() &&
-                !parameterType.isArray() &&
-                !parameterType.isAssignableFrom(List.class) &&
-                !parameterType.isAssignableFrom(Set.class) &&
-                !parameterType.isAssignableFrom(String.class) &&
-                !parameterType.isAssignableFrom(Date.class);
     }
 
     public static boolean isPrimitive(Class<?> parameterType) {

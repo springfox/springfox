@@ -2,6 +2,8 @@ package com.mangofactory.swagger.models;
 
 import com.fasterxml.classmate.ResolvedType;
 
+import static com.mangofactory.swagger.models.ResolvedTypes.modelName;
+
 public class ResolvedTypeMemberSource implements MemberInfoSource {
     private final ResolvedType resolvedType;
 
@@ -16,7 +18,7 @@ public class ResolvedTypeMemberSource implements MemberInfoSource {
 
     @Override
     public String getName() {
-        return "";
+        return modelName(resolvedType);
     }
 
     @Override
@@ -26,7 +28,10 @@ public class ResolvedTypeMemberSource implements MemberInfoSource {
 
     @Override
     public boolean isAssignableFrom(Class<?> clazz) {
-        return resolvedType.getClass().isAssignableFrom(clazz) || clazz.isAssignableFrom(resolvedType.getClass());
+        return resolvedType.getClass().isAssignableFrom(clazz)
+                || clazz.isAssignableFrom(resolvedType.getClass())
+                || resolvedType.getErasedType().isAssignableFrom(clazz)
+                || clazz.isAssignableFrom(resolvedType.getErasedType());
     }
 
     @Override
