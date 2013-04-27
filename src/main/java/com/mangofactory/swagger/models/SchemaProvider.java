@@ -38,6 +38,7 @@ public class SchemaProvider {
             .put(Float.class, PrimitiveMemberVisitor.factory())
             .put(String.class, PrimitiveMemberVisitor.factory())
             .put(Date.class, DateMemberVisitor.factory())
+            .put(Object.class, ObjectMemberVisitor.factory())
             .put(ResolvedProperty.class, ResolvedTypeMemberVisitor.factory())
             .put(ResolvedObjectType.class, ResolvedTypeMemberVisitor.factory())
             .put(ResolvedPrimitiveType.class, ResolvedTypeMemberVisitor.factory())
@@ -105,20 +106,6 @@ public class SchemaProvider {
 
     public boolean isReturnType() {
         return returnType;
-    }
-
-    public static boolean isSimpleType(Class<?> clazz) {
-        if (clazz == Integer.class ||
-                clazz == Double.class ||
-                clazz == Float.class ||
-                clazz == Date.class ||
-                clazz == String.class ||
-                clazz == Byte.class ||
-                clazz == Long.class ||
-                clazz == Boolean.class) {
-            return true;
-        }
-        return false;
     }
 
     public List<ResolvedField> getResolvedFields(ResolvedType resolvedType) {

@@ -52,10 +52,8 @@ public class ApplicationDocumentationFilterTest {
         context.put("servletContext", servletContext);
         context.put("controllerClass", sampleController.getClass());
         context.put("handlerMethod", handlerMethod);
-        SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-        swaggerConfiguration.setApiVersion("2.0");
-        swaggerConfiguration.setBasePath("/some-path");
-        context.put("swagger", swaggerConfiguration);
+        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
+        context.put("swagger", config);
 
         filters = newArrayList();
         filters.add(new ApplicationFilter());

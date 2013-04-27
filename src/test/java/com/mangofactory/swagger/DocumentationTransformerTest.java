@@ -12,14 +12,10 @@ import static com.google.common.collect.Lists.newArrayList;
 
 public class DocumentationTransformerTest {
     private DocumentationTransformer transformer;
-    private SwaggerConfiguration configuration;
-    private SwaggerConfigurationExtension configurationExtension;
+
     @Before
     public void setUp() throws Exception {
-        configuration = new SwaggerConfiguration();
-        configurationExtension = new SwaggerConfigurationExtension();
-        configuration.setExtensions(configurationExtension);
-        transformer = new DocumentationTransformer(configuration) {
+        transformer = new DocumentationTransformer(null, null) {
             @Override
             public Documentation applyTransformation(Documentation documentation) {
                 return documentation;
@@ -27,14 +23,14 @@ public class DocumentationTransformerTest {
         };
     }
 
-    private void setupComparators(SwaggerConfigurationExtension extensions) {
-        extensions.setEndPointComparator(new Comparator<DocumentationEndPoint>() {
+    private void setupComparators(DocumentationTransformer transformer) {
+        transformer.setEndPointComparator(new Comparator<DocumentationEndPoint>() {
             @Override
             public int compare(DocumentationEndPoint endPoint, DocumentationEndPoint endPoint2) {
                 return endPoint.getPath().compareTo(endPoint2.getPath());
             }
         });
-        extensions.setOperationComparator(new Comparator<DocumentationOperation>() {
+        transformer.setOperationComparator(new Comparator<DocumentationOperation>() {
             @Override
             public int compare(DocumentationOperation operation, DocumentationOperation operation2) {
                 return operation.getHttpMethod().compareTo(operation2.getHttpMethod());
@@ -66,14 +62,14 @@ public class DocumentationTransformerTest {
 
     @Test
     public void whenApisCollectionIsEmpty() {
-        setupComparators(configurationExtension);
+        setupComparators(transformer);
         Documentation documentation = new Documentation();
         transformer.applySorting(documentation);
     }
 
     @Test
     public void whenApisCollectionHasOneElementAndEmptyOperationsCollection() {
-        setupComparators(configurationExtension);
+        setupComparators(transformer);
         Documentation documentation = new Documentation();
         documentation.setApis(newArrayList(new DocumentationEndPoint("/somepath", "some desc")));
         transformer.applySorting(documentation);
@@ -81,7 +77,7 @@ public class DocumentationTransformerTest {
 
     @Test
     public void whenApisCollectionHasOneElementWithNonEmptyOperationsCollection() {
-        setupComparators(configurationExtension);
+        setupComparators(transformer);
         Documentation documentation = new Documentation();
         DocumentationEndPoint endPoint = new DocumentationEndPoint("/somepath", "some desc");
         endPoint.setOperations(newArrayList(new DocumentationOperation("GET", "some method", "some method")));

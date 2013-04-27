@@ -3,7 +3,6 @@ package com.mangofactory.swagger.spring.filters;
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
-import com.mangofactory.swagger.SwaggerConfigurationExtension;
 import com.mangofactory.swagger.filters.FilterContext;
 import com.mangofactory.swagger.models.DocumentationSchemaProvider;
 import com.wordnik.swagger.core.DocumentationOperation;
@@ -18,9 +17,9 @@ import org.springframework.web.method.HandlerMethod;
 
 import java.lang.reflect.Method;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static com.google.common.collect.Lists.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OperationFilterTest {
@@ -59,11 +58,8 @@ public class OperationFilterTest {
         context = new FilterContext<DocumentationOperation>(operation);
         context.put("controllerDocumentation", controllerDocumentation);
 
-        SwaggerConfiguration configuration = new SwaggerConfiguration();
-        SwaggerConfigurationExtension extensions = new SwaggerConfigurationExtension();
-        extensions.setIgnorableParameterTypes(newArrayList(String.class, ResponseEntity.class));
-        configuration.setExtensions(extensions);
-        configuration.afterPropertiesSet();
+        SwaggerConfiguration configuration = new SwaggerConfiguration("2.0", "/some-path");
+        configuration.getIgnorableParameterTypes().addAll(newArrayList(String.class, ResponseEntity.class));
         context.put("swaggerConfiguration", configuration);
 
         when(ignoredMethodParameter.getParameterType()).thenReturn((Class) ResponseEntity.class);

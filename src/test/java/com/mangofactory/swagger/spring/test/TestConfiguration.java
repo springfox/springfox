@@ -1,54 +1,28 @@
 package com.mangofactory.swagger.spring.test;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.swagger.SwaggerConfiguration;
-import com.mangofactory.swagger.SwaggerConfigurationExtension;
-import com.mangofactory.swagger.models.DocumentationSchemaProvider;
-import com.mangofactory.swagger.models.Jackson2SchemaDescriptor;
-import com.mangofactory.swagger.models.SchemaDescriptor;
-import com.mangofactory.swagger.spring.controller.DocumentationController;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mangofactory.swagger.configuration.DefaultConfigurationModule;
+import com.mangofactory.swagger.configuration.DocumentationConfig;
+import com.mangofactory.swagger.configuration.ExtensibilityModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import static com.google.common.collect.Lists.*;
 
 @Configuration
 @EnableWebMvc
+@Import(DocumentationConfig.class)
 @ComponentScan("com.mangofactory.swagger.spring.test")
 public class TestConfiguration {
 
     @Bean
-    public DocumentationController documentationController() {
-        return new DocumentationController();
+    public SwaggerConfiguration swaggerConfiguration(DefaultConfigurationModule defaultConfig,
+                                                     ExtensibilityModule extensibility) {
+        SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration("2.0", "/some-path");
+        swaggerConfiguration.getExcludedResources().add("/excluded");
+        return extensibility.apply(defaultConfig.apply(swaggerConfiguration));
     }
 
-    @Bean
-    public SwaggerConfiguration swaggerConfiguration() {
-        SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-        swaggerConfiguration.setApiVersion("2.0");
-        swaggerConfiguration.setBasePath("/some-path");
-        swaggerConfiguration.setExcludedResources(newArrayList("/excluded"));
-        return swaggerConfiguration;
-    }
-
-    @Bean
-    public SwaggerConfigurationExtension swaggerConfigurationExtension() {
-        return new SwaggerConfigurationExtension();
-    }
-
-    @Bean
-    @Autowired
-    public DocumentationSchemaProvider documentationSchemaProvider(SchemaDescriptor schemaDescriptor) {
-        return new DocumentationSchemaProvider(new TypeResolver(), schemaDescriptor);
-    }
-
-    @Bean
-    public SchemaDescriptor schemaDescriptor() {
-        return new Jackson2SchemaDescriptor(new ObjectMapper());
-    }
 
 }

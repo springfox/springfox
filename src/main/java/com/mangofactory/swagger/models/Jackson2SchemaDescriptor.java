@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -31,7 +32,7 @@ public class Jackson2SchemaDescriptor implements SchemaDescriptor {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public Jackson2SchemaDescriptor(ObjectMapper objectMapper) {
+    public Jackson2SchemaDescriptor(@Qualifier("documentationObjectMapper") ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 

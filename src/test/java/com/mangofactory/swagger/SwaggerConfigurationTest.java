@@ -11,8 +11,8 @@ public class SwaggerConfigurationTest {
 
     @Before
     public void setUp() throws Exception {
-        config = new SwaggerConfiguration();
-        config.setExcludedResources(newArrayList("/pets"));
+        config = new SwaggerConfiguration("2.0", "/some-path");
+        config.getExcludedResources().addAll(newArrayList("/pets"));
     }
 
     @Test

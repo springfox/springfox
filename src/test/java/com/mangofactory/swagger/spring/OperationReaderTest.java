@@ -17,6 +17,11 @@ import com.wordnik.swagger.sample.exception.NotFoundException;
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.server.test.context.WebContextLoader;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,9 +39,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader = WebContextLoader.class, classes = TestConfiguration.class)
 public class OperationReaderTest {
 
-    private SwaggerConfiguration swaggerConfiguration;
+    @Autowired private SwaggerConfiguration swaggerConfiguration;
     private HandlerMethod handlerMethod;
     private HandlerMethod handlerMethod2;
     private OperationReader methodReader;
@@ -46,7 +53,6 @@ public class OperationReaderTest {
     @SneakyThrows
     public void setup() {
         SampleClass instance = new SampleClass();
-        swaggerConfiguration= new TestConfiguration().swaggerConfiguration();
         Method method = instance.getClass().getMethod("sampleMethod", String.class, String.class, String.class,
                 String.class, String.class);
         handlerMethod = new HandlerMethod(instance, method);

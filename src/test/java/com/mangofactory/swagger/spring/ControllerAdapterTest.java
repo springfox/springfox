@@ -109,8 +109,8 @@ public class ControllerAdapterTest
         ExampleServiceController controller = new ExampleServiceController();
         Method sampleMethod = controller.getClass().getMethod("included", UriComponentsBuilder.class);
         HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
-        SwaggerConfiguration config = new SwaggerConfiguration();
-        config.setExcludedResources(newArrayList(getDocumentationEndpointUri(controller.getClass())));
+        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
+        config.getExcludedResources().addAll(newArrayList(getDocumentationEndpointUri(controller.getClass())));
 
         ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
         assertFalse(adapter.shouldSkipDocumentation());
@@ -123,7 +123,7 @@ public class ControllerAdapterTest
         ExampleServiceController controller = new ExampleServiceController();
         Method sampleMethod = controller.getClass().getMethod("included", UriComponentsBuilder.class);
         HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
-        SwaggerConfiguration config = new SwaggerConfiguration();
+        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
 
         ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
         assertFalse(adapter.shouldSkipDocumentation());
@@ -135,8 +135,8 @@ public class ControllerAdapterTest
         ExampleServiceController controller = new ExampleServiceController();
         Method sampleMethod = controller.getClass().getMethod("ignored", UriComponentsBuilder.class);
         HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
-        SwaggerConfiguration config = new SwaggerConfiguration();
-        config.setExcludedResources(newArrayList(getDocumentationEndpointUri(controller.getClass())));
+        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
+        config.getExcludedResources().addAll(newArrayList(getDocumentationEndpointUri(controller.getClass())));
 
         ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
         assertTrue(adapter.shouldSkipDocumentation());
@@ -148,8 +148,8 @@ public class ControllerAdapterTest
         ExampleServiceController controller = new ExampleServiceController();
         Method sampleMethod = controller.getClass().getMethod("getEffective", UriComponentsBuilder.class);
         HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
-        SwaggerConfiguration config = new SwaggerConfiguration();
-        config.setExcludedResources(newArrayList(getDocumentationEndpointUri(controller.getClass())));
+        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
+        config.getExcludedResources().addAll(newArrayList(getDocumentationEndpointUri(controller.getClass())));
 
         ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
         assertTrue(adapter.shouldSkipDocumentation());
@@ -162,8 +162,7 @@ public class ControllerAdapterTest
         ExampleServiceController controller = new ExampleServiceController();
         Method sampleMethod = controller.getClass().getMethod("ignored", UriComponentsBuilder.class);
         HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
-        SwaggerConfiguration config = new SwaggerConfiguration();
-
+        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
         ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
         assertTrue(adapter.shouldSkipDocumentation());
     }

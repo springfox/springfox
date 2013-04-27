@@ -164,8 +164,4 @@ public class ResolvedTypes {
         }
         return sb.toString();
     }
-
-    public static boolean ignorable(ResolvedType type) {
-        return type.getErasedType().equals(Object.class);
-    }
 }

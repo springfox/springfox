@@ -1,15 +1,21 @@
 package com.mangofactory.swagger;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
+import com.wordnik.swagger.core.DocumentationOperation;
 
 import java.util.Collections;
+import java.util.Comparator;
 
 public abstract class DocumentationTransformer {
-    protected final SwaggerConfiguration configuration;
+    private Comparator<DocumentationEndPoint> endPointComparator;
+    private Comparator<DocumentationOperation> operationComparator;
 
-    public DocumentationTransformer(SwaggerConfiguration configuration) {
-        this.configuration = configuration;
+    public DocumentationTransformer(Comparator<DocumentationEndPoint> endPointComparator,
+                                    Comparator<DocumentationOperation> operationComparator) {
+        this.endPointComparator = endPointComparator;
+        this.operationComparator = operationComparator;
     }
 
     /***
@@ -23,11 +29,11 @@ public abstract class DocumentationTransformer {
      * a Comparator&lt;DocumentationOperation&gt; via the swagger configuration extensions
      */
     public Documentation applySorting(Documentation transformed) {
-        if (configuration.getEndPointComparator() != null && transformed.getApis() != null) {
-            Collections.sort(transformed.getApis(), configuration.getEndPointComparator());
+        if (endPointComparator != null && transformed.getApis() != null) {
+            Collections.sort(transformed.getApis(), endPointComparator);
             for (DocumentationEndPoint endpoint : transformed.getApis()) {
-                if (configuration.getOperationComparator() != null && endpoint.getOperations() != null) {
-                    Collections.sort(endpoint.getOperations(), configuration.getOperationComparator());
+                if (operationComparator != null && endpoint.getOperations() != null) {
+                    Collections.sort(endpoint.getOperations(), operationComparator);
                 }
             }
         }
@@ -43,4 +49,14 @@ public abstract class DocumentationTransformer {
      * controller based grouping.
      */
     public abstract Documentation applyTransformation(Documentation documentation);
+
+    @VisibleForTesting
+    void setEndPointComparator(Comparator<DocumentationEndPoint> endPointComparator) {
+        this.endPointComparator = endPointComparator;
+    }
+
+    @VisibleForTesting
+    void setOperationComparator(Comparator<DocumentationOperation> operationComparator) {
+        this.operationComparator = operationComparator;
+    }
 }

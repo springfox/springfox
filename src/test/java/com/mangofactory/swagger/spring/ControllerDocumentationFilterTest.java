@@ -74,9 +74,7 @@ public class ControllerDocumentationFilterTest {
         context.put("servletContext", servletContext);
         context.put("controllerClass", noClassLevelRequestMappingController.getClass());
         context.put("handlerMethod", noClassLevelReuestMappingHandlerMethod);
-        SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-        swaggerConfiguration.setApiVersion("2.0");
-        swaggerConfiguration.setBasePath("/some-path");
+        SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration("2.0", "/some-path");
         context.put("swagger", swaggerConfiguration);
         filters = newArrayList();
         filters.add(new EndPointFilter());
@@ -97,9 +95,7 @@ public class ControllerDocumentationFilterTest {
         context.put("servletContext", servletContext);
         context.put("controllerClass", withClassLevelRequestMappingController.getClass());
         context.put("handlerMethod", withClassLevelReuestMappingHandlerMethod);
-        SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-        swaggerConfiguration.setApiVersion("2.0");
-        swaggerConfiguration.setBasePath("/some-path");
+        SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration("2.0", "/some-path");
         context.put("swagger", swaggerConfiguration);
         filters = newArrayList();
         filters.add(new EndPointFilter());

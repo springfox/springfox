@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.models.Models.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 public class ResolvedTypeMemberVisitor implements MemberVisitor {
@@ -32,8 +33,6 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
     @SuppressWarnings("ConstantConditions")
     @Override
     public DocumentationSchema schema(MemberInfoSource member) {
-
-
         if (context.getSchemaMap().containsKey(member.getType().getSimpleName())) {
             DocumentationSchema schema = new DocumentationSchema();
             schema.setType(modelName(member.getResolvedType()));
@@ -43,7 +42,7 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
         ResolvedType resolvedMember = member.getResolvedType();
         Class<?> erasedClass = resolvedMember.getErasedType();
         if (resolvedMember.getTypeParameters().size() == 0) {
-            if (resolvedMember.isPrimitive() || SchemaProvider.isSimpleType(resolvedMember.getErasedType())) {
+            if (resolvedMember.isPrimitive() || isPrimitive(resolvedMember.getErasedType())) {
                 return PrimitiveMemberVisitor.factory().apply(context).schema(new PrimitiveMemberInfo(erasedClass));
             } else if (EnumHelper.isEnum(resolvedMember.getErasedType())) {
                 DocumentationSchema schema = new DocumentationSchema();
@@ -55,6 +54,8 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
                 schema.setProperties(new HashMap<String, DocumentationSchema>());
                 context.getSchemaMap().put(schema.getType(), schema);
                 return schema;
+            } else if (resolvedMember.getErasedType() == Object.class) {
+                return null;
             }
         }
         if (ResolvedCollection.isList(member)) {
@@ -62,25 +63,28 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
             schema.setType("List");
             schema.setName(member.getName());
             ResolvedType resolvedType = ResolvedCollection.listElementType(member);
-            if (!ResolvedTypes.ignorable(resolvedType)) {
-                DocumentationSchema itemSchema = context.schema(resolvedType);
-                DocumentationSchema itemSchemaRef = new DocumentationSchema();
+            DocumentationSchema itemSchema = context.schema(resolvedType);
+            DocumentationSchema itemSchemaRef = new DocumentationSchema();
+            if (itemSchema != null) {
                 itemSchemaRef.ref_$eq(itemSchema.getType());
-                schema.setItems(itemSchemaRef);
+            } else {
+                itemSchemaRef.ref_$eq("any");
             }
+            schema.setItems(itemSchemaRef);
             return schema;
-        }
-        if (ResolvedCollection.isSet(member)) {
+        } else if (ResolvedCollection.isSet(member)) {
             DocumentationSchema schema = new DocumentationSchema();
             schema.setType("Set");
             schema.setName(member.getName());
             ResolvedType resolvedType = ResolvedCollection.setElementType(member);
-            if (!ResolvedTypes.ignorable(resolvedType)) {
-                DocumentationSchema itemSchema = context.schema(resolvedType);
-                DocumentationSchema itemSchemaRef = new DocumentationSchema();
+            DocumentationSchema itemSchema = context.schema(resolvedType);
+            DocumentationSchema itemSchemaRef = new DocumentationSchema();
+            if (itemSchema != null) {
                 itemSchemaRef.ref_$eq(itemSchema.getType());
-                schema.setItems(itemSchemaRef);
+            } else {
+                itemSchemaRef.ref_$eq("any");
             }
+            schema.setItems(itemSchemaRef);
             return schema;
         }
 
@@ -91,13 +95,13 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
         Map<String, DocumentationSchema> propertyMap = newHashMap();
         for (ResolvedField childField: context.getResolvedFields(resolvedMember)){
             DocumentationSchema childSchema = context.schema(childField);
-            if (childSchema != null && !ignorable(childField.getType())) {
+            if (childSchema != null) {
                 propertyMap.put(childField.getName(), childSchema);
             }
         }
         for (ResolvedProperty childProperty: context.getResolvedProperties(resolvedMember)) {
             DocumentationSchema childPropertySchema = context.schema(childProperty);
-            if (childPropertySchema != null && !ignorable(childProperty.getResolvedType())) {
+            if (childPropertySchema != null) {
                 propertyMap.put(childProperty.getName(), childPropertySchema);
             }
         }

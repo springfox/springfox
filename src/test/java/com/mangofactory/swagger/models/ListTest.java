@@ -31,6 +31,7 @@ public class ListTest {
         private List<TypeEnum> petTypeEnums;
         private List<Integer> years;
         private ArrayList<String> names;
+        private List<Object> objects;
 
         ToTest(List<Pet> pets) {
             this.pets = pets;
@@ -66,6 +67,14 @@ public class ListTest {
 
         public void setNames(ArrayList<String> names) {
             this.names = names;
+        }
+
+        public List<Object> getObjects() {
+            return objects;
+        }
+
+        public void setObjects(List<Object> objects) {
+            this.objects = objects;
         }
     }
 
@@ -157,7 +166,7 @@ public class ListTest {
     @Test
     public void hasValidToTestModel() {
         DocumentationSchema toTest = modelMap.get("ToTest");
-        assertThat(toTest.properties().size(), is(4));
+        assertThat(toTest.properties().size(), is(5));
         assertThat(toTest, hasProperty("pets", "List"));
         DocumentationSchema petItems = toTest.properties().get("pets");
         assertThat(petItems.getItems().ref(), is("Pet"));
@@ -173,6 +182,11 @@ public class ListTest {
         assertThat(toTest, hasProperty("names", "List"));
         DocumentationSchema nameItems = toTest.properties().get("names");
         assertThat(nameItems.getItems().ref(), is("string"));
+
+        assertThat(toTest, hasProperty("objects", "List"));
+        DocumentationSchema objects = toTest.properties().get("objects");
+        assertNotNull(objects.getItems());
+        assertThat(objects.getItems().ref(), is("any"));
     }
 
 

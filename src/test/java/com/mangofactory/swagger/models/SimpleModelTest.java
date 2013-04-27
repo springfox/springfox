@@ -24,6 +24,7 @@ public class SimpleModelTest {
         double aDouble;
         String aString;
         Date date;
+        Object anObject;
 
         public byte getaByte() {
             return aByte;
@@ -88,6 +89,14 @@ public class SimpleModelTest {
         public void setDate(Date date) {
             this.date = date;
         }
+
+        public Object getAnObject() {
+            return anObject;
+        }
+
+        public void setAnObject(Object anObject) {
+            this.anObject = anObject;
+        }
     }
 
     @Before
@@ -107,7 +116,7 @@ public class SimpleModelTest {
         assertTrue(modelMap.containsKey("SimpleType"));
         DocumentationSchema simpleType = modelMap.get("SimpleType");
         assertNotNull(simpleType.getProperties());
-        assertEquals(8, simpleType.getProperties().size());
+        assertEquals(9, simpleType.getProperties().size());
     }
 
     @Test
@@ -185,5 +194,13 @@ public class SimpleModelTest {
         assertEquals("Date", stringProperty.getType());
     }
 
+    @Test
+    public void schemaHasAnObjectProperty() {
+        DocumentationSchema schema = modelMap.get("SimpleType");
+        assertTrue(schema.getProperties().containsKey("anObject"));
+        DocumentationSchema stringProperty = schema.getProperties().get("anObject");
+        assertNotNull(stringProperty);
+        assertEquals("any", stringProperty.getType());
+    }
 
 }
