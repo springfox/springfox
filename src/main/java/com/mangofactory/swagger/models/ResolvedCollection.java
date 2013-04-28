@@ -13,7 +13,13 @@ public class ResolvedCollection {
 
     public static ResolvedType listElementType(MemberInfoSource member) {
         ResolvedType resolvedList = member.getResolvedType();
-        return resolvedList.typeParametersFor(List.class).get(0);
+        List<ResolvedType> resolvedTypes = resolvedList.typeParametersFor(List.class);
+        if(resolvedTypes == null) {
+            resolvedTypes = resolvedList.typeParametersFor(Iterable.class);
+        }
+        if(resolvedTypes == null || resolvedTypes.isEmpty())
+            throw new IllegalArgumentException("Unknown List derivative "+member);
+        return resolvedTypes.get(0);
     }
 
     public static boolean isSet(MemberInfoSource member) {
