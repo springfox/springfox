@@ -66,6 +66,7 @@ public class Models {
     public static boolean isPrimitive(Class<?> parameterType) {
         return parameterType.isEnum() ||
                 parameterType.isPrimitive() ||
+                Object.class.equals(parameterType) ||
                 String.class.isAssignableFrom(parameterType) ||
                 Date.class.isAssignableFrom(parameterType) ||
                 Byte.class.isAssignableFrom(parameterType) ||
