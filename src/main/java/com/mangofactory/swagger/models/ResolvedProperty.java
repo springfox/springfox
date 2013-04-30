@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.models;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
 
 public class ResolvedProperty implements MemberInfoSource {
@@ -27,9 +28,17 @@ public class ResolvedProperty implements MemberInfoSource {
 
     private ResolvedType resolvedType() {
         if (isGetter) {
-            return method.getReturnType();
+            if (method.getReturnType().getErasedType().getTypeParameters().length > 0) {
+                return method.getReturnType();
+            } else {
+                return new TypeResolver().resolve(method.getReturnType().getErasedType());
+            }
         } else {
-            return method.getArgumentType(0);
+            if (method.getArgumentType(0).getErasedType().getTypeParameters().length > 0) {
+                return method.getArgumentType(0);
+            } else {
+                return new TypeResolver().resolve(method.getArgumentType(0).getErasedType());
+            }
         }
     }
 

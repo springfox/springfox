@@ -93,8 +93,8 @@ public class SchemaProvider {
     private Function<SchemaProvider,MemberVisitor> findKey(ResolvedField field) {
         if (any(customVisitors, thatSupports(field.getType()))){
             return find(customVisitors, thatSupports(field.getType())).factory();
-        } else if (propertySchemas.containsKey(field.getRawMember().getType())) {
-            return propertySchemas.get(field.getRawMember().getType());
+        } else if (propertySchemas.containsKey(field.getType().getClass())) {
+            return propertySchemas.get(field.getType().getClass());
         }
         return propertySchemas.get(field.getType().getClass());
     }

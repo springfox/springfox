@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.models;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedField;
 
 public class ResolvedFieldInfo implements MemberInfoSource {
@@ -22,7 +23,11 @@ public class ResolvedFieldInfo implements MemberInfoSource {
 
     @Override
     public ResolvedType getResolvedType() {
-        return resolvedField.getType();
+        if (resolvedField.getType().getErasedType().getTypeParameters().length > 0) {
+            return resolvedField.getType();
+        } else {
+            return new TypeResolver().resolve(resolvedField.getType().getErasedType());
+        }
     }
 
     @Override

@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
 public class ComplexTypeTest {
     private Map<String, DocumentationSchema> modelMap;
 
-
     class Pet {
         String name;
         int age;
