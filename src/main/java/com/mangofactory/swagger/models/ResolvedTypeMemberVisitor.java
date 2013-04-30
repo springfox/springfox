@@ -56,6 +56,8 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
                 return schema;
             } else if (resolvedMember.getErasedType() == Object.class) {
                 return null;
+            } else if (context.hasCustomSchemaGenerator(resolvedMember)) {
+                return context.generateCustomSchema(resolvedMember);
             }
         }
         if (ResolvedCollection.isList(member)) {

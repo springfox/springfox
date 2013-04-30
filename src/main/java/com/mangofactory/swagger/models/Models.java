@@ -30,11 +30,11 @@ public class Models {
         }
     }
 
-    public static void maybeAddParameterTypeToModels(ControllerDocumentation controllerDocumentation,
-                                                     ResolvedType parameterType, String dataType, boolean isReturnType) {
+    public static boolean maybeAddParameterTypeToModels(ControllerDocumentation controllerDocumentation,
+                                                        ResolvedType parameterType, String dataType, boolean isReturnType) {
 
         if (isPrimitive(parameterType.getErasedType())) {
-            return;
+            return false;
         }
         ResolvedTypeMemberSource member = new ResolvedTypeMemberSource(parameterType);
         if (parameterType.isArray()) {
@@ -43,6 +43,7 @@ public class Models {
             if (!isPrimitive(arrayType.getArrayElementType().getErasedType())) {
                 controllerDocumentation.putModel(componentType, new Model(String.format("Array[%s]", componentType),
                         arrayType.getArrayElementType(), isReturnType));
+                return true;
             }
         } else if (ResolvedCollection.isList(member)) {
             ResolvedType elementType = ResolvedCollection.listElementType(member);
@@ -50,6 +51,7 @@ public class Models {
             if (!isPrimitive(elementType.getErasedType())) {
                 controllerDocumentation.putModel(componentType, new Model(String.format("List[%s]", componentType),
                         elementType, isReturnType));
+                return true;
             }
         } else if (ResolvedCollection.isSet(member)) {
             ResolvedType elementType = ResolvedCollection.setElementType(member);
@@ -57,10 +59,13 @@ public class Models {
             if (!isPrimitive(elementType.getErasedType())) {
                 controllerDocumentation.putModel(componentType, new Model(String.format("Set[%s]", componentType),
                         elementType, isReturnType));
+                return true;
             }
         } else {
             controllerDocumentation.putModel(dataType, new Model(dataType, parameterType, isReturnType));
+            return true;
         }
+        return false;
     }
 
     public static boolean isPrimitive(Class<?> parameterType) {

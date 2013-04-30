@@ -6,6 +6,7 @@ import com.mangofactory.swagger.DefaultDocumentationTransformer;
 import com.mangofactory.swagger.DocumentationTransformer;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.SwaggerConfigurationExtension;
+import com.mangofactory.swagger.models.CustomSchemaGenerator;
 import com.mangofactory.swagger.models.DocumentationSchemaProvider;
 import com.mangofactory.swagger.models.Jackson2SchemaDescriptor;
 import com.mangofactory.swagger.models.SchemaDescriptor;
@@ -14,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 @Configuration
 public class DocumentationConfig {
@@ -60,12 +65,23 @@ public class DocumentationConfig {
     }
 
     @Bean
-    public SchemaDescriptor schemaDescriptor() {
-        return new Jackson2SchemaDescriptor(new ObjectMapper());
+    @Autowired
+    public SchemaDescriptor schemaDescriptor(ObjectMapper documentationObjectMapper) {
+        return new Jackson2SchemaDescriptor(documentationObjectMapper);
+    }
+
+    @Bean
+    public ObjectMapper documentationObjectMapper() {
+        return new ObjectMapper();
     }
 
     @Bean
     public TypeResolver typeResolver() {
         return new TypeResolver();
+    }
+
+    @Bean
+    public List<CustomSchemaGenerator> customSchemaGenerators() {
+        return newArrayList();
     }
 }
