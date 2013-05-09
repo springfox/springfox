@@ -24,7 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.*;
+import static com.mangofactory.swagger.models.IgnorableTypeRule.ignorable;
 
 public class DefaultConfigurationModule {
     public SwaggerConfiguration apply(SwaggerConfiguration configuration) {
@@ -47,9 +48,12 @@ public class DefaultConfigurationModule {
         Filter<List<DocumentationError>> annotatedErrorFilter = new AnnotatedErrorsFilter();
         configuration.getErrorFilters().addAll(newArrayList(errorFilter, annotatedErrorFilter));
 
-        configuration.getIgnorableParameterTypes().addAll(newArrayList(ModelMap.class, ServletContext.class,
-                HttpServletRequest.class,
-                HttpServletResponse.class, HashMap.class));
+        configuration.getTypeProcessingRules()
+                .addAll(newArrayList(ignorable(ModelMap.class),
+                        ignorable(ServletContext.class),
+                        ignorable(HttpServletRequest.class),
+                        ignorable(HttpServletResponse.class),
+                        ignorable(HashMap.class)));
 
         return configuration;
     }

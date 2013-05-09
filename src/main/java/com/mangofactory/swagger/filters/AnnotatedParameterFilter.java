@@ -1,8 +1,10 @@
 package com.mangofactory.swagger.filters;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Objects;
 import com.mangofactory.swagger.ControllerDocumentation;
-import com.mangofactory.swagger.models.Model;
 import com.mangofactory.swagger.annotations.ApiModel;
+import com.mangofactory.swagger.models.Model;
 import com.mangofactory.swagger.spring.AllowableRangesParser;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.core.DocumentationAllowableListValues;
@@ -15,9 +17,9 @@ import org.springframework.core.MethodParameter;
 
 import java.util.Arrays;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.base.Strings.*;
 import static com.mangofactory.swagger.annotations.Annotations.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 @Slf4j
 public class AnnotatedParameterFilter implements Filter<DocumentationParameter> {
@@ -26,12 +28,13 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
         DocumentationParameter parameter = context.subject();
         MethodParameter methodParameter = context.get("methodParameter");
         ControllerDocumentation controllerDocumentation = context.get("controllerDocumentation");
+        ResolvedType resolvedType = context.get("parameterType");
 
-        documentParameter(controllerDocumentation, parameter, methodParameter);
+        documentParameter(controllerDocumentation, parameter, methodParameter, resolvedType);
     }
 
     private void documentParameter(ControllerDocumentation controllerDocumentation, DocumentationParameter parameter,
-                                   MethodParameter methodParameter) {
+                                   MethodParameter methodParameter, ResolvedType resolvedType) {
 
         ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
         if (apiParam == null) {
@@ -57,9 +60,13 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
         parameter.setAllowMultiple(apiParam.allowMultiple());
         ApiModel apiModel = methodParameter.getParameterAnnotation(ApiModel.class);
         if (apiModel != null) {
-            parameter.setDataType(getAnnotatedType(apiModel));
-            String simpleName = apiModel.type().getSimpleName();
-            controllerDocumentation.putModel(simpleName, new Model(simpleName, asResolvedType(apiModel.type())));
+            if (Objects.equal(resolvedType.getErasedType(), getAnnotatedType(apiModel))) {
+                parameter.setDataType(getAnnotatedType(apiModel));
+                String simpleName = apiModel.type().getSimpleName();
+                controllerDocumentation.putModel(simpleName, new Model(simpleName, asResolvedType(apiModel.type())));
+            } else {
+                log.warn("Api Model override does not match the resolved type");
+            }
         }
 
     }

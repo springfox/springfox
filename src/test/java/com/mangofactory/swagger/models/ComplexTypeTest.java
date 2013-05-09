@@ -1,14 +1,11 @@
 package com.mangofactory.swagger.models;
 
-import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
 import com.wordnik.swagger.core.DocumentationSchema;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
@@ -69,46 +66,17 @@ public class ComplexTypeTest {
         }
     }
 
-    private class BigDecimalSchemaGenerator implements CustomSchemaGenerator {
-        @Override
-        public boolean supports(ResolvedType type) {
-            return BigDecimal.class.equals(type.getErasedType());
-        }
-
-        @Override
-        public Function<SchemaProvider, MemberVisitor> factory() {
-            return new Function<SchemaProvider, MemberVisitor>() {
-                @Override
-                public MemberVisitor apply(SchemaProvider schemaProvider) {
-                    return new MemberVisitor() {
-                        @Override
-                        public DocumentationSchema schema(MemberInfoSource property) {
-                            DocumentationSchema schema = new DocumentationSchema();
-                            schema.setName(property.getName());
-                            schema.setType("double");
-                            schema.setDefault("0.0");
-                            schema.setNotes("BigDecimal type");
-                            return schema;
-                        }
-                    };
-                }
-            };
-        }
-    }
-
     @Before
     public void setup() {
         modelMap = newHashMap();
         DocumentationSchemaProvider provider = new DocumentationSchemaProvider(new TypeResolver());
-        ArrayList<CustomSchemaGenerator> customSchemaGenerators = new ArrayList<CustomSchemaGenerator>();
-        customSchemaGenerators.add(new BigDecimalSchemaGenerator());
-        provider.setCustomSchemaGenerators(customSchemaGenerators);
+        //TODO: Fix this to use Alternate type rules
         modelMap = provider.getModelMap(new Model("pet", asResolvedType(Pet.class)));
     }
 
     @Test
     public void hasExpectedModels() {
-        assertEquals(2, modelMap.size());
+        assertEquals(3, modelMap.size());
     }
 
     @Test
@@ -159,10 +127,8 @@ public class ComplexTypeTest {
         assertTrue(schema.getProperties().containsKey("customType"));
         DocumentationSchema property = schema.getProperties().get("customType");
         assertNotNull(property);
-        assertEquals("double", property.getType());
+        assertEquals("BigDecimal", property.getType());
         assertEquals("customType", property.getName());
-        assertEquals("BigDecimal type", property.getNotes());
-        assertEquals("0.0", property.getDefault());
     }
 
 

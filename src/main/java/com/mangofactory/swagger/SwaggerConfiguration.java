@@ -1,9 +1,13 @@
 package com.mangofactory.swagger;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
 import com.mangofactory.swagger.filters.Filter;
 import com.mangofactory.swagger.filters.FilterContext;
 import com.mangofactory.swagger.models.DocumentationSchemaProvider;
+import com.mangofactory.swagger.models.TypeProcessingRule;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
 import com.wordnik.swagger.core.DocumentationError;
@@ -17,8 +21,10 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.List;
 
 import static com.google.common.base.Strings.*;
+import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.filters.Filters.Fn.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
 
 public class SwaggerConfiguration {
     public static final String API_DOCS_PATH = "/api-docs";
@@ -35,7 +41,7 @@ public class SwaggerConfiguration {
     @Getter private final List<Filter<DocumentationOperation>> operationFilters = newArrayList();
     @Getter private final List<Filter<DocumentationParameter>> parameterFilters = newArrayList();
     @Getter private final List<Filter<List<DocumentationError>>> errorFilters = newArrayList();
-    @Getter private final List<Class<?>> ignorableParameterTypes = newArrayList();
+    @Getter private final List<TypeProcessingRule> typeProcessingRules = newArrayList();
 
     @Autowired @Getter private DocumentationTransformer documentationTransformer;
     @Autowired private DocumentationSchemaProvider schemaProvider;
@@ -68,8 +74,29 @@ public class SwaggerConfiguration {
         return excludedResources.contains(controllerUri);
     }
 
-    public boolean isParameterTypeIgnorable(Class<?> parameterType) {
-        return ignorableParameterTypes.contains(parameterType);
+    public boolean isParameterTypeIgnorable(final Class<?> parameterType) {
+        TypeProcessingRule rule = findProcessingRule(parameterType);
+        return rule.isIgnorable();
+    }
+
+    public ResolvedType maybeGetAlternateType(final ResolvedType parameterType) {
+        if (parameterType.getTypeParameters().size() == 0) {
+            TypeProcessingRule rule = findProcessingRule(parameterType.getErasedType());
+            if (rule.hasAlternateType()) {
+                return asResolvedType(typeResolver, rule.alternateType());
+            }
+            return asResolvedType(typeResolver, rule.originalType());
+        }
+        return parameterType;
+    }
+
+    private TypeProcessingRule findProcessingRule(final Class<?> parameterType) {
+        return find(typeProcessingRules, new Predicate<TypeProcessingRule>() {
+                @Override
+                public boolean apply(TypeProcessingRule input) {
+                    return Objects.equal(input.originalType(), parameterType);
+                }
+            }, new DefaultProcessingRule(parameterType));
     }
 
     public DocumentationSchemaProvider getSchemaProvider() {
@@ -84,5 +111,33 @@ public class SwaggerConfiguration {
             typeResolver = new TypeResolver();
         }
         return typeResolver;
+    }
+
+    static class DefaultProcessingRule implements TypeProcessingRule {
+        private Class<?> clazz;
+
+        public DefaultProcessingRule(Class<?> clazz) {
+            this.clazz = clazz;
+        }
+
+        @Override
+        public boolean isIgnorable() {
+            return false;
+        }
+
+        @Override
+        public boolean hasAlternateType() {
+            return false;
+        }
+
+        @Override
+        public Class<?> originalType() {
+            return clazz;
+        }
+
+        @Override
+        public Class<?> alternateType() {
+            return clazz;
+        }
     }
 }

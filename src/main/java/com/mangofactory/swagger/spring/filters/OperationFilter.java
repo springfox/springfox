@@ -34,11 +34,12 @@ public class OperationFilter implements Filter<DocumentationOperation> {
         operation.setDeprecated(handlerMethod.getMethodAnnotation(Deprecated.class) != null);
         ResolvedType parameterType = methodReturnType(configuration.getTypeResolver(), handlerMethod.getMethod());
         if (parameterType != null) {
-            operation.setResponseClass(modelName(parameterType));
-            if (configuration.isParameterTypeIgnorable(parameterType.getErasedType())) {
+            ResolvedType alternateType = configuration.maybeGetAlternateType(parameterType);
+            operation.setResponseClass(modelName(alternateType));
+            if (configuration.isParameterTypeIgnorable(alternateType.getErasedType())) {
                 return;
             }
-            maybeAddParameterTypeToModels(controllerDocumentation, parameterType, modelName(parameterType), true);
+            maybeAddParameterTypeToModels(controllerDocumentation, alternateType, modelName(alternateType), true);
         }
 
     }

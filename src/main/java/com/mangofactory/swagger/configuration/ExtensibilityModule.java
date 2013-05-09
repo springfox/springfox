@@ -2,6 +2,7 @@ package com.mangofactory.swagger.configuration;
 
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.filters.Filter;
+import com.mangofactory.swagger.models.TypeProcessingRule;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
 import com.wordnik.swagger.core.DocumentationError;
@@ -17,7 +18,7 @@ public class ExtensibilityModule {
         customizeOperationFilters(configuration.getOperationFilters());
         customizeParameterFilters(configuration.getParameterFilters());
         customizeErrorFilters(configuration.getErrorFilters());
-        customizeIgnorableParameterTypes(configuration.getIgnorableParameterTypes());
+        customizeTypeProcessingRules(configuration.getTypeProcessingRules());
         customizeExcludedResources(configuration.getExcludedResources());
         return configuration;
     }
@@ -25,7 +26,7 @@ public class ExtensibilityModule {
     protected void customizeExcludedResources(List<String> excludedResources) {
     }
 
-    protected void customizeIgnorableParameterTypes(List<Class<?>> ignorableParameterTypes) {
+    protected void customizeTypeProcessingRules(List<TypeProcessingRule> typeProcessingRules) {
     }
 
     protected void customizeErrorFilters(List<Filter<List<DocumentationError>>> errorFilters) {

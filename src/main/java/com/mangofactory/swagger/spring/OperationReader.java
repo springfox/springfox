@@ -44,13 +44,14 @@ public class OperationReader {
         MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
         for (int index = 0; index < handlerMethod.getMethodParameters().length; index++) {
             DocumentationParameter parameter = new DocumentationParameter();
+            ResolvedType resolvedType = configuration.maybeGetAlternateType(resolvedParameters.get(index));
             if (resolvedParameters.size() == 0
-                    || configuration.isParameterTypeIgnorable(resolvedParameters.get(index).getErasedType())) {
+                    || configuration.isParameterTypeIgnorable(resolvedType.getErasedType())) {
                 continue;
             }
             FilterContext<DocumentationParameter> parameterContext = new FilterContext<DocumentationParameter>(parameter);
             parameterContext.put("methodParameter", methodParameters[index]);
-            parameterContext.put("parameterType", resolvedParameters.get(index));
+            parameterContext.put("parameterType", resolvedType);
             parameterContext.put("defaultParameterName", parameterNames[parameterIndex++]);
             parameterContext.put("controllerDocumentation", controllerDocumentation);
             Filters.Fn.applyFilters(configuration.getParameterFilters(), parameterContext);

@@ -9,7 +9,6 @@ import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.fasterxml.classmate.types.ResolvedRecursiveType;
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import com.wordnik.swagger.core.DocumentationSchema;
 
@@ -19,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Maps.*;
 
 public class SchemaProvider {
@@ -53,7 +51,6 @@ public class SchemaProvider {
     private final SchemaDescriptor descriptor;
     private final TypeResolver typeResolver;
     private final boolean returnType;
-    private List<CustomSchemaGenerator> customVisitors;
 
     public SchemaProvider(SchemaDescriptor descriptor, TypeResolver typeResolver, boolean returnType) {
         this.descriptor = descriptor;
@@ -79,11 +76,6 @@ public class SchemaProvider {
     }
 
     private Function<SchemaProvider,MemberVisitor> findKey(Type returnType) {
-        if (returnType instanceof ResolvedType) {
-            if (any(customVisitors, thatSupports((ResolvedType) returnType))) {
-                return find(customVisitors, thatSupports((ResolvedType) returnType)).factory();
-            }
-        }
         if (propertySchemas.containsKey(returnType.getClass())) {
             return propertySchemas.get(returnType.getClass());
         }
@@ -91,30 +83,17 @@ public class SchemaProvider {
     }
 
     private Function<SchemaProvider,MemberVisitor> findKey(ResolvedField field) {
-        if (any(customVisitors, thatSupports(field.getType()))){
-            return find(customVisitors, thatSupports(field.getType())).factory();
-        } else if (propertySchemas.containsKey(field.getType().getClass())) {
+        if (propertySchemas.containsKey(field.getType().getClass())) {
             return propertySchemas.get(field.getType().getClass());
         }
         return propertySchemas.get(field.getType().getClass());
     }
 
     private Function<SchemaProvider,MemberVisitor> findKey(ResolvedProperty property) {
-        if (any(customVisitors, thatSupports(property.getResolvedType()))){
-            return find(customVisitors, thatSupports(property.getResolvedType())).factory();
-        } else if (property.getResolvedType().isPrimitive() || propertySchemas.containsKey(property.getType())) {
+        if (property.getResolvedType().isPrimitive() || propertySchemas.containsKey(property.getType())) {
             return propertySchemas.get(property.getType());
         }
         return propertySchemas.get(property.getResolvedType().getClass());
-    }
-
-    private Predicate<? super CustomSchemaGenerator> thatSupports(final ResolvedType type) {
-        return new Predicate<CustomSchemaGenerator>() {
-            @Override
-            public boolean apply(CustomSchemaGenerator input) {
-                return input.supports(type);
-            }
-        };
     }
 
     public HashMap<String, DocumentationSchema> getSchemaMap() {
@@ -143,14 +122,6 @@ public class SchemaProvider {
         } else {
             return descriptor.deserializableProperties(this.getTypeResolver(), resolvedType);
         }
-    }
-
-    public void setCustomVisitors(List<CustomSchemaGenerator> customVisitors) {
-        this.customVisitors = customVisitors;
-    }
-
-    public boolean hasCustomSchemaGenerator(ResolvedType resolvedType) {
-        return any(customVisitors, thatSupports(resolvedType));
     }
 
     @SuppressWarnings("ConstantConditions")
