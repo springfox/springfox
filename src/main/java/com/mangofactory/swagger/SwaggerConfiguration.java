@@ -85,7 +85,6 @@ public class SwaggerConfiguration {
             if (rule.hasAlternateType()) {
                 return asResolvedType(typeResolver, rule.alternateType());
             }
-            return asResolvedType(typeResolver, rule.originalType());
         }
         return parameterType;
     }

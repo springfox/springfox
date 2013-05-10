@@ -1,6 +1,8 @@
 package com.mangofactory.swagger.spring;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.filters.FilterContext;
@@ -18,8 +20,9 @@ import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 
 import java.util.List;
 
+import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.methodParameters;
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 public class OperationReader {
     private final SwaggerConfiguration configuration;
@@ -58,7 +61,7 @@ public class OperationReader {
             operation.addParameter(parameter);
         }
         for (NameValueExpression<String> expression : paramsCondition.getExpressions()) {
-            if (expression.isNegated()) {
+            if (expression.isNegated() || any(operation.getParameters(), withName(expression.getName()))) {
                 continue;
             }
             DocumentationParameter parameter = new DocumentationParameter();
@@ -79,5 +82,14 @@ public class OperationReader {
             operation.addErrorResponse(error);
         }
         return operation;
+    }
+
+    private Predicate<? super DocumentationParameter> withName(final String name) {
+        return new Predicate<DocumentationParameter>() {
+            @Override
+            public boolean apply(DocumentationParameter input) {
+                return Objects.equal(input.getName(), name);
+            }
+        };
     }
 }
