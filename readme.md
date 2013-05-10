@@ -22,7 +22,7 @@ All `@Controller` classes are parsed, and methods annotated with `@RequestMappin
 Additionally, `@Api` at the class level, and `@ApiOperation` at the method level are both supported.
 			
 ## Getting started
-To wire up support, add the following into your ``*-servlet.xml` context:
+To wire up support, add the following into your spring context file (Configuration based on the [example project](https://github.com/martypitt/swagger-springmvc-example)):
 
 ```xml
     <!-- to specify swagger properties
@@ -30,12 +30,13 @@ To wire up support, add the following into your ``*-servlet.xml` context:
 	documentation.services.version=1.0
     --> 
     <context:property-placeholder location="classpath:swagger.properties" /> 
-    <!-- pulls in the DocumentController -->
+    <!-- pulls in the Controllers to document -->
     <context:component-scan base-package="com.mangofactory.swagger.springmvc.example" />
     <!-- Configuration Bean -->
     <bean id="documentationConfig" class="com.mangofactory.swagger.configuration.DocumentationConfig"/>
     <!-- Custom extensibility module (bean) Has override methods to customize the document generation-->
     <bean id="extensibilityModule" class="com.mangofactory.swagger.springmvc.example.config.ExampleExtensibilityModule" />
+
 ```
 
 The `basePath` property is external-facing url the maps to your SpringMVC dispatcher servlet.
@@ -79,7 +80,7 @@ An example of Swaggers PetStore in Spring MVC is available [here](https://github
 License
 -------
 
-Copyright 2012 Marty Pitt - [martypitt](https://github.com/martypitt), Dilip Krishnan - [@dilipkrish](https://github.com/dilipkrish)
+Copyright 2012 Marty Pitt - [@martypitt](https://github.com/martypitt), Dilip Krishnan - [@dilipkrish](https://github.com/dilipkrish)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
