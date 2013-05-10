@@ -6,13 +6,13 @@ Spring beans annotated with `@Controller` are detected and parsed for documentat
 
 ## Getting started
 The project is available from maven:
-
+```xml
 	<dependency>
   		<groupId>com.mangofactory</groupId>
   		<artifactId>swagger-springmvc</artifactId>
   		<version>0.5.0</version>
 	</dependency>
-	
+```	
 
 ## Supported annotations
 Currently, a subset of Swagger annotations are supported.  Support will improve over the coming releases.
@@ -24,19 +24,19 @@ Additionally, `@Api` at the class level, and `@ApiOperation` at the method level
 ## Getting started
 To wire up support, add the following into your ``*-servlet.xml` context:
 
-
-    <context:component-scan base-package="com.mangofactory.swagger.spring.controller" use-default-filters="false">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
-    <bean id="swaggerConfiguration" class="com.mangofactory.swagger.SwaggerConfiguration">
-        <property name="basePath" value="http://www.mydomain.com/swagger-springmvc-example/"/>
-        <property name="apiVersion" value="1.0"/>
-        <property name="excludedResources">
-            <list>
-                <value>/controller-uri-to-exclude</value>
-            </list>
-        </property>
-    </bean>
+```xml
+    <!-- to specify swagger properties
+    	documentation.services.basePath=http://localhost:8080/swagger-springmvc-test
+	documentation.services.version=1.0
+    --> 
+    <context:property-placeholder location="classpath:swagger.properties" /> 
+    <!-- pulls in the DocumentController -->
+    <context:component-scan base-package="com.mangofactory.swagger.springmvc.example" />
+    <!-- Configuration Bean -->
+    <bean id="documentationConfig" class="com.mangofactory.swagger.configuration.DocumentationConfig"/>
+    <!-- Custom extensibility module (bean) Has override methods to customize the document generation-->
+    <bean id="extensibilityModule" class="com.mangofactory.swagger.springmvc.example.config.ExampleExtensibilityModule" />
+```
 
 The `basePath` property is external-facing url the maps to your SpringMVC dispatcher servlet.
 
@@ -54,13 +54,17 @@ In addition, there are `com.mangofactory.swagger` implementations of these that 
 
 `@ApiError` is now supported at the exception class level, as shown here:
 
+```java
     @ApiError(code=302,reason="Malformed request")
     public class BadRequestException {}
+```
 
 This allows errors to be declared as follows:
 
+```java
 	@ApiErrors({NotFoundException.class,BadRequestException.class})
 	public void someApiMethod() {};
+```
 
 or, simply using a `throws` declaration:
 
