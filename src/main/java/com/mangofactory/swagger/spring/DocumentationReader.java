@@ -33,24 +33,28 @@ public class DocumentationReader {
     private final Map<String, ControllerDocumentation> resourceDocumentationLookup = newHashMap();
     private final EndpointReader endpointReader;
     private final OperationReader operationReader;
+    private final WebApplicationContext context;
+    private boolean isMappingBuilt = false;
     @Getter
-    private RequestMappingHandlerMapping handlerMapping;
-    @Getter
+    private List<RequestMappingHandlerMapping> handlerMappings;
     private Documentation documentation;
 
     public DocumentationReader(SwaggerConfiguration swaggerConfiguration, WebApplicationContext context,
-                               RequestMappingHandlerMapping handlerMapping) {
+                               List<RequestMappingHandlerMapping> handlerMappings) {
 
         configuration = swaggerConfiguration;
-        this.handlerMapping = handlerMapping;
+        this.context = context;
+        this.handlerMappings = handlerMappings;
         endpointReader = new EndpointReader(configuration);
         operationReader = new OperationReader(configuration);
-        buildMappingDocuments(context);
     }
 
     private void buildMappingDocuments(WebApplicationContext context) {
         documentation = configuration.newDocumentation(context);
-        processMethod(handlerMapping);
+        for (RequestMappingHandlerMapping handlerMapping: handlerMappings) {
+            processMethod(handlerMapping);
+        }
+        isMappingBuilt = true;
     }
 
     private ControllerDocumentation addChildDocumentIfMissing(ControllerAdapter resource,
@@ -137,5 +141,12 @@ public class DocumentationReader {
         }
         DocumentationReader.log.error("Could not find a matching resource for api with name '" + apiName + "'");
         return null;
+    }
+
+    public Documentation getDocumentation() {
+        if (!isMappingBuilt) {
+            buildMappingDocuments(context);
+        }
+        return documentation;
     }
 }

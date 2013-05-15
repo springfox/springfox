@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping('/' + DocumentationController.CONTROLLER_ENDPOINT)
@@ -31,7 +32,7 @@ public class DocumentationController implements ServletContextAware {
     private SwaggerConfiguration swaggerConfiguration;
 
     @Autowired
-    private RequestMappingHandlerMapping handlerMapping;
+    private List<RequestMappingHandlerMapping> handlerMappings;
     @Getter
     private DocumentationReader apiReader;
 
@@ -56,6 +57,6 @@ public class DocumentationController implements ServletContextAware {
     @Override
     public void setServletContext(ServletContext servletContext) {
         apiReader = new DocumentationReader(swaggerConfiguration,
-                WebApplicationContextUtils.getWebApplicationContext(servletContext), handlerMapping);
+                WebApplicationContextUtils.getWebApplicationContext(servletContext), handlerMappings);
     }
 }
