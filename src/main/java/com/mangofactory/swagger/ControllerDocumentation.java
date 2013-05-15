@@ -26,6 +26,7 @@ public class ControllerDocumentation extends Documentation {
     private final List<DocumentationEndPoint> endpoints = newArrayList();
     private final Map<String, Model> modelMap = newHashMap();
     private DocumentationSchemaProvider schemaProvider;
+    private HashMap<String,DocumentationSchema> models;
 
 
     //Used by JAXB
@@ -77,9 +78,13 @@ public class ControllerDocumentation extends Documentation {
 
     @Override
     public HashMap<String, DocumentationSchema> getModels() {
-        HashMap<String, DocumentationSchema> models = newHashMap();
-        for (Model model: modelMap.values()) {
-            models.putAll(modelToSchema(schemaProvider).apply(model));
+        if (models == null) {
+            models = newHashMap();
+            for (Model model: modelMap.values()) {
+                models.putAll(modelToSchema(schemaProvider).apply(model));
+            }
+            //Free-up the memory of the types
+            modelMap.clear();
         }
         return models;
     }
