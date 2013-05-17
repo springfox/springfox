@@ -86,6 +86,20 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
             }
             schema.setItems(itemSchemaRef);
             return schema;
+        } else if (ResolvedCollection.isCollection(member)) {
+            DocumentationSchema schema = new DocumentationSchema();
+            schema.setType("Collection");
+            schema.setName(member.getName());
+            ResolvedType resolvedType = ResolvedCollection.collectionElementType(member);
+            DocumentationSchema itemSchema = context.schema(resolvedType);
+            DocumentationSchema itemSchemaRef = new DocumentationSchema();
+            if (itemSchema != null) {
+                itemSchemaRef.ref_$eq(itemSchema.getType());
+            } else {
+                itemSchemaRef.ref_$eq("any");
+            }
+            schema.setItems(itemSchemaRef);
+            return schema;
         }
 
         DocumentationSchema objectSchema = new DocumentationSchema();
