@@ -202,7 +202,7 @@ public class ListTest {
         assertNotNull(objects.getItems());
         assertThat(objects.getItems().ref(), is("any"));
         
-        assertThat(toTest, hasProperty("toys", "Collection"));
+        assertThat(toTest, hasProperty("toys", "List"));
         DocumentationSchema toys = toTest.properties().get("toys");
         assertNotNull(toys.getItems());
         assertThat(toys.getItems().ref(), is("string"));

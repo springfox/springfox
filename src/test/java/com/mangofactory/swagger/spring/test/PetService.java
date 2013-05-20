@@ -1,8 +1,12 @@
 package com.mangofactory.swagger.spring.test;
 
-import java.util.Collection;
-import java.util.List;
-
+import com.mangofactory.swagger.annotations.ApiError;
+import com.mangofactory.swagger.annotations.ApiErrors;
+import com.mangofactory.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.sample.exception.NotFoundException;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,13 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mangofactory.swagger.annotations.ApiError;
-import com.mangofactory.swagger.annotations.ApiErrors;
-import com.mangofactory.swagger.annotations.ApiModel;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.wordnik.swagger.sample.exception.NotFoundException;
+import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping("/pets")

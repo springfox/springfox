@@ -61,16 +61,7 @@ public class Models {
                         elementType, isReturnType));
                 return true;
             }
-        } else if (ResolvedCollection.isCollection(member)) {
-            ResolvedType elementType = ResolvedCollection.collectionElementType(member);
-            String componentType = modelName(elementType);
-            if (!isPrimitive(elementType.getErasedType())) {
-                controllerDocumentation.putModel(componentType, new Model(String.format("Collection[%s]", componentType),
-                        elementType, isReturnType));
-                return true;
-            }
-        } 
-          else {
+        } else {
             controllerDocumentation.putModel(dataType, new Model(dataType, parameterType, isReturnType));
             return true;
         }
