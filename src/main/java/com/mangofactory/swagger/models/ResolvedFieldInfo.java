@@ -31,8 +31,8 @@ public class ResolvedFieldInfo implements MemberInfoSource {
     }
 
     @Override
-    public boolean isAssignableFrom(Class<?> clazz) {
-        return (getType() != Object.class) && (getType().isAssignableFrom(clazz) || clazz.isAssignableFrom(getType()));
+    public boolean isSubclassOf(Class<?> clazz) {
+        return (getType() != Object.class) && clazz.isAssignableFrom(getType());
     }
 
     @Override

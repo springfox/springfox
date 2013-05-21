@@ -52,9 +52,9 @@ public class AnnotatedOperationFilter implements Filter<DocumentationOperation> 
         if (apiModel != null) {
             if (resolvedType == null || Objects.equal(resolvedType.getErasedType(), getAnnotatedType(apiModel))) {
                 operation.setResponseClass(getAnnotatedType(apiModel));
-                String simpleName = apiModel.type().getSimpleName();
-                controllerDocumentation.putModel(simpleName,
-                        new Model(simpleName, asResolvedType(apiModel.type()), true));
+                ResolvedType apiModelAsResolvedType = asResolvedType(apiModel.type());
+                String simpleName = modelName(apiModelAsResolvedType);
+                controllerDocumentation.putModel(simpleName, new Model(simpleName, apiModelAsResolvedType, true));
             } else {
                 log.warn("Api Model override does not match the resolved type");
             }

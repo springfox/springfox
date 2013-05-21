@@ -27,11 +27,9 @@ public class ResolvedTypeMemberSource implements MemberInfoSource {
     }
 
     @Override
-    public boolean isAssignableFrom(Class<?> clazz) {
-
-        return (resolvedType.getErasedType() != Object.class) && (resolvedType.getClass().isAssignableFrom(clazz)
-                || clazz.isAssignableFrom(resolvedType.getClass())
-                || resolvedType.getErasedType().isAssignableFrom(clazz)
+    public boolean isSubclassOf(Class<?> clazz) {
+        return (resolvedType.getErasedType() != Object.class) && (
+                 clazz.isAssignableFrom(resolvedType.getClass())
                 || clazz.isAssignableFrom(resolvedType.getErasedType()));
     }
 

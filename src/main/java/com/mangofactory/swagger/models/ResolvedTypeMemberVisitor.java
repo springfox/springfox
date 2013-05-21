@@ -92,7 +92,7 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
         DocumentationSchema objectSchema = new DocumentationSchema();
         objectSchema.setName(member.getName());
         objectSchema.setType(modelName(resolvedMember));
-        context.getSchemaMap().put(resolvedMember.getErasedType().getSimpleName(), objectSchema);
+        context.getSchemaMap().put(modelName(resolvedMember), objectSchema);
         Map<String, DocumentationSchema> propertyMap = newHashMap();
         for (AliasedResolvedField childField: context.getResolvedFields(resolvedMember)){
             DocumentationSchema childSchema = context.schema(childField.getResolvedField());
