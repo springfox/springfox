@@ -1,22 +1,27 @@
 package com.mangofactory.swagger.models;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.wordnik.swagger.core.DocumentationAllowableListValues;
-import com.wordnik.swagger.core.DocumentationSchema;
-import org.junit.Before;
-import org.junit.Test;
+import static com.google.common.collect.Maps.newHashMap;
+import static com.mangofactory.swagger.models.DocumentationSchemaMatchers.hasProperty;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.hamcrest.collection.IsMapContaining.hasKey;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.collect.Maps.*;
-import static com.mangofactory.swagger.models.DocumentationSchemaMatchers.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.collection.IsIterableContainingInOrder.*;
-import static org.hamcrest.collection.IsMapContaining.*;
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.fasterxml.classmate.TypeResolver;
+import com.wordnik.swagger.core.DocumentationAllowableListValues;
+import com.wordnik.swagger.core.DocumentationSchema;
 
 public class ListTest {
     private Map<String, DocumentationSchema> modelMap;
@@ -32,6 +37,7 @@ public class ListTest {
         private List<Integer> years;
         private ArrayList<String> names;
         private List<Object> objects;
+        private Collection<String> toys;
 
         ToTest(List<Pet> pets) {
             this.pets = pets;
@@ -75,6 +81,14 @@ public class ListTest {
 
         public void setObjects(List<Object> objects) {
             this.objects = objects;
+        }
+        
+        public Collection<String> getToys() {
+            return toys;
+        }
+
+        public void setToys(Collection<String> toys) {
+            this.toys = toys;
         }
     }
 
@@ -166,7 +180,7 @@ public class ListTest {
     @Test
     public void hasValidToTestModel() {
         DocumentationSchema toTest = modelMap.get("ToTest");
-        assertThat(toTest.properties().size(), is(5));
+        assertThat(toTest.properties().size(), is(6));
         assertThat(toTest, hasProperty("pets", "List"));
         DocumentationSchema petItems = toTest.properties().get("pets");
         assertThat(petItems.getItems().ref(), is("Pet"));
@@ -187,6 +201,12 @@ public class ListTest {
         DocumentationSchema objects = toTest.properties().get("objects");
         assertNotNull(objects.getItems());
         assertThat(objects.getItems().ref(), is("any"));
+        
+        assertThat(toTest, hasProperty("toys", "List"));
+        DocumentationSchema toys = toTest.properties().get("toys");
+        assertNotNull(toys.getItems());
+        assertThat(toys.getItems().ref(), is("string"));
+
     }
 
 

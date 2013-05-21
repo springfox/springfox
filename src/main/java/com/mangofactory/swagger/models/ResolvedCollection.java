@@ -1,23 +1,23 @@
 package com.mangofactory.swagger.models;
 
-import com.fasterxml.classmate.ResolvedType;
-
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
+
+import com.fasterxml.classmate.ResolvedType;
 
 public class ResolvedCollection {
 
     public static boolean isList(MemberInfoSource member) {
-        return member.isAssignableFrom(List.class);
+        return Collection.class.isAssignableFrom(member.getType()) && !isSet(member);
     }
 
     public static ResolvedType listElementType(MemberInfoSource member) {
         ResolvedType resolvedList = member.getResolvedType();
-        return resolvedList.typeParametersFor(List.class).get(0);
+        return resolvedList.typeParametersFor(Collection.class).get(0);
     }
 
     public static boolean isSet(MemberInfoSource member) {
-        return member.isAssignableFrom(Set.class);
+        return Set.class.isAssignableFrom(member.getType());
     }
 
     public static ResolvedType setElementType(MemberInfoSource member) {

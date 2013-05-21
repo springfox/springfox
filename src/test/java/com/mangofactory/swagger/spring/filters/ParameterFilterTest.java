@@ -163,7 +163,7 @@ public class ParameterFilterTest {
         context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
         applyFilters(paramFilters, context);
 
-        assertEquals(0, documentation.getModels().size());
+        assertEquals(1, documentation.getModels().size());
         assertNull(docParam.allowableValues());
     }
 
@@ -175,7 +175,7 @@ public class ParameterFilterTest {
         context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
         applyFilters(paramFilters, context);
 
-        assertEquals(0, documentation.getModels().size());
+        assertEquals(1, documentation.getModels().size());
         assertNull(docParam.allowableValues());
     }
 
