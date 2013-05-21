@@ -7,7 +7,7 @@ public interface MemberInfoSource {
     String getName();
     ResolvedType getResolvedType();
 
-    boolean isAssignableFrom(Class<?> clazz);
+    boolean isSubclassOf(Class<?> clazz);
 
     boolean isEnum();
 }

@@ -62,8 +62,9 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
         if (apiModel != null) {
             if (Objects.equal(resolvedType.getErasedType(), getAnnotatedType(apiModel))) {
                 parameter.setDataType(getAnnotatedType(apiModel));
-                String simpleName = apiModel.type().getSimpleName();
-                controllerDocumentation.putModel(simpleName, new Model(simpleName, asResolvedType(apiModel.type())));
+                ResolvedType apiModelAsResolvedType = asResolvedType(apiModel.type());
+                String simpleName = modelName(apiModelAsResolvedType);
+                controllerDocumentation.putModel(simpleName, new Model(simpleName, apiModelAsResolvedType));
             } else {
                 log.warn("Api Model override does not match the resolved type");
             }

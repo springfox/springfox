@@ -27,8 +27,8 @@ public class PrimitiveMemberInfo implements MemberInfoSource {
     }
 
     @Override
-    public boolean isAssignableFrom(Class<?> clazz) {
-        return getType().isAssignableFrom(clazz);
+    public boolean isSubclassOf(Class<?> clazz) {
+        return clazz.isAssignableFrom(getType());
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.util.Set;
 public class ResolvedCollection {
 
     public static boolean isList(MemberInfoSource member) {
-        return member.isAssignableFrom(List.class);
+        return member.isSubclassOf(List.class);
     }
 
     public static ResolvedType listElementType(MemberInfoSource member) {
@@ -17,7 +17,7 @@ public class ResolvedCollection {
     }
 
     public static boolean isSet(MemberInfoSource member) {
-        return member.isAssignableFrom(Set.class);
+        return member.isSubclassOf(Set.class);
     }
 
     public static ResolvedType setElementType(MemberInfoSource member) {

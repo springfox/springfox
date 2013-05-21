@@ -82,8 +82,8 @@ public class GenericTypeTest {
 
     @Test
     public void hasAResponseEntityModel() {
-        assertTrue(modelMap.containsKey("ResponseEntity"));
-        DocumentationSchema responseEntity = modelMap.get("ResponseEntity");
+        assertTrue(modelMap.containsKey("ResponseEntity[Pet]"));
+        DocumentationSchema responseEntity = modelMap.get("ResponseEntity[Pet]");
         assertNotNull(responseEntity.getProperties());
         assertEquals(3, responseEntity.getProperties().size());
     }
