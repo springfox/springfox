@@ -51,14 +51,14 @@ public class DocumentationReader {
 
     private void buildMappingDocuments(WebApplicationContext context) {
         documentation = configuration.newDocumentation(context);
-        for (RequestMappingHandlerMapping handlerMapping: handlerMappings) {
+        for (RequestMappingHandlerMapping handlerMapping : handlerMappings) {
             processMethod(handlerMapping);
         }
         isMappingBuilt = true;
     }
 
     private ControllerDocumentation addChildDocumentIfMissing(ControllerAdapter resource,
-                                                    ControllerDocumentation resourceDocumentation) {
+                                                              ControllerDocumentation resourceDocumentation) {
 
         if (!resourceDocumentationLookup.containsKey(getDocumentationEndpointUri(resource.getControllerClass()))) {
             resourceDocumentationLookup.put(getDocumentationEndpointUri(resource.getControllerClass()),
@@ -107,8 +107,6 @@ public class DocumentationReader {
         }
     }
 
-
-
     private void appendOperationsToEndpoint(ControllerDocumentation controllerDocumentation,
                                             RequestMappingInfo mappingInfo, HandlerMethod handlerMethod,
                                             DocumentationEndPoint endPoint, ParamsRequestCondition paramsCondition) {
@@ -123,9 +121,9 @@ public class DocumentationReader {
         }
     }
 
-    private void appendOperationsToEndpoint(ControllerDocumentation controllerDocumentation, HandlerMethod handlerMethod,
-                                            DocumentationEndPoint endPoint,
-                                            Collection<RequestMethod> methods, ParamsRequestCondition paramsCondition) {
+    private void appendOperationsToEndpoint(ControllerDocumentation controllerDocumentation,
+            HandlerMethod handlerMethod, DocumentationEndPoint endPoint, Collection<RequestMethod> methods,
+            ParamsRequestCondition paramsCondition) {
 
         for (RequestMethod requestMethod : methods) {
             endPoint.addOperation(operationReader.readOperation(controllerDocumentation, handlerMethod,

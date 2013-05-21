@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.1//EN"
+        "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
+
+<!-- A set of Checkstyle rules that should be applied to non-legacy modules that should adhere to relatively strict
+     code style rules. -->
+<module name="Checker">
+
+    <property name="severity" value="error"/>
+
+    <!-- Whitespace checks http://checkstyle.sourceforge.net/config_whitespace.html -->
+    <module name="FileTabCharacter"/>
+
+    <!-- Regex checks - http://checkstyle.sourceforge.net/config_regexp.html -->
+    <module name="RegexpSingleline">
+        <property name="format" value="System\.(out|err)\.print"/>
+        <property name="message"
+                  value="System.out.println and System.err.println are not allowed. Using logging instead."/>
+    </module>
+
+    <module name="RegexpSingleline">
+        <property name="format" value="\.printStackTrace\(\)"/>
+        <property name="message"
+                  value="Calls to Throwable.printStackTrace() are not allowed. Log the exception instead."/>
+    </module>
+
+    <!--
+        Along with the FileContentsHolder module, allows for adding comments to source code to suppress checks.
+        http://checkstyle.sourceforge.net/config.html#Filters
+    -->
+    <module name="SuppressionCommentFilter"/>
+
+    <module name="TreeWalker">
+
+        <!--
+            Along with the SuppressionCommentFilter module, allows for adding comments to source code to suppress checks.
+            http://checkstyle.sourceforge.net/config.html#Filters
+        -->
+        <module name="FileContentsHolder"/>
+
+        <!-- Import checks - http://checkstyle.sourceforge.net/config_imports.html -->
+        <module name="UnusedImports"/>
+
+        <!-- Block checks - http://checkstyle.sourceforge.net/config_blocks.html -->
+        <module name="LeftCurly">
+            <property name="option" value="eol"/>
+        </module>
+        <module name="RightCurly">
+            <property name="option" value="same"/>
+        </module>
+        <module name="NeedBraces"/>
+
+        <!-- Size checks - http://checkstyle.sourceforge.net/config_sizes.html -->
+        <module name="LineLengthCheck">
+            <property name="max" value="120"/>
+            <property name="tabWidth" value="4"/>
+            <property name="ignorePattern" value="^import"/>
+        </module>
+
+        <!-- Metrics checks - http://checkstyle.sourceforge.net/config_metrics.html -->
+        <module name="JavaNCSS">
+            <property name="methodMaximum" value="70"/>
+            <property name="classMaximum" value="500"/>
+        </module>
+        <module name="CyclomaticComplexity">
+            <property name="max" value="15"/>
+        </module>
+        <!--<module name="NPathComplexity">-->
+            <!--<property name="max" value="50"/>-->
+        <!--</module>-->
+
+        <!-- Coding checks http://checkstyle.sourceforge.net/config_coding.html -->
+        <module name="EqualsHashCode"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+        <module name="StringLiteralEquality"/>
+        <module name="NestedIfDepth">
+            <property name="max" value="2"/>
+        </module>
+        <module name="NestedTryDepth">
+            <property name="max" value="2"/>
+        </module>
+        <module name="NoFinalizer"/>
+
+    </module>
+
+</module>

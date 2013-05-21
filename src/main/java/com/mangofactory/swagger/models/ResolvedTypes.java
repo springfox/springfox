@@ -32,14 +32,17 @@ public class ResolvedTypes {
         return s.substring(0, 1).toLowerCase() +
                 s.substring(1);
     }
+
     public static boolean isGetter(Method method) {
         if (method.getParameterTypes().length == 0) {
             if (method.getName().matches("^get[a-zA-Z].*") &&
-                    !method.getReturnType().equals(void.class))
+                    !method.getReturnType().equals(void.class)) {
                 return true;
+            }
             if (method.getName().matches("^is[a-zA-Z].*") &&
-                    method.getReturnType().equals(boolean.class))
+                    method.getReturnType().equals(boolean.class)) {
                 return true;
+            }
         }
         return false;
     }
@@ -118,12 +121,13 @@ public class ResolvedTypes {
         MemberResolver resolver = new MemberResolver(typeResolver);
         resolver.setIncludeLangObject(false);
         ResolvedTypeWithMembers typeWithMembers = resolver.resolve(enclosingType, null, null);
-        Iterable<ResolvedMethod> filtered = filter(newArrayList(typeWithMembers.getMemberMethods()), new Predicate<ResolvedMethod>() {
-            @Override
-            public boolean apply(ResolvedMethod input) {
-                return input.getRawMember().getName().equals(methodToResolve.getName());
-            }
-        });
+        Iterable<ResolvedMethod> filtered = filter(newArrayList(typeWithMembers.getMemberMethods()),
+                new Predicate<ResolvedMethod>() {
+                    @Override
+                    public boolean apply(ResolvedMethod input) {
+                        return input.getRawMember().getName().equals(methodToResolve.getName());
+                    }
+                });
         return resolveToMethodWithMaxResolvedTypes(filtered);
     }
 
@@ -151,7 +155,7 @@ public class ResolvedTypes {
         StringBuilder sb = new StringBuilder();
         sb.append(resolvedType.getErasedType().getSimpleName());
         boolean first = true;
-        for (ResolvedType typeParam:  resolvedType.getTypeParameters()) {
+        for (ResolvedType typeParam : resolvedType.getTypeParameters()) {
             if (first) {
                 sb.append(String.format("[%s", typeParam.getErasedType().getSimpleName()));
                 first = false;

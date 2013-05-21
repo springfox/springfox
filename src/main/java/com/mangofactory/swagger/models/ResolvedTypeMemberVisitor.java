@@ -72,7 +72,8 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
             }
             schema.setItems(itemSchemaRef);
             return schema;
-        } else if (ResolvedCollection.isSet(member)) {
+        }
+        if (ResolvedCollection.isSet(member)) {
             DocumentationSchema schema = new DocumentationSchema();
             schema.setType("Set");
             schema.setName(member.getName());

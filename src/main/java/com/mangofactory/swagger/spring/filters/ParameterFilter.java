@@ -34,7 +34,7 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
     }
 
     private void documentParameter(ControllerDocumentation controllerDocumentation, DocumentationParameter parameter,
-                                   MethodParameter methodParameter, ResolvedType parameterType, String defaultParameterName) {
+        MethodParameter methodParameter, ResolvedType parameterType, String defaultParameterName) {
 
         String name = selectBestParameterName(methodParameter, defaultParameterName);
         String description = splitCamelCase(name);

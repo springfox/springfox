@@ -25,30 +25,29 @@ public class ErrorsFilter implements Filter<List<DocumentationError>> {
 
     private void discoverThrowsExceptions(List<DocumentationError> error, HandlerMethod handlerMethod) {
         Class<?>[] exceptionTypes = handlerMethod.getMethod().getExceptionTypes();
-        for (Class<?> exceptionType : exceptionTypes)
-        {
+        for (Class<?> exceptionType : exceptionTypes) {
             appendErrorFromClass(error, (Class<? extends Throwable>) exceptionType);
         }
     }
 
     private void discoverSpringMvcExceptions(List<DocumentationError> errors, HandlerMethod handlerMethod) {
         ApiErrors apiErrors = handlerMethod.getMethodAnnotation(ApiErrors.class);
-        if (apiErrors == null)
+        if (apiErrors == null) {
             return;
-        for (Class<? extends Throwable> exceptionClass : apiErrors.value())
-        {
+        }
+        for (Class<? extends Throwable> exceptionClass : apiErrors.value()) {
             appendErrorFromClass(errors, exceptionClass);
         }
-        for (ApiError apiError : apiErrors.errors())
-        {
+        for (ApiError apiError : apiErrors.errors()) {
             errors.add(new DocumentationError(apiError.code(), apiError.reason()));
         }
     }
 
     void appendErrorFromClass(List<DocumentationError> errors, Class<? extends Throwable> exceptionClass) {
         ApiError apiError = exceptionClass.getAnnotation(ApiError.class);
-        if (apiError == null)
+        if (apiError == null) {
             return;
+        }
         errors.add(new DocumentationError(apiError.code(), apiError.reason()));
     }
 }

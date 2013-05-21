@@ -40,7 +40,7 @@ public class OperationReader {
         operationContext.put("swaggerConfiguration", configuration);
         Filters.Fn.applyFilters(configuration.getOperationFilters(), operationContext);
         int parameterIndex = 0;
-        String [] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(handlerMethod
+        String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(handlerMethod
                 .getMethod());
         List<ResolvedType> resolvedParameters = methodParameters(configuration.getTypeResolver(),
                 handlerMethod.getMethod());
@@ -52,7 +52,8 @@ public class OperationReader {
                     || configuration.isParameterTypeIgnorable(resolvedType.getErasedType())) {
                 continue;
             }
-            FilterContext<DocumentationParameter> parameterContext = new FilterContext<DocumentationParameter>(parameter);
+            FilterContext<DocumentationParameter> parameterContext
+                    = new FilterContext<DocumentationParameter>(parameter);
             parameterContext.put("methodParameter", methodParameters[index]);
             parameterContext.put("parameterType", resolvedType);
             parameterContext.put("defaultParameterName", parameterNames[parameterIndex++]);

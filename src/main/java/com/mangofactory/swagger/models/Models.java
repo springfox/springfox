@@ -31,7 +31,7 @@ public class Models {
     }
 
     public static boolean maybeAddParameterTypeToModels(ControllerDocumentation controllerDocumentation,
-                                                        ResolvedType parameterType, String dataType, boolean isReturnType) {
+            ResolvedType parameterType, String dataType, boolean isReturnType) {
 
         if (isPrimitive(parameterType.getErasedType())) {
             return false;

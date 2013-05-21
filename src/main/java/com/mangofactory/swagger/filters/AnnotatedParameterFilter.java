@@ -19,6 +19,7 @@ import java.util.Arrays;
 
 import static com.google.common.base.Strings.*;
 import static com.mangofactory.swagger.annotations.Annotations.*;
+import static com.mangofactory.swagger.filters.AnnotatedParameterFilter.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 @Slf4j
@@ -38,7 +39,7 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
 
         ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
         if (apiParam == null) {
-            AnnotatedParameterFilter.log.warn("{} is missing @ApiParam annotation - so generating default documentation",
+            log.warn("{} is missing @ApiParam annotation - so generating default documentation",
                     methodParameter.getMethod());
             return;
         }
