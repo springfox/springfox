@@ -40,11 +40,10 @@ public class OperationReader {
         operationContext.put("swaggerConfiguration", configuration);
         Filters.Fn.applyFilters(configuration.getOperationFilters(), operationContext);
         int parameterIndex = 0;
-        String [] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(handlerMethod
-                .getMethod());
         List<ResolvedType> resolvedParameters = methodParameters(configuration.getTypeResolver(),
                 handlerMethod.getMethod());
         MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
+        String [] parameterNames = getParameterNames(handlerMethod, methodParameters.length);
         for (int index = 0; index < handlerMethod.getMethodParameters().length; index++) {
             DocumentationParameter parameter = new DocumentationParameter();
             ResolvedType resolvedType = configuration.maybeGetAlternateType(resolvedParameters.get(index));
@@ -82,6 +81,19 @@ public class OperationReader {
             operation.addErrorResponse(error);
         }
         return operation;
+    }
+
+    private String[] getParameterNames(HandlerMethod handlerMethod, int length) {
+        String[] parameterNames
+                = new LocalVariableTableParameterNameDiscoverer().getParameterNames(handlerMethod.getMethod());
+        //Makeup names if it is null
+        if (parameterNames == null) {
+            parameterNames = new String[length];
+            for (int index = 0; index < length; index++) {
+                parameterNames[index] = String.format("p%s", index);
+            }
+        }
+        return parameterNames;
     }
 
     private Predicate<? super DocumentationParameter> withName(final String name) {
