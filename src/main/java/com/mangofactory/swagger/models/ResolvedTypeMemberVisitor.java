@@ -1,8 +1,8 @@
 package com.mangofactory.swagger.models;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.members.ResolvedField;
 import com.google.common.base.Function;
+import com.mangofactory.swagger.AliasedResolvedField;
 import com.wordnik.swagger.core.DocumentationAllowableListValues;
 import com.wordnik.swagger.core.DocumentationSchema;
 
@@ -93,8 +93,8 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
         objectSchema.setType(modelName(resolvedMember));
         context.getSchemaMap().put(resolvedMember.getErasedType().getSimpleName(), objectSchema);
         Map<String, DocumentationSchema> propertyMap = newHashMap();
-        for (ResolvedField childField: context.getResolvedFields(resolvedMember)){
-            DocumentationSchema childSchema = context.schema(childField);
+        for (AliasedResolvedField childField: context.getResolvedFields(resolvedMember)){
+            DocumentationSchema childSchema = context.schema(childField.getResolvedField());
             if (childSchema != null) {
                 propertyMap.put(childField.getName(), childSchema);
             }
