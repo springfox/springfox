@@ -5,10 +5,12 @@ import com.wordnik.swagger.core.DocumentationSchema;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class RecursiveTypeTest {
@@ -16,6 +18,7 @@ public class RecursiveTypeTest {
 
     class Pet {
         Pet parent;
+        List<Pet> children;
         String name;
         int age;
         Category category;
@@ -51,6 +54,14 @@ public class RecursiveTypeTest {
         public void setParent(Pet parent) {
             this.parent = parent;
         }
+
+        public List<Pet> getChildren() {
+            return children;
+        }
+
+        public void setChildren(List<Pet> children) {
+            this.children = children;
+        }
     }
 
     class Category {
@@ -82,7 +93,7 @@ public class RecursiveTypeTest {
         assertTrue(modelMap.containsKey("Pet"));
         DocumentationSchema pet = modelMap.get("Pet");
         assertNotNull(pet.getProperties());
-        assertEquals(4, pet.getProperties().size());
+        assertEquals(5, pet.getProperties().size());
     }
 
     @Test
@@ -97,27 +108,37 @@ public class RecursiveTypeTest {
     public void schemaHasAStringProperty() {
         DocumentationSchema schema = modelMap.get("Pet");
         assertTrue(schema.getProperties().containsKey("name"));
-        DocumentationSchema stringProperty = schema.getProperties().get("name");
-        assertNotNull(stringProperty);
-        assertEquals("string", stringProperty.getType());
+        DocumentationSchema property = schema.getProperties().get("name");
+        assertNotNull(property);
+        assertEquals("string", property.getType());
     }
 
     @Test
     public void schemaHasAIntProperty() {
         DocumentationSchema schema = modelMap.get("Pet");
         assertTrue(schema.getProperties().containsKey("age"));
-        DocumentationSchema stringProperty = schema.getProperties().get("age");
-        assertNotNull(stringProperty);
-        assertEquals("int", stringProperty.getType());
+        DocumentationSchema property = schema.getProperties().get("age");
+        assertNotNull(property);
+        assertEquals("int", property.getType());
     }
 
     @Test
     public void schemaHasAParentProperty() {
         DocumentationSchema schema = modelMap.get("Pet");
         assertTrue(schema.getProperties().containsKey("parent"));
-        DocumentationSchema stringProperty = schema.getProperties().get("parent");
-        assertNotNull(stringProperty);
-        assertEquals("Pet", stringProperty.getType());
+        DocumentationSchema property = schema.getProperties().get("parent");
+        assertNotNull(property);
+        assertEquals("Pet", property.getType());
+    }
+
+    @Test
+    public void schemaHasChildrenProperty() {
+        DocumentationSchema schema = modelMap.get("Pet");
+        assertTrue(schema.getProperties().containsKey("children"));
+        DocumentationSchema property = schema.getProperties().get("children");
+        assertNotNull(property);
+        assertEquals("List", property.getType());
+        assertThat(property.getItems().ref(), is("Pet"));
     }
 
     @Test

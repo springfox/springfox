@@ -10,6 +10,7 @@ import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.fasterxml.classmate.types.ResolvedRecursiveType;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
+import com.mangofactory.swagger.AliasedResolvedField;
 import com.wordnik.swagger.core.DocumentationSchema;
 
 import java.lang.reflect.Type;
@@ -108,7 +109,7 @@ public class SchemaProvider {
         return returnType;
     }
 
-    public List<ResolvedField> getResolvedFields(ResolvedType resolvedType) {
+    public List<AliasedResolvedField> getResolvedFields(ResolvedType resolvedType) {
         if (isReturnType()) {
             return descriptor.serializableFields(this.getTypeResolver(), resolvedType);
         } else {

@@ -65,4 +65,7 @@ public class ResolvedProperty implements MemberInfoSource {
     }
 
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }
