@@ -33,7 +33,7 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
     @SuppressWarnings("ConstantConditions")
     @Override
     public DocumentationSchema schema(MemberInfoSource member) {
-        if (context.getSchemaMap().containsKey(member.getType().getSimpleName())) {
+        if (context.getSchemaMap().containsKey(modelName(member.getResolvedType()))) {
             DocumentationSchema schema = new DocumentationSchema();
             schema.setType(modelName(member.getResolvedType()));
             schema.setName(member.getName());
