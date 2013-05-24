@@ -51,7 +51,9 @@ public class DocumentationController implements ServletContextAware {
     ControllerDocumentation getApiDocumentation(HttpServletRequest request) {
         String fullUrl = String.valueOf(request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE));
         int indexOfApiName = fullUrl.indexOf("/", 1) + 1;
-        return apiReader.getDocumentation(fullUrl.substring(indexOfApiName));
+        DocumentationTransformer transformer = swaggerConfiguration.getDocumentationTransformer();
+        return (ControllerDocumentation) transformer
+                .applySorting(apiReader.getDocumentation(fullUrl.substring(indexOfApiName)));
     }
 
     @Override

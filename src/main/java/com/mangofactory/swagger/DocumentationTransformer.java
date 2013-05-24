@@ -12,8 +12,7 @@ public abstract class DocumentationTransformer {
     private Comparator<DocumentationEndPoint> endPointComparator;
     private Comparator<DocumentationOperation> operationComparator;
 
-    public DocumentationTransformer(Comparator<DocumentationEndPoint> endPointComparator,
-                                    Comparator<DocumentationOperation> operationComparator) {
+    public DocumentationTransformer(EndpointComparator endPointComparator, OperationComparator operationComparator) {
         this.endPointComparator = endPointComparator;
         this.operationComparator = operationComparator;
     }

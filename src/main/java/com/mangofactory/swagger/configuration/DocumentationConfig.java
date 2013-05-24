@@ -4,6 +4,8 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.swagger.DefaultDocumentationTransformer;
 import com.mangofactory.swagger.DocumentationTransformer;
+import com.mangofactory.swagger.EndpointComparator;
+import com.mangofactory.swagger.OperationComparator;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.SwaggerConfigurationExtension;
 import com.mangofactory.swagger.models.DocumentationSchemaProvider;
@@ -48,9 +50,18 @@ public class DocumentationConfig {
     }
 
     @Bean
-    @Autowired
     public DocumentationTransformer documentationTransformer() {
-        return new DefaultDocumentationTransformer(null, null);
+        return new DefaultDocumentationTransformer(endPointComparator(), operationComparator());
+    }
+
+    @Bean
+    public OperationComparator operationComparator() {
+        return null;
+    }
+
+    @Bean
+    public EndpointComparator endPointComparator() {
+        return null;
     }
 
     @Bean
