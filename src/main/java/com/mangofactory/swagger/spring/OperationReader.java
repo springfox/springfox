@@ -61,7 +61,8 @@ public class OperationReader {
             operation.addParameter(parameter);
         }
         for (NameValueExpression<String> expression : paramsCondition.getExpressions()) {
-            if (expression.isNegated() || any(operation.getParameters(), withName(expression.getName()))) {
+            if (expression.isNegated() || any(nullToEmptyList(operation.getParameters()),
+                    withName(expression.getName()))) {
                 continue;
             }
             DocumentationParameter parameter = new DocumentationParameter();
@@ -82,6 +83,13 @@ public class OperationReader {
             operation.addErrorResponse(error);
         }
         return operation;
+    }
+
+    private Iterable<DocumentationParameter> nullToEmptyList(List<DocumentationParameter> parameters) {
+        if (parameters == null) {
+            return newArrayList();
+        }
+        return parameters;
     }
 
     private String[] getParameterNames(HandlerMethod handlerMethod, int length) {

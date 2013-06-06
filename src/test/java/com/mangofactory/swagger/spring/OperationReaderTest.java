@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 
 import java.lang.reflect.Method;
@@ -46,6 +47,7 @@ public class OperationReaderTest {
     @Autowired private SwaggerConfiguration swaggerConfiguration;
     private HandlerMethod handlerMethod;
     private HandlerMethod handlerMethod2;
+    private HandlerMethod handlerMethodWithNoParam;
     private OperationReader methodReader;
     private ControllerDocumentation controllerDocumentation;
 
@@ -60,6 +62,9 @@ public class OperationReaderTest {
 
         Method method2 = instance.getClass().getMethod("sampleMethod2", Pet.class);
         handlerMethod2 = new HandlerMethod(instance, method2);
+
+        Method methodWithNoParam = instance.getClass().getMethod("methodWithNoParametersWithExpression");
+        handlerMethodWithNoParam = new HandlerMethod(instance, methodWithNoParam);
 
         controllerDocumentation = new ControllerDocumentation(swaggerConfiguration.getApiVersion(),
                 swaggerConfiguration.getSwaggerVersion(), swaggerConfiguration.getBasePath(),
@@ -146,6 +151,30 @@ public class OperationReaderTest {
     }
 
     @Test
+    public void methodWithNoParametersWithExpression() {
+        ParamsRequestCondition paramsCondition = new ParamsRequestCondition();
+        paramsCondition.getExpressions().add(new NameValueExpression<String>() {
+            @Override
+            public String getName() {
+                return "test";
+            }
+
+            @Override
+            public String getValue() {
+                return "testValue";
+            }
+
+            @Override
+            public boolean isNegated() {
+               return false;
+            }
+        });
+        DocumentationOperation operation = methodReader.readOperation(controllerDocumentation,
+                handlerMethodWithNoParam, paramsCondition, RequestMethod.GET);
+        assertNull(operation.getResponseClass());
+    }
+
+    @Test
     public void requestParamRequired() {
         DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod,
                 new ParamsRequestCondition(), RequestMethod.GET);
@@ -179,6 +208,8 @@ public class OperationReaderTest {
                 new ParamsRequestCondition(), RequestMethod.GET);
     }
 
+
+
     @SuppressWarnings("unused")
     private final class SampleClass {
         public
@@ -192,6 +223,9 @@ public class OperationReaderTest {
         }
 
         public void sampleMethod2(@ApiParam(name = "com.mangofactory.swagger.spring.test.Pet") @RequestBody Pet pet) {
+        }
+
+        public void methodWithNoParametersWithExpression() {
         }
 
         @ApiErrors({ NotFoundException.class, BadRequestException.class })
