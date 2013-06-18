@@ -13,6 +13,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import static com.google.common.base.Strings.*;
@@ -99,6 +100,10 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         if (modelAttribute != null) {
             return "body";
         }
+        RequestHeader requestHeader = methodParameter.getParameterAnnotation(RequestHeader.class);
+        if (requestHeader != null) {
+            return "header";
+        }
         if (isPrimitive(parameterType.getErasedType())) {
             return "query";
         }
@@ -117,6 +122,10 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
         if (requestParam != null && !StringUtils.isEmpty(requestParam.value())) {
             return requestParam.value();
+        }
+        RequestHeader requestHeader = methodParameter.getParameterAnnotation(RequestHeader.class);
+        if (requestHeader != null && !StringUtils.isEmpty(requestHeader.value())) {
+            return requestHeader.value();
         }
         if (!isNullOrEmpty(defaultParameterName)) {
             return defaultParameterName;
