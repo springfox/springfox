@@ -39,7 +39,6 @@ public class OperationReader {
         operationContext.put("controllerDocumentation", controllerDocumentation);
         operationContext.put("swaggerConfiguration", configuration);
         Filters.Fn.applyFilters(configuration.getOperationFilters(), operationContext);
-        int parameterIndex = 0;
         List<ResolvedType> resolvedParameters = methodParameters(configuration.getTypeResolver(),
                 handlerMethod.getMethod());
         MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
@@ -55,7 +54,7 @@ public class OperationReader {
                     = new FilterContext<DocumentationParameter>(parameter);
             parameterContext.put("methodParameter", methodParameters[index]);
             parameterContext.put("parameterType", resolvedType);
-            parameterContext.put("defaultParameterName", parameterNames[parameterIndex++]);
+            parameterContext.put("defaultParameterName", parameterNames[index]);
             parameterContext.put("controllerDocumentation", controllerDocumentation);
             Filters.Fn.applyFilters(configuration.getParameterFilters(), parameterContext);
             operation.addParameter(parameter);
