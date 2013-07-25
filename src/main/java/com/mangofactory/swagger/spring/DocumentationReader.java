@@ -132,6 +132,7 @@ public class DocumentationReader {
     }
 
     public ControllerDocumentation getDocumentation(String apiName) {
+        ensureDocumentationReady();
         for (ControllerDocumentation documentation : resourceDocumentationLookup.values()) {
             if (documentation.matchesName(apiName)) {
                 return documentation;
@@ -142,9 +143,13 @@ public class DocumentationReader {
     }
 
     public Documentation getDocumentation() {
+        ensureDocumentationReady();
+        return documentation;
+    }
+
+    private void ensureDocumentationReady() {
         if (!isMappingBuilt) {
             buildMappingDocuments(context);
         }
-        return documentation;
     }
 }
