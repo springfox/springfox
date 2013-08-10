@@ -125,7 +125,7 @@ public class ResolvedTypes {
                 new Predicate<ResolvedMethod>() {
                     @Override
                     public boolean apply(ResolvedMethod input) {
-                        return input.getRawMember().getName().equals(methodToResolve.getName());
+                        return input.getRawMember().equals(methodToResolve);
                     }
                 });
         return resolveToMethodWithMaxResolvedTypes(filtered);
