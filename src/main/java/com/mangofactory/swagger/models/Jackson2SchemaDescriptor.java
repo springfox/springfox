@@ -75,7 +75,9 @@ public class Jackson2SchemaDescriptor implements SchemaDescriptor {
             if (propertyLookup.containsKey(childField.getName())) {
                 BeanPropertyDefinition propertyDefinition = propertyLookup.get(childField.getName());
                 AnnotatedMember member = propertyDefinition.getPrimaryMember();
-                if (member.getMember() != null && Field.class.isAssignableFrom(member.getMember().getClass())) {
+                if (member != null
+                        && member.getMember() != null
+                        && Field.class.isAssignableFrom(member.getMember().getClass())) {
                     serializationCandidates.add(new AliasedResolvedField(propertyDefinition.getName() , childField));
                 }
             }
