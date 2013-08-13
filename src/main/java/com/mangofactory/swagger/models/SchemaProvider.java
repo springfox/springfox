@@ -31,6 +31,8 @@ public class SchemaProvider {
             .put(Integer.class, PrimitiveMemberVisitor.factory())
             .put(long.class, PrimitiveMemberVisitor.factory())
             .put(Long.class, PrimitiveMemberVisitor.factory())
+            .put(short.class, PrimitiveMemberVisitor.factory())
+            .put(Short.class, PrimitiveMemberVisitor.factory())
             .put(byte.class, PrimitiveMemberVisitor.factory())
             .put(Byte.class, PrimitiveMemberVisitor.factory())
             .put(boolean.class, PrimitiveMemberVisitor.factory())

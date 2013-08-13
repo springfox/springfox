@@ -18,6 +18,7 @@ public class SimpleModelTest {
     class SimpleType {
         byte aByte;
         boolean aBoolean;
+        short aShort;
         int anInt;
         long aLong;
         float aFloat;
@@ -25,6 +26,14 @@ public class SimpleModelTest {
         String aString;
         Date date;
         Object anObject;
+
+        public short getaShort() {
+            return aShort;
+        }
+
+        public void setaShort(short aShort) {
+            this.aShort = aShort;
+        }
 
         public byte getaByte() {
             return aByte;
@@ -116,7 +125,7 @@ public class SimpleModelTest {
         assertTrue(modelMap.containsKey("SimpleType"));
         DocumentationSchema simpleType = modelMap.get("SimpleType");
         assertNotNull(simpleType.getProperties());
-        assertEquals(9, simpleType.getProperties().size());
+        assertEquals(10, simpleType.getProperties().size());
     }
 
     @Test
@@ -164,6 +173,15 @@ public class SimpleModelTest {
         DocumentationSchema stringProperty = schema.getProperties().get("aLong");
         assertNotNull(stringProperty);
         assertEquals("long", stringProperty.getType());
+    }
+
+    @Test
+    public void schemaHasAShortProperty() {
+        DocumentationSchema schema = modelMap.get("SimpleType");
+        assertTrue(schema.getProperties().containsKey("aShort"));
+        DocumentationSchema stringProperty = schema.getProperties().get("aShort");
+        assertNotNull(stringProperty);
+        assertEquals("int", stringProperty.getType());
     }
 
     @Test

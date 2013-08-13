@@ -19,7 +19,8 @@ public class PrimitiveMemberVisitor implements MemberVisitor {
     public DocumentationSchema schema(MemberInfoSource member) {
         Class<?> returnType = member.getType();
         String propertyType;
-        if (returnType.isAssignableFrom(int.class) || returnType.isAssignableFrom(Integer.class)) {
+        if (returnType.isAssignableFrom(int.class) || returnType.isAssignableFrom(Integer.class)
+                || returnType.isAssignableFrom(short.class) || returnType.isAssignableFrom(Short.class)) {
             propertyType = "int";
         } else {
             propertyType = returnType.getSimpleName().toLowerCase();
