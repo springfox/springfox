@@ -62,15 +62,23 @@ public class SwaggerConfiguration {
         return context.subject();
     }
 
-    public boolean isExcluded(String documentationEndpointUri) {
-        if(isNullOrEmpty(documentationEndpointUri)) {
+    public boolean isExcluded(List<String> documentationEndpointUris) {
+        if (documentationEndpointUris == null) {
             return false;
         }
-        String controllerUri = documentationEndpointUri;
-        if (documentationEndpointUri.contains(API_DOCS_PATH)) {
-           controllerUri = documentationEndpointUri.substring(API_DOCS_PATH.length());
-        }
-        return excludedResources.contains(controllerUri);
+        for(String uri: documentationEndpointUris) {
+            if(isNullOrEmpty(uri)) {
+                return false;
+            }
+            String controllerUri = uri;
+            if (uri.contains(API_DOCS_PATH)) {
+               controllerUri = uri.substring(API_DOCS_PATH.length());
+            }
+            if (excludedResources.contains(controllerUri)) {
+                return true;
+            }
+       }
+       return false;
     }
 
     public boolean isParameterTypeIgnorable(final ResolvedType type) {

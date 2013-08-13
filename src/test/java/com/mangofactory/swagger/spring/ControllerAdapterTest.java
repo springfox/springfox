@@ -1,7 +1,5 @@
 package com.mangofactory.swagger.spring;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.annotations.ApiIgnore;
@@ -18,11 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.spring.UriExtractor.*;
@@ -251,12 +249,12 @@ public class ControllerAdapterTest
 		Method sampleMethod = sampleController.getClass().getMethod("sampleMethod");
 		HandlerMethod handlerMethod = new HandlerMethod(sampleController, sampleMethod);
 
-        String methodLevelUri = getMethodLevelUri(sampleController.getClass(), handlerMethod);
+        String methodLevelUri = getFirst(methodUris(sampleController.getClass(), handlerMethod), null);
 
 		assertThat(methodLevelUri, is(notNullValue()));
         assertThat(methodLevelUri, is(equalTo("/no-classlevel-requestmapping")));
 
-        String classLevelUri = getDocumentationEndpointUri(sampleController.getClass());
+        String classLevelUri = getFirst(controllerUris(sampleController.getClass()), null);
 
         assertThat(classLevelUri, is(notNullValue()));
         assertThat(classLevelUri, is(equalTo("/sample-controller")));
@@ -271,8 +269,8 @@ public class ControllerAdapterTest
         Method sampleMethod = controller.getClass().getMethod("getEffective", UriComponentsBuilder.class);
         HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
 
-        String classLevelUri = getDocumentationEndpointUri(controller.getClass());
-        String methodLevelUri = getMethodLevelUri(controller.getClass(), handlerMethod);
+        String classLevelUri = getFirst(controllerUris(controller.getClass()), null);
+        String methodLevelUri = getFirst(methodUris(controller.getClass(), handlerMethod), null);
 
         assertThat(classLevelUri, is(notNullValue()));
         assertThat(classLevelUri, is(equalTo("/api/examples")));
@@ -289,7 +287,7 @@ public class ControllerAdapterTest
         Method sampleMethod = controller.getClass().getMethod("included", UriComponentsBuilder.class);
         HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
         SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
-        config.getExcludedResources().addAll(newArrayList(getDocumentationEndpointUri(controller.getClass())));
+        config.getExcludedResources().addAll(newArrayList(controllerUris(controller.getClass())));
 
         ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
         assertFalse(adapter.shouldSkipDocumentation());
@@ -315,7 +313,7 @@ public class ControllerAdapterTest
         Method sampleMethod = controller.getClass().getMethod("ignored", UriComponentsBuilder.class);
         HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
         SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
-        config.getExcludedResources().addAll(newArrayList(getDocumentationEndpointUri(controller.getClass())));
+        config.getExcludedResources().addAll(newArrayList(controllerUris(controller.getClass())));
 
         ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
         assertTrue(adapter.shouldSkipDocumentation());
@@ -328,7 +326,7 @@ public class ControllerAdapterTest
         Method sampleMethod = controller.getClass().getMethod("getEffective", UriComponentsBuilder.class);
         HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
         SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
-        config.getExcludedResources().addAll(newArrayList(getDocumentationEndpointUri(controller.getClass())));
+        config.getExcludedResources().addAll(newArrayList(controllerUris(controller.getClass())));
 
         ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
         assertTrue(adapter.shouldSkipDocumentation());

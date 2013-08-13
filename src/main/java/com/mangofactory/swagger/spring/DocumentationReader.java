@@ -21,7 +21,6 @@ import java.util.Map.Entry;
 
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.spring.DocumentationEndPoints.*;
-import static com.mangofactory.swagger.spring.UriExtractor.*;
 
 @Slf4j
 public class DocumentationReader {
@@ -29,6 +28,7 @@ public class DocumentationReader {
     private static final List<RequestMethod> allRequestMethods =
             Arrays.asList(RequestMethod.GET, RequestMethod.DELETE, RequestMethod.POST, RequestMethod.PUT);
     private final SwaggerConfiguration configuration;
+    private final Map<String, List<DocumentationEndPoint>> endpointByControllerLookup = newHashMap();
     private final Map<String, DocumentationEndPoint> endpointLookup = newHashMap();
     private final Map<String, ControllerDocumentation> resourceDocumentationLookup = newHashMap();
     private final EndpointReader endpointReader;
@@ -57,28 +57,35 @@ public class DocumentationReader {
         isMappingBuilt = true;
     }
 
-    private ControllerDocumentation addChildDocumentIfMissing(ControllerAdapter resource,
-                                                              ControllerDocumentation resourceDocumentation) {
-
-        if (!resourceDocumentationLookup.containsKey(getDocumentationEndpointUri(resource.getControllerClass()))) {
-            resourceDocumentationLookup.put(getDocumentationEndpointUri(resource.getControllerClass()),
+    private ControllerDocumentation addChildDocumentIfMissing(ControllerDocumentation resourceDocumentation) {
+        if (!resourceDocumentationLookup.containsKey(resourceDocumentation.getResourcePath())) {
+            resourceDocumentationLookup.put(resourceDocumentation.getResourcePath(),
                     resourceDocumentation);
         }
-        return resourceDocumentationLookup.get(getDocumentationEndpointUri(resource.getControllerClass()));
+        return resourceDocumentationLookup.get(resourceDocumentation.getResourcePath());
     }
 
-    private DocumentationEndPoint addEndpointDocumentationIfMissing(ControllerAdapter resource) {
-        if (endpointLookup.containsKey(getDocumentationEndpointUri(resource.getControllerClass()))) {
-            return endpointLookup.get(getDocumentationEndpointUri(resource.getControllerClass()));
+    private List<DocumentationEndPoint> addEndpointDocumentationsIfMissing(ControllerAdapter resource) {
+        List<DocumentationEndPoint> endpoints;
+        String resourceKey = resource.toString();
+        if (endpointByControllerLookup.containsKey(resourceKey)) {
+            return endpointByControllerLookup.get(resourceKey);
         }
 
-        DocumentationEndPoint endpoint = resource.describeAsDocumentationEndpoint();
-        if (endpoint != null) {
-            endpointLookup.put(getDocumentationEndpointUri(resource.getControllerClass()), endpoint);
-            DocumentationReader.log.debug("Added resource listing: {}", resource.toString());
-            documentation.addApi(endpoint);
+        endpoints = resource.describeAsDocumentationEndpoints();
+        if (endpoints != null) {
+            endpointByControllerLookup.put(resourceKey, endpoints);
+            DocumentationReader.log.debug("Added resource listing: {}", resourceKey);
+            for (DocumentationEndPoint endpoint: endpoints) {
+                endpointLookup.put(toApiUri(endpoint.getPath()), endpoint);
+                documentation.addApi(endpoint);
+            }
         }
-        return endpoint;
+        return endpoints;
+    }
+
+    private String toApiUri(String path) {
+        return path.substring(configuration.getDocumentationBasePath().length());
     }
 
     private void processMethod(RequestMappingHandlerMapping handlerMapping) {
@@ -93,16 +100,19 @@ public class DocumentationReader {
                 continue;
             }
 
-            DocumentationEndPoint endPoint = addEndpointDocumentationIfMissing(resource);
-            ControllerDocumentation controllerDocumentation = addChildDocumentIfMissing(resource,
-                    asDocumentation(documentation, endPoint, resource, configuration.getSchemaProvider()));
+            for(DocumentationEndPoint endPoint: addEndpointDocumentationsIfMissing(resource)) {
+                ControllerDocumentation controllerDocumentation = addChildDocumentIfMissing(
+                        asDocumentation(documentation, toApiUri(endPoint.path()), configuration.getSchemaProvider()));
 
-            for (String requestUri : mappingInfo.getPatternsCondition().getPatterns()) {
-                DocumentationEndPoint childEndPoint = endpointReader.readEndpoint(handlerMethod, resource,
-                        requestUri);
-                controllerDocumentation.addEndpoint(childEndPoint);
-                appendOperationsToEndpoint(controllerDocumentation, mappingInfo, handlerMethod, childEndPoint,
-                        mappingInfo.getParamsCondition());
+                for (String requestUri : mappingInfo.getPatternsCondition().getPatterns()) {
+                    DocumentationEndPoint childEndPoint = endpointReader.readEndpoint(handlerMethod, resource,
+                            requestUri);
+                    if (requestUri.contains(controllerDocumentation.getResourcePath())) {
+                        controllerDocumentation.addEndpoint(childEndPoint);
+                        appendOperationsToEndpoint(controllerDocumentation, mappingInfo, handlerMethod, childEndPoint,
+                                mappingInfo.getParamsCondition());
+                    }
+                }
             }
         }
     }

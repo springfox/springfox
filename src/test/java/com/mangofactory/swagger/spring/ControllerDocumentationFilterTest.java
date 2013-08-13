@@ -69,7 +69,7 @@ public class ControllerDocumentationFilterTest {
 
     @Test
     public void whenControllerHasNoRequestMappingSpecified() {
-        DocumentationEndPoint endpoint = new DocumentationEndPoint();
+        DocumentationEndPoint endpoint = new DocumentationEndPoint("/no-classlevel-requestmapping", "");
         context = new FilterContext<DocumentationEndPoint>(endpoint);
         context.put("servletContext", servletContext);
         context.put("controllerClass", noClassLevelRequestMappingController.getClass());
@@ -90,7 +90,7 @@ public class ControllerDocumentationFilterTest {
 
     @Test
     public void whenControllerHasRequestMappingSpecified() {
-        DocumentationEndPoint endpoint = new DocumentationEndPoint();
+        DocumentationEndPoint endpoint = new DocumentationEndPoint("/test/with-classlevel-requestmapping", "");
         context = new FilterContext<DocumentationEndPoint>(endpoint);
         context.put("servletContext", servletContext);
         context.put("controllerClass", withClassLevelRequestMappingController.getClass());

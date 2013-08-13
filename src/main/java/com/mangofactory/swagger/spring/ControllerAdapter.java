@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.spring;
 
+import com.google.common.base.Joiner;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.annotations.ApiInclude;
@@ -12,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.method.HandlerMethod;
 
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 import static com.mangofactory.swagger.spring.UriExtractor.*;
 
 /**
@@ -37,21 +41,25 @@ public class ControllerAdapter {
         this.controllerClass = ClassUtils.getUserClass(this.handlerMethod.getBeanType());
     }
 
-    public DocumentationEndPoint describeAsDocumentationEndpoint() {
-        // This is the end-point for retrieving documentation about the api
-        // Not the end point for the api itself
-        String documentationUri = new UriBuilder(configuration.getDocumentationBasePath())
-                .appendPath(getListingPath())
-                .toString();
-        return new DocumentationEndPoint(documentationUri, getApiDescription(controllerClass));
+    public List<DocumentationEndPoint> describeAsDocumentationEndpoints() {
+        List<DocumentationEndPoint> endpoints = newArrayList();
+        for(String listingPath: getListingPaths()) {
+            // This is the end-point for retrieving documentation about the api
+            // Not the end point for the api itself
+            String documentationUri = new UriBuilder(configuration.getDocumentationBasePath())
+                    .appendPath(listingPath)
+                    .toString();
+            endpoints.add(new DocumentationEndPoint(documentationUri, getApiDescription(controllerClass)));
+        }
+        return endpoints;
     }
 
-    private String getListingPath() {
+    private List<String> getListingPaths() {
         Api apiAnnotation = controllerClass.getAnnotation(Api.class);
         if (apiAnnotation == null || apiAnnotation.listingPath().equals("")) {
-            return getDocumentationEndpointUri(controllerClass);
+            return controllerUris(controllerClass);
         }
-        return apiAnnotation.listingPath();
+        return newArrayList(apiAnnotation.listingPath());
     }
 
     private String getApiDescription(Class<?> controllerClass) {
@@ -65,8 +73,8 @@ public class ControllerAdapter {
 
     @Override
     public String toString() {
-        return String.format("ApiResource for %s at %s", controllerClass.getSimpleName(),
-                getMethodLevelUri(controllerClass, handlerMethod));
+        return String.format("ApiResource for %s at [%s]", controllerClass.getSimpleName(),
+                Joiner.on(",").skipNulls().join(controllerUris(controllerClass)));
     }
 
     public Class<?> getControllerClass() {
@@ -98,7 +106,7 @@ public class ControllerAdapter {
     }
 
     private boolean excludedControllerIsNotExplicitlyIncluded() {
-        return configuration.isExcluded(getDocumentationEndpointUri(controllerClass))
+        return configuration.isExcluded(controllerUris(controllerClass))
                         && !hasIncludeOverride();
     }
 }

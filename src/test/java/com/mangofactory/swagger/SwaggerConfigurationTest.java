@@ -17,7 +17,7 @@ public class SwaggerConfigurationTest {
 
     @Test
     public void whenDocumentationEndpointUriIsEmpty() {
-        assertFalse(config.isExcluded(""));
+        assertFalse(config.isExcluded(newArrayList("")));
     }
 
     @Test
@@ -27,16 +27,16 @@ public class SwaggerConfigurationTest {
 
     @Test
     public void whenDocumentationEndpointUriIsNotADocumentationUri() {
-        assertTrue(config.isExcluded("/pets"));
+        assertTrue(config.isExcluded(newArrayList("/pets")));
     }
 
     @Test
     public void whenDocumentationEndpointUriIsADocumentationUri() {
-        assertTrue(config.isExcluded("/api-docs/pets"));
+        assertTrue(config.isExcluded(newArrayList("/api-docs/pets")));
     }
 
     @Test
     public void whenDocumentationEndpointUriIsADocumentationUriThatDoesNotExist() {
-        assertFalse(config.isExcluded("/api-docs/does-not-exist"));
+        assertFalse(config.isExcluded(newArrayList("/api-docs/does-not-exist")));
     }
 }
