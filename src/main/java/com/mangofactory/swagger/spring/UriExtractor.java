@@ -54,16 +54,16 @@ public class UriExtractor {
 
     protected static String resolveRequestUri(Class clazz, RequestMapping requestMapping) {
         if (requestMapping == null) {
-            log.info("Class {} has no @RequestMapping", clazz);
+            log.debug("Class {} has no @RequestMapping", clazz);
             return null;
         }
         String[] requestUris = requestMapping.value();
         if (requestUris == null || requestUris.length == 0) {
-            log.info("Class {} contains a @RequestMapping, but could not resolve the uri", clazz);
+            log.warn("Class {} contains a @RequestMapping, but could not resolve the uri", clazz);
             return null;
         }
         if (requestUris.length > 1) {
-            log.info("Class {} contains a @RequestMapping with multiple uri's. Only the first one will be documented.",
+            log.warn("Class {} contains a @RequestMapping with multiple uri's. Only the first one will be documented.",
                     clazz);
         }
         return requestUris[0];

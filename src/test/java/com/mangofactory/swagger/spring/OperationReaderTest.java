@@ -34,6 +34,7 @@ import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
@@ -207,7 +208,6 @@ public class OperationReaderTest {
         return new OperationReader(swaggerConfiguration).readOperation(controllerDocumentation, handlerMethod,
                 new ParamsRequestCondition(), RequestMethod.GET);
     }
-
 
 
     @SuppressWarnings("unused")

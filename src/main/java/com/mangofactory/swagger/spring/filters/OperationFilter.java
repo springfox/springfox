@@ -35,10 +35,10 @@ public class OperationFilter implements Filter<DocumentationOperation> {
         ResolvedType parameterType = methodReturnType(configuration.getTypeResolver(), handlerMethod.getMethod());
         if (parameterType != null) {
             ResolvedType alternateType = configuration.maybeGetAlternateType(parameterType);
-            operation.setResponseClass(modelName(alternateType));
-            if (configuration.isParameterTypeIgnorable(alternateType.getErasedType())) {
+            if (configuration.isParameterTypeIgnorable(alternateType)) {
                 return;
             }
+            operation.setResponseClass(modelName(alternateType));
             maybeAddParameterTypeToModels(controllerDocumentation, alternateType, modelName(alternateType), true);
         }
 

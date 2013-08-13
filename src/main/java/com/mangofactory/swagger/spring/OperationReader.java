@@ -47,7 +47,7 @@ public class OperationReader {
             DocumentationParameter parameter = new DocumentationParameter();
             ResolvedType resolvedType = configuration.maybeGetAlternateType(resolvedParameters.get(index));
             if (resolvedParameters.size() == 0
-                    || configuration.isParameterTypeIgnorable(resolvedType.getErasedType())) {
+                    || configuration.isParameterTypeIgnorable(resolvedType)) {
                 continue;
             }
             FilterContext<DocumentationParameter> parameterContext

@@ -16,6 +16,7 @@ import com.google.common.primitives.Ints;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,8 +49,7 @@ public class ResolvedTypes {
     }
 
     public static boolean isSetter(Method method) {
-        return method.getReturnType().equals(void.class) &&
-                method.getParameterTypes().length == 1 &&
+        return method.getParameterTypes().length == 1 &&
                 method.getName().matches("^set[a-zA-Z].*");
     }
 
@@ -125,7 +125,7 @@ public class ResolvedTypes {
                 new Predicate<ResolvedMethod>() {
                     @Override
                     public boolean apply(ResolvedMethod input) {
-                        return input.getRawMember().equals(methodToResolve);
+                        return input.getRawMember().getName().equals(methodToResolve.getName());
                     }
                 });
         return resolveToMethodWithMaxResolvedTypes(filtered);
@@ -143,6 +143,7 @@ public class ResolvedTypes {
         return null;
     }
 
+
     public static ResolvedType asResolvedType(Class clazz) {
         return new TypeResolver().resolve(clazz);
     }
@@ -152,19 +153,31 @@ public class ResolvedTypes {
     }
 
     public static String modelName(ResolvedType resolvedType) {
+        if (resolvedType.getErasedType() == Object.class) {
+            return "any";
+        }
+
+        String begin = "«";
+        String end = "»";
+        if (resolvedType.isArray()
+                || List.class.equals(resolvedType.getErasedType())
+                || Set.class.equals(resolvedType.getErasedType())) {
+            begin = "[";
+            end = "]";
+        }
         StringBuilder sb = new StringBuilder();
         sb.append(resolvedType.getErasedType().getSimpleName());
         boolean first = true;
         for (ResolvedType typeParam : resolvedType.getTypeParameters()) {
             if (first) {
-                sb.append(String.format("[%s", typeParam.getErasedType().getSimpleName()));
+                sb.append(String.format("%s%s", begin, modelName(typeParam)));
                 first = false;
             } else {
-                sb.append(String.format(",%s", typeParam.getErasedType().getSimpleName()));
+                sb.append(String.format(",%s", modelName(typeParam)));
             }
         }
         if (!first) {
-            sb.append("]");
+            sb.append(end);
         }
         return sb.toString();
     }

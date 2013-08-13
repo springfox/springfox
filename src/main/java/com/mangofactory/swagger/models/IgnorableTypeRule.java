@@ -1,10 +1,14 @@
 package com.mangofactory.swagger.models;
 
+import com.fasterxml.classmate.ResolvedType;
+
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
+
 public class IgnorableTypeRule implements TypeProcessingRule{
-    private Class<?> ignorableType;
+    private ResolvedType ignorableType;
 
     public IgnorableTypeRule(Class<?> ignorableType) {
-        this.ignorableType = ignorableType;
+        this.ignorableType = asResolvedType(ignorableType);
     }
 
     @Override
@@ -18,12 +22,12 @@ public class IgnorableTypeRule implements TypeProcessingRule{
     }
 
     @Override
-    public Class<?> originalType() {
+    public ResolvedType originalType() {
         return ignorableType;
     }
 
     @Override
-    public Class<?> alternateType() {
+    public ResolvedType alternateType() {
         return ignorableType;
     }
 

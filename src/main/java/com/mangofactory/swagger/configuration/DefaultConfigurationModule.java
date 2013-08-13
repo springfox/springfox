@@ -21,11 +21,12 @@ import org.springframework.ui.ModelMap;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.models.IgnorableTypeRule.ignorable;
+import static com.mangofactory.swagger.models.AlternateTypeProcessingRule.*;
+import static com.mangofactory.swagger.models.IgnorableTypeRule.*;
 
 public class DefaultConfigurationModule {
     public SwaggerConfiguration apply(SwaggerConfiguration configuration) {
@@ -53,8 +54,14 @@ public class DefaultConfigurationModule {
                         ignorable(ServletContext.class),
                         ignorable(HttpServletRequest.class),
                         ignorable(HttpServletResponse.class),
-                        ignorable(HashMap.class)));
+                        alternate(configuration.getTypeResolver().resolve(Map.class),
+                                configuration.getTypeResolver().resolve(Object.class)),
+                        alternate(configuration.getTypeResolver().resolve(Map.class, String.class, Object.class),
+                                configuration.getTypeResolver().resolve(Object.class)),
+                        alternate(configuration.getTypeResolver().resolve(Map.class, Object.class, Object.class),
+                                configuration.getTypeResolver().resolve(Object.class))));
 
         return configuration;
     }
+
 }

@@ -33,7 +33,7 @@ public class Models {
     public static boolean maybeAddParameterTypeToModels(ControllerDocumentation controllerDocumentation,
             ResolvedType parameterType, String dataType, boolean isReturnType) {
 
-        if (isPrimitive(parameterType.getErasedType())) {
+        if (isPrimitive(parameterType.getErasedType()) || isObject(parameterType.getErasedType())) {
             return false;
         }
         ResolvedTypeMemberSource member = new ResolvedTypeMemberSource(parameterType);
@@ -66,6 +66,10 @@ public class Models {
             return true;
         }
         return false;
+    }
+
+    private static boolean isObject(Class<?> erasedType) {
+        return erasedType == Object.class;
     }
 
     public static boolean isPrimitive(Class<?> parameterType) {
