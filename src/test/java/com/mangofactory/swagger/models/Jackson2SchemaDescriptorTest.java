@@ -2,9 +2,6 @@ package com.mangofactory.swagger.models;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedField;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Predicate;
 import com.mangofactory.swagger.AliasedResolvedField;
@@ -14,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -26,54 +24,6 @@ public class Jackson2SchemaDescriptorTest {
     private final boolean forSerialization;
     private List<AliasedResolvedField> fields;
     private List<ResolvedProperty> properties;
-
-    @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, fieldVisibility = JsonAutoDetect
-            .Visibility.PUBLIC_ONLY)
-    class SerializationTest {
-        private String privateField;
-        public String publicField;
-        @JsonIgnore
-        public String ignoredPublicField;
-        @JsonProperty
-        private String includedPrivateField;
-
-//        @JsonProperty
-        @JsonProperty(value = "otherName")
-        private String renamedPrivateField;
-
-        private String privateProperty;
-        private String deserializationProperty;
-
-        SerializationTest() {
-        }
-
-        SerializationTest(String privateField, String publicField, String ignoredPublicField,
-                          String includedPrivateField, String privateProperty, String renamedPrivateField) {
-            this.privateField = privateField;
-            this.publicField = publicField;
-            this.ignoredPublicField = ignoredPublicField;
-            this.includedPrivateField = includedPrivateField;
-            this.privateProperty = privateProperty;
-            this.renamedPrivateField = renamedPrivateField;
-        }
-
-        public String getPrivateProperty() {
-            return privateProperty;
-        }
-
-        void setPrivateProperty(String privateProperty) {
-            this.privateProperty = privateProperty;
-        }
-
-        String getDeserializationProperty() {
-            return deserializationProperty;
-        }
-
-        @JsonProperty
-        void setDeserializationProperty(String deserializationProperty) {
-            this.deserializationProperty = deserializationProperty;
-        }
-    }
 
     public Jackson2SchemaDescriptorTest(boolean forSerialization) {
         this.forSerialization = forSerialization;
@@ -103,9 +53,9 @@ public class Jackson2SchemaDescriptorTest {
     @Test
     public void propertyCountIsCorrect() {
         if (forSerialization) {
-            assertEquals(1, properties.size());
-        } else {
             assertEquals(2, properties.size());
+        } else {
+            assertEquals(3, properties.size());
         }
     }
 
@@ -180,5 +130,24 @@ public class Jackson2SchemaDescriptorTest {
     public void nonExistentProperty() {
         ResolvedProperty property = resolvedProperty("nonExistentProperty");
         assertNull(property);
+    }
+
+    @Test
+    @SneakyThrows
+    public void jsonIgnoreProperties() {
+        ResolvedProperty property = resolvedProperty("ignoreProperty1");
+        assertNotNull(property);
+    }
+
+    @Test
+    @SneakyThrows
+    public void jsonIgnorePropertiesSerialization() {
+        SerializationTest test = new SerializationTest();
+        test.setIgnoreProperty1("ignored");
+        ObjectMapper mapper = new ObjectMapper();
+        StringWriter stringWriter = new StringWriter();
+        mapper.writeValue(stringWriter, test);
+        SerializationTest read = mapper.readValue(stringWriter.toString(), SerializationTest.class);
+        assertNull(read.getIgnoreProperty1());
     }
 }
