@@ -16,11 +16,11 @@ Note - the naming convention for branches is `rel-x.x`.  Point-patch releases (t
 
 ## Prepare
 
-    mvn release:prepare -Darguments=-DskipGpgSigning=false
+    mvn release:prepare
 
 ## Perform
 
-     mvn release:perform -Darguments=-DskipGpgSigning=false
+     mvn release:perform
 
 ## Release
 
