@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.models.Models.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.modelName;
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
 import static com.mangofactory.swagger.spring.Descriptions.*;
 
 public class ParameterFilter implements Filter<DocumentationParameter> {
@@ -41,6 +42,12 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         String description = splitCamelCase(name);
         if (StringUtils.isEmpty(name)) {
             name = methodParameter.getParameterName();
+        }
+        //Multi-part file trumps any other annotations
+        if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
+            parameter.setParamType("body");
+            parameter.setDataType("file");
+            return;
         }
         String paramType = getParameterType(methodParameter, parameterType);
         String dataType = modelName(parameterType);
