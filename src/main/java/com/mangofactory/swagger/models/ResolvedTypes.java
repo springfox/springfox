@@ -14,6 +14,8 @@ import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -128,19 +130,74 @@ public class ResolvedTypes {
                         return input.getRawMember().getName().equals(methodToResolve.getName());
                     }
                 });
-        return resolveToMethodWithMaxResolvedTypes(filtered);
+        return resolveToMethodWithMaxResolvedTypes(filtered, methodToResolve);
     }
 
-    private static ResolvedMethod resolveToMethodWithMaxResolvedTypes(Iterable<ResolvedMethod> filtered) {
-        if (Iterables.size(filtered) > 0) {
-            return Ordering.from(new Comparator<ResolvedMethod>() {
-                @Override
-                public int compare(ResolvedMethod first, ResolvedMethod second) {
-                    return Ints.compare(first.getArgumentCount(), second.getArgumentCount());
-                }
-            }).max(filtered);
+    private static ResolvedMethod resolveToMethodWithMaxResolvedTypes(Iterable<ResolvedMethod> filtered,
+            Method methodToResolve) {
+        if (Iterables.size(filtered) > 1) {
+            Iterable<ResolvedMethod> covariantMethods = covariantMethods(filtered, methodToResolve);
+            if (Iterables.size(covariantMethods) == 0) {
+                return Ordering.from(new Comparator<ResolvedMethod>() {
+                    @Override
+                    public int compare(ResolvedMethod first, ResolvedMethod second) {
+                        return Ints.compare(first.getArgumentCount(), second.getArgumentCount());
+                    }
+                }).max(filtered);
+            } else if (Iterables.size(covariantMethods) == 1) {
+                return Iterables.getFirst(covariantMethods, null);
+            } else {
+                return Ordering.from(new Comparator<ResolvedMethod>() {
+                    @Override
+                    public int compare(ResolvedMethod first, ResolvedMethod second) {
+                        return Ints.compare(first.getArgumentCount(), second.getArgumentCount());
+                    }
+                }).max(covariantMethods);
+            }
+        } else if (Iterables.size(filtered) == 1) {
+            return Iterables.getFirst(filtered, null);
         }
         return null;
+    }
+
+    private static Iterable<ResolvedMethod> covariantMethods(Iterable<ResolvedMethod> filtered,
+            final Method methodToResolve) {
+
+        return filter(methodsWithSameNumberOfParams(filtered, methodToResolve), new Predicate<ResolvedMethod>() {
+            @Override
+            public boolean apply(ResolvedMethod input) {
+                for( int index = 0; index < input.getArgumentCount(); index++) {
+                    if (!covariant(input.getArgumentType(index), methodToResolve.getGenericParameterTypes()[index])) {
+                        return false;
+                    }
+                }
+                return contravariant(input.getReturnType(), methodToResolve.getGenericReturnType());
+            }
+        });
+    }
+
+    private static boolean contravariant(ResolvedType contravariantType, Type with) {
+        return (with instanceof Class && contravariantType.getErasedType().isAssignableFrom((Class<?>) with))
+                || with instanceof ParameterizedType &&
+                contravariantType.getErasedType().isAssignableFrom((Class<?>) ((ParameterizedType) with).getRawType());
+    }
+
+    private static boolean covariant(ResolvedType covariantType, Type with) {
+        return (with instanceof Class && ((Class<?>) with).isAssignableFrom(covariantType.getErasedType()))
+                || with instanceof ParameterizedType &&
+                ((Class<?>) ((ParameterizedType) with).getRawType()).isAssignableFrom(covariantType.getErasedType());
+    }
+
+
+    private static Iterable<ResolvedMethod> methodsWithSameNumberOfParams(Iterable<ResolvedMethod> filtered,
+            final Method methodToResolve) {
+
+        return filter(filtered, new Predicate<ResolvedMethod>() {
+            @Override
+            public boolean apply(ResolvedMethod input) {
+                return input.getArgumentCount() == methodToResolve.getParameterTypes().length;
+            }
+        });
     }
 
 
