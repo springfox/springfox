@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.models;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.wordnik.swagger.core.DocumentationSchema;
 import org.junit.Before;
@@ -9,7 +10,7 @@ import java.util.Date;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
 import static org.junit.Assert.*;
 
 public class SimpleModelTest {
@@ -221,4 +222,9 @@ public class SimpleModelTest {
         assertEquals("any", stringProperty.getType());
     }
 
+    @Test
+    public void resolver() {
+        ResolvedType a = new TypeResolver().resolve(Map.class);
+
+    }
 }

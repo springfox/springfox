@@ -24,6 +24,7 @@ import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.filters.Filters.Fn.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
+import static com.mangofactory.swagger.models.WildcardType.*;
 
 public class SwaggerConfiguration {
     public static final String API_DOCS_PATH = "/api-docs";
@@ -88,17 +89,15 @@ public class SwaggerConfiguration {
 
     public ResolvedType maybeGetAlternateType(final ResolvedType parameterType) {
         TypeProcessingRule rule = findProcessingRule(parameterType);
-        if (rule.hasAlternateType()) {
-            return rule.alternateType();
-        }
-        return parameterType;
+        return rule.alternateType(parameterType);
     }
 
     private TypeProcessingRule findProcessingRule(final ResolvedType parameterType) {
         return find(typeProcessingRules, new Predicate<TypeProcessingRule>() {
             @Override
             public boolean apply(TypeProcessingRule input) {
-                return input.originalType().equals(parameterType);
+                return (hasWildcards(input.originalType()) && wildcardMatch(parameterType, input.originalType()))
+                        || exactMatch(input.originalType(), parameterType);
             }
         }, new DefaultProcessingRule(parameterType.getErasedType()));
     }
@@ -140,8 +139,8 @@ public class SwaggerConfiguration {
         }
 
         @Override
-        public ResolvedType alternateType() {
-            return asResolvedType(clazz);
+        public ResolvedType alternateType(ResolvedType parameterType) {
+            return parameterType;
         }
     }
 }

@@ -6,5 +6,6 @@ public  interface TypeProcessingRule {
     boolean isIgnorable();
     boolean hasAlternateType();
     ResolvedType originalType();
-    ResolvedType alternateType();
+    ResolvedType alternateType(ResolvedType parameterType);
 }
+

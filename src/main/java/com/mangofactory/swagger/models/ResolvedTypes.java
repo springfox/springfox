@@ -222,15 +222,23 @@ public class ResolvedTypes {
             begin = "[";
             end = "]";
         }
+        return modelNameInternal(resolvedType, begin, end);
+    }
+
+    private static String modelNameInternal(ResolvedType resolvedType, String begin, String end) {
+        if (resolvedType.getErasedType() == Object.class) {
+            return "any";
+        }
+
         StringBuilder sb = new StringBuilder();
         sb.append(resolvedType.getErasedType().getSimpleName());
         boolean first = true;
         for (ResolvedType typeParam : resolvedType.getTypeParameters()) {
             if (first) {
-                sb.append(String.format("%s%s", begin, modelName(typeParam)));
+                sb.append(String.format("%s%s", begin, modelNameInternal(typeParam, "«", "»")));
                 first = false;
             } else {
-                sb.append(String.format(",%s", modelName(typeParam)));
+                sb.append(String.format(",%s", modelNameInternal(typeParam, "«", "»")));
             }
         }
         if (!first) {

@@ -27,8 +27,8 @@ public class IgnorableTypeRule implements TypeProcessingRule{
     }
 
     @Override
-    public ResolvedType alternateType() {
-        return ignorableType;
+    public ResolvedType alternateType(ResolvedType parameterType) {
+        return parameterType;
     }
 
     public static IgnorableTypeRule ignorable(Class<?> clazz) {

@@ -8,8 +8,9 @@ import com.google.common.base.Objects;
 import java.util.List;
 import java.util.Map;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-import static com.mangofactory.swagger.models.ResolvedTypes.asResolvedType;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
+import static com.mangofactory.swagger.models.WildcardType.*;
 
 public final class AlternateTypeProcessingRule implements TypeProcessingRule {
     private ResolvedType alternateType;
@@ -41,8 +42,12 @@ public final class AlternateTypeProcessingRule implements TypeProcessingRule {
     }
 
     @Override
-    public ResolvedType alternateType() {
-        return alternateType;
+    public ResolvedType alternateType(ResolvedType parameterType) {
+        if (hasWildcards(originalType)) {
+            return replaceWildcardsFrom(collectReplaceables(parameterType, originalType), alternateType);
+        } else {
+            return alternateType;
+        }
     }
 
     public static AlternateTypeProcessingRule alternate(ResolvedType original, ResolvedType alternate) {
