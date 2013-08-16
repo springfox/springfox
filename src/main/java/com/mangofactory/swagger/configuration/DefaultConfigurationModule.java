@@ -1,11 +1,13 @@
 package com.mangofactory.swagger.configuration;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.filters.AnnotatedEndpointFilter;
 import com.mangofactory.swagger.filters.AnnotatedErrorsFilter;
 import com.mangofactory.swagger.filters.AnnotatedOperationFilter;
 import com.mangofactory.swagger.filters.AnnotatedParameterFilter;
 import com.mangofactory.swagger.filters.Filter;
+import com.mangofactory.swagger.models.WildcardType;
 import com.mangofactory.swagger.spring.filters.ApplicationFilter;
 import com.mangofactory.swagger.spring.filters.EndPointFilter;
 import com.mangofactory.swagger.spring.filters.ErrorsFilter;
@@ -49,17 +51,22 @@ public class DefaultConfigurationModule {
         Filter<List<DocumentationError>> annotatedErrorFilter = new AnnotatedErrorsFilter();
         configuration.getErrorFilters().addAll(newArrayList(errorFilter, annotatedErrorFilter));
 
+        TypeResolver typeResolver = configuration.getTypeResolver();
         configuration.getTypeProcessingRules()
                 .addAll(newArrayList(ignorable(ModelMap.class),
                         ignorable(ServletContext.class),
                         ignorable(HttpServletRequest.class),
                         ignorable(HttpServletResponse.class),
-                        alternate(configuration.getTypeResolver().resolve(Map.class),
-                                configuration.getTypeResolver().resolve(Object.class)),
-                        alternate(configuration.getTypeResolver().resolve(Map.class, String.class, Object.class),
-                                configuration.getTypeResolver().resolve(Object.class)),
-                        alternate(configuration.getTypeResolver().resolve(Map.class, Object.class, Object.class),
-                                configuration.getTypeResolver().resolve(Object.class))));
+                        alternate(typeResolver.resolve(Map.class),
+                                typeResolver.resolve(Object.class)),
+                        alternate(typeResolver.resolve(Map.class, String.class, Object.class),
+                                typeResolver.resolve(Object.class)),
+                        alternate(typeResolver.resolve(Map.class, Object.class, Object.class),
+                                typeResolver.resolve(Object.class)),
+                        alternate(typeResolver.resolve(Map.class, String.class, String.class),
+                                typeResolver.resolve(Object.class)),
+                        hashmapAlternate(WildcardType.class, WildcardType.class)
+                ));
 
         return configuration;
     }
