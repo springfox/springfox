@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.spring.DocumentationEndPoints.*;
 
@@ -66,17 +67,24 @@ public class DocumentationReader {
     }
 
     private List<DocumentationEndPoint> addEndpointDocumentationsIfMissing(ControllerAdapter resource) {
-        List<DocumentationEndPoint> endpoints;
-        String resourceKey = resource.toString();
-        if (endpointByControllerLookup.containsKey(resourceKey)) {
-            return endpointByControllerLookup.get(resourceKey);
+        List<DocumentationEndPoint> endpoints = newArrayList();
+        for (String uri: resource.getControllerUris()) {
+            final String key = String.format("%s-%s", resource.getControllerClass().getSimpleName(), uri);
+            if (endpointByControllerLookup.containsKey(key)) {
+                endpoints.addAll(endpointByControllerLookup.get(key));
+            }
+        }
+        if (!endpoints.isEmpty()) {
+            return endpoints;
         }
 
         endpoints = resource.describeAsDocumentationEndpoints();
-        if (endpoints != null) {
-            endpointByControllerLookup.put(resourceKey, endpoints);
-            DocumentationReader.log.debug("Added resource listing: {}", resourceKey);
-            for (DocumentationEndPoint endpoint: endpoints) {
+        for (String uri: resource.getControllerUris()) {
+            final String key = String.format("%s-%s", resource.getControllerClass().getSimpleName(), uri);
+            endpointByControllerLookup.put(key, endpoints);
+        }
+        for (DocumentationEndPoint endpoint: endpoints) {
+            if (!endpointLookup.containsKey(toApiUri(endpoint.getPath()))) {
                 endpointLookup.put(toApiUri(endpoint.getPath()), endpoint);
                 documentation.addApi(endpoint);
             }
