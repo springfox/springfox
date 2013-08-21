@@ -29,7 +29,7 @@ public class DocumentationReader {
     private static final List<RequestMethod> allRequestMethods =
             Arrays.asList(RequestMethod.GET, RequestMethod.DELETE, RequestMethod.POST, RequestMethod.PUT);
     private final SwaggerConfiguration configuration;
-    private final Map<String, List<DocumentationEndPoint>> endpointByControllerLookup = newHashMap();
+    private final Map<String, DocumentationEndPoint> endpointByControllerLookup = newHashMap();
     private final Map<String, DocumentationEndPoint> endpointLookup = newHashMap();
     private final Map<String, ControllerDocumentation> resourceDocumentationLookup = newHashMap();
     private final EndpointReader endpointReader;
@@ -71,17 +71,18 @@ public class DocumentationReader {
         for (String uri: resource.getControllerUris()) {
             final String key = String.format("%s-%s", resource.getControllerClass().getSimpleName(), uri);
             if (endpointByControllerLookup.containsKey(key)) {
-                endpoints.addAll(endpointByControllerLookup.get(key));
+                endpoints.add(endpointByControllerLookup.get(key));
             }
         }
         if (!endpoints.isEmpty()) {
             return endpoints;
         }
 
-        endpoints = resource.describeAsDocumentationEndpoints();
-        for (String uri: resource.getControllerUris()) {
-            final String key = String.format("%s-%s", resource.getControllerClass().getSimpleName(), uri);
-            endpointByControllerLookup.put(key, endpoints);
+        for (DocumentationEndPoint endpoint : endpoints = resource.describeAsDocumentationEndpoints()) {
+            final String key = String.format("%s-%s", resource.getControllerClass().getSimpleName(), endpoint.path());
+            if (!endpointByControllerLookup.containsKey(key)) {
+                endpointByControllerLookup.put(key, endpoint);
+            }
         }
         for (DocumentationEndPoint endpoint: endpoints) {
             if (!endpointLookup.containsKey(toApiUri(endpoint.getPath()))) {
