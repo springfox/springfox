@@ -44,7 +44,7 @@ public final class AlternateTypeProcessingRule implements TypeProcessingRule {
     @Override
     public ResolvedType alternateType(ResolvedType parameterType) {
         if (hasWildcards(originalType)) {
-            return replaceWildcardsFrom(parameterType, alternateType);
+            return replaceWildcardsFrom(collectReplaceables(parameterType, originalType), alternateType);
         } else {
             return alternateType;
         }

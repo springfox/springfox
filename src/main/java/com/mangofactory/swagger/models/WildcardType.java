@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 
 import java.lang.reflect.Type;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.google.common.collect.Iterables.*;
@@ -42,18 +43,46 @@ public class WildcardType {
         return true;
     }
 
-    public static ResolvedType replaceWildcardsFrom(ResolvedType replacingType, ResolvedType wildcardType) {
+    static ResolvedType replaceWildcardsFrom(Iterable<ResolvedType> replaceables, ResolvedType wildcardType) {
+        Iterator<ResolvedType> replaceableIterator = replaceables.iterator();
+        return breadthFirstReplace(replaceableIterator, wildcardType);
+    }
+
+    private static ResolvedType breadthFirstReplace(Iterator<ResolvedType> replaceableIterator,
+                                                    ResolvedType wildcardType) {
+        TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
+        List<Type> bindings = newArrayList();
+        for(int index = 0; index < wildcardTypeBindings.size(); index++) {
+            if (WildcardType.class.equals(wildcardTypeBindings.getBoundType(index).getErasedType())) {
+                if (replaceableIterator.hasNext()) {
+                    bindings.add(replaceableIterator.next());
+                } else {
+                    throw new IllegalStateException("Count of wildcards to candidates do not match");
+                }
+            } else {
+                bindings.add(breadthFirstReplace(replaceableIterator, wildcardTypeBindings.getBoundType(index)));
+            }
+        }
+        return new TypeResolver().resolve(wildcardType.getErasedType(), toArray(bindings, Type.class));
+    }
+
+    static List<ResolvedType> collectReplaceables(ResolvedType replacingType, ResolvedType wildcardType) {
+        return breadthFirstSearch(replacingType, wildcardType);
+    }
+
+    private static List<ResolvedType> breadthFirstSearch(ResolvedType replacingType, ResolvedType wildcardType) {
         TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
         TypeBindings bindingsToMatch = replacingType.getTypeBindings();
-        Preconditions.checkArgument(bindingsToMatch.size() != wildcardTypeBindings.size());
-        List<Type> bindings = newArrayList();
+        Preconditions.checkArgument(bindingsToMatch.size() == wildcardTypeBindings.size());
+        List<ResolvedType> bindings = newArrayList();
         for(int index = 0; index < bindingsToMatch.size(); index++) {
             if (WildcardType.class.equals(wildcardTypeBindings.getBoundType(index).getErasedType())) {
                 bindings.add(bindingsToMatch.getBoundType(index));
             } else {
-                bindings.add(wildcardTypeBindings.getBoundType(index));
+                bindings.addAll(breadthFirstSearch(bindingsToMatch.getBoundType(index),
+                        wildcardTypeBindings.getBoundType(index)));
             }
         }
-        return new TypeResolver().resolve(wildcardType.getErasedType(), toArray(bindings, Type.class));
+        return bindings;
     }
 }
