@@ -77,6 +77,10 @@ public class ControllerAdapter {
                 Joiner.on(",").skipNulls().join(controllerUris(controllerClass)));
     }
 
+    public List<String> getControllerUris() {
+        return controllerUris(controllerClass);
+    }
+
     public Class<?> getControllerClass() {
         return controllerClass;
     }

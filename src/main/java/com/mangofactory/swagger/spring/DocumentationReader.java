@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.spring.DocumentationEndPoints.*;
 
@@ -28,7 +29,7 @@ public class DocumentationReader {
     private static final List<RequestMethod> allRequestMethods =
             Arrays.asList(RequestMethod.GET, RequestMethod.DELETE, RequestMethod.POST, RequestMethod.PUT);
     private final SwaggerConfiguration configuration;
-    private final Map<String, List<DocumentationEndPoint>> endpointByControllerLookup = newHashMap();
+    private final Map<String, DocumentationEndPoint> endpointByControllerLookup = newHashMap();
     private final Map<String, DocumentationEndPoint> endpointLookup = newHashMap();
     private final Map<String, ControllerDocumentation> resourceDocumentationLookup = newHashMap();
     private final EndpointReader endpointReader;
@@ -66,17 +67,25 @@ public class DocumentationReader {
     }
 
     private List<DocumentationEndPoint> addEndpointDocumentationsIfMissing(ControllerAdapter resource) {
-        List<DocumentationEndPoint> endpoints;
-        String resourceKey = resource.toString();
-        if (endpointByControllerLookup.containsKey(resourceKey)) {
-            return endpointByControllerLookup.get(resourceKey);
+        List<DocumentationEndPoint> endpoints = newArrayList();
+        for (String uri: resource.getControllerUris()) {
+            final String key = String.format("%s-%s", resource.getControllerClass().getSimpleName(), uri);
+            if (endpointByControllerLookup.containsKey(key)) {
+                endpoints.add(endpointByControllerLookup.get(key));
+            }
+        }
+        if (!endpoints.isEmpty()) {
+            return endpoints;
         }
 
-        endpoints = resource.describeAsDocumentationEndpoints();
-        if (endpoints != null) {
-            endpointByControllerLookup.put(resourceKey, endpoints);
-            DocumentationReader.log.debug("Added resource listing: {}", resourceKey);
-            for (DocumentationEndPoint endpoint: endpoints) {
+        for (DocumentationEndPoint endpoint : endpoints = resource.describeAsDocumentationEndpoints()) {
+            final String key = String.format("%s-%s", resource.getControllerClass().getSimpleName(), endpoint.path());
+            if (!endpointByControllerLookup.containsKey(key)) {
+                endpointByControllerLookup.put(key, endpoint);
+            }
+        }
+        for (DocumentationEndPoint endpoint: endpoints) {
+            if (!endpointLookup.containsKey(toApiUri(endpoint.getPath()))) {
                 endpointLookup.put(toApiUri(endpoint.getPath()), endpoint);
                 documentation.addApi(endpoint);
             }
