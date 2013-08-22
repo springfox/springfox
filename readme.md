@@ -74,7 +74,8 @@ This creates a controller at `/api-docs` from this uri, which serves swagger's r
 ., In the above example,  `http://www.mydomain.com/swagger-springmvc-example/api-docs`)
 
 ## Deviations from default Swagger API
-Some deviations from the default Swagger API exist.  Wherever possible, these are inteded to be implemented as-well-as the default Swagger implementation, rather than as a replacement.
+Some deviations from the default Swagger API exist.  Wherever possible, these are intended to be implemented
+as-well-as the default Swagger implementation, rather than as a replacement.
 
 The overarching goal is to support generation of the Swagger JSON, with minimal intrusion to the code itself.
 

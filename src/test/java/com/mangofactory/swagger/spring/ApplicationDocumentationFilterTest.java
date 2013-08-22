@@ -21,7 +21,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.filters.Filters.Fn.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)

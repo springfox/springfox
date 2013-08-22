@@ -3,6 +3,8 @@ package com.mangofactory.swagger.spring;
 import com.mangofactory.swagger.spring.controller.DocumentationController;
 import com.mangofactory.swagger.spring.test.TestConfiguration;
 import lombok.SneakyThrows;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = WebContextLoader.class, classes = TestConfiguration.class)
-public class JsonApiListingTests {
+public class PetServiceTest {
     MockMvc mockMvc;
     private MockHttpServletRequestBuilder builder;
     @Autowired
@@ -35,7 +37,8 @@ public class JsonApiListingTests {
     @Test
     @SneakyThrows
     public void testDocumentationEndpointServesOk() {
-        mockMvc.perform(builder).andExpect(status().isOk());
+        mockMvc.perform(builder)
+                .andExpect(status().isOk());
     }
 
     @Test

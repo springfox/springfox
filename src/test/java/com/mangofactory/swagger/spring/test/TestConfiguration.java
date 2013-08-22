@@ -23,6 +23,4 @@ public class TestConfiguration {
         swaggerConfiguration.getExcludedResources().add("/excluded");
         return extensibility.apply(defaultConfig.apply(swaggerConfiguration));
     }
-
-
 }

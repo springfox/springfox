@@ -24,7 +24,7 @@ import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.spring.UriExtractor.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 @Slf4j

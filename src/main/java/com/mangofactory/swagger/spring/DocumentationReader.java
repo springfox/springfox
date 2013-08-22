@@ -50,10 +50,13 @@ public class DocumentationReader {
         operationReader = new OperationReader(configuration);
     }
 
-    private void buildMappingDocuments(WebApplicationContext context) {
-        documentation = configuration.newDocumentation(context);
-        for (RequestMappingHandlerMapping handlerMapping : handlerMappings) {
-            processMethod(handlerMapping);
+    private synchronized void buildMappingDocuments(WebApplicationContext context) {
+        if (!isMappingBuilt) {
+            documentation = configuration.newDocumentation(context);
+            for (RequestMappingHandlerMapping handlerMapping : handlerMappings) {
+                processMethod(handlerMapping);
+            }
+            isMappingBuilt = true;
         }
     }
 

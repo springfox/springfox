@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.spring;
 
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import lombok.SneakyThrows;
 
@@ -44,7 +44,7 @@ public class JsonResourceListingInheritanceTests {
     @SneakyThrows
     public void testInheritedService() {
         mockMvc.perform(builder)
-                .andExpect(jsonPath("$.apis[0].path").value(equalTo("/api-docs/child")));
+                .andExpect(jsonPath("$.apis[0].path").value(equalTo("/api-docs/business-service")));
     }
 
 }

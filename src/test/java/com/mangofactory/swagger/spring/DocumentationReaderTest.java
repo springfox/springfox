@@ -21,13 +21,9 @@ import org.springframework.web.servlet.HandlerMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
@@ -42,6 +38,7 @@ public class DocumentationReaderTest {
     private Documentation resourceListing;
     private DocumentationEndPoint petsEndpoint;
     private DocumentationEndPoint businessEndpoint;
+    private DocumentationEndPoint featuresEndpoint;
 
 
     @Before
@@ -54,6 +51,8 @@ public class DocumentationReaderTest {
                 petsEndpoint = endPoint;
             } else if("/api-docs/business-controller".equals(endPoint.getPath())) {
                 businessEndpoint = endPoint;
+            } else if("/api-docs/features".equals(endPoint.getPath())) {
+                featuresEndpoint = endPoint;
             }
         }
 
@@ -75,27 +74,26 @@ public class DocumentationReaderTest {
 
     @Test
     public void findsDeclaredHandlerMethods() {
-        assertThat(resourceListing.getApis().size(), equalTo(4));
-        assertEquals("/api-docs/pets", petsEndpoint.getPath());
+        assertThat(resourceListing.getApis().size(), equalTo(8));
+        assertThat("/api-docs/pets", equalTo(petsEndpoint.getPath()));
         Documentation petsDocumentation = controller.getApiDocumentation(request);
-        assertThat(petsDocumentation, is(notNullValue()));
+        assertThat(petsDocumentation, notNullValue());
     }
 
     @Test
     public void findsExpectedMethods() {
+        when(request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).thenReturn("/features");
         ControllerDocumentation petsDocumentation = controller.getApiDocumentation(request);
-        DocumentationOperation operation = petsDocumentation.getEndPoint("/pets/{petId}",
-                RequestMethod.GET).iterator().next();
-        assertThat(operation, is(notNullValue()));
-        assertThat(operation.getParameters().size(), equalTo(1));
 
-        operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.GET).iterator().next();
+
+        String requestUri = "/features/allMethodsAllowed";
+        DocumentationOperation operation = petsDocumentation.getEndPoint(requestUri, RequestMethod.GET).iterator().next();
         assertThat(operation, is(notNullValue()));
-        operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.POST).iterator().next();
+        operation = petsDocumentation.getEndPoint(requestUri, RequestMethod.POST).iterator().next();
         assertThat(operation, is(notNullValue()));
-        operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.DELETE).iterator().next();
+        operation = petsDocumentation.getEndPoint(requestUri, RequestMethod.DELETE).iterator().next();
         assertThat(operation, is(notNullValue()));
-        operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.PUT).iterator().next();
+        operation = petsDocumentation.getEndPoint(requestUri, RequestMethod.PUT).iterator().next();
         assertThat(operation, is(notNullValue()));
     }
 
@@ -111,4 +109,22 @@ public class DocumentationReaderTest {
         assertThat(operation.getParameters().size(), equalTo(1));
         assertThat(operation.getSummary(), equalTo("Find a business by its id"));
     }
+    //TODO: Move to feature demonstration service
+//    @Test
+//    public void findsExpectedMethods() {
+//        ControllerDocumentation petsDocumentation = controller.getApiDocumentation(request);
+//        DocumentationOperation operation = petsDocumentation.getEndPoint("/pets/{petId}",
+//                RequestMethod.GET).iterator().next();
+//        assertThat(operation, is(notNullValue()));
+//        assertThat(operation.getParameters().size(), equalTo(1));
+//
+//        operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.GET).iterator().next();
+//        assertThat(operation, is(notNullValue()));
+//        operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.POST).iterator().next();
+//        assertThat(operation, is(notNullValue()));
+//        operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.DELETE).iterator().next();
+//        assertThat(operation, is(notNullValue()));
+//        operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.PUT).iterator().next();
+//        assertThat(operation, is(notNullValue()));
+//    }
 }

@@ -35,6 +35,7 @@ import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -75,15 +76,15 @@ public class OperationReaderTest {
         DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod,
                 new ParamsRequestCondition(), RequestMethod.GET);
         List<DocumentationParameter> parameters = operation.getParameters();
-        assertThat(parameters.get(0).dataType(), is(equalToIgnoringCase("string")));
-        assertThat(parameters.get(1).dataType(), is(equalToIgnoringCase("string")));
+        assertThat(parameters.get(0).dataType(), equalToIgnoringCase("string"));
+        assertThat(parameters.get(1).dataType(), equalToIgnoringCase("string"));
     }
 
     @Test
     public void setsNickanameCorrectly() {
         DocumentationOperation operation = methodReader.readOperation(controllerDocumentation, handlerMethod,
                 new ParamsRequestCondition(), RequestMethod.GET);
-        assertThat(operation.getNickname(), is(equalTo("sampleMethod")));
+        assertThat(operation.getNickname(), equalTo("sampleMethod"));
     }
 
     @Test
