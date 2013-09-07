@@ -55,7 +55,6 @@ public class DocumentationReader {
         for (RequestMappingHandlerMapping handlerMapping : handlerMappings) {
             processMethod(handlerMapping);
         }
-        isMappingBuilt = true;
     }
 
     private ControllerDocumentation addChildDocumentIfMissing(ControllerDocumentation resourceDocumentation) {
@@ -166,9 +165,10 @@ public class DocumentationReader {
         return documentation;
     }
 
-    private void ensureDocumentationReady() {
+    private synchronized void ensureDocumentationReady() {
         if (!isMappingBuilt) {
             buildMappingDocuments(context);
+            isMappingBuilt = true;
         }
     }
 }
