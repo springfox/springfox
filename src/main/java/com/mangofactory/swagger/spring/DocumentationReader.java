@@ -117,7 +117,7 @@ public class DocumentationReader {
                             requestUri);
                   String resourcePath = controllerDocumentation.getResourcePath();
                   if (requestUri.contains(resourcePath)
-                            || resourcePatMatchesController(resourcePath, resource)) {
+                            || resourcePathMatchesController(resourcePath, resource)) {
                         controllerDocumentation.addEndpoint(childEndPoint);
                         appendOperationsToEndpoint(controllerDocumentation, mappingInfo, handlerMethod, childEndPoint,
                                 mappingInfo.getParamsCondition());
@@ -174,7 +174,7 @@ public class DocumentationReader {
         }
     }
 
-  private boolean resourcePatMatchesController(String resourcePath, ControllerAdapter controllerAdapter) {
+  private boolean resourcePathMatchesController(String resourcePath, ControllerAdapter controllerAdapter) {
     String simpleName = controllerAdapter.getControllerClass().getSimpleName();
     String controllerDescription = Descriptions.splitCamelCase(simpleName, "-").toLowerCase();
     return resourcePath.endsWith(controllerDescription);
