@@ -1,11 +1,21 @@
 package com.mangofactory.swagger.spring;
 
-import com.mangofactory.swagger.ControllerDocumentation;
-import com.mangofactory.swagger.SwaggerConfiguration;
-import com.wordnik.swagger.core.Documentation;
-import com.wordnik.swagger.core.DocumentationEndPoint;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMap;
+import static com.mangofactory.swagger.spring.DocumentationEndPoints.asDocumentation;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
@@ -13,19 +23,15 @@ import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.*;
-import static com.mangofactory.swagger.spring.DocumentationEndPoints.*;
+import com.mangofactory.swagger.ControllerDocumentation;
+import com.mangofactory.swagger.SwaggerConfiguration;
+import com.wordnik.swagger.core.Documentation;
+import com.wordnik.swagger.core.DocumentationEndPoint;
 
 @Slf4j
 public class DocumentationReader {
 
+	private static final Pattern requestMappingURIRegex = Pattern.compile("\\{([^}]*)\\}");
     private static final List<RequestMethod> allRequestMethods =
             Arrays.asList(RequestMethod.GET, RequestMethod.DELETE, RequestMethod.POST, RequestMethod.PUT);
     private final SwaggerConfiguration configuration;
@@ -113,6 +119,7 @@ public class DocumentationReader {
                         asDocumentation(documentation, toApiUri(endPoint.path()), configuration.getSchemaProvider()));
 
                 for (String requestUri : mappingInfo.getPatternsCondition().getPatterns()) {
+                	requestUri = stripRequestMappingRegex(requestUri);
                     DocumentationEndPoint childEndPoint = endpointReader.readEndpoint(handlerMethod, resource,
                             requestUri);
                     if (requestUri.contains(controllerDocumentation.getResourcePath())) {
@@ -171,4 +178,25 @@ public class DocumentationReader {
             isMappingBuilt = true;
         }
     }
+    
+	public String stripRequestMappingRegex( final String inputUri )
+	{
+		if ( inputUri == null || inputUri.isEmpty() )
+			return inputUri;
+
+		// short-circuit pattern matching if there are no parameters.
+		if ( inputUri.indexOf('{') < 0 ) { return inputUri; }
+
+		Matcher m = requestMappingURIRegex.matcher(inputUri);
+		String uriFormat = m.replaceAll("{%s}");
+		m.reset();	//replaceAll changes the matcher's state. Reset before finding the matching groups.
+		List<String> paramNames = new ArrayList<String>();
+		while ( m.find() )
+			paramNames.add(m.group(1).split(":")[0]);
+
+		String result = String.format(uriFormat, paramNames.toArray());
+//		DocumentationReader.log.debug("Converted uri pattern from " + inputUri + " to " + result);
+		return result;
+	}
+
 }

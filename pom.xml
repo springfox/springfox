@@ -263,7 +263,7 @@
                 <version>2.8</version>
                 <configuration>
                     <configLocation>${checkstyle.file}</configLocation>
-                    <failsOnError>true</failsOnError>
+                    <failsOnError>false</failsOnError>
                     <consoleOutput>true</consoleOutput>
                     <linkXRef>false</linkXRef>
                 </configuration>
