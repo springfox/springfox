@@ -19,12 +19,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
@@ -38,6 +41,8 @@ public class DocumentationReaderTest {
     private HttpServletRequest request;
     private Documentation resourceListing;
     private DocumentationEndPoint petsEndpoint;
+    private DocumentationEndPoint businessEndpoint;
+
 
     @Before
     public void setup() {
@@ -47,6 +52,8 @@ public class DocumentationReaderTest {
         for (DocumentationEndPoint endPoint : resourceListing.getApis()) {
             if("/api-docs/pets".equals(endPoint.getPath())) {
                 petsEndpoint = endPoint;
+            } else if("/api-docs/business-controller".equals(endPoint.getPath())) {
+                businessEndpoint = endPoint;
             }
         }
 
@@ -68,7 +75,7 @@ public class DocumentationReaderTest {
 
     @Test
     public void findsDeclaredHandlerMethods() {
-        assertThat(resourceListing.getApis().size(), equalTo(2));
+        assertThat(resourceListing.getApis().size(), equalTo(3));
         assertEquals("/api-docs/pets", petsEndpoint.getPath());
         Documentation petsDocumentation = controller.getApiDocumentation(request);
         assertThat(petsDocumentation, is(notNullValue()));
@@ -90,5 +97,18 @@ public class DocumentationReaderTest {
         assertThat(operation, is(notNullValue()));
         operation = petsDocumentation.getEndPoint("/pets/allMethodsAllowed", RequestMethod.PUT).iterator().next();
         assertThat(operation, is(notNullValue()));
+    }
+
+    @Test
+    public void shouldLocateDocsOnControllerWithoutTopLevelRequestMapping(){
+        when(request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).thenReturn("/business-service");
+        resourceListing = controller.getResourceListing();
+
+        ControllerDocumentation documentation = controller.getApiDocumentation(request);
+        List<DocumentationOperation> endPoint = documentation.getEndPoint("/businesses/{businessId}", RequestMethod.GET);
+        DocumentationOperation operation = endPoint.iterator().next();
+        assertThat(operation, is(notNullValue()));
+        assertThat(operation.getParameters().size(), equalTo(1));
+        assertThat(operation.getSummary(), equalTo("Find a business by its id"));
     }
 }
