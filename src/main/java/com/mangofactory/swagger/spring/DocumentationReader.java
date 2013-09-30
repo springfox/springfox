@@ -184,20 +184,26 @@ public class DocumentationReader {
         if ( inputUri == null || inputUri.isEmpty() ) {
             return inputUri;
         }
-
         // short-circuit pattern matching if there are no parameters.
         if ( inputUri.indexOf('{') < 0 ) { return inputUri; }
-
-        Matcher m = requestMappingURIRegex.matcher(inputUri);
-        String uriFormat = m.replaceAll("{%s}");
-        m.reset();    //replaceAll changes the matcher's state. Reset before finding the matching groups.
-        List<String> paramNames = new ArrayList<String>();
-        while ( m.find() ) {
-            paramNames.add(m.group(1).split(":")[0]);
+        
+        String result = inputUri;
+        try {
+            Matcher m = requestMappingURIRegex.matcher(inputUri);
+            String uriFormat = m.replaceAll("{%s}");
+            m.reset();    //replaceAll changes the matcher's state. Reset before finding the matching groups.
+            List<String> paramNames = new ArrayList<String>();
+            while ( m.find() ) {
+                paramNames.add(m.group(1).split(":")[0]);
+            }
+    
+            result = String.format(uriFormat, paramNames.toArray());
+            DocumentationReader.log.debug("Converted uri pattern from " + inputUri + " to " + result);
+        } catch ( Exception e ) {
+                //Doesn't matter what exception is thrown, we should at least return the 
+                //inputURI
+                DocumentationReader.log.debug("Exception while trying to strip regex from request uri: " + inputUri, e);
         }
-
-        String result = String.format(uriFormat, paramNames.toArray());
-//     DocumentationReader.log.debug("Converted uri pattern from " + inputUri + " to " + result);
         return result;
     }
 
