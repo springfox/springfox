@@ -17,7 +17,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 /**
  * Tests that exercise the documentation
@@ -29,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(loader = WebContextLoader.class, classes = TestConfiguration.class)
 public class JsonResourceListingTests {
 
+    public static final String BUSINESS_ENTITY_SERVICES = "Business entity services";
     @Autowired
     DocumentationController controller;
     private MockMvc mockMvc;
@@ -67,7 +70,7 @@ public class JsonResourceListingTests {
     public void testApiPathIsRelativeToBasePath() {
         mockMvc.perform(builder)
                 .andExpect(jsonPath("$.apiVersion").exists())
-                .andExpect(jsonPath("$.apis[0].path").value(equalTo("/api-docs/pets")));
+                .andExpect(jsonPath("$.apis[1].path").value(equalTo("/api-docs/pets")));
     }
 
     @Test
@@ -75,7 +78,7 @@ public class JsonResourceListingTests {
     public void testApiDescriptionIsCorrect() {
         mockMvc.perform(builder)
                 .andExpect(jsonPath("$.apiVersion").exists())
-                .andExpect(jsonPath("$.apis[0].description").value(equalTo("Operations about pets")));
+                .andExpect(jsonPath("$.apis[1].description").value(equalTo("Operations about pets")));
     }
 
     @Test
@@ -99,4 +102,26 @@ public class JsonResourceListingTests {
                 .andExpect(jsonPath("$.basePath").value(equalTo("/some-path")));
     }
 
+    @Test
+    @SneakyThrows
+    public void shouldHaveCorrectPathForBusinessServiceController() {
+        mockMvc.perform(builder)
+                .andExpect(jsonPath("$.apiVersion").exists())
+                .andExpect(jsonPath("$.apis[0].path").value(equalTo("/api-docs/business-service")))
+                .andExpect(jsonPath("$.apis[0].description").value(equalTo(BUSINESS_ENTITY_SERVICES)));
+    }
+
+    @Test
+    public void shouldRespondWithDocumentOperationsWhenBusinessApiDocsCalled() throws Exception {
+        mockMvc.perform(get("/api-docs/business-service")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(xpath("controllerDocumentation").exists())
+                .andExpect(xpath("controllerDocumentation/apiVersion").string("2.0"))
+                .andExpect(xpath("controllerDocumentation/apis[1]/description").string(equalTo(BUSINESS_ENTITY_SERVICES)))
+                .andExpect(xpath("controllerDocumentation/apis[1]/operations[1]/nickname").string(equalTo("getAllBusinesses")))
+                .andExpect(xpath("controllerDocumentation/apis[1]/operations[1]/httpMethod").string(equalTo("GET")))
+                .andExpect(xpath("controllerDocumentation/apis[1]/operations[1]/summary").string(equalTo("Find a business by its id")))
+                .andExpect(xpath("controllerDocumentation/apis[1]/path").string(equalTo("/businesses/{businessId}")));
+    }
 }
