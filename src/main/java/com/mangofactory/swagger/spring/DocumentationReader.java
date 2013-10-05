@@ -115,7 +115,9 @@ public class DocumentationReader {
                 for (String requestUri : mappingInfo.getPatternsCondition().getPatterns()) {
                     DocumentationEndPoint childEndPoint = endpointReader.readEndpoint(handlerMethod, resource,
                             requestUri);
-                    if (requestUri.contains(controllerDocumentation.getResourcePath())) {
+                     String resourcePath = controllerDocumentation.getResourcePath();
+                  if (requestUri.contains(resourcePath)
+                            || resourcePathMatchesController(resourcePath, resource)) {
                         controllerDocumentation.addEndpoint(childEndPoint);
                         appendOperationsToEndpoint(controllerDocumentation, mappingInfo, handlerMethod, childEndPoint,
                                 mappingInfo.getParamsCondition());
@@ -170,5 +172,11 @@ public class DocumentationReader {
             buildMappingDocuments(context);
             isMappingBuilt = true;
         }
+    }
+
+    private boolean resourcePathMatchesController(String resourcePath, ControllerAdapter controllerAdapter) {
+        String simpleName = controllerAdapter.getControllerClass().getSimpleName();
+        String controllerDescription = Descriptions.splitCamelCase(simpleName, "-").toLowerCase();
+        return resourcePath.endsWith(controllerDescription);
     }
 }
