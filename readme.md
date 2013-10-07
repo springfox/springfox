@@ -79,6 +79,22 @@ An example of Swaggers PetStore in Spring MVC is available [here](https://github
 ## TODO:
 - Handle the case where RequestMapping might have wildcards
 
+## Credits
+
+A big thank you to all the folks who are using this library and contributing via code/issues/discussions. 
+
+In no partiular order thank you to the following for sending in PRs. Its not sustainable without community support!
+- [@mbazos](https://github.com/mbazos)
+- [@thomaschristensen](https://github.com/thomaschristensen)
+- [@pawelrychlik](https://github.com/pawelrychlik)
+- [@frisco82](https://github.com/frisco82)
+- [@adrianbk](https://github.com/adrianbk)
+- [@mwhig](https://github.com/mwhig)
+- [@alexeytokar](https://github.com/alexeytokar)
+- [@williamvoor](https://github.com/williamvoor)
+- [@obernal](https://github.com/obernal)
+
+
 License
 -------
 
