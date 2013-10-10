@@ -24,6 +24,9 @@ All `@Controller` classes are parsed, and methods annotated with `@RequestMappin
 Additionally, `@Api` at the class level, and `@ApiOperation` at the method level are both supported.
 			
 ## Getting started
+
+### For XML config
+
 To wire up support, add the following into your spring context file (Configuration based on the [example project](https://github.com/martypitt/swagger-springmvc-example)):
 
 ```xml
@@ -40,6 +43,30 @@ To wire up support, add the following into your spring context file (Configurati
     <bean id="extensibilityModule" class="com.mangofactory.swagger.springmvc.example.config.ExampleExtensibilityModule" />
 
 ```
+
+### For Java config
+Create if required a @Configuration Bean to import the DocumentationConfig bean defined in this library it [like here](https://github.com/martypitt/swagger-springmvc-example/blob/master/src/main/java/com/mangofactory/swagger/springmvc/example/config/CustomDocumentationConfig.java).
+
+Secondly to pull in the properties, define a bean in yr custom config (note that it needs to implement ServletContextAware to get access to servlet properties)
+
+```java
+    @Bean
+    public PropertyPlaceholderConfigurer swaggerProperties() throws UnknownHostException {
+
+        // Swagger expects these to property values to be replaced. We don't want to propagate these to consumers of
+        // this configuration, so we derive reasonable defaults here and configure the properties programmatically.
+        Properties properties = new Properties();
+        properties.setProperty("documentation.services.basePath", servletContext.getContextPath());
+        // this property will be overridden at runtime, so the value here doesn't matter
+        properties.setProperty("documentation.services.version", "REPLACE-ME");
+
+        PropertyPlaceholderConfigurer configurer = new PropertyPlaceholderConfigurer();
+        configurer.setProperties(properties);
+        configurer.setIgnoreUnresolvablePlaceholders(true);
+        return configurer;
+    }
+```
+**Importantly** everything that swagger needs is defined in the DocumentationConfig bean, *you just need to import it*. And it will guide (scream actually) through satisfying the unsatisfied dependencies when the application starts.
 
 The `basePath` property is external-facing url the maps to your SpringMVC dispatcher servlet.
 
