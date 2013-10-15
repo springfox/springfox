@@ -188,7 +188,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>0.11.4</version>
+            <version>1.12.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -200,7 +200,7 @@
         <dependency>
             <groupId>com.fasterxml</groupId>
             <artifactId>classmate</artifactId>
-            <version>0.8.0</version>
+            <version>0.9.0</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>

@@ -34,10 +34,7 @@ import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -172,7 +169,7 @@ public class OperationReaderTest {
         });
         DocumentationOperation operation = methodReader.readOperation(controllerDocumentation,
                 handlerMethodWithNoParam, paramsCondition, RequestMethod.GET);
-        assertNull(operation.getResponseClass());
+        assertThat(operation.getResponseClass(), equalTo("Void"));
     }
 
     @Test
