@@ -70,7 +70,7 @@ public class JsonResourceListingTests {
     public void testApiPathIsRelativeToBasePath() {
         mockMvc.perform(builder)
                 .andExpect(jsonPath("$.apiVersion").exists())
-                .andExpect(jsonPath("$.apis[1].path").value(equalTo("/api-docs/pets")));
+                .andExpect(jsonPath("$.apis[2].path").value(equalTo("/api-docs/pets")));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class JsonResourceListingTests {
     public void testApiDescriptionIsCorrect() {
         mockMvc.perform(builder)
                 .andExpect(jsonPath("$.apiVersion").exists())
-                .andExpect(jsonPath("$.apis[1].description").value(equalTo("Operations about pets")));
+                .andExpect(jsonPath("$.apis[2].description").value(equalTo("Operations about pets")));
     }
 
     @Test

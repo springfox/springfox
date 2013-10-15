@@ -75,7 +75,7 @@ public class DocumentationReaderTest {
 
     @Test
     public void findsDeclaredHandlerMethods() {
-        assertThat(resourceListing.getApis().size(), equalTo(3));
+        assertThat(resourceListing.getApis().size(), equalTo(4));
         assertEquals("/api-docs/pets", petsEndpoint.getPath());
         Documentation petsDocumentation = controller.getApiDocumentation(request);
         assertThat(petsDocumentation, is(notNullValue()));
