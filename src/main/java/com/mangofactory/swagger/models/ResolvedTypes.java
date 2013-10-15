@@ -112,7 +112,7 @@ public class ResolvedTypes {
     public static ResolvedType methodReturnType(TypeResolver typeResolver, final Method methodToResolve) {
         ResolvedMethod resolvedMethod = getResolvedMethod(typeResolver, methodToResolve);
         if (resolvedMethod != null) {
-            return resolvedMethod.getReturnType();
+            return returnTypeOrVoid(resolvedMethod);
         }
         return asResolvedType(methodToResolve.getReturnType());
 
@@ -171,9 +171,17 @@ public class ResolvedTypes {
                         return false;
                     }
                 }
-                return contravariant(input.getReturnType(), methodToResolve.getGenericReturnType());
+                return contravariant(returnTypeOrVoid(input), methodToResolve.getGenericReturnType());
             }
         });
+    }
+
+    private static ResolvedType returnTypeOrVoid(ResolvedMethod input) {
+        ResolvedType returnType = input.getReturnType();
+        if (returnType == null) {
+            returnType = asResolvedType(Void.class);
+        }
+        return returnType;
     }
 
     private static boolean contravariant(ResolvedType contravariantType, Type with) {
