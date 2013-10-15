@@ -1,3 +1,6 @@
 .idea
 swagger-springmvc.iml
 target
+.settings
+.classpath
+.project
