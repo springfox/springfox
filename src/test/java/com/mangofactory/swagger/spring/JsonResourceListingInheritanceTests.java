@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import lombok.SneakyThrows;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,6 @@ public class JsonResourceListingInheritanceTests {
         builder = MockMvcRequestBuilders.get("/api-docs").accept(MediaType.APPLICATION_JSON);
     }
 
-    @Ignore("expecting the child URL path")
     @Test
     @SneakyThrows
     public void testInheritedService() {

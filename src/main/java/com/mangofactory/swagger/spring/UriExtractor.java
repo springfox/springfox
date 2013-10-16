@@ -1,15 +1,17 @@
 package com.mangofactory.swagger.spring;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.method.HandlerMethod;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.mangofactory.swagger.spring.Descriptions.splitCamelCase;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.spring.Descriptions.*;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.method.HandlerMethod;
 
 @Slf4j
 public class UriExtractor {
@@ -59,6 +61,10 @@ public class UriExtractor {
         if (!isNullOrEmpty(toAppendUri)) {
             builder.appendPath(toAppendUri);
         }
+    }
+
+    private static RequestMapping requestMapping(Class<?> annotated) {
+        return AnnotationUtils.findAnnotation(annotated, RequestMapping.class);
     }
 
     private static RequestMapping requestMapping(AnnotatedElement annotated) {
