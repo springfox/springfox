@@ -1,21 +1,11 @@
 package com.mangofactory.swagger.spring;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.newHashMap;
-import static com.mangofactory.swagger.spring.DocumentationEndPoints.asDocumentation;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.mangofactory.swagger.ControllerDocumentation;
+import com.mangofactory.swagger.SwaggerConfiguration;
+import com.wordnik.swagger.core.Documentation;
+import com.wordnik.swagger.core.DocumentationEndPoint;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
@@ -23,15 +13,19 @@ import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import com.mangofactory.swagger.ControllerDocumentation;
-import com.mangofactory.swagger.SwaggerConfiguration;
-import com.wordnik.swagger.core.Documentation;
-import com.wordnik.swagger.core.DocumentationEndPoint;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.spring.DocumentationEndPoints.*;
 
 @Slf4j
 public class DocumentationReader {
 
-    private static final Pattern requestMappingURIRegex = Pattern.compile("\\{([^}]*)\\}");
     private static final List<RequestMethod> allRequestMethods =
             Arrays.asList(RequestMethod.GET, RequestMethod.DELETE, RequestMethod.POST, RequestMethod.PUT);
     private final SwaggerConfiguration configuration;
@@ -46,8 +40,8 @@ public class DocumentationReader {
     private List<RequestMappingHandlerMapping> handlerMappings;
     private Documentation documentation;
 
-    public DocumentationReader(final SwaggerConfiguration swaggerConfiguration, final WebApplicationContext context,
-                               final List<RequestMappingHandlerMapping> handlerMappings) {
+    public DocumentationReader(SwaggerConfiguration swaggerConfiguration, WebApplicationContext context,
+                               List<RequestMappingHandlerMapping> handlerMappings) {
 
         configuration = swaggerConfiguration;
         this.context = context;
@@ -56,14 +50,14 @@ public class DocumentationReader {
         operationReader = new OperationReader(configuration);
     }
 
-    private void buildMappingDocuments(final WebApplicationContext context) {
+    private void buildMappingDocuments(WebApplicationContext context) {
         documentation = configuration.newDocumentation(context);
         for (RequestMappingHandlerMapping handlerMapping : handlerMappings) {
             processMethod(handlerMapping);
         }
     }
 
-    private ControllerDocumentation addChildDocumentIfMissing(final ControllerDocumentation resourceDocumentation) {
+    private ControllerDocumentation addChildDocumentIfMissing(ControllerDocumentation resourceDocumentation) {
         if (!resourceDocumentationLookup.containsKey(resourceDocumentation.getResourcePath())) {
             resourceDocumentationLookup.put(resourceDocumentation.getResourcePath(),
                     resourceDocumentation);
@@ -71,7 +65,7 @@ public class DocumentationReader {
         return resourceDocumentationLookup.get(resourceDocumentation.getResourcePath());
     }
 
-    private List<DocumentationEndPoint> addEndpointDocumentationsIfMissing(final ControllerAdapter resource) {
+    private List<DocumentationEndPoint> addEndpointDocumentationsIfMissing(ControllerAdapter resource) {
         List<DocumentationEndPoint> endpoints = newArrayList();
         for (String uri: resource.getControllerUris()) {
             final String key = String.format("%s-%s", resource.getControllerClass().getSimpleName(), uri);
@@ -98,11 +92,11 @@ public class DocumentationReader {
         return endpoints;
     }
 
-    private String toApiUri(final String path) {
+    private String toApiUri(String path) {
         return path.substring(configuration.getDocumentationBasePath().length());
     }
 
-    private void processMethod(final RequestMappingHandlerMapping handlerMapping) {
+    private void processMethod(RequestMappingHandlerMapping handlerMapping) {
         for (Entry<RequestMappingInfo, HandlerMethod> entry : handlerMapping.getHandlerMethods().entrySet()) {
             HandlerMethod handlerMethod = entry.getValue();
             RequestMappingInfo mappingInfo = entry.getKey();
@@ -119,10 +113,11 @@ public class DocumentationReader {
                         asDocumentation(documentation, toApiUri(endPoint.path()), configuration.getSchemaProvider()));
 
                 for (String requestUri : mappingInfo.getPatternsCondition().getPatterns()) {
-                    requestUri = stripRequestMappingRegex(requestUri);
                     DocumentationEndPoint childEndPoint = endpointReader.readEndpoint(handlerMethod, resource,
                             requestUri);
-                    if (requestUri.contains(controllerDocumentation.getResourcePath())) {
+                     String resourcePath = controllerDocumentation.getResourcePath();
+                  if (requestUri.contains(resourcePath)
+                            || resourcePathMatchesController(resourcePath, resource)) {
                         controllerDocumentation.addEndpoint(childEndPoint);
                         appendOperationsToEndpoint(controllerDocumentation, mappingInfo, handlerMethod, childEndPoint,
                                 mappingInfo.getParamsCondition());
@@ -132,9 +127,9 @@ public class DocumentationReader {
         }
     }
 
-    private void appendOperationsToEndpoint(final ControllerDocumentation controllerDocumentation,
-                              final RequestMappingInfo mappingInfo, final HandlerMethod handlerMethod,
-                              final DocumentationEndPoint endPoint, final ParamsRequestCondition paramsCondition) {
+    private void appendOperationsToEndpoint(ControllerDocumentation controllerDocumentation,
+                                            RequestMappingInfo mappingInfo, HandlerMethod handlerMethod,
+                                            DocumentationEndPoint endPoint, ParamsRequestCondition paramsCondition) {
 
         if (mappingInfo.getMethodsCondition().getMethods().isEmpty()) {
             // no methods have been specified, it means the endpoint is accessible for all methods
@@ -146,10 +141,9 @@ public class DocumentationReader {
         }
     }
 
-    private void appendOperationsToEndpoint(final ControllerDocumentation controllerDocumentation,
-            final HandlerMethod handlerMethod, final DocumentationEndPoint endPoint, 
-            final Collection<RequestMethod> methods,
-            final ParamsRequestCondition paramsCondition) {
+    private void appendOperationsToEndpoint(ControllerDocumentation controllerDocumentation,
+            HandlerMethod handlerMethod, DocumentationEndPoint endPoint, Collection<RequestMethod> methods,
+            ParamsRequestCondition paramsCondition) {
 
         for (RequestMethod requestMethod : methods) {
             endPoint.addOperation(operationReader.readOperation(controllerDocumentation, handlerMethod,
@@ -157,7 +151,7 @@ public class DocumentationReader {
         }
     }
 
-    public final ControllerDocumentation getDocumentation(final String apiName) {
+    public ControllerDocumentation getDocumentation(String apiName) {
         ensureDocumentationReady();
         for (ControllerDocumentation documentation : resourceDocumentationLookup.values()) {
             if (documentation.matchesName(apiName)) {
@@ -168,7 +162,7 @@ public class DocumentationReader {
         return null;
     }
 
-    public final Documentation getDocumentation() {
+    public Documentation getDocumentation() {
         ensureDocumentationReady();
         return documentation;
     }
@@ -179,32 +173,10 @@ public class DocumentationReader {
             isMappingBuilt = true;
         }
     }
-    
-    public final String stripRequestMappingRegex( final String inputUri ) {
-        if ( inputUri == null || inputUri.isEmpty() ) {
-            return inputUri;
-        }
-        // short-circuit pattern matching if there are no parameters.
-        if ( inputUri.indexOf('{') < 0 ) { return inputUri; }
-        
-        String result = inputUri;
-        try {
-            Matcher m = requestMappingURIRegex.matcher(inputUri);
-            String uriFormat = m.replaceAll("{%s}");
-            m.reset();    //replaceAll changes the matcher's state. Reset before finding the matching groups.
-            List<String> paramNames = new ArrayList<String>();
-            while ( m.find() ) {
-                paramNames.add(m.group(1).split(":")[0]);
-            }
-    
-            result = String.format(uriFormat, paramNames.toArray());
-            DocumentationReader.log.debug("Converted uri pattern from " + inputUri + " to " + result);
-        } catch ( Exception e ) {
-                //Doesn't matter what exception is thrown, we should at least return the 
-                //inputURI
-                DocumentationReader.log.debug("Exception while trying to strip regex from request uri: " + inputUri, e);
-        }
-        return result;
-    }
 
+    private boolean resourcePathMatchesController(String resourcePath, ControllerAdapter controllerAdapter) {
+        String simpleName = controllerAdapter.getControllerClass().getSimpleName();
+        String controllerDescription = Descriptions.splitCamelCase(simpleName, "-").toLowerCase();
+        return resourcePath.endsWith(controllerDescription);
+    }
 }
