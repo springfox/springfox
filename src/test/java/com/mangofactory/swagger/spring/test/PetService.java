@@ -35,7 +35,7 @@ public class PetService {
 
 	@RequestMapping(method=RequestMethod.POST)
 	@ApiOperation(value = "Add a new pet to the store")
-	@ApiErrors(errors = { @ApiError(code = 405, reason = "Invalid input") })
+	@ApiErrors(errors = { @ApiError(code = 405, message = "Invalid input") })
 	public void addPet(
 			@ApiParam(value = "Pet object that needs to be added to the store", required = true) Pet pet) {
 		throw new NotImplementedException();
@@ -43,9 +43,9 @@ public class PetService {
 
 	@RequestMapping(method=RequestMethod.PUT)
 	@ApiOperation(value = "Update an existing pet")
-	@ApiErrors(errors = { @ApiError(code = 400, reason = "Invalid ID supplied"),
-			@ApiError(code = 404, reason = "Pet not found"),
-			@ApiError(code = 405, reason = "Validation exception") })
+	@ApiErrors(errors = { @ApiError(code = 400, message = "Invalid ID supplied"),
+			@ApiError(code = 404, message = "Pet not found"),
+			@ApiError(code = 405, message = "Validation exception") })
 	public void updatePet(
 			@ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
 		throw new NotImplementedException();
@@ -53,7 +53,7 @@ public class PetService {
 
 	@RequestMapping(value="/findByStatus",method=RequestMethod.GET)
 	@ApiOperation(value = "Finds Pets by status", notes = "Multiple status values can be provided with comma seperated strings", responseClass = "ccom.mangofactory.swagger.spring.test.Pet", multiValueResponse = true)
-	@ApiErrors(errors = { @ApiError(code = 400, reason = "Invalid status value") })
+	@ApiErrors(errors = { @ApiError(code = 400, message = "Invalid status value") })
 	public void findPetsByStatus(
 			@ApiParam(value = "Status values that need to be considered for filter", required = true, defaultValue = "available", allowableValues = "available,pending,sold", allowMultiple = true) @RequestParam("status") String status) {
 		throw new NotImplementedException();
@@ -61,7 +61,7 @@ public class PetService {
 
 	@RequestMapping(value="/findByTags",method=RequestMethod.GET)
 	@ApiOperation(value = "Finds Pets by tags", notes = "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.", responseClass = "ccom.mangofactory.swagger.spring.test.Pet", multiValueResponse = true)
-	@ApiErrors(errors = { @ApiError(code = 400, reason = "Invalid tag value") })
+	@ApiErrors(errors = { @ApiError(code = 400, message = "Invalid tag value") })
 	@Deprecated
 	public void findPetsByTags(
 			@ApiParam(value = "Tags to filter by", required = true, allowMultiple = true) @RequestParam("tags") String tags) {

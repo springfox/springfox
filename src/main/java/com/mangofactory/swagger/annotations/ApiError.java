@@ -20,5 +20,5 @@ public @interface ApiError {
 
     int code();
 
-    String reason();
+    String message();
 }
