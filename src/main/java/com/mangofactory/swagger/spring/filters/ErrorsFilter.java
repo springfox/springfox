@@ -39,7 +39,7 @@ public class ErrorsFilter implements Filter<List<DocumentationError>> {
             appendErrorFromClass(errors, exceptionClass);
         }
         for (ApiError apiError : apiErrors.errors()) {
-            errors.add(new DocumentationError(apiError.code(), apiError.reason()));
+            errors.add(new DocumentationError(apiError.code(), apiError.message()));
         }
     }
 
@@ -48,6 +48,6 @@ public class ErrorsFilter implements Filter<List<DocumentationError>> {
         if (apiError == null) {
             return;
         }
-        errors.add(new DocumentationError(apiError.code(), apiError.reason()));
+        errors.add(new DocumentationError(apiError.code(), apiError.message()));
     }
 }

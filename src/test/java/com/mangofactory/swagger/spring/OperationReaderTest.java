@@ -241,8 +241,8 @@ public class OperationReaderTest {
         }
 
         @ApiErrors(errors = {
-                @ApiError(code = 302, reason = "Malformed request"),
-                @ApiError(code = 404, reason = "Not found")
+                @ApiError(code = 302, message = "Malformed request"),
+                @ApiError(code = 404, message = "Not found")
         })
         public void exceptionMethodD() {
         }
