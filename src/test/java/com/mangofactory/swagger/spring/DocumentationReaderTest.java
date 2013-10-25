@@ -48,7 +48,7 @@ public class DocumentationReaderTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         when(request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).thenReturn("/pets");
-        resourceListing = controller.getResourceListing();
+        resourceListing = controller.getResourceListing(null);
         for (DocumentationEndPoint endPoint : resourceListing.getApis()) {
             if("/api-docs/pets".equals(endPoint.getPath())) {
                 petsEndpoint = endPoint;
@@ -102,7 +102,7 @@ public class DocumentationReaderTest {
     @Test
     public void shouldLocateDocsOnControllerWithoutTopLevelRequestMapping(){
         when(request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).thenReturn("/business-service");
-        resourceListing = controller.getResourceListing();
+        resourceListing = controller.getResourceListing(null);
 
         ControllerDocumentation documentation = controller.getApiDocumentation(request);
         List<DocumentationOperation> endPoint = documentation.getEndPoint("/businesses/{businessId}", RequestMethod.GET);

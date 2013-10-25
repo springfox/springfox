@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -39,8 +40,15 @@ public class DocumentationController implements ServletContextAware {
     @RequestMapping(method = RequestMethod.GET)
     public
     @ResponseBody
-    Documentation getResourceListing() {
-        Documentation documentation = apiReader.getDocumentation();
+    Documentation getResourceListing(@RequestParam(value="path", required = false) String path) {
+        Documentation documentation;
+        
+        if (path != null) {
+            documentation = apiReader.getFragmentDocumentation(path);
+        } else {
+            documentation = apiReader.getDocumentation();
+        }
+
         DocumentationTransformer transformer = swaggerConfiguration.getDocumentationTransformer();
         return transformer.applySorting(transformer.applyTransformation(documentation));
     }

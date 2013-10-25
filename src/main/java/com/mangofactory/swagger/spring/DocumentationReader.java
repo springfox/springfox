@@ -39,6 +39,8 @@ public class DocumentationReader {
     @Getter
     private List<RequestMappingHandlerMapping> handlerMappings;
     private Documentation documentation;
+    
+    private Map<String, Documentation> fragmentDocumentation = newHashMap();
 
     public DocumentationReader(SwaggerConfiguration swaggerConfiguration, WebApplicationContext context,
                                List<RequestMappingHandlerMapping> handlerMappings) {
@@ -54,6 +56,40 @@ public class DocumentationReader {
         documentation = configuration.newDocumentation(context);
         for (RequestMappingHandlerMapping handlerMapping : handlerMappings) {
             processMethod(handlerMapping);
+        }
+        
+        // build up first layer documentation from controllers
+        for (Entry<String, DocumentationEndPoint> endPointEntry : endpointByControllerLookup.entrySet()) {
+            // Get the first bit
+            DocumentationEndPoint controllerEndpoint = endPointEntry.getValue();
+            String pathPrefix = controllerEndpoint.getPath().split("/")[2];
+
+            // If the prefix Documentation does not exist... create it
+            Documentation layerDoc;
+            if (!fragmentDocumentation.containsKey(pathPrefix)) {
+                layerDoc = configuration.newDocumentation(context);
+                layerDoc.setApiVersion(pathPrefix);
+                layerDoc.setResourcePath(pathPrefix);
+                fragmentDocumentation.put(pathPrefix, layerDoc);
+            } else {
+                layerDoc = fragmentDocumentation.get(pathPrefix);
+            }
+
+            // ensure we aren't adding the same routes twice, i.e. if two controllers
+            // have the same prefix, this will ignore the second API
+            Boolean exists = false;
+            if (layerDoc.getApis() != null) {
+                for (DocumentationEndPoint existingEndpoint : layerDoc.getApis()) {
+                    if (existingEndpoint.getPath().equals(controllerEndpoint.getPath())) {
+                        exists = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!exists) {
+                layerDoc.addApi(endPointEntry.getValue());
+            }
         }
     }
 
@@ -165,6 +201,16 @@ public class DocumentationReader {
     public Documentation getDocumentation() {
         ensureDocumentationReady();
         return documentation;
+    }
+    
+    public Documentation getFragmentDocumentation(String basePath) {
+        ensureDocumentationReady();
+        if (fragmentDocumentation.containsKey(basePath)) {
+            return fragmentDocumentation.get(basePath);
+        }
+
+        DocumentationReader.log.error("Could not find a matching resource for api with fragment '" + basePath + "'");
+        return null;
     }
 
     private synchronized void ensureDocumentationReady() {
