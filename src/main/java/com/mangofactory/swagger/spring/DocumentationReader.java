@@ -2,10 +2,12 @@ package com.mangofactory.swagger.spring;
 
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
@@ -117,7 +119,8 @@ public class DocumentationReader {
                             requestUri);
                      String resourcePath = controllerDocumentation.getResourcePath();
                   if (requestUri.contains(resourcePath)
-                            || resourcePathMatchesController(resourcePath, resource)) {
+                            || resourcePathMatchesController(resourcePath, resource)
+                            || resourcePathMatchesControllerAnnotation(resourcePath, resource)) {
                         controllerDocumentation.addEndpoint(childEndPoint);
                         appendOperationsToEndpoint(controllerDocumentation, mappingInfo, handlerMethod, childEndPoint,
                                 mappingInfo.getParamsCondition());
@@ -178,5 +181,14 @@ public class DocumentationReader {
         String simpleName = controllerAdapter.getControllerClass().getSimpleName();
         String controllerDescription = Descriptions.splitCamelCase(simpleName, "-").toLowerCase();
         return resourcePath.endsWith(controllerDescription);
+    }
+
+    private boolean resourcePathMatchesControllerAnnotation(String resourcePath, ControllerAdapter controllerAdapter) {
+        Api api = AnnotationUtils.findAnnotation(controllerAdapter.getControllerClass(), Api.class);
+        if (api != null) {
+            return resourcePath.endsWith(api.listingPath());
+        }
+
+        return false;
     }
 }

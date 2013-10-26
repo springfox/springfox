@@ -10,6 +10,7 @@ import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.method.HandlerMethod;
 
@@ -55,7 +56,7 @@ public class ControllerAdapter {
     }
 
     private List<String> getListingPaths() {
-        Api apiAnnotation = controllerClass.getAnnotation(Api.class);
+        Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
         if (apiAnnotation == null || apiAnnotation.listingPath().equals("")) {
             return controllerUris(controllerClass);
         }
@@ -63,7 +64,7 @@ public class ControllerAdapter {
     }
 
     private String getApiDescription(Class<?> controllerClass) {
-        Api apiAnnotation = controllerClass.getAnnotation(Api.class);
+        Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
         if (apiAnnotation == null) {
             return null;
         }
