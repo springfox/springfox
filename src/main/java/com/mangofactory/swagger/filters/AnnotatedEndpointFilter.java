@@ -2,6 +2,7 @@ package com.mangofactory.swagger.filters;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.core.DocumentationEndPoint;
+import org.springframework.core.annotation.AnnotationUtils;
 
 public class AnnotatedEndpointFilter implements Filter<DocumentationEndPoint> {
     @Override
@@ -13,7 +14,7 @@ public class AnnotatedEndpointFilter implements Filter<DocumentationEndPoint> {
 
 
     private String getDescription(Class<?> controllerClass) {
-        Api apiAnnotation = controllerClass.getAnnotation(Api.class);
+        Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
         if (apiAnnotation == null) {
             return "";
         }

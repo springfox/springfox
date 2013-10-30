@@ -6,6 +6,7 @@ import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.annotations.ApiModel;
 import com.mangofactory.swagger.models.Model;
 import com.mangofactory.swagger.spring.AllowableRangesParser;
+import com.mangofactory.swagger.spring.AnnotationUtils;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.core.DocumentationAllowableListValues;
 import com.wordnik.swagger.core.DocumentationAllowableValues;
@@ -37,7 +38,7 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
     private void documentParameter(ControllerDocumentation controllerDocumentation, DocumentationParameter parameter,
                                    MethodParameter methodParameter, ResolvedType resolvedType) {
 
-        ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
+        ApiParam apiParam = AnnotationUtils.findParameterAnnotation(methodParameter, ApiParam.class);
         if (apiParam == null) {
             log.warn("{} is missing @ApiParam annotation - so generating default documentation",
                     methodParameter.getMethod());
@@ -74,7 +75,7 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
     }
 
     private String selectBestParameterName(MethodParameter methodParameter) {
-        ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
+        ApiParam apiParam = AnnotationUtils.findParameterAnnotation(methodParameter, ApiParam.class);
         if (apiParam != null && !StringUtils.isEmpty(apiParam.name())) {
             return apiParam.name();
         }
