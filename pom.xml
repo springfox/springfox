@@ -8,7 +8,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>com.mangofactory</groupId>
    <artifactId>swagger-springmvc</artifactId>
-   <version>0.7.0-SNAPSHOT</version>
+   <version>0.8.0-SNAPSHOT</version>
    <name>Swagger SpringMVC</name>
    <url>https://github.com/martypitt/swagger-springmvc</url>
    <licenses>
@@ -45,6 +45,12 @@
          <name>Dilip Krishnan</name>
          <organization>The Container Store</organization>
          <email>dilipkrish_subscriptions@yahoo.com</email>
+      </developer>
+      <developer>
+         <id>adriankelly</id>
+         <name>Adrian Kelly</name>
+         <organization>DiUS Computing</organization>
+         <email>adrianbkelly+swagger@gmail.com</email>
       </developer>
    </developers>
    <properties>
@@ -381,6 +387,7 @@
             <configuration>
                <configLocation>${checkstyle.file}</configLocation>
                <failsOnError>true</failsOnError>
+               <failOnViolation>true</failOnViolation>
                <consoleOutput>true</consoleOutput>
                <linkXRef>false</linkXRef>
             </configuration>
@@ -389,7 +396,7 @@
                   <goals>
                      <goal>checkstyle</goal>
                   </goals>
-                  <phase>validate</phase>
+                  <phase>test</phase>
                </execution>
             </executions>
          </plugin>
