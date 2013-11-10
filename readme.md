@@ -1,7 +1,6 @@
 # Swagger / Spring MVC Integration
 
-[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc.png?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc)
-
+[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc.png?branch=swagger-spec-1.2.0-upgrade)](https://travis-ci.org/adrianbk/swagger-springmvc)
 This project provides integration between [Swagger](https://github.com/wordnik/swagger-core) and Spring MVC.
 
 Spring beans annotated with `@Controller` are detected and parsed for documentation.

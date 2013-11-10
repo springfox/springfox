@@ -4,7 +4,6 @@ import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.ApiInfo
 import com.wordnik.swagger.model.ApiKey
-import com.wordnik.swagger.model.AuthorizationType
 import com.wordnik.swagger.model.ResourceListing
 import org.springframework.web.context.WebApplicationContext
 import spock.lang.Specification
@@ -16,19 +15,16 @@ import static com.mangofactory.swagger.ScalaUtils.fromOption
 
 class SwaggerApiResourceListingSpec extends Specification {
    String DEFAULT_RELATIVE_BASE_PATH = '/myApp'
-   def WebApplicationContext webApplicationContext
+   def ServletContext servletContext
 
    def setup() {
-      webApplicationContext = Mock()
       def servletContext = Mock(ServletContext)
       servletContext.getContextPath() >> DEFAULT_RELATIVE_BASE_PATH
-      webApplicationContext.getServletContext() >> Mock(ServletContext)
-      webApplicationContext.getServletContext() >> servletContext
    }
 
    def "default swagger resource"() {
     when: "I create a swagger resource"
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(webApplicationContext)
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(servletContext)
       swaggerApiResourceListing.createResourceListing()
 
     then: "I should should have the correct defaults"
@@ -48,7 +44,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     given:
       ApiInfo apiInfo = new ApiInfo("title", "description", "terms", "contact", "license", "licenseUrl")
     when:
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(webApplicationContext)
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(servletContext)
       swaggerApiResourceListing.apiInfo = apiInfo
       swaggerApiResourceListing.createResourceListing()
 
@@ -65,7 +61,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     given:
       ApiKey apiKey = new ApiKey("api_key", "header")
     when:
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(webApplicationContext)
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(servletContext)
       swaggerApiResourceListing.authorizationTypes = [apiKey]
       swaggerApiResourceListing.createResourceListing()
 

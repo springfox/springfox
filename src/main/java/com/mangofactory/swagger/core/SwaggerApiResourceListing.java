@@ -1,10 +1,12 @@
 package com.mangofactory.swagger.core;
 
 import com.wordnik.swagger.core.SwaggerSpec;
-import com.wordnik.swagger.model.*;
+import com.wordnik.swagger.model.ApiInfo;
+import com.wordnik.swagger.model.ApiListingReference;
+import com.wordnik.swagger.model.AuthorizationType;
+import com.wordnik.swagger.model.ResourceListing;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
 import java.util.ArrayList;
@@ -26,18 +28,18 @@ public class SwaggerApiResourceListing {
    @Setter
    private String resourceListingPath = "/api-docs";
 
-   private WebApplicationContext webApplicationContext;
+   private ServletContext servletContext;
 
-   public SwaggerApiResourceListing(WebApplicationContext webApplicationContext) {
-      this.webApplicationContext = webApplicationContext;
+   public SwaggerApiResourceListing(ServletContext servletContext) {
+      this.servletContext = servletContext;
    }
 
    public void createResourceListing() {
-      this.resourceListing = new ResourceListing("1", SwaggerSpec.version(),
-                                                 toList(new ArrayList<ApiListingReference>()),
-                                                 toList(authorizationTypes), toOption(apiInfo));
+      this.resourceListing = new ResourceListing(
+          "1", SwaggerSpec.version(),
+          toList(new ArrayList<ApiListingReference>()),
+          toList(authorizationTypes), toOption(apiInfo));
 
-      ServletContext servletContext = webApplicationContext.getServletContext();
    }
 
 
