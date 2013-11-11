@@ -61,6 +61,7 @@
       <spock.version>0.6-groovy-1.8</spock.version>
       <groovy.version>1.8.5</groovy.version>
       <checkstyle.file>checkstyle.xml</checkstyle.file>
+      <jackson.version>2.2.3</jackson.version>
    </properties>
    <repositories>
       <repository>
@@ -96,29 +97,34 @@
             <artifactId>scala-library</artifactId>
             <version>${scala-lib.version}</version>
          </dependency>
-         <!--      <jackson.version>2.2.1</jackson.version>-->
-         <!--<dependency>-->
-            <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-            <!--<artifactId>jackson-databind</artifactId>-->
-            <!--<version>${jackson.version}</version>-->
-         <!--</dependency>-->
-         <!--<dependency>-->
-            <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-            <!--<artifactId>jackson-core</artifactId>-->
-            <!--<version>${jackson.version}</version>-->
-         <!--</dependency>-->
-         <!--<dependency>-->
-            <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-            <!--<artifactId>jackson-annotations</artifactId>-->
-            <!--<version>${jackson.version}</version>-->
-         <!--</dependency>-->
-         <!--<dependency>-->
-            <!--<groupId>commons-lang</groupId>-->
-            <!--<artifactId>commons-lang</artifactId>-->
-            <!--<version>2.6</version>-->
-         <!--</dependency>-->
 
-
+         <!-- Conflicting dependencies withing swagger-core dependencies -->
+         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+         </dependency>
+         <dependency>
+            <groupId>com.thoughtworks.paranamer</groupId>
+            <artifactId>paranamer</artifactId>
+            <version>2.6</version>
+         </dependency>
+         <!-- EO Conflicting dependencies withing swagger-core dependencies -->
 
          <dependency>
             <groupId>org.codehaus.groovy</groupId>
@@ -292,7 +298,8 @@
             <executions>
                <execution>
                   <id>enforce</id>
-                  <phase>verify</phase>
+                  <!--<phase>verify</phase>-->
+                  <phase>test</phase>
                   <configuration>
                      <rules>
                         <DependencyConvergence>
