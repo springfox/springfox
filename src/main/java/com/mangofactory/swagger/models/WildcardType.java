@@ -50,6 +50,14 @@ public class WildcardType {
 
     private static ResolvedType breadthFirstReplace(Iterator<ResolvedType> replaceableIterator,
                                                     ResolvedType wildcardType) {
+        if (WildcardType.class.equals(wildcardType.getErasedType())) {
+            if (replaceableIterator.hasNext()) {
+                return replaceableIterator.next();
+            } else {
+                throw new IllegalStateException("Expecting the same number of wildcard types as the replaceables");
+            }
+
+        }
         TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
         List<Type> bindings = newArrayList();
         for(int index = 0; index < wildcardTypeBindings.size(); index++) {

@@ -4,6 +4,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -12,12 +13,13 @@ import static com.mangofactory.swagger.models.AlternateTypeProcessingRule.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.core.IsEqual.*;
 
-public class HashmapAlternateTest {
+public class AlternateTypeRuleTest {
 
     private AlternateTypeProcessingRule mapOfStringAndString;
     private AlternateTypeProcessingRule mapOfStringAndWildcard;
     private AlternateTypeProcessingRule mapOfWildcardAndWildcard;
     private AlternateTypeProcessingRule mapOfWildcardAndString;
+    private AlternateTypeProcessingRule responseEntityMapping;
     private TypeResolver typeResolver;
 
     @Before
@@ -26,7 +28,14 @@ public class HashmapAlternateTest {
         mapOfWildcardAndString = hashmapAlternate(WildcardType.class, String.class);
         mapOfStringAndWildcard = hashmapAlternate(String.class, WildcardType.class);
         mapOfWildcardAndWildcard = hashmapAlternate(WildcardType.class, WildcardType.class);
+        responseEntityMapping = responseEntity();
         typeResolver = new TypeResolver();
+    }
+
+    public static AlternateTypeProcessingRule responseEntity() {
+        TypeResolver resolver = new TypeResolver();
+        return alternate(resolver.resolve(ResponseEntity.class, WildcardType.class),
+                resolver.resolve(WildcardType.class));
     }
 
     @Test
@@ -61,5 +70,17 @@ public class HashmapAlternateTest {
         ResolvedType alternate = mapOfWildcardAndWildcard.alternateType(typeResolver.resolve(Map.class, String.class,
                 String.class));
         verifyExpectedType(alternate);
+    }
+
+    @Test
+    public void withWildcardEntryForResponseEntity() {
+        ResolvedType alternate = responseEntityMapping.alternateType(typeResolver.resolve(ResponseEntity.class,
+                String.class));
+        verifyExpectedResponseEntityType(alternate);
+    }
+
+    private void verifyExpectedResponseEntityType(ResolvedType alternate) {
+        ResolvedType expected = typeResolver.resolve(String.class);
+        assertThat(alternate, equalTo(expected));
     }
 }
