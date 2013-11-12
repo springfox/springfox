@@ -17,7 +17,7 @@ public class ScalaUtils {
    }
 
    public static java.util.List<?> fromList(List<?> list) {
-      return asJavaList(list);
+      return seqAsJavaList(list);
    }
    public static Option toOption(Object o) {
       return Option.apply(o);

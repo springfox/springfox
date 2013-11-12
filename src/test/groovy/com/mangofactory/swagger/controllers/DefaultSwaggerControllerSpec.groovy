@@ -26,7 +26,7 @@ class DefaultSwaggerControllerSpec extends Specification {
    @Shared
    DefaultSwaggerController controller = new DefaultSwaggerController()
 
-   def setupSpec() {
+   def setup() {
       def jackson2 = new MappingJackson2HttpMessageConverter()
       ObjectMapper mapper = new ObjectMapper()
       mapper.registerModule(new DefaultScalaModule())
@@ -55,7 +55,7 @@ class DefaultSwaggerControllerSpec extends Specification {
       "/api-docs/defaultApi" | 200
    }
 
-   def defaultSwaggerResourceListing() {
+   private SwaggerApiResourceListing defaultSwaggerResourceListing() {
       def listing = new SwaggerApiResourceListing()
       listing.with {
          createResourceListing()
