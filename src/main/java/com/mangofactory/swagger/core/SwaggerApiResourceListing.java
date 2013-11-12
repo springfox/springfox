@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.core;
 
+import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.wordnik.swagger.core.SwaggerSpec;
 import com.wordnik.swagger.model.ApiInfo;
 import com.wordnik.swagger.model.ApiListingReference;
@@ -28,6 +29,10 @@ public class SwaggerApiResourceListing {
    @Setter
    private String resourceListingPath = "/api-docs";
 
+   @Getter
+   @Setter
+   private ApiListingReferenceScanner apiListingReferenceScanner;
+
    private ServletContext servletContext;
 
    public SwaggerApiResourceListing(ServletContext servletContext) {
@@ -35,10 +40,13 @@ public class SwaggerApiResourceListing {
    }
 
    public void createResourceListing() {
-      this.resourceListing = new ResourceListing(
-          "1", SwaggerSpec.version(),
-          toList(new ArrayList<ApiListingReference>()),
-          toList(authorizationTypes), toOption(apiInfo));
+      List<ApiListingReference> apiListingReferences = new ArrayList<>();
+      if(null != apiListingReferenceScanner){
+         apiListingReferenceScanner.scan();
+         apiListingReferences = apiListingReferenceScanner.getApiListingReferences();
+      }
+      this.resourceListing = new ResourceListing("1", SwaggerSpec.version(), toList(apiListingReferences),
+                                                 toList(authorizationTypes), toOption(apiInfo));
 
    }
 

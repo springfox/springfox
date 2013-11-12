@@ -1,11 +1,15 @@
 package com.mangofactory.swagger.configuration
 
+import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
+import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.ApiInfo
 import com.wordnik.swagger.model.ApiKey
+import com.wordnik.swagger.model.ApiListingReference
 import com.wordnik.swagger.model.ResourceListing
 import org.springframework.web.context.WebApplicationContext
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
 
 import javax.servlet.ServletContext
@@ -13,6 +17,7 @@ import javax.servlet.ServletContext
 import static com.mangofactory.swagger.ScalaUtils.fromList
 import static com.mangofactory.swagger.ScalaUtils.fromOption
 
+@Mixin(com.mangofactory.swagger.mixins.RequestMappingSupport)
 class SwaggerApiResourceListingSpec extends Specification {
    String DEFAULT_RELATIVE_BASE_PATH = '/myApp'
    def ServletContext servletContext
@@ -72,5 +77,32 @@ class SwaggerApiResourceListingSpec extends Specification {
       apiKeyAuthType instanceof ApiKey
       apiKeyAuthType.keyname == "api_key"
       apiKeyAuthType.passAs == "header"
+   }
+
+   def "resource with mocked apis"(){
+      given:
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(servletContext)
+
+      Map handlerMethods = [(requestMappingInfo("/somePath")): dummyHandlerMethod()]
+      def requestHandlerMapping = Mock(RequestMappingHandlerMapping)
+      requestHandlerMapping.getHandlerMethods() >> handlerMethods
+
+      ApiListingReferenceScanner scanner = new ApiListingReferenceScanner([requestHandlerMapping],
+              new DefaultControllerResourceGroupingStrategy())
+
+      swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
+
+      when:
+      swaggerApiResourceListing.createResourceListing()
+
+      then:
+      ResourceListing resourceListing = swaggerApiResourceListing.resourceListing
+      ApiListingReference apiListingReference = resourceListing.apis().first()
+      apiListingReference.path() == "/api-docs/somePath"
+      apiListingReference.position() == 0
+      fromOption(apiListingReference.description()) == "somePath"
+
+
+
    }
 }

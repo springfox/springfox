@@ -298,8 +298,8 @@
             <executions>
                <execution>
                   <id>enforce</id>
-                  <!--<phase>verify</phase>-->
-                  <phase>test</phase>
+                  <phase>verify</phase>
+                  <!--<phase>test</phase>-->
                   <configuration>
                      <rules>
                         <DependencyConvergence>
@@ -404,6 +404,7 @@
                </execution>
             </executions>
          </plugin>
+
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-release-plugin</artifactId>

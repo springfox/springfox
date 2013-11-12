@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.scanners;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
-import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy;
+import com.mangofactory.swagger.core.ControllerResourceGroupingStrategy;
 import com.wordnik.swagger.model.ApiListingReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,8 +11,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.mangofactory.swagger.ScalaUtils.toOption;
@@ -29,41 +31,56 @@ public class ApiListingReferenceScanner {
 
    @Getter
    @Setter
-   DefaultControllerResourceGroupingStrategy defaultControllerNamingStrategy;
+   private String pathPrefix = "api-docs";
+
+   @Getter
+   @Setter
+   private String pathSuffix = "";
+
+   @Getter
+   @Setter
+   private ControllerResourceGroupingStrategy controllerNamingStrategy;
 
 
-   public ApiListingReferenceScanner(List<RequestMappingHandlerMapping> handlerMappings) {
+   public ApiListingReferenceScanner(List<RequestMappingHandlerMapping> handlerMappings,
+         ControllerResourceGroupingStrategy controllerNamingStrategy) {
       Assert.notNull(handlerMappings, REQUEST_MAPPINGS_EMPTY);
+      Assert.notNull(controllerNamingStrategy);
       Assert.notEmpty(handlerMappings, REQUEST_MAPPINGS_EMPTY);
       this.handlerMappings = handlerMappings;
+      this.controllerNamingStrategy = controllerNamingStrategy;
    }
 
    public List<ApiListingReference> scan() {
-      scanForSpringHandlerMethods();
+      scanForDefaultSpringResources();
 
       return this.apiListingReferences;
    }
 
-   public void scanForSpringHandlerMethods() {
+   public void scanForDefaultSpringResources() {
+      Set<String> resourceGroups = new LinkedHashSet<>();
       for (RequestMappingHandlerMapping requestMappingHandlerMapping : handlerMappings) {
          for (Entry<RequestMappingInfo, HandlerMethod> handlerMethodEntry :
-             requestMappingHandlerMapping.getHandlerMethods().entrySet()) {
+               requestMappingHandlerMapping.getHandlerMethods().entrySet()) {
             RequestMappingInfo requestMappingInfo = handlerMethodEntry.getKey();
             HandlerMethod handlerMethod = handlerMethodEntry.getValue();
-
             if (!templateIgnoreRequestMapping(requestMappingInfo, handlerMethod)) {
-
+               resourceGroups.add(controllerNamingStrategy.getGroupName(requestMappingInfo, handlerMethod));
             }
-
-            int position = 0;
-            new ApiListingReference("path", toOption("description"), 0);
          }
+      }
+
+      int groupPosition = 0;
+      for(String group : resourceGroups ){
+        String path = String.format("/%s/%s%s", this.pathPrefix, group, this.pathSuffix);
+         this.apiListingReferences.add(new ApiListingReference(path, toOption(group), groupPosition));
+         groupPosition++;
       }
    }
 
    private boolean templateIgnoreRequestMapping(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      return !ignoreAnnotatedRequestMapping(requestMappingInfo, handlerMethod)
-          && !ignoreRequestMapping(requestMappingInfo, handlerMethod);
+      return ignoreAnnotatedRequestMapping(requestMappingInfo, handlerMethod)
+          || ignoreRequestMapping(requestMappingInfo, handlerMethod);
    }
 
    public boolean ignoreAnnotatedRequestMapping(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
