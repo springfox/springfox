@@ -34,6 +34,6 @@ public class SpringSwaggerConfig {
    @Autowired
    public List<AuthorizationType> defaultAuthorizations() {
       AuthorizationType authorizationType = new ApiKey("apiKey", "header");
-      return new ArrayList<>(Arrays.asList(authorizationType));
+      return new ArrayList<AuthorizationType>(Arrays.asList(authorizationType));
    }
 }

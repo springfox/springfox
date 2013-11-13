@@ -58,7 +58,7 @@ public class ApiListingReferenceScanner {
    }
 
    public void scanForDefaultSpringResources() {
-      Set<String> resourceGroups = new LinkedHashSet<>();
+      Set<String> resourceGroups = new LinkedHashSet<String>();
       for (RequestMappingHandlerMapping requestMappingHandlerMapping : handlerMappings) {
          for (Entry<RequestMappingInfo, HandlerMethod> handlerMethodEntry :
                requestMappingHandlerMapping.getHandlerMethods().entrySet()) {

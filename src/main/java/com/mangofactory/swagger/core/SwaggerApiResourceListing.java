@@ -40,8 +40,8 @@ public class SwaggerApiResourceListing {
    }
 
    public void createResourceListing() {
-      List<ApiListingReference> apiListingReferences = new ArrayList<>();
-      if(null != apiListingReferenceScanner){
+      List<ApiListingReference> apiListingReferences = new ArrayList<ApiListingReference>();
+      if (null != apiListingReferenceScanner) {
          apiListingReferenceScanner.scan();
          apiListingReferences = apiListingReferenceScanner.getApiListingReferences();
       }
