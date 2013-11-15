@@ -7,19 +7,9 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.util.Set;
 
-import static com.mangofactory.swagger.core.ControllerNamingUtils.firstSlashPortion;
-
 public class DefaultControllerResourceGroupingStrategy implements ControllerResourceGroupingStrategy {
 
    public DefaultControllerResourceGroupingStrategy() {
-   }
-
-   @Override
-   public String getControllerName(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      if(null != handlerMethod){
-         return handlerMethod.getMethod().getName();
-      }
-      return "unknown";
    }
 
    @Override
@@ -28,9 +18,7 @@ public class DefaultControllerResourceGroupingStrategy implements ControllerReso
       Set<String> patterns = patternsCondition.getPatterns();
       String result = patterns.iterator().next();
 
-      if(result.startsWith("/")){
-         result = result.replaceFirst("/", "");
-      }
+      result = result.replaceFirst("/", "");
       //remove regex portion '/{businessId:\\w+}'
       result = result.replaceAll(":.*?}", "}");
 
@@ -46,12 +34,12 @@ public class DefaultControllerResourceGroupingStrategy implements ControllerReso
       group = splits.length > 0 ? splits[0] : "root";
       return group;
    }
-
-   @Override
-   public String getControllerPath(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
-      Set<String> patterns = patternsCondition.getPatterns();
-      String firstPattern = patterns.iterator().next();
-      return firstSlashPortion(firstPattern);
-   }
+//
+//   @Override
+//   public String getControllerPath(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+//      PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
+//      Set<String> patterns = patternsCondition.getPatterns();
+//      String firstPattern = patterns.iterator().next();
+//      return pathRoot(firstPattern);
+//   }
 }

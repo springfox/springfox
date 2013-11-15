@@ -47,12 +47,11 @@ class DefaultSwaggerControllerSpec extends Specification {
       def responseJson = jsonBodyResponse(result)
     then:
       result.getResponse().getStatus() == expectedStatus
-      responseJson.swaggerVersion == "1.2"
-
     where:
-      path                   | expectedStatus
-      "/api-docs"            | 200
-      "/api-docs/defaultApi" | 200
+      path                | expectedStatus
+      "/api-docs"         | 200
+      "/api-docs/default" | 200
+      "/api-docs/unknown" | 404
    }
 
    private SwaggerApiResourceListing defaultSwaggerResourceListing() {

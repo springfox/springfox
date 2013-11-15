@@ -5,6 +5,8 @@ import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 
+import static com.mangofactory.swagger.dummy.DummyClass.*
+
 class RequestMappingSupport {
 
    def requestMappingInfo(String path){
@@ -14,6 +16,12 @@ class RequestMappingSupport {
 
    def dummyHandlerMethod(){
       def clazz = new DummyClass()
+      Class c = clazz.getClass();
+      new HandlerMethod(clazz, c.getMethod("dummyMethod", null))
+   }
+
+   def ignorableHandlerMethod(){
+      def clazz = new DummyClass.ApiIgnorableClass()
       Class c = clazz.getClass();
       new HandlerMethod(clazz, c.getMethod("dummyMethod", null))
    }

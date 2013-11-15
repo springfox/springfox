@@ -79,8 +79,8 @@ class SwaggerApiResourceListingSpec extends Specification {
       apiKeyAuthType.passAs == "header"
    }
 
-   def "resource with mocked apis"(){
-      given:
+   def "resource with mocked apis"() {
+    given:
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(servletContext)
 
       Map handlerMethods = [(requestMappingInfo("/somePath")): dummyHandlerMethod()]
@@ -92,17 +92,14 @@ class SwaggerApiResourceListingSpec extends Specification {
 
       swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
 
-      when:
+    when:
       swaggerApiResourceListing.createResourceListing()
 
-      then:
+    then:
       ResourceListing resourceListing = swaggerApiResourceListing.resourceListing
       ApiListingReference apiListingReference = resourceListing.apis().first()
       apiListingReference.path() == "/api-docs/somePath"
       apiListingReference.position() == 0
       fromOption(apiListingReference.description()) == "somePath"
-
-
-
    }
 }

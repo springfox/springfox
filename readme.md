@@ -121,6 +121,21 @@ In no partiular order thank you to the following for sending in PRs. Its not sus
 - [@obernal](https://github.com/obernal)
 - [@sverhagen](https://github.com/sverhagen)
 
+##Development
+
+- Running tests including coverage and checkstyle
+
+-reports: \target\site\jacoco-ut
+```
+mvn test
+
+```
+
+-Coverage Help
+```
+mvn org.jacoco:jacoco-maven-plugin:0.6.3.201306030806:check
+```
+
 License
 -------
 

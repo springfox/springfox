@@ -1,16 +1,17 @@
 package com.mangofactory.swagger.scanners;
 
-import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.ControllerResourceGroupingStrategy;
 import com.wordnik.swagger.model.ApiListingReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.lang.annotation.Annotation;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map.Entry;
@@ -39,14 +40,20 @@ public class ApiListingReferenceScanner {
 
    @Getter
    @Setter
+   private List<Class<Annotation>> excludeAnnotations;
+
+   @Getter
+   @Setter
    private ControllerResourceGroupingStrategy controllerNamingStrategy;
 
+   public ApiListingReferenceScanner() {
+   }
 
    public ApiListingReferenceScanner(List<RequestMappingHandlerMapping> handlerMappings,
          ControllerResourceGroupingStrategy controllerNamingStrategy) {
       Assert.notNull(handlerMappings, REQUEST_MAPPINGS_EMPTY);
-      Assert.notNull(controllerNamingStrategy);
       Assert.notEmpty(handlerMappings, REQUEST_MAPPINGS_EMPTY);
+      Assert.notNull(controllerNamingStrategy, "controllerNamingStrategy is required");
       this.handlerMappings = handlerMappings;
       this.controllerNamingStrategy = controllerNamingStrategy;
    }
@@ -64,7 +71,7 @@ public class ApiListingReferenceScanner {
                requestMappingHandlerMapping.getHandlerMethods().entrySet()) {
             RequestMappingInfo requestMappingInfo = handlerMethodEntry.getKey();
             HandlerMethod handlerMethod = handlerMethodEntry.getValue();
-            if (!templateIgnoreRequestMapping(requestMappingInfo, handlerMethod)) {
+            if (!shouldIgnoreRequestMapping(requestMappingInfo, handlerMethod)) {
                resourceGroups.add(controllerNamingStrategy.getGroupName(requestMappingInfo, handlerMethod));
             }
          }
@@ -78,18 +85,26 @@ public class ApiListingReferenceScanner {
       }
    }
 
-   private boolean templateIgnoreRequestMapping(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      return ignoreAnnotatedRequestMapping(requestMappingInfo, handlerMethod)
+   private boolean shouldIgnoreRequestMapping(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+      return ignoreAnnotatedRequestMapping(handlerMethod)
           || ignoreRequestMapping(requestMappingInfo, handlerMethod);
    }
 
-   public boolean ignoreAnnotatedRequestMapping(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      ApiIgnore ignore = handlerMethod.getMethodAnnotation(ApiIgnore.class);
-      return null != ignore;
+   public boolean ignoreAnnotatedRequestMapping(HandlerMethod handlerMethod) {
+      if(null != excludeAnnotations){
+         for(Class<Annotation> annotation : excludeAnnotations){
+            if(null != AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation)){
+               log.info(String.format("Excluding method as it contains the excluded annotation: %s", annotation));
+               return  true;
+            }
+         }
+         return false;
+      }
+      return false;
    }
 
    /**
-    * Override this to ignore a particular request mapping
+    * Override this method to ignore a particular request mapping
     *
     * @param requestMappingInfo
     * @param handlerMethod

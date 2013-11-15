@@ -13,16 +13,6 @@ import java.lang.reflect.Method
 @Mixin(com.mangofactory.swagger.mixins.RequestMappingSupport)
 class DefaultControllerResourceGroupingStrategySpec extends Specification {
 
-   def "should name based on reflective method"() {
-    given:
-      RequestMappingInfo requestMappingInfo = null
-      HandlerMethod handlerMethod = dummyHandlerMethod()
-      DefaultControllerResourceGroupingStrategy defaultControllerResourceGroupingStrategy =
-         new DefaultControllerResourceGroupingStrategy()
-    expect:
-     "dummyMethod" == defaultControllerResourceGroupingStrategy.getControllerName(requestMappingInfo, handlerMethod)
-   }
-
    @Unroll('Path: #path group: #group')
    def "controller to group names "() {
     given:
@@ -44,4 +34,5 @@ class DefaultControllerResourceGroupingStrategySpec extends Specification {
       'business/(businessId)'                      | '/business/{businessId:\\d+}'
       'business/(businessId)/accounts/(accountId)' | '/business/{businessId:\\d+}/accounts/{accountId:\\d+}'
    }
+
 }
