@@ -51,8 +51,11 @@
         <skipGpgSigning>true</skipGpgSigning>
         <swagger.version>1.2.0</swagger.version>
         <spring.version>3.2.4.RELEASE</spring.version>
+      <scala-lib.version>2.10.0</scala-lib.version>
+      <spock.version>0.7-groovy-2.0</spock.version>
+      <groovy.version>2.1.9</groovy.version>
         <checkstyle.file>checkstyle.xml</checkstyle.file>
-        <repo.address>http://192.168.130.1:8081</repo.address>
+      <jackson.version>2.2.3</jackson.version>
     </properties>
     <repositories>
         <repository>
@@ -75,34 +78,56 @@
             <name>spring milestone releases</name>
             <url>http://repo.springsource.org/libs-milestone/</url>
         </repository>
-        <repository>
-            <id>nexus-local</id>
-            <name>My Public Repository</name>
-            <url>${repo.address}/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
     </repositories>
-
+    <dependencyManagement>
+    <dependencies>
+        <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>14.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+            <version>${scala-lib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.6</version>
+            </dependency>
+             <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>${groovy.version}</version>
+                <scope>test</scope>
+             </dependency>
+        </dependencies>
+    </dependencyManagement>
     <distributionManagement>
-        <!-- Publish versioned releases here -->
-        <repository>
-            <id>nexus-local</id>
-            <name>My releases</name>
-            <url>${repo.address}/nexus/content/repositories/releases</url>
-        </repository>
-
-        <!-- Publish snapshots here -->
         <snapshotRepository>
-            <id>nexus-local</id>
-            <name>My snapshots</name>
-            <url>${repo.address}/nexus/content/repositories/snapshots</url>
+            <id>sonatype-snapshot</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>sonatype-release</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
     </distributionManagement>
     <dependencies>
         <dependency>
@@ -138,17 +163,17 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.2.1</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.2.1</version>
         </dependency>
+        <!-- Runtime dependencies -->
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>2.10.0</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Test dependencies -->
         <dependency>
@@ -157,7 +182,6 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
@@ -199,7 +223,6 @@
             <artifactId>classmate</artifactId>
             <version>0.9.0</version>
         </dependency>
-
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -210,6 +233,22 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>${spock.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit-dep</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     <profiles>
@@ -256,6 +295,63 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.3</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <rules>
+                                <DependencyConvergence>
+                                    <uniqueVersions>true</uniqueVersions>
+                                </DependencyConvergence>
+                            </rules>
+                        </configuration>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+            <groupId>org.codehaus.gmaven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
+            <version>1.3</version>
+            <dependencies>
+               <dependency>
+                  <groupId>org.codehaus.groovy</groupId>
+                  <artifactId>groovy-all</artifactId>
+                  <version>${groovy.version}</version>
+               </dependency>
+               <dependency>
+                  <groupId>org.codehaus.gmaven.runtime</groupId>
+                  <artifactId>gmaven-runtime-1.7</artifactId>
+                  <version>1.3</version>
+                  <exclusions>
+                     <exclusion>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                     </exclusion>
+                  </exclusions>
+               </dependency>
+            </dependencies>
+            <executions>
+               <execution>
+                  <configuration>
+                     <providerSelection>1.7</providerSelection>
+                  </configuration>
+                  <goals>
+                     <goal>generateStubs</goal>
+                     <goal>compile</goal>
+                     <goal>generateTestStubs</goal>
+                     <goal>testCompile</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
@@ -292,10 +388,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.8</version>
+                <version>2.10</version>
                 <configuration>
                     <configLocation>${checkstyle.file}</configLocation>
                     <failsOnError>true</failsOnError>
+                    <failOnViolation>true</failOnViolation>
                     <consoleOutput>true</consoleOutput>
                     <linkXRef>false</linkXRef>
                 </configuration>
@@ -316,18 +413,6 @@
                     <mavenExecutorId>forked-path</mavenExecutorId>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.4.4</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>local-nexus</serverId>
-                    <nexusUrl>${repo.address}/nexus/</nexusUrl>
-                </configuration>
-            </plugin>
         </plugins>
-
     </build>
-
 </project>
