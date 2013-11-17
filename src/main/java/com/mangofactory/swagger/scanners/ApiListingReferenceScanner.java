@@ -23,7 +23,7 @@ import static com.mangofactory.swagger.ScalaUtils.toOption;
 @Slf4j
 public class ApiListingReferenceScanner {
    private static final String REQUEST_MAPPINGS_EMPTY =
-       "No RequestMappingHandlerMapping's found have you added <mvc:annotation-driven/>";
+         "No RequestMappingHandlerMapping's found have you added <mvc:annotation-driven/>";
    @Getter
    @Setter
    private List<RequestMappingHandlerMapping> handlerMappings;
@@ -40,7 +40,7 @@ public class ApiListingReferenceScanner {
 
    @Getter
    @Setter
-   private List<Class<Annotation>> excludeAnnotations;
+   private List<Class<? extends Annotation>> excludeAnnotations;
 
    @Getter
    @Setter
@@ -59,6 +59,7 @@ public class ApiListingReferenceScanner {
    }
 
    public List<ApiListingReference> scan() {
+      log.info("Scanning for api listing references");
       scanForDefaultSpringResources();
 
       return this.apiListingReferences;
@@ -78,8 +79,10 @@ public class ApiListingReferenceScanner {
       }
 
       int groupPosition = 0;
-      for(String group : resourceGroups ){
-        String path = String.format("/%s/%s%s", this.pathPrefix, group, this.pathSuffix);
+      for (String group : resourceGroups) {
+         String path = String.format("/%s/%s%s", this.pathPrefix, group, this.pathSuffix);
+         log.info(String.format("Create resource listing Path: %s Description: %s Psosition: %s", path, group,
+                                groupPosition));
          this.apiListingReferences.add(new ApiListingReference(path, toOption(group), groupPosition));
          groupPosition++;
       }
@@ -87,15 +90,15 @@ public class ApiListingReferenceScanner {
 
    private boolean shouldIgnoreRequestMapping(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
       return ignoreAnnotatedRequestMapping(handlerMethod)
-          || ignoreRequestMapping(requestMappingInfo, handlerMethod);
+            || ignoreRequestMapping(requestMappingInfo, handlerMethod);
    }
 
    public boolean ignoreAnnotatedRequestMapping(HandlerMethod handlerMethod) {
-      if(null != excludeAnnotations){
-         for(Class<Annotation> annotation : excludeAnnotations){
-            if(null != AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation)){
+      if (null != excludeAnnotations) {
+         for (Class<? extends Annotation> annotation : excludeAnnotations) {
+            if (null != AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation)) {
                log.info(String.format("Excluding method as it contains the excluded annotation: %s", annotation));
-               return  true;
+               return true;
             }
          }
          return false;

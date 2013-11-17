@@ -24,6 +24,7 @@ class DefaultControllerResourceGroupingStrategySpec extends Specification {
 
     where:
       group                                        | path
+      'root'                                       | '/'
       'business'                                   | '/business'
       'business'                                   | 'business'
       'business/somethingElse'                     | '/business/somethingElse'
@@ -34,5 +35,7 @@ class DefaultControllerResourceGroupingStrategySpec extends Specification {
       'business/(businessId)'                      | '/business/{businessId:\\d+}'
       'business/(businessId)/accounts/(accountId)' | '/business/{businessId:\\d+}/accounts/{accountId:\\d+}'
    }
+
+
 
 }

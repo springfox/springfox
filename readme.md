@@ -128,7 +128,11 @@ In no partiular order thank you to the following for sending in PRs. Its not sus
 -reports: \target\site\jacoco-ut
 ```
 mvn test
+mvn test jacoco:check
 
+mvn test site
+
+local nexus: mvn deploy
 ```
 
 -Coverage Help

@@ -213,7 +213,7 @@
          <version>1.3</version>
          <scope>test</scope>
       </dependency>
-     
+
       <dependency>
          <groupId>javax.servlet</groupId>
          <artifactId>servlet-api</artifactId>
@@ -286,6 +286,9 @@
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.6.3.201306030806</version>
             <configuration>
+               <excludes>
+                  <exclude>**/com/mangofactory/swagger/configuration/**.*</exclude>
+               </excludes>
                <rules>
                   <rule>
                      <element>BUNDLE</element>
@@ -293,7 +296,7 @@
                         <limit>
                            <counter>COMPLEXITY</counter>
                            <value>COVEREDRATIO</value>
-                           <minimum>0.75</minimum>
+                           <minimum>0.80</minimum>
                         </limit>
                         <limit>
                            <counter>CLASS</counter>
@@ -308,7 +311,7 @@
                         <limit>
                            <counter>LINE</counter>
                            <value>COVEREDRATIO</value>
-                           <minimum>0.70</minimum>
+                           <minimum>0.80</minimum>
                         </limit>
                      </limits>
                   </rule>
@@ -317,30 +320,24 @@
 
             <executions>
                <execution>
-                  <id>pre-unit-test</id>
+                  <id>default-prepare-agent</id>
                   <goals>
                      <goal>prepare-agent</goal>
                   </goals>
                </execution>
                <execution>
-                  <id>post-unit-test</id>
-                  <phase>test</phase>
+                  <id>default-report</id>
+                  <phase>prepare-package</phase>
                   <goals>
                      <goal>report</goal>
                   </goals>
-                  <configuration>
-                     <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-                  </configuration>
                </execution>
-
                <execution>
                   <id>default-check</id>
-                  <phase>test</phase>
                   <goals>
                      <goal>check</goal>
                   </goals>
                </execution>
-
             </executions>
          </plugin>
          <plugin>
@@ -479,4 +476,13 @@
          </plugin>
       </plugins>
    </build>
+   <reporting>
+      <plugins>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>2.5.2</version>
+         </plugin>
+      </plugins>
+   </reporting>
 </project>

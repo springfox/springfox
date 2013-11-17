@@ -8,14 +8,16 @@ import com.wordnik.swagger.model.AuthorizationType;
 import com.wordnik.swagger.model.ResourceListing;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.ServletContext;
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.mangofactory.swagger.ScalaUtils.toList;
 import static com.mangofactory.swagger.ScalaUtils.toOption;
 
+@Slf4j
 public class SwaggerApiResourceListing {
    @Getter
    private ResourceListing resourceListing;
@@ -33,17 +35,18 @@ public class SwaggerApiResourceListing {
    @Setter
    private ApiListingReferenceScanner apiListingReferenceScanner;
 
-   private ServletContext servletContext;
 
-   public SwaggerApiResourceListing(ServletContext servletContext) {
-      this.servletContext = servletContext;
+   public SwaggerApiResourceListing() {
    }
 
+   @PostConstruct
    public void createResourceListing() {
       List<ApiListingReference> apiListingReferences = new ArrayList<ApiListingReference>();
       if (null != apiListingReferenceScanner) {
          apiListingReferenceScanner.scan();
          apiListingReferences = apiListingReferenceScanner.getApiListingReferences();
+      } else{
+         log.error("ApiListingReferenceScanner not configured");
       }
       this.resourceListing = new ResourceListing("1", SwaggerSpec.version(), toList(apiListingReferences),
                                                  toList(authorizationTypes), toOption(apiInfo));

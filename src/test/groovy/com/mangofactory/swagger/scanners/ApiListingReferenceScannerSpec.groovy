@@ -61,7 +61,7 @@ class ApiListingReferenceScannerSpec extends Specification {
    def "ignore requestMappings "() {
     given:
       ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
-      apiListingReferenceScanner.setExcludeAnnotations([ApiIgnore.class])
+      apiListingReferenceScanner.setExcludeAnnotations([ApiIgnore])
       def ignorableMethod = ignorableHandlerMethod()
 
     expect:

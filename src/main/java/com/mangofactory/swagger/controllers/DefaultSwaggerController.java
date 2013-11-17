@@ -4,6 +4,7 @@ import com.mangofactory.swagger.core.SwaggerApiResourceListing;
 import com.wordnik.swagger.model.ResourceListing;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ public class DefaultSwaggerController {
 
    @Getter
    @Setter
+   @Autowired
    private Map<String, SwaggerApiResourceListing> swaggerApiResourceListingMap;
 
    @RequestMapping(value = {"/api-docs/{resourceKey}"}, method = RequestMethod.GET)

@@ -19,17 +19,10 @@ import static com.mangofactory.swagger.ScalaUtils.fromOption
 
 @Mixin(com.mangofactory.swagger.mixins.RequestMappingSupport)
 class SwaggerApiResourceListingSpec extends Specification {
-   String DEFAULT_RELATIVE_BASE_PATH = '/myApp'
-   def ServletContext servletContext
-
-   def setup() {
-      def servletContext = Mock(ServletContext)
-      servletContext.getContextPath() >> DEFAULT_RELATIVE_BASE_PATH
-   }
 
    def "default swagger resource"() {
     when: "I create a swagger resource"
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(servletContext)
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
       swaggerApiResourceListing.createResourceListing()
 
     then: "I should should have the correct defaults"
@@ -49,7 +42,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     given:
       ApiInfo apiInfo = new ApiInfo("title", "description", "terms", "contact", "license", "licenseUrl")
     when:
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(servletContext)
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
       swaggerApiResourceListing.apiInfo = apiInfo
       swaggerApiResourceListing.createResourceListing()
 
@@ -66,7 +59,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     given:
       ApiKey apiKey = new ApiKey("api_key", "header")
     when:
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(servletContext)
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
       swaggerApiResourceListing.authorizationTypes = [apiKey]
       swaggerApiResourceListing.createResourceListing()
 
@@ -81,7 +74,7 @@ class SwaggerApiResourceListingSpec extends Specification {
 
    def "resource with mocked apis"() {
     given:
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(servletContext)
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
 
       Map handlerMethods = [(requestMappingInfo("/somePath")): dummyHandlerMethod()]
       def requestHandlerMapping = Mock(RequestMappingHandlerMapping)

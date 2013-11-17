@@ -1,12 +1,13 @@
 package com.mangofactory.swagger.core;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.util.Set;
-
+@Component
 public class DefaultControllerResourceGroupingStrategy implements ControllerResourceGroupingStrategy {
 
    public DefaultControllerResourceGroupingStrategy() {
@@ -23,7 +24,7 @@ public class DefaultControllerResourceGroupingStrategy implements ControllerReso
       result = result.replaceAll(":.*?}", "}");
 
       result = StringUtils.replaceEach(result, new String[]{"{", "}"}, new String[]{"(", ")"});
-      return result;
+      return result.isEmpty() ? "root" : result;
    }
 
    @Override
@@ -31,7 +32,7 @@ public class DefaultControllerResourceGroupingStrategy implements ControllerReso
       String group = getGroupCompatibleName(requestMappingInfo, handlerMethod);
       group = StringUtils.removeStart(group, "/");
       String[] splits = group.split("/");
-      group = splits.length > 0 ? splits[0] : "root";
+      group = splits[0];
       return group;
    }
 //
