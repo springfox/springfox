@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.controllers;
 
+import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.SwaggerApiResourceListing;
 import com.wordnik.swagger.model.ResourceListing;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class DefaultSwaggerController {
    @Autowired
    private Map<String, SwaggerApiResourceListing> swaggerApiResourceListingMap;
 
+   @ApiIgnore
    @RequestMapping(value = {"/api-docs/{resourceKey}"}, method = RequestMethod.GET)
    public
    @ResponseBody
@@ -31,6 +33,7 @@ public class DefaultSwaggerController {
       return getSwaggerResourceListing(resourceKey);
    }
 
+   @ApiIgnore
    @RequestMapping(value = {"/api-docs"}, method = RequestMethod.GET)
    public
    @ResponseBody
