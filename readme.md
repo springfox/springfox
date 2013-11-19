@@ -130,6 +130,8 @@ In no partiular order thank you to the following for sending in PRs. Its not sus
 mvn test
 mvn test jacoco:check
 
+mvn jacoco:check
+
 mvn test site
 
 local nexus: mvn deploy

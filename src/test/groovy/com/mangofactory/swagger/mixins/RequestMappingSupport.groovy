@@ -4,6 +4,7 @@ import com.mangofactory.swagger.dummy.DummyClass
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 
 import static com.mangofactory.swagger.dummy.DummyClass.*
 
@@ -25,4 +26,5 @@ class RequestMappingSupport {
       Class c = clazz.getClass();
       new HandlerMethod(clazz, c.getMethod("dummyMethod", null))
    }
+
 }

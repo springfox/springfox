@@ -1,14 +1,13 @@
 package com.mangofactory.swagger.scanners
 
 import com.mangofactory.swagger.annotations.ApiIgnore
-import com.mangofactory.swagger.core.ControllerResourceGroupingStrategy
 import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy
 import com.mangofactory.swagger.mixins.AccessorAssertions
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
+import spock.lang.Unroll
 
 @Mixin([AccessorAssertions, RequestMappingSupport])
 class ApiListingReferenceScannerSpec extends Specification {
@@ -23,7 +22,7 @@ class ApiListingReferenceScannerSpec extends Specification {
       'pathPrefix'               | 's'
       'pathSuffix'               | 'd'
       'controllerNamingStrategy' | new DefaultControllerResourceGroupingStrategy()
-      'HandlerMappings'          | []
+      'requestMappingHandlerMapping'          | []
       'excludeAnnotations'       | []
    }
 
@@ -42,22 +41,6 @@ class ApiListingReferenceScannerSpec extends Specification {
       [requestMappingInfo("path")] | null                     | "controllerNamingStrategy is required"
    }
 
-//   def "excluded request mappings"(){
-//    given:
-//      ControllerResourceGroupingStrategy strategy = new DefaultControllerResourceGroupingStrategy()
-//      RequestMappingHandlerMapping requestMappingHandlerMapping = Mock()
-//      requestMappingHandlerMapping.getHandlerMethods() >> [requestMappingInfo('path', dummyHandlerMethod())]
-//      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner([requestMappingHandlerMapping], strategy)
-//
-//      when:
-//      apiListingReferenceScanner.scanForDefaultSpringResources()
-//
-//      expect:
-//
-//
-//
-//   }
-
    def "ignore requestMappings "() {
     given:
       ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
@@ -66,8 +49,44 @@ class ApiListingReferenceScannerSpec extends Specification {
 
     expect:
       true == apiListingReferenceScanner.ignoreAnnotatedRequestMapping(ignorableMethod)
-      true == apiListingReferenceScanner.shouldIgnoreRequestMapping(requestMappingInfo("p"), ignorableMethod)
+      false == apiListingReferenceScanner.shouldIncludeRequestMapping(requestMappingInfo("p"), ignorableMethod)
    }
 
+   @Unroll("Pattern : #patterns | path: #path")
+   def "Should only include matching controller url patterns"() {
+    when:
+      RequestMappingHandlerMapping requestMappingHandlerMapping = Mock()
+      RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
+      requestMappingHandlerMapping.getHandlerMethods() >> [(requestMappingInfo): dummyHandlerMethod()]
+
+      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner([requestMappingHandlerMapping], new DefaultControllerResourceGroupingStrategy())
+      apiListingReferenceScanner.setIncludePatterns(patterns)
+      apiListingReferenceScanner.scan()
+
+    then:
+      shouldMatch == (null != apiListingReferenceScanner.apiListingReferences.find { it.path() == "/api-docs/$group" })
+
+    where:
+      patterns                 | path                           | group        | shouldMatch
+      ['']                     | 'path'                         | 'path'       | false
+      ['sdfs']                 | 'path'                         | 'path'       | false
+      ['/path']                | 'path'                         | 'path'       | true
+      ['/?ath']                | 'path'                         | 'path'       | true
+      ['/*ath']                | 'path'                         | 'path'       | true
+      ['/**path']              | 'path'                         | 'path'       | true
+      ['/path/']               | 'path'                         | 'path'       | false
+      ['/**path']              | 'path'                         | 'path'       | true
+      ['/**']                  | 'path'                         | 'path'       | true
+      ['/businesses/accounts'] | '/businesses/accounts'         | 'businesses' | true
+      ['/**']                  | '/businesses/accounts'         | 'businesses' | true
+      ['/*/accounts']          | '/businesses/accounts'         | 'businesses' | true
+      ['/*/accounts']          | '/businesses/accounts'         | 'businesses' | true
+      ['/**/accounts']         | '/businesses/accounts'         | 'businesses' | true
+      ['/**businesses/**']     | '/businesses/accounts'         | 'businesses' | true
+      ['/**']                  | '/businesses/accounts/balance' | 'businesses' | true
+      ['/path', '/?ath']       | 'path'                         | 'path'       | true
+      ['/path', '/notAMatch']  | 'path'                         | 'path'       | true
+      ['/both', '/doNotMatch'] | 'path'                         | 'path'       | false
+   }
 
 }
