@@ -1,5 +1,7 @@
 package com.mangofactory.swagger.scanners;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.mangofactory.swagger.core.ControllerResourceGroupingStrategy;
 import com.wordnik.swagger.model.ApiListingReference;
 import lombok.Getter;
@@ -15,7 +17,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import scala.actors.threadpool.Arrays;
 
 import java.lang.annotation.Annotation;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -33,6 +34,8 @@ public class ApiListingReferenceScanner {
    private List<RequestMappingHandlerMapping> requestMappingHandlerMapping;
    @Getter
    private List<ApiListingReference> apiListingReferences = newArrayList();
+
+   private ListMultimap<String, RequestMappingContext> resourceGroupRequestMappings = ArrayListMultimap.create();
 
    @Getter
    @Setter
@@ -75,20 +78,20 @@ public class ApiListingReferenceScanner {
    }
 
    public void scanSpringRequestMappings() {
-      Set<String> resourceGroups = new LinkedHashSet<String>();
       for (RequestMappingHandlerMapping requestMappingHandlerMapping : this.requestMappingHandlerMapping) {
          for (Entry<RequestMappingInfo, HandlerMethod> handlerMethodEntry :
                requestMappingHandlerMapping.getHandlerMethods().entrySet()) {
             RequestMappingInfo requestMappingInfo = handlerMethodEntry.getKey();
             HandlerMethod handlerMethod = handlerMethodEntry.getValue();
             if (shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
-               resourceGroups.add(controllerNamingStrategy.getGroupName(requestMappingInfo, handlerMethod));
+               String groupName = controllerNamingStrategy.getGroupName(requestMappingInfo, handlerMethod);
+               resourceGroupRequestMappings.put(groupName, new RequestMappingContext(requestMappingInfo, handlerMethod));
             }
          }
       }
 
       int groupPosition = 0;
-      for (String group : resourceGroups) {
+      for (String group : resourceGroupRequestMappings.keys()) {
          String path = String.format("/%s/%s%s", this.pathPrefix, group, this.pathSuffix);
          log.info(String.format("Create resource listing Path: %s Description: %s Psosition: %s", path, group,
                                 groupPosition));

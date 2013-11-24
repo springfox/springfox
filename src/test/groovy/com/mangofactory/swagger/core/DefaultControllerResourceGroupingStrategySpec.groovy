@@ -16,7 +16,7 @@ class DefaultControllerResourceGroupingStrategySpec extends Specification {
    @Unroll('Path: #path group: #group')
    def "controller to group names "() {
     given:
-      RequestMappingInfo requestMappingInfo = requestMappingInfo([path])
+      RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
       DefaultControllerResourceGroupingStrategy strategy = new DefaultControllerResourceGroupingStrategy()
 
     expect:

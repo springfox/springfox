@@ -119,7 +119,11 @@ In no partiular order thank you to the following for sending in PRs. Its not sus
 - [@alexeytokar](https://github.com/alexeytokar)
 - [@williamvoor](https://github.com/williamvoor)
 - [@obernal](https://github.com/obernal)
-- [@sverhagen](https://github.com/sverhagen)
+
+
+## Rules
+
+Produces and consumes driven off spring annotation arguments only - swagger ignored
 
 ##Development
 

@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mangofactory.swagger.ScalaUtils.toList;
+import static com.mangofactory.swagger.ScalaUtils.toScalaList;
 import static com.mangofactory.swagger.ScalaUtils.toOption;
 
 @Slf4j
@@ -48,8 +48,8 @@ public class SwaggerApiResourceListing {
       } else{
          log.error("ApiListingReferenceScanner not configured");
       }
-      this.resourceListing = new ResourceListing("1", SwaggerSpec.version(), toList(apiListingReferences),
-                                                 toList(authorizationTypes), toOption(apiInfo));
+      this.resourceListing = new ResourceListing("1", SwaggerSpec.version(), toScalaList(apiListingReferences),
+                                                 toScalaList(authorizationTypes), toOption(apiInfo));
 
    }
 

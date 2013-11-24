@@ -9,14 +9,14 @@ import java.util.Collection;
 
 public class ScalaUtils {
 
-   public static List toList(Collection collection) {
+   public static List toScalaList(Collection collection) {
       if(null == collection){
          collection = new ArrayList();
       }
       return collectionAsScalaIterable(collection).toList();
    }
 
-   public static java.util.List<?> fromList(List<?> list) {
+   public static java.util.List<?> fromScalaList(List<?> list) {
       return seqAsJavaList(list);
    }
    public static Option toOption(Object o) {

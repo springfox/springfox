@@ -18,17 +18,17 @@ class ApiListingReferenceScannerSpec extends Specification {
     then:
       assertAccessor(apiListingReferenceScanner, method, value)
     where:
-      method                     | value
-      'pathPrefix'               | 's'
-      'pathSuffix'               | 'd'
-      'controllerNamingStrategy' | new DefaultControllerResourceGroupingStrategy()
-      'requestMappingHandlerMapping'          | []
-      'excludeAnnotations'       | []
+      method                         | value
+      'pathPrefix'                   | 's'
+      'pathSuffix'                   | 'd'
+      'controllerNamingStrategy'     | new DefaultControllerResourceGroupingStrategy()
+      'requestMappingHandlerMapping' | []
+      'excludeAnnotations'           | []
    }
 
    def "should not get expected exceptions with invalid constructor params"() {
     when:
-      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner(handlerMappings, controllerNamingStrategy)
+      new ApiListingReferenceScanner(handlerMappings, controllerNamingStrategy)
 
     then:
       def exception = thrown(IllegalArgumentException)

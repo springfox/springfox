@@ -8,13 +8,10 @@ import com.wordnik.swagger.model.ApiInfo
 import com.wordnik.swagger.model.ApiKey
 import com.wordnik.swagger.model.ApiListingReference
 import com.wordnik.swagger.model.ResourceListing
-import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
 
-import javax.servlet.ServletContext
-
-import static com.mangofactory.swagger.ScalaUtils.fromList
+import static com.mangofactory.swagger.ScalaUtils.fromScalaList
 import static com.mangofactory.swagger.ScalaUtils.fromOption
 
 @Mixin(com.mangofactory.swagger.mixins.RequestMappingSupport)
@@ -27,8 +24,8 @@ class SwaggerApiResourceListingSpec extends Specification {
 
     then: "I should should have the correct defaults"
       ResourceListing resourceListing = swaggerApiResourceListing.resourceListing
-      def apiListingReferenceList = fromList(resourceListing.apis())
-      def authorizationTypes = fromList(resourceListing.authorizations())
+      def apiListingReferenceList = fromScalaList(resourceListing.apis())
+      def authorizationTypes = fromScalaList(resourceListing.authorizations())
 
       resourceListing.apiVersion() == "1"
       resourceListing.swaggerVersion() == SwaggerSpec.version()
@@ -65,7 +62,7 @@ class SwaggerApiResourceListingSpec extends Specification {
 
     then:
       ResourceListing resourceListing = swaggerApiResourceListing.resourceListing
-      def authorizationTypes = fromList(resourceListing.authorizations())
+      def authorizationTypes = fromScalaList(resourceListing.authorizations())
       def apiKeyAuthType = authorizationTypes[0]
       apiKeyAuthType instanceof ApiKey
       apiKeyAuthType.keyname == "api_key"
