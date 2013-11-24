@@ -3,8 +3,8 @@ package com.mangofactory.swagger.controllers
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
+import com.mangofactory.swagger.mixins.ApiListingSupport
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.MvcResult
 import org.springframework.web.servlet.View
@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup
 
-@Mixin(com.mangofactory.swagger.mixins.JsonSupport)
+@Mixin([com.mangofactory.swagger.mixins.JsonSupport, ApiListingSupport])
 class DefaultSwaggerControllerSpec extends Specification {
 
    @Shared
@@ -54,10 +54,23 @@ class DefaultSwaggerControllerSpec extends Specification {
       "/api-docs/unknown" | 404
    }
 
+   def "should respond with api listing for a given resource group"() {
+    given:
+      controller.setSwaggerApiListings([resourceKey: ['businesses': apiListing()]])
+
+    when:
+      MvcResult result = mockMvc.perform(get("/api-docs/resourceKey/businesses")).andDo(print()).andReturn()
+      def responseJson = jsonBodyResponse(result)
+
+    then:
+      result.getResponse().getStatus() == 200
+
+   }
+
    private SwaggerApiResourceListing defaultSwaggerResourceListing() {
       def listing = new SwaggerApiResourceListing()
       listing.with {
-         createResourceListing()
+         initialize()
       }
       return listing
    }

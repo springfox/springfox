@@ -16,6 +16,10 @@ public class ScalaUtils {
       return collectionAsScalaIterable(collection).toList();
    }
 
+   public static List emptyScalaList() {
+      return collectionAsScalaIterable(new ArrayList()).toList();
+   }
+
    public static java.util.List<?> fromScalaList(List<?> list) {
       return seqAsJavaList(list);
    }

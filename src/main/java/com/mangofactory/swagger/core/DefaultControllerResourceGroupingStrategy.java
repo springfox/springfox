@@ -19,7 +19,12 @@ public class DefaultControllerResourceGroupingStrategy implements ControllerReso
       Set<String> patterns = patternsCondition.getPatterns();
       String result = patterns.iterator().next();
 
-      result = result.replaceFirst("/", "");
+      return getUriSafeRequestMappingPattern(result);
+   }
+
+   @Override
+   public String getUriSafeRequestMappingPattern(String requestMappingPattern) {
+      String result = requestMappingPattern.replaceFirst("/", "");
       //remove regex portion '/{businessId:\\w+}'
       result = result.replaceAll(":.*?}", "}");
 

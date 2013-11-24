@@ -19,7 +19,7 @@ class ApiListingReferenceScannerSpec extends Specification {
       assertAccessor(apiListingReferenceScanner, method, value)
     where:
       method                         | value
-      'pathPrefix'                   | 's'
+      'resourceGroup'                | 's'
       'pathSuffix'                   | 'd'
       'controllerNamingStrategy'     | new DefaultControllerResourceGroupingStrategy()
       'requestMappingHandlerMapping' | []
@@ -64,7 +64,7 @@ class ApiListingReferenceScannerSpec extends Specification {
       apiListingReferenceScanner.scan()
 
     then:
-      shouldMatch == (null != apiListingReferenceScanner.apiListingReferences.find { it.path() == "/api-docs/$group" })
+      shouldMatch == (null != apiListingReferenceScanner.apiListingReferences.find { it.path() == "/default/$group" })
 
     where:
       patterns                 | path                           | group        | shouldMatch

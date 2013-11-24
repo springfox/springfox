@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.scanners;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimaps;
 import com.mangofactory.swagger.core.ControllerResourceGroupingStrategy;
 import com.wordnik.swagger.model.ApiListingReference;
 import lombok.Getter;
@@ -18,6 +18,7 @@ import scala.actors.threadpool.Arrays;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -35,11 +36,11 @@ public class ApiListingReferenceScanner {
    @Getter
    private List<ApiListingReference> apiListingReferences = newArrayList();
 
-   private ListMultimap<String, RequestMappingContext> resourceGroupRequestMappings = ArrayListMultimap.create();
+   private ArrayListMultimap<String, RequestMappingContext> resourceGroupRequestMappings = ArrayListMultimap.create();
 
    @Getter
    @Setter
-   private String pathPrefix = "api-docs";
+   private String resourceGroup = "default";
 
    @Getter
    @Setter
@@ -85,15 +86,16 @@ public class ApiListingReferenceScanner {
             HandlerMethod handlerMethod = handlerMethodEntry.getValue();
             if (shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
                String groupName = controllerNamingStrategy.getGroupName(requestMappingInfo, handlerMethod);
-               resourceGroupRequestMappings.put(groupName, new RequestMappingContext(requestMappingInfo,
-                                                                                     handlerMethod));
+
+               resourceGroupRequestMappings
+                     .put(groupName, new RequestMappingContext(requestMappingInfo, handlerMethod));
             }
          }
       }
 
       int groupPosition = 0;
-      for (String group : resourceGroupRequestMappings.keys()) {
-         String path = String.format("/%s/%s%s", this.pathPrefix, group, this.pathSuffix);
+      for (String group : resourceGroupRequestMappings.keySet()) {
+         String path = String.format("/%s/%s%s", this.resourceGroup, group, this.pathSuffix);
          log.info(
                String.format(
                      "Create resource listing Path: %s Description: %s Psosition: %s", path, group,
@@ -137,6 +139,10 @@ public class ApiListingReferenceScanner {
          return false;
       }
       return false;
+   }
+
+   public Map<String, List<RequestMappingContext>> getResourceGroupRequestMappings(){
+      return  Multimaps.asMap(resourceGroupRequestMappings);
    }
 
 

@@ -20,7 +20,7 @@ class SwaggerApiResourceListingSpec extends Specification {
    def "default swagger resource"() {
     when: "I create a swagger resource"
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
-      swaggerApiResourceListing.createResourceListing()
+      swaggerApiResourceListing.initialize()
 
     then: "I should should have the correct defaults"
       ResourceListing resourceListing = swaggerApiResourceListing.resourceListing
@@ -41,7 +41,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     when:
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
       swaggerApiResourceListing.apiInfo = apiInfo
-      swaggerApiResourceListing.createResourceListing()
+      swaggerApiResourceListing.initialize()
 
     then:
       swaggerApiResourceListing.apiInfo.title() == "title"
@@ -58,7 +58,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     when:
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
       swaggerApiResourceListing.authorizationTypes = [apiKey]
-      swaggerApiResourceListing.createResourceListing()
+      swaggerApiResourceListing.initialize()
 
     then:
       ResourceListing resourceListing = swaggerApiResourceListing.resourceListing
@@ -83,12 +83,12 @@ class SwaggerApiResourceListingSpec extends Specification {
       swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
 
     when:
-      swaggerApiResourceListing.createResourceListing()
+      swaggerApiResourceListing.initialize()
 
     then:
       ResourceListing resourceListing = swaggerApiResourceListing.resourceListing
       ApiListingReference apiListingReference = resourceListing.apis().first()
-      apiListingReference.path() == "/api-docs/somePath"
+      apiListingReference.path() == "/default/somePath"
       apiListingReference.position() == 0
       fromOption(apiListingReference.description()) == "somePath"
    }

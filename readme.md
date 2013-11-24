@@ -138,7 +138,7 @@ mvn jacoco:check
 
 mvn test site
 
-local nexus: mvn deploy
+local nexus >  mvn deploy
 ```
 
 -Coverage Help

@@ -65,6 +65,7 @@
       <repository.snapshot>http://192.168.130.1:8081/nexus/content/repositories/snapshots</repository.snapshot>
       <repository.release>http://192.168.130.1:8081/nexus/content/repositories/releases</repository.release>
       <powermock.version>1.5.1</powermock.version>
+      <guava.version>15.0</guava.version>
    </properties>
    <repositories>
       <repository>
@@ -78,7 +79,7 @@
          <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>14.0.1</version>
+            <version>${guava.version}</version>
          </dependency>
          <dependency>
             <groupId>org.scala-lang</groupId>
@@ -155,14 +156,14 @@
          <version>${spring.version}</version>
       </dependency>
       <dependency>
-         <groupId>com.google.guava</groupId>
-         <artifactId>guava</artifactId>
-         <version>14.0.1</version>
-      </dependency>
-      <dependency>
          <groupId>cglib</groupId>
          <artifactId>cglib</artifactId>
          <version>2.2</version>
+      </dependency>
+      <dependency>
+         <groupId>com.google.guava</groupId>
+         <artifactId>guava</artifactId>
+         <version>${guava.version}</version>
       </dependency>
       <!-- Runtime dependencies -->
       <dependency>
