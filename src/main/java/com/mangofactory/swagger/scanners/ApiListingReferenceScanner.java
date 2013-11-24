@@ -85,7 +85,8 @@ public class ApiListingReferenceScanner {
             HandlerMethod handlerMethod = handlerMethodEntry.getValue();
             if (shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
                String groupName = controllerNamingStrategy.getGroupName(requestMappingInfo, handlerMethod);
-               resourceGroupRequestMappings.put(groupName, new RequestMappingContext(requestMappingInfo, handlerMethod));
+               resourceGroupRequestMappings.put(groupName, new RequestMappingContext(requestMappingInfo,
+                                                                                     handlerMethod));
             }
          }
       }
@@ -93,23 +94,25 @@ public class ApiListingReferenceScanner {
       int groupPosition = 0;
       for (String group : resourceGroupRequestMappings.keys()) {
          String path = String.format("/%s/%s%s", this.pathPrefix, group, this.pathSuffix);
-         log.info(String.format("Create resource listing Path: %s Description: %s Psosition: %s", path, group,
-                                groupPosition));
+         log.info(
+               String.format(
+                     "Create resource listing Path: %s Description: %s Psosition: %s", path, group,
+                     groupPosition));
          this.apiListingReferences.add(new ApiListingReference(path, toOption(group), groupPosition));
          groupPosition++;
       }
    }
 
    private boolean requestMappingMatchesAnIncludePattern(RequestMappingInfo requestMappingInfo,
-         HandlerMethod handlerMethod){
+         HandlerMethod handlerMethod) {
       PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
       Set<String> patterns = patternsCondition.getPatterns();
 
       AntPathMatcher antPathMatcher = new AntPathMatcher();
-      for(String path : patterns){
-         for(String includePattern : includePatterns){
+      for (String path : patterns) {
+         for (String includePattern : includePatterns) {
             Assert.notNull(includePattern, "Include patterns should never be null");
-            if(antPathMatcher.match(includePattern, path)){
+            if (antPathMatcher.match(includePattern, path)) {
                return true;
             }
          }
@@ -135,7 +138,6 @@ public class ApiListingReferenceScanner {
       }
       return false;
    }
-
 
 
 }
