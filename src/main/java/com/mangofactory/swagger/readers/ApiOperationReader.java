@@ -33,6 +33,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       Set<RequestMethod> supportedMethods = (requestMethods == null || requestMethods.isEmpty())
             ? allRequestMethods : requestMethods;
 
+      int count = 0;
       for (RequestMethod httpRequestMethod : supportedMethods) {
          CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
 
@@ -40,6 +41,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          List<Command<RequestMappingContext>> commandList = newArrayList();
 
          operationRequestMappingContext.put("currentHttpMethod", httpRequestMethod);
+         operationRequestMappingContext.put("currentCount", count++);
 
          commandList.add(new OperationHttpMethodReader());
          commandList.add(new OperationSummaryReader());
@@ -58,11 +60,11 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
 //
          Operation operation = new Operation(
                (String) operationResultMap.get("httpRequestMethod"),
-               "summary",
-               "notes",
+               (String) operationResultMap.get("summary"),
+               (String) operationResultMap.get("notes"),
                "responseClass",
-               "nickname",
-               1,
+               (String) operationResultMap.get("nickname"),
+               (Integer) operationResultMap.get("position"),
                emptyScalaList(),
                emptyScalaList(),
                emptyScalaList(),

@@ -86,9 +86,7 @@ public class ApiListingReferenceScanner {
             HandlerMethod handlerMethod = handlerMethodEntry.getValue();
             if (shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
                String groupName = controllerNamingStrategy.getGroupName(requestMappingInfo, handlerMethod);
-
-               resourceGroupRequestMappings
-                     .put(groupName, new RequestMappingContext(requestMappingInfo, handlerMethod));
+               resourceGroupRequestMappings.put(groupName, new RequestMappingContext(requestMappingInfo, handlerMethod));
             }
          }
       }
@@ -105,8 +103,7 @@ public class ApiListingReferenceScanner {
       }
    }
 
-   private boolean requestMappingMatchesAnIncludePattern(RequestMappingInfo requestMappingInfo,
-         HandlerMethod handlerMethod) {
+   private boolean requestMappingMatchesAnIncludePattern(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
       PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
       Set<String> patterns = patternsCondition.getPatterns();
 
@@ -141,8 +138,8 @@ public class ApiListingReferenceScanner {
       return false;
    }
 
-   public Map<String, List<RequestMappingContext>> getResourceGroupRequestMappings(){
-      return  Multimaps.asMap(resourceGroupRequestMappings);
+   public Map<String, List<RequestMappingContext>> getResourceGroupRequestMappings() {
+      return Multimaps.asMap(resourceGroupRequestMappings);
    }
 
 

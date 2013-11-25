@@ -6,6 +6,6 @@ import com.mangofactory.swagger.scanners.RequestMappingContext;
 public class OperationNicknameReader implements Command<RequestMappingContext> {
    @Override
    public void execute(RequestMappingContext context) {
-      //To change body of implemented methods use File | Settings | File Templates.
+      context.put("nickname", context.getHandlerMethod().getMethod().getName());
    }
 }

@@ -15,6 +15,12 @@ public class DummyClass {
    @ApiOperation( value = "summary", httpMethod = "RUBBISH")
    public void methodWithSummary(){}
 
+   @ApiOperation( value = "", notes = "some notes")
+   public void methodWithNotes(){}
+
+   @ApiOperation( value = "", position = 5)
+   public void methodWithPosition(){}
+
 
    public static class ApiIgnorableClass{
       @ApiIgnore

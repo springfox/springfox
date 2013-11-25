@@ -8,7 +8,9 @@ This project provides integration between [Swagger](https://github.com/wordnik/s
 
 ## Swagger Annotations
 ### ApiOperation
-- value: if present and not blank otherwise the java method name is used
+- value: (summary) if present and not blank otherwise the java method name is used
+- notes: if present and not blank otherwise the java method name is used
+- position: used if present otherwise an logical position is provided
 - httpMethod: overrides the spring's  @RequestMapping(method = ..) if springs method is not defined and operation appears for all possible http methods
 
 

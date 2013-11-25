@@ -10,7 +10,7 @@ import spock.lang.Specification
 @Mixin(RequestMappingSupport)
 class ApiOperationReaderSpec extends Specification{
 
-   def "Should generate an operation for each http method supported by the request mapping"() {
+   def "Should generate default operation on handler method without swagger annotations"() {
 
     given:
       RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
@@ -33,6 +33,10 @@ class ApiOperationReaderSpec extends Specification{
     then:
       def apiOperation = result['operations'][0]
       apiOperation.method == RequestMethod.PATCH.toString()
+      apiOperation.summary == handlerMethod.method.name
+      apiOperation.notes == handlerMethod.method.name
+      apiOperation.nickname == handlerMethod.method.name
+      apiOperation.position == 0
    }
 
 }
