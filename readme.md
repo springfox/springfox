@@ -144,6 +144,8 @@ local nexus >  mvn deploy
 -Coverage Help
 ```
 mvn org.jacoco:jacoco-maven-plugin:0.6.3.201306030806:check
+
+jacoco.skip=true
 ```
 
 License

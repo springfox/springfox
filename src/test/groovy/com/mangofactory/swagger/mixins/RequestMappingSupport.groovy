@@ -1,10 +1,12 @@
 package com.mangofactory.swagger.mixins
 
 import com.mangofactory.swagger.dummy.DummyClass
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
 import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition
+import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 
@@ -13,15 +15,13 @@ import static com.mangofactory.swagger.dummy.DummyClass.*
 class RequestMappingSupport {
 
    def requestMappingInfo(String path, Map overrides = [:]){
-      PatternsRequestCondition patternsRequestCondition = patternsRequestCondition(path)
-
-      ConsumesRequestCondition consumesRequestCondition =
-         null == overrides['consumesRequestCondition'] ? consumesRequestCondition() : overrides['consumesRequestCondition']
-      ProducesRequestCondition producesRequestCondition =
-         null == overrides['producesRequestCondition'] ? producesRequestCondition() : overrides['producesRequestCondition']
-
-
-      new RequestMappingInfo(patternsRequestCondition, null, null, null, consumesRequestCondition, producesRequestCondition, null)
+      PatternsRequestCondition singlePatternRequestCondition = patternsRequestCondition([path] as String[])
+      ConsumesRequestCondition consumesRequestCondition = overrides['consumesRequestCondition'] ?: consumesRequestCondition()
+      ProducesRequestCondition producesRequestCondition = overrides['producesRequestCondition'] ?: producesRequestCondition()
+      PatternsRequestCondition patternsRequestCondition = overrides['patternsRequestCondition'] ?: singlePatternRequestCondition
+      RequestMethodsRequestCondition requestMethodsRequestCondition =
+         overrides['requestMethodsRequestCondition'] ?:  RequestMethod.values()
+      new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, null, null, consumesRequestCondition, producesRequestCondition, null)
    }
 
    def dummyHandlerMethod(){
@@ -36,8 +36,8 @@ class RequestMappingSupport {
       new HandlerMethod(clazz, c.getMethod("dummyMethod", null))
    }
 
-   def patternsRequestCondition(String path){
-      new PatternsRequestCondition([path] as String[])
+   def patternsRequestCondition(String ... patterns){
+      new PatternsRequestCondition(patterns)
    }
 
    def consumesRequestCondition(String ... conditions){

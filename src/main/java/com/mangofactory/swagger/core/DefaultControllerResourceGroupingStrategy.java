@@ -7,14 +7,20 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.util.Set;
+
 @Component
 public class DefaultControllerResourceGroupingStrategy implements ControllerResourceGroupingStrategy {
 
+   private final String relativeEndpointPrefix;
+   private final String endpointSuffix;
+
    public DefaultControllerResourceGroupingStrategy() {
+      relativeEndpointPrefix = "";
+      endpointSuffix = "";
    }
 
    @Override
-   public String getGroupCompatibleName(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+   public String getFirstGroupCompatibleName(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
       PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
       Set<String> patterns = patternsCondition.getPatterns();
       String result = patterns.iterator().next();
@@ -33,8 +39,13 @@ public class DefaultControllerResourceGroupingStrategy implements ControllerReso
    }
 
    @Override
+   public String getRequestPatternMappingEndpoint(String requestMappingPattern) {
+      return relativeEndpointPrefix + getUriSafeRequestMappingPattern(requestMappingPattern) + endpointSuffix;
+   }
+
+   @Override
    public String getGroupName(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      String group = getGroupCompatibleName(requestMappingInfo, handlerMethod);
+      String group = getFirstGroupCompatibleName(requestMappingInfo, handlerMethod);
       group = StringUtils.removeStart(group, "/");
       String[] splits = group.split("/");
       group = splits[0];

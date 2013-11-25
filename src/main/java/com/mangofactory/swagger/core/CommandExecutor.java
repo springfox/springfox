@@ -4,9 +4,10 @@ import com.mangofactory.swagger.readers.Command;
 
 import java.util.List;
 
-//T - resulttype, typically Map<String, Object>
-public class CommandExecutor<T> {
-   public T execute(List<Command> commands, CommandContext<T> context){
+//T - result type, typically Map<String, Object>
+public class CommandExecutor<T, C> {
+
+   public T execute(List<Command<C>> commands, CommandContext<T> context){
       if(null != commands){
          for(Command command : commands){
             command.execute(context);

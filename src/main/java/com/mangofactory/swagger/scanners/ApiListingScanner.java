@@ -16,8 +16,7 @@ import java.util.*;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
-import static com.mangofactory.swagger.ScalaUtils.toScalaList;
-import static com.mangofactory.swagger.ScalaUtils.toOption;
+import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class ApiListingScanner {
 
@@ -29,7 +28,7 @@ public class ApiListingScanner {
 
    @Getter
    @Setter
-   private List<Command> readers = newArrayList();
+   private List<Command<RequestMappingContext>> readers = newArrayList();
 
    @Getter
    @Setter
@@ -48,7 +47,6 @@ public class ApiListingScanner {
       }
 
       Map<String, ApiListing> apiListingMap = newHashMap();
-      scala.collection.immutable.List emptyList = toScalaList(null);
 
       int position = 0;
       for (Map.Entry<String, List<RequestMappingContext>> entry : resourceGroupRequestMappings.entrySet()) {
@@ -60,7 +58,7 @@ public class ApiListingScanner {
          List<ApiDescription> apiDescriptions = new ArrayList();
          for(RequestMappingContext requestMappingContext : entry.getValue()){
 
-            CommandExecutor<Map<String, Object>> commandExecutor = new CommandExecutor();
+            CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
             readers.add(new MediaTypeReader());
             readers.add(new ApiDescriptionReader(controllerNamingStrategy));
 
@@ -74,7 +72,6 @@ public class ApiListingScanner {
 
             List<ApiDescription> apiDescriptionList = (List<ApiDescription>) results.get("apiDescriptionList");
             apiDescriptions.addAll(apiDescriptionList);
-
          }
 
          String resourcePath = String.format("/%s/%s", resourceGroup, controllerGroupName);
@@ -85,7 +82,29 @@ public class ApiListingScanner {
                resourcePath,
                toScalaList(produces),
                toScalaList(consumes),
-               emptyList, emptyList, toScalaList(apiDescriptions), toOption(null), toOption(null), position++);
+               emptyScalaList(),
+               emptyScalaList(),
+               toScalaList(apiDescriptions),
+               toOption(null),
+               toOption(null),
+               position++);
+
+         /*
+         case class ApiListing (
+  apiVersion: String,
+  swaggerVersion: String,
+  basePath: String,
+  resourcePath: String,
+  produces: List[String] = List.empty,
+  consumes: List[String] = List.empty,
+  protocols: List[String] = List.empty,
+  authorizations: List[String] = List.empty,
+  apis: List[ApiDescription] = List(),
+  models: Option[Map[String, Model]] = None,
+  description: Option[String] = None,
+  position: Int = 0)
+          */
+
 
          apiListingMap.put(controllerGroupName, apiListing);
       }

@@ -3,6 +3,7 @@ package com.mangofactory.swagger.readers;
 import com.mangofactory.swagger.core.ControllerResourceGroupingStrategy;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.model.ApiDescription;
+import com.wordnik.swagger.model.Operation;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -10,8 +11,8 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.mangofactory.swagger.ScalaUtils.emptyScalaList;
 import static com.mangofactory.swagger.ScalaUtils.toOption;
+import static com.mangofactory.swagger.ScalaUtils.toScalaList;
 
 public class ApiDescriptionReader implements Command<RequestMappingContext> {
 
@@ -26,24 +27,19 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
 
       RequestMappingInfo requestMappingInfo = context.getRequestMappingInfo();
       HandlerMethod handlerMethod = context.getHandlerMethod();
-
       PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
 
       List<ApiDescription> apiDescriptionList = newArrayList();
-
-      //New api operation for each pattern
       for (String pattern : patternsCondition.getPatterns()) {
 
-         //TODO - allow prefix & suffix
-         String path = controllerResourceGroupingStrategy.getUriSafeRequestMappingPattern(pattern);
+         String path = controllerResourceGroupingStrategy.getRequestPatternMappingEndpoint(pattern);
          String methodName = handlerMethod.getMethod().getName();
-//      case class ApiDescription (
-//            path: String,
-//            description: Option[String],
-//            operations: List[Operation] = List())
 
+         ApiOperationReader apiOperationReader = new ApiOperationReader();
+         apiOperationReader.execute(context);
+         List<Operation> operations = (List<Operation>) context.get("operations");
 
-         apiDescriptionList.add(new ApiDescription(path, toOption(methodName), emptyScalaList()));
+         apiDescriptionList.add(new ApiDescription(path, toOption(methodName), toScalaList(operations)));
       }
       context.put("apiDescriptionList", apiDescriptionList);
    }

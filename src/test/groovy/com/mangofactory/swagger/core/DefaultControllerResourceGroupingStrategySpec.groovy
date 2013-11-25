@@ -1,14 +1,8 @@
 package com.mangofactory.swagger.core
 
-import com.mangofactory.swagger.dummy.DummyClass
-import com.mangofactory.swagger.mixins.RequestMappingSupport
-import org.springframework.web.method.HandlerMethod
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import java.lang.reflect.Method
 
 @Mixin(com.mangofactory.swagger.mixins.RequestMappingSupport)
 class DefaultControllerResourceGroupingStrategySpec extends Specification {
@@ -20,7 +14,7 @@ class DefaultControllerResourceGroupingStrategySpec extends Specification {
       DefaultControllerResourceGroupingStrategy strategy = new DefaultControllerResourceGroupingStrategy()
 
     expect:
-      group == strategy.getGroupCompatibleName(requestMappingInfo, null)
+      group == strategy.getFirstGroupCompatibleName(requestMappingInfo, null)
 
     where:
       group                                        | path

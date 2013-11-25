@@ -2,10 +2,12 @@ package com.mangofactory.swagger;
 
 import scala.Option;
 import scala.collection.immutable.List;
-import static scala.collection.JavaConversions.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import static scala.collection.JavaConversions.collectionAsScalaIterable;
+import static scala.collection.JavaConversions.seqAsJavaList;
 
 public class ScalaUtils {
 
