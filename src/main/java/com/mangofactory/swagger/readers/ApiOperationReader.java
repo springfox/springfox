@@ -12,8 +12,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import java.util.*;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.mangofactory.swagger.ScalaUtils.emptyScalaList;
-import static com.mangofactory.swagger.ScalaUtils.toOption;
+import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class ApiOperationReader implements Command<RequestMappingContext> {
 
@@ -55,9 +54,11 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          commandList.add(new OperationDeprecatedReader());
          commandExecutor.execute(commandList, operationRequestMappingContext);
 
+
          Map<String, Object> operationResultMap = operationRequestMappingContext.getResult();
 
-//
+         List<String> producesMediaTypes = (List<String>) operationResultMap.get("produces");
+         List<String> consumesMediaTypes = (List<String>) operationResultMap.get("consumes");
          Operation operation = new Operation(
                (String) operationResultMap.get("httpRequestMethod"),
                (String) operationResultMap.get("summary"),
@@ -65,8 +66,8 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
                "responseClass",
                (String) operationResultMap.get("nickname"),
                (Integer) operationResultMap.get("position"),
-               emptyScalaList(),
-               emptyScalaList(),
+               toScalaList(producesMediaTypes),
+               toScalaList(consumesMediaTypes),
                emptyScalaList(),
                emptyScalaList(),
                emptyScalaList(),

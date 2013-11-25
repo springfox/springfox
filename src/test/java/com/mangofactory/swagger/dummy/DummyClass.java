@@ -21,6 +21,17 @@ public class DummyClass {
    @ApiOperation( value = "", position = 5)
    public void methodWithPosition(){}
 
+   @ApiOperation(value = "", consumes = "application/xml")
+   public void methodWithXmlConsumes(){}
+
+   @ApiOperation(value = "", produces = "application/xml")
+   public void methodWithXmlProduces(){}
+
+   @ApiOperation(value = "", produces = "application/xml, application/json", consumes = "application/xml, application/json")
+   public void methodWithMultipleMediaTypes(){}
+
+   @ApiOperation(value = "", produces = "application/xml", consumes= "application/xml")
+   public void methodWithBothXmlMediaTypes(){}
 
    public static class ApiIgnorableClass{
       @ApiIgnore
