@@ -10,8 +10,9 @@ This project provides integration between [Swagger](https://github.com/wordnik/s
 ### ApiOperation
 - value: (summary) if present and not blank otherwise the java method name is used
 - notes: if present and not blank otherwise the java method name is used
-- position: used if present otherwise an logical position is provided
-- httpMethod: overrides the spring's  @RequestMapping(method = ..) if springs method is not defined and operation appears for all possible http methods
+- position: used if present otherwise a logical position is provided
+- httpMethod: overrides the spring's  @RequestMapping(method = ..) if springs method is not defined an operation appears on the ui for all possible http methods
+- consumes/produces: media types are derived from springs @RequestMapping. if @APiOperation.consumes/produces is present these values override
 
 
 Produces and consumes driven off spring annotation arguments only - swagger ignored
