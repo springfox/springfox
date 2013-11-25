@@ -14,7 +14,7 @@ class OperationMethodReaderSpec extends Specification {
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
 
       context.put("currentHttpMethod", currentHttpMethod)
-      OperationMethodReader operationMethodReader = new OperationMethodReader();
+      OperationHttpMethodReader operationMethodReader = new OperationHttpMethodReader();
     when:
       operationMethodReader.execute(context)
       Map<String, Object> result = context.getResult()

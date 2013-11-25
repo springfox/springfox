@@ -14,7 +14,11 @@ class ApiOperationReaderSpec extends Specification{
 
     given:
       RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
-              [patternsRequestCondition: patternsRequestCondition('/doesNotMatterForThisTest', '/somePath/{businessId:\\d+}')]
+              [
+                      patternsRequestCondition: patternsRequestCondition('/doesNotMatterForThisTest', '/somePath/{businessId:\\d+}'),
+                      requestMethodsRequestCondition : requestMethodsRequestCondition(RequestMethod.PATCH)
+
+              ]
       )
 
       HandlerMethod handlerMethod = dummyHandlerMethod()
@@ -27,8 +31,8 @@ class ApiOperationReaderSpec extends Specification{
       Map<String, Object> result = context.getResult()
 
     then:
-      result['operations'].size == RequestMethod.values().size()
-      result['operations'][0].method == RequestMethod.values()[0].toString()
+      def apiOperation = result['operations'][0]
+      apiOperation.method == RequestMethod.PATCH.toString()
    }
 
 }

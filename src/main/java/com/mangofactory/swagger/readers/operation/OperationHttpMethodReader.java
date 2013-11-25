@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
 @Slf4j
-public class OperationMethodReader implements Command<RequestMappingContext> {
+public class OperationHttpMethodReader implements Command<RequestMappingContext> {
    @Override
    public void execute(RequestMappingContext context) {
       RequestMethod currentHttpMethod = (RequestMethod) context.get("currentHttpMethod");

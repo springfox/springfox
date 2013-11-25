@@ -20,7 +20,7 @@ class RequestMappingSupport {
       ProducesRequestCondition producesRequestCondition = overrides['producesRequestCondition'] ?: producesRequestCondition()
       PatternsRequestCondition patternsRequestCondition = overrides['patternsRequestCondition'] ?: singlePatternRequestCondition
       RequestMethodsRequestCondition requestMethodsRequestCondition =
-         overrides['requestMethodsRequestCondition'] ?:  RequestMethod.values()
+         overrides['requestMethodsRequestCondition'] ?:  requestMethodsRequestCondition(RequestMethod.values())
       new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, null, null, consumesRequestCondition, producesRequestCondition, null)
    }
 
@@ -48,4 +48,8 @@ class RequestMappingSupport {
       new ProducesRequestCondition(conditions)
    }
 
+   def requestMethodsRequestCondition(RequestMethod ... requestMethods){
+      new RequestMethodsRequestCondition(requestMethods)
+
+   }
 }

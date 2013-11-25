@@ -41,7 +41,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
 
          operationRequestMappingContext.put("currentHttpMethod", httpRequestMethod);
 
-         commandList.add(new OperationMethodReader());
+         commandList.add(new OperationHttpMethodReader());
          commandList.add(new OperationSummaryReader());
          commandList.add(new OperationNotesReader());
          commandList.add(new OperationResponseClassReader());
@@ -52,9 +52,12 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          commandList.add(new OperationResponseMessageReader());
          commandList.add(new OperationDeprecatedReader());
          commandExecutor.execute(commandList, operationRequestMappingContext);
+
+         Map<String, Object> operationResultMap = operationRequestMappingContext.getResult();
+
 //
          Operation operation = new Operation(
-               httpRequestMethod.toString(),
+               (String) operationResultMap.get("httpRequestMethod"),
                "summary",
                "notes",
                "responseClass",

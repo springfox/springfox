@@ -12,6 +12,9 @@ public class DummyClass {
    @ApiOperation( value = "description", httpMethod = "RUBBISH")
    public void methodWithInvalidHttpMethod(){}
 
+   @ApiOperation( value = "summary", httpMethod = "RUBBISH")
+   public void methodWithSummary(){}
+
 
    public static class ApiIgnorableClass{
       @ApiIgnore
