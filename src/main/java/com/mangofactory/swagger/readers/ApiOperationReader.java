@@ -39,6 +39,8 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          RequestMappingContext operationRequestMappingContext = new RequestMappingContext(requestMappingInfo, handlerMethod);
          List<Command<RequestMappingContext>> commandList = newArrayList();
 
+         operationRequestMappingContext.put("currentHttpMethod", httpRequestMethod);
+
          commandList.add(new OperationMethodReader());
          commandList.add(new OperationSummaryReader());
          commandList.add(new OperationNotesReader());
