@@ -104,7 +104,7 @@ public class ParameterFilterTest {
         paramFilters.add(new ParameterFilter());
     }
 
-    @Test
+/*    @Test
     @SneakyThrows
     public void whenParameterIsAPrimitive() {
         HandlerMethod handlerMethod = handlerMethod("methodWithSupportedPrimitives", byte.class, boolean.class,
@@ -214,6 +214,6 @@ public class ParameterFilterTest {
 
         assertEquals(1, documentation.getModels().size());
         assertNull(docParam.allowableValues());
-    }
+    }*/
 
 }
