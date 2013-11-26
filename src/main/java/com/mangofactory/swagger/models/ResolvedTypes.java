@@ -27,6 +27,8 @@ import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Lists.transform;
 
 public class ResolvedTypes {
+    public static final String GENERICS_SYMBOL_BEGIN = "«";
+    public static final String GENERICS_SYMBOL_END = "»";
     static Pattern getter = Pattern.compile("^get([a-zA-Z].*)");
     static Pattern isGetter = Pattern.compile("^is([a-zA-Z].*)");
     static Pattern setter = Pattern.compile("^set([a-zA-Z].*)");
@@ -222,8 +224,8 @@ public class ResolvedTypes {
             return "any";
         }
 
-        String begin = "«";
-        String end = "»";
+        String begin = GENERICS_SYMBOL_BEGIN;
+        String end = GENERICS_SYMBOL_END;
         if (resolvedType.isArray()
                 || List.class.equals(resolvedType.getErasedType())
                 || Set.class.equals(resolvedType.getErasedType())) {

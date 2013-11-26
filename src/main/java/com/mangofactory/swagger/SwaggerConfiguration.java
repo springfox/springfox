@@ -29,27 +29,23 @@ public class SwaggerConfiguration {
     public static final String SWAGGER_VERSION = "1.0";
 
     private final String documentationBasePath;
-
     private final String swaggerVersion;
 
-    private String apiVersion;
-    private String basePath;
-
-    private List<String> excludedResources = newArrayList();
-
     private final List<Filter<Documentation>> documentationFilters = newArrayList();
-
     private final List<Filter<DocumentationEndPoint>> endpointFilters = newArrayList();
-
     private final List<Filter<DocumentationOperation>> operationFilters = newArrayList();
-
     private final List<Filter<DocumentationParameter>> parameterFilters = newArrayList();
     private final List<Filter<List<DocumentationError>>> errorFilters = newArrayList();
     private final List<TypeProcessingRule> typeProcessingRules = newArrayList();
-    @Autowired private DocumentationTransformer documentationTransformer;
 
+    @Autowired private DocumentationTransformer documentationTransformer;
     @Autowired private DocumentationSchemaProvider schemaProvider;
     @Autowired private TypeResolver typeResolver;
+
+    private String apiVersion;
+    private String basePath;
+    private List<String> excludedResources = newArrayList();
+
     public SwaggerConfiguration(String apiVersion, String basePath) {
         this.swaggerVersion = SWAGGER_VERSION;
         this.documentationBasePath = API_DOCS_PATH;
