@@ -21,6 +21,7 @@ import java.util.Map;
 @Controller
 public class DefaultSwaggerController {
 
+   public static final String DOCUMENTATION_BASE_PATH = "/api-docs";
    @Getter
    @Setter
    @Resource(name = "swaggerApiResourceListingMap")
@@ -32,7 +33,7 @@ public class DefaultSwaggerController {
    private Map<String, Map<String, ApiListing>> swaggerApiListings;
 
    @ApiIgnore
-   @RequestMapping(value = {"/api-docs"}, method = RequestMethod.GET)
+   @RequestMapping(value = {DOCUMENTATION_BASE_PATH}, method = RequestMethod.GET)
    public
    @ResponseBody
    ResponseEntity<ResourceListing> getResourceListingByKey() {
@@ -40,7 +41,7 @@ public class DefaultSwaggerController {
    }
 
    @ApiIgnore
-   @RequestMapping(value = {"/api-docs/{resourceKey}"}, method = RequestMethod.GET)
+   @RequestMapping(value = {DOCUMENTATION_BASE_PATH + "/{resourceKey}"}, method = RequestMethod.GET)
    public
    @ResponseBody
    ResponseEntity<ResourceListing> getResourceListing(@PathVariable String resourceKey) {
@@ -48,7 +49,7 @@ public class DefaultSwaggerController {
    }
 
    @ApiIgnore
-   @RequestMapping(value = {"/api-docs/{resourceKey}/{resource}"}, method = RequestMethod.GET)
+   @RequestMapping(value = {DOCUMENTATION_BASE_PATH + "/{resourceKey}/{resource}"}, method = RequestMethod.GET)
    public
    @ResponseBody
    ResponseEntity<ApiListing> getApiListing(@PathVariable String resourceKey, @PathVariable String resource) {

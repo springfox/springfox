@@ -15,7 +15,7 @@ public class DefaultControllerResourceGroupingStrategy implements ControllerReso
    private final String endpointSuffix;
 
    public DefaultControllerResourceGroupingStrategy() {
-      relativeEndpointPrefix = "";
+      relativeEndpointPrefix = "/";
       endpointSuffix = "";
    }
 

@@ -2,6 +2,7 @@ package com.mangofactory.swagger.configuration
 
 import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
+import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.ApiInfo
@@ -11,8 +12,8 @@ import com.wordnik.swagger.model.ResourceListing
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.ScalaUtils.fromScalaList
 import static com.mangofactory.swagger.ScalaUtils.fromOption
+import static com.mangofactory.swagger.ScalaUtils.fromScalaList
 
 @Mixin(com.mangofactory.swagger.mixins.RequestMappingSupport)
 class SwaggerApiResourceListingSpec extends Specification {
@@ -72,6 +73,9 @@ class SwaggerApiResourceListingSpec extends Specification {
    def "resource with mocked apis"() {
     given:
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
+      DefaultSwaggerPathProvider swaggerPathProvider = Stub()
+
+      swaggerApiResourceListing.setSwaggerPathProvider(swaggerPathProvider)
 
       Map handlerMethods = [(requestMappingInfo("/somePath")): dummyHandlerMethod()]
       def requestHandlerMapping = Mock(RequestMappingHandlerMapping)

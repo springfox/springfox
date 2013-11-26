@@ -44,10 +44,6 @@ public class ApiListingReferenceScanner {
 
    @Getter
    @Setter
-   private String pathSuffix = "";
-
-   @Getter
-   @Setter
    private List<Class<? extends Annotation>> excludeAnnotations;
 
    @Getter
@@ -93,7 +89,7 @@ public class ApiListingReferenceScanner {
 
       int groupPosition = 0;
       for (String group : resourceGroupRequestMappings.keySet()) {
-         String path = String.format("/%s/%s%s", this.resourceGroup, group, this.pathSuffix);
+         String path = String.format("/%s/%s", this.resourceGroup, group);
          log.info(
                String.format(
                      "Create resource listing Path: %s Description: %s Psosition: %s", path, group,

@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.readers
 
-import com.mangofactory.swagger.core.ControllerResourceGroupingStrategy
 import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -34,10 +33,10 @@ class ApiDescriptionReaderSpec extends Specification {
       ApiDescription apiDescription = descriptionList[0]
       ApiDescription secondApiDescription = descriptionList[1]
 
-      apiDescription.path() == 'somePath/(businessId)'
+      apiDescription.path() == '/somePath/(businessId)'
       fromOption(apiDescription.description()) == dummyHandlerMethod().method.name
 
-      secondApiDescription.path() == 'somePath/(businessId)'
+      secondApiDescription.path() == '/somePath/(businessId)'
       fromOption(secondApiDescription.description()) == dummyHandlerMethod().method.name
    }
 

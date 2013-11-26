@@ -34,13 +34,14 @@ public class SwaggerApiResourceListing {
    private List<AuthorizationType> authorizationTypes;
    @Getter
    @Setter
-   private String resourceListingPath = "/api-docs";
+   private ApiListingReferenceScanner apiListingReferenceScanner;
 
    @Getter
    @Setter
-   private ApiListingReferenceScanner apiListingReferenceScanner;
+   private DefaultSwaggerPathProvider swaggerPathProvider;
 
    public SwaggerApiResourceListing() {
+
    }
 
    @PostConstruct
@@ -49,18 +50,25 @@ public class SwaggerApiResourceListing {
       if (null != apiListingReferenceScanner) {
          apiListingReferenceScanner.scan();
          apiListingReferences = apiListingReferenceScanner.getApiListingReferences();
-         Map<String,List<RequestMappingContext>> resourceGroupRequestMappings = apiListingReferenceScanner
-               .getResourceGroupRequestMappings();
 
-         ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings,
-                                                                     apiListingReferenceScanner.getResourceGroup());
+         Map<String, List<RequestMappingContext>> resourceGroupRequestMappings =
+               apiListingReferenceScanner.getResourceGroupRequestMappings();
+
+         ApiListingScanner apiListingScanner = new ApiListingScanner(
+               resourceGroupRequestMappings, apiListingReferenceScanner.getResourceGroup(), swaggerPathProvider);
+
          swaggerApiListings = apiListingScanner.scan();
 
-      } else{
+      } else {
          log.error("ApiListingReferenceScanner not configured");
       }
-      this.resourceListing = new ResourceListing("1", SwaggerSpec.version(), toScalaList(apiListingReferences),
-                                                 toScalaList(authorizationTypes), toOption(apiInfo));
+      this.resourceListing = new ResourceListing(
+            "1",
+            SwaggerSpec.version(),
+            toScalaList(apiListingReferences),
+            toScalaList(authorizationTypes),
+            toOption(apiInfo)
+      );
 
    }
 

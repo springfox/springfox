@@ -2,6 +2,7 @@ package com.mangofactory.swagger.scanners
 
 import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
 import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.ApiDescription
 import com.wordnik.swagger.model.ApiListing
@@ -14,7 +15,7 @@ import static com.mangofactory.swagger.ScalaUtils.fromScalaList
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
 
-@Mixin(RequestMappingSupport)
+@Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
 class ApiListingScannerSpec extends Specification {
 
    @Shared DefaultControllerResourceGroupingStrategy controllerNamingStrategy = new DefaultControllerResourceGroupingStrategy()
@@ -31,7 +32,7 @@ class ApiListingScannerSpec extends Specification {
 
       RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod())
       Map resourceGroupRequestMappings = [ 'businesses' : [requestMappingContext]]
-      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, "default")
+      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, "default", swaggerPathProvider())
 
     when:
       Map<String, ApiListing> apiListingMap = scanner.scan()
@@ -41,13 +42,13 @@ class ApiListingScannerSpec extends Specification {
       ApiListing listing = apiListingMap['businesses']
       listing.swaggerVersion() == SwaggerSpec.version()
       listing.apiVersion() == "1.0"
-      listing.basePath() == ""
-      listing.resourcePath() == "/default/businesses"
+      listing.basePath() == "http://127.0.0.1:8080/context-path"
+      listing.resourcePath() == "/api/v1/businesses"
       listing.position() == 0
       fromScalaList(listing.consumes()) == [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
       fromScalaList(listing.produces()) == [APPLICATION_JSON_VALUE]
       ApiDescription apiDescription = fromScalaList(listing.apis())[0]
-      apiDescription.path() == 'businesses'
+      apiDescription.path() == '/businesses'
       fromOption(apiDescription.description()) == dummyHandlerMethod().getMethod().getName()
 
    }

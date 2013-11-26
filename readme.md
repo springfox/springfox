@@ -37,7 +37,7 @@ local nexus >  mvn deploy
 ```
 mvn org.jacoco:jacoco-maven-plugin:0.6.3.201306030806:check
 
-jacoco.skip=true
+-Djacoco.skip=true
 ```
 
 License

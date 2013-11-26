@@ -20,7 +20,6 @@ class ApiListingReferenceScannerSpec extends Specification {
     where:
       method                         | value
       'resourceGroup'                | 's'
-      'pathSuffix'                   | 'd'
       'controllerNamingStrategy'     | new DefaultControllerResourceGroupingStrategy()
       'requestMappingHandlerMapping' | []
       'excludeAnnotations'           | []

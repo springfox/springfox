@@ -3,6 +3,7 @@ package com.mangofactory.swagger.scanners;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.core.ControllerResourceGroupingStrategy;
 import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy;
+import com.mangofactory.swagger.core.DefaultSwaggerPathProvider;
 import com.mangofactory.swagger.readers.ApiDescriptionReader;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.MediaTypeReader;
@@ -23,8 +24,8 @@ public class ApiListingScanner {
    private final String resourceGroup;
    private String apiVersion = "1.0";
    private String swaggerVersion = SwaggerSpec.version();
-   private String basePath = "";
    private Map<String, List<RequestMappingContext>>  resourceGroupRequestMappings;
+   private DefaultSwaggerPathProvider swaggerPathProvider;
 
    @Getter
    @Setter
@@ -35,9 +36,10 @@ public class ApiListingScanner {
    private ControllerResourceGroupingStrategy controllerNamingStrategy;
 
    public ApiListingScanner(Map<String, List<RequestMappingContext>> resourceGroupRequestMappings,
-         String resourceGroup) {
+         String resourceGroup, DefaultSwaggerPathProvider swaggerPathProvider) {
       this.resourceGroupRequestMappings = resourceGroupRequestMappings;
       this.resourceGroup = resourceGroup;
+      this.swaggerPathProvider = swaggerPathProvider;
    }
 
    public Map<String, ApiListing> scan() {
@@ -74,11 +76,11 @@ public class ApiListingScanner {
             apiDescriptions.addAll(apiDescriptionList);
          }
 
-         String resourcePath = String.format("/%s/%s", resourceGroup, controllerGroupName);
+            String resourcePath = String.format("%s%s", swaggerPathProvider.getApiResourcePrefix(),  controllerGroupName);
          ApiListing apiListing = new ApiListing(
                apiVersion,
                swaggerVersion,
-               basePath,
+               swaggerPathProvider.getAppBasePath(),
                resourcePath,
                toScalaList(produces),
                toScalaList(consumes),
