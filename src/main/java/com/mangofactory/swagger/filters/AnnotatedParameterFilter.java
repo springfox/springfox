@@ -40,7 +40,7 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
 
         ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
         if (apiParam == null) {
-            LOG.warn(format("%s is missing @ApiParam annotation - so generating default documentation",
+            LOG.debug(format("%s is missing @ApiParam annotation - so generating default documentation",
                     methodParameter.getMethod()));
             return;
         }
