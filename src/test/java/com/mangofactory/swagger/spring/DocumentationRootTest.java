@@ -2,7 +2,6 @@ package com.mangofactory.swagger.spring;
 
 import com.mangofactory.swagger.spring.controller.DocumentationController;
 import com.mangofactory.swagger.spring.test.TestConfiguration;
-import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,8 +15,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsEqual.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,22 +43,19 @@ public class DocumentationRootTest {
     }
 
     @Test
-    @SneakyThrows
-    public void testDocumentationEndpointServesOk() {
+    public void testDocumentationEndpointServesOk() throws Exception {
         mockMvc.perform(builder)
                 .andExpect(status().isOk());
     }
 
     @Test
-    @SneakyThrows
-    public void testResourcePathNotListed() {
+    public void testResourcePathNotListed() throws Exception {
         mockMvc.perform(builder)
                 .andExpect(jsonPath("$.resourcePath").doesNotExist());
     }
 
     @Test
-    @SneakyThrows
-    public void testApisContainCorrectApiList() {
+    public void testApisContainCorrectApiList() throws Exception {
         mockMvc.perform(builder)
                 .andExpect(jsonPath("$.apiVersion").exists())
                 .andExpect(jsonPath("$.apis").isArray());
@@ -95,29 +90,25 @@ public class DocumentationRootTest {
 //    }
 
     @Test
-    @SneakyThrows
-    public void testApiVersionReturnedCorrectly() {
+    public void testApiVersionReturnedCorrectly() throws Exception {
         mockMvc.perform(builder)
                 .andExpect(jsonPath("$.apiVersion").value(equalTo("2.0")));
     }
 
     @Test
-    @SneakyThrows
-    public void testSwaggerVersionReturnedCorrectly() {
+    public void testSwaggerVersionReturnedCorrectly() throws Exception {
         mockMvc.perform(builder)
                 .andExpect(jsonPath("$.swaggerVersion").value(equalTo("1.0")));
     }
 
     @Test
-    @SneakyThrows
-    public void testBasePathReturnedCorrectly() {
+    public void testBasePathReturnedCorrectly() throws Exception {
         mockMvc.perform(builder)
                 .andExpect(jsonPath("$.basePath").value(equalTo("/some-path")));
     }
 
     @Test
-    @SneakyThrows
-    public void shouldHaveCorrectPathForBusinessServiceController() {
+    public void shouldHaveCorrectPathForBusinessServiceController() throws Exception {
         mockMvc.perform(builder)
                 .andExpect(jsonPath("$.apiVersion").exists())
                 .andExpect(jsonPath("$.apis[0].path").value(equalTo("/api-docs/business-service")))

@@ -8,14 +8,12 @@ import com.mangofactory.swagger.spring.controller.DocumentationController;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.method.HandlerMethod;
 
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.spring.UriExtractor.*;
 
 /**
@@ -23,15 +21,13 @@ import static com.mangofactory.swagger.spring.UriExtractor.*;
  *
  * @author martypitt
  */
-@Slf4j
 public class ControllerAdapter {
 
-    @Getter
     private final HandlerMethod handlerMethod;
+
     private final Class<?> controllerClass;
     private final SwaggerConfiguration configuration;
     private Documentation parent;
-
     public ControllerAdapter(Documentation parent, HandlerMethod handlerMethod, SwaggerConfiguration configuration) {
         this.parent = parent;
         this.handlerMethod = handlerMethod;
@@ -39,6 +35,10 @@ public class ControllerAdapter {
         // Workaround until SPR-9490 is fixed (see also issue #4 on github
         // Avoid NPE when handler.getBeanType() returns the CGLIB-generated class
         this.controllerClass = ClassUtils.getUserClass(this.handlerMethod.getBeanType());
+    }
+
+    public HandlerMethod getHandlerMethod() {
+        return handlerMethod;
     }
 
     public List<DocumentationEndPoint> describeAsDocumentationEndpoints() {

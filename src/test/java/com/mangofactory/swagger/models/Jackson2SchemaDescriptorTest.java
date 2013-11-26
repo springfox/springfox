@@ -5,12 +5,12 @@ import com.fasterxml.classmate.members.ResolvedField;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Predicate;
 import com.mangofactory.swagger.AliasedResolvedField;
-import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collection;
@@ -83,14 +83,12 @@ public class Jackson2SchemaDescriptorTest {
     }
 
     @Test
-    @SneakyThrows
     public void privateProperty() {
         ResolvedProperty property = resolvedProperty("privateProperty");
         assertNotNull(property);
     }
 
     @Test
-    @SneakyThrows
     public void publicField() {
         ResolvedField field = resolvedField("publicField").getResolvedField();
         assertNotNull(field);
@@ -98,50 +96,43 @@ public class Jackson2SchemaDescriptorTest {
 
 
     @Test
-    @SneakyThrows
     public void ignoredPublicField() {
         AliasedResolvedField field = resolvedField("ignoredPublicField");
         assertNull(field);
     }
 
     @Test
-    @SneakyThrows
     public void includedPrivateField() {
         ResolvedField field = resolvedField("includedPrivateField").getResolvedField();
         assertNotNull(field);
     }
 
     @Test
-    @SneakyThrows
     public void includedRenamedField() {
         ResolvedField field = resolvedField("otherName").getResolvedField();
         assertNotNull(field);
     }
 
     @Test
-    @SneakyThrows
     public void nonExistentField() {
         AliasedResolvedField field = resolvedField("nonExistentField");
         assertNull(field);
     }
 
     @Test
-    @SneakyThrows
     public void nonExistentProperty() {
         ResolvedProperty property = resolvedProperty("nonExistentProperty");
         assertNull(property);
     }
 
     @Test
-    @SneakyThrows
     public void jsonIgnoreProperties() {
         ResolvedProperty property = resolvedProperty("ignoreProperty1");
         assertNotNull(property);
     }
 
     @Test
-    @SneakyThrows
-    public void jsonIgnorePropertiesSerialization() {
+    public void jsonIgnorePropertiesSerialization() throws IOException {
         SerializationTest test = new SerializationTest();
         test.setIgnoreProperty1("ignored");
         ObjectMapper mapper = new ObjectMapper();

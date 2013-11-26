@@ -1,11 +1,10 @@
 package com.mangofactory.swagger.spring;
 
+import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.filters.Filter;
 import com.mangofactory.swagger.filters.FilterContext;
-import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.spring.filters.EndPointFilter;
 import com.wordnik.swagger.core.DocumentationEndPoint;
-import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -51,8 +50,7 @@ public class ControllerDocumentationFilterTest {
     }
 
     @Before
-    @SneakyThrows
-    public void setup() {
+    public void setup() throws NoSuchMethodException {
         noClassLevelRequestMappingController = new NoClassLevelRequestMappingController();
         Method noClassLevelRequestMappingMethod = noClassLevelRequestMappingController.getClass()
                 .getMethod("sampleMethod");

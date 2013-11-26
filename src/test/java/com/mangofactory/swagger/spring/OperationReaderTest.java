@@ -14,7 +14,6 @@ import com.wordnik.swagger.core.DocumentationOperation;
 import com.wordnik.swagger.core.DocumentationParameter;
 import com.wordnik.swagger.sample.exception.BadRequestException;
 import com.wordnik.swagger.sample.exception.NotFoundException;
-import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,8 +50,7 @@ public class OperationReaderTest {
     private ControllerDocumentation controllerDocumentation;
 
     @Before
-    @SneakyThrows
-    public void setup() {
+    public void setup() throws NoSuchMethodException {
         SampleClass instance = new SampleClass();
         Method method = instance.getClass().getMethod("sampleMethod", String.class, String.class, String.class,
                 String.class, String.class);
@@ -103,7 +101,7 @@ public class OperationReaderTest {
     }
 
     @Test
-    public void detectsErrorsUsingSwaggerDeclaration() {
+    public void detectsErrorsUsingSwaggerDeclaration() throws NoSuchMethodException {
         DocumentationOperation operation  = getExceptionMethod("exceptionMethodB");
         List<DocumentationError> errors = operation.getErrorResponses();
         assertThat(errors.size(), equalTo(2));
@@ -113,7 +111,7 @@ public class OperationReaderTest {
     }
 
     @Test
-    public void detectsErrorsUsingSpringMVCDeclaration() {
+    public void detectsErrorsUsingSpringMVCDeclaration() throws NoSuchMethodException {
         DocumentationOperation operation  = getExceptionMethod("exceptionMethodA");
         List<DocumentationError> errors = operation.getErrorResponses();
         assertThat(errors.size(), equalTo(2));
@@ -123,7 +121,7 @@ public class OperationReaderTest {
     }
 
     @Test
-    public void detectsErrorsUsingThrowsDeclaration() {
+    public void detectsErrorsUsingThrowsDeclaration() throws NoSuchMethodException {
         DocumentationOperation operation  = getExceptionMethod("exceptionMethodC");
         List<DocumentationError> errors = operation.getErrorResponses();
         assertThat(errors.size(), equalTo(1));
@@ -133,7 +131,7 @@ public class OperationReaderTest {
     }
 
     @Test
-    public void detectsApiErrorsDeclaredWithSpringMvcApiErrorList() {
+    public void detectsApiErrorsDeclaredWithSpringMvcApiErrorList() throws NoSuchMethodException {
         DocumentationOperation operation  = getExceptionMethod("exceptionMethodD");
         List<DocumentationError> errors = operation.getErrorResponses();
         assertThat(errors.size(), equalTo(2));
@@ -198,8 +196,7 @@ public class OperationReaderTest {
     }
 
     /// TEST SUPPORT
-    @SneakyThrows
-    private DocumentationOperation getExceptionMethod(String methodName) {
+    private DocumentationOperation getExceptionMethod(String methodName) throws NoSuchMethodException {
         SampleClass instance = new SampleClass();
         Method method = instance.getClass().getMethod(methodName);
         handlerMethod = new HandlerMethod(instance, method);

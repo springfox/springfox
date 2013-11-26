@@ -1,9 +1,7 @@
 package com.mangofactory.swagger.spring;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import lombok.SneakyThrows;
-
+import com.mangofactory.swagger.spring.controller.DocumentationController;
+import com.mangofactory.swagger.spring.test.TestConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,8 +16,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.mangofactory.swagger.spring.controller.DocumentationController;
-import com.mangofactory.swagger.spring.test.TestConfiguration;
+import static org.hamcrest.CoreMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 /**
  * Test that exercises the documentation
  * APIs for a class that inherits its {@link RequestMapping}s from an interface.
@@ -41,8 +39,7 @@ public class JsonResourceListingInheritanceTests {
     }
 
     @Test
-    @SneakyThrows
-    public void testInheritedService() {
+    public void testInheritedService() throws Exception {
         mockMvc.perform(builder)
                 .andExpect(jsonPath("$.apis[0].path").value(equalTo("/api-docs/business-service")));
     }

@@ -1,20 +1,21 @@
 package com.mangofactory.swagger.spring;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.mangofactory.swagger.spring.Descriptions.splitCamelCase;
-
-import java.lang.reflect.AnnotatedElement;
-import java.util.List;
-
-import lombok.extern.slf4j.Slf4j;
-
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
 
-@Slf4j
+import java.lang.reflect.AnnotatedElement;
+import java.util.List;
+
+import static com.google.common.base.Strings.*;
+import static com.google.common.collect.Lists.*;
+import static com.mangofactory.swagger.spring.Descriptions.*;
+import static java.lang.String.*;
+
 public class UriExtractor {
+    private static final Logger LOG = LogManager.getLogger(UriExtractor.class);
 
     public static List<String> controllerUris(Class<?> controllerClass) {
         List<String> controllerUris = newArrayList();
@@ -28,7 +29,7 @@ public class UriExtractor {
                 classLevelUri = "/" + defaultUri;
             }
             if (!classLevelUri.startsWith("/")) {
-                classLevelUri = String.format("/%s", classLevelUri);
+                classLevelUri = format("/%s", classLevelUri);
             }
             UriBuilder builder = new UriBuilder();
             maybeAppendPath(builder, classLevelUri);
@@ -45,7 +46,7 @@ public class UriExtractor {
         List<String> methodLevelUris = newArrayList();
         for(String classLevelUri: classLevelUris) {
             if (!classLevelUri.startsWith("/")) {
-                classLevelUri = String.format("/%s", classLevelUri);
+                classLevelUri = format("/%s", classLevelUri);
             }
             UriBuilder builder = new UriBuilder();
             maybeAppendPath(builder, classLevelUri);
@@ -73,12 +74,12 @@ public class UriExtractor {
 
     protected static List<String> resolveRequestUri(Class clazz, RequestMapping requestMapping) {
         if (requestMapping == null) {
-            log.debug("Class {} has no @RequestMapping", clazz);
+            LOG.debug(format("Class %s has no @RequestMapping", clazz));
             return newArrayList();
         }
         String[] requestUris = requestMapping.value();
         if (requestUris == null || requestUris.length == 0) {
-            log.warn("Class {} contains a @RequestMapping, but could not resolve the uri", clazz);
+            LOG.warn(format("Class %s contains a @RequestMapping, but could not resolve the uri", clazz));
             return newArrayList();
         }
         return newArrayList(requestUris);

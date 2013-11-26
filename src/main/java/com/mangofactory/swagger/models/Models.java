@@ -5,14 +5,12 @@ import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.google.common.base.Function;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.wordnik.swagger.core.DocumentationSchema;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.Map;
 
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
-@Slf4j
 public class Models {
     public static class Fn {
         private Fn() {

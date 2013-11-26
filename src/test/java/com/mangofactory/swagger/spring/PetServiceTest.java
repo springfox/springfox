@@ -2,9 +2,6 @@ package com.mangofactory.swagger.spring;
 
 import com.mangofactory.swagger.spring.controller.DocumentationController;
 import com.mangofactory.swagger.spring.test.TestConfiguration;
-import lombok.SneakyThrows;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,15 +32,13 @@ public class PetServiceTest {
     }
 
     @Test
-    @SneakyThrows
-    public void testDocumentationEndpointServesOk() {
+    public void testDocumentationEndpointServesOk() throws Exception {
         mockMvc.perform(builder)
                 .andExpect(status().isOk());
     }
 
     @Test
-    @SneakyThrows
-    public void getResult() {
+    public void getResult() throws Exception {
         MvcResult result = mockMvc.perform(builder).andReturn();
         String json = result.getResponse().getContentAsString();
         System.out.print(json);

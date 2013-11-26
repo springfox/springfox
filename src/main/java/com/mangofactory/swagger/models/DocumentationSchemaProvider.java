@@ -3,13 +3,11 @@ package com.mangofactory.swagger.models;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordnik.swagger.core.DocumentationSchema;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Slf4j
 @Component
 public class DocumentationSchemaProvider {
 

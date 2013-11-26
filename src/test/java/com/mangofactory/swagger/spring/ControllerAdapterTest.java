@@ -5,8 +5,6 @@ import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.annotations.ApiInclude;
 import com.wordnik.swagger.core.Documentation;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,25 +18,177 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import static com.google.common.collect.Iterables.getFirst;
+import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.spring.UriExtractor.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-@Slf4j
-public class ControllerAdapterTest
-{
+public class ControllerAdapterTest {
 
-	class SampleController
-	{
-		@RequestMapping( value = "/no-classlevel-requestmapping", method = RequestMethod.GET )
-		public void sampleMethod()
-		{
+    @Test
+    public void sometest() {
+        Map<ExampleKey, ExampleValue> toSerialize = newHashMap();
+        toSerialize.put(new ExampleKey(1), new ExampleValue(1));
+        toSerialize.put(new ExampleKey(2), new ExampleValue(2));
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            StringWriter writer = new StringWriter();
+            mapper.writeValue(writer, toSerialize);
+            writer.flush();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 
-		}
-	}
+    @Test
+    public void sometest2() {
+        Map<Integer, ExampleValue> toSerialize = newHashMap();
+        toSerialize.put(1, new ExampleValue(1));
+        toSerialize.put(2, new ExampleValue(2));
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            StringWriter writer = new StringWriter();
+            mapper.writeValue(writer, toSerialize);
+            writer.flush();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void sometest3() {
+        Map<String, Object> toSerialize = newHashMap();
+        toSerialize.put("1", new ExampleValue(1));
+        toSerialize.put("2", new ExampleValue(2));
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            StringWriter writer = new StringWriter();
+            mapper.writeValue(writer, toSerialize);
+            writer.flush();
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void sometest4() {
+        Map<String, Object> toSerialize = newHashMap();
+        toSerialize.put("1", new ExampleValue(1));
+        toSerialize.put("2", new ExampleValue(2));
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            StringWriter writer = new StringWriter();
+            mapper.writeValue(writer, toSerialize.entrySet());
+            writer.flush();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void assertHandleNoClassLevelRequestMapping() throws NoSuchMethodException {
+        SampleController sampleController = new SampleController();
+        Method sampleMethod = sampleController.getClass().getMethod("sampleMethod");
+        HandlerMethod handlerMethod = new HandlerMethod(sampleController, sampleMethod);
+
+        String methodLevelUri = getFirst(methodUris(sampleController.getClass(), handlerMethod), null);
+
+        assertThat(methodLevelUri, is(notNullValue()));
+        assertThat(methodLevelUri, is(equalTo("/no-classlevel-requestmapping")));
+
+        String classLevelUri = getFirst(controllerUris(sampleController.getClass()), null);
+
+        assertThat(classLevelUri, is(notNullValue()));
+        assertThat(classLevelUri, is(equalTo("/sample-controller")));
+
+    }
+
+    @Test
+    public void assertThatExampleServiceWorksAsExpected() throws NoSuchMethodException {
+        ExampleServiceController controller = new ExampleServiceController();
+        Method sampleMethod = controller.getClass().getMethod("getEffective", UriComponentsBuilder.class);
+        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
+
+        String classLevelUri = getFirst(controllerUris(controller.getClass()), null);
+        String methodLevelUri = getFirst(methodUris(controller.getClass(), handlerMethod), null);
+
+        assertThat(classLevelUri, is(notNullValue()));
+        assertThat(classLevelUri, is(equalTo("/api/examples")));
+
+        assertThat(methodLevelUri, is(notNullValue()));
+        assertThat(methodLevelUri, is(equalTo("/api/examples/effective")));
+    }
+
+    @Test
+    public void doesNotSkipDocumentationWhenIncludeAnnotationIsAddedToAMethodOfAnExcludedController()
+            throws NoSuchMethodException {
+        ExampleServiceController controller = new ExampleServiceController();
+        Method sampleMethod = controller.getClass().getMethod("included", UriComponentsBuilder.class);
+        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
+        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
+        config.getExcludedResources().addAll(newArrayList(controllerUris(controller.getClass())));
+
+        ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
+        assertFalse(adapter.shouldSkipDocumentation());
+
+    }
+
+    @Test
+    public void doesNotSkipDocumentationWhenIncludeAnnotationIsAdded() throws NoSuchMethodException {
+        ExampleServiceController controller = new ExampleServiceController();
+        Method sampleMethod = controller.getClass().getMethod("included", UriComponentsBuilder.class);
+        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
+        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
+
+        ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
+        assertFalse(adapter.shouldSkipDocumentation());
+    }
+
+    @Test
+    public void skipsDocumentationWhenIgnoreAnnotationIsAddedToAMethodOfAnExcludedController()
+            throws NoSuchMethodException {
+        ExampleServiceController controller = new ExampleServiceController();
+        Method sampleMethod = controller.getClass().getMethod("ignored", UriComponentsBuilder.class);
+        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
+        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
+        config.getExcludedResources().addAll(newArrayList(controllerUris(controller.getClass())));
+
+        ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
+        assertTrue(adapter.shouldSkipDocumentation());
+    }
+
+    @Test
+    public void skipsDocumentationWhenNoAnnotationIsAddedToAMethodOfAnExcludedController()
+            throws NoSuchMethodException {
+        ExampleServiceController controller = new ExampleServiceController();
+        Method sampleMethod = controller.getClass().getMethod("getEffective", UriComponentsBuilder.class);
+        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
+        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
+        config.getExcludedResources().addAll(newArrayList(controllerUris(controller.getClass())));
+
+        ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
+        assertTrue(adapter.shouldSkipDocumentation());
+    }
+
+    @Test
+    public void skipsDocumentationWhenIgnoreAnnotationIsAddedToAMethod() throws NoSuchMethodException {
+        ExampleServiceController controller = new ExampleServiceController();
+        Method sampleMethod = controller.getClass().getMethod("ignored", UriComponentsBuilder.class);
+        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
+        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
+        ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
+        assertTrue(adapter.shouldSkipDocumentation());
+    }
+
+    class SampleController {
+        @RequestMapping(value = "/no-classlevel-requestmapping", method = RequestMethod.GET)
+        public void sampleMethod() {
+
+        }
+    }
 
     class Example {
 
@@ -46,15 +196,15 @@ public class ControllerAdapterTest
 
     class ExampleKey {
 
-        int getI() {
-            return i;
-        }
-
         private final int i;
 
         public ExampleKey(int i) {
 
             this.i = i;
+        }
+
+        int getI() {
+            return i;
         }
 
         @Override
@@ -139,80 +289,6 @@ public class ControllerAdapterTest
         }
     }
 
-
-    @Test
-    @SneakyThrows
-    public void sometest() {
-        Map<ExampleKey, ExampleValue> toSerialize =  newHashMap();
-        toSerialize.put(new ExampleKey(1), new ExampleValue(1));
-        toSerialize.put(new ExampleKey(2), new ExampleValue(2));
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            StringWriter writer = new StringWriter();
-            mapper.writeValue(writer, toSerialize);
-            writer.flush();
-            ControllerAdapterTest.log.info(writer.toString());
-
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Test
-    @SneakyThrows
-    public void sometest2() {
-        Map<Integer, ExampleValue> toSerialize =  newHashMap();
-        toSerialize.put(1, new ExampleValue(1));
-        toSerialize.put(2, new ExampleValue(2));
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            StringWriter writer = new StringWriter();
-            mapper.writeValue(writer, toSerialize);
-            writer.flush();
-            ControllerAdapterTest.log.info(writer.toString());
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Test
-    @SneakyThrows
-    public void sometest3() {
-        Map<String, Object> toSerialize =  newHashMap();
-        toSerialize.put("1", new ExampleValue(1));
-        toSerialize.put("2", new ExampleValue(2));
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            StringWriter writer = new StringWriter();
-            mapper.writeValue(writer, toSerialize);
-            writer.flush();
-            ControllerAdapterTest.log.info(writer.toString());
-
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    @SneakyThrows
-    public void sometest4() {
-        Map<String, Object> toSerialize =  newHashMap();
-        toSerialize.put("1", new ExampleValue(1));
-        toSerialize.put("2", new ExampleValue(2));
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            StringWriter writer = new StringWriter();
-            mapper.writeValue(writer, toSerialize.entrySet());
-            writer.flush();
-            ControllerAdapterTest.log.info(writer.toString());
-
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
     @Controller
     @RequestMapping("api/examples")
     public class ExampleServiceController {
@@ -239,109 +315,6 @@ public class ControllerAdapterTest
             return null;
         }
 
-    }
-
-	@Test
-	@SneakyThrows
-	public void assertHandleNoClassLevelRequestMapping()
-	{
-		SampleController sampleController = new SampleController();
-		Method sampleMethod = sampleController.getClass().getMethod("sampleMethod");
-		HandlerMethod handlerMethod = new HandlerMethod(sampleController, sampleMethod);
-
-        String methodLevelUri = getFirst(methodUris(sampleController.getClass(), handlerMethod), null);
-
-		assertThat(methodLevelUri, is(notNullValue()));
-        assertThat(methodLevelUri, is(equalTo("/no-classlevel-requestmapping")));
-
-        String classLevelUri = getFirst(controllerUris(sampleController.getClass()), null);
-
-        assertThat(classLevelUri, is(notNullValue()));
-        assertThat(classLevelUri, is(equalTo("/sample-controller")));
-
-	}
-
-    @Test
-    @SneakyThrows
-    public void assertThatExampleServiceWorksAsExpected()
-    {
-        ExampleServiceController controller = new ExampleServiceController();
-        Method sampleMethod = controller.getClass().getMethod("getEffective", UriComponentsBuilder.class);
-        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
-
-        String classLevelUri = getFirst(controllerUris(controller.getClass()), null);
-        String methodLevelUri = getFirst(methodUris(controller.getClass(), handlerMethod), null);
-
-        assertThat(classLevelUri, is(notNullValue()));
-        assertThat(classLevelUri, is(equalTo("/api/examples")));
-
-        assertThat(methodLevelUri, is(notNullValue()));
-        assertThat(methodLevelUri, is(equalTo("/api/examples/effective")));
-    }
-
-
-    @Test
-    @SneakyThrows
-    public void doesNotSkipDocumentationWhenIncludeAnnotationIsAddedToAMethodOfAnExcludedController() {
-        ExampleServiceController controller = new ExampleServiceController();
-        Method sampleMethod = controller.getClass().getMethod("included", UriComponentsBuilder.class);
-        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
-        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
-        config.getExcludedResources().addAll(newArrayList(controllerUris(controller.getClass())));
-
-        ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
-        assertFalse(adapter.shouldSkipDocumentation());
-
-    }
-
-    @Test
-    @SneakyThrows
-    public void doesNotSkipDocumentationWhenIncludeAnnotationIsAdded() {
-        ExampleServiceController controller = new ExampleServiceController();
-        Method sampleMethod = controller.getClass().getMethod("included", UriComponentsBuilder.class);
-        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
-        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
-
-        ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
-        assertFalse(adapter.shouldSkipDocumentation());
-    }
-
-    @Test
-    @SneakyThrows
-    public void skipsDocumentationWhenIgnoreAnnotationIsAddedToAMethodOfAnExcludedController() {
-        ExampleServiceController controller = new ExampleServiceController();
-        Method sampleMethod = controller.getClass().getMethod("ignored", UriComponentsBuilder.class);
-        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
-        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
-        config.getExcludedResources().addAll(newArrayList(controllerUris(controller.getClass())));
-
-        ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
-        assertTrue(adapter.shouldSkipDocumentation());
-    }
-
-    @Test
-    @SneakyThrows
-    public void skipsDocumentationWhenNoAnnotationIsAddedToAMethodOfAnExcludedController() {
-        ExampleServiceController controller = new ExampleServiceController();
-        Method sampleMethod = controller.getClass().getMethod("getEffective", UriComponentsBuilder.class);
-        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
-        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
-        config.getExcludedResources().addAll(newArrayList(controllerUris(controller.getClass())));
-
-        ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
-        assertTrue(adapter.shouldSkipDocumentation());
-    }
-
-
-    @Test
-    @SneakyThrows
-    public void skipsDocumentationWhenIgnoreAnnotationIsAddedToAMethod() {
-        ExampleServiceController controller = new ExampleServiceController();
-        Method sampleMethod = controller.getClass().getMethod("ignored", UriComponentsBuilder.class);
-        HandlerMethod handlerMethod = new HandlerMethod(controller, sampleMethod);
-        SwaggerConfiguration config = new SwaggerConfiguration("2.0", "/some-path");
-        ControllerAdapter adapter = new ControllerAdapter(new Documentation(), handlerMethod, config);
-        assertTrue(adapter.shouldSkipDocumentation());
     }
 
 }

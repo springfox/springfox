@@ -4,8 +4,8 @@ import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
@@ -19,12 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.spring.DocumentationEndPoints.*;
 
-@Slf4j
 public class DocumentationReader {
+    private static final Logger LOG = LogManager.getLogger(DocumentationReader.class);
 
     private static final List<RequestMethod> allRequestMethods =
             Arrays.asList(RequestMethod.GET, RequestMethod.DELETE, RequestMethod.POST, RequestMethod.PUT);
@@ -36,10 +36,10 @@ public class DocumentationReader {
     private final OperationReader operationReader;
     private final WebApplicationContext context;
     private boolean isMappingBuilt = false;
-    @Getter
-    private List<RequestMappingHandlerMapping> handlerMappings;
-    private Documentation documentation;
 
+    private List<RequestMappingHandlerMapping> handlerMappings;
+
+    private Documentation documentation;
     public DocumentationReader(SwaggerConfiguration swaggerConfiguration, WebApplicationContext context,
                                List<RequestMappingHandlerMapping> handlerMappings) {
 
@@ -48,6 +48,10 @@ public class DocumentationReader {
         this.handlerMappings = handlerMappings;
         endpointReader = new EndpointReader(configuration);
         operationReader = new OperationReader(configuration);
+    }
+
+    public List<RequestMappingHandlerMapping> getHandlerMappings() {
+        return handlerMappings;
     }
 
     private synchronized void buildMappingDocuments(WebApplicationContext context) {
@@ -161,7 +165,7 @@ public class DocumentationReader {
                 return documentation;
             }
         }
-        DocumentationReader.log.error("Could not find a matching resource for api with name '" + apiName + "'");
+        LOG.error("Could not find a matching resource for api with name '" + apiName + "'");
         return null;
     }
 

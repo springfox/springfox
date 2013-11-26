@@ -6,14 +6,12 @@ import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.filters.Filter;
 import com.mangofactory.swagger.filters.FilterContext;
 import com.wordnik.swagger.core.DocumentationOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 
 import static com.mangofactory.swagger.models.Models.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 import static com.mangofactory.swagger.spring.Descriptions.*;
 
-@Slf4j
 public class OperationFilter implements Filter<DocumentationOperation> {
     @Override
     public void apply(FilterContext<DocumentationOperation> context) {

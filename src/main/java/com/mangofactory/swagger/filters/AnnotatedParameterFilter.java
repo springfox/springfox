@@ -10,20 +10,21 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.core.DocumentationAllowableListValues;
 import com.wordnik.swagger.core.DocumentationAllowableValues;
 import com.wordnik.swagger.core.DocumentationParameter;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.core.MethodParameter;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.google.common.base.Strings.*;
 import static com.mangofactory.swagger.annotations.Annotations.*;
-import static com.mangofactory.swagger.filters.AnnotatedParameterFilter.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
+import static java.lang.String.*;
 
-@Slf4j
 public class AnnotatedParameterFilter implements Filter<DocumentationParameter> {
+    private static final Logger LOG = LogManager.getLogger(AnnotatedParameterFilter.class);
     @Override
     public void apply(FilterContext<DocumentationParameter> context) {
         DocumentationParameter parameter = context.subject();
@@ -39,11 +40,11 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
 
         ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
         if (apiParam == null) {
-            log.warn("{} is missing @ApiParam annotation - so generating default documentation",
-                    methodParameter.getMethod());
+            LOG.warn(format("%s is missing @ApiParam annotation - so generating default documentation",
+                    methodParameter.getMethod()));
             return;
         }
-        val allowableValues = convertToAllowableValues(apiParam.allowableValues());
+        DocumentationAllowableValues allowableValues = convertToAllowableValues(apiParam.allowableValues());
         String description = apiParam.value();
         boolean isRequired = apiParam.required();
 
@@ -67,7 +68,7 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
                 String simpleName = modelName(apiModelAsResolvedType);
                 controllerDocumentation.putModel(simpleName, new Model(simpleName, apiModelAsResolvedType));
             } else {
-                log.warn("Api Model override does not match the resolved type");
+                LOG.warn("Api Model override does not match the resolved type");
             }
         }
 
@@ -84,17 +85,17 @@ public class AnnotatedParameterFilter implements Filter<DocumentationParameter> 
 
     protected DocumentationAllowableValues convertToAllowableValues(String csvString) {
         if (csvString.toLowerCase().startsWith("range[")) {
-            val ranges = csvString.substring(6, csvString.length() - 1).split(",");
+            String[] ranges = csvString.substring(6, csvString.length() - 1).split(",");
             return AllowableRangesParser.buildAllowableRangeValues(ranges, csvString);
         } else if (csvString.toLowerCase().startsWith("rangeexclusive[")) {
-            val ranges = csvString.substring(15, csvString.length() - 1).split(",");
+            String[] ranges = csvString.substring(15, csvString.length() - 1).split(",");
             return AllowableRangesParser.buildAllowableRangeValues(ranges, csvString);
         }
         // else..
         if (csvString == null || csvString.length() == 0) {
             return null;
         }
-        val params = Arrays.asList(csvString.split(","));
+        List<String> params = Arrays.asList(csvString.split(","));
         return new DocumentationAllowableListValues(params);
     }
 }

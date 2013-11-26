@@ -12,8 +12,6 @@ import com.wordnik.swagger.core.DocumentationEndPoint;
 import com.wordnik.swagger.core.DocumentationError;
 import com.wordnik.swagger.core.DocumentationOperation;
 import com.wordnik.swagger.core.DocumentationParameter;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -30,23 +28,28 @@ public class SwaggerConfiguration {
     public static final String API_DOCS_PATH = "/api-docs";
     public static final String SWAGGER_VERSION = "1.0";
 
-    @Getter private final String documentationBasePath;
-    @Getter private final String swaggerVersion;
-    @Getter @Setter private String apiVersion;
-    @Getter @Setter private String basePath;
+    private final String documentationBasePath;
 
-    @Getter private List<String> excludedResources = newArrayList();
-    @Getter private final List<Filter<Documentation>> documentationFilters = newArrayList();
-    @Getter private final List<Filter<DocumentationEndPoint>> endpointFilters = newArrayList();
-    @Getter private final List<Filter<DocumentationOperation>> operationFilters = newArrayList();
-    @Getter private final List<Filter<DocumentationParameter>> parameterFilters = newArrayList();
-    @Getter private final List<Filter<List<DocumentationError>>> errorFilters = newArrayList();
-    @Getter private final List<TypeProcessingRule> typeProcessingRules = newArrayList();
+    private final String swaggerVersion;
 
-    @Autowired @Getter private DocumentationTransformer documentationTransformer;
+    private String apiVersion;
+    private String basePath;
+
+    private List<String> excludedResources = newArrayList();
+
+    private final List<Filter<Documentation>> documentationFilters = newArrayList();
+
+    private final List<Filter<DocumentationEndPoint>> endpointFilters = newArrayList();
+
+    private final List<Filter<DocumentationOperation>> operationFilters = newArrayList();
+
+    private final List<Filter<DocumentationParameter>> parameterFilters = newArrayList();
+    private final List<Filter<List<DocumentationError>>> errorFilters = newArrayList();
+    private final List<TypeProcessingRule> typeProcessingRules = newArrayList();
+    @Autowired private DocumentationTransformer documentationTransformer;
+
     @Autowired private DocumentationSchemaProvider schemaProvider;
     @Autowired private TypeResolver typeResolver;
-
     public SwaggerConfiguration(String apiVersion, String basePath) {
         this.swaggerVersion = SWAGGER_VERSION;
         this.documentationBasePath = API_DOCS_PATH;
@@ -114,6 +117,64 @@ public class SwaggerConfiguration {
             typeResolver = new TypeResolver();
         }
         return typeResolver;
+    }
+
+    public List<String> getExcludedResources() {
+        return excludedResources;
+    }
+
+    public String getDocumentationBasePath() {
+        return documentationBasePath;
+    }
+
+    public String getApiVersion() {
+        return apiVersion;
+    }
+
+    public void setApiVersion(String apiVersion) {
+        this.apiVersion = apiVersion;
+    }
+
+    public DocumentationTransformer getDocumentationTransformer() {
+        return documentationTransformer;
+    }
+
+    public void setDocumentationTransformer(DocumentationTransformer documentationTransformer) {
+        this.documentationTransformer = documentationTransformer;
+    }
+
+    public String getSwaggerVersion() {
+        return swaggerVersion;
+    }
+    public String getBasePath() {
+        return basePath;
+    }
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
+    }
+
+    public List<Filter<Documentation>> getDocumentationFilters() {
+        return documentationFilters;
+    }
+
+    public List<Filter<DocumentationEndPoint>> getEndpointFilters() {
+        return endpointFilters;
+    }
+
+    public List<Filter<DocumentationOperation>> getOperationFilters() {
+        return operationFilters;
+    }
+
+    public List<Filter<DocumentationParameter>> getParameterFilters() {
+        return parameterFilters;
+    }
+
+    public List<Filter<List<DocumentationError>>> getErrorFilters() {
+        return errorFilters;
+    }
+
+    public List<TypeProcessingRule> getTypeProcessingRules() {
+        return typeProcessingRules;
     }
 
     static class DefaultProcessingRule implements TypeProcessingRule {

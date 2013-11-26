@@ -9,15 +9,17 @@ import com.mangofactory.swagger.annotations.ApiModel;
 import com.mangofactory.swagger.models.Model;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.core.DocumentationOperation;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.web.method.HandlerMethod;
 
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.annotations.Annotations.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
-@Slf4j
 public class AnnotatedOperationFilter implements Filter<DocumentationOperation> {
+    private static final Logger LOG = LogManager.getLogger(AnnotatedOperationFilter.class);
+
     @Override
     public void apply(FilterContext<DocumentationOperation> context) {
         DocumentationOperation operation = context.subject();
@@ -56,7 +58,7 @@ public class AnnotatedOperationFilter implements Filter<DocumentationOperation> 
                 String simpleName = modelName(apiModelAsResolvedType);
                 controllerDocumentation.putModel(simpleName, new Model(simpleName, apiModelAsResolvedType, true));
             } else {
-                log.warn("Api Model override does not match the resolved type");
+                LOG.warn("Api Model override does not match the resolved type");
             }
 
         }

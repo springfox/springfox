@@ -8,7 +8,6 @@ import com.mangofactory.swagger.filters.FilterContext;
 import com.mangofactory.swagger.models.DocumentationSchemaProvider;
 import com.wordnik.swagger.core.DocumentationAllowableListValues;
 import com.wordnik.swagger.core.DocumentationParameter;
-import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.MethodParameter;
@@ -105,8 +104,7 @@ public class ParameterFilterTest {
     }
 
     @Test
-    @SneakyThrows
-    public void whenParameterIsAPrimitive() {
+    public void whenParameterIsAPrimitive() throws NoSuchMethodException {
         HandlerMethod handlerMethod = handlerMethod("methodWithSupportedPrimitives", byte.class, boolean.class,
                 int.class, long.class, float.class, double.class, String.class, Date.class);
         MethodParameter[] methodParams = handlerMethod.getMethodParameters();
@@ -130,8 +128,7 @@ public class ParameterFilterTest {
     }
 
     @Test
-    @SneakyThrows
-    public void whenParameterIsAnEnum() {
+    public void whenParameterIsAnEnum() throws NoSuchMethodException {
         HandlerMethod handlerMethod = handlerMethod("methodWithEnum", SampleEnum.class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
         context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
@@ -144,8 +141,7 @@ public class ParameterFilterTest {
     }
 
     @Test
-    @SneakyThrows
-    public void whenParameterIsAType() {
+    public void whenParameterIsAType() throws NoSuchMethodException {
         HandlerMethod handlerMethod = handlerMethod("methodWithType", SampleType.class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
         context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
@@ -156,8 +152,7 @@ public class ParameterFilterTest {
     }
 
     @Test
-    @SneakyThrows
-    public void whenParameterIsAGenericList() {
+    public void whenParameterIsAGenericList() throws NoSuchMethodException {
         HandlerMethod handlerMethod = handlerMethod("methodWithGenericList", List.class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
         context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
@@ -168,8 +163,7 @@ public class ParameterFilterTest {
     }
 
     @Test
-    @SneakyThrows
-    public void whenParameterIsGenericSet() {
+    public void whenParameterIsGenericSet() throws NoSuchMethodException {
         HandlerMethod handlerMethod = handlerMethod("methodWithGenericSet", Set.class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
         context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
@@ -180,8 +174,7 @@ public class ParameterFilterTest {
     }
 
     @Test
-    @SneakyThrows
-    public void whenArrayTypeIsAPrimitive() {
+    public void whenArrayTypeIsAPrimitive() throws NoSuchMethodException {
         HandlerMethod handlerMethod = handlerMethod("methodWithPrimitiveArray", String[].class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
         context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
@@ -192,8 +185,7 @@ public class ParameterFilterTest {
     }
 
     @Test
-    @SneakyThrows
-    public void whenArrayTypeIsAClass() {
+    public void whenArrayTypeIsAClass() throws NoSuchMethodException {
         HandlerMethod handlerMethod = handlerMethod("methodWithTypeArray", SampleType[].class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
         context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));
@@ -204,8 +196,7 @@ public class ParameterFilterTest {
     }
 
     @Test
-    @SneakyThrows
-    public void whenArrayTypeIsAnEnum() {
+    public void whenArrayTypeIsAnEnum() throws NoSuchMethodException {
         HandlerMethod handlerMethod = handlerMethod("methodWithEnumArray", SampleEnum[].class);
         context.put("methodParameter", handlerMethod.getMethodParameters()[0]);
         context.put("parameterType", methodParameters(typeResolver, handlerMethod.getMethod()).get(0));

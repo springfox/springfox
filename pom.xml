@@ -51,9 +51,9 @@
         <skipGpgSigning>true</skipGpgSigning>
         <swagger.version>1.2.0</swagger.version>
         <spring.version>3.2.4.RELEASE</spring.version>
-      <scala-lib.version>2.10.0</scala-lib.version>
-      <spock.version>0.7-groovy-2.0</spock.version>
-      <groovy.version>2.1.9</groovy.version>
+        <scala-lib.version>2.10.0</scala-lib.version>
+        <spock.version>0.7-groovy-2.0</spock.version>
+        <groovy.version>2.1.9</groovy.version>
         <checkstyle.file>checkstyle.xml</checkstyle.file>
       <jackson.version>2.2.3</jackson.version>
     </properties>
@@ -207,12 +207,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.12.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
             <version>0.8.1</version>
@@ -357,6 +351,7 @@
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
+                    <compilerArgument>-Xlint:unchecked</compilerArgument>
                 </configuration>
             </plugin>
             <plugin>

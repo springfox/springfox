@@ -1,7 +1,5 @@
 package com.mangofactory.swagger.spring;
 
-import lombok.val;
-
 import com.wordnik.swagger.core.DocumentationAllowableRangeValues;
 
 public class AllowableRangesParser {
@@ -28,7 +26,6 @@ public class AllowableRangesParser {
         } else {
             max = Float.parseFloat(ranges[1]);
         }
-        val allowableValues = new DocumentationAllowableRangeValues(min, max);
-        return allowableValues;
+        return new DocumentationAllowableRangeValues(min, max);
     }
 }

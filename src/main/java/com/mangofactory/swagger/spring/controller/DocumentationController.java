@@ -5,8 +5,6 @@ import com.mangofactory.swagger.DocumentationTransformer;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.spring.DocumentationReader;
 import com.wordnik.swagger.core.Documentation;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,15 +24,19 @@ import java.util.List;
 public class DocumentationController implements ServletContextAware {
 
     public static final String CONTROLLER_ENDPOINT = "api-docs";
-    @Autowired
-    @Getter
-    @Setter
-    private SwaggerConfiguration swaggerConfiguration;
 
-    @Autowired
-    private List<RequestMappingHandlerMapping> handlerMappings;
-    @Getter
+    @Autowired private SwaggerConfiguration swaggerConfiguration;
+    @Autowired private List<RequestMappingHandlerMapping> handlerMappings;
+
     private DocumentationReader apiReader;
+
+    public SwaggerConfiguration getSwaggerConfiguration() {
+        return swaggerConfiguration;
+    }
+
+    public DocumentationReader getApiReader() {
+        return apiReader;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public

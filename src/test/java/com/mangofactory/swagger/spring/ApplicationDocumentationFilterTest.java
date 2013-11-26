@@ -1,11 +1,10 @@
 package com.mangofactory.swagger.spring;
 
+import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.filters.Filter;
 import com.mangofactory.swagger.filters.FilterContext;
-import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.spring.filters.ApplicationFilter;
 import com.wordnik.swagger.core.Documentation;
-import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,8 +40,7 @@ public class ApplicationDocumentationFilterTest {
     }
 
     @Before
-    @SneakyThrows
-    public void setup() {
+    public void setup() throws NoSuchMethodException {
         SampleController sampleController = new SampleController();
         Method sampleMethod = sampleController.getClass().getMethod("sampleMethod");
         HandlerMethod handlerMethod = new HandlerMethod(sampleController, sampleMethod);
@@ -60,7 +58,6 @@ public class ApplicationDocumentationFilterTest {
     }
 
     @Test
-    @SneakyThrows
     public void whenServiceNameEndsWithController()
     {
         applyFilters(filters, context);
