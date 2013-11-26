@@ -11,7 +11,7 @@ class DefaultControllerResourceGroupingStrategySpec extends Specification {
    def "controller to group names "() {
     given:
       RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
-      DefaultControllerResourceGroupingStrategy strategy = new DefaultControllerResourceGroupingStrategy()
+      DefaultControllerResourceNamingStrategy strategy = new DefaultControllerResourceNamingStrategy()
 
     expect:
       group == strategy.getFirstGroupCompatibleName(requestMappingInfo, null)

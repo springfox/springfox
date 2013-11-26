@@ -3,6 +3,7 @@ package com.mangofactory.swagger.controllers
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
+import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.ApiListingSupport
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
@@ -41,7 +42,12 @@ class DefaultSwaggerControllerSpec extends Specification {
    @Unroll("path: #path")
    def "should return the default or first swagger resource listing"() {
     given:
-      controller.setSwaggerApiResourceListingMap([default: defaultSwaggerResourceListing()])
+      SwaggerCache swaggerCache = new SwaggerCache();
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
+      swaggerApiResourceListing.initialize()
+      controller.swaggerCache = swaggerCache
+
+
     when:
       MvcResult result = mockMvc.perform(get(path)).andDo(print()).andReturn()
       def responseJson = jsonBodyResponse(result)
@@ -56,8 +62,9 @@ class DefaultSwaggerControllerSpec extends Specification {
 
    def "should respond with api listing for a given resource group"() {
     given:
-      controller.setSwaggerApiListings([resourceKey: ['businesses': apiListing()]])
-
+      SwaggerCache swaggerCache = new SwaggerCache();
+      swaggerCache.swaggerApiListingMap = [resourceKey: ['businesses': apiListing()]]
+      controller.swaggerCache = swaggerCache
     when:
       MvcResult result = mockMvc.perform(get("/api-docs/resourceKey/businesses")).andDo(print()).andReturn()
       def responseJson = jsonBodyResponse(result)
@@ -65,13 +72,5 @@ class DefaultSwaggerControllerSpec extends Specification {
     then:
       result.getResponse().getStatus() == 200
 
-   }
-
-   private SwaggerApiResourceListing defaultSwaggerResourceListing() {
-      def listing = new SwaggerApiResourceListing()
-      listing.with {
-         initialize()
-      }
-      return listing
    }
 }

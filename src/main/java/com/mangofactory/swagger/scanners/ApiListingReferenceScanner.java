@@ -2,7 +2,7 @@ package com.mangofactory.swagger.scanners;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimaps;
-import com.mangofactory.swagger.core.ControllerResourceGroupingStrategy;
+import com.mangofactory.swagger.core.ControllerResourceNamingStrategy;
 import com.wordnik.swagger.model.ApiListingReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,7 +48,7 @@ public class ApiListingReferenceScanner {
 
    @Getter
    @Setter
-   private ControllerResourceGroupingStrategy controllerNamingStrategy;
+   private ControllerResourceNamingStrategy controllerNamingStrategy;
    @Setter
    @Getter
    private List<String> includePatterns;
@@ -58,7 +58,7 @@ public class ApiListingReferenceScanner {
    }
 
    public ApiListingReferenceScanner(List<RequestMappingHandlerMapping> requestMappingHandlerMapping,
-         ControllerResourceGroupingStrategy controllerNamingStrategy) {
+         ControllerResourceNamingStrategy controllerNamingStrategy) {
       Assert.notNull(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
       Assert.notEmpty(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
       Assert.notNull(controllerNamingStrategy, "controllerNamingStrategy is required");

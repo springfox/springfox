@@ -10,6 +10,5 @@ class SwaggerPathProviderSupport {
       swaggerPathProvider.setApiResourceSuffix("/api/v1/");
       swaggerPathProvider.servletContext = [getContextPath: {return "/context-path"}] as ServletContext
       return swaggerPathProvider
-
    }
 }

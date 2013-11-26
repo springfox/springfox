@@ -21,10 +21,7 @@ import static com.mangofactory.swagger.ScalaUtils.toScalaList;
 public class SwaggerApiResourceListing {
 
    @Getter
-   private ResourceListing resourceListing;
-
-   @Getter
-   private Map<String, ApiListing> swaggerApiListings;
+   private SwaggerCache swaggerCache;
 
    @Getter
    @Setter
@@ -32,16 +29,18 @@ public class SwaggerApiResourceListing {
    @Getter
    @Setter
    private List<AuthorizationType> authorizationTypes;
-   @Getter
+
    @Setter
    private ApiListingReferenceScanner apiListingReferenceScanner;
 
-   @Getter
    @Setter
-   private DefaultSwaggerPathProvider swaggerPathProvider;
+   private SwaggerPathProvider swaggerPathProvider;
 
-   public SwaggerApiResourceListing() {
+   private String swaggerGroup;
 
+   public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
+      this.swaggerCache = swaggerCache;
+      this.swaggerGroup = swaggerGroup;
    }
 
    @PostConstruct
@@ -57,12 +56,13 @@ public class SwaggerApiResourceListing {
          ApiListingScanner apiListingScanner = new ApiListingScanner(
                resourceGroupRequestMappings, apiListingReferenceScanner.getResourceGroup(), swaggerPathProvider);
 
-         swaggerApiListings = apiListingScanner.scan();
+         Map<String, ApiListing> apiListings = apiListingScanner.scan();
+         swaggerCache.addApiListings(swaggerGroup, apiListings);
 
       } else {
          log.error("ApiListingReferenceScanner not configured");
       }
-      this.resourceListing = new ResourceListing(
+      ResourceListing resourceListing = new ResourceListing(
             "1",
             SwaggerSpec.version(),
             toScalaList(apiListingReferences),
@@ -70,6 +70,7 @@ public class SwaggerApiResourceListing {
             toOption(apiInfo)
       );
 
+      swaggerCache.addSwaggerResourceListing(swaggerGroup, resourceListing);
    }
 
 

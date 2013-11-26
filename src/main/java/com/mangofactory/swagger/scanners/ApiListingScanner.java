@@ -1,9 +1,9 @@
 package com.mangofactory.swagger.scanners;
 
 import com.mangofactory.swagger.core.CommandExecutor;
-import com.mangofactory.swagger.core.ControllerResourceGroupingStrategy;
-import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy;
-import com.mangofactory.swagger.core.DefaultSwaggerPathProvider;
+import com.mangofactory.swagger.core.ControllerResourceNamingStrategy;
+import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy;
+import com.mangofactory.swagger.core.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.ApiDescriptionReader;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.MediaTypeReader;
@@ -25,7 +25,7 @@ public class ApiListingScanner {
    private String apiVersion = "1.0";
    private String swaggerVersion = SwaggerSpec.version();
    private Map<String, List<RequestMappingContext>>  resourceGroupRequestMappings;
-   private DefaultSwaggerPathProvider swaggerPathProvider;
+   private SwaggerPathProvider swaggerPathProvider;
 
    @Getter
    @Setter
@@ -33,10 +33,10 @@ public class ApiListingScanner {
 
    @Getter
    @Setter
-   private ControllerResourceGroupingStrategy controllerNamingStrategy;
+   private ControllerResourceNamingStrategy controllerNamingStrategy;
 
    public ApiListingScanner(Map<String, List<RequestMappingContext>> resourceGroupRequestMappings,
-         String resourceGroup, DefaultSwaggerPathProvider swaggerPathProvider) {
+         String resourceGroup, SwaggerPathProvider swaggerPathProvider) {
       this.resourceGroupRequestMappings = resourceGroupRequestMappings;
       this.resourceGroup = resourceGroup;
       this.swaggerPathProvider = swaggerPathProvider;
@@ -45,7 +45,7 @@ public class ApiListingScanner {
    public Map<String, ApiListing> scan() {
 
       if(null == controllerNamingStrategy){
-         controllerNamingStrategy = new DefaultControllerResourceGroupingStrategy();
+         controllerNamingStrategy = new DefaultControllerResourceNamingStrategy();
       }
 
       Map<String, ApiListing> apiListingMap = newHashMap();

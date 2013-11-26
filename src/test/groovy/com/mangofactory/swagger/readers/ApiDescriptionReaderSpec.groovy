@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.readers
 
-import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy
+import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.ApiDescription
@@ -15,7 +15,7 @@ class ApiDescriptionReaderSpec extends Specification {
 
    def "should generate an api description for each request mapping pattern"() {
     given:
-      ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(new DefaultControllerResourceGroupingStrategy())
+      ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(new DefaultControllerResourceNamingStrategy())
       RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
               [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
       )

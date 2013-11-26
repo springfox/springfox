@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.scanners
 
-import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy
+import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
 import com.wordnik.swagger.core.SwaggerSpec
@@ -18,7 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
 class ApiListingScannerSpec extends Specification {
 
-   @Shared DefaultControllerResourceGroupingStrategy controllerNamingStrategy = new DefaultControllerResourceGroupingStrategy()
+   @Shared DefaultControllerResourceNamingStrategy controllerNamingStrategy = new DefaultControllerResourceNamingStrategy()
 
    def "Should create an api listing for a single resource grouping "() {
     given:

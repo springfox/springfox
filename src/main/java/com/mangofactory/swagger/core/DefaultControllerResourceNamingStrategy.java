@@ -9,12 +9,12 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import java.util.Set;
 
 @Component
-public class DefaultControllerResourceGroupingStrategy implements ControllerResourceGroupingStrategy {
+public class DefaultControllerResourceNamingStrategy implements ControllerResourceNamingStrategy {
 
    private final String relativeEndpointPrefix;
    private final String endpointSuffix;
 
-   public DefaultControllerResourceGroupingStrategy() {
+   public DefaultControllerResourceNamingStrategy() {
       relativeEndpointPrefix = "/";
       endpointSuffix = "";
    }
@@ -51,12 +51,4 @@ public class DefaultControllerResourceGroupingStrategy implements ControllerReso
       group = splits[0];
       return group;
    }
-//
-//   @Override
-//   public String getControllerPath(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-//      PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
-//      Set<String> patterns = patternsCondition.getPatterns();
-//      String firstPattern = patterns.iterator().next();
-//      return pathRoot(firstPattern);
-//   }
 }

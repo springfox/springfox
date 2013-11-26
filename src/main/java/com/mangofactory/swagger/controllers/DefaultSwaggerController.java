@@ -1,36 +1,27 @@
 package com.mangofactory.swagger.controllers;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
-import com.mangofactory.swagger.core.SwaggerApiResourceListing;
+import com.mangofactory.swagger.core.SwaggerCache;
 import com.wordnik.swagger.model.ApiListing;
 import com.wordnik.swagger.model.ResourceListing;
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
 public class DefaultSwaggerController {
 
    public static final String DOCUMENTATION_BASE_PATH = "/api-docs";
-   @Getter
-   @Setter
-   @Resource(name = "swaggerApiResourceListingMap")
-   private Map<String, SwaggerApiResourceListing> swaggerApiResourceListingMap;
 
-   @Getter
-   @Setter
-   @Resource(name = "swaggerApiListings")
-   private Map<String, Map<String, ApiListing>> swaggerApiListings;
+   @Autowired
+   private SwaggerCache swaggerCache;
 
    @ApiIgnore
    @RequestMapping(value = {DOCUMENTATION_BASE_PATH}, method = RequestMethod.GET)
@@ -57,11 +48,8 @@ public class DefaultSwaggerController {
    }
 
    private ResponseEntity<ApiListing> getSwaggerApiListing(String resourceKey, String resource) {
-      Assert.notNull(swaggerApiListings, "swaggerApiListings is null");
-      Assert.notEmpty(swaggerApiListings, "swaggerApiListings is empty");
-
       ResponseEntity<ApiListing> responseEntity = new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
-      Map<String, ApiListing> apiListingMap = swaggerApiListings.get(resourceKey);
+      Map<String, ApiListing> apiListingMap = swaggerCache.getSwaggerApiListingMap().get(resourceKey);
       if (null != apiListingMap) {
          ApiListing apiListing = apiListingMap.get(resource);
          if (null != apiListing) {
@@ -72,17 +60,14 @@ public class DefaultSwaggerController {
    }
 
    private ResponseEntity<ResourceListing> getSwaggerResourceListing(String resourceKey) {
-      Assert.notNull(swaggerApiResourceListingMap, "swaggerApiResourceListingMap is null");
-      Assert.notEmpty(swaggerApiResourceListingMap, "swaggerApiResourceListingMap is empty");
-
       ResponseEntity<ResourceListing> responseEntity = new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
       ResourceListing resourceListing = null;
 
       if (null == resourceKey) {
-         resourceListing = swaggerApiResourceListingMap.values().iterator().next().getResourceListing();
+         resourceListing = swaggerCache.getSwaggerApiResourceListingMap().values().iterator().next();
       } else {
-         if (swaggerApiResourceListingMap.containsKey(resourceKey)) {
-            resourceListing = swaggerApiResourceListingMap.get(resourceKey).getResourceListing();
+         if (swaggerCache.getSwaggerApiResourceListingMap().containsKey(resourceKey)) {
+            resourceListing = swaggerCache.getSwaggerApiResourceListingMap().get(resourceKey);
          }
       }
       if (null != resourceListing) {

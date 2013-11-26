@@ -1,8 +1,9 @@
 package com.mangofactory.swagger.configuration
 
-import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy
+import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
+import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.ApiInfo
@@ -20,11 +21,12 @@ class SwaggerApiResourceListingSpec extends Specification {
 
    def "default swagger resource"() {
     when: "I create a swagger resource"
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
+      SwaggerCache swaggerCache = new SwaggerCache();
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
       swaggerApiResourceListing.initialize()
 
     then: "I should should have the correct defaults"
-      ResourceListing resourceListing = swaggerApiResourceListing.resourceListing
+      ResourceListing resourceListing = swaggerCache.getResourceListing("default")
       def apiListingReferenceList = fromScalaList(resourceListing.apis())
       def authorizationTypes = fromScalaList(resourceListing.authorizations())
 
@@ -40,7 +42,8 @@ class SwaggerApiResourceListingSpec extends Specification {
     given:
       ApiInfo apiInfo = new ApiInfo("title", "description", "terms", "contact", "license", "licenseUrl")
     when:
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
+      SwaggerCache swaggerCache = new SwaggerCache();
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
       swaggerApiResourceListing.apiInfo = apiInfo
       swaggerApiResourceListing.initialize()
 
@@ -57,12 +60,13 @@ class SwaggerApiResourceListingSpec extends Specification {
     given:
       ApiKey apiKey = new ApiKey("api_key", "header")
     when:
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
+      SwaggerCache swaggerCache = new SwaggerCache();
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
       swaggerApiResourceListing.authorizationTypes = [apiKey]
       swaggerApiResourceListing.initialize()
 
     then:
-      ResourceListing resourceListing = swaggerApiResourceListing.resourceListing
+      ResourceListing resourceListing = swaggerCache.getResourceListing("default")
       def authorizationTypes = fromScalaList(resourceListing.authorizations())
       def apiKeyAuthType = authorizationTypes[0]
       apiKeyAuthType instanceof ApiKey
@@ -71,8 +75,9 @@ class SwaggerApiResourceListingSpec extends Specification {
    }
 
    def "resource with mocked apis"() {
-    given:
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing()
+      given:
+      SwaggerCache swaggerCache = new SwaggerCache();
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
       DefaultSwaggerPathProvider swaggerPathProvider = Stub()
 
       swaggerApiResourceListing.setSwaggerPathProvider(swaggerPathProvider)
@@ -82,7 +87,7 @@ class SwaggerApiResourceListingSpec extends Specification {
       requestHandlerMapping.getHandlerMethods() >> handlerMethods
 
       ApiListingReferenceScanner scanner = new ApiListingReferenceScanner([requestHandlerMapping],
-              new DefaultControllerResourceGroupingStrategy())
+              new DefaultControllerResourceNamingStrategy())
 
       swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
 
@@ -90,7 +95,7 @@ class SwaggerApiResourceListingSpec extends Specification {
       swaggerApiResourceListing.initialize()
 
     then:
-      ResourceListing resourceListing = swaggerApiResourceListing.resourceListing
+      ResourceListing resourceListing = swaggerCache.getResourceListing("default")
       ApiListingReference apiListingReference = resourceListing.apis().first()
       apiListingReference.path() == "/default/somePath"
       apiListingReference.position() == 0

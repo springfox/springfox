@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.scanners
 
 import com.mangofactory.swagger.annotations.ApiIgnore
-import com.mangofactory.swagger.core.DefaultControllerResourceGroupingStrategy
+import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
 import com.mangofactory.swagger.mixins.AccessorAssertions
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
@@ -20,7 +20,7 @@ class ApiListingReferenceScannerSpec extends Specification {
     where:
       method                         | value
       'resourceGroup'                | 's'
-      'controllerNamingStrategy'     | new DefaultControllerResourceGroupingStrategy()
+      'controllerNamingStrategy'     | new DefaultControllerResourceNamingStrategy()
       'requestMappingHandlerMapping' | []
       'excludeAnnotations'           | []
    }
@@ -58,7 +58,7 @@ class ApiListingReferenceScannerSpec extends Specification {
       RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
       requestMappingHandlerMapping.getHandlerMethods() >> [(requestMappingInfo): dummyHandlerMethod()]
 
-      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner([requestMappingHandlerMapping], new DefaultControllerResourceGroupingStrategy())
+      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner([requestMappingHandlerMapping], new DefaultControllerResourceNamingStrategy())
       apiListingReferenceScanner.setIncludePatterns(patterns)
       apiListingReferenceScanner.scan()
 
