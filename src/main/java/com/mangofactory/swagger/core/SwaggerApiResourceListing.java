@@ -54,7 +54,7 @@ public class SwaggerApiResourceListing {
                apiListingReferenceScanner.getResourceGroupRequestMappings();
 
          ApiListingScanner apiListingScanner = new ApiListingScanner(
-               resourceGroupRequestMappings, apiListingReferenceScanner.getResourceGroup(), swaggerPathProvider);
+               resourceGroupRequestMappings, apiListingReferenceScanner.getSwaggerGroup(), swaggerPathProvider);
 
          Map<String, ApiListing> apiListings = apiListingScanner.scan();
          swaggerCache.addApiListings(swaggerGroup, apiListings);

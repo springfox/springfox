@@ -76,7 +76,7 @@ public class ApiListingScanner {
             apiDescriptions.addAll(apiDescriptionList);
          }
 
-            String resourcePath = String.format("%s%s", swaggerPathProvider.getApiResourcePrefix(),  controllerGroupName);
+         String resourcePath = String.format("%s%s", swaggerPathProvider.getApiResourcePrefix(),  controllerGroupName);
          ApiListing apiListing = new ApiListing(
                apiVersion,
                swaggerVersion,
@@ -90,24 +90,6 @@ public class ApiListingScanner {
                toOption(null),
                toOption(null),
                position++);
-
-         /*
-         case class ApiListing (
-  apiVersion: String,
-  swaggerVersion: String,
-  basePath: String,
-  resourcePath: String,
-  produces: List[String] = List.empty,
-  consumes: List[String] = List.empty,
-  protocols: List[String] = List.empty,
-  authorizations: List[String] = List.empty,
-  apis: List[ApiDescription] = List(),
-  models: Option[Map[String, Model]] = None,
-  description: Option[String] = None,
-  position: Int = 0)
-          */
-
-
          apiListingMap.put(controllerGroupName, apiListing);
       }
       return apiListingMap;

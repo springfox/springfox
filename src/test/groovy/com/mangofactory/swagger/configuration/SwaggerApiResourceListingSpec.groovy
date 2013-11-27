@@ -86,8 +86,10 @@ class SwaggerApiResourceListingSpec extends Specification {
       def requestHandlerMapping = Mock(RequestMappingHandlerMapping)
       requestHandlerMapping.getHandlerMethods() >> handlerMethods
 
-      ApiListingReferenceScanner scanner = new ApiListingReferenceScanner([requestHandlerMapping],
-              new DefaultControllerResourceNamingStrategy())
+      ApiListingReferenceScanner scanner = new ApiListingReferenceScanner()
+      scanner.setRequestMappingHandlerMapping([requestHandlerMapping])
+      scanner.setControllerNamingStrategy(new DefaultControllerResourceNamingStrategy())
+      scanner.setSwaggerGroup("swaggerGroup")
 
       swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
 
@@ -97,7 +99,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     then:
       ResourceListing resourceListing = swaggerCache.getResourceListing("default")
       ApiListingReference apiListingReference = resourceListing.apis().first()
-      apiListingReference.path() == "/default/somePath"
+      apiListingReference.path() == "/somePath"
       apiListingReference.position() == 0
       fromOption(apiListingReference.description()) == "somePath"
    }

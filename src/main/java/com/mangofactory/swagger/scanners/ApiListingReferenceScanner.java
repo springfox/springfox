@@ -7,6 +7,7 @@ import com.wordnik.swagger.model.ApiListingReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
@@ -22,12 +23,13 @@ import java.util.Map.Entry;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.mangofactory.swagger.ScalaUtils.toOption;
+import static java.lang.String.format;
 
 @Slf4j
 public class ApiListingReferenceScanner {
    private static final String REQUEST_MAPPINGS_EMPTY =
          "No RequestMappingHandlerMapping's found have you added <mvc:annotation-driven/>";
-   private static final List DEFAULT_INCLUDE_PATTERNS = Arrays.asList(new String[]{".*?"});
+
    @Getter
    @Setter
    private List<RequestMappingHandlerMapping> requestMappingHandlerMapping;
@@ -38,7 +40,7 @@ public class ApiListingReferenceScanner {
 
    @Getter
    @Setter
-   private String resourceGroup = "default";
+   private String swaggerGroup;
 
    @Getter
    @Setter
@@ -49,30 +51,26 @@ public class ApiListingReferenceScanner {
    private ControllerResourceNamingStrategy controllerNamingStrategy;
    @Setter
    @Getter
-   private List<String> includePatterns;
+   private List<String> includePatterns = Arrays.asList(new String[]{".*?"});;
 
    @Setter
    @Getter
    private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
 
    public ApiListingReferenceScanner() {
-      this.includePatterns = DEFAULT_INCLUDE_PATTERNS;
-   }
-
-   public ApiListingReferenceScanner(List<RequestMappingHandlerMapping> requestMappingHandlerMapping,
-         ControllerResourceNamingStrategy controllerNamingStrategy) {
-      Assert.notNull(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
-      Assert.notEmpty(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
-      Assert.notNull(controllerNamingStrategy, "controllerNamingStrategy is required");
-      this.requestMappingHandlerMapping = requestMappingHandlerMapping;
-      this.controllerNamingStrategy = controllerNamingStrategy;
-      this.includePatterns = DEFAULT_INCLUDE_PATTERNS;
    }
 
    public List<ApiListingReference> scan() {
+      Assert.notNull(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
+      Assert.notEmpty(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
+      Assert.notNull(controllerNamingStrategy, "controllerNamingStrategy is required");
+      Assert.notNull(swaggerGroup, "swaggerGroup is required");
+      if(StringUtils.isBlank(swaggerGroup)){
+         throw new IllegalArgumentException("swaggerGroup must not be empty");
+      }
+
       log.info("Scanning for api listing references");
       scanSpringRequestMappings();
-
       return this.apiListingReferences;
    }
 
@@ -90,14 +88,17 @@ public class ApiListingReferenceScanner {
       }
 
       int groupPosition = 0;
-      for (String group : resourceGroupRequestMappings.keySet()) {
-         String path = String.format("/%s/%s", this.resourceGroup, group);
-         log.info(
-               String.format(
-                     "Create resource listing Path: %s Description: %s Position: %s", path, group,
-                     groupPosition));
-         this.apiListingReferences.add(new ApiListingReference(path, toOption(group), groupPosition));
-         groupPosition++;
+      for (String controllerGroupName : resourceGroupRequestMappings.keySet()) {
+         /**
+          * TODO - consider making resource path absolute. @see SwaggerPathProvider
+          * Path is realtive to swagger-UI
+          * e.g. http://myserver.com/api-docs/{swagger-group}/{resourcePath}
+          */
+         String path = format("/%s", controllerGroupName);
+         log.info(format("Create resource listing Path: %s Description: %s Position: %s",
+                         path, controllerGroupName,groupPosition));
+
+         this.apiListingReferences.add(new ApiListingReference(path, toOption(controllerGroupName), groupPosition++));
       }
    }
 
@@ -107,26 +108,25 @@ public class ApiListingReferenceScanner {
       if(isMatch){
          return true;
       }
-      log.info(String.format("RequestMappingInfo did not match any include patterns: | %s", requestMappingInfo));
+      log.info(format("RequestMappingInfo did not match any include patterns: | %s", requestMappingInfo));
       return false;
    }
 
    private boolean shouldIncludeRequestMapping(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
       return requestMappingMatchesAnIncludePattern(requestMappingInfo, handlerMethod)
-            && !doesNotHaveIgnoredAnnotatedRequestMapping(handlerMethod);
+            && !hasIgnoredAnnotatedRequestMapping(handlerMethod);
    }
 
-   public boolean doesNotHaveIgnoredAnnotatedRequestMapping(HandlerMethod handlerMethod) {
+   public boolean hasIgnoredAnnotatedRequestMapping(HandlerMethod handlerMethod) {
       if (null != excludeAnnotations) {
          for (Class<? extends Annotation> annotation : excludeAnnotations) {
             if (null != AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation)) {
-               log.info(String.format("Excluding method as it contains the excluded annotation: %s", annotation));
+               log.info(format("Excluding method as it contains the excluded annotation: %s", annotation));
                return true;
             }
          }
-         return false;
-      }
-      return false;
+     }
+     return false;
    }
 
    public Map<String, List<RequestMappingContext>> getResourceGroupRequestMappings() {
