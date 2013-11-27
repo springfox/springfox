@@ -53,6 +53,7 @@ public class ApiListingReferenceScanner {
    @Getter
    private List<String> includePatterns;
 
+
    public ApiListingReferenceScanner() {
       this.includePatterns = DEFAULT_INCLUDE_PATTERNS;
    }
@@ -92,7 +93,7 @@ public class ApiListingReferenceScanner {
          String path = String.format("/%s/%s", this.resourceGroup, group);
          log.info(
                String.format(
-                     "Create resource listing Path: %s Description: %s Psosition: %s", path, group,
+                     "Create resource listing Path: %s Description: %s Position: %s", path, group,
                      groupPosition));
          this.apiListingReferences.add(new ApiListingReference(path, toOption(group), groupPosition));
          groupPosition++;
@@ -118,10 +119,10 @@ public class ApiListingReferenceScanner {
 
    private boolean shouldIncludeRequestMapping(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
       return requestMappingMatchesAnIncludePattern(requestMappingInfo, handlerMethod)
-            && !ignoreAnnotatedRequestMapping(handlerMethod);
+            && !doesNotHaveIgnoredAnnotatedRequestMapping(handlerMethod);
    }
 
-   public boolean ignoreAnnotatedRequestMapping(HandlerMethod handlerMethod) {
+   public boolean doesNotHaveIgnoredAnnotatedRequestMapping(HandlerMethod handlerMethod) {
       if (null != excludeAnnotations) {
          for (Class<? extends Annotation> annotation : excludeAnnotations) {
             if (null != AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation)) {

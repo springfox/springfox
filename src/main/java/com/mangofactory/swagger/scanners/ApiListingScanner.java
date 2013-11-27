@@ -57,7 +57,7 @@ public class ApiListingScanner {
 
          Set<String> produces = new LinkedHashSet<String>(2);
          Set<String> consumes = new LinkedHashSet<String>(2);
-         List<ApiDescription> apiDescriptions = new ArrayList();
+         List<ApiDescription> apiDescriptions = newArrayList();
          for(RequestMappingContext requestMappingContext : entry.getValue()){
 
             CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();

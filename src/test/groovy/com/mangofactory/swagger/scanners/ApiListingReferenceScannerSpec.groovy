@@ -47,7 +47,7 @@ class ApiListingReferenceScannerSpec extends Specification {
       def ignorableMethod = ignorableHandlerMethod()
 
     expect:
-      true == apiListingReferenceScanner.ignoreAnnotatedRequestMapping(ignorableMethod)
+      true == apiListingReferenceScanner.doesNotHaveIgnoredAnnotatedRequestMapping(ignorableMethod)
       false == apiListingReferenceScanner.shouldIncludeRequestMapping(requestMappingInfo("p"), ignorableMethod)
    }
 

@@ -38,8 +38,7 @@ public class SpringSwaggerConfig {
 
    @Bean
    public SwaggerPathProvider defaultSwaggerPathProvider() {
-      DefaultSwaggerPathProvider swaggerPathProvider = new DefaultSwaggerPathProvider();
-      return  swaggerPathProvider;
+      return new DefaultSwaggerPathProvider();
    }
 
    @Bean
