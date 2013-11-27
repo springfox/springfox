@@ -60,6 +60,7 @@ class ApiListingReferenceScannerSpec extends Specification {
 
       ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner([requestMappingHandlerMapping], new DefaultControllerResourceNamingStrategy())
       apiListingReferenceScanner.setIncludePatterns(patterns)
+      apiListingReferenceScanner.setRequestMappingPatternMatcher(new AntRequestMappingPatternMatcher())
       apiListingReferenceScanner.scan()
 
     then:

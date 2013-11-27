@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
@@ -20,7 +19,6 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.mangofactory.swagger.ScalaUtils.toOption;
@@ -29,7 +27,7 @@ import static com.mangofactory.swagger.ScalaUtils.toOption;
 public class ApiListingReferenceScanner {
    private static final String REQUEST_MAPPINGS_EMPTY =
          "No RequestMappingHandlerMapping's found have you added <mvc:annotation-driven/>";
-   private static final List DEFAULT_INCLUDE_PATTERNS = Arrays.asList(new String[]{"/**"});
+   private static final List DEFAULT_INCLUDE_PATTERNS = Arrays.asList(new String[]{".*?"});
    @Getter
    @Setter
    private List<RequestMappingHandlerMapping> requestMappingHandlerMapping;
@@ -53,6 +51,9 @@ public class ApiListingReferenceScanner {
    @Getter
    private List<String> includePatterns;
 
+   @Setter
+   @Getter
+   private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
 
    public ApiListingReferenceScanner() {
       this.includePatterns = DEFAULT_INCLUDE_PATTERNS;
@@ -102,16 +103,9 @@ public class ApiListingReferenceScanner {
 
    private boolean requestMappingMatchesAnIncludePattern(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
       PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
-      Set<String> patterns = patternsCondition.getPatterns();
-
-      AntPathMatcher antPathMatcher = new AntPathMatcher();
-      for (String path : patterns) {
-         for (String includePattern : includePatterns) {
-            Assert.notNull(includePattern, "Include patterns should never be null");
-            if (antPathMatcher.match(includePattern, path)) {
-               return true;
-            }
-         }
+      boolean isMatch = requestMappingPatternMatcher.patternConditionsMatchOneOfIncluded(patternsCondition, includePatterns);
+      if(isMatch){
+         return true;
       }
       log.info(String.format("RequestMappingInfo did not match any include patterns: | %s", requestMappingInfo));
       return false;
