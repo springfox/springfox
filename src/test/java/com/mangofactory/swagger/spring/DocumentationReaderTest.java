@@ -2,7 +2,7 @@ package com.mangofactory.swagger.spring;
 
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.spring.controller.DocumentationController;
-import com.mangofactory.swagger.spring.test.TestConfiguration;
+import com.mangofactory.swagger.spring.test.configuration.ServicesTestConfiguration;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
 import com.wordnik.swagger.core.DocumentationOperation;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
         loader = WebContextLoader.class,
-        classes = TestConfiguration.class)
+        classes = ServicesTestConfiguration.class)
 public class DocumentationReaderTest {
 
     @Autowired
@@ -103,11 +103,11 @@ public class DocumentationReaderTest {
         resourceListing = controller.getResourceListing();
 
         ControllerDocumentation documentation = controller.getApiDocumentation(request);
-        List<DocumentationOperation> endPoint = documentation.getEndPoint("/businesses/{businessId}", RequestMethod.GET);
+        List<DocumentationOperation> endPoint = documentation.getEndPoint("/businesses/vanilla/{businessId}", RequestMethod.GET);
         DocumentationOperation operation = endPoint.iterator().next();
         assertThat(operation, is(notNullValue()));
         assertThat(operation.getParameters().size(), equalTo(1));
-        assertThat(operation.getSummary(), equalTo("Find a business by its id"));
+        assertThat(operation.getSummary(), equalTo("get Vanilla Path Variable"));
     }
     //TODO: Move to feature demonstration service
 //    @Test

@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.spring;
 
 import com.mangofactory.swagger.spring.controller.DocumentationController;
-import com.mangofactory.swagger.spring.test.TestConfiguration;
+import com.mangofactory.swagger.spring.test.configuration.ServicesTestConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,10 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author martypitt
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = WebContextLoader.class, classes = TestConfiguration.class)
+@ContextConfiguration(loader = WebContextLoader.class, classes = ServicesTestConfiguration.class)
 public class DocumentationRootTest {
 
-    public static final String BUSINESS_ENTITY_SERVICES = "Business entity services";
+    public static final String BUSINESS_ENTITY_SERVICES = "Services to demonstrate path variable resolution";
     @Autowired DocumentationController controller;
     private MockMvc mockMvc;
     private MockHttpServletRequestBuilder builder;
@@ -94,9 +94,9 @@ public class DocumentationRootTest {
                 .andExpect(xpath("controllerDocumentation").exists())
                 .andExpect(xpath("controllerDocumentation/apiVersion").string("2.0"))
                 .andExpect(xpath("controllerDocumentation/apis[1]/description").string(equalTo(BUSINESS_ENTITY_SERVICES)))
-                .andExpect(xpath("controllerDocumentation/apis[1]/operations[1]/nickname").string(equalTo("getAllBusinesses")))
+                .andExpect(xpath("controllerDocumentation/apis[1]/operations[1]/nickname").string(equalTo("getAliasedPathVariable")))
                 .andExpect(xpath("controllerDocumentation/apis[1]/operations[1]/httpMethod").string(equalTo("GET")))
                 .andExpect(xpath("controllerDocumentation/apis[1]/operations[1]/summary").string(equalTo("Find a business by its id")))
-                .andExpect(xpath("controllerDocumentation/apis[1]/path").string(equalTo("/businesses/{businessId}")));
+                .andExpect(xpath("controllerDocumentation/apis[1]/path").string(equalTo("/businesses/aliased/{otherId}")));
     }
 }

@@ -7,7 +7,7 @@ import com.mangofactory.swagger.annotations.ApiError;
 import com.mangofactory.swagger.annotations.ApiErrors;
 import com.mangofactory.swagger.models.DocumentationSchemaProvider;
 import com.mangofactory.swagger.spring.test.Pet;
-import com.mangofactory.swagger.spring.test.TestConfiguration;
+import com.mangofactory.swagger.spring.test.configuration.ServicesTestConfiguration;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.core.DocumentationError;
 import com.wordnik.swagger.core.DocumentationOperation;
@@ -39,7 +39,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = WebContextLoader.class, classes = TestConfiguration.class)
+@ContextConfiguration(loader = WebContextLoader.class, classes = ServicesTestConfiguration.class)
 public class OperationReaderTest {
 
     @Autowired private SwaggerConfiguration swaggerConfiguration;

@@ -30,7 +30,7 @@ public class FeatureDemonstrationService {
     @RequestMapping(value="/{petId}",method=RequestMethod.GET)
 	@ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. "
 			+ "ID > 10 or nonintegers will simulate API error conditions",
-            responseClass = "ccom.mangofactory.swagger.spring.test.Pet"
+            responseClass = "com.mangofactory.swagger.spring.test.Pet"
 		)
 	@ApiErrors(NotFoundException.class)
 	public Pet getPetById (

@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.spring;
 
 import com.mangofactory.swagger.spring.controller.DocumentationController;
-import com.mangofactory.swagger.spring.test.TestConfiguration;
+import com.mangofactory.swagger.spring.test.configuration.ServicesTestConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = WebContextLoader.class, classes = TestConfiguration.class)
+@ContextConfiguration(loader = WebContextLoader.class, classes = ServicesTestConfiguration.class)
 public class PetServiceTest {
     MockMvc mockMvc;
     private MockHttpServletRequestBuilder builder;

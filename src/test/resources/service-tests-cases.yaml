@@ -1,0 +1,379 @@
+testcases:
+  - uriIndex: 0
+    index: 0
+    testDescription: "Verfied when @PathVariable is aliased"
+    expectedUri: "/businesses/aliased/{otherId}"
+    returnType: "String"
+    parameters:
+      - type: "String"
+        paramType: "path"
+        name: "otherId"
+
+  - uriIndex: 0
+    index: 1
+    testDescription: "Verfied when @PathVariable is not aliased"
+    expectedUri: "/businesses/non-aliased/{businessId}"
+    returnType: "String"
+    parameters:
+      - type: "String"
+        paramType: "path"
+        name: "businessId"
+
+  - uriIndex: 0
+    index: 2
+    testDescription: "Verfied when @PathVariable is defaulted"
+    expectedUri: "/businesses/vanilla/{businessId}"
+    returnType: "String"
+    parameters:
+      - type: "String"
+        paramType: "path"
+        name: "businessId"
+
+  - uriIndex: 1
+    index: 0
+    testDescription: "Verified when controller has no request mapping at the class level and ignores
+    UriComponentsBuilder"
+    expectedUri: "/no-request-mapping"
+    returnType: "ResponseEntity«Example»"
+
+  - uriIndex: 2
+    index: 0
+    testDescription: "Verified new method on inherrited generic type"
+    expectedUri: "/fancypets/?{someId}"
+    returnType: "int"
+    parameters:
+      - type: "FancyPet"
+        name: "object"
+      - type: "int"
+        name: "someId"
+
+  - uriIndex: 2
+    index: 1
+    testDescription: "Verified Inheritted class with a generic type"
+    expectedUri: "/fancypets"
+    returnType: "Void"
+    httpMethod: "PUT"
+    parameters:
+       - type: "Pet«any»"
+         name: "pet"
+
+  - uriIndex: 2
+    index: 2
+    testDescription: "Verified Inherrited override of a parameterized generic type"
+    expectedUri: "/fancypets"
+    returnType: "int"
+    httpMethod: "POST"
+    parameters:
+       - type: "FancyPet"
+         name: "object"
+
+  - uriIndex: 3
+    index: 0
+    testDescription: "Verified alternate type for big decimal"
+    expectedUri: "/features/bigDecimal"
+    returnType: "Void"
+    parameters:
+       - type: "Float"
+         name: "input"
+
+  - uriIndex: 3
+    index: 1
+    testDescription: "Verified alternate type for LocalDate"
+    expectedUri: "/features/date"
+    returnType: "Void"
+    parameters:
+       - type: "Date"
+         name: "localDate"
+
+  - uriIndex: 3
+    index: 2
+    testDescription: "Verified swagger annotations are processed correctly"
+    expectedUri: "/features/{petId}"
+    returnType: "Pet"
+    parameters:
+       - type: "String"
+         name: "petId"
+
+  - uriIndex: 3
+    index: 3
+    testDescription: "Verified that all http methods are generated when method is not explicitly mentioned"
+    expectedUri: "/features/allMethodsAllowed"
+    returnType: "Void"
+
+  - uriIndex: 3
+    index: 4
+    httpMethod: "GET"
+    testDescription: "Verified ignore type rule for UriComponentsBuilder"
+    expectedUri: "/features/effective"
+    returnType: "ResponseEntity«Example»"
+
+  - uriIndex: 3
+    index: 5
+    testDescription: "Verifed that nested generics are supported"
+    expectedUri: "/features/effectives"
+    returnType: "ResponseEntity«List«Example»»"
+
+  - uriIndex: 3
+    index: 6
+    httpMethod: "POST"
+    testDescription: "Verified that bare models without @RequestBody annotation are supported"
+    expectedUri: "/features/effective"
+    returnType: "Void"
+    parameters:
+       - type: "Example"
+         name: "example"
+
+  - uriIndex: 3
+    index: 7
+    testDescription: "Verified enums are supported"
+    expectedUri: "/features/status"
+    returnType: "Void"
+    parameters:
+       - type: "EnumType"
+         name: "enumType"
+
+  - uriIndex: 3
+    index: 8
+    testDescription: "Verfied generic collection of enums are supported"
+    expectedUri: "/features/statuses"
+    returnType: "Void"
+    parameters:
+       - type: "Collection«EnumType»"
+         name: "enumType"
+
+  - uriIndex: 4
+    index: 0
+    testDescription: "Verified that urls are calculated correctly when class and method have request mapping urls"
+    expectedUri: "/child/child-method"
+    returnType: "String"
+    parameters:
+       - type: "String"
+         name: "parameter"
+
+  - uriIndex: 5
+    index: 0
+    testDescription: "Verified that multiple request mappings on controller works"
+    expectedUri: "/petgrooming"
+    returnType: "ResponseEntity«Boolean»"
+    parameters:
+       - type: "String"
+         name: "type"
+
+  - uriIndex: 5
+    index: 1
+    testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
+    expectedUri: "/petgrooming/voidMethod/{input}"
+    returnType: "Void"
+    parameters:
+       - type: "String"
+         name: "input"
+
+  - uriIndex: 6
+    index: 0
+    testDescription: "Verified that multiple request mappings on controller works and is grouped correctly"
+    expectedUri: "/pets/grooming"
+    returnType: "ResponseEntity«Boolean»"
+    parameters:
+       - type: "String"
+         name: "type"
+
+  - uriIndex: 6
+    index: 1
+    testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
+    expectedUri: "/pets/grooming/voidMethod/{input}"
+    returnType: "Void"
+    parameters:
+       - type: "String"
+         name: "input"
+
+  - uriIndex: 7
+    index: 0
+    testDescription: "Verified that multiple request mappings on controller works and is grouped correctly"
+    expectedUri: "/pets/grooming"
+    returnType: "ResponseEntity«Boolean»"
+    parameters:
+       - type: "String"
+         name: "type"
+
+  - uriIndex: 7
+    index: 1
+    httpMethod: "GET"
+    testDescription: "Verified that multiple request mappings on controller works and is grouped correctly"
+    expectedUri: "/pets"
+    returnType: "ResponseEntity«Boolean»"
+    parameters:
+       - type: "String"
+         name: "type"
+
+  - uriIndex: 7
+    index: 2
+    testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
+    expectedUri: "/pets/grooming/voidMethod/{input}"
+    returnType: "Void"
+    parameters:
+       - type: "String"
+         name: "input"
+
+  - uriIndex: 7
+    index: 3
+    testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
+    expectedUri: "/pets/voidMethod/{input}"
+    returnType: "Void"
+    parameters:
+       - type: "String"
+         name: "input"
+
+  - uriIndex: 7
+    index: 4
+    testDescription: "Verified multiple @PathVariables is supported"
+    expectedUri: "/pets/{a}/{b}"
+    returnType: "ResponseEntity«Void»"
+    parameters:
+       - type: "String"
+         name: "a"
+       - type: "String"
+         name: "b"
+
+  - uriIndex: 7
+    index: 5
+    httpMethod: "POST"
+    testDescription: "Verfied @Apixxx annotations are supported and layer on top of spings annotations for POST"
+    expectedUri: "/pets"
+    returnType: "Void"
+    parameters:
+       - type: "Pet"
+         name: "pet"
+
+  - uriIndex: 7
+    index: 6
+    testDescription: "Verfied @Apixxx annotations are supported and layer on top of spings annotations for GET"
+    expectedUri: "/pets/{petId}"
+    returnType: "Pet"
+    parameters:
+       - type: "String"
+         name: "petId"
+
+  - uriIndex: 7
+    index: 7
+    httpMethod: "PUT"
+    testDescription: "Verfied @Apixxx annotations are supported and layer on top of spings annotations for POST"
+    expectedUri: "/pets"
+    returnType: "Void"
+    parameters:
+       - type: "Pet"
+         name: "pet"
+
+  - uriIndex: 7
+    index: 8
+    testDescription: "Verfied @RequestParam is supported"
+    expectedUri: "/pets/findByStatus"
+    returnType: "Pet"
+    parameters:
+       - type: "String"
+         name: "status"
+
+  - uriIndex: 7
+    index: 9
+    testDescription: "Verified @Depricated operations are supported"
+    expectedUri: "/pets/findByTags"
+    returnType: "Pet"
+    parameters:
+       - type: "String"
+         name: "tags"
+
+  - uriIndex: 7
+    index: 10
+    testDescription: "@Verified @ApiModel annotation is supported"
+    expectedUri: "/pets/siblings"
+    returnType: "List[Pet]"
+    parameters:
+       - type: "Pet"
+         name: "pet"
+
+  - uriIndex: 7
+    index: 11
+    httpMethod: "GET"
+    testDescription: "Verified Generic List is supported"
+    expectedUri: "/pets"
+    returnType: "List[Pet]"
+
+  - uriIndex: 7
+    index: 12
+    testDescription: "Verfied HttpEntity is supported"
+    expectedUri: "/pets/{name}"
+    returnType: "HttpEntity«Pet»"
+    parameters:
+       - type: "String"
+         name: "name"
+
+  - uriIndex: 7
+    index: 13
+    testDescription: "Verified concrete Map<String, Pet> is supported"
+    expectedUri: "/pets/echo"
+    returnType: "List[Entry«String,Pet»]"
+    parameters:
+       - type: "List[Entry«String,Pet»]"
+         name: "someInput"
+
+  - uriIndex: 7
+    index: 14
+    testDescription: "Verfied generic Map<String, Object> maps to any"
+    expectedUri: "/pets/transformPetNameToPetMapToAny"
+    returnType: "any"
+    parameters:
+       - type: "List[Entry«String,Pet»]"
+         name: "someInput"
+
+  - uriIndex: 7
+    index: 15
+    testDescription: "Verfied generic Map<Object,Object> is supported"
+    expectedUri: "/pets/transformPetNameToPetMapToGenericOpenMap"
+    returnType: "any"
+    parameters:
+       - type: "List[Entry«String,Pet»]"
+         name: "someInput"
+
+  - uriIndex: 7
+    index: 16
+    testDescription: "Verified non-generic Map is supported"
+    expectedUri: "/pets/transformPetNameToPetMapToOpenMap"
+    returnType: "any"
+    parameters:
+       - type: "List[Entry«String,Pet»]"
+         name: "someInput"
+
+  - uriIndex: 7
+    index: 17
+    testDescription: "Verified nested generic keys and values are supported for Maps"
+    expectedUri: "/pets/nameToNickNamesMap"
+    returnType: "List[Entry«String,List«String»»]"
+
+  - uriIndex: 7
+    index: 18
+    testDescription: "Verified List of HttpEntity is supported"
+    expectedUri: "/pets/byName/{name}"
+    returnType: "HttpEntity«List«Pet»»"
+    parameters:
+       - type: "String"
+         name: "name"
+
+  - uriIndex: 7
+    index: 19
+    testDescription: "Verified Void ResponseEntity is supported"
+    expectedUri: "/pets/{petId}/pic"
+    returnType: "ResponseEntity«Void»"
+    parameters:
+       - type: "String"
+         name: "petId"
+       - type: "file"
+
+  - uriIndex: 7
+    index: 20
+    testDescription: "Verified naked @PathVariables with no explicit names are supported"
+    expectedUri: "/pets/{petId}/pic/{picId}"
+    returnType: "ResponseEntity«Void»"
+    parameters:
+       - type: "String"
+         name: "petId"
+       - type: "String"
+         name: "picId"
