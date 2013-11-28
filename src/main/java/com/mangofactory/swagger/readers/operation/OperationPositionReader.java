@@ -4,14 +4,19 @@ import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 
+import static java.lang.Math.max;
+
 public class OperationPositionReader implements Command<RequestMappingContext> {
    @Override
    public void execute(RequestMappingContext context) {
-      Integer position = (Integer) context.get("currentCount");
+      int origPosition = (Integer) context.get("currentCount");
+      Integer operationPosition = origPosition;
       ApiOperation apiOperation = context.getApiOperationAnnotation();
       if (null != apiOperation && apiOperation.position() > 0) {
-         position = apiOperation.position();
+         operationPosition = apiOperation.position();
       }
-      context.put("position", position);
+      context.put("position", operationPosition);
+      context.put("currentCount", max((origPosition + 1), operationPosition ));
+
    }
 }
