@@ -1,7 +1,7 @@
-package com.mangofactory.swagger.spring.test.controllers;
+package com.mangofactory.swagger.spring.sample.controllers;
 
-import com.mangofactory.swagger.spring.test.FancyPet;
-import com.mangofactory.swagger.spring.test.Pet;
+import com.mangofactory.swagger.spring.sample.FancyPet;
+import com.mangofactory.swagger.spring.sample.Pet;
 import com.wordnik.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

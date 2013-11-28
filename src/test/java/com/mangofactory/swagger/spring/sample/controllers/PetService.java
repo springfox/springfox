@@ -1,9 +1,9 @@
-package com.mangofactory.swagger.spring.test.controllers;
+package com.mangofactory.swagger.spring.sample.controllers;
 
 import com.mangofactory.swagger.annotations.ApiError;
 import com.mangofactory.swagger.annotations.ApiErrors;
 import com.mangofactory.swagger.annotations.ApiModel;
-import com.mangofactory.swagger.spring.test.Pet;
+import com.mangofactory.swagger.spring.sample.Pet;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -34,7 +34,7 @@ public class PetService {
 
 	@RequestMapping(value="/{petId}",method=RequestMethod.GET)
 	@ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. "
-			+ "ID > 10 or nonintegers will simulate API error conditions", responseClass = "ccom.mangofactory.swagger.spring.test.Pet"
+			+ "ID > 10 or nonintegers will simulate API error conditions", responseClass = "ccom.mangofactory.swagger.spring.sample.Pet"
 		)
 	@ApiErrors(NotFoundException.class)
 	public Pet getPetById (
@@ -64,7 +64,7 @@ public class PetService {
 	@RequestMapping(value="/findByStatus",method=RequestMethod.GET)
 	@ApiOperation(value = "Finds Pets by status",
             notes = "Multiple status values can be provided with comma seperated strings",
-            responseClass = "com.mangofactory.swagger.spring.test.Pet", multiValueResponse = true)
+            responseClass = "com.mangofactory.swagger.spring.sample.Pet", multiValueResponse = true)
 	@ApiErrors(errors = { @ApiError(code = 400, reason = "Invalid status value") })
 	public Pet findPetsByStatus(
 			@ApiParam(value = "Status values that need to be considered for filter", required = true,
@@ -76,7 +76,7 @@ public class PetService {
 	@RequestMapping(value="/findByTags",method=RequestMethod.GET)
 	@ApiOperation(value = "Finds Pets by tags",
             notes = "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
-            responseClass = "com.mangofactory.swagger.spring.test.Pet", multiValueResponse = true)
+            responseClass = "com.mangofactory.swagger.spring.sample.Pet", multiValueResponse = true)
 	@ApiErrors(errors = { @ApiError(code = 400, reason = "Invalid tag value") })
 	@Deprecated
 	public Pet findPetsByTags(

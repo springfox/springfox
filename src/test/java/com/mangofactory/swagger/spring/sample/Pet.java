@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.spring.test;
+package com.mangofactory.swagger.spring.sample;
 
 public class Pet {
     private String id;

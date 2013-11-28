@@ -6,8 +6,8 @@ import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.annotations.ApiError;
 import com.mangofactory.swagger.annotations.ApiErrors;
 import com.mangofactory.swagger.models.DocumentationSchemaProvider;
-import com.mangofactory.swagger.spring.test.Pet;
-import com.mangofactory.swagger.spring.test.configuration.ServicesTestConfiguration;
+import com.mangofactory.swagger.spring.sample.Pet;
+import com.mangofactory.swagger.spring.sample.configuration.ServicesTestConfiguration;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.core.DocumentationError;
 import com.wordnik.swagger.core.DocumentationOperation;
@@ -217,7 +217,7 @@ public class OperationReaderTest {
             return new Pet();
         }
 
-        public void sampleMethod2(@ApiParam(name = "com.mangofactory.swagger.spring.test.Pet") @RequestBody Pet pet) {
+        public void sampleMethod2(@ApiParam(name = "com.mangofactory.swagger.spring.sample.Pet") @RequestBody Pet pet) {
         }
 
         public void methodWithNoParametersWithExpression() {

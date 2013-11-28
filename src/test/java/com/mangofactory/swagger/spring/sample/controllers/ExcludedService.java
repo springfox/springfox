@@ -1,6 +1,6 @@
-package com.mangofactory.swagger.spring.test.controllers;
+package com.mangofactory.swagger.spring.sample.controllers;
 
-import com.mangofactory.swagger.spring.test.Pet;
+import com.mangofactory.swagger.spring.sample.Pet;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.commons.lang.NotImplementedException;

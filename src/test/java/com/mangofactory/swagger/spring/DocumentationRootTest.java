@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.spring;
 
 import com.mangofactory.swagger.spring.controller.DocumentationController;
-import com.mangofactory.swagger.spring.test.configuration.ServicesTestConfiguration;
+import com.mangofactory.swagger.spring.sample.configuration.ServicesTestConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

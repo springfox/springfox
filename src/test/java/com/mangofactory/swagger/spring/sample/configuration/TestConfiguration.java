@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.spring.test.configuration;
+package com.mangofactory.swagger.spring.sample.configuration;
 
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.configuration.DefaultConfigurationModule;
@@ -11,18 +11,16 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-import static com.mangofactory.swagger.models.IgnorableTypeRule.ignorable;
-
 @Configuration
 @EnableWebMvc
 @Import(DocumentationConfig.class)
-@ComponentScan("com.mangofactory.swagger.spring.test")
-public class ServicesTestConfiguration {
+@ComponentScan("com.mangofactory.swagger.spring.sample")
+public class TestConfiguration {
+
     @Bean
     public SwaggerConfiguration swaggerConfiguration(DefaultConfigurationModule defaultConfig,
                                                      ExtensibilityModule extensibility) {
@@ -32,7 +30,6 @@ public class ServicesTestConfiguration {
                 Float.class));
         swaggerConfiguration.getTypeProcessingRules().add(new AlternateTypeProcessingRule(LocalDate.class,
                 Date.class));
-        swaggerConfiguration.getTypeProcessingRules().add(ignorable(UriComponentsBuilder.class));
         return extensibility.apply(defaultConfig.apply(swaggerConfiguration));
     }
 

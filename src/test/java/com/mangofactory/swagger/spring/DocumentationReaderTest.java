@@ -2,7 +2,7 @@ package com.mangofactory.swagger.spring;
 
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.spring.controller.DocumentationController;
-import com.mangofactory.swagger.spring.test.configuration.ServicesTestConfiguration;
+import com.mangofactory.swagger.spring.sample.configuration.ServicesTestConfiguration;
 import com.wordnik.swagger.core.Documentation;
 import com.wordnik.swagger.core.DocumentationEndPoint;
 import com.wordnik.swagger.core.DocumentationOperation;

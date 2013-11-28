@@ -1,7 +1,7 @@
 import com.google.common.base.Charsets
 import com.google.common.io.Resources
 import com.mangofactory.swagger.spring.controller.DocumentationController
-import com.mangofactory.swagger.spring.test.configuration.ServicesTestConfiguration
+import com.mangofactory.swagger.spring.sample.configuration.ServicesTestConfiguration
 import groovy.json.JsonSlurper
 import org.ho.yaml.Yaml
 import org.springframework.beans.factory.annotation.Autowired

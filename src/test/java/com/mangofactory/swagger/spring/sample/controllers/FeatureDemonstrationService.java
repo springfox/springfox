@@ -1,10 +1,10 @@
-package com.mangofactory.swagger.spring.test.controllers;
+package com.mangofactory.swagger.spring.sample.controllers;
 
 import com.mangofactory.swagger.annotations.ApiErrors;
-import com.mangofactory.swagger.spring.test.EnumType;
-import com.mangofactory.swagger.spring.test.Example;
-import com.mangofactory.swagger.spring.test.NestedType;
-import com.mangofactory.swagger.spring.test.Pet;
+import com.mangofactory.swagger.spring.sample.EnumType;
+import com.mangofactory.swagger.spring.sample.Example;
+import com.mangofactory.swagger.spring.sample.NestedType;
+import com.mangofactory.swagger.spring.sample.Pet;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -34,7 +34,7 @@ public class FeatureDemonstrationService {
     @RequestMapping(value="/{petId}",method=RequestMethod.GET)
 	@ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. "
 			+ "ID > 10 or nonintegers will simulate API error conditions",
-            responseClass = "com.mangofactory.swagger.spring.test.Pet"
+            responseClass = "com.mangofactory.swagger.spring.sample.Pet"
 		)
 	@ApiErrors(NotFoundException.class)
 	public Pet getPetById (

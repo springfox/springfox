@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.spring.test;
+package com.mangofactory.swagger.spring.sample;
 
 public class Example {
     private String foo;
