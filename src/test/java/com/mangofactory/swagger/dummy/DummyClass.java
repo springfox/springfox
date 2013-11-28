@@ -33,6 +33,9 @@ public class DummyClass {
    @ApiOperation(value = "", produces = "application/xml", consumes= "application/xml")
    public void methodWithBothXmlMediaTypes(){}
 
+   @Deprecated
+   public void methodWithDeprecated(){}
+
    public static class ApiIgnorableClass{
       @ApiIgnore
       public void dummyMethod(){}

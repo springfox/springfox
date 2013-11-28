@@ -6,6 +6,6 @@ import com.mangofactory.swagger.scanners.RequestMappingContext;
 public class OperationDeprecatedReader implements Command<RequestMappingContext> {
    @Override
    public void execute(RequestMappingContext context) {
-      //To change body of implemented methods use File | Settings | File Templates.
+      context.put("deprecated", context.getHandlerMethod().getMethodAnnotation(Deprecated.class) != null);
    }
 }

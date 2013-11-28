@@ -24,13 +24,15 @@ class OperationCommandReaderSpec extends Specification {
     then:
       result[property] == expected
     where:
-      command                          | property      | handlerMethod                            | expected
-      new OperationSummaryReader()     | 'summary'     | dummyHandlerMethod()                     | 'dummyMethod'
-      new OperationSummaryReader()     | 'summary'     | dummyHandlerMethod('methodWithSummary')  | 'summary'
-      new OperationNotesReader()       | 'notes'       | dummyHandlerMethod()                     | 'dummyMethod'
-      new OperationNotesReader()       | 'notes'       | dummyHandlerMethod('methodWithNotes')    | 'some notes'
-      new OperationNicknameReader()    | 'nickname'    | dummyHandlerMethod()                     | 'dummyMethod'
-      new OperationPositionReader()    | 'position'    | dummyHandlerMethod()                     | CURRENT_COUNT
-      new OperationPositionReader()    | 'position'    | dummyHandlerMethod('methodWithPosition') | 5
+      command                         | property     | handlerMethod                              | expected
+      new OperationSummaryReader()    | 'summary'    | dummyHandlerMethod()                       | 'dummyMethod'
+      new OperationSummaryReader()    | 'summary'    | dummyHandlerMethod('methodWithSummary')    | 'summary'
+      new OperationNotesReader()      | 'notes'      | dummyHandlerMethod()                       | 'dummyMethod'
+      new OperationNotesReader()      | 'notes'      | dummyHandlerMethod('methodWithNotes')      | 'some notes'
+      new OperationNicknameReader()   | 'nickname'   | dummyHandlerMethod()                       | 'dummyMethod'
+      new OperationPositionReader()   | 'position'   | dummyHandlerMethod()                       | CURRENT_COUNT
+      new OperationPositionReader()   | 'position'   | dummyHandlerMethod('methodWithPosition')   | 5
+      new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod('methodWithDeprecated') | true
+      new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod()                       | false
    }
 }

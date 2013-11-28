@@ -44,13 +44,13 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          commandList.add(new OperationHttpMethodReader());
          commandList.add(new OperationSummaryReader());
          commandList.add(new OperationNotesReader());
-         commandList.add(new OperationResponseClassReader());
+         commandList.add(new OperationResponseClassReader()); //td
          commandList.add(new OperationNicknameReader());
          commandList.add(new OperationPositionReader());
          commandList.add(new MediaTypeReader());
-         commandList.add(new OperationParameterReader());
-         commandList.add(new OperationResponseMessageReader());
-         commandList.add(new OperationDeprecatedReader());
+         commandList.add(new OperationParameterReader()); //td
+         commandList.add(new OperationResponseMessageReader()); //td
+         commandList.add(new OperationDeprecatedReader()); //td
          commandExecutor.execute(commandList, operationRequestMappingContext);
 
 
@@ -71,8 +71,9 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
                emptyScalaList(),
                emptyScalaList(),
                emptyScalaList(),
-               toOption("false")
+               toOption(operationResultMap.get("deprecated"))
          );
+
          operations.add(operation);
 
 //                  method: String

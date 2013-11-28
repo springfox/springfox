@@ -28,6 +28,5 @@ public class OperationHttpMethodReader implements Command<RequestMappingContext>
          }
       }
       context.put("httpRequestMethod", requestMethod);
-      //To change body of implemented methods use File | Settings | File Templates.
    }
 }
