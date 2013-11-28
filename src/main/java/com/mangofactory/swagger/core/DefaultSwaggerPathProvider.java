@@ -3,6 +3,7 @@ package com.mangofactory.swagger.core;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletContext;
 
@@ -18,11 +19,20 @@ public class DefaultSwaggerPathProvider implements SwaggerPathProvider {
       return apiResourceSuffix;
    }
 
-   public String getContextPath() {
-      return servletContext.getContextPath();
+   public String getAppBasePath() {
+      return UriComponentsBuilder
+            .fromHttpUrl("http://127.0.0.1:8080")
+            .path(servletContext.getContextPath())
+            .build()
+            .toString();
    }
 
-   public String getAppBasePath() {
-      return "http://127.0.0.1:8080" + getContextPath();
+   @Override
+   public String getSwaggerDocumentationBasePath() {
+      return UriComponentsBuilder
+            .fromHttpUrl(getAppBasePath())
+            .pathSegment("api-docs/")
+            .build()
+            .toString();
    }
 }

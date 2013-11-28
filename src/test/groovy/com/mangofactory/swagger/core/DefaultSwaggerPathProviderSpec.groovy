@@ -1,24 +1,24 @@
 package com.mangofactory.swagger.core
 
+import com.mangofactory.swagger.mixins.RequestMappingSupport
 import spock.lang.Specification
+import spock.lang.Unroll
 
-import javax.servlet.ServletContext
-
+@Mixin(RequestMappingSupport)
 class DefaultSwaggerPathProviderSpec extends Specification {
 
+   @Unroll
    def "Swagger url formats"() {
     given:
       DefaultSwaggerPathProvider defaultSwaggerPathProvider = new DefaultSwaggerPathProvider(apiResourceSuffix: "/api/v1/");
-      ServletContext context = Mock(ServletContext)
-      context.getContextPath() >> "/context-path"
-      defaultSwaggerPathProvider.servletContext = context
+      defaultSwaggerPathProvider.servletContext = servletContext()
 
     expect:
       defaultSwaggerPathProvider."${method}"() == expected
     where:
-      method                 | expected
-      "getContextPath"       | "/context-path"
-      "getAppBasePath"       | "http://127.0.0.1:8080/context-path"
-      "getApiResourcePrefix" | "/api/v1/"
+      method                            | expected
+      "getAppBasePath"                  | "http://127.0.0.1:8080/context-path"
+      "getSwaggerDocumentationBasePath" | 'http://127.0.0.1:8080/context-path/api-docs/'
+      "getApiResourcePrefix"            | "/api/v1/"
    }
 }

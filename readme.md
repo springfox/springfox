@@ -2,9 +2,18 @@
 
 [![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc.png?branch=swagger-spec-1.2.0-upgrade)](https://travis-ci.org/adrianbk/swagger-springmvc)
 
+Sample Project: [here](https://github.com/adrianbk/swagger-springmvc-demo)
 
-This project provides integration between [Swagger](https://github.com/wordnik/swagger-core) and Spring MVC.
+## Features
+- Supports multiple instances of swagger api resource listings from the same spring mvc application
+- All uris are now absolute after much deliberation. Relative uri's do not work well with swagger UI. Other swagger tools like
+swagger-codegen work much better with absolute uri's.
 
+
+##Adding to to a spring MVC application
+
+
+##Customization
 
 ## Rules
 
@@ -42,6 +51,7 @@ mvn org.jacoco:jacoco-maven-plugin:0.6.3.201306030806:check
 -Djacoco.skip=true
 ```
 
+Spring  prior to 3.1.1 Bug in uri componentsbuilder
 License
 -------
 

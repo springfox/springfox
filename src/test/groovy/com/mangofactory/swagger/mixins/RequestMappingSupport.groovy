@@ -8,48 +8,50 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
 import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 
-import static com.mangofactory.swagger.dummy.DummyClass.*
+import javax.servlet.ServletContext
 
 class RequestMappingSupport {
 
-   def requestMappingInfo(String path, Map overrides = [:]){
+   def requestMappingInfo(String path, Map overrides = [:]) {
       PatternsRequestCondition singlePatternRequestCondition = patternsRequestCondition([path] as String[])
       ConsumesRequestCondition consumesRequestCondition = overrides['consumesRequestCondition'] ?: consumesRequestCondition()
       ProducesRequestCondition producesRequestCondition = overrides['producesRequestCondition'] ?: producesRequestCondition()
       PatternsRequestCondition patternsRequestCondition = overrides['patternsRequestCondition'] ?: singlePatternRequestCondition
       RequestMethodsRequestCondition requestMethodsRequestCondition =
-         overrides['requestMethodsRequestCondition'] ?:  requestMethodsRequestCondition(RequestMethod.values())
+         overrides['requestMethodsRequestCondition'] ?: requestMethodsRequestCondition(RequestMethod.values())
       new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, null, null, consumesRequestCondition, producesRequestCondition, null)
    }
 
-   def dummyHandlerMethod(String methodName = "dummyMethod"){
+   def dummyHandlerMethod(String methodName = "dummyMethod") {
       def clazz = new DummyClass()
       Class c = clazz.getClass();
       new HandlerMethod(clazz, c.getMethod(methodName, null))
    }
 
-   def ignorableHandlerMethod(){
+   def ignorableHandlerMethod() {
       def clazz = new DummyClass.ApiIgnorableClass()
       Class c = clazz.getClass();
       new HandlerMethod(clazz, c.getMethod("dummyMethod", null))
    }
 
-   def patternsRequestCondition(String ... patterns){
+   def patternsRequestCondition(String... patterns) {
       new PatternsRequestCondition(patterns)
    }
 
-   def consumesRequestCondition(String ... conditions){
+   def consumesRequestCondition(String... conditions) {
       new ConsumesRequestCondition(conditions)
    }
 
-   def producesRequestCondition(String ... conditions){
+   def producesRequestCondition(String... conditions) {
       new ProducesRequestCondition(conditions)
    }
 
-   def requestMethodsRequestCondition(RequestMethod ... requestMethods){
+   def requestMethodsRequestCondition(RequestMethod... requestMethods) {
       new RequestMethodsRequestCondition(requestMethods)
+   }
 
+   def servletContext() {
+      [getContextPath: { return "/context-path" }] as ServletContext
    }
 }

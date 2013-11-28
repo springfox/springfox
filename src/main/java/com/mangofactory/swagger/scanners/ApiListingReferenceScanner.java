@@ -3,6 +3,7 @@ package com.mangofactory.swagger.scanners;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimaps;
 import com.mangofactory.swagger.core.ControllerResourceNamingStrategy;
+import com.mangofactory.swagger.core.SwaggerPathProvider;
 import com.wordnik.swagger.model.ApiListingReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.util.UriComponentsBuilder;
 import scala.actors.threadpool.Arrays;
 
 import java.lang.annotation.Annotation;
@@ -49,6 +51,11 @@ public class ApiListingReferenceScanner {
    @Getter
    @Setter
    private ControllerResourceNamingStrategy controllerNamingStrategy;
+
+   @Getter
+   @Setter
+   private SwaggerPathProvider swaggerPathProvider;
+
    @Setter
    @Getter
    private List<String> includePatterns = Arrays.asList(new String[]{".*?"});;
@@ -68,6 +75,7 @@ public class ApiListingReferenceScanner {
       if(StringUtils.isBlank(swaggerGroup)){
          throw new IllegalArgumentException("swaggerGroup must not be empty");
       }
+      Assert.notNull(swaggerPathProvider, "swaggerPathProvider is required");
 
       log.info("Scanning for api listing references");
       scanSpringRequestMappings();
@@ -89,12 +97,10 @@ public class ApiListingReferenceScanner {
 
       int groupPosition = 0;
       for (String controllerGroupName : resourceGroupRequestMappings.keySet()) {
-         /**
-          * TODO - consider making resource path absolute. @see SwaggerPathProvider
-          * Path is realtive to swagger-UI
-          * e.g. http://myserver.com/api-docs/{swagger-group}/{resourcePath}
-          */
-         String path = format("/%s", controllerGroupName);
+         String path = UriComponentsBuilder.fromHttpUrl(swaggerPathProvider.getSwaggerDocumentationBasePath())
+               .pathSegment(swaggerGroup, controllerGroupName)
+               .build()
+               .toString();
          log.info(format("Create resource listing Path: %s Description: %s Position: %s",
                          path, controllerGroupName,groupPosition));
 

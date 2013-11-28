@@ -3,14 +3,12 @@ package com.mangofactory.swagger.core;
 public interface SwaggerPathProvider {
 
    /**
-    * e.g the api endpoint resides at  http://myapp.com:8080/contextPath/api/v1/businesses
-    * Should return /api/v1/ - not the leading and trailing forward slashes
+    * e.g the api endpoint resides at  http://myapp.com:8080/<contextPath>/api/v1/businesses
+    * Should return /api/v1/ - note the leading and trailing forward slashes
     *
     * @return the resource prefix of the api endpoint
     */
    public String getApiResourcePrefix();
-
-   public String getContextPath();
 
    /**
     * return the absolute path to the app/web server hosting  the swagger documentation
@@ -21,4 +19,10 @@ public interface SwaggerPathProvider {
     */
    public String getAppBasePath();
 
+   /**
+    *  The uri to the swagger documentation - typically the applications base path joined with the swagger path
+    *  e.g. http://www.myserver.com/<contextPath>/api-docs
+    * @return
+    */
+   public String getSwaggerDocumentationBasePath();
 }

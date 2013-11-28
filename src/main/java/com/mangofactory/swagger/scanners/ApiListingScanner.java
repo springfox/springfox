@@ -12,6 +12,7 @@ import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiListing;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
 
@@ -76,7 +77,12 @@ public class ApiListingScanner {
             apiDescriptions.addAll(apiDescriptionList);
          }
 
-         String resourcePath = String.format("%s%s", swaggerPathProvider.getApiResourcePrefix(),  controllerGroupName);
+         String resourcePath = UriComponentsBuilder
+               .fromPath(swaggerPathProvider.getApiResourcePrefix())
+               .pathSegment(controllerGroupName)
+               .build()
+               .toString();
+
          ApiListing apiListing = new ApiListing(
                apiVersion,
                swaggerVersion,

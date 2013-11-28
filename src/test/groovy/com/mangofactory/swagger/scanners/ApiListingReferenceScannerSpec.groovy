@@ -2,12 +2,16 @@ package com.mangofactory.swagger.scanners
 
 import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
+import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
 import com.mangofactory.swagger.mixins.AccessorAssertions
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.wordnik.swagger.model.ApiListingReference
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import static com.mangofactory.swagger.ScalaUtils.fromOption
 
 @Mixin([AccessorAssertions, RequestMappingSupport])
 class ApiListingReferenceScannerSpec extends Specification {
@@ -80,41 +84,30 @@ class ApiListingReferenceScannerSpec extends Specification {
    def "Should only include matching controller url patterns"() {
     when:
       RequestMappingHandlerMapping requestMappingHandlerMapping = Mock()
-      RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
-      requestMappingHandlerMapping.getHandlerMethods() >> [(requestMappingInfo): dummyHandlerMethod()]
+      RequestMappingInfo businessRequestMappingInfo = requestMappingInfo("/businesses")
+      RequestMappingInfo accountsRequestMappingInfo = requestMappingInfo("/accounts")
+
+      requestMappingHandlerMapping.getHandlerMethods() >>
+              [(businessRequestMappingInfo): dummyHandlerMethod(), (accountsRequestMappingInfo): dummyHandlerMethod()]
 
       ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
       apiListingReferenceScanner.setControllerNamingStrategy(new DefaultControllerResourceNamingStrategy())
       apiListingReferenceScanner.setRequestMappingHandlerMapping([requestMappingHandlerMapping])
-      apiListingReferenceScanner.setIncludePatterns(patterns)
-      apiListingReferenceScanner.setRequestMappingPatternMatcher(new AntRequestMappingPatternMatcher())
+      apiListingReferenceScanner.setIncludePatterns([".*"])
+      apiListingReferenceScanner.setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
       apiListingReferenceScanner.setSwaggerGroup("someGroup")
-      apiListingReferenceScanner.scan()
+      apiListingReferenceScanner.setSwaggerPathProvider(new DefaultSwaggerPathProvider(servletContext: servletContext()))
+      List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
 
     then:
-      shouldMatch == (null != apiListingReferenceScanner.apiListingReferences.find { it.path() == "/$controllerGroupName" })
+      apiListingReferences.size == 2
+      ApiListingReference businessListingReference = apiListingReferences.find({fromOption(it.description()) == "businesses"})
+      businessListingReference.path() == 'http://127.0.0.1:8080/context-path/api-docs/someGroup/businesses'
+      businessListingReference.position() > -1
 
-    where:
-      patterns                 | path                           | controllerGroupName | shouldMatch
-      ['']                     | 'path'                         | 'path'              | false
-      ['sdfs']                 | 'path'                         | 'path'              | false
-      ['/path']                | 'path'                         | 'path'              | true
-      ['/?ath']                | 'path'                         | 'path'              | true
-      ['/*ath']                | 'path'                         | 'path'              | true
-      ['/**path']              | 'path'                         | 'path'              | true
-      ['/path/']               | 'path'                         | 'path'              | false
-      ['/**path']              | 'path'                         | 'path'              | true
-      ['/**']                  | 'path'                         | 'path'              | true
-      ['/businesses/accounts'] | '/businesses/accounts'         | 'businesses'        | true
-      ['/**']                  | '/businesses/accounts'         | 'businesses'        | true
-      ['/*/accounts']          | '/businesses/accounts'         | 'businesses'        | true
-      ['/*/accounts']          | '/businesses/accounts'         | 'businesses'        | true
-      ['/**/accounts']         | '/businesses/accounts'         | 'businesses'        | true
-      ['/**businesses/**']     | '/businesses/accounts'         | 'businesses'        | true
-      ['/**']                  | '/businesses/accounts/balance' | 'businesses'        | true
-      ['/path', '/?ath']       | 'path'                         | 'path'              | true
-      ['/path', '/notAMatch']  | 'path'                         | 'path'              | true
-      ['/both', '/doNotMatch'] | 'path'                         | 'path'              | false
+      ApiListingReference accountsListingReference = apiListingReferences.find({fromOption(it.description()) == "accounts"})
+      accountsListingReference.path() == 'http://127.0.0.1:8080/context-path/api-docs/someGroup/accounts'
+      businessListingReference.position() > -1
+
    }
-
 }

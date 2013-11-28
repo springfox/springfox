@@ -15,6 +15,7 @@ public class SwaggerCache {
    private Map<String, ResourceListing> swaggerApiResourceListingMap = newLinkedHashMap();
 
    @Getter
+   //Map<'swaggerGroup', Map<controllerGroupName>, ApiListing>>
    private Map<String, Map<String, ApiListing>> swaggerApiListingMap = newLinkedHashMap();
 
    public void addSwaggerResourceListing(String swaggerGroup, ResourceListing resourceListing) {

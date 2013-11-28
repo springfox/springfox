@@ -8,10 +8,13 @@ import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.ApiInfo
 import com.wordnik.swagger.model.ApiKey
+import com.wordnik.swagger.model.ApiListing
 import com.wordnik.swagger.model.ApiListingReference
 import com.wordnik.swagger.model.ResourceListing
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
+
+import javax.servlet.ServletContext
 
 import static com.mangofactory.swagger.ScalaUtils.fromOption
 import static com.mangofactory.swagger.ScalaUtils.fromScalaList
@@ -77,12 +80,14 @@ class SwaggerApiResourceListingSpec extends Specification {
    def "resource with mocked apis"() {
       given:
       SwaggerCache swaggerCache = new SwaggerCache();
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
-      DefaultSwaggerPathProvider swaggerPathProvider = Stub()
+      String swaggerGroup = "swaggerGroup"
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, swaggerGroup)
+      ServletContext servletContext = [getContextPath: {return "/myApp"}] as ServletContext
+      DefaultSwaggerPathProvider swaggerPathProvider = new DefaultSwaggerPathProvider(servletContext: servletContext)
 
       swaggerApiResourceListing.setSwaggerPathProvider(swaggerPathProvider)
 
-      Map handlerMethods = [(requestMappingInfo("/somePath")): dummyHandlerMethod()]
+      Map handlerMethods = [(requestMappingInfo("somePath/")): dummyHandlerMethod()]
       def requestHandlerMapping = Mock(RequestMappingHandlerMapping)
       requestHandlerMapping.getHandlerMethods() >> handlerMethods
 
@@ -91,16 +96,28 @@ class SwaggerApiResourceListingSpec extends Specification {
       scanner.setControllerNamingStrategy(new DefaultControllerResourceNamingStrategy())
       scanner.setSwaggerGroup("swaggerGroup")
 
+      scanner.setSwaggerPathProvider(swaggerPathProvider)
+
       swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
 
     when:
       swaggerApiResourceListing.initialize()
-
+      ResourceListing resourceListing = swaggerCache.getResourceListing("swaggerGroup")
     then:
-      ResourceListing resourceListing = swaggerCache.getResourceListing("default")
+
       ApiListingReference apiListingReference = resourceListing.apis().first()
-      apiListingReference.path() == "/somePath"
+      apiListingReference.path() == "http://127.0.0.1:8080/myApp/api-docs/swaggerGroup/somePath"
       apiListingReference.position() == 0
       fromOption(apiListingReference.description()) == "somePath"
+
+    and:
+      ApiListing apiListing = swaggerCache.swaggerApiListingMap['swaggerGroup']['somePath']
+      apiListing.swaggerVersion() == '1.2'
+      apiListing.basePath() == 'http://127.0.0.1:8080/myApp'
+      apiListing.resourcePath() == '/somePath'
+
+      //"basePath": "http://petstore.swagger.wordnik.com/api",
+      //"resourcePath": "/pet"
+
    }
 }
