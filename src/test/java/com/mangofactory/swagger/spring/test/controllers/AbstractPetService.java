@@ -1,5 +1,6 @@
-package com.mangofactory.swagger.spring.test;
+package com.mangofactory.swagger.spring.test.controllers;
 
+import com.mangofactory.swagger.spring.test.Pet;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

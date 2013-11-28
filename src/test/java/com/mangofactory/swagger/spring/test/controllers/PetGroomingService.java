@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.spring.test;
+package com.mangofactory.swagger.spring.test.controllers;
 
 import com.wordnik.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;

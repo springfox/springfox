@@ -20,9 +20,8 @@ import spock.lang.Unroll
 
 import java.nio.ByteBuffer
 
-import static com.google.common.collect.Maps.newHashMap
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-// Spring imports omitted for brevity
+import static com.google.common.collect.Maps.*
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 @ContextConfiguration(loader = WebContextLoader.class, classes = ServicesTestConfiguration.class)
 class ServicesTest extends Specification {
@@ -112,10 +111,6 @@ class ServicesTest extends Specification {
 
   def paramSize(def params) {
     return params == null ? 0 : params.size()
-  }
-
-  def expectedParamSize(def params) {
-    return params == null ? 0 : params.get("parameter").size()
   }
 
   def response(MockMvc mockMvc, String path) {

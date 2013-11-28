@@ -1,8 +1,9 @@
-package com.mangofactory.swagger.spring.test;
+package com.mangofactory.swagger.spring.test.controllers;
 
 import com.mangofactory.swagger.annotations.ApiError;
 import com.mangofactory.swagger.annotations.ApiErrors;
 import com.mangofactory.swagger.annotations.ApiModel;
+import com.mangofactory.swagger.spring.test.Pet;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;

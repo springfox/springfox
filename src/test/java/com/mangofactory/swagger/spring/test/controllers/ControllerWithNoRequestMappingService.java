@@ -1,5 +1,8 @@
-package com.mangofactory.swagger.spring.test;
+package com.mangofactory.swagger.spring.test.controllers;
 
+import com.mangofactory.swagger.spring.test.EnumType;
+import com.mangofactory.swagger.spring.test.Example;
+import com.mangofactory.swagger.spring.test.NestedType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
