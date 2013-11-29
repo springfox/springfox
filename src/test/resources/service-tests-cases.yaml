@@ -1,5 +1,5 @@
 testcases:
-  - uriIndex: 0
+  - parentUri: "/api-docs/business-service"
     index: 0
     testDescription: "Verfied when @PathVariable is aliased"
     expectedUri: "/businesses/aliased/{otherId}"
@@ -9,7 +9,7 @@ testcases:
         paramType: "path"
         name: "otherId"
 
-  - uriIndex: 0
+  - parentUri: "/api-docs/business-service"
     index: 1
     testDescription: "Verfied when @PathVariable is not aliased"
     expectedUri: "/businesses/non-aliased/{businessId}"
@@ -19,7 +19,7 @@ testcases:
         paramType: "path"
         name: "businessId"
 
-  - uriIndex: 0
+  - parentUri: "/api-docs/business-service"
     index: 2
     testDescription: "Verfied when @PathVariable is defaulted"
     expectedUri: "/businesses/vanilla/{businessId}"
@@ -29,14 +29,14 @@ testcases:
         paramType: "path"
         name: "businessId"
 
-  - uriIndex: 1
+  - parentUri: "/api-docs/controller-with-no-request-mapping-service"
     index: 0
     testDescription: "Verified when controller has no request mapping at the class level and ignores
     UriComponentsBuilder"
     expectedUri: "/no-request-mapping"
     returnType: "ResponseEntity«Example»"
 
-  - uriIndex: 2
+  - parentUri: "/api-docs/fancypets"
     index: 0
     testDescription: "Verified new method on inherrited generic type"
     expectedUri: "/fancypets/?{someId}"
@@ -47,7 +47,7 @@ testcases:
       - type: "int"
         name: "someId"
 
-  - uriIndex: 2
+  - parentUri: "/api-docs/fancypets"
     index: 1
     testDescription: "Verified Inheritted class with a generic type"
     expectedUri: "/fancypets"
@@ -57,7 +57,7 @@ testcases:
        - type: "Pet«any»"
          name: "pet"
 
-  - uriIndex: 2
+  - parentUri: "/api-docs/fancypets"
     index: 2
     testDescription: "Verified Inherrited override of a parameterized generic type"
     expectedUri: "/fancypets"
@@ -67,7 +67,7 @@ testcases:
        - type: "FancyPet"
          name: "object"
 
-  - uriIndex: 3
+  - parentUri: "/api-docs/features"
     index: 0
     testDescription: "Verified alternate type for big decimal"
     expectedUri: "/features/bigDecimal"
@@ -76,7 +76,7 @@ testcases:
        - type: "Float"
          name: "input"
 
-  - uriIndex: 3
+  - parentUri: "/api-docs/features"
     index: 1
     testDescription: "Verified alternate type for LocalDate"
     expectedUri: "/features/date"
@@ -85,7 +85,7 @@ testcases:
        - type: "Date"
          name: "localDate"
 
-  - uriIndex: 3
+  - parentUri: "/api-docs/features"
     index: 2
     testDescription: "Verified swagger annotations are processed correctly"
     expectedUri: "/features/{petId}"
@@ -94,26 +94,26 @@ testcases:
        - type: "String"
          name: "petId"
 
-  - uriIndex: 3
+  - parentUri: "/api-docs/features"
     index: 3
     testDescription: "Verified that all http methods are generated when method is not explicitly mentioned"
     expectedUri: "/features/allMethodsAllowed"
     returnType: "Void"
 
-  - uriIndex: 3
+  - parentUri: "/api-docs/features"
     index: 4
     httpMethod: "GET"
     testDescription: "Verified ignore type rule for UriComponentsBuilder"
     expectedUri: "/features/effective"
     returnType: "ResponseEntity«Example»"
 
-  - uriIndex: 3
+  - parentUri: "/api-docs/features"
     index: 5
     testDescription: "Verifed that nested generics are supported"
     expectedUri: "/features/effectives"
     returnType: "ResponseEntity«List«Example»»"
 
-  - uriIndex: 3
+  - parentUri: "/api-docs/features"
     index: 6
     httpMethod: "POST"
     testDescription: "Verified that bare models without @RequestBody annotation are supported"
@@ -123,7 +123,7 @@ testcases:
        - type: "Example"
          name: "example"
 
-  - uriIndex: 3
+  - parentUri: "/api-docs/features"
     index: 7
     testDescription: "Verified enums are supported"
     expectedUri: "/features/status"
@@ -132,7 +132,7 @@ testcases:
        - type: "EnumType"
          name: "enumType"
 
-  - uriIndex: 3
+  - parentUri: "/api-docs/features"
     index: 8
     testDescription: "Verfied generic collection of enums are supported"
     expectedUri: "/features/statuses"
@@ -141,7 +141,7 @@ testcases:
        - type: "Collection«EnumType»"
          name: "enumType"
 
-  - uriIndex: 4
+  - parentUri: "/api-docs/child"
     index: 0
     testDescription: "Verified that urls are calculated correctly when class and method have request mapping urls"
     expectedUri: "/child/child-method"
@@ -150,7 +150,7 @@ testcases:
        - type: "String"
          name: "parameter"
 
-  - uriIndex: 5
+  - parentUri: "/api-docs/petgrooming"
     index: 0
     testDescription: "Verified that multiple request mappings on controller works"
     expectedUri: "/petgrooming"
@@ -159,7 +159,7 @@ testcases:
        - type: "String"
          name: "type"
 
-  - uriIndex: 5
+  - parentUri: "/api-docs/petgrooming"
     index: 1
     testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
     expectedUri: "/petgrooming/voidMethod/{input}"
@@ -168,7 +168,7 @@ testcases:
        - type: "String"
          name: "input"
 
-  - uriIndex: 6
+  - parentUri: "/api-docs/pets/grooming"
     index: 0
     testDescription: "Verified that multiple request mappings on controller works and is grouped correctly"
     expectedUri: "/pets/grooming"
@@ -177,7 +177,7 @@ testcases:
        - type: "String"
          name: "type"
 
-  - uriIndex: 6
+  - parentUri: "/api-docs/pets/grooming"
     index: 1
     testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
     expectedUri: "/pets/grooming/voidMethod/{input}"
@@ -186,7 +186,7 @@ testcases:
        - type: "String"
          name: "input"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 0
     testDescription: "Verified that multiple request mappings on controller works and is grouped correctly"
     expectedUri: "/pets/grooming"
@@ -195,7 +195,7 @@ testcases:
        - type: "String"
          name: "type"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 1
     httpMethod: "GET"
     testDescription: "Verified that multiple request mappings on controller works and is grouped correctly"
@@ -205,7 +205,7 @@ testcases:
        - type: "String"
          name: "type"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 2
     testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
     expectedUri: "/pets/grooming/voidMethod/{input}"
@@ -214,7 +214,7 @@ testcases:
        - type: "String"
          name: "input"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 3
     testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
     expectedUri: "/pets/voidMethod/{input}"
@@ -223,7 +223,7 @@ testcases:
        - type: "String"
          name: "input"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 4
     testDescription: "Verified multiple @PathVariables is supported"
     expectedUri: "/pets/{a}/{b}"
@@ -234,7 +234,7 @@ testcases:
        - type: "String"
          name: "b"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 5
     httpMethod: "POST"
     testDescription: "Verfied @Apixxx annotations are supported and layer on top of spings annotations for POST"
@@ -244,7 +244,7 @@ testcases:
        - type: "Pet"
          name: "pet"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 6
     testDescription: "Verfied @Apixxx annotations are supported and layer on top of spings annotations for GET"
     expectedUri: "/pets/{petId}"
@@ -253,7 +253,7 @@ testcases:
        - type: "String"
          name: "petId"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 7
     httpMethod: "PUT"
     testDescription: "Verfied @Apixxx annotations are supported and layer on top of spings annotations for POST"
@@ -263,7 +263,7 @@ testcases:
        - type: "Pet"
          name: "pet"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 8
     testDescription: "Verfied @RequestParam is supported"
     expectedUri: "/pets/findByStatus"
@@ -272,7 +272,7 @@ testcases:
        - type: "String"
          name: "status"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 9
     testDescription: "Verified @Depricated operations are supported"
     expectedUri: "/pets/findByTags"
@@ -281,7 +281,7 @@ testcases:
        - type: "String"
          name: "tags"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 10
     testDescription: "@Verified @ApiModel annotation is supported"
     expectedUri: "/pets/siblings"
@@ -290,14 +290,14 @@ testcases:
        - type: "Pet"
          name: "pet"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 11
     httpMethod: "GET"
     testDescription: "Verified Generic List is supported"
     expectedUri: "/pets"
     returnType: "List[Pet]"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 12
     testDescription: "Verfied HttpEntity is supported"
     expectedUri: "/pets/{name}"
@@ -306,7 +306,7 @@ testcases:
        - type: "String"
          name: "name"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 13
     testDescription: "Verified concrete Map<String, Pet> is supported"
     expectedUri: "/pets/echo"
@@ -315,7 +315,7 @@ testcases:
        - type: "List[Entry«String,Pet»]"
          name: "someInput"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 14
     testDescription: "Verfied generic Map<String, Object> maps to any"
     expectedUri: "/pets/transformPetNameToPetMapToAny"
@@ -324,7 +324,7 @@ testcases:
        - type: "List[Entry«String,Pet»]"
          name: "someInput"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 15
     testDescription: "Verfied generic Map<Object,Object> is supported"
     expectedUri: "/pets/transformPetNameToPetMapToGenericOpenMap"
@@ -333,7 +333,7 @@ testcases:
        - type: "List[Entry«String,Pet»]"
          name: "someInput"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 16
     testDescription: "Verified non-generic Map is supported"
     expectedUri: "/pets/transformPetNameToPetMapToOpenMap"
@@ -342,13 +342,13 @@ testcases:
        - type: "List[Entry«String,Pet»]"
          name: "someInput"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 17
     testDescription: "Verified nested generic keys and values are supported for Maps"
     expectedUri: "/pets/nameToNickNamesMap"
     returnType: "List[Entry«String,List«String»»]"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 18
     testDescription: "Verified List of HttpEntity is supported"
     expectedUri: "/pets/byName/{name}"
@@ -357,7 +357,7 @@ testcases:
        - type: "String"
          name: "name"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 19
     testDescription: "Verified Void ResponseEntity is supported"
     expectedUri: "/pets/{petId}/pic"
@@ -367,7 +367,7 @@ testcases:
          name: "petId"
        - type: "file"
 
-  - uriIndex: 7
+  - parentUri: "/api-docs/pets"
     index: 20
     testDescription: "Verified naked @PathVariables with no explicit names are supported"
     expectedUri: "/pets/{petId}/pic/{picId}"

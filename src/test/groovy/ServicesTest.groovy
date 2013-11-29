@@ -54,28 +54,31 @@ class ServicesTest extends Specification {
       response.apis.size == 8
   }
 
-  @Unroll("#uri has #operations operations")
+  @Unroll("#parentUri has #operations operations")
   def "Services are documented with the correct number of operations"() {
-
     expect:
-    operations == response(mockMvc, uri).apis.size
+      def documentationUri = parentUri
+      def api = apis.find { it.path == documentationUri }
+      operations == response(mockMvc, api.path).apis.size
 
     where:
       entry << countsByOperation(testCases)
-      uri = apis[entry.getKey()].path
+      parentUri = entry.getKey()
       operations = entry.getValue()
   }
 
   @Unroll("##index #expectedUri - #testDescription")
   def "Operations are documented correctly"() {
-    expect:
+    given:
       def json = response(mockMvc, documentationUri)
+
+    when:
       def api = findApi(json, expectedUri, httpMethod, expectedParams, returnType)
+
+    then:
       assert api != null
       def operation = api.operations[0]
       def actualParams = operation.parameters
-
-      operation.responseClass == returnType
       if (actualParams != null && expectedParams != null) {
         expectedParams.size == actualParams.size
         expectedParams.eachWithIndex { entry, i ->
@@ -89,7 +92,7 @@ class ServicesTest extends Specification {
       record << fromYaml()
       index = record.get("index")
       expectedUri = record.get("expectedUri")
-      documentationUri = apis[record.get("uriIndex")].path
+      documentationUri = record.get("parentUri")
       returnType = record.get("returnType")
       expectedParams = record.get("parameters")
       testDescription = record.get("testDescription")
@@ -132,11 +135,11 @@ class ServicesTest extends Specification {
   def countsByOperation(testCases) {
     Map<Integer, Integer> counts = newHashMap()
     testCases.each { record ->
-      Integer index = record.get("uriIndex")
-      if (counts.containsKey(index)) {
-        counts.put(index, counts.get(index) + 1)
+      String parentUri = record.get("parentUri")
+      if (counts.containsKey(parentUri)) {
+        counts.put(parentUri, counts.get(parentUri) + 1)
       } else {
-        counts.put(index, 1)
+        counts.put(parentUri, 1)
       }
     }
     counts.entrySet()

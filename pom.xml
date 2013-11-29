@@ -53,7 +53,7 @@
         <spring.version>3.2.4.RELEASE</spring.version>
         <scala-lib.version>2.10.0</scala-lib.version>
         <spock.version>0.7-groovy-2.0</spock.version>
-        <groovy.version>2.1.9</groovy.version>
+        <groovy.version>2.2.1</groovy.version>
         <checkstyle.file>checkstyle.xml</checkstyle.file>
         <jackson.version>2.2.3</jackson.version>
     </properties>
