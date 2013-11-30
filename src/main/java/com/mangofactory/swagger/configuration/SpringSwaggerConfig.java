@@ -45,4 +45,7 @@ public class SpringSwaggerConfig {
    public SwaggerCache swaggerCache(){
       return new SwaggerCache();
    }
+
+//   List ignorableParameterTypes = [ServletRequest, ServletResponse,
+// HttpServletRequest, HttpServletResponse, BindingResult, ServletContext]
 }

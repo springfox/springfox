@@ -28,6 +28,9 @@ swagger-codegen work much better with absolute uri's.
 
 Produces and consumes driven off spring annotation arguments only - swagger ignored
 
+### ApiParam
+- required ApiParm.required() otherwise RequestParam.required() otherwise true
+- defaultValue ApiParm.defaultValue() otherwise RequestParam.defaultValue() otherwise ""
 ##Development
 
 - Running tests including coverage and checkstyle

@@ -23,10 +23,10 @@ class RequestMappingSupport {
       new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, null, null, consumesRequestCondition, producesRequestCondition, null)
    }
 
-   def dummyHandlerMethod(String methodName = "dummyMethod") {
+   def dummyHandlerMethod(String methodName = "dummyMethod", parameterTypes = null ) {
       def clazz = new DummyClass()
       Class c = clazz.getClass();
-      new HandlerMethod(clazz, c.getMethod(methodName, null))
+      new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
    }
 
    def ignorableHandlerMethod() {

@@ -1,0 +1,26 @@
+package com.mangofactory.swagger.readers.operation.parameter;
+
+import com.mangofactory.swagger.readers.Command;
+import com.mangofactory.swagger.scanners.RequestMappingContext;
+import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.core.MethodParameter;
+
+import java.util.Collection;
+
+public class ParameterMultiplesReader implements Command<RequestMappingContext> {
+   @Override
+   public void execute(RequestMappingContext context) {
+      MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
+      ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
+
+      Boolean allowMultiple = false;
+      if (null != apiParam) {
+         allowMultiple = apiParam.allowMultiple();
+      } else {
+         Class<?> parameterType = methodParameter.getParameterType();
+         allowMultiple = parameterType.isArray()
+               || Collection.class.isAssignableFrom(parameterType);
+      }
+      context.put("allowMultiple", allowMultiple);
+   }
+}

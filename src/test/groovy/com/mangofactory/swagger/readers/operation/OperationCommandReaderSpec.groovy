@@ -12,7 +12,7 @@ class OperationCommandReaderSpec extends Specification {
    private static final int CURRENT_COUNT = 3
 
    @Unroll("property #property expected: #expected")
-   def "should set summary based on method name or swagger annotation"() {
+   def "should set various properties based on method name or swagger annotation"() {
     given:
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
       context.put("currentCount", CURRENT_COUNT)

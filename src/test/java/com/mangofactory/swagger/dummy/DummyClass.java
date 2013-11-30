@@ -2,6 +2,10 @@ package com.mangofactory.swagger.dummy;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.wordnik.swagger.annotations.ApiOperation;
+import org.springframework.validation.BindingResult;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 public class DummyClass {
    public void dummyMethod(){}
@@ -35,6 +39,10 @@ public class DummyClass {
 
    @Deprecated
    public void methodWithDeprecated(){}
+
+   public void methodWithServletRequest(ServletRequest req){}
+   public void methodWithBindingResult(BindingResult res){}
+   public void methodWithInteger(Integer integer){}
 
    public static class ApiIgnorableClass{
       @ApiIgnore

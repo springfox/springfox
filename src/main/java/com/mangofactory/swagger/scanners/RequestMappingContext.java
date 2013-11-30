@@ -2,6 +2,7 @@ package com.mangofactory.swagger.scanners;
 
 import com.mangofactory.swagger.core.CommandContext;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import lombok.Getter;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -39,5 +40,9 @@ public class RequestMappingContext implements CommandContext<Map<String, Object>
 
    public ApiOperation getApiOperationAnnotation() {
       return this.handlerMethod.getMethodAnnotation(ApiOperation.class);
+   }
+
+   public ApiParam getApiParamAnnotation(){
+      return this.handlerMethod.getMethodAnnotation(ApiParam.class);
    }
 }
