@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.String.format;
@@ -22,7 +20,7 @@ public class ParameterNameReader implements Command<RequestMappingContext> {
    public void execute(RequestMappingContext context) {
       MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
       ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
-      String name = methodParameter.getParameterName();
+      String name = "";
       if (null != apiParam && !isBlank(apiParam.name())) {
          name = apiParam.name();
       } else {
@@ -48,9 +46,5 @@ public class ParameterNameReader implements Command<RequestMappingContext> {
       }
       String parameterName = methodParameter.getParameterName();
       return isNullOrEmpty(parameterName) ? format("param%s", methodParameter.getParameterIndex()) : parameterName;
-   }
-
-   public static List safeList(List other) {
-      return other == null ? Collections.EMPTY_LIST : other;
    }
 }
