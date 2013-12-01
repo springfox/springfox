@@ -25,6 +25,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
 
       RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
       HandlerMethod handlerMethod = outerContext.getHandlerMethod();
+      Set<Class> ignorableParameterTypes = (Set<Class>) outerContext.get("ignorableParameterTypes");
 
       RequestMethodsRequestCondition requestMethodsRequestCondition = requestMappingInfo.getMethodsCondition();
       List<Operation> operations = newArrayList();
@@ -33,14 +34,16 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       Set<RequestMethod> supportedMethods = (requestMethods == null || requestMethods.isEmpty())
             ? allRequestMethods : requestMethods;
 
+
+      Integer currentCount = 0;
       for (RequestMethod httpRequestMethod : supportedMethods) {
          CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
 
-         RequestMappingContext operationRequestMappingContext = new RequestMappingContext(requestMappingInfo, handlerMethod);
          List<Command<RequestMappingContext>> commandList = newArrayList();
-
+         RequestMappingContext operationRequestMappingContext = new RequestMappingContext(requestMappingInfo, handlerMethod);
+         operationRequestMappingContext.put("currentCount", currentCount);
          operationRequestMappingContext.put("currentHttpMethod", httpRequestMethod);
-         operationRequestMappingContext.put("currentCount", 0);
+         operationRequestMappingContext.put("ignorableParameterTypes", ignorableParameterTypes);
 
          commandList.add(new OperationHttpMethodReader());
          commandList.add(new OperationSummaryReader());
@@ -51,11 +54,12 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          commandList.add(new MediaTypeReader());
          commandList.add(new OperationParameterReader());
          commandList.add(new OperationResponseMessageReader()); //td
-         commandList.add(new OperationDeprecatedReader()); //td
+         commandList.add(new OperationDeprecatedReader());
          commandExecutor.execute(commandList, operationRequestMappingContext);
 
 
          Map<String, Object> operationResultMap = operationRequestMappingContext.getResult();
+         currentCount = (Integer) operationResultMap.get("currentCount");
 
          List<String> producesMediaTypes = (List<String>) operationResultMap.get("produces");
          List<String> consumesMediaTypes = (List<String>) operationResultMap.get("consumes");

@@ -13,7 +13,7 @@ public class ParameterMultiplesReader implements Command<RequestMappingContext> 
       MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
       ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
 
-      Boolean allowMultiple = false;
+      Boolean allowMultiple = Boolean.FALSE;
       if (null != apiParam) {
          allowMultiple = apiParam.allowMultiple();
       } else {

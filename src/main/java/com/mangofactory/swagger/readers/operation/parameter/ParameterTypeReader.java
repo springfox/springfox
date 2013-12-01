@@ -2,18 +2,16 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.annotation.Annotation;
 
-public class ParameterDataTypeReader implements Command<RequestMappingContext> {
+public class ParameterTypeReader implements Command<RequestMappingContext> {
    @Override
    public void execute(RequestMappingContext context) {
       MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
-      ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
-      context.put("dataType", findParameterType(methodParameter));
+      context.put("paramType", findParameterType(methodParameter));
    }
 
    private String findParameterType(MethodParameter methodParameter) {
@@ -35,4 +33,10 @@ public class ParameterDataTypeReader implements Command<RequestMappingContext> {
       }
       return "body";
    }
+
+//   if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
+//      parameter.setParamType("body");
+//      parameter.setDataType("file");
+//      return;
+//   }
 }

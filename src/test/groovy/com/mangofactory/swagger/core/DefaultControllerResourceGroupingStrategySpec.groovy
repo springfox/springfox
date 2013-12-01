@@ -23,11 +23,11 @@ class DefaultControllerResourceGroupingStrategySpec extends Specification {
       'business'                                   | 'business'
       'business/somethingElse'                     | '/business/somethingElse'
       'business/somethingElse'                     | 'business/somethingElse'
-      '(businessId)'                               | '/{businessId}'
-      '(businessId)'                               | '/{businessId:\\d+}'
-      '(businessId)'                               | '/{businessId:\\w+}'
-      'business/(businessId)'                      | '/business/{businessId:\\d+}'
-      'business/(businessId)/accounts/(accountId)' | '/business/{businessId:\\d+}/accounts/{accountId:\\d+}'
+      '{businessId}'                               | '/{businessId}'
+      '{businessId}'                               | '/{businessId:\\d+}'
+      '{businessId}'                               | '/{businessId:\\w+}'
+      'business/{businessId}'                      | '/business/{businessId:\\d+}'
+      'business/{businessId}/accounts/{accountId}' | '/business/{businessId:\\d+}/accounts/{accountId:\\d+}'
    }
 
 

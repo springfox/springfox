@@ -32,6 +32,9 @@ public class ApiListingScanner {
    @Setter
    private List<Command<RequestMappingContext>> readers = newArrayList();
 
+   @Setter
+   private Set<Class> ignorableParameterTypes;
+
    @Getter
    @Setter
    private ControllerResourceNamingStrategy controllerNamingStrategy;
@@ -65,7 +68,9 @@ public class ApiListingScanner {
             readers.add(new MediaTypeReader());
             readers.add(new ApiDescriptionReader(controllerNamingStrategy));
 
+            requestMappingContext.put("ignorableParameterTypes", ignorableParameterTypes);
             Map<String, Object> results = commandExecutor.execute(readers, requestMappingContext);
+
 
             List<String> producesMediaTypes = (List<String>) results.get("produces");
             List<String> consumesMediaTypes = (List<String>) results.get("consumes");

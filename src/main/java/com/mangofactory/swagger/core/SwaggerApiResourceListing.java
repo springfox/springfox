@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.mangofactory.swagger.ScalaUtils.toOption;
 import static com.mangofactory.swagger.ScalaUtils.toScalaList;
@@ -36,6 +37,9 @@ public class SwaggerApiResourceListing {
    @Setter
    private SwaggerPathProvider swaggerPathProvider;
 
+   @Setter
+   private Set<Class> ignorableParameterTypes;
+
    private String swaggerGroup;
 
    public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
@@ -55,6 +59,7 @@ public class SwaggerApiResourceListing {
 
          ApiListingScanner apiListingScanner = new ApiListingScanner(
                resourceGroupRequestMappings, apiListingReferenceScanner.getSwaggerGroup(), swaggerPathProvider);
+         apiListingScanner.setIgnorableParameterTypes(ignorableParameterTypes);
 
          Map<String, ApiListing> apiListings = apiListingScanner.scan();
          swaggerCache.addApiListings(swaggerGroup, apiListings);

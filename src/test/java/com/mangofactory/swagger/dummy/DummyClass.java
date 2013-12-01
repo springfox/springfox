@@ -3,6 +3,8 @@ package com.mangofactory.swagger.dummy;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +45,11 @@ public class DummyClass {
    public void methodWithServletRequest(ServletRequest req){}
    public void methodWithBindingResult(BindingResult res){}
    public void methodWithInteger(Integer integer){}
+
+   @RequestMapping("/businesses/{businessId}")
+   public void methodWithSinglePathVariable(@PathVariable String businessId){
+
+   }
 
    public static class ApiIgnorableClass{
       @ApiIgnore

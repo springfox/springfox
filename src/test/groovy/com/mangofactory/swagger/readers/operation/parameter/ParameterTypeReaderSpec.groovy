@@ -14,7 +14,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 @Mixin(RequestMappingSupport)
-class ParameterDataTypeReaderSpec extends Specification {
+class ParameterTypeReaderSpec extends Specification {
    @Unroll
    def "param type"() {
     given:
@@ -26,10 +26,10 @@ class ParameterDataTypeReaderSpec extends Specification {
       context.put("methodParameter", methodParameter)
 
     when:
-      Command operationCommand = new ParameterDataTypeReader();
+      Command operationCommand = new ParameterTypeReader();
       operationCommand.execute(context)
     then:
-      context.get('dataType') == expected
+      context.get('paramType') == expected
     where:
       annotation            | expected
       [:] as PathVariable   | "path"

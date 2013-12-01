@@ -7,6 +7,8 @@ import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST
+
 @Mixin(RequestMappingSupport)
 class ApiOperationReaderSpec extends Specification{
 
@@ -16,7 +18,7 @@ class ApiOperationReaderSpec extends Specification{
       RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
               [
                       patternsRequestCondition: patternsRequestCondition('/doesNotMatterForThisTest', '/somePath/{businessId:\\d+}'),
-                      requestMethodsRequestCondition : requestMethodsRequestCondition(RequestMethod.PATCH)
+                      requestMethodsRequestCondition : requestMethodsRequestCondition(RequestMethod.PATCH, POST)
 
               ]
       )
@@ -37,6 +39,9 @@ class ApiOperationReaderSpec extends Specification{
       apiOperation.notes == handlerMethod.method.name
       apiOperation.nickname == handlerMethod.method.name
       apiOperation.position == 0
+
+      def secondApiOperation = result['operations'][1]
+      secondApiOperation.position == 1
    }
 
 }

@@ -34,7 +34,6 @@ public class DefaultControllerResourceNamingStrategy implements ControllerResour
       //remove regex portion '/{businessId:\\w+}'
       result = result.replaceAll(":.*?}", "}");
 
-      result = StringUtils.replaceEach(result, new String[]{"{", "}"}, new String[]{"(", ")"});
       return result.isEmpty() ? "root" : result;
    }
 

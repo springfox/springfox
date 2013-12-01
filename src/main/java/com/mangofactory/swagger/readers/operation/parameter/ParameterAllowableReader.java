@@ -15,5 +15,10 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
 //      (AllowableListValues)context.get("allowableValues"),
 //            (String) result.get("paramType"),
 //            toOption(result.get("paramAccess"))
+
+      context.put("dataType", "integer");
+      context.put("format", "int64");
+      context.put("allowableValues", "");
+      context.put("paramAccess", "");
    }
 }

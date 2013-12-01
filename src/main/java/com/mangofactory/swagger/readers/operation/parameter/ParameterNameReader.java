@@ -24,12 +24,16 @@ public class ParameterNameReader implements Command<RequestMappingContext> {
       if (null != apiParam && !isBlank(apiParam.name())) {
          name = apiParam.name();
       } else {
-         name = findParameterName(methodParameter);
+         name = findParameterNameFromAnnotations(methodParameter);
+         if(isNullOrEmpty(name)){
+            String parameterName = methodParameter.getParameterName();
+            name = isNullOrEmpty(parameterName) ? format("param%s", methodParameter.getParameterIndex()) : parameterName;
+         }
       }
       context.put("name", name);
    }
 
-   private String findParameterName(MethodParameter methodParameter) {
+   private String findParameterNameFromAnnotations(MethodParameter methodParameter) {
       Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
       if (null != methodAnnotations) {
          for (Annotation annotation : methodAnnotations) {
@@ -44,7 +48,6 @@ public class ParameterNameReader implements Command<RequestMappingContext> {
             }
          }
       }
-      String parameterName = methodParameter.getParameterName();
-      return isNullOrEmpty(parameterName) ? format("param%s", methodParameter.getParameterIndex()) : parameterName;
+      return null;
    }
 }

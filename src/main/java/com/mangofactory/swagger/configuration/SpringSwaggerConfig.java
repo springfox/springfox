@@ -7,11 +7,21 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 @Configuration
 public class SpringSwaggerConfig {
@@ -46,6 +56,15 @@ public class SpringSwaggerConfig {
       return new SwaggerCache();
    }
 
-//   List ignorableParameterTypes = [ServletRequest, ServletResponse,
-// HttpServletRequest, HttpServletResponse, BindingResult, ServletContext]
+   @Bean
+   public Set<Class> defaultIgnorableParameterTypes(){
+      HashSet<Class> ignored = newHashSet();
+      ignored.add(ServletRequest.class);
+      ignored.add(ServletResponse.class);
+      ignored.add(HttpServletRequest.class);
+      ignored.add(HttpServletResponse.class);
+      ignored.add(BindingResult.class);
+      ignored.add(ServletContext.class);
+      return ignored;
+   }
 }
