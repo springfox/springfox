@@ -55,7 +55,7 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
                   (Boolean) result.get("required"),
                   (Boolean) result.get("allowMultiple"),
                   (String) result.get("dataType"),
-                  (AllowableValues) context.get("allowableValues"),
+                  (AllowableValues) result.get("allowableValues"),
                   (String) result.get("paramType"),
                   toOption(result.get("paramAccess"))
             );

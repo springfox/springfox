@@ -33,10 +33,4 @@ public class ParameterTypeReader implements Command<RequestMappingContext> {
       }
       return "body";
    }
-
-//   if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
-//      parameter.setParamType("body");
-//      parameter.setDataType("file");
-//      return;
-//   }
 }
