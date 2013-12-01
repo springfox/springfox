@@ -31,6 +31,7 @@ Produces and consumes driven off spring annotation arguments only - swagger igno
 ### ApiParam
 - required ApiParm.required() otherwise RequestParam.required() otherwise true
 - defaultValue ApiParm.defaultValue() otherwise RequestParam.defaultValue() otherwise ""
+- ApiParam defaults swagger ApiParam annotation is false
 ##Development
 
 - Running tests including coverage and checkstyle
