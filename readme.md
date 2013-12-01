@@ -25,7 +25,7 @@ For more detail see: https://github.com/wordnik/swagger-core/wiki/1.2-transition
 - All http methods supported by org.springframework.web.bind.annotation.RequestMethod (GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE)
 - All uris are, by default, absolute after much deliberation. Relative uri's do not work well with swagger UI. Other swagger tools like
 swagger-codegen work much better with absolute uri's. This strategy can be changed by
-implementing [](https://github.com/adrianbk/swagger-springmvc/blob/swagger-spec-1.2.0-upgrade/src/main/java/com/mangofactory/swagger/core/SwaggerPathProvider.java)
+implementing [SwaggerPathProvider](https://github.com/adrianbk/swagger-springmvc/blob/swagger-spec-1.2.0-upgrade/src/main/java/com/mangofactory/swagger/core/SwaggerPathProvider.java)
 
 ## Dependencies
 - Spring 3.1.1 or above (due to a bug in UriComponentsBuilder)
@@ -34,7 +34,7 @@ implementing [](https://github.com/adrianbk/swagger-springmvc/blob/swagger-spec-
 
 ##Adding to to a spring MVC application
 
-- web app xml spring config
+web application context xml config
 
 ```xml
 <mvc:annotation-driven>
@@ -48,7 +48,7 @@ implementing [](https://github.com/adrianbk/swagger-springmvc/blob/swagger-spec-
 <context:component-scan base-package="com.mangofactory.swagger.configuration"/>
 ```
 
-- Java spring config
+Java spring config
 ```java
 
    @Autowired
@@ -116,7 +116,6 @@ implementing [](https://github.com/adrianbk/swagger-springmvc/blob/swagger-spec-
       return apiInfo;
    }
 }
-
 ```
 
 ##Development
