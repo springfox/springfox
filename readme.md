@@ -145,7 +145,6 @@ Skipping coverage
 ```
 mvn deploy -Djacoco.skip=true
 ```
-
 License
 -------
 
