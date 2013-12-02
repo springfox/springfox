@@ -53,6 +53,6 @@ class ParameterDataTypeReaderSpec extends Specification {
       boolean.class                  | "boolean"
       Date.class                     | "date-time"
       DummyClass.CustomClass.class   | "customClassParamType"
-      SpringSwaggerModelConfig.class | null
+      SpringSwaggerModelConfig.class | "string"
    }
 }
