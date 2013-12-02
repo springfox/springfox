@@ -55,9 +55,10 @@ web application context xml config
 
 Java spring config
 ```java
-
-   @Autowired
+  @Autowired
    private SpringSwaggerConfig springSwaggerConfig;
+   @Autowired
+   private SpringSwaggerModelConfig springSwaggerModelConfig;
 
    /**
     * Adds the jackson scala module to the MappingJackson2HttpMessageConverter registered with spring
@@ -79,6 +80,7 @@ Java spring config
       swaggerApiResourceListing.setApiInfo(apiInfo());
       swaggerApiResourceListing.setAuthorizationTypes(authorizationTypes());
       swaggerApiResourceListing.setIgnorableParameterTypes(springSwaggerConfig.defaultIgnorableParameterTypes());
+      swaggerApiResourceListing.setParameterDataTypes(springSwaggerModelConfig.defaultParameterDataTypes());
 
       ApiListingReferenceScanner apiListingReferenceScanner = apiListingReferenceScanner();
       swaggerApiResourceListing.setApiListingReferenceScanner(apiListingReferenceScanner);
@@ -97,7 +99,8 @@ Java spring config
       //Only add the businesses endpoints to this api listing
       apiListingReferenceScanner.setIncludePatterns(
             Arrays.asList(new String[]{
-                  "/business.*"
+                  "/business.*",
+                  "/operations.*"
             })
       );
       return apiListingReferenceScanner;
@@ -120,7 +123,6 @@ Java spring config
       );
       return apiInfo;
    }
-}
 ```
 
 ##Development
