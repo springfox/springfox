@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
-import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
