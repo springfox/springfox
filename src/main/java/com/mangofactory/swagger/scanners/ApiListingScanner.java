@@ -35,6 +35,9 @@ public class ApiListingScanner {
    @Setter
    private Set<Class> ignorableParameterTypes;
 
+   @Setter
+   private Map<Class, String> parameterDataTypes;
+
    @Getter
    @Setter
    private ControllerResourceNamingStrategy controllerNamingStrategy;
@@ -69,6 +72,7 @@ public class ApiListingScanner {
             readers.add(new ApiDescriptionReader(controllerNamingStrategy));
 
             requestMappingContext.put("ignorableParameterTypes", ignorableParameterTypes);
+            requestMappingContext.put("parameterDataTypes", parameterDataTypes);
             Map<String, Object> results = commandExecutor.execute(readers, requestMappingContext);
 
 

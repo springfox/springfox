@@ -22,6 +22,7 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
    public void execute(RequestMappingContext context) {
       HandlerMethod handlerMethod = context.getHandlerMethod();
       Set<Class> ignorableParameterTypes = (Set<Class>) context.get("ignorableParameterTypes");
+      Map<Class, String> parameterDataTypes = (Map<Class, String>) context.get("parameterDataTypes");
 
       MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
       List<Parameter> parameters = newArrayList();
@@ -33,11 +34,13 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
             RequestMappingContext parameterContext = new RequestMappingContext(context.getRequestMappingInfo(), handlerMethod);
             methodParameter.initParameterNameDiscovery(new LocalVariableTableParameterNameDiscoverer());
             parameterContext.put("methodParameter", methodParameter);
+            parameterContext.put("parameterDataTypes", parameterDataTypes);
 
             CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
             List<Command<RequestMappingContext>> commandList = newArrayList();
 
             commandList.add(new ParameterAllowableReader());
+            commandList.add(new ParameterDataTypeReader());
             commandList.add(new ParameterTypeReader());
             commandList.add(new ParameterDefaultReader());
             commandList.add(new ParameterDescriptionReader());

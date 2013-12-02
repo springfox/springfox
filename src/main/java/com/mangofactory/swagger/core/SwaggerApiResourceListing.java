@@ -40,6 +40,9 @@ public class SwaggerApiResourceListing {
    @Setter
    private Set<Class> ignorableParameterTypes;
 
+   @Setter
+   private Map<Class, String> parameterDataTypes;
+
    private String swaggerGroup;
 
    public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {

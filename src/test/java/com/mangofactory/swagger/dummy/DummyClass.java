@@ -89,6 +89,8 @@ public class DummyClass {
          return value;
       }
    }
+
+   public class CustomClass{}
 }
 
 

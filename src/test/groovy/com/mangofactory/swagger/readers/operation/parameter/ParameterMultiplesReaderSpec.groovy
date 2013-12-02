@@ -38,5 +38,6 @@ class ParameterMultiplesReaderSpec extends Specification {
       null                                     | Vector.class     | true
       null                                     | Object[].class   | true
       null                                     | Integer.class    | false
+      null                                     | Iterable.class   | true
    }
 }

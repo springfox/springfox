@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -24,6 +25,7 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newHashSet;
 
 @Configuration
+@Import(SpringSwaggerModelConfig.class)
 public class SpringSwaggerConfig {
 
    @Autowired

@@ -5,8 +5,6 @@ import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.core.MethodParameter;
 
-import java.util.Collection;
-
 public class ParameterMultiplesReader implements Command<RequestMappingContext> {
    @Override
    public void execute(RequestMappingContext context) {
@@ -19,7 +17,7 @@ public class ParameterMultiplesReader implements Command<RequestMappingContext> 
       } else {
          Class<?> parameterType = methodParameter.getParameterType();
          allowMultiple = parameterType.isArray()
-               || Collection.class.isAssignableFrom(parameterType);
+               || Iterable.class.isAssignableFrom(parameterType);
       }
       context.put("allowMultiple", allowMultiple);
    }

@@ -49,10 +49,6 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
          }
       }
       context.put("allowableValues", allowableValues);
-
-      context.put("dataType", "integer");
-      context.put("format", "int64");
-      context.put("paramAccess", "");
    }
 
    private String findAnnotatedAllowableValues(MethodParameter methodParameter) {
