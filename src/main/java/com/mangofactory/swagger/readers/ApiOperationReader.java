@@ -26,6 +26,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
       HandlerMethod handlerMethod = outerContext.getHandlerMethod();
       Set<Class> ignorableParameterTypes = (Set<Class>) outerContext.get("ignorableParameterTypes");
+      Map<Class, String> parameterDataTypes = (Map<Class, String>) outerContext.get("parameterDataTypes");
 
       RequestMethodsRequestCondition requestMethodsRequestCondition = requestMappingInfo.getMethodsCondition();
       List<Operation> operations = newArrayList();
@@ -44,6 +45,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          operationRequestMappingContext.put("currentCount", currentCount);
          operationRequestMappingContext.put("currentHttpMethod", httpRequestMethod);
          operationRequestMappingContext.put("ignorableParameterTypes", ignorableParameterTypes);
+         operationRequestMappingContext.put("parameterDataTypes", parameterDataTypes);
 
          commandList.add(new OperationHttpMethodReader());
          commandList.add(new OperationSummaryReader());
