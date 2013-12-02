@@ -7,8 +7,10 @@ Sample Project: [here](https://github.com/adrianbk/swagger-springmvc-demo)
 WIP. Model/Model schema not yet implemented..
 
 An upgrade to the swagger-springmvc project to the latest Swagger specification (1.2)
-The swagger specification upgrade to 1.2 has several feature additions and has also refactored it's core model structure. See [swagger-core](https://github.com/wordnik/swagger-core)
+The swagger specification upgrade to 1.2 has several feature additions and has also refactored it's core model structure.
+See [swagger-core](https://github.com/wordnik/swagger-core)
 The [demo/sample](https://github.com/adrianbk/swagger-springmvc-demo) application is built off of swagger-ui 4th Noc 2013 (SHA: 4601f6270235489581acd80548620716506311a5)
+
 Swagger 1.2 supported features:
 - Authorization types: (OAuth, ApiKey, BasicAuth) (swagger-ui has not yet upgraded to support these)
 - ApiInfo: info, title, licencing, etc.
@@ -23,8 +25,10 @@ For more detail see: https://github.com/wordnik/swagger-core/wiki/1.2-transition
 - HTTP media types
 - Request mappings with regex expressions do not error out
 - All http methods supported by org.springframework.web.bind.annotation.RequestMethod (GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE)
+- Filtering/Inclusion of api endpoints with regular expression or ant path matching.
 - All uris are, by default, absolute after much deliberation. Relative uri's do not work well with swagger UI. Other swagger tools like
-swagger-codegen work much better with absolute uri's. This strategy can be changed by
+swagger-codegen work much better with absolute uri's.
+This strategy can be changed by
 implementing [SwaggerPathProvider](https://github.com/adrianbk/swagger-springmvc/blob/swagger-spec-1.2.0-upgrade/src/main/java/com/mangofactory/swagger/core/SwaggerPathProvider.java)
 
 ## Dependencies
