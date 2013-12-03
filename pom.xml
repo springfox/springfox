@@ -66,6 +66,7 @@
       <repository.release>http://192.168.130.1:8081/nexus/content/repositories/releases</repository.release>
       <powermock.version>1.5.1</powermock.version>
       <guava.version>15.0</guava.version>
+      <spring-hateoas.version>0.8.0.RELEASE</spring-hateoas.version>
    </properties>
    <repositories>
       <repository>
@@ -86,7 +87,11 @@
             <artifactId>scala-library</artifactId>
             <version>${scala-lib.version}</version>
          </dependency>
-
+         <dependency>
+            <groupId>org.springframework.hateoas</groupId>
+            <artifactId>spring-hateoas</artifactId>
+            <version>${spring-hateoas.version}</version>
+         </dependency>
          <!-- Conflicting dependencies withing swagger-core dependencies -->
          <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

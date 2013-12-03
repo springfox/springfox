@@ -1,13 +1,14 @@
 package com.mangofactory.swagger.configuration;
 
-
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.*;
+import com.wordnik.swagger.model.ResponseMessage;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.servlet.ServletContext;
@@ -16,12 +17,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import static com.google.common.collect.Maps.newLinkedHashMap;
 import static com.google.common.collect.Sets.newHashSet;
+import static com.mangofactory.swagger.ScalaUtils.toOption;
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Configuration
 public class SpringSwaggerConfig {
@@ -66,5 +68,44 @@ public class SpringSwaggerConfig {
       ignored.add(BindingResult.class);
       ignored.add(ServletContext.class);
       return ignored;
+   }
+
+   /**
+    * Default response messages set on all api operations
+    */
+   @Bean
+   public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages(){
+      LinkedHashMap<RequestMethod, List<ResponseMessage>> responses = newLinkedHashMap();
+      responses.put(GET, asList(
+            new ResponseMessage(OK.value(), OK.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+      ));
+
+      responses.put(PUT, asList(
+            new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+      ));
+
+      responses.put(POST, asList(
+            new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+      ));
+
+      responses.put(DELETE, asList(
+            new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+      ));
+      return responses;
+   }
+
+   private List<ResponseMessage> asList(ResponseMessage ... responseMessages){
+      return Arrays.asList(responseMessages);
    }
 }

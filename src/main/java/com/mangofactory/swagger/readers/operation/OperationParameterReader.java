@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.readers.operation;
 
+import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.parameter.*;
@@ -21,21 +22,19 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
    @Override
    public void execute(RequestMappingContext context) {
       HandlerMethod handlerMethod = context.getHandlerMethod();
-      Set<Class> ignorableParameterTypes = (Set<Class>) context.get("ignorableParameterTypes");
-      Map<Class, String> parameterDataTypes = (Map<Class, String>) context.get("parameterDataTypes");
+      SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings)context.get("swaggerGlobalSettings");
 
       MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
       List<Parameter> parameters = newArrayList();
 
       for (MethodParameter methodParameter : methodParameters) {
          Class<?> parameterType = methodParameter.getParameterType();
-         if (!shouldIgnore(parameterType, ignorableParameterTypes)) {
+         if (!shouldIgnore(parameterType, swaggerGlobalSettings.getIgnorableParameterTypes())) {
 
             RequestMappingContext parameterContext = new RequestMappingContext(context.getRequestMappingInfo(), handlerMethod);
             methodParameter.initParameterNameDiscovery(new LocalVariableTableParameterNameDiscoverer());
+            parameterContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
             parameterContext.put("methodParameter", methodParameter);
-            parameterContext.put("parameterDataTypes", parameterDataTypes);
-
             CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
             List<Command<RequestMappingContext>> commandList = newArrayList();
 
@@ -63,24 +62,8 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
                   toOption(result.get("paramAccess"))
             );
             parameters.add(parameter);
-            //Parameter (
-//            name: String,
-//            description: Option[String],
-//            defaultValue: Option[String],
-//            required: Boolean,
-//            allowMultiple: Boolean,
-//            dataType: String,
-//            allowableValues: AllowableValues = AnyAllowableValues,
-//            paramType: String,
-//            paramAccess: Option[String] = None)
-
-
          }
-
       }
-
-
-//
       context.put("parameters", parameters);
    }
 

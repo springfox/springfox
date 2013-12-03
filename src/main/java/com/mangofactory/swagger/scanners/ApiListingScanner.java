@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.scanners;
 
+import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.core.ControllerResourceNamingStrategy;
 import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy;
@@ -14,7 +15,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
@@ -33,10 +37,8 @@ public class ApiListingScanner {
    private List<Command<RequestMappingContext>> readers = newArrayList();
 
    @Setter
-   private Set<Class> ignorableParameterTypes;
-
-   @Setter
-   private Map<Class, String> parameterDataTypes;
+   @Getter
+   private SwaggerGlobalSettings swaggerGlobalSettings;
 
    @Getter
    @Setter
@@ -71,10 +73,8 @@ public class ApiListingScanner {
             readers.add(new MediaTypeReader());
             readers.add(new ApiDescriptionReader(controllerNamingStrategy));
 
-            requestMappingContext.put("ignorableParameterTypes", ignorableParameterTypes);
-            requestMappingContext.put("parameterDataTypes", parameterDataTypes);
+            requestMappingContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
             Map<String, Object> results = commandExecutor.execute(readers, requestMappingContext);
-
 
             List<String> producesMediaTypes = (List<String>) results.get("produces");
             List<String> consumesMediaTypes = (List<String>) results.get("consumes");

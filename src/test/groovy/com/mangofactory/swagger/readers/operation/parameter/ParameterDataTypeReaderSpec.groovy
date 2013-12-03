@@ -1,6 +1,9 @@
 package com.mangofactory.swagger.readers.operation.parameter
 
+import com.fasterxml.classmate.ResolvedType
+import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerModelConfig
+import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyClass
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
@@ -26,7 +29,10 @@ class ParameterDataTypeReaderSpec extends Specification {
       context.put("methodParameter", methodParameter)
       Map<Class, String> types = springSwaggerModelConfig.defaultParameterDataTypes()
       types.put(DummyClass.CustomClass, "customClassParamType")
-      context.put("parameterDataTypes", types)
+
+      SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings()
+      swaggerGlobalSettings.setParameterDataTypes(types)
+      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
 
     when:
       Command operationCommand = new ParameterDataTypeReader();

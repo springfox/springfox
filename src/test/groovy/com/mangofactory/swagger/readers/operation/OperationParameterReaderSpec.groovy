@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.readers.operation
 
 import com.mangofactory.swagger.configuration.SpringSwaggerModelConfig
+import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.Parameter
@@ -23,14 +24,18 @@ import static com.mangofactory.swagger.ScalaUtils.toOption
 class OperationParameterReaderSpec extends Specification {
 
    @Shared SpringSwaggerModelConfig springSwaggerModelConfig = new SpringSwaggerModelConfig();
+   @Shared SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings()
+
+   def setup() {
+      swaggerGlobalSettings.setIgnorableParameterTypes([ServletRequest, ServletResponse, HttpServletRequest, HttpServletResponse, BindingResult, ServletContext] as Set)
+      swaggerGlobalSettings.setParameterDataTypes(springSwaggerModelConfig.defaultParameterDataTypes())
+   }
 
    @Unroll
    def "Should ignore ignorables"() {
     given:
-      List ignorableParameterTypes = [ServletRequest, ServletResponse, HttpServletRequest, HttpServletResponse, BindingResult, ServletContext]
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
-      context.put("ignorableParameterTypes", ignorableParameterTypes as Set)
-      context.put("parameterDataTypes", springSwaggerModelConfig.defaultParameterDataTypes())
+      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
     when:
       OperationParameterReader operationParameterReader = new OperationParameterReader()
       operationParameterReader.execute(context)
@@ -49,14 +54,12 @@ class OperationParameterReaderSpec extends Specification {
    @Unroll
    def "Should read a request mapping method without APIParameter annotation"() {
     given:
-      List ignorableParameterTypes = [ServletRequest, ServletResponse, HttpServletRequest, HttpServletResponse, BindingResult, ServletContext]
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSinglePathVariable', String.class)
 
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
       MethodParameter methodParameter = new MethodParameter(handlerMethod.getMethod(), 1)
 
-      context.put("ignorableParameterTypes", ignorableParameterTypes as Set)
-      context.put("parameterDataTypes", springSwaggerModelConfig.defaultParameterDataTypes())
+      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
       context.put("methodParameter", methodParameter)
     when:
       OperationParameterReader operationParameterReader = new OperationParameterReader()
@@ -73,7 +76,7 @@ class OperationParameterReaderSpec extends Specification {
       'required'      | true
       'allowMultiple' | false
       'allowMultiple' | false
-      'paramType'      | "path"
+      'paramType'     | "path"
 
    }
 }

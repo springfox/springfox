@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.readers;
 
+import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.readers.operation.*;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
@@ -25,8 +26,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
 
       RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
       HandlerMethod handlerMethod = outerContext.getHandlerMethod();
-      Set<Class> ignorableParameterTypes = (Set<Class>) outerContext.get("ignorableParameterTypes");
-      Map<Class, String> parameterDataTypes = (Map<Class, String>) outerContext.get("parameterDataTypes");
+      SwaggerGlobalSettings swaggerGlobalSettings  = (SwaggerGlobalSettings) outerContext.get("swaggerGlobalSettings");
 
       RequestMethodsRequestCondition requestMethodsRequestCondition = requestMappingInfo.getMethodsCondition();
       List<Operation> operations = newArrayList();
@@ -44,8 +44,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          RequestMappingContext operationRequestMappingContext = new RequestMappingContext(requestMappingInfo, handlerMethod);
          operationRequestMappingContext.put("currentCount", currentCount);
          operationRequestMappingContext.put("currentHttpMethod", httpRequestMethod);
-         operationRequestMappingContext.put("ignorableParameterTypes", ignorableParameterTypes);
-         operationRequestMappingContext.put("parameterDataTypes", parameterDataTypes);
+         operationRequestMappingContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
 
          commandList.add(new OperationHttpMethodReader());
          commandList.add(new OperationSummaryReader());
@@ -81,6 +80,22 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
                emptyScalaList(),
                toOption(operationResultMap.get("deprecated"))
          );
+//         case class Operation (
+//               method: String,
+//               summary: String,
+//               notes: String,
+//               responseClass: String,
+//               nickname: String,
+//               position: Int,
+//               produces: List[String] = List.empty,
+//               consumes: List[String] = List.empty,
+//               protocols: List[String] = List.empty,
+//               authorizations: List[String] = List.empty,
+//               parameters: List[Parameter] = List.empty,
+//               responseMessages: List[ResponseMessage] = List.empty,
+//         `deprecated`: Option[String] = None)
+
+
          operations.add(operation);
       }
       outerContext.put("operations", operations);
