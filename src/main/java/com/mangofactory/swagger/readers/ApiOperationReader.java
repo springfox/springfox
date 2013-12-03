@@ -69,7 +69,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
                (String) operationResultMap.get("httpRequestMethod"),
                (String) operationResultMap.get("summary"),
                (String) operationResultMap.get("notes"),
-               "responseClass",
+               "",
                (String) operationResultMap.get("nickname"),
                (Integer) operationResultMap.get("position"),
                toScalaList(producesMediaTypes),
@@ -77,7 +77,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
                emptyScalaList(),
                emptyScalaList(),
                toScalaList(parameterList),
-               emptyScalaList(),
+               toScalaList((List) operationResultMap.get("responseMessages")),
                toOption(operationResultMap.get("deprecated"))
          );
 //         case class Operation (

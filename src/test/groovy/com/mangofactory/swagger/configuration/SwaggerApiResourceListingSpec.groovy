@@ -86,6 +86,7 @@ class SwaggerApiResourceListingSpec extends Specification {
       DefaultSwaggerPathProvider swaggerPathProvider = new DefaultSwaggerPathProvider(servletContext: servletContext)
 
       swaggerApiResourceListing.setSwaggerPathProvider(swaggerPathProvider)
+      swaggerApiResourceListing.setSwaggerGlobalSettings(new SwaggerGlobalSettings())
 
       Map handlerMethods = [(requestMappingInfo("somePath/")): dummyHandlerMethod()]
       def requestHandlerMapping = Mock(RequestMappingHandlerMapping)

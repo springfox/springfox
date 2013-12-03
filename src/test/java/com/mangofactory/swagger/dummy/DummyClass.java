@@ -2,6 +2,8 @@ package com.mangofactory.swagger.dummy;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,6 +74,8 @@ public class DummyClass {
 
    }
 
+   @ApiResponses({ @ApiResponse(code = 413, message = "a message")})
+   public void methodWithApiResponses(){}
    public static class ApiIgnorableClass {
       @ApiIgnore
       public void dummyMethod() {

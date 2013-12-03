@@ -18,6 +18,7 @@ import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+import static com.google.common.collect.Maps.newHashMap
 import static com.mangofactory.swagger.ScalaUtils.toOption
 
 @Mixin(RequestMappingSupport)
@@ -29,6 +30,7 @@ class OperationParameterReaderSpec extends Specification {
    def setup() {
       swaggerGlobalSettings.setIgnorableParameterTypes([ServletRequest, ServletResponse, HttpServletRequest, HttpServletResponse, BindingResult, ServletContext] as Set)
       swaggerGlobalSettings.setParameterDataTypes(springSwaggerModelConfig.defaultParameterDataTypes())
+      swaggerGlobalSettings.setGlobalResponseMessages(newHashMap())
    }
 
    @Unroll

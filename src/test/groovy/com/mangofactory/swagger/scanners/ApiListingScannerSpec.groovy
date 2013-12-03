@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.scanners
 
+import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
@@ -33,6 +34,7 @@ class ApiListingScannerSpec extends Specification {
       RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod())
       Map resourceGroupRequestMappings = [ 'businesses' : [requestMappingContext]]
       ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, "default", swaggerPathProvider())
+      scanner.setSwaggerGlobalSettings(new SwaggerGlobalSettings())
 
     when:
       Map<String, ApiListing> apiListingMap = scanner.scan()

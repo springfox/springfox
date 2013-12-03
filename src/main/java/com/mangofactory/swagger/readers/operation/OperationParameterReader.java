@@ -33,8 +33,10 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
 
             RequestMappingContext parameterContext = new RequestMappingContext(context.getRequestMappingInfo(), handlerMethod);
             methodParameter.initParameterNameDiscovery(new LocalVariableTableParameterNameDiscoverer());
-            parameterContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
+
             parameterContext.put("methodParameter", methodParameter);
+            parameterContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
+
             CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
             List<Command<RequestMappingContext>> commandList = newArrayList();
 
