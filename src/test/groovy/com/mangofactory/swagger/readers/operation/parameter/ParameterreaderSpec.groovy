@@ -41,6 +41,7 @@ class ParameterReaderSpec extends Specification {
       new ParameterDefaultReader()     | 'defaultValue' | 'none'                | 'any'             | null                                   | null                                   | ''
       new ParameterDefaultReader()     | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: {-> 'defl' }]) | null                                   | 'defl'
       new ParameterDefaultReader()     | 'defaultValue' | 'none'                | 'any'             | null                                   | reqParam([defaultValue: {-> 'defr' }]) | 'defr'
+      new ParameterAccessReader()      | 'paramAccess'  | 'none'                | 'any'             | apiParam([access: {-> 'myAccess' }])   | null                                   | 'myAccess'
    }
 
    private ApiParam apiParam(Map closureMap) {
