@@ -51,7 +51,7 @@ Secondly to pull in the properties, define a bean in yr custom config (note that
 
 ```java
     @Bean
-    public PropertyPlaceholderConfigurer swaggerProperties() throws UnknownHostException {
+    public static PropertyPlaceholderConfigurer swaggerProperties() throws UnknownHostException {
 
         // Swagger expects these to property values to be replaced. We don't want to propagate these to consumers of
         // this configuration, so we derive reasonable defaults here and configure the properties programmatically.
