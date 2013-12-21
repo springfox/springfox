@@ -5,23 +5,22 @@ import com.google.common.base.Function;
 import com.mangofactory.swagger.ControllerDocumentation;
 import com.mangofactory.swagger.filters.Filter;
 import com.mangofactory.swagger.filters.FilterContext;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.core.DocumentationAllowableListValues;
 import com.wordnik.swagger.core.DocumentationAllowableValues;
 import com.wordnik.swagger.core.DocumentationParameter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.MethodParameter;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.models.Models.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.*;
-import static com.mangofactory.swagger.spring.Descriptions.*;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.transform;
+import static com.mangofactory.swagger.models.Models.isPrimitive;
+import static com.mangofactory.swagger.models.Models.maybeAddParameterTypeToModels;
+import static com.mangofactory.swagger.models.ResolvedTypes.modelName;
+import static com.mangofactory.swagger.spring.Descriptions.splitCamelCase;
 
 public class ParameterFilter implements Filter<DocumentationParameter> {
     @Override
@@ -39,7 +38,7 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         MethodParameter methodParameter, ResolvedType parameterType, String defaultParameterName) {
 
         String name = selectBestParameterName(methodParameter, defaultParameterName);
-        String description = splitCamelCase(name);
+        String description = selectBestParameterDescription(methodParameter, defaultParameterName);
         if (StringUtils.isEmpty(name)) {
             name = methodParameter.getParameterName();
         }
@@ -54,20 +53,30 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
         parameter.setDataType(dataType);
         maybeAddParameterTypeToModels(controllerDocumentation, parameterType, dataType, false);
         RequestParam requestParam = methodParameter.getParameterAnnotation(RequestParam.class);
-        boolean isRequired = false;
-        if (requestParam != null) {
-            isRequired = requestParam.required();
+
+        boolean isRequired = paramType.equals( "path" );
+        if ( !isRequired && requestParam != null ) {
+            isRequired = requestParam.required() || !requestParam.defaultValue().equals( ValueConstants.DEFAULT_NONE );
         }
+
         parameter.setName(name);
         parameter.setDescription(description);
         parameter.setNotes("");
         parameter.setParamType(paramType);
-        parameter.setDefaultValue("");
+        parameter.setDefaultValue(getDefaultValue(requestParam));
         parameter.setAllowableValues(maybeGetAllowableValues(parameterType.getErasedType()));
         parameter.setRequired(isRequired);
         parameter.setAllowMultiple(false);
         parameter.setDataType(dataType);
 
+    }
+
+    private String getDefaultValue( RequestParam requestParam ) {
+        if ( requestParam != null && !requestParam.defaultValue().equals( ValueConstants.DEFAULT_NONE ) ) {
+            return requestParam.defaultValue();
+        } else {
+            return "";
+        }
     }
 
     private DocumentationAllowableValues maybeGetAllowableValues(Class<?> parameterType) {
@@ -115,6 +124,17 @@ public class ParameterFilter implements Filter<DocumentationParameter> {
             return "query";
         }
         return "body";
+    }
+
+    private String selectBestParameterDescription( MethodParameter methodParameter, String defaultParameterName ) {
+        String description = splitCamelCase( selectBestParameterName( methodParameter, defaultParameterName ) );
+
+        ApiParam apiParam = methodParameter.getParameterAnnotation( ApiParam.class );
+        if ( apiParam != null && !StringUtils.isEmpty( apiParam.value() ) ) {
+            description = apiParam.value();
+        }
+
+        return description;
     }
 
     private String selectBestParameterName(MethodParameter methodParameter, String defaultParameterName) {
