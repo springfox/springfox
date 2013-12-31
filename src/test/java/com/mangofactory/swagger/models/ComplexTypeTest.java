@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.models;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.mangofactory.swagger.SwaggerConfiguration;
 import com.wordnik.swagger.core.DocumentationSchema;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,8 +70,8 @@ public class ComplexTypeTest {
     @Before
     public void setup() {
         modelMap = newHashMap();
-        DocumentationSchemaProvider provider = new DocumentationSchemaProvider(new TypeResolver());
-        //TODO: Fix this to use Alternate type rules
+        DocumentationSchemaProvider provider = new DocumentationSchemaProvider(new TypeResolver(),
+                new SwaggerConfiguration("1.1", "/"));
         modelMap = provider.getModelMap(new Model("pet", asResolvedType(Pet.class)));
     }
 

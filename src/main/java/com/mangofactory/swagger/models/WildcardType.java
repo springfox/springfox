@@ -28,6 +28,9 @@ public class WildcardType {
     }
 
     public static boolean wildcardMatch(ResolvedType toMatch, ResolvedType wildcardType) {
+        if (!toMatch.getErasedType().equals(wildcardType.getErasedType())) {
+            return false;
+        }
         TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
         TypeBindings bindingsToMatch = toMatch.getTypeBindings();
         if (bindingsToMatch.size() != wildcardTypeBindings.size()) {

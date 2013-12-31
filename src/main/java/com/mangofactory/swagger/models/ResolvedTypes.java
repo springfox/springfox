@@ -12,6 +12,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
+import com.mangofactory.swagger.SwaggerConfiguration;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -75,7 +76,8 @@ public class ResolvedTypes {
         throw new IllegalArgumentException(String.format("Method (%s) is not a getter or a setter", methodName));
     }
 
-    public static List<ResolvedProperty> gettersAndSetters(TypeResolver typeResolver, ResolvedType resolvedType) {
+    public static List<ResolvedPropertyInfo> gettersAndSetters(final SwaggerConfiguration configuration,
+            TypeResolver typeResolver, ResolvedType resolvedType) {
 
         MemberResolver resolver = new MemberResolver(typeResolver);
         resolver.setIncludeLangObject(false);
@@ -89,10 +91,10 @@ public class ResolvedTypes {
             }
         });
         return transform(newArrayList(filteredProperties), new Function<ResolvedMethod,
-                ResolvedProperty>() {
+                ResolvedPropertyInfo>() {
             @Override
-            public ResolvedProperty apply(ResolvedMethod input) {
-                return new ResolvedProperty(propertyName(input.getRawMember().getName()), input,
+            public ResolvedPropertyInfo apply(ResolvedMethod input) {
+                return new ResolvedPropertyInfo(configuration, propertyName(input.getRawMember().getName()), input,
                         isGetter(input.getRawMember()));
             }
         });

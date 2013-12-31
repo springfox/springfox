@@ -103,7 +103,7 @@ public class SwaggerConfiguration {
 
     public DocumentationSchemaProvider getSchemaProvider() {
         if (schemaProvider == null) {
-            schemaProvider = new DocumentationSchemaProvider(getTypeResolver());
+            schemaProvider = new DocumentationSchemaProvider(getTypeResolver(), this);
         }
         return schemaProvider;
     }

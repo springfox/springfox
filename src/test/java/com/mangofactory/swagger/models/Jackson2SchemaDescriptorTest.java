@@ -5,6 +5,7 @@ import com.fasterxml.classmate.members.ResolvedField;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Predicate;
 import com.mangofactory.swagger.AliasedResolvedField;
+import com.mangofactory.swagger.SwaggerConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +24,7 @@ import static org.junit.Assert.*;
 public class Jackson2SchemaDescriptorTest {
     private final boolean forSerialization;
     private List<AliasedResolvedField> fields;
-    private List<ResolvedProperty> properties;
+    private List<ResolvedPropertyInfo> properties;
 
     public Jackson2SchemaDescriptorTest(boolean forSerialization) {
         this.forSerialization = forSerialization;
@@ -37,7 +38,8 @@ public class Jackson2SchemaDescriptorTest {
 
     @Before
     public void setUp() throws Exception {
-        Jackson2SchemaDescriptor descriptor = new Jackson2SchemaDescriptor(new ObjectMapper());
+        Jackson2SchemaDescriptor descriptor = new Jackson2SchemaDescriptor(new SwaggerConfiguration("1.1", "/"),
+                new ObjectMapper());
         TypeResolver typeResolver = new TypeResolver();
         if (forSerialization) {
             fields =  descriptor.serializableFields(typeResolver, typeResolver.resolve(SerializationTest.class));
@@ -73,10 +75,10 @@ public class Jackson2SchemaDescriptorTest {
             }, null);
     }
 
-    private ResolvedProperty resolvedProperty(final String property) {
-        return find(properties, new Predicate<ResolvedProperty>() {
+    private ResolvedPropertyInfo resolvedProperty(final String property) {
+        return find(properties, new Predicate<ResolvedPropertyInfo>() {
             @Override
-            public boolean apply(ResolvedProperty input) {
+            public boolean apply(ResolvedPropertyInfo input) {
                 return property.equals(input.getName());
             }
         }, null);
@@ -84,7 +86,7 @@ public class Jackson2SchemaDescriptorTest {
 
     @Test
     public void privateProperty() {
-        ResolvedProperty property = resolvedProperty("privateProperty");
+        ResolvedPropertyInfo property = resolvedProperty("privateProperty");
         assertNotNull(property);
     }
 
@@ -121,13 +123,13 @@ public class Jackson2SchemaDescriptorTest {
 
     @Test
     public void nonExistentProperty() {
-        ResolvedProperty property = resolvedProperty("nonExistentProperty");
+        ResolvedPropertyInfo property = resolvedProperty("nonExistentProperty");
         assertNull(property);
     }
 
     @Test
     public void jsonIgnoreProperties() {
-        ResolvedProperty property = resolvedProperty("ignoreProperty1");
+        ResolvedPropertyInfo property = resolvedProperty("ignoreProperty1");
         assertNotNull(property);
     }
 

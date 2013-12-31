@@ -11,6 +11,7 @@ import com.fasterxml.classmate.types.ResolvedRecursiveType;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.mangofactory.swagger.AliasedResolvedField;
+import com.mangofactory.swagger.SwaggerConfiguration;
 import com.wordnik.swagger.core.DocumentationSchema;
 
 import java.lang.reflect.Type;
@@ -42,7 +43,7 @@ public class SchemaProvider {
             .put(String.class, PrimitiveMemberVisitor.factory())
             .put(Date.class, DateMemberVisitor.factory())
             .put(Object.class, ObjectMemberVisitor.factory())
-            .put(ResolvedProperty.class, ResolvedTypeMemberVisitor.factory())
+            .put(ResolvedPropertyInfo.class, ResolvedTypeMemberVisitor.factory())
             .put(ResolvedObjectType.class, ResolvedTypeMemberVisitor.factory())
             .put(ResolvedPrimitiveType.class, ResolvedTypeMemberVisitor.factory())
             .put(ResolvedArrayType.class, ResolvedArrayMemberVisitor.factory())
@@ -51,11 +52,14 @@ public class SchemaProvider {
             .build();
 
     private final HashMap<String,DocumentationSchema> schemaMap = newHashMap();
+    private final SwaggerConfiguration configuration;
     private final SchemaDescriptor descriptor;
     private final TypeResolver typeResolver;
     private final boolean returnType;
 
-    public SchemaProvider(SchemaDescriptor descriptor, TypeResolver typeResolver, boolean returnType) {
+    public SchemaProvider(SwaggerConfiguration configuration, SchemaDescriptor descriptor, TypeResolver typeResolver,
+                          boolean returnType) {
+        this.configuration = configuration;
         this.descriptor = descriptor;
         this.typeResolver = typeResolver;
         this.returnType = returnType;
@@ -63,19 +67,26 @@ public class SchemaProvider {
 
     @SuppressWarnings("ConstantConditions")
     public DocumentationSchema schema(ResolvedField field) {
-        ResolvedFieldInfo memberInfo = new ResolvedFieldInfo(field);
+        ResolvedFieldInfo memberInfo = new ResolvedFieldInfo(configuration, field);
         return findKey(field).apply(this).schema(memberInfo);
+//        ResolvedType alternate = configuration.maybeGetAlternateType(field.getType());
+//        ResolvedTypeMemberSource memberSource = new ResolvedTypeMemberSource(alternate);
+//        return findKey(field).apply(this).schema(memberSource);
     }
 
     @SuppressWarnings("ConstantConditions")
-    public DocumentationSchema schema(ResolvedProperty property) {
+    public DocumentationSchema schema(ResolvedPropertyInfo property) {
         return findKey(property).apply(this).schema(property);
+//        ResolvedType alternate = configuration.maybeGetAlternateType(property.getResolvedType());
+//        ResolvedTypeMemberSource memberSource = new ResolvedTypeMemberSource(alternate);
+//        return findKey(property).apply(this).schema(memberSource);
     }
 
     @SuppressWarnings("ConstantConditions")
     public DocumentationSchema schema(ResolvedType resolvedType) {
-        ResolvedTypeMemberSource memberSource = new ResolvedTypeMemberSource(resolvedType);
-        return findKey(resolvedType).apply(this).schema(memberSource);
+        ResolvedType alternate = configuration.maybeGetAlternateType(resolvedType);
+        ResolvedTypeMemberSource memberSource = new ResolvedTypeMemberSource(alternate);
+        return findKey(alternate).apply(this).schema(memberSource);
     }
 
     private Function<SchemaProvider,MemberVisitor> findKey(Type returnType) {
@@ -86,17 +97,19 @@ public class SchemaProvider {
     }
 
     private Function<SchemaProvider,MemberVisitor> findKey(ResolvedField field) {
-        if (propertySchemas.containsKey(field.getType().getClass())) {
-            return propertySchemas.get(field.getType().getClass());
+        ResolvedType type = configuration.maybeGetAlternateType(field.getType());
+        if (propertySchemas.containsKey(type.getClass())) {
+            return propertySchemas.get(type.getClass());
         }
-        return propertySchemas.get(field.getType().getClass());
+        return propertySchemas.get(type.getClass());
     }
 
-    private Function<SchemaProvider,MemberVisitor> findKey(ResolvedProperty property) {
-        if (property.getResolvedType().isPrimitive() || propertySchemas.containsKey(property.getType())) {
+    private Function<SchemaProvider,MemberVisitor> findKey(ResolvedPropertyInfo property) {
+        ResolvedType resolvedType = configuration.maybeGetAlternateType(property.getResolvedType());
+        if (resolvedType.isPrimitive() || propertySchemas.containsKey(property.getType())) {
             return propertySchemas.get(property.getType());
         }
-        return propertySchemas.get(property.getResolvedType().getClass());
+        return propertySchemas.get(resolvedType.getClass());
     }
 
     public HashMap<String, DocumentationSchema> getSchemaMap() {
@@ -119,7 +132,7 @@ public class SchemaProvider {
         }
     }
 
-    public List<ResolvedProperty> getResolvedProperties(ResolvedType resolvedType) {
+    public List<ResolvedPropertyInfo> getResolvedProperties(ResolvedType resolvedType) {
         if (isReturnType()) {
             return descriptor.serializableProperties(this.getTypeResolver(), resolvedType);
         } else {

@@ -12,9 +12,9 @@ public interface SchemaDescriptor {
 
     List<AliasedResolvedField> deserializableFields(TypeResolver typeResolver, ResolvedType resolvedType);
 
-    List<ResolvedProperty> serializableProperties(TypeResolver typeResolver, ResolvedType resolvedType);
+    List<ResolvedPropertyInfo> serializableProperties(TypeResolver typeResolver, ResolvedType resolvedType);
 
-    List<ResolvedProperty> deserializableProperties(TypeResolver typeResolver, ResolvedType resolvedType);
+    List<ResolvedPropertyInfo> deserializableProperties(TypeResolver typeResolver, ResolvedType resolvedType);
 
 }
 

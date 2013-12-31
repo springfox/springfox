@@ -67,14 +67,15 @@ public class DocumentationConfig {
     @Bean
     @Autowired
     DocumentationSchemaProvider documentationSchemaProvider(TypeResolver typeResolver,
-            SchemaDescriptor schemaDescriptor) {
-        return new DocumentationSchemaProvider(typeResolver, schemaDescriptor);
+            SchemaDescriptor schemaDescriptor, SwaggerConfiguration configuration) {
+        return new DocumentationSchemaProvider(typeResolver, configuration, schemaDescriptor);
     }
 
     @Bean
     @Autowired
-    public SchemaDescriptor schemaDescriptor(ObjectMapper documentationObjectMapper) {
-        return new Jackson2SchemaDescriptor(documentationObjectMapper);
+    public SchemaDescriptor schemaDescriptor(SwaggerConfiguration configuration,
+            ObjectMapper documentationObjectMapper) {
+        return new Jackson2SchemaDescriptor(configuration, documentationObjectMapper);
     }
 
     @Bean

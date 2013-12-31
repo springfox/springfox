@@ -4,6 +4,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mangofactory.swagger.SwaggerConfiguration;
 import com.wordnik.swagger.core.DocumentationSchema;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +48,8 @@ public class GenericTypeTest {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.addMixInAnnotations(HttpHeaders.class, HttpHeadersMixin.class);
         DocumentationSchemaProvider provider = new DocumentationSchemaProvider(new TypeResolver(),
-                new Jackson2SchemaDescriptor(objectMapper));
+                new SwaggerConfiguration("1.1", "/"), new Jackson2SchemaDescriptor(new SwaggerConfiguration("1.1",
+                "/"), objectMapper));
         modelMap = provider.getModelMap(new Model("pet", asResolvedType()));
     }
 

@@ -83,7 +83,7 @@ public class OperationFilterTest {
     public void setup() throws Exception {
         DocumentationOperation operation = new DocumentationOperation();
         controllerDocumentation= new ControllerDocumentation("", "", "", "",
-                new DocumentationSchemaProvider(new TypeResolver()));
+                new DocumentationSchemaProvider(new TypeResolver(), new SwaggerConfiguration("1.1", "/")));
         context = new FilterContext<DocumentationOperation>(operation);
         context.put("controllerDocumentation", controllerDocumentation);
 

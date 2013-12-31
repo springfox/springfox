@@ -3,19 +3,17 @@ package com.mangofactory.swagger.models;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
+import com.mangofactory.swagger.SwaggerConfiguration;
 
-public class ResolvedProperty implements MemberInfoSource {
+public class ResolvedPropertyInfo implements MemberInfoSource {
+    private final SwaggerConfiguration configuration;
     private final boolean isGetter;
     private String name;
     private ResolvedMethod method;
 
-    public ResolvedProperty(String name, ResolvedMethod method) {
-        this.isGetter = true;
-        this.name = name;
-        this.method = method;
-    }
-
-    public ResolvedProperty(String name, ResolvedMethod method, boolean isGetter) {
+    public ResolvedPropertyInfo(SwaggerConfiguration configuration, String name, ResolvedMethod method,
+                                boolean isGetter) {
+        this.configuration = configuration;
         this.isGetter = isGetter;
         this.name = name;
         this.method = method;
@@ -27,6 +25,10 @@ public class ResolvedProperty implements MemberInfoSource {
     }
 
     private ResolvedType resolvedType() {
+        return configuration.maybeGetAlternateType(internalResolvedType());
+    }
+
+    private ResolvedType internalResolvedType() {
         if (isGetter) {
             if (method.getReturnType().getErasedType().getTypeParameters().length > 0) {
                 return method.getReturnType();

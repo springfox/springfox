@@ -3,6 +3,7 @@ package com.mangofactory.swagger.spring.filters;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.ControllerDocumentation;
+import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.filters.Filter;
 import com.mangofactory.swagger.filters.FilterContext;
 import com.mangofactory.swagger.models.DocumentationSchemaProvider;
@@ -96,7 +97,7 @@ public class ParameterFilterTest {
     public void setup() {
         docParam = new DocumentationParameter();
         documentation = new ControllerDocumentation("1", "2", "", "",
-                new DocumentationSchemaProvider(new TypeResolver()));
+                new DocumentationSchemaProvider(new TypeResolver(), new SwaggerConfiguration("1.1", "/")));
         context = new FilterContext<DocumentationParameter>(docParam);
         context.put("controllerDocumentation", documentation);
         paramFilters = newArrayList();
@@ -112,7 +113,7 @@ public class ParameterFilterTest {
         for (int index = 0; index < methodParams.length; index++) {
             DocumentationParameter docParam = new DocumentationParameter();
             ControllerDocumentation documentation = new ControllerDocumentation("1", "2", "", "",
-                    new DocumentationSchemaProvider(new TypeResolver()));
+                    new DocumentationSchemaProvider(new TypeResolver(), new SwaggerConfiguration("1.1", "/")));
             FilterContext context = new FilterContext<DocumentationParameter>(docParam);
             context.put("controllerDocumentation", documentation);
             context.put("methodParameter", methodParams[index]);

@@ -3,11 +3,14 @@ package com.mangofactory.swagger.models;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedField;
+import com.mangofactory.swagger.SwaggerConfiguration;
 
 public class ResolvedFieldInfo implements MemberInfoSource {
+    private final SwaggerConfiguration configuration;
     private final ResolvedField resolvedField;
 
-    public ResolvedFieldInfo(ResolvedField resolvedField) {
+    public ResolvedFieldInfo(SwaggerConfiguration configuration, ResolvedField resolvedField) {
+        this.configuration = configuration;
         this.resolvedField = resolvedField;
     }
 
@@ -23,6 +26,10 @@ public class ResolvedFieldInfo implements MemberInfoSource {
 
     @Override
     public ResolvedType getResolvedType() {
+        return configuration.maybeGetAlternateType(internalResolvedType());
+    }
+
+    private ResolvedType internalResolvedType() {
         if (resolvedField.getType().getErasedType().getTypeParameters().length > 0) {
             return resolvedField.getType();
         } else {

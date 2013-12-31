@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.mangofactory.swagger.AliasedResolvedField;
+import com.mangofactory.swagger.SwaggerConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -30,10 +31,13 @@ import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 @Component
 public class Jackson2SchemaDescriptor implements SchemaDescriptor {
+    private final SwaggerConfiguration configuration;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public Jackson2SchemaDescriptor(@Qualifier("documentationObjectMapper") ObjectMapper objectMapper) {
+    public Jackson2SchemaDescriptor(SwaggerConfiguration configuration,
+            @Qualifier("documentationObjectMapper") ObjectMapper objectMapper) {
+        this.configuration = configuration;
         this.objectMapper = objectMapper;
     }
 
@@ -86,14 +90,14 @@ public class Jackson2SchemaDescriptor implements SchemaDescriptor {
     }
 
     @Override
-    public List<ResolvedProperty> serializableProperties(TypeResolver typeResolver, ResolvedType resolvedType) {
-        List<ResolvedProperty> serializationCandidates = newArrayList();
+    public List<ResolvedPropertyInfo> serializableProperties(TypeResolver typeResolver, ResolvedType resolvedType) {
+        List<ResolvedPropertyInfo> serializationCandidates = newArrayList();
         SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
         BeanDescription beanDescription = serializationConfig.introspect(TypeFactory.defaultInstance()
                 .constructType(resolvedType.getErasedType()));
         Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
                 beanPropertyByInternalName());
-        for (ResolvedProperty childProperty: gettersAndSetters(typeResolver, resolvedType)) {
+        for (ResolvedPropertyInfo childProperty: gettersAndSetters(configuration, typeResolver, resolvedType)) {
 
             if (propertyLookup.containsKey(childProperty.getName())) {
                 BeanPropertyDefinition propertyDefinition = propertyLookup.get(childProperty.getName());
@@ -110,14 +114,14 @@ public class Jackson2SchemaDescriptor implements SchemaDescriptor {
     }
 
     @Override
-    public List<ResolvedProperty> deserializableProperties(TypeResolver typeResolver, ResolvedType resolvedType) {
-        List<ResolvedProperty> serializationCandidates = newArrayList();
+    public List<ResolvedPropertyInfo> deserializableProperties(TypeResolver typeResolver, ResolvedType resolvedType) {
+        List<ResolvedPropertyInfo> serializationCandidates = newArrayList();
         DeserializationConfig serializationConfig = objectMapper.getDeserializationConfig();
         BeanDescription beanDescription = serializationConfig.introspect(TypeFactory.defaultInstance()
                 .constructType(resolvedType.getErasedType()));
         Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
                 beanPropertyByInternalName());
-        for (ResolvedProperty childProperty: gettersAndSetters(typeResolver, resolvedType)) {
+        for (ResolvedPropertyInfo childProperty: gettersAndSetters(configuration, typeResolver, resolvedType)) {
 
             if (propertyLookup.containsKey(childProperty.getName())) {
                 BeanPropertyDefinition propertyDefinition = propertyLookup.get(childProperty.getName());

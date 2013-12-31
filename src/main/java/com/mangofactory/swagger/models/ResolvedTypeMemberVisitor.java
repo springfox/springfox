@@ -100,7 +100,7 @@ public class ResolvedTypeMemberVisitor implements MemberVisitor {
                 propertyMap.put(childField.getName(), childSchema);
             }
         }
-        for (ResolvedProperty childProperty: context.getResolvedProperties(resolvedMember)) {
+        for (ResolvedPropertyInfo childProperty: context.getResolvedProperties(resolvedMember)) {
             DocumentationSchema childPropertySchema = context.schema(childProperty);
             if (childPropertySchema != null) {
                 propertyMap.put(childProperty.getName(), childPropertySchema);

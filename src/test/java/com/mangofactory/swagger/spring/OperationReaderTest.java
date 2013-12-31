@@ -65,7 +65,8 @@ public class OperationReaderTest {
 
         controllerDocumentation = new ControllerDocumentation(swaggerConfiguration.getApiVersion(),
                 swaggerConfiguration.getSwaggerVersion(), swaggerConfiguration.getBasePath(),
-                swaggerConfiguration.getDocumentationBasePath(), new DocumentationSchemaProvider(new TypeResolver()));
+                swaggerConfiguration.getDocumentationBasePath(),
+                new DocumentationSchemaProvider(new TypeResolver(), swaggerConfiguration));
     }
 
     @Test
