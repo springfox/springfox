@@ -69,17 +69,11 @@ public class SchemaProvider {
     public DocumentationSchema schema(ResolvedField field) {
         ResolvedFieldInfo memberInfo = new ResolvedFieldInfo(configuration, field);
         return findKey(field).apply(this).schema(memberInfo);
-//        ResolvedType alternate = configuration.maybeGetAlternateType(field.getType());
-//        ResolvedTypeMemberSource memberSource = new ResolvedTypeMemberSource(alternate);
-//        return findKey(field).apply(this).schema(memberSource);
     }
 
     @SuppressWarnings("ConstantConditions")
     public DocumentationSchema schema(ResolvedPropertyInfo property) {
         return findKey(property).apply(this).schema(property);
-//        ResolvedType alternate = configuration.maybeGetAlternateType(property.getResolvedType());
-//        ResolvedTypeMemberSource memberSource = new ResolvedTypeMemberSource(alternate);
-//        return findKey(property).apply(this).schema(memberSource);
     }
 
     @SuppressWarnings("ConstantConditions")
