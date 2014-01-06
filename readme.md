@@ -27,9 +27,9 @@ For more detail see: https://github.com/wordnik/swagger-core/wiki/1.2-transition
 - All http methods supported by org.springframework.web.bind.annotation.RequestMethod (GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE)
 - Filtering/Inclusion of api endpoints with regular expression or ant path matching.
 - Operation parameter data types supported as per spec: https://github.com/wordnik/swagger-core/wiki/Datatypes
+- Http response codes and messages with com.wordnik.swagger.annotations.ApiResponses
 - All uris are, by default, absolute after much deliberation. Relative uri's do not work well with swagger UI. Other swagger tools like
-swagger-codegen work much better with absolute uri's.
-This strategy can be changed by
+swagger-codegen work much better with absolute uri's. This strategy can be changed by
 implementing [SwaggerPathProvider](https://github.com/adrianbk/swagger-springmvc/blob/swagger-spec-1.2.0-upgrade/src/main/java/com/mangofactory/swagger/core/SwaggerPathProvider.java)
 
 ## Dependencies
