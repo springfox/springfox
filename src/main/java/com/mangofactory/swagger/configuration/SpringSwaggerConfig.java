@@ -3,7 +3,6 @@ package com.mangofactory.swagger.configuration;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.*;
 import com.wordnik.swagger.model.ResponseMessage;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +28,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class SpringSwaggerConfig {
 
    @Autowired
-   @Getter
    private List<RequestMappingHandlerMapping> handlerMappings;
 
    @Bean public List<RequestMappingHandlerMapping> swaggerRequestMappingHandlerMappings(){
@@ -107,5 +105,9 @@ public class SpringSwaggerConfig {
 
    private List<ResponseMessage> asList(ResponseMessage ... responseMessages){
       return Arrays.asList(responseMessages);
+   }
+
+   public List<RequestMappingHandlerMapping> getHandlerMappings() {
+      return handlerMappings;
    }
 }

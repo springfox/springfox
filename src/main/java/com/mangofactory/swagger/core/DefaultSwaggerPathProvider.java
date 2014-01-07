@@ -1,7 +1,5 @@
 package com.mangofactory.swagger.core;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -10,9 +8,6 @@ import javax.servlet.ServletContext;
 public class DefaultSwaggerPathProvider implements SwaggerPathProvider {
    @Autowired
    private ServletContext servletContext;
-
-   @Setter
-   @Getter
    private String apiResourceSuffix = "";
 
    public String getApiResourcePrefix() {
@@ -34,5 +29,13 @@ public class DefaultSwaggerPathProvider implements SwaggerPathProvider {
             .pathSegment("api-docs/")
             .build()
             .toString();
+   }
+
+   public String getApiResourceSuffix() {
+      return apiResourceSuffix;
+   }
+
+   public void setApiResourceSuffix(String apiResourceSuffix) {
+      this.apiResourceSuffix = apiResourceSuffix;
    }
 }

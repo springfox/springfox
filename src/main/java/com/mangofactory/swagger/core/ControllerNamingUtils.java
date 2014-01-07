@@ -1,19 +1,19 @@
 package com.mangofactory.swagger.core;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.util.UriUtils;
-
 import java.io.UnsupportedEncodingException;
 
-@Slf4j
 public class ControllerNamingUtils {
-
+   private static Logger log = LoggerFactory.getLogger(ControllerNamingUtils.class);
    private static final String ISO_8859_1 = "ISO-8859-1";
 
    public static String pathRoot(String requestPattern) {
       Assert.notNull(requestPattern);
       Assert.hasText(requestPattern);
+      log.info("Resolving path root for {}", requestPattern);
       requestPattern = requestPattern.startsWith("/") ? requestPattern : "/" + requestPattern;
       int idx = requestPattern.indexOf("/", 1);
       if(idx > -1){

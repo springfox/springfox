@@ -11,8 +11,6 @@ import com.mangofactory.swagger.readers.MediaTypeReader;
 import com.wordnik.swagger.core.SwaggerSpec;
 import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiListing;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.LinkedHashSet;
@@ -31,17 +29,8 @@ public class ApiListingScanner {
    private String swaggerVersion = SwaggerSpec.version();
    private Map<String, List<RequestMappingContext>>  resourceGroupRequestMappings;
    private SwaggerPathProvider swaggerPathProvider;
-
-   @Getter
-   @Setter
    private List<Command<RequestMappingContext>> readers = newArrayList();
-
-   @Setter
-   @Getter
    private SwaggerGlobalSettings swaggerGlobalSettings;
-
-   @Getter
-   @Setter
    private ControllerResourceNamingStrategy controllerNamingStrategy;
 
    public ApiListingScanner(Map<String, List<RequestMappingContext>> resourceGroupRequestMappings,
@@ -109,4 +98,30 @@ public class ApiListingScanner {
       }
       return apiListingMap;
    }
+
+   public SwaggerGlobalSettings getSwaggerGlobalSettings() {
+      return swaggerGlobalSettings;
+   }
+
+   public void setSwaggerGlobalSettings(SwaggerGlobalSettings swaggerGlobalSettings) {
+      this.swaggerGlobalSettings = swaggerGlobalSettings;
+   }
+
+   public List<Command<RequestMappingContext>> getReaders() {
+      return readers;
+   }
+
+   public void setReaders(List<Command<RequestMappingContext>> readers) {
+      this.readers = readers;
+   }
+
+   public ControllerResourceNamingStrategy getControllerNamingStrategy() {
+      return controllerNamingStrategy;
+   }
+
+   public void setControllerNamingStrategy(ControllerResourceNamingStrategy controllerNamingStrategy) {
+      this.controllerNamingStrategy = controllerNamingStrategy;
+   }
+
+
 }

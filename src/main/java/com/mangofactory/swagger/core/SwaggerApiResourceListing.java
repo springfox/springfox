@@ -6,9 +6,8 @@ import com.mangofactory.swagger.scanners.ApiListingScanner;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.core.SwaggerSpec;
 import com.wordnik.swagger.model.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -18,28 +17,15 @@ import java.util.Map;
 import static com.mangofactory.swagger.ScalaUtils.toOption;
 import static com.mangofactory.swagger.ScalaUtils.toScalaList;
 
-@Slf4j
 public class SwaggerApiResourceListing {
+   private static final Logger log = LoggerFactory.getLogger(SwaggerApiResourceListing.class);
 
-   @Getter
    private SwaggerCache swaggerCache;
-
-   @Getter
-   @Setter
    private ApiInfo apiInfo;
-   @Getter
-   @Setter
    private List<AuthorizationType> authorizationTypes;
-
-   @Setter
    private ApiListingReferenceScanner apiListingReferenceScanner;
-
-   @Setter
    private SwaggerPathProvider swaggerPathProvider;
-
-   @Setter
    private SwaggerGlobalSettings swaggerGlobalSettings;
-
    private String swaggerGroup;
 
    public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
@@ -78,5 +64,59 @@ public class SwaggerApiResourceListing {
       swaggerCache.addSwaggerResourceListing(swaggerGroup, resourceListing);
    }
 
+   public SwaggerCache getSwaggerCache() {
+      return swaggerCache;
+   }
 
+   public void setSwaggerCache(SwaggerCache swaggerCache) {
+      this.swaggerCache = swaggerCache;
+   }
+
+   public ApiInfo getApiInfo() {
+      return apiInfo;
+   }
+
+   public void setApiInfo(ApiInfo apiInfo) {
+      this.apiInfo = apiInfo;
+   }
+
+   public List<AuthorizationType> getAuthorizationTypes() {
+      return authorizationTypes;
+   }
+
+   public void setAuthorizationTypes(List<AuthorizationType> authorizationTypes) {
+      this.authorizationTypes = authorizationTypes;
+   }
+
+   public ApiListingReferenceScanner getApiListingReferenceScanner() {
+      return apiListingReferenceScanner;
+   }
+
+   public void setApiListingReferenceScanner(ApiListingReferenceScanner apiListingReferenceScanner) {
+      this.apiListingReferenceScanner = apiListingReferenceScanner;
+   }
+
+   public SwaggerPathProvider getSwaggerPathProvider() {
+      return swaggerPathProvider;
+   }
+
+   public void setSwaggerPathProvider(SwaggerPathProvider swaggerPathProvider) {
+      this.swaggerPathProvider = swaggerPathProvider;
+   }
+
+   public SwaggerGlobalSettings getSwaggerGlobalSettings() {
+      return swaggerGlobalSettings;
+   }
+
+   public void setSwaggerGlobalSettings(SwaggerGlobalSettings swaggerGlobalSettings) {
+      this.swaggerGlobalSettings = swaggerGlobalSettings;
+   }
+
+   public String getSwaggerGroup() {
+      return swaggerGroup;
+   }
+
+   public void setSwaggerGroup(String swaggerGroup) {
+      this.swaggerGroup = swaggerGroup;
+   }
 }

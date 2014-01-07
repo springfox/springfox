@@ -5,10 +5,9 @@ import com.google.common.collect.Multimaps;
 import com.mangofactory.swagger.core.ControllerResourceNamingStrategy;
 import com.mangofactory.swagger.core.SwaggerPathProvider;
 import com.wordnik.swagger.model.ApiListingReference;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
@@ -27,41 +26,19 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.mangofactory.swagger.ScalaUtils.toOption;
 import static java.lang.String.format;
 
-@Slf4j
 public class ApiListingReferenceScanner {
    private static final String REQUEST_MAPPINGS_EMPTY =
          "No RequestMappingHandlerMapping's found have you added <mvc:annotation-driven/>";
 
-   @Getter
-   @Setter
+   private static final Logger log = LoggerFactory.getLogger(ApiListingReferenceScanner.class);
    private List<RequestMappingHandlerMapping> requestMappingHandlerMapping;
-   @Getter
    private List<ApiListingReference> apiListingReferences = newArrayList();
-
    private ArrayListMultimap<String, RequestMappingContext> resourceGroupRequestMappings = ArrayListMultimap.create();
-
-   @Getter
-   @Setter
    private String swaggerGroup;
-
-   @Getter
-   @Setter
    private List<Class<? extends Annotation>> excludeAnnotations;
-
-   @Getter
-   @Setter
    private ControllerResourceNamingStrategy controllerNamingStrategy;
-
-   @Getter
-   @Setter
    private SwaggerPathProvider swaggerPathProvider;
-
-   @Setter
-   @Getter
-   private List<String> includePatterns = Arrays.asList(new String[]{".*?"});;
-
-   @Setter
-   @Getter
+   private List<String> includePatterns = Arrays.asList(new String[]{".*?"});
    private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
 
    public ApiListingReferenceScanner() {
@@ -139,5 +116,71 @@ public class ApiListingReferenceScanner {
       return Multimaps.asMap(resourceGroupRequestMappings);
    }
 
+   public List<RequestMappingHandlerMapping> getRequestMappingHandlerMapping() {
+      return requestMappingHandlerMapping;
+   }
 
+   public void setRequestMappingHandlerMapping(List<RequestMappingHandlerMapping> requestMappingHandlerMapping) {
+      this.requestMappingHandlerMapping = requestMappingHandlerMapping;
+   }
+
+   public List<ApiListingReference> getApiListingReferences() {
+      return apiListingReferences;
+   }
+
+   public void setApiListingReferences(List<ApiListingReference> apiListingReferences) {
+      this.apiListingReferences = apiListingReferences;
+   }
+
+   public void setResourceGroupRequestMappings(ArrayListMultimap<String, RequestMappingContext> resourceGroupRequestMappings) {
+      this.resourceGroupRequestMappings = resourceGroupRequestMappings;
+   }
+
+   public String getSwaggerGroup() {
+      return swaggerGroup;
+   }
+
+   public void setSwaggerGroup(String swaggerGroup) {
+      this.swaggerGroup = swaggerGroup;
+   }
+
+   public List<Class<? extends Annotation>> getExcludeAnnotations() {
+      return excludeAnnotations;
+   }
+
+   public void setExcludeAnnotations(List<Class<? extends Annotation>> excludeAnnotations) {
+      this.excludeAnnotations = excludeAnnotations;
+   }
+
+   public ControllerResourceNamingStrategy getControllerNamingStrategy() {
+      return controllerNamingStrategy;
+   }
+
+   public void setControllerNamingStrategy(ControllerResourceNamingStrategy controllerNamingStrategy) {
+      this.controllerNamingStrategy = controllerNamingStrategy;
+   }
+
+   public SwaggerPathProvider getSwaggerPathProvider() {
+      return swaggerPathProvider;
+   }
+
+   public void setSwaggerPathProvider(SwaggerPathProvider swaggerPathProvider) {
+      this.swaggerPathProvider = swaggerPathProvider;
+   }
+
+   public List<String> getIncludePatterns() {
+      return includePatterns;
+   }
+
+   public void setIncludePatterns(List<String> includePatterns) {
+      this.includePatterns = includePatterns;
+   }
+
+   public RequestMappingPatternMatcher getRequestMappingPatternMatcher() {
+      return requestMappingPatternMatcher;
+   }
+
+   public void setRequestMappingPatternMatcher(RequestMappingPatternMatcher requestMappingPatternMatcher) {
+      this.requestMappingPatternMatcher = requestMappingPatternMatcher;
+   }
 }
