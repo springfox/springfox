@@ -22,7 +22,7 @@ public interface SwaggerPathProvider {
    /**
     *  The uri to the swagger documentation - typically the applications base path joined with the swagger path
     *  e.g. http://www.myserver.com/<contextPath>/api-docs
-    * @return
+    * @return the base path
     */
    public String getSwaggerDocumentationBasePath();
 }

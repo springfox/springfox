@@ -67,6 +67,7 @@
       <powermock.version>1.5.1</powermock.version>
       <guava.version>15.0</guava.version>
       <spring-hateoas.version>0.8.0.RELEASE</spring-hateoas.version>
+      <slf4j-api.version>1.7.5</slf4j-api.version>
    </properties>
    <repositories>
       <repository>
@@ -121,7 +122,7 @@
          <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
+            <version>${slf4j-api.version}</version>
          </dependency>
          <!-- EO Conflicting dependencies withing swagger-core dependencies -->
 

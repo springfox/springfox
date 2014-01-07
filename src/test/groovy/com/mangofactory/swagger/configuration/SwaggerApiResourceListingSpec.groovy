@@ -10,6 +10,7 @@ import com.wordnik.swagger.model.ApiInfo
 import com.wordnik.swagger.model.ApiKey
 import com.wordnik.swagger.model.ApiListing
 import com.wordnik.swagger.model.ApiListingReference
+import com.wordnik.swagger.model.AuthorizationType
 import com.wordnik.swagger.model.ResourceListing
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
@@ -21,6 +22,21 @@ import static com.mangofactory.swagger.ScalaUtils.fromScalaList
 
 @Mixin(com.mangofactory.swagger.mixins.RequestMappingSupport)
 class SwaggerApiResourceListingSpec extends Specification {
+
+   def "assessors"() {
+    given:
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(null, null)
+      SwaggerCache cache = new SwaggerCache()
+      swaggerApiResourceListing.setSwaggerCache(cache)
+      List<AuthorizationType> authTypes = Arrays.asList(new ApiKey("", ""))
+      swaggerApiResourceListing.setAuthorizationTypes(authTypes)
+      DefaultSwaggerPathProvider provider = new DefaultSwaggerPathProvider()
+      swaggerApiResourceListing.setSwaggerPathProvider(provider);
+    expect:
+      cache == swaggerApiResourceListing.getSwaggerCache()
+      authTypes == swaggerApiResourceListing.getAuthorizationTypes()
+      provider == swaggerApiResourceListing.getSwaggerPathProvider()
+   }
 
    def "default swagger resource"() {
     when: "I create a swagger resource"
@@ -78,11 +94,11 @@ class SwaggerApiResourceListingSpec extends Specification {
    }
 
    def "resource with mocked apis"() {
-      given:
+    given:
       SwaggerCache swaggerCache = new SwaggerCache();
       String swaggerGroup = "swaggerGroup"
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, swaggerGroup)
-      ServletContext servletContext = [getContextPath: {return "/myApp"}] as ServletContext
+      ServletContext servletContext = [getContextPath: { return "/myApp" }] as ServletContext
       DefaultSwaggerPathProvider swaggerPathProvider = new DefaultSwaggerPathProvider(servletContext: servletContext)
 
       swaggerApiResourceListing.setSwaggerPathProvider(swaggerPathProvider)
@@ -116,9 +132,6 @@ class SwaggerApiResourceListingSpec extends Specification {
       apiListing.swaggerVersion() == '1.2'
       apiListing.basePath() == 'http://127.0.0.1:8080/myApp'
       apiListing.resourcePath() == '/somePath'
-
-      //"basePath": "http://petstore.swagger.wordnik.com/api",
-      //"resourcePath": "/pet"
 
    }
 }
