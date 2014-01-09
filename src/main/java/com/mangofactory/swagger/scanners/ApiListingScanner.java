@@ -6,17 +6,16 @@ import com.mangofactory.swagger.core.ControllerResourceNamingStrategy;
 import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy;
 import com.mangofactory.swagger.core.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.ApiDescriptionReader;
+import com.mangofactory.swagger.readers.ApiModelReader;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.MediaTypeReader;
 import com.wordnik.swagger.core.SwaggerSpec;
 import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiListing;
+import com.wordnik.swagger.model.Model;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
@@ -56,18 +55,26 @@ public class ApiListingScanner {
          Set<String> produces = new LinkedHashSet<String>(2);
          Set<String> consumes = new LinkedHashSet<String>(2);
          List<ApiDescription> apiDescriptions = newArrayList();
+
+         //Models has to be a map not a list
+         //Option[Map[String, Model]]
+         Map<String, Model> models = new LinkedHashMap<String, Model>();
          for(RequestMappingContext requestMappingContext : entry.getValue()){
 
             CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
             readers.add(new MediaTypeReader());
             readers.add(new ApiDescriptionReader(controllerNamingStrategy));
+            readers.add(new ApiModelReader());
 
             requestMappingContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
             Map<String, Object> results = commandExecutor.execute(readers, requestMappingContext);
 
             List<String> producesMediaTypes = (List<String>) results.get("produces");
             List<String> consumesMediaTypes = (List<String>) results.get("consumes");
-
+            Model model = (Model) results.get("model");
+            if(null != model){
+               models.put(model.id(), model);
+            }
             produces.addAll(producesMediaTypes);
             consumes.addAll(consumesMediaTypes);
 
@@ -91,7 +98,7 @@ public class ApiListingScanner {
                emptyScalaList(),
                emptyScalaList(),
                toScalaList(apiDescriptions),
-               toOption(null),
+               toOption(models),
                toOption(null),
                position++);
          apiListingMap.put(controllerGroupName, apiListing);

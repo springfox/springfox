@@ -7,9 +7,10 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 public class DummyClass {
    public void dummyMethod() {
@@ -73,6 +74,20 @@ public class DummyClass {
    public void methodWithSingleEnum(BusinessType businessType) {
 
    }
+   @ResponseBody
+   public DummyModels.BusinessModel methodWithConcreteResponseBody() {
+      return null;
+   }
+
+   @ResponseBody
+   public DummyModels.CorporationModel methodWithConcreteCorporationModel() {
+      return null;
+   }
+
+   @ResponseBody
+   public Date methodWithDateResponseBody() {
+      return null;
+   }
 
    @ApiResponses({ @ApiResponse(code = 413, message = "a message")})
    public void methodWithApiResponses(){}
@@ -93,7 +108,6 @@ public class DummyClass {
          return value;
       }
    }
-
    public class CustomClass{}
 }
 

@@ -104,7 +104,11 @@ public class SpringSwaggerConfig {
    }
 
    private List<ResponseMessage> asList(ResponseMessage ... responseMessages){
-      return Arrays.asList(responseMessages);
+      List<ResponseMessage> list = new ArrayList();
+      for(ResponseMessage responseMessage : responseMessages){
+         list.add(responseMessage);
+      }
+      return list;
    }
 
    public List<RequestMappingHandlerMapping> getHandlerMappings() {

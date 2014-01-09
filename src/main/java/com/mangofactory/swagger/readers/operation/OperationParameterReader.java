@@ -69,9 +69,9 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
       context.put("parameters", parameters);
    }
 
-   private boolean shouldIgnore(Class paramType, Set<Class> ignorabledParamTypes) {
-      if (null != ignorabledParamTypes && !ignorabledParamTypes.isEmpty()) {
-         if (ignorabledParamTypes.contains(paramType)) {
+   private boolean shouldIgnore(Class paramType, Set<Class> ignorableParamTypes) {
+      if (null != ignorableParamTypes && !ignorableParamTypes.isEmpty()) {
+         if (ignorableParamTypes.contains(paramType)) {
             return true;
          }
       }

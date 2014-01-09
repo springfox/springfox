@@ -9,7 +9,7 @@ WIP. Model/Model schema not yet implemented..
 An upgrade to the swagger-springmvc project to the latest Swagger specification (1.2)
 The swagger specification upgrade to 1.2 has several feature additions and has also refactored it's core model structure.
 See [swagger-core](https://github.com/wordnik/swagger-core)
-The [demo/sample](https://github.com/adrianbk/swagger-springmvc-demo) application is built off of swagger-ui 4th Noc 2013 (SHA: 4601f6270235489581acd80548620716506311a5)
+The [demo/sample](https://github.com/adrianbk/swagger-springmvc-demo) application is built off of swagger-ui tag v2.0.3
 
 Swagger 1.2 supported features:
 - Authorization types: (OAuth, ApiKey, BasicAuth) (swagger-ui has not yet upgraded to support these)

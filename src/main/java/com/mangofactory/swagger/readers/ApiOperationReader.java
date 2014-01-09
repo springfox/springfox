@@ -49,12 +49,12 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          commandList.add(new OperationHttpMethodReader());
          commandList.add(new OperationSummaryReader());
          commandList.add(new OperationNotesReader());
-         commandList.add(new OperationResponseClassReader()); //td
+         commandList.add(new OperationResponseClassReader());
          commandList.add(new OperationNicknameReader());
          commandList.add(new OperationPositionReader());
          commandList.add(new MediaTypeReader());
          commandList.add(new OperationParameterReader());
-         commandList.add(new OperationResponseMessageReader()); //td
+         commandList.add(new OperationResponseMessageReader());
          commandList.add(new OperationDeprecatedReader());
          commandExecutor.execute(commandList, operationRequestMappingContext);
 
@@ -69,7 +69,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
                (String) operationResultMap.get("httpRequestMethod"),
                (String) operationResultMap.get("summary"),
                (String) operationResultMap.get("notes"),
-               "",
+               (String) operationResultMap.get("responseClass"),
                (String) operationResultMap.get("nickname"),
                (Integer) operationResultMap.get("position"),
                toScalaList(producesMediaTypes),
