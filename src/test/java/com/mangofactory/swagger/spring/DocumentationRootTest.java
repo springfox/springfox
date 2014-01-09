@@ -2,6 +2,7 @@ package com.mangofactory.swagger.spring;
 
 import com.mangofactory.swagger.spring.controller.DocumentationController;
 import com.mangofactory.swagger.spring.sample.configuration.ServicesTestConfiguration;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import static org.hamcrest.core.IsEqual.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
  * Tests that exercise the documentation
@@ -80,12 +82,11 @@ public class DocumentationRootTest {
     }
 
     @Test
-    @Ignore
     public void shouldHaveCorrectPathForBusinessServiceController() throws Exception {
-        mockMvc.perform(builder)
-                .andExpect(jsonPath("$.apiVersion").exists())
-                .andExpect(jsonPath("$.apis[0].path").value(equalTo("/api-docs/business-service")))
-                .andExpect(jsonPath("$.apis[0].description").value(equalTo(BUSINESS_ENTITY_SERVICES)));
+       String apiDescriptionSelector = "$.apis[?(@.path=='/api-docs/business-service')]";
+       mockMvc.perform(builder)
+             .andExpect(jsonPath("$.apiVersion").exists())
+             .andExpect(jsonPath(apiDescriptionSelector + ".description", Matchers.hasSize(1)));
     }
 
     @Test
