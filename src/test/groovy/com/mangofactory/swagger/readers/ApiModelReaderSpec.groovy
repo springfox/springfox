@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.readers
 
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.Model
@@ -23,9 +22,8 @@ class ApiModelReaderSpec extends Specification {
 
       Model model = result.get("model")
     then:
-      true
-      model.id == 'BusinessModel'
-      model.name() == 'BusinessModel'
+      model.id == 'com.mangofactory.swagger.dummy.DummyModels$BusinessModel'
+      model.name() == 'com.mangofactory.swagger.dummy.DummyModels$BusinessModel'
       model.qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$BusinessModel'
 
       Map<String, ModelProperty> modelProperties = fromScalaMap(model.properties())
@@ -58,6 +56,31 @@ class ApiModelReaderSpec extends Specification {
 
       Model model = result.get("model")
     then:
-     null == model
+      null == model
+   }
+
+   def "Annotated model"() {
+    given:
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithModelAnnotations'))
+    when:
+      ApiModelReader apiModelReader = new ApiModelReader()
+      apiModelReader.execute(context)
+      Map<String, Object> result = context.getResult()
+
+      Model model = result.get("model")
+    then:
+      model.id == 'com.mangofactory.swagger.dummy.DummyModels$AnnotatedBusinessModel'
+      model.name() == 'com.mangofactory.swagger.dummy.DummyModels$AnnotatedBusinessModel'
+      model.qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$AnnotatedBusinessModel'
+
+      Map<String, ModelProperty> modelProps = fromScalaMap(model.properties())
+      ModelProperty prop = modelProps.name
+      prop.type == 'string'
+      fromOption(prop.description()) == 'The name of this business'
+      prop.required() == true
+
+      fromOption(modelProps.numEmployees.description()) == 'Total number of current employees'
+      modelProps.numEmployees.required() == false
+
    }
 }

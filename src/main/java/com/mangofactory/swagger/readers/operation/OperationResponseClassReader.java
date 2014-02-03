@@ -11,8 +11,8 @@ public class OperationResponseClassReader implements Command<RequestMappingConte
    public void execute(RequestMappingContext context) {
       HandlerMethod handlerMethod = context.getHandlerMethod();
       Class<?> returnType = getHandlerReturnType(handlerMethod);
-      if(Void.class != returnType){
-         context.put("responseClass", returnType.getSimpleName());
+      if (Void.class != returnType) {
+         context.put("responseClass", returnType.getCanonicalName());
       }
    }
 }

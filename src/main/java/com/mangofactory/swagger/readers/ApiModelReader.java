@@ -15,6 +15,21 @@ public class ApiModelReader implements Command<RequestMappingContext> {
       SwaggerSchemaConverter swaggerSchemaConverter = new SwaggerSchemaConverter();
       Class<?> returnType = getHandlerReturnType(handlerMethod);
       Model model = fromOption(swaggerSchemaConverter.read(returnType));
-      context.put("model", model);
+      context.put("model", decorate(model));
+   }
+
+   private Model decorate(Model model) {
+      if(null == model){
+         return model;
+      }
+      Model decorated = new Model(model.qualifiedType(),
+              model.qualifiedType(),
+              model.qualifiedType(),
+              model.properties(),
+              model.description(),
+              model.baseModel(),
+              model.discriminator(),
+              model.subTypes());
+      return decorated;
    }
 }
