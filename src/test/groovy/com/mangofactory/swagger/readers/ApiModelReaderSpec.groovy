@@ -7,6 +7,7 @@ import com.wordnik.swagger.model.ApiDescription
 import com.wordnik.swagger.model.Model
 import com.wordnik.swagger.model.ModelProperty
 import com.wordnik.swagger.model.Operation
+import org.springframework.web.method.HandlerMethod
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -17,15 +18,8 @@ class ApiModelReaderSpec extends Specification {
 
    def "Method return type model"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithConcreteResponseBody'))
-      List<Operation> operationList = Arrays.asList(operation('com.mangofactory.swagger.dummy.DummyModels$BusinessModel'))
-      ApiDescription description = new ApiDescription(
-              "anyPath",
-              toOption("anyDescription"),
-              toScalaList(operationList)
-      )
-
-      context.put("apiDescriptionList", [description])
+      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithConcreteResponseBody'),
+              [operation('com.mangofactory.swagger.dummy.DummyModels$BusinessModel')])
 
     when:
       ApiModelReader apiModelReader = new ApiModelReader()
@@ -75,16 +69,8 @@ class ApiModelReaderSpec extends Specification {
 
    def "Annotated model"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithModelAnnotations'))
-      List<Operation> operationList = Arrays.asList(operation('com.mangofactory.swagger.dummy.DummyModels$AnnotatedBusinessModel'))
-      ApiDescription description = new ApiDescription(
-              "anyPath",
-              toOption("anyDescription"),
-              toScalaList(operationList)
-      )
-
-      context.put("apiDescriptionList", [description])
-
+      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithModelAnnotations'),
+              [operation('com.mangofactory.swagger.dummy.DummyModels$AnnotatedBusinessModel')])
     when:
       ApiModelReader apiModelReader = new ApiModelReader()
       apiModelReader.execute(context)
@@ -110,15 +96,9 @@ class ApiModelReaderSpec extends Specification {
 
    def "Should pull models from Api Operation response class"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodApiResponseClass'))
-      List<Operation> operationList = Arrays.asList(operation('com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness'))
-      ApiDescription description = new ApiDescription(
-              "anyPath",
-              toOption("anyDescription"),
-              toScalaList(operationList)
-      )
 
-      context.put("apiDescriptionList", [description])
+      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodApiResponseClass'),
+              [operation('com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness')])
 
     when:
       ApiModelReader apiModelReader = new ApiModelReader()
@@ -128,5 +108,17 @@ class ApiModelReaderSpec extends Specification {
       List<Model> model = result.get("models")
     then:
       model[0].qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness'
+   }
+
+   def contextWithApiDescription(HandlerMethod handlerMethod, List<Operation> operationList ){
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
+      def scalaOpList = null == operationList ? emptyScalaList() : toScalaList(operationList)
+      ApiDescription description = new ApiDescription(
+              "anyPath",
+              toOption("anyDescription"),
+              scalaOpList
+      )
+      context.put("apiDescriptionList", [description])
+      context
    }
 }

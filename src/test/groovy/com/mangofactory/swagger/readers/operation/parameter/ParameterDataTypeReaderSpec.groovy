@@ -5,6 +5,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerModelConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyClass
+import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -20,7 +21,7 @@ class ParameterDataTypeReaderSpec extends Specification {
    @Unroll
    def "Parameter types"() {
     given:
-      HandlerMethod handlerMethod = Stub()
+      HandlerMethod handlerMethod = Stub(HandlerMethod)
       SpringSwaggerModelConfig springSwaggerModelConfig = new SpringSwaggerModelConfig();
 
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
@@ -40,25 +41,26 @@ class ParameterDataTypeReaderSpec extends Specification {
     then:
       context.get('dataType') == expected
     where:
-      paramType                      | expected
-      char.class                     | "string"
-      String.class                   | "string"
-      Integer.class                  | "int32"
-      int.class                      | "int32"
-      Long.class                     | "int64"
-      BigInteger.class               | "int64"
-      long.class                     | "int64"
-      Float.class                    | "float"
-      float.class                    | "float"
-      Double.class                   | "double"
-      double.class                   | "double"
-      BigDecimal.class               | "double"
-      Byte.class                     | "byte"
-      byte.class                     | "byte"
-      Boolean.class                  | "boolean"
-      boolean.class                  | "boolean"
-      Date.class                     | "date-time"
-      DummyClass.CustomClass.class   | "customClassParamType"
-      SpringSwaggerModelConfig.class | "string"
+      paramType                       | expected
+      char.class                      | "string"
+      String.class                    | "string"
+      Integer.class                   | "int32"
+      int.class                       | "int32"
+      Long.class                      | "int64"
+      BigInteger.class                | "int64"
+      long.class                      | "int64"
+      Float.class                     | "float"
+      float.class                     | "float"
+      Double.class                    | "double"
+      double.class                    | "double"
+      BigDecimal.class                | "double"
+      Byte.class                      | "byte"
+      byte.class                      | "byte"
+      Boolean.class                   | "boolean"
+      boolean.class                   | "boolean"
+      Date.class                      | "date-time"
+      DummyClass.CustomClass.class    | "customClassParamType"
+      DummyModels.FunkyBusiness.class | "com.mangofactory.swagger.dummy.DummyModels.FunkyBusiness"
+      Void.class                      | "java.lang.Void"
    }
 }

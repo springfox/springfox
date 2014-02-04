@@ -57,6 +57,11 @@ public class DummyClass {
    public void methodApiResponseClass() {
    }
 
+   @ApiOperation(value = "")
+   public DummyModels.FunkyBusiness methodWithAPiAnnotationButWithoutResponseClass() {
+      return null;
+   }
+
    @Deprecated
    public void methodWithDeprecated() {
    }

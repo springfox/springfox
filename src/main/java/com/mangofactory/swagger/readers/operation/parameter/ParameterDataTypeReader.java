@@ -7,15 +7,25 @@ import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import org.springframework.core.MethodParameter;
 
+import static com.mangofactory.swagger.core.ModelUtils.getMethodParameterType;
+
 public class ParameterDataTypeReader implements Command<RequestMappingContext> {
 
    @Override
    public void execute(RequestMappingContext context) {
       MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
       SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
-      ResolvedType resolvedType = new TypeResolver().resolve(methodParameter.getParameterType());
-      String swaggerDataType = swaggerGlobalSettings.getParameterDataTypes().get(resolvedType.getErasedType());
-      context.put("dataType", null == swaggerDataType ? "string" : swaggerDataType);
+      Class<?> parameterType = methodParameter.getParameterType();
+      ResolvedType resolvedType = null;
+      String swaggerDataType = null;
+      if (null != parameterType) {
+         resolvedType = new TypeResolver().resolve(parameterType);
+         swaggerDataType = swaggerGlobalSettings.getParameterDataTypes().get(resolvedType.getErasedType());
+      }
+      if (null == swaggerDataType) {
+         swaggerDataType = getMethodParameterType(methodParameter).getCanonicalName();
+      }
+      context.put("dataType", swaggerDataType);
    }
 
 }

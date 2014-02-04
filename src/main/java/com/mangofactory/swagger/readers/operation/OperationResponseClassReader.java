@@ -17,7 +17,7 @@ public class OperationResponseClassReader implements Command<RequestMappingConte
       HandlerMethod handlerMethod = context.getHandlerMethod();
       ApiOperation methodAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
       Class<?> returnType = Void.class;
-      if ((null != methodAnnotation) && null != methodAnnotation.response()) {
+      if ((null != methodAnnotation) && Void.class != methodAnnotation.response()) {
          log.debug("Overriding response class with annotated response class");
          returnType = methodAnnotation.response();
       } else {

@@ -21,9 +21,10 @@ class OperationResponseClassReaderSpec extends Specification {
     then:
       result['responseClass'] == expectedClass
     where:
-      handlerMethod                                        | expectedClass
-      dummyHandlerMethod('methodWithConcreteResponseBody') | 'com.mangofactory.swagger.dummy.DummyModels.BusinessModel'
-      dummyHandlerMethod('methodApiResponseClass')         | 'com.mangofactory.swagger.dummy.DummyModels.FunkyBusiness'
+      handlerMethod                                                        | expectedClass
+      dummyHandlerMethod('methodWithConcreteResponseBody')                 | 'com.mangofactory.swagger.dummy.DummyModels.BusinessModel'
+      dummyHandlerMethod('methodApiResponseClass')                         | 'com.mangofactory.swagger.dummy.DummyModels.FunkyBusiness'
+      dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'com.mangofactory.swagger.dummy.DummyModels.FunkyBusiness'
 
    }
 }
