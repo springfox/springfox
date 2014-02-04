@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.readers
 
+import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.ApiOperationSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -8,7 +9,6 @@ import com.wordnik.swagger.model.Model
 import com.wordnik.swagger.model.ModelProperty
 import com.wordnik.swagger.model.Operation
 import org.springframework.web.method.HandlerMethod
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.mangofactory.swagger.ScalaUtils.*
@@ -27,10 +27,10 @@ class ApiModelReaderSpec extends Specification {
       Map<String, Object> result = context.getResult()
 
     then:
-      List<Model> models = result.get("models")
-      Model model = models[0]
-      model.id == 'com.mangofactory.swagger.dummy.DummyModels$BusinessModel'
-      model.name() == 'com.mangofactory.swagger.dummy.DummyModels$BusinessModel'
+      Map<String, Model> models = result.get("models")
+      Model model = models['BusinessModel']
+      model.id == 'BusinessModel'
+      model.name() == 'BusinessModel'
       model.qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$BusinessModel'
 
       Map<String, ModelProperty> modelProperties = fromScalaMap(model.properties())
@@ -52,21 +52,6 @@ class ApiModelReaderSpec extends Specification {
 //      println model.subTypes()
    }
 
-   @Ignore
-   def "void method"() {
-    given:
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithHttpGETMethod'))
-
-    when:
-      ApiModelReader apiModelReader = new ApiModelReader()
-      apiModelReader.execute(context)
-      Map<String, Object> result = context.getResult()
-
-    then:
-      List<Model> models = result.get("models")
-      null == models[0]
-   }
-
    def "Annotated model"() {
     given:
       RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithModelAnnotations'),
@@ -77,10 +62,10 @@ class ApiModelReaderSpec extends Specification {
       Map<String, Object> result = context.getResult()
 
     then:
-      List<Model> models = result.get("models")
-      Model model = models[0]
-      model.id == 'com.mangofactory.swagger.dummy.DummyModels$AnnotatedBusinessModel'
-      model.name() == 'com.mangofactory.swagger.dummy.DummyModels$AnnotatedBusinessModel'
+      Map<String, Model> models = result.get("models")
+      Model model = models['AnnotatedBusinessModel']
+      model.id == 'AnnotatedBusinessModel'
+      model.name() == 'AnnotatedBusinessModel'
       model.qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$AnnotatedBusinessModel'
 
       Map<String, ModelProperty> modelProps = fromScalaMap(model.properties())
@@ -105,9 +90,9 @@ class ApiModelReaderSpec extends Specification {
       apiModelReader.execute(context)
       Map<String, Object> result = context.getResult()
 
-      List<Model> model = result.get("models")
+      Map<String, Model> models = result.get("models")
     then:
-      model[0].qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness'
+      models['FunkyBusiness'].qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness'
    }
 
    def contextWithApiDescription(HandlerMethod handlerMethod, List<Operation> operationList ){

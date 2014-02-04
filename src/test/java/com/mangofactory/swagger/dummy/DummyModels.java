@@ -57,6 +57,10 @@ public class DummyModels {
 
    }
 
+   public class Paginated<T>{
+
+   }
+
    public class FunkyBusiness{
       private String id;
       private String name;

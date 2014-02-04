@@ -62,6 +62,11 @@ public class DummyClass {
       return null;
    }
 
+   @ApiOperation(value = "")
+   public DummyModels.Paginated<BusinessType> methodWithGenericType() {
+      return null;
+   }
+
    @Deprecated
    public void methodWithDeprecated() {
    }

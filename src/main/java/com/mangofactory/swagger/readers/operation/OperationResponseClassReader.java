@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.readers.operation;
 
+import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -23,8 +24,8 @@ public class OperationResponseClassReader implements Command<RequestMappingConte
       } else {
          returnType = getHandlerReturnType(handlerMethod);
       }
-      String canonicalName = returnType.getCanonicalName();
-      log.debug("Setting response class to:" + canonicalName);
-      context.put("responseClass", canonicalName);
+      String responseTypeName = ModelUtils.getModelName(returnType);
+      log.debug("Setting response class to:" + responseTypeName);
+      context.put("responseClass", responseTypeName);
    }
 }

@@ -13,6 +13,8 @@ import com.wordnik.swagger.core.SwaggerSpec;
 import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiListing;
 import com.wordnik.swagger.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
@@ -22,6 +24,7 @@ import static com.google.common.collect.Maps.newHashMap;
 import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class ApiListingScanner {
+   private static final Logger log = LoggerFactory.getLogger(ApiListingScanner.class);
 
    private final String resourceGroup;
    private String apiVersion = "1.0";
@@ -56,8 +59,6 @@ public class ApiListingScanner {
          Set<String> consumes = new LinkedHashSet<String>(2);
          List<ApiDescription> apiDescriptions = newArrayList();
 
-         //Models has to be a map not a list
-         //Option[Map[String, Model]]
          Map<String, Model> models = new LinkedHashMap<String, Model>();
          for(RequestMappingContext requestMappingContext : entry.getValue()){
 
@@ -71,11 +72,12 @@ public class ApiListingScanner {
 
             List<String> producesMediaTypes = (List<String>) results.get("produces");
             List<String> consumesMediaTypes = (List<String>) results.get("consumes");
-            List<Model> swaggerModels = (List<Model>) results.get("models");
+            Map<String, Model> swaggerModels = (Map<String, Model>) results.get("models");
             if(null != swaggerModels){
-               for(Model swaggerModel: swaggerModels){
-                  models.put(swaggerModel.id(), swaggerModel);
-               }
+               models.putAll(swaggerModels);
+//               for(Model swaggerModel: swaggerModels){
+//                  models.put(swaggerModel.id(), swaggerModel);
+//               }
             }
             produces.addAll(producesMediaTypes);
             consumes.addAll(consumesMediaTypes);

@@ -3,11 +3,10 @@ package com.mangofactory.swagger.readers.operation.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
+import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import org.springframework.core.MethodParameter;
-
-import static com.mangofactory.swagger.core.ModelUtils.getMethodParameterType;
 
 public class ParameterDataTypeReader implements Command<RequestMappingContext> {
 
@@ -23,7 +22,7 @@ public class ParameterDataTypeReader implements Command<RequestMappingContext> {
          swaggerDataType = swaggerGlobalSettings.getParameterDataTypes().get(resolvedType.getErasedType());
       }
       if (null == swaggerDataType) {
-         swaggerDataType = getMethodParameterType(methodParameter).getCanonicalName();
+         swaggerDataType = ModelUtils.getMethodParameterType(methodParameter).getCanonicalName();
       }
       context.put("dataType", swaggerDataType);
    }
