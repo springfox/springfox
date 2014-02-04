@@ -71,9 +71,11 @@ public class ApiListingScanner {
 
             List<String> producesMediaTypes = (List<String>) results.get("produces");
             List<String> consumesMediaTypes = (List<String>) results.get("consumes");
-            Model model = (Model) results.get("model");
-            if(null != model){
-               models.put(model.id(), model);
+            List<Model> swaggerModels = (List<Model>) results.get("models");
+            if(null != swaggerModels){
+               for(Model swaggerModel: swaggerModels){
+                  models.put(swaggerModel.id(), swaggerModel);
+               }
             }
             produces.addAll(producesMediaTypes);
             consumes.addAll(consumesMediaTypes);

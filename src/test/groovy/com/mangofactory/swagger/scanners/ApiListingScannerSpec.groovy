@@ -31,7 +31,7 @@ class ApiListingScannerSpec extends Specification {
             ]
          )
 
-      RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod())
+      RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
       Map resourceGroupRequestMappings = [ 'businesses' : [requestMappingContext]]
       ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, "default", swaggerPathProvider())
       scanner.setSwaggerGlobalSettings(new SwaggerGlobalSettings())
@@ -51,7 +51,9 @@ class ApiListingScannerSpec extends Specification {
       fromScalaList(listing.produces()) == [APPLICATION_JSON_VALUE]
       ApiDescription apiDescription = fromScalaList(listing.apis())[0]
       apiDescription.path() == '/businesses'
-      fromOption(apiDescription.description()) == dummyHandlerMethod().getMethod().getName()
+      fromOption(apiDescription.description()) == "methodWithConcreteResponseBody"
+
+      println listing.models()
 
    }
 

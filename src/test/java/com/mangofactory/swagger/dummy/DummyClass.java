@@ -53,6 +53,10 @@ public class DummyClass {
    public void methodWithBothXmlMediaTypes() {
    }
 
+   @ApiOperation(value = "", response = DummyModels.FunkyBusiness.class)
+   public void methodApiResponseClass() {
+   }
+
    @Deprecated
    public void methodWithDeprecated() {
    }

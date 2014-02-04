@@ -23,7 +23,7 @@ class OperationResponseClassReaderSpec extends Specification {
     where:
       handlerMethod                                        | expectedClass
       dummyHandlerMethod('methodWithConcreteResponseBody') | 'com.mangofactory.swagger.dummy.DummyModels.BusinessModel'
-      dummyHandlerMethod('methodWithModelAnnotations')     | 'com.mangofactory.swagger.dummy.DummyModels.AnnotatedBusinessModel'
+      dummyHandlerMethod('methodApiResponseClass')         | 'com.mangofactory.swagger.dummy.DummyModels.FunkyBusiness'
 
    }
 }
