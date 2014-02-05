@@ -7,6 +7,7 @@ import com.mangofactory.swagger.spring.DocumentationReader;
 import com.wordnik.swagger.core.Documentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,11 +52,10 @@ public class DocumentationController implements ServletContextAware {
     public
     @ResponseBody
     ControllerDocumentation getApiDocumentation(HttpServletRequest request) {
-        String fullUrl = String.valueOf(request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE));
-        int indexOfApiName = fullUrl.indexOf("/", 1) + 1;
+        String apiName = extractPathFromPattern(request);
         DocumentationTransformer transformer = swaggerConfiguration.getDocumentationTransformer();
         return (ControllerDocumentation) transformer
-                .applySorting(apiReader.getDocumentation(fullUrl.substring(indexOfApiName)));
+                .applySorting(apiReader.getDocumentation(apiName));
     }
 
     @Override
@@ -63,4 +63,13 @@ public class DocumentationController implements ServletContextAware {
         apiReader = new DocumentationReader(swaggerConfiguration,
                 WebApplicationContextUtils.getWebApplicationContext(servletContext), handlerMappings);
     }
+    
+    private static String extractPathFromPattern(final HttpServletRequest request){
+
+      String path = (String) request.getAttribute(
+              HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+      String bestMatchPattern = (String ) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+      
+      return new AntPathMatcher().extractPathWithinPattern(bestMatchPattern, path);
+  }
 }

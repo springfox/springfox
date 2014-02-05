@@ -44,7 +44,8 @@ public class DocumentationReaderTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        when(request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).thenReturn("/pets");
+        when(request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).thenReturn("//api-docs/pets");
+        when(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE)).thenReturn("/api-docs/**");
         resourceListing = controller.getResourceListing();
         for (DocumentationEndPoint endPoint : resourceListing.getApis()) {
             if("/api-docs/pets".equals(endPoint.getPath())) {
