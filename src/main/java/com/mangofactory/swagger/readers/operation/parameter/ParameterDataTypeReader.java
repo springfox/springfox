@@ -16,13 +16,15 @@ public class ParameterDataTypeReader implements Command<RequestMappingContext> {
       SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
       Class<?> parameterType = methodParameter.getParameterType();
       ResolvedType resolvedType = null;
-      String swaggerDataType = null;
+      String swaggerDataType = ModelUtils.getModelName(parameterType);
+
+
       if (null != parameterType) {
          resolvedType = new TypeResolver().resolve(parameterType);
          swaggerDataType = swaggerGlobalSettings.getParameterDataTypes().get(resolvedType.getErasedType());
       }
       if (null == swaggerDataType) {
-         swaggerDataType = ModelUtils.getMethodParameterType(methodParameter).getCanonicalName();
+         swaggerDataType = ModelUtils.getModelName(parameterType);
       }
       context.put("dataType", swaggerDataType);
    }

@@ -1,42 +1,50 @@
 package com.mangofactory.swagger.readers;
 
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.core.util.ModelUtil;
-import com.wordnik.swagger.model.ApiDescription;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.converter.SwaggerSchemaConverter;
 import com.wordnik.swagger.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.method.HandlerMethod;
 import scala.Option;
 
-import java.util.List;
 import java.util.Map;
 
-import static com.mangofactory.swagger.ScalaUtils.*;
+import static com.google.common.collect.Maps.newHashMap;
+import static com.mangofactory.swagger.ScalaUtils.fromOption;
 
 public class ApiModelReader implements Command<RequestMappingContext> {
    private static final Logger log = LoggerFactory.getLogger(ApiModelReader.class);
 
    @Override
    public void execute(RequestMappingContext context) {
-      List<ApiDescription> apiDescriptionList = (List<ApiDescription>) context.get("apiDescriptionList");
+      HandlerMethod handlerMethod = context.getHandlerMethod();
 
-      log.debug("Reading models for the following apis.. ");
-      for(ApiDescription apiDescription : apiDescriptionList){
-         log.debug("ApiDescription path:{} ", apiDescription.path());
+      log.debug("Reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+
+      SwaggerSchemaConverter parser = new SwaggerSchemaConverter();
+      Map<String, Model> modelMap = newHashMap();
+      Class<?> modelType = handlerMethod.getMethod().getReturnType();
+
+      ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
+      if(null != apiOperationAnnotation && Void.class != apiOperationAnnotation.response()){
+         modelType = apiOperationAnnotation.response();
       }
 
-      //todo probably don't need to call this so many times
-      Option<scala.collection.immutable.Map<String, Model>> modelOptions =
-              ModelUtil.modelsFromApis(toScalaList(apiDescriptionList));
-      Map<String, Model> modelMap = null;
+      String schemaName = modelType.isArray() ? modelType.getComponentType().getSimpleName() : modelType.getSimpleName();
 
-      if (modelOptions != null && null != fromOption(modelOptions)) {
-         scala.collection.immutable.Map<String, Model> stringModelMap = fromOption(modelOptions);
-         log.debug("Swagger core found {} models", stringModelMap.size());
-         modelMap = fromScalaMap(stringModelMap);
+      Option<Model> sModel = parser.read(modelType);
+      Model model = fromOption(sModel);
+
+      if(null != model) {
+         log.debug("Swagger generated model of type {} ", model.qualifiedType());
+         modelMap.put(schemaName, model);
       } else{
          log.debug("Swagger core did not find any models");
       }
+
+      log.debug("Finished reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
       context.put("models", modelMap);
    }
 }

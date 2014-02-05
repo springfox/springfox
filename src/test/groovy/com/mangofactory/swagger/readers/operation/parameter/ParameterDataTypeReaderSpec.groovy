@@ -60,7 +60,7 @@ class ParameterDataTypeReaderSpec extends Specification {
       boolean.class                   | "boolean"
       Date.class                      | "date-time"
       DummyClass.CustomClass.class    | "customClassParamType"
-      DummyModels.FunkyBusiness.class | "com.mangofactory.swagger.dummy.DummyModels.FunkyBusiness"
-      Void.class                      | "java.lang.Void"
+      DummyModels.FunkyBusiness.class | "FunkyBusiness"
+      Void.class                      | "Void"
    }
 }

@@ -18,8 +18,7 @@ class ApiModelReaderSpec extends Specification {
 
    def "Method return type model"() {
     given:
-      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithConcreteResponseBody'),
-              [operation('com.mangofactory.swagger.dummy.DummyModels$BusinessModel')])
+      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithConcreteResponseBody'))
 
     when:
       ApiModelReader apiModelReader = new ApiModelReader()
@@ -54,8 +53,7 @@ class ApiModelReaderSpec extends Specification {
 
    def "Annotated model"() {
     given:
-      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithModelAnnotations'),
-              [operation('com.mangofactory.swagger.dummy.DummyModels$AnnotatedBusinessModel')])
+      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithModelAnnotations'))
     when:
       ApiModelReader apiModelReader = new ApiModelReader()
       apiModelReader.execute(context)
@@ -82,8 +80,7 @@ class ApiModelReaderSpec extends Specification {
    def "Should pull models from Api Operation response class"() {
     given:
 
-      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodApiResponseClass'),
-              [operation('com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness')])
+      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodApiResponseClass'), null)
 
     when:
       ApiModelReader apiModelReader = new ApiModelReader()
@@ -92,10 +89,11 @@ class ApiModelReaderSpec extends Specification {
 
       Map<String, Model> models = result.get("models")
     then:
+      println models
       models['FunkyBusiness'].qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness'
    }
 
-   def contextWithApiDescription(HandlerMethod handlerMethod, List<Operation> operationList ){
+   def contextWithApiDescription(HandlerMethod handlerMethod, List<Operation> operationList = null){
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
       def scalaOpList = null == operationList ? emptyScalaList() : toScalaList(operationList)
       ApiDescription description = new ApiDescription(
