@@ -5,7 +5,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 @Mixin(com.mangofactory.swagger.mixins.RequestMappingSupport)
-class DefaultControllerResourceGroupingStrategySpec extends Specification {
+class DefaultControllerResourceNamingStrategySpec extends Specification {
 
    @Unroll('Path: #path group: #group')
    def "controller to group names "() {
@@ -30,6 +30,29 @@ class DefaultControllerResourceGroupingStrategySpec extends Specification {
       'business/{businessId}/accounts/{accountId}' | '/business/{businessId:\\d+}/accounts/{accountId:\\d+}'
    }
 
+
+   @Unroll('Path: #path group: #group')
+   def "controller to group names with skipped path elements "() {
+    given:
+      RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
+      DefaultControllerResourceNamingStrategy strategy = new DefaultControllerResourceNamingStrategy(skipPathCount: 2)
+
+    expect:
+      strategy.getGroupName(requestMappingInfo, null) == group
+
+    where:
+      group          | path
+      'root'         | '/'
+      'business'     | '/api/v1/business'
+      'business'     | 'api/v1/business'
+      'business'     | '/api/v1/business/somethingElse'
+      'business'     | 'api/v1/business/somethingElse'
+      '{businessId}' | '/api/v1/{businessId}'
+      '{businessId}' | '/api/v1/{businessId:\\d+}'
+      '{businessId}' | '/api/v1/{businessId:\\w+}'
+      'business'     | '/api/v1/business/{businessId:\\d+}'
+      'business'     | '/api/v1/business/{businessId:\\d+}/accounts/{accountId:\\d+}'
+   }
 
 
 }

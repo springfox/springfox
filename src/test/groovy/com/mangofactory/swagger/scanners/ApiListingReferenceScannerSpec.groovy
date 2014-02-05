@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.scanners
-
 import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
 import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
@@ -9,7 +8,6 @@ import com.wordnik.swagger.model.ApiListingReference
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
-import spock.lang.Unroll
 
 import static com.mangofactory.swagger.ScalaUtils.fromOption
 
@@ -29,7 +27,6 @@ class ApiListingReferenceScannerSpec extends Specification {
       'excludeAnnotations'           | []
    }
 
-   @Unroll
    def "should not get expected exceptions with invalid constructor params"() {
     when:
       ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
@@ -80,7 +77,6 @@ class ApiListingReferenceScannerSpec extends Specification {
 
    }
 
-   @Unroll("Pattern : #patterns | path: #path")
    def "Should only include matching controller url patterns"() {
     when:
       RequestMappingHandlerMapping requestMappingHandlerMapping = Mock()
@@ -109,5 +105,35 @@ class ApiListingReferenceScannerSpec extends Specification {
       accountsListingReference.path() == 'http://127.0.0.1:8080/context-path/api-docs/someGroup/accounts'
       businessListingReference.position() > -1
 
+   }
+
+   def "should group controller paths"(){
+    when:
+      RequestMappingHandlerMapping requestMappingHandlerMapping = Mock()
+      RequestMappingInfo businessRequestMappingInfo = requestMappingInfo("/api/v1/businesses")
+      RequestMappingInfo accountsRequestMappingInfo = requestMappingInfo("/api/v1/accounts")
+
+      requestMappingHandlerMapping.getHandlerMethods() >>
+              [(businessRequestMappingInfo): dummyHandlerMethod(), (accountsRequestMappingInfo): dummyHandlerMethod()]
+
+      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
+
+      DefaultControllerResourceNamingStrategy defaultControllerResourceNamingStrategy = new DefaultControllerResourceNamingStrategy()
+      defaultControllerResourceNamingStrategy.setSkipPathCount(2)
+
+      apiListingReferenceScanner.setControllerNamingStrategy(defaultControllerResourceNamingStrategy)
+      apiListingReferenceScanner.setRequestMappingHandlerMapping([requestMappingHandlerMapping])
+      apiListingReferenceScanner.setIncludePatterns([".*"])
+      apiListingReferenceScanner.setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
+      apiListingReferenceScanner.setSwaggerGroup("someGroup")
+      apiListingReferenceScanner.setSwaggerPathProvider(new DefaultSwaggerPathProvider(servletContext: servletContext()))
+      List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
+
+    then:
+      apiListingReferences.size == 2
+      ApiListingReference businessListingReference = apiListingReferences.find({fromOption(it.description()) == "businesses"})
+      businessListingReference.path() == 'http://127.0.0.1:8080/context-path/api-docs/someGroup/businesses'
+      ApiListingReference accountsListingReference = apiListingReferences.find({fromOption(it.description()) == "accounts"})
+      accountsListingReference.path() == 'http://127.0.0.1:8080/context-path/api-docs/someGroup/accounts'
    }
 }

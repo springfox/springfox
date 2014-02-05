@@ -13,10 +13,12 @@ public class DefaultControllerResourceNamingStrategy implements ControllerResour
 
    private final String relativeEndpointPrefix;
    private final String endpointSuffix;
+   private  int skipPathCount;
 
    public DefaultControllerResourceNamingStrategy() {
       relativeEndpointPrefix = "/";
       endpointSuffix = "";
+      this.skipPathCount = 0;
    }
 
    @Override
@@ -47,7 +49,16 @@ public class DefaultControllerResourceNamingStrategy implements ControllerResour
       String group = getFirstGroupCompatibleName(requestMappingInfo, handlerMethod);
       group = StringUtils.removeStart(group, "/");
       String[] splits = group.split("/");
-      group = splits[0];
+      int startingPoint = splits.length > skipPathCount ? skipPathCount : 0;
+      group = splits[startingPoint];
       return group;
+   }
+
+   public int getSkipPathCount() {
+      return skipPathCount;
+   }
+
+   public void setSkipPathCount(int skipPathCount) {
+      this.skipPathCount = skipPathCount;
    }
 }
