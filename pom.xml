@@ -5,6 +5,22 @@
         <artifactId>oss-parent</artifactId>
         <version>7</version>
     </parent>
+    <properties>
+        <swagger.version>1.3.1</swagger.version>
+        <spring.version>3.2.4.RELEASE</spring.version>
+        <scala-lib.version>2.9.1-1</scala-lib.version>
+        <spock.version>0.7-groovy-2.0</spock.version>
+        <groovy.version>2.1.9</groovy.version>
+        <checkstyle.file>checkstyle.xml</checkstyle.file>
+        <jackson.version>2.2.3</jackson.version>
+        <repository.snapshot>http://192.168.130.1:8081/nexus/content/repositories/snapshots</repository.snapshot>
+        <repository.release>http://192.168.130.1:8081/nexus/content/repositories/releases</repository.release>
+        <powermock.version>1.5.1</powermock.version>
+        <guava.version>15.0</guava.version>
+        <spring-hateoas.version>0.8.0.RELEASE</spring-hateoas.version>
+        <slf4j-api.version>1.7.5</slf4j-api.version>
+        <github.host>me-github</github.host>
+    </properties>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
@@ -24,10 +40,10 @@
         <name>The Mango Factory</name>
     </organization>
     <scm>
-        <url>scm:git:git@github.com:martypitt/swagger-springmvc.git</url>
-        <connection>scm:git:git@github.com:martypitt/swagger-springmvc.git</connection>
-        <developerConnection>scm:git:git@github.com:martypitt/swagger-springmvc.git</developerConnection>
-        <tag>swagger-springmvc-0.4.1</tag>
+        <connection>scm:git:ssh://${github.host}/adrianbk/swagger-springmvc.git</connection>
+        <developerConnection>scm:git:ssh://git@${github.host}/adrianbk/swagger-springmvc.git</developerConnection>
+        <url>http://github.com/adrianbk/swagger-springmvc</url>
+        <tag>swagger-springmvc-0.8.0</tag>
     </scm>
     <issueManagement>
         <system>Github</system>
@@ -53,21 +69,6 @@
             <email>adrianbkelly+swagger@gmail.com</email>
         </developer>
     </developers>
-    <properties>
-        <swagger.version>1.3.1</swagger.version>
-        <spring.version>3.2.4.RELEASE</spring.version>
-        <scala-lib.version>2.9.1-1</scala-lib.version>
-        <spock.version>0.7-groovy-2.0</spock.version>
-        <groovy.version>2.1.9</groovy.version>
-        <checkstyle.file>checkstyle.xml</checkstyle.file>
-        <jackson.version>2.2.3</jackson.version>
-        <repository.snapshot>http://192.168.130.1:8081/nexus/content/repositories/snapshots</repository.snapshot>
-        <repository.release>http://192.168.130.1:8081/nexus/content/repositories/releases</repository.release>
-        <powermock.version>1.5.1</powermock.version>
-        <guava.version>15.0</guava.version>
-        <spring-hateoas.version>0.8.0.RELEASE</spring-hateoas.version>
-        <slf4j-api.version>1.7.5</slf4j-api.version>
-    </properties>
     <repositories>
         <repository>
             <id>sonatype</id>
