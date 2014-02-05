@@ -239,47 +239,7 @@
          </exclusions>
       </dependency>
    </dependencies>
-   <profiles>
-      <profile>
-         <id>release-sign-artifacts</id>
-         <activation>
-            <property>
-               <name>performRelease</name>
-               <value>true</value>
-            </property>
-         </activation>
-         <build>
-            <plugins>
-               <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-gpg-plugin</artifactId>
-                  <executions>
-                     <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                           <goal>sign</goal>
-                        </goals>
-                     </execution>
-                  </executions>
-               </plugin>
-            </plugins>
-         </build>
-      </profile>
-   </profiles>
    <build>
-      <pluginManagement>
-         <plugins>
-            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-gpg-plugin</artifactId>
-               <configuration>
-                  <!--<releaseProfiles>release</releaseProfiles>-->
-                  <!--<goals>sign</goals>-->
-               </configuration>
-            </plugin>
-         </plugins>
-      </pluginManagement>
       <plugins>
          <!--http://www.petrikainulainen.net/programming/maven/creating-code-coverage-reports-for-unit-and-integration-tests-with-the-jacoco-maven-plugin/-->
          <plugin>
