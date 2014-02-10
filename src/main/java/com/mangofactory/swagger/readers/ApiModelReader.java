@@ -34,11 +34,14 @@ public class ApiModelReader implements Command<RequestMappingContext> {
 
       String schemaName = modelType.isArray() ? modelType.getComponentType().getSimpleName() : modelType.getSimpleName();
 
-      Option<Model> sModel = parser.read(modelType);
+
+
+      Option<Model> sModel = parser.read(modelType, new scala.collection.immutable.HashMap());
       Model model = fromOption(sModel);
 
+
       if(null != model) {
-         log.debug("Swagger generated model of type {} ", model.qualifiedType());
+         log.debug("Swagger generated model {} models", model.id());
          modelMap.put(schemaName, model);
       } else{
          log.debug("Swagger core did not find any models");
@@ -47,4 +50,6 @@ public class ApiModelReader implements Command<RequestMappingContext> {
       log.debug("Finished reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
       context.put("models", modelMap);
    }
+
+
 }

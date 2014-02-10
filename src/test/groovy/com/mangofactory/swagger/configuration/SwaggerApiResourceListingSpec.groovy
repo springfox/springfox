@@ -122,7 +122,7 @@ class SwaggerApiResourceListingSpec extends Specification {
       ResourceListing resourceListing = swaggerCache.getResourceListing("swaggerGroup")
     then:
 
-      ApiListingReference apiListingReference = resourceListing.apis().first()
+      ApiListingReference apiListingReference = resourceListing.apis().head()
       apiListingReference.path() == "http://127.0.0.1:8080/myApp/api-docs/swaggerGroup/somePath"
       apiListingReference.position() == 0
       fromOption(apiListingReference.description()) == "somePath"

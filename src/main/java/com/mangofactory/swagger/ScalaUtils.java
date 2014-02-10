@@ -8,9 +8,7 @@ import scala.collection.immutable.List;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static scala.collection.JavaConversions.collectionAsScalaIterable;
-import static scala.collection.JavaConversions.seqAsJavaList;
-import static scala.collection.JavaConversions.mapAsJavaMap;
+import static scala.collection.JavaConversions.*;
 
 public class ScalaUtils {
 
