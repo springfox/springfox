@@ -64,7 +64,7 @@ public class ApiListingScanner {
 
             CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
             readers.add(new MediaTypeReader());
-            readers.add(new ApiDescriptionReader(controllerNamingStrategy));
+            readers.add(new ApiDescriptionReader(swaggerPathProvider, controllerNamingStrategy));
             readers.add(new ApiModelReader());
 
             requestMappingContext.put("swaggerGlobalSettings", swaggerGlobalSettings);

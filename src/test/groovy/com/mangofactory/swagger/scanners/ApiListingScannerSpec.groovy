@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.scanners
-
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
 import com.mangofactory.swagger.mixins.RequestMappingSupport
@@ -8,7 +7,6 @@ import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.ApiDescription
 import com.wordnik.swagger.model.ApiListing
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
-import spock.lang.Shared
 import spock.lang.Specification
 
 import static com.mangofactory.swagger.ScalaUtils.fromOption
@@ -19,7 +17,7 @@ import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
 class ApiListingScannerSpec extends Specification {
 
-   @Shared DefaultControllerResourceNamingStrategy controllerNamingStrategy = new DefaultControllerResourceNamingStrategy()
+   final DefaultControllerResourceNamingStrategy controllerNamingStrategy = new DefaultControllerResourceNamingStrategy()
 
    def "Should create an api listing for a single resource grouping "() {
     given:
@@ -50,11 +48,8 @@ class ApiListingScannerSpec extends Specification {
       fromScalaList(listing.consumes()) == [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
       fromScalaList(listing.produces()) == [APPLICATION_JSON_VALUE]
       ApiDescription apiDescription = fromScalaList(listing.apis())[0]
-      apiDescription.path() == '/businesses'
+      apiDescription.path() == '/api/v1/businesses'
       fromOption(apiDescription.description()) == "methodWithConcreteResponseBody"
-
-      println listing.models()
-
    }
 
 }

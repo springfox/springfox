@@ -11,7 +11,7 @@
         <spock.version>0.7-groovy-2.0</spock.version>
         <groovy.version>2.1.9</groovy.version>
         <checkstyle.file>checkstyle.xml</checkstyle.file>
-        <jackson.version>2.2.3</jackson.version>
+        <jackson.version>2.1.5</jackson.version>
         <repository.snapshot>http://192.168.130.1:8081/nexus/content/repositories/snapshots</repository.snapshot>
         <repository.release>http://192.168.130.1:8081/nexus/content/repositories/releases</repository.release>
         <powermock.version>1.5.1</powermock.version>

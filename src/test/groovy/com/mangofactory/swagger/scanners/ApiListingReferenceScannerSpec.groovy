@@ -114,7 +114,10 @@ class ApiListingReferenceScannerSpec extends Specification {
       RequestMappingInfo accountsRequestMappingInfo = requestMappingInfo("/api/v1/accounts")
 
       requestMappingHandlerMapping.getHandlerMethods() >>
-              [(businessRequestMappingInfo): dummyHandlerMethod(), (accountsRequestMappingInfo): dummyHandlerMethod()]
+              [
+                (businessRequestMappingInfo): dummyHandlerMethod(),
+                (accountsRequestMappingInfo): dummyHandlerMethod()
+              ]
 
       ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
 

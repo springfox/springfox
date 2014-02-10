@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.core;
 
+import com.wordnik.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -11,12 +12,10 @@ import java.util.Set;
 @Component
 public class DefaultControllerResourceNamingStrategy implements ControllerResourceNamingStrategy {
 
-   private final String relativeEndpointPrefix;
-   private final String endpointSuffix;
-   private  int skipPathCount;
+   private String endpointSuffix;
+   private int skipPathCount;
 
    public DefaultControllerResourceNamingStrategy() {
-      relativeEndpointPrefix = "/";
       endpointSuffix = "";
       this.skipPathCount = 0;
    }
@@ -32,26 +31,44 @@ public class DefaultControllerResourceNamingStrategy implements ControllerResour
 
    @Override
    public String getUriSafeRequestMappingPattern(String requestMappingPattern) {
-      String result = requestMappingPattern.replaceFirst("/", "");
+      String result = requestMappingPattern;
       //remove regex portion '/{businessId:\\w+}'
       result = result.replaceAll(":.*?}", "}");
 
-      return result.isEmpty() ? "root" : result;
+      return result.isEmpty() ? "/" : result;
    }
 
    @Override
    public String getRequestPatternMappingEndpoint(String requestMappingPattern) {
-      return relativeEndpointPrefix + getUriSafeRequestMappingPattern(requestMappingPattern) + endpointSuffix;
+      String endpoint = getUriSafeRequestMappingPattern(requestMappingPattern) + endpointSuffix;
+      return endpoint.replaceAll("//", "/");
    }
 
    @Override
    public String getGroupName(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
       String group = getFirstGroupCompatibleName(requestMappingInfo, handlerMethod);
+
+      if (null != handlerMethod) {
+         Class<?> aClass = handlerMethod.getBeanType();
+         Api apiAnnotation = aClass.getAnnotation(Api.class);
+         if (null != apiAnnotation && !StringUtils.isBlank(apiAnnotation.value())) {
+            return apiAnnotation.value();
+         }
+      }
+
       group = StringUtils.removeStart(group, "/");
       String[] splits = group.split("/");
       int startingPoint = splits.length > skipPathCount ? skipPathCount : 0;
       group = splits[startingPoint];
-      return group;
+      return group.isEmpty() ? "root" : group;
+   }
+
+   public String getEndpointSuffix() {
+      return endpointSuffix;
+   }
+
+   public void setEndpointSuffix(String endpointSuffix) {
+      this.endpointSuffix = endpointSuffix;
    }
 
    public int getSkipPathCount() {

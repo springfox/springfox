@@ -2,6 +2,7 @@ package com.mangofactory.swagger.readers
 
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
+import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.ApiDescription
@@ -16,7 +17,11 @@ class ApiDescriptionReaderSpec extends Specification {
 
    def "should generate an api description for each request mapping pattern"() {
     given:
-      ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(new DefaultControllerResourceNamingStrategy())
+      DefaultSwaggerPathProvider defaultSwaggerPathProvider = new DefaultSwaggerPathProvider()
+      defaultSwaggerPathProvider.setApiResourceSuffix("/api/v1")
+      defaultSwaggerPathProvider.servletContext = servletContext()
+
+      ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(defaultSwaggerPathProvider, new DefaultControllerResourceNamingStrategy())
       RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
               [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
       )
@@ -35,10 +40,10 @@ class ApiDescriptionReaderSpec extends Specification {
       ApiDescription apiDescription = descriptionList[0]
       ApiDescription secondApiDescription = descriptionList[1]
 
-      apiDescription.path() == '/somePath/{businessId}'
+      apiDescription.path() == '/api/v1/somePath/{businessId}'
       fromOption(apiDescription.description()) == dummyHandlerMethod().method.name
 
-      secondApiDescription.path() == '/somePath/{businessId}'
+      secondApiDescription.path() == '/api/v1/somePath/{businessId}'
       fromOption(secondApiDescription.description()) == dummyHandlerMethod().method.name
    }
 

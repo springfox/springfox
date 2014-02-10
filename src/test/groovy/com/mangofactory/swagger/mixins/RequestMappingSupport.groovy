@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.mixins
 
 import com.mangofactory.swagger.dummy.DummyClass
+import com.mangofactory.swagger.dummy.DummyController
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition
@@ -25,6 +26,12 @@ class RequestMappingSupport {
 
    def dummyHandlerMethod(String methodName = "dummyMethod", parameterTypes = null ) {
       def clazz = new DummyClass()
+      Class c = clazz.getClass();
+      new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
+   }
+
+   def dummyControllerHandlerMethod(String methodName = "dummyMethod", parameterTypes = null ) {
+      def clazz = new DummyController()
       Class c = clazz.getClass();
       new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
    }

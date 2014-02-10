@@ -4,7 +4,7 @@ public interface SwaggerPathProvider {
 
    /**
     * e.g the api endpoint resides at  http://myapp.com:8080/<contextPath>/api/v1/businesses
-    * Should return /api/v1/ - note the leading and trailing forward slashes
+    * Should return /api/v1 - note the leading and non trailing forward slashes
     *
     * @return the resource prefix of the api endpoint
     */

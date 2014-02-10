@@ -8,7 +8,7 @@ import javax.servlet.ServletContext
 class SwaggerPathProviderSupport {
    def swaggerPathProvider(){
       SwaggerPathProvider swaggerPathProvider = new DefaultSwaggerPathProvider();
-      swaggerPathProvider.setApiResourceSuffix("/api/v1/");
+      swaggerPathProvider.setApiResourceSuffix("/api/v1");
       swaggerPathProvider.servletContext = [getContextPath: {return "/context-path"}] as ServletContext
       return swaggerPathProvider
    }

@@ -14,22 +14,21 @@ class DefaultControllerResourceNamingStrategySpec extends Specification {
       DefaultControllerResourceNamingStrategy strategy = new DefaultControllerResourceNamingStrategy()
 
     expect:
-      group == strategy.getFirstGroupCompatibleName(requestMappingInfo, null)
+      strategy.getFirstGroupCompatibleName(requestMappingInfo, null) == group
 
     where:
-      group                                        | path
-      'root'                                       | '/'
-      'business'                                   | '/business'
-      'business'                                   | 'business'
-      'business/somethingElse'                     | '/business/somethingElse'
-      'business/somethingElse'                     | 'business/somethingElse'
-      '{businessId}'                               | '/{businessId}'
-      '{businessId}'                               | '/{businessId:\\d+}'
-      '{businessId}'                               | '/{businessId:\\w+}'
-      'business/{businessId}'                      | '/business/{businessId:\\d+}'
-      'business/{businessId}/accounts/{accountId}' | '/business/{businessId:\\d+}/accounts/{accountId:\\d+}'
+      group                                         | path
+      '/'                                           | '/'
+      '/business'                                   | '/business'
+      '/business'                                   | 'business'
+      '/business/somethingElse'                     | '/business/somethingElse'
+      '/business/somethingElse'                     | 'business/somethingElse'
+      '/{businessId}'                               | '/{businessId}'
+      '/{businessId}'                               | '/{businessId:\\d+}'
+      '/{businessId}'                               | '/{businessId:\\w+}'
+      '/business/{businessId}'                      | '/business/{businessId:\\d+}'
+      '/business/{businessId}/accounts/{accountId}' | '/business/{businessId:\\d+}/accounts/{accountId:\\d+}'
    }
-
 
    @Unroll('Path: #path group: #group')
    def "controller to group names with skipped path elements "() {
@@ -54,5 +53,16 @@ class DefaultControllerResourceNamingStrategySpec extends Specification {
       'business'     | '/api/v1/business/{businessId:\\d+}/accounts/{accountId:\\d+}'
    }
 
+   def "Controllers with and Api annotation should override the group name"() {
+    given:
+      RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
+      DefaultControllerResourceNamingStrategy strategy = new DefaultControllerResourceNamingStrategy(skipPathCount: 2)
 
+    expect:
+      strategy.getGroupName(requestMappingInfo, dummyControllerHandlerMethod()) == "Group name"
+
+    where:
+      path << ['/', '/api/v1/business', 'api/v1/business', '/api/v1/business/somethingElse']
+   }
 }
+
