@@ -67,6 +67,7 @@ public class ApiListingReferenceScanner {
             HandlerMethod handlerMethod = handlerMethodEntry.getValue();
             if (shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
                String groupName = controllerNamingStrategy.getGroupName(requestMappingInfo, handlerMethod);
+               log.info("Adding resource to group {}", groupName);
                resourceGroupRequestMappings.put(groupName, new RequestMappingContext(requestMappingInfo, handlerMethod));
             }
          }

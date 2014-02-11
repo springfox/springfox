@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.readers.operation.parameter
-
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -11,12 +10,11 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
-import spock.lang.Unroll
 
 @Mixin(RequestMappingSupport)
 class ParameterNameReaderSpec extends Specification {
 
-   @Unroll
+//   @Unroll
    def "param required"() {
     given:
       HandlerMethod handlerMethod = Mock()

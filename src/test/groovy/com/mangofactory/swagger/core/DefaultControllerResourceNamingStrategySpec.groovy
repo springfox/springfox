@@ -12,6 +12,9 @@ class DefaultControllerResourceNamingStrategySpec extends Specification {
     given:
       RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
       DefaultControllerResourceNamingStrategy strategy = new DefaultControllerResourceNamingStrategy()
+      //Coverage
+      strategy.getEndpointSuffix()
+      strategy.getSkipPathCount()
 
     expect:
       strategy.getFirstGroupCompatibleName(requestMappingInfo, null) == group
@@ -40,17 +43,17 @@ class DefaultControllerResourceNamingStrategySpec extends Specification {
       strategy.getGroupName(requestMappingInfo, null) == group
 
     where:
-      group          | path
-      'root'         | '/'
-      'business'     | '/api/v1/business'
-      'business'     | 'api/v1/business'
-      'business'     | '/api/v1/business/somethingElse'
-      'business'     | 'api/v1/business/somethingElse'
-      '{businessId}' | '/api/v1/{businessId}'
-      '{businessId}' | '/api/v1/{businessId:\\d+}'
-      '{businessId}' | '/api/v1/{businessId:\\w+}'
-      'business'     | '/api/v1/business/{businessId:\\d+}'
-      'business'     | '/api/v1/business/{businessId:\\d+}/accounts/{accountId:\\d+}'
+      group                                        | path
+      'root'                                       | '/'
+      'business'                                   | '/api/v1/business'
+      'business'                                   | 'api/v1/business'
+      'business_somethingElse'                     | '/api/v1/business/somethingElse'
+      'business_somethingElse'                     | 'api/v1/business/somethingElse'
+      '{businessId}'                               | '/api/v1/{businessId}'
+      '{businessId}'                               | '/api/v1/{businessId:\\d+}'
+      '{businessId}'                               | '/api/v1/{businessId:\\w+}'
+      'business_{businessId}'                      | '/api/v1/business/{businessId:\\d+}'
+      'business_{businessId}_accounts_{accountId}' | '/api/v1/business/{businessId:\\d+}/accounts/{accountId:\\d+}'
    }
 
    def "Controllers with and Api annotation should override the group name"() {
@@ -63,6 +66,24 @@ class DefaultControllerResourceNamingStrategySpec extends Specification {
 
     where:
       path << ['/', '/api/v1/business', 'api/v1/business', '/api/v1/business/somethingElse']
+   }
+
+   def "longestCommonPath"() {
+      DefaultControllerResourceNamingStrategy strategy = new DefaultControllerResourceNamingStrategy()
+
+    expect:
+      println paths
+      strategy.longestCommonPath(paths) == expected
+
+    where:
+      paths << [
+              ['/a/b/c', '/a/b/d', '/a/b/z'] as String[],
+              ['/r/s/t', '/x/y/z', '/a/b/z'] as String[]
+      ]
+      expected << [
+              '/a/b/',
+              '/'
+      ]
    }
 }
 

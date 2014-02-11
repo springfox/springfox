@@ -1,7 +1,5 @@
 package com.mangofactory.swagger.readers.operation.parameter
 
-import com.fasterxml.classmate.ResolvedType
-import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerModelConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyClass
@@ -9,16 +7,13 @@ import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import org.joda.time.LocalDateTime
 import org.springframework.core.MethodParameter
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
-import spock.lang.Unroll
 
 @Mixin(RequestMappingSupport)
 class ParameterDataTypeReaderSpec extends Specification {
 
-   @Unroll
    def "Parameter types"() {
     given:
       HandlerMethod handlerMethod = Stub(HandlerMethod)

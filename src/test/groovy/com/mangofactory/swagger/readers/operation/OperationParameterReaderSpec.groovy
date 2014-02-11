@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.readers.operation
-
 import com.mangofactory.swagger.configuration.SpringSwaggerModelConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
@@ -10,7 +9,6 @@ import org.springframework.validation.BindingResult
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Shared
 import spock.lang.Specification
-import spock.lang.Unroll
 
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
@@ -33,7 +31,6 @@ class OperationParameterReaderSpec extends Specification {
       swaggerGlobalSettings.setGlobalResponseMessages(newHashMap())
    }
 
-   @Unroll
    def "Should ignore ignorables"() {
     given:
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
@@ -53,7 +50,6 @@ class OperationParameterReaderSpec extends Specification {
       dummyHandlerMethod('methodWithInteger', Integer.class)               | 1
    }
 
-   @Unroll
    def "Should read a request mapping method without APIParameter annotation"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSinglePathVariable', String.class)

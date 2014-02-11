@@ -75,9 +75,6 @@ public class ApiListingScanner {
             Map<String, Model> swaggerModels = (Map<String, Model>) results.get("models");
             if(null != swaggerModels){
                models.putAll(swaggerModels);
-//               for(Model swaggerModel: swaggerModels){
-//                  models.put(swaggerModel.id(), swaggerModel);
-//               }
             }
             produces.addAll(producesMediaTypes);
             consumes.addAll(consumesMediaTypes);

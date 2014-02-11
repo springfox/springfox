@@ -139,4 +139,40 @@ class ApiListingReferenceScannerSpec extends Specification {
       ApiListingReference accountsListingReference = apiListingReferences.find({fromOption(it.description()) == "accounts"})
       accountsListingReference.path() == 'http://127.0.0.1:8080/context-path/api-docs/someGroup/accounts'
    }
+
+   def "grouping of listing references"() {
+    given:
+      DefaultControllerResourceNamingStrategy defaultControllerResourceNamingStrategy = new DefaultControllerResourceNamingStrategy()
+
+    when:
+      RequestMappingHandlerMapping requestMappingHandlerMapping = Mock()
+
+      requestMappingHandlerMapping.getHandlerMethods() >> [
+         (requestMappingInfo("/public/{businessId}"))                      : dummyControllerHandlerMethod(),
+         (requestMappingInfo("/public/inventoryTypes"))                    : dummyHandlerMethod(),
+         (requestMappingInfo("/public/{businessId}/accounts"))             : dummyHandlerMethod(),
+         (requestMappingInfo("/public/{businessId}/employees"))            : dummyHandlerMethod(),
+         (requestMappingInfo("/public/inventoryTypes"))                    : dummyHandlerMethod(),
+         (requestMappingInfo("/public/{businessId}/inventory"))            : dummyHandlerMethod(),
+         (requestMappingInfo("/public/{businessId}/inventory/products"))   : dummyHandlerMethod()
+      ]
+
+      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
+
+    then:
+      apiListingReferenceScanner.setControllerNamingStrategy(defaultControllerResourceNamingStrategy)
+      apiListingReferenceScanner.setRequestMappingHandlerMapping([requestMappingHandlerMapping])
+      apiListingReferenceScanner.setIncludePatterns([".*"])
+      apiListingReferenceScanner.setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
+      apiListingReferenceScanner.setSwaggerGroup("someGroup")
+      apiListingReferenceScanner.setSwaggerPathProvider(new DefaultSwaggerPathProvider(servletContext: servletContext()))
+
+      List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
+
+      println apiListingReferences
+
+      true
+
+
+   }
 }

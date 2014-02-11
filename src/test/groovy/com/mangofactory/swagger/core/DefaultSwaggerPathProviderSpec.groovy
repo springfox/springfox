@@ -1,13 +1,10 @@
 package com.mangofactory.swagger.core
-
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import spock.lang.Specification
-import spock.lang.Unroll
 
 @Mixin(RequestMappingSupport)
 class DefaultSwaggerPathProviderSpec extends Specification {
 
-   @Unroll
    def "Swagger url formats"() {
     given:
       DefaultSwaggerPathProvider defaultSwaggerPathProvider = new DefaultSwaggerPathProvider(apiResourceSuffix: "/api/v1/");

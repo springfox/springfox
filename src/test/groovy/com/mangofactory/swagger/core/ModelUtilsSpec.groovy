@@ -12,6 +12,7 @@ class ModelUtilsSpec extends Specification {
       def type = ModelUtils.getHandlerReturnType(handlerMethod)
       println "TYPE: $type"
       type == expectedType
+      ModelUtils.getModelName(String.class)
 
     where:
       handlerMethod                                            | expectedType

@@ -1,15 +1,12 @@
 package com.mangofactory.swagger.readers
-
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
-import spock.lang.Unroll
 
 @Mixin(RequestMappingSupport)
 class MediaTypeReaderSpec extends Specification {
 
-   @Unroll
    def "should read media types"() {
 
     given:
@@ -36,7 +33,6 @@ class MediaTypeReaderSpec extends Specification {
       ['application/json', 'application/xml'] as String[] | ['application/xml'] as String[]  | dummyHandlerMethod()
    }
 
-   @Unroll
    def "handler method should override spring media types"() {
       MediaTypeReader mediaTypeReader = new MediaTypeReader()
       RequestMappingInfo requestMappingInfo =

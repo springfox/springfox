@@ -123,15 +123,15 @@ class SwaggerApiResourceListingSpec extends Specification {
     then:
 
       ApiListingReference apiListingReference = resourceListing.apis().head()
-      apiListingReference.path() == "http://127.0.0.1:8080/myApp/api-docs/swaggerGroup/somePath"
+      apiListingReference.path() == "http://127.0.0.1:8080/myApp/api-docs/swaggerGroup/somePath_"
       apiListingReference.position() == 0
-      fromOption(apiListingReference.description()) == "somePath"
+      fromOption(apiListingReference.description()) == "somePath_"
 
     and:
-      ApiListing apiListing = swaggerCache.swaggerApiListingMap['swaggerGroup']['somePath']
+      ApiListing apiListing = swaggerCache.swaggerApiListingMap['swaggerGroup']['somePath_']
       apiListing.swaggerVersion() == '1.2'
       apiListing.basePath() == 'http://127.0.0.1:8080/myApp'
-      apiListing.resourcePath() == '/somePath'
+      apiListing.resourcePath() == '/somePath_'
 
    }
 }

@@ -3,11 +3,16 @@ package com.mangofactory.swagger.core;
 import com.wordnik.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
+import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Set;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 @Component
 public class DefaultControllerResourceNamingStrategy implements ControllerResourceNamingStrategy {
@@ -46,21 +51,84 @@ public class DefaultControllerResourceNamingStrategy implements ControllerResour
 
    @Override
    public String getGroupName(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      String group = getFirstGroupCompatibleName(requestMappingInfo, handlerMethod);
-
+      String groupName = getFirstGroupCompatibleName(requestMappingInfo, handlerMethod);
       if (null != handlerMethod) {
-         Class<?> aClass = handlerMethod.getBeanType();
-         Api apiAnnotation = aClass.getAnnotation(Api.class);
+         Class<?> controllerClass = handlerMethod.getBeanType();
+         Api apiAnnotation = controllerClass.getAnnotation(Api.class);
          if (null != apiAnnotation && !StringUtils.isBlank(apiAnnotation.value())) {
-            return apiAnnotation.value();
+            groupName = apiAnnotation.value();
+         }
+
+         List<String> allMappings = getAllRequestMappingsFromControllerClass(controllerClass);
+
+         if (null != allMappings && allMappings.size() > 0) {
+            String longestCommonPath = longestCommonPath(allMappings.toArray(new String[allMappings.size()]));
+            if (!StringUtils.isBlank(longestCommonPath) && !longestCommonPath.endsWith("/")) {
+               groupName = longestCommonPath;
+            }
+         }
+
+      }
+      return cleanAndSkip(groupName);
+   }
+
+   private List<String> getAllRequestMappingsFromControllerClass(Class<?> controllerClass) {
+
+      List<String> allMappings = newArrayList();
+      RequestMapping classLevelMapping = controllerClass.getAnnotation(RequestMapping.class);
+      addMappingIfPresent(allMappings, classLevelMapping);
+
+      Method[] declaredMethods = controllerClass.getDeclaredMethods();
+
+      if (null != declaredMethods) {
+         for (Method method : declaredMethods) {
+            RequestMapping annotation = method.getAnnotation(RequestMapping.class);
+            addMappingIfPresent(allMappings, annotation);
          }
       }
+      return allMappings;
+   }
 
-      group = StringUtils.removeStart(group, "/");
-      String[] splits = group.split("/");
-      int startingPoint = splits.length > skipPathCount ? skipPathCount : 0;
-      group = splits[startingPoint];
-      return group.isEmpty() ? "root" : group;
+   private void addMappingIfPresent(List<String> allMappings, RequestMapping classLevelMapping) {
+      if (null != classLevelMapping) {
+         String[] mappings = classLevelMapping.value();
+         if (null != mappings && mappings.length > 0) {
+            for (String mapping : mappings) {
+               allMappings.add(getUriSafeRequestMappingPattern(mapping));
+            }
+         }
+      }
+   }
+
+   private String longestCommonPath(String... paths) {
+      String commonPath = "";
+      String[][] folders = new String[paths.length][];
+
+      for (int i = 0; i < paths.length; i++) {
+         folders[i] = paths[i].split("/");
+      }
+
+      for (int j = 0; j < folders[0].length; j++) {
+         String s = folders[0][j];
+         for (int i = 1; i < paths.length; i++) {
+            if (!s.equals(folders[i][j])){
+               return commonPath;
+            }
+         }
+         commonPath += s + "/";
+      }
+      return commonPath;
+   }
+
+   private String cleanAndSkip(String groupName){
+      int ordinalIndex = StringUtils.ordinalIndexOf(groupName, "/", skipPathCount + 1);
+
+      if(ordinalIndex > 0){
+         groupName = groupName.substring(ordinalIndex);
+      }
+      groupName = StringUtils.removeStart(groupName, "/");
+      groupName = groupName.replaceAll("/", "_");
+      return groupName.isEmpty() ? "root" : groupName;
    }
 
    public String getEndpointSuffix() {
@@ -78,4 +146,6 @@ public class DefaultControllerResourceNamingStrategy implements ControllerResour
    public void setSkipPathCount(int skipPathCount) {
       this.skipPathCount = skipPathCount;
    }
+
+
 }
