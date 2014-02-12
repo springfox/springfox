@@ -1,9 +1,11 @@
 package com.mangofactory.swagger.readers;
 
+import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.readers.operation.*;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
+import com.wordnik.swagger.model.Authorization;
 import com.wordnik.swagger.model.Operation;
 import com.wordnik.swagger.model.Parameter;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,8 +20,8 @@ import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class ApiOperationReader implements Command<RequestMappingContext> {
 
-   private static final Set<RequestMethod> allRequestMethods
-         = new HashSet<RequestMethod>(Arrays.asList(RequestMethod.values()));
+   private static final Set<RequestMethod> allRequestMethods = new HashSet<RequestMethod>(Arrays.asList(RequestMethod.values()));
+   public ApiOperationReader() { }
 
    @Override
    public void execute(RequestMappingContext outerContext) {
@@ -27,7 +29,8 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
       HandlerMethod handlerMethod = outerContext.getHandlerMethod();
       SwaggerGlobalSettings swaggerGlobalSettings  = (SwaggerGlobalSettings) outerContext.get("swaggerGlobalSettings");
-
+      AuthorizationContext authorizationContext = (AuthorizationContext) outerContext.get("authorizationContext");
+      String requestMappingPattern = (String) outerContext.get("requestMappingPattern");
       RequestMethodsRequestCondition requestMethodsRequestCondition = requestMappingInfo.getMethodsCondition();
       List<Operation> operations = newArrayList();
 
@@ -45,7 +48,11 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          operationRequestMappingContext.put("currentCount", currentCount);
          operationRequestMappingContext.put("currentHttpMethod", httpRequestMethod);
          operationRequestMappingContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
+         operationRequestMappingContext.put("authorizationContext", authorizationContext);
+         operationRequestMappingContext.put("requestMappingPattern", requestMappingPattern);
 
+
+         commandList.add(new OperationAuthReader());
          commandList.add(new OperationHttpMethodReader());
          commandList.add(new OperationSummaryReader());
          commandList.add(new OperationNotesReader());
@@ -65,6 +72,8 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          List<String> producesMediaTypes = (List<String>) operationResultMap.get("produces");
          List<String> consumesMediaTypes = (List<String>) operationResultMap.get("consumes");
          List<Parameter> parameterList = (List<Parameter>) operationResultMap.get("parameters");
+         List<Authorization> authorizations = (List<Authorization>) operationResultMap.get("authorizations");
+
          Operation operation = new Operation(
                (String) operationResultMap.get("httpRequestMethod"),
                (String) operationResultMap.get("summary"),
@@ -75,26 +84,11 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
                toScalaList(producesMediaTypes),
                toScalaList(consumesMediaTypes),
                emptyScalaList(),
-               emptyScalaList(),
+               toScalaList(authorizations),
                toScalaList(parameterList),
                toScalaList((List) operationResultMap.get("responseMessages")),
                toOption(operationResultMap.get("deprecated"))
          );
-//         case class Operation (
-//               method: String,
-//               summary: String,
-//               notes: String,
-//               responseClass: String,
-//               nickname: String,
-//               position: Int,
-//               produces: List[String] = List.empty,
-//               consumes: List[String] = List.empty,
-//               protocols: List[String] = List.empty,
-//               authorizations: List[String] = List.empty,
-//               parameters: List[Parameter] = List.empty,
-//               responseMessages: List[ResponseMessage] = List.empty,
-//         `deprecated`: Option[String] = None)
-
 
          operations.add(operation);
       }

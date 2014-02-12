@@ -20,7 +20,9 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
    private final SwaggerPathProvider swaggerPathProvider;
    private ControllerResourceNamingStrategy controllerResourceNamingStrategy;
 
-   public ApiDescriptionReader(SwaggerPathProvider pathProvider, ControllerResourceNamingStrategy namingStrategy) {
+   public ApiDescriptionReader(SwaggerPathProvider pathProvider,
+                               ControllerResourceNamingStrategy namingStrategy) {
+
       this.controllerResourceNamingStrategy = namingStrategy;
       this.swaggerPathProvider = pathProvider;
    }
@@ -35,11 +37,13 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
       List<ApiDescription> apiDescriptionList = newArrayList();
       for (String pattern : patternsCondition.getPatterns()) {
 
-         String path =  swaggerPathProvider.getApiResourcePrefix()
-                 + controllerResourceNamingStrategy.getRequestPatternMappingEndpoint(pattern);
+         String cleanedRequestMappingPath = controllerResourceNamingStrategy.getRequestPatternMappingEndpoint(pattern);
+         String path = swaggerPathProvider.getApiResourcePrefix()
+                 + cleanedRequestMappingPath;
 
          String methodName = handlerMethod.getMethod().getName();
 
+         context.put("requestMappingPattern", cleanedRequestMappingPath);
          ApiOperationReader apiOperationReader = new ApiOperationReader();
          apiOperationReader.execute(context);
          List<Operation> operations = (List<Operation>) context.get("operations");

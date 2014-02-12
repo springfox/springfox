@@ -11,13 +11,23 @@ public class AntRequestMappingPatternMatcher implements RequestMappingPatternMat
    @Override
    public boolean patternConditionsMatchOneOfIncluded(PatternsRequestCondition patternsCondition, List<String> includePatterns) {
       Set<String> patterns = patternsCondition.getPatterns();
-      AntPathMatcher antPathMatcher = new AntPathMatcher();
       for (String path : patterns) {
          for (String includePattern : includePatterns) {
-            Assert.notNull(includePattern, "Include patterns should never be null");
-            if (antPathMatcher.match(includePattern, path)) {
+            if (pathMatchesOneOfIncluded(path, includePatterns)) {
                return true;
             }
+         }
+      }
+      return false;
+   }
+
+   @Override
+   public boolean pathMatchesOneOfIncluded(String path, List<String> includePatterns) {
+      AntPathMatcher antPathMatcher = new AntPathMatcher();
+      for (String includePattern : includePatterns) {
+         Assert.notNull(includePattern, "Include patterns should never be null");
+         if (antPathMatcher.match(includePattern, path)) {
+            return true;
          }
       }
       return false;

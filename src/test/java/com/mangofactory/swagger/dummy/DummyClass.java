@@ -1,9 +1,7 @@
 package com.mangofactory.swagger.dummy;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiResponse;
-import com.wordnik.swagger.annotations.ApiResponses;
+import com.wordnik.swagger.annotations.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +52,13 @@ public class DummyClass {
 
    @ApiOperation(value = "", response = DummyModels.FunkyBusiness.class)
    public void methodApiResponseClass() {
+   }
+
+   @ApiOperation(value = "SomeVal",
+           authorizations = @Authorization(value = "oauth2",
+                   scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
+                   }))
+   public void methodWithAuth() {
    }
 
    @ApiOperation(value = "")

@@ -1,6 +1,8 @@
 package com.mangofactory.swagger.scanners
+
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
+import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
 import com.wordnik.swagger.core.SwaggerSpec
@@ -14,7 +16,7 @@ import static com.mangofactory.swagger.ScalaUtils.fromScalaList
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
 
-@Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
+@Mixin([RequestMappingSupport, SwaggerPathProviderSupport, AuthSupport])
 class ApiListingScannerSpec extends Specification {
 
    final DefaultControllerResourceNamingStrategy controllerNamingStrategy = new DefaultControllerResourceNamingStrategy()
@@ -22,15 +24,15 @@ class ApiListingScannerSpec extends Specification {
    def "Should create an api listing for a single resource grouping "() {
     given:
       RequestMappingInfo requestMappingInfo =
-         requestMappingInfo("/businesses",
-            [
-               consumesRequestCondition: consumesRequestCondition(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE),
-               producesRequestCondition : producesRequestCondition(APPLICATION_JSON_VALUE)
-            ]
-         )
+              requestMappingInfo("/businesses",
+                      [
+                              consumesRequestCondition: consumesRequestCondition(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE),
+                              producesRequestCondition: producesRequestCondition(APPLICATION_JSON_VALUE)
+                      ]
+              )
 
       RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
-      Map resourceGroupRequestMappings = [ 'businesses' : [requestMappingContext]]
+      Map resourceGroupRequestMappings = ['businesses': [requestMappingContext]]
       ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, "default", swaggerPathProvider())
       scanner.setSwaggerGlobalSettings(new SwaggerGlobalSettings())
 
@@ -51,5 +53,4 @@ class ApiListingScannerSpec extends Specification {
       apiDescription.path() == '/api/v1/businesses'
       fromOption(apiDescription.description()) == "methodWithConcreteResponseBody"
    }
-
 }

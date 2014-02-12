@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.scanners;
 
+import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.core.ControllerResourceNamingStrategy;
@@ -34,6 +35,7 @@ public class ApiListingScanner {
    private List<Command<RequestMappingContext>> readers = newArrayList();
    private SwaggerGlobalSettings swaggerGlobalSettings;
    private ControllerResourceNamingStrategy controllerNamingStrategy;
+   private AuthorizationContext authorizationContext;
 
    public ApiListingScanner(Map<String, List<RequestMappingContext>> resourceGroupRequestMappings,
          String resourceGroup, SwaggerPathProvider swaggerPathProvider) {
@@ -63,6 +65,7 @@ public class ApiListingScanner {
          for(RequestMappingContext requestMappingContext : entry.getValue()){
 
             CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
+            requestMappingContext.put("authorizationContext", authorizationContext);
             readers.add(new MediaTypeReader());
             readers.add(new ApiDescriptionReader(swaggerPathProvider, controllerNamingStrategy));
             readers.add(new ApiModelReader());
@@ -97,7 +100,7 @@ public class ApiListingScanner {
                toScalaList(produces),
                toScalaList(consumes),
                emptyScalaList(),
-               emptyScalaList(),
+               emptyScalaList(), //Auth authorizations: List[Authorization] = List.empty,
                toScalaList(apiDescriptions),
                toOption(models),
                toOption(null),
@@ -131,5 +134,11 @@ public class ApiListingScanner {
       this.controllerNamingStrategy = controllerNamingStrategy;
    }
 
+   public AuthorizationContext getAuthorizationContext() {
+      return authorizationContext;
+   }
 
+   public void setAuthorizationContext(AuthorizationContext authorizationContext) {
+      this.authorizationContext = authorizationContext;
+   }
 }

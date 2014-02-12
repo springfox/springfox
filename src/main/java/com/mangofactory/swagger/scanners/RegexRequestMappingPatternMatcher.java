@@ -12,11 +12,19 @@ public class RegexRequestMappingPatternMatcher implements RequestMappingPatternM
    public boolean patternConditionsMatchOneOfIncluded(PatternsRequestCondition patternsCondition, List<String> includePatterns) {
       Set<String> patterns = patternsCondition.getPatterns();
       for (String path : patterns) {
-         for (String includePattern : includePatterns) {
-            Assert.notNull(includePattern, "Include patterns should never be null");
-            if (path.matches(includePattern)) {
-               return true;
-            }
+         if(pathMatchesOneOfIncluded(path, includePatterns)){
+            return true;
+         }
+      }
+      return false;
+   }
+
+   @Override
+   public boolean pathMatchesOneOfIncluded(String path, List<String> includePatterns) {
+      for (String includePattern : includePatterns) {
+         Assert.notNull(includePattern, "Include patterns should never be null");
+         if (path.matches(includePattern)) {
+            return true;
          }
       }
       return false;

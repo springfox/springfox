@@ -33,12 +33,8 @@ public class ApiModelReader implements Command<RequestMappingContext> {
       }
 
       String schemaName = modelType.isArray() ? modelType.getComponentType().getSimpleName() : modelType.getSimpleName();
-
-
-
       Option<Model> sModel = parser.read(modelType, new scala.collection.immutable.HashMap());
       Model model = fromOption(sModel);
-
 
       if(null != model) {
          log.debug("Swagger generated model {} models", model.id());
