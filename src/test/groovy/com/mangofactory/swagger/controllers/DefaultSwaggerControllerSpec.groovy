@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.controllers
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.mangofactory.swagger.authorization.AuthorizationTypeSerializer
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.ApiListingSupport
