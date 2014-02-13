@@ -1,10 +1,12 @@
 package com.mangofactory.swagger.controllers
-
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.mangofactory.swagger.authorization.AuthorizationTypeSerializer
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.ApiListingSupport
+import com.mangofactory.swagger.mixins.AuthSupport
+import com.wordnik.swagger.model.AuthorizationType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.MvcResult
@@ -17,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup
 
-@Mixin([com.mangofactory.swagger.mixins.JsonSupport, ApiListingSupport])
+@Mixin([com.mangofactory.swagger.mixins.JsonSupport, ApiListingSupport, AuthSupport])
 class DefaultSwaggerControllerSpec extends Specification {
 
    @Shared
@@ -67,6 +69,25 @@ class DefaultSwaggerControllerSpec extends Specification {
       controller.swaggerCache = swaggerCache
     when:
       MvcResult result = mockMvc.perform(get("/api-docs/resourceKey/businesses")).andDo(print()).andReturn()
+      def responseJson = jsonBodyResponse(result)
+
+    then:
+      result.getResponse().getStatus() == 200
+
+   }
+
+   def "should respond with auth included"() {
+    given:
+      SwaggerCache swaggerCache = new SwaggerCache();
+
+      def authTypes = new ArrayList<AuthorizationType>()
+
+      authTypes.add(authorizationTypes());
+
+      swaggerCache.swaggerApiResourceListingMap = [resourceKey: resourceListing(authTypes)]
+      controller.swaggerCache = swaggerCache
+    when:
+      MvcResult result = mockMvc.perform(get("/api-docs/resourceKey")).andDo(print()).andReturn()
       def responseJson = jsonBodyResponse(result)
 
     then:

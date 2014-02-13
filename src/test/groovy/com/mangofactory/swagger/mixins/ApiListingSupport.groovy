@@ -1,16 +1,16 @@
 package com.mangofactory.swagger.mixins
-
 import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.ApiListing
+import com.wordnik.swagger.model.OAuth
+import com.wordnik.swagger.model.ResourceListing
 
-import static com.mangofactory.swagger.ScalaUtils.toOption
-import static com.mangofactory.swagger.ScalaUtils.toScalaList
+import static com.mangofactory.swagger.ScalaUtils.*
 
 class ApiListingSupport {
 
-   def apiListing(){
+   def apiListing(authorizations = emptyScalaList()) {
       scala.collection.immutable.List emptyList = toScalaList(null);
-      ApiListing apiListing = new ApiListing(
+      new ApiListing(
               "1.0",
               SwaggerSpec.version(),
               "",
@@ -18,10 +18,19 @@ class ApiListingSupport {
               emptyList,
               emptyList,
               emptyList,
-              emptyList,
+              authorizations,
               emptyList,
               toOption(null),
               toOption(null),
               1);
+   }
+
+   def resourceListing(List<OAuth> authorizationTypes) {
+      new ResourceListing(
+              "apiVersion",
+              "swagger version",
+              emptyScalaList(),
+              toScalaList(authorizationTypes),
+              toOption(null))
    }
 }

@@ -33,7 +33,7 @@ class ApiListingScannerSpec extends Specification {
 
       RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
       Map resourceGroupRequestMappings = ['businesses': [requestMappingContext]]
-      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, "default", swaggerPathProvider())
+      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, "default", swaggerPathProvider(), null)
       scanner.setSwaggerGlobalSettings(new SwaggerGlobalSettings())
 
     when:

@@ -53,4 +53,29 @@ class OperationAuthReaderSpec extends Specification {
       authorizationScope.description() == "accessEverything"
       authorizationScope.scope() == "global"
    }
+
+   def "should apply global auth when ApiOperationAnnotation exists without auth values"(){
+    given:
+      OperationAuthReader authReader = new OperationAuthReader()
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), dummyHandlerMethod("methodWithHttpGETMethod"))
+      List<Authorization> authorizations = defaultAuth()
+      AuthorizationContext authorizationContext = new AuthorizationContext.AuthorizationContextBuilder(defaultAuth())
+              .withIncludePatterns(['/anyPath.*'])
+              .build()
+
+      context.put("authorizationContext", authorizationContext)
+      context.put("requestMappingPattern", "/anyPath")
+
+    when:
+      authReader.execute(context)
+
+    then:
+      def results = context.get("authorizations")
+      println(results)
+      Authorization authorization = results[0]
+      authorization.type() == 'oauth2'
+      AuthorizationScope authorizationScope = authorization.scopes()[0]
+      authorizationScope.description() == "accessEverything"
+      authorizationScope.scope() == "global"
+   }
 }

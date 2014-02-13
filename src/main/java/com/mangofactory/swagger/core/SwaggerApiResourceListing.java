@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.core;
 
+import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.ApiListingScanner;
@@ -23,6 +24,7 @@ public class SwaggerApiResourceListing {
    private SwaggerCache swaggerCache;
    private ApiInfo apiInfo;
    private List<AuthorizationType> authorizationTypes;
+   private AuthorizationContext authorizationContext;
    private ApiListingReferenceScanner apiListingReferenceScanner;
    private SwaggerPathProvider swaggerPathProvider;
    private SwaggerGlobalSettings swaggerGlobalSettings;
@@ -41,10 +43,11 @@ public class SwaggerApiResourceListing {
          apiListingReferences = apiListingReferenceScanner.getApiListingReferences();
 
          Map<String, List<RequestMappingContext>> resourceGroupRequestMappings =
-               apiListingReferenceScanner.getResourceGroupRequestMappings();
+                 apiListingReferenceScanner.getResourceGroupRequestMappings();
 
          ApiListingScanner apiListingScanner = new ApiListingScanner(
-               resourceGroupRequestMappings, apiListingReferenceScanner.getSwaggerGroup(), swaggerPathProvider);
+                 resourceGroupRequestMappings,
+                 apiListingReferenceScanner.getSwaggerGroup(), swaggerPathProvider, authorizationContext);
          apiListingScanner.setSwaggerGlobalSettings(swaggerGlobalSettings);
 
          Map<String, ApiListing> apiListings = apiListingScanner.scan();
@@ -54,11 +57,11 @@ public class SwaggerApiResourceListing {
          log.error("ApiListingReferenceScanner not configured");
       }
       ResourceListing resourceListing = new ResourceListing(
-            "1",
-            SwaggerSpec.version(),
-            toScalaList(apiListingReferences),
-            toScalaList(authorizationTypes),
-            toOption(apiInfo)
+              "1",
+              SwaggerSpec.version(),
+              toScalaList(apiListingReferences),
+              toScalaList(authorizationTypes),
+              toOption(apiInfo)
       );
 
       swaggerCache.addSwaggerResourceListing(swaggerGroup, resourceListing);
@@ -118,5 +121,9 @@ public class SwaggerApiResourceListing {
 
    public void setSwaggerGroup(String swaggerGroup) {
       this.swaggerGroup = swaggerGroup;
+   }
+
+   public void setAuthorizationContext(AuthorizationContext authorizationContext) {
+      this.authorizationContext = authorizationContext;
    }
 }

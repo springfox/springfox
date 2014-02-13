@@ -38,10 +38,11 @@ public class ApiListingScanner {
    private AuthorizationContext authorizationContext;
 
    public ApiListingScanner(Map<String, List<RequestMappingContext>> resourceGroupRequestMappings,
-         String resourceGroup, SwaggerPathProvider swaggerPathProvider) {
+         String resourceGroup, SwaggerPathProvider swaggerPathProvider, AuthorizationContext authorizationContext) {
       this.resourceGroupRequestMappings = resourceGroupRequestMappings;
       this.resourceGroup = resourceGroup;
       this.swaggerPathProvider = swaggerPathProvider;
+      this.authorizationContext = authorizationContext;
    }
 
    public Map<String, ApiListing> scan() {

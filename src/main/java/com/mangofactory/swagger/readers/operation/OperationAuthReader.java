@@ -6,6 +6,7 @@ import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.Authorization;
 import com.wordnik.swagger.annotations.AuthorizationScope;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 
 import java.util.List;
@@ -22,18 +23,20 @@ public class OperationAuthReader implements Command<RequestMappingContext> {
       String requestMappingPattern = (String) context.get("requestMappingPattern");
       List<com.wordnik.swagger.model.Authorization> authorizations = newArrayList();
 
-      if(null != authorizationContext){
+      if (null != authorizationContext) {
          authorizations = authorizationContext.getAuthorizationsForPath(requestMappingPattern);
       }
 
-
       ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
-      if (null != apiOperationAnnotation && null != apiOperationAnnotation.authorizations()) {
-         authorizations = newArrayList();
-         Authorization[] authAnnotations = apiOperationAnnotation.authorizations();
 
-         if (null != authAnnotations) {
-            for (Authorization authorization : authAnnotations) {
+      if (null != apiOperationAnnotation && null != apiOperationAnnotation.authorizations()) {
+         Authorization[] authorizationAnnotations = apiOperationAnnotation.authorizations();
+         if (authorizationAnnotations != null
+                 && authorizationAnnotations.length > 0
+                 && !StringUtils.isBlank(authorizationAnnotations[0].value())) {
+
+            authorizations = newArrayList();
+            for (Authorization authorization : authorizationAnnotations) {
                String value = authorization.value();
                AuthorizationScope[] scopes = authorization.scopes();
                List<com.wordnik.swagger.model.AuthorizationScope> authorizationScopeList = newArrayList();
