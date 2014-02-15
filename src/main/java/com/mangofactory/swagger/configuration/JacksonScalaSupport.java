@@ -1,6 +1,9 @@
 package com.mangofactory.swagger.configuration;
 
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.module.scala.DefaultScalaModule;
+import com.wordnik.swagger.model.AuthorizationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -23,6 +26,7 @@ public class JacksonScalaSupport {
             if (messageConverter instanceof MappingJackson2HttpMessageConverter) {
                MappingJackson2HttpMessageConverter m = (MappingJackson2HttpMessageConverter) messageConverter;
                m.getObjectMapper().registerModule(new DefaultScalaModule());
+               m.getObjectMapper().registerModule(swaggerSerializationModule());
             }
          }
       }
@@ -35,6 +39,12 @@ public class JacksonScalaSupport {
 
    public Boolean getRegisterScalaModule() {
       return registerScalaModule;
+   }
+
+   public Module swaggerSerializationModule(){
+      SimpleModule module = new SimpleModule("SwaggerAuthorizationTypeModule");
+      module.addSerializer(AuthorizationType.class, new SwaggerAuthorizationTypeJsonSerializer());
+      return module;
    }
 
    public void setRegisterScalaModule(Boolean registerScalaModule) {

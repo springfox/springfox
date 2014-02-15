@@ -2,10 +2,12 @@ package com.mangofactory.swagger.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.mangofactory.swagger.configuration.JacksonScalaSupport
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.ApiListingSupport
 import com.mangofactory.swagger.mixins.AuthSupport
+import com.wordnik.swagger.core.util.JsonSerializer
 import com.wordnik.swagger.model.AuthorizationType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
@@ -31,8 +33,11 @@ class DefaultSwaggerControllerSpec extends Specification {
 
    def setup() {
       def jackson2 = new MappingJackson2HttpMessageConverter()
+
+      JacksonScalaSupport jacksonScalaSupport = new JacksonScalaSupport()
       ObjectMapper mapper = new ObjectMapper()
       mapper.registerModule(new DefaultScalaModule())
+      mapper.registerModule(jacksonScalaSupport.swaggerSerializationModule())
 
       jackson2.setObjectMapper(mapper)
       mockMvc = standaloneSetup(controller)
@@ -88,10 +93,17 @@ class DefaultSwaggerControllerSpec extends Specification {
       controller.swaggerCache = swaggerCache
     when:
       MvcResult result = mockMvc.perform(get("/api-docs/resourceKey")).andDo(print()).andReturn()
-      def responseJson = jsonBodyResponse(result)
+      def json = jsonBodyResponse(result)
+
+      String swaggerSerializedJson = JsonSerializer.asJson(resourceListing(authTypes))
 
     then:
       result.getResponse().getStatus() == 200
+      json.authorizations[0].type == "oauth2"
+      json.authorizations[0].scopes[0].scope == "global"
+      json.authorizations[0].scopes[0].description == "access all"
+      json.authorizations[0].grantTypes.implicit.loginEndpoint.url == "https://logmein.com"
+      json.authorizations[0].grantTypes.implicit.tokenName == "AccessToken"
 
    }
 }
