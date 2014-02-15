@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.scanners
 
+import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
 import com.mangofactory.swagger.mixins.AuthSupport
@@ -52,5 +53,27 @@ class ApiListingScannerSpec extends Specification {
       ApiDescription apiDescription = fromScalaList(listing.apis())[0]
       apiDescription.path() == '/api/v1/businesses'
       fromOption(apiDescription.description()) == "methodWithConcreteResponseBody"
+   }
+
+   def "should assign global authorizations"() {
+    given:
+      RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
+      RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
+      Map resourceGroupRequestMappings = ['businesses': [requestMappingContext]]
+      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, "default", swaggerPathProvider(), null)
+      scanner.setSwaggerGlobalSettings(new SwaggerGlobalSettings())
+
+      AuthorizationContext authorizationContext = new AuthorizationContext.AuthorizationContextBuilder(defaultAuth())
+              .withIncludePatterns(['/anyPath.*'])
+              .build()
+
+      scanner.setAuthorizationContext(authorizationContext)
+
+    when:
+      Map<String, ApiListing> apiListingMap = scanner.scan()
+
+    then:
+      ApiListing listing = apiListingMap['businesses']
+      listing.authorizations().size() == 1
    }
 }

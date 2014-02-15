@@ -13,6 +13,7 @@ import com.mangofactory.swagger.readers.MediaTypeReader;
 import com.wordnik.swagger.core.SwaggerSpec;
 import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiListing;
+import com.wordnik.swagger.model.Authorization;
 import com.wordnik.swagger.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,6 +94,11 @@ public class ApiListingScanner {
                .build()
                .toString();
 
+         scala.collection.immutable.List<Authorization> authorizations = emptyScalaList();
+         if (null != authorizationContext) {
+            authorizations = authorizationContext.getScalaAuthorizations();
+         }
+
          ApiListing apiListing = new ApiListing(
                apiVersion,
                swaggerVersion,
@@ -101,7 +107,7 @@ public class ApiListingScanner {
                toScalaList(produces),
                toScalaList(consumes),
                emptyScalaList(),
-               emptyScalaList(), //Auth authorizations: List[Authorization] = List.empty,
+               authorizations,
                toScalaList(apiDescriptions),
                toOption(models),
                toOption(null),
