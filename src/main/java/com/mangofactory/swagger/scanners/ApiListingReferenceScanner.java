@@ -2,7 +2,7 @@ package com.mangofactory.swagger.scanners;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimaps;
-import com.mangofactory.swagger.core.ControllerResourceNamingStrategy;
+import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.core.SwaggerPathProvider;
 import com.wordnik.swagger.model.ApiListingReference;
 import org.apache.commons.lang.StringUtils;
@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -36,7 +37,7 @@ public class ApiListingReferenceScanner {
    private ArrayListMultimap<String, RequestMappingContext> resourceGroupRequestMappings = ArrayListMultimap.create();
    private String swaggerGroup;
    private List<Class<? extends Annotation>> excludeAnnotations;
-   private ControllerResourceNamingStrategy controllerNamingStrategy;
+   private ResourceGroupingStrategy resourceGroupingStrategy;
    private SwaggerPathProvider swaggerPathProvider;
    private List<String> includePatterns = Arrays.asList(new String[]{".*?"});
    private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
@@ -47,7 +48,7 @@ public class ApiListingReferenceScanner {
    public List<ApiListingReference> scan() {
       Assert.notNull(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
       Assert.notEmpty(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
-      Assert.notNull(controllerNamingStrategy, "controllerNamingStrategy is required");
+      Assert.notNull(resourceGroupingStrategy, "resourceGroupingStrategy is required");
       Assert.notNull(swaggerGroup, "swaggerGroup is required");
       if(StringUtils.isBlank(swaggerGroup)){
          throw new IllegalArgumentException("swaggerGroup must not be empty");
@@ -60,29 +61,35 @@ public class ApiListingReferenceScanner {
    }
 
    public void scanSpringRequestMappings() {
+      Map<String, String> resourceGroupDescriptions = new HashMap<String, String>();
       for (RequestMappingHandlerMapping requestMappingHandlerMapping : this.requestMappingHandlerMapping) {
          for (Entry<RequestMappingInfo, HandlerMethod> handlerMethodEntry :
                requestMappingHandlerMapping.getHandlerMethods().entrySet()) {
             RequestMappingInfo requestMappingInfo = handlerMethodEntry.getKey();
             HandlerMethod handlerMethod = handlerMethodEntry.getValue();
             if (shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
-               String groupName = controllerNamingStrategy.getGroupName(requestMappingInfo, handlerMethod);
-               log.info("Adding resource to group {}", groupName);
-               resourceGroupRequestMappings.put(groupName, new RequestMappingContext(requestMappingInfo, handlerMethod));
+               String resourceGroupPath = resourceGroupingStrategy.getResourceGroupPath(requestMappingInfo, handlerMethod);
+               String resourceDescription = resourceGroupingStrategy.getResourceDescription(requestMappingInfo, handlerMethod);
+               resourceGroupDescriptions.put(resourceGroupPath, resourceDescription);
+               log.info("Adding resource to group {} for handler method: {}", resourceGroupPath,
+                       handlerMethod.getMethod().getName());
+               
+               resourceGroupRequestMappings.put(resourceGroupPath, new RequestMappingContext(requestMappingInfo, handlerMethod));
             }
          }
       }
 
       int groupPosition = 0;
-      for (String controllerGroupName : resourceGroupRequestMappings.keySet()) {
+      for (String resourceGroupUri : resourceGroupRequestMappings.keySet()) {
+         String listingDescription = resourceGroupDescriptions.get(resourceGroupUri);
          String path = UriComponentsBuilder.fromHttpUrl(swaggerPathProvider.getSwaggerDocumentationBasePath())
-               .pathSegment(swaggerGroup, controllerGroupName)
+               .pathSegment(swaggerGroup, resourceGroupUri)
                .build()
                .toString();
          log.info(format("Create resource listing Path: %s Description: %s Position: %s",
-                         path, controllerGroupName,groupPosition));
+                         path, resourceGroupUri,groupPosition));
 
-         this.apiListingReferences.add(new ApiListingReference(path, toOption(controllerGroupName), groupPosition++));
+         this.apiListingReferences.add(new ApiListingReference(path, toOption(listingDescription), groupPosition++));
       }
    }
 
@@ -153,12 +160,12 @@ public class ApiListingReferenceScanner {
       this.excludeAnnotations = excludeAnnotations;
    }
 
-   public ControllerResourceNamingStrategy getControllerNamingStrategy() {
-      return controllerNamingStrategy;
+   public ResourceGroupingStrategy getResourceGroupingStrategy() {
+      return resourceGroupingStrategy;
    }
 
-   public void setControllerNamingStrategy(ControllerResourceNamingStrategy controllerNamingStrategy) {
-      this.controllerNamingStrategy = controllerNamingStrategy;
+   public void setResourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
+      this.resourceGroupingStrategy = resourceGroupingStrategy;
    }
 
    public SwaggerPathProvider getSwaggerPathProvider() {

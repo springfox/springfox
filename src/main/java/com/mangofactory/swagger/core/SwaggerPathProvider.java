@@ -25,4 +25,17 @@ public interface SwaggerPathProvider {
     * @return the base path
     */
    public String getSwaggerDocumentationBasePath();
+
+   /**
+    * Gets a uri friendly path from a request mapping pattern.
+    * Typically involves removing any regex patterns or || conditions from a spring request mapping
+    * This method will be called to resolve every request mapping endpoint.
+    * A good extension point if you need to alter endpoints by adding or removing path segments.
+    * Note: this should not be an absolute  uri
+    *
+    * @see com.mangofactory.swagger.readers.ApiDescriptionReader
+    * @param requestMappingPattern
+    * @return the request mapping endpoint
+    */
+   public String getRequestMappingEndpoint(String requestMappingPattern);
 }

@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.readers;
 
-import com.mangofactory.swagger.core.ControllerResourceNamingStrategy;
+import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.core.SwaggerPathProvider;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.model.ApiDescription;
@@ -18,12 +18,12 @@ import static com.mangofactory.swagger.ScalaUtils.toScalaList;
 public class ApiDescriptionReader implements Command<RequestMappingContext> {
 
    private final SwaggerPathProvider swaggerPathProvider;
-   private ControllerResourceNamingStrategy controllerResourceNamingStrategy;
+   private ResourceGroupingStrategy resourceGroupingStrategy;
 
    public ApiDescriptionReader(SwaggerPathProvider pathProvider,
-                               ControllerResourceNamingStrategy namingStrategy) {
+                               ResourceGroupingStrategy namingStrategy) {
 
-      this.controllerResourceNamingStrategy = namingStrategy;
+      this.resourceGroupingStrategy = namingStrategy;
       this.swaggerPathProvider = pathProvider;
    }
 
@@ -37,7 +37,7 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
       List<ApiDescription> apiDescriptionList = newArrayList();
       for (String pattern : patternsCondition.getPatterns()) {
 
-         String cleanedRequestMappingPath = controllerResourceNamingStrategy.getRequestPatternMappingEndpoint(pattern);
+         String cleanedRequestMappingPath = swaggerPathProvider.getRequestMappingEndpoint(pattern);
          String path = swaggerPathProvider.getApiResourcePrefix()
                  + cleanedRequestMappingPath;
 

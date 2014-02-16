@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.readers
 
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
-import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
+import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -21,7 +21,7 @@ class ApiDescriptionReaderSpec extends Specification {
       defaultSwaggerPathProvider.setApiResourceSuffix("/api/v1")
       defaultSwaggerPathProvider.servletContext = servletContext()
 
-      ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(defaultSwaggerPathProvider, new DefaultControllerResourceNamingStrategy())
+      ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(defaultSwaggerPathProvider, new ClassOrApiAnnotationResourceGrouping())
       RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
               [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
       )

@@ -3,8 +3,8 @@ package com.mangofactory.swagger.scanners;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
-import com.mangofactory.swagger.core.ControllerResourceNamingStrategy;
-import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy;
+import com.mangofactory.swagger.core.ResourceGroupingStrategy;
+import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping;
 import com.mangofactory.swagger.core.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.ApiDescriptionReader;
 import com.mangofactory.swagger.readers.ApiModelReader;
@@ -35,7 +35,7 @@ public class ApiListingScanner {
    private SwaggerPathProvider swaggerPathProvider;
    private List<Command<RequestMappingContext>> readers = newArrayList();
    private SwaggerGlobalSettings swaggerGlobalSettings;
-   private ControllerResourceNamingStrategy controllerNamingStrategy;
+   private ResourceGroupingStrategy controllerNamingStrategy;
    private AuthorizationContext authorizationContext;
 
    public ApiListingScanner(Map<String, List<RequestMappingContext>> resourceGroupRequestMappings,
@@ -49,7 +49,7 @@ public class ApiListingScanner {
    public Map<String, ApiListing> scan() {
 
       if(null == controllerNamingStrategy){
-         controllerNamingStrategy = new DefaultControllerResourceNamingStrategy();
+         controllerNamingStrategy = new ClassOrApiAnnotationResourceGrouping();
       }
 
       Map<String, ApiListing> apiListingMap = newHashMap();
@@ -57,7 +57,7 @@ public class ApiListingScanner {
       int position = 0;
       for (Map.Entry<String, List<RequestMappingContext>> entry : resourceGroupRequestMappings.entrySet()) {
 
-         String controllerGroupName = entry.getKey();
+         String controllerGroupPath = entry.getKey();
 
          Set<String> produces = new LinkedHashSet<String>(2);
          Set<String> consumes = new LinkedHashSet<String>(2);
@@ -90,7 +90,7 @@ public class ApiListingScanner {
 
          String resourcePath = UriComponentsBuilder
                .fromPath(swaggerPathProvider.getApiResourcePrefix())
-               .pathSegment(controllerGroupName)
+               .pathSegment(controllerGroupPath)
                .build()
                .toString();
 
@@ -112,7 +112,7 @@ public class ApiListingScanner {
                toOption(models),
                toOption(null),
                position++);
-         apiListingMap.put(controllerGroupName, apiListing);
+         apiListingMap.put(controllerGroupPath, apiListing);
       }
       return apiListingMap;
    }
@@ -133,11 +133,11 @@ public class ApiListingScanner {
       this.readers = readers;
    }
 
-   public ControllerResourceNamingStrategy getControllerNamingStrategy() {
+   public ResourceGroupingStrategy getControllerNamingStrategy() {
       return controllerNamingStrategy;
    }
 
-   public void setControllerNamingStrategy(ControllerResourceNamingStrategy controllerNamingStrategy) {
+   public void setControllerNamingStrategy(ResourceGroupingStrategy controllerNamingStrategy) {
       this.controllerNamingStrategy = controllerNamingStrategy;
    }
 

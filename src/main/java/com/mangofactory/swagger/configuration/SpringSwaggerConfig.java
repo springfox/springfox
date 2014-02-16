@@ -35,8 +35,8 @@ public class SpringSwaggerConfig {
    }
 
    @Bean
-   public ControllerResourceNamingStrategy defaultControllerResourceNamingStrategy() {
-      return new DefaultControllerResourceNamingStrategy();
+   public ResourceGroupingStrategy defaultResourceGroupingStrategy() {
+      return new ClassOrApiAnnotationResourceGrouping();
    }
 
    @Bean

@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.configuration
 
-import com.mangofactory.swagger.core.DefaultControllerResourceNamingStrategy
+import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
 import com.mangofactory.swagger.core.SwaggerCache
@@ -110,7 +110,7 @@ class SwaggerApiResourceListingSpec extends Specification {
 
       ApiListingReferenceScanner scanner = new ApiListingReferenceScanner()
       scanner.setRequestMappingHandlerMapping([requestHandlerMapping])
-      scanner.setControllerNamingStrategy(new DefaultControllerResourceNamingStrategy())
+      scanner.setResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
       scanner.setSwaggerGroup("swaggerGroup")
 
       scanner.setSwaggerPathProvider(swaggerPathProvider)
@@ -123,15 +123,15 @@ class SwaggerApiResourceListingSpec extends Specification {
     then:
 
       ApiListingReference apiListingReference = resourceListing.apis().head()
-      apiListingReference.path() == "http://127.0.0.1:8080/myApp/api-docs/swaggerGroup/somePath_"
+      apiListingReference.path() == "http://127.0.0.1:8080/myApp/api-docs/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass"
       apiListingReference.position() == 0
-      fromOption(apiListingReference.description()) == "somePath_"
+      fromOption(apiListingReference.description()) == "com.mangofactory.swagger.dummy.DummyClass"
 
     and:
-      ApiListing apiListing = swaggerCache.swaggerApiListingMap['swaggerGroup']['somePath_']
+      ApiListing apiListing = swaggerCache.swaggerApiListingMap['swaggerGroup']['com_mangofactory_swagger_dummy_DummyClass']
       apiListing.swaggerVersion() == '1.2'
       apiListing.basePath() == 'http://127.0.0.1:8080/myApp'
-      apiListing.resourcePath() == '/somePath_'
+      apiListing.resourcePath() == '/com_mangofactory_swagger_dummy_DummyClass'
 
    }
 }
