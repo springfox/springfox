@@ -1,4 +1,4 @@
 language: java
-script: "mvn install -Dgpg.skip=true"
+script: "mvn verify"
 jdk:
   - openjdk6
