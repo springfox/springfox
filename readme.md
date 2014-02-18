@@ -4,7 +4,7 @@
 
 
 ### About
-An upgrade to the swagger-springmvc project to the latest Swagger specification (1.2)
+An upgrade to the swagger-springmvc project to the latest Swagger specification (1.2).
 The swagger specification upgrade to 1.2 has several feature additions and has also refactored it's core model structure.
 See [swagger-core](https://github.com/wordnik/swagger-core)
 The [demo/sample](https://github.com/adrianbk/swagger-springmvc-demo) application is built off of swagger-ui tag `v2.0.4`
@@ -57,13 +57,13 @@ the JSON structure required by swagger-ui.
 
 
 ###### Swagger Spec 1.2 changes:
-- Authorization types: (OAuth, ApiKey, BasicAuth) (swagger-ui has not yet upgraded to support these)
+- Authorization types: (OAuth, ApiKey, BasicAuth).
 - ApiInfo: info, title, licencing, etc.
-- Http media types (produces/consumes)
-- Model annotation changes
-- resource & base path changes
-- Swagger core library has upgraded to scala 2.10.0
-For more detail see: https://github.com/wordnik/swagger-core/wiki/1.2-transition
+- Http media types (produces/consumes).
+- Model annotation changes.
+- resource & base path changes.
+- Swagger core library has upgraded to scala 2.10.0.
+For more detail see: https://github.com/wordnik/swagger-core/wiki/1.2-transition.
 
 
 ##### Summary of features/changes to prior swagger-springmvc library
@@ -252,7 +252,7 @@ Configuration is slightly verbose but on the upside it provides several hooks in
     //Excludes any controllers with the supplied annotations
     apiListingReferenceScanner.setExcludeAnnotations(springSwaggerConfig.defaultExcludeAnnotations());
 
-    //
+    //How to group request mappings to ApiResource's typically by spring controller clesses or @Api.value() 
     apiListingReferenceScanner.setResourceGroupingStrategy(springSwaggerConfig.defaultResourceGroupingStrategy());
 
     //Path provider used to generate the appropriate uri's
