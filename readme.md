@@ -38,6 +38,8 @@ the JSON structure required by swagger-ui.
 ```
 
 ###### Release version
+or maven central: http://repo1.maven.org/maven2/
+
 ```xml
 
   <repositories>
@@ -77,7 +79,7 @@ For more detail see: https://github.com/wordnik/swagger-core/wiki/1.2-transition
 - Http response codes and messages with com.wordnik.swagger.annotations.ApiResponses
 - All uris are, by default, absolute after much deliberation. Relative uri's do not work well with swagger UI and other swagger tools like
   swagger-codegen work much better with absolute uri's. This strategy can be changed by
-  implementing [SwaggerPathProvider](https://github.com/adrianbk/swagger-springmvc/blob/swagger-spec-1.2.0-upgrade/src/main/java/com/mangofactory/swagger/core/SwaggerPathProvider.java)
+  implementing [SwaggerPathProvider](https://github.com/martypitt/swagger-springmvc/blob/rel-0.8-upgrade-spec-preview/src/main/java/com/mangofactory/swagger/core/SwaggerPathProvider.java)
   This strategy is also useful if your api sits behind a proxy like mashery
 
 ##### Notable Dependencies
@@ -164,6 +166,17 @@ Configuration is slightly verbose but on the upside it provides several hooks in
 - Place the following into a spring @Configuration java class or see: [The Sample App Configuration](https://github.com/adrianbk/swagger-springmvc-demo/blob/master/src/main/java/com/ak/swaggermvc/demo/config/SwaggerConfig.java)
 
 ```java
+
+  /**
+   * 
+   * Autowire the bundled swagger config
+   */
+  @Autowired
+  private SpringSwaggerConfig springSwaggerConfig;
+  @Autowired
+  private SpringSwaggerModelConfig springSwaggerModelConfig;
+
+
   /**
    * Adds the jackson scala module to the MappingJackson2HttpMessageConverter registered with spring
    * Swagger core models are scala so we need to be able to convert to JSON
