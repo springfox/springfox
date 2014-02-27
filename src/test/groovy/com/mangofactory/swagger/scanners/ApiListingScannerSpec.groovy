@@ -53,6 +53,8 @@ class ApiListingScannerSpec extends Specification {
       ApiDescription apiDescription = fromScalaList(listing.apis())[0]
       apiDescription.path() == '/api/v1/businesses'
       fromOption(apiDescription.description()) == "methodWithConcreteResponseBody"
+      def models = apiDescription.operations().head()
+
    }
 
    def "should assign global authorizations"() {

@@ -3,8 +3,8 @@ package com.mangofactory.swagger.configuration;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.module.scala.DefaultScalaModule;
-import com.wordnik.swagger.model.Authorization;
-import com.wordnik.swagger.model.AuthorizationType;
+import com.wordnik.swagger.model.ApiListing;
+import com.wordnik.swagger.model.ResourceListing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -44,8 +44,8 @@ public class JacksonScalaSupport {
 
    public Module swaggerSerializationModule(){
       SimpleModule module = new SimpleModule("SwaggerAuthorizationTypeModule");
-      module.addSerializer(AuthorizationType.class, new SwaggerAuthorizationTypeJsonSerializer());
-      module.addSerializer(Authorization.class, new SwaggerAuthorizationJsonSerializer());
+      module.addSerializer(ApiListing.class, new SwaggerApiListingJsonSerializer());
+      module.addSerializer(ResourceListing.class, new SwaggerResourceListingJsonSerializer());
       return module;
    }
 

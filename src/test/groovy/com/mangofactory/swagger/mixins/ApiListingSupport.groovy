@@ -8,7 +8,7 @@ import static com.mangofactory.swagger.ScalaUtils.*
 
 class ApiListingSupport {
 
-   def apiListing(authorizations = emptyScalaList()) {
+   def apiListing(authorizations = emptyScalaList(), models = toOption(null)) {
       scala.collection.immutable.List emptyList = toScalaList(null);
       new ApiListing(
               "1.0",
@@ -20,7 +20,7 @@ class ApiListingSupport {
               emptyList,
               authorizations,
               emptyList,
-              toOption(null),
+              models,
               toOption(null),
               1);
    }

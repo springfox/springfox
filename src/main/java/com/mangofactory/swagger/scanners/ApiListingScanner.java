@@ -18,6 +18,7 @@ import com.wordnik.swagger.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriComponentsBuilder;
+import scala.Option;
 
 import java.util.*;
 
@@ -99,7 +100,12 @@ public class ApiListingScanner {
             authorizations = authorizationContext.getScalaAuthorizations();
          }
 
-         ApiListing apiListing = new ApiListing(
+        Option modelOption = toOption(models);
+        if(null != models){
+          modelOption = toOption(toScalaModelMap(models));
+        }
+
+        ApiListing apiListing = new ApiListing(
                apiVersion,
                swaggerVersion,
                swaggerPathProvider.getAppBasePath(),
@@ -109,7 +115,7 @@ public class ApiListingScanner {
                emptyScalaList(),
                authorizations,
                toScalaList(apiDescriptions),
-               toOption(models),
+              modelOption,
                toOption(null),
                position++);
          apiListingMap.put(controllerGroupPath, apiListing);

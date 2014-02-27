@@ -30,7 +30,7 @@ class OperationCommandReaderSpec extends Specification {
       new OperationNicknameReader()   | 'nickname'   | dummyHandlerMethod()                       | 'dummyMethod'
       new OperationPositionReader()   | 'position'   | dummyHandlerMethod()                       | CURRENT_COUNT
       new OperationPositionReader()   | 'position'   | dummyHandlerMethod('methodWithPosition')   | 5
-      new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod('methodWithDeprecated') | true
-      new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod()                       | false
+      new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod('methodWithDeprecated') | 'true'
+      new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod()                       | 'false'
    }
 }
