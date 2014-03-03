@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.core;
 
 import com.wordnik.swagger.annotations.Api;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -10,6 +9,8 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 @Component
 public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStrategy {
@@ -40,7 +41,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
       String group = controllerClass.getCanonicalName();
 
       Api apiAnnotation = controllerClass.getAnnotation(Api.class);
-      if (null != apiAnnotation && !StringUtils.isBlank(apiAnnotation.value())) {
+      if (null != apiAnnotation && !isBlank(apiAnnotation.value())) {
          group = apiAnnotation.value();
       }
       return group;
