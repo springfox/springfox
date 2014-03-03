@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Ordering.natural;
 import static com.mangofactory.swagger.ScalaUtils.toOption;
 import static java.lang.String.format;
 
@@ -80,7 +81,8 @@ public class ApiListingReferenceScanner {
       }
 
       int groupPosition = 0;
-      for (String resourceGroupUri : resourceGroupRequestMappings.keySet()) {
+     List<String> resourceGroups = natural().sortedCopy(resourceGroupRequestMappings.keySet());
+     for (String resourceGroupUri : resourceGroups) {
          String listingDescription = resourceGroupDescriptions.get(resourceGroupUri);
          String path = UriComponentsBuilder.fromHttpUrl(swaggerPathProvider.getSwaggerDocumentationBasePath())
                .pathSegment(swaggerGroup, resourceGroupUri)
