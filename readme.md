@@ -11,10 +11,7 @@ The [demo/sample](https://github.com/adrianbk/swagger-springmvc-demo) applicatio
 
 There are currently some features not fully supported:
 - Model generation - work in progress to modularize the model generation from prior versions of swagger-springmvc. This version uses the model
-generation that ships with swagger-core which is not as powerful when it comes to polymorphic models
-
-- Oauth/authorization - not yet appearing on swagger-ui page as there is some further work required to transform the swagger-core models to
-the JSON structure required by swagger-ui.
+generation that ships with swagger-core which is not as powerful when it comes to polymorphic models.
 
 ### Sample Application
 
