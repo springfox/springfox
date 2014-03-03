@@ -27,7 +27,7 @@ class SwaggerApiListingJsonSerializerSpec extends Specification {
     mapper.registerModule(mod)
   }
 
-  def "should serialize Authorization types"() {
+  def "should serialize Authorization types with models attached"() {
   given:
     SwaggerSchemaConverter parser = new SwaggerSchemaConverter();
     Option<Model> sModel = parser.read(DummyModels.BusinessModel, new scala.collection.immutable.HashMap());
