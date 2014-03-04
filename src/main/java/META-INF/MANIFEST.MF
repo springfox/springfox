@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Class-Path:
-Library-Version:2.0
-
