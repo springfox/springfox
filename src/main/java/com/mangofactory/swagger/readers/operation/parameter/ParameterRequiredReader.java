@@ -25,19 +25,23 @@ public class ParameterRequiredReader implements Command<RequestMappingContext> {
    private Boolean getAnnotatedRequired(MethodParameter methodParameter) {
       Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
       if (null != methodAnnotations) {
+    	// Default to false, then if any of the multiple parameters mark it as requried then make it true
+         boolean returnValue = false; 
          for (Annotation annotation : methodAnnotations) {
             //Todo - APIParam annotation - required defaults to false. Maybe makes more
             // sense to default to true like springs @RequestParam
             if (annotation instanceof ApiParam) {
-               return ((ApiParam) annotation).required();
+               returnValue |= ((ApiParam) annotation).required();
             } else if (annotation instanceof PathVariable) {
-               return true;
+               // PathVariables are always required by their nature
+               returnValue = true;
             } else if (annotation instanceof RequestParam) {
-               return ((RequestParam) annotation).required();
+               returnValue |= ((RequestParam) annotation).required();
             } else if (annotation instanceof RequestHeader) {
-               return ((RequestHeader) annotation).required();
+               returnValue |= ((RequestHeader) annotation).required();
             }
          }
+         return returnValue;
       }
       return null;
    }
