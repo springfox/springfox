@@ -18,12 +18,15 @@ public class ParameterDataTypeReader implements Command<RequestMappingContext> {
       ResolvedType resolvedType = null;
       String swaggerDataType = ModelUtils.getModelName(parameterType);
 
-
       if (null != parameterType) {
          resolvedType = new TypeResolver().resolve(parameterType);
          swaggerDataType = swaggerGlobalSettings.getParameterDataTypes().get(resolvedType.getErasedType());
       }
       if (null == swaggerDataType) {
+         /**
+          * TODO - the model itself is not being generated - ui only works if that
+          * sane model is response type in another method
+          */
          swaggerDataType = ModelUtils.getModelName(parameterType);
       }
       context.put("dataType", swaggerDataType);

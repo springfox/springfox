@@ -115,7 +115,7 @@ public class ApiListingScanner {
                emptyScalaList(),
                authorizations,
                toScalaList(apiDescriptions),
-              modelOption,
+               modelOption,
                toOption(null),
                position++);
          apiListingMap.put(controllerGroupPath, apiListing);

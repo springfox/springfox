@@ -80,22 +80,33 @@ public class ApiListingReferenceScanner {
          }
       }
 
-      int groupPosition = 0;
+     int groupPosition = 0;
      List<String> resourceGroups = natural().sortedCopy(resourceGroupRequestMappings.keySet());
      for (String resourceGroupUri : resourceGroups) {
-         String listingDescription = resourceGroupDescriptions.get(resourceGroupUri);
-         String path = UriComponentsBuilder.fromHttpUrl(swaggerPathProvider.getSwaggerDocumentationBasePath())
-               .pathSegment(swaggerGroup, resourceGroupUri)
-               .build()
-               .toString();
-         log.info(format("Create resource listing Path: %s Description: %s Position: %s",
-                         path, resourceGroupUri,groupPosition));
+       String listingDescription = resourceGroupDescriptions.get(resourceGroupUri);
 
-         this.apiListingReferences.add(new ApiListingReference(path, toOption(listingDescription), groupPosition++));
-      }
+       String path = null;
+       String swaggerDocumentationBasePath = swaggerPathProvider.getSwaggerDocumentationBasePath();
+       path = resolveListingBasePath(resourceGroupUri, swaggerDocumentationBasePath);
+
+       log.info(format("Creating resource listing Path: %s Description: %s Position: %s",
+           path, listingDescription, groupPosition));
+
+       this.apiListingReferences.add(new ApiListingReference(path, toOption(listingDescription), groupPosition++));
+     }
    }
 
-   private boolean requestMappingMatchesAnIncludePattern(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+  private String resolveListingBasePath(String resourceGroupUri, String swaggerDocumentationBasePath) {
+    if (swaggerDocumentationBasePath.startsWith("http")) {
+      return UriComponentsBuilder.fromHttpUrl(swaggerPathProvider.getSwaggerDocumentationBasePath())
+          .pathSegment(swaggerGroup, resourceGroupUri)
+          .build()
+          .toString();
+    }
+    return UriComponentsBuilder.fromPath(null).pathSegment(resourceGroupUri).build().toString();
+  }
+
+  private boolean requestMappingMatchesAnIncludePattern(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
       PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
       boolean isMatch = requestMappingPatternMatcher.patternConditionsMatchOneOfIncluded(patternsCondition, includePatterns);
       if(isMatch){
