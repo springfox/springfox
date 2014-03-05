@@ -67,8 +67,7 @@ public class ScalaUtils {
         i ++;
       }
       final WrappedArray wa = Predef.wrapRefArray(ts);
-      final Map<String, Model> smap = (Map<String, Model>) Predef$.MODULE$.Map().apply(wa);
-      return smap;
+      return (Map<String, Model>) Predef$.MODULE$.Map().apply(wa);
     }
     return null;
   }

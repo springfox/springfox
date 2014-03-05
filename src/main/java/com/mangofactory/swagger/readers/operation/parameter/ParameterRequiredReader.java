@@ -9,36 +9,32 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.annotation.Annotation;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ParameterRequiredReader implements Command<RequestMappingContext> {
-   @Override
-   public void execute(RequestMappingContext context) {
-      MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
-      Boolean isRequired = true;
-      isRequired = getAnnotatedRequired(methodParameter);
-      if (null == isRequired) {
-         isRequired = true;
-      }
-      context.put("required", isRequired);
-   }
+  @Override
+  public void execute(RequestMappingContext context) {
+    MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
+    context.put("required", getAnnotatedRequired(methodParameter));
+  }
 
-   private Boolean getAnnotatedRequired(MethodParameter methodParameter) {
-      Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
-      if (null != methodAnnotations) {
-         for (Annotation annotation : methodAnnotations) {
-            //Todo - APIParam annotation - required defaults to false. Maybe makes more
-            // sense to default to true like springs @RequestParam
-            if (annotation instanceof ApiParam) {
-               return ((ApiParam) annotation).required();
-            } else if (annotation instanceof PathVariable) {
-               return true;
-            } else if (annotation instanceof RequestParam) {
-               return ((RequestParam) annotation).required();
-            } else if (annotation instanceof RequestHeader) {
-               return ((RequestHeader) annotation).required();
-            }
-         }
+  private Boolean getAnnotatedRequired(MethodParameter methodParameter) {
+    Set<Boolean> requiredSet = new HashSet<Boolean>();
+    Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
+    if (null != methodAnnotations) {
+      for (Annotation annotation : methodAnnotations) {
+        if (annotation instanceof ApiParam) {
+          requiredSet.add(((ApiParam) annotation).required());
+        } else if (annotation instanceof RequestParam) {
+          requiredSet.add(((RequestParam) annotation).required());
+        } else if (annotation instanceof RequestHeader) {
+          requiredSet.add(((RequestHeader) annotation).required());
+        } else if (annotation instanceof PathVariable) {
+          requiredSet.add(true);
+        }
       }
-      return null;
-   }
+    }
+    return requiredSet.contains(true);
+  }
 }

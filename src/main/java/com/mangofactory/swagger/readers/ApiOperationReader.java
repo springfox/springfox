@@ -3,7 +3,16 @@ package com.mangofactory.swagger.readers;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
-import com.mangofactory.swagger.readers.operation.*;
+import com.mangofactory.swagger.readers.operation.OperationAuthReader;
+import com.mangofactory.swagger.readers.operation.OperationDeprecatedReader;
+import com.mangofactory.swagger.readers.operation.OperationHttpMethodReader;
+import com.mangofactory.swagger.readers.operation.OperationNicknameReader;
+import com.mangofactory.swagger.readers.operation.OperationNotesReader;
+import com.mangofactory.swagger.readers.operation.OperationParameterReader;
+import com.mangofactory.swagger.readers.operation.OperationPositionReader;
+import com.mangofactory.swagger.readers.operation.OperationResponseClassReader;
+import com.mangofactory.swagger.readers.operation.OperationResponseMessageReader;
+import com.mangofactory.swagger.readers.operation.OperationSummaryReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.model.Authorization;
 import com.wordnik.swagger.model.Operation;
@@ -13,10 +22,16 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.mangofactory.swagger.ScalaUtils.*;
+import static com.mangofactory.swagger.ScalaUtils.emptyScalaList;
+import static com.mangofactory.swagger.ScalaUtils.toOption;
+import static com.mangofactory.swagger.ScalaUtils.toScalaList;
 
 public class ApiOperationReader implements Command<RequestMappingContext> {
 
