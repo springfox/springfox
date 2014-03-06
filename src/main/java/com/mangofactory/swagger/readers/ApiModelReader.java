@@ -43,18 +43,18 @@ public class ApiModelReader implements Command<RequestMappingContext> {
          log.debug("Swagger core did not find any models");
       }
 
-       Class<?>[] parameterTypes = handlerMethod.getMethod().getParameterTypes();
-       for (Class<?> parameterType : parameterTypes) {
-           String parameterSchemaName = parameterType.isArray() ? parameterType.getComponentType().getSimpleName() : parameterType.getSimpleName();
-           Option<Model> spModel = parser.read(parameterType, new scala.collection.immutable.HashMap());
-           Model pModel = fromOption(spModel);
-           if (null != pModel) {
-               log.debug("Swagger generated parameter model {} models", pModel.id());
-               modelMap.put(parameterSchemaName, pModel);
-           } else {
-               log.debug("Swagger core did not find any parameter models for {}", parameterSchemaName);
-           }
-       }
+      Class<?>[] parameterTypes = handlerMethod.getMethod().getParameterTypes();
+      for (Class<?> parameterType : parameterTypes) {
+          String parameterSchemaName = parameterType.isArray() ? parameterType.getComponentType().getSimpleName() : parameterType.getSimpleName();
+          Option<Model> spModel = parser.read(parameterType, new scala.collection.immutable.HashMap());
+          Model pModel = fromOption(spModel);
+          if (null != pModel) {
+              log.debug("Swagger generated parameter model {} models", pModel.id());
+              modelMap.put(parameterSchemaName, pModel);
+          } else {
+              log.debug("Swagger core did not find any parameter models for {}", parameterSchemaName);
+          }
+      }
 
       log.debug("Finished reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
       context.put("models", modelMap);
