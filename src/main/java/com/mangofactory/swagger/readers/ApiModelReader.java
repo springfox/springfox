@@ -6,9 +6,11 @@ import com.wordnik.swagger.converter.SwaggerSchemaConverter;
 import com.wordnik.swagger.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.HandlerMethod;
 import scala.Option;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -53,17 +55,27 @@ public class ApiModelReader implements Command<RequestMappingContext> {
 
        Method method = handlerMethod.getMethod();
        Map<String, Model> modelMap = newHashMap();
+
        log.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+
        Class<?>[] parameterTypes = method.getParameterTypes();
-       for (Class<?> pType : parameterTypes) {
-           String parameterSchemaName = pType.isArray() ? pType.getComponentType().getSimpleName() : pType.getSimpleName();
-           Option<Model> spModel = parser.read(pType, new scala.collection.immutable.HashMap());
-           Model pModel = fromOption(spModel);
-           if (null != pModel) {
-               log.debug("Swagger generated parameter model {} models", pModel.id());
-               modelMap.put(parameterSchemaName, pModel);
-           } else {
-               log.debug("Swagger core did not find any parameter models for {}", parameterSchemaName);
+       Annotation[][] annotations = method.getParameterAnnotations();
+
+       for (int i=0; i < annotations.length; i++){
+           Annotation[] pAnnotations = annotations[i];
+           for (Annotation annotation : pAnnotations){
+               if (annotation instanceof RequestBody){
+                   Class<?> pType = parameterTypes[i];
+                   String pSchemaName = pType.isArray() ? pType.getComponentType().getSimpleName() : pType.getSimpleName();
+                   Option<Model> spModel = parser.read(pType, new scala.collection.immutable.HashMap());
+                   Model pModel = fromOption(spModel);
+                   if (null != pModel) {
+                       log.debug("Swagger generated parameter model {} models", pModel.id());
+                       modelMap.put(pSchemaName, pModel);
+                   } else {
+                       log.debug("Swagger core did not find any parameter models for {}", pSchemaName);
+                   }
+               }
            }
        }
        log.debug("Finished reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
