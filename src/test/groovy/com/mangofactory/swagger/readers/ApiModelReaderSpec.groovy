@@ -11,6 +11,8 @@ import com.wordnik.swagger.model.Operation
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
 
+import javax.servlet.http.HttpServletResponse
+
 import static com.mangofactory.swagger.ScalaUtils.*
 
 @Mixin([RequestMappingSupport, ApiOperationSupport])
@@ -103,5 +105,22 @@ class ApiModelReaderSpec extends Specification {
       )
       context.put("apiDescriptionList", [description])
       context
+   }
+
+   def "should only generate models for request parameters that are annotated with Springs RequestBody"(){
+     given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestBodyAnnotation',
+             DummyModels.BusinessModel.class,
+             HttpServletResponse.class,
+             DummyModels.AnnotatedBusinessModel.class
+      )
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'),handlerMethod)
+     when:
+      ApiModelReader apiModelReader = new ApiModelReader()
+      apiModelReader.execute(context)
+      Map<String, Object> result = context.getResult()
+     then:
+      Map<String, Model> models = result.get("models")
+      models.size() == 1
    }
 }

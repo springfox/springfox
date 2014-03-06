@@ -4,10 +4,12 @@ import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.wordnik.swagger.annotations.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 public class DummyClass {
@@ -111,6 +113,12 @@ public class DummyClass {
    @ResponseBody
    public Date methodWithDateResponseBody() {
       return null;
+   }
+
+   public void methodParameterWithRequestBodyAnnotation(
+           @RequestBody DummyModels.BusinessModel model,
+           HttpServletResponse response,
+           DummyModels.AnnotatedBusinessModel annotatedBusinessModel){
    }
 
    @ApiResponses({ @ApiResponse(code = 413, message = "a message")})

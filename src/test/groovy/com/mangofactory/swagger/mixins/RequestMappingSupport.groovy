@@ -30,6 +30,12 @@ class RequestMappingSupport {
       new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
    }
 
+   def dummyHandlerMethod(String methodName = "dummyMethod", Class<?>... parameterTypes ) {
+       def clazz = new DummyClass()
+       Class c = clazz.getClass();
+       new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
+   }
+
    def dummyControllerHandlerMethod(String methodName = "dummyMethod", parameterTypes = null ) {
       def clazz = new DummyController()
       Class c = clazz.getClass();
