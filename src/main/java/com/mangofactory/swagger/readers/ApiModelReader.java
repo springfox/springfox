@@ -44,9 +44,9 @@ public class ApiModelReader implements Command<RequestMappingContext> {
       }
 
       Class<?>[] parameterTypes = handlerMethod.getMethod().getParameterTypes();
-      for (Class<?> parameterType : parameterTypes) {
-          String parameterSchemaName = parameterType.isArray() ? parameterType.getComponentType().getSimpleName() : parameterType.getSimpleName();
-          Option<Model> spModel = parser.read(parameterType, new scala.collection.immutable.HashMap());
+      for (Class<?> pType : parameterTypes) {
+          String parameterSchemaName = pType.isArray() ? pType.getComponentType().getSimpleName() : pType.getSimpleName();
+          Option<Model> spModel = parser.read(pType, new scala.collection.immutable.HashMap());
           Model pModel = fromOption(spModel);
           if (null != pModel) {
               log.debug("Swagger generated parameter model {} models", pModel.id());
