@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
 import scala.Option;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
@@ -16,6 +17,7 @@ import static com.mangofactory.swagger.ScalaUtils.fromOption;
 
 public class ApiModelReader implements Command<RequestMappingContext> {
    private static final Logger log = LoggerFactory.getLogger(ApiModelReader.class);
+   private SwaggerSchemaConverter parser = new SwaggerSchemaConverter();
 
    @Override
    public void execute(RequestMappingContext context) {
@@ -23,7 +25,6 @@ public class ApiModelReader implements Command<RequestMappingContext> {
 
       log.debug("Reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
 
-      SwaggerSchemaConverter parser = new SwaggerSchemaConverter();
       Map<String, Model> modelMap = newHashMap();
       Class<?> modelType = handlerMethod.getMethod().getReturnType();
 
@@ -42,23 +43,30 @@ public class ApiModelReader implements Command<RequestMappingContext> {
       } else{
          log.debug("Swagger core did not find any models");
       }
-
-      Class<?>[] parameterTypes = handlerMethod.getMethod().getParameterTypes();
-      for (Class<?> pType : parameterTypes) {
-          String parameterSchemaName = pType.isArray() ? pType.getComponentType().getSimpleName() : pType.getSimpleName();
-          Option<Model> spModel = parser.read(pType, new scala.collection.immutable.HashMap());
-          Model pModel = fromOption(spModel);
-          if (null != pModel) {
-              log.debug("Swagger generated parameter model {} models", pModel.id());
-              modelMap.put(parameterSchemaName, pModel);
-          } else {
-              log.debug("Swagger core did not find any parameter models for {}", parameterSchemaName);
-          }
-      }
+      modelMap.putAll( readParametersApiModel(handlerMethod));
 
       log.debug("Finished reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
       context.put("models", modelMap);
    }
 
+   private Map<String, Model> readParametersApiModel(HandlerMethod handlerMethod ){
 
+       Method method = handlerMethod.getMethod();
+       Map<String, Model> modelMap = newHashMap();
+       log.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+       Class<?>[] parameterTypes = method.getParameterTypes();
+       for (Class<?> pType : parameterTypes) {
+           String parameterSchemaName = pType.isArray() ? pType.getComponentType().getSimpleName() : pType.getSimpleName();
+           Option<Model> spModel = parser.read(pType, new scala.collection.immutable.HashMap());
+           Model pModel = fromOption(spModel);
+           if (null != pModel) {
+               log.debug("Swagger generated parameter model {} models", pModel.id());
+               modelMap.put(parameterSchemaName, pModel);
+           } else {
+               log.debug("Swagger core did not find any parameter models for {}", parameterSchemaName);
+           }
+       }
+       log.debug("Finished reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+       return modelMap;
+   }
 }
