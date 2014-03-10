@@ -35,7 +35,7 @@ public class DefaultSwaggerPathProvider implements SwaggerPathProvider {
    public String getRequestMappingEndpoint(String requestMappingPattern) {
       String result = requestMappingPattern;
       //remove regex portion '/{businessId:\\w+}'
-      result = result.replaceAll(":.*?}", "}");
+      result = result.replaceAll("\\{(.*?):.*?\\}", "{$1}");
       return result.isEmpty() ? "/" : result;
    }
 
