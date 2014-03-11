@@ -7,7 +7,15 @@
 		</layout>
 	</appender>
 	<logger name="com.mangofactory" additivity="false">
-		<level value="INFO" />
+		<level value="DEBUG" />
 		<appender-ref ref="CONSOLE_LOG" />
 	</logger>
+	<logger name="org.springframework" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="CONSOLE_LOG" />
+	</logger>
+	<root>
+		<level value="DEBUG" />
+		<appender-ref ref="CONSOLE_LOG" />
+	</root>
 </log4j:configuration>

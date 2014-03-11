@@ -53,7 +53,7 @@
 
         <!-- Size checks - http://checkstyle.sourceforge.net/config_sizes.html -->
         <module name="LineLengthCheck">
-            <property name="max" value="120"/>
+            <property name="max" value="130"/>
             <property name="tabWidth" value="4"/>
             <property name="ignorePattern" value="^import"/>
         </module>
