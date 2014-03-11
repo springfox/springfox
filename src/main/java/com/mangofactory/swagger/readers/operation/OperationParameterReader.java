@@ -11,6 +11,7 @@ import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.method.HandlerMethod;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,8 +29,8 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
       List<Parameter> parameters = newArrayList();
 
       for (MethodParameter methodParameter : methodParameters) {
-         Class<?> parameterType = methodParameter.getParameterType();
-         if (!shouldIgnore(parameterType, swaggerGlobalSettings.getIgnorableParameterTypes())) {
+
+         if (!shouldIgnore(methodParameter, swaggerGlobalSettings.getIgnorableParameterTypes())) {
 
             RequestMappingContext parameterContext = new RequestMappingContext(context.getRequestMappingInfo(), handlerMethod);
             methodParameter.initParameterNameDiscovery(new LocalVariableTableParameterNameDiscoverer());
@@ -69,11 +70,17 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
       context.put("parameters", parameters);
    }
 
-   private boolean shouldIgnore(Class paramType, Set<Class> ignorableParamTypes) {
+   private boolean shouldIgnore(MethodParameter parameter, Set<Class> ignorableParamTypes) {
       if (null != ignorableParamTypes && !ignorableParamTypes.isEmpty()) {
-         if (ignorableParamTypes.contains(paramType)) {
+
+         if (ignorableParamTypes.contains( parameter.getParameterType() )) {
             return true;
          }
+	     for (Annotation annotation : parameter.getParameterAnnotations()) {
+		     if(ignorableParamTypes.contains( annotation.annotationType() )) {
+			     return true;
+		     }
+	     }
       }
       return false;
    }
