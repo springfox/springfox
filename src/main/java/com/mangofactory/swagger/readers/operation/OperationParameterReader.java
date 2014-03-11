@@ -76,11 +76,11 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
          if (ignorableParamTypes.contains( parameter.getParameterType() )) {
             return true;
          }
-	     for (Annotation annotation : parameter.getParameterAnnotations()) {
-		     if(ignorableParamTypes.contains( annotation.annotationType() )) {
-			     return true;
-		     }
-	     }
+         for (Annotation annotation : parameter.getParameterAnnotations()) {
+             if(ignorableParamTypes.contains( annotation.annotationType() )) {
+                 return true;
+             }
+         }
       }
       return false;
    }
