@@ -12,6 +12,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
+import static com.mangofactory.swagger.dummy.DummyModels.Ignorable;
+
 public class DummyClass {
    public void dummyMethod() {
    }
@@ -84,6 +86,9 @@ public class DummyClass {
    }
 
    public void methodWithInteger(Integer integer) {
+   }
+
+   public void methodWithAnnotatedInteger(@Ignorable Integer integer) {
    }
 
    @RequestMapping("/businesses/{businessId}")

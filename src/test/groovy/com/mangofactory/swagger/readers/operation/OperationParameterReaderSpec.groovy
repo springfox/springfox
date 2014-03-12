@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.readers.operation
 import com.mangofactory.swagger.configuration.SpringSwaggerModelConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.Parameter
@@ -26,7 +27,7 @@ class OperationParameterReaderSpec extends Specification {
    @Shared SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings()
 
    def setup() {
-      swaggerGlobalSettings.setIgnorableParameterTypes([ServletRequest, ServletResponse, HttpServletRequest, HttpServletResponse, BindingResult, ServletContext] as Set)
+      swaggerGlobalSettings.setIgnorableParameterTypes([ServletRequest, ServletResponse, HttpServletRequest, HttpServletResponse, BindingResult, ServletContext, DummyModels.Ignorable.class] as Set)
       swaggerGlobalSettings.setParameterDataTypes(springSwaggerModelConfig.defaultParameterDataTypes())
       swaggerGlobalSettings.setGlobalResponseMessages(newHashMap())
    }
@@ -48,6 +49,7 @@ class OperationParameterReaderSpec extends Specification {
       dummyHandlerMethod('methodWithServletRequest', ServletRequest.class) | 0
       dummyHandlerMethod('methodWithBindingResult', BindingResult.class)   | 0
       dummyHandlerMethod('methodWithInteger', Integer.class)               | 1
+      dummyHandlerMethod('methodWithAnnotatedInteger', Integer.class)      | 0
    }
 
    def "Should read a request mapping method without APIParameter annotation"() {
