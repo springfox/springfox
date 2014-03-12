@@ -27,7 +27,9 @@ class OperationParameterReaderSpec extends Specification {
    @Shared SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings()
 
    def setup() {
-      swaggerGlobalSettings.setIgnorableParameterTypes([ServletRequest, ServletResponse, HttpServletRequest, HttpServletResponse, BindingResult, ServletContext, DummyModels.Ignorable.class] as Set)
+      swaggerGlobalSettings.setIgnorableParameterTypes([ServletRequest, ServletResponse, HttpServletRequest,
+          HttpServletResponse, BindingResult, ServletContext, DummyModels.Ignorable.class] as Set)
+
       swaggerGlobalSettings.setParameterDataTypes(springSwaggerModelConfig.defaultParameterDataTypes())
       swaggerGlobalSettings.setGlobalResponseMessages(newHashMap())
    }

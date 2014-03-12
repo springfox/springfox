@@ -97,7 +97,9 @@ E.g. Default response messages for HTTP GET methods
   ));
 ```
 
-- Configurable global ignored spring mvc controller method parameters/`HandlerMethodArgumentResolver`'s
+
+Configurable global ignored spring mvc controller method parameters/`HandlerMethodArgumentResolver`'s
+Annotation classes can also be added here to ignore method parameters with a specific annotation.
 
 E.g.
 ```java
