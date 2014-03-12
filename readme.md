@@ -315,6 +315,11 @@ Skipping coverage
 ```
 mvn deploy -Djacoco.skip=true
 ```
+
+Pre Commit or before submitting a pull request
+```
+mvn verify
+```
 License
 -------
 
