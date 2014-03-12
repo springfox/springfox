@@ -3,6 +3,11 @@ package com.mangofactory.swagger.dummy;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 public class DummyModels {
 
    public class BusinessModel {
@@ -81,5 +86,9 @@ public class DummyModels {
          this.name = name;
       }
    }
+
+   @Target(ElementType.PARAMETER)
+   @Retention(RetentionPolicy.RUNTIME)
+   public @interface Ignorable { }
 
 }
