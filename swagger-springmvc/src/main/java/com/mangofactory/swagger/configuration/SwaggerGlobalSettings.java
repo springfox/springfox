@@ -16,11 +16,6 @@ public class SwaggerGlobalSettings {
     private Set<Class> ignorableParameterTypes;
 
     /**
-     * Map of java primitive types to swagger specific parameter dataTypes
-     */
-    private Map<Class, String> parameterDataTypes;
-
-    /**
      * Map of spring RequestMethod's to a list of http status codes and accompanying messages
      *
      * @see com.mangofactory.swagger.readers.operation.OperationResponseMessageReader

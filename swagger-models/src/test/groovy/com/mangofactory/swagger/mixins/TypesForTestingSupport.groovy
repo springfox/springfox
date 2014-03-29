@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.mixins
-
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.models.*
@@ -39,6 +38,11 @@ class TypesForTestingSupport {
   static ResolvedType genericClass() {
     new TypeResolver().resolve(GenericType, SimpleType)
   }
+
+  static ResolvedType genericClassOfType(def type) {
+    new TypeResolver().resolve(GenericType, type)
+  }
+
   static ResolvedType genericClassWithListField() {
     def resolver = new TypeResolver()
     resolver.resolve(GenericType, resolver.resolve(List, SimpleType))
@@ -86,4 +90,13 @@ class TypesForTestingSupport {
     TypeWithGettersAndSetters
   }
 
+  static ResolvedType hashMap(def keyClazz, def valueClazz) {
+    def resolver = new TypeResolver()
+    resolver.resolve(Map, keyClazz, valueClazz)
+  }
+
+  static ResolvedType genericMap(def toResolve, def key, def value) {
+    def resolver = new TypeResolver()
+    resolver.resolve(toResolve, resolver.resolve(Map.Entry, key, value));
+  }
 }

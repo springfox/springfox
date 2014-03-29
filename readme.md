@@ -198,7 +198,6 @@ Configuration is slightly verbose but on the upside it provides several hooks in
     SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
     swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages());
     swaggerGlobalSettings.setIgnorableParameterTypes(springSwaggerConfig.defaultIgnorableParameterTypes());
-    swaggerGlobalSettings.setParameterDataTypes(springSwaggerModelConfig.defaultParameterDataTypes());
     return swaggerGlobalSettings;
   }
 
