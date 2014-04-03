@@ -79,6 +79,20 @@ class DefaultSwaggerControllerSpec extends Specification {
 
   }
 
+  def "should respond with api listing for a given resource group prefixed with a swagger group"() {
+    given:
+    SwaggerCache swaggerCache = new SwaggerCache();
+    swaggerCache.swaggerApiListingMap = ['businesses': apiListing()]
+    controller.swaggerCache = swaggerCache
+    when:
+    MvcResult result = mockMvc.perform(get("/api-docs/some-swagger-group/businesses")).andDo(print()).andReturn()
+    def responseJson = jsonBodyResponse(result)
+
+    then:
+    result.getResponse().getStatus() == 200
+
+  }
+
   def "should respond with auth included"() {
   given:
     SwaggerCache swaggerCache = new SwaggerCache();

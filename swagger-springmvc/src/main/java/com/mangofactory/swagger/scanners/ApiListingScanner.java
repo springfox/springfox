@@ -52,7 +52,7 @@ public class ApiListingScanner {
       this.resourceGroupRequestMappings = resourceGroupRequestMappings;
       this.swaggerPathProvider = swaggerPathProvider;
       this.authorizationContext = authorizationContext;
-        this.modelProvider = modelProvider;
+      this.modelProvider = modelProvider;
     }
 
    public Map<String, ApiListing> scan() {
