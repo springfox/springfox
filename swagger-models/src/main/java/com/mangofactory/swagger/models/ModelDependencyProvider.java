@@ -25,7 +25,17 @@ public class ModelDependencyProvider {
         return FluentIterable
                 .from(resolvedDependencies(modelContext))
                 .filter(ignorableTypes(modelContext))
+                .filter(baseTypes())
                 .toSet();
+    }
+
+    private Predicate<ResolvedType> baseTypes() {
+        return new Predicate<ResolvedType>() {
+            @Override
+            public boolean apply(ResolvedType resolvedType) {
+                return !Types.isBaseType(typeName(resolvedType));
+            }
+        };
     }
 
     private Predicate<ResolvedType> ignorableTypes(final ModelContext modelContext) {
@@ -41,9 +51,21 @@ public class ModelDependencyProvider {
     private List<ResolvedType> resolvedDependencies(ModelContext modelContext) {
         ResolvedType resolvedType = modelContext.resolvedType(typeResolver);
         if (Types.isBaseType(typeName(resolvedType))) {
+            modelContext.seen(resolvedType);
             return newArrayList();
         }
-        return resolvedPropertiesAndFields(modelContext, resolvedType);
+        List<ResolvedType> dependencies = newArrayList(resolvedTypeParameters(modelContext, resolvedType));
+        dependencies.addAll(resolvedPropertiesAndFields(modelContext, resolvedType));
+        return dependencies;
+    }
+
+    private List<? extends ResolvedType> resolvedTypeParameters(ModelContext modelContext, ResolvedType resolvedType) {
+        List<ResolvedType> parameters = newArrayList();
+        for (ResolvedType parameter : resolvedType.getTypeParameters()) {
+            parameters.add(parameter);
+            parameters.addAll(resolvedDependencies(ModelContext.fromParent(modelContext, parameter)));
+        }
+        return parameters;
     }
 
     private List<ResolvedType> resolvedPropertiesAndFields(ModelContext modelContext, ResolvedType resolvedType) {

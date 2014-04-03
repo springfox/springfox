@@ -105,6 +105,8 @@ class SwaggerApiResourceListingSpec extends Specification {
 
      def settings = new SwaggerGlobalSettings()
      settings.setIgnorableParameterTypes(new SpringSwaggerConfig().defaultIgnorableParameterTypes())
+     SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+     settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
      swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
 
       Map handlerMethods = [(requestMappingInfo("somePath/")): dummyHandlerMethod()]

@@ -2,6 +2,7 @@ package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.models.*
+import com.mangofactory.swagger.models.alternates.Entry
 import org.springframework.http.ResponseEntity
 
 class TypesForTestingSupport {
@@ -97,6 +98,6 @@ class TypesForTestingSupport {
 
   static ResolvedType genericMap(def toResolve, def key, def value) {
     def resolver = new TypeResolver()
-    resolver.resolve(toResolve, resolver.resolve(Map.Entry, key, value));
+    resolver.resolve(toResolve, resolver.resolve(Entry, key, value));
   }
 }

@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.readers.operation
 
+import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -12,7 +13,10 @@ class OperationResponseClassReaderSpec extends Specification {
 
     given:
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
-      context.put("swaggerGlobalSettings", new SwaggerGlobalSettings())
+      def settings = new SwaggerGlobalSettings()
+      settings.alternateTypeProvider = new SpringSwaggerConfig().defaultAlternateTypeProvider();
+
+      context.put("swaggerGlobalSettings", settings)
       OperationResponseClassReader operationResponseClassReader = new OperationResponseClassReader()
 
     when:

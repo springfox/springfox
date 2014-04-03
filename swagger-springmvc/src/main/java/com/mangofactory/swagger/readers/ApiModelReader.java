@@ -49,6 +49,7 @@ public class ApiModelReader implements Command<RequestMappingContext> {
         HandlerMethodResolver handlerMethodResolver
                 = new HandlerMethodResolver(swaggerGlobalSettings.getTypeResolver());
         ResolvedType modelType = ModelUtils.handlerReturnType(swaggerGlobalSettings.getTypeResolver(), handlerMethod);
+        modelType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(modelType);
 
         ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
         if (null != apiOperationAnnotation && Void.class != apiOperationAnnotation.response()) {
@@ -98,7 +99,9 @@ public class ApiModelReader implements Command<RequestMappingContext> {
                     ResolvedMethodParameter pType = parameterTypes.get(i);
                     if (!settings.getIgnorableParameterTypes()
                             .contains(pType.getResolvedParameterType().getErasedType())) {
-                        ModelContext modelContext = ModelContext.inputParam(pType.getResolvedParameterType());
+                        ResolvedType modelType = settings.getAlternateTypeProvider().alternateFor(pType
+                                .getResolvedParameterType());
+                        ModelContext modelContext = ModelContext.inputParam(modelType);
                         markIgnorablesAsHasSeen(settings.getIgnorableParameterTypes(), modelContext);
                         Optional<Model> pModel = modelProvider.modelFor(modelContext);
                         if (pModel.isPresent()) {

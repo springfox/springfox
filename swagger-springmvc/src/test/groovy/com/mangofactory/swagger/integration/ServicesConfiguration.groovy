@@ -74,6 +74,7 @@ public class ServicesConfiguration {
     SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
     swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages());
     swaggerGlobalSettings.setIgnorableParameterTypes(springSwaggerConfig.defaultIgnorableParameterTypes());
+    swaggerGlobalSettings.setAlternateTypeProvider(springSwaggerConfig.defaultAlternateTypeProvider());
     return swaggerGlobalSettings;
   }
 

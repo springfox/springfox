@@ -310,54 +310,45 @@ testcases:
 
   - parentUri: "/api-docs/pets"
     index: 13
-    testDescription: "Verified concrete Map<String, Pet> is supported"
+    testDescription: "Verified concrete Map<string, Pet> is supported"
     expectedUri: "/pets/echo"
-    returnType: "Map«string,Pet»"
-#    returnType: "List[Entry«String,Pet»]"#DK TODO: fix this
+    returnType: "List[Entry«string,Pet»]"
     parameters:
-#       - type: "List[Entry«String,Pet»]" //DK TODO: alternate types
-       - type: "Map«string,Pet»"
+       - type: "List[Entry«string,Pet»]"
          name: "someInput"
 
   - parentUri: "/api-docs/pets"
     index: 14
-    testDescription: "Verfied generic Map<String, Object> maps to any"
+    testDescription: "Verfied generic Map<string, Object> maps to any"
     expectedUri: "/pets/transformPetNameToPetMapToAny"
-#    returnType: "any" #DK TODO: fix this
-    returnType: "Map«string,object»"
+    returnType: "object"
     parameters:
-#       - type: "List[Entry«String,Pet»]" DK TODO: allow alternate types
-       - type: "Map«string,Pet»"
+       - type: "List[Entry«string,Pet»]"
          name: "someInput"
 
   - parentUri: "/api-docs/pets"
     index: 15
     testDescription: "Verfied generic Map<Object,Object> is supported"
     expectedUri: "/pets/transformPetNameToPetMapToGenericOpenMap"
-#    returnType: "any" #DK TODO: fix this
-    returnType: "Map«object,object»"
+    returnType: "object"
     parameters:
-#       - type: "List[Entry«String,Pet»]" DK TODO: allow alternate types
-       - type: "Map«string,Pet»"
+       - type: "List[Entry«string,Pet»]"
          name: "someInput"
 
   - parentUri: "/api-docs/pets"
     index: 16
     testDescription: "Verified non-generic Map is supported"
     expectedUri: "/pets/transformPetNameToPetMapToOpenMap"
-#    returnType: "any" #DK TODO: fix this
-    returnType: "Map"
+    returnType: "object"
     parameters:
-#       - type: "List[Entry«String,Pet»]" DK TODO: allow alternate types
-       - type: "Map«string,Pet»"
+       - type: "List[Entry«string,Pet»]"
          name: "someInput"
 
   - parentUri: "/api-docs/pets"
     index: 17
     testDescription: "Verified nested generic keys and values are supported for Maps"
     expectedUri: "/pets/nameToNickNamesMap"
-#    returnType: "List[Entry«String,List«String»»]" DK TODO: Make this happen
-    returnType: "Map«string,List«string»»"
+    returnType: "List[Entry«string,List«string»»]"
 
   - parentUri: "/api-docs/pets"
     index: 18

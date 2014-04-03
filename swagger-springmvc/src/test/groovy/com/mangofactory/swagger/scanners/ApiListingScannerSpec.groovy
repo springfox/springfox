@@ -42,7 +42,9 @@ class ApiListingScannerSpec extends Specification {
               defaultModelProvider(), null)
 
      def settings = new SwaggerGlobalSettings()
-     settings.ignorableParameterTypes = new SpringSwaggerConfig().defaultIgnorableParameterTypes()
+     SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+     settings.ignorableParameterTypes = springSwaggerConfig.defaultIgnorableParameterTypes()
+     settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
      scanner.setSwaggerGlobalSettings(settings)
 
     when:
@@ -74,7 +76,9 @@ class ApiListingScannerSpec extends Specification {
       ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider(),
               defaultModelProvider(), null)
      def settings = new SwaggerGlobalSettings()
-     settings.ignorableParameterTypes = new SpringSwaggerConfig().defaultIgnorableParameterTypes()
+     SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+     settings.ignorableParameterTypes = springSwaggerConfig.defaultIgnorableParameterTypes()
+     settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
      scanner.setSwaggerGlobalSettings(settings)
 
       AuthorizationContext authorizationContext = new AuthorizationContext.AuthorizationContextBuilder(defaultAuth())

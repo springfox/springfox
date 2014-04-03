@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.readers
 
+import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
 import com.mangofactory.swagger.mixins.RequestMappingSupport
@@ -27,7 +28,11 @@ class ApiDescriptionReaderSpec extends Specification {
 
       HandlerMethod handlerMethod = dummyHandlerMethod()
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo, handlerMethod)
-      context.put("swaggerGlobalSettings", new SwaggerGlobalSettings())
+
+      def settings = new SwaggerGlobalSettings()
+      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+      settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
+      context.put("swaggerGlobalSettings", settings)
     when:
       apiDescriptionReader.execute(context)
       Map<String, Object> result = context.getResult()

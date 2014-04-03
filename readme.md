@@ -84,6 +84,11 @@ For more detail see: https://github.com/wordnik/swagger-core/wiki/1.2-transition
 - scala lib 2.10.0
 - jackson 2.1.5 (older/newer versions may work)
 
+##### Documentation and Javadocs
+By no means is the documentation great but the project has plenty of tests and we're slowly chipping away at the
+documentation. The latest javadocs are available [here](http://martypitt.github.io/swagger-springmvc/). Contributions
+that add to test coverage and documentation is always welcome! :)
+
 ##### Features
 - Allows configuration of default response messages based on HTTP methods which are displayed on all api operations on swagger-ui
 
@@ -197,7 +202,11 @@ Configuration is slightly verbose but on the upside it provides several hooks in
   public SwaggerGlobalSettings swaggerGlobalSettings() {
     SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
     swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages());
+
+    // This is where we add types to ignore (or use the default provided types)
     swaggerGlobalSettings.setIgnorableParameterTypes(springSwaggerConfig.defaultIgnorableParameterTypes());
+    // This is where we add type substitutions (or use the default provided alternates)
+    swaggerGlobalSettings.setAlternateTypeProvider(springSwaggerConfig.defaultAlternateTypeProvider());
     return swaggerGlobalSettings;
   }
 

@@ -96,7 +96,9 @@ public class AccessorsProvider {
     public List<BeanModelProperty> in(ResolvedType resolvedType) {
         MemberResolver resolver = new MemberResolver(typeResolver);
         resolver.setIncludeLangObject(false);
-
+        if (resolvedType.getErasedType() == Object.class) {
+            return newArrayList();
+        }
         ResolvedTypeWithMembers typeWithMembers = resolver.resolve(resolvedType, null, null);
         return FluentIterable
                 .from(newArrayList(typeWithMembers.getMemberMethods()))

@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.wordnik.swagger.model.ResponseMessage;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -22,6 +23,7 @@ public class SwaggerGlobalSettings {
      */
     private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
     private TypeResolver typeResolver = new TypeResolver();
+    private AlternateTypeProvider alternateTypeProvider;
 
     public Set<Class> getIgnorableParameterTypes() {
         return ignorableParameterTypes;
@@ -29,6 +31,10 @@ public class SwaggerGlobalSettings {
 
     public void setIgnorableParameterTypes(Set<Class> ignorableParameterTypes) {
         this.ignorableParameterTypes = ignorableParameterTypes;
+    }
+
+    public void setAlternateTypeProvider(AlternateTypeProvider alternateTypeProvider) {
+        this.alternateTypeProvider = alternateTypeProvider;
     }
 
     public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {
@@ -41,5 +47,9 @@ public class SwaggerGlobalSettings {
 
     public TypeResolver getTypeResolver() {
         return typeResolver;
+    }
+
+    public AlternateTypeProvider getAlternateTypeProvider() {
+        return alternateTypeProvider;
     }
 }

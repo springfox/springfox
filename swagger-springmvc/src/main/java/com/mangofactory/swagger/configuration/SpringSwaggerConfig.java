@@ -1,11 +1,14 @@
 package com.mangofactory.swagger.configuration;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.DefaultSwaggerPathProvider;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.core.SpringGroupingStrategy;
 import com.mangofactory.swagger.core.SwaggerCache;
 import com.mangofactory.swagger.core.SwaggerPathProvider;
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
+import com.mangofactory.swagger.models.alternates.WildcardType;
 import com.wordnik.swagger.model.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +36,7 @@ import java.util.Set;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.swagger.ScalaUtils.*;
+import static com.mangofactory.swagger.models.alternates.Alternates.*;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -83,6 +87,21 @@ public class SpringSwaggerConfig {
         ignored.add(ServletContext.class);
         ignored.add(UriComponentsBuilder.class);
         return ignored;
+    }
+
+    @Bean
+    public AlternateTypeProvider defaultAlternateTypeProvider() {
+        AlternateTypeProvider alternateTypeProvider = new AlternateTypeProvider();
+        TypeResolver typeResolver = new TypeResolver();
+        alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class), typeResolver.resolve(Object.class)));
+        alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, String.class, Object.class),
+                        typeResolver.resolve(Object.class)));
+        alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, Object.class, Object.class),
+                                typeResolver.resolve(Object.class)));
+        alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, String.class, String.class),
+                                        typeResolver.resolve(Object.class)));
+        alternateTypeProvider.addRule(newMapRule(WildcardType.class, WildcardType.class));
+        return alternateTypeProvider;
     }
 
     /**

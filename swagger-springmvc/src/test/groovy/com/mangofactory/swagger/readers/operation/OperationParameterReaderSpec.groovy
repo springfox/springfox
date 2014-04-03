@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.readers.operation
 
+import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
@@ -28,7 +29,8 @@ class OperationParameterReaderSpec extends Specification {
    def setup() {
       swaggerGlobalSettings.setIgnorableParameterTypes([ServletRequest, ServletResponse, HttpServletRequest,
           HttpServletResponse, BindingResult, ServletContext, DummyModels.Ignorable.class] as Set)
-
+      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+      swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
       swaggerGlobalSettings.setGlobalResponseMessages(newHashMap())
    }
 

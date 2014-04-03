@@ -1,19 +1,14 @@
 package com.mangofactory.swagger.readers.operation
-
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.ModelUtils
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.wordnik.swagger.annotations.ApiResponse
-import com.wordnik.swagger.annotations.ApiResponses
 import com.wordnik.swagger.model.ResponseMessage
-import org.springframework.core.MethodParameter
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
-import spock.lang.Unroll
 
-import static com.mangofactory.swagger.ScalaUtils.fromOption
+import static com.mangofactory.swagger.ScalaUtils.*
 
 @Mixin(RequestMappingSupport)
 class OperationResponseMessageReaderSpec extends Specification {
@@ -22,6 +17,7 @@ class OperationResponseMessageReaderSpec extends Specification {
     given:
       SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+      swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
       swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages())
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
@@ -44,6 +40,7 @@ class OperationResponseMessageReaderSpec extends Specification {
       SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
       swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages())
+      swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithApiResponses'))
 
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
@@ -64,6 +61,7 @@ class OperationResponseMessageReaderSpec extends Specification {
       SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
       swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages())
+      swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithConcreteResponseBody'))
 
       new ModelUtils()

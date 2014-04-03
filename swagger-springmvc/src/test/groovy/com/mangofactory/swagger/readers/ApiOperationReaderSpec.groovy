@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.readers
 
 import com.mangofactory.swagger.authorization.AuthorizationContext
+import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
@@ -35,7 +36,11 @@ class ApiOperationReaderSpec extends Specification {
               .withIncludePatterns([".*"])
               .withRequestMethods(RequestMethod.values())
               .build()
-      context.put("swaggerGlobalSettings", new SwaggerGlobalSettings())
+
+      def settings = new SwaggerGlobalSettings()
+      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+      settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
+      context.put("swaggerGlobalSettings", settings)
       context.put("requestMappingPattern", "/anything")
       context.put("authorizationContext", authorizationContext)
 

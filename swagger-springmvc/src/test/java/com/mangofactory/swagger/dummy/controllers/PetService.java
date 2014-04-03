@@ -103,7 +103,8 @@ public class PetService {
     }
 
     @RequestMapping(value="/echo", method=RequestMethod.POST)
-    public Map<String, Pet> echo(Map<String, Pet> someInput) {
+    @ResponseBody
+    public Map<String, Pet> echo(@RequestBody Map<String, Pet> someInput) {
         throw new NotImplementedException();
     }
 

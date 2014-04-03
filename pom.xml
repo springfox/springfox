@@ -194,7 +194,7 @@
                         <exclude>**/com/mangofactory/swagger/scanners/**ResourceGroups.*</exclude>
                         <!-- TODO: REMOVE when we delete this class -->
                         <exclude>**/com/mangofactory/swagger/models/**SwaggerModelProvider.*</exclude>
-                        <exclude>**/com/mangofactory/swagger/models/**ModelsScanner.*</exclude>
+                        <exclude>**/com/mangofactory/swagger/models/alternates/Entry.*</exclude>
                     </excludes>
                     <rules>
                         <rule>
@@ -332,7 +332,7 @@
                     <execution>
                         <id>attach-javadocs</id>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>aggregate</goal>
                         </goals>
                     </execution>
                 </executions>

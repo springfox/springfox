@@ -20,10 +20,10 @@ class AlternateTypeProviderSpec extends Specification {
 
     where:
     rule                                        | expectedType
-    hashMapAlternate(String, String)            | genericMap(List, String, String)
-    hashMapAlternate(WildcardType, String)      | genericMap(List, String, String)
-    hashMapAlternate(String, WildcardType)      | genericMap(List, String, String)
-    hashMapAlternate(WildcardType, WildcardType)| genericMap(List, String, String)
+    newMapRule(String, String)            | genericMap(List, String, String)
+    newMapRule(WildcardType, String)      | genericMap(List, String, String)
+    newMapRule(String, WildcardType)      | genericMap(List, String, String)
+    newMapRule(WildcardType, WildcardType)| genericMap(List, String, String)
   }
 
   def "Alternate types are provided for specified types" () {

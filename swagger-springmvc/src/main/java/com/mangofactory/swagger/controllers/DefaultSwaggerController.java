@@ -41,7 +41,7 @@ public class DefaultSwaggerController {
     }
 
     @ApiIgnore
-    @RequestMapping(value = { DOCUMENTATION_BASE_PATH + "/{swaggerGroup}/{resource}" }, method = RequestMethod.GET)
+    @RequestMapping(value = { DOCUMENTATION_BASE_PATH + "/{swaggerGroup}/{resource:.*}" }, method = RequestMethod.GET)
     public
     @ResponseBody
     ResponseEntity<ApiListing> getApiListing(@PathVariable String swaggerGroup, @PathVariable String resource) {

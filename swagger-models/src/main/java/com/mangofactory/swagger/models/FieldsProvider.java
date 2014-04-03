@@ -17,6 +17,9 @@ public class FieldsProvider {
 
     public Iterable<? extends ResolvedField> in(ResolvedType resolvedType) {
         MemberResolver memberResolver = new MemberResolver(typeResolver);
+        if (resolvedType.getErasedType() == Object.class) {
+            return newArrayList();
+        }
         ResolvedTypeWithMembers resolvedMemberWithMembers = memberResolver.resolve(resolvedType, null, null);
         return newArrayList(resolvedMemberWithMembers.getMemberFields());
     }

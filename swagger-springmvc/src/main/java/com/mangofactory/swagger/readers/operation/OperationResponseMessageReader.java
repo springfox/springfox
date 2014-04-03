@@ -42,6 +42,7 @@ public class OperationResponseMessageReader implements Command<RequestMappingCon
             responseMessages = globalResponseMessages.get(currentHttpMethod);
          }
          ResolvedType returnType = handlerReturnType(swaggerGlobalSettings.getTypeResolver(), handlerMethod);
+         returnType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(returnType);
          if (Void.class != returnType.getErasedType()) {
             String simpleName = ResolvedTypes.typeName(returnType);
             ResponseMessage responseWithModel = new ResponseMessage(200, HttpStatus.OK.getReasonPhrase(), toOption(simpleName));
