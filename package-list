@@ -1,0 +1,12 @@
+com.mangofactory.swagger
+com.mangofactory.swagger.annotations
+com.mangofactory.swagger.authorization
+com.mangofactory.swagger.configuration
+com.mangofactory.swagger.controllers
+com.mangofactory.swagger.core
+com.mangofactory.swagger.models
+com.mangofactory.swagger.models.alternates
+com.mangofactory.swagger.readers
+com.mangofactory.swagger.readers.operation
+com.mangofactory.swagger.readers.operation.parameter
+com.mangofactory.swagger.scanners
