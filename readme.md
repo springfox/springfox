@@ -50,7 +50,7 @@ or maven central: http://repo1.maven.org/maven2/
   <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.1</version>
+    <version>0.8.3</version>
   </dependency>
 ```
 
