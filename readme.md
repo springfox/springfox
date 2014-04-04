@@ -117,15 +117,27 @@ E.g.
       ignored.add(ServletContext.class);
 ```
 
-- Configurable swagger parameter data type mappings
+- Configurable swagger type substitutions
 
 E.g.
 ```Java
-      Map<Class, String> dataTypeMappings = newHashMap();
-      dataTypeMappings.put(char.class, "string");
-      dataTypeMappings.put(String.class, "string");
-      dataTypeMappings.put(Integer.class, "int32");
-      dataTypeMappings.put(int.class, "int32");
+
+    AlternateTypeProvider alternateTypeProvider = new AlternateTypeProvider();
+    TypeResolver typeResolver = new TypeResolver(); //dependency on com.fasterxml.classmate
+    // Add a rule that substitutes ResponseEntity<AnyClass> to AnyClass
+    // NOTE: WildcardType is an in-built type used for type substitutions of generic
+    //      types
+    alternateTypeProvider.addRule(
+      newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
+              typeResolver.resolve(WildcardType.class)));
+              
+    // Add a rule that substitutes LocalDate to Date
+    alternateTypeProvider.addRule(
+      newRule(typeResolver.resolve(LocalDate.class),
+              typeResolver.resolve(Date.class)));
+              
+    //After setting up the custom provider wire it up by calling swaggerGlobalSettings.setAlternateTypeProvider
+
 ```
 
 - Configurable uri path providers by implementing `SwaggerPathProvider`
