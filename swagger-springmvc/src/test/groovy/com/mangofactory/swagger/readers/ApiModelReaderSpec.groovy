@@ -1,22 +1,29 @@
 package com.mangofactory.swagger.readers
+
+import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyModels
+import com.mangofactory.swagger.dummy.controllers.BusinessService
 import com.mangofactory.swagger.dummy.controllers.PetService
 import com.mangofactory.swagger.mixins.ApiOperationSupport
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.models.alternates.WildcardType
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.ApiDescription
 import com.wordnik.swagger.model.Model
 import com.wordnik.swagger.model.ModelProperty
 import com.wordnik.swagger.model.Operation
+import org.springframework.http.HttpEntity
+import org.springframework.http.ResponseEntity
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
 
 import javax.servlet.http.HttpServletResponse
 
 import static com.mangofactory.swagger.ScalaUtils.*
+import static com.mangofactory.swagger.models.alternates.Alternates.*
 
 @Mixin([RequestMappingSupport, ApiOperationSupport, ModelProviderSupport])
 class ApiModelReaderSpec extends Specification {
@@ -162,6 +169,34 @@ class ApiModelReaderSpec extends Specification {
       models.size() == 2
       models.containsKey("Entry«string,Pet»")
       models.containsKey("Pet")
+
+  }
+
+  def "Generates the correct models when alternateTypeProvider returns an ingoreable or base parameter type"() {
+    given:
+      HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
+      RequestMappingContext context =
+              new RequestMappingContext(requestMappingInfo('/businesses/responseEntity/{businessId}'), handlerMethod)
+
+      def settings = new SwaggerGlobalSettings()
+      def config = new SpringSwaggerConfig()
+      settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
+      settings.alternateTypeProvider = config.defaultAlternateTypeProvider()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider.addRule(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
+              typeResolver.resolve(WildcardType.class)));
+      settings.alternateTypeProvider.addRule(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
+              typeResolver.resolve(WildcardType.class)));
+      context.put("swaggerGlobalSettings", settings)
+
+    when:
+      ApiModelReader apiModelReader = new ApiModelReader(defaultModelProvider())
+      apiModelReader.execute(context)
+      Map<String, Object> result = context.getResult()
+
+    then:
+      Map<String, Model> models = result.get("models")
+      models.size() == 0
 
   }
 }

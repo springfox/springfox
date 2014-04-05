@@ -39,7 +39,9 @@ public class DefaultModelProvider implements ModelProvider {
     @Override
     public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
         ResolvedType propertiesHost = modelContext.resolvedType(resolver);
-        if (isContainerType(propertiesHost) || propertiesHost.getErasedType().isEnum()) {
+        if (isContainerType(propertiesHost)
+                || propertiesHost.getErasedType().isEnum()
+                || Types.isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))) {
             return Optional.absent();
         }
         Map<String, ModelProperty> properties = newLinkedHashMap();

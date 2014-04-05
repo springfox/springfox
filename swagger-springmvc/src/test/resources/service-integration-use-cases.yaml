@@ -29,6 +29,16 @@ testcases:
         paramType: "path"
         name: "businessId"
 
+  - parentUri: "/api-docs/business-service"
+    index: 3
+    testDescription: "Verfied when Response entity has a base type"
+    expectedUri: "/businesses/responseEntity/{businessId}"
+    returnType: "ResponseEntity«string»"
+    parameters:
+      - type: "string"
+        paramType: "path"
+        name: "businessId"
+
   - parentUri: "/api-docs/controller-with-no-request-mapping-service"
     index: 0
     testDescription: "Verified when controller has no request mapping at the class level and ignores

@@ -3,6 +3,8 @@ package com.mangofactory.swagger.scanners
 import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
+import com.mangofactory.swagger.core.ResourceGroupingStrategy
+import com.mangofactory.swagger.core.SpringGroupingStrategy
 import com.mangofactory.swagger.mixins.AccessorAssertions
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.wordnik.swagger.model.ApiListingReference
@@ -110,7 +112,7 @@ class ApiListingReferenceScannerSpec extends Specification {
 
   def "grouping of listing references"() {
   given:
-    ClassOrApiAnnotationResourceGrouping defaultControllerResourceNamingStrategy = new ClassOrApiAnnotationResourceGrouping()
+    ResourceGroupingStrategy defaultControllerResourceNamingStrategy = new SpringGroupingStrategy()
 
   when:
     RequestMappingHandlerMapping requestMappingHandlerMapping = Mock()
@@ -120,7 +122,6 @@ class ApiListingReferenceScannerSpec extends Specification {
         (requestMappingInfo("/public/inventoryTypes")): dummyHandlerMethod(),
         (requestMappingInfo("/public/{businessId}/accounts")): dummyHandlerMethod(),
         (requestMappingInfo("/public/{businessId}/employees")): dummyHandlerMethod(),
-        (requestMappingInfo("/public/inventoryTypes")): dummyHandlerMethod(),
         (requestMappingInfo("/public/{businessId}/inventory")): dummyHandlerMethod(),
         (requestMappingInfo("/public/{businessId}/inventory/products")): dummyHandlerMethod()
     ]
@@ -137,8 +138,13 @@ class ApiListingReferenceScannerSpec extends Specification {
 
     List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
     apiListingReferences.size() == 2
-    fromOption(apiListingReferences[0].description()) == 'Group name'
-    fromOption(apiListingReferences[1].description()) == 'com.mangofactory.swagger.dummy.DummyClass'
+      fromOption(apiListingReferences[0].description()) == 'Dummy Class'
+      fromOption(apiListingReferences[1].description()) == 'Group name'
+
+    and:
+      apiListingReferenceScanner.resourceGroupRequestMappings.size() == 2
+      apiListingReferenceScanner.resourceGroupRequestMappings[new ResourceGroup("dummy-controller", "/")].size() == 1
+      apiListingReferenceScanner.resourceGroupRequestMappings[new ResourceGroup("dummy-class", "/")].size() == 5
   }
 
   def "Relative Paths"() {
