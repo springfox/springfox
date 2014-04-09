@@ -5,7 +5,6 @@ import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
-import com.mangofactory.swagger.core.SpringGroupingStrategy;
 import com.mangofactory.swagger.core.SwaggerPathProvider;
 import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.readers.ApiDescriptionReader;
@@ -56,11 +55,6 @@ public class ApiListingScanner {
     }
 
    public Map<String, ApiListing> scan() {
-
-      if(null == controllerNamingStrategy){
-         controllerNamingStrategy = new SpringGroupingStrategy();
-      }
-
       Map<String, ApiListing> apiListingMap = newHashMap();
 
       readers = newArrayList();
