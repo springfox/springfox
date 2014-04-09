@@ -28,7 +28,7 @@ public class OperationResponseClassReader implements Command<RequestMappingConte
             returnType = handlerReturnType(swaggerGlobalSettings.getTypeResolver(), handlerMethod);
             returnType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(returnType);
         }
-        if (Void.class.equals(returnType) || Void.TYPE.equals(returnType)) {
+        if (Void.class.equals(returnType.getErasedType()) || Void.TYPE.equals(returnType.getErasedType())) {
             context.put("responseClass", "");
             return;
         }
