@@ -48,7 +48,7 @@ testcases:
 
   - parentUri: "/api-docs/fancypets"
     index: 0
-    testDescription: "Verified new method on inherrited generic type"
+    testDescription: "Verified new method on inherited generic type"
     expectedUri: "/fancypets/?{someId}"
     returnType: "int"
     parameters:
@@ -61,7 +61,7 @@ testcases:
     index: 1
     testDescription: "Verified Inheritted class with a generic type"
     expectedUri: "/fancypets"
-    returnType: "Void"
+    returnType: ""
     httpMethod: "PUT"
     parameters:
        - type: Pet
@@ -82,7 +82,7 @@ testcases:
     index: 0
     testDescription: "Verified alternate type for big decimal"
     expectedUri: "/features/bigDecimal"
-    returnType: "Void"
+    returnType: ""
     parameters:
        - type: "number"
          name: "input"
@@ -92,7 +92,7 @@ testcases:
     index: 1
     testDescription: "Verified alternate type for LocalDate"
     expectedUri: "/features/date"
-    returnType: "Void"
+    returnType: ""
     parameters:
        - type: "LocalDate"
          name: "localDate"
@@ -110,7 +110,7 @@ testcases:
     index: 3
     testDescription: "Verified that all http methods are generated when method is not explicitly mentioned"
     expectedUri: "/features/allMethodsAllowed"
-    returnType: "Void"
+    returnType: ""
 
   - parentUri: "/api-docs/features"
     index: 4
@@ -130,7 +130,7 @@ testcases:
     httpMethod: "POST"
     testDescription: "Verified that bare models without @RequestBody annotation are supported"
     expectedUri: "/features/bare"
-    returnType: "Void"
+    returnType: ""
     parameters:
       - type: "Example"
         name: "example"
@@ -139,7 +139,7 @@ testcases:
     index: 7
     testDescription: "Verified enums are supported"
     expectedUri: "/features/status"
-    returnType: "Void"
+    returnType: ""
     parameters:
        - type: "string"
          name: "enumType"
@@ -148,7 +148,7 @@ testcases:
     index: 8
     testDescription: "Verfied generic collection of enums are supported"
     expectedUri: "/features/statuses"
-    returnType: "Void"
+    returnType: ""
     parameters:
        - type: "Collection«string»"
          name: "enumType"
@@ -175,7 +175,7 @@ testcases:
     index: 1
     testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
     expectedUri: "/petgrooming/voidMethod/{input}"
-    returnType: "Void"
+    returnType: ""
     parameters:
        - type: "string"
          name: "input"
@@ -193,7 +193,7 @@ testcases:
 #    index: 1
 #    testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
 #    expectedUri: "/pets/grooming/voidMethod/{input}"
-#    returnType: "Void"
+#    returnType: ""
 #    parameters:
 #       - type: "string"
 #         name: "input"
@@ -221,7 +221,7 @@ testcases:
     index: 2
     testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
     expectedUri: "/pets/grooming/voidMethod/{input}"
-    returnType: "Void"
+    returnType: ""
     parameters:
        - type: "string"
          name: "input"
@@ -230,7 +230,7 @@ testcases:
     index: 3
     testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
     expectedUri: "/pets/voidMethod/{input}"
-    returnType: "Void"
+    returnType: ""
     parameters:
        - type: "string"
          name: "input"
@@ -251,7 +251,7 @@ testcases:
     httpMethod: "POST"
     testDescription: "Verfied @Apixxx annotations are supported and layer on top of spings annotations for POST"
     expectedUri: "/pets"
-    returnType: "Void"
+    returnType: ""
     parameters:
        - type: "Pet"
          name: "pet"
@@ -270,7 +270,7 @@ testcases:
     httpMethod: "PUT"
     testDescription: "Verfied @Apixxx annotations are supported and layer on top of spings annotations for POST"
     expectedUri: "/pets"
-    returnType: "Void"
+    returnType: ""
     parameters:
        - type: "Pet"
          name: "pet"
