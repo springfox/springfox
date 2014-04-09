@@ -63,6 +63,11 @@ public class ApiListingScanner {
 
       Map<String, ApiListing> apiListingMap = newHashMap();
 
+      readers = newArrayList();
+      readers.add(new MediaTypeReader());
+      readers.add(new ApiDescriptionReader(swaggerPathProvider));
+      readers.add(new ApiModelReader(modelProvider));
+
       int position = 0;
       for (Map.Entry<ResourceGroup, List<RequestMappingContext>> entry : resourceGroupRequestMappings.entrySet()) {
 
@@ -77,10 +82,6 @@ public class ApiListingScanner {
 
             CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
             each.put("authorizationContext", authorizationContext);
-            readers.add(new MediaTypeReader());
-            readers.add(new ApiDescriptionReader(swaggerPathProvider));
-            readers.add(new ApiModelReader(modelProvider));
-
             each.put("swaggerGlobalSettings", swaggerGlobalSettings);
             Map<String, Object> results = commandExecutor.execute(readers, each);
 
