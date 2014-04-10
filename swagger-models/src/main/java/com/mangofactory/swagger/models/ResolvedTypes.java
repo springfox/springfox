@@ -109,7 +109,7 @@ public class ResolvedTypes {
     public static AllowableValues allowableValues(ResolvedType resolvedType) {
         if (isBaseType(simpleTypeName(resolvedType)) && resolvedType.getErasedType().isEnum()) {
             List<String> enumValues = getEnumValues(resolvedType.getErasedType());
-            return new AllowableListValues(JavaConversions.collectionAsScalaIterable(enumValues).toList(), "string");
+            return new AllowableListValues(JavaConversions.collectionAsScalaIterable(enumValues).toList(), "LIST");
         }
         return null;
     }
