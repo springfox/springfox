@@ -22,6 +22,6 @@ class ClassOrApiAnnotationResourceGroupingSpec extends Specification {
     where:
       handlerMethod                  | groupName                                   | realPath                                     | description
       dummyHandlerMethod()           | "com_mangofactory_swagger_dummy_DummyClass" | "/com_mangofactory_swagger_dummy_DummyClass" |"com.mangofactory.swagger.dummy.DummyClass"
-      dummyControllerHandlerMethod() | "Group+name"                                | "/Group+name"                                | "Group name"
+      dummyControllerHandlerMethod() | "Group+name"                                | "/Group+name"                                | "Group description"
    }
 }

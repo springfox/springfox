@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.core;
 
+import com.google.common.base.Optional;
 import com.mangofactory.swagger.scanners.ResourceGroup;
 import com.wordnik.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Set;
 
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Sets.*;
 import static org.apache.commons.lang.StringUtils.*;
 
@@ -26,7 +28,19 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
 
    @Override
    public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      return getClassOrApiAnnotationValue(handlerMethod);
+      Class<?> controllerClass = handlerMethod.getBeanType();
+      String group = controllerClass.getCanonicalName();
+      
+      Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
+      if (null != apiAnnotation) {
+          String descriptionFromAnnotation = Optional.fromNullable(emptyToNull(apiAnnotation.description()))
+                  .or(apiAnnotation.value());
+          if (!isNullOrEmpty(descriptionFromAnnotation)) {
+              return descriptionFromAnnotation;
+          }
+      }
+      
+      return group;
    }
 
    @Override
