@@ -37,6 +37,10 @@ public class ResolvedTypes {
 
 
     private static String optionalContainerTypeQualifierForReturn(ResolvedType type) {
+        if(type.isArray()) {
+            return String.format("[%s]", typeName(type.getArrayElementType()));
+        }
+
         List<ResolvedType> typeParameters = type.getTypeParameters();
         checkArgument(typeParameters.size() <= 1, "Expects container to have at most one generic parameter");
         if (typeParameters.size() == 0) {

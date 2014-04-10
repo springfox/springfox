@@ -1,4 +1,5 @@
 package com.mangofactory.swagger.readers.operation.parameter
+import com.mangofactory.swagger.dummy.DummyClass
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -29,6 +30,7 @@ class ParameterMultiplesReaderSpec extends Specification {
       apiParamAnnotation                       | paramType        | expected
       [allowMultiple: {-> true }] as ApiParam  | null             | true
       [allowMultiple: {-> false }] as ApiParam | String[].class   | false
+      [allowMultiple: {-> false }] as ApiParam | DummyClass.BusinessType[].class     | true
       null                                     | String[].class   | true
       null                                     | List.class       | true
       null                                     | Collection.class | true

@@ -28,7 +28,7 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
     MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
     AllowableValues allowableValues = null;
     String allowableValueString = findAnnotatedAllowableValues(methodParameter);
-    if (null != allowableValueString) {
+    if (allowableValueString!=null && !"".equals(allowableValueString)) {
       allowableValueString = allowableValueString.trim().replaceAll(" ", "");
       if (allowableValueString.startsWith("range[")) {
         allowableValueString = allowableValueString.replaceAll("range\\[", "").replaceAll("]", "");
@@ -45,6 +45,14 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
     } else {
       if (methodParameter.getParameterType().isEnum()) {
         Object[] enumConstants = methodParameter.getParameterType().getEnumConstants();
+        List<String> enumNames = new ArrayList<String>();
+        for (Object o : enumConstants) {
+          enumNames.add(o.toString());
+        }
+        allowableValues = new AllowableListValues(toScalaList(newArrayList(enumNames)), "LIST");
+      }
+      if(methodParameter.getParameterType().isArray() && methodParameter.getParameterType().getComponentType().isEnum()) {
+        Object[] enumConstants = methodParameter.getParameterType().getComponentType().getEnumConstants();
         List<String> enumNames = new ArrayList<String>();
         for (Object o : enumConstants) {
           enumNames.add(o.toString());

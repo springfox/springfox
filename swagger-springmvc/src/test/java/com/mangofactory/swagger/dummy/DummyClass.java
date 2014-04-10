@@ -101,6 +101,12 @@ public class DummyClass {
    public void methodWithSingleEnum(BusinessType businessType) {
 
    }
+   
+   @RequestMapping("/businesses/{businessId}")
+   public void methodWithSingleEnumArray(BusinessType[] businessTypes) {
+
+   }
+   
    @ResponseBody
    public DummyModels.BusinessModel methodWithConcreteResponseBody() {
       return null;
