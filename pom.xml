@@ -17,16 +17,16 @@
     </modules>
 
     <properties>
-        <swagger.version>1.3.2</swagger.version>
+        <swagger.version>1.3.4</swagger.version>
         <spring.version>3.2.7.RELEASE</spring.version>
         <scala-lib.version>2.10.0</scala-lib.version>
         <spock.version>0.7-groovy-2.0</spock.version>
-        <groovy.version>2.1.9</groovy.version>
+        <groovy.version>2.2.1</groovy.version>
         <checkstyle.file>${basedir}/../checkstyle.xml</checkstyle.file>
-        <jackson.version>2.1.5</jackson.version>
+        <jackson.version>2.2.3</jackson.version>
         <powermock.version>1.5.1</powermock.version>
         <guava.version>15.0</guava.version>
-        <spring-hateoas.version>0.8.0.RELEASE</spring-hateoas.version>
+        <spring-hateoas.version>0.10.0.RELEASE</spring-hateoas.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <github.host>me-github</github.host>
     </properties>

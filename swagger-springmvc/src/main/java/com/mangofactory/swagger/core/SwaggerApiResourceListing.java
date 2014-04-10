@@ -66,6 +66,8 @@ public class SwaggerApiResourceListing {
           ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider,
                   modelProvider, authorizationContext);
          apiListingScanner.setSwaggerGlobalSettings(swaggerGlobalSettings);
+          //DK TODO: Fix this hack!
+          apiListingScanner.setControllerNamingStrategy(apiListingReferenceScanner.getResourceGroupingStrategy());
 
          Map<String, ApiListing> apiListings = apiListingScanner.scan();
          swaggerCache.addApiListings(apiListings);

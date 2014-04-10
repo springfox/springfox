@@ -12,12 +12,12 @@ public class ParameterMultiplesReader implements Command<RequestMappingContext> 
       ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
 
       Boolean allowMultiple = Boolean.FALSE;
-      if (null != apiParam) {
+      Class<?> parameterType = methodParameter.getParameterType();
+      if (null != apiParam && !(parameterType!=null && parameterType.isArray() && parameterType.getComponentType().isEnum())) {
          allowMultiple = apiParam.allowMultiple();
       } else {
-         Class<?> parameterType = methodParameter.getParameterType();
          allowMultiple = parameterType.isArray()
-               || Iterable.class.isAssignableFrom(parameterType);
+           || Iterable.class.isAssignableFrom(parameterType);
       }
       context.put("allowMultiple", allowMultiple);
    }

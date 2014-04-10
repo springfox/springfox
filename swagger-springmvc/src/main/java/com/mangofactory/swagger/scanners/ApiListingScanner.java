@@ -5,7 +5,6 @@ import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
-import com.mangofactory.swagger.core.SpringGroupingStrategy;
 import com.mangofactory.swagger.core.SwaggerPathProvider;
 import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.readers.ApiDescriptionReader;
@@ -56,12 +55,12 @@ public class ApiListingScanner {
     }
 
    public Map<String, ApiListing> scan() {
-
-      if(null == controllerNamingStrategy){
-         controllerNamingStrategy = new SpringGroupingStrategy();
-      }
-
       Map<String, ApiListing> apiListingMap = newHashMap();
+
+      readers = newArrayList();
+      readers.add(new MediaTypeReader());
+      readers.add(new ApiDescriptionReader(swaggerPathProvider));
+      readers.add(new ApiModelReader(modelProvider));
 
       int position = 0;
       for (Map.Entry<ResourceGroup, List<RequestMappingContext>> entry : resourceGroupRequestMappings.entrySet()) {
@@ -77,10 +76,6 @@ public class ApiListingScanner {
 
             CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
             each.put("authorizationContext", authorizationContext);
-            readers.add(new MediaTypeReader());
-            readers.add(new ApiDescriptionReader(swaggerPathProvider));
-            readers.add(new ApiModelReader(modelProvider));
-
             each.put("swaggerGlobalSettings", swaggerGlobalSettings);
             Map<String, Object> results = commandExecutor.execute(readers, each);
 

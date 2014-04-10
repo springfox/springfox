@@ -34,6 +34,7 @@ class ParameterAllowableReaderSpec extends Specification {
   where:
     handler                                                                   | expected
     dummyHandlerMethod('methodWithSingleEnum', DummyClass.BusinessType.class) | AllowableListValues
+    dummyHandlerMethod('methodWithSingleEnumArray', DummyClass.BusinessType[].class) | AllowableListValues
   }
 
   @Unroll
