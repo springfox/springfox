@@ -80,7 +80,7 @@ For more detail see: https://github.com/wordnik/swagger-core/wiki/1.2-transition
   This strategy is also useful if your api sits behind a proxy like mashery
 
 ##### Notable Dependencies
-- Spring 3.1.1 or above (due to a bug in UriComponentsBuilder)
+- Spring 3.2.x or above 
 - scala lib 2.10.0
 - jackson 2.1.5 (older/newer versions may work)
 
