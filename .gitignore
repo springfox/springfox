@@ -1,4 +1,5 @@
 .idea
+*.iml
 swagger-springmvc.iml
 target
 .settings
