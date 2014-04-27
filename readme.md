@@ -30,7 +30,7 @@ generation that ships with swagger-core which is not as powerful when it comes t
   <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.4-SNAPSHOT</version>
+    <version>0.8.5-SNAPSHOT</version>
   </dependency>
 ```
 
@@ -50,12 +50,12 @@ or maven central: http://repo1.maven.org/maven2/
   <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.3</version>
+    <version>0.8.4</version>
   </dependency>
 ```
 
 
-###### Swagger Spec 1.2 changes:
+### Swagger Spec 1.2 changes:
 - Authorization types: (OAuth, ApiKey, BasicAuth).
 - ApiInfo: info, title, licencing, etc.
 - Http media types (produces/consumes).
@@ -65,19 +65,7 @@ or maven central: http://repo1.maven.org/maven2/
 For more detail see: https://github.com/wordnik/swagger-core/wiki/1.2-transition.
 
 
-##### Summary of features/changes to prior swagger-springmvc library
-- Supports multiple instances of swagger api resource listings from the same spring mvc application
-- Authorization types.
-- HTTP media types
-- Request mappings with regex expressions do not error out
-- All http methods supported by org.springframework.web.bind.annotation.RequestMethod (GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE)
-- Filtering/Inclusion of api endpoints with regular expression or ant path matching.
-- Operation parameter data types supported as per spec: https://github.com/wordnik/swagger-core/wiki/Datatypes
-- Http response codes and messages with com.wordnik.swagger.annotations.ApiResponses
-- All uris are, by default, absolute after much deliberation. Relative uri's do not work well with swagger UI and other swagger tools like
-  swagger-codegen work much better with absolute uri's. This strategy can be changed by
-  implementing [SwaggerPathProvider](https://github.com/martypitt/swagger-springmvc/blob/rel-0.8-upgrade-spec-preview/src/main/java/com/mangofactory/swagger/core/SwaggerPathProvider.java)
-  This strategy is also useful if your api sits behind a proxy like mashery
+
 
 ##### Notable Dependencies
 - Spring 3.2.x or above 
@@ -88,6 +76,49 @@ For more detail see: https://github.com/wordnik/swagger-core/wiki/1.2-transition
 By no means is the documentation great but the project has plenty of tests and we're slowly chipping away at the
 documentation. The latest javadocs are available [here](http://martypitt.github.io/swagger-springmvc/). Contributions
 that add to test coverage and documentation is always welcome! :)
+
+#### Changes
+
+[Change Log](History.md) is available for the changes since 0.8.3
+
+##### Breaking changes in 0.8.4 since 0.8.2 that would need the configurations to be altered are:
+1. Remove the following autowired fields in your spring configuration
+   ```java
+   @Autowired
+   private SpringSwaggerModelConfig springSwaggerModelConfig;
+   ```
+2. Add the following autowired fields in your spring configuration
+  ```java
+  @Autowired
+  private ModelProvider modelProvider;
+  ```
+3. Make sure any customizations to the object mapper are appropriately added in an ObjectMapper bean definition
+    ```java
+    /**
+        * Object mapper.
+        *
+        * @return the configured object mapper
+        */
+        @Bean
+        public ObjectMapper objectMapper() {
+            //This is the opportunity to override object mapper behavior
+            return new ObjectMapper();
+        }
+    ```
+4. Configure the swaggerApiResourceListing bean with the model provider that is autowired or provide your own
+implementation
+  ```java
+  // Set the model provider, uses the default autowired model provider.
+      swaggerApiResourceListing.setModelProvider(modelProvider);
+   ```
+
+5. Configure the blah bean with an implementation of the resource grouping strategy
+    ```java
+    //How to group request mappings to ApiResource's typically by spring controller classes. This is a hook to provide
+     // a custom implementation of the grouping strategy. By default we use SpringGroupingStrategy. An alternative is
+     // to use ClassOrApiAnnotationResourceGrouping to group using Api annotation.
+        apiListingReferenceScanner.setResourceGroupingStrategy(springSwaggerConfig.defaultResourceGroupingStrategy());
+    ```
 
 ##### Features
 - Allows configuration of default response messages based on HTTP methods which are displayed on all api operations on swagger-ui
@@ -150,7 +181,7 @@ E.g.
   annotations.add(ApiIgnore.class);
 ```
 
-- Flexible Inclusion or exclusion of paths using regex expressions
+- Flexible Inclusion or exclusion of paths using regex expressions. **Make sure the include patterns apply**
 ```java
 List<String> DEFAULT_INCLUDE_PATTERNS = Arrays.asList(new String[]{
       "/business.*",
@@ -158,8 +189,6 @@ List<String> DEFAULT_INCLUDE_PATTERNS = Arrays.asList(new String[]{
       "/contacts.*"
   });
 ```
-
-
 
 ### Adding to to a spring MVC application
 
@@ -172,7 +201,8 @@ web application context xml config
   <!-- Enable the default documentation controller-->
   <context:component-scan base-package="com.mangofactory.swagger.controllers"/>
 
-  <!-- Pick up the bundled spring config-->
+  <!-- Pick up the bundled spring config. Not really required if you're already importing the configuration bean
+  as part of an application specific configuration bean via the previous component scan-->
   <context:component-scan base-package="com.mangofactory.swagger.configuration"/>
 
 ```
@@ -190,7 +220,8 @@ Configuration is slightly verbose but on the upside it provides several hooks in
   @Autowired
   private SpringSwaggerConfig springSwaggerConfig;
   @Autowired
-  private SpringSwaggerModelConfig springSwaggerModelConfig;
+  private ModelProvider modelProvider;
+
 
 
   /**
@@ -206,6 +237,16 @@ Configuration is slightly verbose but on the upside it provides several hooks in
     return jacksonScalaSupport;
   }
 
+  /**
+    * Object mapper.
+    *
+    * @return the configured object mapper
+    */
+    @Bean
+    public ObjectMapper objectMapper() {
+        //This is the opportunity to override object mapper behavior
+        return new ObjectMapper();
+    }
 
   /**
    * Global swagger settings
@@ -257,6 +298,9 @@ Configuration is slightly verbose but on the upside it provides several hooks in
 
     //Supply the API Info as it should appear on swagger-ui web page
     swaggerApiResourceListing.setApiInfo(apiInfo());
+
+    // Set the model provider, uses the default autowired model provider.
+    swaggerApiResourceListing.setModelProvider(modelProvider);
 
     //Global authorization - see the swagger documentation
     swaggerApiResourceListing.setAuthorizationTypes(authorizationTypes());
