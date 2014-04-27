@@ -132,7 +132,7 @@ public class ApiListingScanner {
         return new Predicate<ApiDescription>() {
             @Override
             public boolean apply(ApiDescription input) {
-                return input.path().startsWith(path);
+                return input.path().toLowerCase().startsWith(path.toLowerCase());
             }
         };
     }
