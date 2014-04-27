@@ -1,24 +1,21 @@
 package com.mangofactory.swagger.configuration
 
+import com.fasterxml.classmate.TypeResolver
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
-import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
+import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
+import com.mangofactory.swagger.models.*
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.core.SwaggerSpec
-import com.wordnik.swagger.model.ApiInfo
-import com.wordnik.swagger.model.ApiKey
-import com.wordnik.swagger.model.ApiListing
-import com.wordnik.swagger.model.ApiListingReference
-import com.wordnik.swagger.model.AuthorizationType
-import com.wordnik.swagger.model.ResourceListing
+import com.wordnik.swagger.model.*
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
 
 import javax.servlet.ServletContext
 
-import static com.mangofactory.swagger.ScalaUtils.fromOption
-import static com.mangofactory.swagger.ScalaUtils.fromScalaList
+import static com.mangofactory.swagger.ScalaUtils.*
 
 @Mixin(com.mangofactory.swagger.mixins.RequestMappingSupport)
 class SwaggerApiResourceListingSpec extends Specification {
@@ -109,6 +106,13 @@ class SwaggerApiResourceListingSpec extends Specification {
      settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
      swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
 
+    def resolver = new TypeResolver()
+    def modelPropertiesProvider = new DefaultModelPropertiesProvider(new ObjectMapper(), new AccessorsProvider(resolver),
+            new FieldsProvider(resolver))
+    def modelDependenciesProvider = new ModelDependencyProvider(resolver, modelPropertiesProvider)
+    ModelProvider modelProvider = new DefaultModelProvider(resolver, modelPropertiesProvider,
+            modelDependenciesProvider)
+
       Map handlerMethods = [(requestMappingInfo("somePath/")): dummyHandlerMethod()]
       def requestHandlerMapping = Mock(RequestMappingHandlerMapping)
       requestHandlerMapping.getHandlerMethods() >> handlerMethods
@@ -119,7 +123,7 @@ class SwaggerApiResourceListingSpec extends Specification {
       scanner.setSwaggerGroup("swaggerGroup")
 
       scanner.setSwaggerPathProvider(swaggerPathProvider)
-
+      swaggerApiResourceListing.setModelProvider(modelProvider)
       swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
 
     when:

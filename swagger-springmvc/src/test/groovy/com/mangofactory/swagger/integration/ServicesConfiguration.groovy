@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.integration
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.JacksonScalaSupport
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
@@ -8,6 +7,7 @@ import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerPathProvider
+import com.mangofactory.swagger.models.ModelProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.model.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 
 import javax.servlet.ServletContext
@@ -35,6 +34,8 @@ public class ServicesConfiguration {
   private SpringSwaggerConfig springSwaggerConfig;
   @Autowired
   private ServletContext servletContext;
+  @Autowired
+  private ModelProvider modelProvider;
 
   /**
    * Adds the jackson scala module to the MappingJackson2HttpMessageConverter registered with spring
@@ -51,14 +52,9 @@ public class ServicesConfiguration {
 
   @Bean
   public ObjectMapper objectMapper() {
-    def jackson2 = new MappingJackson2HttpMessageConverter()
-
-    ObjectMapper mapper = new ObjectMapper()
-    mapper.registerModule(new DefaultScalaModule())
-    mapper.registerModule(jacksonScalaSupport().swaggerSerializationModule())
-
-    jackson2.setObjectMapper(mapper)
-    return mapper;
+    //This is the opportunity to override object mapper behavior
+    //return springSwaggerConfig.objectMapperSupport().getObjectMapper();
+    return new ObjectMapper();
   }
 
 //  @Bean
@@ -110,6 +106,9 @@ public class ServicesConfiguration {
 
     //Use a custom path provider or springSwaggerConfig.defaultSwaggerPathProvider()
     swaggerApiResourceListing.setSwaggerPathProvider(testPathProvider());
+
+    // Set the model provider, uses the default autowired model provider.
+    swaggerApiResourceListing.setModelProvider(modelProvider);
 
     //Supply the API Info as it should appear on swagger-ui web page
     swaggerApiResourceListing.setApiInfo(apiInfo());

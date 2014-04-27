@@ -4,6 +4,8 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
@@ -11,11 +13,13 @@ import java.util.Set;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
+@Component
 public class ModelDependencyProvider {
 
     private final TypeResolver typeResolver;
     private final ModelPropertiesProvider propertiesProvider;
 
+    @Autowired
     public ModelDependencyProvider(TypeResolver typeResolver, ModelPropertiesProvider propertiesProvider) {
         this.typeResolver = typeResolver;
         this.propertiesProvider = propertiesProvider;

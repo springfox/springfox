@@ -1,14 +1,8 @@
 package com.mangofactory.swagger.core;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
-import com.mangofactory.swagger.models.AccessorsProvider;
-import com.mangofactory.swagger.models.DefaultModelPropertiesProvider;
-import com.mangofactory.swagger.models.DefaultModelProvider;
-import com.mangofactory.swagger.models.FieldsProvider;
-import com.mangofactory.swagger.models.ModelDependencyProvider;
+import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.ApiListingScanner;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
@@ -40,8 +34,9 @@ public class SwaggerApiResourceListing {
    private SwaggerPathProvider swaggerPathProvider;
    private SwaggerGlobalSettings swaggerGlobalSettings;
    private String swaggerGroup;
+    private ModelProvider modelProvider;
 
-   public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
+    public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
       this.swaggerCache = swaggerCache;
       this.swaggerGroup = swaggerGroup;
    }
@@ -55,14 +50,6 @@ public class SwaggerApiResourceListing {
 
          Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings =
                  apiListingReferenceScanner.getResourceGroupRequestMappings();
-
-          TypeResolver typeResolver = swaggerGlobalSettings.getTypeResolver();
-          DefaultModelPropertiesProvider propertiesProvider
-                  = new DefaultModelPropertiesProvider(new ObjectMapper(), //DK TODO: Autowire this
-                        new AccessorsProvider(typeResolver),  new FieldsProvider(typeResolver));
-          ModelDependencyProvider dependencyProvider = new ModelDependencyProvider(typeResolver, propertiesProvider);
-          DefaultModelProvider modelProvider = new DefaultModelProvider(typeResolver, propertiesProvider,
-                  dependencyProvider);
           ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider,
                   modelProvider, authorizationContext);
          apiListingScanner.setSwaggerGlobalSettings(swaggerGlobalSettings);
@@ -145,4 +132,8 @@ public class SwaggerApiResourceListing {
    public void setAuthorizationContext(AuthorizationContext authorizationContext) {
       this.authorizationContext = authorizationContext;
    }
+
+    public void setModelProvider(ModelProvider modelProvider) {
+        this.modelProvider = modelProvider;
+    }
 }

@@ -9,11 +9,13 @@ import com.mangofactory.swagger.core.SwaggerCache;
 import com.mangofactory.swagger.core.SwaggerPathProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.alternates.WildcardType;
+import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration;
 import com.wordnik.swagger.model.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,6 +44,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Configuration
 @ComponentScan(basePackages = { "com.mangofactory.swagger.controllers" })
+@Import(SwaggerModelsConfiguration.class)
 public class SpringSwaggerConfig {
 
     @Autowired

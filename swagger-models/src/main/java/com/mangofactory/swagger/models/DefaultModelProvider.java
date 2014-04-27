@@ -7,6 +7,7 @@ import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.model.Model;
 import com.wordnik.swagger.model.ModelProperty;
 import com.wordnik.swagger.model.ModelRef;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import scala.Option;
@@ -29,6 +30,7 @@ public class DefaultModelProvider implements ModelProvider {
     private final ModelPropertiesProvider propertiesProvider;
     private final ModelDependencyProvider dependencyProvider;
 
+    @Autowired
     public DefaultModelProvider(TypeResolver resolver, ModelPropertiesProvider propertiesProvider,
                                 ModelDependencyProvider dependencyProvider) {
         this.resolver = resolver;

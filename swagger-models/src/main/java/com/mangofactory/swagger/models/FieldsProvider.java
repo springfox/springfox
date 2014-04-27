@@ -5,12 +5,16 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedField;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.*;
 
+@Component
 public class FieldsProvider {
     private final TypeResolver typeResolver;
 
+    @Autowired
     public FieldsProvider(TypeResolver typeResolver) {
         this.typeResolver = typeResolver;
     }

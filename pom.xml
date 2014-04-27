@@ -189,6 +189,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/com/mangofactory/swagger/configuration/**SpringSwaggerConfig.*</exclude>
+                        <exclude>**/com/mangofactory/swagger/models/configuration/**SwaggerModelsConfiguration.*</exclude>
                         <exclude>**/com/mangofactory/swagger/scanners/**ResourceGroups.*</exclude>
                         <!-- TODO: REMOVE when we delete this class -->
                         <exclude>**/com/mangofactory/swagger/models/**SwaggerModelProvider.*</exclude>

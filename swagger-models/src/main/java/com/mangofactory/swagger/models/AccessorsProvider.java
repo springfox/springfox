@@ -10,6 +10,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -18,12 +20,14 @@ import java.util.regex.Pattern;
 
 import static com.google.common.collect.Lists.newArrayList;
 
+@Component
 public class AccessorsProvider {
     private static Pattern getter = Pattern.compile("^get([a-zA-Z_0-9].*)");
     private static Pattern isGetter = Pattern.compile("^is([a-zA-Z_0_9].*)");
     private static Pattern setter = Pattern.compile("^set([a-zA-Z_0-9].*)");
 
     private TypeResolver typeResolver;
+    @Autowired
     public AccessorsProvider(TypeResolver typeResolver) {
         this.typeResolver = typeResolver;
     }
