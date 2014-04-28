@@ -78,11 +78,28 @@ class DefaultSwaggerControllerSpec extends Specification {
     result.getResponse().getStatus() == 200
 
   }
+  
+  def "should respond with api listing for a given multi segment resource group"() {
+    given:
+      SwaggerCache swaggerCache = new SwaggerCache();
+      swaggerCache.swaggerApiListingMap = ['api/v1/businesses': apiListing()]
+      swaggerCache.swaggerApiResourceListingMap = ['some-swagger-group': resourceListing()]
+      controller.swaggerCache = swaggerCache
+        
+    when:
+      MvcResult result = mockMvc.perform(get("/api-docs/api/v1/businesses")).andDo(print()).andReturn()
+      def responseJson = jsonBodyResponse(result)
+      
+    then:
+      result.getResponse().getStatus() == 200
+  
+  }
 
   def "should respond with api listing for a given resource group prefixed with a swagger group"() {
     given:
     SwaggerCache swaggerCache = new SwaggerCache();
     swaggerCache.swaggerApiListingMap = ['businesses': apiListing()]
+    swaggerCache.swaggerApiResourceListingMap = ['some-swagger-group': resourceListing()]
     controller.swaggerCache = swaggerCache
     when:
     MvcResult result = mockMvc.perform(get("/api-docs/some-swagger-group/businesses")).andDo(print()).andReturn()
@@ -93,6 +110,22 @@ class DefaultSwaggerControllerSpec extends Specification {
 
   }
 
+  def "should respond with api listing for a given multi segment resource group prefixed with a swagger group"() {
+	given:
+	  SwaggerCache swaggerCache = new SwaggerCache();
+	  swaggerCache.swaggerApiListingMap = ['api/v1/businesses': apiListing()]
+      swaggerCache.swaggerApiResourceListingMap = ['some-swagger-group': resourceListing()]
+	  controller.swaggerCache = swaggerCache
+	  
+	when:
+	  MvcResult result = mockMvc.perform(get("/api-docs/some-swagger-group/api/v1/businesses")).andDo(print()).andReturn()
+	  def responseJson = jsonBodyResponse(result)
+
+	then:
+	  result.getResponse().getStatus() == 200
+
+  }
+  
   def "should respond with auth included"() {
   given:
     SwaggerCache swaggerCache = new SwaggerCache();

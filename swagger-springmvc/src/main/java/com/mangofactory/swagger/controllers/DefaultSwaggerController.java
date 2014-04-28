@@ -1,19 +1,26 @@
 package com.mangofactory.swagger.controllers;
 
-import com.mangofactory.swagger.annotations.ApiIgnore;
-import com.mangofactory.swagger.core.SwaggerCache;
-import com.wordnik.swagger.model.ApiListing;
-import com.wordnik.swagger.model.ResourceListing;
+import static com.google.common.collect.Iterables.getFirst;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.HandlerMapping;
 
-import static com.google.common.collect.Iterables.*;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.mangofactory.swagger.annotations.ApiIgnore;
+import com.mangofactory.swagger.core.SwaggerCache;
+import com.wordnik.swagger.model.ApiListing;
+import com.wordnik.swagger.model.ResourceListing;
 
 @Controller
 public class DefaultSwaggerController {
@@ -33,21 +40,27 @@ public class DefaultSwaggerController {
     }
 
     @ApiIgnore
-    @RequestMapping(value = { DOCUMENTATION_BASE_PATH + "/{resource}" }, method = RequestMethod.GET)
+    @RequestMapping(value = { DOCUMENTATION_BASE_PATH + "/**" }, method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<ApiListing> getApiListing(@PathVariable String resource) {
-        return getSwaggerApiListing(resource);
-    }
+    ResponseEntity<ApiListing> getApiListing(HttpServletRequest request) {
 
-    @ApiIgnore
-    @RequestMapping(value = { DOCUMENTATION_BASE_PATH + "/{swaggerGroup}/{resource:.*}" }, method = RequestMethod.GET)
-    public
-    @ResponseBody
-    ResponseEntity<ApiListing> getApiListing(@PathVariable String swaggerGroup, @PathVariable String resource) {
-        return getSwaggerApiListing(resource);
-    }
+        final String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
 
+        List<String> segments = Splitter.on('/').omitEmptyStrings().splitToList(path);
+
+        if (segments.isEmpty() || segments.size() < 2) {
+            new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
+        }
+
+        boolean isFirstSegmentSwaggerGroup = swaggerCache.getResourceListing(segments.get(1)) != null;
+        if (isFirstSegmentSwaggerGroup) {
+            return getSwaggerApiListing(Joiner.on('/').join(segments.subList(2, segments.size())));
+        }
+
+        return getSwaggerApiListing(Joiner.on('/').join(segments.subList(1, segments.size())));
+    }
+    
     private ResponseEntity<ApiListing> getSwaggerApiListing(String resource) {
         ResponseEntity<ApiListing> responseEntity = new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
         ApiListing apiListing = swaggerCache.getSwaggerApiListing(resource);

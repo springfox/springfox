@@ -24,7 +24,16 @@ class ApiListingSupport {
               toOption(null),
               1);
    }
-
+   
+   def resourceListing() {
+      new ResourceListing(
+              "apiVersion",
+              "swagger version",
+              emptyScalaList(),
+              emptyScalaList(),
+              toOption(null))
+   }
+   
    def resourceListing(List<OAuth> authorizationTypes) {
       new ResourceListing(
               "apiVersion",
