@@ -34,7 +34,15 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
 
         List<ResolvedMethodParameter> methodParameters = handlerMethodResolver.methodParameters(handlerMethod);
         List<Parameter> parameters = newArrayList();
-
+        List<Command<RequestMappingContext>> commandList = newArrayList();
+        commandList.add(new ParameterAllowableReader());
+        commandList.add(new ParameterDataTypeReader());
+        commandList.add(new ParameterTypeReader());
+        commandList.add(new ParameterDefaultReader());
+        commandList.add(new ParameterDescriptionReader());
+        commandList.add(new ParameterMultiplesReader());
+        commandList.add(new ParameterNameReader());
+        commandList.add(new ParameterRequiredReader());
         for (ResolvedMethodParameter methodParameter : methodParameters) {
 
             if (!shouldIgnore(methodParameter, swaggerGlobalSettings.getIgnorableParameterTypes())) {
@@ -47,16 +55,6 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
                 parameterContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
 
                 CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
-                List<Command<RequestMappingContext>> commandList = newArrayList();
-
-                commandList.add(new ParameterAllowableReader());
-                commandList.add(new ParameterDataTypeReader());
-                commandList.add(new ParameterTypeReader());
-                commandList.add(new ParameterDefaultReader());
-                commandList.add(new ParameterDescriptionReader());
-                commandList.add(new ParameterMultiplesReader());
-                commandList.add(new ParameterNameReader());
-                commandList.add(new ParameterRequiredReader());
 
                 commandExecutor.execute(commandList, parameterContext);
 
