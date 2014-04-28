@@ -53,12 +53,22 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       Set<RequestMethod> supportedMethods = (requestMethods == null || requestMethods.isEmpty())
             ? allRequestMethods : requestMethods;
 
-
+      List<Command<RequestMappingContext>> commandList = newArrayList();
+      commandList.add(new OperationAuthReader());
+      commandList.add(new OperationHttpMethodReader());
+      commandList.add(new OperationSummaryReader());
+      commandList.add(new OperationNotesReader());
+      commandList.add(new OperationResponseClassReader());
+      commandList.add(new OperationNicknameReader());
+      commandList.add(new OperationPositionReader());
+      commandList.add(new MediaTypeReader());
+      commandList.add(new OperationParameterReader());
+      commandList.add(new OperationResponseMessageReader());
+      commandList.add(new OperationDeprecatedReader());
       Integer currentCount = 0;
       for (RequestMethod httpRequestMethod : supportedMethods) {
          CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
 
-         List<Command<RequestMappingContext>> commandList = newArrayList();
          RequestMappingContext operationRequestMappingContext = new RequestMappingContext(requestMappingInfo, handlerMethod);
          operationRequestMappingContext.put("currentCount", currentCount);
          operationRequestMappingContext.put("currentHttpMethod", httpRequestMethod);
@@ -67,19 +77,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
          operationRequestMappingContext.put("requestMappingPattern", requestMappingPattern);
 
 
-         commandList.add(new OperationAuthReader());
-         commandList.add(new OperationHttpMethodReader());
-         commandList.add(new OperationSummaryReader());
-         commandList.add(new OperationNotesReader());
-         commandList.add(new OperationResponseClassReader());
-         commandList.add(new OperationNicknameReader());
-         commandList.add(new OperationPositionReader());
-         commandList.add(new MediaTypeReader());
-         commandList.add(new OperationParameterReader());
-         commandList.add(new OperationResponseMessageReader());
-         commandList.add(new OperationDeprecatedReader());
-         commandExecutor.execute(commandList, operationRequestMappingContext);
-
+          commandExecutor.execute(commandList, operationRequestMappingContext);
 
          Map<String, Object> operationResultMap = operationRequestMappingContext.getResult();
          currentCount = (Integer) operationResultMap.get("currentCount");
