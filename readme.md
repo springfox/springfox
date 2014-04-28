@@ -83,17 +83,17 @@ that add to test coverage and documentation is always welcome! :)
 
 ##### Breaking changes in 0.8.4 since 0.8.2 that would need the configurations to be altered are:
 1. Remove the following autowired fields in your spring configuration
-   ```java
+```java
    @Autowired
    private SpringSwaggerModelConfig springSwaggerModelConfig;
-   ```
+```
 2. Add the following autowired fields in your spring configuration
-  ```java
+```java
   @Autowired
   private ModelProvider modelProvider;
-  ```
+```
 3. Make sure any customizations to the object mapper are appropriately added in an ObjectMapper bean definition
-    ```java
+```java
     /**
         * Object mapper.
         *
@@ -104,21 +104,21 @@ that add to test coverage and documentation is always welcome! :)
             //This is the opportunity to override object mapper behavior
             return new ObjectMapper();
         }
-    ```
+```
 4. Configure the swaggerApiResourceListing bean with the model provider that is autowired or provide your own
 implementation
-  ```java
+```java
   // Set the model provider, uses the default autowired model provider.
       swaggerApiResourceListing.setModelProvider(modelProvider);
-   ```
+```
 
 5. Configure the blah bean with an implementation of the resource grouping strategy
-    ```java
+```java
     //How to group request mappings to ApiResource's typically by spring controller classes. This is a hook to provide
      // a custom implementation of the grouping strategy. By default we use SpringGroupingStrategy. An alternative is
      // to use ClassOrApiAnnotationResourceGrouping to group using Api annotation.
         apiListingReferenceScanner.setResourceGroupingStrategy(springSwaggerConfig.defaultResourceGroupingStrategy());
-    ```
+```
 
 ##### Features
 - Allows configuration of default response messages based on HTTP methods which are displayed on all api operations on swagger-ui
