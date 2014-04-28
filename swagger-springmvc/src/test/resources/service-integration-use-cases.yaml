@@ -377,7 +377,7 @@ testcases:
     parameters:
        - type: "string"
          name: "petId"
-       - type: "MultipartFile"
+       - type: "file"
          name: "pic"
 
   - parentUri: "/api-docs/pets"
