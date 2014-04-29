@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,16 +28,28 @@ import static com.google.common.collect.Maps.*;
 public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultModelPropertiesProvider.class);
-    private final ObjectMapper objectMapper;
+    @Autowired(required = false)
+    private ObjectMapper objectMapper;
     private final AccessorsProvider accessors;
     private final FieldsProvider fields;
 
     @Autowired
-    public DefaultModelPropertiesProvider(ObjectMapper objectMapper, AccessorsProvider accessors,
-            FieldsProvider fields) {
-        this.objectMapper = objectMapper;
+    public DefaultModelPropertiesProvider(AccessorsProvider accessors, FieldsProvider fields) {
         this.accessors = accessors;
         this.fields = fields;
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper();
+        }
+    }
+
+    @VisibleForTesting
+    DefaultModelPropertiesProvider(ObjectMapper objectMapper, AccessorsProvider accessors, FieldsProvider fields) {
+        this.accessors = accessors;
+        this.fields = fields;
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper();
+        }
+        this.objectMapper = objectMapper;
     }
 
     public List<? extends ModelProperty> serializableProperties(ResolvedType resolvedType) {

@@ -1,5 +1,5 @@
 package com.mangofactory.swagger.integration
-import com.fasterxml.jackson.databind.ObjectMapper
+
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.JacksonScalaSupport
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
@@ -48,13 +48,6 @@ public class ServicesConfiguration {
     //Set to false to disable
     jacksonScalaSupport.setRegisterScalaModule(true);
     return jacksonScalaSupport;
-  }
-
-  @Bean
-  public ObjectMapper objectMapper() {
-    //This is the opportunity to override object mapper behavior
-    //return springSwaggerConfig.objectMapperSupport().getObjectMapper();
-    return new ObjectMapper();
   }
 
 //  @Bean
