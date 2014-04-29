@@ -144,7 +144,12 @@ public class ServicesConfiguration {
         return defaultSwaggerPathProvider.sanitizeRequestMappingPattern(requestMappingPattern);
       }
 
-      public void setDefaultSwaggerPathProvider(SwaggerPathProvider defaultSwaggerPathProvider) {
+        @Override
+        String getSwaggerDocumentationBasePath() {
+            return "api-docs/"
+        }
+
+        public void setDefaultSwaggerPathProvider(SwaggerPathProvider defaultSwaggerPathProvider) {
         this.defaultSwaggerPathProvider = defaultSwaggerPathProvider;
       }
     }

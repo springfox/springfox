@@ -104,10 +104,10 @@ class ApiListingReferenceScannerSpec extends Specification {
     List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
 
   then:
-    apiListingReferences.size == 1
-    ApiListingReference businessListingReference = apiListingReferences[0]
-    businessListingReference.path() ==
-        '/someGroup/com_mangofactory_swagger_dummy_DummyClass'
+  apiListingReferences.size == 1
+  ApiListingReference businessListingReference = apiListingReferences[0]
+  businessListingReference.path() ==
+          'http://127.0.0.1:8080/context-path/api-docs/someGroup/com_mangofactory_swagger_dummy_DummyClass'
   }
 
   def "grouping of listing references"() {
@@ -170,8 +170,6 @@ class ApiListingReferenceScannerSpec extends Specification {
   then:
     ApiListingReference apiListingReference = apiListingReferences[0]
     apiListingReference.path() == "/swaggerGroup/Group+name"
-
-
   }
 
   private class DemoRelativeSwaggerPathProvider extends DefaultSwaggerPathProvider {
@@ -180,5 +178,9 @@ class ApiListingReferenceScannerSpec extends Specification {
       return "/swagger-springmvc-demo";
     }
 
+      @Override
+      String getSwaggerDocumentationBasePath() {
+          return "api-docs/"
+      }
   }
 }

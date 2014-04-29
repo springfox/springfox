@@ -30,6 +30,14 @@ public class DefaultSwaggerPathProvider implements SwaggerPathProvider {
       return result.isEmpty() ? "/" : result;
    }
 
+   public String getSwaggerDocumentationBasePath() {
+      return UriComponentsBuilder
+              .fromHttpUrl(getAppBasePath())
+              .pathSegment("api-docs/")
+              .build()
+              .toString();
+   }
+
    public String getApiResourceSuffix() {
       return apiResourceSuffix;
    }

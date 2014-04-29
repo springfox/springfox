@@ -17,7 +17,7 @@ public interface SwaggerPathProvider {
     * https://mywebserver.com
     * @return the applications base uri
     */
-   public String getAppBasePath();
+   String getAppBasePath();
 
     /**
     * Gets a uri friendly path from a request mapping pattern.
@@ -30,5 +30,7 @@ public interface SwaggerPathProvider {
     * @param requestMappingPattern
     * @return the request mapping endpoint
     */
-   public String sanitizeRequestMappingPattern(String requestMappingPattern);
+   String sanitizeRequestMappingPattern(String requestMappingPattern);
+
+   String getSwaggerDocumentationBasePath();
 }

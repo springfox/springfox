@@ -132,7 +132,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     then:
 
       ApiListingReference apiListingReference = resourceListing.apis().head()
-      apiListingReference.path() == "/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass"
+      apiListingReference.path() == "http://127.0.0.1:8080/myApp/api-docs/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass"
       apiListingReference.position() == 0
       fromOption(apiListingReference.description()) == "com.mangofactory.swagger.dummy.DummyClass"
 
