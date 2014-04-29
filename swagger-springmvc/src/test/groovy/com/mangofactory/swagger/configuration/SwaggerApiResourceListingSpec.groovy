@@ -137,8 +137,8 @@ class SwaggerApiResourceListingSpec extends Specification {
       fromOption(apiListingReference.description()) == "com.mangofactory.swagger.dummy.DummyClass"
 
     and:
-      ApiListing apiListing = swaggerCache
-              .swaggerApiListingMap['com_mangofactory_swagger_dummy_DummyClass']
+      ApiListing apiListing =
+              swaggerCache.swaggerApiListingMap['swaggerGroup']['com_mangofactory_swagger_dummy_DummyClass']
       apiListing.swaggerVersion() == '1.2'
       apiListing.basePath() == 'http://127.0.0.1:8080/myApp'
       apiListing.resourcePath() == '/com_mangofactory_swagger_dummy_DummyClass'

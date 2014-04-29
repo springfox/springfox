@@ -28,7 +28,7 @@ import static com.google.common.collect.Lists.*
 public class ServicesConfiguration {
 
   public static final List<String> DEFAULT_INCLUDE_PATTERNS = newArrayList(".*?");
-  public static final String SWAGGER_GROUP = "";
+  public static final String SWAGGER_GROUP = "default";
 
   @Autowired
   private SpringSwaggerConfig springSwaggerConfig;

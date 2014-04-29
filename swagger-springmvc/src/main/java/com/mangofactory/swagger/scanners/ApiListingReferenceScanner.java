@@ -5,6 +5,7 @@ import com.google.common.collect.Multimaps;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.core.SwaggerPathProvider;
 import com.wordnik.swagger.model.ApiListingReference;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -53,6 +54,9 @@ public class ApiListingReferenceScanner {
         Assert.notEmpty(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
         Assert.notNull(resourceGroupingStrategy, "resourceGroupingStrategy is required");
         Assert.notNull(swaggerGroup, "swaggerGroup is required");
+       if(StringUtils.isBlank(swaggerGroup)){
+          throw new IllegalArgumentException("swaggerGroup must not be empty");
+       }
         Assert.notNull(swaggerPathProvider, "swaggerPathProvider is required");
 
         log.info("Scanning for api listing references");

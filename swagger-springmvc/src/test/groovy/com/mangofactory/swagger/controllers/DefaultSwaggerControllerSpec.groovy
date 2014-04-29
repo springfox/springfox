@@ -48,7 +48,7 @@ class DefaultSwaggerControllerSpec extends Specification {
   def "should return the default or first swagger resource listing"() {
   given:
     SwaggerCache swaggerCache = new SwaggerCache();
-    SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "")
+    SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
     swaggerApiResourceListing.initialize()
     controller.swaggerCache = swaggerCache
 
@@ -61,34 +61,20 @@ class DefaultSwaggerControllerSpec extends Specification {
   where:
     path                | expectedStatus
     "/api-docs"         | 200
-    "/api-docs/"        | 200
+    "/api-docs/default" | 200
     "/api-docs/unknown" | 404
   }
 
   def "should respond with api listing for a given resource group"() {
   given:
     SwaggerCache swaggerCache = new SwaggerCache();
-    swaggerCache.swaggerApiListingMap = ['businesses': apiListing()]
+    swaggerCache.swaggerApiListingMap = [resourceKey: ['businesses': apiListing()]]
     controller.swaggerCache = swaggerCache
   when:
-    MvcResult result = mockMvc.perform(get("/api-docs/businesses")).andDo(print()).andReturn()
+    MvcResult result = mockMvc.perform(get("/api-docs/resourceKey/businesses")).andDo(print()).andReturn()
     def responseJson = jsonBodyResponse(result)
 
   then:
-    result.getResponse().getStatus() == 200
-
-  }
-
-  def "should respond with api listing for a given resource group prefixed with a swagger group"() {
-    given:
-    SwaggerCache swaggerCache = new SwaggerCache();
-    swaggerCache.swaggerApiListingMap = ['businesses': apiListing()]
-    controller.swaggerCache = swaggerCache
-    when:
-    MvcResult result = mockMvc.perform(get("/api-docs/some-swagger-group/businesses")).andDo(print()).andReturn()
-    def responseJson = jsonBodyResponse(result)
-
-    then:
     result.getResponse().getStatus() == 200
 
   }
@@ -104,7 +90,7 @@ class DefaultSwaggerControllerSpec extends Specification {
     swaggerCache.swaggerApiResourceListingMap = [resourceKey: resourceListing(authTypes)]
     controller.swaggerCache = swaggerCache
   when:
-    MvcResult result = mockMvc.perform(get("/api-docs")).andDo(print()).andReturn()
+    MvcResult result = mockMvc.perform(get("/api-docs/resourceKey")).andDo(print()).andReturn()
     def json = jsonBodyResponse(result)
 
   then:

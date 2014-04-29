@@ -13,64 +13,66 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import static com.google.common.collect.Iterables.*;
+import java.util.Map;
 
 @Controller
 public class DefaultSwaggerController {
 
-    public static final String DOCUMENTATION_BASE_PATH = "/api-docs";
-    private static final String API_ROOT = "root";
+   public static final String DOCUMENTATION_BASE_PATH = "/api-docs";
 
-    @Autowired
-    private SwaggerCache swaggerCache;
+   @Autowired
+   private SwaggerCache swaggerCache;
 
-    @ApiIgnore
-    @RequestMapping(value = { DOCUMENTATION_BASE_PATH }, method = RequestMethod.GET)
-    public
-    @ResponseBody
-    ResponseEntity<ResourceListing> getResourceListingByKey() {
-        return getSwaggerResourceListing(API_ROOT);
-    }
+   @ApiIgnore
+   @RequestMapping(value = {DOCUMENTATION_BASE_PATH}, method = RequestMethod.GET)
+   public
+   @ResponseBody
+   ResponseEntity<ResourceListing> getResourceListingByKey() {
+      return getSwaggerResourceListing(null);
+   }
 
-    @ApiIgnore
-    @RequestMapping(value = { DOCUMENTATION_BASE_PATH + "/{resource}" }, method = RequestMethod.GET)
-    public
-    @ResponseBody
-    ResponseEntity<ApiListing> getApiListing(@PathVariable String resource) {
-        return getSwaggerApiListing(resource);
-    }
+   @ApiIgnore
+   @RequestMapping(value = {DOCUMENTATION_BASE_PATH + "/{resourceKey}"}, method = RequestMethod.GET)
+   public
+   @ResponseBody
+   ResponseEntity<ResourceListing> getResourceListing(@PathVariable String resourceKey) {
+      return getSwaggerResourceListing(resourceKey);
+   }
 
-    @ApiIgnore
-    @RequestMapping(value = { DOCUMENTATION_BASE_PATH + "/{swaggerGroup}/{resource:.*}" }, method = RequestMethod.GET)
-    public
-    @ResponseBody
-    ResponseEntity<ApiListing> getApiListing(@PathVariable String swaggerGroup, @PathVariable String resource) {
-        return getSwaggerApiListing(resource);
-    }
+   @ApiIgnore
+   @RequestMapping(value = {DOCUMENTATION_BASE_PATH + "/{resourceKey}/{resource}"}, method = RequestMethod.GET)
+   public
+   @ResponseBody
+   ResponseEntity<ApiListing> getApiListing(@PathVariable String resourceKey, @PathVariable String resource) {
+      return getSwaggerApiListing(resourceKey, resource);
+   }
 
-    private ResponseEntity<ApiListing> getSwaggerApiListing(String resource) {
-        ResponseEntity<ApiListing> responseEntity = new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
-        ApiListing apiListing = swaggerCache.getSwaggerApiListing(resource);
-        if (null != apiListing) {
+   private ResponseEntity<ApiListing> getSwaggerApiListing(String resourceKey, String resource) {
+      ResponseEntity<ApiListing> responseEntity = new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
+      Map<String, ApiListing> apiListingMap = swaggerCache.getSwaggerApiListingMap().get(resourceKey);
+      if (null != apiListingMap) {
+         ApiListing apiListing = apiListingMap.get(resource);
+         if (null != apiListing) {
             responseEntity = new ResponseEntity<ApiListing>(apiListing, HttpStatus.OK);
-        }
-        return responseEntity;
-    }
+         }
+      }
+      return responseEntity;
+   }
 
-    private ResponseEntity<ResourceListing> getSwaggerResourceListing(String resourceKey) {
-        ResponseEntity<ResourceListing> responseEntity = new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
-        ResourceListing resourceListing = null;
+   private ResponseEntity<ResourceListing> getSwaggerResourceListing(String resourceKey) {
+      ResponseEntity<ResourceListing> responseEntity = new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
+      ResourceListing resourceListing = null;
 
-        if (API_ROOT.equals(resourceKey)) {
-            resourceListing = getFirst(swaggerCache.getSwaggerApiResourceListingMap().values(), null);
-        } else {
-            if (swaggerCache.getSwaggerApiResourceListingMap().containsKey(resourceKey)) {
-                resourceListing = swaggerCache.getSwaggerApiResourceListingMap().get(resourceKey);
-            }
-        }
-        if (null != resourceListing) {
-            responseEntity = new ResponseEntity<ResourceListing>(resourceListing, HttpStatus.OK);
-        }
-        return responseEntity;
-    }
+      if (null == resourceKey) {
+         resourceListing = swaggerCache.getSwaggerApiResourceListingMap().values().iterator().next();
+      } else {
+         if (swaggerCache.getSwaggerApiResourceListingMap().containsKey(resourceKey)) {
+            resourceListing = swaggerCache.getSwaggerApiResourceListingMap().get(resourceKey);
+         }
+      }
+      if (null != resourceListing) {
+         responseEntity = new ResponseEntity<ResourceListing>(resourceListing, HttpStatus.OK);
+      }
+      return responseEntity;
+   }
 }

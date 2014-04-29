@@ -57,7 +57,7 @@ public class SwaggerApiResourceListing {
           apiListingScanner.setControllerNamingStrategy(apiListingReferenceScanner.getResourceGroupingStrategy());
 
          Map<String, ApiListing> apiListings = apiListingScanner.scan();
-         swaggerCache.addApiListings(apiListings);
+         swaggerCache.addApiListings(swaggerGroup, apiListings);
 
       } else {
          log.error("ApiListingReferenceScanner not configured");

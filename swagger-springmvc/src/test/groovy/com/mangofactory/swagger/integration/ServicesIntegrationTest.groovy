@@ -58,7 +58,9 @@ public class ServicesIntegrationTest extends Specification {
   def "Services are documented with the correct number of operations"() {
     expect:
     def documentationUri = parentUri
+    println apis
     def api = apis.find { "/api-docs" + it.path ==  documentationUri }
+    println api
     api != null
     def apiListing = response(mockMvc, "/api-docs" + api.path)
     operations == apiListing.apis.size
