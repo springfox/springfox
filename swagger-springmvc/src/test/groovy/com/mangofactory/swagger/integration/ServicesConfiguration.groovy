@@ -4,9 +4,10 @@ import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.JacksonScalaSupport
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
-import com.mangofactory.swagger.core.AbsoluteSwaggerPathProvider
+import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
-import com.mangofactory.swagger.core.SwaggerPathProvider
+import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
+import com.mangofactory.swagger.paths.SwaggerPathProvider
 import com.mangofactory.swagger.models.ModelProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.model.*
@@ -119,27 +120,7 @@ public class ServicesConfiguration {
 
    def testPathProvider() {
       def servletContext = servletContext
-      new SwaggerPathProvider() {
-         private SwaggerPathProvider defaultSwaggerPathProvider = new AbsoluteSwaggerPathProvider();
-
-         @Override
-         public String getApiResourcePrefix() {
-            return defaultSwaggerPathProvider.getApiResourcePrefix();
-         }
-
-         public String getAppBasePath() {
-            return "http://localhost:8080";
-         }
-
-         @Override
-         String getSwaggerDocumentationBasePath() {
-            return "api-docs/"
-         }
-
-         public void setDefaultSwaggerPathProvider(SwaggerPathProvider defaultSwaggerPathProvider) {
-            this.defaultSwaggerPathProvider = defaultSwaggerPathProvider;
-         }
-      }
+      new RelativeSwaggerPathProvider(servletContext: servletContext)
    }
 
   @Bean

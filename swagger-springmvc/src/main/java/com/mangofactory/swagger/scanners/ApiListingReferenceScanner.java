@@ -3,7 +3,7 @@ package com.mangofactory.swagger.scanners;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimaps;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
-import com.mangofactory.swagger.core.SwaggerPathProvider;
+import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.wordnik.swagger.model.ApiListingReference;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Ordering.*;
 import static com.mangofactory.swagger.ScalaUtils.*;

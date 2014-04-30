@@ -58,7 +58,7 @@ public class ServicesIntegrationTest extends Specification {
   def "Services are documented with the correct number of operations"() {
     expect:
     def documentationUri = parentUri
-    println apis
+    println "documentationUri: $documentationUri Apis: $apis"
     def api = apis.find { "/api-docs" + it.path ==  documentationUri }
     println api
     api != null

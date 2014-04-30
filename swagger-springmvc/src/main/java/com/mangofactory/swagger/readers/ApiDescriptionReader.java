@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.readers;
 
-import com.mangofactory.swagger.core.SwaggerPathProvider;
+import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.Operation;

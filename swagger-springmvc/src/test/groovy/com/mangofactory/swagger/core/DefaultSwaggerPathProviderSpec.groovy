@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.core
 
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import spock.lang.Specification
 
 @Mixin(RequestMappingSupport)
@@ -8,7 +9,7 @@ class DefaultSwaggerPathProviderSpec extends Specification {
 
    def "Swagger url formats"() {
     given:
-      AbsoluteSwaggerPathProvider defaultSwaggerPathProvider = new AbsoluteSwaggerPathProvider(apiResourceSuffix: "/api/v1/");
+      AbsoluteSwaggerPathProvider defaultSwaggerPathProvider = new AbsoluteSwaggerPathProvider(apiResourcePrefix: "/api/v1/");
       defaultSwaggerPathProvider.servletContext = servletContext()
 
     expect:
