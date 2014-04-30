@@ -8,7 +8,7 @@ class DefaultSwaggerPathProviderSpec extends Specification {
 
    def "Swagger url formats"() {
     given:
-      DefaultSwaggerPathProvider defaultSwaggerPathProvider = new DefaultSwaggerPathProvider(apiResourceSuffix: "/api/v1/");
+      AbsoluteSwaggerPathProvider defaultSwaggerPathProvider = new AbsoluteSwaggerPathProvider(apiResourceSuffix: "/api/v1/");
       defaultSwaggerPathProvider.servletContext = servletContext()
 
     expect:
@@ -22,7 +22,7 @@ class DefaultSwaggerPathProviderSpec extends Specification {
    def "should generate request mapping endpoints"() {
     given:
 
-      DefaultSwaggerPathProvider defaultSwaggerPathProvider = new DefaultSwaggerPathProvider(apiResourceSuffix: "/api/v1/");
+      AbsoluteSwaggerPathProvider defaultSwaggerPathProvider = new AbsoluteSwaggerPathProvider(apiResourceSuffix: "/api/v1/");
       defaultSwaggerPathProvider.servletContext = servletContext()
 
     expect:

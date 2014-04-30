@@ -2,7 +2,7 @@ package com.mangofactory.swagger.readers
 
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
-import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
+import com.mangofactory.swagger.core.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.ApiDescription
@@ -17,7 +17,7 @@ class ApiDescriptionReaderSpec extends Specification {
 
    def "should generate an api description for each request mapping pattern"() {
     given:
-      DefaultSwaggerPathProvider defaultSwaggerPathProvider = new DefaultSwaggerPathProvider()
+      AbsoluteSwaggerPathProvider defaultSwaggerPathProvider = new AbsoluteSwaggerPathProvider()
       defaultSwaggerPathProvider.setApiResourceSuffix("/api/v1")
       defaultSwaggerPathProvider.servletContext = servletContext()
 

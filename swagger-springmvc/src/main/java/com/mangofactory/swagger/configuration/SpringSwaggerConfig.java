@@ -2,11 +2,8 @@ package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.annotations.ApiIgnore;
-import com.mangofactory.swagger.core.DefaultSwaggerPathProvider;
-import com.mangofactory.swagger.core.ResourceGroupingStrategy;
-import com.mangofactory.swagger.core.SpringGroupingStrategy;
-import com.mangofactory.swagger.core.SwaggerCache;
-import com.mangofactory.swagger.core.SwaggerPathProvider;
+import com.mangofactory.swagger.core.*;
+import com.mangofactory.swagger.core.AbsoluteSwaggerPathProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.alternates.WildcardType;
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration;
@@ -69,7 +66,7 @@ public class SpringSwaggerConfig {
 
     @Bean
     public SwaggerPathProvider defaultSwaggerPathProvider() {
-        return new DefaultSwaggerPathProvider();
+        return new AbsoluteSwaggerPathProvider();
     }
 
     @Bean

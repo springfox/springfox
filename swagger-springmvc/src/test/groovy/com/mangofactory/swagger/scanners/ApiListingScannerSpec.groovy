@@ -38,7 +38,7 @@ class ApiListingScannerSpec extends Specification {
       RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
       resourceGroupRequestMappings.put(new ResourceGroup("businesses"), [requestMappingContext])
-      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider(),
+      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
               defaultModelProvider(), null)
 
      def settings = new SwaggerGlobalSettings()
@@ -73,7 +73,7 @@ class ApiListingScannerSpec extends Specification {
       RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
      Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
      resourceGroupRequestMappings.put(new ResourceGroup("businesses"), [requestMappingContext])
-      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider(),
+      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
               defaultModelProvider(), null)
      def settings = new SwaggerGlobalSettings()
      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()

@@ -2,7 +2,7 @@ package com.mangofactory.swagger.scanners
 
 import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
-import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
+import com.mangofactory.swagger.core.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.core.ResourceGroupingStrategy
 import com.mangofactory.swagger.core.SpringGroupingStrategy
 import com.mangofactory.swagger.mixins.AccessorAssertions
@@ -100,7 +100,7 @@ class ApiListingReferenceScannerSpec extends Specification {
     apiListingReferenceScanner.setIncludePatterns([".*"])
     apiListingReferenceScanner.setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
     apiListingReferenceScanner.setSwaggerGroup("someGroup")
-    apiListingReferenceScanner.setSwaggerPathProvider(new DefaultSwaggerPathProvider(servletContext: servletContext()))
+    apiListingReferenceScanner.setSwaggerPathProvider(new AbsoluteSwaggerPathProvider(servletContext: servletContext()))
     List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
 
   then:
@@ -134,7 +134,7 @@ class ApiListingReferenceScannerSpec extends Specification {
     apiListingReferenceScanner.setIncludePatterns([".*"])
     apiListingReferenceScanner.setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
     apiListingReferenceScanner.setSwaggerGroup("someGroup")
-    apiListingReferenceScanner.setSwaggerPathProvider(new DefaultSwaggerPathProvider(servletContext: servletContext()))
+    apiListingReferenceScanner.setSwaggerPathProvider(new AbsoluteSwaggerPathProvider(servletContext: servletContext()))
 
     List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
     apiListingReferences.size() == 2
@@ -172,7 +172,7 @@ class ApiListingReferenceScannerSpec extends Specification {
     apiListingReference.path() == "/swaggerGroup/Group+name"
   }
 
-  private class DemoRelativeSwaggerPathProvider extends DefaultSwaggerPathProvider {
+  private class DemoRelativeSwaggerPathProvider extends AbsoluteSwaggerPathProvider {
     @Override
     public String getAppBasePath() {
       return "/swagger-springmvc-demo";

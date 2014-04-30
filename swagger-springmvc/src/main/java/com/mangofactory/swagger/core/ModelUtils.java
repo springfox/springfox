@@ -20,7 +20,7 @@ public final class ModelUtils {
        return ResolvedTypes.typeName(asResolved(resolver, clazz));
    }
 
-    public static String getReponseClassName(ResolvedType returnType) {
+    public static String getResponseClassName(ResolvedType returnType) {
         return ResolvedTypes.responseTypeName(returnType);
     }
 }

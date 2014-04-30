@@ -32,7 +32,7 @@ public class OperationResponseClassReader implements Command<RequestMappingConte
             context.put("responseClass", "");
             return;
         }
-        String responseTypeName = ModelUtils.getReponseClassName(returnType);
+        String responseTypeName = ModelUtils.getResponseClassName(returnType);
         log.debug("Setting response class to:" + responseTypeName);
         context.put("responseClass", responseTypeName);
     }

@@ -4,7 +4,7 @@ import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.JacksonScalaSupport
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
-import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
+import com.mangofactory.swagger.core.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerPathProvider
 import com.mangofactory.swagger.models.ModelProvider
@@ -120,7 +120,7 @@ public class ServicesConfiguration {
   def testPathProvider() {
     def servletContext = servletContext
     new SwaggerPathProvider() {
-      private SwaggerPathProvider defaultSwaggerPathProvider = new DefaultSwaggerPathProvider();
+      private SwaggerPathProvider defaultSwaggerPathProvider = new AbsoluteSwaggerPathProvider();
 
       @Override
       public String getApiResourcePrefix() {

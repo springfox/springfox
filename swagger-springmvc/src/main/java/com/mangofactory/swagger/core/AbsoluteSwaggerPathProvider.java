@@ -5,7 +5,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletContext;
 
-public class DefaultSwaggerPathProvider implements SwaggerPathProvider {
+public class AbsoluteSwaggerPathProvider implements SwaggerPathProvider {
    @Autowired
    private ServletContext servletContext;
    private String apiResourceSuffix = "";

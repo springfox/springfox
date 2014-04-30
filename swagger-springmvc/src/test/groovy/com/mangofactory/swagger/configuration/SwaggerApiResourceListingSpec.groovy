@@ -3,7 +3,7 @@ package com.mangofactory.swagger.configuration
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
-import com.mangofactory.swagger.core.DefaultSwaggerPathProvider
+import com.mangofactory.swagger.core.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.models.*
@@ -27,7 +27,7 @@ class SwaggerApiResourceListingSpec extends Specification {
       swaggerApiResourceListing.setSwaggerCache(cache)
       List<AuthorizationType> authTypes = Arrays.asList(new ApiKey("", ""))
       swaggerApiResourceListing.setAuthorizationTypes(authTypes)
-      DefaultSwaggerPathProvider provider = new DefaultSwaggerPathProvider()
+      AbsoluteSwaggerPathProvider provider = new AbsoluteSwaggerPathProvider()
       swaggerApiResourceListing.setSwaggerPathProvider(provider);
     expect:
       cache == swaggerApiResourceListing.getSwaggerCache()
@@ -91,57 +91,55 @@ class SwaggerApiResourceListingSpec extends Specification {
    }
 
    def "resource with mocked apis"() {
-    given:
-      SwaggerCache swaggerCache = new SwaggerCache();
-      String swaggerGroup = "swaggerGroup"
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, swaggerGroup)
-      ServletContext servletContext = [getContextPath: { return "/myApp" }] as ServletContext
-      DefaultSwaggerPathProvider swaggerPathProvider = new DefaultSwaggerPathProvider(servletContext: servletContext)
+      given:
+        SwaggerCache swaggerCache = new SwaggerCache();
+        String swaggerGroup = "swaggerGroup"
+        SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, swaggerGroup)
+        ServletContext servletContext = [getContextPath: { return "/myApp" }] as ServletContext
+        AbsoluteSwaggerPathProvider swaggerPathProvider = new AbsoluteSwaggerPathProvider(servletContext: servletContext)
 
-      swaggerApiResourceListing.setSwaggerPathProvider(swaggerPathProvider)
+        swaggerApiResourceListing.setSwaggerPathProvider(swaggerPathProvider)
 
-     def settings = new SwaggerGlobalSettings()
-     settings.setIgnorableParameterTypes(new SpringSwaggerConfig().defaultIgnorableParameterTypes())
-     SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-     settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
-     swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
+        def settings = new SwaggerGlobalSettings()
+        settings.setIgnorableParameterTypes(new SpringSwaggerConfig().defaultIgnorableParameterTypes())
+        SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+        settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
+        swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
 
-    def resolver = new TypeResolver()
-    def modelPropertiesProvider = new DefaultModelPropertiesProvider(new ObjectMapper(), new AccessorsProvider(resolver),
-            new FieldsProvider(resolver))
-    def modelDependenciesProvider = new ModelDependencyProvider(resolver, modelPropertiesProvider)
-    ModelProvider modelProvider = new DefaultModelProvider(resolver, modelPropertiesProvider,
-            modelDependenciesProvider)
+        def resolver = new TypeResolver()
+        def modelPropertiesProvider = new DefaultModelPropertiesProvider(new ObjectMapper(), new AccessorsProvider(resolver), new FieldsProvider(resolver))
+        def modelDependenciesProvider = new ModelDependencyProvider(resolver, modelPropertiesProvider)
+        ModelProvider modelProvider = new DefaultModelProvider(resolver, modelPropertiesProvider, modelDependenciesProvider)
 
-      Map handlerMethods = [(requestMappingInfo("somePath/")): dummyHandlerMethod()]
-      def requestHandlerMapping = Mock(RequestMappingHandlerMapping)
-      requestHandlerMapping.getHandlerMethods() >> handlerMethods
+        Map handlerMethods = [(requestMappingInfo("somePath/")): dummyHandlerMethod()]
+        def requestHandlerMapping = Mock(RequestMappingHandlerMapping)
+        requestHandlerMapping.getHandlerMethods() >> handlerMethods
 
-      ApiListingReferenceScanner scanner = new ApiListingReferenceScanner()
-      scanner.setRequestMappingHandlerMapping([requestHandlerMapping])
-      scanner.setResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
-      scanner.setSwaggerGroup("swaggerGroup")
+        ApiListingReferenceScanner scanner = new ApiListingReferenceScanner()
+        scanner.setRequestMappingHandlerMapping([requestHandlerMapping])
+        scanner.setResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
+        scanner.setSwaggerGroup("swaggerGroup")
 
-      scanner.setSwaggerPathProvider(swaggerPathProvider)
-      swaggerApiResourceListing.setModelProvider(modelProvider)
-      swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
+        scanner.setSwaggerPathProvider(swaggerPathProvider)
+        swaggerApiResourceListing.setModelProvider(modelProvider)
+        swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
 
-    when:
-      swaggerApiResourceListing.initialize()
-      ResourceListing resourceListing = swaggerCache.getResourceListing("swaggerGroup")
-    then:
+      when:
+        swaggerApiResourceListing.initialize()
+        ResourceListing resourceListing = swaggerCache.getResourceListing("swaggerGroup")
 
-      ApiListingReference apiListingReference = resourceListing.apis().head()
-      apiListingReference.path() == "http://127.0.0.1:8080/myApp/api-docs/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass"
-      apiListingReference.position() == 0
-      fromOption(apiListingReference.description()) == "com.mangofactory.swagger.dummy.DummyClass"
+      then:
+        ApiListingReference apiListingReference = resourceListing.apis().head()
+        apiListingReference.path() == "http://127.0.0.1:8080/myApp/api-docs/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass"
+        apiListingReference.position() == 0
+        fromOption(apiListingReference.description()) == "com.mangofactory.swagger.dummy.DummyClass"
 
-    and:
-      ApiListing apiListing =
-              swaggerCache.swaggerApiListingMap['swaggerGroup']['com_mangofactory_swagger_dummy_DummyClass']
-      apiListing.swaggerVersion() == '1.2'
-      apiListing.basePath() == 'http://127.0.0.1:8080/myApp'
-      apiListing.resourcePath() == '/com_mangofactory_swagger_dummy_DummyClass'
+      and:
+        ApiListing apiListing =
+                swaggerCache.swaggerApiListingMap['swaggerGroup']['com_mangofactory_swagger_dummy_DummyClass']
+        apiListing.swaggerVersion() == '1.2'
+        apiListing.basePath() == 'http://127.0.0.1:8080/myApp'
+        apiListing.resourcePath() == '/com_mangofactory_swagger_dummy_DummyClass'
 
    }
 }

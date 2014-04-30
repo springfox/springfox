@@ -20,7 +20,7 @@ public class ParameterDataTypeReader implements Command<RequestMappingContext> {
         if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
             context.put("dataType", "file");
         } else {
-            context.put("dataType", ModelUtils.getReponseClassName(parameterType));
+            context.put("dataType", ModelUtils.getResponseClassName(parameterType));
         }
     }
 
