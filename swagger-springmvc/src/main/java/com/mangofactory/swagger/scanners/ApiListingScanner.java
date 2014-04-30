@@ -113,7 +113,7 @@ public class ApiListingScanner {
           ApiListing apiListing = new ApiListing(
                apiVersion,
                swaggerVersion,
-               swaggerPathProvider.getAppBasePath(),
+               swaggerPathProvider.getApplicationBasePath(),
                resourcePath,
                toScalaList(produces),
                toScalaList(consumes),

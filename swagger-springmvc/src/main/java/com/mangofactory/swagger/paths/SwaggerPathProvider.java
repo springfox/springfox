@@ -1,7 +1,11 @@
 package com.mangofactory.swagger.paths;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.springframework.web.util.UriComponentsBuilder;
+
 public abstract class SwaggerPathProvider {
 
+    public static final String[] docs = {"api-docs"};
     /**
      * e.g the api endpoint resides at  http://myapp.com:8080/<contextPath>/api/v1/businesses
      * Should return /api/v1 - note the leading and non trailing forward slashes.
@@ -24,9 +28,34 @@ public abstract class SwaggerPathProvider {
      *
      * @return the applications base uri
      */
-    public abstract String getAppBasePath();
+    public String getApplicationBasePath() {
+        return applicationPath();
 
-    public abstract String getSwaggerDocumentationBasePath();
+        //TODO AK - replace with this and replace all code in other classes that appends apiResourcePrefix
+//        UriComponentsBuilder uriComponentsBuilder = agnosticUriComponentBuilder(applicationPath());
+//        return uriComponentsBuilder.pathSegment(apiResourcePrefix).build().toString();
+    }
+
+    public String getDocumentationBasePath(String ... segments) {
+        String[] pathSegments = (String[]) ArrayUtils.addAll(docs, segments);
+        UriComponentsBuilder uriComponentsBuilder = agnosticUriComponentBuilder(applicationPath());
+
+        return uriComponentsBuilder.pathSegment(pathSegments)
+                .build()
+                .toString();
+    }
+
+    private UriComponentsBuilder agnosticUriComponentBuilder(String appUrl) {
+        UriComponentsBuilder uriComponentsBuilder;
+        if (appUrl.startsWith("http")) {
+            uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(appUrl);
+        } else {
+            uriComponentsBuilder = UriComponentsBuilder.fromPath(appUrl);
+        }
+        return uriComponentsBuilder;
+    }
+
+    protected abstract String applicationPath();
 
     public String getApiResourcePrefix() {
         return apiResourcePrefix;
@@ -36,3 +65,5 @@ public abstract class SwaggerPathProvider {
         this.apiResourcePrefix = apiResourcePrefix;
     }
 }
+
+

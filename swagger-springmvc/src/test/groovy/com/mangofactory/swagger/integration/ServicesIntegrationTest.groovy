@@ -59,10 +59,10 @@ public class ServicesIntegrationTest extends Specification {
     expect:
     def documentationUri = parentUri
     println "documentationUri: $documentationUri Apis: $apis"
-    def api = apis.find { "/api-docs" + it.path ==  documentationUri }
+    def api = apis.find { it.path ==  documentationUri }
     println api
     api != null
-    def apiListing = response(mockMvc, "/api-docs" + api.path)
+    def apiListing = response(mockMvc, api.path)
     operations == apiListing.apis.size
 
     where:

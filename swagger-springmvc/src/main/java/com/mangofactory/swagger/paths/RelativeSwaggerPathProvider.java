@@ -9,18 +9,11 @@ public class RelativeSwaggerPathProvider extends SwaggerPathProvider {
     @Autowired
     private ServletContext servletContext;
 
-    public String getAppBasePath() {
+    @Override
+    protected String applicationPath() {
         return UriComponentsBuilder
                 .fromPath(null)
                 .path(servletContext.getContextPath())
-                .build()
-                .toString();
-    }
-
-    public String getSwaggerDocumentationBasePath() {
-        return UriComponentsBuilder
-                .fromPath(getAppBasePath())
-                .pathSegment("api-docs/")
                 .build()
                 .toString();
     }

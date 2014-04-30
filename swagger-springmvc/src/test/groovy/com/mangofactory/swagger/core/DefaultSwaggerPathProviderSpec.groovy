@@ -16,7 +16,7 @@ class DefaultSwaggerPathProviderSpec extends Specification {
       defaultSwaggerPathProvider."${method}"() == expected
     where:
       method                            | expected
-      "getAppBasePath"                  | "http://127.0.0.1:8080/context-path"
+      "getApplicationBasePath"                  | "http://127.0.0.1:8080/context-path"
       "getApiResourcePrefix"            | "/api/v1/"
    }
 }

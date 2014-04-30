@@ -14,7 +14,6 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -23,11 +22,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Ordering.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Ordering.natural;
+import static com.mangofactory.swagger.ScalaUtils.toOption;
 import static com.mangofactory.swagger.scanners.ResourceGroups.groupUris;
-import static java.lang.String.*;
+import static java.lang.String.format;
 
 public class ApiListingReferenceScanner {
    private static final String REQUEST_MAPPINGS_EMPTY =
@@ -92,27 +91,14 @@ public class ApiListingReferenceScanner {
       for (String resourceGroupUri : groups) {
 
          String listingDescription = resourceGroupDescriptions.get(resourceGroupUri);
-         String swaggerDocumentationBasePath = swaggerPathProvider.getSwaggerDocumentationBasePath();
 
-         String path = resolveListingBasePath(resourceGroupUri, swaggerDocumentationBasePath);
+         String path = swaggerPathProvider.getDocumentationBasePath(new String[]{swaggerGroup, resourceGroupUri});
 
          log.info(format("Create resource listing Path: %s Description: %s Position: %s",
                  path, resourceGroupUri, groupPosition));
 
          this.apiListingReferences.add(new ApiListingReference(path, toOption(listingDescription), groupPosition++));
       }
-   }
-
-   private String resolveListingBasePath(String resourceGroupUri, String swaggerDocumentationBasePath) {
-      String[] segments = {swaggerGroup, resourceGroupUri};
-
-      if (swaggerDocumentationBasePath.startsWith("http")) {
-         return UriComponentsBuilder.fromHttpUrl(swaggerPathProvider.getSwaggerDocumentationBasePath())
-                 .pathSegment(segments)
-                 .build()
-                 .toString();
-      }
-      return UriComponentsBuilder.fromPath(null).pathSegment(segments).build().toString();
    }
 
    private boolean requestMappingMatchesAnIncludePattern(RequestMappingInfo requestMappingInfo,

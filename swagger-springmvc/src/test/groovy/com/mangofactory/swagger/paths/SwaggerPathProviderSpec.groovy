@@ -9,13 +9,13 @@ class SwaggerPathProviderSpec extends Specification {
    def "Should build paths"() {
 
       expect:
-        provider.getSwaggerDocumentationBasePath() == expectedDoc
-        provider.getAppBasePath() == expectedBase
+        provider.getDocumentationBasePath() == expectedDoc
+        provider.getApplicationBasePath() == expectedBase
 
       where:
         provider                                                          | expectedBase                         | expectedDoc
-        new RelativeSwaggerPathProvider(servletContext: servletContext()) | "/context-path"                      | "/context-path/api-docs/"
-        new AbsoluteSwaggerPathProvider(servletContext: servletContext()) | "http://127.0.0.1:8080/context-path" | "http://127.0.0.1:8080/context-path/api-docs/"
+        new RelativeSwaggerPathProvider(servletContext: servletContext()) | "/context-path"                      | "/context-path/api-docs"
+        new AbsoluteSwaggerPathProvider(servletContext: servletContext()) | "http://127.0.0.1:8080/context-path" | "http://127.0.0.1:8080/context-path/api-docs"
 
    }
 }

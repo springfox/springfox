@@ -7,6 +7,7 @@ import com.mangofactory.swagger.core.ResourceGroupingStrategy
 import com.mangofactory.swagger.core.SpringGroupingStrategy
 import com.mangofactory.swagger.mixins.AccessorAssertions
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.paths.SwaggerPathProvider
 import com.wordnik.swagger.model.ApiListingReference
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
@@ -169,18 +170,14 @@ class ApiListingReferenceScannerSpec extends Specification {
 
   then:
     ApiListingReference apiListingReference = apiListingReferences[0]
-    apiListingReference.path() == "/swaggerGroup/Group+name"
+    apiListingReference.path() == "/swagger-springmvc-demo/api-docs/swaggerGroup/Group+name"
   }
 
-  private class DemoRelativeSwaggerPathProvider extends AbsoluteSwaggerPathProvider {
-    @Override
-    public String getAppBasePath() {
-      return "/swagger-springmvc-demo";
-    }
+  private class DemoRelativeSwaggerPathProvider extends SwaggerPathProvider {
 
-      @Override
-      String getSwaggerDocumentationBasePath() {
-          return "api-docs/"
-      }
+     @Override
+     protected String applicationPath() {
+        return "/swagger-springmvc-demo";
+     }
   }
 }
