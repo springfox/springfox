@@ -22,14 +22,6 @@ public class AbsoluteSwaggerPathProvider implements SwaggerPathProvider {
           .toString();
    }
 
-    @Override
-   public String sanitizeRequestMappingPattern(String requestMappingPattern) {
-      String result = requestMappingPattern;
-      //remove regex portion '/{businessId:\\w+}'
-      result = result.replaceAll("\\{(.*?):.*?\\}", "{$1}");
-      return result.isEmpty() ? "/" : result;
-   }
-
    public String getSwaggerDocumentationBasePath() {
       return UriComponentsBuilder
               .fromHttpUrl(getAppBasePath())

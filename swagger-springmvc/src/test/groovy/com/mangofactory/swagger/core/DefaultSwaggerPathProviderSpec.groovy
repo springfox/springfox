@@ -18,25 +18,4 @@ class DefaultSwaggerPathProviderSpec extends Specification {
       "getAppBasePath"                  | "http://127.0.0.1:8080/context-path"
       "getApiResourcePrefix"            | "/api/v1/"
    }
-
-   def "should generate request mapping endpoints"() {
-    given:
-
-      AbsoluteSwaggerPathProvider defaultSwaggerPathProvider = new AbsoluteSwaggerPathProvider(apiResourceSuffix: "/api/v1/");
-      defaultSwaggerPathProvider.servletContext = servletContext()
-
-    expect:
-      defaultSwaggerPathProvider.sanitizeRequestMappingPattern(mappingPattern) == expected
-
-    where:
-      mappingPattern             | expected
-      ""                         | "/"
-      "/"                        | "/"
-      "/businesses"              | "/businesses"
-      "/{businessId:\\w+}"       | "/{businessId}"
-      "/businesses/{businessId}" | "/businesses/{businessId}"
-      "/foo/bar:{baz}"           | "/foo/bar:{baz}"
-      "/foo/bar:{baz:\\w+}"      | "/foo/bar:{baz}"
-
-   }
 }

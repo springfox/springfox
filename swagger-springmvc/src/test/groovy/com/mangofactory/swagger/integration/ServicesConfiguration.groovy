@@ -117,36 +117,30 @@ public class ServicesConfiguration {
     return swaggerApiResourceListing;
   }
 
-  def testPathProvider() {
-    def servletContext = servletContext
-    new SwaggerPathProvider() {
-      private SwaggerPathProvider defaultSwaggerPathProvider = new AbsoluteSwaggerPathProvider();
+   def testPathProvider() {
+      def servletContext = servletContext
+      new SwaggerPathProvider() {
+         private SwaggerPathProvider defaultSwaggerPathProvider = new AbsoluteSwaggerPathProvider();
 
-      @Override
-      public String getApiResourcePrefix() {
-        return defaultSwaggerPathProvider.getApiResourcePrefix();
-      }
+         @Override
+         public String getApiResourcePrefix() {
+            return defaultSwaggerPathProvider.getApiResourcePrefix();
+         }
 
-      public String getAppBasePath() {
-        return "http://localhost:8080";
-      }
+         public String getAppBasePath() {
+            return "http://localhost:8080";
+         }
 
-
-      @Override
-      public String sanitizeRequestMappingPattern(String requestMappingPattern) {
-        return defaultSwaggerPathProvider.sanitizeRequestMappingPattern(requestMappingPattern);
-      }
-
-        @Override
-        String getSwaggerDocumentationBasePath() {
+         @Override
+         String getSwaggerDocumentationBasePath() {
             return "api-docs/"
-        }
+         }
 
-        public void setDefaultSwaggerPathProvider(SwaggerPathProvider defaultSwaggerPathProvider) {
-        this.defaultSwaggerPathProvider = defaultSwaggerPathProvider;
+         public void setDefaultSwaggerPathProvider(SwaggerPathProvider defaultSwaggerPathProvider) {
+            this.defaultSwaggerPathProvider = defaultSwaggerPathProvider;
+         }
       }
-    }
-  }
+   }
 
   @Bean
   /**

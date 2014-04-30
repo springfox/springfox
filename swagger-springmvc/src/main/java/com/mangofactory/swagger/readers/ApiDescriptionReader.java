@@ -31,7 +31,7 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
         List<ApiDescription> apiDescriptionList = newArrayList();
         for (String pattern : patternsCondition.getPatterns()) {
 
-            String cleanedRequestMappingPath = swaggerPathProvider.sanitizeRequestMappingPattern(pattern);
+            String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
             String path = swaggerPathProvider.getApiResourcePrefix() + cleanedRequestMappingPath;
 
             String methodName = handlerMethod.getMethod().getName();
@@ -44,5 +44,22 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
             apiDescriptionList.add(new ApiDescription(path, toOption(methodName), toScalaList(operations)));
         }
         context.put("apiDescriptionList", apiDescriptionList);
+    }
+
+    /**
+     * Gets a uri friendly path from a request mapping pattern.
+     * Typically involves removing any regex patterns or || conditions from a spring request mapping
+     * This method will be called to resolve every request mapping endpoint.
+     * A good extension point if you need to alter endpoints by adding or removing path segments.
+     * Note: this should not be an absolute  uri
+     *
+     * @param requestMappingPattern
+     * @return the request mapping endpoint
+     */
+    public String sanitizeRequestMappingPattern(String requestMappingPattern) {
+        String result = requestMappingPattern;
+        //remove regex portion '/{businessId:\\w+}'
+        result = result.replaceAll("\\{(.*?):.*?\\}", "{$1}");
+        return result.isEmpty() ? "/" : result;
     }
 }

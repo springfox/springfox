@@ -4,6 +4,7 @@ import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.ApiDescription
 import org.springframework.web.method.HandlerMethod
@@ -12,16 +13,13 @@ import spock.lang.Specification
 
 import static com.mangofactory.swagger.ScalaUtils.fromOption
 
-@Mixin(RequestMappingSupport)
+@Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
 class ApiDescriptionReaderSpec extends Specification {
 
    def "should generate an api description for each request mapping pattern"() {
     given:
-      AbsoluteSwaggerPathProvider defaultSwaggerPathProvider = new AbsoluteSwaggerPathProvider()
-      defaultSwaggerPathProvider.setApiResourceSuffix("/api/v1")
-      defaultSwaggerPathProvider.servletContext = servletContext()
 
-      ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(defaultSwaggerPathProvider)
+      ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(absoluteSwaggerPathProvider())
       RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
               [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
       )
@@ -51,4 +49,19 @@ class ApiDescriptionReaderSpec extends Specification {
       fromOption(secondApiDescription.description()) == dummyHandlerMethod().method.name
    }
 
+   def "should sanitize request mapping endpoints"() {
+      expect:
+        new ApiDescriptionReader(absoluteSwaggerPathProvider()).sanitizeRequestMappingPattern(mappingPattern) == expected
+
+      where:
+        mappingPattern             | expected
+        ""                         | "/"
+        "/"                        | "/"
+        "/businesses"              | "/businesses"
+        "/{businessId:\\w+}"       | "/{businessId}"
+        "/businesses/{businessId}" | "/businesses/{businessId}"
+        "/foo/bar:{baz}"           | "/foo/bar:{baz}"
+        "/foo/bar:{baz:\\w+}"      | "/foo/bar:{baz}"
+
+   }
 }
