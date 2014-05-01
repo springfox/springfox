@@ -1,5 +1,5 @@
 language: java
-script: mvn verify deploy --settings travisDeploySettings.xml
+script: mvn deploy --settings travisDeploySettings.xml
 jdk:
 - openjdk6
 env:
