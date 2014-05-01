@@ -2,3 +2,6 @@ language: java
 script: "mvn verify"
 jdk:
   - openjdk6
+
+after_success:
+  - mvn clean test jacoco:report coveralls:jacoco
