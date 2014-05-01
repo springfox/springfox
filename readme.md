@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.org/martypitt/swagger-springmvc.png?branch=master)](https://travis-ci.org/martypitt/swagger-springmvc)
 
-[![Coverage Status](https://coveralls.io/repos/martypitt/swagger-springmvc/badge.png)](https://coveralls.io/r/martypitt/swagger-springmvc)
-
 ### About
 An upgrade to the swagger-springmvc project to the latest Swagger specification (1.2).
 The swagger specification upgrade to 1.2 has several feature additions and has also refactored it's core model structure.
