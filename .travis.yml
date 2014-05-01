@@ -3,7 +3,7 @@ script: "mvn deploy --settings travisDeploySettings.xml"
 jdk:
   - openjdk6
 
- env:
-    global:
-    - secure: FPyn3w+tEhkqUD8PivyEFmXAIX3xlq5WhCqP1DyfoYXHrP8134Tkgasdg8PZdi1tOCSw9Ma63j0ccwxizJVlQOTY/UrItfPZPe0kpAY9s/L+WhYXSYrBdgLmJUylYyaIiz4rV5Z6nOWMLi3K3P2HBH+6lJPd2/Hfknfk0Xr7bVQ=
-    - secure: usRRdgGnP275H1jmlnNAaKwspD/jHagr/R0gY7gEA3JgPP05ZZkE/DZuH2LA7JKKVYkoTMpWZQdm1fzNTW+MugLgxiWN6gGvKWP/nnSPzB8vkuEGKgYU/T4KNbSSbL11vaoOBEnMXu7fMCR90RJDo/TTQTYp6trwLPb4ZAhEZKc=
+env:
+  global:
+  - secure: "FPyn3w+tEhkqUD8PivyEFmXAIX3xlq5WhCqP1DyfoYXHrP8134Tkgasdg8PZdi1tOCSw9Ma63j0ccwxizJVlQOTY/UrItfPZPe0kpAY9s/L+WhYXSYrBdgLmJUylYyaIiz4rV5Z6nOWMLi3K3P2HBH+6lJPd2/Hfknfk0Xr7bVQ="
+  - secure: "usRRdgGnP275H1jmlnNAaKwspD/jHagr/R0gY7gEA3JgPP05ZZkE/DZuH2LA7JKKVYkoTMpWZQdm1fzNTW+MugLgxiWN6gGvKWP/nnSPzB8vkuEGKgYU/T4KNbSSbL11vaoOBEnMXu7fMCR90RJDo/TTQTYp6trwLPb4ZAhEZKc="
