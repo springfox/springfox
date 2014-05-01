@@ -1,9 +1,8 @@
 language: java
-script: "mvn verify deploy --settings travisDeploySettings.xml"
+script: mvn verify deploy --settings travisDeploySettings.xml
 jdk:
-  - openjdk6
-
+- openjdk6
 env:
   global:
-  - secure: "FPyn3w+tEhkqUD8PivyEFmXAIX3xlq5WhCqP1DyfoYXHrP8134Tkgasdg8PZdi1tOCSw9Ma63j0ccwxizJVlQOTY/UrItfPZPe0kpAY9s/L+WhYXSYrBdgLmJUylYyaIiz4rV5Z6nOWMLi3K3P2HBH+6lJPd2/Hfknfk0Xr7bVQ="
-  - secure: "usRRdgGnP275H1jmlnNAaKwspD/jHagr/R0gY7gEA3JgPP05ZZkE/DZuH2LA7JKKVYkoTMpWZQdm1fzNTW+MugLgxiWN6gGvKWP/nnSPzB8vkuEGKgYU/T4KNbSSbL11vaoOBEnMXu7fMCR90RJDo/TTQTYp6trwLPb4ZAhEZKc="
+  - secure: mn5HXRqI8btBN76tIfrxeC6aLrXSgEuTVMA7ZuZLF7jwbTZkrs0rELFeAUNU0vjkW5gq3yKgV/WB0fhSFAMGGp44lrfOC0GB24lH3OaQWQQJcU7EKc7q/xvc65o9UbUTqxOoCBcQsqFaGSh7Op94mtR7h10Lbf7r69OcngOgt70=
+  - secure: i/GulSx1wbhHph7erloWXpdDunyqlKrWhEHqeEQeCn9BGVsJhBXtx/QWC03HtbvBg+tRGjHGQeiNfesbxBgVN87Vt3D8l8T6DygIVt9K2IDRtdm97gVf7P3tFi0PRRqTBT63eyXwymiMzxVOQC01OuLOHn4Y+HEFn80sdc+0WpA=
