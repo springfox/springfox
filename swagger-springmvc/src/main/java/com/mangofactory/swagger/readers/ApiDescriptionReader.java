@@ -10,56 +10,58 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.mangofactory.swagger.ScalaUtils.toOption;
+import static com.mangofactory.swagger.ScalaUtils.toScalaList;
 
 public class ApiDescriptionReader implements Command<RequestMappingContext> {
 
-    private final SwaggerPathProvider swaggerPathProvider;
+   private final SwaggerPathProvider swaggerPathProvider;
 
-    public ApiDescriptionReader(SwaggerPathProvider pathProvider) {
-        this.swaggerPathProvider = pathProvider;
-    }
+   public ApiDescriptionReader(SwaggerPathProvider pathProvider) {
+      this.swaggerPathProvider = pathProvider;
+   }
 
-    @Override
-    public void execute(RequestMappingContext context) {
+   @Override
+   public void execute(RequestMappingContext context) {
 
-        RequestMappingInfo requestMappingInfo = context.getRequestMappingInfo();
-        HandlerMethod handlerMethod = context.getHandlerMethod();
-        PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
+      RequestMappingInfo requestMappingInfo = context.getRequestMappingInfo();
+      HandlerMethod handlerMethod = context.getHandlerMethod();
+      PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
 
-        List<ApiDescription> apiDescriptionList = newArrayList();
-        for (String pattern : patternsCondition.getPatterns()) {
+      List<ApiDescription> apiDescriptionList = newArrayList();
+      for (String pattern : patternsCondition.getPatterns()) {
 
-            String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
-            String path = swaggerPathProvider.getApiResourcePrefix() + cleanedRequestMappingPath;
+         String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
+         String path = swaggerPathProvider.getOperationPath(cleanedRequestMappingPath);
 
-            String methodName = handlerMethod.getMethod().getName();
+         String methodName = handlerMethod.getMethod().getName();
 
-            context.put("requestMappingPattern", cleanedRequestMappingPath);
-            ApiOperationReader apiOperationReader = new ApiOperationReader();
-            apiOperationReader.execute(context);
-            List<Operation> operations = (List<Operation>) context.get("operations");
+         context.put("requestMappingPattern", cleanedRequestMappingPath);
+         ApiOperationReader apiOperationReader = new ApiOperationReader();
+         apiOperationReader.execute(context);
+         List<Operation> operations = (List<Operation>) context.get("operations");
 
-            apiDescriptionList.add(new ApiDescription(path, toOption(methodName), toScalaList(operations)));
-        }
-        context.put("apiDescriptionList", apiDescriptionList);
-    }
+         apiDescriptionList.add(new ApiDescription(path, toOption(methodName), toScalaList(operations)));
 
-    /**
-     * Gets a uri friendly path from a request mapping pattern.
-     * Typically involves removing any regex patterns or || conditions from a spring request mapping
-     * This method will be called to resolve every request mapping endpoint.
-     * A good extension point if you need to alter endpoints by adding or removing path segments.
-     * Note: this should not be an absolute  uri
-     *
-     * @param requestMappingPattern
-     * @return the request mapping endpoint
-     */
-    public String sanitizeRequestMappingPattern(String requestMappingPattern) {
-        String result = requestMappingPattern;
-        //remove regex portion '/{businessId:\\w+}'
-        result = result.replaceAll("\\{(.*?):.*?\\}", "{$1}");
-        return result.isEmpty() ? "/" : result;
-    }
+      }
+      context.put("apiDescriptionList", apiDescriptionList);
+   }
+
+   /**
+    * Gets a uri friendly path from a request mapping pattern.
+    * Typically involves removing any regex patterns or || conditions from a spring request mapping
+    * This method will be called to resolve every request mapping endpoint.
+    * A good extension point if you need to alter endpoints by adding or removing path segments.
+    * Note: this should not be an absolute  uri
+    *
+    * @param requestMappingPattern
+    * @return the request mapping endpoint
+    */
+   public String sanitizeRequestMappingPattern(String requestMappingPattern) {
+      String result = requestMappingPattern;
+      //remove regex portion '/{businessId:\\w+}'
+      result = result.replaceAll("\\{(.*?):.*?\\}", "{$1}");
+      return result.isEmpty() ? "/" : result;
+   }
 }

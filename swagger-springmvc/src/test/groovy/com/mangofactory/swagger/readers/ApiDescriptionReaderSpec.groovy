@@ -16,37 +16,46 @@ import static com.mangofactory.swagger.ScalaUtils.fromOption
 class ApiDescriptionReaderSpec extends Specification {
 
    def "should generate an api description for each request mapping pattern"() {
-    given:
+      given:
 
-      ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(absoluteSwaggerPathProvider())
-      RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
-              [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
-      )
+        ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(pathProvider)
+        RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
+                [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
+        )
 
-      HandlerMethod handlerMethod = dummyHandlerMethod()
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo, handlerMethod)
+        HandlerMethod handlerMethod = dummyHandlerMethod()
+        RequestMappingContext context = new RequestMappingContext(requestMappingInfo, handlerMethod)
 
-      def settings = new SwaggerGlobalSettings()
-      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-      settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
-      context.put("swaggerGlobalSettings", settings)
-    when:
-      apiDescriptionReader.execute(context)
-      Map<String, Object> result = context.getResult()
+        def settings = new SwaggerGlobalSettings()
+        SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+        settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
+        context.put("swaggerGlobalSettings", settings)
+      when:
+        apiDescriptionReader.execute(context)
+        Map<String, Object> result = context.getResult()
 
-    then:
-      def descriptionList = result['apiDescriptionList']
-      descriptionList.size == 2
+      then:
+        def descriptionList = result['apiDescriptionList']
+        descriptionList.size == 2
 
-      ApiDescription apiDescription = descriptionList[0]
-      ApiDescription secondApiDescription = descriptionList[1]
+        ApiDescription apiDescription = descriptionList[0]
+        ApiDescription secondApiDescription = descriptionList[1]
 
-      apiDescription.path() == '/api/v1/somePath/{businessId}'
-      fromOption(apiDescription.description()) == dummyHandlerMethod().method.name
+        apiDescription.path() == prefix + '/somePath/{businessId}'
+        fromOption(apiDescription.description()) == dummyHandlerMethod().method.name
 
-      secondApiDescription.path() == '/api/v1/somePath/{businessId}'
-      fromOption(secondApiDescription.description()) == dummyHandlerMethod().method.name
+        secondApiDescription.path() == prefix + '/somePath/{businessId}'
+        fromOption(secondApiDescription.description()) == dummyHandlerMethod().method.name
+
+      where:
+        pathProvider                  | prefix
+        absoluteSwaggerPathProvider() | "/api/v1"
+        relativeSwaggerPathProvider() | ""
    }
+
+  def "Should generate correct operations based on grouping strategy"(){
+
+  }
 
    def "should sanitize request mapping endpoints"() {
       expect:

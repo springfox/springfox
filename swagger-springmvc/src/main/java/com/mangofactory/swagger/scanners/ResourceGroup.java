@@ -1,52 +1,47 @@
 package com.mangofactory.swagger.scanners;
 
 import com.google.common.base.Objects;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 public class ResourceGroup {
-    private String groupName;
-    private String realUri;
+   private String groupName;
 
-    public ResourceGroup(String groupName, String realUri) {
-        this.groupName = groupName;
-        this.realUri = realUri;
-    }
+   public ResourceGroup(String groupName) {
+      this.groupName = groupName;
+   }
 
-    public ResourceGroup(String groupName) {
-        this(groupName, String.format("/%s", groupName));
-    }
+   public String getGroupName() {
+      return groupName;
+   }
 
-    public String getGroupName() {
-        return groupName;
-    }
 
-    public String getRealUri() {
-        return realUri;
-    }
+   @Override
+   public boolean equals(Object obj) {
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+      if (obj == null) {
+         return false;
+      }
+      if (obj == this) {
+         return true;
+      }
+      if (obj.getClass() != getClass()) {
+         return false;
+      }
+      ResourceGroup rhs = (ResourceGroup) obj;
+      return new EqualsBuilder()
+              .append(this.groupName, rhs.groupName)
+              .isEquals();
+   }
 
-        ResourceGroup that = (ResourceGroup) o;
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(groupName);
+   }
 
-        return Objects.equal(groupName, that.groupName) && Objects.equal(realUri, that.realUri);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(groupName, realUri);
-    }
-
-    @Override
-    public String toString() {
-        return "ResourceGroup{" +
-                "groupName='" + groupName + '\'' +
-                ", realUri='" + realUri + '\'' +
-                '}';
-    }
+   @Override
+   public String toString() {
+      return "ResourceGroup{" +
+              "groupName='" + groupName + '\'' +
+              '}';
+   }
 }

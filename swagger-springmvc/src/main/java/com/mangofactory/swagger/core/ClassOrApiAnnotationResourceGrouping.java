@@ -9,12 +9,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.*;
-import static org.apache.commons.lang.StringUtils.*;
+import static com.google.common.collect.Sets.newHashSet;
+import static com.mangofactory.swagger.core.StringUtils.splitCamelCase;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 @Component
 public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStrategy {
@@ -23,26 +22,21 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
    public ClassOrApiAnnotationResourceGrouping() {
    }
 
-
    @Override
    public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      return getClassOrApiAnnotationValue(handlerMethod);
+      String group = getClassOrApiAnnotationValue(handlerMethod);
+      return group;
    }
 
    @Override
    public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      String group = getClassOrApiAnnotationValue(handlerMethod).replaceAll("\\.", "_");
-      try {
-         group = URLEncoder.encode(group, "ISO-8859-1");
-      } catch (UnsupportedEncodingException e) {
-         log.error("Could not encode group", e);
-      }
-      return newHashSet(new ResourceGroup(group));
+      String group = getClassOrApiAnnotationValue(handlerMethod).toLowerCase().replaceAll(" ", "-");
+      return newHashSet(new ResourceGroup(group.toLowerCase()));
    }
 
    private String getClassOrApiAnnotationValue(HandlerMethod handlerMethod) {
       Class<?> controllerClass = handlerMethod.getBeanType();
-      String group = controllerClass.getCanonicalName();
+      String group = splitCamelCase(controllerClass.getSimpleName(), " ");
 
       Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
       if (null != apiAnnotation && !isBlank(apiAnnotation.value())) {

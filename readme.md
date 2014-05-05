@@ -353,6 +353,7 @@ Configuration is slightly verbose but on the upside it provides several hooks in
   }
 ```
 
+
 ##Development
 
 - Running tests with coverage:

@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.paths;
 
+import com.mangofactory.swagger.controllers.DefaultSwaggerController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -11,10 +12,21 @@ public class AbsoluteSwaggerPathProvider extends SwaggerPathProvider {
 
     @Override
     protected String applicationPath() {
-        return UriComponentsBuilder
-                .fromHttpUrl("http://127.0.0.1:8080")
-                .path(servletContext.getContextPath())
+        return getAppRoot()
                 .build()
                 .toString();
+    }
+
+    @Override
+    protected String getDocumentationPath() {
+        return getAppRoot()
+                .path(DefaultSwaggerController.DOCUMENTATION_BASE_PATH)
+                .build()
+                .toString();
+    }
+
+    private UriComponentsBuilder getAppRoot() {
+        return UriComponentsBuilder.fromHttpUrl("http://localhost:8080")
+                .path(servletContext.getContextPath());
     }
 }

@@ -28,4 +28,5 @@ public interface ResourceGroupingStrategy {
     * @return description of the resource
     */
    public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);
+
 }

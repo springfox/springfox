@@ -2,11 +2,13 @@ package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.annotations.ApiIgnore;
-import com.mangofactory.swagger.core.*;
-import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider;
+import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping;
+import com.mangofactory.swagger.core.ResourceGroupingStrategy;
+import com.mangofactory.swagger.core.SwaggerCache;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.alternates.WildcardType;
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration;
+import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.wordnik.swagger.model.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +35,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
-import static com.mangofactory.swagger.models.alternates.Alternates.*;
-import static org.springframework.http.HttpStatus.*;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static com.google.common.collect.Maps.newLinkedHashMap;
+import static com.google.common.collect.Sets.newHashSet;
+import static com.mangofactory.swagger.ScalaUtils.toOption;
+import static com.mangofactory.swagger.models.alternates.Alternates.newMapRule;
+import static com.mangofactory.swagger.models.alternates.Alternates.newRule;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.HEAD;
+import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import static org.springframework.web.bind.annotation.RequestMethod.TRACE;
 
 @Configuration
 @ComponentScan(basePackages = { "com.mangofactory.swagger.controllers" })
@@ -55,7 +70,7 @@ public class SpringSwaggerConfig {
 
     @Bean
     public ResourceGroupingStrategy defaultResourceGroupingStrategy() {
-        return new SpringGroupingStrategy();
+        return new ClassOrApiAnnotationResourceGrouping();
     }
 
     @Bean
@@ -67,7 +82,7 @@ public class SpringSwaggerConfig {
 
     @Bean
     public SwaggerPathProvider defaultSwaggerPathProvider() {
-        return new AbsoluteSwaggerPathProvider();
+        return new RelativeSwaggerPathProvider();
     }
 
     @Bean

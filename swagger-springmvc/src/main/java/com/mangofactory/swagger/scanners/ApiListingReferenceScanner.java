@@ -62,6 +62,8 @@ public class ApiListingReferenceScanner {
       return this.apiListingReferences;
    }
 
+
+
    public void scanSpringRequestMappings() {
       Map<String, String> resourceGroupDescriptions = new HashMap<String, String>();
       for (RequestMappingHandlerMapping requestMappingHandlerMapping : this.requestMappingHandlerMapping) {
@@ -72,14 +74,21 @@ public class ApiListingReferenceScanner {
             if (shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
                Set<ResourceGroup> resourceGroups = resourceGroupingStrategy.getResourceGroups(requestMappingInfo,
                        handlerMethod);
+               String handlerMethodName = handlerMethod.getMethod().getName();
+
                String resourceDescription = resourceGroupingStrategy.getResourceDescription(requestMappingInfo,
                        handlerMethod);
                RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo,
                        handlerMethod);
+
+               log.info("Request mapping: {} belongs to groups: [{}] ", handlerMethodName, resourceGroups);
                for (ResourceGroup group : resourceGroups) {
                   resourceGroupDescriptions.put(group.getGroupName(), resourceDescription);
-                  log.info("Adding resource to group {} for handler method: {}", group,
-                          handlerMethod.getMethod().getName());
+
+
+                  log.info("Adding resource to group:{} with description:{} for handler method:{}",
+                          group, resourceDescription, handlerMethodName);
+
                   resourceGroupRequestMappings.put(group, requestMappingContext);
                }
             }
@@ -88,14 +97,14 @@ public class ApiListingReferenceScanner {
 
       int groupPosition = 0;
       List<String> groups = natural().sortedCopy(groupUris(resourceGroupRequestMappings.keySet()));
-      for (String resourceGroupUri : groups) {
+      for (String resourceGroupName : groups) {
 
-         String listingDescription = resourceGroupDescriptions.get(resourceGroupUri);
+         String listingDescription = resourceGroupDescriptions.get(resourceGroupName);
 
-         String path = swaggerPathProvider.getDocumentationBasePath(new String[]{swaggerGroup, resourceGroupUri});
+         String path = swaggerPathProvider.getResourceListingPath(swaggerGroup, resourceGroupName);
 
          log.info(format("Create resource listing Path: %s Description: %s Position: %s",
-                 path, resourceGroupUri, groupPosition));
+                 path, resourceGroupName, groupPosition));
 
          this.apiListingReferences.add(new ApiListingReference(path, toOption(listingDescription), groupPosition++));
       }

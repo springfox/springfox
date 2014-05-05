@@ -16,7 +16,6 @@ import java.lang.annotation.Annotation
 @Mixin(RequestMappingSupport)
 class ParameterRequiredReaderSpec extends Specification {
 
-  @Unroll
   def "parameters required"() {
   given:
     HandlerMethod handlerMethod = Mock()

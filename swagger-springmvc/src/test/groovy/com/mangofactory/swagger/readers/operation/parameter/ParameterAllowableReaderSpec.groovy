@@ -29,6 +29,7 @@ class ParameterAllowableReaderSpec extends Specification {
     operationCommand.execute(context)
     AllowableListValues allowableValues = context.get('allowableValues')
   then:
+
     allowableValues.valueType() == "LIST"
     fromScalaList(allowableValues.values()) == ["PRODUCT", "SERVICE"]
   where:

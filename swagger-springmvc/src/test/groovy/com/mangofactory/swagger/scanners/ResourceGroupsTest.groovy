@@ -7,7 +7,7 @@ import static com.mangofactory.swagger.scanners.ResourceGroups.groupUris
 
 class ResourceGroupsTest extends Specification {
   @Shared
-  def groups = [new ResourceGroup("group1", "/"), new ResourceGroup("group2", "/")]
+  def groups = [new ResourceGroup("group1"), new ResourceGroup("group2")]
 
   def "GroupUri"() {
     expect:

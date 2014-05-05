@@ -1,12 +1,11 @@
 package com.mangofactory.swagger.scanners;
 
-import com.google.common.base.Predicate;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
-import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.models.ModelProvider;
+import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.ApiDescriptionReader;
 import com.mangofactory.swagger.readers.ApiModelReader;
 import com.mangofactory.swagger.readers.Command;
@@ -18,7 +17,6 @@ import com.wordnik.swagger.model.Authorization;
 import com.wordnik.swagger.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.util.UriComponentsBuilder;
 import scala.Option;
 
 import java.util.LinkedHashMap;
@@ -27,10 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Sets.newHashSet;
+import static com.mangofactory.swagger.ScalaUtils.emptyScalaList;
+import static com.mangofactory.swagger.ScalaUtils.toOption;
+import static com.mangofactory.swagger.ScalaUtils.toScalaList;
+import static com.mangofactory.swagger.ScalaUtils.toScalaModelMap;
 
 public class ApiListingScanner {
    private static final Logger log = LoggerFactory.getLogger(ApiListingScanner.class);
@@ -39,11 +40,10 @@ public class ApiListingScanner {
    private String swaggerVersion = SwaggerSpec.version();
    private Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings;
    private SwaggerPathProvider swaggerPathProvider;
-   private List<Command<RequestMappingContext>> readers = newArrayList();
    private SwaggerGlobalSettings swaggerGlobalSettings;
-   private ResourceGroupingStrategy controllerNamingStrategy;
+   private ResourceGroupingStrategy resourceGroupingStrategy;
    private AuthorizationContext authorizationContext;
-    private final ModelProvider modelProvider;
+   private final ModelProvider modelProvider;
 
     public ApiListingScanner(Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings,
                              SwaggerPathProvider swaggerPathProvider, ModelProvider modelProvider,
@@ -57,19 +57,21 @@ public class ApiListingScanner {
    public Map<String, ApiListing> scan() {
       Map<String, ApiListing> apiListingMap = newHashMap();
 
-      readers = newArrayList();
-      readers.add(new MediaTypeReader());
-      readers.add(new ApiDescriptionReader(swaggerPathProvider));
-      readers.add(new ApiModelReader(modelProvider));
 
       int position = 0;
       for (Map.Entry<ResourceGroup, List<RequestMappingContext>> entry : resourceGroupRequestMappings.entrySet()) {
 
-         ResourceGroup controllerGroup = entry.getKey();
+         ResourceGroup resourceGroup = entry.getKey();
 
          Set<String> produces = new LinkedHashSet<String>(2);
          Set<String> consumes = new LinkedHashSet<String>(2);
          Set<ApiDescription> apiDescriptions = newHashSet();
+
+         List<Command<RequestMappingContext>> readers  = newArrayList();
+         readers.add(new MediaTypeReader());
+         readers.add(new ApiDescriptionReader(swaggerPathProvider));
+         readers.add(new ApiModelReader(modelProvider));
+
 
          Map<String, Model> models = new LinkedHashMap<String, Model>();
          for(RequestMappingContext each : entry.getValue()){
@@ -77,6 +79,9 @@ public class ApiListingScanner {
             CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
             each.put("authorizationContext", authorizationContext);
             each.put("swaggerGlobalSettings", swaggerGlobalSettings);
+            each.put("currentResourceGroup", resourceGroup);
+            each.put("resourceGroupingStrategy", resourceGroupingStrategy);
+
             Map<String, Object> results = commandExecutor.execute(readers, each);
 
             List<String> producesMediaTypes = (List<String>) results.get("produces");
@@ -92,52 +97,43 @@ public class ApiListingScanner {
             apiDescriptions.addAll(apiDescriptionList);
          }
 
-         String resourcePath = UriComponentsBuilder
-               .fromPath(swaggerPathProvider.getApiResourcePrefix())
-               .pathSegment(controllerGroup.getGroupName())
-               .build()
-               .toString();
-
          scala.collection.immutable.List<Authorization> authorizations = emptyScalaList();
          if (null != authorizationContext) {
             authorizations = authorizationContext.getScalaAuthorizations();
          }
 
-        Option modelOption = toOption(models);
-        if(null != models){
-          modelOption = toOption(toScalaModelMap(models));
-        }
+         Option modelOption = toOption(models);
+         if (null != models) {
+            modelOption = toOption(toScalaModelMap(models));
+         }
 
-          String groupPrefix = String.format("%s%s", swaggerPathProvider.getApiResourcePrefix(),
-                  controllerGroup.getRealUri());
-          ApiListing apiListing = new ApiListing(
-               apiVersion,
-               swaggerVersion,
-               swaggerPathProvider.getApplicationBasePath(),
-               resourcePath,
-               toScalaList(produces),
-               toScalaList(consumes),
-               emptyScalaList(),
-               authorizations,
-               toScalaList(filter(apiDescriptions, withPathBeginning(groupPrefix))),
-               modelOption,
-               toOption(null),
-               position++);
-         apiListingMap.put(controllerGroup.getGroupName(), apiListing);
+//          String groupPrefix = controllerGroup.getRealUri();
+
+         //resourcePath is specific to this class only
+         //TODO AK /swaggergroup/prefix - abs and rel are different and its always
+         // relative to swaggerPathProvider.getApplicationBasePath()
+         String resourcePath = "fix this";
+
+         ApiListing apiListing = new ApiListing(
+            apiVersion,
+            swaggerVersion,
+            swaggerPathProvider.getApplicationBasePath(),
+            resourcePath,
+            toScalaList(produces),
+            toScalaList(consumes),
+            emptyScalaList(),
+            authorizations,
+            toScalaList(apiDescriptions), // toScalaList(filter(apiDescriptions, withPathBeginning(groupPrefix))),
+            modelOption,
+            toOption(null),
+            position++);
+
+         apiListingMap.put(resourceGroup.getGroupName(), apiListing);
       }
       return apiListingMap;
    }
 
-    private Predicate<? super ApiDescription> withPathBeginning(final String path) {
-        return new Predicate<ApiDescription>() {
-            @Override
-            public boolean apply(ApiDescription input) {
-                return input.path().toLowerCase().startsWith(path.toLowerCase());
-            }
-        };
-    }
-
-    public SwaggerGlobalSettings getSwaggerGlobalSettings() {
+   public SwaggerGlobalSettings getSwaggerGlobalSettings() {
       return swaggerGlobalSettings;
    }
 
@@ -145,24 +141,8 @@ public class ApiListingScanner {
       this.swaggerGlobalSettings = swaggerGlobalSettings;
    }
 
-   public List<Command<RequestMappingContext>> getReaders() {
-      return readers;
-   }
-
-   public void setReaders(List<Command<RequestMappingContext>> readers) {
-      this.readers = readers;
-   }
-
-   public ResourceGroupingStrategy getControllerNamingStrategy() {
-      return controllerNamingStrategy;
-   }
-
-   public void setControllerNamingStrategy(ResourceGroupingStrategy controllerNamingStrategy) {
-      this.controllerNamingStrategy = controllerNamingStrategy;
-   }
-
-   public AuthorizationContext getAuthorizationContext() {
-      return authorizationContext;
+   public void setResourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
+      this.resourceGroupingStrategy = resourceGroupingStrategy;
    }
 
    public void setAuthorizationContext(AuthorizationContext authorizationContext) {

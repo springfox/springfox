@@ -7,6 +7,7 @@ import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.models.*
+import com.mangofactory.swagger.paths.SwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.*
@@ -95,9 +96,8 @@ class SwaggerApiResourceListingSpec extends Specification {
         SwaggerCache swaggerCache = new SwaggerCache();
         String swaggerGroup = "swaggerGroup"
         SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, swaggerGroup)
-        ServletContext servletContext = [getContextPath: { return "/myApp" }] as ServletContext
-        AbsoluteSwaggerPathProvider swaggerPathProvider = new AbsoluteSwaggerPathProvider(servletContext: servletContext)
 
+        SwaggerPathProvider swaggerPathProvider = new AbsoluteSwaggerPathProvider(servletContext: servletContext())
         swaggerApiResourceListing.setSwaggerPathProvider(swaggerPathProvider)
 
         def settings = new SwaggerGlobalSettings()
@@ -130,16 +130,18 @@ class SwaggerApiResourceListingSpec extends Specification {
 
       then:
         ApiListingReference apiListingReference = resourceListing.apis().head()
-        apiListingReference.path() == "http://127.0.0.1:8080/myApp/api-docs/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass"
+        apiListingReference.path() == "http://localhost:8080/context-path/api-docs/swaggerGroup/dummy-class"
         apiListingReference.position() == 0
-        fromOption(apiListingReference.description()) == "com.mangofactory.swagger.dummy.DummyClass"
+        fromOption(apiListingReference.description()) == "Dummy Class"
 
       and:
         ApiListing apiListing =
-                swaggerCache.swaggerApiListingMap['swaggerGroup']['com_mangofactory_swagger_dummy_DummyClass']
+                swaggerCache.swaggerApiListingMap['swaggerGroup']['dummy-class']
         apiListing.swaggerVersion() == '1.2'
-        apiListing.basePath() == 'http://127.0.0.1:8080/myApp'
-        apiListing.resourcePath() == '/com_mangofactory_swagger_dummy_DummyClass'
+        apiListing.basePath() == 'http://localhost:8080/context-path'
+        //The relative path to the resource, from the basePath, which this API Specification
+//        apiListing.resourcePath() == '/api-docs/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass'
+        apiListing.resourcePath() == 'fix this'
 
    }
 }

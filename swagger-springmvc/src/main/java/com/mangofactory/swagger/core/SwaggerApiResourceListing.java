@@ -51,11 +51,11 @@ public class SwaggerApiResourceListing {
 
          Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings =
                  apiListingReferenceScanner.getResourceGroupRequestMappings();
-          ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider,
-                  modelProvider, authorizationContext);
+         ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider,
+                 modelProvider, authorizationContext);
          apiListingScanner.setSwaggerGlobalSettings(swaggerGlobalSettings);
-          //DK TODO: Fix this hack!
-          apiListingScanner.setControllerNamingStrategy(apiListingReferenceScanner.getResourceGroupingStrategy());
+         //DK TODO: Fix this hack!
+         apiListingScanner.setResourceGroupingStrategy(apiListingReferenceScanner.getResourceGroupingStrategy());
 
          Map<String, ApiListing> apiListings = apiListingScanner.scan();
          swaggerCache.addApiListings(swaggerGroup, apiListings);

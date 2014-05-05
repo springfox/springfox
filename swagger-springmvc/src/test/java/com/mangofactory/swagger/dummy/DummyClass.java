@@ -106,6 +106,11 @@ public class DummyClass {
    public void methodWithSingleEnumArray(BusinessType[] businessTypes) {
 
    }
+
+   @RequestMapping("/businesses/{businessId}/employees/{employeeId}/salary")
+   public void methodWithRatherLongRequestPath() {
+
+   }
    
    @ResponseBody
    public DummyModels.BusinessModel methodWithConcreteResponseBody() {

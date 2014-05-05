@@ -23,8 +23,6 @@ import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport, AuthSupport, ModelProviderSupport])
 class ApiListingScannerSpec extends Specification {
 
-   final ClassOrApiAnnotationResourceGrouping controllerNamingStrategy = new ClassOrApiAnnotationResourceGrouping()
-
    def "Should create an api listing for a single resource grouping "() {
     given:
       RequestMappingInfo requestMappingInfo =
@@ -55,8 +53,8 @@ class ApiListingScannerSpec extends Specification {
       ApiListing listing = apiListingMap['businesses']
       listing.swaggerVersion() == SwaggerSpec.version()
       listing.apiVersion() == "1.0"
-      listing.basePath() == "http://127.0.0.1:8080/context-path"
-      listing.resourcePath() == "/api/v1/businesses"
+      listing.basePath() == "http://localhost:8080/context-path"
+      listing.resourcePath() == "fix this"
       listing.position() == 0
       fromScalaList(listing.consumes()) == [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
       fromScalaList(listing.produces()) == [APPLICATION_JSON_VALUE]
