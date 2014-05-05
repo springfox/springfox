@@ -29,7 +29,7 @@ generation that ships with swagger-core which is not as powerful when it comes t
   <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.5-SNAPSHOT</version>
+    <version>0.8.4-SNAPSHOT</version>
   </dependency>
 ```
 
@@ -49,7 +49,7 @@ or maven central: http://repo1.maven.org/maven2/
   <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.4</version>
+    <version>0.8.3</version>
   </dependency>
 ```
 
