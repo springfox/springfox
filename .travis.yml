@@ -6,7 +6,7 @@ jdk:
 - openjdk6
 
 after_success:
-- $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_BRANCH == "master" && mvn deploy --settings travisDeploySettings.xml
+ - "[[ $TRAVIS_BRANCH == \"master\" ]] && [[ $TRAVIS_PULL_REQUEST == \"false\" ]] && mvn deploy --settings travisDeploySettings.xml"
 
 env:
   global:
