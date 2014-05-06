@@ -16,7 +16,7 @@ after_success:
 - git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
 - git push origin $GIT_TAG
 - git push
-- '[[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == "false" ]] && mvn deploy --settings travisDeploySettings.xml'
+- '[[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == "false" ]] && mvn deploy --settings travisDeploySettings.xml -Dmaven.test.skip=true'
 
 env:
   global:
