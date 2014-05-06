@@ -11,6 +11,7 @@ after_success:
 - cat $GH_TOKEN > .travis/deploy_key.pem
 - chmod 600 .travis/deploy_key.pem
 - ssh-add .travis/deploy_key.pem
+- git remote set-url origin https://github.com/martypitt/swagger-springmvc.git
 - export GIT_TAG=build-$TRAVIS_BRANCH-$(date -u "+%Y-%m-%d-%H-%M-%S")-$TRAVIS_BUILD_NUMBER
 - git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
 - git push origin $GIT_TAG
