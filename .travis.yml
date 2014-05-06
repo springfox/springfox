@@ -1,7 +1,13 @@
 language: java
-script: mvn deploy --settings travisDeploySettings.xml
+
+script: mvn verify
+
 jdk:
 - openjdk6
+
+after_success:
+- $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_BRANCH == "master" && mvn deploy --settings travisDeploySettings.xml
+
 env:
   global:
   - secure: mn5HXRqI8btBN76tIfrxeC6aLrXSgEuTVMA7ZuZLF7jwbTZkrs0rELFeAUNU0vjkW5gq3yKgV/WB0fhSFAMGGp44lrfOC0GB24lH3OaQWQQJcU7EKc7q/xvc65o9UbUTqxOoCBcQsqFaGSh7Op94mtR7h10Lbf7r69OcngOgt70=
