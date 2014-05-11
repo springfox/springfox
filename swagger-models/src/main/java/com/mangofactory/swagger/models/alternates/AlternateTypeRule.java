@@ -4,7 +4,7 @@ import com.fasterxml.classmate.ResolvedType;
 
 import static com.mangofactory.swagger.models.alternates.WildcardType.*;
 
-class AlternateTypeRule {
+public class AlternateTypeRule {
     private final ResolvedType original;
     private final ResolvedType alternate;
 
