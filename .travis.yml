@@ -6,14 +6,14 @@ after_success:
 
 
 after_success:
-- git config --global user.email "builds@travis-ci.com"
-- git config --global user.name "Travis CI"
-- git remote set-url origin https://$GH_TOKEN@github.com/martypitt/swagger-springmvc.git
-- export GIT_TAG=CI-$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER
-- git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
-- git push origin $GIT_TAG
-- git push
-- '[[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == "false" ]] && mvn deploy --settings travisDeploySettings.xml -Dmaven.test.skip=true'
+#- git config --global user.email "builds@travis-ci.com"
+#- git config --global user.name "Travis CI"
+#- git remote set-url origin https://$GH_TOKEN@github.com/martypitt/swagger-springmvc.git
+#- export GIT_TAG=CI-$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER
+#- git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
+#- git push origin $GIT_TAG
+#- git push
+#- '[[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == "false" ]] && mvn deploy --settings travisDeploySettings.xml -Dmaven.test.skip=true'
 
 env:
   global:
