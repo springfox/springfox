@@ -6,6 +6,7 @@ after_success:
 
 
 after_success:
+ - echo tag disabled
 #- git config --global user.email "builds@travis-ci.com"
 #- git config --global user.name "Travis CI"
 #- git remote set-url origin https://$GH_TOKEN@github.com/martypitt/swagger-springmvc.git
