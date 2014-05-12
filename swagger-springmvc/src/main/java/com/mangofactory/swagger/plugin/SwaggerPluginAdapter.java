@@ -13,6 +13,7 @@ import java.util.Map;
 public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshedEvent> {
    private static final Logger log = LoggerFactory.getLogger(SwaggerPluginAdapter.class);
    private SpringSwaggerConfig springSwaggerConfig;
+   private boolean initialized = false;
 
    @Autowired
    public SwaggerPluginAdapter(SpringSwaggerConfig springSwaggerConfig) {
@@ -21,24 +22,28 @@ public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshe
 
    @Override
    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-      log.info("Context refreshed");
-      ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
+      if (!initialized) {
+         log.info("Context refreshed");
+         ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
 
-      Map<String, SwaggerSpringMvcPlugin> plugins = applicationContext.getBeansOfType(SwaggerSpringMvcPlugin.class);
+         Map<String, SwaggerSpringMvcPlugin> plugins = applicationContext.getBeansOfType(SwaggerSpringMvcPlugin.class);
 
-      if (plugins.isEmpty()) {
-         log.info("Did not find any SwaggerSpringMvcPlugins so creating a default one");
-         new SwaggerSpringMvcPlugin(springSwaggerConfig)
-                 .build()
-                 .initialize();
-      } else {
-         log.info("Found custom SwaggerSpringMvcPlugins");
+         if (plugins.isEmpty()) {
+            log.info("Did not find any SwaggerSpringMvcPlugins so creating a default one");
+            new SwaggerSpringMvcPlugin(springSwaggerConfig)
+                    .build()
+                    .initialize();
+         } else {
+            log.info("Found custom SwaggerSpringMvcPlugins");
 
-         for (Map.Entry<String, SwaggerSpringMvcPlugin> entry : plugins.entrySet()) {
-            log.info("initializing plugin bean {}", entry.getKey());
-            entry.getValue().build().initialize();
+            for (Map.Entry<String, SwaggerSpringMvcPlugin> entry : plugins.entrySet()) {
+               log.info("initializing plugin bean {}", entry.getKey());
+               entry.getValue().build().initialize();
+            }
          }
+         initialized = true;
+      } else {
+         log.warn("SwaggerSpringMvcPlugin have already been initialized!");
       }
-
    }
 }
