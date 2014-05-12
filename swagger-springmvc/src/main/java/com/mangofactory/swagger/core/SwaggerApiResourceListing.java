@@ -35,9 +35,9 @@ public class SwaggerApiResourceListing {
    private SwaggerPathProvider swaggerPathProvider;
    private SwaggerGlobalSettings swaggerGlobalSettings;
    private String swaggerGroup;
-    private ModelProvider modelProvider;
+   private ModelProvider modelProvider;
 
-    public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
+   public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
       this.swaggerCache = swaggerCache;
       this.swaggerGroup = swaggerGroup;
    }
@@ -70,6 +70,11 @@ public class SwaggerApiResourceListing {
               toScalaList(authorizationTypes),
               toOption(apiInfo)
       );
+
+      log.info("Added a resource listing with the following api resources: ");
+      for(ApiListingReference apiListingReference : apiListingReferences){
+         log.info("  {} at location: {}", apiListingReference.description(), apiListingReference.path());
+      }
 
       swaggerCache.addSwaggerResourceListing(swaggerGroup, resourceListing);
    }

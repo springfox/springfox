@@ -11,22 +11,22 @@ import static com.mangofactory.swagger.models.alternates.Alternates.*
 
 @Mixin(TypesForTestingSupport)
 class AlternateTypeProviderSpec extends Specification {
-  def "Alternate types are provided for specified map types" () {
+  def "Alternate types are provided for specified map types"() {
     given:
       AlternateTypeProvider sut = new AlternateTypeProvider()
       sut.addRule(rule)
     expect:
-      sut.alternateFor(hashMap(String, String))  == expectedType
+      sut.alternateFor(hashMap(String, String)) == expectedType
 
     where:
-    rule                                        | expectedType
-    newMapRule(String, String)            | genericMap(List, String, String)
-    newMapRule(WildcardType, String)      | genericMap(List, String, String)
-    newMapRule(String, WildcardType)      | genericMap(List, String, String)
-    newMapRule(WildcardType, WildcardType)| genericMap(List, String, String)
+      rule                                   | expectedType
+      newMapRule(String, String)             | genericMap(List, String, String)
+      newMapRule(WildcardType, String)       | genericMap(List, String, String)
+      newMapRule(String, WildcardType)       | genericMap(List, String, String)
+      newMapRule(WildcardType, WildcardType) | genericMap(List, String, String)
   }
 
-  def "Alternate types are provided for specified types" () {
+  def "Alternate types are provided for specified types"() {
     given:
       def resolvedSource = asResolved(new TypeResolver(), source)
       AlternateTypeProvider sut = new AlternateTypeProvider()
@@ -35,13 +35,13 @@ class AlternateTypeProviderSpec extends Specification {
       sut.alternateFor(resolvedSource).erasedType == expectedAlternate
 
     where:
-    rule                                                    | source                            | expectedAlternate
-    newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(SimpleType)    | SimpleType
-    newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(ComplexType)   | genericClassOfType(ComplexType).erasedType
-    newRule(genericClassOfType(WildcardType), SimpleType)   | genericClassOfType(SimpleType)    | SimpleType
-    newRule(genericClassOfType(WildcardType), ComplexType)  | genericClassOfType(SimpleType)    | ComplexType
-    newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(SimpleType)    | SimpleType
-    newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(ComplexType)   | ComplexType
-    newRule(genericClassOfType(WildcardType), WildcardType) | ComplexType                       | ComplexType
+      rule                                                    | source                          | expectedAlternate
+      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(SimpleType)  | SimpleType
+      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(ComplexType) | genericClassOfType(ComplexType).erasedType
+      newRule(genericClassOfType(WildcardType), SimpleType)   | genericClassOfType(SimpleType)  | SimpleType
+      newRule(genericClassOfType(WildcardType), ComplexType)  | genericClassOfType(SimpleType)  | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(SimpleType)  | SimpleType
+      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(ComplexType) | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | ComplexType                     | ComplexType
   }
 }

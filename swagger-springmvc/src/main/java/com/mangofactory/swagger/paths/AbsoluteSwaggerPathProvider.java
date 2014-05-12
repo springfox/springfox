@@ -7,26 +7,27 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.ServletContext;
 
 public class AbsoluteSwaggerPathProvider extends SwaggerPathProvider {
-    @Autowired
-    private ServletContext servletContext;
 
-    @Override
-    protected String applicationPath() {
-        return getAppRoot()
-                .build()
-                .toString();
-    }
+   @Autowired
+   private ServletContext servletContext;
 
-    @Override
-    protected String getDocumentationPath() {
-        return getAppRoot()
-                .path(DefaultSwaggerController.DOCUMENTATION_BASE_PATH)
-                .build()
-                .toString();
-    }
+   @Override
+   protected String applicationPath() {
+      return getAppRoot()
+              .build()
+              .toString();
+   }
 
-    private UriComponentsBuilder getAppRoot() {
-        return UriComponentsBuilder.fromHttpUrl("http://localhost:8080")
-                .path(servletContext.getContextPath());
-    }
+   @Override
+   protected String getDocumentationPath() {
+      return getAppRoot()
+              .path(DefaultSwaggerController.DOCUMENTATION_BASE_PATH)
+              .build()
+              .toString();
+   }
+
+   private UriComponentsBuilder getAppRoot() {
+      return UriComponentsBuilder.fromHttpUrl("http://localhost:8080")
+              .path(servletContext.getContextPath());
+   }
 }

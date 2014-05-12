@@ -1,0 +1,44 @@
+package com.mangofactory.swagger.plugin;
+
+import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+
+import java.util.Map;
+
+public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshedEvent> {
+   private static final Logger log = LoggerFactory.getLogger(SwaggerPluginAdapter.class);
+   private SpringSwaggerConfig springSwaggerConfig;
+
+   @Autowired
+   public SwaggerPluginAdapter(SpringSwaggerConfig springSwaggerConfig) {
+      this.springSwaggerConfig = springSwaggerConfig;
+   }
+
+   @Override
+   public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+      log.info("Context refreshed");
+      ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
+
+      Map<String, SwaggerSpringMvcPlugin> plugins = applicationContext.getBeansOfType(SwaggerSpringMvcPlugin.class);
+
+      if (plugins.isEmpty()) {
+         log.info("Did not find any SwaggerSpringMvcPlugins so creating a default one");
+         new SwaggerSpringMvcPlugin(springSwaggerConfig)
+                 .build()
+                 .initialize();
+      } else {
+         log.info("Found custom SwaggerSpringMvcPlugins");
+
+         for (Map.Entry<String, SwaggerSpringMvcPlugin> entry : plugins.entrySet()) {
+            log.info("initializing plugin bean {}", entry.getKey());
+            entry.getValue().build().initialize();
+         }
+      }
+
+   }
+}
