@@ -38,7 +38,9 @@ public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshe
 
             for (Map.Entry<String, SwaggerSpringMvcPlugin> entry : plugins.entrySet()) {
                log.info("initializing plugin bean {}", entry.getKey());
-               entry.getValue().build().initialize();
+               entry.getValue()
+                       .build()
+                       .initialize();
             }
          }
          initialized = true;
