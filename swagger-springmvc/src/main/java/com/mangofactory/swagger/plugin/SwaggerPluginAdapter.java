@@ -10,6 +10,13 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 import java.util.Map;
 
+/**
+ * After an application context refresh, builds and executes all SwaggerSpringMvcPlugin instances found in the application
+ * context.
+ *
+ * If no instances SwaggerSpringMvcPlugin are found a default one is created and executed.
+ *
+ */
 public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshedEvent> {
    private static final Logger log = LoggerFactory.getLogger(SwaggerPluginAdapter.class);
    private SpringSwaggerConfig springSwaggerConfig;

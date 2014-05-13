@@ -2,6 +2,7 @@ package com.mangofactory.swagger.core;
 
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
+import com.mangofactory.swagger.controllers.DefaultSwaggerController;
 import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
@@ -71,9 +72,12 @@ public class SwaggerApiResourceListing {
               toOption(apiInfo)
       );
 
-      log.info("Added a resource listing with the following api resources: ");
+
+      log.info("Added a resource listing with the ({}) api resources: ", apiListingReferences.size());
       for(ApiListingReference apiListingReference : apiListingReferences){
-         log.info("  {} at location: {}", apiListingReference.description(), apiListingReference.path());
+         String path = fromOption(apiListingReference.description());
+         String prefix = path.startsWith("http") ? path :DefaultSwaggerController.DOCUMENTATION_BASE_PATH;
+         log.info("  {} at location: {}{}", path, prefix, apiListingReference.path());
       }
 
       swaggerCache.addSwaggerResourceListing(swaggerGroup, resourceListing);

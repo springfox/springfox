@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableSwagger
 @ComponentScan("com.mangofactory.swagger.dummy")
-public class TestSwaggerPluginConfiguration {
-
+public class DefaultJavaPluginConfig {
 
 }
