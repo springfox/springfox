@@ -12,6 +12,10 @@ public class CustomXmlJavaConfig {
 
    private SpringSwaggerConfig springSwaggerConfig;
 
+   /**
+    * Required to autowire SpringSwaggerConfig
+    * @param springSwaggerConfig
+    */
    @Autowired
    public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
       this.springSwaggerConfig = springSwaggerConfig;

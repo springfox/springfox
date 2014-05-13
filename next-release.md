@@ -3,16 +3,18 @@
 This project integrates swagger with the Spring Web MVC framework. The complete swagger specification is available
 at https://github.com/wordnik/swagger-spec and it's worth being familiar with the main concepts of the specification.
 
-Typically a Spring Web MVC project will use this project in combination with the swagger-ui project to provide the user interface which visualises an applications JSON api's. The most common know use of this project has been Spring Web MVC applications using springs `MappingJackson2HttpMessageConverter` to produce JSON API endpoints.
+Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/wordnik/swagger-ui) 
+to provide the user interface which visualises an applications JSON api's. The most common know use of this project has been 
+Spring Web MVC applications using springs `MappingJackson2HttpMessageConverter` to produce JSON API endpoints.
 
 The demo project (https://github.com/adrianbk/swagger-springmvc-demo) containes a number of examples using both spring web mvc and spring-boot.
 
+### Repositories
 
-### Usage (Quick guide)
-
-###### Release version
+#### Release version
 or maven central: http://repo1.maven.org/maven2/
 
+- Maven
 ```xml
   <repositories>
     <repository>
@@ -34,7 +36,7 @@ or maven central: http://repo1.maven.org/maven2/
 compile "com.mangofactory:swagger-springmvc:0.8.4"
 ```
 
-###### Snapshot version
+#### Snapshot version
 - Maven
 ```xml
   <repositories>
@@ -58,11 +60,15 @@ compile "com.mangofactory:swagger-springmvc:0.8.4"
 compile "com.mangofactory:swagger-springmvc:0.8.4-SNAPSHOT"
 ```
 
+### Usage (Quick guide)
+This quick guide outlines how to get swagger-springmvc up and running with a default configuration. The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin` explained in the [Usage (SwaggerSpringMvcPlugin)][] section.
+
 #### Spring Java Configuration
 - By far, the easiest way to enable swagger
+- Assuming you have configured Spring MVC without an xml based servlet application context.
 - A typical minimal configuration looks as follows:
 
-```
+```java
 @Configuration
 @EnableWebMvc
 @EnableSwagger
@@ -71,7 +77,7 @@ public class WebAppConfig {
  ...
 }
 ```
-The `@EnableSwagger` annotation, in this example, enbles swagger-springnvc out of the box and the swagger json Resource Listing is available at /api-docs
+The `@EnableSwagger` annotation, in this example, enbles swagger-springnvc out of the box and the generated swagger json Resource Listing is available at /api-docs
 
 
 #### Spring xml Configuration
@@ -81,14 +87,103 @@ The `@EnableSwagger` annotation, in this example, enbles swagger-springnvc out o
 <mvc:annotation-driven/> <!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
 <bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
 ```
-- JSON Resource Listing availagle at /api-docs
+- JSON Resource Listing available at /api-docs
+
+
+
+### Usage (SwaggerSpringMvcPlugin)
+
+The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin`. If you are ever going to need to configure or customize how swagger-springmvc generates your applicatios sagger api documentation you are going to need to use the `SwaggerSpringMvcPlugin`.
+
+
+### SwaggerSpringMvcPlugin XML Configuration
+To use the plugin you must create a spring java configuration class which uses spring's `@Configuration`.
+This config class must then be defined in your xml application context. 
+
+
+```xml
+<mvc:annotation-driven/> <!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
+<bean class="com.yourapp.configuration.MySwaggerConfig"/>
+```
+
+
+
+```java
+
+@Configuration
+@EnableSwagger //Loads the spring beans required by the framework most of which are available in SpringSwaggerConfig 
+public class MySwaggerConfig {
+
+   private SpringSwaggerConfig springSwaggerConfig;
+   
+   /**
+    * Required to autowire SpringSwaggerConfig
+    */
+   @Autowired
+   public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
+      this.springSwaggerConfig = springSwaggerConfig;
+   }
+
+   /**
+    * Every SwaggerSpringMvcPlugin bean is picked up by the swagger-mvc framework - allowing for multiple
+    * swagger groups i.e. same code base multiple swagger resource listings.
+    */
+   @Bean
+   public SwaggerSpringMvcPlugin customImplementation(){
+      return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
+              .includePatterns(".*pet.*");
+   }
+
+}
+```
+
+
+### SwaggerSpringMvcPlugin Spring Java Configuration
+- Use the `@EnableSwagger` annotation.
+- Autowire `SpringSwaggerConfig`.
+- Define one of more SwaggerSpringMvcPlugin using springs `@Bean` annotation.
+
+```java
+@Configuration
+@EnableWebMvc
+@EnableSwagger
+@ComponentScan("com.myapp.controllers") 
+public class CustomJavaPluginConfig {
+
+   private SpringSwaggerConfig springSwaggerConfig;
+
+   @Autowired
+   public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
+      this.springSwaggerConfig = springSwaggerConfig;
+   }
+
+   @Bean
+   public SwaggerSpringMvcPlugin customImplementation(){
+      return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
+            .apiInfo(apiInfo())
+            .includePatterns(".*pet.*");
+   }
+
+    private ApiInfo apiInfo() {
+      ApiInfo apiInfo = new ApiInfo(
+              "My Apps API Title",
+              "My Apps API Description",
+              "My Apps API terms of service",
+              "My Apps API Contact Email",
+              "My Apps API Licence Type",
+              "My Apps API License URL"
+        );
+      return apiInfo;
+    }
+}
+```
+
+
+
 
 ### Customization
 
-sd
-#### SwaggerSpringMvcPlugin
 
-sd
 
 
 ### Migration From 0.8.0 -> 0.8.4
@@ -111,9 +206,10 @@ Swagger-springmvc stores the generated swagger documentation, in memory, and ser
 A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
 within your application. The reason this concept was introduced was to support applications which require more than one
 Resource Listing. Why would you need more than one Resource Listing?
-- A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
--  A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2
-In most cases an application will not need more than one Resource Listing and the concept of swagger groups can be ignored.
+ - A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
+ -  A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2
+
+ In most cases an application will not need more than one Resource Listing and the concept of swagger groups can be ignored.
 
 2. Resource Listing
 Please see the Swagger Specification for a detailed explanation.

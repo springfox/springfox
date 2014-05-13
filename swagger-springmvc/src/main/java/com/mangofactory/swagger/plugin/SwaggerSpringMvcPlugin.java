@@ -134,6 +134,10 @@ public class SwaggerSpringMvcPlugin {
       return apiListingReferenceScanner;
    }
 
+   public SwaggerSpringMvcPlugin apiInfo(ApiInfo apiInfo) {
+      this.apiInfo = apiInfo;
+      return this;
+   }
 
    public SwaggerSpringMvcPlugin swaggerGroup(String swaggerGroup) {
       this.swaggerGroup = swaggerGroup;

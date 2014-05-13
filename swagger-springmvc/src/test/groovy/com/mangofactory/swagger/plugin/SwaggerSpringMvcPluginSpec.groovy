@@ -12,6 +12,7 @@ import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
+import com.wordnik.swagger.model.ApiInfo
 import com.wordnik.swagger.model.AuthorizationType
 import com.wordnik.swagger.model.ResponseMessage
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
@@ -134,6 +135,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       'authorizationContext' | new AuthorizationContext.AuthorizationContextBuilder().build() | 'authorizationContext'
       'includePatterns'      | ['one', 'two', 'three'] as String[]                            | 'includePatterns'
       'swaggerGroup'         | 'someGroup'                                                    | 'swaggerGroup'
+      'apiInfo'              | new ApiInfo('', '', '', '', '', '')                            | 'apiInfo'
   }
 
   def "non nullable swaggerApiResourceListing properties"() {
