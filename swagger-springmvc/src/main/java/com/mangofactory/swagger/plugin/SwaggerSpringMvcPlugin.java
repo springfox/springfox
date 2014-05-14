@@ -206,7 +206,10 @@ public class SwaggerSpringMvcPlugin {
       return apiInfo;
    }
 
-   public void initialize(){
+   /**
+    * Called by the framework hence protected
+    */
+   protected void initialize(){
       this.build().swaggerApiResourceListing.initialize();
    }
 }

@@ -1,3 +1,8 @@
+# Swagger-springmvc
+
+Unit Tests: [![Build Status](https://travis-ci.org/martypitt/swagger-springmvc.png?branch=master)](https://travis-ci.org/martypitt/swagger-springmvc)
+Functional Tests: [![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.png?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo)
+
 ### About
 
 This project integrates swagger with the Spring Web MVC framework. The complete swagger specification is available
@@ -93,7 +98,9 @@ The `@EnableSwagger` annotation, in this example, enbles swagger-springnvc out o
 
 ### Usage (SwaggerSpringMvcPlugin)
 
-The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin`. If you are ever going to need to configure or customize how swagger-springmvc generates your applicatios sagger api documentation you are going to need to use the `SwaggerSpringMvcPlugin`.
+The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin`. If you are ever 
+going to need to configure or customize how swagger-springmvc generates your applicatios sagger api documentation 
+you are going to need to use the `SwaggerSpringMvcPlugin`.
 
 
 ### SwaggerSpringMvcPlugin XML Configuration
@@ -187,6 +194,9 @@ public class CustomJavaPluginConfig {
 
 
 ### Migration From 0.8.0 -> 0.8.4
+Prior to 0.8.4 the configuration of Swagger-springmvc was far too verbose as indicated by a number of users. SwaggerSpringMvcPlugin 
+was introduced to make configuration simpler and less verbose. It is recommended to follow the usage guides above migrate 
+to the newer configuration.
 
 
 ### How It works
