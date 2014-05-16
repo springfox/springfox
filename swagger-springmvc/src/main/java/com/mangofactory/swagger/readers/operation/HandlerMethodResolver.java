@@ -5,6 +5,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
@@ -35,7 +36,10 @@ public class HandlerMethodResolver {
         ResolvedMethod resolvedMethod = getResolvedMethod(methodToResolve.getMethod());
         List<ResolvedMethodParameter> parameters = newArrayList();
         MethodParameter[] methodParameters = methodToResolve.getMethodParameters();
+
         if (resolvedMethod != null) {
+            Preconditions.checkState(methodParameters.length >= resolvedMethod.getArgumentCount(),
+                        "array length mismatch for %s", methodToResolve);
             for (int index = 0; index < resolvedMethod.getArgumentCount(); index++) {
                 MethodParameter methodParameter = methodParameters[index];
                 methodParameter.initParameterNameDiscovery(new LocalVariableTableParameterNameDiscoverer());
