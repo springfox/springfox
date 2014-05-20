@@ -37,6 +37,7 @@ public class SwaggerApiResourceListing {
    private SwaggerGlobalSettings swaggerGlobalSettings;
    private String swaggerGroup;
    private ModelProvider modelProvider;
+   private String apiVersion = "1";
 
    public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
       this.swaggerCache = swaggerCache;
@@ -65,7 +66,7 @@ public class SwaggerApiResourceListing {
          log.error("ApiListingReferenceScanner not configured");
       }
       ResourceListing resourceListing = new ResourceListing(
-              "1",
+              this.apiVersion,
               SwaggerSpec.version(),
               toScalaList(apiListingReferences),
               toScalaList(authorizationTypes),
@@ -146,4 +147,8 @@ public class SwaggerApiResourceListing {
     public void setModelProvider(ModelProvider modelProvider) {
         this.modelProvider = modelProvider;
     }
+
+   public void setApiVersion(String apiVersion) {
+      this.apiVersion = apiVersion;
+   }
 }

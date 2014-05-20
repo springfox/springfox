@@ -136,6 +136,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       'includePatterns'      | ['one', 'two', 'three'] as String[]                            | 'includePatterns'
       'swaggerGroup'         | 'someGroup'                                                    | 'swaggerGroup'
       'apiInfo'              | new ApiInfo('', '', '', '', '', '')                            | 'apiInfo'
+      'apiVersion'           | '2.0'                                                          | 'apiVersion'
   }
 
   def "non nullable swaggerApiResourceListing properties"() {
@@ -156,6 +157,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       listing.apiListingReferenceScanner instanceof ApiListingReferenceScanner
       listing.swaggerCache instanceof SwaggerCache
       listing.swaggerGroup == plugin.swaggerGroup
+      listing.apiVersion == plugin.apiVersion
 
   }
 

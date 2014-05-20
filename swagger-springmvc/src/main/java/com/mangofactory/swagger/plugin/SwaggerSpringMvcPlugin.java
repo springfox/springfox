@@ -39,6 +39,7 @@ public class SwaggerSpringMvcPlugin {
    private AuthorizationContext authorizationContext;
    private List<Class<? extends Annotation>> excludeAnnotations = new ArrayList<Class<? extends Annotation>>();
    private ResourceGroupingStrategy resourceGroupingStrategy;
+   private String apiVersion = "1.0";
 
    private SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
    private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages = new HashMap<RequestMethod, List<ResponseMessage>>();
@@ -118,6 +119,7 @@ public class SwaggerSpringMvcPlugin {
       swaggerApiResourceListing.setAuthorizationContext(this.authorizationContext);
       swaggerApiResourceListing.setModelProvider(this.modelProvider);
       swaggerApiResourceListing.setApiListingReferenceScanner(this.apiListingReferenceScanner);
+      swaggerApiResourceListing.setApiVersion(this.apiVersion);
    }
 
    private ApiListingReferenceScanner buildApiListingReferenceScanner() {
@@ -191,6 +193,12 @@ public class SwaggerSpringMvcPlugin {
 
    public SwaggerSpringMvcPlugin alternateTypeProvider(AlternateTypeProvider alternateTypeProvider) {
       this.alternateTypeProvider = alternateTypeProvider;
+      return this;
+   }
+
+   public SwaggerSpringMvcPlugin apiVersion(String apiVersion) {
+      Assert.hasText(apiVersion, "apiVersion must contain text");
+      this.apiVersion = apiVersion;
       return this;
    }
 
