@@ -186,12 +186,29 @@ public class CustomJavaPluginConfig {
 ```
 
 
+### Swagger-UI
 
+#### Option 1
+- Use the web-jar which packages all of the swagger-ui static content.
+- Requires that your app is using the servlet 3 specification.
+- For non-spring boot applications some extra spring configuration is required. See: https://github.com/adrianbk/swagger-springmvc-demo/tree/master/swagger-ui
+```
+"org.ajar:swagger-spring-mvc-ui:0.1"
+```
 
-### Customization
+#### Option 2
+- Manually copy all of the static content swagger-ui's dist directory (https://github.com/wordnik/swagger-ui/tree/master/dist)
+- Provide the necessary view resolvers and resource handlers to serve the static content.
+- Consult the spring documentation on serving static resources.
 
-
-
+The following is one way to serve static content from /src/main/webapp
+```
+    <!-- Direct static mappings -->
+    <mvc:resources mapping="*.html" location="/"/>
+    
+    <!-- Serve static content-->
+    <mvc:default-servlet-handler/>
+```
 
 ### Migration From 0.8.0 -> 0.8.4
 Prior to 0.8.4 the configuration of Swagger-springmvc was far too verbose as indicated by a number of users. SwaggerSpringMvcPlugin 
@@ -228,3 +245,5 @@ Please see the Swagger Specification for a detailed explanation.
 
 ### Notable Dependencies
 
+
+### Customization
