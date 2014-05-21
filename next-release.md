@@ -229,6 +229,8 @@ Swagger-springmvc stores the generated swagger documentation, in memory, and ser
 
 ### Core Concepts
 
+![alt tag](https://raw.githubusercontent.com/martypitt/swagger-springmvc/master/docs/swaggerSpringMvc.png)
+
 1. Swagger group
 A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
 within your application. The reason this concept was introduced was to support applications which require more than one
