@@ -378,7 +378,7 @@ testcases:
     parameters:
        - type: "string"
          name: "petId"
-       - type: "file"
+       - type: "File"
          name: "pic"
 
   - parentUri: "/default/pet-service"

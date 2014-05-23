@@ -18,7 +18,7 @@ public class ParameterDataTypeReader implements Command<RequestMappingContext> {
         parameterType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(parameterType);
         //Multi-part file trumps any other annotations
         if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
-            context.put("dataType", "file");
+            context.put("dataType", "File");
         } else {
             context.put("dataType", ModelUtils.getResponseClassName(parameterType));
         }

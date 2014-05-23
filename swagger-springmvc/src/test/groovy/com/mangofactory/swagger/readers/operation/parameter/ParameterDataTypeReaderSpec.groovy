@@ -10,6 +10,7 @@ import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.core.MethodParameter
 import org.springframework.web.method.HandlerMethod
+import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 
 import static com.mangofactory.swagger.models.ResolvedTypes.*
@@ -59,6 +60,7 @@ class ParameterDataTypeReaderSpec extends Specification {
 //      DummyClass.CustomClass.class    | "customClassParamType" //DK TODO: Alternate types
       DummyModels.FunkyBusiness.class | "FunkyBusiness"
       Void.class                      | "Void"
+      MultipartFile.class             | "File"
    }
 
   ResolvedType resolve(Class clazz) {

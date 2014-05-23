@@ -212,8 +212,8 @@ The following is one way to serve static content from /src/main/webapp
 
 ### Migration From 0.8.0 -> 0.8.4
 Prior to 0.8.4 the configuration of Swagger-springmvc was far too verbose as indicated by a number of users. SwaggerSpringMvcPlugin 
-was introduced to make configuration simpler and less verbose. It is recommended to follow the usage guides above migrate 
-to the newer configuration.
+was introduced to make configuration simpler and less verbose. It is recommended to follow the usage guides above and migrate 
+your swagger-springmvc configuration to use the `SwaggerSpringMvcPlugin`
 
 
 ### How It works
@@ -246,6 +246,17 @@ Please see the Swagger Specification for a detailed explanation.
 
 
 ### Notable Dependencies
+
+### Urls (SwaggerPathProvider)
+The swagger specification recommends the use of absolute URL's for where possible - specifically the the `path` attribute of 
+api's within the ResourceListing's and the `basePath` attribute of Api Declarations. Most users of swagger-springmvc have expressed 
+a preference for relative urls hence `RelativeSwaggerPathProvider` is the default SwaggerPathProvider`. `AbsoluteSwaggerPathProvider` can be
+used to provide absolute urls. `AbsoluteSwaggerPathProvider`has a hardcoded appRoot but demonstrates the concept. If you wish use absolute urls:
+use `AbsoluteSwaggerPathProvider` as a guide and configure your `SwaggerSpringMvcPlugin` with: 
+ 
+ ```java
+.pathProvider(myPathProvider) 
+ ```
 
 
 ### Customization

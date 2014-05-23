@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +54,10 @@ public class DummyClass {
 
    @ApiOperation(value = "", produces = "application/xml", consumes = "application/xml")
    public void methodWithBothXmlMediaTypes() {
+   }
+
+   @ApiOperation(value = "", produces = "application/json", consumes = "application/xml")
+   public void methodWithMediaTypeAndFile(MultipartFile multipartFile) {
    }
 
    @ApiOperation(value = "", response = DummyModels.FunkyBusiness.class)

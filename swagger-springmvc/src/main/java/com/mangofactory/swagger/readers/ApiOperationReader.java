@@ -61,8 +61,8 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       commandList.add(new OperationResponseClassReader());
       commandList.add(new OperationNicknameReader());
       commandList.add(new OperationPositionReader());
-      commandList.add(new MediaTypeReader());
       commandList.add(new OperationParameterReader());
+      commandList.add(new MediaTypeReader());
       commandList.add(new OperationResponseMessageReader());
       commandList.add(new OperationDeprecatedReader());
       Integer currentCount = 0;
