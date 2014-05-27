@@ -193,7 +193,12 @@ public class CustomJavaPluginConfig {
 - Requires that your app is using the servlet 3 specification.
 - For non-spring boot applications some extra spring configuration is required. See: https://github.com/adrianbk/swagger-springmvc-demo/tree/master/swagger-ui
 ```
-compile "org.ajar:swagger-spring-mvc-ui:0.1"
+dependencies {
+
+  ...
+  compile "org.ajar:swagger-spring-mvc-ui:0.1"
+
+}
 ```
 
 #### Option 2
