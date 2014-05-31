@@ -21,7 +21,7 @@ class JacksonScalaSupportSpec extends Specification {
       )
       jacksonScalaSupport.init()
     then:
-      2 * objectMapper.registerModule(_)
+      1 * objectMapper.registerModule(_)
 
     when:
       jacksonScalaSupport = new JacksonScalaSupport(

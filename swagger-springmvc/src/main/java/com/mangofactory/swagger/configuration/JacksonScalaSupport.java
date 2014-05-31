@@ -2,7 +2,6 @@ package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.module.scala.DefaultScalaModule;
 import com.wordnik.swagger.model.ApiListing;
 import com.wordnik.swagger.model.ResourceListing;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ public class JacksonScalaSupport {
          for (HttpMessageConverter<?> messageConverter : messageConverters) {
             if (messageConverter instanceof MappingJackson2HttpMessageConverter) {
                MappingJackson2HttpMessageConverter m = (MappingJackson2HttpMessageConverter) messageConverter;
-               m.getObjectMapper().registerModule(new DefaultScalaModule());
                m.getObjectMapper().registerModule(swaggerSerializationModule());
             }
          }
