@@ -17,7 +17,7 @@
     </modules>
 
     <properties>
-        <swagger.version>1.3.4</swagger.version>
+        <swagger.version>1.3.5</swagger.version>
         <spring.version>3.2.7.RELEASE</spring.version>
         <scala-lib.version>2.10.0</scala-lib.version>
         <spock.version>0.7-groovy-2.0</spock.version>
