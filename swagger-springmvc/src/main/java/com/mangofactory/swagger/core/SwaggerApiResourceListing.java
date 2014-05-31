@@ -60,7 +60,6 @@ public class SwaggerApiResourceListing {
          ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider,
                  modelProvider, authorizationContext);
          apiListingScanner.setSwaggerGlobalSettings(swaggerGlobalSettings);
-         //DK TODO: Fix this hack!
          apiListingScanner.setResourceGroupingStrategy(apiListingReferenceScanner.getResourceGroupingStrategy());
 
          Map<String, ApiListing> apiListings = apiListingScanner.scan();
