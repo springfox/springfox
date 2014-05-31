@@ -62,8 +62,6 @@ public class ApiListingReferenceScanner {
       return this.apiListingReferences;
    }
 
-
-
    public void scanSpringRequestMappings() {
       Map<String, String> resourceGroupDescriptions = new HashMap<String, String>();
       for (RequestMappingHandlerMapping requestMappingHandlerMapping : this.requestMappingHandlerMapping) {
@@ -84,7 +82,6 @@ public class ApiListingReferenceScanner {
                log.info("Request mapping: {} belongs to groups: [{}] ", handlerMethodName, resourceGroups);
                for (ResourceGroup group : resourceGroups) {
                   resourceGroupDescriptions.put(group.getGroupName(), resourceDescription);
-
 
                   log.info("Adding resource to group:{} with description:{} for handler method:{}",
                           group, resourceDescription, handlerMethodName);

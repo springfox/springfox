@@ -3,6 +3,8 @@ package com.mangofactory.swagger.configuration
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
+import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
+import com.mangofactory.swagger.ordering.ResourceListingPositionalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
@@ -139,9 +141,37 @@ class SwaggerApiResourceListingSpec extends Specification {
                 swaggerCache.swaggerApiListingMap['swaggerGroup']['dummy-class']
         apiListing.swaggerVersion() == '1.2'
         apiListing.basePath() == 'http://localhost:8080/context-path'
-        //The relative path to the resource, from the basePath, which this API Specification
-//        apiListing.resourcePath() == '/api-docs/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass'
+
+        /**
+         * TODO - AK
+         * The relative path to the resource, from the basePath, which this API Specification
+         * piListing.resourcePath() == '/api-docs/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass'
+         */
         apiListing.resourcePath() == 'fix this'
 
    }
+
+  def "Should sort based on position"() {
+    given:
+      SwaggerCache swaggerCache = new SwaggerCache();
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
+      swaggerApiResourceListing.setApiListingReferenceOrdering(new ResourceListingPositionalOrdering())
+
+      ApiListingReferenceScanner apiListingReferenceScanner = Mock()
+      apiListingReferenceScanner.getApiListingReferences() >> [
+            new ApiListingReference("/b", toOption('b'), 1),
+            new ApiListingReference("/a", toOption('a'), 2)
+      ]
+
+      swaggerApiResourceListing.apiListingReferenceScanner = apiListingReferenceScanner
+
+    when:
+      swaggerApiResourceListing.initialize()
+      def apis = fromScalaList(swaggerCache.getResourceListing('default').apis())
+    then:
+      apis[0].position == 1
+      apis[0].path == '/b'
+      apis[1].position == 2
+      apis[1].path == '/a'
+  }
 }

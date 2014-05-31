@@ -1,9 +1,11 @@
 package com.mangofactory.swagger.core;
 
+import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.controllers.DefaultSwaggerController;
 import com.mangofactory.swagger.models.ModelProvider;
+import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.ApiListingScanner;
@@ -20,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +41,7 @@ public class SwaggerApiResourceListing {
    private String swaggerGroup;
    private ModelProvider modelProvider;
    private String apiVersion = "1";
+   private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
 
    public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
       this.swaggerCache = swaggerCache;
@@ -65,6 +69,10 @@ public class SwaggerApiResourceListing {
       } else {
          log.error("ApiListingReferenceScanner not configured");
       }
+
+
+      Collections.sort(apiListingReferences, apiListingReferenceOrdering);
+
       ResourceListing resourceListing = new ResourceListing(
               this.apiVersion,
               SwaggerSpec.version(),
@@ -72,7 +80,6 @@ public class SwaggerApiResourceListing {
               toScalaList(authorizationTypes),
               toOption(apiInfo)
       );
-
 
       log.info("Added a resource listing with the ({}) api resources: ", apiListingReferences.size());
       for(ApiListingReference apiListingReference : apiListingReferences){
@@ -144,11 +151,15 @@ public class SwaggerApiResourceListing {
       this.authorizationContext = authorizationContext;
    }
 
-    public void setModelProvider(ModelProvider modelProvider) {
+   public void setModelProvider(ModelProvider modelProvider) {
         this.modelProvider = modelProvider;
     }
 
    public void setApiVersion(String apiVersion) {
       this.apiVersion = apiVersion;
+   }
+
+   public void setApiListingReferenceOrdering(Ordering<ApiListingReference> apiListingReferenceOrdering) {
+      this.apiListingReferenceOrdering = apiListingReferenceOrdering;
    }
 }

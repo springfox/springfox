@@ -29,9 +29,20 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
    }
 
    @Override
+   public Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+      Class<?> controllerClass = handlerMethod.getBeanType();
+      Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
+      if (null != apiAnnotation && !isBlank(apiAnnotation.value())) {
+         return apiAnnotation.position();
+      }
+      return 0;
+   }
+
+   @Override
    public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
       String group = getClassOrApiAnnotationValue(handlerMethod).toLowerCase().replaceAll(" ", "-");
-      return newHashSet(new ResourceGroup(group.toLowerCase()));
+      Integer position = getResourcePosition(requestMappingInfo, handlerMethod);
+      return newHashSet(new ResourceGroup(group.toLowerCase(), position));
    }
 
    private String getClassOrApiAnnotationValue(HandlerMethod handlerMethod) {

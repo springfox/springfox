@@ -16,11 +16,12 @@ class ClassOrApiAnnotationResourceGroupingSpec extends Specification {
 
     expect:
       group.groupName == groupName
+      group.position == position
       strategy.getResourceDescription(requestMappingInfo, handlerMethod) == description
 
     where:
-      handlerMethod                  | groupName     | description
-      dummyHandlerMethod()           | "dummy-class" | "Dummy Class"
-      dummyControllerHandlerMethod() | "group-name"  | "Group name"
+      handlerMethod                  | groupName     | description   | position
+      dummyHandlerMethod()           | "dummy-class" | "Dummy Class" | 0
+      dummyControllerHandlerMethod() | "group-name"  | "Group name"  | 2
   }
 }

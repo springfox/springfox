@@ -29,4 +29,10 @@ public interface ResourceGroupingStrategy {
     */
    public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);
 
+   /**
+    * Gets the position of the resource. Typically com.wordnik.swagger.annotations.Api.position
+    * @return The numeric position
+    */
+   public Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);
+
 }

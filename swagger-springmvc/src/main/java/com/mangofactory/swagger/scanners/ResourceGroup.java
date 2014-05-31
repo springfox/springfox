@@ -5,15 +5,28 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 
 public class ResourceGroup {
    private String groupName;
+   private Integer position = 0;
 
    public ResourceGroup(String groupName) {
       this.groupName = groupName;
+   }
+
+   public ResourceGroup(String groupName, Integer position) {
+      this.groupName = groupName;
+      this.position = position;
    }
 
    public String getGroupName() {
       return groupName;
    }
 
+   public void setPosition(Integer position) {
+      this.position = position;
+   }
+
+   public Integer getPosition() {
+      return position;
+   }
 
    @Override
    public boolean equals(Object obj) {

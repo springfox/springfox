@@ -265,3 +265,11 @@ use `AbsoluteSwaggerPathProvider` as a guide and configure your `SwaggerSpringMv
 
 
 ### Customization
+
+#### Ordering the api's within a ResourceListing
+
+```java
+
+//If not supplied the default is ResourceListingLexicographicalOrdering
+swaggerSpringMvcPlugin.apiListingReferenceOrdering(new ResourceListingPositionalOrdering())
+```

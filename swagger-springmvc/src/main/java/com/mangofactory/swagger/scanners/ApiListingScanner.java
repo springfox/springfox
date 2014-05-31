@@ -56,79 +56,81 @@ public class ApiListingScanner {
 
    public Map<String, ApiListing> scan() {
       Map<String, ApiListing> apiListingMap = newHashMap();
-
-
       int position = 0;
-      for (Map.Entry<ResourceGroup, List<RequestMappingContext>> entry : resourceGroupRequestMappings.entrySet()) {
 
-         ResourceGroup resourceGroup = entry.getKey();
+      if (null == resourceGroupRequestMappings) {
+         log.error("resourceGroupRequestMappings should not be null.");
+      } else {
+         for (Map.Entry<ResourceGroup, List<RequestMappingContext>> entry : resourceGroupRequestMappings.entrySet()) {
 
-         Set<String> produces = new LinkedHashSet<String>(2);
-         Set<String> consumes = new LinkedHashSet<String>(2);
-         Set<ApiDescription> apiDescriptions = newHashSet();
+            ResourceGroup resourceGroup = entry.getKey();
 
-         List<Command<RequestMappingContext>> readers  = newArrayList();
-         readers.add(new MediaTypeReader());
-         readers.add(new ApiDescriptionReader(swaggerPathProvider));
-         readers.add(new ApiModelReader(modelProvider));
+            Set<String> produces = new LinkedHashSet<String>(2);
+            Set<String> consumes = new LinkedHashSet<String>(2);
+            Set<ApiDescription> apiDescriptions = newHashSet();
+
+            List<Command<RequestMappingContext>> readers = newArrayList();
+            readers.add(new MediaTypeReader());
+            readers.add(new ApiDescriptionReader(swaggerPathProvider));
+            readers.add(new ApiModelReader(modelProvider));
 
 
-         Map<String, Model> models = new LinkedHashMap<String, Model>();
-         for(RequestMappingContext each : entry.getValue()){
+            Map<String, Model> models = new LinkedHashMap<String, Model>();
+            for (RequestMappingContext each : entry.getValue()) {
 
-            CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
-            each.put("authorizationContext", authorizationContext);
-            each.put("swaggerGlobalSettings", swaggerGlobalSettings);
-            each.put("currentResourceGroup", resourceGroup);
-            each.put("resourceGroupingStrategy", resourceGroupingStrategy);
+               CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
+               each.put("authorizationContext", authorizationContext);
+               each.put("swaggerGlobalSettings", swaggerGlobalSettings);
+               each.put("currentResourceGroup", resourceGroup);
+               each.put("resourceGroupingStrategy", resourceGroupingStrategy);
 
-            Map<String, Object> results = commandExecutor.execute(readers, each);
+               Map<String, Object> results = commandExecutor.execute(readers, each);
 
-            List<String> producesMediaTypes = (List<String>) results.get("produces");
-            List<String> consumesMediaTypes = (List<String>) results.get("consumes");
-            Map<String, Model> swaggerModels = (Map<String, Model>) results.get("models");
-            if(null != swaggerModels){
-               models.putAll(swaggerModels);
+               List<String> producesMediaTypes = (List<String>) results.get("produces");
+               List<String> consumesMediaTypes = (List<String>) results.get("consumes");
+               Map<String, Model> swaggerModels = (Map<String, Model>) results.get("models");
+               if (null != swaggerModels) {
+                  models.putAll(swaggerModels);
+               }
+               produces.addAll(producesMediaTypes);
+               consumes.addAll(consumesMediaTypes);
+
+               List<ApiDescription> apiDescriptionList = (List<ApiDescription>) results.get("apiDescriptionList");
+               apiDescriptions.addAll(apiDescriptionList);
             }
-            produces.addAll(producesMediaTypes);
-            consumes.addAll(consumesMediaTypes);
 
-            List<ApiDescription> apiDescriptionList = (List<ApiDescription>) results.get("apiDescriptionList");
-            apiDescriptions.addAll(apiDescriptionList);
+            scala.collection.immutable.List<Authorization> authorizations = emptyScalaList();
+            if (null != authorizationContext) {
+               authorizations = authorizationContext.getScalaAuthorizations();
+            }
+
+            Option modelOption = toOption(models);
+            if (null != models) {
+               modelOption = toOption(toScalaModelMap(models));
+            }
+
+            //String groupPrefix = controllerGroup.getRealUri();
+            // resourcePath is specific to this class only
+            //TODO AK /swaggergroup/prefix - abs and rel are different and its always
+            // relative to swaggerPathProvider.getApplicationBasePath()
+            String resourcePath = "fix this";
+
+            ApiListing apiListing = new ApiListing(
+                    apiVersion,
+                    swaggerVersion,
+                    swaggerPathProvider.getApplicationBasePath(),
+                    resourcePath,
+                    toScalaList(produces),
+                    toScalaList(consumes),
+                    emptyScalaList(),
+                    authorizations,
+                    toScalaList(apiDescriptions), // toScalaList(filter(apiDescriptions, withPathBeginning(groupPrefix))),
+                    modelOption,
+                    toOption(null),
+                    position++);
+
+            apiListingMap.put(resourceGroup.getGroupName(), apiListing);
          }
-
-         scala.collection.immutable.List<Authorization> authorizations = emptyScalaList();
-         if (null != authorizationContext) {
-            authorizations = authorizationContext.getScalaAuthorizations();
-         }
-
-         Option modelOption = toOption(models);
-         if (null != models) {
-            modelOption = toOption(toScalaModelMap(models));
-         }
-
-//          String groupPrefix = controllerGroup.getRealUri();
-
-         //resourcePath is specific to this class only
-         //TODO AK /swaggergroup/prefix - abs and rel are different and its always
-         // relative to swaggerPathProvider.getApplicationBasePath()
-         String resourcePath = "fix this";
-
-         ApiListing apiListing = new ApiListing(
-            apiVersion,
-            swaggerVersion,
-            swaggerPathProvider.getApplicationBasePath(),
-            resourcePath,
-            toScalaList(produces),
-            toScalaList(consumes),
-            emptyScalaList(),
-            authorizations,
-            toScalaList(apiDescriptions), // toScalaList(filter(apiDescriptions, withPathBeginning(groupPrefix))),
-            modelOption,
-            toOption(null),
-            position++);
-
-         apiListingMap.put(resourceGroup.getGroupName(), apiListing);
       }
       return apiListingMap;
    }

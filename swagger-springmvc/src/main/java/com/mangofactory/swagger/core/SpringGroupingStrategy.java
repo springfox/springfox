@@ -33,6 +33,11 @@ public class SpringGroupingStrategy implements ResourceGroupingStrategy {
       return getDescription(handlerMethod);
    }
 
+   @Override
+   public Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+      return 0;
+   }
+
    private Set<ResourceGroup> groups(HandlerMethod handlerMethod) {
       Class<?> controllerClass = handlerMethod.getBeanType();
       String defaultGroup = String.format("%s", splitCamelCase(controllerClass.getSimpleName(), "-"));

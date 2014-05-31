@@ -8,11 +8,9 @@ class ResourceGroupTest extends Specification {
    def reference = new ResourceGroup("group")
 
    def "Equals"() {
-      given:
-
       expect:
         first.equals(second) == expected
-
+        first.position == 0
       where:
         first                      | second                     | expected
         new ResourceGroup("group") | null                       | false

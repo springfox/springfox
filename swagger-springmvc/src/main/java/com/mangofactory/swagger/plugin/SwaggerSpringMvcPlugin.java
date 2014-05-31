@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.plugin;
 
+import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
@@ -8,9 +9,11 @@ import com.mangofactory.swagger.core.SwaggerApiResourceListing;
 import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeRule;
+import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.wordnik.swagger.model.ApiInfo;
+import com.wordnik.swagger.model.ApiListingReference;
 import com.wordnik.swagger.model.AuthorizationType;
 import com.wordnik.swagger.model.ResponseMessage;
 import org.springframework.util.Assert;
@@ -48,6 +51,7 @@ public class SwaggerSpringMvcPlugin {
    private List<AlternateTypeRule> alternateTypeRules = new ArrayList<AlternateTypeRule>();
    private SpringSwaggerConfig springSwaggerConfig;
    private SwaggerApiResourceListing swaggerApiResourceListing;
+   private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
    private ApiListingReferenceScanner apiListingReferenceScanner;
 
    public SwaggerSpringMvcPlugin(SpringSwaggerConfig springSwaggerConfig) {
@@ -120,6 +124,7 @@ public class SwaggerSpringMvcPlugin {
       swaggerApiResourceListing.setModelProvider(this.modelProvider);
       swaggerApiResourceListing.setApiListingReferenceScanner(this.apiListingReferenceScanner);
       swaggerApiResourceListing.setApiVersion(this.apiVersion);
+      swaggerApiResourceListing.setApiListingReferenceOrdering(this.apiListingReferenceOrdering);
    }
 
    private ApiListingReferenceScanner buildApiListingReferenceScanner() {
@@ -199,6 +204,18 @@ public class SwaggerSpringMvcPlugin {
    public SwaggerSpringMvcPlugin apiVersion(String apiVersion) {
       Assert.hasText(apiVersion, "apiVersion must contain text");
       this.apiVersion = apiVersion;
+      return this;
+   }
+
+   /**
+    * Controls how ApiListingReference's are sorted.
+    * i.e the ordering of the api's within the swagger Resource Listing.
+    * The default sort is Lexicographically by the ApiListingReference's path
+    * @param apiListingReferenceOrdering
+    * @return this
+    */
+   public SwaggerSpringMvcPlugin apiListingReferenceOrdering(Ordering<ApiListingReference> apiListingReferenceOrdering){
+      this.apiListingReferenceOrdering = apiListingReferenceOrdering;
       return this;
    }
 

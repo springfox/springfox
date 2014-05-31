@@ -77,7 +77,6 @@ class DefaultSwaggerControllerSpec extends Specification {
 
       then:
         result.getResponse().getStatus() == 200
-
    }
 
    def "should respond with auth included"() {
@@ -85,7 +84,6 @@ class DefaultSwaggerControllerSpec extends Specification {
         SwaggerCache swaggerCache = new SwaggerCache();
 
         def authTypes = new ArrayList<AuthorizationType>()
-
         authTypes.add(authorizationTypes());
 
         swaggerCache.swaggerApiResourceListingMap = [swaggerGroup: resourceListing(authTypes)]
@@ -93,6 +91,7 @@ class DefaultSwaggerControllerSpec extends Specification {
       when:
         MvcResult result = mockMvc.perform(get("/api-docs?group=swaggerGroup")).andDo(print()).andReturn()
         def json = jsonBodyResponse(result)
+        println json
 
       then:
         result.getResponse().getStatus() == 200

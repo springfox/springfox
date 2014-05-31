@@ -9,6 +9,7 @@ import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.models.DefaultModelProvider
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
+import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
@@ -158,6 +159,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       listing.swaggerCache instanceof SwaggerCache
       listing.swaggerGroup == plugin.swaggerGroup
       listing.apiVersion == plugin.apiVersion
+      listing.apiListingReferenceOrdering instanceof ResourceListingLexicographicalOrdering
 
   }
 

@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.mixins
 import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.ApiListing
+import com.wordnik.swagger.model.ApiListingReference
 import com.wordnik.swagger.model.OAuth
 import com.wordnik.swagger.model.ResourceListing
 
@@ -25,11 +26,15 @@ class ApiListingSupport {
               1);
    }
 
+   def apiListingReference() {
+      new ApiListingReference("/path", toOption("description"), 3)
+   }
+
    def resourceListing(List<OAuth> authorizationTypes) {
       new ResourceListing(
               "apiVersion",
               "swagger version",
-              emptyScalaList(),
+              toScalaList([apiListingReference()]),
               toScalaList(authorizationTypes),
               toOption(null))
    }
