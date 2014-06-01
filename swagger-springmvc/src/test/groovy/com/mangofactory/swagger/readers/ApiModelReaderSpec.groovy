@@ -7,6 +7,7 @@ import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.controllers.BusinessService
 import com.mangofactory.swagger.dummy.controllers.PetService
 import com.mangofactory.swagger.mixins.ApiOperationSupport
+import com.mangofactory.swagger.mixins.JsonSupport
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.alternates.WildcardType
@@ -25,7 +26,7 @@ import javax.servlet.http.HttpServletResponse
 import static com.mangofactory.swagger.ScalaUtils.*
 import static com.mangofactory.swagger.models.alternates.Alternates.*
 
-@Mixin([RequestMappingSupport, ApiOperationSupport, ModelProviderSupport])
+@Mixin([RequestMappingSupport, ApiOperationSupport, ModelProviderSupport, JsonSupport])
 class ApiModelReaderSpec extends Specification {
 
   def "Method return type model"() {
@@ -55,6 +56,8 @@ class ApiModelReaderSpec extends Specification {
 //      "${nameProp.allowableValues().getClass()}".contains('com.wordnik.swagger.model.AnyAllowableValues')
       fromOption(nameProp.items()) == null
 
+
+
       //TODO test these remaining
 //      println model.description()
 //      println model.baseModel()
@@ -82,9 +85,12 @@ class ApiModelReaderSpec extends Specification {
       prop.type == 'string'
       fromOption(prop.description()) == 'The name of this business'
       prop.required() == true
+      println swaggerCoreSerialize(model)
 
       fromOption(modelProps.numEmployees.description()) == 'Total number of current employees'
       modelProps.numEmployees.required() == false
+
+
 
   }
 

@@ -51,11 +51,8 @@ public class AccessorsProvider {
                 setter.matcher(method.getName()).find();
     }
 
-
-
     private Function<ResolvedMethod, BeanModelProperty> toBeanModelProperty() {
-        return new Function<ResolvedMethod,
-                        BeanModelProperty>() {
+        return new Function<ResolvedMethod, BeanModelProperty>() {
             @Override
             public BeanModelProperty apply(ResolvedMethod input) {
                 return new BeanModelProperty(propertyName(input.getRawMember().getName()), input,
@@ -63,7 +60,6 @@ public class AccessorsProvider {
             }
         };
     }
-
 
     private String toCamelCase(String s) {
         return s.substring(0, 1).toLowerCase() +

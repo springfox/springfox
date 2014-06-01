@@ -13,4 +13,8 @@ class JsonSupport {
       def slurper = new JsonSlurper()
       return slurper.parseText(content)
    }
+
+  def String swaggerCoreSerialize(obj){
+    com.wordnik.swagger.core.util.JsonSerializer.asJson(obj);
+  }
 }
