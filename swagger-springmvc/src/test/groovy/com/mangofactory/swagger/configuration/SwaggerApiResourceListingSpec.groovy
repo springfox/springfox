@@ -23,7 +23,7 @@ import static com.mangofactory.swagger.ScalaUtils.*
 @Mixin(com.mangofactory.swagger.mixins.RequestMappingSupport)
 class SwaggerApiResourceListingSpec extends Specification {
 
-   def "assessors"() {
+  def "assessors"() {
     given:
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(null, null)
       SwaggerCache cache = new SwaggerCache()
@@ -36,9 +36,9 @@ class SwaggerApiResourceListingSpec extends Specification {
       cache == swaggerApiResourceListing.getSwaggerCache()
       authTypes == swaggerApiResourceListing.getAuthorizationTypes()
       provider == swaggerApiResourceListing.getSwaggerPathProvider()
-   }
+  }
 
-   def "default swagger resource"() {
+  def "default swagger resource"() {
     when: "I create a swagger resource"
       SwaggerCache swaggerCache = new SwaggerCache();
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
@@ -55,9 +55,9 @@ class SwaggerApiResourceListingSpec extends Specification {
       fromOption(resourceListing.info()) == null
       apiListingReferenceList == []
       authorizationTypes == []
-   }
+  }
 
-   def "resource with api info"() {
+  def "resource with api info"() {
     given:
       ApiInfo apiInfo = new ApiInfo("title", "description", "terms", "contact", "license", "licenseUrl")
     when:
@@ -73,9 +73,9 @@ class SwaggerApiResourceListingSpec extends Specification {
       swaggerApiResourceListing.apiInfo.contact() == "contact"
       swaggerApiResourceListing.apiInfo.license() == "license"
       swaggerApiResourceListing.apiInfo.licenseUrl() == "licenseUrl"
-   }
+  }
 
-   def "resource with authorization types"() {
+  def "resource with authorization types"() {
     given:
       ApiKey apiKey = new ApiKey("api_key", "header")
     when:
@@ -91,71 +91,71 @@ class SwaggerApiResourceListingSpec extends Specification {
       apiKeyAuthType instanceof ApiKey
       apiKeyAuthType.keyname == "api_key"
       apiKeyAuthType.passAs == "header"
-   }
+  }
 
-   def "resource with mocked apis"() {
-      given:
-        SwaggerCache swaggerCache = new SwaggerCache();
-        String swaggerGroup = "swaggerGroup"
-        SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, swaggerGroup)
+  def "resource with mocked apis"() {
+    given:
+      SwaggerCache swaggerCache = new SwaggerCache();
+      String swaggerGroup = "swaggerGroup"
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, swaggerGroup)
 
-        SwaggerPathProvider swaggerPathProvider = new AbsoluteSwaggerPathProvider(servletContext: servletContext())
-        swaggerApiResourceListing.setSwaggerPathProvider(swaggerPathProvider)
+      SwaggerPathProvider swaggerPathProvider = new AbsoluteSwaggerPathProvider(servletContext: servletContext())
+      swaggerApiResourceListing.setSwaggerPathProvider(swaggerPathProvider)
 
-        def settings = new SwaggerGlobalSettings()
-        settings.setIgnorableParameterTypes(new SpringSwaggerConfig().defaultIgnorableParameterTypes())
-        SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-        settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
-        swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
+      def settings = new SwaggerGlobalSettings()
+      settings.setIgnorableParameterTypes(new SpringSwaggerConfig().defaultIgnorableParameterTypes())
+      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+      settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
+      swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
 
-        def resolver = new TypeResolver()
-        def modelPropertiesProvider = new DefaultModelPropertiesProvider(new ObjectMapper(), new AccessorsProvider(resolver), new FieldsProvider(resolver))
-        def modelDependenciesProvider = new ModelDependencyProvider(resolver, modelPropertiesProvider)
-        ModelProvider modelProvider = new DefaultModelProvider(resolver, modelPropertiesProvider, modelDependenciesProvider)
+      def resolver = new TypeResolver()
+      def modelPropertiesProvider = new DefaultModelPropertiesProvider(new ObjectMapper(), new AccessorsProvider(resolver), new FieldsProvider(resolver))
+      def modelDependenciesProvider = new ModelDependencyProvider(resolver, modelPropertiesProvider)
+      ModelProvider modelProvider = new DefaultModelProvider(resolver, modelPropertiesProvider, modelDependenciesProvider)
 
-        Map handlerMethods = [(requestMappingInfo("somePath/")): dummyHandlerMethod()]
-        def requestHandlerMapping = Mock(RequestMappingHandlerMapping)
-        requestHandlerMapping.getHandlerMethods() >> handlerMethods
+      Map handlerMethods = [(requestMappingInfo("somePath/")): dummyHandlerMethod()]
+      def requestHandlerMapping = Mock(RequestMappingHandlerMapping)
+      requestHandlerMapping.getHandlerMethods() >> handlerMethods
 
-        ApiListingReferenceScanner scanner = new ApiListingReferenceScanner()
-        scanner.setRequestMappingHandlerMapping([requestHandlerMapping])
-        scanner.setResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
-        scanner.setSwaggerGroup("swaggerGroup")
+      ApiListingReferenceScanner scanner = new ApiListingReferenceScanner()
+      scanner.setRequestMappingHandlerMapping([requestHandlerMapping])
+      scanner.setResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
+      scanner.setSwaggerGroup("swaggerGroup")
 
-        scanner.setSwaggerPathProvider(swaggerPathProvider)
-        swaggerApiResourceListing.setModelProvider(modelProvider)
-        swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
+      scanner.setSwaggerPathProvider(swaggerPathProvider)
+      swaggerApiResourceListing.setModelProvider(modelProvider)
+      swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
 
-      when:
-        swaggerApiResourceListing.initialize()
-        ResourceListing resourceListing = swaggerCache.getResourceListing("swaggerGroup")
+    when:
+      swaggerApiResourceListing.initialize()
+      ResourceListing resourceListing = swaggerCache.getResourceListing("swaggerGroup")
 
-      then:
-        ApiListingReference apiListingReference = resourceListing.apis().head()
-        apiListingReference.path() == "http://localhost:8080/context-path/api-docs/swaggerGroup/dummy-class"
-        apiListingReference.position() == 0
-        fromOption(apiListingReference.description()) == "Dummy Class"
+    then:
+      ApiListingReference apiListingReference = resourceListing.apis().head()
+      apiListingReference.path() == "http://localhost:8080/context-path/api-docs/swaggerGroup/dummy-class"
+      apiListingReference.position() == 0
+      fromOption(apiListingReference.description()) == "Dummy Class"
 
-      and:
-        ApiListing apiListing =
-                swaggerCache.swaggerApiListingMap['swaggerGroup']['dummy-class']
-        apiListing.swaggerVersion() == '1.2'
-        apiListing.basePath() == 'http://localhost:8080/context-path'
+    and:
+      ApiListing apiListing =
+            swaggerCache.swaggerApiListingMap['swaggerGroup']['dummy-class']
+      apiListing.swaggerVersion() == '1.2'
+      apiListing.basePath() == 'http://localhost:8080/context-path'
 
-        /**
-         * TODO - AK
-         * The relative path to the resource, from the basePath, which this API Specification
-         * piListing.resourcePath() == '/api-docs/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass'
-         */
-        apiListing.resourcePath() == 'fix this'
+      /**
+       * TODO - AK
+       * The relative path to the resource, from the basePath, which this API Specification
+       * piListing.resourcePath() == '/api-docs/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass'
+       */
+      apiListing.resourcePath() == 'fix this'
 
-   }
+  }
 
   def "Should sort based on position"() {
     given:
       SwaggerCache swaggerCache = new SwaggerCache();
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
-      swaggerApiResourceListing.setApiListingReferenceOrdering(new ResourceListingPositionalOrdering())
+      swaggerApiResourceListing.setApiListingReferenceOrdering(ordering)
 
       ApiListingReferenceScanner apiListingReferenceScanner = Mock()
       apiListingReferenceScanner.getApiListingReferences() >> [
@@ -169,9 +169,12 @@ class SwaggerApiResourceListingSpec extends Specification {
       swaggerApiResourceListing.initialize()
       def apis = fromScalaList(swaggerCache.getResourceListing('default').apis())
     then:
-      apis[0].position == 1
-      apis[0].path == '/b'
-      apis[1].position == 2
-      apis[1].path == '/a'
+      apis[0].position == firstPosition
+      apis[0].path == firstPath
+
+    where:
+      ordering                                     | firstPath | firstPosition
+      new ResourceListingPositionalOrdering()      | '/b'      | 1
+      new ResourceListingLexicographicalOrdering() | '/a'      | 2
   }
 }

@@ -80,7 +80,7 @@ public class SwaggerApiResourceListing {
               toOption(apiInfo)
       );
 
-      log.info("Added a resource listing with the ({}) api resources: ", apiListingReferences.size());
+      log.info("Added a resource listing with ({}) api resources: ", apiListingReferences.size());
       for(ApiListingReference apiListingReference : apiListingReferences){
          String path = fromOption(apiListingReference.description());
          String prefix = path.startsWith("http") ? path :DefaultSwaggerController.DOCUMENTATION_BASE_PATH;

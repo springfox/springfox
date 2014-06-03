@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import spock.lang.Specification
 
 import static com.mangofactory.swagger.ScalaUtils.fromOption
+import static com.mangofactory.swagger.ScalaUtils.toOption
 
 @Mixin([AccessorAssertions, RequestMappingSupport])
 class ApiListingReferenceScannerSpec extends Specification {
@@ -139,8 +140,8 @@ class ApiListingReferenceScannerSpec extends Specification {
 
       List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
       apiListingReferences.size() == 2
-      fromOption(apiListingReferences[0].description()) == 'Dummy Class'
-      fromOption(apiListingReferences[1].description()) == 'Group name'
+      apiListingReferences.find({it.description() == toOption('Dummy Class')})
+      apiListingReferences.find({it.description() == toOption('Group name')})
 
     and:
       apiListingReferenceScanner.resourceGroupRequestMappings.size() == 2
