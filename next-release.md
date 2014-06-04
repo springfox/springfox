@@ -189,6 +189,7 @@ public class CustomJavaPluginConfig {
 ### Swagger-UI
 
 #### Option 1
+- __Note:__ Only use this option if you don't need to customize any of the swagger-ui static content, otherwise use option 2.
 - Use the web-jar which packages all of the swagger-ui static content.
 - Requires that your app is using the servlet 3 specification.
 - For non-spring boot applications some extra spring configuration is required. See: https://github.com/adrianbk/swagger-springmvc-demo/tree/master/swagger-ui
@@ -196,7 +197,7 @@ public class CustomJavaPluginConfig {
 dependencies {
 
   ...
-  compile "org.ajar:swagger-spring-mvc-ui:0.1"
+  compile "org.ajar:swagger-spring-mvc-ui:0.2"
 
 }
 ```

@@ -3,6 +3,7 @@ package com.mangofactory.swagger.readers;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
+import com.mangofactory.swagger.ordering.OperationPositionalOrdering;
 import com.mangofactory.swagger.readers.operation.OperationAuthReader;
 import com.mangofactory.swagger.readers.operation.OperationDeprecatedReader;
 import com.mangofactory.swagger.readers.operation.OperationHttpMethodReader;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondit
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -105,6 +107,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
 
          operations.add(operation);
       }
+      Collections.sort(operations, new OperationPositionalOrdering());
       outerContext.put("operations", operations);
    }
 }

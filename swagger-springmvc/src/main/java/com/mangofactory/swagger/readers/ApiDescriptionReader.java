@@ -24,26 +24,20 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
 
    @Override
    public void execute(RequestMappingContext context) {
-
       RequestMappingInfo requestMappingInfo = context.getRequestMappingInfo();
       HandlerMethod handlerMethod = context.getHandlerMethod();
       PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
 
       List<ApiDescription> apiDescriptionList = newArrayList();
       for (String pattern : patternsCondition.getPatterns()) {
-
          String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
          String path = swaggerPathProvider.getOperationPath(cleanedRequestMappingPath);
-
          String methodName = handlerMethod.getMethod().getName();
-
          context.put("requestMappingPattern", cleanedRequestMappingPath);
          ApiOperationReader apiOperationReader = new ApiOperationReader();
          apiOperationReader.execute(context);
          List<Operation> operations = (List<Operation>) context.get("operations");
-
          apiDescriptionList.add(new ApiDescription(path, toOption(methodName), toScalaList(operations)));
-
       }
       context.put("apiDescriptionList", apiDescriptionList);
    }
