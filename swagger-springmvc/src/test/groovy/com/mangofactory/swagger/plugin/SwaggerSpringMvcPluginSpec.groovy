@@ -18,6 +18,7 @@ import com.wordnik.swagger.model.AuthorizationType
 import com.wordnik.swagger.model.ResponseMessage
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -105,6 +106,14 @@ class SwaggerSpringMvcPluginSpec extends Specification {
     then:
       plugin.swaggerGlobalSettings.alternateTypeProvider == provider
       plugin.swaggerGlobalSettings.alternateTypeProvider.rules.contains(rule)
+
+  }
+
+  def "generic model substitute"() {
+    when:
+      plugin.genericModelSubstitutes(ResponseEntity.class).build()
+    then:
+      plugin.swaggerGlobalSettings.alternateTypeProvider.rules.size() == 6
 
   }
 

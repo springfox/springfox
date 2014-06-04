@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.plugin;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
@@ -9,6 +10,7 @@ import com.mangofactory.swagger.core.SwaggerApiResourceListing;
 import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeRule;
+import com.mangofactory.swagger.models.alternates.WildcardType;
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
@@ -28,9 +30,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.mangofactory.swagger.models.alternates.Alternates.newRule;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
+/**
+ * A builder which is intended to be the primary interface into the framework.
+ * Provides sensible defaults and convenience methods to configure swagger-springmvc.
+ */
 public class SwaggerSpringMvcPlugin {
 
    private ModelProvider modelProvider;
@@ -53,6 +60,7 @@ public class SwaggerSpringMvcPlugin {
    private SwaggerApiResourceListing swaggerApiResourceListing;
    private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
    private ApiListingReferenceScanner apiListingReferenceScanner;
+   private TypeResolver typeResolver = new TypeResolver();
 
    public SwaggerSpringMvcPlugin(SpringSwaggerConfig springSwaggerConfig) {
       Assert.notNull(springSwaggerConfig);
@@ -151,11 +159,6 @@ public class SwaggerSpringMvcPlugin {
       return this;
    }
 
-   public SwaggerSpringMvcPlugin modelProvider(ModelProvider modelProvider) {
-      this.modelProvider = modelProvider;
-      return this;
-   }
-
    public SwaggerSpringMvcPlugin pathProvider(SwaggerPathProvider swaggerPathProvider) {
       this.swaggerPathProvider = swaggerPathProvider;
       return this;
@@ -171,39 +174,122 @@ public class SwaggerSpringMvcPlugin {
       return this;
    }
 
-   public SwaggerSpringMvcPlugin excludeAnnotations(Class<? extends Annotation> ... excludeAnnotations ) {
+   public SwaggerSpringMvcPlugin excludeAnnotations(Class<? extends Annotation>... excludeAnnotations) {
       this.excludeAnnotations.addAll(asList(excludeAnnotations));
       return this;
    }
 
-   public SwaggerSpringMvcPlugin includePatterns(String ... includePatterns) {
+   /**
+    *
+    *
+    * @param includePatterns
+    * @return this SwaggerSpringMvcPlugin
+    */
+   public SwaggerSpringMvcPlugin includePatterns(String... includePatterns) {
       this.includePatterns = asList(includePatterns);
       return this;
    }
 
-   public SwaggerSpringMvcPlugin alternateTypeRules(AlternateTypeRule... alternateTypeRules) {
-      this.alternateTypeRules.addAll(Arrays.asList(alternateTypeRules));
-      return this;
-   }
-
+   /**
+    * Overrides the default http response messages at the http request method level.
+    *
+    * To set specific response messages for specific api operations use the swagger core annotations on
+    * the appropriate controller methods.
+    *
+    * @see com.wordnik.swagger.annotations.ApiResponse
+    * and
+    * @see com.wordnik.swagger.annotations.ApiResponses
+    *
+    * @see com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultResponseMessages()
+    * @param requestMethod - http request method for which to apply the message
+    * @param responseMessages - the message
+    * @return this SwaggerSpringMvcPlugin
+    */
    public SwaggerSpringMvcPlugin globalResponseMessage(RequestMethod requestMethod, List<ResponseMessage> responseMessages) {
       this.globalResponseMessages.put(requestMethod, responseMessages);
       return this;
    }
 
-   public SwaggerSpringMvcPlugin ignoredParameterTypes(Class... clazz) {
-      this.ignorableParameterTypes.addAll(Arrays.asList(clazz));
+   /**
+    * Adds ignored controller method parameter types so that the framework does not generate swagger model or parameter
+    * information for specific types.
+    * e.g. HttpServletRequest/HttpServletResponse which are included in pre-configured ignored types.
+    * This method adds to the pre-configured ignored types:
+    * @see com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes()
+    * @param classes the classes to ignore
+    * @return this SwaggerSpringMvcPlugin
+    */
+   public SwaggerSpringMvcPlugin ignoredParameterTypes(Class... classes) {
+      this.ignorableParameterTypes.addAll(Arrays.asList(classes));
       return this;
    }
 
+   /**
+    * Overrides the default AlternateTypeProvider.
+    *
+    * @param alternateTypeProvider
+    * @return this SwaggerSpringMvcPlugin
+    */
    public SwaggerSpringMvcPlugin alternateTypeProvider(AlternateTypeProvider alternateTypeProvider) {
       this.alternateTypeProvider = alternateTypeProvider;
       return this;
    }
 
+   /**
+    * Sets the api version. The 'apiVersion' on the swagger Resource Listing
+    * @param apiVersion
+    * @return
+    */
    public SwaggerSpringMvcPlugin apiVersion(String apiVersion) {
       Assert.hasText(apiVersion, "apiVersion must contain text");
       this.apiVersion = apiVersion;
+      return this;
+   }
+
+   public SwaggerSpringMvcPlugin modelProvider(ModelProvider modelProvider) {
+      this.modelProvider = modelProvider;
+      return this;
+   }
+
+   /**
+    * Adds model substitution rules (alternateTypeRules)
+    * @see com.mangofactory.swagger.models.alternates.Alternates#newRule(java.lang.reflect.Type, java.lang.reflect.Type)
+    * @param alternateTypeRules
+    * @return this SwaggerSpringMvcPlugin
+    */
+   public SwaggerSpringMvcPlugin alternateTypeRules(AlternateTypeRule... alternateTypeRules) {
+      this.alternateTypeRules.addAll(Arrays.asList(alternateTypeRules));
+      return this;
+   }
+
+   /**
+    * Directly substitutes a model class with the supplied substitute
+    * e.g
+    * <code>directModelSubstitute(LocalDate.class, Date.class)</code>
+    * would substitute LocalDate with Date
+    * @param clazz class to substitute
+    * @param with the class which substitutes 'clazz'
+    * @return this SwaggerSpringMvcPlugin
+    */
+   public SwaggerSpringMvcPlugin directModelSubstitute(Class clazz, Class with) {
+      alternateTypeProvider.addRule(newRule(typeResolver.resolve(clazz), typeResolver.resolve(with)));
+      return this;
+   }
+
+   /**
+    * Substitutes each generic class with it's direct parameterized type.
+    * e.g.
+    * <code>.genericModelSubstitutes(ResponseEntity.class)</code>
+    * would substitute ResponseEntity<MyModel> with MyModel
+    * @param genericClasses - generic classes on which to apply generic model substitution.
+    * @return this SwaggerSpringMvcPlugin
+    */
+   public SwaggerSpringMvcPlugin genericModelSubstitutes(Class ... genericClasses) {
+      for(Class clz : genericClasses){
+         this.alternateTypeRules.add(
+                 newRule(typeResolver.resolve(clz, WildcardType.class), typeResolver.resolve(WildcardType.class))
+         );
+      }
       return this;
    }
 
@@ -211,10 +297,11 @@ public class SwaggerSpringMvcPlugin {
     * Controls how ApiListingReference's are sorted.
     * i.e the ordering of the api's within the swagger Resource Listing.
     * The default sort is Lexicographically by the ApiListingReference's path
+    *
     * @param apiListingReferenceOrdering
-    * @return this
+    * @return this SwaggerSpringMvcPlugin
     */
-   public SwaggerSpringMvcPlugin apiListingReferenceOrdering(Ordering<ApiListingReference> apiListingReferenceOrdering){
+   public SwaggerSpringMvcPlugin apiListingReferenceOrdering(Ordering<ApiListingReference> apiListingReferenceOrdering) {
       this.apiListingReferenceOrdering = apiListingReferenceOrdering;
       return this;
    }
@@ -234,7 +321,7 @@ public class SwaggerSpringMvcPlugin {
    /**
     * Called by the framework hence protected
     */
-   protected void initialize(){
+   protected void initialize() {
       this.build().swaggerApiResourceListing.initialize();
    }
 }

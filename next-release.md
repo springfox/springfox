@@ -1,6 +1,7 @@
 # Swagger-springmvc
 
 Unit Tests: [![Build Status](https://travis-ci.org/martypitt/swagger-springmvc.png?branch=master)](https://travis-ci.org/martypitt/swagger-springmvc)
+
 Functional Tests: [![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.png?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo)
 
 ### About

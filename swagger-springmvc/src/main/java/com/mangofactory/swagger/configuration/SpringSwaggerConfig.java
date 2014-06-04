@@ -69,7 +69,7 @@ public class SpringSwaggerConfig {
    private ServletContext servletContext;
 
    @Autowired
-   ModelProvider modelProvider;
+   private ModelProvider modelProvider;
 
    @Bean
    public List<RequestMappingHandlerMapping> swaggerRequestMappingHandlerMappings() {
