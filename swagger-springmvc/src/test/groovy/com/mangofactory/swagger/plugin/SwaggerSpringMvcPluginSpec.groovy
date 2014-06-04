@@ -16,6 +16,7 @@ import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.model.ApiInfo
 import com.wordnik.swagger.model.AuthorizationType
 import com.wordnik.swagger.model.ResponseMessage
+import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.http.ResponseEntity
@@ -109,13 +110,19 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
   }
 
+  @Unroll
   def "generic model substitute"() {
     when:
-      plugin.genericModelSubstitutes(ResponseEntity.class).build()
+      plugin."${method}"(*args).build()
     then:
-      plugin.swaggerGlobalSettings.alternateTypeProvider.rules.size() == 6
+      plugin.swaggerGlobalSettings.alternateTypeProvider.rules.size() == expectedSize
 
+    where:
+      method                    | args                               | expectedSize
+      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 7
+      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 6
   }
+
 
   def "should contain both default and custom exclude annotations"() {
     when:

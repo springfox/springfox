@@ -272,7 +272,7 @@ public class SwaggerSpringMvcPlugin {
     * @return this SwaggerSpringMvcPlugin
     */
    public SwaggerSpringMvcPlugin directModelSubstitute(Class clazz, Class with) {
-      alternateTypeProvider.addRule(newRule(typeResolver.resolve(clazz), typeResolver.resolve(with)));
+      this.alternateTypeRules.add(newRule(typeResolver.resolve(clazz), typeResolver.resolve(with)));
       return this;
    }
 
