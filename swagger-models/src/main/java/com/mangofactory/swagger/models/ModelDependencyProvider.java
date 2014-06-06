@@ -4,6 +4,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +18,14 @@ import static com.mangofactory.swagger.models.ResolvedTypes.*;
 public class ModelDependencyProvider {
 
     private final TypeResolver typeResolver;
+    private final AlternateTypeProvider alternateTypeProvider;
     private final ModelPropertiesProvider propertiesProvider;
 
     @Autowired
-    public ModelDependencyProvider(TypeResolver typeResolver, ModelPropertiesProvider propertiesProvider) {
+    public ModelDependencyProvider(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider,
+                                   ModelPropertiesProvider propertiesProvider) {
         this.typeResolver = typeResolver;
+        this.alternateTypeProvider = alternateTypeProvider;
         this.propertiesProvider = propertiesProvider;
     }
 
@@ -53,7 +57,7 @@ public class ModelDependencyProvider {
 
 
     private List<ResolvedType> resolvedDependencies(ModelContext modelContext) {
-        ResolvedType resolvedType = modelContext.resolvedType(typeResolver);
+        ResolvedType resolvedType = alternateTypeProvider.alternateFor(modelContext.resolvedType(typeResolver));
         if (Types.isBaseType(typeName(resolvedType))) {
             modelContext.seen(resolvedType);
             return newArrayList();
@@ -66,7 +70,7 @@ public class ModelDependencyProvider {
     private List<? extends ResolvedType> resolvedTypeParameters(ModelContext modelContext, ResolvedType resolvedType) {
         List<ResolvedType> parameters = newArrayList();
         for (ResolvedType parameter : resolvedType.getTypeParameters()) {
-            parameters.add(parameter);
+            parameters.add(alternateTypeProvider.alternateFor(parameter));
             parameters.addAll(resolvedDependencies(ModelContext.fromParent(modelContext, parameter)));
         }
         return parameters;

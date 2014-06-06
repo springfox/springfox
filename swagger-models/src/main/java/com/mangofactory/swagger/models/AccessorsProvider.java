@@ -56,7 +56,7 @@ public class AccessorsProvider {
             @Override
             public BeanModelProperty apply(ResolvedMethod input) {
                 return new BeanModelProperty(propertyName(input.getRawMember().getName()), input,
-                        isGetter(input.getRawMember()));
+                        isGetter(input.getRawMember()), typeResolver);
             }
         };
     }

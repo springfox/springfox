@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.models
 
+import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import spock.lang.Specification
@@ -13,7 +14,8 @@ class BeanModelPropertySpec extends Specification {
       Class typeToTest = typeForTestingGettersAndSetters()
       def modelContext = ModelContext.inputParam(typeToTest)
       def method = accessorMethod(typeToTest, methodName)
-      def sut = new BeanModelProperty(methodName, method, AccessorsProvider.isGetter(method.getRawMember()))
+      def sut = new BeanModelProperty(methodName, method, AccessorsProvider.isGetter(method.getRawMember()),
+              new TypeResolver())
 
     expect:
       fromOption(sut.propertyDescription()) == description

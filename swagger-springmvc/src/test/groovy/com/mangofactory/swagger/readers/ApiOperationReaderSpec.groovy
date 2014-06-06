@@ -1,10 +1,10 @@
 package com.mangofactory.swagger.readers
-
+import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.authorization.AuthorizationContext
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.Operation
@@ -13,7 +13,7 @@ import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST
+import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Mixin([RequestMappingSupport, AuthSupport])
 class ApiOperationReaderSpec extends Specification {
@@ -38,8 +38,8 @@ class ApiOperationReaderSpec extends Specification {
               .build()
 
       def settings = new SwaggerGlobalSettings()
-      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-      settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
+      SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
+      settings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver());
       context.put("swaggerGlobalSettings", settings)
       context.put("requestMappingPattern", "/anything")
       context.put("authorizationContext", authorizationContext)

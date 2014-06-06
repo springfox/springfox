@@ -15,11 +15,13 @@ public class BeanModelProperty implements ModelProperty {
     private String name;
     private final ResolvedMethod method;
     private final boolean isGetter;
+    private TypeResolver typeResolver;
 
-    public BeanModelProperty(String propertyName, ResolvedMethod method, boolean isGetter) {
+    public BeanModelProperty(String propertyName, ResolvedMethod method, boolean isGetter, TypeResolver typeResolver) {
         name = propertyName;
         this.method = method;
         this.isGetter = isGetter;
+        this.typeResolver = typeResolver;
     }
 
     public String getName() {
@@ -32,13 +34,13 @@ public class BeanModelProperty implements ModelProperty {
             if (method.getReturnType().getErasedType().getTypeParameters().length > 0) {
                 return method.getReturnType();
             } else {
-                return new TypeResolver().resolve(method.getReturnType().getErasedType());
+                return typeResolver.resolve(method.getReturnType().getErasedType());
             }
         } else {
             if (method.getArgumentType(0).getErasedType().getTypeParameters().length > 0) {
                 return method.getArgumentType(0);
             } else {
-                return new TypeResolver().resolve(method.getArgumentType(0).getErasedType());
+                return typeResolver.resolve(method.getArgumentType(0).getErasedType());
             }
         }
     }

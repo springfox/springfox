@@ -3,6 +3,7 @@ package com.mangofactory.swagger.models;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.model.Model;
 import com.wordnik.swagger.model.ModelProperty;
@@ -27,20 +28,23 @@ import static scala.collection.JavaConversions.*;
 @Component
 public class DefaultModelProvider implements ModelProvider {
     private final TypeResolver resolver;
+    private final AlternateTypeProvider alternateTypeProvider;
     private final ModelPropertiesProvider propertiesProvider;
     private final ModelDependencyProvider dependencyProvider;
 
     @Autowired
-    public DefaultModelProvider(TypeResolver resolver, ModelPropertiesProvider propertiesProvider,
+    public DefaultModelProvider(TypeResolver resolver, AlternateTypeProvider alternateTypeProvider,
+                                ModelPropertiesProvider  propertiesProvider,
                                 ModelDependencyProvider dependencyProvider) {
         this.resolver = resolver;
+        this.alternateTypeProvider = alternateTypeProvider;
         this.propertiesProvider = propertiesProvider;
         this.dependencyProvider = dependencyProvider;
     }
 
     @Override
     public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
-        ResolvedType propertiesHost = modelContext.resolvedType(resolver);
+        ResolvedType propertiesHost = alternateTypeProvider.alternateFor(modelContext.resolvedType(resolver));
         if (isContainerType(propertiesHost)
                 || propertiesHost.getErasedType().isEnum()
                 || Types.isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))) {

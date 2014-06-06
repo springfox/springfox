@@ -1,12 +1,11 @@
 package com.mangofactory.swagger.plugin
-
 import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.authorization.AuthorizationContext
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.models.DefaultModelProvider
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
@@ -26,19 +25,18 @@ import spock.lang.Unroll
 
 import javax.servlet.ServletRequest
 
-import static com.mangofactory.swagger.ScalaUtils.toOption
-import static com.mangofactory.swagger.models.alternates.Alternates.newMapRule
-import static org.springframework.http.HttpStatus.OK
+import static com.mangofactory.swagger.ScalaUtils.*
+import static com.mangofactory.swagger.models.alternates.Alternates.*
+import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
+@Mixin(SpringSwaggerConfigSupport)
 class SwaggerSpringMvcPluginSpec extends Specification {
 
-  SpringSwaggerConfig springSwaggerConfig
   SwaggerSpringMvcPlugin plugin
 
   void setup() {
-    springSwaggerConfig = new SpringSwaggerConfig()
-    plugin = new SwaggerSpringMvcPlugin(springSwaggerConfig)
+    plugin = new SwaggerSpringMvcPlugin(springSwaggerConfig())
   }
 
   def "Should have sensible defaults when built with minimal configuration"() {
@@ -146,7 +144,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
     where:
       builderMethod          | object                                                         | property
-      'modelProvider'        | new DefaultModelProvider(null, null, null)                     | 'modelProvider'
+      'modelProvider'        | new DefaultModelProvider(null, null, null, null)               | 'modelProvider'
       'pathProvider'         | new AbsoluteSwaggerPathProvider()                              | 'swaggerPathProvider'
       'authorizationTypes'   | new ArrayList<AuthorizationType>()                             | 'authorizationTypes'
       'authorizationContext' | new AuthorizationContext.AuthorizationContextBuilder().build() | 'authorizationContext'
@@ -185,7 +183,8 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       ApiListingReferenceScanner apiListingReferenceScanner = plugin.apiListingReferenceScanner
 
     then:
-      apiListingReferenceScanner.excludeAnnotations == plugin.excludeAnnotations + springSwaggerConfig.defaultExcludeAnnotations()
+      apiListingReferenceScanner.excludeAnnotations == plugin.excludeAnnotations + springSwaggerConfig()
+              .defaultExcludeAnnotations()
       apiListingReferenceScanner.resourceGroupingStrategy == plugin.resourceGroupingStrategy
       apiListingReferenceScanner.swaggerPathProvider == plugin.swaggerPathProvider
       apiListingReferenceScanner.swaggerGroup == plugin.swaggerGroup

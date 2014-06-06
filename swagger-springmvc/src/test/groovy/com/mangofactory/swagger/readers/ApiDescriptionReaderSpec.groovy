@@ -1,16 +1,17 @@
 package com.mangofactory.swagger.readers
 
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig
+import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
+import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.ApiDescription
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.ScalaUtils.fromOption
+import static com.mangofactory.swagger.ScalaUtils.*
 
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
 class ApiDescriptionReaderSpec extends Specification {
@@ -27,8 +28,8 @@ class ApiDescriptionReaderSpec extends Specification {
         RequestMappingContext context = new RequestMappingContext(requestMappingInfo, handlerMethod)
 
         def settings = new SwaggerGlobalSettings()
-        SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-        settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
+        SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
+        settings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver());
         context.put("swaggerGlobalSettings", settings)
       when:
         apiDescriptionReader.execute(context)
@@ -52,10 +53,6 @@ class ApiDescriptionReaderSpec extends Specification {
         absoluteSwaggerPathProvider() | "/api/v1"
         relativeSwaggerPathProvider() | ""
    }
-
-  def "Should generate correct operations based on grouping strategy"(){
-
-  }
 
    def "should sanitize request mapping endpoints"() {
       expect:

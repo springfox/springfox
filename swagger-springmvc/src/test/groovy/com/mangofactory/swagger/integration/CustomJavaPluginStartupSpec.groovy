@@ -2,7 +2,6 @@ package com.mangofactory.swagger.integration
 
 import com.mangofactory.swagger.configuration.CustomJavaPluginConfig
 import com.mangofactory.swagger.mixins.JsonSupport
-import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.web.WebAppConfiguration

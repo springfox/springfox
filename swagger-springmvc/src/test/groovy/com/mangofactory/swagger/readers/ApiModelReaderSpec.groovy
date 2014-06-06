@@ -11,6 +11,7 @@ import com.mangofactory.swagger.mixins.JsonSupport
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.alternates.WildcardType
+import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.ApiDescription
 import com.wordnik.swagger.model.Model
@@ -32,8 +33,14 @@ class ApiModelReaderSpec extends Specification {
   def "Method return type model"() {
     given:
       RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithConcreteResponseBody'))
+      SwaggerGlobalSettings settings = new SwaggerGlobalSettings()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.ignorableParameterTypes = new SpringSwaggerConfig().defaultIgnorableParameterTypes()
+      context.put("swaggerGlobalSettings", settings)
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(defaultModelProvider())
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
       apiModelReader.execute(context)
       Map<String, Object> result = context.getResult()
 
@@ -68,8 +75,14 @@ class ApiModelReaderSpec extends Specification {
   def "Annotated model"() {
     given:
       RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithModelAnnotations'))
+      SwaggerGlobalSettings settings = new SwaggerGlobalSettings()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.ignorableParameterTypes = new SpringSwaggerConfig().defaultIgnorableParameterTypes()
+      context.put("swaggerGlobalSettings", settings)
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(defaultModelProvider())
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
       apiModelReader.execute(context)
       Map<String, Object> result = context.getResult()
 
@@ -98,9 +111,14 @@ class ApiModelReaderSpec extends Specification {
     given:
 
       RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodApiResponseClass'), null)
-
+      SwaggerGlobalSettings settings = new SwaggerGlobalSettings()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.ignorableParameterTypes = new SpringSwaggerConfig().defaultIgnorableParameterTypes()
+      context.put("swaggerGlobalSettings", settings)
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(defaultModelProvider())
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
       apiModelReader.execute(context)
       Map<String, Object> result = context.getResult()
 
@@ -122,7 +140,9 @@ class ApiModelReaderSpec extends Specification {
 
     def settings = new SwaggerGlobalSettings()
     settings.ignorableParameterTypes = new SpringSwaggerConfig().defaultIgnorableParameterTypes();
-    settings.alternateTypeProvider = new SpringSwaggerConfig().defaultAlternateTypeProvider();
+    def modelConfig = new SwaggerModelsConfiguration()
+    def typeResolver = new TypeResolver()
+    settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
     context.put("swaggerGlobalSettings", settings)
     context
   }
@@ -140,10 +160,12 @@ class ApiModelReaderSpec extends Specification {
 
       def config = new SpringSwaggerConfig()
       settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
-      settings.alternateTypeProvider = config.defaultAlternateTypeProvider()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
       context.put("swaggerGlobalSettings", settings)
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(defaultModelProvider())
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
       apiModelReader.execute(context)
       Map<String, Object> result = context.getResult()
     then:
@@ -162,11 +184,13 @@ class ApiModelReaderSpec extends Specification {
       def settings = new SwaggerGlobalSettings()
       def config = new SpringSwaggerConfig()
       settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
-      settings.alternateTypeProvider = config.defaultAlternateTypeProvider()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
       context.put("swaggerGlobalSettings", settings)
 
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(defaultModelProvider())
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
       apiModelReader.execute(context)
       Map<String, Object> result = context.getResult()
 
@@ -186,9 +210,10 @@ class ApiModelReaderSpec extends Specification {
 
       def settings = new SwaggerGlobalSettings()
       def config = new SpringSwaggerConfig()
-      settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
-      settings.alternateTypeProvider = config.defaultAlternateTypeProvider()
+      def modelConfig = new SwaggerModelsConfiguration()
       def typeResolver = new TypeResolver()
+      settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
       settings.alternateTypeProvider.addRule(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
             typeResolver.resolve(WildcardType.class)));
       settings.alternateTypeProvider.addRule(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
@@ -196,7 +221,7 @@ class ApiModelReaderSpec extends Specification {
       context.put("swaggerGlobalSettings", settings)
 
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(defaultModelProvider())
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
       apiModelReader.execute(context)
       Map<String, Object> result = context.getResult()
 

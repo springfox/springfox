@@ -1,14 +1,14 @@
 package com.mangofactory.swagger.configuration
-
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
-import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
-import com.mangofactory.swagger.ordering.ResourceListingPositionalOrdering
-import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.models.*
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
+import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
+import com.mangofactory.swagger.ordering.ResourceListingPositionalOrdering
+import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.SwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.core.SwaggerSpec
@@ -16,11 +16,10 @@ import com.wordnik.swagger.model.*
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
 
-import javax.servlet.ServletContext
-
 import static com.mangofactory.swagger.ScalaUtils.*
 
-@Mixin(com.mangofactory.swagger.mixins.RequestMappingSupport)
+@Mixin([com.mangofactory.swagger.mixins.RequestMappingSupport,
+        com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport])
 class SwaggerApiResourceListingSpec extends Specification {
 
   def "assessors"() {
@@ -104,14 +103,19 @@ class SwaggerApiResourceListingSpec extends Specification {
 
       def settings = new SwaggerGlobalSettings()
       settings.setIgnorableParameterTypes(new SpringSwaggerConfig().defaultIgnorableParameterTypes())
-      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+      SpringSwaggerConfig springSwaggerConfig = springSwaggerConfig()
       settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
       swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
 
       def resolver = new TypeResolver()
       def modelPropertiesProvider = new DefaultModelPropertiesProvider(new ObjectMapper(), new AccessorsProvider(resolver), new FieldsProvider(resolver))
-      def modelDependenciesProvider = new ModelDependencyProvider(resolver, modelPropertiesProvider)
-      ModelProvider modelProvider = new DefaultModelProvider(resolver, modelPropertiesProvider, modelDependenciesProvider)
+
+    def alternateTypeProvider = new AlternateTypeProvider()
+    def modelDependenciesProvider = new ModelDependencyProvider(resolver, alternateTypeProvider,
+              modelPropertiesProvider)
+      ModelProvider modelProvider = new DefaultModelProvider(resolver, alternateTypeProvider,
+              modelPropertiesProvider,
+              modelDependenciesProvider)
 
       Map handlerMethods = [(requestMappingInfo("somePath/")): dummyHandlerMethod()]
       def requestHandlerMapping = Mock(RequestMappingHandlerMapping)

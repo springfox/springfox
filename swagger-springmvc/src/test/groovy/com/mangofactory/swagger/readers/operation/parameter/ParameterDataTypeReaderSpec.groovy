@@ -1,10 +1,11 @@
 package com.mangofactory.swagger.readers.operation.parameter
+
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -30,7 +31,8 @@ class ParameterDataTypeReaderSpec extends Specification {
       context.put("resolvedMethodParameter", resolvedMethodParameter)
 
       SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings()
-      swaggerGlobalSettings.alternateTypeProvider = new SpringSwaggerConfig().defaultAlternateTypeProvider();
+      SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
+      swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver());
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
 
     when:
