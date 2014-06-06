@@ -180,9 +180,19 @@ public class SwaggerSpringMvcPlugin {
    }
 
    /**
+    * Controls which controllers, more specifically, which Spring RequestMappings to include in the swagger Resource
+    * Listing.
     *
+    * Under the hood, <code>com.mangofactory.swagger.scanners.RequestMappingPatternMatcher</code>is used to match a
+    * given <code>org.springframework.web.servlet.mvc.condition.PatternsRequestCondition</code> against the
+    * includePatterns supplied here.
     *
-    * @param includePatterns
+    * <code>RegexRequestMappingPatternMatcher</code> is the default implementation and requires these includePatterns to
+    * be valid regular expressions.
+    *
+    * If not supplied a single pattern ".*?" is used which matches anything and hence all RequestMappings.
+    *
+    * @param includePatterns - the regular expressions to determine which Spring RequestMappings to include.
     * @return this SwaggerSpringMvcPlugin
     */
    public SwaggerSpringMvcPlugin includePatterns(String... includePatterns) {
