@@ -42,20 +42,20 @@ public class DummyModels {
 //        @ApiModelProperty(value = "Total number of current employees")
         private String numEmployees;
 
+        @ApiModelProperty(value = "The name of this business", required = true)
         public String getName() {
             return name;
         }
 
-        @ApiModelProperty(value = "The name of this business", required = true)
         public void setName(String name) {
             this.name = name;
         }
 
+        @ApiModelProperty(value = "Total number of current employees")
         public String getNumEmployees() {
             return numEmployees;
         }
 
-        @ApiModelProperty(value = "Total number of current employees")
         public void setNumEmployees(String numEmployees) {
             this.numEmployees = numEmployees;
         }

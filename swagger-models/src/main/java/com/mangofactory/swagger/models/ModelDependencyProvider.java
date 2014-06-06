@@ -107,9 +107,9 @@ public class ModelDependencyProvider {
 
     private Iterable<? extends ModelProperty> propertiesFor(ModelContext modelContext, ResolvedType resolvedType) {
         if (modelContext.isReturnType()) {
-            return propertiesProvider.propertiesForDeserialization(resolvedType);
-        } else {
             return propertiesProvider.propertiesForSerialization(resolvedType);
+        } else {
+            return propertiesProvider.propertiesForDeserialization(resolvedType);
         }
     }
 

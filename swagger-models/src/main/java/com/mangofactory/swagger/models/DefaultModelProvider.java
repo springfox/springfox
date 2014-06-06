@@ -96,9 +96,9 @@ public class DefaultModelProvider implements ModelProvider {
     private Iterable<? extends com.mangofactory.swagger.models.ModelProperty> properties(ModelContext context,
                                                                                          ResolvedType propertiesHost) {
         if (context.isReturnType()) {
-            return propertiesProvider.propertiesForDeserialization(propertiesHost);
-        } else {
             return propertiesProvider.propertiesForSerialization(propertiesHost);
+        } else {
+            return propertiesProvider.propertiesForDeserialization(propertiesHost);
         }
     }
 
