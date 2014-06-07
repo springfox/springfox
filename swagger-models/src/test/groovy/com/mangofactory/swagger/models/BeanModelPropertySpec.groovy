@@ -3,6 +3,7 @@ package com.mangofactory.swagger.models
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import spock.lang.Specification
 
 import static com.mangofactory.swagger.models.ScalaConverters.*
@@ -15,7 +16,7 @@ class BeanModelPropertySpec extends Specification {
       def modelContext = ModelContext.inputParam(typeToTest)
       def method = accessorMethod(typeToTest, methodName)
       def sut = new BeanModelProperty(methodName, method, AccessorsProvider.isGetter(method.getRawMember()),
-              new TypeResolver())
+              new TypeResolver(), new AlternateTypeProvider())
 
     expect:
       fromOption(sut.propertyDescription()) == description

@@ -5,7 +5,6 @@ import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.models.*
-import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
 import com.mangofactory.swagger.ordering.ResourceListingPositionalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
@@ -108,12 +107,14 @@ class SwaggerApiResourceListingSpec extends Specification {
       swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
 
       def resolver = new TypeResolver()
-      def modelPropertiesProvider = new DefaultModelPropertiesProvider(new ObjectMapper(), new AccessorsProvider(resolver), new FieldsProvider(resolver))
+      def modelPropertiesProvider = new DefaultModelPropertiesProvider(new ObjectMapper(),
+              settings.alternateTypeProvider,
+              new AccessorsProvider(resolver, settings.alternateTypeProvider),
+              new FieldsProvider(resolver))
 
-    def alternateTypeProvider = new AlternateTypeProvider()
-    def modelDependenciesProvider = new ModelDependencyProvider(resolver, alternateTypeProvider,
+      def modelDependenciesProvider = new ModelDependencyProvider(resolver, settings.alternateTypeProvider,
               modelPropertiesProvider)
-      ModelProvider modelProvider = new DefaultModelProvider(resolver, alternateTypeProvider,
+      ModelProvider modelProvider = new DefaultModelProvider(resolver, settings.alternateTypeProvider,
               modelPropertiesProvider,
               modelDependenciesProvider)
 

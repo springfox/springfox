@@ -5,6 +5,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.classmate.members.ResolvedField
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.wordnik.swagger.model.AllowableListValues
 import scala.collection.JavaConversions
 import spock.lang.Specification
@@ -20,7 +21,7 @@ class FieldModelPropertySpec extends Specification {
       def typeToTest = typeForTestingGettersAndSetters()
       def modelContext = ModelContext.inputParam(typeToTest )
       def field = field(typeToTest, fieldName)
-      def sut = new FieldModelProperty(fieldName, field)
+      def sut = new FieldModelProperty(fieldName, field, new AlternateTypeProvider())
 
     expect:
       fromOption(sut.propertyDescription()) == description

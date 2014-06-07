@@ -9,8 +9,8 @@ import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,30 +29,18 @@ import static com.google.common.collect.Maps.uniqueIndex;
 public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
 
   private static final Logger log = LoggerFactory.getLogger(DefaultModelPropertiesProvider.class);
-  private ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
+  private final AlternateTypeProvider alternateTypeProvider;
   private final AccessorsProvider accessors;
   private final FieldsProvider fields;
 
   @Autowired
-  public DefaultModelPropertiesProvider(AccessorsProvider accessors, FieldsProvider fields) {
+  public DefaultModelPropertiesProvider(@Qualifier("springsMessageConverterObjectMapper") ObjectMapper objectMapper,
+      AlternateTypeProvider alternateTypeProvider, AccessorsProvider accessors, FieldsProvider fields) {
+    this.alternateTypeProvider = alternateTypeProvider;
     this.accessors = accessors;
     this.fields = fields;
-  }
-
-  @VisibleForTesting
-  DefaultModelPropertiesProvider(ObjectMapper objectMapper, AccessorsProvider accessors, FieldsProvider fields) {
-    this.accessors = accessors;
-    this.fields = fields;
-    if (objectMapper == null) {
-      objectMapper = new ObjectMapper();
-    }
     this.objectMapper = objectMapper;
-  }
-
-  @Autowired
-  @Qualifier("springsMessageConverterObjectMapper")
-  public void setObjectMapper(ObjectMapper springsMessageConverterObjectMapper) {
-    this.objectMapper = springsMessageConverterObjectMapper;
   }
 
   public List<? extends ModelProperty> serializableProperties(ResolvedType resolvedType) {
@@ -93,7 +81,8 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
         BeanPropertyDefinition propertyDefinition = propertyLookup.get(childField.getName());
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
         if (memberIsAField(member)) {
-          serializationCandidates.add(new FieldModelProperty(propertyDefinition.getName(), childField));
+          serializationCandidates.add(new FieldModelProperty(propertyDefinition.getName(), childField,
+                  alternateTypeProvider));
         }
       }
     }
@@ -123,7 +112,7 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
           if (childProperty.accessorMemberIs(methodName(member))) {
             serializationCandidates.add(childProperty);
           }
-        } catch (Exception e) {
+        } catch(Exception e) {
           log.warn(e.getMessage());
         }
       }
@@ -143,7 +132,8 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
         BeanPropertyDefinition propertyDefinition = propertyLookup.get(childField.getName());
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
         if (memberIsAField(member)) {
-          serializationCandidates.add(new FieldModelProperty(propertyDefinition.getName(), childField));
+          serializationCandidates.add(new FieldModelProperty(propertyDefinition.getName(), childField,
+                  alternateTypeProvider));
         }
       }
     }
@@ -173,3 +163,4 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
     return modelProperties;
   }
 }
+

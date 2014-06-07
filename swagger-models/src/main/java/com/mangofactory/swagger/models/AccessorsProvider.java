@@ -10,6 +10,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,9 +28,12 @@ public class AccessorsProvider {
     private static Pattern setter = Pattern.compile("^set([a-zA-Z_0-9].*)");
 
     private TypeResolver typeResolver;
+    private final AlternateTypeProvider alternateTypeProvider;
+
     @Autowired
-    public AccessorsProvider(TypeResolver typeResolver) {
+    public AccessorsProvider(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider) {
         this.typeResolver = typeResolver;
+        this.alternateTypeProvider = alternateTypeProvider;
     }
 
     public static boolean isGetter(Method method) {
@@ -56,7 +60,7 @@ public class AccessorsProvider {
             @Override
             public BeanModelProperty apply(ResolvedMethod input) {
                 return new BeanModelProperty(propertyName(input.getRawMember().getName()), input,
-                        isGetter(input.getRawMember()), typeResolver);
+                        isGetter(input.getRawMember()), typeResolver, alternateTypeProvider);
             }
         };
     }

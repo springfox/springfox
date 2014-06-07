@@ -4,6 +4,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedField;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.model.AllowableValues;
 import scala.Option;
@@ -16,37 +17,35 @@ import static com.mangofactory.swagger.models.ResolvedTypes.*;
 public class FieldModelProperty implements ModelProperty {
     private final String name;
     private final ResolvedField childField;
+    private final AlternateTypeProvider alternateTypeProvider;
 
-    public FieldModelProperty(String name, ResolvedField childField) {
+    public FieldModelProperty(String name, ResolvedField childField, AlternateTypeProvider alternateTypeProvider) {
         this.name = name;
         this.childField = childField;
+        this.alternateTypeProvider = alternateTypeProvider;
     }
 
-    public String fieldTypeName(ResolvedField field) {
-        ResolvedType type = field.getType();
-        return ResolvedTypes.typeName(type);
-    }
-
-    private String fieldQualifiedName(ResolvedField field) {
-        if (field.getType().getTypeParameters().size() > 0) {
-            return field.getType().toString();
-        }
-        return simpleQualifiedTypeName(field.getType());
+    private ResolvedType realType(ResolvedField field) {
+        return field.getType();
     }
 
     @Override
     public String typeName(ModelContext modelContext) {
-        return fieldTypeName(childField);
+        return ResolvedTypes.typeName(getType());
     }
 
     @Override
     public String qualifiedTypeName() {
-       return fieldQualifiedName(childField);
+        ResolvedType resolvedType = getType();
+        if (resolvedType.getTypeParameters().size() > 0) {
+            return resolvedType.toString();
+        }
+        return simpleQualifiedTypeName(resolvedType);
     }
 
     @Override
     public AllowableValues allowableValues() {
-        return ResolvedTypes.allowableValues(childField.getType());
+        return ResolvedTypes.allowableValues(getType());
     }
 
     @Override
@@ -66,10 +65,7 @@ public class FieldModelProperty implements ModelProperty {
     @Override
     public boolean isRequired() {
         Optional<ApiModelProperty> modelPropertyAnnotation = modelPropertyAnnotation(childField.getRawMember());
-        if (modelPropertyAnnotation.isPresent()) {
-            return modelPropertyAnnotation.get().required();
-        }
-        return false;
+        return modelPropertyAnnotation.isPresent() && modelPropertyAnnotation.get().required();
     }
 
     private Optional<ApiModelProperty> modelPropertyAnnotation(AnnotatedElement annotated) {
@@ -88,6 +84,6 @@ public class FieldModelProperty implements ModelProperty {
 
     @Override
     public ResolvedType getType() {
-       return childField.getType();
+       return alternateTypeProvider.alternateFor(realType(childField));
     }
 }

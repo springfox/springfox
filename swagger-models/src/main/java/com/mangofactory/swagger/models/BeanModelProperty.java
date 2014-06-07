@@ -4,6 +4,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.google.common.base.Strings;
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.model.AllowableValues;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -16,12 +17,15 @@ public class BeanModelProperty implements ModelProperty {
     private final ResolvedMethod method;
     private final boolean isGetter;
     private TypeResolver typeResolver;
+    private final AlternateTypeProvider alternateTypeProvider;
 
-    public BeanModelProperty(String propertyName, ResolvedMethod method, boolean isGetter, TypeResolver typeResolver) {
+    public BeanModelProperty(String propertyName, ResolvedMethod method,
+            boolean isGetter, TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider) {
         name = propertyName;
         this.method = method;
         this.isGetter = isGetter;
         this.typeResolver = typeResolver;
+        this.alternateTypeProvider = alternateTypeProvider;
     }
 
     public String getName() {
@@ -30,6 +34,10 @@ public class BeanModelProperty implements ModelProperty {
 
     @Override
     public ResolvedType getType() {
+        return alternateTypeProvider.alternateFor(realType());
+    }
+
+    private ResolvedType realType() {
         if (isGetter) {
             if (method.getReturnType().getErasedType().getTypeParameters().length > 0) {
                 return method.getReturnType();

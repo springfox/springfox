@@ -2,13 +2,14 @@ package com.mangofactory.swagger.models
 
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import spock.lang.Specification
 
 @Mixin(TypesForTestingSupport)
 class DefaultModelPropertiesProviderSpec extends Specification {
   def "Property names are identified correctly based on (get/set) method names"() {
     given:
-      def propertyProvider = new AccessorsProvider(new TypeResolver())
+      def propertyProvider = new AccessorsProvider(new TypeResolver(), new AlternateTypeProvider())
 
     expect:
       propertyProvider.propertyName(methodName) == property
@@ -33,7 +34,7 @@ class DefaultModelPropertiesProviderSpec extends Specification {
     given:
       def sut = typeForTestingGettersAndSetters()
       def method = sut.methods.find { it.name.equals(methodName) }
-      def accessors = new AccessorsProvider(new TypeResolver())
+      def accessors = new AccessorsProvider(new TypeResolver(), new AlternateTypeProvider())
 
     expect:
       accessors.isGetter(method) == isGetter
@@ -54,7 +55,7 @@ class DefaultModelPropertiesProviderSpec extends Specification {
     given:
       def sut = typeForTestingGettersAndSetters()
       def method = sut.methods.find { it.name.equals(methodName) }
-      def accessors = new AccessorsProvider(new TypeResolver())
+      def accessors = new AccessorsProvider(new TypeResolver(), new AlternateTypeProvider())
 
     expect:
       accessors.isSetter(method) == isGetter

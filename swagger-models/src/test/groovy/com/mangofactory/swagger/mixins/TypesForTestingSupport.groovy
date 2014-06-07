@@ -90,4 +90,8 @@ class TypesForTestingSupport {
   static ResolvedType genericMap(def toResolve, def key, def value) {
     resolver.resolve(toResolve, resolver.resolve(Entry, key, value));
   }
+
+  static ResolvedType typeWithAlternateProperty() {
+    resolver.resolve(TypeWithAlternateProperty);
+  }
 }
