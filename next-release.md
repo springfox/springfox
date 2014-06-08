@@ -271,8 +271,17 @@ use `AbsoluteSwaggerPathProvider` as a guide and configure your `SwaggerSpringMv
 #### Ordering the api's within a ResourceListing
 
 ```java
-//If not supplied the default is ResourceListingLexicographicalOrdering
+//If not supplied the default the plugin default is ResourceListingLexicographicalOrdering
 swaggerSpringMvcPlugin.apiListingReferenceOrdering(new ResourceListingPositionalOrdering())
+```
+
+- Use the position attribute of the `@Api` annotation
+```
+@Controller
+@Api(value="", description="Operations on Businesses", position = 2)
+public class BusinessService {
+    ...
+}
 ```
 
 #### Ordering operations in Api Declarations
