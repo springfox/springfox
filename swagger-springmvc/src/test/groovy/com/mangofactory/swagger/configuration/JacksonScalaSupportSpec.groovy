@@ -7,7 +7,7 @@ import spock.lang.Specification
 
 class JacksonScalaSupportSpec extends Specification {
 
-   def "should add scala module based on boolean flag"() {
+  def "should add scala module based on boolean flag"() {
     given:
       RequestMappingHandlerAdapter requestMappingHandlerAdapter = Mock()
       ObjectMapper objectMapper = Mock()
@@ -16,19 +16,10 @@ class JacksonScalaSupportSpec extends Specification {
       requestMappingHandlerAdapter.getMessageConverters() >> [httpMessageConverter]
     when:
       JacksonScalaSupport jacksonScalaSupport = new JacksonScalaSupport(
-              requestMappingHandlerAdapter: requestMappingHandlerAdapter,
-              registerScalaModule: true
+              requestMappingHandlerAdapter: requestMappingHandlerAdapter
       )
       jacksonScalaSupport.init()
     then:
       1 * objectMapper.registerModule(_)
-
-    when:
-      jacksonScalaSupport = new JacksonScalaSupport(
-              requestMappingHandlerAdapter: requestMappingHandlerAdapter,
-              registerScalaModule: false)
-      jacksonScalaSupport.init()
-    then:
-      0 * objectMapper.registerModule(_)
-   }
+  }
 }
