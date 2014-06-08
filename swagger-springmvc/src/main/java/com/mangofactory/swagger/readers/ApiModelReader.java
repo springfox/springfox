@@ -57,7 +57,9 @@ public class ApiModelReader implements Command<RequestMappingContext> {
         }
         if (!swaggerGlobalSettings.getIgnorableParameterTypes().contains(modelType.getErasedType())) {
             ModelContext modelContext = ModelContext.returnValue(modelType);
-            markIgnorablesAsHasSeen(swaggerGlobalSettings.getIgnorableParameterTypes(), modelContext);
+            markIgnorablesAsHasSeen(swaggerGlobalSettings.getTypeResolver(),
+                    swaggerGlobalSettings.getIgnorableParameterTypes(),
+                    modelContext);
             Optional<Model> model = modelProvider.modelFor(modelContext);
             if (model.isPresent() && !"void".equals(model.get().name())) {
                 log.debug("Swagger generated parameter model id: {}, name: {}, schema: {} models",
@@ -75,14 +77,16 @@ public class ApiModelReader implements Command<RequestMappingContext> {
         context.put("models", modelMap);
     }
 
-    private void markIgnorablesAsHasSeen(Set<Class> ignorableParameterTypes, ModelContext modelContext) {
+    private void markIgnorablesAsHasSeen(TypeResolver typeResolver, Set<Class> ignorableParameterTypes,
+            ModelContext modelContext) {
+
         for (Class ignorableParameterType : ignorableParameterTypes) {
-            modelContext.seen(asResolved(new TypeResolver(), ignorableParameterType));
+            modelContext.seen(asResolved(typeResolver, ignorableParameterType));
         }
     }
 
     private Map<String, Model> readParametersApiModel(HandlerMethodResolver handlerMethodResolver,
-    SwaggerGlobalSettings settings, HandlerMethod handlerMethod) {
+            SwaggerGlobalSettings settings, HandlerMethod handlerMethod) {
 
         Method method = handlerMethod.getMethod();
         Map<String, Model> modelMap = newHashMap();
@@ -102,7 +106,8 @@ public class ApiModelReader implements Command<RequestMappingContext> {
                         ResolvedType modelType = settings.getAlternateTypeProvider().alternateFor(pType
                                 .getResolvedParameterType());
                         ModelContext modelContext = ModelContext.inputParam(modelType);
-                        markIgnorablesAsHasSeen(settings.getIgnorableParameterTypes(), modelContext);
+                        markIgnorablesAsHasSeen(settings.getTypeResolver(), settings.getIgnorableParameterTypes(),
+                                modelContext);
                         Optional<Model> pModel = modelProvider.modelFor(modelContext);
                         if (pModel.isPresent()) {
                             log.debug("Swagger generated parameter model id: {}, name: {}, schema: {} models",

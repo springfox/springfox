@@ -21,7 +21,7 @@ public class ModelContext {
         this.returnType = returnType;
     }
 
-    public ModelContext(ModelContext parentContext, ResolvedType input) {
+    ModelContext(ModelContext parentContext, ResolvedType input) {
         this.parentContext = parentContext;
         this.type = input;
         this.returnType = parentContext.isReturnType();

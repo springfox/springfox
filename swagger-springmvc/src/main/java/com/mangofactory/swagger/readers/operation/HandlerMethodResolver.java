@@ -129,7 +129,7 @@ public class HandlerMethodResolver {
     private ResolvedType returnTypeOrVoid(ResolvedMethod input) {
         ResolvedType returnType = input.getReturnType();
         if (returnType == null) {
-            returnType = new TypeResolver().resolve(Void.class);
+            returnType = typeResolver.resolve(Void.class);
         }
         return returnType;
     }

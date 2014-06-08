@@ -60,7 +60,6 @@ public class SwaggerSpringMvcPlugin {
    private SwaggerApiResourceListing swaggerApiResourceListing;
    private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
    private ApiListingReferenceScanner apiListingReferenceScanner;
-   private TypeResolver typeResolver = new TypeResolver();
 
    public SwaggerSpringMvcPlugin(SpringSwaggerConfig springSwaggerConfig) {
       Assert.notNull(springSwaggerConfig);
@@ -89,7 +88,7 @@ public class SwaggerSpringMvcPlugin {
       }
 
       if (null == this.includePatterns || this.includePatterns.size() == 0) {
-         this.includePatterns = asList(new String[]{".*?"});
+         this.includePatterns = asList(".*?");
       }
 
       if (null == swaggerPathProvider) {
@@ -282,7 +281,8 @@ public class SwaggerSpringMvcPlugin {
     * @return this SwaggerSpringMvcPlugin
     */
    public SwaggerSpringMvcPlugin directModelSubstitute(Class clazz, Class with) {
-      this.alternateTypeRules.add(newRule(typeResolver.resolve(clazz), typeResolver.resolve(with)));
+       TypeResolver typeResolver = swaggerGlobalSettings.getTypeResolver();
+       this.alternateTypeRules.add(newRule(typeResolver.resolve(clazz), typeResolver.resolve(with)));
       return this;
    }
 
@@ -295,6 +295,7 @@ public class SwaggerSpringMvcPlugin {
     * @return this SwaggerSpringMvcPlugin
     */
    public SwaggerSpringMvcPlugin genericModelSubstitutes(Class ... genericClasses) {
+       TypeResolver typeResolver = swaggerGlobalSettings.getTypeResolver();
       for(Class clz : genericClasses){
          this.alternateTypeRules.add(
                  newRule(typeResolver.resolve(clz, WildcardType.class), typeResolver.resolve(WildcardType.class))
@@ -317,15 +318,14 @@ public class SwaggerSpringMvcPlugin {
    }
 
    private ApiInfo defaultApiInfo() {
-      ApiInfo apiInfo = new ApiInfo(
-              this.swaggerGroup + " Title",
-              "Api Description",
-              "Api terms of service",
-              "Contact Email",
-              "Licence Type",
-              "License URL"
-      );
-      return apiInfo;
+       return new ApiInfo(
+               this.swaggerGroup + " Title",
+               "Api Description",
+               "Api terms of service",
+               "Contact Email",
+               "Licence Type",
+               "License URL"
+       );
    }
 
    /**
