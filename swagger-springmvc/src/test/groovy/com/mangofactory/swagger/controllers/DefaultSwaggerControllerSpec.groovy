@@ -2,7 +2,7 @@ package com.mangofactory.swagger.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.mangofactory.swagger.configuration.JacksonScalaSupport
+import com.mangofactory.swagger.configuration.JacksonSwaggerSupport
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.ApiListingSupport
@@ -33,7 +33,7 @@ class DefaultSwaggerControllerSpec extends Specification {
    def setup() {
       def jackson2 = new MappingJackson2HttpMessageConverter()
 
-      JacksonScalaSupport jacksonScalaSupport = new JacksonScalaSupport()
+      JacksonSwaggerSupport jacksonScalaSupport = new JacksonSwaggerSupport()
       ObjectMapper mapper = new ObjectMapper()
       mapper.registerModule(new DefaultScalaModule())
       mapper.registerModule(jacksonScalaSupport.swaggerSerializationModule())

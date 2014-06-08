@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.integration
 
 import com.mangofactory.swagger.authorization.AuthorizationContext
-import com.mangofactory.swagger.configuration.JacksonScalaSupport
+import com.mangofactory.swagger.configuration.JacksonSwaggerSupport
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
@@ -53,10 +53,8 @@ public class ServicesConfiguration {
     * Also registers some custom serializers needed to transform swagger models to swagger-ui required json format
     */
    @Bean
-   public JacksonScalaSupport jacksonScalaSupport() {
-      JacksonScalaSupport jacksonScalaSupport = new JacksonScalaSupport();
-      //Set to false to disable
-      jacksonScalaSupport.setRegisterScalaModule(true);
+   public JacksonSwaggerSupport jacksonScalaSupport() {
+      JacksonSwaggerSupport jacksonScalaSupport = new JacksonSwaggerSupport();
       return jacksonScalaSupport;
    }
 

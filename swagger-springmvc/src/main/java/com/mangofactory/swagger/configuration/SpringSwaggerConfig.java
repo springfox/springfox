@@ -194,9 +194,9 @@ public class SpringSwaggerConfig {
    * Registers some custom serializers needed to transform swagger models to swagger-ui required json format.
    */
   @Bean
-  public JacksonScalaSupport jacksonScalaSupport() {
-    JacksonScalaSupport jacksonScalaSupport = new JacksonScalaSupport();
-    return jacksonScalaSupport;
+  public JacksonSwaggerSupport jacksonScalaSupport() {
+    JacksonSwaggerSupport jacksonSwaggerSupport = new JacksonSwaggerSupport();
+    return jacksonSwaggerSupport;
   }
 
   @Bean
