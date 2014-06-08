@@ -34,10 +34,6 @@ public class JacksonScalaSupport {
     this.requestMappingHandlerAdapter = requestMappingHandlerAdapter;
   }
 
-  public Boolean getRegisterScalaModule() {
-    return registerScalaModule;
-  }
-
   public Module swaggerSerializationModule() {
     SimpleModule module = new SimpleModule("SwaggerJacksonModule");
     module.addSerializer(ApiListing.class, new SwaggerApiListingJsonSerializer());
@@ -51,5 +47,13 @@ public class JacksonScalaSupport {
    */
   public void setRegisterScalaModule(Boolean registerScalaModule) {
     this.registerScalaModule = registerScalaModule;
+  }
+
+  @Deprecated
+  /**
+   * @deprecated Scala module no longer used and the SwaggerJacksonModule is not optional
+   */
+  public Boolean getRegisterScalaModule() {
+    return registerScalaModule;
   }
 }

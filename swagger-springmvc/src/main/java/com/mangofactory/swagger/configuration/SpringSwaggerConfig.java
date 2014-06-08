@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
@@ -19,8 +20,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -62,161 +66,170 @@ import static org.springframework.web.bind.annotation.RequestMethod.TRACE;
 @Import(SwaggerModelsConfiguration.class)
 public class SpringSwaggerConfig {
 
-   @Autowired
-   private List<RequestMappingHandlerMapping> handlerMappings;
+  @Autowired
+  private List<RequestMappingHandlerMapping> handlerMappings;
 
-   @Autowired
-   private ServletContext servletContext;
+  @Autowired
+  private ServletContext servletContext;
 
-   @Autowired
-   private ModelProvider modelProvider;
+  @Autowired
+  private ModelProvider modelProvider;
 
-   @Bean
-   public List<RequestMappingHandlerMapping> swaggerRequestMappingHandlerMappings() {
-      return handlerMappings;
-   }
+  @Bean
+  public List<RequestMappingHandlerMapping> swaggerRequestMappingHandlerMappings() {
+    return handlerMappings;
+  }
 
-   @Bean
-   public ResourceGroupingStrategy defaultResourceGroupingStrategy() {
-      return new ClassOrApiAnnotationResourceGrouping();
-   }
+  @Bean
+  public ResourceGroupingStrategy defaultResourceGroupingStrategy() {
+    return new ClassOrApiAnnotationResourceGrouping();
+  }
 
-   @Bean
-   public List<Class<? extends Annotation>> defaultExcludeAnnotations() {
-      List<Class<? extends Annotation>> annotations = new ArrayList<Class<? extends Annotation>>();
-      annotations.add(ApiIgnore.class);
-      return annotations;
-   }
+  @Bean
+  public List<Class<? extends Annotation>> defaultExcludeAnnotations() {
+    List<Class<? extends Annotation>> annotations = new ArrayList<Class<? extends Annotation>>();
+    annotations.add(ApiIgnore.class);
+    return annotations;
+  }
 
-   @Bean
-   public SwaggerPathProvider defaultSwaggerPathProvider() {
-      return new RelativeSwaggerPathProvider();
-   }
+  @Bean
+  public SwaggerPathProvider defaultSwaggerPathProvider() {
+    return new RelativeSwaggerPathProvider();
+  }
 
-   @Bean
-   public SwaggerCache swaggerCache() {
-      return new SwaggerCache();
-   }
+  @Bean
+  public SwaggerCache swaggerCache() {
+    return new SwaggerCache();
+  }
 
-   @Bean
-   public Set<Class> defaultIgnorableParameterTypes() {
-      HashSet<Class> ignored = newHashSet();
-      ignored.add(ServletRequest.class);
-      ignored.add(HttpHeaders.class);
-      ignored.add(ServletResponse.class);
-      ignored.add(HttpServletRequest.class);
-      ignored.add(HttpServletResponse.class);
-      ignored.add(HttpHeaders.class);
-      ignored.add(BindingResult.class);
-      ignored.add(ServletContext.class);
-      ignored.add(UriComponentsBuilder.class);
-      return ignored;
-   }
+  @Bean
+  public Set<Class> defaultIgnorableParameterTypes() {
+    HashSet<Class> ignored = newHashSet();
+    ignored.add(ServletRequest.class);
+    ignored.add(HttpHeaders.class);
+    ignored.add(ServletResponse.class);
+    ignored.add(HttpServletRequest.class);
+    ignored.add(HttpServletResponse.class);
+    ignored.add(HttpHeaders.class);
+    ignored.add(BindingResult.class);
+    ignored.add(ServletContext.class);
+    ignored.add(UriComponentsBuilder.class);
+    return ignored;
+  }
 
-   @Bean
-   public AlternateTypeProvider defaultAlternateTypeProvider() {
-      AlternateTypeProvider alternateTypeProvider = new AlternateTypeProvider();
-      TypeResolver typeResolver = new TypeResolver();
-      alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class), typeResolver.resolve(Object.class)));
-      alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, String.class, Object.class),
-              typeResolver.resolve(Object.class)));
-      alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, Object.class, Object.class),
-              typeResolver.resolve(Object.class)));
-      alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, String.class, String.class),
-              typeResolver.resolve(Object.class)));
-      alternateTypeProvider.addRule(newMapRule(WildcardType.class, WildcardType.class));
-      return alternateTypeProvider;
-   }
+  @Bean
+  public AlternateTypeProvider defaultAlternateTypeProvider() {
+    AlternateTypeProvider alternateTypeProvider = new AlternateTypeProvider();
+    TypeResolver typeResolver = new TypeResolver();
+    alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class), typeResolver.resolve(Object.class)));
+    alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, String.class, Object.class),
+            typeResolver.resolve(Object.class)));
+    alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, Object.class, Object.class),
+            typeResolver.resolve(Object.class)));
+    alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, String.class, String.class),
+            typeResolver.resolve(Object.class)));
+    alternateTypeProvider.addRule(newMapRule(WildcardType.class, WildcardType.class));
+    return alternateTypeProvider;
+  }
 
-   /**
-    * Default response messages set on all api operations
-    */
-   @Bean
-   public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages() {
-      LinkedHashMap<RequestMethod, List<ResponseMessage>> responses = newLinkedHashMap();
-      responses.put(GET, asList(
-              new ResponseMessage(OK.value(), OK.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-      ));
+  /**
+   * Default response messages set on all api operations
+   */
+  @Bean
+  public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages() {
+    LinkedHashMap<RequestMethod, List<ResponseMessage>> responses = newLinkedHashMap();
+    responses.put(GET, asList(
+            new ResponseMessage(OK.value(), OK.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+                             ));
 
-      responses.put(PUT, asList(
-              new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-      ));
+    responses.put(PUT, asList(
+            new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+                             ));
 
-      responses.put(POST, asList(
-              new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-      ));
+    responses.put(POST, asList(
+            new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+                              ));
 
-      responses.put(DELETE, asList(
-              new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-      ));
+    responses.put(DELETE, asList(
+            new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+                                ));
 
-      responses.put(PATCH, asList(
-              new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-      ));
+    responses.put(PATCH, asList(
+            new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+                               ));
 
-      responses.put(TRACE, asList(
-              new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-      ));
+    responses.put(TRACE, asList(
+            new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+                               ));
 
-      responses.put(OPTIONS, asList(
-              new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-      ));
-      responses.put(HEAD, asList(
-              new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-              new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-      ));
-      return responses;
-   }
+    responses.put(OPTIONS, asList(
+            new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+                                 ));
+    responses.put(HEAD, asList(
+            new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+                              ));
+    return responses;
+  }
 
-   /**
-    * Adds the jackson scala module to the MappingJackson2HttpMessageConverter registered with spring
-    * Swagger core models are scala so we need to be able to convert to JSON
-    * Also registers some custom serializers needed to transform swagger models to swagger-ui required json format
-    */
-   @Bean
-   public JacksonScalaSupport jacksonScalaSupport() {
-      JacksonScalaSupport jacksonScalaSupport = new JacksonScalaSupport();
-      //Set to false to disable
-      jacksonScalaSupport.setRegisterScalaModule(true);
-      return jacksonScalaSupport;
-   }
+  /**
+   * Registers some custom serializers needed to transform swagger models to swagger-ui required json format.
+   */
+  @Bean
+  public JacksonScalaSupport jacksonScalaSupport() {
+    JacksonScalaSupport jacksonScalaSupport = new JacksonScalaSupport();
+    return jacksonScalaSupport;
+  }
 
-   @Bean
-   public SwaggerPluginAdapter swaggerPluginAdapter() {
-      return new SwaggerPluginAdapter(this);
-   }
+  @Bean
+  public SwaggerPluginAdapter swaggerPluginAdapter() {
+    return new SwaggerPluginAdapter(this);
+  }
 
-   public ModelProvider defaultModelProvider() {
-      return modelProvider;
-   }
-
-   private List<ResponseMessage> asList(ResponseMessage... responseMessages) {
-      List<ResponseMessage> list = new ArrayList();
-      for (ResponseMessage responseMessage : responseMessages) {
-         list.add(responseMessage);
+  @Autowired
+  @Bean(name = "springsMessageConverterObjectMapper")
+  public ObjectMapper springsMessageConverterObjectMapper(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
+    List<HttpMessageConverter<?>> messageConverters = requestMappingHandlerAdapter.getMessageConverters();
+    for (HttpMessageConverter<?> messageConverter : messageConverters) {
+      if (messageConverter instanceof MappingJackson2HttpMessageConverter) {
+        MappingJackson2HttpMessageConverter m = (MappingJackson2HttpMessageConverter) messageConverter;
+        return m.getObjectMapper();
       }
-      return list;
-   }
+    }
+    throw new RuntimeException("Could not get an ObjectMapper from Spring's MappingJackson2HttpMessageConverter");
+  }
 
-   public List<RequestMappingHandlerMapping> getHandlerMappings() {
-      return handlerMappings;
-   }
+  public ModelProvider defaultModelProvider() {
+    return modelProvider;
+  }
+
+  private List<ResponseMessage> asList(ResponseMessage... responseMessages) {
+    List<ResponseMessage> list = new ArrayList();
+    for (ResponseMessage responseMessage : responseMessages) {
+      list.add(responseMessage);
+    }
+    return list;
+  }
+
+  public List<RequestMappingHandlerMapping> getHandlerMappings() {
+    return handlerMappings;
+  }
 }
