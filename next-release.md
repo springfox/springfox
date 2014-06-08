@@ -243,7 +243,7 @@ A swagger group is a concept introduced by this library which is simply a unique
 within your application. The reason this concept was introduced was to support applications which require more than one
 Resource Listing. Why would you need more than one Resource Listing?
  - A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
- -  A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2
+ - A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2
 
  In most cases an application will not need more than one Resource Listing and the concept of swagger groups can be ignored.
 
@@ -271,7 +271,18 @@ use `AbsoluteSwaggerPathProvider` as a guide and configure your `SwaggerSpringMv
 #### Ordering the api's within a ResourceListing
 
 ```java
-
 //If not supplied the default is ResourceListingLexicographicalOrdering
 swaggerSpringMvcPlugin.apiListingReferenceOrdering(new ResourceListingPositionalOrdering())
 ```
+
+#### Ordering operations in Api Declarations
+Use the swagger `ApiOperation` annotation.
+ ```java
+   @ApiOperation(value = "", position = 5)
+   @RequestMapping("/somewhere")
+   public Model methodWithPosition() {
+        ...
+   }
+ 
+ ```
+ 
