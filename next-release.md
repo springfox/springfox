@@ -67,7 +67,11 @@ compile "com.mangofactory:swagger-springmvc:0.8.4-SNAPSHOT"
 ```
 
 ### Usage (Quick guide)
-This quick guide outlines how to get swagger-springmvc up and running with a default configuration. The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin` explained in the [Usage (SwaggerSpringMvcPlugin)][] section.
+This quick guide outlines how to get swagger-springmvc up and running with a default configuration. 
+The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin` explained 
+in the [Usage] (#Usage (SwaggerSpringMvcPlugin)) section.
+
+https://github.com/martypitt/swagger-springmvc/blob/master/next-release.md#usage-swaggerspringmvcplugin
 
 #### Spring Java Configuration
 - By far, the easiest way to enable swagger
@@ -83,7 +87,8 @@ public class WebAppConfig {
  ...
 }
 ```
-The `@EnableSwagger` annotation, in this example, enbles swagger-springnvc out of the box and the generated swagger json Resource Listing is available at /api-docs
+The `@EnableSwagger` annotation, in this example, enables swagger-springnvc out of the box. The generated swagger 
+json Resource Listing is available at /api-docs
 
 
 #### Spring xml Configuration
