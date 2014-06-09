@@ -13,9 +13,10 @@ import com.google.common.base.Function;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -27,9 +28,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.uniqueIndex;
 
 @Component
-@Lazy
-//@DependsOn("springsMessageConverterObjectMapper")
-public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
+public class DefaultModelPropertiesProvider implements ModelPropertiesProvider, ApplicationContextAware {
 
   private static final Logger log = LoggerFactory.getLogger(DefaultModelPropertiesProvider.class);
   private ObjectMapper objectMapper;
@@ -46,13 +45,7 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
     this.fields = fields;
   }
 
-  /**
-   * Autowire as a setter - construction injection can lead to:
-   * org.springframework.beans.factory.BeanCurrentlyInCreationException
-   * @param objectMapper
-   */
-  @Autowired
-  public void setObjectMapper(@Qualifier("springsMessageConverterObjectMapper") ObjectMapper objectMapper) {
+  public void setObjectMapper(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 
@@ -174,6 +167,13 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
     ArrayList<ModelProperty> modelProperties = newArrayList(deserializableFields(type));
     modelProperties.addAll(deserializableProperties(type));
     return modelProperties;
+  }
+
+  @Override
+  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    ObjectMapper springsMessageConverterObjectMapper =
+            (ObjectMapper) applicationContext.getBean("springsMessageConverterObjectMapper");
+    setObjectMapper(springsMessageConverterObjectMapper);
   }
 }
 
