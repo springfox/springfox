@@ -29,17 +29,27 @@ import static com.google.common.collect.Maps.uniqueIndex;
 public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
 
   private static final Logger log = LoggerFactory.getLogger(DefaultModelPropertiesProvider.class);
-  private final ObjectMapper objectMapper;
+  private ObjectMapper objectMapper;
   private final AlternateTypeProvider alternateTypeProvider;
   private final AccessorsProvider accessors;
   private final FieldsProvider fields;
 
+
   @Autowired
-  public DefaultModelPropertiesProvider(@Qualifier("springsMessageConverterObjectMapper") ObjectMapper objectMapper,
-      AlternateTypeProvider alternateTypeProvider, AccessorsProvider accessors, FieldsProvider fields) {
+  public DefaultModelPropertiesProvider(AlternateTypeProvider alternateTypeProvider, AccessorsProvider accessors,
+                                        FieldsProvider fields) {
     this.alternateTypeProvider = alternateTypeProvider;
     this.accessors = accessors;
     this.fields = fields;
+  }
+
+  /**
+   * Autowire as a setter - construction injection can lead to:
+   * org.springframework.beans.factory.BeanCurrentlyInCreationException
+   * @param objectMapper
+   */
+  @Autowired
+  public void setObjectMapper(@Qualifier("springsMessageConverterObjectMapper") ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 

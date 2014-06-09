@@ -12,9 +12,10 @@ class ModelProviderSupport {
     def fields = new FieldsProvider(resolver)
     def alternateTypeProvider = new AlternateTypeProvider()
     def accessors = new AccessorsProvider(resolver, alternateTypeProvider)
-    def modelPropertiesProvider = new DefaultModelPropertiesProvider(new ObjectMapper(), alternateTypeProvider,
+    def modelPropertiesProvider = new DefaultModelPropertiesProvider(alternateTypeProvider,
             accessors,
             fields)
+    modelPropertiesProvider.setObjectMapper(new ObjectMapper())
     def modelDependenciesProvider = modelDependencyProvider(resolver, alternateTypeProvider, modelPropertiesProvider)
     new DefaultModelProvider(resolver, alternateTypeProvider, modelPropertiesProvider, modelDependenciesProvider)
   }
@@ -25,9 +26,11 @@ class ModelProviderSupport {
     def alternateTypeProvider = new AlternateTypeProvider()
     def accessors = new AccessorsProvider(resolver, alternateTypeProvider)
     alternateTypeProvider.addRule(new AlternateTypeRule(resolver.resolve(LocalDate), resolver.resolve(String)))
-    def modelPropertiesProvider = new DefaultModelPropertiesProvider(new ObjectMapper(), alternateTypeProvider,
+    def modelPropertiesProvider = new DefaultModelPropertiesProvider(alternateTypeProvider,
             accessors,
             fields)
+    modelPropertiesProvider.setObjectMapper(new ObjectMapper())
+
     def modelDependenciesProvider = modelDependencyProvider(resolver, alternateTypeProvider, modelPropertiesProvider)
     new DefaultModelProvider(resolver, alternateTypeProvider, modelPropertiesProvider, modelDependenciesProvider)
   }
@@ -43,8 +46,8 @@ class ModelProviderSupport {
     def alternateTypeProvider = new AlternateTypeProvider()
     def accessors = new AccessorsProvider(resolver, alternateTypeProvider)
 
-    def modelPropertiesProvider = new DefaultModelPropertiesProvider(new ObjectMapper(), alternateTypeProvider,
-            accessors, fields)
+    def modelPropertiesProvider = new DefaultModelPropertiesProvider( alternateTypeProvider, accessors, fields)
+    modelPropertiesProvider.setObjectMapper(new ObjectMapper())
     modelDependencyProvider(resolver, alternateTypeProvider, modelPropertiesProvider)
   }
 
