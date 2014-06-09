@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.scanners;
 
+import com.google.common.primitives.Ints;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
@@ -15,10 +16,16 @@ import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiListing;
 import com.wordnik.swagger.model.Authorization;
 import com.wordnik.swagger.model.Model;
+
+import org.junit.runner.manipulation.Sortable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import scala.Option;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -67,7 +74,7 @@ public class ApiListingScanner {
 
             Set<String> produces = new LinkedHashSet<String>(2);
             Set<String> consumes = new LinkedHashSet<String>(2);
-            Set<ApiDescription> apiDescriptions = newHashSet();
+            List<ApiDescription> apiDescriptions = newArrayList();
 
             List<Command<RequestMappingContext>> readers = newArrayList();
             readers.add(new MediaTypeReader());
@@ -98,7 +105,12 @@ public class ApiListingScanner {
                List<ApiDescription> apiDescriptionList = (List<ApiDescription>) results.get("apiDescriptionList");
                apiDescriptions.addAll(apiDescriptionList);
             }
-
+            Collections.sort(apiDescriptions,new Comparator<ApiDescription>() {
+            @Override
+                public int compare(ApiDescription first, ApiDescription second) {
+                  return Ints.compare(first.operations().head().position(),first.operations().head().position());
+            }
+            });
             scala.collection.immutable.List<Authorization> authorizations = emptyScalaList();
             if (null != authorizationContext) {
                authorizations = authorizationContext.getScalaAuthorizations();
