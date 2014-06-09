@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -27,7 +27,8 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.uniqueIndex;
 
 @Component
-@DependsOn("springsMessageConverterObjectMapper")
+@Lazy
+//@DependsOn("springsMessageConverterObjectMapper")
 public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
 
   private static final Logger log = LoggerFactory.getLogger(DefaultModelPropertiesProvider.class);
