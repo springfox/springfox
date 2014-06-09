@@ -37,8 +37,11 @@ import static com.mangofactory.swagger.ScalaUtils.toScalaList;
 
 public class ApiOperationReader implements Command<RequestMappingContext> {
 
-   private static final Set<RequestMethod> allRequestMethods = new HashSet<RequestMethod>(Arrays.asList(RequestMethod.values()));
-   public ApiOperationReader() { }
+  private static final Set<RequestMethod> allRequestMethods = new HashSet<RequestMethod>(Arrays.asList(RequestMethod.values()));
+
+  public static final OperationPositionalOrdering OPERATION_POSITIONAL_ORDERING = new OperationPositionalOrdering();
+
+  public ApiOperationReader() { }
 
    @Override
    public void execute(RequestMappingContext outerContext) {
@@ -71,43 +74,44 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       for (RequestMethod httpRequestMethod : supportedMethods) {
          CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
 
-         RequestMappingContext operationRequestMappingContext = new RequestMappingContext(requestMappingInfo, handlerMethod);
-         operationRequestMappingContext.put("currentCount", currentCount);
-         operationRequestMappingContext.put("currentHttpMethod", httpRequestMethod);
-         operationRequestMappingContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
-         operationRequestMappingContext.put("authorizationContext", authorizationContext);
-         operationRequestMappingContext.put("requestMappingPattern", requestMappingPattern);
+        RequestMappingContext operationRequestMappingContext = new RequestMappingContext(requestMappingInfo,
+                handlerMethod);
+        operationRequestMappingContext.put("currentCount", currentCount);
+        operationRequestMappingContext.put("currentHttpMethod", httpRequestMethod);
+        operationRequestMappingContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
+        operationRequestMappingContext.put("authorizationContext", authorizationContext);
+        operationRequestMappingContext.put("requestMappingPattern", requestMappingPattern);
 
 
-          commandExecutor.execute(commandList, operationRequestMappingContext);
+        commandExecutor.execute(commandList, operationRequestMappingContext);
 
-         Map<String, Object> operationResultMap = operationRequestMappingContext.getResult();
-         currentCount = (Integer) operationResultMap.get("currentCount");
+        Map<String, Object> operationResultMap = operationRequestMappingContext.getResult();
+        currentCount = (Integer) operationResultMap.get("currentCount");
 
-         List<String> producesMediaTypes = (List<String>) operationResultMap.get("produces");
-         List<String> consumesMediaTypes = (List<String>) operationResultMap.get("consumes");
-         List<Parameter> parameterList = (List<Parameter>) operationResultMap.get("parameters");
-         List<Authorization> authorizations = (List<Authorization>) operationResultMap.get("authorizations");
+        List<String> producesMediaTypes = (List<String>) operationResultMap.get("produces");
+        List<String> consumesMediaTypes = (List<String>) operationResultMap.get("consumes");
+        List<Parameter> parameterList = (List<Parameter>) operationResultMap.get("parameters");
+        List<Authorization> authorizations = (List<Authorization>) operationResultMap.get("authorizations");
 
-         Operation operation = new Operation(
-               (String) operationResultMap.get("httpRequestMethod"),
-               (String) operationResultMap.get("summary"),
-               (String) operationResultMap.get("notes"),
-               (String) operationResultMap.get("responseClass"),
-               (String) operationResultMap.get("nickname"),
-               (Integer) operationResultMap.get("position"),
-               toScalaList(producesMediaTypes),
-               toScalaList(consumesMediaTypes),
-               emptyScalaList(),
-               toScalaList(authorizations),
-               toScalaList(parameterList),
-               toScalaList((List) operationResultMap.get("responseMessages")),
-               toOption(operationResultMap.get("deprecated"))
-         );
+        Operation operation = new Operation(
+             (String) operationResultMap.get("httpRequestMethod"),
+             (String) operationResultMap.get("summary"),
+             (String) operationResultMap.get("notes"),
+             (String) operationResultMap.get("responseClass"),
+             (String) operationResultMap.get("nickname"),
+             (Integer) operationResultMap.get("position"),
+             toScalaList(producesMediaTypes),
+             toScalaList(consumesMediaTypes),
+             emptyScalaList(),
+             toScalaList(authorizations),
+             toScalaList(parameterList),
+             toScalaList((List) operationResultMap.get("responseMessages")),
+             toOption(operationResultMap.get("deprecated"))
+        );
 
-         operations.add(operation);
+        operations.add(operation);
       }
-      Collections.sort(operations, new OperationPositionalOrdering());
+      Collections.sort(operations, OPERATION_POSITIONAL_ORDERING);
       outerContext.put("operations", operations);
    }
 }

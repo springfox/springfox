@@ -37,6 +37,7 @@ import static com.google.common.collect.Lists.newArrayList
 @Import(SpringSwaggerConfig.class)
 public class ServicesConfiguration {
 
+  //TODO - AK - rewrite to use new plugin builder
    public static final List<String> DEFAULT_INCLUDE_PATTERNS = newArrayList(".*?");
    public static final String SWAGGER_GROUP = "default";
 

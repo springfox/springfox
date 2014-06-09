@@ -7,7 +7,6 @@ import spock.lang.Specification
 class OperationPositionReaderSpec extends Specification {
 
    def "should have correct api position after several invocations"() {
-
     given:
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
       OperationPositionReader operationPositionReader = new OperationPositionReader();

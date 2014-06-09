@@ -67,7 +67,7 @@
             <property name="max" value="15"/>
         </module>
         <!--<module name="NPathComplexity">-->
-            <!--<property name="max" value="50"/>-->
+        <!--<property name="max" value="50"/>-->
         <!--</module>-->
 
         <!-- Coding checks http://checkstyle.sourceforge.net/config_coding.html -->

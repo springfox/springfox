@@ -8,6 +8,7 @@ import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.models.DefaultModelProvider
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
+import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
@@ -83,7 +84,6 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       plugin
             .ignoredParameterTypes(AbstractSingletonProxyFactoryBean.class, ProxyFactoryBean.class)
             .build()
-
     then:
       SwaggerGlobalSettings swaggerGlobalSettings = plugin.swaggerGlobalSettings
       swaggerGlobalSettings.getIgnorableParameterTypes().contains(AbstractSingletonProxyFactoryBean.class)
@@ -105,7 +105,6 @@ class SwaggerSpringMvcPluginSpec extends Specification {
     then:
       plugin.swaggerGlobalSettings.alternateTypeProvider == provider
       plugin.swaggerGlobalSettings.alternateTypeProvider.rules.contains(rule)
-
   }
 
   @Unroll
@@ -174,6 +173,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       listing.swaggerGroup == plugin.swaggerGroup
       listing.apiVersion == plugin.apiVersion
       listing.apiListingReferenceOrdering instanceof ResourceListingLexicographicalOrdering
+      listing.apiDescriptionOrdering instanceof ApiDescriptionLexicographicalOrdering
 
   }
 
@@ -189,7 +189,6 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       apiListingReferenceScanner.swaggerPathProvider == plugin.swaggerPathProvider
       apiListingReferenceScanner.swaggerGroup == plugin.swaggerGroup
       apiListingReferenceScanner.includePatterns == plugin.includePatterns
-
   }
 
 
