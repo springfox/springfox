@@ -138,7 +138,6 @@ public class SwaggerSpringMvcPlugin {
     swaggerApiResourceListing.setApiVersion(this.apiVersion);
     swaggerApiResourceListing.setApiListingReferenceOrdering(this.apiListingReferenceOrdering);
     swaggerApiResourceListing.setApiDescriptionOrdering(this.apiDescriptionOrdering);
-
   }
 
   private ApiListingReferenceScanner buildApiListingReferenceScanner() {

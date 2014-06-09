@@ -300,3 +300,10 @@ Use the swagger `ApiOperation` annotation.
  
  ```
  
+#### Ordering ApiDescriptions (withing ApiListing's)
+- Defaults to ApiDescriptionLexicographicalOrdering
+```java
+swaggerSpringMvcPlugin.apiDescriptionOrdering(new MyCustomApiDescriptionOrdering())
+```
+ 
+ 
