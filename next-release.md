@@ -1,16 +1,16 @@
 # Swagger-springmvc
 
-Unit Tests: [![Build Status](https://travis-ci.org/martypitt/swagger-springmvc.png?branch=master)](https://travis-ci.org/martypitt/swagger-springmvc)
+- Unit Tests: [![Build Status](https://travis-ci.org/martypitt/swagger-springmvc.png?branch=master)](https://travis-ci
+.org/martypitt/swagger-springmvc)
 
-Functional Tests: [![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.png?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo)
+- Functional Tests: [![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.png?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo)
 
 ### About
 
 This project integrates swagger with the Spring Web MVC framework. The complete swagger specification is available
 at https://github.com/wordnik/swagger-spec and it's worth being familiar with the main concepts of the specification.
 
-Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/wordnik/swagger-ui) 
-to provide the user interface which visualises an applications JSON api's. The most common know use of this project has been 
+Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/wordnik/swagger-ui) to provide the user interface which visualises an applications JSON api's. The most common know use of this project has been 
 Spring Web MVC applications using springs `MappingJackson2HttpMessageConverter` to produce JSON API endpoints.
 
 The demo project (https://github.com/adrianbk/swagger-springmvc-demo) containes a number of examples using both spring web mvc and spring-boot.
@@ -18,32 +18,37 @@ The demo project (https://github.com/adrianbk/swagger-springmvc-demo) containes 
 ### Repositories
 
 #### Release version
-or maven central: http://repo1.maven.org/maven2/
 
-- Maven
+Or maven central: http://repo1.maven.org/maven2/
+
+__Maven__
+
 ```xml
-  <repositories>
+<repositories>
     <repository>
       <id>sonatype-snapshots</id>
       <name>Sonatype</name>
       <url>https://oss.sonatype.org/content/repositories/releases/</url>
     </repository>
-  </repositories>
+</repositories>
 
-  <dependency>
+<dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
     <version>0.8.4</version>
-  </dependency>
+</dependency
+
 ```
 
-- Gradle
+__Gradle__
+
 ```groovy
 compile "com.mangofactory:swagger-springmvc:0.8.4"
 ```
 
 #### Snapshot version
-- Maven
+
+__Maven__
 ```xml
   <repositories>
     <repository>
@@ -60,7 +65,7 @@ compile "com.mangofactory:swagger-springmvc:0.8.4"
   </dependency>
 ```
 
-- Gradle
+__Gradle__
 
 ```groovy
 compile "com.mangofactory:swagger-springmvc:0.8.4-SNAPSHOT"
@@ -68,10 +73,7 @@ compile "com.mangofactory:swagger-springmvc:0.8.4-SNAPSHOT"
 
 ### Usage (Quick guide)
 This quick guide outlines how to get swagger-springmvc up and running with a default configuration. 
-The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin` explained 
-in the [Usage] (#Usage (SwaggerSpringMvcPlugin)) section.
-
-https://github.com/martypitt/swagger-springmvc/blob/master/next-release.md#usage-swaggerspringmvcplugin
+The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin` as explained below.
 
 #### Spring Java Configuration
 - By far, the easiest way to enable swagger
@@ -87,19 +89,19 @@ public class WebAppConfig {
  ...
 }
 ```
-The `@EnableSwagger` annotation, in this example, enables swagger-springnvc out of the box. The generated swagger 
+The `@EnableSwagger` annotation, in this example, enables swagger-springmvc out of the box. The generated swagger 
 json Resource Listing is available at /api-docs
 
 
-#### Spring xml Configuration
+#### Spring xml Configuratio
 - To get the default implementation simply define a bean of type: `com.mangofactory.swagger.configuration.SpringSwaggerConfig`
 
 ```xml
 <mvc:annotation-driven/> <!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
 <bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
 ```
-- JSON Resource Listing available at /api-docs
-
+- The generated swagger 
+json Resource Listing is available at /api-docs
 
 
 ### Usage (SwaggerSpringMvcPlugin)
@@ -115,16 +117,16 @@ This config class must then be defined in your xml application context.
 
 
 ```xml
-<mvc:annotation-driven/> <!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
+<!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
+<mvc:annotation-driven/>
+
 <bean class="com.yourapp.configuration.MySwaggerConfig"/>
 ```
-
-
 
 ```java
 
 @Configuration
-@EnableSwagger //Loads the spring beans required by the framework most of which are available in SpringSwaggerConfig 
+@EnableSwagger //Loads the spring beans required by the framework
 public class MySwaggerConfig {
 
    private SpringSwaggerConfig springSwaggerConfig;
@@ -154,7 +156,7 @@ public class MySwaggerConfig {
 ### SwaggerSpringMvcPlugin Spring Java Configuration
 - Use the `@EnableSwagger` annotation.
 - Autowire `SpringSwaggerConfig`.
-- Define one of more SwaggerSpringMvcPlugin using springs `@Bean` annotation.
+- Define one or more SwaggerSpringMvcPlugin instances using springs `@Bean` annotation.
 
 ```java
 @Configuration
@@ -170,7 +172,7 @@ public class CustomJavaPluginConfig {
       this.springSwaggerConfig = springSwaggerConfig;
    }
 
-   @Bean
+   @Bean //Don't forget the @Bean annotation
    public SwaggerSpringMvcPlugin customImplementation(){
       return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
             .apiInfo(apiInfo())
@@ -198,13 +200,13 @@ public class CustomJavaPluginConfig {
 - __Note:__ Only use this option if you don't need to customize any of the swagger-ui static content, otherwise use option 2.
 - Use the web-jar which packages all of the swagger-ui static content.
 - Requires that your app is using the servlet 3 specification.
-- For non-spring boot applications some extra spring configuration is required. See: https://github.com/adrianbk/swagger-springmvc-demo/tree/master/swagger-ui
-```
-dependencies {
+- For non-spring boot applications some extra spring configuration (ResourceHandler's) is required. See: https://github.com/adrianbk/swagger-springmvc-demo/tree/master/swagger-ui
 
+```groovy
+
+dependencies {
   ...
   compile "org.ajar:swagger-spring-mvc-ui:0.2"
-
 }
 ```
 
@@ -215,11 +217,11 @@ dependencies {
 
 The following is one way to serve static content from /src/main/webapp
 ```
-    <!-- Direct static mappings -->
-    <mvc:resources mapping="*.html" location="/"/>
-    
-    <!-- Serve static content-->
-    <mvc:default-servlet-handler/>
+<!-- Direct static mappings -->
+<mvc:resources mapping="*.html" location="/"/>
+
+<!-- Serve static content-->
+<mvc:default-servlet-handler/>
 ```
 
 ### Migration From 0.8.0 -> 0.8.4
@@ -302,8 +304,8 @@ Use the swagger `ApiOperation` annotation.
  
 #### Ordering ApiDescriptions (withing ApiListing's)
 - Defaults to ApiDescriptionLexicographicalOrdering
+
 ```java
-swaggerSpringMvcPlugin.apiDescriptionOrdering(new MyCustomApiDescriptionOrdering())
+swaggerSpringMvcPlugin.apiDescriptionOrdering(new MyCustomApiDescriptionOrdering());
 ```
- 
  
