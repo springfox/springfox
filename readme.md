@@ -1,9 +1,8 @@
 # Swagger / Spring MVC Integration
-- Coverage: [![Coverage Status](https://coveralls.io/repos/martypitt/swagger-springmvc/badge.png?branch=master)]
-(https://coveralls.io/r/martypitt/swagger-springmvc?branch=master)
 
-- CI: [![Build Status](https://travis-ci.org/martypitt/swagger-springmvc.png?branch=master)](https://travis-ci
-.org/martypitt/swagger-springmvc)
+| Unit  | Functional   | Coverage   |
+|---|---|---|
+|[![Build Status](https://travis-ci.org/martypitt/swagger-springmvc.png?branch=master)](https://travis-ci.org/martypitt/swagger-springmvc)   |[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.png?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo) |[![Coverage Status](https://coveralls.io/repos/martypitt/swagger-springmvc/badge.png?branch=master)](https://coveralls.io/r/martypitt/swagger-springmvc?branch=master) |
 
 ### About
 An upgrade to the swagger-springmvc project to the latest Swagger specification (1.2).
