@@ -19,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider, 
   private final AlternateTypeProvider alternateTypeProvider;
   private final AccessorsProvider accessors;
   private final FieldsProvider fields;
+  private ApplicationContext applicationContext;
 
 
   @Autowired
@@ -171,6 +173,11 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider, 
 
   @Override
   public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    this.applicationContext = applicationContext;
+  }
+
+  @PostConstruct
+  private void postConstruct(){
     ObjectMapper springsMessageConverterObjectMapper =
             (ObjectMapper) applicationContext.getBean("springsMessageConverterObjectMapper");
     setObjectMapper(springsMessageConverterObjectMapper);
