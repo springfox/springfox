@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping;
@@ -20,11 +19,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -200,10 +196,6 @@ public class SpringSwaggerConfig {
     return list;
   }
 
-  public List<RequestMappingHandlerMapping> getHandlerMappings() {
-    return handlerMappings;
-  }
-
   /**
    * Registers some custom serializers needed to transform swagger models to swagger-ui required json format.
    */
@@ -211,19 +203,6 @@ public class SpringSwaggerConfig {
   public JacksonSwaggerSupport jacksonScalaSupport() {
     JacksonSwaggerSupport jacksonSwaggerSupport = new JacksonSwaggerSupport();
     return jacksonSwaggerSupport;
-  }
-
-  @Autowired
-  @Bean(name = "springsMessageConverterObjectMapper")
-  public ObjectMapper springsMessageConverterObjectMapper(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
-    List<HttpMessageConverter<?>> messageConverters = requestMappingHandlerAdapter.getMessageConverters();
-    for (HttpMessageConverter<?> messageConverter : messageConverters) {
-      if (messageConverter instanceof MappingJackson2HttpMessageConverter) {
-        MappingJackson2HttpMessageConverter m = (MappingJackson2HttpMessageConverter) messageConverter;
-        return m.getObjectMapper();
-      }
-    }
-    throw new RuntimeException("Could not get an ObjectMapper from Spring's MappingJackson2HttpMessageConverter");
   }
 
   @VisibleForTesting

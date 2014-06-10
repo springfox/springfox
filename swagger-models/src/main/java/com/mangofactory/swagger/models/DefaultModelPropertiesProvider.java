@@ -13,13 +13,9 @@ import com.google.common.base.Function;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +25,13 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.uniqueIndex;
 
 @Component
-public class DefaultModelPropertiesProvider implements ModelPropertiesProvider, ApplicationContextAware {
+public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
 
   private static final Logger log = LoggerFactory.getLogger(DefaultModelPropertiesProvider.class);
   private ObjectMapper objectMapper;
   private final AlternateTypeProvider alternateTypeProvider;
   private final AccessorsProvider accessors;
   private final FieldsProvider fields;
-  private ApplicationContext applicationContext;
-
 
   @Autowired
   public DefaultModelPropertiesProvider(AlternateTypeProvider alternateTypeProvider, AccessorsProvider accessors,
@@ -120,7 +114,7 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider, 
           if (childProperty.accessorMemberIs(methodName(member))) {
             serializationCandidates.add(childProperty);
           }
-        } catch(Exception e) {
+        } catch (Exception e) {
           log.warn(e.getMessage());
         }
       }
@@ -169,18 +163,6 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider, 
     ArrayList<ModelProperty> modelProperties = newArrayList(deserializableFields(type));
     modelProperties.addAll(deserializableProperties(type));
     return modelProperties;
-  }
-
-  @Override
-  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-    this.applicationContext = applicationContext;
-  }
-
-  @PostConstruct
-  private void postConstruct(){
-    ObjectMapper springsMessageConverterObjectMapper =
-            (ObjectMapper) applicationContext.getBean("springsMessageConverterObjectMapper");
-    setObjectMapper(springsMessageConverterObjectMapper);
   }
 }
 
