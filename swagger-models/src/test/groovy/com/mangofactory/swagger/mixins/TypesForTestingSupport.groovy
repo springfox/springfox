@@ -12,6 +12,12 @@ class TypesForTestingSupport {
   static Class simpleType() {
     SimpleType
   }
+  static Class typeWithConstructor() {
+    TypeWithConstructor
+  }
+  static Class typeWithJsonPropertyAnnotation() {
+    TypeWithJsonProperty
+  }
   static Class complexType() {
     ComplexType
   }
@@ -93,5 +99,9 @@ class TypesForTestingSupport {
 
   static ResolvedType typeWithAlternateProperty() {
     resolver.resolve(TypeWithAlternateProperty);
+  }
+
+  static ResolvedType typeWithResponseEntityOfVoid() {
+    resolver.resolve(GenericType, resolver.resolve(ResponseEntity, Void))
   }
 }

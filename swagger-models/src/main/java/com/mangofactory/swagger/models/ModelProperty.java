@@ -6,7 +6,7 @@ import scala.Option;
 
 public interface ModelProperty {
     String getName();
-    ResolvedType getType();
+  ResolvedType getType();
     String typeName(ModelContext modelContext);
     String qualifiedTypeName();
     AllowableValues allowableValues();

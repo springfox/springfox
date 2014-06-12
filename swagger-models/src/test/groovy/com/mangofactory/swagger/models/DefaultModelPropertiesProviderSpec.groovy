@@ -1,18 +1,18 @@
 package com.mangofactory.swagger.models
 
-import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import spock.lang.Specification
+
+import static com.mangofactory.swagger.models.Accessors.isGetter
+import static com.mangofactory.swagger.models.Accessors.isSetter
+import static com.mangofactory.swagger.models.Accessors.propertyName
 
 @Mixin(TypesForTestingSupport)
 class DefaultModelPropertiesProviderSpec extends Specification {
   def "Property names are identified correctly based on (get/set) method names"() {
     given:
-      def propertyProvider = new AccessorsProvider(new TypeResolver(), new AlternateTypeProvider())
-
     expect:
-      propertyProvider.propertyName(methodName) == property
+      propertyName(methodName) == property
 
     where:
       methodName  || property
@@ -34,13 +34,12 @@ class DefaultModelPropertiesProviderSpec extends Specification {
     given:
       def sut = typeForTestingGettersAndSetters()
       def method = sut.methods.find { it.name.equals(methodName) }
-      def accessors = new AccessorsProvider(new TypeResolver(), new AlternateTypeProvider())
 
     expect:
-      accessors.isGetter(method) == isGetter
+      isGetter(method) == result
 
     where:
-      methodName      || isGetter
+      methodName      || result
       "getIntProp"    || true
       "setIntProp"    || false
       "isBoolProp"    || true
@@ -55,13 +54,12 @@ class DefaultModelPropertiesProviderSpec extends Specification {
     given:
       def sut = typeForTestingGettersAndSetters()
       def method = sut.methods.find { it.name.equals(methodName) }
-      def accessors = new AccessorsProvider(new TypeResolver(), new AlternateTypeProvider())
 
     expect:
-      accessors.isSetter(method) == isGetter
+      isSetter(method) == result
 
     where:
-      methodName      || isGetter
+      methodName      || result
       "getIntProp"    || false
       "setIntProp"    || true
       "isBoolProp"    || false

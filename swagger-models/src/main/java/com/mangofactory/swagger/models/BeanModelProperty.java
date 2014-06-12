@@ -2,6 +2,7 @@ package com.mangofactory.swagger.models;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.classmate.members.ResolvedMember;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.google.common.base.Strings;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
@@ -19,7 +20,7 @@ public class BeanModelProperty implements ModelProperty {
     private TypeResolver typeResolver;
     private final AlternateTypeProvider alternateTypeProvider;
 
-    public BeanModelProperty(String propertyName, ResolvedMethod method,
+  public BeanModelProperty(String propertyName, ResolvedMethod method,
             boolean isGetter, TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider) {
         name = propertyName;
         this.method = method;
@@ -32,7 +33,12 @@ public class BeanModelProperty implements ModelProperty {
         return name;
     }
 
-    @Override
+  public void setName(String alias) {
+    this.name = alias;
+  }
+
+
+  @Override
     public ResolvedType getType() {
         return alternateTypeProvider.alternateFor(realType());
     }
@@ -93,7 +99,7 @@ public class BeanModelProperty implements ModelProperty {
         return false;
     }
 
-    public boolean accessorMemberIs(String methodName) {
+    public static boolean accessorMemberIs(ResolvedMember method, String methodName) {
         return method.getRawMember().getName().equals(methodName);
     }
 }

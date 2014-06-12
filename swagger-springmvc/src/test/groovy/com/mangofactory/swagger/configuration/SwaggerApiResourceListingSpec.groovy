@@ -107,9 +107,9 @@ class SwaggerApiResourceListingSpec extends Specification {
       swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
 
       def resolver = new TypeResolver()
-      def modelPropertiesProvider = new DefaultModelPropertiesProvider(
+      def modelPropertiesProvider = new DefaultModelPropertiesProvider(settings.typeResolver,
               settings.alternateTypeProvider,
-              new AccessorsProvider(resolver, settings.alternateTypeProvider),
+              new AccessorsProvider(resolver),
               new FieldsProvider(resolver))
       modelPropertiesProvider.setObjectMapper(new ObjectMapper())
 

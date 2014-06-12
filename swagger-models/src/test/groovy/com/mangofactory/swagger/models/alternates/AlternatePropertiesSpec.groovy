@@ -21,4 +21,17 @@ class AlternatePropertiesSpec extends Specification {
       modelProperty.get().qualifiedType() == "java.lang.String"
       modelProperty.get().items().isEmpty()
   }
+
+  def "ResponseEntity«Void» renders correctly when an alternate type is provided" () {
+    given:
+      ModelProvider modelProvider = providerThatSubstitutesResponseEntityOfVoid()
+      Model model = modelProvider.modelFor(inputParam(typeWithResponseEntityOfVoid())).get()
+    expect:
+      model.name() == "GenericType«ResponseEntity«Void»»"
+      model.properties().contains("genericField")
+      def modelProperty = model.properties().get("genericField")
+      modelProperty.get().type() == "Void"
+      modelProperty.get().qualifiedType() == "java.lang.Void"
+      modelProperty.get().items().isEmpty()
+  }
 }

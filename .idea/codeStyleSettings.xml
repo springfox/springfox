@@ -4,7 +4,7 @@
     <option name="PER_PROJECT_SETTINGS">
       <value>
         <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="999" />
-        <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="999" />
+        <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="1" />
         <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="true" />
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
@@ -27,7 +27,6 @@
       </value>
     </option>
     <option name="USE_PER_PROJECT_SETTINGS" value="true" />
-    <option name="PREFERRED_PROJECT_CODE_STYLE" value="ak-codestyle" />
   </component>
 </project>
 

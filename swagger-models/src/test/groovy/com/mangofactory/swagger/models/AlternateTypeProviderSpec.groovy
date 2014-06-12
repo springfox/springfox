@@ -43,5 +43,6 @@ class AlternateTypeProviderSpec extends Specification {
       newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(SimpleType)  | SimpleType
       newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(ComplexType) | ComplexType
       newRule(genericClassOfType(WildcardType), WildcardType) | ComplexType                     | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | Void                            | Void
   }
 }

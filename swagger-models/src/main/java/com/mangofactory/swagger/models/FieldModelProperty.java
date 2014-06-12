@@ -82,7 +82,7 @@ public class FieldModelProperty implements ModelProperty {
         return name;
     }
 
-    @Override
+  @Override
     public ResolvedType getType() {
        return alternateTypeProvider.alternateFor(realType(childField));
     }

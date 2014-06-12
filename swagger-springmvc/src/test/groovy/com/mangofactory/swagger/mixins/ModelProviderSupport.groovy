@@ -11,8 +11,8 @@ class ModelProviderSupport {
     def fields = new FieldsProvider(resolver)
     SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
     def alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver());
-    def accessors = new AccessorsProvider(resolver, alternateTypeProvider)
-    def modelPropertiesProvider = new DefaultModelPropertiesProvider(alternateTypeProvider,
+    def accessors = new AccessorsProvider(resolver)
+    def modelPropertiesProvider = new DefaultModelPropertiesProvider(resolver, alternateTypeProvider,
             accessors, fields)
     modelPropertiesProvider.setObjectMapper(new ObjectMapper())
     def modelDependenciesProvider = modelDependencyProvider(resolver, alternateTypeProvider, modelPropertiesProvider)
