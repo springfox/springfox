@@ -13,9 +13,9 @@ import static com.mangofactory.swagger.ScalaUtils.emptyScalaList;
 import static com.mangofactory.swagger.ScalaUtils.toScalaList;
 
 /**
- * A class to represent a default set of authorizations to apply toe each api operation
- * To customize which request mappings/operations the list of authorizations are applied to
- * Specify the custom includePatterns or requestMethods
+ * A class to represent a default set of authorizations to apply to each api operation
+ * To customize which request mappings the list of authorizations are applied to Specify the custom includePatterns
+ * or requestMethods
  */
 public class AuthorizationContext {
 

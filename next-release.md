@@ -92,7 +92,7 @@ The `@EnableSwagger` annotation, in this example, enables swagger-springmvc out 
 json Resource Listing is available at /api-docs
 
 
-#### Spring xml Configuratio
+#### Spring xml Configuration
 - To get the default implementation simply define a bean of type: `com.mangofactory.swagger.configuration.SpringSwaggerConfig`
 
 ```xml

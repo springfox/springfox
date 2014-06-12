@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.paths;
 
-public class RelativeSwaggerPathProvider extends SwaggerPathProvider {
+public class  RelativeSwaggerPathProvider extends SwaggerPathProvider {
     public static final String ROOT = "/";
 
     @Override

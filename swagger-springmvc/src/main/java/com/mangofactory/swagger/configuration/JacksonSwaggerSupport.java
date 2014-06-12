@@ -51,8 +51,8 @@ public class JacksonSwaggerSupport implements ApplicationContextAware {
       }
     }
 
-    Map<String, DefaultModelPropertiesProvider> beans = applicationContext.getBeansOfType
-            (DefaultModelPropertiesProvider.class);
+    Map<String, DefaultModelPropertiesProvider> beans =
+            applicationContext.getBeansOfType(DefaultModelPropertiesProvider.class);
 
     for (DefaultModelPropertiesProvider defaultModelPropertiesProvider : beans.values()) {
       defaultModelPropertiesProvider.setObjectMapper(this.springsMessageConverterObjectMapper);
