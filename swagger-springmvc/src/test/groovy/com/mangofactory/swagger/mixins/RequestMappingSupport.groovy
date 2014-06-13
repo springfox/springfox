@@ -1,4 +1,5 @@
 package com.mangofactory.swagger.mixins
+
 import com.mangofactory.swagger.dummy.DummyClass
 import com.mangofactory.swagger.dummy.DummyController
 import com.mangofactory.swagger.dummy.controllers.FancyPetService
@@ -7,10 +8,7 @@ import com.mangofactory.swagger.dummy.controllers.PetService
 import com.mangofactory.swagger.dummy.models.FancyPet
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
-import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
-import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition
-import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition
+import org.springframework.web.servlet.mvc.condition.*
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 
 import javax.servlet.ServletContext
@@ -22,9 +20,11 @@ class RequestMappingSupport {
     ConsumesRequestCondition consumesRequestCondition = overrides['consumesRequestCondition'] ?: consumesRequestCondition()
     ProducesRequestCondition producesRequestCondition = overrides['producesRequestCondition'] ?: producesRequestCondition()
     PatternsRequestCondition patternsRequestCondition = overrides['patternsRequestCondition'] ?: singlePatternRequestCondition
+    ParamsRequestCondition paramsRequestCondition = overrides["paramsCondition"] ?: paramsRequestCondition()
     RequestMethodsRequestCondition requestMethodsRequestCondition =
             overrides['requestMethodsRequestCondition'] ?: requestMethodsRequestCondition(RequestMethod.values())
-    new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, null, null, consumesRequestCondition, producesRequestCondition, null)
+
+    new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, paramsRequestCondition, null, consumesRequestCondition, producesRequestCondition, null)
   }
 
   def dummyHandlerMethod(String methodName = "dummyMethod", Class<?>... parameterTypes = null) {
@@ -71,6 +71,10 @@ class RequestMappingSupport {
 
   def patternsRequestCondition(String... patterns) {
     new PatternsRequestCondition(patterns)
+  }
+
+  def paramsRequestCondition(String... params) {
+    new ParamsRequestCondition(params)
   }
 
   def consumesRequestCondition(String... conditions) {

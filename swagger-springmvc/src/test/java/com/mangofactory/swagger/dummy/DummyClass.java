@@ -116,6 +116,10 @@ public class DummyClass {
    public void methodWithRatherLongRequestPath() {
 
    }
+  @RequestMapping(value = "/parameter-conditions", params = "test=testValue")
+  public void methodWithParameterRequestCondition() {
+
+  }
    
    @ResponseBody
    public DummyModels.BusinessModel methodWithConcreteResponseBody() {

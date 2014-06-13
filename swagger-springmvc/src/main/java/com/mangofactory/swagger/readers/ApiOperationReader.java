@@ -67,6 +67,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       commandList.add(new OperationNicknameReader());
       commandList.add(new OperationPositionReader());
       commandList.add(new OperationParameterReader());
+      commandList.add(new OperationParameterRequestConditionReader());
       commandList.add(new MediaTypeReader());
       commandList.add(new OperationResponseMessageReader());
       commandList.add(new OperationDeprecatedReader());
@@ -114,4 +115,5 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       Collections.sort(operations, OPERATION_POSITIONAL_ORDERING);
       outerContext.put("operations", operations);
    }
+
 }

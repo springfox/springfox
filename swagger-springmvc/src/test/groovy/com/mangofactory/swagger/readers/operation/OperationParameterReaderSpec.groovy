@@ -18,8 +18,8 @@ import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-import static com.google.common.collect.Maps.*
-import static com.mangofactory.swagger.ScalaUtils.*
+import static com.google.common.collect.Maps.newHashMap
+import static com.mangofactory.swagger.ScalaUtils.toOption
 
 @Mixin(RequestMappingSupport)
 class OperationParameterReaderSpec extends Specification {
@@ -81,4 +81,6 @@ class OperationParameterReaderSpec extends Specification {
       'paramType'     | "path"
 
    }
+
+
 }
