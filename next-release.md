@@ -8,8 +8,8 @@
 
 This project integrates swagger with the Spring Web MVC framework. The complete swagger specification is available
 at https://github.com/wordnik/swagger-spec and it's worth being familiar with the main concepts of the specification.
-
-Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/wordnik/swagger-ui) to provide the user interface which visualises an applications JSON api's. The most common know use of this project has been 
+Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/wordnik/swagger-ui) 
+to provide the user interface which visualises an applications JSON api's. The most common know use of this project has been 
 Spring Web MVC applications using springs `MappingJackson2HttpMessageConverter` to produce JSON API endpoints.
 
 The demo project (https://github.com/adrianbk/swagger-springmvc-demo) containes a number of examples using both spring web mvc and spring-boot.
@@ -277,10 +277,38 @@ to use absolute urls use `AbsoluteSwaggerPathProvider` as a guide and configure 
 
 ### Customization
 
-#### Ordering the api's within a ResourceListing
+#### Excluding api endpoints
+Annotate a controller class or controller methods with the `@ApiIgnore` annotation.
+
+For more powerful control, specify regular expressions:
 
 ```java
-//If not supplied the default the plugin default is ResourceListingLexicographicalOrdering
+swaggerSpringMvcPlugin.includePatterns(...)
+```
+
+Exclude all controllers or controller handler methods with specific annotations .
+```java
+swaggerSpringMvcPlugin.excludeAnnotations(MyCustomApiExclusion.class)
+
+```
+
+#### HTTP Response codes and messages
+Configuring global response messages for RequestMappings
+```java
+swaggerSpringMvcPlugin.globalResponseMessage(new ResponseMessage(OK.value(), "200 means all good \o/", toOption(null)))
+```
+
+Configuring per-RequestMappings method response messages
+```java
+@ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
+public .... createSomething(..)
+ 
+```
+
+#### Ordering the api's within a ResourceListing
+- Defaults to `ResourceListingLexicographicalOrdering`
+
+```java
 swaggerSpringMvcPlugin.apiListingReferenceOrdering(new ResourceListingPositionalOrdering())
 ```
 
@@ -305,9 +333,20 @@ Use the swagger `ApiOperation` annotation.
  ```
  
 #### Ordering ApiDescriptions (withing ApiListing's)
-- Defaults to ApiDescriptionLexicographicalOrdering
+- Defaults to `ApiDescriptionLexicographicalOrdering`
 
 ```java
 swaggerSpringMvcPlugin.apiDescriptionOrdering(new MyCustomApiDescriptionOrdering());
 ```
+ 
+ 
+### Model Customization
+#### Excluding spring handler method arguments or custom types
+To exclude controller method arguments form the generated swagger model JSON.
+```java
+swaggerSpringMvcPlugin.ignoredParameterTypes(MyCustomType.class)
+```
+By default, a number of Spring's handler method arguments are ignored. See: com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
+ 
+ 
  
