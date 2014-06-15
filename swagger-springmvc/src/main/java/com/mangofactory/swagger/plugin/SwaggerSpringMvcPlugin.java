@@ -303,10 +303,21 @@ public class SwaggerSpringMvcPlugin {
    *
    * @see com.mangofactory.swagger.scanners.ApiListingScanner
    * @param apiDescriptionOrdering
-   * @return
+   * @return this SwaggerSpringMvcPlugin
    */
   public SwaggerSpringMvcPlugin apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
     this.apiDescriptionOrdering = apiDescriptionOrdering;
+    return this;
+  }
+
+  /**
+   * Controls which ResourceListing's, RequestMappings belong to.
+   * @see com.mangofactory.swagger.scanners.ApiListingReferenceScanner#scanSpringRequestMappings()
+   * @param resourceGroupingStrategy
+   * @return this SwaggerSpringMvcPlugin
+   */
+  public SwaggerSpringMvcPlugin resourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
+    this.resourceGroupingStrategy = resourceGroupingStrategy;
     return this;
   }
 
