@@ -259,13 +259,16 @@ Please see the Swagger Specification for a detailed explanation.
 
 
 ### Notable Dependencies
+- Spring 3.2.x or above 
+- scala lib 2.10.0
+- jackson 2.1.5 (older/newer versions may work)
 
 ### Urls (SwaggerPathProvider)
-The swagger specification recommends the use of absolute URL's for where possible - specifically the the `path` attribute of 
+The swagger specification recommends the use of absolute URL's where possible - specifically the the `path` attribute of 
 api's within the ResourceListing's and the `basePath` attribute of Api Declarations. Most users of swagger-springmvc have expressed 
-a preference for relative urls hence `RelativeSwaggerPathProvider` is the default SwaggerPathProvider`. `AbsoluteSwaggerPathProvider` can be
-used to provide absolute urls. `AbsoluteSwaggerPathProvider`has a hardcoded appRoot but demonstrates the concept. If you wish use absolute urls:
-use `AbsoluteSwaggerPathProvider` as a guide and configure your `SwaggerSpringMvcPlugin` with: 
+a preference for relative urls hence `RelativeSwaggerPathProvider` is the default `SwaggerPathProvider`. `AbsoluteSwaggerPathProvider` 
+can be used to provide absolute urls. `AbsoluteSwaggerPathProvider` has a hardcoded appRoot but demonstrates the concept. If you wish 
+to use absolute urls use `AbsoluteSwaggerPathProvider` as a guide and configure your `SwaggerSpringMvcPlugin` with: 
  
  ```java
 .pathProvider(myPathProvider) 
