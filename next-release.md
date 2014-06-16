@@ -35,7 +35,7 @@ __Maven__
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
     <version>0.8.4</version>
-</dependency
+</dependency>
 
 ```
 
