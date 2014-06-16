@@ -23,14 +23,6 @@ Or maven central: http://repo1.maven.org/maven2/
 __Maven__
 
 ```xml
-<repositories>
-    <repository>
-      <id>sonatype-snapshots</id>
-      <name>Sonatype</name>
-      <url>https://oss.sonatype.org/content/repositories/releases/</url>
-    </repository>
-</repositories>
-
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
