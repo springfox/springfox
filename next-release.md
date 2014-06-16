@@ -348,5 +348,53 @@ swaggerSpringMvcPlugin.ignoredParameterTypes(MyCustomType.class)
 ```
 By default, a number of Spring's handler method arguments are ignored. See: com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
  
+
+##Development
+
+- Running tests with coverage:
+```
+mvn test jacoco:check
+```
+Report directory: \target\site\jacoco-ut
+
+Coverage only
+```
+mvn jacoco:check
+```
+
+Deploy to local nexus
+```
+mvn deploy
+```
+
+-Coverage Help
+```
+mvn org.jacoco:jacoco-maven-plugin:0.6.3.201306030806:check
+```
+
+Skipping coverage
+```
+mvn deploy -Djacoco.skip=true
+```
+
+Pre Commit or before submitting a pull request
+```
+mvn verify
+```
+
  
- 
+License
+-------
+
+Copyright 2012 Marty Pitt - [@martypitt](https://github.com/martypitt), Dilip Krishnan - [@dilipkrish](https://github.com/dilipkrish),
+Adrian Kelly -  [@adrianbk](https://github.com/adrianbk),
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at [apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
