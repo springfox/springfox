@@ -249,6 +249,18 @@ Resource Listing. Why would you need more than one Resource Listing?
 Please see the Swagger Specification for a detailed explanation.
 
 
+3. API Documentation Endpoints
+All swagger documentation (JSON responses) are served from DefaultSwaggerController. The controller maintains a cache
+of ResourcesListing's which are uniquely identified by the `swaggerGroup`. There is a 1:1 relationship between 
+ResourceListings and swagger groups (`SwaggerSpringMvcPlugin` instances). A typical application will have a single 
+SwaggerSpringMvcPlugin which is given the unique identifier 'default'.
+
+| Path                    | Description                                                             |
+|---                      |---                                                                      |
+| /api-docs               | Returns the first _Resource Listing_ found in the cache                 |
+| /api-docs?group=default | Returns the _Resource Listing_ for the default swagger group            |
+| /api-docs?group=group1  | Returns the _Resource Listing_ for the swagger group 'group1'           |
+| /api-docs/group1/albums | Returns the album's _Api Declaration_ for the swagger group 'group1'    |
 
 ### Notable Dependencies
 - Spring 3.2.x or above 
@@ -265,7 +277,6 @@ to use absolute urls use `AbsoluteSwaggerPathProvider` as a guide and configure 
  ```java
 .pathProvider(myPathProvider) 
  ```
-
 
 ### Customization
 
