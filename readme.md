@@ -52,14 +52,14 @@ __Maven__
   <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.4-SNAPSHOT</version>
+    <version>0.8.5-SNAPSHOT</version>
   </dependency>
 ```
 
 __Gradle__
 
 ```groovy
-compile "com.mangofactory:swagger-springmvc:0.8.4-SNAPSHOT"
+compile "com.mangofactory:swagger-springmvc:0.8.5-SNAPSHOT"
 ```
 
 ### Usage (Quick guide)
