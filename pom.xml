@@ -29,6 +29,7 @@
         <spring-hateoas.version>0.10.0.RELEASE</spring-hateoas.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <github.host>me-github</github.host>
+        <maven.bundle.plugin.version>2.3.7</maven.bundle.plugin.version>
     </properties>
     <name>Swagger SpringMVC</name>
     <url>https://github.com/martypitt/swagger-springmvc</url>
@@ -105,6 +106,7 @@
             </build>
         </profile>
     </profiles>
+
     <repositories>
         <repository>
             <id>sonatype</id>
@@ -378,6 +380,17 @@
             </plugin>
 
         </plugins>
+
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.felix</groupId>
+              <artifactId>maven-bundle-plugin</artifactId>
+              <version>${maven.bundle.plugin.version}</version>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+        
     </build>
     <reporting>
         <plugins>

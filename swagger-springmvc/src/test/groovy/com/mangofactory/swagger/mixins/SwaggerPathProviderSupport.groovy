@@ -7,14 +7,14 @@ import com.mangofactory.swagger.paths.SwaggerPathProvider
 import javax.servlet.ServletContext
 
 class SwaggerPathProviderSupport {
-   def absoluteSwaggerPathProvider(){
+  AbsoluteSwaggerPathProvider absoluteSwaggerPathProvider(){
       SwaggerPathProvider swaggerPathProvider = new AbsoluteSwaggerPathProvider();
       swaggerPathProvider.setApiResourcePrefix("api/v1");
       swaggerPathProvider.servletContext = [getContextPath: {return "/context-path"}] as ServletContext
       return swaggerPathProvider
    }
 
-   def relativeSwaggerPathProvider(){
+  RelativeSwaggerPathProvider relativeSwaggerPathProvider(){
       new RelativeSwaggerPathProvider()
    }
 }

@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping;
@@ -42,6 +43,7 @@ import static com.google.common.collect.Sets.*;
 import static com.mangofactory.swagger.ScalaUtils.*;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 @Configuration
 @ComponentScan(basePackages = {"com.mangofactory.swagger.controllers"})
 @Import(SwaggerModelsConfiguration.class)
@@ -191,6 +193,14 @@ public class SpringSwaggerConfig {
   public JacksonSwaggerSupport jacksonScalaSupport() {
     JacksonSwaggerSupport jacksonSwaggerSupport = new JacksonSwaggerSupport();
     return jacksonSwaggerSupport;
+  }
+
+  /**
+   * In case there is no ObjectMapper bean defined, we do
+   */
+  @Bean(name = "swaggerObjectMapper")
+  public ObjectMapper springsMessageConverterObjectMapper() {
+    return jacksonScalaSupport().getSpringsMessageConverterObjectMapper();
   }
 
   @VisibleForTesting

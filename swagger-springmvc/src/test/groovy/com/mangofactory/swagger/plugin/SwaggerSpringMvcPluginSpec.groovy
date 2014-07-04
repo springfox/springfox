@@ -64,13 +64,13 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
     when:
-      plugin.globalResponseMessage(RequestMethod.GET, [new ResponseMessage(OK.value(), "blah", toOption(null))])
+      plugin.globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", toOption(null))])
             .build()
 
     then:
       SwaggerGlobalSettings swaggerGlobalSettings = plugin.swaggerGlobalSettings
-      swaggerGlobalSettings.getGlobalResponseMessages()[RequestMethod.GET][0].message() == "blah"
-      swaggerGlobalSettings.getGlobalResponseMessages()[RequestMethod.GET].size() == 1
+      swaggerGlobalSettings.getGlobalResponseMessages()[GET][0].message() == "blah"
+      swaggerGlobalSettings.getGlobalResponseMessages()[GET].size() == 1
 
     and: "defaults are preserved"
       swaggerGlobalSettings.getGlobalResponseMessages().keySet().containsAll(

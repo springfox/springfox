@@ -15,7 +15,7 @@ import javax.servlet.ServletContext
 
 class RequestMappingSupport {
 
-  def requestMappingInfo(String path, Map overrides = [:]) {
+  RequestMappingInfo requestMappingInfo(String path, Map overrides = [:]) {
     PatternsRequestCondition singlePatternRequestCondition = patternsRequestCondition([path] as String[])
     ConsumesRequestCondition consumesRequestCondition = overrides['consumesRequestCondition'] ?: consumesRequestCondition()
     ProducesRequestCondition producesRequestCondition = overrides['producesRequestCondition'] ?: producesRequestCondition()
@@ -27,73 +27,77 @@ class RequestMappingSupport {
     new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, paramsRequestCondition, null, consumesRequestCondition, producesRequestCondition, null)
   }
 
-  def dummyHandlerMethod(String methodName = "dummyMethod", Class<?>... parameterTypes = null) {
+  HandlerMethod dummyHandlerMethod(String methodName = "dummyMethod", Class<?>... parameterTypes = null) {
     def clazz = new DummyClass()
     Class c = clazz.getClass();
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
-  def handlerMethodIn(Class<?> aClass, String methodName = "dummyMethod", Class<?>... parameterTypes = null) {
+  HandlerMethod handlerMethodIn(Class<?> aClass, String methodName = "dummyMethod", Class<?>... parameterTypes = null) {
     new HandlerMethod(aClass, aClass.getMethod(methodName, parameterTypes))
   }
 
-  def dummyControllerHandlerMethod(String methodName = "dummyMethod", parameterTypes = null) {
+  HandlerMethod dummyControllerHandlerMethod(String methodName = "dummyMethod", parameterTypes = null) {
     def clazz = new DummyController()
     Class c = clazz.getClass();
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
 
-  def petServiceHandlerMethod(String methodName = "getPetById", parameterTypes = String) {
+  HandlerMethod petServiceHandlerMethod(String methodName = "getPetById", parameterTypes = String) {
     def clazz = new PetService()
     Class c = clazz.getClass()
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
-  def fancyPetServiceHandlerMethod(String methodName = "createObject", parameterTypes = FancyPet) {
+  HandlerMethod fancyPetServiceHandlerMethod(String methodName = "createObject", parameterTypes = FancyPet) {
     def clazz = new FancyPetService()
     Class c = clazz.getClass()
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
 
-  def multipleRequestMappingsHandlerMethod(String methodName = "canGroom", parameterTypes = String) {
+  HandlerMethod multipleRequestMappingsHandlerMethod(String methodName = "canGroom", parameterTypes = String) {
     def clazz = new PetGroomingService()
     Class c = clazz.getClass()
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
-  def ignorableClass() {
-    return new DummyClass.ApiIgnorableClass().getClass()
+  Class ignorableClass() {
+    DummyClass.ApiIgnorableClass
   }
 
-  def ignorableHandlerMethod() {
+  def apiImplicitParamsClass() {
+    DummyClass.ApiImplicitParamsClass.class;
+  }
+
+  HandlerMethod ignorableHandlerMethod() {
     def clazz = new DummyClass.ApiIgnorableClass()
     Class c = clazz.getClass();
     new HandlerMethod(clazz, c.getMethod("dummyMethod", null))
   }
 
-  def patternsRequestCondition(String... patterns) {
+  PatternsRequestCondition patternsRequestCondition(String... patterns) {
     new PatternsRequestCondition(patterns)
   }
 
-  def paramsRequestCondition(String... params) {
+  ParamsRequestCondition paramsRequestCondition(String... params) {
     new ParamsRequestCondition(params)
   }
 
-  def consumesRequestCondition(String... conditions) {
+  ConsumesRequestCondition consumesRequestCondition(String... conditions) {
     new ConsumesRequestCondition(conditions)
   }
 
-  def producesRequestCondition(String... conditions) {
+  ProducesRequestCondition producesRequestCondition(String... conditions) {
     new ProducesRequestCondition(conditions)
   }
 
-  def requestMethodsRequestCondition(RequestMethod... requestMethods) {
+  RequestMethodsRequestCondition requestMethodsRequestCondition(RequestMethod... requestMethods) {
     new RequestMethodsRequestCondition(requestMethods)
   }
 
-  def servletContext() {
+  ServletContext servletContext() {
     [getContextPath: { return "/context-path" }] as ServletContext
   }
 }

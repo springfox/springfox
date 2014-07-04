@@ -7,6 +7,7 @@ import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.ApiListingSupport
 import com.mangofactory.swagger.mixins.AuthSupport
+import com.mangofactory.swagger.mixins.JsonSupport
 import com.wordnik.swagger.model.AuthorizationType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
@@ -20,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*
 
-@Mixin([com.mangofactory.swagger.mixins.JsonSupport, ApiListingSupport, AuthSupport])
+@Mixin([JsonSupport, ApiListingSupport, AuthSupport])
 class DefaultSwaggerControllerSpec extends Specification {
 
    @Shared

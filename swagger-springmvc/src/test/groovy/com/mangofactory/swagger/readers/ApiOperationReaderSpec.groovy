@@ -24,7 +24,7 @@ class ApiOperationReaderSpec extends Specification {
       RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
               [
                       patternsRequestCondition: patternsRequestCondition('/doesNotMatterForThisTest', '/somePath/{businessId:\\d+}'),
-                      requestMethodsRequestCondition: requestMethodsRequestCondition(RequestMethod.PATCH, POST)
+                      requestMethodsRequestCondition: requestMethodsRequestCondition(PATCH, POST)
 
               ]
       )
@@ -34,7 +34,7 @@ class ApiOperationReaderSpec extends Specification {
       AuthorizationContext authorizationContext = new AuthorizationContext.AuthorizationContextBuilder(defaultAuth())
               .withRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
               .withIncludePatterns([".*"])
-              .withRequestMethods(RequestMethod.values())
+              .withRequestMethods(values())
               .build()
 
       def settings = new SwaggerGlobalSettings()
@@ -52,7 +52,7 @@ class ApiOperationReaderSpec extends Specification {
 
     then:
       Operation apiOperation = result['operations'][0]
-      apiOperation.method() == RequestMethod.PATCH.toString()
+      apiOperation.method() == PATCH.toString()
       apiOperation.summary() == handlerMethod.method.name
       apiOperation.notes() == handlerMethod.method.name
       apiOperation.nickname() == handlerMethod.method.name

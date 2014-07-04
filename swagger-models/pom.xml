@@ -4,6 +4,7 @@
     <artifactId>swagger-models</artifactId>
     <version>0.8.6-SNAPSHOT</version>
     <groupId>com.mangofactory.swagger</groupId>
+    <packaging>bundle</packaging>
     <name>models</name>
 
     <parent>
@@ -67,5 +68,38 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>3.1</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                      <Export-Package>
+                        com.mangofactory.swagger.models,
+                        com.mangofactory.swagger.models.configuration,
+                        com.mangofactory.swagger.models.alternates
+                      </Export-Package>
+                      <Import-Package>
+                        org.springframework.beans.factory,
+                        org.springframework.cglib.core,
+                        org.springframework.cglib.proxy,
+                        org.springframework.beans,
+                        org.springframework.cglib.reflect,
+                        *
+                      </Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

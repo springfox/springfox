@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
 import com.wordnik.swagger.model.ApiInfo;
@@ -46,7 +47,12 @@ public class CustomJavaPluginConfig {
               .includePatterns("/feature.*");
    }
 
-   private ApiInfo apiInfo() {
+  @Bean
+  public ObjectMapper objectMapper() {
+    return new ObjectMapper();
+  }
+
+  private ApiInfo apiInfo() {
       ApiInfo apiInfo = new ApiInfo(
               "My Apps API Title",
               "My Apps API Description",

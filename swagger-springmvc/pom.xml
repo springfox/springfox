@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>swagger-springmvc</artifactId>
     <version>0.8.6-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <name>springmvc</name>
     <dependencies>
         <dependency>
@@ -127,5 +127,32 @@
             </exclusions>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Export-Package>
+                          com.mangofactory.swagger,
+                          com.mangofactory.swagger.configuration,
+                          com.mangofactory.swagger.controllers
+                        </Export-Package>
+                        <Import-Package>
+                          org.springframework.beans.factory,
+                          org.springframework.cglib.core,
+                          org.springframework.cglib.proxy,
+                          org.springframework.beans,
+                          org.springframework.cglib.reflect,
+                          *
+                        </Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -1,11 +1,14 @@
-package com.mangofactory.swagger.models;
+package com.mangofactory.swagger.models.property.bean;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMember;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.google.common.base.Strings;
+import com.mangofactory.swagger.models.ModelContext;
+import com.mangofactory.swagger.models.ResolvedTypes;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
+import com.mangofactory.swagger.models.property.ModelProperty;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.model.AllowableValues;
 import org.springframework.core.annotation.AnnotationUtils;
