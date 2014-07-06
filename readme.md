@@ -26,7 +26,7 @@ __Maven__
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.4</version>
+    <version>0.8.5</version>
 </dependency>
 
 ```
@@ -34,32 +34,32 @@ __Maven__
 __Gradle__
 
 ```groovy
-compile "com.mangofactory:swagger-springmvc:0.8.4"
+compile "com.mangofactory:swagger-springmvc:0.8.5"
 ```
 
 #### Snapshot version
 
 __Maven__
 ```xml
-  <repositories>
+<repositories>
     <repository>
       <id>sonatype-snapshots</id>
       <name>Sonatype</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </repository>
-  </repositories>
+</repositories>
 
-  <dependency>
+<dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.5-SNAPSHOT</version>
-  </dependency>
+    <version>0.8.6-SNAPSHOT</version>
+</dependency>
 ```
 
 __Gradle__
 
 ```groovy
-compile "com.mangofactory:swagger-springmvc:0.8.5-SNAPSHOT"
+compile "com.mangofactory:swagger-springmvc:0.8.6-SNAPSHOT"
 ```
 
 ### Usage (Quick guide)
@@ -215,7 +215,7 @@ The following is one way to serve static content from /src/main/webapp
 <mvc:default-servlet-handler/>
 ```
 
-### Migration From 0.8.0 -> 0.8.4
+### Migration From 0.8.0 -> 0.8.4+
 Prior to 0.8.4 the configuration of Swagger-springmvc was far too verbose as indicated by a number of users. SwaggerSpringMvcPlugin 
 was introduced to make configuration simpler and less verbose. It is recommended to follow the usage guides above and migrate 
 your swagger-springmvc configuration to use the `SwaggerSpringMvcPlugin`
@@ -237,6 +237,7 @@ Swagger-springmvc stores the generated swagger documentation, in memory, and ser
 ![alt tag](https://raw.githubusercontent.com/martypitt/swagger-springmvc/master/docs/swaggerSpringMvc.png)
 
 1. Swagger group
+
 A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
 within your application. The reason this concept was introduced was to support applications which require more than one
 Resource Listing. Why would you need more than one Resource Listing?
@@ -246,14 +247,19 @@ Resource Listing. Why would you need more than one Resource Listing?
  In most cases an application will not need more than one Resource Listing and the concept of swagger groups can be ignored.
 
 2. Resource Listing
+
 Please see the Swagger Specification for a detailed explanation.
 
 
 3. API Documentation Endpoints
+
 All swagger documentation (JSON responses) are served from DefaultSwaggerController. The controller maintains a cache
 of ResourcesListing's which are uniquely identified by the `swaggerGroup`. There is a 1:1 relationship between 
 ResourceListings and swagger groups (`SwaggerSpringMvcPlugin` instances). A typical application will have a single 
 SwaggerSpringMvcPlugin which is given the unique identifier 'default'.
+
+__Note:__ The below paths are relative to your applications context path and/or DispatcherServlet `url-pattern` 
+
 
 | Path                    | Description                                                             |
 |---                      |---                                                                      |

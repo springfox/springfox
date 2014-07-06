@@ -1,3 +1,6 @@
+swagger-springmvc-0.8.5 / 2014-06-07
+==================
+ * Allows detection of customs SwaggerSpringMvcPlugins from spring context's with ancestors.
 
 swagger-springmvc-0.8.4 / 2014-04-27 
 ==================
