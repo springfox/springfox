@@ -3,6 +3,7 @@ package com.mangofactory.swagger.plugin;
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -33,7 +34,9 @@ public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshe
          log.info("Context refreshed");
          ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
 
-         Map<String, SwaggerSpringMvcPlugin> plugins = applicationContext.getBeansOfType(SwaggerSpringMvcPlugin.class);
+            Map<String, SwaggerSpringMvcPlugin> plugins = BeanFactoryUtils.beansOfTypeIncludingAncestors(
+                    applicationContext,
+                    SwaggerSpringMvcPlugin.class);
 
          if (plugins.isEmpty()) {
             log.info("Did not find any SwaggerSpringMvcPlugins so creating a default one");
