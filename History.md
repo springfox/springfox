@@ -1,3 +1,12 @@
+swagger-springmvc-0.8.6 
+==================
+ * 8294504b1b867d39d66e5ef69306c245c1496161
+Adding the posibility of ignoring an entire controller
+ - Ingoring all methods of a controller by adding an excluded annotation
+    on class level
+ - @ApiIgnore can now be specified on Type, but also on Parameter and has
+   been added to the defaultIgnorableParameterTypes Set
+
 swagger-springmvc-0.8.5 / 2014-06-07
 ==================
  * Allows detection of customs SwaggerSpringMvcPlugins from spring context's with ancestors.
