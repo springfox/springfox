@@ -101,6 +101,7 @@ public class SpringSwaggerConfig {
     ignored.add(BindingResult.class);
     ignored.add(ServletContext.class);
     ignored.add(UriComponentsBuilder.class);
+    ignored.add(ApiIgnore.class);
     return ignored;
   }
 
