@@ -7,6 +7,8 @@ import com.mangofactory.swagger.ordering.OperationPositionalOrdering;
 import com.mangofactory.swagger.readers.operation.OperationAuthReader;
 import com.mangofactory.swagger.readers.operation.OperationDeprecatedReader;
 import com.mangofactory.swagger.readers.operation.OperationHttpMethodReader;
+import com.mangofactory.swagger.readers.operation.OperationImplicitParameterReader;
+import com.mangofactory.swagger.readers.operation.OperationImplicitParametersReader;
 import com.mangofactory.swagger.readers.operation.OperationNicknameReader;
 import com.mangofactory.swagger.readers.operation.OperationNotesReader;
 import com.mangofactory.swagger.readers.operation.OperationParameterReader;
@@ -67,6 +69,8 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       commandList.add(new OperationNicknameReader());
       commandList.add(new OperationPositionReader());
       commandList.add(new OperationParameterReader());
+      commandList.add(new OperationImplicitParametersReader());
+      commandList.add(new OperationImplicitParameterReader());
       commandList.add(new OperationParameterRequestConditionReader());
       commandList.add(new MediaTypeReader());
       commandList.add(new OperationResponseMessageReader());

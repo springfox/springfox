@@ -33,7 +33,10 @@ public class OperationParameterReader implements Command<RequestMappingContext> 
                 = new HandlerMethodResolver(swaggerGlobalSettings.getTypeResolver());
 
         List<ResolvedMethodParameter> methodParameters = handlerMethodResolver.methodParameters(handlerMethod);
-        List<Parameter> parameters = newArrayList();
+        List<Parameter> parameters = (List<Parameter>) context.get("parameters");
+        if (parameters == null) {
+           parameters = newArrayList();
+        }
         List<Command<RequestMappingContext>> commandList = newArrayList();
         commandList.add(new ParameterAllowableReader());
         commandList.add(new ParameterDataTypeReader());
