@@ -149,6 +149,8 @@ public class DummyClass {
 
    @ApiResponses({ @ApiResponse(code = 413, message = "a message")})
    public void methodWithApiResponses(){}
+
+   @ApiIgnore
    public static class ApiIgnorableClass {
       @ApiIgnore
       public void dummyMethod() {

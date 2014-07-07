@@ -115,7 +115,19 @@ public class ApiListingReferenceScanner {
 
    private boolean shouldIncludeRequestMapping(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
       return requestMappingMatchesAnIncludePattern(requestMappingInfo, handlerMethod)
+              && !classHasIgnoredAnnotatedRequestMapping(handlerMethod.getMethod().getDeclaringClass())
               && !hasIgnoredAnnotatedRequestMapping(handlerMethod);
+   }
+   public boolean classHasIgnoredAnnotatedRequestMapping(Class<?> handlerClass) {
+      if (null != excludeAnnotations) {
+         for (Class<? extends Annotation> annotation : excludeAnnotations) {
+            if (handlerClass.isAnnotationPresent(annotation)) {
+               log.info(format("Excluding method as its class is annotated with: %s", annotation));
+               return true;
+            }
+         }
+      }
+      return false;
    }
 
    public boolean hasIgnoredAnnotatedRequestMapping(HandlerMethod handlerMethod) {

@@ -63,6 +63,10 @@ class RequestMappingSupport {
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
+  def ignorableClass() {
+    return new DummyClass.ApiIgnorableClass().getClass()
+  }
+
   def ignorableHandlerMethod() {
     def clazz = new DummyClass.ApiIgnorableClass()
     Class c = clazz.getClass();
