@@ -29,19 +29,7 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
     AllowableValues allowableValues = null;
     String allowableValueString = findAnnotatedAllowableValues(methodParameter);
     if (allowableValueString!=null && !"".equals(allowableValueString)) {
-      allowableValueString = allowableValueString.trim().replaceAll(" ", "");
-      if (allowableValueString.startsWith("range[")) {
-        allowableValueString = allowableValueString.replaceAll("range\\[", "").replaceAll("]", "");
-        Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
-        List<String> ranges = newArrayList(split);
-        allowableValues = new AllowableRangeValues(ranges.get(0), ranges.get(1));
-      } else if (allowableValueString.contains(",")) {
-        Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
-        allowableValues = new AllowableListValues(toScalaList(newArrayList(split)), "LIST");
-      } else if (!isBlank(allowableValueString)) {
-        List<String> singleVal = Arrays.asList(allowableValueString.trim());
-        allowableValues = new AllowableListValues(toScalaList(singleVal), "LIST");
-      }
+      allowableValues = ParameterAllowableReader.getAllowableValueFromString(allowableValueString);
     } else {
       if (methodParameter.getParameterType().isEnum()) {
         Object[] enumConstants = methodParameter.getParameterType().getEnumConstants();
@@ -61,6 +49,24 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
       }
     }
     context.put("allowableValues", allowableValues);
+  }
+
+  public static AllowableValues getAllowableValueFromString(String allowableValueString) {
+     AllowableValues allowableValues = null;
+     allowableValueString = allowableValueString.trim().replaceAll(" ", "");
+     if (allowableValueString.startsWith("range[")) {
+        allowableValueString = allowableValueString.replaceAll("range\\[", "").replaceAll("]", "");
+        Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
+        List<String> ranges = newArrayList(split);
+        allowableValues = new AllowableRangeValues(ranges.get(0), ranges.get(1));
+     } else if (allowableValueString.contains(",")) {
+        Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
+        allowableValues = new AllowableListValues(toScalaList(newArrayList(split)), "LIST");
+     } else if (!isBlank(allowableValueString)) {
+        List<String> singleVal = Arrays.asList(allowableValueString.trim());
+        allowableValues = new AllowableListValues(toScalaList(singleVal), "LIST");
+     }
+     return allowableValues;
   }
 
   private String findAnnotatedAllowableValues(MethodParameter methodParameter) {

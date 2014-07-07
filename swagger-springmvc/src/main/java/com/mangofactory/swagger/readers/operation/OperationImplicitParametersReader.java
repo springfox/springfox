@@ -12,7 +12,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-public class ImplicitParametersReader implements Command<RequestMappingContext> {
+public class OperationImplicitParametersReader implements Command<RequestMappingContext> {
    @Override
    public void execute(RequestMappingContext context) {
       HandlerMethod handlerMethod = context.getHandlerMethod();
@@ -21,13 +21,12 @@ public class ImplicitParametersReader implements Command<RequestMappingContext> 
          return;
       }
       ApiImplicitParams annotation = method.getAnnotation(ApiImplicitParams.class);
-      ImplicitParameterReader implicitParameter = new ImplicitParameterReader();
       List<Parameter> parameters = (List<Parameter>) context.get("parameters");
       if (parameters == null) {
          parameters = newArrayList();
       }
       for (ApiImplicitParam param: annotation.value()) {
-         parameters.add(implicitParameter.getImplicitParameter(param));
+         parameters.add(OperationImplicitParameterReader.getImplicitParameter(param));
       }
       context.put("parameters", parameters);
    }
