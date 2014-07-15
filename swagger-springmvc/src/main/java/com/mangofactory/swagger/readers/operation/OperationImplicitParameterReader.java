@@ -5,6 +5,7 @@ import com.mangofactory.swagger.readers.operation.parameter.ParameterAllowableRe
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.model.Parameter;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.method.HandlerMethod;
 
 import java.lang.reflect.Method;
@@ -18,16 +19,15 @@ public class OperationImplicitParameterReader implements Command<RequestMappingC
    public void execute(RequestMappingContext context) {
       HandlerMethod handlerMethod = context.getHandlerMethod();
       Method method = handlerMethod.getMethod();
-      if (!method.isAnnotationPresent(ApiImplicitParam.class)) {
-         return;
+      ApiImplicitParam annotation = AnnotationUtils.findAnnotation(method, ApiImplicitParam.class);
+      if (null != annotation) {
+         List<Parameter> parameters = (List<Parameter>) context.get("parameters");
+         if (parameters == null) {
+            parameters = newArrayList();
+         }
+         parameters.add(OperationImplicitParameterReader.getImplicitParameter(annotation));
+         context.put("parameters", parameters);
       }
-      ApiImplicitParam annotation = method.getAnnotation(ApiImplicitParam.class);
-      List<Parameter> parameters = (List<Parameter>) context.get("parameters");
-      if (parameters == null) {
-         parameters = newArrayList();
-      }
-      parameters.add(OperationImplicitParameterReader.getImplicitParameter(annotation));
-      context.put("parameters", parameters);
    }
 
    public static Parameter getImplicitParameter(ApiImplicitParam param) {

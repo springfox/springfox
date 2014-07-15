@@ -44,5 +44,6 @@ class OperationImplicitParamsReaderSpec extends Specification {
       dummyHandlerMethod('methodWithApiImplicitParam')                          | 1
       dummyHandlerMethod('methodWithApiImplicitParamAndInteger', Integer.class) | 2
       dummyHandlerMethod('methodWithApiImplicitParams', Integer.class)          | 3
+      handlerMethodIn(apiImplicitParamsClass(), 'methodWithApiImplicitParam')   | 2
   }
 }
