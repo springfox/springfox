@@ -36,8 +36,16 @@ public class JacksonSwaggerSupport implements ApplicationContextAware {
   }
 
   @Autowired
-  public void setRequestMappingHandlerAdapter(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
-    this.requestMappingHandlerAdapter = requestMappingHandlerAdapter;
+  public void setRequestMappingHandlerAdapter(RequestMappingHandlerAdapter[] requestMappingHandlerAdapters) {
+    if (requestMappingHandlerAdapters.length > 1) {
+      for (RequestMappingHandlerAdapter adapter : requestMappingHandlerAdapters) {
+        if (adapter.getClass().getCanonicalName().equals(RequestMappingHandlerAdapter.class.getCanonicalName())) {
+          this.requestMappingHandlerAdapter = adapter;
+        }
+      }
+    } else {
+      requestMappingHandlerAdapter = requestMappingHandlerAdapters[0];
+    }
   }
 
   @PostConstruct
