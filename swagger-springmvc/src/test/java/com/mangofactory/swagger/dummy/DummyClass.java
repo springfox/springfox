@@ -138,6 +138,21 @@ public class DummyClass {
    })
    public void methodWithApiImplicitParams(Integer integer) {}
 
+   public interface ApiImplicitParamsInterface {
+      @ApiImplicitParams({
+              @ApiImplicitParam(name = "lang", dataType = "string", required = true, paramType = "query",
+                      value = "Language", defaultValue = "EN", allowableValues = "EN,FR")
+      })
+      @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
+              value="Authentication token")
+      void methodWithApiImplicitParam();
+   }
+
+   public static class ApiImplicitParamsClass implements ApiImplicitParamsInterface {
+      @Override
+      public void methodWithApiImplicitParam() {}
+   }
+
    @ResponseBody
    public DummyModels.BusinessModel methodWithConcreteResponseBody() {
       return null;

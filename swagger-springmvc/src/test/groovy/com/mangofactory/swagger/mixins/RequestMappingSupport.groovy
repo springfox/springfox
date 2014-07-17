@@ -67,6 +67,10 @@ class RequestMappingSupport {
     return new DummyClass.ApiIgnorableClass().getClass()
   }
 
+  def apiImplicitParamsClass() {
+    return DummyClass.ApiImplicitParamsClass.class;
+  }
+
   def ignorableHandlerMethod() {
     def clazz = new DummyClass.ApiIgnorableClass()
     Class c = clazz.getClass();
