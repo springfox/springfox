@@ -8,12 +8,11 @@ import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import com.wordnik.swagger.model.ResponseMessage;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,7 @@ public class OperationResponseMessageReader implements Command<RequestMappingCon
       RequestMethod currentHttpMethod = (RequestMethod) context.get("currentHttpMethod");
       HandlerMethod handlerMethod = context.getHandlerMethod();
       List<ResponseMessage> responseMessages = newArrayList();
-      ApiResponses apiResponses = getAnnotatedResponseMessages(handlerMethod.getMethod());
+      ApiResponses apiResponses = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), ApiResponses.class);
 
       if (null != apiResponses) {
          ApiResponse[] apiResponseAnnotations = apiResponses.value();
@@ -51,18 +50,6 @@ public class OperationResponseMessageReader implements Command<RequestMappingCon
          }
       }
       context.put("responseMessages", responseMessages);
-   }
-
-   private ApiResponses getAnnotatedResponseMessages(Method method) {
-      Annotation[] methodAnnotations = method.getAnnotations();
-      if (null != methodAnnotations) {
-         for (Annotation annotation : methodAnnotations) {
-            if (annotation instanceof ApiResponses) {
-               return (ApiResponses) annotation;
-            }
-         }
-      }
-      return null;
    }
 
    private void safelyRemoveHttpOkResponse(List<ResponseMessage> responseMessages) {
