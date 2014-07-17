@@ -99,7 +99,23 @@ public class BeanModelProperty implements ModelProperty {
         return false;
     }
 
-    public static boolean accessorMemberIs(ResolvedMember method, String methodName) {
+    public ResolvedMethod getMethod() {
+        return method;
+    }
+
+    public boolean isGetter() {
+        return isGetter;
+    }
+
+    public TypeResolver getTypeResolver() {
+        return typeResolver;
+    }
+
+    public AlternateTypeProvider getAlternateTypeProvider() {
+        return alternateTypeProvider;
+    }
+
+  public static boolean accessorMemberIs(ResolvedMember method, String methodName) {
         return method.getRawMember().getName().equals(methodName);
     }
 }

@@ -86,4 +86,12 @@ public class FieldModelProperty implements ModelProperty {
     public ResolvedType getType() {
        return alternateTypeProvider.alternateFor(realType(childField));
     }
+
+    public ResolvedField getChildField() {
+        return childField;
+    }
+
+    public AlternateTypeProvider getAlternateTypeProvider() {
+        return alternateTypeProvider;
+    }
 }
