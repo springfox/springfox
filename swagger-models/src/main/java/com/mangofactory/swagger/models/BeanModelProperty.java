@@ -4,7 +4,6 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMember;
 import com.fasterxml.classmate.members.ResolvedMethod;
-import com.google.common.base.Strings;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.model.AllowableValues;
@@ -19,10 +18,12 @@ public class BeanModelProperty implements ModelProperty {
     private final boolean isGetter;
     private TypeResolver typeResolver;
     private final AlternateTypeProvider alternateTypeProvider;
+    private final String propertyDescription;
 
-  public BeanModelProperty(String propertyName, ResolvedMethod method,
+  public BeanModelProperty(String name, String propertyDescription, ResolvedMethod method,
             boolean isGetter, TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider) {
-        name = propertyName;
+        this.name = name;
+        this.propertyDescription = propertyDescription;
         this.method = method;
         this.isGetter = isGetter;
         this.typeResolver = typeResolver;
@@ -79,16 +80,9 @@ public class BeanModelProperty implements ModelProperty {
 
     @Override
     public Option<String> propertyDescription() {
-        ApiModelProperty annotation = AnnotationUtils.findAnnotation(method.getRawMember(), ApiModelProperty.class);
-        if (annotation != null) {
-            if (!Strings.isNullOrEmpty(annotation.value())) {
-                return Option.apply(annotation.value());
-            } else if (!Strings.isNullOrEmpty(annotation.notes())) {
-                return Option.apply(annotation.notes());
-            }
-        }
-        return Option.apply(null);
+        return Option.apply(propertyDescription);
     }
+
 
     @Override
     public boolean isRequired() {

@@ -14,11 +14,14 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -145,7 +148,8 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
 
   private BeanModelProperty beanModelProperty(ResolvedMethod childProperty, Optional<BeanPropertyDefinition>
           jacksonProperty) {
-    return new BeanModelProperty(jacksonProperty.get().getName(),
+    BeanPropertyDefinition propertyDefinition = jacksonProperty.get();
+    return new BeanModelProperty(propertyDefinition.getName(), getPropertyDescription(propertyDefinition),
             childProperty, isGetter(childProperty.getRawMember()), typeResolver, alternateTypeProvider);
   }
 
@@ -201,6 +205,30 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
     ArrayList<ModelProperty> modelProperties = newArrayList(deserializableFields(type));
     modelProperties.addAll(deserializableProperties(type));
     return modelProperties;
+  }
+
+
+  private String getPropertyDescription(BeanPropertyDefinition beanPropertyDefinition) {
+    ApiModelProperty annotation = null;
+    if (beanPropertyDefinition.hasGetter()) {
+      annotation = AnnotationUtils.findAnnotation(beanPropertyDefinition.getGetter().getMember(),
+              ApiModelProperty.class);
+    } else {
+      if (beanPropertyDefinition.hasSetter()) {
+        annotation = AnnotationUtils.findAnnotation(beanPropertyDefinition.getSetter().getMember(),
+                ApiModelProperty.class);
+      }
+    }
+
+    String description = null;
+    if (annotation != null) {
+      if (!Strings.isNullOrEmpty(annotation.value())) {
+        description = annotation.value();
+      } else if (!Strings.isNullOrEmpty(annotation.notes())) {
+        description = annotation.notes();
+      }
+    }
+    return description;
   }
 }
 

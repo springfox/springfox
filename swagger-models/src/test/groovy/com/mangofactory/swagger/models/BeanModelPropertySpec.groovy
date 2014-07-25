@@ -15,7 +15,7 @@ class BeanModelPropertySpec extends Specification {
       Class typeToTest = typeForTestingGettersAndSetters()
       def modelContext = ModelContext.inputParam(typeToTest)
       def method = accessorMethod(typeToTest, methodName)
-      def sut = new BeanModelProperty(methodName, method, Accessors.isGetter(method.getRawMember()),
+      def sut = new BeanModelProperty(methodName, description, method, Accessors.isGetter(method.getRawMember()),
               new TypeResolver(), new AlternateTypeProvider())
 
     expect:
