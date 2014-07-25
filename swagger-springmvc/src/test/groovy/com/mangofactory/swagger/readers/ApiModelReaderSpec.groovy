@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.readers
-
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
@@ -25,7 +24,7 @@ import spock.lang.Specification
 import javax.servlet.http.HttpServletResponse
 
 import static com.mangofactory.swagger.ScalaUtils.*
-import static com.mangofactory.swagger.models.alternates.Alternates.*
+import static com.mangofactory.swagger.models.alternates.Alternates.newRule
 
 @Mixin([RequestMappingSupport, ApiOperationSupport, ModelProviderSupport, JsonSupport])
 class ApiModelReaderSpec extends Specification {
@@ -228,6 +227,42 @@ class ApiModelReaderSpec extends Specification {
     then:
       Map<String, Model> models = result.get("models")
       models.size() == 0
+
+  }
+
+  def "property description should be populated when type is used in response and request body"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSameAnnotatedModelInReturnAndRequestBodyParam',
+              DummyModels.AnnotatedBusinessModel
+      )
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
+
+      def settings = new SwaggerGlobalSettings()
+      def config = new SpringSwaggerConfig()
+      settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      context.put("swaggerGlobalSettings", settings)
+
+    when:
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
+      apiModelReader.execute(context)
+      Map<String, Model> result = context.getResult()
+
+    then:
+      Map<String, Model> models = result.get("models")
+      models.size() == 1
+
+      String modelName = DummyModels.AnnotatedBusinessModel.class.simpleName
+      models.containsKey(modelName)
+
+      Model model = models[modelName]
+      Map modelProperties = fromScalaMap(model.properties())
+      modelProperties.containsKey('name')
+
+      ModelProperty nameProperty = modelProperties['name']
+      nameProperty.description().isEmpty() == false
 
   }
 }
