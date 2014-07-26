@@ -145,7 +145,7 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
 
   private BeanModelProperty beanModelProperty(ResolvedMethod childProperty, Optional<BeanPropertyDefinition>
           jacksonProperty) {
-    return new BeanModelProperty(jacksonProperty.get().getName(),
+    return new BeanModelProperty(jacksonProperty.get(),
             childProperty, isGetter(childProperty.getRawMember()), typeResolver, alternateTypeProvider);
   }
 
@@ -202,5 +202,8 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
     modelProperties.addAll(deserializableProperties(type));
     return modelProperties;
   }
+
+
+
 }
 
