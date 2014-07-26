@@ -14,7 +14,7 @@ class JacksonSwaggerSupportSpec extends Specification {
   final static RequestMappingHandlerAdapter dummyAdapter = new DummyRequestMappingHandlerAdapter();
   final static RequestMappingHandlerAdapter duplicateAdapter = new RequestMappingHandlerAdapter();
 
-  def "Should register swagger module and obtain object mapper"() {
+  def "Should register swagger module and set object mapper on DefaultModelPropertiesProvider"() {
     given:
       JacksonSwaggerSupport jacksonSwaggerSupport = new JacksonSwaggerSupport()
       ObjectMapper objectMapper = Mock(ObjectMapper)
