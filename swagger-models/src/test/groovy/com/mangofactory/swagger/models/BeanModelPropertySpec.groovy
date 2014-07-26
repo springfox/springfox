@@ -21,17 +21,17 @@ class BeanModelPropertySpec extends Specification {
 
     expect:
       fromOption(sut.propertyDescription()) == description
-      sut.required == false
+      sut.required == required
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       sut.allowableValues() == null
 
 
     where:
-    methodName      || description            | typeName     | qualifiedTypeName
-    "getIntProp"    || null                   | "int"        | "int"
-    "isBoolProp"    || "bool Property Getter" | "boolean"    | "boolean"
-    "setIntProp"    || null                   | "int"        | "int"
-    "setBoolProp"   || "bool Property Getter" | "boolean"    | "boolean"
+    methodName      || description            | required  | typeName     | qualifiedTypeName
+    "getIntProp"    || "int Property Field"   | true      | "int"        | "int"
+    "isBoolProp"    || "bool Property Getter" | false     | "boolean"    | "boolean"
+    "setIntProp"    || "int Property Field"   | true      | "int"        | "int"
+    "setBoolProp"   || "bool Property Getter" | false     | "boolean"    | "boolean"
   }
 }

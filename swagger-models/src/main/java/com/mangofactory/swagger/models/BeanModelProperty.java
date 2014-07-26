@@ -9,9 +9,9 @@ import com.google.common.base.Strings;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.model.AllowableValues;
-import org.springframework.core.annotation.AnnotationUtils;
 import scala.Option;
 
+import static com.mangofactory.swagger.models.Annotations.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 public class BeanModelProperty implements ModelProperty {
@@ -83,39 +83,28 @@ public class BeanModelProperty implements ModelProperty {
 
     @Override
     public Option<String> propertyDescription() {
-        if (propertyDescription == null) {
-          propertyDescription = findPropertyDescription(beanPropertyDefinition);
-        }
-        return propertyDescription;
+      if (propertyDescription == null) {
+        propertyDescription = findPropertyDescription(beanPropertyDefinition);
+      }
+      return propertyDescription;
     }
 
     private Option<String> findPropertyDescription(BeanPropertyDefinition beanPropertyDefinition) {
-        ApiModelProperty annotation = null;
-        if (beanPropertyDefinition.hasGetter()) {
-            annotation = AnnotationUtils.findAnnotation(beanPropertyDefinition.getGetter().getMember(),
-                    ApiModelProperty.class);
-        } else {
-            if (beanPropertyDefinition.hasSetter()) {
-                annotation = AnnotationUtils.findAnnotation(beanPropertyDefinition.getSetter().getMember(),
-                        ApiModelProperty.class);
-            }
+      ApiModelProperty annotation = findPropertyAnnotation(beanPropertyDefinition, ApiModelProperty.class);
+      String description = null;
+      if (annotation != null) {
+        if (!Strings.isNullOrEmpty(annotation.value())) {
+          description = annotation.value();
+        } else if (!Strings.isNullOrEmpty(annotation.notes())) {
+          description = annotation.notes();
         }
-
-        String description = null;
-        if (annotation != null) {
-            if (!Strings.isNullOrEmpty(annotation.value())) {
-                description = annotation.value();
-            } else if (!Strings.isNullOrEmpty(annotation.notes())) {
-                description = annotation.notes();
-            }
-        }
-        return Option.apply(description);
+      }
+      return Option.apply(description);
     }
-
 
     @Override
     public boolean isRequired() {
-        ApiModelProperty annotation = AnnotationUtils.findAnnotation(method.getRawMember(), ApiModelProperty.class);
+        ApiModelProperty annotation = findPropertyAnnotation(beanPropertyDefinition, ApiModelProperty.class);
         if (annotation != null) {
             return annotation.required();
         }
