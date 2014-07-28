@@ -3,6 +3,7 @@ package com.mangofactory.swagger.readers;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
+import com.mangofactory.swagger.ScalaUtils;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.swagger.models.ModelContext;
@@ -12,6 +13,7 @@ import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.model.Model;
+import com.wordnik.swagger.model.ModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.method.HandlerMethod;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -71,10 +74,36 @@ public class ApiModelReader implements Command<RequestMappingContext> {
             }
             populateDependencies(modelContext, modelMap);
         }
-        modelMap.putAll(readParametersApiModel(handlerMethodResolver, swaggerGlobalSettings, handlerMethod));
+        mergeModelMap(modelMap, readParametersApiModel(handlerMethodResolver, swaggerGlobalSettings, handlerMethod));
 
         log.debug("Finished reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
         context.put("models", modelMap);
+    }
+
+    private void mergeModelMap(Map<String, Model> target, Map<String, Model> source) {
+      for (Map.Entry<String,  Model> sModelEntry : source.entrySet()) {
+        String sourceModelKey = sModelEntry.getKey();
+
+        if ( !target.containsKey(sourceModelKey) ) {
+          //if we encounter completely unknown model, just add it
+          target.put(sModelEntry.getKey(), sModelEntry.getValue());
+        } else {
+          //we can encounter a known model with an unknown property
+          //if (de)serialization is not symmetrical (@JsonIgnore on setter, @JsonProperty on getter).
+          //In these cases, don't overwrite the entire model entry for that type, just add the unknown property.
+          Model targetModelValue = target.get(sourceModelKey);
+          Model sourceModelValue = sModelEntry.getValue();
+
+          Map<String, ModelProperty> targetProperties = ScalaUtils.fromScalaMap(targetModelValue.properties());
+          Map<String, ModelProperty> sourceProperties = ScalaUtils.fromScalaMap(sourceModelValue.properties());
+
+          Set<String> newSourcePropKeys = new HashSet<String>(sourceProperties.keySet());
+          newSourcePropKeys.removeAll(targetProperties.keySet());
+          for (String newProperty : newSourcePropKeys) {
+            targetProperties.put(newProperty, sourceProperties.get(newProperty));
+          }
+        }
+      }
     }
 
     private void markIgnorablesAsHasSeen(TypeResolver typeResolver, Set<Class> ignorableParameterTypes,
