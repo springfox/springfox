@@ -1,0 +1,51 @@
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath "com.github.adrianbk:gradle-jvmsrc-plugin:0.6.1"
+  }
+}
+
+subprojects {
+  apply plugin: 'groovy'
+  sourceCompatibility = 1.6
+  targetCompatibility = 1.6
+
+  group = 'com.mangofactory'
+  version = '0.7.77'
+
+  apply plugin: 'com.github.adrianbk.jvmsrc'
+  jvmsrc {
+     packageName "${group}.swagger"
+  }
+  
+
+  apply plugin: 'checkstyle'
+  checkstyle{
+    configFile = file("$rootDir/config/checkstyle.xml")
+  }
+
+  apply plugin: 'maven-publish'
+  apply from: "$rootDir/gradle/publishing.gradle"
+
+  apply from: "$rootDir/gradle/coverage.gradle"
+
+  repositories {
+    jcenter()
+  }
+
+  buildscript {
+    repositories {
+      jcenter()
+    }
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.0'
+}

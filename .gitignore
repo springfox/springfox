@@ -1,10 +1,12 @@
 .idea/workspace.xml
 .idea/tasks.xml
+.idea/misc.xml
 .idea/libraries/
 *.iml
-swagger-springmvc.iml
 target
 .settings
 .classpath
 .project
 .DS_Store
+build/
+.gradle/

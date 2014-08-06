@@ -1,0 +1,34 @@
+ext {
+  artifactRepoBase = 'http://localhost:8081/artifactory'
+
+  releaseRepos = {
+    maven {
+      name 'jcenter'
+//      url "${artifactRepoBase}/oss-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
+      url "${artifactRepoBase}/libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
+
+      credentials {
+        username = 'admin'
+//        password = project.hasProperty('bintray_key') ? project.getProperty('bintray_key') : ''
+        password = 'password'
+      }
+    }
+
+    //TODO - deploy release versions on bintray
+//    if (!project.version.endsWith('-SNAPSHOT')) {
+//      maven {
+//        name 'bintray'
+//        url "https://api.bintray.com/maven/adrianbkelly/maven/${artifactLabel}"
+//        credentials {
+//          username = 'adrianbkelly'
+//          password = project.hasProperty('bintray_key') ? project.getProperty('bintray_key') : ''
+//        }
+//      }
+//    }
+  }
+}
+
+task packageSources(type: Jar) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}

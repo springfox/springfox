@@ -1,0 +1,25 @@
+dependencies {
+  compile libs.swaggerCore
+  compile libs.core
+  compile libs.spring
+  compile libs.clientProvided
+
+  compile project(':swagger-models')
+  testCompile libs.test
+}
+
+publishing {
+  publications {
+    mavenSwaggerMvc(MavenPublication) {
+      from components.java
+
+      artifact packageSources {
+        classifier "sources"
+      }
+    }
+  }
+
+  repositories {
+    configure(releaseRepos)
+  }
+}
