@@ -179,6 +179,12 @@ public class DummyClass {
            DummyModels.AnnotatedBusinessModel annotatedBusinessModel){
    }
 
+  @ResponseBody
+  public DummyModels.AnnotatedBusinessModel methodWithSameAnnotatedModelInReturnAndRequestBodyParam(
+          @RequestBody DummyModels.AnnotatedBusinessModel model) {
+    return null;
+  }
+
    @ApiResponses({ @ApiResponse(code = 413, message = "a message")})
    public void methodWithApiResponses(){}
 
