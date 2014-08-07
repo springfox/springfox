@@ -1,8 +1,12 @@
 package com.mangofactory.swagger.models;
 
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
+import com.google.common.base.Optional;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 
 public class Annotations {
   /**
@@ -29,4 +33,9 @@ public class Annotations {
 
     return annotation;
   }
+
+  public static Optional<ApiModelProperty> findElementAnnotation(AnnotatedElement annotated) {
+    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class));
+  }
+
 }
