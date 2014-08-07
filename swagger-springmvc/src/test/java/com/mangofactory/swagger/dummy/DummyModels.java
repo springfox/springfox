@@ -1,5 +1,7 @@
 package com.mangofactory.swagger.dummy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
@@ -89,6 +91,30 @@ public class DummyModels {
             this.name = name;
         }
     }
+
+  public class ModelWithSerializeOnlyProperty {
+    private String alwaysVisible;
+    private Long visibleForSerialize;
+
+    public String getAlwaysVisible() {
+      return alwaysVisible;
+    }
+
+
+    public void setAlwaysVisible(String alwaysVisible) {
+      this.alwaysVisible = alwaysVisible;
+    }
+
+    @JsonInclude
+    public Long getVisibleForSerialize() {
+      return visibleForSerialize;
+    }
+
+    @JsonIgnore
+    public void setVisibleForSerialize(Long visibleForSerialize) {
+      this.visibleForSerialize = visibleForSerialize;
+    }
+  }
 
     @Target(ElementType.PARAMETER)
     @Retention(RetentionPolicy.RUNTIME)
