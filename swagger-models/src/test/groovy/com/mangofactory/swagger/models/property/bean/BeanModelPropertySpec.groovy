@@ -18,22 +18,23 @@ class BeanModelPropertySpec extends Specification {
       Class typeToTest = typeForTestingGettersAndSetters()
       def modelContext = ModelContext.inputParam(typeToTest)
       def method = accessorMethod(typeToTest, methodName)
-      def sut = new BeanModelProperty(methodName, method, Accessors.isGetter(method.getRawMember()),
+      def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
+      def sut = new BeanModelProperty(propertyDefinition, method, Accessors.isGetter(method.getRawMember()),
               new TypeResolver(), new AlternateTypeProvider())
 
     expect:
       fromOption(sut.propertyDescription()) == description
-      sut.required == false
+      sut.required == required
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       sut.allowableValues() == null
 
 
     where:
-    methodName      || description            | typeName     | qualifiedTypeName
-    "getIntProp"    || null                   | "int"        | "int"
-    "isBoolProp"    || "bool Property Getter" | "boolean"    | "boolean"
-    "setIntProp"    || null                   | "int"        | "int"
-    "setBoolProp"   || null                   | "boolean"    | "boolean"
+    methodName      || description            | required  | typeName     | qualifiedTypeName
+    "getIntProp"    || "int Property Field"   | true      | "int"        | "int"
+    "isBoolProp"    || "bool Property Getter" | false     | "boolean"    | "boolean"
+    "setIntProp"    || "int Property Field"   | true      | "int"        | "int"
+    "setBoolProp"   || "bool Property Getter" | false     | "boolean"    | "boolean"
   }
 }

@@ -44,7 +44,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
   @Autowired
   public BeanModelPropertyProvider(@Qualifier("swaggerObjectMapper") ObjectMapper objectMapper,
-                                   AccessorsProvider  accessors, TypeResolver typeResolver,
+                                   AccessorsProvider accessors, TypeResolver typeResolver,
                                    AlternateTypeProvider alternateTypeProvider) {
     this.objectMapper = objectMapper;
     this.typeResolver = typeResolver;
@@ -113,7 +113,8 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
   private BeanModelProperty beanModelProperty(ResolvedMethod childProperty, Optional<BeanPropertyDefinition>
           jacksonProperty) {
-    return new BeanModelProperty(jacksonProperty.get().getName(),
+    BeanPropertyDefinition beanPropertyDefinition = jacksonProperty.get();
+    return new BeanModelProperty(beanPropertyDefinition,
             childProperty, isGetter(childProperty.getRawMember()), typeResolver, alternateTypeProvider);
   }
 
