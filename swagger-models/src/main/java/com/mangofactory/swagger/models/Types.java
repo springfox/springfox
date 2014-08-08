@@ -12,8 +12,12 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newHashSet;
 
 public class Types {
+
+    private static final String DATE_TYPE = "date";
+    private static final String DATE_TIME_TYPE = "date-time";
+
     private static final Set<String> baseTypes
-            = newHashSet("int", "date", "string", "double", "float", "boolean", "byte", "object", "long");
+            = newHashSet("int", DATE_TYPE, DATE_TIME_TYPE, "string", "double", "float", "boolean", "byte", "object", "long");
     private static final Map<Type, String> typeNameLookup = ImmutableMap.<Type, String>builder()
             .put(Long.TYPE, "long")
             .put(Short.TYPE, "int")
@@ -24,7 +28,7 @@ public class Types {
             .put(Boolean.TYPE, "boolean")
             .put(Character.TYPE, "string")
 
-            .put(Date.class, "date-time")
+            .put(Date.class, DATE_TIME_TYPE)
             .put(String.class, "string")
             .put(Object.class, "object")
             .put(Long.class, "long")
@@ -38,11 +42,25 @@ public class Types {
             .put(BigInteger.class, "long")
             .build();
 
-    public static String typeNameFor(Type type) {
-        return typeNameLookup.get(type);
+    public static String typeNameFor(final Type type) {
+
+        String typeName = typeNameLookup.get(type);
+
+        if (typeName == null) {
+
+            //we can't return the class names without the space or Swagger UI will show a
+            //complex type for LocalDate instead of just a String
+            if (type.getTypeName().endsWith("LocalDate")) {
+                typeName = "date ";
+            } else if (type.getTypeName().endsWith("LocalDateTime")) {
+                typeName = "date-time ";
+            }
+        }
+
+        return typeName;
     }
 
-    public static boolean isBaseType(String typeName) {
+    public static boolean isBaseType(final String typeName) {
         return baseTypes.contains(typeName);
     }
 
