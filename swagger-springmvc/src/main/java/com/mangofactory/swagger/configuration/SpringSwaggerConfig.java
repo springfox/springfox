@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping;
