@@ -48,9 +48,11 @@ public class Types {
 
         if (typeName == null) {
 
-            if ("java.time.LocalDate".equals(type.getTypeName())) {
+            Class<?> clazz = (Class<?>) type;
+
+            if ("java.time.LocalDate".equals(clazz.getName())) {
                 typeName = "date";
-            } else if ("java.time.LocalDateTime".equals(type.getTypeName())) {
+            } else if ("java.time.LocalDateTime".equals(clazz.getName())) {
                 typeName = "date-time";
             }
         }
