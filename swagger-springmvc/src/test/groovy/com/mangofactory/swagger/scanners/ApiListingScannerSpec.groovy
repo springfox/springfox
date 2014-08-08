@@ -37,7 +37,7 @@ class ApiListingScannerSpec extends Specification {
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
       resourceGroupRequestMappings.put(new ResourceGroup("businesses"), [requestMappingContext])
       ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
-              modelProvider(), null)
+              modelProvider(), null, [])
 
       def settings = new SwaggerGlobalSettings()
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
@@ -73,7 +73,7 @@ class ApiListingScannerSpec extends Specification {
      Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
      resourceGroupRequestMappings.put(new ResourceGroup("businesses"), [requestMappingContext])
       ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
-              modelProvider(), null)
+              modelProvider(), null, [])
      def settings = new SwaggerGlobalSettings()
      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
      settings.ignorableParameterTypes = springSwaggerConfig.defaultIgnorableParameterTypes()

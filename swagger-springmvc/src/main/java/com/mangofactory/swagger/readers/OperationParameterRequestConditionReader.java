@@ -2,6 +2,7 @@ package com.mangofactory.swagger.readers;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
+import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.model.AllowableListValues;
 import com.wordnik.swagger.model.Parameter;
@@ -15,7 +16,7 @@ import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.ScalaUtils.*;
 import static scala.collection.JavaConversions.*;
 
-public class OperationParameterRequestConditionReader implements Command<RequestMappingContext> {
+public class OperationParameterRequestConditionReader implements RequestMappingReader {
   @Override
   public void execute(RequestMappingContext context) {
     ParamsRequestCondition paramsCondition = context.getRequestMappingInfo().getParamsCondition();
