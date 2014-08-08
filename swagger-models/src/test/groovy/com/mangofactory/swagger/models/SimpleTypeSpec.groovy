@@ -101,4 +101,14 @@ class SimpleTypeSpec extends Specification {
       property              | type      | qualifiedType
       "some_odd_ball_name"  | "string"  | "java.lang.String"
   }
+  
+  def "Java 8 LocalDate typeName can be determined"() {
+    expect:
+      "date" == Types.java8TypeNameFor("java.time.LocalDate")
+  }
+  
+  def "Java 8 LocalDateTime typeName can be determined"() {
+    expect:
+      "date-time" == Types.java8TypeNameFor("java.time.LocalDateTime")
+  }
 }

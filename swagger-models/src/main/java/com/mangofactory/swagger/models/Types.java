@@ -47,16 +47,20 @@ public class Types {
         String typeName = typeNameLookup.get(type);
 
         if (typeName == null) {
-
-            Class<?> clazz = (Class<?>) type;
-
-            if ("java.time.LocalDate".equals(clazz.getName())) {
-                typeName = "date";
-            } else if ("java.time.LocalDateTime".equals(clazz.getName())) {
-                typeName = "date-time";
-            }
+            typeName = java8TypeNameFor(((Class<?>) type).getName());
         }
 
+        return typeName;
+    }
+
+    public static String java8TypeNameFor(final String fullClassName) {
+
+        String typeName = null;
+        if ("java.time.LocalDate".equals(fullClassName)) {
+            typeName = DATE_TYPE;
+        } else if ("java.time.LocalDateTime".equals(fullClassName)) {
+            typeName = DATE_TIME_TYPE;
+        }
         return typeName;
     }
 
