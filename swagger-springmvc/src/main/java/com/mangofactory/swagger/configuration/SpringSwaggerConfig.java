@@ -190,17 +190,8 @@ public class SpringSwaggerConfig {
    * Registers some custom serializers needed to transform swagger models to swagger-ui required json format.
    */
   @Bean
-  public JacksonSwaggerSupport jacksonScalaSupport() {
-    JacksonSwaggerSupport jacksonSwaggerSupport = new JacksonSwaggerSupport();
-    return jacksonSwaggerSupport;
-  }
-
-  /**
-   * In case there is no ObjectMapper bean defined, we do
-   */
-  @Bean(name = "swaggerObjectMapper")
-  public ObjectMapper springsMessageConverterObjectMapper() {
-    return jacksonScalaSupport().getSpringsMessageConverterObjectMapper();
+  public JacksonSwaggerSupport jacksonSwaggerSupport() {
+    return new JacksonSwaggerSupport();
   }
 
   @VisibleForTesting

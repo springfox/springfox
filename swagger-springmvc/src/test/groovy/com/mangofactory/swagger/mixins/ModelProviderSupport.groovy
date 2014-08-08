@@ -21,14 +21,15 @@ class ModelProviderSupport {
 
     def objectMapper = new ObjectMapper()
 
-    def beanModelPropertyProvider = new BeanModelPropertyProvider(objectMapper, new AccessorsProvider(typeResolver), typeResolver,
+    def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver,
             alternateTypeProvider)
-    def fieldModelPropertyProvider = new FieldModelPropertyProvider(objectMapper, fields, alternateTypeProvider)
-    def constructorModelPropertyProvider = new ConstructorModelPropertyProvider(objectMapper, fields,
-            alternateTypeProvider)
+    def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, alternateTypeProvider)
+    def constructorModelPropertyProvider = new ConstructorModelPropertyProvider(fields, alternateTypeProvider)
 
     def modelPropertiesProvider = new DefaultModelPropertiesProvider(beanModelPropertyProvider,
             fieldModelPropertyProvider, constructorModelPropertyProvider)
+
+    modelPropertiesProvider.objectMapper = objectMapper
     def modelDependenciesProvider = new ModelDependencyProvider(typeResolver, alternateTypeProvider, modelPropertiesProvider)
     new DefaultModelProvider(typeResolver, alternateTypeProvider, modelPropertiesProvider, modelDependenciesProvider)
   }

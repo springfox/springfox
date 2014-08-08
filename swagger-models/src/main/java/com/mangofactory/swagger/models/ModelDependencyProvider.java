@@ -26,7 +26,7 @@ public class ModelDependencyProvider {
 
     @Autowired
     public ModelDependencyProvider(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider,
-                                   @Qualifier("modelPropertiesProvider") ModelPropertiesProvider propertiesProvider) {
+                                   @Qualifier("default") ModelPropertiesProvider propertiesProvider) {
         this.typeResolver = typeResolver;
         this.alternateTypeProvider = alternateTypeProvider;
         this.propertiesProvider = propertiesProvider;
