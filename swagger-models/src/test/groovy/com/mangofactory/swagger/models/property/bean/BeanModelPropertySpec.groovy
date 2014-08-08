@@ -2,7 +2,6 @@ package com.mangofactory.swagger.models.property.bean
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.mangofactory.swagger.models.Accessors
 import com.mangofactory.swagger.models.ModelContext
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.wordnik.swagger.model.AllowableListValues

@@ -3,6 +3,10 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="Osmorc" url="file://$PROJECT_DIR$/swagger-models" />
+    <file type="Osmorc" url="file://$PROJECT_DIR$/swagger-springmvc" />
+  </component>
   <component name="IdProvider" IDEtalkID="8C3FCCB605B8E9CB3553448531831F71" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">

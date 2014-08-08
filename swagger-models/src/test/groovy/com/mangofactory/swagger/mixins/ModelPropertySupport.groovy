@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition
 import com.fasterxml.jackson.databind.type.TypeFactory
 
-import static com.mangofactory.swagger.models.Accessors.propertyName
+import static com.mangofactory.swagger.models.property.bean.Accessors.propertyName
 import static com.mangofactory.swagger.models.ResolvedTypes.asResolved
 
 class ModelPropertySupport {

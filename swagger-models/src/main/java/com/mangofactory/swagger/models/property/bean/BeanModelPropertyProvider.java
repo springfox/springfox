@@ -12,13 +12,12 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
+import com.mangofactory.swagger.models.property.BeanPropertyDefinitions;
 import com.mangofactory.swagger.models.property.ModelProperty;
-import com.mangofactory.swagger.models.property.PropertyUtils;
 import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -26,13 +25,9 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
-import static com.mangofactory.swagger.models.Accessors.*;
+import static com.mangofactory.swagger.models.property.bean.Accessors.*;
 import static com.mangofactory.swagger.models.property.bean.BeanModelProperty.*;
 
-/**
- * @author fgaule
- * @since 17/07/2014
- */
 @Component
 public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
@@ -43,10 +38,8 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
   private final AlternateTypeProvider alternateTypeProvider;
 
   @Autowired
-  public BeanModelPropertyProvider(@Qualifier("swaggerObjectMapper") ObjectMapper objectMapper,
-                                   AccessorsProvider accessors, TypeResolver typeResolver,
+  public BeanModelPropertyProvider(AccessorsProvider accessors, TypeResolver typeResolver,
                                    AlternateTypeProvider alternateTypeProvider) {
-    this.objectMapper = objectMapper;
     this.typeResolver = typeResolver;
     this.alternateTypeProvider = alternateTypeProvider;
     this.accessors = accessors;
@@ -60,11 +53,11 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     BeanDescription beanDescription = serializationConfig.introspect(TypeFactory.defaultInstance()
             .constructType(resolvedType.getErasedType()));
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
-            PropertyUtils.beanPropertyByInternalName());
+            BeanPropertyDefinitions.beanPropertyByInternalName());
     for (ResolvedMethod childProperty : accessors.in(resolvedType)) {
       if (propertyLookup.containsKey(propertyName(childProperty.getName()))) {
         BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getName()));
-        Optional<BeanPropertyDefinition> jacksonProperty = PropertyUtils.jacksonPropertyWithSameInternalName
+        Optional<BeanPropertyDefinition> jacksonProperty = BeanPropertyDefinitions.jacksonPropertyWithSameInternalName
                 (beanDescription,
                         propertyDefinition);
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
@@ -83,13 +76,13 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     BeanDescription beanDescription = serializationConfig.introspect(TypeFactory.defaultInstance()
             .constructType(resolvedType.getErasedType()));
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
-            PropertyUtils.beanPropertyByInternalName());
+            BeanPropertyDefinitions.beanPropertyByInternalName());
     for (ResolvedMethod childProperty : accessors.in(resolvedType)) {
 
       if (propertyLookup.containsKey(propertyName(childProperty.getName()))) {
         BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getName()));
         Optional<BeanPropertyDefinition> jacksonProperty
-                = PropertyUtils.jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+                = BeanPropertyDefinitions.jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         try {
           AnnotatedMember member = propertyDefinition.getPrimaryMember();
           if (accessorMemberIs(childProperty, methodName(member))) {
@@ -101,6 +94,11 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
       }
     }
     return serializationCandidates;
+  }
+
+  @Override
+  public void setObjectMapper(ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
   }
 
   private String methodName(AnnotatedMember member) {

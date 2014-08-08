@@ -1,10 +1,10 @@
-package com.mangofactory.swagger.models;
+package com.mangofactory.swagger.models.property.bean;
 
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Accessors {
+class Accessors {
   private static Pattern getter = Pattern.compile("^get([a-zA-Z_0-9].*)");
   private static Pattern isGetter = Pattern.compile("^is([a-zA-Z_0_9].*)");
   private static Pattern setter = Pattern.compile("^set([a-zA-Z_0-9].*)");
