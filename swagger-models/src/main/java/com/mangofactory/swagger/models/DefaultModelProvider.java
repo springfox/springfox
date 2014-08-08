@@ -4,11 +4,13 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
+import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.model.Model;
 import com.wordnik.swagger.model.ModelProperty;
 import com.wordnik.swagger.model.ModelRef;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import scala.Option;
@@ -34,7 +36,7 @@ public class DefaultModelProvider implements ModelProvider {
 
     @Autowired
     public DefaultModelProvider(TypeResolver resolver, AlternateTypeProvider alternateTypeProvider,
-                                ModelPropertiesProvider  propertiesProvider,
+                                @Qualifier("default") ModelPropertiesProvider  propertiesProvider,
                                 ModelDependencyProvider dependencyProvider) {
         this.resolver = resolver;
         this.alternateTypeProvider = alternateTypeProvider;
@@ -53,7 +55,7 @@ public class DefaultModelProvider implements ModelProvider {
         Map<String, ModelProperty> properties = newLinkedHashMap();
 
         int index = 0;
-        for (com.mangofactory.swagger.models.ModelProperty each : properties(modelContext, propertiesHost)) {
+        for (com.mangofactory.swagger.models.property.ModelProperty each : properties(modelContext, propertiesHost)) {
             properties.put(each.getName(), new ModelProperty(each.typeName(modelContext),
                     each.qualifiedTypeName(),
                     index,
@@ -93,7 +95,7 @@ public class DefaultModelProvider implements ModelProvider {
         return Option.apply("");
     }
 
-    private Iterable<? extends com.mangofactory.swagger.models.ModelProperty> properties(ModelContext context,
+    private Iterable<? extends com.mangofactory.swagger.models.property.ModelProperty> properties(ModelContext context,
                                                                                          ResolvedType propertiesHost) {
         if (context.isReturnType()) {
             return propertiesProvider.propertiesForSerialization(propertiesHost);

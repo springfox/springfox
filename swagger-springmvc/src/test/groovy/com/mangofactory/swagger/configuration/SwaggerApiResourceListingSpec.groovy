@@ -4,7 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
-import com.mangofactory.swagger.models.*
+import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
+import com.mangofactory.swagger.models.DefaultModelProvider
+import com.mangofactory.swagger.models.ModelDependencyProvider
+import com.mangofactory.swagger.models.ModelProvider
+import com.mangofactory.swagger.models.property.bean.AccessorsProvider
+import com.mangofactory.swagger.models.property.bean.BeanModelPropertyProvider
+import com.mangofactory.swagger.models.property.constructor.ConstructorModelPropertyProvider
+import com.mangofactory.swagger.models.property.field.FieldModelPropertyProvider
+import com.mangofactory.swagger.models.property.field.FieldProvider
+import com.mangofactory.swagger.models.property.provider.DefaultModelPropertiesProvider
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
 import com.mangofactory.swagger.ordering.ResourceListingPositionalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
@@ -17,8 +27,7 @@ import spock.lang.Specification
 
 import static com.mangofactory.swagger.ScalaUtils.*
 
-@Mixin([com.mangofactory.swagger.mixins.RequestMappingSupport,
-        com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport])
+@Mixin([RequestMappingSupport, SpringSwaggerConfigSupport])
 class SwaggerApiResourceListingSpec extends Specification {
 
   def "assessors"() {
@@ -107,12 +116,17 @@ class SwaggerApiResourceListingSpec extends Specification {
       swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
 
       def resolver = new TypeResolver()
-      def modelPropertiesProvider = new DefaultModelPropertiesProvider(settings.typeResolver,
-              settings.alternateTypeProvider,
-              new AccessorsProvider(resolver),
-              new FieldsProvider(resolver))
-      modelPropertiesProvider.setObjectMapper(new ObjectMapper())
+      def objectMapper = new ObjectMapper()
+      def fields = new FieldProvider(resolver)
 
+      def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(resolver), resolver,
+              settings.alternateTypeProvider)
+      def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, settings.alternateTypeProvider)
+      def constructorModelPropertyProvider = new ConstructorModelPropertyProvider(fields, settings.alternateTypeProvider)
+
+      def modelPropertiesProvider = new DefaultModelPropertiesProvider(beanModelPropertyProvider,
+              fieldModelPropertyProvider, constructorModelPropertyProvider)
+      modelPropertiesProvider.objectMapper = objectMapper
       def modelDependenciesProvider = new ModelDependencyProvider(resolver, settings.alternateTypeProvider,
               modelPropertiesProvider)
       ModelProvider modelProvider = new DefaultModelProvider(resolver, settings.alternateTypeProvider,

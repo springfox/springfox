@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.scanners
-
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
@@ -15,9 +14,11 @@ import com.wordnik.swagger.model.ApiListing
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 
-import static com.google.common.collect.Maps.*
-import static com.mangofactory.swagger.ScalaUtils.*
-import static org.springframework.http.MediaType.*
+import static com.google.common.collect.Maps.newHashMap
+import static com.mangofactory.swagger.ScalaUtils.fromOption
+import static com.mangofactory.swagger.ScalaUtils.fromScalaList
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
 
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport, AuthSupport, ModelProviderSupport])
 class ApiListingScannerSpec extends Specification {

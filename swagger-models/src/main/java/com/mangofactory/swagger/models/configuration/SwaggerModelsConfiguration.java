@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.models.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.swagger.models.FieldsProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.alternates.WildcardType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import java.util.Map;
 import static com.mangofactory.swagger.models.alternates.Alternates.*;
 
 @Configuration
-@ComponentScan(basePackageClasses = { FieldsProvider.class })
+@ComponentScan(basePackages = {"com.mangofactory.swagger.models"})
 public class SwaggerModelsConfiguration {
     @Bean
     public TypeResolver typeResolver() {

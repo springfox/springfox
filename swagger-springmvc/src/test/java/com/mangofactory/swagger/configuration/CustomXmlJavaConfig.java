@@ -10,28 +10,29 @@ import org.springframework.context.annotation.Configuration;
 @EnableSwagger
 public class CustomXmlJavaConfig {
 
-   private SpringSwaggerConfig springSwaggerConfig;
+  private SpringSwaggerConfig springSwaggerConfig;
 
-   /**
-    * Required to autowire SpringSwaggerConfig
-    * @param springSwaggerConfig
-    */
-   @Autowired
-   public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
-      this.springSwaggerConfig = springSwaggerConfig;
-   }
+  /**
+   * Required to autowire SpringSwaggerConfig
+   *
+   * @param springSwaggerConfig
+   */
+  @Autowired
+  public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
+    this.springSwaggerConfig = springSwaggerConfig;
+  }
 
-   @Bean
-   public SwaggerSpringMvcPlugin customImplementation(){
-      return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
-              .swaggerGroup("customPlugin")
-              .includePatterns(".*pet.*");
-   }
+  @Bean
+  public SwaggerSpringMvcPlugin customImplementation() {
+    return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
+            .swaggerGroup("customPlugin")
+            .includePatterns(".*pet.*");
+  }
 
-   @Bean
-   public SwaggerSpringMvcPlugin secondCustomImplementation(){
-      return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
-              .swaggerGroup("secondCustomPlugin")
-              .includePatterns("/feature.*");
-   }
+  @Bean
+  public SwaggerSpringMvcPlugin secondCustomImplementation() {
+    return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
+            .swaggerGroup("secondCustomPlugin")
+            .includePatterns("/feature.*");
+  }
 }

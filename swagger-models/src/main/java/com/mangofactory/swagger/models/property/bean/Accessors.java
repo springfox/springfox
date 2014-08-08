@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.models;
+package com.mangofactory.swagger.models.property.bean;
 
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;

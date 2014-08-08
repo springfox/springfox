@@ -3,9 +3,9 @@ package com.mangofactory.swagger.models
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.models.Accessors.isGetter
-import static com.mangofactory.swagger.models.Accessors.isSetter
-import static com.mangofactory.swagger.models.Accessors.propertyName
+import static com.mangofactory.swagger.models.property.bean.Accessors.isGetter
+import static com.mangofactory.swagger.models.property.bean.Accessors.isSetter
+import static com.mangofactory.swagger.models.property.bean.Accessors.propertyName
 
 @Mixin(TypesForTestingSupport)
 class DefaultModelPropertiesProviderSpec extends Specification {

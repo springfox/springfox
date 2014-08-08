@@ -5,7 +5,10 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
+import com.mangofactory.swagger.models.property.ModelProperty;
+import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,7 +26,7 @@ public class ModelDependencyProvider {
 
     @Autowired
     public ModelDependencyProvider(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider,
-                                   ModelPropertiesProvider propertiesProvider) {
+                                   @Qualifier("default") ModelPropertiesProvider propertiesProvider) {
         this.typeResolver = typeResolver;
         this.alternateTypeProvider = alternateTypeProvider;
         this.propertiesProvider = propertiesProvider;

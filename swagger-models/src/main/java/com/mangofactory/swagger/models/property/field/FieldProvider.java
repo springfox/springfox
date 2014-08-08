@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.models;
+package com.mangofactory.swagger.models.property.field;
 
 import com.fasterxml.classmate.MemberResolver;
 import com.fasterxml.classmate.ResolvedType;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 import static com.google.common.collect.Lists.*;
 
 @Component
-public class FieldsProvider {
+public class FieldProvider {
     private final TypeResolver typeResolver;
 
     @Autowired
-    public FieldsProvider(TypeResolver typeResolver) {
+    public FieldProvider(TypeResolver typeResolver) {
         this.typeResolver = typeResolver;
     }
 
