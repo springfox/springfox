@@ -48,12 +48,10 @@ public class Types {
 
         if (typeName == null) {
 
-            //we can't return the class names without the space or Swagger UI will show a
-            //complex type for LocalDate instead of just a String
-            if (type.getTypeName().endsWith("LocalDate")) {
-                typeName = "date ";
-            } else if (type.getTypeName().endsWith("LocalDateTime")) {
-                typeName = "date-time ";
+            if ("java.time.LocalDate".equals(type.getTypeName())) {
+                typeName = "date";
+            } else if ("java.time.LocalDateTime".equals(type.getTypeName())) {
+                typeName = "date-time";
             }
         }
 

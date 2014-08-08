@@ -2,6 +2,8 @@ package com.mangofactory.swagger.readers.operation
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyModels
+import com.mangofactory.swagger.dummy.controllers.PersonService
+import com.mangofactory.swagger.dummy.models.Person
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -79,6 +81,32 @@ class OperationParameterReaderSpec extends Specification {
       'allowMultiple' | false
       'allowMultiple' | false
       'paramType'     | "path"
+
+   }
+   
+   def "Should expand method parameters that are marked with @BeanParam"() {
+    given:
+      HandlerMethod handlerMethod = new HandlerMethod(new PersonService(), PersonService.class.getMethod("createRandomPersonWithBeanParam", Person.class, BindingResult.class))
+
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/createPerson'), handlerMethod)
+      MethodParameter methodParameter = new MethodParameter(handlerMethod.getMethod(), 1)
+      
+      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
+      context.put("methodParameter", methodParameter)
+    when:
+      OperationParameterReader operationParameterReader = new OperationParameterReader()
+      operationParameterReader.execute(context)
+      Map<String, Object> result = context.getResult()
+    then:
+      Parameter parameter = result['parameters'][0]
+      assert parameter."$property" == expectedValue
+    where:
+      property        | expectedValue
+      'name'          | 'firstName'
+      'description'   | toOption('The first name')
+      'required'      | true
+      'allowMultiple' | false
+      'paramType'     | "query"
 
    }
 

@@ -37,7 +37,7 @@ public class ServicesIntegrationTest extends Specification {
     apis = response(mockMvc, "/api-docs").apis
   }
 
-   def "Number of services to be documented is 8"() {
+   def "Number of services to be documented is 9"() {
       given:
         ResultActions actions
         MockHttpServletRequestBuilder requestBuilder =
@@ -51,7 +51,7 @@ public class ServicesIntegrationTest extends Specification {
         def bytes = ByteBuffer.wrap(actions.andReturn().response.contentAsByteArray)
         def decoded = Charsets.UTF_8.decode(bytes)
         def response = new JsonSlurper().parseText(decoded.toString())
-        response.apis.size == 8
+        response.apis.size == 9
    }
 
    @Unroll("#parentUri has #operations operations")

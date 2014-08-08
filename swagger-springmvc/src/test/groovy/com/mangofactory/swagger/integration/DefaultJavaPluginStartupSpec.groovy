@@ -24,7 +24,7 @@ class DefaultJavaPluginStartupSpec extends Specification{
       MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
       MvcResult petApi = mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get('/api-docs')).andReturn()
     then:
-      jsonBodyResponse(petApi).apis.size() == 8
+      jsonBodyResponse(petApi).apis.size() == 9
   }
 
 }
