@@ -14,7 +14,6 @@ import static com.mangofactory.swagger.models.Annotations.*;
 
 public class BeanModelProperty extends BaseModelProperty {
 
-  private final BeanPropertyDefinition beanPropertyDefinition;
   private final ResolvedMethod method;
   private final boolean isGetter;
   private TypeResolver typeResolver;
@@ -25,7 +24,6 @@ public class BeanModelProperty extends BaseModelProperty {
 
     super(beanPropertyDefinition.getName(), alternateTypeProvider, Optional.fromNullable(findPropertyAnnotation
             (beanPropertyDefinition, ApiModelProperty.class)));
-    this.beanPropertyDefinition = beanPropertyDefinition;
     this.method = method;
     this.isGetter = isGetter;
     this.typeResolver = typeResolver;

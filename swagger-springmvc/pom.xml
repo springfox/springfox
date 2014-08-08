@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.mangofactory.swagger</groupId>
             <artifactId>swagger-models</artifactId>
-            <version>0.8.6-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <!-- Runtime dependencies -->
         <dependency>

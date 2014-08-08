@@ -36,7 +36,7 @@ public class DefaultModelProvider implements ModelProvider {
 
     @Autowired
     public DefaultModelProvider(TypeResolver resolver, AlternateTypeProvider alternateTypeProvider,
-                                @Qualifier("modelPropertiesProvider") ModelPropertiesProvider  propertiesProvider,
+                                @Qualifier("default") ModelPropertiesProvider  propertiesProvider,
                                 ModelDependencyProvider dependencyProvider) {
         this.resolver = resolver;
         this.alternateTypeProvider = alternateTypeProvider;

@@ -29,13 +29,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.newHashMap;
-import static com.google.common.collect.Sets.newHashSet;
-import static com.mangofactory.swagger.ScalaUtils.emptyScalaList;
-import static com.mangofactory.swagger.ScalaUtils.toOption;
-import static com.mangofactory.swagger.ScalaUtils.toScalaList;
-import static com.mangofactory.swagger.ScalaUtils.toScalaModelMap;
+import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Sets.*;
+import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class ApiListingScanner {
   private static final Logger log = LoggerFactory.getLogger(ApiListingScanner.class);
@@ -107,10 +104,7 @@ public class ApiListingScanner {
           authorizations = authorizationContext.getScalaAuthorizations();
         }
 
-        Option modelOption = toOption(models);
-        if (null != models) {
-          modelOption = toOption(toScalaModelMap(models));
-        }
+        Option modelOption = toOption(toScalaModelMap(models));
 
         ArrayList sortedDescriptions = new ArrayList(apiDescriptions);
         Collections.sort(sortedDescriptions, this.apiDescriptionOrdering);

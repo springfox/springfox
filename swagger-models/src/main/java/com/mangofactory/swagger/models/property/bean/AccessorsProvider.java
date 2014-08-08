@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.models.Accessors.*;
+import static com.mangofactory.swagger.models.property.bean.Accessors.*;
 
 @Component
 public class AccessorsProvider {

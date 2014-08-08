@@ -195,6 +195,12 @@ public class DummyClass {
       }
    }
 
+  @ResponseBody
+  public DummyModels.ModelWithSerializeOnlyProperty methodWithSerializeOnlyPropInReturnAndRequestBodyParam(
+          @RequestBody DummyModels.ModelWithSerializeOnlyProperty model) {
+    return null;
+  }
+
    public enum BusinessType {
       PRODUCT(1),
       SERVICE(2);

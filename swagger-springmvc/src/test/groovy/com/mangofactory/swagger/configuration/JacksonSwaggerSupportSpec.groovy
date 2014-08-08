@@ -30,11 +30,13 @@ class JacksonSwaggerSupportSpec extends Specification {
       requestMappingHandlerAdapter.getMessageConverters() >> [jacksonMessageConverter]
 
       jacksonSwaggerSupport.requestMappingHandlerAdapter = requestMappingHandlerAdapter
+      jacksonSwaggerSupport.applicationContext = applicationContext
 
     when:
       jacksonSwaggerSupport.setup()
     then:
       1 * objectMapper.registerModule(_)
+      1 * defaultModelPropertiesProvider.setObjectMapper(objectMapper)
   }
 
   @Unroll

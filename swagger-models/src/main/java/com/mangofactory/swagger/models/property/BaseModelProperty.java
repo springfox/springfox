@@ -12,7 +12,6 @@ import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.model.AllowableListValues;
 import com.wordnik.swagger.model.AllowableValues;
-import org.apache.commons.lang.StringUtils;
 import scala.Option;
 import scala.collection.JavaConversions;
 
@@ -20,10 +19,6 @@ import java.util.Collection;
 
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
-/**
- * @author fgaule
- * @since 07/08/2014
- */
 public abstract class BaseModelProperty implements ModelProperty {
 
   private static final String EMPTY_STRING = "";
