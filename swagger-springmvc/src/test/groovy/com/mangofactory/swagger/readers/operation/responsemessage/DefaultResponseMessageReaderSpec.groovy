@@ -1,9 +1,7 @@
-package com.mangofactory.swagger.readers.operation
-
+package com.mangofactory.swagger.readers.operation.responsemessage
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
-import com.mangofactory.swagger.core.ModelUtils
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -11,10 +9,10 @@ import com.wordnik.swagger.model.ResponseMessage
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.ScalaUtils.*
+import static com.mangofactory.swagger.ScalaUtils.fromOption
 
 @Mixin(RequestMappingSupport)
-class OperationResponseMessageReaderSpec extends Specification {
+class DefaultResponseMessageReaderSpec extends Specification {
 
    def "Should add default response messages"() {
     given:
@@ -27,7 +25,7 @@ class OperationResponseMessageReaderSpec extends Specification {
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
       context.put("currentHttpMethod", currentHttpMethod)
     when:
-      OperationResponseMessageReader operationResponseMessageReader = new OperationResponseMessageReader()
+      DefaultResponseMessageReader operationResponseMessageReader = new DefaultResponseMessageReader()
       operationResponseMessageReader.execute(context)
       Map<String, Object> result = context.getResult()
 
@@ -50,7 +48,7 @@ class OperationResponseMessageReaderSpec extends Specification {
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
       context.put("currentHttpMethod", RequestMethod.GET)
     when:
-      OperationResponseMessageReader operationResponseMessageReader = new OperationResponseMessageReader()
+      DefaultResponseMessageReader operationResponseMessageReader = new DefaultResponseMessageReader()
       operationResponseMessageReader.execute(context)
       Map<String, Object> result = context.getResult()
 
@@ -69,11 +67,10 @@ class OperationResponseMessageReaderSpec extends Specification {
       swaggerGlobalSettings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider(new TypeResolver());
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithConcreteResponseBody'))
 
-      new ModelUtils()
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
       context.put("currentHttpMethod", RequestMethod.GET)
     when:
-      OperationResponseMessageReader operationResponseMessageReader = new OperationResponseMessageReader()
+      DefaultResponseMessageReader operationResponseMessageReader = new DefaultResponseMessageReader()
       operationResponseMessageReader.execute(context)
       Map<String, Object> result = context.getResult()
       ResponseMessage responseMessage =  result['responseMessages'].find{ it.code == 200 }

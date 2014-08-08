@@ -3,6 +3,7 @@ package com.mangofactory.swagger.readers;
 import com.google.common.base.Splitter;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
+import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -19,7 +20,7 @@ import java.util.Set;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
-public class MediaTypeReader implements Command<RequestMappingContext> {
+public class MediaTypeReader implements RequestMappingReader {
 
    @Override
    public void execute(RequestMappingContext context) {

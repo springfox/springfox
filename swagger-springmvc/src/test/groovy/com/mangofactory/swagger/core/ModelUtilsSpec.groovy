@@ -21,4 +21,10 @@ class ModelUtilsSpec extends Specification {
       dummyHandlerMethod("methodWithConcreteCorporationModel") | DummyModels.CorporationModel.class
    }
 
+  def "Should be instantiated when needed for test coverage"() {
+    when:
+      def modelUtils = new ModelUtils()
+    then:
+      modelUtils.class == ModelUtils
+  }
 }

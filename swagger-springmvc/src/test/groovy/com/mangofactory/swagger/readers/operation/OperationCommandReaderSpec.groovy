@@ -1,6 +1,11 @@
 package com.mangofactory.swagger.readers.operation
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
+import com.mangofactory.swagger.readers.operation.deprecated.OperationDeprecatedReader
+import com.mangofactory.swagger.readers.operation.nickname.OperationNicknameReader
+import com.mangofactory.swagger.readers.operation.notes.OperationNotesReader
+import com.mangofactory.swagger.readers.operation.position.OperationPositionReader
+import com.mangofactory.swagger.readers.operation.summary.OperationSummaryReader
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import spock.lang.Specification
 

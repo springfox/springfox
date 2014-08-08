@@ -19,7 +19,7 @@ public class SwaggerGlobalSettings {
     /**
      * Map of spring RequestMethod's to a list of http status codes and accompanying messages
      *
-     * @see com.mangofactory.swagger.readers.operation.OperationResponseMessageReader
+     * @see com.mangofactory.swagger.readers.operation.responsemessage.DefaultResponseMessageReader
      */
     private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
     private TypeResolver typeResolver = new TypeResolver();
