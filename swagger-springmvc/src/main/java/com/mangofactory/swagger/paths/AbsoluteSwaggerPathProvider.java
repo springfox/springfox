@@ -2,10 +2,12 @@ package com.mangofactory.swagger.paths;
 
 import com.mangofactory.swagger.controllers.DefaultSwaggerController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletContext;
 
+@Component
 public class AbsoluteSwaggerPathProvider extends SwaggerPathProvider {
 
    @Autowired

@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.mixins
 
+import com.wordnik.swagger.core.util.JsonSerializer
 import groovy.json.JsonSlurper
 import org.springframework.test.web.servlet.MvcResult
 
@@ -15,6 +16,6 @@ class JsonSupport {
    }
 
   def String swaggerCoreSerialize(obj){
-    com.wordnik.swagger.core.util.JsonSerializer.asJson(obj);
+    JsonSerializer.asJson(obj);
   }
 }

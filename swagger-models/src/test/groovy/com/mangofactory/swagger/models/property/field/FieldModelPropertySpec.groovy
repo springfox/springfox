@@ -1,18 +1,15 @@
-package com.mangofactory.swagger.models
-import com.fasterxml.classmate.MemberResolver
-import com.fasterxml.classmate.ResolvedTypeWithMembers
-import com.fasterxml.classmate.TypeResolver
-import com.fasterxml.classmate.members.ResolvedField
+package com.mangofactory.swagger.models.property.field
+
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
+import com.mangofactory.swagger.models.ModelContext
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.wordnik.swagger.model.AllowableListValues
 import scala.collection.JavaConversions
 import spock.lang.Specification
 
-import static com.google.common.collect.Lists.*
-import static com.mangofactory.swagger.models.ResolvedTypes.*
-import static com.mangofactory.swagger.models.ScalaConverters.*
+import static com.google.common.collect.Lists.newArrayList
+import static com.mangofactory.swagger.models.ScalaConverters.fromOption
 
 @Mixin([TypesForTestingSupport, ModelPropertySupport])
 class FieldModelPropertySpec extends Specification {

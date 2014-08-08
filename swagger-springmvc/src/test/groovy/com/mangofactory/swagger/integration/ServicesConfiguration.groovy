@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.integration
-
 import com.mangofactory.swagger.authorization.AuthorizationContext
+import com.mangofactory.swagger.configuration.DefaultJavaPluginConfig
 import com.mangofactory.swagger.configuration.JacksonSwaggerSupport
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
@@ -8,18 +8,7 @@ import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.models.ModelProvider
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
-import com.wordnik.swagger.model.ApiInfo
-import com.wordnik.swagger.model.Authorization
-import com.wordnik.swagger.model.AuthorizationCodeGrant
-import com.wordnik.swagger.model.AuthorizationScope
-import com.wordnik.swagger.model.AuthorizationType
-import com.wordnik.swagger.model.GrantType
-import com.wordnik.swagger.model.ImplicitGrant
-import com.wordnik.swagger.model.LoginEndpoint
-import com.wordnik.swagger.model.OAuth
-import com.wordnik.swagger.model.OAuthBuilder
-import com.wordnik.swagger.model.TokenEndpoint
-import com.wordnik.swagger.model.TokenRequestEndpoint
+import com.wordnik.swagger.model.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -34,7 +23,7 @@ import static com.google.common.collect.Lists.newArrayList
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.mangofactory.swagger.dummy")
-@Import(SpringSwaggerConfig.class)
+@Import([DefaultJavaPluginConfig.class, SpringSwaggerConfig.class])
 public class ServicesConfiguration {
 
   //TODO - AK - rewrite to use new plugin builder

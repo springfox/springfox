@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +35,9 @@ public class CustomXmlJavaConfig {
               .swaggerGroup("secondCustomPlugin")
               .includePatterns("/feature.*");
    }
+
+  @Bean
+  public ObjectMapper objectMapper() {
+    return new ObjectMapper();
+  }
 }

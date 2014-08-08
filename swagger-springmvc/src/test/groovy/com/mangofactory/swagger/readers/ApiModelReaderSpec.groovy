@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse
 import static com.mangofactory.swagger.ScalaUtils.*
 import static com.mangofactory.swagger.models.alternates.Alternates.newRule
 
-@Mixin([RequestMappingSupport, ApiOperationSupport, ModelProviderSupport, JsonSupport])
+@Mixin([RequestMappingSupport, ApiOperationSupport, JsonSupport, ModelProviderSupport])
 class ApiModelReaderSpec extends Specification {
 
   def "Method return type model"() {
