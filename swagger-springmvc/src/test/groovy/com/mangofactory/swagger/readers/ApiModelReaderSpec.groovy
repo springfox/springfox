@@ -265,4 +265,37 @@ class ApiModelReaderSpec extends Specification {
       nameProperty.description().isEmpty() == false
 
   }
+
+  def "model should include property that is only visible during serialization"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
+              DummyModels.ModelWithSerializeOnlyProperty
+      )
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
+
+      def settings = new SwaggerGlobalSettings()
+      def config = new SpringSwaggerConfig()
+      settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      context.put("swaggerGlobalSettings", settings)
+
+    when:
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
+      apiModelReader.execute(context)
+      Map<String, Model> result = context.getResult()
+
+    then:
+      Map<String, Model> models = result.get("models")
+      models.size() == 1
+
+      String modelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
+      models.containsKey(modelName)
+
+      Model model = models[modelName]
+      Map modelProperties = fromScalaMap(model.properties())
+      modelProperties.containsKey('visibleForSerialize')
+
+  }
 }
