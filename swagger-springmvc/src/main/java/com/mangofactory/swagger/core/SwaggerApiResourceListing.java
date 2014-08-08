@@ -8,6 +8,7 @@ import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
+import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.ApiListingScanner;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
@@ -23,13 +24,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.mangofactory.swagger.ScalaUtils.fromOption;
-import static com.mangofactory.swagger.ScalaUtils.toOption;
-import static com.mangofactory.swagger.ScalaUtils.toScalaList;
+import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class SwaggerApiResourceListing {
   private static final Logger log = LoggerFactory.getLogger(SwaggerApiResourceListing.class);
@@ -46,6 +46,7 @@ public class SwaggerApiResourceListing {
   private String apiVersion = "1";
   private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
   private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
+  private Collection<RequestMappingReader> customAnnotationReaders;
 
   public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
     this.swaggerCache = swaggerCache;
@@ -61,7 +62,7 @@ public class SwaggerApiResourceListing {
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings =
               apiListingReferenceScanner.getResourceGroupRequestMappings();
       ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider,
-              modelProvider, authorizationContext);
+              modelProvider, authorizationContext, customAnnotationReaders);
 
       apiListingScanner.setApiDescriptionOrdering(apiDescriptionOrdering);
       apiListingScanner.setSwaggerGlobalSettings(swaggerGlobalSettings);
@@ -87,7 +88,8 @@ public class SwaggerApiResourceListing {
     log.info("Added a resource listing with ({}) api resources: ", apiListingReferences.size());
     for (ApiListingReference apiListingReference : apiListingReferences) {
       String path = fromOption(apiListingReference.description());
-      String prefix = (path != null && path.startsWith("http")) ? path : DefaultSwaggerController.DOCUMENTATION_BASE_PATH;
+      String prefix = (path != null && path.startsWith("http")) ? path : DefaultSwaggerController
+              .DOCUMENTATION_BASE_PATH;
       log.info("  {} at location: {}{}", path, prefix, apiListingReference.path());
     }
 
@@ -96,14 +98,6 @@ public class SwaggerApiResourceListing {
 
   public SwaggerCache getSwaggerCache() {
     return swaggerCache;
-  }
-
-  public void setSwaggerCache(SwaggerCache swaggerCache) {
-    this.swaggerCache = swaggerCache;
-  }
-
-  public ApiInfo getApiInfo() {
-    return apiInfo;
   }
 
   public void setApiInfo(ApiInfo apiInfo) {
@@ -116,10 +110,6 @@ public class SwaggerApiResourceListing {
 
   public void setAuthorizationTypes(List<AuthorizationType> authorizationTypes) {
     this.authorizationTypes = authorizationTypes;
-  }
-
-  public ApiListingReferenceScanner getApiListingReferenceScanner() {
-    return apiListingReferenceScanner;
   }
 
   public void setApiListingReferenceScanner(ApiListingReferenceScanner apiListingReferenceScanner) {
@@ -142,14 +132,6 @@ public class SwaggerApiResourceListing {
     this.swaggerGlobalSettings = swaggerGlobalSettings;
   }
 
-  public String getSwaggerGroup() {
-    return swaggerGroup;
-  }
-
-  public void setSwaggerGroup(String swaggerGroup) {
-    this.swaggerGroup = swaggerGroup;
-  }
-
   public void setAuthorizationContext(AuthorizationContext authorizationContext) {
     this.authorizationContext = authorizationContext;
   }
@@ -168,5 +150,9 @@ public class SwaggerApiResourceListing {
 
   public void setApiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
     this.apiDescriptionOrdering = apiDescriptionOrdering;
+  }
+
+  public void setCustomAnnotationReaders(Collection<RequestMappingReader> customAnnotationReaders) {
+    this.customAnnotationReaders = customAnnotationReaders;
   }
 }

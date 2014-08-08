@@ -19,7 +19,7 @@ class ApiDescriptionReaderSpec extends Specification {
    def "should generate an api description for each request mapping pattern"() {
       given:
 
-        ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(pathProvider)
+        ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(pathProvider, [])
         RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
                 [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
         )
@@ -56,7 +56,8 @@ class ApiDescriptionReaderSpec extends Specification {
 
    def "should sanitize request mapping endpoints"() {
       expect:
-        new ApiDescriptionReader(absoluteSwaggerPathProvider()).sanitizeRequestMappingPattern(mappingPattern) == expected
+        new ApiDescriptionReader(absoluteSwaggerPathProvider(), []).sanitizeRequestMappingPattern(mappingPattern) ==
+                expected
 
       where:
         mappingPattern             | expected

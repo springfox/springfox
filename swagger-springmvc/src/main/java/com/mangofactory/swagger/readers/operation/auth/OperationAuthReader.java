@@ -1,7 +1,7 @@
-package com.mangofactory.swagger.readers.operation;
+package com.mangofactory.swagger.readers.operation.auth;
 
 import com.mangofactory.swagger.authorization.AuthorizationContext;
-import com.mangofactory.swagger.readers.Command;
+import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.Authorization;
@@ -11,9 +11,9 @@ import org.springframework.web.method.HandlerMethod;
 
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.*;
 
-public class OperationAuthReader implements Command<RequestMappingContext> {
+public class OperationAuthReader implements RequestMappingReader {
 
    @Override
    public void execute(RequestMappingContext context) {
