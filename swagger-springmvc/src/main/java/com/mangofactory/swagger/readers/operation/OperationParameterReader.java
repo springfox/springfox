@@ -3,7 +3,6 @@ package com.mangofactory.swagger.readers.operation;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.readers.Command;
-<<<<<<< HEAD:swagger-springmvc/src/main/java/com/mangofactory/swagger/readers/operation/OperationParameterReader.java
 import com.mangofactory.swagger.readers.operation.parameter.ParameterAllowableReader;
 import com.mangofactory.swagger.readers.operation.parameter.ParameterDataTypeReader;
 import com.mangofactory.swagger.readers.operation.parameter.ParameterDefaultReader;
@@ -12,8 +11,6 @@ import com.mangofactory.swagger.readers.operation.parameter.ParameterMultiplesRe
 import com.mangofactory.swagger.readers.operation.parameter.ParameterNameReader;
 import com.mangofactory.swagger.readers.operation.parameter.ParameterRequiredReader;
 import com.mangofactory.swagger.readers.operation.parameter.ParameterTypeReader;
-=======
->>>>>>> cec296b... Unfolding readers.operation.*:swagger-springmvc/src/main/java/com/mangofactory/swagger/readers/operation/OperationParameterReader.java
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.model.AllowableValues;
 import com.wordnik.swagger.model.Parameter;
