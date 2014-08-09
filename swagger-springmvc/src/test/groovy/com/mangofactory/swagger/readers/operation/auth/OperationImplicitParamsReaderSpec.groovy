@@ -4,9 +4,9 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
-import com.mangofactory.swagger.readers.operation.parameter.OperationImplicitParameterReader
-import com.mangofactory.swagger.readers.operation.parameter.OperationImplicitParametersReader
-import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader
+import com.mangofactory.swagger.readers.operation.OperationImplicitParameterReader
+import com.mangofactory.swagger.readers.operation.OperationImplicitParametersReader
+import com.mangofactory.swagger.readers.operation.OperationParameterReader
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import spock.lang.Shared
 import spock.lang.Specification

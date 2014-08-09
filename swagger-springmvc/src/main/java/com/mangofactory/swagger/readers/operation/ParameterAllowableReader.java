@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.readers.operation.parameter;
+package com.mangofactory.swagger.readers.operation;
 
 import com.google.common.base.Splitter;
 import com.mangofactory.swagger.readers.Command;
