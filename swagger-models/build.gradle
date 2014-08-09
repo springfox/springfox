@@ -7,17 +7,26 @@ dependencies{
 }
 
 publishing {
+  repositories {
+    configure(releaseRepos)
+  }
   publications {
-    mavenSwagerModels(MavenPublication) {
+    mavenSwaggerMvc(MavenPublication) {
       from components.java
 
       artifact packageSources {
         classifier "sources"
       }
-    }
-  }
 
-  repositories {
-    configure(releaseRepos)
+      pom.withXml {
+        asNode().dependencies.'*'.findAll() {
+          project.configurations.provided.allDependencies.find { dep ->
+            dep.name == it.artifactId.text()
+          }
+        }.each() {
+          it.scope*.value = 'provided'
+        }
+      }
+    }
   }
 }

@@ -1,6 +1,5 @@
 apply from: "$rootDir/gradle/dependencies.gradle"
 
-
 buildscript {
   repositories {
     jcenter()
@@ -16,6 +15,12 @@ subprojects {
   sourceCompatibility = 1.6
   targetCompatibility = 1.6
 
+  //Adds provide dependency configuration
+  configurations {
+    provided
+    compile.extendsFrom provided
+  }
+
   group = 'com.mangofactory'
   version = '0.7.77'
 
@@ -23,7 +28,6 @@ subprojects {
   jvmsrc {
      packageName "${group}.swagger"
   }
-  
 
   apply plugin: 'checkstyle'
   checkstyle{

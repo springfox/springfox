@@ -26,6 +26,33 @@ ext {
 //      }
 //    }
   }
+
+
+
+  pomConfig = {
+    licenses {
+      license {
+        name "The Apache Software License, Version 2.0"
+        url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        distribution "repo"
+      }
+    }
+    developers {
+      developer {
+        id "yoav"
+        name "Yoav Landman"
+        email "yoavl@jfrog.com"
+      }
+    }
+  }
+
+//  pom.withXml {
+//    def root = asNode()
+//    root.appendNode('description', 'A gradle plugin for publishing to Bintray')
+//    root.children().last() + pomConfig
+//  }
+
+
 }
 
 task packageSources(type: Jar) {

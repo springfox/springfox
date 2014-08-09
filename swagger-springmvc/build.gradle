@@ -2,13 +2,16 @@ dependencies {
   compile libs.swaggerCore
   compile libs.core
   compile libs.spring
-  compile libs.clientProvided
+  provided libs.clientProvided
 
   compile project(':swagger-models')
   testCompile libs.test
 }
 
 publishing {
+  repositories {
+    configure(releaseRepos)
+  }
   publications {
     mavenSwaggerMvc(MavenPublication) {
       from components.java
@@ -16,10 +19,16 @@ publishing {
       artifact packageSources {
         classifier "sources"
       }
-    }
-  }
 
-  repositories {
-    configure(releaseRepos)
+      pom.withXml {
+        asNode().dependencies.'*'.findAll() {
+          project.configurations.provided.allDependencies.find { dep ->
+            dep.name == it.artifactId.text()
+          }
+        }.each() {
+          it.scope*.value = 'provided'
+        }
+      }
+    }
   }
 }
