@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.readers.operation.auth;
+package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;

@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.readers.operation.parameter;
+package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
