@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.readers.operation;
 
 import com.google.common.collect.Lists;
-import com.mangofactory.swagger.readers.operation.parameter.ParameterAllowableReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.model.Parameter;
@@ -40,7 +39,7 @@ public class OperationImplicitParameterReader extends SwaggerParameterReader {
             param.paramType(),
             toOption(param.access())
     );
-   }
+  }
 
 }
 
