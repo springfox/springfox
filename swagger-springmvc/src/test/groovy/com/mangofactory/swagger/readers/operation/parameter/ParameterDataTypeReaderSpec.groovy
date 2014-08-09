@@ -7,6 +7,7 @@ import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.readers.Command
+import com.mangofactory.swagger.readers.operation.ParameterDataTypeReader
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.core.MethodParameter

@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.readers.operation.responsemessage;
+package com.mangofactory.swagger.readers.operation;
 
 import com.google.common.collect.Lists;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
