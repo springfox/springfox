@@ -1,6 +1,5 @@
-package com.mangofactory.swagger.readers.operation.position;
+package com.mangofactory.swagger.readers.operation;
 
-import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

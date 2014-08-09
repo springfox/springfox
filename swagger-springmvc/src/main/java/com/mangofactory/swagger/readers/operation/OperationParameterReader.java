@@ -1,10 +1,8 @@
-package com.mangofactory.swagger.readers.operation.parameter;
+package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.readers.Command;
-import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
-import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.model.AllowableValues;
 import com.wordnik.swagger.model.Parameter;
