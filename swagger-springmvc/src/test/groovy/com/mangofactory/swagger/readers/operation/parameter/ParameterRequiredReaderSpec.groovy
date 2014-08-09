@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.readers.operation.parameter
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
-import com.mangofactory.swagger.readers.operation.ParameterRequiredReader
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
