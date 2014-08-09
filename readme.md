@@ -236,7 +236,7 @@ Swagger-springmvc stores the generated swagger documentation, in memory, and ser
 
 ![alt tag](https://raw.githubusercontent.com/martypitt/swagger-springmvc/master/docs/swaggerSpringMvc.png)
 
-1. Swagger group
+#### Swagger group
 
 A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
 within your application. The reason this concept was introduced was to support applications which require more than one
@@ -246,12 +246,12 @@ Resource Listing. Why would you need more than one Resource Listing?
 
  In most cases an application will not need more than one Resource Listing and the concept of swagger groups can be ignored.
 
-2. Resource Listing
+#### Resource Listing
 
 Please see the Swagger Specification for a detailed explanation.
 
 
-3. API Documentation Endpoints
+#### API Documentation Endpoints
 
 All swagger documentation (JSON responses) are served from DefaultSwaggerController. The controller maintains a cache
 of ResourcesListing's which are uniquely identified by the `swaggerGroup`. There is a 1:1 relationship between 
@@ -358,36 +358,36 @@ swaggerSpringMvcPlugin.ignoredParameterTypes(MyCustomType.class)
 By default, a number of Spring's handler method arguments are ignored. See: com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
  
 
-##Development
+##Development 
 
-- Running tests with coverage:
-```
+Running tests with coverage:
+```bash
 mvn test jacoco:check
 ```
 Report directory: \target\site\jacoco-ut
 
 Coverage only
-```
+```bash
 mvn jacoco:check
 ```
 
 Deploy to local nexus
-```
+```bash
 mvn deploy
 ```
 
 -Coverage Help
-```
+```bash
 mvn org.jacoco:jacoco-maven-plugin:0.6.3.201306030806:check
 ```
 
 Skipping coverage
-```
+```bash
 mvn deploy -Djacoco.skip=true
 ```
 
 Pre Commit or before submitting a pull request
-```
+```bash
 mvn verify
 ```
 
@@ -407,3 +407,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
