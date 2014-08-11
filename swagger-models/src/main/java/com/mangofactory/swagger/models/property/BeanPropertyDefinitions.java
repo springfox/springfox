@@ -22,12 +22,15 @@ public class BeanPropertyDefinitions {
   }
 
   public static Optional<BeanPropertyDefinition> jacksonPropertyWithSameInternalName(BeanDescription beanDescription,
-                                                                         BeanPropertyDefinition propertyDefinition) {
-    return FluentIterable.from(beanDescription.findProperties()).firstMatch(withSameInternalName(propertyDefinition));
+      BeanPropertyDefinition propertyDefinition) {
+
+    return FluentIterable.from(beanDescription.findProperties())
+            .firstMatch(withSameInternalName(propertyDefinition));
   }
 
-  private static Predicate<BeanPropertyDefinition> withSameInternalName(final BeanPropertyDefinition
-                                                                                propertyDefinition) {
+  private static Predicate<BeanPropertyDefinition> withSameInternalName(
+      final BeanPropertyDefinition propertyDefinition) {
+
     return new Predicate<BeanPropertyDefinition>() {
       @Override
       public boolean apply(BeanPropertyDefinition input) {
