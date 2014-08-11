@@ -8,6 +8,9 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
 public class BeanPropertyDefinitions {
+  private BeanPropertyDefinitions() {
+    throw new UnsupportedOperationException();
+  }
 
   public static Function<BeanPropertyDefinition, String> beanPropertyByInternalName() {
     return new Function<BeanPropertyDefinition, String>() {

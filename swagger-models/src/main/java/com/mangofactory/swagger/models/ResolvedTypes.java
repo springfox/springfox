@@ -20,7 +20,11 @@ import static com.mangofactory.swagger.models.Types.*;
 
 public class ResolvedTypes {
 
-    public static String typeName(ResolvedType type) {
+  private ResolvedTypes() {
+    throw new UnsupportedOperationException();
+  }
+
+  public static String typeName(ResolvedType type) {
         if (isContainerType(type)) {
             return containerType(type);
         }

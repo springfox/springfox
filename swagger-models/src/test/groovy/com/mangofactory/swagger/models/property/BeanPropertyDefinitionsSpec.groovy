@@ -15,10 +15,4 @@ class BeanPropertyDefinitionsSpec extends Specification {
       name == "aName"
   }
 
-  def "Should be instantiated when needed for test coverage"() {
-    when:
-      def propertyUtils = new BeanPropertyDefinitions()
-    then:
-      propertyUtils.class == BeanPropertyDefinitions
-  }
 }
