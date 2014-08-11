@@ -23,20 +23,17 @@ ext {
       }
     }
 
-    //TODO - deploy release versions on bintray
-//    if (!project.version.endsWith('-SNAPSHOT')) {
-//      maven {
-//        name 'bintray'
-//        url "https://api.bintray.com/maven/adrianbkelly/maven/${artifactLabel}"
-//        credentials {
-//          username = 'adrianbkelly'
-//          password = project.hasProperty('bintray_key') ? project.getProperty('bintray_key') : ''
-//        }
-//      }
-//    }
+    if (!project.version.endsWith('-SNAPSHOT')) {
+      maven {
+        name 'bintray'
+        url "https://api.bintray.com/maven/swaggerspringmvc/swaggerspringmvc/${project.name}"
+        credentials {
+          username = relUsername
+          password = relPassword
+        }
+      }
+    }
   }
-
-
 
   pomMetaData = {
     licenses {
