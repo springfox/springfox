@@ -59,7 +59,6 @@ public class SpringSwaggerConfig {
   private ModelProvider modelProvider;
 
   @Autowired
-  @Qualifier("defaultAlternateTypeProvider")
   private AlternateTypeProvider alternateTypeProvider;
 
   @Autowired
