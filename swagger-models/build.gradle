@@ -1,9 +1,9 @@
-dependencies{
- compile libs.swaggerCore 
- compile libs.core
- compile libs.spring 
- provided libs.clientProvided
- testCompile libs.test 
+dependencies {
+  compile libs.swaggerCore
+  compile libs.core
+  compile libs.spring
+  provided libs.clientProvided
+  testCompile libs.test
 }
 
 publishing {

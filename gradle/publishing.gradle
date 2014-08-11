@@ -1,16 +1,25 @@
 ext {
-  artifactRepoBase = 'http://localhost:8081/artifactory'
+  developerMachines = ['adrianxbk']
+
+  relUsername = project.hasProperty('username') ? project.getProperty('username') : 'admin'
+  relPassword = project.hasProperty('password') ? project.getProperty('password') : 'password'
+
+  if (developerMachines.contains(System.getenv('USER'))) {
+    artifactRepoBase = 'http://localhost:8081/artifactory'
+    repoPrefix = 'libs'
+  } else {
+    artifactRepoBase = 'http://oss.jfrog.org/artifactory'
+    repoPrefix = 'oss'
+  }
+
 
   releaseRepos = {
     maven {
       name 'jcenter'
-//      url "${artifactRepoBase}/oss-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
-      url "${artifactRepoBase}/libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
-
+      url "${artifactRepoBase}/${repoPrefix}-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
       credentials {
-        username = 'admin'
-//        password = project.hasProperty('bintray_key') ? project.getProperty('bintray_key') : ''
-        password = 'password'
+        username = "$relUsername"
+        password = "$relPassword"
       }
     }
 
