@@ -29,7 +29,7 @@ ext {
 
 
 
-  pomConfig = {
+  pomMetaData = {
     licenses {
       license {
         name "The Apache Software License, Version 2.0"
@@ -39,21 +39,46 @@ ext {
     }
     developers {
       developer {
-        id "yoav"
-        name "Yoav Landman"
-        email "yoavl@jfrog.com"
+        id "martypitt@me.com"
+        name "Marty Pitt"
+        organization "The Mango Factory"
+        email "martypitt@me.com"
+      }
+      developer {
+        id "dilipkrish"
+        name "Dilip Krishnan"
+        organization "The Container Store"
+        email "dilipkrish_subscriptions@yahoo.com"
+      }
+      developer {
+        id "adrianbk"
+        name "Adrian Kelly"
+        organization "DiUS Computing"
+        email "adrianbkelly+swagger@gmail.com"
       }
     }
   }
 
-//  pom.withXml {
-//    def root = asNode()
-//    root.appendNode('description', 'A gradle plugin for publishing to Bintray')
-//    root.children().last() + pomConfig
-//  }
+  //Gralde's maven-publish plugin does not yet handles pom generation correctly. Fix expected in 2.1
+  swaggerMvcPomConfig = {
+    def dependencies = asNode().dependencies
+    def allDependencies = dependencies.'*'
 
+    allDependencies.findAll() {
+      project.configurations.provided.allDependencies.find { dep ->
+        dep.name == it.artifactId.text()
+      }
+    }.each() {
+      it.scope*.value = 'provided'
+    }
 
+    Node groovyDep = allDependencies.find { it.artifactId.text() == 'groovy-all' }
+    groovyDep.scope*.value = 'test'
+
+    asNode().children().last() + pomMetaData
+  }
 }
+
 
 task packageSources(type: Jar) {
   classifier = 'sources'

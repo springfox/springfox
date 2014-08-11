@@ -20,15 +20,7 @@ publishing {
         classifier "sources"
       }
 
-      pom.withXml {
-        asNode().dependencies.'*'.findAll() {
-          project.configurations.provided.allDependencies.find { dep ->
-            dep.name == it.artifactId.text()
-          }
-        }.each() {
-          it.scope*.value = 'provided'
-        }
-      }
+      pom.withXml swaggerMvcPomConfig
     }
   }
 }

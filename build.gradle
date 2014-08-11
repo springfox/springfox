@@ -22,7 +22,7 @@ subprojects {
   }
 
   group = 'com.mangofactory'
-  version = '0.7.77'
+  version = '0.7.78'
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
   jvmsrc {
