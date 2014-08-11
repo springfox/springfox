@@ -193,7 +193,9 @@
                     <excludes>
                         <exclude>**/com/mangofactory/swagger/configuration/**SpringSwaggerConfig.*</exclude>
                         <exclude>**/com/mangofactory/swagger/models/configuration/**SwaggerModelsConfiguration.*</exclude>
+                        <!-- In static classes (for guava helpers) constructors arent included in coverage -->
                         <exclude>**/com/mangofactory/swagger/scanners/**ResourceGroups.*</exclude>
+                        <exclude>**/com/mangofactory/swagger/models/property/**ApiModelProperties.*</exclude>
                         <!-- TODO: REMOVE when we delete this class -->
                         <exclude>**/com/mangofactory/swagger/models/**SwaggerModelProvider.*</exclude>
                         <exclude>**/com/mangofactory/swagger/models/alternates/Entry.*</exclude>

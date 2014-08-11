@@ -1,11 +1,7 @@
 package com.mangofactory.swagger.models.property;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.mangofactory.swagger.models.ModelContext;
 import com.mangofactory.swagger.models.ResolvedTypes;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
@@ -13,15 +9,11 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.model.AllowableListValues;
 import com.wordnik.swagger.model.AllowableValues;
 import scala.Option;
-import scala.collection.JavaConversions;
-
-import java.util.Collection;
 
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
+import static com.mangofactory.swagger.models.property.ApiModelProperties.*;
 
 public abstract class BaseModelProperty implements ModelProperty {
-
-  private static final String EMPTY_STRING = "";
 
   private final Optional<ApiModelProperty> apiModelProperty;
   private final String name;
@@ -61,51 +53,32 @@ public abstract class BaseModelProperty implements ModelProperty {
 
   @Override
   public AllowableValues allowableValues() {
-    Optional<AllowableListValues> allowableValuesOptional = apiModelProperty.transform(new Function<ApiModelProperty,
-            AllowableListValues>() {
-      @Override
-      public AllowableListValues apply(ApiModelProperty annotation) {
-        Collection<String> split = Lists.newArrayList(annotation.allowableValues().split(","));
-        Collection<String> allowableValues = EMPTY_STRING.equals(Iterables.getFirst(split, EMPTY_STRING)) ?
-                Lists.<String>newArrayList() : split;
-        return new AllowableListValues(JavaConversions.collectionAsScalaIterable(allowableValues).toList(), "LIST");
-      }
-    });
-
-    if (allowableValuesOptional.isPresent() && allowableValuesOptional.get().values().size() > 0) {
-      return allowableValuesOptional.get();
+    Optional<AllowableValues> allowableValues = Optional.fromNullable(ResolvedTypes.allowableValues(getType()));
+    Optional<AllowableListValues> listValues = apiModelProperty.transform(toAllowableList());
+    //Preference to inferred allowable values over list values via ApiModelProperty
+    if (allowableValues.isPresent()) {
+      return allowableValues.get();
     }
-    return ResolvedTypes.allowableValues(getType());
+    if (allowableValuesIsEmpty(listValues)) {
+      return null;
+    }
+    return listValues.orNull();
+  }
+
+  private boolean allowableValuesIsEmpty(Optional<AllowableListValues> listValues) {
+    return !listValues.isPresent() || listValues.get().values().size() == 0;
   }
 
   @Override
   public boolean isRequired() {
-    return apiModelProperty.transform(new Function<ApiModelProperty, Boolean>() {
-      @Override
-      public Boolean apply(ApiModelProperty annotation) {
-        return annotation.required();
-      }
-    }).or(false);
+    return apiModelProperty.transform(toIsRequired()).or(false);
   }
+
 
   @Override
   public Option<String> propertyDescription() {
-
-    Optional<String> description = getApiModelProperty().transform(new Function<ApiModelProperty, String>() {
-      @Override
-      public String apply(ApiModelProperty annotation) {
-        String description = EMPTY_STRING;
-        if (!Strings.isNullOrEmpty(annotation.value())) {
-          description = annotation.value();
-        } else if (!Strings.isNullOrEmpty(annotation.notes())) {
-          description = annotation.notes();
-        }
-        return description;
-      }
-    });
-
-    return Option.apply(description.isPresent() && !Strings.isNullOrEmpty(description.get()) ? description
-            .get() : description.orNull());
+    String description = getApiModelProperty().transform(toDescription()).orNull();
+    return Option.apply(description);
   }
 
   protected Optional<ApiModelProperty> getApiModelProperty() {
