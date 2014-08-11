@@ -13,7 +13,7 @@ import static com.mangofactory.swagger.models.ResolvedTypes.*;
 public final class ModelUtils {
 
    public static ResolvedType handlerReturnType(TypeResolver resolver, HandlerMethod handlerMethod) {
-       return new HandlerMethodResolver(resolver).methodReturnType(handlerMethod.getMethod());
+       return new HandlerMethodResolver(resolver).methodReturnType(handlerMethod.getMethod(), handlerMethod.getBeanType());
    }
 
    public static String getModelName(TypeResolver resolver, Type clazz){

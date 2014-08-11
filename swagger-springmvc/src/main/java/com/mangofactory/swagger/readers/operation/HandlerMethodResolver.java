@@ -5,6 +5,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
@@ -32,10 +33,14 @@ public class HandlerMethodResolver {
     }
 
     public List<ResolvedMethodParameter> methodParameters(final HandlerMethod methodToResolve) {
-        ResolvedMethod resolvedMethod = getResolvedMethod(methodToResolve.getMethod());
+        ResolvedMethod resolvedMethod = getResolvedMethod(methodToResolve.getMethod(), methodToResolve.getBeanType());
         List<ResolvedMethodParameter> parameters = newArrayList();
         MethodParameter[] methodParameters = methodToResolve.getMethodParameters();
+
         if (resolvedMethod != null) {
+            //if this check fails methods had been been incorrectly resolved above. (Issue #303)
+            Preconditions.checkState(methodParameters.length >= resolvedMethod.getArgumentCount(),
+                        "array length mismatch for %s", methodToResolve);
             for (int index = 0; index < resolvedMethod.getArgumentCount(); index++) {
                 MethodParameter methodParameter = methodParameters[index];
                 methodParameter.initParameterNameDiscovery(new LocalVariableTableParameterNameDiscoverer());
@@ -45,16 +50,23 @@ public class HandlerMethodResolver {
         return parameters;
     }
 
-    public ResolvedType methodReturnType(final Method methodToResolve) {
-        ResolvedMethod resolvedMethod = getResolvedMethod(methodToResolve);
+    /**
+     * Resolves the return type of the given method in the class.
+     *
+     * @param methodToResolve a method which is declared in the implementing class or one of its subclasses
+     * @param actualClass the actual class. Used to resolve generic types if needed.
+     * @return
+     */
+    public ResolvedType methodReturnType(final Method methodToResolve, Class<?> actualClass) {
+        ResolvedMethod resolvedMethod = getResolvedMethod(methodToResolve, actualClass);
         if (resolvedMethod != null) {
             return returnTypeOrVoid(resolvedMethod);
         }
         return asResolved(typeResolver, methodToResolve.getReturnType());
     }
 
-    private ResolvedMethod getResolvedMethod(final Method methodToResolve) {
-        ResolvedType enclosingType = typeResolver.resolve(methodToResolve.getDeclaringClass());
+    private ResolvedMethod getResolvedMethod(final Method methodToResolve, Class<?> actualClass) {
+        ResolvedType enclosingType = typeResolver.resolve(actualClass);
         MemberResolver resolver = new MemberResolver(typeResolver);
         resolver.setIncludeLangObject(false);
         ResolvedTypeWithMembers typeWithMembers = resolver.resolve(enclosingType, null, null);
