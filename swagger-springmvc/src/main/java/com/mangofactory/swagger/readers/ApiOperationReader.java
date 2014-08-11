@@ -44,11 +44,12 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
           .values()));
 
   public static final OperationPositionalOrdering OPERATION_POSITIONAL_ORDERING = new OperationPositionalOrdering();
-  private Collection<RequestMappingReader> customAnnotationReader;
+  private Collection<RequestMappingReader> customAnnotationReaders;
 
-  public ApiOperationReader(Collection<RequestMappingReader> customAnnotationReader) {
-    this.customAnnotationReader = customAnnotationReader == null ? Lists.<RequestMappingReader>newArrayList
-            () : customAnnotationReader;
+  public ApiOperationReader(Collection<RequestMappingReader> customAnnotationReaders) {
+    this.customAnnotationReaders = customAnnotationReaders == null
+            ? Lists.<RequestMappingReader>newArrayList()
+            : customAnnotationReaders;
   }
 
   @Override
@@ -64,7 +65,8 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
 
     Set<RequestMethod> requestMethods = requestMethodsRequestCondition.getMethods();
     Set<RequestMethod> supportedMethods = (requestMethods == null || requestMethods.isEmpty())
-            ? allRequestMethods : requestMethods;
+            ? allRequestMethods
+            : requestMethods;
 
     List<RequestMappingReader> commandList = newArrayList();
     commandList.add(new OperationAuthReader());
@@ -81,7 +83,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
     commandList.add(new MediaTypeReader());
     commandList.add(new DefaultResponseMessageReader());
     commandList.add(new OperationDeprecatedReader());
-    commandList.addAll(customAnnotationReader);
+    commandList.addAll(customAnnotationReaders);
     Integer currentCount = 0;
     for (RequestMethod httpRequestMethod : supportedMethods) {
       CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();

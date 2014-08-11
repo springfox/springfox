@@ -51,9 +51,11 @@ public class ApiListingScanner {
   private Collection<RequestMappingReader> customAnnotationReaders;
 
   public ApiListingScanner(Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings,
-                           SwaggerPathProvider swaggerPathProvider, ModelProvider modelProvider,
-                           AuthorizationContext authorizationContext, Collection<RequestMappingReader>
-          customAnnotationReaders) {
+        SwaggerPathProvider swaggerPathProvider,
+        ModelProvider modelProvider,
+        AuthorizationContext authorizationContext,
+        Collection<RequestMappingReader> customAnnotationReaders) {
+
     this.resourceGroupRequestMappings = resourceGroupRequestMappings;
     this.swaggerPathProvider = swaggerPathProvider;
     this.authorizationContext = authorizationContext;
