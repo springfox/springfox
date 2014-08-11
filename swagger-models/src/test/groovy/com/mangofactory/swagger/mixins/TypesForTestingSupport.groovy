@@ -89,6 +89,10 @@ class TypesForTestingSupport {
     TypeWithGettersAndSetters
   }
 
+  static Class typeForTestingAnnotatedGettersAndSetter(){
+    TypeWithAnnotatedGettersAndSetters
+  }
+
   static ResolvedType hashMap(def keyClazz, def valueClazz) {
     resolver.resolve(Map, keyClazz, valueClazz)
   }

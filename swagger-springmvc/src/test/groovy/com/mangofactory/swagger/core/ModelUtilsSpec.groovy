@@ -34,10 +34,4 @@ class ModelUtilsSpec extends Specification {
       Integer     | "GenericType«int»"
   }
 
-  def "Should be instantiated when needed for test coverage"() {
-    when:
-      def modelUtils = new ModelUtils()
-    then:
-      modelUtils.class == ModelUtils
-  }
 }
