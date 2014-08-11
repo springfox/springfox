@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.models.DefaultModelProvider
 import com.mangofactory.swagger.models.ModelDependencyProvider
 import com.mangofactory.swagger.models.ModelProvider
+import com.mangofactory.swagger.models.NoRenamingStrategy
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.mangofactory.swagger.models.property.bean.AccessorsProvider
 import com.mangofactory.swagger.models.property.bean.BeanModelPropertyProvider
@@ -20,11 +21,12 @@ class ModelProviderSupport {
     def fields = new FieldProvider(typeResolver)
 
     def objectMapper = new ObjectMapper()
+    def namingStrategy = new NoRenamingStrategy()
 
     def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver,
-            alternateTypeProvider)
-    def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, alternateTypeProvider)
-    def constructorModelPropertyProvider = new ConstructorModelPropertyProvider(fields, alternateTypeProvider)
+            alternateTypeProvider, namingStrategy)
+    def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, alternateTypeProvider, namingStrategy)
+    def constructorModelPropertyProvider = new ConstructorModelPropertyProvider(fields, alternateTypeProvider, namingStrategy)
 
     def modelPropertiesProvider = new DefaultModelPropertiesProvider(beanModelPropertyProvider,
             fieldModelPropertyProvider, constructorModelPropertyProvider)

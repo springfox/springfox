@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.base.Optional;
+import com.mangofactory.swagger.models.NamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.property.BeanPropertyDefinitions;
 import com.mangofactory.swagger.models.property.ModelProperty;
@@ -18,6 +19,7 @@ import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,16 +35,19 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(BeanModelPropertyProvider.class);
   private final AccessorsProvider accessors;
+  private final NamingStrategy namingStrategy;
   private ObjectMapper objectMapper;
   private final TypeResolver typeResolver;
   private final AlternateTypeProvider alternateTypeProvider;
 
   @Autowired
   public BeanModelPropertyProvider(AccessorsProvider accessors, TypeResolver typeResolver,
-                                   AlternateTypeProvider alternateTypeProvider) {
+                                   AlternateTypeProvider alternateTypeProvider,
+                                   @Qualifier("namingStrategy") NamingStrategy namingStrategy) {
     this.typeResolver = typeResolver;
     this.alternateTypeProvider = alternateTypeProvider;
     this.accessors = accessors;
+    this.namingStrategy = namingStrategy;
   }
 
 
@@ -113,7 +118,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
           jacksonProperty) {
     BeanPropertyDefinition beanPropertyDefinition = jacksonProperty.get();
     return new BeanModelProperty(beanPropertyDefinition,
-            childProperty, isGetter(childProperty.getRawMember()), typeResolver, alternateTypeProvider);
+            childProperty, isGetter(childProperty.getRawMember()), typeResolver, alternateTypeProvider, namingStrategy);
   }
 
 }

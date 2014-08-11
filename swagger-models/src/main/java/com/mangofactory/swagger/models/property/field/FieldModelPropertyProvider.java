@@ -11,11 +11,13 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import com.mangofactory.swagger.models.NamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.property.BeanPropertyDefinitions;
 import com.mangofactory.swagger.models.property.ModelProperty;
 import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -30,12 +32,15 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
 
   private final FieldProvider fieldProvider;
   private final AlternateTypeProvider alternateTypeProvider;
+  private final NamingStrategy namingStrategy;
   private ObjectMapper objectMapper;
 
   @Autowired
-  public FieldModelPropertyProvider(FieldProvider fieldProvider, AlternateTypeProvider alternateTypeProvider) {
+  public FieldModelPropertyProvider(FieldProvider fieldProvider, AlternateTypeProvider alternateTypeProvider,
+                                    @Qualifier("namingStrategy") NamingStrategy namingStrategy) {
     this.fieldProvider = fieldProvider;
     this.alternateTypeProvider = alternateTypeProvider;
+    this.namingStrategy = namingStrategy;
   }
 
   @Override
@@ -55,7 +60,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
         if (memberIsAField(member)) {
           serializationCandidates.add(new FieldModelProperty(jacksonProperty.get().getName(), childField,
-                  alternateTypeProvider));
+                  alternateTypeProvider, namingStrategy));
         }
       }
     }
@@ -78,7 +83,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
         if (memberIsAField(member)) {
           serializationCandidates.add(new FieldModelProperty(jacksonProperty.get().getName(), childField,
-                  alternateTypeProvider));
+                  alternateTypeProvider, namingStrategy));
         }
       }
     }

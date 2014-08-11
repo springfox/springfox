@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.readers.operation;
+package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;

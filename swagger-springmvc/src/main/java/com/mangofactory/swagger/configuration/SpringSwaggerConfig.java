@@ -63,6 +63,7 @@ public class SpringSwaggerConfig {
   @Autowired
   private TypeResolver typeResolver;
 
+
   @Bean
   public List<RequestMappingHandlerMapping> swaggerRequestMappingHandlerMappings() {
     return handlerMappings;

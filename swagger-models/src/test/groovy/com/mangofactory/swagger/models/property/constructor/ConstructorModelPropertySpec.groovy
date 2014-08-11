@@ -1,7 +1,9 @@
 package com.mangofactory.swagger.models.property.constructor
+
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
+import com.mangofactory.swagger.models.NoRenamingStrategy
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.wordnik.swagger.model.AllowableListValues
 import scala.collection.JavaConversions
@@ -17,7 +19,8 @@ class ConstructorModelPropertySpec extends Specification {
       def typeToTest = typeForTestingGettersAndSetters()
       def modelContext = ModelContext.inputParam(typeToTest )
       def field = field(typeToTest, fieldName)
-      def sut = new ConstructorModelProperty(fieldName, field, new AlternateTypeProvider())
+      def sut = new ConstructorModelProperty(fieldName, field, new AlternateTypeProvider(),
+              new NoRenamingStrategy())
 
     expect:
       fromOption(sut.propertyDescription()) == description

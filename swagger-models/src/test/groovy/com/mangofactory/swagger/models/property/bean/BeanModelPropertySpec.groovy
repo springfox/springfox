@@ -3,6 +3,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
+import com.mangofactory.swagger.models.NoRenamingStrategy
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.wordnik.swagger.model.AllowableListValues
 import spock.lang.Specification
@@ -23,7 +24,7 @@ class BeanModelPropertySpec extends Specification {
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
       def sut = new BeanModelProperty(propertyDefinition, method, Accessors.isGetter(method.getRawMember()),
-              new TypeResolver(), new AlternateTypeProvider())
+              new TypeResolver(), new AlternateTypeProvider(), new NoRenamingStrategy())
 
 
     expect:
@@ -50,7 +51,7 @@ class BeanModelPropertySpec extends Specification {
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
       def sut = new BeanModelProperty(propertyDefinition, method, Accessors.isGetter(method.getRawMember()),
-              new TypeResolver(), new AlternateTypeProvider())
+              new TypeResolver(), new AlternateTypeProvider(), new NoRenamingStrategy())
 
     expect:
       fromOption(sut.propertyDescription()) == description
