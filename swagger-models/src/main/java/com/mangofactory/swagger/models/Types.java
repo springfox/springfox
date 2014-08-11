@@ -43,30 +43,11 @@ public class Types {
             .build();
 
     public static String typeNameFor(final Type type) {
-
-        String typeName = typeNameLookup.get(type);
-
-        if (typeName == null) {
-            typeName = java8TypeNameFor(((Class<?>) type).getName());
-        }
-
-        return typeName;
-    }
-
-    public static String java8TypeNameFor(final String fullClassName) {
-
-        String typeName = null;
-        if ("java.time.LocalDate".equals(fullClassName)) {
-            typeName = DATE_TYPE;
-        } else if ("java.time.LocalDateTime".equals(fullClassName)) {
-            typeName = DATE_TIME_TYPE;
-        }
-        return typeName;
+        return typeNameLookup.get(type);
     }
 
     public static boolean isBaseType(final String typeName) {
         return baseTypes.contains(typeName);
     }
-
 
 }
