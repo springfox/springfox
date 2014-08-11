@@ -13,6 +13,10 @@ import static com.google.common.base.Strings.*;
 
 public final class ApiModelProperties {
 
+  private ApiModelProperties() {
+    throw new UnsupportedOperationException();
+  }
+
   public static Function<ApiModelProperty, AllowableListValues> toAllowableList() {
     return new Function<ApiModelProperty,
             AllowableListValues>() {
