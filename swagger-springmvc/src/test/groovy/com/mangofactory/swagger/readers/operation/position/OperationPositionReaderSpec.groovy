@@ -1,5 +1,6 @@
-package com.mangofactory.swagger.readers.operation
+package com.mangofactory.swagger.readers.operation.position
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.readers.operation.OperationPositionReader
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import spock.lang.Specification
 

@@ -20,7 +20,7 @@ public class SwaggerModelsConfiguration {
         return new TypeResolver();
     }
 
-    @Bean
+    @Bean(name = "defaultAlternateTypeProvider")
     @Autowired
     public AlternateTypeProvider alternateTypeProvider(TypeResolver typeResolver) {
         AlternateTypeProvider alternateTypeProvider = new AlternateTypeProvider();

@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.plugin;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
@@ -14,6 +15,7 @@ import com.mangofactory.swagger.models.alternates.WildcardType;
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
+import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiInfo;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,9 +36,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.mangofactory.swagger.models.alternates.Alternates.newRule;
-import static java.util.Arrays.asList;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static com.mangofactory.swagger.models.alternates.Alternates.*;
+import static java.util.Arrays.*;
+import static org.apache.commons.lang.StringUtils.*;
 
 /**
  * A builder which is intended to be the primary interface into the swagger-springmvc framework.
@@ -66,10 +69,12 @@ public class SwaggerSpringMvcPlugin {
   private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
   private ApiListingReferenceScanner apiListingReferenceScanner;
   private AtomicBoolean initialized = new AtomicBoolean(false);
+  private Collection<RequestMappingReader> customAnnotationReaders;
 
   /**
    * Default constructor.
    * The argument springSwaggerConfig is used to by this class to establish sensible defaults.
+   *
    * @param springSwaggerConfig
    */
   public SwaggerSpringMvcPlugin(SpringSwaggerConfig springSwaggerConfig) {
@@ -80,6 +85,7 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Sets the api's meta information as included in the json ResourceListing response.
+   *
    * @param apiInfo
    * @return this SwaggerSpringMvcPlugin
    */
@@ -104,11 +110,10 @@ public class SwaggerSpringMvcPlugin {
   /**
    * Configures which api operations (via regex patterns) and HTTP methods to apply swagger authorization to.
    *
-   * @see <a href="https://github.com/adrianbk/swagger-springmvc-demo/blob/m
-   * aster/spring3-testsuite/src/main/java/com/ak/spring3/testsuite/config/SwaggerConfig.java">SwaggerConfig.java</a>
-   *
    * @param authorizationContext
    * @return this SwaggerSpringMvcPlugin
+   * @see <a href="https://github.com/adrianbk/swagger-springmvc-demo/blob/m
+   * aster/spring3-testsuite/src/main/java/com/ak/spring3/testsuite/config/SwaggerConfig.java">SwaggerConfig.java</a>
    */
   public SwaggerSpringMvcPlugin authorizationContext(AuthorizationContext authorizationContext) {
     this.authorizationContext = authorizationContext;
@@ -129,13 +134,13 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Determines the generated, swagger specific, urls.
-   *
+   * <p/>
    * By default, relative urls are generated. If absolute urls are required, supply an implementation of
    * AbsoluteSwaggerPathProvider
    *
-   * @see com.mangofactory.swagger.paths.SwaggerPathProvider
    * @param swaggerPathProvider
    * @return this SwaggerSpringMvcPlugin
+   * @see com.mangofactory.swagger.paths.SwaggerPathProvider
    */
   public SwaggerSpringMvcPlugin pathProvider(SwaggerPathProvider swaggerPathProvider) {
     this.swaggerPathProvider = swaggerPathProvider;
@@ -144,6 +149,7 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Spring controllers or request mappings with these annotations will be excluded from the generated swagger JSON.
+   *
    * @param excludeAnnotations one or more java Annotation classes
    * @return this SwaggerSpringMvcPlugin
    */
@@ -209,6 +215,7 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Overrides the default AlternateTypeProvider.
+   *
    * @param alternateTypeProvider
    * @return this SwaggerSpringMvcPlugin
    */
@@ -219,6 +226,7 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Sets the api version. The 'apiVersion' on the swagger Resource Listing
+   *
    * @param apiVersion
    * @return this SwaggerSpringMvcPlugin
    */
@@ -230,6 +238,7 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Overrides the default <code>com.mangofactory.swagger.models.ModelProvider</code>
+   *
    * @param modelProvider
    * @return this SwaggerSpringMvcPlugin
    */
@@ -301,9 +310,9 @@ public class SwaggerSpringMvcPlugin {
    * Controls how <code>com.wordnik.swagger.model.ApiDescription</code>'s are ordered.
    * The default sort is Lexicographically by the ApiDescription's path.
    *
-   * @see com.mangofactory.swagger.scanners.ApiListingScanner
    * @param apiDescriptionOrdering
    * @return this SwaggerSpringMvcPlugin
+   * @see com.mangofactory.swagger.scanners.ApiListingScanner
    */
   public SwaggerSpringMvcPlugin apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
     this.apiDescriptionOrdering = apiDescriptionOrdering;
@@ -312,12 +321,25 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Controls which ResourceListing's, RequestMappings belong to.
-   * @see com.mangofactory.swagger.scanners.ApiListingReferenceScanner#scanSpringRequestMappings()
+   *
    * @param resourceGroupingStrategy
    * @return this SwaggerSpringMvcPlugin
+   * @see com.mangofactory.swagger.scanners.ApiListingReferenceScanner#scanSpringRequestMappings()
    */
   public SwaggerSpringMvcPlugin resourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
     this.resourceGroupingStrategy = resourceGroupingStrategy;
+    return this;
+  }
+
+  /**
+   * Hook for adding custom annotations readers. Useful when you want to add your own annotation to be mapped to swagger
+   * model.
+   *
+   * @param customAnnotationReaders list of {@link com.mangofactory.swagger.readers.operation.RequestMappingReader}
+   * @return this SwaggerSpringMvcPlugin
+   */
+  public SwaggerSpringMvcPlugin customAnnotationReaders(Collection<RequestMappingReader> customAnnotationReaders) {
+    this.customAnnotationReaders = customAnnotationReaders;
     return this;
   }
 
@@ -343,8 +365,9 @@ public class SwaggerSpringMvcPlugin {
    * Builds the SwaggerSpringMvcPlugin by merging/overlaying user specified values.
    * It is not necessary to call this method when defined as a spring bean.
    * NOTE: Calling this method more than once has no effect.
-   * @see com.mangofactory.swagger.plugin.SwaggerPluginAdapter
+   *
    * @return this SwaggerSpringMvcPlugin
+   * @see com.mangofactory.swagger.plugin.SwaggerPluginAdapter
    */
   public SwaggerSpringMvcPlugin build() {
     if (initialized.compareAndSet(false, true)) {
@@ -384,6 +407,10 @@ public class SwaggerSpringMvcPlugin {
     if (null == this.modelProvider) {
       this.modelProvider = springSwaggerConfig.defaultModelProvider();
     }
+
+    if (null == this.customAnnotationReaders) {
+      this.customAnnotationReaders = Lists.newArrayList();
+    }
   }
 
   private void buildSwaggerGlobalSettings() {
@@ -416,6 +443,7 @@ public class SwaggerSpringMvcPlugin {
     swaggerApiResourceListing.setApiVersion(this.apiVersion);
     swaggerApiResourceListing.setApiListingReferenceOrdering(this.apiListingReferenceOrdering);
     swaggerApiResourceListing.setApiDescriptionOrdering(this.apiDescriptionOrdering);
+    swaggerApiResourceListing.setCustomAnnotationReaders(this.customAnnotationReaders);
   }
 
   private ApiListingReferenceScanner buildApiListingReferenceScanner() {
