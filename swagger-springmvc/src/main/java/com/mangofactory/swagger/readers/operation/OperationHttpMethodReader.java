@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.readers.operation;
 
-import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
@@ -9,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
-public class OperationHttpMethodReader implements Command<RequestMappingContext> {
+public class OperationHttpMethodReader implements RequestMappingReader {
    private static final Logger log = LoggerFactory.getLogger(OperationHttpMethodReader.class);
 
    @Override

@@ -32,9 +32,8 @@ class SwaggerApiResourceListingSpec extends Specification {
 
   def "assessors"() {
     given:
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(null, null)
       SwaggerCache cache = new SwaggerCache()
-      swaggerApiResourceListing.setSwaggerCache(cache)
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(cache, null)
       List<AuthorizationType> authTypes = Arrays.asList(new ApiKey("", ""))
       swaggerApiResourceListing.setAuthorizationTypes(authTypes)
       AbsoluteSwaggerPathProvider provider = new AbsoluteSwaggerPathProvider()

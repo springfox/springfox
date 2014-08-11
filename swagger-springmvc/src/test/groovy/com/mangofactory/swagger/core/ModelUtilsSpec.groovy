@@ -1,6 +1,8 @@
 package com.mangofactory.swagger.core
 
+import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.TypeResolver
+import com.fasterxml.jackson.databind.type.SimpleType
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import spock.lang.Specification
@@ -21,4 +23,21 @@ class ModelUtilsSpec extends Specification {
       dummyHandlerMethod("methodWithConcreteCorporationModel") | DummyModels.CorporationModel.class
    }
 
+  def "Get response class name from ResolvedType"(){
+    expect:
+      def modelResponseClass = ModelUtils.getResponseClassName(new TypeResolver().resolve(GenericType, clazz))
+      modelResponseClass == expectedResponseClassName
+
+    where:
+      clazz       | expectedResponseClassName
+      SimpleType  | "GenericType«SimpleType»"
+      Integer     | "GenericType«int»"
+  }
+
+  def "Should be instantiated when needed for test coverage"() {
+    when:
+      def modelUtils = new ModelUtils()
+    then:
+      modelUtils.class == ModelUtils
+  }
 }

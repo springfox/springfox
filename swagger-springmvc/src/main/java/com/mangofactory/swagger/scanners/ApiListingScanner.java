@@ -12,6 +12,7 @@ import com.mangofactory.swagger.readers.ApiDescriptionReader;
 import com.mangofactory.swagger.readers.ApiModelReader;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.MediaTypeReader;
+import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.wordnik.swagger.core.SwaggerSpec;
 import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiListing;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import scala.Option;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -46,14 +48,19 @@ public class ApiListingScanner {
   private AuthorizationContext authorizationContext;
   private final ModelProvider modelProvider;
   private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
+  private Collection<RequestMappingReader> customAnnotationReaders;
 
   public ApiListingScanner(Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings,
-                           SwaggerPathProvider swaggerPathProvider, ModelProvider modelProvider,
-                           AuthorizationContext authorizationContext) {
+        SwaggerPathProvider swaggerPathProvider,
+        ModelProvider modelProvider,
+        AuthorizationContext authorizationContext,
+        Collection<RequestMappingReader> customAnnotationReaders) {
+
     this.resourceGroupRequestMappings = resourceGroupRequestMappings;
     this.swaggerPathProvider = swaggerPathProvider;
     this.authorizationContext = authorizationContext;
     this.modelProvider = modelProvider;
+    this.customAnnotationReaders = customAnnotationReaders;
   }
 
   public Map<String, ApiListing> scan() {
@@ -73,7 +80,7 @@ public class ApiListingScanner {
 
         List<Command<RequestMappingContext>> readers = newArrayList();
         readers.add(new MediaTypeReader());
-        readers.add(new ApiDescriptionReader(swaggerPathProvider));
+        readers.add(new ApiDescriptionReader(swaggerPathProvider, customAnnotationReaders));
         readers.add(new ApiModelReader(modelProvider));
 
         Map<String, Model> models = new LinkedHashMap<String, Model>();

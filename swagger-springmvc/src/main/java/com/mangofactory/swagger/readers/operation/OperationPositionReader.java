@@ -1,14 +1,13 @@
 package com.mangofactory.swagger.readers.operation;
 
-import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.lang.Math.max;
+import static java.lang.Math.*;
 
-public class OperationPositionReader implements Command<RequestMappingContext> {
+public class OperationPositionReader implements RequestMappingReader {
 
   private static final Logger log = LoggerFactory.getLogger(OperationPositionReader.class);
 

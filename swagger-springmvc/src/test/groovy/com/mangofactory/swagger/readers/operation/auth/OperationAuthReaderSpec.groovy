@@ -1,8 +1,9 @@
-package com.mangofactory.swagger.readers.operation
+package com.mangofactory.swagger.readers.operation.auth
 
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.readers.operation.OperationAuthReader
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.Authorization
 import com.wordnik.swagger.model.AuthorizationScope

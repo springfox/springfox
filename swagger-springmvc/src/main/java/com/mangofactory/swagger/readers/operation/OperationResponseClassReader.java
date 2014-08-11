@@ -3,7 +3,6 @@ package com.mangofactory.swagger.readers.operation;
 import com.fasterxml.classmate.ResolvedType;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.ModelUtils;
-import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -13,7 +12,7 @@ import org.springframework.web.method.HandlerMethod;
 
 import static com.mangofactory.swagger.core.ModelUtils.*;
 
-public class OperationResponseClassReader implements Command<RequestMappingContext> {
+public class OperationResponseClassReader implements RequestMappingReader {
     private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
 
     @Override
