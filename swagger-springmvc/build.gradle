@@ -13,7 +13,7 @@ publishing {
     configure(releaseRepos)
   }
   publications {
-    mavenSwaggerMvc(MavenPublication) {
+    ssmvc(MavenPublication) {
       from components.java
 
       artifact packageSources {

@@ -11,7 +11,7 @@ publishing {
     configure(releaseRepos)
   }
   publications {
-    mavenSwaggerMvc(MavenPublication) {
+    models(MavenPublication) {
       from components.java
 
       artifact packageSources {

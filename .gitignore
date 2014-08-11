@@ -10,3 +10,4 @@ target
 .DS_Store
 build/
 .gradle/
+private.txt
