@@ -14,6 +14,8 @@ Spring Web MVC applications using springs `MappingJackson2HttpMessageConverter` 
 
 The demo project (https://github.com/adrianbk/swagger-springmvc-demo) containes a number of examples using both spring web mvc and spring-boot.
 
+### Contribution guidelines are available [here](contributing.md)
+
 ### Repositories
 
 #### Release version
