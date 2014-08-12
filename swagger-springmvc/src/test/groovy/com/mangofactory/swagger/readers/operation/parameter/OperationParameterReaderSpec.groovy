@@ -86,6 +86,44 @@ class OperationParameterReaderSpec extends Specification {
 
    def "Should expand ModelAttribute request params"() {
     given:
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), 
+        dummyHandlerMethod('methodWithModelAttribute', Example.class))
+      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
+    when:
+      OperationParameterReader operationParameterReader = new OperationParameterReader()
+      operationParameterReader.execute(context)
+      Map<String, Object> result = context.getResult()
+
+    then:
+      result['parameters'].size == 4
+      
+      Parameter annotatedFooParam = result['parameters'][0]
+      annotatedFooParam != null
+      annotatedFooParam.name == 'foo'
+      annotatedFooParam.description().get() == 'description of foo'
+      annotatedFooParam.required
+      annotatedFooParam.allowableValues != null
+      
+      Parameter annotatedBarParam = result['parameters'][1]
+      annotatedBarParam != null
+      annotatedBarParam.name == 'bar'
+      annotatedBarParam.description().get() == 'description of bar'
+      !annotatedBarParam.required
+      annotatedBarParam.allowableValues == null
+      
+      Parameter unannotatedEnumTypeParam = result['parameters'][2]
+      unannotatedEnumTypeParam != null
+      unannotatedEnumTypeParam.name == 'enumType'
+      unannotatedEnumTypeParam.description().isEmpty()
+      
+      Parameter unannotatedNestedTypeNameParam = result['parameters'][3]
+      unannotatedNestedTypeNameParam != null
+      unannotatedNestedTypeNameParam.name == 'nestedType.name'
+      unannotatedNestedTypeNameParam.description().isEmpty()
+   }
+   
+  def "Should not expand unannotated request params"() {
+    given:
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
     when:
@@ -97,9 +135,8 @@ class OperationParameterReaderSpec extends Specification {
       result['parameters'].size == expectedSize
 
     where:
-      handlerMethod                                                        | expectedSize
-      dummyHandlerMethod('methodWithoutModelAttribute', Example.class)     | 1
-      dummyHandlerMethod('methodWithModelAttribute', Example.class)        | 4
+      handlerMethod                                                    | expectedSize
+      dummyHandlerMethod('methodWithoutModelAttribute', Example.class) | 1
    }
 
 }

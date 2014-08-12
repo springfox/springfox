@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.readers.operation;
 
-import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.models.Types;
@@ -90,14 +89,14 @@ public class OperationParameterReader extends SwaggerParameterReader {
       for (int i = 0; i < fields.length; i++) {
           Field field = fields[i];
 
-          if (field.getAnnotation(ApiIgnore.class) != null || field.isSynthetic()) {
+          if (field.isSynthetic()) {
               continue;
           }
 
           if (field.getType().getPackage() != null &&
                   !field.getType().getPackage().getName().startsWith("java") && !field.getType().isEnum()) {
 
-              expandModelAttribute(field.getName().toLowerCase(), field.getType(), parameters);
+              expandModelAttribute(field.getName(), field.getType(), parameters);
               continue;
           }
 
