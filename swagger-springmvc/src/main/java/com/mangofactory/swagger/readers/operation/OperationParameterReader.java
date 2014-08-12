@@ -5,6 +5,7 @@ import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.models.Types;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.model.AllowableValues;
 import com.wordnik.swagger.model.Parameter;
@@ -100,16 +101,38 @@ public class OperationParameterReader extends SwaggerParameterReader {
               continue;
           }
 
-          Annotation annotation = field.getAnnotation(ApiParam.class);
-
           String dataTypeName = Types.typeNameFor(field.getType());
 
           if (dataTypeName == null) {
               dataTypeName = field.getType().getSimpleName();
           }
 
-          if (annotation instanceof ApiParam) {
-              ApiParam apiParam = (ApiParam) annotation;
+          if (field.getAnnotation(ApiModelProperty.class) != null) {
+              ApiModelProperty apiModelProperty = field.getAnnotation(ApiModelProperty.class);
+
+              AllowableValues allowable = null;
+              if (apiModelProperty.allowableValues() != null) {
+
+                  allowable = ParameterAllowableReader.getAllowableValueFromString(apiModelProperty.allowableValues());
+              }
+
+              Parameter annotatedModelParam = new Parameter(
+                      parentName != null ? new StringBuilder(parentName).append(".")
+                              .append(field.getName()).toString() : field.getName(),
+                      toOption(apiModelProperty.value()),
+                      toOption(null), //default value
+                      apiModelProperty.required(),
+                      Boolean.FALSE,  //allow multiple
+                      dataTypeName,
+                      allowable,
+                      "query", //param type
+                      toOption(apiModelProperty.access())
+                      );
+
+              parameters.add(annotatedModelParam);
+
+          } else if (field.getAnnotation(ApiParam.class) != null) {
+              ApiParam apiParam = field.getAnnotation(ApiParam.class);
 
               AllowableValues allowable = null;
               if (apiParam.allowableValues() != null) {
