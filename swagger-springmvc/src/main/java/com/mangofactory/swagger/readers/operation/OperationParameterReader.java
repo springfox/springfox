@@ -23,6 +23,7 @@ import org.springframework.web.method.HandlerMethod;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +99,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
       for (int i = 0; i < fields.length; i++) {
           Field field = fields[i];
 
-          if (field.isSynthetic()) {
+          if (Modifier.isStatic(field.getModifiers()) || field.isSynthetic()) {
               continue;
           }
 
