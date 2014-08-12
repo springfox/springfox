@@ -1,9 +1,13 @@
 package com.mangofactory.swagger.dummy.models;
 
-import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+import com.wordnik.swagger.annotations.ApiParam;
 
-public class Example {
+import java.io.Serializable;
+
+public class Example implements Serializable {
+
+    private static final long serialVersionUID = -8084678021874483017L;
 
     @ApiParam(value="description of foo", required=true,  allowableValues="man,chu")
     private String foo;
