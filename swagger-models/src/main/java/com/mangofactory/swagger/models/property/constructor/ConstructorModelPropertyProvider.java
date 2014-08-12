@@ -2,12 +2,14 @@ package com.mangofactory.swagger.models.property.constructor;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
+import com.mangofactory.swagger.models.NamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.property.ModelProperty;
 import com.mangofactory.swagger.models.property.field.FieldModelPropertyProvider;
 import com.mangofactory.swagger.models.property.field.FieldProvider;
 import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Constructor;
@@ -16,8 +18,9 @@ import java.lang.reflect.Constructor;
 public class ConstructorModelPropertyProvider extends FieldModelPropertyProvider implements ModelPropertiesProvider{
 
   @Autowired
-  public ConstructorModelPropertyProvider(FieldProvider fieldProvider, AlternateTypeProvider alternateTypeProvider) {
-    super(fieldProvider, alternateTypeProvider);
+  public ConstructorModelPropertyProvider(FieldProvider fieldProvider, AlternateTypeProvider alternateTypeProvider,
+                                          @Qualifier("namingStrategy") NamingStrategy namingStrategy) {
+    super(fieldProvider, alternateTypeProvider, namingStrategy);
   }
 
   @Override

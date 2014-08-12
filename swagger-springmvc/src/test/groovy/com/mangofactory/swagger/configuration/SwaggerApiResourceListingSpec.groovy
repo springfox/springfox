@@ -9,6 +9,7 @@ import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.models.DefaultModelProvider
 import com.mangofactory.swagger.models.ModelDependencyProvider
 import com.mangofactory.swagger.models.ModelProvider
+import com.mangofactory.swagger.models.NoRenamingStrategy
 import com.mangofactory.swagger.models.property.bean.AccessorsProvider
 import com.mangofactory.swagger.models.property.bean.BeanModelPropertyProvider
 import com.mangofactory.swagger.models.property.constructor.ConstructorModelPropertyProvider
@@ -117,11 +118,13 @@ class SwaggerApiResourceListingSpec extends Specification {
       def resolver = new TypeResolver()
       def objectMapper = new ObjectMapper()
       def fields = new FieldProvider(resolver)
+      def namingStrategy = new NoRenamingStrategy()
 
       def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(resolver), resolver,
-              settings.alternateTypeProvider)
-      def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, settings.alternateTypeProvider)
-      def constructorModelPropertyProvider = new ConstructorModelPropertyProvider(fields, settings.alternateTypeProvider)
+              settings.alternateTypeProvider, namingStrategy)
+      def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, settings.alternateTypeProvider, namingStrategy)
+      def constructorModelPropertyProvider = new ConstructorModelPropertyProvider(fields,
+              settings.alternateTypeProvider, namingStrategy)
 
       def modelPropertiesProvider = new DefaultModelPropertiesProvider(beanModelPropertyProvider,
               fieldModelPropertyProvider, constructorModelPropertyProvider)

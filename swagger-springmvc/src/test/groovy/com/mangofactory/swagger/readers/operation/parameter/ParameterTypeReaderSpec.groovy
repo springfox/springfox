@@ -6,7 +6,6 @@ import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.mangofactory.swagger.readers.Command
-import com.mangofactory.swagger.readers.operation.ParameterTypeReader
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.annotations.ApiParam
