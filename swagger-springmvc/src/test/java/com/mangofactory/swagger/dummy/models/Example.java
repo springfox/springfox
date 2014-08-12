@@ -1,7 +1,7 @@
-package com.mangofactory.swagger.readers.operation;
+package com.mangofactory.swagger.dummy.models;
 
-import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+import com.wordnik.swagger.annotations.ApiParam;
 
 import java.io.Serializable;
 
