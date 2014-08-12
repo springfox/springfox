@@ -2,6 +2,7 @@ package com.mangofactory.swagger.readers.operation.parameter
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyModels
+import com.mangofactory.swagger.dummy.models.Example
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.readers.operation.OperationParameterReader
@@ -83,5 +84,22 @@ class OperationParameterReaderSpec extends Specification {
 
    }
 
+   def "Should expand ModelAttribute request params"() {
+    given:
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
+      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
+    when:
+      OperationParameterReader operationParameterReader = new OperationParameterReader()
+      operationParameterReader.execute(context)
+      Map<String, Object> result = context.getResult()
+
+    then:
+      result['parameters'].size == expectedSize
+
+    where:
+      handlerMethod                                                        | expectedSize
+      dummyHandlerMethod('methodWithoutModelAttribute', Example.class)     | 1
+      dummyHandlerMethod('methodWithModelAttribute', Example.class)        | 4
+   }
 
 }

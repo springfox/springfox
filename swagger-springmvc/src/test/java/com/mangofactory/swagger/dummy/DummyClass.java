@@ -1,9 +1,12 @@
 package com.mangofactory.swagger.dummy;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
+import com.mangofactory.swagger.dummy.models.Example;
 import com.wordnik.swagger.annotations.*;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.Date;
 
 import static com.mangofactory.swagger.dummy.DummyModels.Ignorable;
@@ -97,6 +101,12 @@ public class DummyClass {
    public void methodWithAnnotatedInteger(@Ignorable Integer integer) {
    }
 
+   public void methodWithModelAttribute(@ModelAttribute Example example) {
+   }
+
+   public void methodWithoutModelAttribute(Example example) {
+   }
+
    @RequestMapping("/businesses/{businessId}")
    public void methodWithSinglePathVariable(@PathVariable String businessId) {
 
@@ -106,7 +116,7 @@ public class DummyClass {
    public void methodWithSingleEnum(BusinessType businessType) {
 
    }
-   
+
    @RequestMapping("/businesses/{businessId}")
    public void methodWithSingleEnumArray(BusinessType[] businessTypes) {
 
