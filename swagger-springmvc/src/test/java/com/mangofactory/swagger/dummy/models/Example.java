@@ -1,7 +1,14 @@
 package com.mangofactory.swagger.dummy.models;
 
+import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
 public class Example {
+
+    @ApiParam(value="description of foo", required=true,  allowableValues="man,chu")
     private String foo;
+
+    @ApiModelProperty(value="description of bar", required=false)
     private int bar;
     private EnumType enumType;
     private NestedType nestedType;
