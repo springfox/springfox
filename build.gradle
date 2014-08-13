@@ -26,11 +26,25 @@ subprojects {
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
   jvmsrc {
-     packageName "${group}.swagger"
+    packageName "${group}.swagger"
+  }
+
+  jar {
+    manifest {
+      attributes(
+              'Implementation-Title': "${project.name}",
+              'Implementation-Version': version.toString(),
+              'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')',
+              'Built-With': "gradle-${project.getGradle().getGradleVersion()}, groovy-${GroovySystem.getVersion()}",
+              'Build-Time': "${new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")}",
+              'Built-By': System.getProperty('user.name'),
+              'Built-On': "${InetAddress.localHost.hostName}/${InetAddress.localHost.hostAddress}"
+      )
+    }
   }
 
   apply plugin: 'checkstyle'
-  checkstyle{
+  checkstyle {
     configFile = file("$rootDir/config/checkstyle.xml")
   }
 
