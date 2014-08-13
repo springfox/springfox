@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.readers.operation;
 
+import com.google.common.base.Function;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.models.Types;
@@ -15,15 +16,20 @@ import com.mangofactory.swagger.readers.operation.parameter.ParameterTypeReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.model.AllowableListValues;
 import com.wordnik.swagger.model.AllowableValues;
 import com.wordnik.swagger.model.Parameter;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
 
+import scala.Option;
+import scala.collection.JavaConversions;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -116,14 +122,12 @@ public class OperationParameterReader extends SwaggerParameterReader {
               dataTypeName = field.getType().getSimpleName();
           }
 
+          AllowableValues allowable = null;
+
           if (field.getAnnotation(ApiModelProperty.class) != null) {
               ApiModelProperty apiModelProperty = field.getAnnotation(ApiModelProperty.class);
 
-              AllowableValues allowable = null;
-              if (apiModelProperty.allowableValues() != null) {
-
-                  allowable = ParameterAllowableReader.getAllowableValueFromString(apiModelProperty.allowableValues());
-              }
+              allowable = getAllowableValues(toOption(apiModelProperty.allowableValues()), field);
 
               Parameter annotatedModelParam = new Parameter(
                       parentName != null ? new StringBuilder(parentName).append(".")
@@ -143,11 +147,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
           } else if (field.getAnnotation(ApiParam.class) != null) {
               ApiParam apiParam = field.getAnnotation(ApiParam.class);
 
-              AllowableValues allowable = null;
-              if (apiParam.allowableValues() != null) {
-
-                  allowable = ParameterAllowableReader.getAllowableValueFromString(apiParam.allowableValues());
-              }
+              allowable = getAllowableValues(toOption(apiParam.allowableValues()), field);
 
               Parameter annotatedParam = new Parameter(
                       parentName != null ? new StringBuilder(parentName).append(".")
@@ -166,6 +166,8 @@ public class OperationParameterReader extends SwaggerParameterReader {
 
           } else {
 
+              allowable = getAllowableValues(toOption(null), field);
+
               Parameter unannotatedParam = new Parameter(
                       parentName != null ? new StringBuilder(parentName).append(".")
                               .append(field.getName()).toString() : field.getName(),
@@ -174,7 +176,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
                       Boolean.FALSE,  //required
                       Boolean.FALSE,  //allow multiple
                       dataTypeName,   //data type
-                      null,           //allowable values
+                      allowable,           //allowable values
                       "query",        //param type
                       toOption(null)  //param access
                       );
@@ -183,6 +185,31 @@ public class OperationParameterReader extends SwaggerParameterReader {
           }
       }
 
+  }
+
+  private AllowableValues getAllowableValues(final Option<String> allowableStr, final Field field) {
+
+      AllowableValues allowable = null;
+
+      if (allowableStr.nonEmpty()) {
+
+          allowable = ParameterAllowableReader.getAllowableValueFromString(allowableStr.get());
+
+      } else if (field.getType().isEnum()) {
+          allowable = new AllowableListValues(JavaConversions.collectionAsScalaIterable(
+                  getEnumValues(field.getType())).toList(), "LIST");
+      }
+
+      return allowable;
+  }
+
+  private List<String> getEnumValues(final Class<?> subject) {
+      return transform(Arrays.asList(subject.getEnumConstants()), new Function<Object, String>() {
+          @Override
+          public String apply(final Object input) {
+              return input.toString();
+          }
+      });
   }
 
   private boolean shouldIgnore(final ResolvedMethodParameter parameter, final Set<Class> ignorableParamTypes) {
