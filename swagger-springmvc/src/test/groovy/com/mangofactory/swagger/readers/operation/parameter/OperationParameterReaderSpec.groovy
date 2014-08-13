@@ -115,6 +115,7 @@ class OperationParameterReaderSpec extends Specification {
       unannotatedEnumTypeParam != null
       unannotatedEnumTypeParam.name == 'enumType'
       unannotatedEnumTypeParam.description().isEmpty()
+      unannotatedEnumTypeParam.allowableValues != null
       
       Parameter unannotatedNestedTypeNameParam = result['parameters'][3]
       unannotatedNestedTypeNameParam != null
