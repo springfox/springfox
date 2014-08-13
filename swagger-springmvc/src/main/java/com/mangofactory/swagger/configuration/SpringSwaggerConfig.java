@@ -139,30 +139,30 @@ public class SpringSwaggerConfig {
                               ));
 
     responses.put(DELETE, asList(
-            new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
             new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
             new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
                                 ));
 
     responses.put(PATCH, asList(
-            new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
             new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
             new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
                                ));
 
     responses.put(TRACE, asList(
-            new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
             new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
             new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
                                ));
 
     responses.put(OPTIONS, asList(
-            new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
             new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
             new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
                                  ));
     responses.put(HEAD, asList(
-            new ResponseMessage(NO_CONTENT.value(), CREATED.getReasonPhrase(), toOption(null)),
+            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
             new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
             new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
                               ));
