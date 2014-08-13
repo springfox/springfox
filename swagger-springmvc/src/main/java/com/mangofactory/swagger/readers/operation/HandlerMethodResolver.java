@@ -9,6 +9,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.method.HandlerMethod;
@@ -19,12 +21,13 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.google.common.collect.Iterables.filter;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.mangofactory.swagger.models.ResolvedTypes.asResolved;
+import static com.google.common.collect.Iterables.*;
+import static com.google.common.collect.Lists.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 public class HandlerMethodResolver {
 
+  private static final Logger log = LoggerFactory.getLogger(HandlerMethodResolver.class);
   private final TypeResolver typeResolver;
 
   public HandlerMethodResolver(TypeResolver typeResolver) {
@@ -36,10 +39,16 @@ public class HandlerMethodResolver {
     List<ResolvedMethodParameter> parameters = newArrayList();
     MethodParameter[] methodParameters = methodToResolve.getMethodParameters();
     if (resolvedMethod != null) {
-      for (int index = 0; index < resolvedMethod.getArgumentCount(); index++) {
-        MethodParameter methodParameter = methodParameters[index];
-        methodParameter.initParameterNameDiscovery(new LocalVariableTableParameterNameDiscoverer());
-        parameters.add(new ResolvedMethodParameter(methodParameter, resolvedMethod.getArgumentType(index)));
+      if (methodParameters.length == resolvedMethod.getArgumentCount()) {
+        for (int index = 0; index < resolvedMethod.getArgumentCount(); index++) {
+          MethodParameter methodParameter = methodParameters[index];
+          methodParameter.initParameterNameDiscovery(new LocalVariableTableParameterNameDiscoverer());
+          parameters.add(new ResolvedMethodParameter(methodParameter, resolvedMethod.getArgumentType(index)));
+        }
+      } else {
+        log.warn(String.format("Problem trying to resolve a method named %s", methodToResolve.getMethod().getName()));
+        log.warn(String.format("Method parameter count %s does not match resolved method argument count %s",
+                methodParameters.length, resolvedMethod.getArgumentCount()));
       }
     }
     return parameters;
