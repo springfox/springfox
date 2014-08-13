@@ -33,7 +33,8 @@ class ModelPropertySupport {
     ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(asResolved(resolver, typeToTest), null, null);
     typeWithMembers.memberFields.find { it.name == fieldName}
   }
-  static BeanPropertyDefinition beanPropertyDefinition(def typeToTest, String methodName) {
+
+  static BeanPropertyDefinition beanPropertyDefinition(def typeToTest, def methodName) {
     JavaType type = TypeFactory.defaultInstance().constructType(typeToTest)
     BeanDescription beanDescription = mapper.getDeserializationConfig().introspectForBuilder(type)
     Map<String, BeanPropertyDefinition> propertyDefinitionsByInternalName =

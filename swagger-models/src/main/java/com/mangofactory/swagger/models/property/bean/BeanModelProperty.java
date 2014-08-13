@@ -6,7 +6,7 @@ import com.fasterxml.classmate.members.ResolvedMember;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
-import com.mangofactory.swagger.models.NamingStrategy;
+import com.mangofactory.swagger.models.BeanPropertyNamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.property.BaseModelProperty;
 import com.wordnik.swagger.annotations.ApiModelProperty;
@@ -21,14 +21,25 @@ public class BeanModelProperty extends BaseModelProperty {
 
 
   public BeanModelProperty(BeanPropertyDefinition beanPropertyDefinition, ResolvedMethod method,
-                           boolean isGetter, TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider,
-                           NamingStrategy namingStrategy) {
+                           boolean isGetter, boolean forSerialization, TypeResolver typeResolver,
+                           AlternateTypeProvider alternateTypeProvider,
+                           BeanPropertyNamingStrategy namingStrategy) {
 
-    super(beanPropertyDefinition.getName(), alternateTypeProvider, Optional.fromNullable(findPropertyAnnotation
-            (beanPropertyDefinition, ApiModelProperty.class)), namingStrategy);
+    super(name(beanPropertyDefinition, forSerialization, namingStrategy),
+            alternateTypeProvider,
+            Optional.fromNullable(findPropertyAnnotation(beanPropertyDefinition, ApiModelProperty.class)));
+
     this.method = method;
     this.isGetter = isGetter;
     this.typeResolver = typeResolver;
+  }
+
+  private static String name(BeanPropertyDefinition beanPropertyDefinition,
+      boolean forSerialization, BeanPropertyNamingStrategy namingStrategy) {
+
+    return forSerialization
+            ? namingStrategy.nameForSerialization(beanPropertyDefinition)
+            : namingStrategy.nameForDeserialization(beanPropertyDefinition);
   }
 
 

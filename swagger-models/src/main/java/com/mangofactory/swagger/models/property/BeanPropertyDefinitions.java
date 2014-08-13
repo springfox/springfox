@@ -1,7 +1,11 @@
 package com.mangofactory.swagger.models.property;
 
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
+import com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -38,4 +42,26 @@ public class BeanPropertyDefinitions {
       }
     };
   }
+
+  public static Function<PropertyNamingStrategy, String> overTheWireName(final BeanPropertyDefinition beanProperty,
+      final MapperConfig<?> config) {
+
+    return new Function<PropertyNamingStrategy, String>() {
+      @Override
+      public String apply(PropertyNamingStrategy strategy) {
+        return getName(strategy, beanProperty, config);
+      }
+    };
+  }
+
+  private static String getName(PropertyNamingStrategy naming, BeanPropertyDefinition beanProperty,
+                                MapperConfig<?> config) {
+
+    AnnotationIntrospector annotationIntrospector = config.isAnnotationProcessingEnabled()
+            ? config.getAnnotationIntrospector()
+            : null;
+    POJOPropertyBuilder prop = new POJOPropertyBuilder(beanProperty.getName(), annotationIntrospector, true);
+    return naming.nameForField(config, prop.getField(), beanProperty.getName());
+  }
+
 }

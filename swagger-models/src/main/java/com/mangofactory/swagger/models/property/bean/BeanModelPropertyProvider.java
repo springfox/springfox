@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.base.Optional;
-import com.mangofactory.swagger.models.NamingStrategy;
+import com.mangofactory.swagger.models.BeanPropertyNamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.property.BeanPropertyDefinitions;
 import com.mangofactory.swagger.models.property.ModelProperty;
@@ -19,7 +19,6 @@ import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,15 +34,15 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(BeanModelPropertyProvider.class);
   private final AccessorsProvider accessors;
-  private final NamingStrategy namingStrategy;
+  private final BeanPropertyNamingStrategy namingStrategy;
   private ObjectMapper objectMapper;
   private final TypeResolver typeResolver;
   private final AlternateTypeProvider alternateTypeProvider;
 
   @Autowired
   public BeanModelPropertyProvider(AccessorsProvider accessors, TypeResolver typeResolver,
-                                   AlternateTypeProvider alternateTypeProvider,
-                                   @Qualifier("namingStrategy") NamingStrategy namingStrategy) {
+      AlternateTypeProvider alternateTypeProvider, BeanPropertyNamingStrategy namingStrategy) {
+
     this.typeResolver = typeResolver;
     this.alternateTypeProvider = alternateTypeProvider;
     this.accessors = accessors;
@@ -67,7 +66,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
                         propertyDefinition);
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
         if (accessorMemberIs(childProperty, methodName(member))) {
-          serializationCandidates.add(beanModelProperty(childProperty, jacksonProperty));
+          serializationCandidates.add(beanModelProperty(childProperty, jacksonProperty, true));
         }
       }
     }
@@ -91,7 +90,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
         try {
           AnnotatedMember member = propertyDefinition.getPrimaryMember();
           if (accessorMemberIs(childProperty, methodName(member))) {
-            serializationCandidates.add(beanModelProperty(childProperty, jacksonProperty));
+            serializationCandidates.add(beanModelProperty(childProperty, jacksonProperty, false));
           }
         } catch (Exception e) {
           LOG.warn(e.getMessage());
@@ -104,6 +103,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
   @Override
   public void setObjectMapper(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
+    this.namingStrategy.setObjectMapper(objectMapper);
   }
 
   private String methodName(AnnotatedMember member) {
@@ -115,10 +115,12 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
 
   private BeanModelProperty beanModelProperty(ResolvedMethod childProperty, Optional<BeanPropertyDefinition>
-          jacksonProperty) {
+          jacksonProperty, boolean forSerialization) {
+
     BeanPropertyDefinition beanPropertyDefinition = jacksonProperty.get();
-    return new BeanModelProperty(beanPropertyDefinition,
-            childProperty, isGetter(childProperty.getRawMember()), typeResolver, alternateTypeProvider, namingStrategy);
+    return new BeanModelProperty(beanPropertyDefinition, childProperty, isGetter(childProperty.getRawMember()),
+            forSerialization, typeResolver, alternateTypeProvider,
+            namingStrategy);
   }
 
 }

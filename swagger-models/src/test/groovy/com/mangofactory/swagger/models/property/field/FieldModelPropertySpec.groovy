@@ -3,7 +3,7 @@ package com.mangofactory.swagger.models.property.field
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
-import com.mangofactory.swagger.models.NoRenamingStrategy
+
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.wordnik.swagger.model.AllowableListValues
 import scala.collection.JavaConversions
@@ -19,7 +19,7 @@ class FieldModelPropertySpec extends Specification {
       def typeToTest = typeForTestingGettersAndSetters()
       def modelContext = ModelContext.inputParam(typeToTest )
       def field = field(typeToTest, fieldName)
-      def sut = new FieldModelProperty(fieldName, field, new AlternateTypeProvider(), new NoRenamingStrategy())
+      def sut = new FieldModelProperty(fieldName, field, new AlternateTypeProvider())
 
     expect:
       fromOption(sut.propertyDescription()) == description

@@ -3,7 +3,6 @@ package com.mangofactory.swagger.models.property;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.ModelContext;
-import com.mangofactory.swagger.models.NamingStrategy;
 import com.mangofactory.swagger.models.ResolvedTypes;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.wordnik.swagger.annotations.ApiModelProperty;
@@ -19,14 +18,12 @@ public abstract class BaseModelProperty implements ModelProperty {
   private final Optional<ApiModelProperty> apiModelProperty;
   private final String name;
   private final AlternateTypeProvider alternateTypeProvider;
-  private final NamingStrategy namingStrategy;
 
   public BaseModelProperty(String name, AlternateTypeProvider alternateTypeProvider,
-                           Optional<ApiModelProperty> apiModelProperty, NamingStrategy namingStrategy) {
-    this.name = namingStrategy.name(name);
+                           Optional<ApiModelProperty> apiModelProperty) {
+    this.name = name;
     this.apiModelProperty = apiModelProperty;
     this.alternateTypeProvider = alternateTypeProvider;
-    this.namingStrategy = namingStrategy;
   }
 
   protected abstract ResolvedType realType();
@@ -46,7 +43,7 @@ public abstract class BaseModelProperty implements ModelProperty {
     if (getType().getTypeParameters().size() > 0) {
       return getType().toString();
     }
-    return namingStrategy.name(simpleQualifiedTypeName(getType()));
+    return simpleQualifiedTypeName(getType());
   }
 
   @Override

@@ -1,9 +1,12 @@
 package com.mangofactory.swagger.models.property.bean
 import com.fasterxml.classmate.TypeResolver
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
-import com.mangofactory.swagger.models.NoRenamingStrategy
+
+import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
+import com.mangofactory.swagger.models.ObjectMapperNamingStrategySpec
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.wordnik.swagger.model.AllowableListValues
 import spock.lang.Specification
@@ -23,8 +26,12 @@ class BeanModelPropertySpec extends Specification {
       def modelContext = ModelContext.inputParam(typeToTest)
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
+      def forSerialization = true
+
+      ObjectMapper mapper = new ObjectMapper()
       def sut = new BeanModelProperty(propertyDefinition, method, Accessors.isGetter(method.getRawMember()),
-              new TypeResolver(), new AlternateTypeProvider(), new NoRenamingStrategy())
+              forSerialization, new TypeResolver(), new AlternateTypeProvider(),
+              new ObjectMapperBeanPropertyNamingStrategy(mapper))
 
 
     expect:
@@ -50,8 +57,12 @@ class BeanModelPropertySpec extends Specification {
       def modelContext = ModelContext.inputParam(typeToTest)
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
+      def forSerialization = true
+
+      ObjectMapper mapper = new ObjectMapper()
       def sut = new BeanModelProperty(propertyDefinition, method, Accessors.isGetter(method.getRawMember()),
-              new TypeResolver(), new AlternateTypeProvider(), new NoRenamingStrategy())
+              forSerialization, new TypeResolver(), new AlternateTypeProvider(),
+              new ObjectMapperBeanPropertyNamingStrategy(mapper))
 
     expect:
       fromOption(sut.propertyDescription()) == description
