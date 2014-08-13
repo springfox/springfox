@@ -20,6 +20,7 @@ import com.wordnik.swagger.model.AllowableListValues;
 import com.wordnik.swagger.model.AllowableValues;
 import com.wordnik.swagger.model.Parameter;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
 
@@ -191,7 +192,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
 
       AllowableValues allowable = null;
 
-      if (allowableStr.nonEmpty()) {
+      if (allowableStr.nonEmpty() && StringUtils.isNotBlank(allowableStr.get())) {
 
           allowable = ParameterAllowableReader.getAllowableValueFromString(allowableStr.get());
 
