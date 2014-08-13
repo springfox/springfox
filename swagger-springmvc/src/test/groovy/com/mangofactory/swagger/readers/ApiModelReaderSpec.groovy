@@ -5,6 +5,7 @@ import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.controllers.BusinessService
 import com.mangofactory.swagger.dummy.controllers.PetService
+import com.mangofactory.swagger.dummy.models.FoobarDto
 import com.mangofactory.swagger.mixins.ApiOperationSupport
 import com.mangofactory.swagger.mixins.JsonSupport
 import com.mangofactory.swagger.mixins.ModelProviderSupport
@@ -291,6 +292,38 @@ class ApiModelReaderSpec extends Specification {
       models.size() == 1
 
       String modelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
+      models.containsKey(modelName)
+
+      Model model = models[modelName]
+      Map modelProperties = fromScalaMap(model.properties())
+      modelProperties.containsKey('visibleForSerialize')
+
+  }
+
+
+  def "Test to verify issue #283"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestFoobarDto', FoobarDto)
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
+
+      def settings = new SwaggerGlobalSettings()
+      def config = new SpringSwaggerConfig()
+      settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      context.put("swaggerGlobalSettings", settings)
+
+    when:
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
+      apiModelReader.execute(context)
+      Map<String, Model> result = context.getResult()
+
+    then:
+      Map<String, Model> models = result.get("models")
+      models.size() == 1
+
+      String modelName = FoobarDto.simpleName
       models.containsKey(modelName)
 
       Model model = models[modelName]

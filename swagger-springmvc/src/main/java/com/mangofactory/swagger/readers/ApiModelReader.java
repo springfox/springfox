@@ -3,7 +3,6 @@ package com.mangofactory.swagger.readers;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
-import com.mangofactory.swagger.ScalaUtils;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.swagger.models.ModelContext;
@@ -23,12 +22,13 @@ import org.springframework.web.method.HandlerMethod;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Sets.*;
+import static com.mangofactory.swagger.ScalaUtils.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 @Component
@@ -94,10 +94,10 @@ public class ApiModelReader implements Command<RequestMappingContext> {
           Model targetModelValue = target.get(sourceModelKey);
           Model sourceModelValue = sModelEntry.getValue();
 
-          Map<String, ModelProperty> targetProperties = ScalaUtils.fromScalaMap(targetModelValue.properties());
-          Map<String, ModelProperty> sourceProperties = ScalaUtils.fromScalaMap(sourceModelValue.properties());
+          Map<String, ModelProperty> targetProperties = fromScalaMap(targetModelValue.properties());
+          Map<String, ModelProperty> sourceProperties = fromScalaMap(sourceModelValue.properties());
 
-          Set<String> newSourcePropKeys = new HashSet<String>(sourceProperties.keySet());
+          Set<String> newSourcePropKeys = newHashSet(sourceProperties.keySet());
           newSourcePropKeys.removeAll(targetProperties.keySet());
           for (String newProperty : newSourcePropKeys) {
             targetProperties.put(newProperty, sourceProperties.get(newProperty));
