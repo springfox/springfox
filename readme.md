@@ -36,7 +36,7 @@ __Maven__
 __Gradle__
 
 ```groovy
-compile "com.mangofactory:swagger-springmvc:0.8.5"
+compile "com.mangofactory:swagger-springmvc:0.8.6"
 ```
 
 #### Snapshot version
