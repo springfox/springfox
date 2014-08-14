@@ -50,14 +50,14 @@ public class ParameterBuilder {
     if (apiParamOptional.isPresent()) {
       return fromApiParam(apiParamOptional.get());
     }
-    return fromField();
+    return defaultParameter();
   }
 
-  private Parameter fromField() {
+  private Parameter defaultParameter() {
     AllowableValues allowable = allowableValues(Optional.<String>absent(), field);
 
     return new Parameter(
-            parentName != null ? String.format("%s.%s", parentName, field.getName()) : field.getName(),
+            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
             toOption(null), //description
             toOption(null), //default value
             Boolean.FALSE,  //required
@@ -75,7 +75,7 @@ public class ParameterBuilder {
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
 
     return  new Parameter(
-            parentName != null ? String.format("%s.%s", parentName, field.getName()) : field.getName(),
+            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
             toOption(apiParam.value()),
             toOption(apiParam.defaultValue()),
             apiParam.required(),
@@ -90,7 +90,7 @@ public class ParameterBuilder {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
     return new Parameter(
-            parentName != null ? String.format("%s.%s", parentName, field.getName()) : field.getName(),
+            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
             toOption(apiModelProperty.value()),
             toOption(null), //default value
             apiModelProperty.required(),

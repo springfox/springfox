@@ -80,9 +80,8 @@ public class OperationParameterReader extends SwaggerParameterReader {
                   toOption(result.get("paramAccess"))
           );
           parameters.add(parameter);
-
         } else {
-          expander.expand(null, methodParameter.getResolvedParameterType().getErasedType(), parameters);
+          expander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters);
         }
       }
     }
