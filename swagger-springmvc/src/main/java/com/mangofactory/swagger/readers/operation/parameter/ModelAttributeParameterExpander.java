@@ -8,7 +8,7 @@ import java.util.List;
 import static com.mangofactory.swagger.models.Types.*;
 import static java.lang.reflect.Modifier.*;
 
-public class ModelAttributeParameterExpander {
+class ModelAttributeParameterExpander {
 
   public void expand(final String parentName, final Class<?> paramType,
                      final List<Parameter> parameters) {

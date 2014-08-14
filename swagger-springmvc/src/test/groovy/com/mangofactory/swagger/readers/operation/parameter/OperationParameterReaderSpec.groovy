@@ -5,7 +5,6 @@ import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.models.Example
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
-import com.mangofactory.swagger.readers.operation.OperationParameterReader
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.Parameter
 import org.springframework.core.MethodParameter

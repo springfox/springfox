@@ -12,7 +12,7 @@ import com.mangofactory.swagger.readers.operation.OperationImplicitParameterRead
 import com.mangofactory.swagger.readers.operation.OperationImplicitParametersReader;
 import com.mangofactory.swagger.readers.operation.OperationNicknameReader;
 import com.mangofactory.swagger.readers.operation.OperationNotesReader;
-import com.mangofactory.swagger.readers.operation.OperationParameterReader;
+import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader;
 import com.mangofactory.swagger.readers.operation.OperationPositionReader;
 import com.mangofactory.swagger.readers.operation.OperationResponseClassReader;
 import com.mangofactory.swagger.readers.operation.DefaultResponseMessageReader;

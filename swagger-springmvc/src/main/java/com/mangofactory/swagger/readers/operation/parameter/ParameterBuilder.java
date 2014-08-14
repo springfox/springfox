@@ -20,7 +20,7 @@ import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.ScalaUtils.*;
 import static com.mangofactory.swagger.readers.operation.parameter.ParameterAllowableReader.*;
 
-public class ParameterBuilder {
+class ParameterBuilder {
 
   private String dataTypeName;
   private String parentName;
