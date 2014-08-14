@@ -5,7 +5,10 @@ branches:
 language: java
 script: mvn verify
 jdk:
-- openjdk6
+  - openjdk6
+  - oraclejdk7
+  - openjdk7
+  - oraclejdk8
 
 after_success:
   - mvn -f swagger-springmvc/pom.xml clean test jacoco:report coveralls:jacoco
