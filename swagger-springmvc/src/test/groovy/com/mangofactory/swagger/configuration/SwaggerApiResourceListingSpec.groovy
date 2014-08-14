@@ -163,14 +163,7 @@ class SwaggerApiResourceListingSpec extends Specification {
             swaggerCache.swaggerApiListingMap['swaggerGroup']['dummy-class']
       apiListing.swaggerVersion() == '1.2'
       apiListing.basePath() == 'http://localhost:8080/context-path'
-
-      /**
-       * TODO - AK
-       * The relative path to the resource, from the basePath, which this API Specification
-       * piListing.resourcePath() == '/api-docs/swaggerGroup/com_mangofactory_swagger_dummy_DummyClass'
-       */
-      apiListing.resourcePath() == 'fix this'
-
+      apiListing.resourcePath() == '/somePath'
   }
 
   def "Should sort based on position"() {

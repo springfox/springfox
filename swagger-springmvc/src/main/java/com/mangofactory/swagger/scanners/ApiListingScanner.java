@@ -1,5 +1,7 @@
 package com.mangofactory.swagger.scanners;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
@@ -51,10 +53,10 @@ public class ApiListingScanner {
   private Collection<RequestMappingReader> customAnnotationReaders;
 
   public ApiListingScanner(Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings,
-        SwaggerPathProvider swaggerPathProvider,
-        ModelProvider modelProvider,
-        AuthorizationContext authorizationContext,
-        Collection<RequestMappingReader> customAnnotationReaders) {
+                           SwaggerPathProvider swaggerPathProvider,
+                           ModelProvider modelProvider,
+                           AuthorizationContext authorizationContext,
+                           Collection<RequestMappingReader> customAnnotationReaders) {
 
     this.resourceGroupRequestMappings = resourceGroupRequestMappings;
     this.swaggerPathProvider = swaggerPathProvider;
@@ -116,11 +118,7 @@ public class ApiListingScanner {
         ArrayList sortedDescriptions = new ArrayList(apiDescriptions);
         Collections.sort(sortedDescriptions, this.apiDescriptionOrdering);
 
-        //String groupPrefix = controllerGroup.getRealUri();
-        // resourcePath is specific to this class only
-        //TODO AK /swaggergroup/prefix - abs and rel are different and its always
-        // relative to swaggerPathProvider.getApplicationBasePath()
-        String resourcePath = "fix this";
+        String resourcePath = longestCommonPath(sortedDescriptions);
 
         ApiListing apiListing = new ApiListing(
                 apiVersion,
@@ -140,6 +138,39 @@ public class ApiListingScanner {
       }
     }
     return apiListingMap;
+  }
+
+  private String longestCommonPath(ArrayList<ApiDescription> apiDescriptions) {
+    List<String> commons = newArrayList();
+    if (null == apiDescriptions || apiDescriptions.isEmpty()) {
+      return null;
+    }
+    List<String> firstWords = urlParts(apiDescriptions.get(0));
+
+    for (int position = 0; position < firstWords.size(); position++) {
+      String word = firstWords.get(position);
+      boolean allContain = true;
+      for (int i = 1; i < apiDescriptions.size(); i++) {
+        List<String> words = urlParts(apiDescriptions.get(i));
+        if (words.size() < position + 1 || !words.get(position).equals(word)) {
+          allContain = false;
+          break;
+        }
+      }
+      if (allContain) {
+        commons.add(word);
+      }
+    }
+    Joiner joiner = Joiner.on("/").skipNulls();
+    return "/" + joiner.join(commons);
+  }
+
+  private List<String> urlParts(ApiDescription apiDescription) {
+    List<String> strings = Splitter.on('/')
+            .omitEmptyStrings()
+            .trimResults()
+            .splitToList(apiDescription.path());
+    return strings;
   }
 
   public SwaggerGlobalSettings getSwaggerGlobalSettings() {
