@@ -4,7 +4,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
-import com.mangofactory.swagger.models.Types;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.parameter.ParameterAllowableReader;
 import com.mangofactory.swagger.readers.operation.parameter.ParameterDataTypeReader;
@@ -26,18 +25,19 @@ import scala.collection.JavaConversions;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.base.Optional.fromNullable;
-import static com.google.common.base.Strings.emptyToNull;
+import static com.google.common.base.Optional.*;
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.ScalaUtils.*;
+import static com.mangofactory.swagger.models.Types.*;
 import static com.mangofactory.swagger.readers.operation.parameter.ParameterAllowableReader.*;
+import static java.lang.reflect.Modifier.*;
 
 public class OperationParameterReader extends SwaggerParameterReader {
 
@@ -104,21 +104,18 @@ public class OperationParameterReader extends SwaggerParameterReader {
 
     Field[] fields = paramType.getDeclaredFields();
 
-    for (int i = 0; i < fields.length; i++) {
-      Field field = fields[i];
-
-      if (Modifier.isStatic(field.getModifiers()) || field.isSynthetic()) {
+    for (Field field : fields) {
+      if (isStatic(field.getModifiers()) || field.isSynthetic()) {
         continue;
       }
 
-      if (field.getType().getPackage() != null &&
-              !field.getType().getPackage().getName().startsWith("java") && !field.getType().isEnum()) {
+      if (!typeBelongsToJavaPackage(field) && !field.getType().isEnum()) {
 
         expandModelAttribute(field.getName(), field.getType(), parameters);
         continue;
       }
 
-      String dataTypeName = Types.typeNameFor(field.getType());
+      String dataTypeName = typeNameFor(field.getType());
 
       if (dataTypeName == null) {
         dataTypeName = field.getType().getSimpleName();
@@ -128,7 +125,6 @@ public class OperationParameterReader extends SwaggerParameterReader {
 
       if (field.getAnnotation(ApiModelProperty.class) != null) {
         ApiModelProperty apiModelProperty = field.getAnnotation(ApiModelProperty.class);
-
 
         String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
         allowable = allowableValues(fromNullable(allowableProperty), field);
@@ -150,8 +146,8 @@ public class OperationParameterReader extends SwaggerParameterReader {
 
       } else if (field.getAnnotation(ApiParam.class) != null) {
         ApiParam apiParam = field.getAnnotation(ApiParam.class);
-
-        allowable = allowableValues(fromNullable(apiParam.allowableValues()), field);
+        String allowableProperty = emptyToNull(apiParam.allowableValues());
+        allowable = allowableValues(fromNullable(allowableProperty), field);
 
         Parameter annotatedParam = new Parameter(
                 parentName != null ? new StringBuilder(parentName).append(".")
@@ -189,6 +185,10 @@ public class OperationParameterReader extends SwaggerParameterReader {
       }
     }
 
+  }
+
+  private boolean typeBelongsToJavaPackage(Field field) {
+    return (field.getType().getPackage() == null || field.getType().getPackage().getName().startsWith("java"));
   }
 
   private AllowableValues allowableValues(final Optional<String> optionalAllowable, final Field field) {
