@@ -11,7 +11,7 @@ public class FieldModelProperty extends BaseModelProperty {
   private final ResolvedField childField;
 
   public FieldModelProperty(String name, ResolvedField childField, AlternateTypeProvider alternateTypeProvider) {
-    super(name, alternateTypeProvider, Annotations.findElementAnnotation(childField.getRawMember()));
+    super(name, alternateTypeProvider, Annotations.findApiModePropertyAnnotation(childField.getRawMember()));
     this.childField = childField;
   }
 

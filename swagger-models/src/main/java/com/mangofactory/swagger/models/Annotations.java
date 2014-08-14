@@ -3,6 +3,7 @@ package com.mangofactory.swagger.models;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
@@ -34,8 +35,11 @@ public class Annotations {
     return annotation;
   }
 
-  public static Optional<ApiModelProperty> findElementAnnotation(AnnotatedElement annotated) {
+  public static Optional<ApiModelProperty> findApiModePropertyAnnotation(AnnotatedElement annotated) {
     return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class));
   }
 
+  public static Optional<ApiParam> findApiParamAnnotation(AnnotatedElement annotated) {
+    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiParam.class));
+  }
 }
