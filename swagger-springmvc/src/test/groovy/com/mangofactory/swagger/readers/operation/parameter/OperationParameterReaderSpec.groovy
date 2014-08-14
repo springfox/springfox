@@ -95,7 +95,7 @@ class OperationParameterReaderSpec extends Specification {
       Map<String, Object> result = context.getResult()
 
     then:
-      result['parameters'].size == 4
+      result['parameters'].size == 5
       
       Parameter annotatedFooParam = result['parameters'][0]
       annotatedFooParam != null
@@ -117,7 +117,13 @@ class OperationParameterReaderSpec extends Specification {
       unannotatedEnumTypeParam.description().isEmpty()
       unannotatedEnumTypeParam.allowableValues != null
       
-      Parameter unannotatedNestedTypeNameParam = result['parameters'][3]
+      Parameter annotatedEnumTypeParam = result['parameters'][3]
+      annotatedEnumTypeParam != null
+      annotatedEnumTypeParam.name == 'annotatedEnumType'
+      annotatedEnumTypeParam.description().get() == 'description of annotatedEnumType'
+      annotatedEnumTypeParam.allowableValues != null
+      
+      Parameter unannotatedNestedTypeNameParam = result['parameters'][4]
       unannotatedNestedTypeNameParam != null
       unannotatedNestedTypeNameParam.name == 'nestedType.name'
       unannotatedNestedTypeNameParam.description().isEmpty()

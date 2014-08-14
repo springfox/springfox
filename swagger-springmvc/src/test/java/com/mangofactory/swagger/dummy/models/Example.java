@@ -14,7 +14,12 @@ public class Example implements Serializable {
 
     @ApiModelProperty(value="description of bar", required=false)
     private int bar;
+    
     private EnumType enumType;
+    
+    @ApiParam(value="description of annotatedEnumType", required=false)
+    private EnumType annotatedEnumType;
+        
     private NestedType nestedType;
 
     public Example(String foo, int bar, EnumType enumType, NestedType nestedType) {
@@ -46,6 +51,14 @@ public class Example implements Serializable {
 
     public void setEnumType(EnumType enumType) {
         this.enumType = enumType;
+    }
+    
+    public EnumType getAnnotatedEnumType() {
+        return annotatedEnumType;
+    }
+
+    public void setAnnotatedEnumType(EnumType annotatedEnumType) {
+        this.annotatedEnumType = annotatedEnumType;
     }
 
     public NestedType getNestedType() {
