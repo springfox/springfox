@@ -78,115 +78,116 @@ public class OperationParameterReader extends SwaggerParameterReader {
         Map<String, Object> result = parameterContext.getResult();
 
         if (!shouldExpand(methodParameter)) {
-            Parameter parameter = new Parameter(
-                    (String) result.get("name"),
-                    toOption(result.get("description")),
-                    toOption(result.get("defaultValue")),
-                    (Boolean) result.get("required"),
-                    (Boolean) result.get("allowMultiple"),
-                    (String) result.get("dataType"),
-                    (AllowableValues) result.get("allowableValues"),
-                    (String) result.get("paramType"),
-                    toOption(result.get("paramAccess"))
-            );
-            parameters.add(parameter);
+          Parameter parameter = new Parameter(
+                  (String) result.get("name"),
+                  toOption(result.get("description")),
+                  toOption(result.get("defaultValue")),
+                  (Boolean) result.get("required"),
+                  (Boolean) result.get("allowMultiple"),
+                  (String) result.get("dataType"),
+                  (AllowableValues) result.get("allowableValues"),
+                  (String) result.get("paramType"),
+                  toOption(result.get("paramAccess"))
+          );
+          parameters.add(parameter);
 
         } else {
-            expandModelAttribute(null, methodParameter.getResolvedParameterType().getErasedType(), parameters);
+          expandModelAttribute(null, methodParameter.getResolvedParameterType().getErasedType(), parameters);
         }
       }
     }
-   return  parameters;
+    return parameters;
   }
 
-  private void expandModelAttribute(final String parentName, final Class<?> paramType, final List<Parameter> parameters) {
+  private void expandModelAttribute(final String parentName, final Class<?> paramType,
+                                    final List<Parameter> parameters) {
 
-      Field[] fields = paramType.getDeclaredFields();
+    Field[] fields = paramType.getDeclaredFields();
 
-      for (int i = 0; i < fields.length; i++) {
-          Field field = fields[i];
+    for (int i = 0; i < fields.length; i++) {
+      Field field = fields[i];
 
-          if (Modifier.isStatic(field.getModifiers()) || field.isSynthetic()) {
-              continue;
-          }
-
-          if (field.getType().getPackage() != null &&
-                  !field.getType().getPackage().getName().startsWith("java") && !field.getType().isEnum()) {
-
-              expandModelAttribute(field.getName(), field.getType(), parameters);
-              continue;
-          }
-
-          String dataTypeName = Types.typeNameFor(field.getType());
-
-          if (dataTypeName == null) {
-              dataTypeName = field.getType().getSimpleName();
-          }
-
-          AllowableValues allowable;
-
-          if (field.getAnnotation(ApiModelProperty.class) != null) {
-              ApiModelProperty apiModelProperty = field.getAnnotation(ApiModelProperty.class);
-
-
-            String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
-            allowable = allowableValues(fromNullable(allowableProperty),  field);
-
-              Parameter annotatedModelParam = new Parameter(
-                      parentName != null ? new StringBuilder(parentName).append(".")
-                              .append(field.getName()).toString() : field.getName(),
-                      toOption(apiModelProperty.value()),
-                      toOption(null), //default value
-                      apiModelProperty.required(),
-                      Boolean.FALSE,  //allow multiple
-                      dataTypeName,
-                      allowable,
-                      "query", //param type
-                      toOption(apiModelProperty.access())
-                      );
-
-              parameters.add(annotatedModelParam);
-
-          } else if (field.getAnnotation(ApiParam.class) != null) {
-              ApiParam apiParam = field.getAnnotation(ApiParam.class);
-
-              allowable = allowableValues(fromNullable(apiParam.allowableValues()), field);
-
-              Parameter annotatedParam = new Parameter(
-                      parentName != null ? new StringBuilder(parentName).append(".")
-                              .append(field.getName()).toString() : field.getName(),
-                      toOption(apiParam.value()),
-                      toOption(apiParam.defaultValue()),
-                      apiParam.required(),
-                      apiParam.allowMultiple(),
-                      dataTypeName,
-                      allowable,
-                      "query", //param type
-                      toOption(apiParam.access())
-                      );
-
-              parameters.add(annotatedParam);
-
-          } else {
-
-              allowable = allowableValues(Optional.<String>absent(), field);
-
-              Parameter unannotatedParam = new Parameter(
-                      parentName != null ? new StringBuilder(parentName).append(".")
-                              .append(field.getName()).toString() : field.getName(),
-                      toOption(null), //description
-                      toOption(null), //default value
-                      Boolean.FALSE,  //required
-                      Boolean.FALSE,  //allow multiple
-                      dataTypeName,   //data type
-                      allowable,           //allowable values
-                      "query",        //param type
-                      toOption(null)  //param access
-                      );
-
-              parameters.add(unannotatedParam);
-          }
+      if (Modifier.isStatic(field.getModifiers()) || field.isSynthetic()) {
+        continue;
       }
+
+      if (field.getType().getPackage() != null &&
+              !field.getType().getPackage().getName().startsWith("java") && !field.getType().isEnum()) {
+
+        expandModelAttribute(field.getName(), field.getType(), parameters);
+        continue;
+      }
+
+      String dataTypeName = Types.typeNameFor(field.getType());
+
+      if (dataTypeName == null) {
+        dataTypeName = field.getType().getSimpleName();
+      }
+
+      AllowableValues allowable;
+
+      if (field.getAnnotation(ApiModelProperty.class) != null) {
+        ApiModelProperty apiModelProperty = field.getAnnotation(ApiModelProperty.class);
+
+
+        String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
+        allowable = allowableValues(fromNullable(allowableProperty), field);
+
+        Parameter annotatedModelParam = new Parameter(
+                parentName != null ? new StringBuilder(parentName).append(".")
+                        .append(field.getName()).toString() : field.getName(),
+                toOption(apiModelProperty.value()),
+                toOption(null), //default value
+                apiModelProperty.required(),
+                Boolean.FALSE,  //allow multiple
+                dataTypeName,
+                allowable,
+                "query", //param type
+                toOption(apiModelProperty.access())
+        );
+
+        parameters.add(annotatedModelParam);
+
+      } else if (field.getAnnotation(ApiParam.class) != null) {
+        ApiParam apiParam = field.getAnnotation(ApiParam.class);
+
+        allowable = allowableValues(fromNullable(apiParam.allowableValues()), field);
+
+        Parameter annotatedParam = new Parameter(
+                parentName != null ? new StringBuilder(parentName).append(".")
+                        .append(field.getName()).toString() : field.getName(),
+                toOption(apiParam.value()),
+                toOption(apiParam.defaultValue()),
+                apiParam.required(),
+                apiParam.allowMultiple(),
+                dataTypeName,
+                allowable,
+                "query", //param type
+                toOption(apiParam.access())
+        );
+
+        parameters.add(annotatedParam);
+
+      } else {
+
+        allowable = allowableValues(Optional.<String>absent(), field);
+
+        Parameter unannotatedParam = new Parameter(
+                parentName != null ? new StringBuilder(parentName).append(".")
+                        .append(field.getName()).toString() : field.getName(),
+                toOption(null), //description
+                toOption(null), //default value
+                Boolean.FALSE,  //required
+                Boolean.FALSE,  //allow multiple
+                dataTypeName,   //data type
+                allowable,           //allowable values
+                "query",        //param type
+                toOption(null)  //param access
+        );
+
+        parameters.add(unannotatedParam);
+      }
+    }
 
   }
 
@@ -195,46 +196,46 @@ public class OperationParameterReader extends SwaggerParameterReader {
     AllowableValues allowable = null;
     if (field.getType().isEnum()) {
       allowable = new AllowableListValues(JavaConversions.collectionAsScalaIterable(
-      getEnumValues(field.getType())).toList(), "LIST");
+              getEnumValues(field.getType())).toList(), "LIST");
     } else if (optionalAllowable.isPresent()) {
       allowable = allowableValueFromString(optionalAllowable.get());
     }
 
-      return allowable;
+    return allowable;
   }
 
   private List<String> getEnumValues(final Class<?> subject) {
-      return transform(Arrays.asList(subject.getEnumConstants()), new Function<Object, String>() {
-          @Override
-          public String apply(final Object input) {
-              return input.toString();
-          }
-      });
+    return transform(Arrays.asList(subject.getEnumConstants()), new Function<Object, String>() {
+      @Override
+      public String apply(final Object input) {
+        return input.toString();
+      }
+    });
   }
 
   private boolean shouldIgnore(final ResolvedMethodParameter parameter, final Set<Class> ignorableParamTypes) {
-        if (null != ignorableParamTypes && !ignorableParamTypes.isEmpty()) {
+    if (null != ignorableParamTypes && !ignorableParamTypes.isEmpty()) {
 
-            if (ignorableParamTypes.contains(parameter.getMethodParameter().getParameterType())) {
-                return true;
-            }
-            for (Annotation annotation : parameter.getMethodParameter().getParameterAnnotations()) {
-                if (ignorableParamTypes.contains(annotation.annotationType())) {
-                    return true;
-                }
-            }
+      if (ignorableParamTypes.contains(parameter.getMethodParameter().getParameterType())) {
+        return true;
+      }
+      for (Annotation annotation : parameter.getMethodParameter().getParameterAnnotations()) {
+        if (ignorableParamTypes.contains(annotation.annotationType())) {
+          return true;
         }
-        return false;
+      }
     }
+    return false;
+  }
 
   private boolean shouldExpand(final ResolvedMethodParameter parameter) {
 
-        for (Annotation annotation : parameter.getMethodParameter().getParameterAnnotations()) {
-            if (ModelAttribute.class == annotation.annotationType()) {
-                return true;
-            }
-        }
+    for (Annotation annotation : parameter.getMethodParameter().getParameterAnnotations()) {
+      if (ModelAttribute.class == annotation.annotationType()) {
+        return true;
+      }
+    }
 
-        return false;
+    return false;
   }
 }
