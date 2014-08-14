@@ -29,7 +29,7 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
     AllowableValues allowableValues = null;
     String allowableValueString = findAnnotatedAllowableValues(methodParameter);
     if (allowableValueString!=null && !"".equals(allowableValueString)) {
-      allowableValues = ParameterAllowableReader.getAllowableValueFromString(allowableValueString);
+      allowableValues = ParameterAllowableReader.allowableValueFromString(allowableValueString);
     } else {
       if (methodParameter.getParameterType().isEnum()) {
         Object[] enumConstants = methodParameter.getParameterType().getEnumConstants();
@@ -51,7 +51,7 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
     context.put("allowableValues", allowableValues);
   }
 
-  public static AllowableValues getAllowableValueFromString(String allowableValueString) {
+  public static AllowableValues allowableValueFromString(String allowableValueString) {
      AllowableValues allowableValues = null;
      allowableValueString = allowableValueString.trim().replaceAll(" ", "");
      if (allowableValueString.startsWith("range[")) {

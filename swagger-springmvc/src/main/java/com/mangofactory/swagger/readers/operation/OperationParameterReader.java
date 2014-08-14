@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.readers.operation;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.models.Types;
@@ -19,12 +20,8 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.model.AllowableListValues;
 import com.wordnik.swagger.model.AllowableValues;
 import com.wordnik.swagger.model.Parameter;
-
-import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
-
-import scala.Option;
 import scala.collection.JavaConversions;
 
 import java.lang.annotation.Annotation;
@@ -36,8 +33,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.base.Optional.fromNullable;
+import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.ScalaUtils.*;
+import static com.mangofactory.swagger.readers.operation.parameter.ParameterAllowableReader.*;
 
 public class OperationParameterReader extends SwaggerParameterReader {
 
@@ -123,12 +123,14 @@ public class OperationParameterReader extends SwaggerParameterReader {
               dataTypeName = field.getType().getSimpleName();
           }
 
-          AllowableValues allowable = null;
+          AllowableValues allowable;
 
           if (field.getAnnotation(ApiModelProperty.class) != null) {
               ApiModelProperty apiModelProperty = field.getAnnotation(ApiModelProperty.class);
 
-              allowable = getAllowableValues(toOption(apiModelProperty.allowableValues()), field);
+
+            String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
+            allowable = allowableValues(fromNullable(allowableProperty),  field);
 
               Parameter annotatedModelParam = new Parameter(
                       parentName != null ? new StringBuilder(parentName).append(".")
@@ -148,7 +150,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
           } else if (field.getAnnotation(ApiParam.class) != null) {
               ApiParam apiParam = field.getAnnotation(ApiParam.class);
 
-              allowable = getAllowableValues(toOption(apiParam.allowableValues()), field);
+              allowable = allowableValues(fromNullable(apiParam.allowableValues()), field);
 
               Parameter annotatedParam = new Parameter(
                       parentName != null ? new StringBuilder(parentName).append(".")
@@ -167,7 +169,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
 
           } else {
 
-              allowable = getAllowableValues(toOption(null), field);
+              allowable = allowableValues(Optional.<String>absent(), field);
 
               Parameter unannotatedParam = new Parameter(
                       parentName != null ? new StringBuilder(parentName).append(".")
@@ -188,18 +190,15 @@ public class OperationParameterReader extends SwaggerParameterReader {
 
   }
 
-  private AllowableValues getAllowableValues(final Option<String> allowableStr, final Field field) {
+  private AllowableValues allowableValues(final Optional<String> optionalAllowable, final Field field) {
 
-      AllowableValues allowable = null;
-
-      if (allowableStr.nonEmpty() && StringUtils.isNotBlank(allowableStr.get())) {
-
-          allowable = ParameterAllowableReader.getAllowableValueFromString(allowableStr.get());
-
-      } else if (field.getType().isEnum()) {
-          allowable = new AllowableListValues(JavaConversions.collectionAsScalaIterable(
-                  getEnumValues(field.getType())).toList(), "LIST");
-      }
+    AllowableValues allowable = null;
+    if (field.getType().isEnum()) {
+      allowable = new AllowableListValues(JavaConversions.collectionAsScalaIterable(
+      getEnumValues(field.getType())).toList(), "LIST");
+    } else if (optionalAllowable.isPresent()) {
+      allowable = allowableValueFromString(optionalAllowable.get());
+    }
 
       return allowable;
   }
