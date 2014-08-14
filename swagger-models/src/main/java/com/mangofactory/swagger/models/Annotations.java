@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.annotations.ApiResponses;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
@@ -41,5 +42,9 @@ public class Annotations {
 
   public static Optional<ApiParam> findApiParamAnnotation(AnnotatedElement annotated) {
     return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiParam.class));
+  }
+
+  public static Optional<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
+    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiResponses.class));
   }
 }

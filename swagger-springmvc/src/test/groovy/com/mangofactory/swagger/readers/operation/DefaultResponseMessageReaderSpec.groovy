@@ -3,6 +3,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.ResponseMessage
@@ -42,7 +43,7 @@ class DefaultResponseMessageReaderSpec extends Specification {
       SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
       swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages())
-      swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
+      swaggerGlobalSettings.alternateTypeProvider = new AlternateTypeProvider();
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithApiResponses'))
 
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
@@ -53,9 +54,10 @@ class DefaultResponseMessageReaderSpec extends Specification {
       Map<String, Object> result = context.getResult()
 
     then:
-      result['responseMessages'].size() == 1
-      result['responseMessages'][0].code == 413
-      result['responseMessages'][0].message == "a message"
+      result['responseMessages'].size() == 5
+      def annotatedResponse = result['responseMessages'].find { it.code == 413 }
+      annotatedResponse != null
+      annotatedResponse.message == "a message"
    }
 
    def "Methods with return type containing a model should override the success response code"(){
