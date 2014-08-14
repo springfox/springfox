@@ -12,7 +12,6 @@ jdk:
 
 after_success:
   - mvn -f swagger-springmvc/pom.xml clean test jacoco:report coveralls:jacoco
-  TRAVIS_JDK_VERSION=openjdk6
   - '[[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == "false" ]]  && [[ $TRAVIS_JDK_VERSION == "openjdk6" ]]  && mvn deploy --settings travisDeploySettings.xml -Dmaven.test.skip=true'
 
 env:
