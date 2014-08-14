@@ -1,7 +1,6 @@
-package com.mangofactory.swagger.readers.operation.requestmethod
+package com.mangofactory.swagger.readers.operation
 
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.readers.operation.OperationHttpMethodReader
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification

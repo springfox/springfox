@@ -1,10 +1,9 @@
-package com.mangofactory.swagger.readers.operation.responsemessage
+package com.mangofactory.swagger.readers.operation
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
-import com.mangofactory.swagger.readers.operation.DefaultResponseMessageReader
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.ResponseMessage
 import org.springframework.web.bind.annotation.RequestMethod
