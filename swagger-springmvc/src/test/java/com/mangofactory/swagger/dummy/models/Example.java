@@ -5,7 +5,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 
 import java.io.Serializable;
 
-public class Example implements Serializable {
+public class Example extends Parent implements Serializable {
 
     private static final long serialVersionUID = -8084678021874483017L;
 
@@ -14,13 +14,16 @@ public class Example implements Serializable {
 
     @ApiModelProperty(value="description of bar", required=false)
     private int bar;
-    
+
     private EnumType enumType;
-    
+
     @ApiParam(value="description of annotatedEnumType", required=false)
     private EnumType annotatedEnumType;
-        
+
     private NestedType nestedType;
+
+    private String propertyWithNoGetterMethod;
+    private String propertyWithNoSetterMethod;
 
     public Example(String foo, int bar, EnumType enumType, NestedType nestedType) {
         this.foo = foo;
@@ -52,7 +55,7 @@ public class Example implements Serializable {
     public void setEnumType(EnumType enumType) {
         this.enumType = enumType;
     }
-    
+
     public EnumType getAnnotatedEnumType() {
         return annotatedEnumType;
     }
@@ -67,6 +70,14 @@ public class Example implements Serializable {
 
     public void setNestedType(NestedType nestedType) {
         this.nestedType = nestedType;
+    }
+
+    public void setPropertyWithNoGetterMethod(String propertyWithNoGetterMethod) {
+        this.propertyWithNoGetterMethod = propertyWithNoGetterMethod;
+    }
+
+    public String getPropertyWithNoSetterMethod() {
+        return this.propertyWithNoSetterMethod;
     }
 }
 

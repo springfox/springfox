@@ -94,7 +94,7 @@ class OperationParameterReaderSpec extends Specification {
       Map<String, Object> result = context.getResult()
 
     then:
-      result['parameters'].size == 5
+      result['parameters'].size == 6
       
       Parameter annotatedFooParam = result['parameters'][0]
       annotatedFooParam != null
@@ -126,6 +126,11 @@ class OperationParameterReaderSpec extends Specification {
       unannotatedNestedTypeNameParam != null
       unannotatedNestedTypeNameParam.name == 'nestedType.name'
       unannotatedNestedTypeNameParam.description().isEmpty()
+      
+      Parameter unannotatedParentBeanParam = result['parameters'][5]
+      unannotatedParentBeanParam != null
+      unannotatedParentBeanParam.name == 'parentBeanProperty'
+      unannotatedParentBeanParam.description().isEmpty()
    }
    
   def "Should not expand unannotated request params"() {
