@@ -106,6 +106,7 @@ public class ApiModelReader implements Command<RequestMappingContext> {
             mergedTargetProperties.put(newProperty, sourceProperties.get(newProperty));
           }
 
+          // uses scala generated copy constructor.
           Model mergedModel = targetModelValue.copy(
                   targetModelValue.id(),
                   targetModelValue.name(),
