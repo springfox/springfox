@@ -3,10 +3,12 @@ package com.mangofactory.swagger.readers;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
+import com.google.common.collect.Maps;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.swagger.models.ModelContext;
 import com.mangofactory.swagger.models.ModelProvider;
+import com.mangofactory.swagger.models.ScalaConverters;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
@@ -99,9 +101,22 @@ public class ApiModelReader implements Command<RequestMappingContext> {
 
           Set<String> newSourcePropKeys = newHashSet(sourceProperties.keySet());
           newSourcePropKeys.removeAll(targetProperties.keySet());
+          Map<String, ModelProperty> mergedTargetProperties = Maps.newHashMap(targetProperties);
           for (String newProperty : newSourcePropKeys) {
-            targetProperties.put(newProperty, sourceProperties.get(newProperty));
+            mergedTargetProperties.put(newProperty, sourceProperties.get(newProperty));
           }
+
+          Model mergedModel = targetModelValue.copy(
+                  targetModelValue.id(),
+                  targetModelValue.name(),
+                  targetModelValue.qualifiedType(),
+                  ScalaConverters.toScalaLinkedHashMap(mergedTargetProperties),
+                  targetModelValue.description(),
+                  targetModelValue.baseModel(),
+                  targetModelValue.discriminator(),
+                  targetModelValue.subTypes());
+
+          target.put(sourceModelKey, mergedModel);
         }
       }
     }
