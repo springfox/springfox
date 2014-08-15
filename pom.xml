@@ -8,7 +8,7 @@
     </parent>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc-parent</artifactId>
-    <version>0.8.7</version>
+    <version>0.8.8-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
