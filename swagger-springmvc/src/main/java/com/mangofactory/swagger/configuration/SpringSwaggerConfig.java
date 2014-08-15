@@ -83,7 +83,7 @@ public class SpringSwaggerConfig {
 
   @Bean
   public SwaggerPathProvider defaultSwaggerPathProvider() {
-    return new RelativeSwaggerPathProvider();
+    return new RelativeSwaggerPathProvider(servletContext);
   }
 
   @Bean

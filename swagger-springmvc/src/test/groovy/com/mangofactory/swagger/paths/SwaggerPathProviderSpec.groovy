@@ -3,12 +3,17 @@ package com.mangofactory.swagger.paths
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import spock.lang.Specification
 
+import javax.servlet.ServletContext
+
 @Mixin(RequestMappingSupport)
 class SwaggerPathProviderSpec extends Specification {
 
    def "relative paths"() {
       given:
-        SwaggerPathProvider provider = new RelativeSwaggerPathProvider(apiResourcePrefix: "some/prefix")
+        ServletContext servletContext = Mock()
+        servletContext.contextPath >> "/"
+        SwaggerPathProvider provider = new RelativeSwaggerPathProvider(servletContext)
+        provider.apiResourcePrefix = "some/prefix"
 
       expect:
         provider.getApplicationBasePath() == "/"
@@ -32,7 +37,10 @@ class SwaggerPathProviderSpec extends Specification {
 
    def "Invalid prefix's"() {
       when:
-        new RelativeSwaggerPathProvider(apiResourcePrefix: prefix)
+        ServletContext servletContext = Mock()
+        servletContext.contextPath >> "/"
+        SwaggerPathProvider provider = new RelativeSwaggerPathProvider(servletContext)
+        provider.apiResourcePrefix = prefix
       then:
         thrown(IllegalArgumentException)
       where:
@@ -40,8 +48,12 @@ class SwaggerPathProviderSpec extends Specification {
    }
 
    def "api declaration path"() {
-      expect:
-        new RelativeSwaggerPathProvider(apiResourcePrefix: prefix).getOperationPath(apiDeclaration) == expected
+      given:
+        ServletContext servletContext = Mock()
+        servletContext.contextPath >> "/"
+        SwaggerPathProvider provider = new RelativeSwaggerPathProvider(servletContext)
+        provider.apiResourcePrefix = prefix
+        provider.getOperationPath(apiDeclaration) == expected
 
       where:
         prefix   | apiDeclaration           | expected
