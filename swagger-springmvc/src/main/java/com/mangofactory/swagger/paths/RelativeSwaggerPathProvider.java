@@ -2,6 +2,8 @@ package com.mangofactory.swagger.paths;
 
 import javax.servlet.ServletContext;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 public class  RelativeSwaggerPathProvider extends SwaggerPathProvider {
     public static final String ROOT = "/";
   private final ServletContext servletContext;
@@ -13,7 +15,7 @@ public class  RelativeSwaggerPathProvider extends SwaggerPathProvider {
 
   @Override
     protected String applicationPath() {
-        return servletContext.getContextPath();
+        return isNullOrEmpty(servletContext.getContextPath()) ? ROOT : servletContext.getContextPath();
     }
 
     @Override
