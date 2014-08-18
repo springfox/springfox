@@ -42,4 +42,13 @@ class ModelPropertySupport {
                     .collectEntries {[ it.getInternalName(), it ]}
     return propertyDefinitionsByInternalName[propertyName(methodName)]
   }
+
+  static BeanPropertyDefinition beanPropertyDefinitionByField(def typeToTest, def fieldName) {
+    JavaType type = TypeFactory.defaultInstance().constructType(typeToTest)
+    BeanDescription beanDescription = mapper.getDeserializationConfig().introspectForBuilder(type)
+    Map<String, BeanPropertyDefinition> propertyDefinitionsByInternalName =
+            beanDescription.findProperties()
+                    .collectEntries {[ it.getInternalName(), it ]}
+    return propertyDefinitionsByInternalName[fieldName]
+  }
 }

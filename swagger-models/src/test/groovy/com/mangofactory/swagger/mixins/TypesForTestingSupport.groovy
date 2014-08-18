@@ -15,6 +15,9 @@ class TypesForTestingSupport {
   static Class typeWithConstructor() {
     TypeWithConstructor
   }
+  static Class typeWithConstructorProperty() {
+    TypeWithConstructorProperty
+  }
   static Class mapsContainer() {
     MapsContainer
   }

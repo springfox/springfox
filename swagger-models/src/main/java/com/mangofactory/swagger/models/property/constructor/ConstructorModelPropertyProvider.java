@@ -1,9 +1,8 @@
 package com.mangofactory.swagger.models.property.constructor;
 
-import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
+import com.mangofactory.swagger.models.BeanPropertyNamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
-import com.mangofactory.swagger.models.property.ModelProperty;
 import com.mangofactory.swagger.models.property.field.FieldModelPropertyProvider;
 import com.mangofactory.swagger.models.property.field.FieldProvider;
 import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
@@ -13,21 +12,13 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Constructor;
 
 @Component
-public class ConstructorModelPropertyProvider extends FieldModelPropertyProvider implements ModelPropertiesProvider{
+public class ConstructorModelPropertyProvider extends FieldModelPropertyProvider implements ModelPropertiesProvider {
 
   @Autowired
-  public ConstructorModelPropertyProvider(FieldProvider fieldProvider, AlternateTypeProvider alternateTypeProvider) {
-    super(fieldProvider, alternateTypeProvider);
-  }
+  public ConstructorModelPropertyProvider(FieldProvider fieldProvider, AlternateTypeProvider alternateTypeProvider,
+      BeanPropertyNamingStrategy namingStrategy) {
 
-  @Override
-  public Iterable<? extends ModelProperty> propertiesForSerialization(ResolvedType type) {
-    return super.propertiesForSerialization(type);
-  }
-
-  @Override
-  public Iterable<? extends ModelProperty> propertiesForDeserialization(ResolvedType type) {
-    return super.propertiesForDeserialization(type);
+    super(fieldProvider, alternateTypeProvider, namingStrategy);
   }
 
   @Override

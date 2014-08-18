@@ -122,9 +122,10 @@ class SwaggerApiResourceListingSpec extends Specification {
 
       def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(resolver), resolver,
               settings.alternateTypeProvider, namingStrategy)
-      def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, settings.alternateTypeProvider)
+      def fieldModelPropertyProvider =
+              new FieldModelPropertyProvider(fields, settings.alternateTypeProvider, namingStrategy)
       def constructorModelPropertyProvider = new ConstructorModelPropertyProvider(fields,
-              settings.alternateTypeProvider)
+              settings.alternateTypeProvider, namingStrategy)
 
       def modelPropertiesProvider = new DefaultModelPropertiesProvider(beanModelPropertyProvider,
               fieldModelPropertyProvider, constructorModelPropertyProvider)

@@ -2,8 +2,9 @@ package com.mangofactory.swagger.models.property.field
 
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
+import com.mangofactory.swagger.models.BeanPropertyNamingStrategy
 import com.mangofactory.swagger.models.ModelContext
-
+import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.wordnik.swagger.model.AllowableListValues
 import scala.collection.JavaConversions

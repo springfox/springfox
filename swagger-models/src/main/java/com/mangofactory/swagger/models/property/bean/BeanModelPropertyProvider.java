@@ -26,6 +26,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.models.property.BeanPropertyDefinitions.*;
 import static com.mangofactory.swagger.models.property.bean.Accessors.*;
 import static com.mangofactory.swagger.models.property.bean.BeanModelProperty.*;
 
@@ -61,9 +62,8 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     for (ResolvedMethod childProperty : accessors.in(resolvedType)) {
       if (propertyLookup.containsKey(propertyName(childProperty.getName()))) {
         BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getName()));
-        Optional<BeanPropertyDefinition> jacksonProperty = BeanPropertyDefinitions.jacksonPropertyWithSameInternalName
-                (beanDescription,
-                        propertyDefinition);
+        Optional<BeanPropertyDefinition> jacksonProperty
+                = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
         if (accessorMemberIs(childProperty, methodName(member))) {
           serializationCandidates.add(beanModelProperty(childProperty, jacksonProperty, true));
@@ -86,7 +86,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
       if (propertyLookup.containsKey(propertyName(childProperty.getName()))) {
         BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getName()));
         Optional<BeanPropertyDefinition> jacksonProperty
-                = BeanPropertyDefinitions.jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+                = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         try {
           AnnotatedMember member = propertyDefinition.getPrimaryMember();
           if (accessorMemberIs(childProperty, methodName(member))) {
@@ -118,9 +118,10 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
           jacksonProperty, boolean forSerialization) {
 
     BeanPropertyDefinition beanPropertyDefinition = jacksonProperty.get();
-    return new BeanModelProperty(beanPropertyDefinition, childProperty, isGetter(childProperty.getRawMember()),
-            forSerialization, typeResolver, alternateTypeProvider,
-            namingStrategy);
+    String propertyName = name(beanPropertyDefinition, forSerialization, namingStrategy);
+    return new BeanModelProperty(propertyName, beanPropertyDefinition, childProperty,
+            isGetter(childProperty.getRawMember()),
+            typeResolver, alternateTypeProvider);
   }
 
 }

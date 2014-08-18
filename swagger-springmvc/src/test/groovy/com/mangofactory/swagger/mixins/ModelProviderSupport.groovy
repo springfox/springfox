@@ -25,8 +25,9 @@ class ModelProviderSupport {
 
     def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver,
             alternateTypeProvider, namingStrategy)
-    def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, alternateTypeProvider)
-    def constructorModelPropertyProvider = new ConstructorModelPropertyProvider(fields, alternateTypeProvider)
+    def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, alternateTypeProvider, namingStrategy)
+    def constructorModelPropertyProvider =
+            new ConstructorModelPropertyProvider(fields, alternateTypeProvider, namingStrategy)
 
     def modelPropertiesProvider = new DefaultModelPropertiesProvider(beanModelPropertyProvider,
             fieldModelPropertyProvider, constructorModelPropertyProvider)

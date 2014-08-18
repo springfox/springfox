@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import com.mangofactory.swagger.models.BeanPropertyNamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.property.BeanPropertyDefinitions;
 import com.mangofactory.swagger.models.property.ModelProperty;
@@ -24,18 +25,22 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.models.property.BeanPropertyDefinitions.*;
 
 @Component
 public class FieldModelPropertyProvider implements ModelPropertiesProvider {
 
   private final FieldProvider fieldProvider;
   private final AlternateTypeProvider alternateTypeProvider;
+  private final BeanPropertyNamingStrategy namingStrategy;
   private ObjectMapper objectMapper;
 
   @Autowired
-  public FieldModelPropertyProvider(FieldProvider fieldProvider, AlternateTypeProvider alternateTypeProvider) {
+  public FieldModelPropertyProvider(FieldProvider fieldProvider, AlternateTypeProvider alternateTypeProvider,
+      BeanPropertyNamingStrategy namingStrategy) {
     this.fieldProvider = fieldProvider;
     this.alternateTypeProvider = alternateTypeProvider;
+    this.namingStrategy = namingStrategy;
   }
 
   @Override
@@ -51,11 +56,11 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
       if (propertyLookup.containsKey(childField.getName())) {
         BeanPropertyDefinition propertyDefinition = propertyLookup.get(childField.getName());
         Optional<BeanPropertyDefinition> jacksonProperty
-                = BeanPropertyDefinitions.jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+                = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
         if (memberIsAField(member)) {
-          serializationCandidates.add(new FieldModelProperty(jacksonProperty.get().getName(), childField,
-                  alternateTypeProvider));
+          String fieldName = name(jacksonProperty.get(), true, namingStrategy);
+          serializationCandidates.add(new FieldModelProperty(fieldName, childField, alternateTypeProvider));
         }
       }
     }
@@ -74,11 +79,11 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
       if (propertyLookup.containsKey(childField.getName())) {
         BeanPropertyDefinition propertyDefinition = propertyLookup.get(childField.getName());
         Optional<BeanPropertyDefinition> jacksonProperty
-                = BeanPropertyDefinitions.jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+                = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
         if (memberIsAField(member)) {
-          serializationCandidates.add(new FieldModelProperty(jacksonProperty.get().getName(), childField,
-                  alternateTypeProvider));
+          String fieldName = name(jacksonProperty.get(), true, namingStrategy);
+          serializationCandidates.add(new FieldModelProperty(fieldName, childField, alternateTypeProvider));
         }
       }
     }

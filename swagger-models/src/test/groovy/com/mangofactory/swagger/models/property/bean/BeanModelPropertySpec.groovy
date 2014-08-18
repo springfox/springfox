@@ -8,11 +8,14 @@ import com.mangofactory.swagger.models.ModelContext
 import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.swagger.models.ObjectMapperNamingStrategySpec
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
+import com.mangofactory.swagger.models.property.BeanPropertyDefinitions
 import com.wordnik.swagger.model.AllowableListValues
 import spock.lang.Specification
 
 import static com.google.common.collect.Lists.newArrayList
 import static com.mangofactory.swagger.models.ScalaConverters.fromOption
+import static com.mangofactory.swagger.models.property.BeanPropertyDefinitions.name
+import static com.mangofactory.swagger.models.property.bean.Accessors.isGetter
 import static scala.collection.JavaConversions.collectionAsScalaIterable
 
 @Mixin([TypesForTestingSupport, ModelPropertySupport])
@@ -29,9 +32,9 @@ class BeanModelPropertySpec extends Specification {
       def forSerialization = true
 
       ObjectMapper mapper = new ObjectMapper()
-      def sut = new BeanModelProperty(propertyDefinition, method, Accessors.isGetter(method.getRawMember()),
-              forSerialization, new TypeResolver(), new AlternateTypeProvider(),
-              new ObjectMapperBeanPropertyNamingStrategy(mapper))
+      String propName = name(propertyDefinition, true, new ObjectMapperBeanPropertyNamingStrategy(mapper))
+      def sut = new BeanModelProperty(propName, propertyDefinition, method, isGetter(method.getRawMember()),
+              new TypeResolver(), new AlternateTypeProvider())
 
 
     expect:
@@ -60,9 +63,9 @@ class BeanModelPropertySpec extends Specification {
       def forSerialization = true
 
       ObjectMapper mapper = new ObjectMapper()
-      def sut = new BeanModelProperty(propertyDefinition, method, Accessors.isGetter(method.getRawMember()),
-              forSerialization, new TypeResolver(), new AlternateTypeProvider(),
-              new ObjectMapperBeanPropertyNamingStrategy(mapper))
+      String propName = name(propertyDefinition, true, new ObjectMapperBeanPropertyNamingStrategy(mapper))
+      def sut = new BeanModelProperty(propName, propertyDefinition, method, isGetter(method.getRawMember()),
+              new TypeResolver(), new AlternateTypeProvider())
 
     expect:
       fromOption(sut.propertyDescription()) == description

@@ -10,6 +10,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import com.mangofactory.swagger.models.BeanPropertyNamingStrategy;
 
 public class BeanPropertyDefinitions {
   private BeanPropertyDefinitions() {
@@ -23,6 +24,14 @@ public class BeanPropertyDefinitions {
         return input.getInternalName();
       }
     };
+  }
+
+  public static String name(BeanPropertyDefinition beanPropertyDefinition,
+                            boolean forSerialization, BeanPropertyNamingStrategy namingStrategy) {
+
+    return forSerialization
+            ? namingStrategy.nameForSerialization(beanPropertyDefinition)
+            : namingStrategy.nameForDeserialization(beanPropertyDefinition);
   }
 
   public static Optional<BeanPropertyDefinition> jacksonPropertyWithSameInternalName(BeanDescription beanDescription,
