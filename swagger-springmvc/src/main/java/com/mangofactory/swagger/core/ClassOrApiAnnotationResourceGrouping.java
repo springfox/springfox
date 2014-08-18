@@ -20,41 +20,41 @@ import static org.apache.commons.lang.StringUtils.*;
 
 @Component
 public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStrategy {
-   private static final Logger log = LoggerFactory.getLogger(ClassOrApiAnnotationResourceGrouping.class);
+  private static final Logger log = LoggerFactory.getLogger(ClassOrApiAnnotationResourceGrouping.class);
 
-   public ClassOrApiAnnotationResourceGrouping() {
-   }
-
-   @Override
-   public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-     Class<?> controllerClass = handlerMethod.getBeanType();
-     String group = splitCamelCase(controllerClass.getSimpleName(), " ");
-     return extractAnnotation(controllerClass, descriptionOrValueExtractor()).or(group);
-   }
+  public ClassOrApiAnnotationResourceGrouping() {
+  }
 
   @Override
-   public Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      Class<?> controllerClass = handlerMethod.getBeanType();
-      Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
-      if (null != apiAnnotation && !isBlank(apiAnnotation.value())) {
-         return apiAnnotation.position();
-      }
-      return 0;
-   }
+  public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+    Class<?> controllerClass = handlerMethod.getBeanType();
+    String group = splitCamelCase(controllerClass.getSimpleName(), " ");
+    return extractAnnotation(controllerClass, descriptionOrValueExtractor()).or(group);
+  }
 
-   @Override
-   public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      String group = getClassOrApiAnnotationValue(handlerMethod).toLowerCase().replaceAll(" ", "-");
-      Integer position = getResourcePosition(requestMappingInfo, handlerMethod);
-      return newHashSet(new ResourceGroup(group.toLowerCase(), position));
-   }
+  @Override
+  public Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+    Class<?> controllerClass = handlerMethod.getBeanType();
+    Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
+    if (null != apiAnnotation && !isBlank(apiAnnotation.value())) {
+      return apiAnnotation.position();
+    }
+    return 0;
+  }
 
-   private String getClassOrApiAnnotationValue(HandlerMethod handlerMethod) {
+  @Override
+  public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+    String group = getClassOrApiAnnotationValue(handlerMethod).toLowerCase().replaceAll(" ", "-");
+    Integer position = getResourcePosition(requestMappingInfo, handlerMethod);
+    return newHashSet(new ResourceGroup(group.toLowerCase(), position));
+  }
+
+  private String getClassOrApiAnnotationValue(HandlerMethod handlerMethod) {
     Class<?> controllerClass = handlerMethod.getBeanType();
     String group = splitCamelCase(controllerClass.getSimpleName(), " ");
 
     return extractAnnotation(controllerClass, valueExtractor()).or(group);
-   }
+  }
 
   private Optional<String> extractAnnotation(Class<?> controllerClass, Function<Api,
           Optional<String>> annotationExtractor) {
