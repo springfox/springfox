@@ -2,6 +2,7 @@ package com.mangofactory.swagger.mixins
 
 import com.mangofactory.swagger.dummy.DummyClass
 import com.mangofactory.swagger.dummy.DummyController
+import com.mangofactory.swagger.dummy.DummyControllerWithApiDescription
 import com.mangofactory.swagger.dummy.controllers.FancyPetService
 import com.mangofactory.swagger.dummy.controllers.PetGroomingService
 import com.mangofactory.swagger.dummy.controllers.PetService
@@ -39,6 +40,14 @@ class RequestMappingSupport {
 
   HandlerMethod dummyControllerHandlerMethod(String methodName = "dummyMethod", parameterTypes = null) {
     def clazz = new DummyController()
+    Class c = clazz.getClass();
+    new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
+  }
+
+  HandlerMethod dummyControllerWithApiDescriptionHandlerMethod(String methodName = "dummyMethod",
+      parameterTypes = null) {
+
+    def clazz = new DummyControllerWithApiDescription()
     Class c = clazz.getClass();
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
