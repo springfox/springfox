@@ -389,3 +389,17 @@ testcases:
          name: "petId"
        - type: "string"
          name: "picId"
+
+  - parentUri: "/default/concrete-controller"
+    index: 20
+    testDescription: "Verified abstract base types with open generic type with no constraint works"
+    expectedUri: "/foo/create-t"
+    parameters:
+       - type: "Pet"
+         name: "toCreate"
+
+  - parentUri: "/default/concrete-controller"
+    index: 20
+    testDescription: "Verified abstract base types with open generic type with no constraint works"
+    expectedUri: "/foo/get-t"
+    returnType: "Pet"

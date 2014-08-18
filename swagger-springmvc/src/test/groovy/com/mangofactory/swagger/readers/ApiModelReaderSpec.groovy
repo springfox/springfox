@@ -202,7 +202,7 @@ class ApiModelReaderSpec extends Specification {
 
   }
 
-  def "Generates the correct models when alternateTypeProvider returns an ingoreable or base parameter type"() {
+  def "Generates the correct models when alternateTypeProvider returns an ignoreable or base parameter type"() {
     given:
       HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
       RequestMappingContext context =

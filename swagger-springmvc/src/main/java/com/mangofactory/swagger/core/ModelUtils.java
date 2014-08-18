@@ -9,6 +9,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.lang.reflect.Type;
 
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
+import static com.mangofactory.swagger.readers.operation.HandlerMethodResolver.use;
 
 public final class ModelUtils {
 
@@ -17,7 +18,9 @@ public final class ModelUtils {
   }
 
   public static ResolvedType handlerReturnType(TypeResolver resolver, HandlerMethod handlerMethod) {
-    return new HandlerMethodResolver(resolver).methodReturnType(handlerMethod.getMethod());
+    Class hostClass = use(handlerMethod.getBeanType())
+            .or(handlerMethod.getMethod().getDeclaringClass());
+    return new HandlerMethodResolver(resolver).methodReturnType(handlerMethod.getMethod(), hostClass);
   }
 
   public static String getModelName(TypeResolver resolver, Type clazz) {

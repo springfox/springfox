@@ -11,7 +11,7 @@ class HandlerMethodResolverSpec extends Specification {
       def resolvedParameters = methodResolver.methodParameters(handlerMethod)
               .collect() { it.resolvedParameterType.getErasedType().simpleName }
               .sort()
-      def resolvedReturnType = methodResolver.methodReturnType(handlerMethod.method).erasedType.simpleName
+      def resolvedReturnType = methodResolver.methodReturnType(handlerMethod.method, handlerMethod.getBeanType()).erasedType.simpleName
     expect:
       parameters == resolvedParameters
       returnType == resolvedReturnType

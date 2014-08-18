@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import org.yaml.snakeyaml.Yaml
@@ -21,8 +20,8 @@ import spock.lang.Unroll
 
 import java.nio.ByteBuffer
 
-import static com.google.common.collect.Maps.*
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import static com.google.common.collect.Maps.newHashMap
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebAppConfiguration
 @ContextConfiguration(loader = WebContextLoader, classes = ServicesConfiguration)
@@ -51,7 +50,7 @@ public class ServicesIntegrationTest extends Specification {
         def bytes = ByteBuffer.wrap(actions.andReturn().response.contentAsByteArray)
         def decoded = Charsets.UTF_8.decode(bytes)
         def response = new JsonSlurper().parseText(decoded.toString())
-        response.apis.size == 8
+        response.apis.size == 9
    }
 
    @Unroll("#parentUri has #operations operations")
