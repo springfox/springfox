@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.models;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
 
 import java.util.Collection;
 import java.util.List;
@@ -8,7 +9,11 @@ import java.util.Set;
 
 public class Collections {
     public static <T extends Collection> ResolvedType elementType(ResolvedType container, Class<T> collectionType) {
-        return container.typeParametersFor(collectionType).get(0);
+      List<ResolvedType> resolvedTypes = container.typeParametersFor(collectionType);
+      if (resolvedTypes.size() == 1) {
+        return resolvedTypes.get(0);
+      }
+      return new TypeResolver().resolve(Object.class);
     }
 
     public static ResolvedType collectionElementType(ResolvedType type) {
