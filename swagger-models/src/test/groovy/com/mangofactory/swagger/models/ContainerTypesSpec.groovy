@@ -1,12 +1,14 @@
 package com.mangofactory.swagger.models
+
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.wordnik.swagger.model.Model
 import com.wordnik.swagger.model.ModelRef
+import org.springframework.http.HttpHeaders
 import scala.Option
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.models.ResolvedTypes.*
+import static com.mangofactory.swagger.models.ResolvedTypes.responseTypeName
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport])
 class ContainerTypesSpec extends Specification {
@@ -138,4 +140,82 @@ class ContainerTypesSpec extends Specification {
     "strings"         | "Array"    | "string"        | null               | "java.lang.String"
     "objects"         | "Array"    | "object"        | null               | "java.lang.Object"
   }
+
+  def "Model properties of type Map are inferred correctly"() {
+    given:
+      def sut = mapsContainer()
+      def provider = defaultModelProvider()
+      Model asInput = provider.modelFor(ModelContext.inputParam(sut)).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(sut)).get()
+
+    expect:
+      asInput.name() == "MapsContainer"
+      asInput.properties().contains(property)
+      def modelProperty = asInput.properties().get(property)
+      modelProperty.get().type() == type
+      !modelProperty.get().items().isEmpty()
+      ModelRef item = modelProperty.get().items().get()
+      item.type() == null
+      item.ref() == Option.apply(itemRef)
+      item.qualifiedType() == Option.apply(itemQualifiedType)
+
+      asReturn.name() == "MapsContainer"
+      asReturn.properties().contains(property)
+      def retModelProperty = asReturn.properties().get(property)
+      retModelProperty.get().type() == type
+      !retModelProperty.get().items().isEmpty()
+      def retItem = retModelProperty.get().items().get()
+      retItem.type() == null
+      retItem.ref() == Option.apply(itemRef)
+      retItem.qualifiedType() == Option.apply(itemQualifiedType)
+
+    where:
+      property              | type   | itemRef                     | itemQualifiedType
+      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"  | "com.mangofactory.swagger.models.alternates.Entry"
+      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"  | "com.mangofactory.swagger.models.alternates.Entry"
+      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»"| "com.mangofactory.swagger.models.alternates.Entry"
+  }
+
+
+  def "Model properties of type Map are inferred correctly on generic host"() {
+    given:
+      def sut = responseEntityWithDeepGenerics()
+      def provider = defaultModelProvider()
+
+      def modelContext = ModelContext.inputParam(sut)
+      modelContext.seen(resolver.resolve(HttpHeaders.class))
+      Model asInput = provider.dependencies(modelContext).get("MapsContainer")
+
+      def returnContext = ModelContext.returnValue(sut)
+      returnContext.seen(resolver.resolve(HttpHeaders.class))
+      Model asReturn = provider.dependencies(returnContext).get("MapsContainer")
+
+    expect:
+      asInput.name() == "MapsContainer"
+      asInput.properties().contains(property)
+      def modelProperty = asInput.properties().get(property)
+      modelProperty.get().type() == type
+      !modelProperty.get().items().isEmpty()
+      ModelRef item = modelProperty.get().items().get()
+      item.type() == null
+      item.ref() == Option.apply(itemRef)
+      item.qualifiedType() == Option.apply(itemQualifiedType)
+
+      asReturn.name() == "MapsContainer"
+      asReturn.properties().contains(property)
+      def retModelProperty = asReturn.properties().get(property)
+      retModelProperty.get().type() == type
+      !retModelProperty.get().items().isEmpty()
+      def retItem = retModelProperty.get().items().get()
+      retItem.type() == null
+      retItem.ref() == Option.apply(itemRef)
+      retItem.qualifiedType() == Option.apply(itemQualifiedType)
+
+    where:
+      property              | type   | itemRef                     | itemQualifiedType
+      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"  | "com.mangofactory.swagger.models.alternates.Entry"
+      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"  | "com.mangofactory.swagger.models.alternates.Entry"
+      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»"| "com.mangofactory.swagger.models.alternates.Entry"
+  }
+
 }

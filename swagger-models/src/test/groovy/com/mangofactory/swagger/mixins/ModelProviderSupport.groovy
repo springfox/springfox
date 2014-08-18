@@ -7,6 +7,7 @@ import com.mangofactory.swagger.models.ModelProvider
 import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.mangofactory.swagger.models.alternates.AlternateTypeRule
+import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.models.property.bean.AccessorsProvider
 import com.mangofactory.swagger.models.property.bean.BeanModelPropertyProvider
 import com.mangofactory.swagger.models.property.constructor.ConstructorModelPropertyProvider
@@ -33,7 +34,8 @@ class ModelProviderSupport {
   }
 
   ModelProvider defaultModelProvider(TypeResolver typeResolver = new TypeResolver(), AlternateTypeProvider alternateTypeProvider
-          = new AlternateTypeProvider()) {
+          = defaultAlternateTypesProvider()) {
+
 
     def fields = new FieldProvider(typeResolver)
 
@@ -50,6 +52,10 @@ class ModelProviderSupport {
     modelPropertiesProvider.objectMapper = objectMapper
     def modelDependenciesProvider = modelDependencyProvider(typeResolver, alternateTypeProvider, modelPropertiesProvider)
     new DefaultModelProvider(typeResolver, alternateTypeProvider, modelPropertiesProvider, modelDependenciesProvider)
+  }
+
+  def defaultAlternateTypesProvider() {
+    return new SwaggerModelsConfiguration().alternateTypeProvider(new TypeResolver())
   }
 
   private ModelDependencyProvider modelDependencyProvider(TypeResolver resolver,

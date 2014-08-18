@@ -15,6 +15,9 @@ class TypesForTestingSupport {
   static Class typeWithConstructor() {
     TypeWithConstructor
   }
+  static Class mapsContainer() {
+    MapsContainer
+  }
   static Class typeWithJsonPropertyAnnotation() {
     TypeWithJsonProperty
   }
@@ -62,6 +65,11 @@ class TypesForTestingSupport {
   static ResolvedType genericClassWithDeepGenerics() {
     resolver.resolve(GenericType, resolver.resolve(ResponseEntity, resolver.resolve(List, SimpleType)))
   }
+
+  static ResolvedType responseEntityWithDeepGenerics() {
+    resolver.resolve(ResponseEntity, mapsContainer())
+  }
+
   static ResolvedType genericCollectionWithEnum() {
     resolver.resolve(GenericType, resolver.resolve(Collection, ExampleEnum))
   }

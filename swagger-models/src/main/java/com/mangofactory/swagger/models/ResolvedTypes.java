@@ -5,6 +5,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.wordnik.swagger.model.AllowableListValues;
 import com.wordnik.swagger.model.AllowableValues;
 import scala.collection.JavaConversions;
@@ -66,9 +67,13 @@ public class ResolvedTypes {
     }
 
     public static String genericTypeName(ResolvedType resolvedType) {
-        StringBuilder sb = new StringBuilder(String.format("%s«", resolvedType.getErasedType().getSimpleName()));
+      Class<?> erasedType = resolvedType.getErasedType();
+      String simpleName = Optional
+              .fromNullable(typeNameFor(erasedType))
+              .or(erasedType.getSimpleName());
+      StringBuilder sb = new StringBuilder(String.format("%s«", simpleName));
         boolean first = true;
-        for (int index = 0; index < resolvedType.getErasedType().getTypeParameters().length; index++) {
+        for (int index = 0; index < erasedType.getTypeParameters().length; index++) {
             ResolvedType typeParam = resolvedType.getTypeParameters().get(index);
             if (first) {
                 sb.append(innerTypeName(typeParam));

@@ -110,7 +110,7 @@ public class DefaultModelProvider implements ModelProvider {
             return Option.empty();
         }
         ResolvedType collectionElementType = collectionElementType(type);
-        String elementTypeName = simpleTypeName(collectionElementType);
+        String elementTypeName = typeName(collectionElementType);
         String qualifiedElementTypeName = simpleQualifiedTypeName(collectionElementType);
         if (!isBaseType(elementTypeName)) {
             return Option.apply(new ModelRef(null,
