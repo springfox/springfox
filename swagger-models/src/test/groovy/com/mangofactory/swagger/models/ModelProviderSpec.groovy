@@ -11,7 +11,7 @@ import static com.mangofactory.swagger.models.ResolvedTypes.*
 @Mixin([TypesForTestingSupport, ModelProviderSupport])
 class ModelProviderSpec extends Specification {
 
-  def "dependencies provider respects ignorables" () {
+  def "dependencies provider respects ignorables"() {
     given:
       ModelProvider sut = defaultModelProvider()
       def context = ModelContext.inputParam(modelType)
@@ -22,11 +22,11 @@ class ModelProviderSpec extends Specification {
       dependencies == dependentTypeNames
 
     where:
-      modelType                       | dependencies
-      genericClassWithGenericField()  | ["ResponseEntity«SimpleType»", "SimpleType"].sort()
+      modelType                      | dependencies
+      genericClassWithGenericField() | ["ResponseEntity«SimpleType»", "SimpleType"].sort()
   }
 
-  def "dependencies are inferred correctly by the model provider" () {
+  def "dependencies are inferred correctly by the model provider"() {
     given:
       ModelProvider provider = defaultModelProvider()
       def dependentTypeNames = provider.dependencies(ModelContext.inputParam(modelType)).keySet().sort()
@@ -35,18 +35,18 @@ class ModelProviderSpec extends Specification {
       dependencies == dependentTypeNames
 
     where:
-      modelType                       | dependencies
-      simpleType()                    | []
-      complexType()                   | ["Category"]
-      inheritedComplexType()          | ["Category"]
-      typeWithLists()                 | ["Category",  "ComplexType"].sort()
-      typeWithSets()                  | ["Category",  "ComplexType"].sort()
-      typeWithArrays()                | ["Category", "ComplexType"]
-      genericClass()                  | ["SimpleType"]
-      genericClassWithListField()     | ["SimpleType"]
-      genericClassWithGenericField()  | ["Charset", "Entry«string,string»", "HttpHeaders", "MediaType", "ResponseEntity«SimpleType»", "SimpleType", "URI"].sort()
-      genericClassWithDeepGenerics()  | ["Charset", "Entry«string,string»", "HttpHeaders", "MediaType", "ResponseEntity«List«SimpleType»»", "SimpleType", "URI"].sort()
-      genericCollectionWithEnum()     | ["Collection«string»"]
-      recursiveType()                 | ["SimpleType"]
+      modelType                      | dependencies
+      simpleType()                   | []
+      complexType()                  | ["Category"]
+      inheritedComplexType()         | ["Category"]
+      typeWithLists()                | ["Category", "ComplexType"].sort()
+      typeWithSets()                 | ["Category", "ComplexType"].sort()
+      typeWithArrays()               | ["Category", "ComplexType"]
+      genericClass()                 | ["SimpleType"]
+      genericClassWithListField()    | ["SimpleType"]
+      genericClassWithGenericField() | ["Charset", "Entry«string,string»", "HttpHeaders", "MediaType", "ResponseEntity«SimpleType»", "SimpleType", "URI"].sort()
+      genericClassWithDeepGenerics() | ["Charset", "Entry«string,string»", "HttpHeaders", "MediaType", "ResponseEntity«List«SimpleType»»", "SimpleType", "URI"].sort()
+      genericCollectionWithEnum()    | ["Collection«string»"]
+      recursiveType()                | ["SimpleType"]
   }
 }

@@ -1,4 +1,5 @@
 package com.mangofactory.swagger.mixins
+
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.models.DefaultModelProvider
@@ -33,9 +34,8 @@ class ModelProviderSupport {
     defaultModelProvider(resolver, alternateTypeProvider)
   }
 
-  ModelProvider defaultModelProvider(TypeResolver typeResolver = new TypeResolver(), AlternateTypeProvider alternateTypeProvider
-          = defaultAlternateTypesProvider()) {
-
+  ModelProvider defaultModelProvider(TypeResolver typeResolver = new TypeResolver(),
+                                     AlternateTypeProvider alternateTypeProvider = defaultAlternateTypesProvider()) {
 
     def fields = new FieldProvider(typeResolver)
 
@@ -59,7 +59,7 @@ class ModelProviderSupport {
   }
 
   private ModelDependencyProvider modelDependencyProvider(TypeResolver resolver,
-    AlternateTypeProvider alternateTypeProvider, DefaultModelPropertiesProvider modelPropertiesProvider) {
+      AlternateTypeProvider alternateTypeProvider, DefaultModelPropertiesProvider modelPropertiesProvider) {
     new ModelDependencyProvider(resolver, alternateTypeProvider, modelPropertiesProvider)
   }
 

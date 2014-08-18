@@ -30,7 +30,7 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
   public Iterable<? extends ModelProperty> propertiesForSerialization(ResolvedType type) {
     return Iterables.concat(fieldModelPropertyProvider.propertiesForSerialization(type),
             beanModelPropertyProvider.propertiesForSerialization(type),
-            constructorModelPropertyProvider .propertiesForSerialization(type));
+            constructorModelPropertyProvider.propertiesForSerialization(type));
   }
 
   @Override
