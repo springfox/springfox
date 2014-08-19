@@ -119,4 +119,8 @@ class TypesForTestingSupport {
   static ResolvedType typeWithResponseEntityOfVoid() {
     resolver.resolve(GenericType, resolver.resolve(ResponseEntity, Void))
   }
+
+  static ResolvedType nestedGenericType(def clazz) {
+    resolver.resolve(GenericType, resolver.resolve(ResponseEntity, clazz))
+  }
 }
