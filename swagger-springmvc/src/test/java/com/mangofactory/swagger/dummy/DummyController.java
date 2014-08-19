@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 @Api(value = "Group name", position = 2)
 public class DummyController {
 
-   public void dummyMethod(){
+  public void dummyMethod() {
 
-   }
+  }
 }

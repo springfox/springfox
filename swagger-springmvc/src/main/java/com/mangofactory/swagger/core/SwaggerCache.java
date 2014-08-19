@@ -6,32 +6,32 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.google.common.collect.Maps.newLinkedHashMap;
+import static com.google.common.collect.Maps.*;
 
 @Component
 public class SwaggerCache {
-   private Map<String, ResourceListing> swaggerApiResourceListingMap = newLinkedHashMap();
+  private Map<String, ResourceListing> swaggerApiResourceListingMap = newLinkedHashMap();
 
-   //Map<'swaggerGroup', Map<controllerGroupName>, ApiListing>>
-   private Map<String, Map<String, ApiListing>> swaggerApiListingMap = newLinkedHashMap();
+  //Map<'swaggerGroup', Map<controllerGroupName>, ApiListing>>
+  private Map<String, Map<String, ApiListing>> swaggerApiListingMap = newLinkedHashMap();
 
-   public void addSwaggerResourceListing(String swaggerGroup, ResourceListing resourceListing) {
-      swaggerApiResourceListingMap.put(swaggerGroup, resourceListing);
-   }
+  public void addSwaggerResourceListing(String swaggerGroup, ResourceListing resourceListing) {
+    swaggerApiResourceListingMap.put(swaggerGroup, resourceListing);
+  }
 
-   public void addApiListings(String swaggerGroup, Map<String, ApiListing> apiListings) {
-     swaggerApiListingMap.put(swaggerGroup, apiListings);
-   }
+  public void addApiListings(String swaggerGroup, Map<String, ApiListing> apiListings) {
+    swaggerApiListingMap.put(swaggerGroup, apiListings);
+  }
 
-   public ResourceListing getResourceListing(String key){
-      return swaggerApiResourceListingMap.get(key);
-   }
+  public ResourceListing getResourceListing(String key) {
+    return swaggerApiResourceListingMap.get(key);
+  }
 
-   public Map<String, ResourceListing> getSwaggerApiResourceListingMap() {
-      return swaggerApiResourceListingMap;
-   }
+  public Map<String, ResourceListing> getSwaggerApiResourceListingMap() {
+    return swaggerApiResourceListingMap;
+  }
 
-   public Map<String, Map<String, ApiListing>> getSwaggerApiListingMap() {
-      return swaggerApiListingMap;
-   }
+  public Map<String, Map<String, ApiListing>> getSwaggerApiListingMap() {
+    return swaggerApiListingMap;
+  }
 }

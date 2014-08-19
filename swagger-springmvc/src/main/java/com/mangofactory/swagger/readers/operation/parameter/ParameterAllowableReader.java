@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.mangofactory.swagger.ScalaUtils.toScalaList;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static com.google.common.collect.Lists.*;
+import static com.mangofactory.swagger.ScalaUtils.*;
+import static org.apache.commons.lang.StringUtils.*;
 
 public class ParameterAllowableReader implements Command<RequestMappingContext> {
   private static final Logger log = LoggerFactory.getLogger(ParameterAllowableReader.class);
@@ -28,7 +28,7 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
     MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
     AllowableValues allowableValues = null;
     String allowableValueString = findAnnotatedAllowableValues(methodParameter);
-    if (allowableValueString!=null && !"".equals(allowableValueString)) {
+    if (allowableValueString != null && !"".equals(allowableValueString)) {
       allowableValues = ParameterAllowableReader.allowableValueFromString(allowableValueString);
     } else {
       if (methodParameter.getParameterType().isEnum()) {
@@ -39,7 +39,8 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
         }
         allowableValues = new AllowableListValues(toScalaList(newArrayList(enumNames)), "LIST");
       }
-      if(methodParameter.getParameterType().isArray() && methodParameter.getParameterType().getComponentType().isEnum()) {
+      if (methodParameter.getParameterType().isArray()
+              && methodParameter.getParameterType().getComponentType().isEnum()) {
         Object[] enumConstants = methodParameter.getParameterType().getComponentType().getEnumConstants();
         List<String> enumNames = new ArrayList<String>();
         for (Object o : enumConstants) {
@@ -52,21 +53,21 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
   }
 
   public static AllowableValues allowableValueFromString(String allowableValueString) {
-     AllowableValues allowableValues = null;
-     allowableValueString = allowableValueString.trim().replaceAll(" ", "");
-     if (allowableValueString.startsWith("range[")) {
-        allowableValueString = allowableValueString.replaceAll("range\\[", "").replaceAll("]", "");
-        Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
-        List<String> ranges = newArrayList(split);
-        allowableValues = new AllowableRangeValues(ranges.get(0), ranges.get(1));
-     } else if (allowableValueString.contains(",")) {
-        Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
-        allowableValues = new AllowableListValues(toScalaList(newArrayList(split)), "LIST");
-     } else if (!isBlank(allowableValueString)) {
-        List<String> singleVal = Arrays.asList(allowableValueString.trim());
-        allowableValues = new AllowableListValues(toScalaList(singleVal), "LIST");
-     }
-     return allowableValues;
+    AllowableValues allowableValues = null;
+    allowableValueString = allowableValueString.trim().replaceAll(" ", "");
+    if (allowableValueString.startsWith("range[")) {
+      allowableValueString = allowableValueString.replaceAll("range\\[", "").replaceAll("]", "");
+      Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
+      List<String> ranges = newArrayList(split);
+      allowableValues = new AllowableRangeValues(ranges.get(0), ranges.get(1));
+    } else if (allowableValueString.contains(",")) {
+      Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
+      allowableValues = new AllowableListValues(toScalaList(newArrayList(split)), "LIST");
+    } else if (!isBlank(allowableValueString)) {
+      List<String> singleVal = Arrays.asList(allowableValueString.trim());
+      allowableValues = new AllowableListValues(toScalaList(singleVal), "LIST");
+    }
+    return allowableValues;
   }
 
   private String findAnnotatedAllowableValues(MethodParameter methodParameter) {

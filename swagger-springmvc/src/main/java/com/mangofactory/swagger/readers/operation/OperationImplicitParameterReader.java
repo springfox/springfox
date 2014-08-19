@@ -40,7 +40,7 @@ public class OperationImplicitParameterReader extends SwaggerParameterReader {
             param.paramType(),
             toOption(param.access())
     );
-   }
+  }
 
 }
 

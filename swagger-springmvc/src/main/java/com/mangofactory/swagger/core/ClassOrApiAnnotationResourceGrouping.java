@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.util.Set;
 
-import static com.google.common.base.Strings.emptyToNull;
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.swagger.core.StringUtils.*;
 import static org.apache.commons.lang.StringUtils.*;

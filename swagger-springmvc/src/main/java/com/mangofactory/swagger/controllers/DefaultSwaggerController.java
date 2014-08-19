@@ -19,53 +19,55 @@ import java.util.Map;
 @Controller
 public class DefaultSwaggerController {
 
-   public static final String DOCUMENTATION_BASE_PATH = "/api-docs";
+  public static final String DOCUMENTATION_BASE_PATH = "/api-docs";
 
-   @Autowired
-   private SwaggerCache swaggerCache;
+  @Autowired
+  private SwaggerCache swaggerCache;
 
-   @ApiIgnore
-   @RequestMapping(value = {DOCUMENTATION_BASE_PATH }, method = RequestMethod.GET)
-   public
-   @ResponseBody
-   ResponseEntity<ResourceListing> getResourceListing(@RequestParam(value = "group", required = false) String swaggerGroup) {
-      return getSwaggerResourceListing(swaggerGroup);
-   }
+  @ApiIgnore
+  @RequestMapping(value = {DOCUMENTATION_BASE_PATH}, method = RequestMethod.GET)
+  public
+  @ResponseBody
+  ResponseEntity<ResourceListing> getResourceListing(
+      @RequestParam(value = "group",  required = false) String swaggerGroup) {
 
-   @ApiIgnore
-   @RequestMapping(value = {DOCUMENTATION_BASE_PATH + "/{swaggerGroup}/{apiDeclaration}"}, method = RequestMethod.GET)
-   public
-   @ResponseBody
-   ResponseEntity<ApiListing> getApiListing(@PathVariable String swaggerGroup, @PathVariable String apiDeclaration) {
-      return getSwaggerApiListing(swaggerGroup, apiDeclaration);
-   }
+    return getSwaggerResourceListing(swaggerGroup);
+  }
 
-   private ResponseEntity<ApiListing> getSwaggerApiListing(String swaggerGroup, String apiDeclaration) {
-      ResponseEntity<ApiListing> responseEntity = new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
-      Map<String, ApiListing> apiListingMap = swaggerCache.getSwaggerApiListingMap().get(swaggerGroup);
-      if (null != apiListingMap) {
-         ApiListing apiListing = apiListingMap.get(apiDeclaration);
-         if (null != apiListing) {
-            responseEntity = new ResponseEntity<ApiListing>(apiListing, HttpStatus.OK);
-         }
+  @ApiIgnore
+  @RequestMapping(value = {DOCUMENTATION_BASE_PATH + "/{swaggerGroup}/{apiDeclaration}"}, method = RequestMethod.GET)
+  public
+  @ResponseBody
+  ResponseEntity<ApiListing> getApiListing(@PathVariable String swaggerGroup, @PathVariable String apiDeclaration) {
+    return getSwaggerApiListing(swaggerGroup, apiDeclaration);
+  }
+
+  private ResponseEntity<ApiListing> getSwaggerApiListing(String swaggerGroup, String apiDeclaration) {
+    ResponseEntity<ApiListing> responseEntity = new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
+    Map<String, ApiListing> apiListingMap = swaggerCache.getSwaggerApiListingMap().get(swaggerGroup);
+    if (null != apiListingMap) {
+      ApiListing apiListing = apiListingMap.get(apiDeclaration);
+      if (null != apiListing) {
+        responseEntity = new ResponseEntity<ApiListing>(apiListing, HttpStatus.OK);
       }
-      return responseEntity;
-   }
+    }
+    return responseEntity;
+  }
 
-   private ResponseEntity<ResourceListing> getSwaggerResourceListing(String swaggerGroup) {
-      ResponseEntity<ResourceListing> responseEntity = new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
-      ResourceListing resourceListing = null;
+  private ResponseEntity<ResourceListing> getSwaggerResourceListing(String swaggerGroup) {
+    ResponseEntity<ResourceListing> responseEntity = new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
+    ResourceListing resourceListing = null;
 
-      if (null == swaggerGroup) {
-         resourceListing = swaggerCache.getSwaggerApiResourceListingMap().values().iterator().next();
-      } else {
-         if (swaggerCache.getSwaggerApiResourceListingMap().containsKey(swaggerGroup)) {
-            resourceListing = swaggerCache.getSwaggerApiResourceListingMap().get(swaggerGroup);
-         }
+    if (null == swaggerGroup) {
+      resourceListing = swaggerCache.getSwaggerApiResourceListingMap().values().iterator().next();
+    } else {
+      if (swaggerCache.getSwaggerApiResourceListingMap().containsKey(swaggerGroup)) {
+        resourceListing = swaggerCache.getSwaggerApiResourceListingMap().get(swaggerGroup);
       }
-      if (null != resourceListing) {
-         responseEntity = new ResponseEntity<ResourceListing>(resourceListing, HttpStatus.OK);
-      }
-      return responseEntity;
-   }
+    }
+    if (null != resourceListing) {
+      responseEntity = new ResponseEntity<ResourceListing>(resourceListing, HttpStatus.OK);
+    }
+    return responseEntity;
+  }
 }

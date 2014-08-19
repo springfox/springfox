@@ -26,173 +26,178 @@ import java.util.Date;
 import static com.mangofactory.swagger.dummy.DummyModels.*;
 
 public class DummyClass {
-   public void dummyMethod() {
-   }
+  public void dummyMethod() {
+  }
 
-   @ApiOperation(value = "description", httpMethod = "GET")
-   public void methodWithHttpGETMethod() {
-   }
+  @ApiOperation(value = "description", httpMethod = "GET")
+  public void methodWithHttpGETMethod() {
+  }
 
-   @ApiOperation(value = "description", httpMethod = "RUBBISH")
-   public void methodWithInvalidHttpMethod() {
-   }
+  @ApiOperation(value = "description", httpMethod = "RUBBISH")
+  public void methodWithInvalidHttpMethod() {
+  }
 
-   @ApiOperation(value = "summary", httpMethod = "RUBBISH")
-   public void methodWithSummary() {
-   }
+  @ApiOperation(value = "summary", httpMethod = "RUBBISH")
+  public void methodWithSummary() {
+  }
 
-   @ApiOperation(value = "", notes = "some notes")
-   public void methodWithNotes() {
-   }
+  @ApiOperation(value = "", notes = "some notes")
+  public void methodWithNotes() {
+  }
 
-   @ApiOperation(value = "", position = 5)
-   public void methodWithPosition() {
-   }
+  @ApiOperation(value = "", position = 5)
+  public void methodWithPosition() {
+  }
 
-   @ApiOperation(value = "", consumes = "application/xml")
-   public void methodWithXmlConsumes() {
-   }
+  @ApiOperation(value = "", consumes = "application/xml")
+  public void methodWithXmlConsumes() {
+  }
 
-   @ApiOperation(value = "", produces = "application/xml")
-   public void methodWithXmlProduces() {
-   }
+  @ApiOperation(value = "", produces = "application/xml")
+  public void methodWithXmlProduces() {
+  }
 
-   @ApiOperation(value = "", produces = "application/xml, application/json", consumes = "application/xml, application/json")
-   public void methodWithMultipleMediaTypes() {
-   }
+  @ApiOperation(value = "", produces = "application/xml, application/json", consumes = "application/xml, " +
+          "application/json")
+  public void methodWithMultipleMediaTypes() {
+  }
 
-   @ApiOperation(value = "", produces = "application/xml", consumes = "application/xml")
-   public void methodWithBothXmlMediaTypes() {
-   }
+  @ApiOperation(value = "", produces = "application/xml", consumes = "application/xml")
+  public void methodWithBothXmlMediaTypes() {
+  }
 
-   @ApiOperation(value = "", produces = "application/json", consumes = "application/xml")
-   public void methodWithMediaTypeAndFile(MultipartFile multipartFile) {
-   }
+  @ApiOperation(value = "", produces = "application/json", consumes = "application/xml")
+  public void methodWithMediaTypeAndFile(MultipartFile multipartFile) {
+  }
 
-   @ApiOperation(value = "", response = DummyModels.FunkyBusiness.class)
-   public void methodApiResponseClass() {
-   }
+  @ApiOperation(value = "", response = DummyModels.FunkyBusiness.class)
+  public void methodApiResponseClass() {
+  }
 
-   @ApiOperation(value = "SomeVal",
-           authorizations = @Authorization(value = "oauth2",
-                   scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
-                   }))
-   public void methodWithAuth() {
-   }
+  @ApiOperation(value = "SomeVal",
+          authorizations = @Authorization(value = "oauth2",
+                  scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
+                  }))
+  public void methodWithAuth() {
+  }
 
-   @ApiOperation(value = "")
-   public DummyModels.FunkyBusiness methodWithAPiAnnotationButWithoutResponseClass() {
-      return null;
-   }
+  @ApiOperation(value = "")
+  public DummyModels.FunkyBusiness methodWithAPiAnnotationButWithoutResponseClass() {
+    return null;
+  }
 
-   @ApiOperation(value = "")
-   public DummyModels.Paginated<BusinessType> methodWithGenericType() {
-      return null;
-   }
+  @ApiOperation(value = "")
+  public DummyModels.Paginated<BusinessType> methodWithGenericType() {
+    return null;
+  }
 
-   @Deprecated
-   public void methodWithDeprecated() {
-   }
+  @Deprecated
+  public void methodWithDeprecated() {
+  }
 
-   public void methodWithServletRequest(ServletRequest req) {
-   }
+  public void methodWithServletRequest(ServletRequest req) {
+  }
 
-   public void methodWithBindingResult(BindingResult res) {
-   }
+  public void methodWithBindingResult(BindingResult res) {
+  }
 
-   public void methodWithInteger(Integer integer) {
-   }
+  public void methodWithInteger(Integer integer) {
+  }
 
-   public void methodWithAnnotatedInteger(@Ignorable Integer integer) {
-   }
+  public void methodWithAnnotatedInteger(@Ignorable Integer integer) {
+  }
 
-   public void methodWithModelAttribute(@ModelAttribute Example example) {
-   }
+  public void methodWithModelAttribute(@ModelAttribute Example example) {
+  }
 
-   public void methodWithoutModelAttribute(Example example) {
-   }
+  public void methodWithoutModelAttribute(Example example) {
+  }
 
-   @RequestMapping("/businesses/{businessId}")
-   public void methodWithSinglePathVariable(@PathVariable String businessId) {
+  @RequestMapping("/businesses/{businessId}")
+  public void methodWithSinglePathVariable(@PathVariable String businessId) {
 
-   }
+  }
 
-   @RequestMapping("/businesses/{businessId}")
-   public void methodWithSingleEnum(BusinessType businessType) {
+  @RequestMapping("/businesses/{businessId}")
+  public void methodWithSingleEnum(BusinessType businessType) {
 
-   }
+  }
 
-   @RequestMapping("/businesses/{businessId}")
-   public void methodWithSingleEnumArray(BusinessType[] businessTypes) {
+  @RequestMapping("/businesses/{businessId}")
+  public void methodWithSingleEnumArray(BusinessType[] businessTypes) {
 
-   }
+  }
 
-   @RequestMapping("/businesses/{businessId}/employees/{employeeId}/salary")
-   public void methodWithRatherLongRequestPath() {
+  @RequestMapping("/businesses/{businessId}/employees/{employeeId}/salary")
+  public void methodWithRatherLongRequestPath() {
 
-   }
+  }
 
-   @RequestMapping(value = "/parameter-conditions", params = "test=testValue")
-   public void methodWithParameterRequestCondition() {
+  @RequestMapping(value = "/parameter-conditions", params = "test=testValue")
+  public void methodWithParameterRequestCondition() {
 
-   }
+  }
 
-   @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
-           value="Authentication token")
-   public void methodWithApiImplicitParam() {}
+  @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
+          value = "Authentication token")
+  public void methodWithApiImplicitParam() {
+  }
 
-   @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
-           value="Authentication token")
-   public void methodWithApiImplicitParamAndInteger(Integer integer) {}
+  @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
+          value = "Authentication token")
+  public void methodWithApiImplicitParamAndInteger(Integer integer) {
+  }
 
-   @ApiImplicitParams({
-           @ApiImplicitParam(name = "lang", dataType = "string", required = true, paramType = "query",
-                   value = "Language", defaultValue = "EN", allowableValues = "EN,FR"),
-           @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
-                   value="Authentication token")
-   })
-   public void methodWithApiImplicitParams(Integer integer) {}
+  @ApiImplicitParams({
+          @ApiImplicitParam(name = "lang", dataType = "string", required = true, paramType = "query",
+                  value = "Language", defaultValue = "EN", allowableValues = "EN,FR"),
+          @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
+                  value = "Authentication token")
+  })
+  public void methodWithApiImplicitParams(Integer integer) {
+  }
 
-   public interface ApiImplicitParamsInterface {
-      @ApiImplicitParams({
-              @ApiImplicitParam(name = "lang", dataType = "string", required = true, paramType = "query",
-                      value = "Language", defaultValue = "EN", allowableValues = "EN,FR")
-      })
-      @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
-              value="Authentication token")
-      void methodWithApiImplicitParam();
-   }
+  public interface ApiImplicitParamsInterface {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "lang", dataType = "string", required = true, paramType = "query",
+                    value = "Language", defaultValue = "EN", allowableValues = "EN,FR")
+    })
+    @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
+            value = "Authentication token")
+    void methodWithApiImplicitParam();
+  }
 
-   public static class ApiImplicitParamsClass implements ApiImplicitParamsInterface {
-      @Override
-      public void methodWithApiImplicitParam() {}
-   }
+  public static class ApiImplicitParamsClass implements ApiImplicitParamsInterface {
+    @Override
+    public void methodWithApiImplicitParam() {
+    }
+  }
 
-   @ResponseBody
-   public DummyModels.BusinessModel methodWithConcreteResponseBody() {
-      return null;
-   }
+  @ResponseBody
+  public DummyModels.BusinessModel methodWithConcreteResponseBody() {
+    return null;
+  }
 
-   @ResponseBody
-   public DummyModels.AnnotatedBusinessModel methodWithModelAnnotations() {
-      return null;
-   }
+  @ResponseBody
+  public DummyModels.AnnotatedBusinessModel methodWithModelAnnotations() {
+    return null;
+  }
 
-   @ResponseBody
-   public DummyModels.CorporationModel methodWithConcreteCorporationModel() {
-      return null;
-   }
+  @ResponseBody
+  public DummyModels.CorporationModel methodWithConcreteCorporationModel() {
+    return null;
+  }
 
-   @ResponseBody
-   public Date methodWithDateResponseBody() {
-      return null;
-   }
+  @ResponseBody
+  public Date methodWithDateResponseBody() {
+    return null;
+  }
 
-   public void methodParameterWithRequestBodyAnnotation(
-           @RequestBody DummyModels.BusinessModel model,
-           HttpServletResponse response,
-           DummyModels.AnnotatedBusinessModel annotatedBusinessModel){
-   }
+  public void methodParameterWithRequestBodyAnnotation(
+          @RequestBody DummyModels.BusinessModel model,
+          HttpServletResponse response,
+          DummyModels.AnnotatedBusinessModel annotatedBusinessModel) {
+  }
 
   @ResponseBody
   public DummyModels.AnnotatedBusinessModel methodWithSameAnnotatedModelInReturnAndRequestBodyParam(
@@ -200,15 +205,16 @@ public class DummyClass {
     return null;
   }
 
-   @ApiResponses({ @ApiResponse(code = 413, message = "a message")})
-   public void methodWithApiResponses(){}
+  @ApiResponses({@ApiResponse(code = 413, message = "a message")})
+  public void methodWithApiResponses() {
+  }
 
-   @ApiIgnore
-   public static class ApiIgnorableClass {
-      @ApiIgnore
-      public void dummyMethod() {
-      }
-   }
+  @ApiIgnore
+  public static class ApiIgnorableClass {
+    @ApiIgnore
+    public void dummyMethod() {
+    }
+  }
 
   @ResponseBody
   public DummyModels.ModelWithSerializeOnlyProperty methodWithSerializeOnlyPropInReturnAndRequestBodyParam(
@@ -221,34 +227,39 @@ public class DummyClass {
     return null;
   }
 
-   public enum BusinessType {
-      PRODUCT(1),
-      SERVICE(2);
-      private int value;
-      private BusinessType(int value) {
-         this.value = value;
-      }
-      public int getValue() {
-         return value;
-      }
-   }
-   public class CustomClass{}
+  public enum BusinessType {
+    PRODUCT(1),
+    SERVICE(2);
+    private int value;
 
-    class MethodsWithSameName {
-        public ResponseEntity methodToTest(Integer integer, Parent child) {
-            return null;
-        }
-        public void methodToTest(Integer integer, Child child) {
-        }
+    private BusinessType(int value) {
+      this.value = value;
     }
 
-    class Parent {
+    public int getValue() {
+      return value;
+    }
+  }
 
+  public class CustomClass {
+  }
+
+  class MethodsWithSameName {
+    public ResponseEntity methodToTest(Integer integer, Parent child) {
+      return null;
     }
 
-    class Child extends Parent {
-
+    public void methodToTest(Integer integer, Child child) {
     }
+  }
+
+  class Parent {
+
+  }
+
+  class Child extends Parent {
+
+  }
 }
 
 

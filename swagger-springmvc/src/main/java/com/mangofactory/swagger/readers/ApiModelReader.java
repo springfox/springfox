@@ -35,145 +35,145 @@ import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 @Component
 public class ApiModelReader implements Command<RequestMappingContext> {
-    private static final Logger log = LoggerFactory.getLogger(ApiModelReader.class);
-    private ModelProvider modelProvider;
+  private static final Logger log = LoggerFactory.getLogger(ApiModelReader.class);
+  private ModelProvider modelProvider;
 
-    @Autowired
-    public ApiModelReader(ModelProvider modelProvider) {
-        this.modelProvider = modelProvider;
+  @Autowired
+  public ApiModelReader(ModelProvider modelProvider) {
+    this.modelProvider = modelProvider;
+  }
+
+  @Override
+  public void execute(RequestMappingContext context) {
+    HandlerMethod handlerMethod = context.getHandlerMethod();
+
+    log.debug("Reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+
+    Map<String, Model> modelMap = newHashMap();
+    SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
+    HandlerMethodResolver handlerMethodResolver
+            = new HandlerMethodResolver(swaggerGlobalSettings.getTypeResolver());
+    ResolvedType modelType = ModelUtils.handlerReturnType(swaggerGlobalSettings.getTypeResolver(), handlerMethod);
+    modelType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(modelType);
+
+    ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
+    if (null != apiOperationAnnotation && Void.class != apiOperationAnnotation.response()) {
+      modelType = asResolved(swaggerGlobalSettings.getTypeResolver(), apiOperationAnnotation.response());
     }
+    if (!swaggerGlobalSettings.getIgnorableParameterTypes().contains(modelType.getErasedType())) {
+      ModelContext modelContext = ModelContext.returnValue(modelType);
+      markIgnorablesAsHasSeen(swaggerGlobalSettings.getTypeResolver(),
+              swaggerGlobalSettings.getIgnorableParameterTypes(),
+              modelContext);
+      Optional<Model> model = modelProvider.modelFor(modelContext);
+      if (model.isPresent() && !"void".equals(model.get().name())) {
+        log.debug("Swagger generated parameter model id: {}, name: {}, schema: {} models",
+                model.get().id(),
+                model.get().name());
+        modelMap.put(model.get().id(), model.get());
+      } else {
+        log.debug("Swagger core did not find any models");
+      }
+      populateDependencies(modelContext, modelMap);
+    }
+    mergeModelMap(modelMap, readParametersApiModel(handlerMethodResolver, swaggerGlobalSettings, handlerMethod));
 
-    @Override
-    public void execute(RequestMappingContext context) {
-        HandlerMethod handlerMethod = context.getHandlerMethod();
+    log.debug("Finished reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+    context.put("models", modelMap);
+  }
 
-        log.debug("Reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+  private void mergeModelMap(Map<String, Model> target, Map<String, Model> source) {
+    for (Map.Entry<String, Model> sModelEntry : source.entrySet()) {
+      String sourceModelKey = sModelEntry.getKey();
 
-        Map<String, Model> modelMap = newHashMap();
-        SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
-        HandlerMethodResolver handlerMethodResolver
-                = new HandlerMethodResolver(swaggerGlobalSettings.getTypeResolver());
-        ResolvedType modelType = ModelUtils.handlerReturnType(swaggerGlobalSettings.getTypeResolver(), handlerMethod);
-        modelType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(modelType);
+      if (!target.containsKey(sourceModelKey)) {
+        //if we encounter completely unknown model, just add it
+        target.put(sModelEntry.getKey(), sModelEntry.getValue());
+      } else {
+        //we can encounter a known model with an unknown property
+        //if (de)serialization is not symmetrical (@JsonIgnore on setter, @JsonProperty on getter).
+        //In these cases, don't overwrite the entire model entry for that type, just add the unknown property.
+        Model targetModelValue = target.get(sourceModelKey);
+        Model sourceModelValue = sModelEntry.getValue();
 
-        ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
-        if (null != apiOperationAnnotation && Void.class != apiOperationAnnotation.response()) {
-            modelType = asResolved(swaggerGlobalSettings.getTypeResolver(), apiOperationAnnotation.response());
+        Map<String, ModelProperty> targetProperties = fromScalaMap(targetModelValue.properties());
+        Map<String, ModelProperty> sourceProperties = fromScalaMap(sourceModelValue.properties());
+
+        Set<String> newSourcePropKeys = newHashSet(sourceProperties.keySet());
+        newSourcePropKeys.removeAll(targetProperties.keySet());
+        Map<String, ModelProperty> mergedTargetProperties = Maps.newHashMap(targetProperties);
+        for (String newProperty : newSourcePropKeys) {
+          mergedTargetProperties.put(newProperty, sourceProperties.get(newProperty));
         }
-        if (!swaggerGlobalSettings.getIgnorableParameterTypes().contains(modelType.getErasedType())) {
-            ModelContext modelContext = ModelContext.returnValue(modelType);
-            markIgnorablesAsHasSeen(swaggerGlobalSettings.getTypeResolver(),
-                    swaggerGlobalSettings.getIgnorableParameterTypes(),
+
+        // uses scala generated copy constructor.
+        Model mergedModel = targetModelValue.copy(
+                targetModelValue.id(),
+                targetModelValue.name(),
+                targetModelValue.qualifiedType(),
+                ScalaConverters.toScalaLinkedHashMap(mergedTargetProperties),
+                targetModelValue.description(),
+                targetModelValue.baseModel(),
+                targetModelValue.discriminator(),
+                targetModelValue.subTypes());
+
+        target.put(sourceModelKey, mergedModel);
+      }
+    }
+  }
+
+  private void markIgnorablesAsHasSeen(TypeResolver typeResolver, Set<Class> ignorableParameterTypes,
+                                       ModelContext modelContext) {
+
+    for (Class ignorableParameterType : ignorableParameterTypes) {
+      modelContext.seen(asResolved(typeResolver, ignorableParameterType));
+    }
+  }
+
+  private Map<String, Model> readParametersApiModel(HandlerMethodResolver handlerMethodResolver,
+                                                    SwaggerGlobalSettings settings, HandlerMethod handlerMethod) {
+
+    Method method = handlerMethod.getMethod();
+    Map<String, Model> modelMap = newHashMap();
+
+    log.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+
+    List<ResolvedMethodParameter> parameterTypes = handlerMethodResolver.methodParameters(handlerMethod);
+    Annotation[][] annotations = method.getParameterAnnotations();
+
+    for (int i = 0; i < annotations.length; i++) {
+      Annotation[] pAnnotations = annotations[i];
+      for (Annotation annotation : pAnnotations) {
+        if (annotation instanceof RequestBody) {
+          ResolvedMethodParameter pType = parameterTypes.get(i);
+          if (!settings.getIgnorableParameterTypes()
+                  .contains(pType.getResolvedParameterType().getErasedType())) {
+            ResolvedType modelType = settings.getAlternateTypeProvider().alternateFor(pType
+                    .getResolvedParameterType());
+            ModelContext modelContext = ModelContext.inputParam(modelType);
+            markIgnorablesAsHasSeen(settings.getTypeResolver(), settings.getIgnorableParameterTypes(),
                     modelContext);
-            Optional<Model> model = modelProvider.modelFor(modelContext);
-            if (model.isPresent() && !"void".equals(model.get().name())) {
-                log.debug("Swagger generated parameter model id: {}, name: {}, schema: {} models",
-                        model.get().id(),
-                        model.get().name());
-                modelMap.put(model.get().id(), model.get());
+            Optional<Model> pModel = modelProvider.modelFor(modelContext);
+            if (pModel.isPresent()) {
+              log.debug("Swagger generated parameter model id: {}, name: {}, schema: {} models",
+                      pModel.get().id(),
+                      pModel.get().name());
+              modelMap.put(pModel.get().id(), pModel.get());
             } else {
-                log.debug("Swagger core did not find any models");
+              log.debug("Swagger core did not find any parameter models for {}",
+                      pType.getResolvedParameterType());
             }
             populateDependencies(modelContext, modelMap);
-        }
-        mergeModelMap(modelMap, readParametersApiModel(handlerMethodResolver, swaggerGlobalSettings, handlerMethod));
-
-        log.debug("Finished reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
-        context.put("models", modelMap);
-    }
-
-    private void mergeModelMap(Map<String, Model> target, Map<String, Model> source) {
-      for (Map.Entry<String,  Model> sModelEntry : source.entrySet()) {
-        String sourceModelKey = sModelEntry.getKey();
-
-        if ( !target.containsKey(sourceModelKey) ) {
-          //if we encounter completely unknown model, just add it
-          target.put(sModelEntry.getKey(), sModelEntry.getValue());
-        } else {
-          //we can encounter a known model with an unknown property
-          //if (de)serialization is not symmetrical (@JsonIgnore on setter, @JsonProperty on getter).
-          //In these cases, don't overwrite the entire model entry for that type, just add the unknown property.
-          Model targetModelValue = target.get(sourceModelKey);
-          Model sourceModelValue = sModelEntry.getValue();
-
-          Map<String, ModelProperty> targetProperties = fromScalaMap(targetModelValue.properties());
-          Map<String, ModelProperty> sourceProperties = fromScalaMap(sourceModelValue.properties());
-
-          Set<String> newSourcePropKeys = newHashSet(sourceProperties.keySet());
-          newSourcePropKeys.removeAll(targetProperties.keySet());
-          Map<String, ModelProperty> mergedTargetProperties = Maps.newHashMap(targetProperties);
-          for (String newProperty : newSourcePropKeys) {
-            mergedTargetProperties.put(newProperty, sourceProperties.get(newProperty));
           }
-
-          // uses scala generated copy constructor.
-          Model mergedModel = targetModelValue.copy(
-                  targetModelValue.id(),
-                  targetModelValue.name(),
-                  targetModelValue.qualifiedType(),
-                  ScalaConverters.toScalaLinkedHashMap(mergedTargetProperties),
-                  targetModelValue.description(),
-                  targetModelValue.baseModel(),
-                  targetModelValue.discriminator(),
-                  targetModelValue.subTypes());
-
-          target.put(sourceModelKey, mergedModel);
         }
       }
     }
+    log.debug("Finished reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+    return modelMap;
+  }
 
-    private void markIgnorablesAsHasSeen(TypeResolver typeResolver, Set<Class> ignorableParameterTypes,
-            ModelContext modelContext) {
-
-        for (Class ignorableParameterType : ignorableParameterTypes) {
-            modelContext.seen(asResolved(typeResolver, ignorableParameterType));
-        }
-    }
-
-    private Map<String, Model> readParametersApiModel(HandlerMethodResolver handlerMethodResolver,
-            SwaggerGlobalSettings settings, HandlerMethod handlerMethod) {
-
-        Method method = handlerMethod.getMethod();
-        Map<String, Model> modelMap = newHashMap();
-
-        log.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
-
-        List<ResolvedMethodParameter> parameterTypes = handlerMethodResolver.methodParameters(handlerMethod);
-        Annotation[][] annotations = method.getParameterAnnotations();
-
-        for (int i = 0; i < annotations.length; i++) {
-            Annotation[] pAnnotations = annotations[i];
-            for (Annotation annotation : pAnnotations) {
-                if (annotation instanceof RequestBody) {
-                    ResolvedMethodParameter pType = parameterTypes.get(i);
-                    if (!settings.getIgnorableParameterTypes()
-                            .contains(pType.getResolvedParameterType().getErasedType())) {
-                        ResolvedType modelType = settings.getAlternateTypeProvider().alternateFor(pType
-                                .getResolvedParameterType());
-                        ModelContext modelContext = ModelContext.inputParam(modelType);
-                        markIgnorablesAsHasSeen(settings.getTypeResolver(), settings.getIgnorableParameterTypes(),
-                                modelContext);
-                        Optional<Model> pModel = modelProvider.modelFor(modelContext);
-                        if (pModel.isPresent()) {
-                            log.debug("Swagger generated parameter model id: {}, name: {}, schema: {} models",
-                                    pModel.get().id(),
-                                    pModel.get().name());
-                            modelMap.put(pModel.get().id(), pModel.get());
-                        } else {
-                            log.debug("Swagger core did not find any parameter models for {}",
-                                    pType.getResolvedParameterType());
-                        }
-                        populateDependencies(modelContext, modelMap);
-                    }
-                }
-            }
-        }
-        log.debug("Finished reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
-        return modelMap;
-    }
-
-    private void populateDependencies(ModelContext modelContext, Map<String, Model> modelMap) {
-        modelMap.putAll(modelProvider.dependencies(modelContext));
-    }
+  private void populateDependencies(ModelContext modelContext, Map<String, Model> modelMap) {
+    modelMap.putAll(modelProvider.dependencies(modelContext));
+  }
 
 }

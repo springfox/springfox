@@ -1,19 +1,13 @@
 package com.mangofactory.swagger.readers.operation;
 
-import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.model.Parameter;
 
 import java.util.Collection;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.*;
 
-/**
- * Base implementation of Swagger parameters readers
- * @author fgaule
- * @since 18/07/2014
- */
 public abstract class SwaggerParameterReader implements RequestMappingReader {
 
   @Override

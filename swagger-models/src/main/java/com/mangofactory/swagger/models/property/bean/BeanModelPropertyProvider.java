@@ -42,7 +42,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
   @Autowired
   public BeanModelPropertyProvider(AccessorsProvider accessors, TypeResolver typeResolver,
-      AlternateTypeProvider alternateTypeProvider, BeanPropertyNamingStrategy namingStrategy) {
+      AlternateTypeProvider alternateTypeProvider,  BeanPropertyNamingStrategy namingStrategy) {
 
     this.typeResolver = typeResolver;
     this.alternateTypeProvider = alternateTypeProvider;

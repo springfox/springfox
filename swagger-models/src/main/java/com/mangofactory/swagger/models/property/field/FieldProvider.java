@@ -12,19 +12,19 @@ import static com.google.common.collect.Lists.*;
 
 @Component
 public class FieldProvider {
-    private final TypeResolver typeResolver;
+  private final TypeResolver typeResolver;
 
-    @Autowired
-    public FieldProvider(TypeResolver typeResolver) {
-        this.typeResolver = typeResolver;
-    }
+  @Autowired
+  public FieldProvider(TypeResolver typeResolver) {
+    this.typeResolver = typeResolver;
+  }
 
-    public Iterable<? extends ResolvedField> in(ResolvedType resolvedType) {
-        MemberResolver memberResolver = new MemberResolver(typeResolver);
-        if (resolvedType.getErasedType() == Object.class) {
-            return newArrayList();
-        }
-        ResolvedTypeWithMembers resolvedMemberWithMembers = memberResolver.resolve(resolvedType, null, null);
-        return newArrayList(resolvedMemberWithMembers.getMemberFields());
+  public Iterable<? extends ResolvedField> in(ResolvedType resolvedType) {
+    MemberResolver memberResolver = new MemberResolver(typeResolver);
+    if (resolvedType.getErasedType() == Object.class) {
+      return newArrayList();
     }
+    ResolvedTypeWithMembers resolvedMemberWithMembers = memberResolver.resolve(resolvedType, null, null);
+    return newArrayList(resolvedMemberWithMembers.getMemberFields());
+  }
 }

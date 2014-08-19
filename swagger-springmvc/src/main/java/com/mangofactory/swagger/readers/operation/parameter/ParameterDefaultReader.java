@@ -10,30 +10,30 @@ import org.springframework.web.bind.annotation.ValueConstants;
 
 import java.lang.annotation.Annotation;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang.StringUtils.*;
 
 public class ParameterDefaultReader implements Command<RequestMappingContext> {
-   @Override
-   public void execute(RequestMappingContext context) {
-      MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
-      String defaultValue = findAnnotatedDefaultValue(methodParameter);
-      boolean isNull = defaultValue == null || defaultValue.equals(ValueConstants.DEFAULT_NONE);
-      context.put("defaultValue", isNull ? "" : defaultValue);
-   }
+  @Override
+  public void execute(RequestMappingContext context) {
+    MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
+    String defaultValue = findAnnotatedDefaultValue(methodParameter);
+    boolean isNull = defaultValue == null || defaultValue.equals(ValueConstants.DEFAULT_NONE);
+    context.put("defaultValue", isNull ? "" : defaultValue);
+  }
 
-   private String findAnnotatedDefaultValue(MethodParameter methodParameter) {
-      Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
-      if (null != methodAnnotations) {
-         for (Annotation annotation : methodAnnotations) {
-            if (annotation instanceof ApiParam && !isBlank(((ApiParam) annotation).defaultValue())) {
-               return ((ApiParam) annotation).defaultValue();
-            } else if (annotation instanceof RequestParam) {
-               return ((RequestParam) annotation).defaultValue();
-            } else if (annotation instanceof RequestHeader) {
-               return ((RequestHeader) annotation).defaultValue();
-            }
-         }
+  private String findAnnotatedDefaultValue(MethodParameter methodParameter) {
+    Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
+    if (null != methodAnnotations) {
+      for (Annotation annotation : methodAnnotations) {
+        if (annotation instanceof ApiParam && !isBlank(((ApiParam) annotation).defaultValue())) {
+          return ((ApiParam) annotation).defaultValue();
+        } else if (annotation instanceof RequestParam) {
+          return ((RequestParam) annotation).defaultValue();
+        } else if (annotation instanceof RequestHeader) {
+          return ((RequestHeader) annotation).defaultValue();
+        }
       }
-      return null;
-   }
+    }
+    return null;
+  }
 }

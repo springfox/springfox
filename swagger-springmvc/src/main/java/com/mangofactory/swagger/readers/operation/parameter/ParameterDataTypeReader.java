@@ -10,18 +10,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ParameterDataTypeReader implements Command<RequestMappingContext> {
 
-    @Override
-    public void execute(RequestMappingContext context) {
-        ResolvedMethodParameter methodParameter = (ResolvedMethodParameter) context.get("resolvedMethodParameter");
-        SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
-        ResolvedType parameterType = methodParameter.getResolvedParameterType();
-        parameterType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(parameterType);
-        //Multi-part file trumps any other annotations
-        if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
-            context.put("dataType", "File");
-        } else {
-            context.put("dataType", ModelUtils.getResponseClassName(parameterType));
-        }
+  @Override
+  public void execute(RequestMappingContext context) {
+    ResolvedMethodParameter methodParameter = (ResolvedMethodParameter) context.get("resolvedMethodParameter");
+    SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
+    ResolvedType parameterType = methodParameter.getResolvedParameterType();
+    parameterType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(parameterType);
+    //Multi-part file trumps any other annotations
+    if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
+      context.put("dataType", "File");
+    } else {
+      context.put("dataType", ModelUtils.getResponseClassName(parameterType));
     }
+  }
 
 }

@@ -12,32 +12,32 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/fancypets")
-@Api(value="Fancy Pet Service", description="Operations about fancy pets")
+@Api(value = "Fancy Pet Service", description = "Operations about fancy pets")
 public class FancyPetService extends AbstractPetService<FancyPet> {
 
-    // some subclass dependency here
-    // override one of superclass
-    @Override
-    @ResponseBody
-    public int createObject(@RequestBody FancyPet object) {
-        int id = super.createObject(object);
-        // do some logic with sub class
-        return id;
-    }
+  // some subclass dependency here
+  // override one of superclass
+  @Override
+  @ResponseBody
+  public int createObject(@RequestBody FancyPet object) {
+    int id = super.createObject(object);
+    // do some logic with sub class
+    return id;
+  }
 
 
-    //Example of generic type constraint
-    @RequestMapping(method = RequestMethod.PUT)
-    public <T extends Pet> void updatePet(@RequestBody T pet) {
-        throw new UnsupportedOperationException();
-    }
+  //Example of generic type constraint
+  @RequestMapping(method = RequestMethod.PUT)
+  public <T extends Pet> void updatePet(@RequestBody T pet) {
+    throw new UnsupportedOperationException();
+  }
 
-    // overload one of superclass
-    public @ResponseBody
-    @RequestMapping(method= RequestMethod.POST, value = "?{someId}")
-    int createObject(@RequestBody FancyPet object, @PathVariable int someId) {
-        int id = super.createObject(object);
-        // do some logic with sub class
-        return id;
-    }
+  // overload one of superclass
+  @ResponseBody
+  @RequestMapping(method = RequestMethod.POST, value = "?{someId}")
+  public int createObject(@RequestBody FancyPet object, @PathVariable int someId) {
+    int id = super.createObject(object);
+    // do some logic with sub class
+    return id;
+  }
 }

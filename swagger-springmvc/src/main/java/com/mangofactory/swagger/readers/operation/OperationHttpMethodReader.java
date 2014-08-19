@@ -9,25 +9,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
 public class OperationHttpMethodReader implements RequestMappingReader {
-   private static final Logger log = LoggerFactory.getLogger(OperationHttpMethodReader.class);
+  private static final Logger log = LoggerFactory.getLogger(OperationHttpMethodReader.class);
 
-   @Override
-   public void execute(RequestMappingContext context) {
-      RequestMethod currentHttpMethod = (RequestMethod) context.get("currentHttpMethod");
-      HandlerMethod handlerMethod = context.getHandlerMethod();
+  @Override
+  public void execute(RequestMappingContext context) {
+    RequestMethod currentHttpMethod = (RequestMethod) context.get("currentHttpMethod");
+    HandlerMethod handlerMethod = context.getHandlerMethod();
 
-      String requestMethod = currentHttpMethod.toString();
-      ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
+    String requestMethod = currentHttpMethod.toString();
+    ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
 
-      if (apiOperationAnnotation != null && !StringUtils.isBlank(apiOperationAnnotation.httpMethod())) {
-         String apiMethod = apiOperationAnnotation.httpMethod();
-         try {
-            RequestMethod.valueOf(apiMethod);
-            requestMethod = apiMethod;
-         } catch (IllegalArgumentException e) {
-            log.error("Invalid http method: " + apiMethod + "Valid ones are [" + RequestMethod.values() + "]", e);
-         }
+    if (apiOperationAnnotation != null && !StringUtils.isBlank(apiOperationAnnotation.httpMethod())) {
+      String apiMethod = apiOperationAnnotation.httpMethod();
+      try {
+        RequestMethod.valueOf(apiMethod);
+        requestMethod = apiMethod;
+      } catch (IllegalArgumentException e) {
+        log.error("Invalid http method: " + apiMethod + "Valid ones are [" + RequestMethod.values() + "]", e);
       }
-      context.put("httpRequestMethod", requestMethod);
-   }
+    }
+    context.put("httpRequestMethod", requestMethod);
+  }
 }

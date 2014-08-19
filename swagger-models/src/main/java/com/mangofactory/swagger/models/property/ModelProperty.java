@@ -6,11 +6,17 @@ import com.wordnik.swagger.model.AllowableValues;
 import scala.Option;
 
 public interface ModelProperty {
-    String getName();
+  String getName();
+
   ResolvedType getType();
-    String typeName(ModelContext modelContext);
-    String qualifiedTypeName();
-    AllowableValues allowableValues();
-    Option<String> propertyDescription();
-    boolean isRequired();
+
+  String typeName(ModelContext modelContext);
+
+  String qualifiedTypeName();
+
+  AllowableValues allowableValues();
+
+  Option<String> propertyDescription();
+
+  boolean isRequired();
 }

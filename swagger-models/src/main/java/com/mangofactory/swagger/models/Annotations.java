@@ -16,12 +16,13 @@ public class Annotations {
    * Search precedence is getter -> setter -> field.
    *
    * @param beanPropertyDefinition introspected jackson proprty defintion
-   * @param annotationClass class object representing desired annotation
-   * @param <A> type that extends Annotation
+   * @param annotationClass        class object representing desired annotation
+   * @param <A>                    type that extends Annotation
    * @return first annotation found for property
    */
   public static <A extends Annotation> A findPropertyAnnotation(BeanPropertyDefinition beanPropertyDefinition,
-                                                  Class<A> annotationClass) {
+      Class<A> annotationClass) {
+
     A annotation = null;
     if (beanPropertyDefinition.hasGetter()) {
       annotation = beanPropertyDefinition.getGetter().getAnnotation(annotationClass);
@@ -30,7 +31,7 @@ public class Annotations {
       annotation = beanPropertyDefinition.getSetter().getAnnotation(annotationClass);
     }
     if (annotation == null && beanPropertyDefinition.hasField()) {
-        annotation = beanPropertyDefinition.getField().getAnnotation(annotationClass);
+      annotation = beanPropertyDefinition.getField().getAnnotation(annotationClass);
     }
 
     return annotation;

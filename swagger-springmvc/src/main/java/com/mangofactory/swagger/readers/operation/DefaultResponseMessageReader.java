@@ -67,7 +67,7 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
         ResponseMessage responseMessage = byStatusCode.get(apiResponse.code());
         if (null == responseMessage) {
           byStatusCode.put(apiResponse.code(),
-                  new ResponseMessage(apiResponse.code(), apiResponse.message(),  toOption(overrideTypeName)));
+                  new ResponseMessage(apiResponse.code(), apiResponse.message(), toOption(overrideTypeName)));
         } else {
           Option<String> responseModel = responseMessage.responseModel();
           if (!isNullOrEmpty(overrideTypeName)) {

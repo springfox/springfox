@@ -74,7 +74,7 @@ class ParameterBuilder {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
 
-    return  new Parameter(
+    return new Parameter(
             isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
             toOption(apiParam.value()),
             toOption(apiParam.defaultValue()),

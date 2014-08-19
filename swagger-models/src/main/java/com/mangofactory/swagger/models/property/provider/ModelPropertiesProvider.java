@@ -6,6 +6,8 @@ import com.mangofactory.swagger.models.property.ModelProperty;
 
 public interface ModelPropertiesProvider {
   Iterable<? extends ModelProperty> propertiesForSerialization(ResolvedType type);
+
   Iterable<? extends ModelProperty> propertiesForDeserialization(ResolvedType type);
+
   void setObjectMapper(ObjectMapper objectMapper);
 }

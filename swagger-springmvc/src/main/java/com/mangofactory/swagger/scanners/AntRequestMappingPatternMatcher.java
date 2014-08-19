@@ -8,28 +8,30 @@ import java.util.List;
 import java.util.Set;
 
 public class AntRequestMappingPatternMatcher implements RequestMappingPatternMatcher {
-   @Override
-   public boolean patternConditionsMatchOneOfIncluded(PatternsRequestCondition patternsCondition, List<String> includePatterns) {
-      Set<String> patterns = patternsCondition.getPatterns();
-      for (String path : patterns) {
-         for (String includePattern : includePatterns) {
-            if (pathMatchesOneOfIncluded(path, includePatterns)) {
-               return true;
-            }
-         }
-      }
-      return false;
-   }
+  @Override
+  public boolean patternConditionsMatchOneOfIncluded(PatternsRequestCondition patternsCondition,
+      List<String> includePatterns) {
 
-   @Override
-   public boolean pathMatchesOneOfIncluded(String path, List<String> includePatterns) {
-      AntPathMatcher antPathMatcher = new AntPathMatcher();
+    Set<String> patterns = patternsCondition.getPatterns();
+    for (String path : patterns) {
       for (String includePattern : includePatterns) {
-         Assert.notNull(includePattern, "Include patterns should never be null");
-         if (antPathMatcher.match(includePattern, path)) {
-            return true;
-         }
+        if (pathMatchesOneOfIncluded(path, includePatterns)) {
+          return true;
+        }
       }
-      return false;
-   }
+    }
+    return false;
+  }
+
+  @Override
+  public boolean pathMatchesOneOfIncluded(String path, List<String> includePatterns) {
+    AntPathMatcher antPathMatcher = new AntPathMatcher();
+    for (String includePattern : includePatterns) {
+      Assert.notNull(includePattern, "Include patterns should never be null");
+      if (antPathMatcher.match(includePattern, path)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

@@ -23,55 +23,55 @@ import static java.util.Arrays.*;
  * - Controllers without top level request mappings
  */
 public class SpringGroupingStrategy implements ResourceGroupingStrategy {
-   @Override
-   public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      return groups(handlerMethod);
-   }
+  @Override
+  public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+    return groups(handlerMethod);
+  }
 
-   @Override
-   public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      return getDescription(handlerMethod);
-   }
+  @Override
+  public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+    return getDescription(handlerMethod);
+  }
 
-   @Override
-   public Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-      return 0;
-   }
+  @Override
+  public Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+    return 0;
+  }
 
-   private Set<ResourceGroup> groups(HandlerMethod handlerMethod) {
-      Class<?> controllerClass = handlerMethod.getBeanType();
-      String defaultGroup = String.format("%s", splitCamelCase(controllerClass.getSimpleName(), "-"));
+  private Set<ResourceGroup> groups(HandlerMethod handlerMethod) {
+    Class<?> controllerClass = handlerMethod.getBeanType();
+    String defaultGroup = String.format("%s", splitCamelCase(controllerClass.getSimpleName(), "-"));
 
-      Optional<RequestMapping> requestMapping
-              = Optional.fromNullable(AnnotationUtils.findAnnotation(controllerClass, RequestMapping.class));
-      if (requestMapping.isPresent()) {
-         Set<ResourceGroup> groups = newHashSet();
-         //noinspection ConstantConditions
-         for (String groupFromReqMapping : asList(requestMapping.get().value())) {
-            if (!isNullOrEmpty(groupFromReqMapping)) {
-               String groupName = maybeChompLeadingSlash(firstPathSegment(groupFromReqMapping));
-               groups.add(new ResourceGroup(groupName));
-            }
-         }
-         if (groups.size() > 0) {
-            return groups;
-         }
+    Optional<RequestMapping> requestMapping
+            = Optional.fromNullable(AnnotationUtils.findAnnotation(controllerClass, RequestMapping.class));
+    if (requestMapping.isPresent()) {
+      Set<ResourceGroup> groups = newHashSet();
+      //noinspection ConstantConditions
+      for (String groupFromReqMapping : asList(requestMapping.get().value())) {
+        if (!isNullOrEmpty(groupFromReqMapping)) {
+          String groupName = maybeChompLeadingSlash(firstPathSegment(groupFromReqMapping));
+          groups.add(new ResourceGroup(groupName));
+        }
       }
-      return newHashSet(new ResourceGroup(maybeChompLeadingSlash(defaultGroup.toLowerCase())));
-   }
-
-   private String getDescription(HandlerMethod handlerMethod) {
-      Class<?> controllerClass = handlerMethod.getBeanType();
-      String description = splitCamelCase(controllerClass.getSimpleName(), " ");
-
-      Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
-      if (null != apiAnnotation) {
-         String descriptionFromAnnotation = Optional.fromNullable(emptyToNull(apiAnnotation.value()))
-                 .or(apiAnnotation.description());
-         if (!isNullOrEmpty(descriptionFromAnnotation)) {
-            return descriptionFromAnnotation;
-         }
+      if (groups.size() > 0) {
+        return groups;
       }
-      return description;
-   }
+    }
+    return newHashSet(new ResourceGroup(maybeChompLeadingSlash(defaultGroup.toLowerCase())));
+  }
+
+  private String getDescription(HandlerMethod handlerMethod) {
+    Class<?> controllerClass = handlerMethod.getBeanType();
+    String description = splitCamelCase(controllerClass.getSimpleName(), " ");
+
+    Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
+    if (null != apiAnnotation) {
+      String descriptionFromAnnotation = Optional.fromNullable(emptyToNull(apiAnnotation.value()))
+              .or(apiAnnotation.description());
+      if (!isNullOrEmpty(descriptionFromAnnotation)) {
+        return descriptionFromAnnotation;
+      }
+    }
+    return description;
+  }
 }

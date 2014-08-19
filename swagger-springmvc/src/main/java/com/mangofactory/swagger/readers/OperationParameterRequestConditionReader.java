@@ -33,7 +33,8 @@ public class OperationParameterRequestConditionReader implements RequestMappingR
               true,
               false,
               "string",
-              new AllowableListValues(collectionAsScalaIterable(newArrayList(expression.getValue())).toList(), "string"),
+              new AllowableListValues(collectionAsScalaIterable(newArrayList(expression.getValue())).toList(),
+                      "string"),
               "query",
               toOption("")
       );
@@ -41,6 +42,7 @@ public class OperationParameterRequestConditionReader implements RequestMappingR
       parameters.add(parameter);
     }
   }
+
   private Iterable<Parameter> nullToEmptyList(List<Parameter> parameters) {
     if (parameters == null) {
       return newArrayList();

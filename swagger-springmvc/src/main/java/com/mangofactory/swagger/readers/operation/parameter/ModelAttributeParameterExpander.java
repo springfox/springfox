@@ -55,34 +55,34 @@ class ModelAttributeParameterExpander {
 
   private List<Field> getAllFields(final Class<?> type) {
 
-      List<Field> result = new ArrayList<Field>();
+    List<Field> result = new ArrayList<Field>();
 
-      Class<?> i = type;
-      while (i != null && i != Object.class) {
-          result.addAll(Arrays.asList(i.getDeclaredFields()));
-          i = i.getSuperclass();
-      }
+    Class<?> i = type;
+    while (i != null && i != Object.class) {
+      result.addAll(Arrays.asList(i.getDeclaredFields()));
+      i = i.getSuperclass();
+    }
 
-      return result;
+    return result;
   }
 
   private Set<String> getBeanPropertyNames(final Class<?> clazz) {
 
-      try {
-          Set<String> beanProps = new HashSet<String>();
-          PropertyDescriptor[] propDescriptors = Introspector.getBeanInfo(clazz).getPropertyDescriptors();
+    try {
+      Set<String> beanProps = new HashSet<String>();
+      PropertyDescriptor[] propDescriptors = Introspector.getBeanInfo(clazz).getPropertyDescriptors();
 
-          for (int i = 0; i < propDescriptors.length; i++) {
+      for (int i = 0; i < propDescriptors.length; i++) {
 
-              if (propDescriptors[i].getReadMethod() != null && propDescriptors[i].getWriteMethod() != null) {
-                  beanProps.add(propDescriptors[i].getName());
-              }
-          }
+        if (propDescriptors[i].getReadMethod() != null && propDescriptors[i].getWriteMethod() != null) {
+          beanProps.add(propDescriptors[i].getName());
+        }
+      }
 
-          return beanProps;
+      return beanProps;
 
     } catch (IntrospectionException e) {
-        throw new RuntimeException(new StringBuilder("Failed to get bean properties on ").append(clazz).toString(), e);
+      throw new RuntimeException(new StringBuilder("Failed to get bean properties on ").append(clazz).toString(), e);
     }
 
   }

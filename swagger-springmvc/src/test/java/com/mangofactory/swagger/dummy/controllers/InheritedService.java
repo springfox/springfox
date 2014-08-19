@@ -11,5 +11,5 @@ public interface InheritedService {
 
   @RequestMapping(value = "child-method", method = RequestMethod.GET)
   public String getSomething(String parameter);
-  
+
 }

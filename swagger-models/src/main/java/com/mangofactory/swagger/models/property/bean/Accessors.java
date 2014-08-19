@@ -8,6 +8,7 @@ class Accessors {
   private static Pattern getter = Pattern.compile("^get([a-zA-Z_0-9].*)");
   private static Pattern isGetter = Pattern.compile("^is([a-zA-Z_0_9].*)");
   private static Pattern setter = Pattern.compile("^set([a-zA-Z_0-9].*)");
+
   public static boolean isGetter(Method method) {
     if (method.getParameterTypes().length == 0) {
       if (getter.matcher(method.getName()).find() &&
