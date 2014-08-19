@@ -28,7 +28,7 @@ __Maven__
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.7</version>
+    <version>0.8.8</version>
 </dependency>
 
 ```
@@ -36,7 +36,7 @@ __Maven__
 __Gradle__
 
 ```groovy
-compile "com.mangofactory:swagger-springmvc:0.8.7"
+compile "com.mangofactory:swagger-springmvc:0.8.8"
 ```
 
 #### Snapshot version
@@ -54,14 +54,14 @@ __Maven__
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.8-SNAPSHOT</version>
+    <version>0.8.9-SNAPSHOT</version>
 </dependency>
 ```
 
 __Gradle__
 
 ```groovy
-compile "com.mangofactory:swagger-springmvc:0.8.8-SNAPSHOT"
+compile "com.mangofactory:swagger-springmvc:0.8.9-SNAPSHOT"
 ```
 
 ### Usage (Quick guide)
