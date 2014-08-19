@@ -26,4 +26,16 @@ class WildcardTypeSpec extends Specification {
     hashMap(String, WildcardType)      | hashMap(String, Integer)         || true
     hashMap(WildcardType, WildcardType)| hashMap(Integer, String)         || true
   }
+
+
+  def "wildcard matches checks equivalence of types with nested wildcard types" () {
+    given:
+    expect:
+      wildcardMatch(testType, type) == shouldMatch
+
+    where:
+      type                               | testType                         || shouldMatch
+      nestedGenericType(WildcardType)    | nestedGenericType(String)        || true
+      nestedGenericType(String)          | nestedGenericType(WildcardType)  || false
+  }
 }

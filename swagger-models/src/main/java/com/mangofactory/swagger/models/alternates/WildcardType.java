@@ -22,7 +22,7 @@ public class WildcardType {
         return new Predicate<ResolvedType>() {
             @Override
             public boolean apply(ResolvedType input) {
-                return WildcardType.class.equals(input.getErasedType());
+                return WildcardType.class.equals(input.getErasedType()) || hasWildcards(input);
             }
         };
     }
@@ -41,9 +41,11 @@ public class WildcardType {
         TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
         TypeBindings bindingsToMatch = toMatch.getTypeBindings();
         for(int index = 0; index < bindingsToMatch.size(); index++) {
-            if (!wildcardTypeBindings.getBoundType(index).getErasedType().equals(WildcardType.class)
-                    && !wildcardTypeBindings.getBoundType(index).equals(bindingsToMatch.getBoundType(index))) {
+          ResolvedType wildcardTypeBindingsBoundType = wildcardTypeBindings.getBoundType(index);
+          ResolvedType bindingsToMatchBoundType = bindingsToMatch.getBoundType(index);
 
+          if (!wildcardTypeBindingsBoundType.getErasedType().equals(WildcardType.class)
+                    && !wildcardMatch(bindingsToMatchBoundType, wildcardTypeBindingsBoundType)) {
                 return false;
             }
         }
