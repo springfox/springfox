@@ -217,6 +217,8 @@ The following is one way to serve static content from /src/main/webapp
 <mvc:default-servlet-handler/>
 ```
 
+## Change log available [here](History.md)
+
 ### Migration From 0.8.0 -> 0.8.4+
 Prior to 0.8.4 the configuration of Swagger-springmvc was far too verbose as indicated by a number of users. SwaggerSpringMvcPlugin 
 was introduced to make configuration simpler and less verbose. It is recommended to follow the usage guides above and migrate 

@@ -1,3 +1,7 @@
+swagger-springmvc-0.8.8 
+==================
+[Release notes](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.8.8) since 0.8.6
+
 swagger-springmvc-0.8.6 
 ==================
  * 8294504b1b867d39d66e5ef69306c245c1496161
