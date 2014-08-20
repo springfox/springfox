@@ -296,10 +296,47 @@ class ApiModelReaderSpec extends Specification {
 
       Model model = models[modelName]
       Map modelProperties = fromScalaMap(model.properties())
+      modelProperties.size() == 2
       modelProperties.containsKey('visibleForSerialize')
+      modelProperties.containsKey('alwaysVisible')
 
   }
 
+
+  def "model should include snake_case property that is only visible during serialization when objectMapper has CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
+              DummyModels.ModelWithSerializeOnlyProperty
+      )
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
+
+      def settings = new SwaggerGlobalSettings()
+      def config = new SpringSwaggerConfig()
+      settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      context.put("swaggerGlobalSettings", settings)
+
+    when:
+      ApiModelReader apiModelReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy())
+      apiModelReader.execute(context)
+      Map<String, Model> result = context.getResult()
+
+    then:
+      Map<String, Model> models = result.get("models")
+      models.size() == 1
+
+      String modelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
+      models.containsKey(modelName)
+
+      Model model = models[modelName]
+      Map modelProperties = fromScalaMap(model.properties())
+      modelProperties.size() == 2
+      modelProperties.containsKey('visible_for_serialize')
+      modelProperties.containsKey('always_visible')
+
+  }
 
   def "Test to verify issue #283"() {
     given:
