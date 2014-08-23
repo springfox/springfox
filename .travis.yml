@@ -12,7 +12,9 @@ after_success:
   - '[[ $TRAVIS_BRANCH == "master" ]]
   && [[ $TRAVIS_PULL_REQUEST == "false" ]]
   && [[ $TRAVIS_JDK_VERSION == "openjdk6" ]]
-  && TERM=dumb ./gradlew -Pbintray_username=$bintray_username -Pbintray_password=$bintray_password ciPublish -i'
+  && TERM=dumb ./gradlew
+  coveralls
+  -Pbintray_username=$bintray_username -Pbintray_password=$bintray_password ciPublish -i'
 
 env:
   global:
