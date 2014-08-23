@@ -370,7 +370,7 @@ By default, a number of Spring's handler method arguments are ignored. See: com.
 
 - Development environment and build tasks See: [build.md] (https://github.com/martypitt/swagger-springmvc/blob/master/build.md)
 - [Release process](https://github.com/martypitt/swagger-springmvc/issues/422)
-
+- Contributing - please see the [wiki](https://github.com/martypitt/swagger-springmvc/wiki) for some guidelines
  
 License
 -------
