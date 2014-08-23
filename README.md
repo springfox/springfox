@@ -104,7 +104,7 @@ json Resource Listing is available at /api-docs
 ### Usage (SwaggerSpringMvcPlugin)
 
 The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin`. If you are ever 
-going to need to configure or customize how swagger-springmvc generates your applicatios sagger api documentation 
+going to need to configure or customize how swagger-springmvc generates your application's swagger api documentation 
 you are going to need to use the `SwaggerSpringMvcPlugin`.
 
 
