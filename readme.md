@@ -1,5 +1,8 @@
 # Swagger-springmvc
 
+[ ![Download](https://api.bintray.com/packages/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/images/download.png) ](https://bintray.com/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/_latestVersion)
+
+
 | Unit  | Functional   | Coverage   |
 |---|---|---|
 |[![Build Status](https://travis-ci.org/martypitt/swagger-springmvc.png?branch=master)](https://travis-ci.org/martypitt/swagger-springmvc)   |[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.png?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo) |[![Coverage Status](https://coveralls.io/repos/martypitt/swagger-springmvc/badge.png?branch=master)](https://coveralls.io/r/martypitt/swagger-springmvc?branch=master) |
@@ -12,7 +15,8 @@ Typically a Spring Web MVC project will use this project in combination with the
 to provide the user interface which visualises an applications JSON api's. The most common know use of this project has been 
 Spring Web MVC applications using springs `MappingJackson2HttpMessageConverter` to produce JSON API endpoints.
 
-The demo project (https://github.com/adrianbk/swagger-springmvc-demo) containes a number of examples using both spring web mvc and spring-boot.
+The demo project (https://github.com/adrianbk/swagger-springmvc-demo) contains a number of examples using both spring 
+web mvc and spring-boot.
 
 ### Development and contribution guidelines are available [here](https://github.com/martypitt/swagger-springmvc/wiki/Development)
 
@@ -364,36 +368,8 @@ By default, a number of Spring's handler method arguments are ignored. See: com.
 
 ##Development 
 
-Running tests with coverage:
-```bash
-mvn test jacoco:check
-```
-Report directory: \target\site\jacoco-ut
-
-Coverage only
-```bash
-mvn jacoco:check
-```
-
-Deploy to local nexus
-```bash
-mvn deploy
-```
-
--Coverage Help
-```bash
-mvn org.jacoco:jacoco-maven-plugin:0.6.3.201306030806:check
-```
-
-Skipping coverage
-```bash
-mvn deploy -Djacoco.skip=true
-```
-
-Pre Commit or before submitting a pull request
-```bash
-mvn verify
-```
+- Development environment and build tasks See: [build.md] (https://github.com/martypitt/swagger-springmvc/blob/master/build.md)
+- [Release process](https://github.com/martypitt/swagger-springmvc/issues/422)
 
  
 License

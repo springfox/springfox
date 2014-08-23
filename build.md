@@ -15,23 +15,17 @@
 ./gradlew check
 ```
 - Reports: `swagger-springmvc/build/reports` and `/swagger-models/build/reports`
-- Coverage limits: coverage.gradle `minCoverage = 80` 
-- To get more output from any gralde commands/tasks append a `-i` (info) or `-d` (debug)
-
-### Releasing
-- An illistrated version of the release process is described in the following issue: https://github.com/martypitt/swagger-springmvc/issues/422
-
-- The following command will publish the artifacts to bintray/jcenter. Only 'release' versions are hosted on bintray. 
-This command will fail if you try to publish a release version that has already been published.
-
+- Coverage limits: see coverage.gradle `minCoverage = 80` 
+- To get more output from any gralde commands/tasks append a `-i` (info) or `-d` (debug) e.g.
 ```bash
-./gradlew -Pbintray_username=<bintraybintray_username> -Pbintray_password=<bintraytoken> publish
+./gradlew build -i
+
 ```
 
-- The version number is controlled by the version attribute in the top level build.gradle (e.g. `version = '0.7.80-SNAPSHOT`)
+### Releasing
+- An illustrated version of the release process is described in the following issue: https://github.com/martypitt/swagger-springmvc/issues/422
 
-- Both released and snapshot versions are stored in jcenter's artifactory instance under oss-release-local and 
-oss-snapshot-local respectively. You can browse the repos from here: https://oss.jfrog.org/webapp/browserepo.html
+### Jcenter repositories
 
 - Gradle
 ```groovy
@@ -78,9 +72,8 @@ compile(group: 'com.mangofactory', name: 'swagger-models', version: '0.7.80')
 ```
 
 
-## Adding secure CI env variables to travisci
+### Adding secure CI env variables to travisci
 ```
-
 > gem install travis
 > travis encrypt SOMEVAR=secretvalue
 
