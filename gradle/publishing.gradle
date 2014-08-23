@@ -1,8 +1,8 @@
 ext {
   developerMachines = ['adrianxbk']
 
-  relUsername = project.hasProperty('username') ? project.getProperty('username') : 'admin'
-  relPassword = project.hasProperty('password') ? project.getProperty('password') : 'password'
+  relUsername = project.hasProperty('bintray_username') ? project.getProperty('bintray_username') : 'admin'
+  relPassword = project.hasProperty('bintray_password') ? project.getProperty('bintray_password') : 'password'
 
   if (developerMachines.contains(System.getenv('USER'))) {
     artifactRepoBase = 'http://localhost:8081/artifactory'
@@ -102,7 +102,17 @@ task preRelease << {
 }
 
 afterEvaluate { project ->
-  project.tasks.findAll {it.name.contains('ToBintrayRepository')}.each{
+  project.tasks.findAll { it.name.contains('ToBintrayRepository') }.each {
     it.dependsOn preRelease
   }
 }
+
+task ciPublish {
+  if (project.version.contains('SNAPSHOT')) {
+    logger.quiet("SANPSHOT artifacts will be published [${project.version}] from ci server")
+    dependsOn publish
+  } else {
+    logger.quiet("CI Publishing skipped as this is not a SNAPSHOT version")
+  }
+}
+

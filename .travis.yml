@@ -8,8 +8,16 @@ jdk:
   - openjdk7
   - oraclejdk8
 
+after_success:
+  - '[[ $TRAVIS_BRANCH == "master" ]]
+  && [[ $TRAVIS_PULL_REQUEST == "false" ]]
+  && [[ $TRAVIS_JDK_VERSION == "openjdk6" ]]
+  && TERM=dumb ./gradlew -Pbintray_username=<bintray_username> -Pbintray_password=<bintraytoken> ciPublish -i'
+
 env:
   global:
   - secure: mn5HXRqI8btBN76tIfrxeC6aLrXSgEuTVMA7ZuZLF7jwbTZkrs0rELFeAUNU0vjkW5gq3yKgV/WB0fhSFAMGGp44lrfOC0GB24lH3OaQWQQJcU7EKc7q/xvc65o9UbUTqxOoCBcQsqFaGSh7Op94mtR7h10Lbf7r69OcngOgt70=
   - secure: i/GulSx1wbhHph7erloWXpdDunyqlKrWhEHqeEQeCn9BGVsJhBXtx/QWC03HtbvBg+tRGjHGQeiNfesbxBgVN87Vt3D8l8T6DygIVt9K2IDRtdm97gVf7P3tFi0PRRqTBT63eyXwymiMzxVOQC01OuLOHn4Y+HEFn80sdc+0WpA=
   - secure: jBmnnTVwrBwUNPhSiMey0HRQ9Df7qmb+QLcMFi8ivQy7vh8WKm2ovkyzfMEg5Ci/ZVpwCm5Pbaaa5w1LqTJPnfHtRxO11nUBeJCwqwhWcSep19RLuW65JEVgLncn2SCtYHaPodWm+VSjnr/p98x6Tk0ZLkREEZd8ZldNtq8ZEO8=
+  - secure: "pqt4cAhwyFU6w3MiMaorQYoQgV9ZOKgpUcYznvfOIuu09menbZg6w87a65k2EbWpTB/+srPKzFNFNcpeHZD8ffnvUZPygRFeU2AFDo5KuAm5vhnntynlR5ZlB6JsheCZHvaRL+M4AQPiTWiiJAIAHMsLdcidaAyeJRFHlSn+/kk="
+  - secure: "oo+eflXkbSl0o2wCFm3uqWZ+K7qDvx9ypfA/OsJJIC8pFZ5sr6xRAx4uzvA8jXqz72DDe4rpAXdAoEQTwsI7OhpTEDCrrc/ujxEI2SDmGX+mEDwbCNFXSetsKfU4ok2XU7p/vvnZb4v46LkwDqmt6+7ojWgIeSymksjgRIj5Ryk="

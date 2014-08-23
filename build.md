@@ -25,7 +25,7 @@
 This command will fail if you try to publish a release version that has already been published.
 
 ```bash
-./gradlew -Pusername=<bintrayusername> -Ppassword=<bintraytoken> publish
+./gradlew -Pbintray_username=<bintraybintray_username> -Pbintray_password=<bintraytoken> publish
 ```
 
 - The version number is controlled by the version attribute in the top level build.gradle (e.g. `version = '0.7.80-SNAPSHOT`)
@@ -74,5 +74,14 @@ compile(group: 'com.mangofactory', name: 'swagger-models', version: '0.7.80')
     <artifactId>swagger-models</artifactId>
     <version>version-SNAPSHOT</version>
 </dependency>
+
+```
+
+
+## Adding secure CI env variables to travisci
+```
+
+> gem install travis
+> travis encrypt SOMEVAR=secretvalue
 
 ```
