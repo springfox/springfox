@@ -1,7 +1,7 @@
 # Swagger-springmvc
-
+<!--
 [ ![Download](https://api.bintray.com/packages/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/images/download.png) ](https://bintray.com/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/_latestVersion)
-
+-->
 
 | Unit  | Functional   | Coverage   |
 |---|---|---|
