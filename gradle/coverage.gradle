@@ -2,11 +2,19 @@ apply plugin: 'jacoco'
 apply plugin: "com.github.kt3k.coveralls"
 
 ext {
-  minCoverage = 80
+  limits = [
+          'instruction': 93,
+          'branch'     : 88,
+          'line'       : 91,
+          'complexity' : 84,
+          'method'     : 87,
+          'class'      : 95
+  ]
 }
 
 jacocoTestReport {
   reports {
+    //XML required by coveralls and for the below coverage checks
     xml.enabled true
   }
 
@@ -27,21 +35,23 @@ jacocoTestReport {
 
     def counters = results.counter
     def metrics = [:]
-    metrics << ['instruction': percentage(counters.find { it.'@type'.equals('INSTRUCTION') })]
-    metrics << ['branch': percentage(counters.find { it.'@type'.equals('BRANCH') })]
-    metrics << ['line': percentage(counters.find { it.'@type'.equals('LINE') })]
-    metrics << ['complexity': percentage(counters.find { it.'@type'.equals('COMPLEXITY') })]
-    metrics << ['method': percentage(counters.find { it.'@type'.equals('METHOD') })]
-    metrics << ['class': percentage(counters.find { it.'@type'.equals('CLASS') })]
+    metrics << [
+            'instruction': percentage(counters.find { it.'@type'.equals('INSTRUCTION') }),
+            'branch'     : percentage(counters.find { it.'@type'.equals('BRANCH') }),
+            'line'       : percentage(counters.find { it.'@type'.equals('LINE') }),
+            'complexity' : percentage(counters.find { it.'@type'.equals('COMPLEXITY') }),
+            'method'     : percentage(counters.find { it.'@type'.equals('METHOD') }),
+            'class'      : percentage(counters.find { it.'@type'.equals('CLASS') })
+    ]
 
 
     def failures = []
     metrics.each {
-      if (it.value < minCoverage) {
-        failures.add("- ${it.key} coverage rate is: ${it.value}%, minimum is ${minCoverage}%")
+      def limit = limits[it.key]
+      if (it.value < limit) {
+        failures.add("- ${it.key} coverage rate is: ${it.value}%, minimum is ${limit}%")
       }
     }
-
 
     if (failures) {
       logger.quiet("------------------ Code Coverage Failed -----------------------")
@@ -50,6 +60,8 @@ jacocoTestReport {
       }
       logger.quiet("---------------------------------------------------------------")
       throw new GradleException("Code coverage failed")
+    } else{
+      logger.quiet("Passed Code Coverage Checks")
     }
   }
 }
