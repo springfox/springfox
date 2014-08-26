@@ -8,7 +8,14 @@ buildscript {
   dependencies {
     classpath "com.github.adrianbk:gradle-jvmsrc-plugin:0.6.1"
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0"
+    classpath "org._10ne.gradle:rest-gradle-plugin:0.3.1"
   }
+}
+apply plugin: "org.10ne.rest"
+
+ext{
+  apiKey = System.getenv('GIT_HUB_API_KEY')
+  version = project(':swagger-springmvc').version
 }
 
 subprojects {
@@ -63,6 +70,21 @@ subprojects {
       jcenter()
     }
   }
+}
+
+task triggerDownstreamJobs(type: org._10ne.gradle.rest.RestTask) {
+  httpMethod = 'get'
+  uri = 'https://api.github.com/repos/adrianbk/swagger-springmvc-demo/contents/gradle/dependencies.gradle'
+  contentType = groovyx.net.http.ContentType.JSON
+  requestHeaders = ['User-Agent' : 'swagger-springmvc', 'Authorization' : "token ${apiKey}"]
+
+  doLast{
+    println serverResponse.data
+  }
+
+  //Rethink - use travis
+  //Add env var POST /repos/settings/?repository_id={repository.id}
+  //Trigger last build (rebuild)
 }
 
 task wrapper(type: Wrapper) {
