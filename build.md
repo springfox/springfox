@@ -71,8 +71,13 @@ compile(group: 'com.mangofactory', name: 'swagger-models', version: '0.7.80')
 
 ```
 
+### CI Enviroment
 
-### Adding secure CI env variables to travisci
+[TravicCI] (https://travis-ci.org/martypitt/swagger-springmvc)
+
+Once build has passed and an artifact published, the [demo project] (https://github.com/adrianbk/swagger-springmvc-demo) will be triggered
+
+#### Adding secure CI env variables to travisci
 ```
 > gem install travis
 > travis encrypt SOMEVAR=secretvalue
