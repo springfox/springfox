@@ -8,14 +8,13 @@ buildscript {
   dependencies {
     classpath "com.github.adrianbk:gradle-jvmsrc-plugin:0.6.1"
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0"
-    classpath "org._10ne.gradle:rest-gradle-plugin:0.3.1"
+    classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
   }
 }
-apply plugin: "org.10ne.rest"
 
-ext{
+ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
-  version = project(':swagger-springmvc').version
+  projectVersion = '0.9.0-SNAPSHOT'
 }
 
 subprojects {
@@ -30,7 +29,7 @@ subprojects {
   }
 
   group = 'com.mangofactory'
-  version = '0.9.0-SNAPSHOT'
+  version = projectVersion
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
   jvmsrc {
@@ -71,20 +70,63 @@ subprojects {
     }
   }
 }
+//This should be moved to a plugin
+task triggerDownstreamBuilds << {
+  def gitToken = System.getenv('GIT_HUB_API_KEY')
+  assert gitToken
 
-task triggerDownstreamJobs(type: org._10ne.gradle.rest.RestTask) {
-  httpMethod = 'get'
-  uri = 'https://api.github.com/repos/adrianbk/swagger-springmvc-demo/contents/gradle/dependencies.gradle'
-  contentType = groovyx.net.http.ContentType.JSON
-  requestHeaders = ['User-Agent' : 'swagger-springmvc', 'Authorization' : "token ${apiKey}"]
+  def travisClient = new groovyx.net.http.RESTClient('https://api.travis-ci.org/')
+  travisClient.ignoreSSLIssues() //Untrusted travisci ssl cert
+  def httpHeaders = [
+          "Content-Type": "application/json",
+          "User-Agent"  : "SwaggerSpringmvc",
+          "Host"        : "api.travis-ci.org",
+          "Accept"      : "application/vnd.travis-ci.2+json"
+  ]
 
-  doLast{
-    println serverResponse.data
+  def tokBuilder = new groovy.json.JsonBuilder()
+  tokBuilder {
+    github_token "$gitToken"
+  }
+  def accessTokenResp = travisClient.post(
+          contentType: 'application/json',
+          path: 'auth/github',
+          headers: httpHeaders,
+          body: tokBuilder.toString()
+  )
+  def accessToken = accessTokenResp.data.access_token
+
+
+  def buildsResp = travisClient.get(
+          path: 'repos/adrianbk/swagger-springmvc-demo/builds',
+          headers: httpHeaders + ["Authorization": "token ${accessToken}"],
+  )
+  def lastBuildId = buildsResp.data.builds[0].id
+
+  def jsonBuilder = new groovy.json.JsonBuilder()
+  jsonBuilder {
+    env_var {
+      name 'LATEST_SSMVC_VERSION'
+      value "${projectVersion}"
+      'public' true
+    }
   }
 
-  //Rethink - use travis
-  //Add env var POST /repos/settings/?repository_id={repository.id}
-  //Trigger last build (rebuild)
+  //This adds a variable every time - consider using an update
+  def envResp = travisClient.post(
+          contentType: 'application/json',
+          path: 'settings/env_vars',
+          query: [repository_id: '1550492'],
+          headers: httpHeaders + ["Authorization": "token ${accessToken}"],
+          body: jsonBuilder.toString()
+  )
+
+  def restartBuildResp = travisClient.post(
+          contentType: 'application/json',
+          path: "builds/${lastBuildId}/restart",
+          headers: httpHeaders + ["Authorization": "token ${accessToken}"],
+          body: jsonBuilder.toString()
+  )
 }
 
 task wrapper(type: Wrapper) {
