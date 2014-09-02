@@ -10,7 +10,7 @@ class ApiDescriptionSupport {
   def apiDescriptions(List<String> paths) {
     def result = []
     paths.each {
-      result << new ApiDescription(it, toOption(""), emptyScalaList())
+      result << new ApiDescription(it, toOption(""), emptyScalaList(), false)
     }
     result
   }
