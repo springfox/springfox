@@ -134,8 +134,7 @@ class ApiModelReaderSpec extends Specification {
     ApiDescription description = new ApiDescription(
           "anyPath",
           toOption("anyDescription"),
-          scalaOpList,
-          false
+          scalaOpList
     )
     context.put("apiDescriptionList", [description])
 
