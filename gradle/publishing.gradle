@@ -109,10 +109,10 @@ afterEvaluate { project ->
 
 task ciPublish {
   if (project.version.contains('SNAPSHOT')) {
-    logger.quiet("SANPSHOT artifacts will be published [${project.version}] from ci server")
+    logger.quiet("Task :ciPublish configured to publish SANPSHOT artifacts [${project.version}]")
     dependsOn publish
   } else {
-    logger.quiet("CI Publishing skipped as this is not a SNAPSHOT version")
+    logger.quiet("Task :ciPublish will not publish artifacts [${project.version}] as this is not a SNAPSHOT version")
   }
 }
 
