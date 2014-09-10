@@ -22,19 +22,28 @@ public class ParameterRequiredReader implements Command<RequestMappingContext> {
   private Boolean getAnnotatedRequired(MethodParameter methodParameter) {
     Set<Boolean> requiredSet = new HashSet<Boolean>();
     Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
+
+    // when the type is Optional, the required property of @RequestParam/@RequestHeader doesn't matter,
+    // since the value is always a non-null Optional after conversion
+    boolean optional = isOptional(methodParameter);
+
     if (null != methodAnnotations) {
       for (Annotation annotation : methodAnnotations) {
         if (annotation instanceof ApiParam) {
           requiredSet.add(((ApiParam) annotation).required());
         } else if (annotation instanceof RequestParam) {
-          requiredSet.add(((RequestParam) annotation).required());
+          requiredSet.add(!optional && ((RequestParam) annotation).required());
         } else if (annotation instanceof RequestHeader) {
-          requiredSet.add(((RequestHeader) annotation).required());
+          requiredSet.add(!optional && ((RequestHeader) annotation).required());
         } else if (annotation instanceof PathVariable) {
           requiredSet.add(true);
         }
       }
     }
     return requiredSet.contains(true);
+  }
+
+  private boolean isOptional(MethodParameter methodParameter) {
+    return methodParameter.getParameterType().getName().equals("java.util.Optional");
   }
 }

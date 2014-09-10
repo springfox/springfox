@@ -1,4 +1,5 @@
 package com.mangofactory.swagger.readers.operation.parameter
+
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -21,6 +22,7 @@ class ParameterRequiredReaderSpec extends Specification {
     RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
     MethodParameter methodParameter = Mock(MethodParameter)
     methodParameter.getParameterAnnotations() >> (paramAnnotations as Annotation[])
+    methodParameter.getParameterType() >> Object.class
     methodParameter.getMethodAnnotation(PathVariable.class) >> paramAnnotations.find { it instanceof PathVariable }
     context.put("methodParameter", methodParameter)
 
@@ -44,4 +46,32 @@ class ParameterRequiredReaderSpec extends Specification {
     []                                                                                | false
     [null]                                                                            | false
   }
+
+  def "should detect java.util.Optional parameters"() {
+  given:
+    HandlerMethod handlerMethod = Mock()
+    RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
+    MethodParameter methodParameter = Mock(MethodParameter)
+    methodParameter.getParameterAnnotations() >> (paramAnnotations as Annotation[])
+    context.put("methodParameter", methodParameter)
+
+    Class<?> fakeOptionalClass = new FakeOptional().class
+    fakeOptionalClass.name = "java.util.Optional"
+    methodParameter.getParameterType() >> fakeOptionalClass
+
+  when:
+    Command operationCommand = new ParameterRequiredReader();
+    operationCommand.execute(context)
+  then:
+    context.get('required') == false
+  where:
+    paramAnnotations << [
+      [[required: { -> true }] as RequestHeader],
+      [[required: { -> false }] as RequestHeader],
+      [[required: { -> true }] as RequestParam],
+      [[required: { -> false }] as RequestParam],
+    ]
+  }
 }
+
+class FakeOptional {}
