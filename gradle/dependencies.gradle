@@ -12,42 +12,40 @@ ext {
   servlet = "2.5"
   guava = "15.0"
   classmate = "1.0.0"
+  libs = [
+
+          test          : [
+                  "org.springframework:spring-test:${spring}",
+                  "cglib:cglib-nodep:2.2",
+                  "org.objenesis:objenesis:1.2",
+                  "org.mockito:mockito-all:${mockito}",
+                  "com.jayway.jsonpath:json-path:0.8.1",
+                  "org.slf4j:slf4j-simple:1.7.5",
+                  "org.yaml:snakeyaml:1.9",
+                  "org.spockframework:spock-spring:${spock}",
+                  "org.spockframework:spock-core:${spock}"
+          ],
+
+          swaggerCore   : [
+                  "com.wordnik:swagger-core_2.10:${swaggerCore}"
+          ],
+
+          spring        : [
+                  "org.springframework:spring-web:$spring",
+                  "org.springframework:spring-webmvc:$spring"
+          ],
+
+          clientProvided: [
+                  "org.scala-lang:scala-library:${scalaLib}",
+                  "javax.servlet:servlet-api:${servlet}"
+          ],
+
+          core          : [
+                  "org.codehaus.groovy:groovy-all:${groovy}",
+                  "com.google.guava:guava:${guava}",
+                  "com.fasterxml:classmate:1.0.0",
+                  "org.slf4j:slf4j-api:${slf4j}"
+          ]
+
+  ]
 }
-
-
-ext.libs = [
-
-        test          : [
-                "org.springframework:spring-test:${spring}",
-                "cglib:cglib-nodep:2.2",
-                "org.objenesis:objenesis:1.2",
-                "org.mockito:mockito-all:${mockito}",
-                "com.jayway.jsonpath:json-path:0.8.1",
-                "org.slf4j:slf4j-simple:1.7.5",
-                "org.yaml:snakeyaml:1.9",
-                "org.spockframework:spock-spring:${spock}",
-                "org.spockframework:spock-core:${spock}"
-        ],
-
-        swaggerCore   : [
-                "com.wordnik:swagger-core_2.10:${swaggerCore}"
-        ],
-
-        spring        : [
-                "org.springframework:spring-web:$spring",
-                "org.springframework:spring-webmvc:$spring"
-        ],
-
-        clientProvided: [
-                "org.scala-lang:scala-library:${scalaLib}",
-                "javax.servlet:servlet-api:${servlet}"
-        ],
-
-        core          : [
-                "org.codehaus.groovy:groovy-all:${groovy}",
-                "com.google.guava:guava:${guava}",
-                "com.fasterxml:classmate:1.0.0",
-                "org.slf4j:slf4j-api:${slf4j}"
-        ]
-
-]

@@ -1,3 +1,5 @@
+import groovy.json.JsonBuilder
+
 apply from: "$rootDir/gradle/dependencies.gradle"
 
 buildscript {
@@ -19,6 +21,8 @@ ext {
 
 subprojects {
   apply plugin: 'groovy'
+  apply plugin: 'java'
+  compileJava.options.encoding = 'UTF-8'
   sourceCompatibility = 1.6
   targetCompatibility = 1.6
 
@@ -64,11 +68,6 @@ subprojects {
     jcenter()
   }
 
-  buildscript {
-    repositories {
-      jcenter()
-    }
-  }
 }
 //This should be moved to a plugin
 task triggerDownstreamBuilds << {
@@ -84,7 +83,7 @@ task triggerDownstreamBuilds << {
           "Accept"      : "application/vnd.travis-ci.2+json"
   ]
 
-  def tokBuilder = new groovy.json.JsonBuilder()
+  def tokBuilder = new JsonBuilder()
   tokBuilder {
     github_token "$gitToken"
   }
@@ -103,7 +102,7 @@ task triggerDownstreamBuilds << {
   )
   def lastBuildId = buildsResp.data.builds[0].id
 
-  def jsonBuilder = new groovy.json.JsonBuilder()
+  def jsonBuilder = new JsonBuilder()
   jsonBuilder {
     env_var {
       name 'LATEST_SSMVC_VERSION'
@@ -129,6 +128,4 @@ task triggerDownstreamBuilds << {
   )
 }
 
-task wrapper(type: Wrapper) {
-  gradleVersion = '2.0'
-}
+task wrapper(type: Wrapper) {}
