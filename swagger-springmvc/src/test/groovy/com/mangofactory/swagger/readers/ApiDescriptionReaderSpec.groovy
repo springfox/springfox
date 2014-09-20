@@ -67,6 +67,7 @@ class ApiDescriptionReaderSpec extends Specification {
         "/{businessId:\\w+}"       | "/{businessId}"
         "/businesses/{businessId}" | "/businesses/{businessId}"
         "/foo/bar:{baz}"           | "/foo/bar:{baz}"
+        "/foo:{foo}/bar:{baz}"     | "/foo:{foo}/bar:{baz}"
         "/foo/bar:{baz:\\w+}"      | "/foo/bar:{baz}"
 
    }
