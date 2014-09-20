@@ -59,7 +59,7 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
   public String sanitizeRequestMappingPattern(String requestMappingPattern) {
     String result = requestMappingPattern;
     //remove regex portion '/{businessId:\\w+}'
-    result = result.replaceAll("\\{(.*?):.*?\\}", "{$1}");
+    result = result.replaceAll("\\{([^}]*?):.*?\\}", "{$1}");
     return result.isEmpty() ? "/" : result;
   }
 }
