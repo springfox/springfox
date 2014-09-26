@@ -41,7 +41,7 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
       ApiOperationReader apiOperationReader = new ApiOperationReader(customAnnotationReaders);
       apiOperationReader.execute(context);
       List<Operation> operations = (List<Operation>) context.get("operations");
-      apiDescriptionList.add(new ApiDescription(path, toOption(methodName), toScalaList(operations)));
+      apiDescriptionList.add(new ApiDescription(path, toOption(methodName), toScalaList(operations), false));
     }
     context.put("apiDescriptionList", apiDescriptionList);
   }
