@@ -2,6 +2,7 @@ package com.mangofactory.swagger.models.property;
 
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.PropertyName;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
@@ -69,7 +70,8 @@ public class BeanPropertyDefinitions {
     AnnotationIntrospector annotationIntrospector = config.isAnnotationProcessingEnabled()
             ? config.getAnnotationIntrospector()
             : null;
-    POJOPropertyBuilder prop = new POJOPropertyBuilder(beanProperty.getName(), annotationIntrospector, true);
+    POJOPropertyBuilder prop
+            = new POJOPropertyBuilder(new PropertyName(beanProperty.getName()),  annotationIntrospector,  true);
     return naming.nameForField(config, prop.getField(), beanProperty.getName());
   }
 

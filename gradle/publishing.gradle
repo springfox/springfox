@@ -1,8 +1,8 @@
 ext {
   developerMachines = ['adrianxbk']
 
-  relUsername = project.hasProperty('bintray_username') ? project.getProperty('bintray_username') : 'admin'
-  relPassword = project.hasProperty('bintray_password') ? project.getProperty('bintray_password') : 'password'
+  relUsername = project.hasProperty('bintray_username') ? project.property('bintray_username') : 'admin'
+  relPassword = project.hasProperty('bintray_password') ? project.property('bintray_password') : 'password'
 
   if (developerMachines.contains(System.getenv('USER'))) {
     artifactRepoBase = 'http://localhost:8081/artifactory'

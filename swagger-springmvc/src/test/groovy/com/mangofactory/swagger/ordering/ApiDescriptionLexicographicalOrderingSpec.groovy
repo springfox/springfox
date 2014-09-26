@@ -20,8 +20,8 @@ class ApiDescriptionLexicographicalOrderingSpec extends Specification {
       list[1].path() == expectedSecond
 
     where:
-      list << [[new ApiDescription("/b", toOption(""), emptyScalaList()),
-                new ApiDescription("/a", toOption(""), emptyScalaList())]
+      list << [[new ApiDescription("/b", toOption(""), emptyScalaList(), false),
+                new ApiDescription("/a", toOption(""), emptyScalaList(), false)]
       ]
       expectedFirst << ["/a"]
       expectedSecond << ["/b"]
