@@ -35,7 +35,7 @@ public class Types {
           .put(Boolean.class, "boolean")
           .put(Byte.class, "byte")
           .put(BigDecimal.class, "float")
-          .put(BigInteger.class, "integer")
+          .put(BigInteger.class, "long")
           .build();
 
   public static String typeNameFor(Type type) {

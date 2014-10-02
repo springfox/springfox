@@ -7,6 +7,9 @@ import com.wordnik.swagger.models.properties.IntegerProperty;
 import com.wordnik.swagger.models.properties.LongProperty;
 import com.wordnik.swagger.models.properties.Property;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 public class NumericFactory implements Function<ModelProperty, Property> {
   @Override
   public Property apply(ModelProperty input) {
@@ -19,10 +22,12 @@ public class NumericFactory implements Function<ModelProperty, Property> {
             || input.qualifiedTypeName().equals(Float.TYPE.getName())) {
       return new FloatProperty();
     } else if (input.qualifiedTypeName().equals(Double.class.getName())
-            || input.qualifiedTypeName().equals(Double.TYPE.getName())) {
+            || input.qualifiedTypeName().equals(Double.TYPE.getName())
+            || input.qualifiedTypeName().equals(BigDecimal.class.getName())) {
       return new DoubleProperty();
     } else if (input.qualifiedTypeName().equals(Long.class.getName())
-            || input.qualifiedTypeName().equals(Long.TYPE.getName())) {
+            || input.qualifiedTypeName().equals(Long.TYPE.getName())
+            || input.qualifiedTypeName().equals(BigInteger.class.getName())) {
       return new LongProperty();
     }
     throw new IllegalArgumentException("Unknown type");

@@ -11,6 +11,8 @@ import com.mangofactory.swagger.models.property.NumericFactory;
 import com.mangofactory.swagger.models.property.StringFactory;
 import com.wordnik.swagger.models.properties.Property;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.Map;
 
@@ -27,6 +29,8 @@ public class Properties {
           .put(String.class.getName(), new StringFactory())
           .put(Boolean.class.getName(), new BooleanFactory())
           .put(Byte.class.getName(), new StringFactory())
+          .put(BigDecimal.class.getName(), new NumericFactory())
+          .put(BigInteger.class.getName(), new NumericFactory())
           .put("int", new NumericFactory())
           .put("short", new NumericFactory())
           .put("long", new NumericFactory())

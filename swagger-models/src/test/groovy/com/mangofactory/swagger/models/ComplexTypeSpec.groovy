@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.models
-
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.wordnik.swagger.models.Model
@@ -17,28 +16,30 @@ class ComplexTypeSpec extends Specification {
       Model asReturn = provider.modelFor(returnValue(complexType())).get()
 
     expect:
-      asInput.properties.name == "ComplexType"
-      asInput.properties.property != null
-      def modelProperty = asInput.properties.property
-      modelProperty.type() == type
-      modelProperty.qualifiedType() == qualifiedType
-      modelProperty.items().isEmpty()
-      Types.isBaseType(type) == isBaseType
+      asInput.name == "ComplexType"
+      asInput.properties."$property" != null
+      def modelProperty = asInput.properties."$property"
+      modelProperty.type == type
+      modelProperty.format == format
+      if (modelProperty.metaClass.respondsTo(modelProperty, "get$ref")) {
+        modelProperty.get$ref() == ref
+      }
 
-      asReturn.properties.name == "ComplexType"
-      asReturn.properties.property != null
-      def retModelProperty = asReturn.properties.property
-      retModelProperty.type() == type
-      retModelProperty.qualifiedType() == qualifiedType
-      retModelProperty.items().isEmpty()
-      Types.isBaseType(type) == isBaseType
+      asReturn.name == "ComplexType"
+      asReturn.properties."$property" != null
+      def retModelProperty = asReturn.properties."$property"
+      retModelProperty.type == type
+      retModelProperty.format == format
+      if (retModelProperty.metaClass.respondsTo(retModelProperty, "get$ref")) {
+        retModelProperty.get$ref() == ref
+      }
 
     where:
-      property      | type          | qualifiedType                               | isBaseType
-      "name"        | "string"      | "java.lang.String"                          | true
-      "age"         | "int"         | "int"                                       | true
-      "category"    | "Category"    | "com.mangofactory.swagger.models.Category"  | false
-      "customType"  | "double"      | "java.math.BigDecimal"                      | true
+      property      | type          | format  | ref
+      "name"        | "string"      | null    | null
+      "age"         | "integer"     | "int32" | null
+      "category"    | "ref"         | null    | "Category"
+      "customType"  | "number"      | "double"| null
   }
 
   def "recursive type properties are inferred correctly"() {
@@ -49,25 +50,23 @@ class ComplexTypeSpec extends Specification {
     Model asReturn = provider.modelFor(returnValue(complexType)).get()
 
     expect:
-      asInput.name() == "RecursiveType"
-      asInput.properties().contains(property)
-      def modelProperty = asInput.properties().get(property)
-      modelProperty.get().type() == type
-      modelProperty.get().qualifiedType() == qualifiedType
-      modelProperty.get().items().isEmpty()
-      Types.isBaseType(type) == isBaseType
+      asInput.name == "RecursiveType"
+      asInput.properties."$property" != null
+      def modelProperty = asInput.properties."$property"
+      if (modelProperty.metaClass.respondsTo(modelProperty, "get$ref")) {
+        modelProperty.get$ref() == ref
+      }
 
-      asReturn.name() == "RecursiveType"
-      asReturn.properties().contains(property)
-      def retModelProperty = asReturn.properties().get(property)
-      retModelProperty.get().type() == type
-      retModelProperty.get().qualifiedType() == qualifiedType
-      retModelProperty.get().items().isEmpty()
-      Types.isBaseType(type) == isBaseType
+      asReturn.name == "RecursiveType"
+      asReturn.properties."$property" != null
+      def retModelProperty = asReturn.properties."$property"
+      if (retModelProperty.metaClass.respondsTo(retModelProperty, "get$ref")) {
+        retModelProperty.get$ref() == ref
+      }
 
     where:
-      property      | type            | qualifiedType                                   | isBaseType
-      "parent"      | "RecursiveType" | "com.mangofactory.swagger.models.RecursiveType" | false
+      property      | ref
+      "parent"      | "RecursiveType"
   }
 
   def "inherited type properties are inferred correctly"() {
@@ -78,29 +77,27 @@ class ComplexTypeSpec extends Specification {
       Model asReturn = provider.modelFor(returnValue(complexType)).get()
 
     expect:
-      asInput.name() == "InheritedComplexType"
-      asInput.properties().contains(property)
-      def modelProperty = asInput.properties().get(property)
-      modelProperty.get().type() == type
-      modelProperty.get().qualifiedType() == qualifiedType
-      modelProperty.get().items().isEmpty()
-      Types.isBaseType(type) == isBaseType
+      asInput.name == "InheritedComplexType"
+      asInput.properties."$property" != null
+      def modelProperty = asInput.properties."$property"
+      if (modelProperty.metaClass.respondsTo(modelProperty, "get$ref")) {
+        modelProperty.get$ref() == ref
+      }
 
-      asReturn.name() == "InheritedComplexType"
-      asReturn.properties().contains(property)
-      def retModelProperty = asReturn.properties().get(property)
-      retModelProperty.get().type() == type
-      retModelProperty.get().qualifiedType() == qualifiedType
-      retModelProperty.get().items().isEmpty()
-      Types.isBaseType(type) == isBaseType
+      asReturn.name == "InheritedComplexType"
+      asReturn.properties."$property" != null
+      def retModelProperty = asReturn.properties."$property"
+      if (retModelProperty.metaClass.respondsTo(retModelProperty, "get$ref")) {
+        modelProperty.get$ref() == ref
+      }
 
     where:
-      property            | type          | qualifiedType                               | isBaseType
-      "name"              | "string"      | "java.lang.String"                          | true
-      "age"               | "int"         | "int"                                       | true
-      "category"          | "Category"    | "com.mangofactory.swagger.models.Category"  | false
-      "customType"        | "double"      | "java.math.BigDecimal"                      | true
-      "inheritedProperty" | "string"      | "java.lang.String"                          | true
+      property            | ref
+      "name"              | "string"
+      "age"               | "int"
+      "category"          | "Category"
+      "customType"        | "double"
+      "inheritedProperty" | "string"
   }
 
 }
