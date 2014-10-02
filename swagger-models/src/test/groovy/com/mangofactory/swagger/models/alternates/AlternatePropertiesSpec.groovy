@@ -2,7 +2,7 @@ package com.mangofactory.swagger.models.alternates
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelProvider
-import com.wordnik.swagger.model.Model
+import com.wordnik.swagger.models.Model
 import spock.lang.Specification
 
 import static com.mangofactory.swagger.models.ModelContext.*
@@ -14,9 +14,9 @@ class AlternatePropertiesSpec extends Specification {
       ModelProvider modelProvider = providerThatSubstitutesLocalDateWithString()
       Model model = modelProvider.modelFor(inputParam(typeWithAlternateProperty())).get()
     expect:
-      model.name() == "TypeWithAlternateProperty"
-      model.properties().contains("localDate")
-      def modelProperty = model.properties().get("localDate")
+      model.properties.name == "TypeWithAlternateProperty"
+      model.properties.localDate
+      def modelProperty = model.properties.localDate
       modelProperty.get().type() == "string"
       modelProperty.get().qualifiedType() == "java.lang.String"
       modelProperty.get().items().isEmpty()
@@ -27,9 +27,9 @@ class AlternatePropertiesSpec extends Specification {
       ModelProvider modelProvider = providerThatSubstitutesResponseEntityOfVoid()
       Model model = modelProvider.modelFor(inputParam(typeWithResponseEntityOfVoid())).get()
     expect:
-      model.name() == "GenericType«ResponseEntity«Void»»"
-      model.properties().contains("genericField")
-      def modelProperty = model.properties().get("genericField")
+      model.properties.name == "GenericType«ResponseEntity«Void»»"
+      model.properties.genericField != null
+      def modelProperty = model.properties.genericField
       modelProperty.get().type() == "Void"
       modelProperty.get().qualifiedType() == "java.lang.Void"
       modelProperty.get().items().isEmpty()

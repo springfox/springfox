@@ -4,8 +4,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.wordnik.swagger.model.AllowableListValues;
-import scala.collection.JavaConversions;
 
 import java.util.List;
 
@@ -17,14 +15,11 @@ public final class ApiModelProperties {
     throw new UnsupportedOperationException();
   }
 
-  public static Function<ApiModelProperty, AllowableListValues> toAllowableList() {
-    return new Function<ApiModelProperty,
-            AllowableListValues>() {
+  public static Function<ApiModelProperty, List<String>> toAllowableList() {
+    return new Function<ApiModelProperty, List<String>>() {
       @Override
-      public AllowableListValues apply(ApiModelProperty annotation) {
-        List<String> allowableValues
-                = Splitter.on(',').omitEmptyStrings().splitToList(nullToEmpty(annotation.allowableValues()));
-        return new AllowableListValues(JavaConversions.collectionAsScalaIterable(allowableValues).toList(), "LIST");
+      public List<String> apply(ApiModelProperty annotation) {
+        return Splitter.on(',').omitEmptyStrings().splitToList(nullToEmpty(annotation.allowableValues()));
       }
     };
   }

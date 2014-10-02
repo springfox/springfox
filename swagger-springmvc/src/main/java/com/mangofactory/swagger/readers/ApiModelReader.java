@@ -8,13 +8,12 @@ import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.swagger.models.ModelContext;
 import com.mangofactory.swagger.models.ModelProvider;
-import com.mangofactory.swagger.models.ScalaConverters;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.model.Model;
-import com.wordnik.swagger.model.ModelProperty;
+import com.wordnik.swagger.models.Model;
+import com.wordnik.swagger.models.properties.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,12 +95,12 @@ public class ApiModelReader implements Command<RequestMappingContext> {
         Model targetModelValue = target.get(sourceModelKey);
         Model sourceModelValue = sModelEntry.getValue();
 
-        Map<String, ModelProperty> targetProperties = fromScalaMap(targetModelValue.properties());
-        Map<String, ModelProperty> sourceProperties = fromScalaMap(sourceModelValue.properties());
+        Map<String, Property> targetProperties = fromScalaMap(targetModelValue.properties());
+        Map<String, Property> sourceProperties = fromScalaMap(sourceModelValue.properties());
 
         Set<String> newSourcePropKeys = newHashSet(sourceProperties.keySet());
         newSourcePropKeys.removeAll(targetProperties.keySet());
-        Map<String, ModelProperty> mergedTargetProperties = Maps.newHashMap(targetProperties);
+        Map<String, Property> mergedTargetProperties = Maps.newHashMap(targetProperties);
         for (String newProperty : newSourcePropKeys) {
           mergedTargetProperties.put(newProperty, sourceProperties.get(newProperty));
         }
@@ -111,7 +110,7 @@ public class ApiModelReader implements Command<RequestMappingContext> {
                 targetModelValue.id(),
                 targetModelValue.name(),
                 targetModelValue.qualifiedType(),
-                ScalaConverters.toScalaLinkedHashMap(mergedTargetProperties),
+                mergedTargetProperties,
                 targetModelValue.description(),
                 targetModelValue.baseModel(),
                 targetModelValue.discriminator(),

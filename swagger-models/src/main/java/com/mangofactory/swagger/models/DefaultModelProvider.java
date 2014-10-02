@@ -6,25 +6,19 @@ import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
 import com.wordnik.swagger.annotations.ApiModel;
-import com.wordnik.swagger.model.Model;
-import com.wordnik.swagger.model.ModelProperty;
-import com.wordnik.swagger.model.ModelRef;
+import com.wordnik.swagger.models.Model;
+import com.wordnik.swagger.models.ModelImpl;
+import com.wordnik.swagger.models.properties.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
-import scala.Option;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.models.Collections.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
-import static com.mangofactory.swagger.models.ScalaConverters.*;
-import static com.mangofactory.swagger.models.Types.*;
-import static scala.collection.JavaConversions.*;
 
 
 @Component
@@ -45,33 +39,49 @@ public class DefaultModelProvider implements ModelProvider {
   }
 
   @Override
-  public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
+  public Optional<Model> modelFor(ModelContext modelContext) {
     ResolvedType propertiesHost = alternateTypeProvider.alternateFor(modelContext.resolvedType(resolver));
     if (isContainerType(propertiesHost)
             || propertiesHost.getErasedType().isEnum()
             || Types.isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))) {
       return Optional.absent();
     }
-    Map<String, ModelProperty> properties = newLinkedHashMap();
+    Map<String, Property> properties = newLinkedHashMap();
 
-    int index = 0;
     for (com.mangofactory.swagger.models.property.ModelProperty each : properties(modelContext, propertiesHost)) {
-      properties.put(each.getName(), new ModelProperty(each.typeName(modelContext),
-              each.qualifiedTypeName(),
-              index,
-              each.isRequired(),
-              each.propertyDescription(),
-              each.allowableValues(),
-              itemModelRef(each.getType())
-      ));
+      properties.put(each.getName(), Properties.from(each));
     }
-    return Optional.of(new Model(typeName(propertiesHost),
-            typeName(propertiesHost),
-            simpleQualifiedTypeName(propertiesHost),
-            toScalaLinkedHashMap(properties),
-            modelDescription(propertiesHost), Option.apply(""),
-            Option.<String>empty(),
-            collectionAsScalaIterable(new ArrayList<String>()).toList()));
+    Model model = new ModelImpl()
+            .name(typeName(propertiesHost))
+            .example("");
+    applyDescription(propertiesHost, model);
+    applyRequired(model, properties);
+    addProperties(model, properties);
+
+    return Optional.of(model);
+
+//            typeName(propertiesHost),
+//            typeName(propertiesHost),
+//            simpleQualifiedTypeName(propertiesHost),
+//            properties,
+//            modelDescription(propertiesHost), Optional.of(""),
+//            Optional.<String>absent(),
+//            newArrayList()));
+  }
+
+  private void addProperties(Model model, Map<String, Property> properties) {
+    model.setProperties(properties);
+  }
+
+  private void applyRequired(Model model, Map<String, Property> properties) {
+
+  }
+
+  private void applyDescription(ResolvedType propertiesHost, Model model) {
+    Optional<String> description = modelDescription(propertiesHost);
+    if (description.isPresent()) {
+      model.setDescription(description.get());
+    }
   }
 
   @Override
@@ -80,19 +90,19 @@ public class DefaultModelProvider implements ModelProvider {
     for (ResolvedType resolvedType : dependencyProvider.dependentModels(modelContext)) {
       Optional<Model> model = modelFor(ModelContext.fromParent(modelContext, resolvedType));
       if (model.isPresent()) {
-        models.put(model.get().name(), model.get());
+        models.put(String.valueOf(model.get().getProperties().get("name")), model.get());
       }
     }
     return models;
   }
 
 
-  private Option<String> modelDescription(ResolvedType type) {
+  private Optional<String> modelDescription(ResolvedType type) {
     ApiModel annotation = AnnotationUtils.findAnnotation(type.getErasedType(), ApiModel.class);
     if (annotation != null) {
-      return Option.apply(annotation.description());
+      return Optional.of(annotation.description());
     }
-    return Option.apply("");
+    return Optional.of("");
   }
 
   private Iterable<? extends com.mangofactory.swagger.models.property.ModelProperty> properties(ModelContext context,
@@ -104,25 +114,23 @@ public class DefaultModelProvider implements ModelProvider {
     }
   }
 
-
-  private Option<ModelRef> itemModelRef(ResolvedType type) {
-    if (!isContainerType(type)) {
-      return Option.empty();
-    }
-    ResolvedType collectionElementType = collectionElementType(type);
-    String elementTypeName = typeName(collectionElementType);
-    String qualifiedElementTypeName = simpleQualifiedTypeName(collectionElementType);
-    if (!isBaseType(elementTypeName)) {
-      return Option.apply(new ModelRef(null,
-              Option.apply(elementTypeName), Option.apply(qualifiedElementTypeName)));
-    } else {
-      return Option.apply(new ModelRef(elementTypeName,
-              Option.<String>empty(), Option.apply(qualifiedElementTypeName)));
-    }
-  }
-
-
-  private String id(Type type) {
-    return asResolved(resolver, type).getErasedType().getSimpleName();
-  }
+//
+//  private Optional<RefModel> itemModelRef(ResolvedType type) {
+//    if (!isContainerType(type)) {
+//      return Optional.absent();
+//    }
+//    ResolvedType collectionElementType = collectionElementType(type);
+//    String elementTypeName = typeName(collectionElementType);
+//    String qualifiedElementTypeName = simpleQualifiedTypeName(collectionElementType);
+//    if (!isBaseType(elementTypeName)) {
+//      return Optional.of(new RefModel(null,
+//              Optional.of(elementTypeName), Optional.of(qualifiedElementTypeName)));
+//    }
+//    return Optional.absent();
+//  }
+//
+//
+//  private String id(Type type) {
+//    return asResolved(resolver, type).getErasedType().getSimpleName();
+//  }
 }

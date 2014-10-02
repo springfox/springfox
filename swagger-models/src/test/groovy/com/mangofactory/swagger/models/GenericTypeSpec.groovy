@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.models
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.wordnik.swagger.model.Model
+import com.wordnik.swagger.models.Model
 import spock.lang.Specification
 
 import static com.google.common.base.Strings.*
@@ -16,16 +16,16 @@ class GenericTypeSpec extends Specification{
       Model asReturn = provider.modelFor(returnValue(modelType)).get()
 
     expect:
-      asInput.name() == expectedModelName(modelNamePart)
-      asInput.properties().contains("genericField")
-      def modelProperty = asInput.properties().get("genericField")
+      asInput.properties.name == expectedModelName(modelNamePart)
+      asInput.properties.genericField
+      def modelProperty = asInput.properties.genericField
       modelProperty.get().type() == propertyType
       modelProperty.get().qualifiedType() == qualifiedType
       modelProperty.get().items().isEmpty() == !"List".equals(propertyType)
 
-      asReturn.name() == expectedModelName(modelNamePart)
-      asReturn.properties().contains("genericField")
-      def retModelProperty = asReturn.properties().get("genericField")
+      asReturn.properties.name == expectedModelName(modelNamePart)
+      asReturn.properties.genericField
+      def retModelProperty = asReturn.properties.genericField
       retModelProperty.get().type() == propertyType
       retModelProperty.get().qualifiedType() ==qualifiedType
       retModelProperty.get().items().isEmpty() == !"List".equals(propertyType)
@@ -48,13 +48,13 @@ class GenericTypeSpec extends Specification{
     Model asReturn = provider.modelFor(returnValue(modelType)).get()
 
     expect:
-    asInput.properties().contains("strings")
-    def modelProperty = asInput.properties().get("strings")
+    asInput.properties.strings
+    def modelProperty = asInput.properties.strings
     modelProperty.get().type() == propertyType
 //    modelProperty.get().qualifiedType() == qualifiedType DK TODO: Fix this
 
-    asReturn.properties().contains("strings")
-    def retModelProperty = asReturn.properties().get("strings")
+    asReturn.properties.("strings")
+    def retModelProperty = asReturn.properties.strings
     retModelProperty.get().type() == propertyType
 //    retModelProperty.get().qualifiedType() ==qualifiedType DK TODO: Fix this
 

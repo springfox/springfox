@@ -1,20 +1,14 @@
 package com.mangofactory.swagger.models.property.constructor
-
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.collect.Lists
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.mangofactory.swagger.models.BeanPropertyNamingStrategy
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.models.ModelContext
 import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
-import com.mangofactory.swagger.models.property.BeanPropertyDefinitions
-import com.wordnik.swagger.model.AllowableListValues
-import scala.collection.JavaConversions
+import com.mangofactory.swagger.models.property.field.FieldModelProperty
 import spock.lang.Specification
-import spock.lang.Unroll
 
-import static com.google.common.collect.Lists.newArrayList
-import static com.mangofactory.swagger.models.ScalaConverters.fromOption
 import static com.mangofactory.swagger.models.property.BeanPropertyDefinitions.name
 
 @Mixin([TypesForTestingSupport, ModelPropertySupport])
@@ -27,17 +21,15 @@ class ConstructorModelPropertySpec extends Specification {
       def field = field(typeToTest, fieldName)
       ObjectMapper mapper = new ObjectMapper()
       String propName = name(beanPropertyDefinition, true,  new ObjectMapperBeanPropertyNamingStrategy(mapper))
-      def sut = new com.mangofactory.swagger.models.property.field.FieldModelProperty(propName, field,
-              new AlternateTypeProvider())
+      def sut = new FieldModelProperty(propName, field, new AlternateTypeProvider())
 
     expect:
-      fromOption(sut.propertyDescription()) == description
+      sut.propertyDescription() == description
       sut.required == isRequired
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       if (allowableValues != null) {
-        def values = JavaConversions.collectionAsScalaIterable(newArrayList(allowableValues)).toList()
-        sut.allowableValues() == new AllowableListValues(values, "string")
+        sut.allowableValues() == Lists.newArrayList(allowableValues)
       } else {
         sut.allowableValues() == null
       }

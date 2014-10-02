@@ -1,17 +1,11 @@
 package com.mangofactory.swagger.models.property.field
 
+import com.google.common.collect.Lists
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.mangofactory.swagger.models.BeanPropertyNamingStrategy
 import com.mangofactory.swagger.models.ModelContext
-import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
-import com.wordnik.swagger.model.AllowableListValues
-import scala.collection.JavaConversions
 import spock.lang.Specification
-
-import static com.google.common.collect.Lists.newArrayList
-import static com.mangofactory.swagger.models.ScalaConverters.fromOption
 
 @Mixin([TypesForTestingSupport, ModelPropertySupport])
 class FieldModelPropertySpec extends Specification {
@@ -23,13 +17,12 @@ class FieldModelPropertySpec extends Specification {
       def sut = new FieldModelProperty(fieldName, field, new AlternateTypeProvider())
 
     expect:
-      fromOption(sut.propertyDescription()) == description
+      sut.propertyDescription() == description
       sut.required == isRequired
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       if (allowableValues != null) {
-        def values = JavaConversions.collectionAsScalaIterable(newArrayList(allowableValues)).toList()
-        sut.allowableValues() == new AllowableListValues(values, "string")
+        sut.allowableValues() == Lists.newArrayList(allowableValues)
       } else {
         sut.allowableValues() == null
       }

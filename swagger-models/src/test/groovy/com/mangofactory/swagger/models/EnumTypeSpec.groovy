@@ -2,7 +2,7 @@ package com.mangofactory.swagger.models
 
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.wordnik.swagger.model.Model
+import com.wordnik.swagger.models.Model
 import scala.collection.JavaConversions
 import spock.lang.Specification
 

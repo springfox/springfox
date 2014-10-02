@@ -1,12 +1,12 @@
 ext {
-  swaggerCore = "1.3.10"
+  swaggerCore = "1.5.0-SNAPSHOT"
   spring = "3.2.9.RELEASE"
   scalaLib = "2.10.0"
   groovy = "2.3.7"
   spock = "0.7-groovy-2.0"
   jackson = "2.2.3"
   guava = "15.0"
-  springHateoas = "0.10.0.RELEASE"
+  springHateoas = "0.17.0.RELEASE"
   slf4j = "1.7.7"
   mockito = "1.10.2"
   servlet = "2.5"
@@ -27,7 +27,8 @@ ext {
           ],
 
           swaggerCore   : [
-                  "com.wordnik:swagger-core_2.10:${swaggerCore}"
+                  "com.wordnik:swagger-core:${swaggerCore}",
+                  "com.wordnik:swagger-models:${swaggerCore}"
           ],
 
           spring        : [

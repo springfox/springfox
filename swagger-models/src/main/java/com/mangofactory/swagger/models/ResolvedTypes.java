@@ -6,9 +6,6 @@ import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.wordnik.swagger.model.AllowableListValues;
-import com.wordnik.swagger.model.AllowableValues;
-import scala.collection.JavaConversions;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -119,12 +116,11 @@ public class ResolvedTypes {
   }
 
 
-  public static AllowableValues allowableValues(ResolvedType resolvedType) {
+  public static Optional<List<String>> allowableValues(ResolvedType resolvedType) {
     if (isBaseType(simpleTypeName(resolvedType)) && resolvedType.getErasedType().isEnum()) {
-      List<String> enumValues = getEnumValues(resolvedType.getErasedType());
-      return new AllowableListValues(JavaConversions.collectionAsScalaIterable(enumValues).toList(), "LIST");
+      return Optional.of(getEnumValues(resolvedType.getErasedType()));
     }
-    return null;
+    return Optional.absent();
   }
 
   static List<String> getEnumValues(Class<?> subject) {

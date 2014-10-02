@@ -1,8 +1,8 @@
 package com.mangofactory.swagger.models.property;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.ModelContext;
-import com.wordnik.swagger.model.AllowableValues;
 import scala.Option;
 
 public interface ModelProperty {
@@ -14,7 +14,7 @@ public interface ModelProperty {
 
   String qualifiedTypeName();
 
-  AllowableValues allowableValues();
+  Optional<java.util.List<String>> allowableValues();
 
   Option<String> propertyDescription();
 

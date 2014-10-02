@@ -6,9 +6,9 @@ import com.mangofactory.swagger.models.ModelContext;
 import com.mangofactory.swagger.models.ResolvedTypes;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.wordnik.swagger.model.AllowableListValues;
-import com.wordnik.swagger.model.AllowableValues;
 import scala.Option;
+
+import java.util.List;
 
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 import static com.mangofactory.swagger.models.property.ApiModelProperties.*;
@@ -52,21 +52,17 @@ public abstract class BaseModelProperty implements ModelProperty {
   }
 
   @Override
-  public AllowableValues allowableValues() {
-    Optional<AllowableValues> allowableValues = Optional.fromNullable(ResolvedTypes.allowableValues(getType()));
-    Optional<AllowableListValues> listValues = apiModelProperty.transform(toAllowableList());
+  public Optional<List<String>> allowableValues() {
+    Optional<List<String>> allowableValues = ResolvedTypes.allowableValues(getType());
+    Optional<List<String>> listValues = apiModelProperty.transform(toAllowableList());
     //Preference to inferred allowable values over list values via ApiModelProperty
     if (allowableValues.isPresent()) {
-      return allowableValues.get();
+      return allowableValues;
     }
-    if (allowableValuesIsEmpty(listValues)) {
-      return null;
+    if (listValues.isPresent()) {
+      return listValues;
     }
-    return listValues.orNull();
-  }
-
-  private boolean allowableValuesIsEmpty(Optional<AllowableListValues> listValues) {
-    return !listValues.isPresent() || listValues.get().values().size() == 0;
+    return Optional.absent();
   }
 
   @Override

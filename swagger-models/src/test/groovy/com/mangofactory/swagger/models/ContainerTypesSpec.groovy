@@ -2,8 +2,8 @@ package com.mangofactory.swagger.models
 
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.wordnik.swagger.model.Model
-import com.wordnik.swagger.model.ModelRef
+import com.wordnik.swagger.models.Model
+import com.wordnik.swagger.models.RefModel
 import org.springframework.http.HttpHeaders
 import scala.Option
 import spock.lang.Specification
@@ -38,11 +38,11 @@ class ContainerTypesSpec extends Specification {
 
     expect:
       asInput.name() == "ListsContainer"
-      asInput.properties().contains(property)
+      asInput.properties."$property" != null
       def modelProperty = asInput.properties().get(property)
       modelProperty.get().type() == name
       !modelProperty.get().items().isEmpty()
-      ModelRef item = modelProperty.get().items().get()
+      RefModel item = modelProperty.get().items().get()
       item.type() == itemType
       item.ref() == Option.apply(itemRef)
       item.qualifiedType() == Option.apply(itemQualifiedType)
@@ -76,11 +76,11 @@ class ContainerTypesSpec extends Specification {
 
     expect:
       asInput.name() == "SetsContainer"
-      asInput.properties().contains(property)
+      asInput.properties."$property" != null
       def modelProperty = asInput.properties().get(property)
       modelProperty.get().type() == type
       !modelProperty.get().items().isEmpty()
-      ModelRef item = modelProperty.get().items().get()
+      RefModel item = modelProperty.get().items().get()
       item.type() == itemType
       item.ref() == Option.apply(itemRef)
       item.qualifiedType() == Option.apply(itemQualifiedType)
@@ -113,11 +113,11 @@ class ContainerTypesSpec extends Specification {
 
     expect:
       asInput.name() == "ArraysContainer"
-      asInput.properties().contains(property)
+      asInput.properties."$property" != null
       def modelProperty = asInput.properties().get(property)
       modelProperty.get().type() == type
       !modelProperty.get().items().isEmpty()
-      ModelRef item = modelProperty.get().items().get()
+      RefModel item = modelProperty.get().items().get()
       item.type() == itemType
       item.ref() == Option.apply(itemRef)
       item.qualifiedType() == Option.apply(itemQualifiedType)
@@ -149,12 +149,12 @@ class ContainerTypesSpec extends Specification {
       Model asReturn = provider.modelFor(ModelContext.returnValue(sut)).get()
 
     expect:
-      asInput.name() == "MapsContainer"
-      asInput.properties().contains(property)
+      asInput.properties.name == "MapsContainer"
+      asInput.properties."$property" != null
       def modelProperty = asInput.properties().get(property)
       modelProperty.get().type() == type
       !modelProperty.get().items().isEmpty()
-      ModelRef item = modelProperty.get().items().get()
+      RefModel item = modelProperty.get().items().get()
       item.type() == null
       item.ref() == Option.apply(itemRef)
       item.qualifiedType() == Option.apply(itemQualifiedType)
@@ -191,12 +191,12 @@ class ContainerTypesSpec extends Specification {
       Model asReturn = provider.dependencies(returnContext).get("MapsContainer")
 
     expect:
-      asInput.name() == "MapsContainer"
-      asInput.properties().contains(property)
+      asInput.properties.name == "MapsContainer"
+      asInput.properties."$property"
       def modelProperty = asInput.properties().get(property)
       modelProperty.get().type() == type
       !modelProperty.get().items().isEmpty()
-      ModelRef item = modelProperty.get().items().get()
+      RefModel item = modelProperty.get().items().get()
       item.type() == null
       item.ref() == Option.apply(itemRef)
       item.qualifiedType() == Option.apply(itemQualifiedType)
