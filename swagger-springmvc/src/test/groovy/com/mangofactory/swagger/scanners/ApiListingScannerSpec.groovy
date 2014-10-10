@@ -4,11 +4,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
-import com.mangofactory.swagger.mixins.ApiDescriptionSupport
-import com.mangofactory.swagger.mixins.AuthSupport
-import com.mangofactory.swagger.mixins.ModelProviderSupport
-import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
+import com.mangofactory.swagger.mixins.*
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.ApiDescription
@@ -109,14 +105,14 @@ class ApiListingScannerSpec extends Specification {
     then:
       result == expected
     where:
-      paths                                                            | expected
-      []                                                               | null
-      ['/a/b', '/a/b']                                                 | '/a/b'
-      ['/a/b', '/a/b/c']                                               | '/a/b'
-      ['/a/b', '/a/']                                                  | '/a'
-      ['/a/b', '/a/d/e/f']                                             | '/a'
-      ['/a/b/c/d/e/f', '/a', '/a/b']                                   | '/a'
-      ['/d', '/e', 'f']                                                | '/'
-      ['/a/b/c', '/a/b/c/d/e/f', '/a/b/c/d/e/f/g']                     | '/a/b/c'
+      paths                                        | expected
+      []                                           | null
+      ['/a/b', '/a/b']                             | '/a/b'
+      ['/a/b', '/a/b/c']                           | '/a/b'
+      ['/a/b', '/a/']                              | '/a'
+      ['/a/b', '/a/d/e/f']                         | '/a'
+      ['/a/b/c/d/e/f', '/a', '/a/b']               | '/a'
+      ['/d', '/e', 'f']                            | '/'
+      ['/a/b/c', '/a/b/c/d/e/f', '/a/b/c/d/e/f/g'] | '/a/b/c'
   }
 }

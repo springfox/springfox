@@ -74,7 +74,7 @@ public abstract class SwaggerPathProvider {
     if (!isBlank(apiResourcePrefix)) {
       uriComponentsBuilder.path(apiResourcePrefix);
     }
-    return uriComponentsBuilder.path(operationPath).build().toString();
+    return sanitiseUrl(uriComponentsBuilder.path(operationPath).build().toString());
   }
 
   /**
@@ -87,10 +87,15 @@ public abstract class SwaggerPathProvider {
    * @return the resource listing path
    */
   public String getResourceListingPath(String swaggerGroup, String apiDeclaration) {
-    return agnosticUriComponentBuilder(getDocumentationPath())
+    String candidate = agnosticUriComponentBuilder(getDocumentationPath())
             .pathSegment(swaggerGroup, apiDeclaration)
             .build()
             .toString();
+    return sanitiseUrl(candidate);
+  }
+
+  public String sanitiseUrl(String candidate) {
+    return candidate.replaceAll("(?<!(http:|https:))//", "/");
   }
 
   private UriComponentsBuilder agnosticUriComponentBuilder(String url) {
