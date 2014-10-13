@@ -8,6 +8,8 @@ import com.fasterxml.classmate.members.ResolvedMethod;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
+import com.mangofactory.swagger.models.property.ResolvedMemberProvider;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +17,7 @@ import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.models.property.bean.Accessors.*;
 
 @Component
-public class AccessorsProvider {
+public class AccessorsProvider implements ResolvedMemberProvider<ResolvedMethod> {
 
   private TypeResolver typeResolver;
 
@@ -33,6 +35,7 @@ public class AccessorsProvider {
     };
   }
 
+  @Override
   public com.google.common.collect.ImmutableList<ResolvedMethod> in(ResolvedType resolvedType) {
     MemberResolver resolver = new MemberResolver(typeResolver);
     resolver.setIncludeLangObject(false);
