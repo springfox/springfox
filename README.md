@@ -386,6 +386,10 @@ By default, a number of Spring's handler method arguments are ignored. See: com.
 - [Release process](https://github.com/martypitt/swagger-springmvc/issues/422)
 - Contributing - please see the [wiki](https://github.com/martypitt/swagger-springmvc/wiki) for some guidelines
  
+## Support
+
+If you find issues or bugs please use the github issue [tracker] (https://github.com/martypitt/swagger-springmvc/issues) 
+
 License
 -------
 
