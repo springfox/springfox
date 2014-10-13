@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedMember;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.base.Optional;
+import com.google.common.collect.Iterables;
 import com.mangofactory.swagger.models.BeanPropertyNamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.property.BeanPropertyDefinitions;
@@ -76,7 +78,7 @@ public abstract class AbstractModelPropertyProvider<T extends ResolvedMember> im
         try {
           AnnotatedMember annotatedMember = propertyDefinition.getPrimaryMember();
           if (isApplicable(resolvedMember, annotatedMember)) {
-            addModelProperties(candidates, resolvedMember, annotatedMember, jacksonProperty, forSerialization);
+            addModelProperties(candidates, resolvedMember, jacksonProperty, forSerialization, annotatedMember);
           }
         } catch (Exception e) {
           LOG.warn(e.getMessage());
@@ -91,8 +93,33 @@ public abstract class AbstractModelPropertyProvider<T extends ResolvedMember> im
 
   protected abstract boolean isApplicable(T resolvedMember, AnnotatedMember annotatedMember);
 
-  protected abstract void addModelProperties(List<ModelProperty> candidates, T resolvedMember, AnnotatedMember annotatedMember,
+  private void addModelProperties(List<ModelProperty> candidates, T resolvedMember, 
+      Optional<BeanPropertyDefinition> jacksonProperty, boolean forSerialization, AnnotatedMember annotatedMember) {
+    
+    if (isUnwrapped(annotatedMember)) {
+      final ResolvedType unwrappedType = getUnwrappedType(resolvedMember, forSerialization);
+      Iterables.addAll(candidates, forSerialization ? propertiesForSerialization(unwrappedType) : propertiesForDeserialization(unwrappedType));
+    } else {
+      addModelProperty(candidates, resolvedMember, jacksonProperty, forSerialization);
+    }
+  }
+
+  private ResolvedType getUnwrappedType(T resolvedMember, boolean forSerialization) {
+    return forSerialization ? getUnwrappedTypeForSerialization(resolvedMember) : getUnwrappedTypeForDeserialization(resolvedMember);
+  }
+
+  private ResolvedType getUnwrappedTypeForSerialization(T resolvedMember) {
+    return resolvedMember.getType();
+  }
+  
+  protected abstract ResolvedType getUnwrappedTypeForDeserialization(T resolvedMember);
+
+  protected abstract void addModelProperty(List<ModelProperty> candidates, T resolvedMember,
       Optional<BeanPropertyDefinition> jacksonProperty, boolean forSerialization);
+
+  private boolean isUnwrapped(AnnotatedMember annotatedMember) {
+    return annotatedMember.hasAnnotation(JsonUnwrapped.class) && annotatedMember.getAnnotation(JsonUnwrapped.class).enabled();
+  }
 
   @Override
   public void setObjectMapper(ObjectMapper objectMapper) {

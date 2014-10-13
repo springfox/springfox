@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedField;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
@@ -39,10 +40,15 @@ public class FieldModelPropertyProvider extends AbstractModelPropertyProvider<Re
   }
   
   @Override
-  protected void addModelProperties(List<ModelProperty> candidates, ResolvedField resolvedField,
-      AnnotatedMember annotatedMember, Optional<BeanPropertyDefinition> jacksonProperty, boolean forSerialization) {
+  protected void addModelProperty(List<ModelProperty> candidates, ResolvedField resolvedField,
+      Optional<BeanPropertyDefinition> jacksonProperty, boolean forSerialization) {
     String fieldName = name(jacksonProperty.get(), true, namingStrategy);
     candidates.add(new FieldModelProperty(fieldName, resolvedField, alternateTypeProvider));
+  }
+
+  @Override
+  protected ResolvedType getUnwrappedTypeForDeserialization(ResolvedField resolvedField) {
+    return resolvedField.getType();
   }
 
   @Override

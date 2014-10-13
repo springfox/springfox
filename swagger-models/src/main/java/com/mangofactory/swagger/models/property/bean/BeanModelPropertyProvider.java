@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
@@ -44,9 +45,14 @@ public class BeanModelPropertyProvider extends AbstractModelPropertyProvider<Res
   }
 
   @Override
-  protected void addModelProperties(List<ModelProperty> candidates, ResolvedMethod resolvedMethod,
-      AnnotatedMember annotatedMember, Optional<BeanPropertyDefinition> jacksonProperty, boolean forSerialization) {
+  protected void addModelProperty(List<ModelProperty> candidates, ResolvedMethod resolvedMethod,
+      Optional<BeanPropertyDefinition> jacksonProperty, boolean forSerialization) {
     candidates.add(beanModelProperty(resolvedMethod, jacksonProperty, forSerialization));
+  }
+  
+  @Override
+  protected ResolvedType getUnwrappedTypeForDeserialization(ResolvedMethod resolvedMethod) {
+    return resolvedMethod.getArgumentType(0);
   }
 
   private String methodName(AnnotatedMember member) {
