@@ -49,7 +49,7 @@ public class DefaultModelProvider implements ModelProvider {
     Map<String, Property> properties = newLinkedHashMap();
 
     for (com.mangofactory.swagger.models.property.ModelProperty each : properties(modelContext, propertiesHost)) {
-      properties.put(each.getName(), Properties.from(each));
+      properties.put(each.getName(), SimpleProperties.from(each));
     }
     Model model = new ModelImpl()
             .name(typeName(propertiesHost))
@@ -59,14 +59,6 @@ public class DefaultModelProvider implements ModelProvider {
     addProperties(model, properties);
 
     return Optional.of(model);
-
-//            typeName(propertiesHost),
-//            typeName(propertiesHost),
-//            simpleQualifiedTypeName(propertiesHost),
-//            properties,
-//            modelDescription(propertiesHost), Optional.of(""),
-//            Optional.<String>absent(),
-//            newArrayList()));
   }
 
   private void addProperties(Model model, Map<String, Property> properties) {
@@ -74,7 +66,7 @@ public class DefaultModelProvider implements ModelProvider {
   }
 
   private void applyRequired(Model model, Map<String, Property> properties) {
-
+    //DK TODO: flush out the implementation
   }
 
   private void applyDescription(ResolvedType propertiesHost, Model model) {

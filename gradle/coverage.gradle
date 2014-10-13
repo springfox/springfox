@@ -65,4 +65,4 @@ jacocoTestReport {
     }
   }
 }
-check.dependsOn jacocoTestReport
+check.dependsOn 'jacocoTestReport'

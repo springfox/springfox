@@ -111,17 +111,18 @@ task preRelease << {
 }
 
 afterEvaluate { project ->
-  project.tasks.findAll { it.name.contains('ToBintrayRepository') }.each {
-    it.dependsOn preRelease
-  }
+  project.tasks
+    .findAll { it.name.contains('ToBintrayRepository') }
+    .each { it.dependsOn preRelease }
 }
 
-task ciPublish {
-  if (project.version.contains('SNAPSHOT')) {
+publish {
+  def isSnapshotBuild = String.valueOf(project.version).contains('SNAPSHOT')
+  if (isSnapshotBuild) {
     logger.quiet("Task :ciPublish configured to publish SANPSHOT artifacts [${project.version}]")
-    dependsOn publish
   } else {
     logger.quiet("Task :ciPublish will not publish artifacts [${project.version}] as this is not a SNAPSHOT version")
   }
+  enabled = isSnapshotBuild
 }
 

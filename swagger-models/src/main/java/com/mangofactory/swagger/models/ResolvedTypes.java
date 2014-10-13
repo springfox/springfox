@@ -40,7 +40,7 @@ public class ResolvedTypes {
 
   private static String optionalContainerTypeQualifierForReturn(ResolvedType type) {
     if (type.isArray()) {
-      return String.format("[%s]", typeName(type.getArrayElementType()));
+      return String.format("«%s»", typeName(type.getArrayElementType()));
     }
 
     List<ResolvedType> typeParameters = type.getTypeParameters();
@@ -49,10 +49,7 @@ public class ResolvedTypes {
       return "";
     }
     String qualifier = innerTypeName(typeParameters.get(0));
-    if (Types.isBaseType(qualifier)) {
-      return "";
-    }
-    return String.format("[%s]", qualifier);
+    return String.format("«%s»", qualifier);
   }
 
 

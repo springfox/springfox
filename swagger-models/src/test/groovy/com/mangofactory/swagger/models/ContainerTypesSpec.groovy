@@ -4,6 +4,10 @@ import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.wordnik.swagger.models.Model
 import com.wordnik.swagger.models.RefModel
+import com.wordnik.swagger.models.properties.ArrayProperty
+import com.wordnik.swagger.models.properties.IntegerProperty
+import com.wordnik.swagger.models.properties.RefProperty
+import com.wordnik.swagger.models.properties.StringProperty
 import org.springframework.http.HttpHeaders
 import scala.Option
 import spock.lang.Specification
@@ -19,14 +23,12 @@ class ContainerTypesSpec extends Specification {
 
     where:
       containerType                   | name
-      genericListOfSimpleType()       | "List[SimpleType]"
-      genericListOfInteger()          | "List"
+      genericListOfSimpleType()       | "List«SimpleType»"
+      genericListOfInteger()          | "List«int»"
       erasedList()                    | "List"
-      genericSetOfSimpleType()        | "Set[SimpleType]"
-      genericSetOfInteger()           | "Set"
+      genericSetOfSimpleType()        | "Set«SimpleType»"
+      genericSetOfInteger()           | "Set«int»"
       erasedSet()                     | "Set"
-      genericClassWithGenericField()  | "GenericType«ResponseEntity«SimpleType»»"
-
   }
 
   def "Model properties of type List, are inferred correctly"() {
@@ -37,33 +39,37 @@ class ContainerTypesSpec extends Specification {
       Model asReturn = provider.modelFor(ModelContext.returnValue(sut)).get()
 
     expect:
-      asInput.name() == "ListsContainer"
+      asInput.name == "ListsContainer"
       asInput.properties."$property" != null
-      def modelProperty = asInput.properties().get(property)
-      modelProperty.get().type() == name
-      !modelProperty.get().items().isEmpty()
-      RefModel item = modelProperty.get().items().get()
-      item.type() == itemType
-      item.ref() == Option.apply(itemRef)
-      item.qualifiedType() == Option.apply(itemQualifiedType)
+      ArrayProperty modelProperty = asInput.properties.get(property)
+      modelProperty.type == "array"
+      def item = modelProperty.items
+      assert item.items.class == itemType
+      if (itemType == RefProperty) {
+        assert itemName == item.items.simpleRef
+      } else {
+        assert itemName == item.items.name
+      }
 
-      asReturn.name() == "ListsContainer"
-      asReturn.properties().contains(property)
-      def retModelProperty = asReturn.properties().get(property)
-      retModelProperty.get().type() == name
-      !retModelProperty.get().items().isEmpty()
-      def retItem = retModelProperty.get().items().get()
-      retItem.type() == itemType
-      retItem.ref() == Option.apply(itemRef)
-      retItem.qualifiedType() == Option.apply(itemQualifiedType)
+      asReturn.name == "ListsContainer"
+      asInput.properties."$property" != null
+      def retModelProperty = asReturn.properties.get(property)
+      retModelProperty.type == "array"
+      def retItem = modelProperty.items
+      assert retItem.items.class == itemType
+      if (itemType == RefProperty) {
+        assert itemName == retItem.items.simpleRef
+      } else {
+        assert itemName == retItem.items.name
+      }
 
     where:
-    property          | name                  | itemType        | itemRef            | itemQualifiedType
-    "complexTypes"    | "List"                | null            | "ComplexType"      | "com.mangofactory.swagger.models.ComplexType"
-    "enums"           | "List"                | "string"        | null               | "com.mangofactory.swagger.models.ExampleEnum"
-    "aliasOfIntegers" | "List"                | "int"           | null               | "java.lang.Integer"
-    "strings"         | "List"                | "string"        | null               | "java.lang.String"
-    "objects"         | "List"                | "object"        | null               | "java.lang.Object"
+    property          | itemType        | itemName
+    "complexTypes"    | RefProperty     | "ComplexType"
+    "enums"           | StringProperty  | "string"
+    "aliasOfIntegers" | IntegerProperty | "number"
+    "strings"         | StringProperty  | "string"
+//    "objects"         | ObjectProperty  | null
   }
 
 
