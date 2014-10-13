@@ -98,14 +98,18 @@ public abstract class AbstractModelPropertyProvider<T extends ResolvedMember> im
     
     if (isUnwrapped(annotatedMember)) {
       final ResolvedType unwrappedType = getUnwrappedType(resolvedMember, forSerialization);
-      Iterables.addAll(candidates, forSerialization ? propertiesForSerialization(unwrappedType) : propertiesForDeserialization(unwrappedType));
+      Iterables.addAll(candidates, forSerialization 
+          ? propertiesForSerialization(unwrappedType) 
+          : propertiesForDeserialization(unwrappedType));
     } else {
       addModelProperty(candidates, resolvedMember, jacksonProperty, forSerialization);
     }
   }
 
   private ResolvedType getUnwrappedType(T resolvedMember, boolean forSerialization) {
-    return forSerialization ? getUnwrappedTypeForSerialization(resolvedMember) : getUnwrappedTypeForDeserialization(resolvedMember);
+    return forSerialization 
+        ? getUnwrappedTypeForSerialization(resolvedMember) 
+        : getUnwrappedTypeForDeserialization(resolvedMember);
   }
 
   private ResolvedType getUnwrappedTypeForSerialization(T resolvedMember) {
