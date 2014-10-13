@@ -1,7 +1,5 @@
 # Swagger-springmvc
-<!--
 [ ![Download](https://api.bintray.com/packages/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/images/download.png) ](https://bintray.com/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/_latestVersion)
--->
 
 | Unit  | Functional   | Coverage   |
 |---|---|---|
@@ -23,16 +21,22 @@ web mvc and spring-boot.
 ### Repositories
 
 #### Release version
-
-Or maven central: http://repo1.maven.org/maven2/
-
 __Maven__
 
 ```xml
+
+<repositories>
+    <repository>
+      <id>jcenter-release</id>
+      <name>jcenter</name>
+      <url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
+    </repository>
+</repositories>
+
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.8</version>
+    <version>0.9.0</version>
 </dependency>
 
 ```
@@ -40,7 +44,12 @@ __Maven__
 __Gradle__
 
 ```groovy
-compile "com.mangofactory:swagger-springmvc:0.8.8"
+
+repositories {
+    jcenter()
+}
+
+compile "com.mangofactory:swagger-springmvc:0.9.0"
 ```
 
 #### Snapshot version
@@ -49,23 +58,28 @@ __Maven__
 ```xml
 <repositories>
     <repository>
-      <id>sonatype-snapshots</id>
-      <name>Sonatype</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      <id>jcenter-snapshots</id>
+      <name>jcenter</name>
+      <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
     </repository>
 </repositories>
 
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.8.9-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
 </dependency>
 ```
 
 __Gradle__
 
 ```groovy
-compile "com.mangofactory:swagger-springmvc:0.8.9-SNAPSHOT"
+
+repositories {
+   maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+}
+
+compile "com.mangofactory:swagger-springmvc:0.9.0-SNAPSHOT"
 ```
 
 ### Usage (Quick guide)
