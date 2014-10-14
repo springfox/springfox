@@ -23,7 +23,7 @@ public class ResolvedTypes {
   }
 
   public static String typeName(ResolvedType type) {
-    if (isContainerType(type)) {
+    if (isCollectionType(type)) {
       return containerType(type);
     }
     return innerTypeName(type);
@@ -31,7 +31,7 @@ public class ResolvedTypes {
 
   //DK TODO: Eliminate this repetition
   public static String responseTypeName(ResolvedType type) {
-    if (isContainerType(type)) {
+    if (isCollectionType(type)) {
       return String.format("%s%s", containerType(type), optionalContainerTypeQualifierForReturn(type));
     }
     return innerTypeName(type);

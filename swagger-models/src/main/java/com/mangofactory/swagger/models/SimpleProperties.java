@@ -6,7 +6,6 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.mangofactory.swagger.models.property.BooleanFactory;
 import com.mangofactory.swagger.models.property.DateFactory;
-import com.mangofactory.swagger.models.property.DefaultPropertyFactory;
 import com.mangofactory.swagger.models.property.ModelProperty;
 import com.mangofactory.swagger.models.property.NumericFactory;
 import com.mangofactory.swagger.models.property.StringFactory;
@@ -21,8 +20,11 @@ import com.wordnik.swagger.models.properties.StringProperty;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 public class SimpleProperties {
 
@@ -48,31 +50,29 @@ public class SimpleProperties {
           .put("byte", new StringFactory())
           .build();
 
-  public static Property from(ModelProperty property) {
-    return Optional
-            .fromNullable(propertyFactory.get(property.qualifiedTypeName()))
-            .or(new DefaultPropertyFactory())
-            .apply(property);
-
+  public static Optional<Property> from(ModelProperty property) {
+    if (propertyFactory.get(property.qualifiedTypeName()) == null) {
+      return Optional.absent();
+    }
+    return Optional.fromNullable(propertyFactory.get(property.qualifiedTypeName()).apply(property));
   }
 
-  public static Property baseTypeFrom(ResolvedType property) {
+  public static Property fromType(ResolvedType property) {
     Property defaultProperty = new ObjectProperty();
-    if (property.getErasedType().equals(Integer.class)
-            || property.getErasedType().equals(Short.class)) {
+    if (property.getErasedType().equals(Integer.class) || property.getErasedType().equals(Short.class)) {
       return new IntegerProperty();
     } else if (property.getErasedType().equals(Float.class)) {
       return new FloatProperty();
-    } else if (property.getErasedType().equals(Double.class)
-            || property.getErasedType().equals(BigDecimal.class)) {
+    } else if (property.getErasedType().equals(Double.class) || property.getErasedType().equals(BigDecimal.class)) {
       return new DoubleProperty();
-    } else if (property.getErasedType().equals(Long.class)
-            || property.getErasedType().equals(BigInteger.class)) {
+    } else if (property.getErasedType().equals(Long.class) || property.getErasedType().equals(BigInteger.class)) {
       return new LongProperty();
     } else if (property.getErasedType().equals(Boolean.class)) {
       return new BooleanProperty();
-    } else if (property.getErasedType().equals(String.class) || property.getErasedType().equals(Byte.class)) {
-      return new StringProperty();
+    } else if (property.getErasedType().equals(String.class)
+            || property.getErasedType().equals(Byte.class)
+            || property.getErasedType().isEnum()) {
+      return new StringProperty()._enum(allowableValues(property).or(new ArrayList<String>()));
     } else if (property.getErasedType().equals(Date.class)) {
       return new DateProperty();
     }
