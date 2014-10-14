@@ -59,31 +59,55 @@ public class SimpleProperties {
 
   public static Property fromType(ResolvedType property) {
     Property defaultProperty = new ObjectProperty();
-    if (property.getErasedType().equals(Integer.class)
-            || property.getErasedType().equals(Short.class)
-            || property.getErasedType().equals(Integer.TYPE)
-            || property.getErasedType().equals(Short.TYPE)) {
+    if (IsInt32(property)) {
       return new IntegerProperty();
-    } else if (property.getErasedType().equals(Float.class)
-            || property.getErasedType().equals(Float.TYPE)) {
+    } else if (isFloat(property)) {
       return new FloatProperty();
-    } else if (property.getErasedType().equals(Double.class)
-            || property.getErasedType().equals(BigDecimal.class)
-            || property.getErasedType().equals(Double.TYPE)) {
+    } else if (isDouble(property)) {
       return new DoubleProperty();
-    } else if (property.getErasedType().equals(Long.class) || property.getErasedType().equals(Long.TYPE)
-            || property.getErasedType().equals(BigInteger.class)) {
+    } else if (isLong(property)) {
       return new LongProperty();
-    } else if (property.getErasedType().equals(Boolean.class)
-            || property.getErasedType().equals(Boolean.TYPE) ) {
+    } else if (isBoolean(property)) {
       return new BooleanProperty();
-    } else if (property.getErasedType().equals(String.class)
-            || property.getErasedType().equals(Byte.class)
-            || property.getErasedType().isEnum()) {
+    } else if (isString(property)) {
       return new StringProperty()._enum(allowableValues(property).or(new ArrayList<String>()));
     } else if (property.getErasedType().equals(Date.class)) {
       return new DateProperty();
     }
     return defaultProperty;
+  }
+
+  private static boolean isString(ResolvedType property) {
+    return property.getErasedType().equals(String.class)
+            || property.getErasedType().equals(Byte.class)
+            || property.getErasedType().isEnum();
+  }
+
+  private static boolean isBoolean(ResolvedType property) {
+    return property.getErasedType().equals(Boolean.class)
+            || property.getErasedType().equals(Boolean.TYPE);
+  }
+
+  private static boolean isLong(ResolvedType property) {
+    return property.getErasedType().equals(Long.class) || property.getErasedType().equals(Long.TYPE)
+            || property.getErasedType().equals(BigInteger.class);
+  }
+
+  private static boolean isDouble(ResolvedType property) {
+    return property.getErasedType().equals(Double.class)
+            || property.getErasedType().equals(BigDecimal.class)
+            || property.getErasedType().equals(Double.TYPE);
+  }
+
+  private static boolean isFloat(ResolvedType property) {
+    return property.getErasedType().equals(Float.class)
+            || property.getErasedType().equals(Float.TYPE);
+  }
+
+  private static boolean IsInt32(ResolvedType property) {
+    return property.getErasedType().equals(Integer.class)
+            || property.getErasedType().equals(Short.class)
+            || property.getErasedType().equals(Integer.TYPE)
+            || property.getErasedType().equals(Short.TYPE);
   }
 }

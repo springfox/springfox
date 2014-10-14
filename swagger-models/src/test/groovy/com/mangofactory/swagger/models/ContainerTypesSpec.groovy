@@ -122,6 +122,10 @@ class ContainerTypesSpec extends Specification {
       assert modelProperty.items.class == itemClass
       if (modelProperty.items.class == RefProperty) {
         assert itemType == ((RefProperty) modelProperty.items).$ref
+      } else if (modelProperty.items.class == ArrayProperty) {
+        assert "array" == ((ArrayProperty) modelProperty.items).type
+        assert itemType == ((ArrayProperty) modelProperty.items).items.type
+        assert format == ((ArrayProperty) modelProperty.items).items.format
       } else {
         assert itemType == modelProperty.items.type
       }
@@ -133,6 +137,8 @@ class ContainerTypesSpec extends Specification {
       assert modelProperty.items.class == itemClass
       if (modelProperty.items.class == RefProperty) {
         assert itemType == ((RefProperty) modelProperty.items).$ref
+      } else if (modelProperty.items.class == ArrayProperty) {
+        assert "array" == ((ArrayProperty) modelProperty.items).type
       } else {
         assert itemType == modelProperty.items.type
         assert format == modelProperty.items.format
@@ -157,10 +163,11 @@ class ContainerTypesSpec extends Specification {
       "booleans"        | BooleanProperty | "boolean"     | null
       "booleanObjs"     | BooleanProperty | "boolean"     | null
       "dates"           | DateProperty    | "string"      | "date"
+      "intArrayOfArrays"| ArrayProperty   | "integer"     | "int32"
   }
 
 
-  def "Model properties of type Map are inferred correctly"() {
+  def "Model properties of tgcbype Map are inferred correctly"() {
     given:
       def sut = mapsContainer()
       def provider = defaultModelProvider()

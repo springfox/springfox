@@ -19,9 +19,10 @@ public class ArraysContainer {
   private Date[] dates;
   private boolean[] booleans;
   private Boolean[] booleanObjs;
+  private int[][] intArrayOfArrays;
 
   private Object[] objects;
-
+  private int nonArrayInt;
   ArraysContainer(ComplexType[] complexTypes) {
     this.complexTypes = complexTypes;
   }
@@ -160,6 +161,14 @@ public class ArraysContainer {
 
   public void setBooleanObjs(Boolean[] booleanObjs) {
     this.booleanObjs = booleanObjs;
+  }
+
+  public int[][] getIntArrayOfArrays() {
+    return intArrayOfArrays;
+  }
+
+  public void setIntArrayOfArrays(int[][] intArrayOfArrays) {
+    this.intArrayOfArrays = intArrayOfArrays;
   }
 }
 
