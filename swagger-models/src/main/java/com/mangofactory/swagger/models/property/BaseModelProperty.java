@@ -73,7 +73,7 @@ public abstract class BaseModelProperty implements ModelProperty {
   @Override
   public Optional<String> propertyDescription() {
     String description = getApiModelProperty().transform(toDescription()).orNull();
-    return Optional.of(description);
+    return Optional.fromNullable(description);
   }
 
   protected Optional<ApiModelProperty> getApiModelProperty() {
