@@ -59,15 +59,23 @@ public class SimpleProperties {
 
   public static Property fromType(ResolvedType property) {
     Property defaultProperty = new ObjectProperty();
-    if (property.getErasedType().equals(Integer.class) || property.getErasedType().equals(Short.class)) {
+    if (property.getErasedType().equals(Integer.class)
+            || property.getErasedType().equals(Short.class)
+            || property.getErasedType().equals(Integer.TYPE)
+            || property.getErasedType().equals(Short.TYPE)) {
       return new IntegerProperty();
-    } else if (property.getErasedType().equals(Float.class)) {
+    } else if (property.getErasedType().equals(Float.class)
+            || property.getErasedType().equals(Float.TYPE)) {
       return new FloatProperty();
-    } else if (property.getErasedType().equals(Double.class) || property.getErasedType().equals(BigDecimal.class)) {
+    } else if (property.getErasedType().equals(Double.class)
+            || property.getErasedType().equals(BigDecimal.class)
+            || property.getErasedType().equals(Double.TYPE)) {
       return new DoubleProperty();
-    } else if (property.getErasedType().equals(Long.class) || property.getErasedType().equals(BigInteger.class)) {
+    } else if (property.getErasedType().equals(Long.class) || property.getErasedType().equals(Long.TYPE)
+            || property.getErasedType().equals(BigInteger.class)) {
       return new LongProperty();
-    } else if (property.getErasedType().equals(Boolean.class)) {
+    } else if (property.getErasedType().equals(Boolean.class)
+            || property.getErasedType().equals(Boolean.TYPE) ) {
       return new BooleanProperty();
     } else if (property.getErasedType().equals(String.class)
             || property.getErasedType().equals(Byte.class)

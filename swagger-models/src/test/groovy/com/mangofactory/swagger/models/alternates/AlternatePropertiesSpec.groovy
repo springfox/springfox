@@ -2,36 +2,32 @@ package com.mangofactory.swagger.models.alternates
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelProvider
-import com.wordnik.swagger.models.Model
+import com.wordnik.swagger.models.ModelImpl
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.models.ModelContext.*
+import static com.mangofactory.swagger.models.ModelContext.inputParam
 
 @Mixin([ModelProviderSupport, TypesForTestingSupport])
 class AlternatePropertiesSpec extends Specification {
   def "Nested properties that have alternate types defined are rendered correctly" () {
     given:
       ModelProvider modelProvider = providerThatSubstitutesLocalDateWithString()
-      Model model = modelProvider.modelFor(inputParam(typeWithAlternateProperty())).get()
+      ModelImpl model = modelProvider.modelFor(inputParam(typeWithAlternateProperty())).get()
     expect:
-      model.properties.name == "TypeWithAlternateProperty"
+      model.name == "TypeWithAlternateProperty"
       model.properties.localDate
       def modelProperty = model.properties.localDate
-      modelProperty.get().type() == "string"
-      modelProperty.get().qualifiedType() == "java.lang.String"
-      modelProperty.get().items().isEmpty()
+      modelProperty.type == "string"
   }
 
   def "ResponseEntity«Void» renders correctly when an alternate type is provided" () {
     given:
       ModelProvider modelProvider = providerThatSubstitutesResponseEntityOfVoid()
-      Model model = modelProvider.modelFor(inputParam(typeWithResponseEntityOfVoid())).get()
+      ModelImpl model = modelProvider.modelFor(inputParam(typeWithResponseEntityOfVoid())).get()
     expect:
-      model.properties.name == "GenericType«ResponseEntity«Void»»"
+      model.name == "GenericType«ResponseEntity«Void»»"
       model.properties.genericField != null
       def modelProperty = model.properties.genericField
-      modelProperty.get().type() == "Void"
-      modelProperty.get().qualifiedType() == "java.lang.Void"
-      modelProperty.get().items().isEmpty()
+      modelProperty.ref == "Void"
   }
 }

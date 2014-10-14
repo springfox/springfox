@@ -32,7 +32,7 @@ class ParameterDataTypeReaderSpec extends Specification {
 
       SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings()
       SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
-      swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver());
+      swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider();
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
 
     when:

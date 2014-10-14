@@ -13,7 +13,7 @@ import static com.google.common.collect.Sets.*;
 
 public class Types {
   private static final Set<String> baseTypes
-          = newHashSet("int", "date", "string", "double", "float", "boolean", "byte", "object", "long");
+          = newHashSet("int", "date-time", "string", "double", "float", "boolean", "byte", "object", "long");
   private static final Map<Type, String> typeNameLookup = ImmutableMap.<Type, String>builder()
           .put(Long.TYPE, "long")
           .put(Short.TYPE, "int")
@@ -23,6 +23,7 @@ public class Types {
           .put(Byte.TYPE, "byte")
           .put(Boolean.TYPE, "boolean")
           .put(Character.TYPE, "string")
+          .put(Void.TYPE, "Void")
 
           .put(Date.class, "date-time")
           .put(String.class, "string")
@@ -36,6 +37,7 @@ public class Types {
           .put(Byte.class, "byte")
           .put(BigDecimal.class, "float")
           .put(BigInteger.class, "long")
+          .put(Void.class, "Void")
           .build();
 
   public static String typeNameFor(Type type) {

@@ -1,5 +1,5 @@
 package com.mangofactory.swagger.readers.operation
-import com.fasterxml.classmate.TypeResolver
+
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
@@ -15,7 +15,7 @@ class OperationResponseClassReaderSpec extends Specification {
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
       def settings = new SwaggerGlobalSettings()
       SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
-    settings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver())
+    settings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider()
 
     context.put("swaggerGlobalSettings", settings)
       OperationResponseClassReader operationResponseClassReader = new OperationResponseClassReader()

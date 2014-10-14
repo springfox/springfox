@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.models
-
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
@@ -10,25 +9,10 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.mangofactory.swagger.models.ResolvedTypes.asResolved
-import static com.mangofactory.swagger.models.alternates.Alternates.newMapRule
 import static com.mangofactory.swagger.models.alternates.Alternates.newRule
 
 @Mixin(TypesForTestingSupport)
 class AlternateTypeProviderSpec extends Specification {
-  def "Alternate types are provided for specified map types"() {
-    given:
-      AlternateTypeProvider sut = new AlternateTypeProvider()
-      sut.addRule(rule)
-    expect:
-      sut.alternateFor(hashMap(String, String)) == expectedType
-
-    where:
-      rule                                   | expectedType
-      newMapRule(String, String)             | genericMap(List, String, String)
-      newMapRule(WildcardType, String)       | genericMap(List, String, String)
-      newMapRule(String, WildcardType)       | genericMap(List, String, String)
-      newMapRule(WildcardType, WildcardType) | genericMap(List, String, String)
-  }
 
   @Unroll
   def "Alternate types are provided for specified types"() {

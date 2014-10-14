@@ -1,13 +1,12 @@
 package com.mangofactory.swagger.models
+
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.wordnik.swagger.models.ModelImpl
-import com.wordnik.swagger.models.properties.ArrayProperty
-import com.wordnik.swagger.models.properties.IntegerProperty
-import com.wordnik.swagger.models.properties.RefProperty
-import com.wordnik.swagger.models.properties.StringProperty
+import com.wordnik.swagger.models.properties.*
 import org.springframework.http.HttpHeaders
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static com.mangofactory.swagger.models.ResolvedTypes.responseTypeName
 
@@ -107,6 +106,7 @@ class ContainerTypesSpec extends Specification {
       "objects"         | ObjectProperty  | "object"
   }
 
+  @Unroll("#property")
   def "Model properties of type Arrays, are inferred correctly"() {
     given:
       def sut = typeWithArrays()
@@ -135,16 +135,30 @@ class ContainerTypesSpec extends Specification {
         assert itemType == ((RefProperty) modelProperty.items).$ref
       } else {
         assert itemType == modelProperty.items.type
+        assert format == modelProperty.items.format
       }
 
     where:
-      property          | itemClass       | itemType
-      "complexTypes"    | RefProperty     | "ComplexType"
-      "enums"           | StringProperty  | "string"
-      "aliasOfIntegers" | IntegerProperty | "integer"
-      "strings"         | StringProperty  | "string"
-      "objects"         | ObjectProperty  | "object"
+      property          | itemClass       | itemType      | format
+      "complexTypes"    | RefProperty     | "ComplexType" | ""
+      "enums"           | StringProperty  | "string"      | null
+      "aliasOfIntegers" | IntegerProperty | "integer"     | "int32"
+      "strings"         | StringProperty  | "string"      | null
+      "objects"         | ObjectProperty  | "object"      | null
+      "integerObjs"     | IntegerProperty | "integer"     | "int32"
+      "longs"           | LongProperty    | "integer"     | "int64"
+      "longObjs"        | LongProperty    | "integer"     | "int64"
+      "shorts"          | IntegerProperty | "integer"     | "int32"
+      "shortObjs"       | IntegerProperty | "integer"     | "int32"
+      "floats"          | FloatProperty   | "number"      | "float"
+      "floatObjs"       | FloatProperty   | "number"      | "float"
+      "doubles"         | DoubleProperty  | "number"      | "double"
+      "doubleObjs"      | DoubleProperty  | "number"      | "double"
+      "booleans"        | BooleanProperty | "boolean"     | null
+      "booleanObjs"     | BooleanProperty | "boolean"     | null
+      "dates"           | DateProperty    | "string"      | "date"
   }
+
 
   def "Model properties of type Map are inferred correctly"() {
     given:

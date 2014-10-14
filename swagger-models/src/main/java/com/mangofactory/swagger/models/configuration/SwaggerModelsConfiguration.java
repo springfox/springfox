@@ -17,16 +17,7 @@ public class SwaggerModelsConfiguration {
 
   @Bean(name = "defaultAlternateTypeProvider")
   @Autowired
-  public AlternateTypeProvider alternateTypeProvider(TypeResolver typeResolver) {
-    AlternateTypeProvider alternateTypeProvider = new AlternateTypeProvider();
-//    alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class), typeResolver.resolve(Object.class)));
-//    alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, String.class, Object.class),
-//            typeResolver.resolve(Object.class)));
-//    alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, Object.class, Object.class),
-//            typeResolver.resolve(Object.class)));
-//    alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, String.class, String.class),
-//            typeResolver.resolve(Object.class)));
-//    alternateTypeProvider.addRule(newMapRule(WildcardType.class, WildcardType.class));
-    return alternateTypeProvider;
+  public AlternateTypeProvider alternateTypeProvider() {
+    return new AlternateTypeProvider();
   }
 }

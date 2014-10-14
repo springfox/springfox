@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.models.property.constructor
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.base.Optional
 import com.google.common.collect.Lists
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
@@ -24,8 +25,8 @@ class ConstructorModelPropertySpec extends Specification {
       def sut = new FieldModelProperty(propName, field, new AlternateTypeProvider())
 
     expect:
-      sut.propertyDescription() == description
-      sut.required == isRequired
+      sut.propertyDescription() == Optional.absent()
+      sut.required == false
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       if (allowableValues != null) {
@@ -38,8 +39,8 @@ class ConstructorModelPropertySpec extends Specification {
 
 
     where:
-    fieldName             || description  | isRequired | typeName             | qualifiedTypeName                                                     | allowableValues
-    "foobar"              || null         | false      | "string"             | "com.mangofactory.swagger.models.TypeWithConstructorProperty\$Foobar" | ["Foo", "Bar"]
-    "visibleForSerialize" || null         | false      | "long"               | "java.lang.Long"                                                      | null
+    fieldName             || typeName             | qualifiedTypeName                                                     | allowableValues
+    "foobar"              || "string"             | "com.mangofactory.swagger.models.TypeWithConstructorProperty\$Foobar" | ["Foo", "Bar"]
+    "visibleForSerialize" || "long"               | "java.lang.Long"                                                      | null
   }
 }

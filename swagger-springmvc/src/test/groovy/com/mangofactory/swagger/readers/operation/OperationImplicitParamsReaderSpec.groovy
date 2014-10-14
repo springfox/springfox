@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.readers.operation
 
-import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
@@ -18,7 +17,7 @@ class OperationImplicitParamsReaderSpec extends Specification {
 
   def setup() {
     SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
-    swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver());
+    swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider();
     swaggerGlobalSettings.setGlobalResponseMessages(newHashMap())
   }
 

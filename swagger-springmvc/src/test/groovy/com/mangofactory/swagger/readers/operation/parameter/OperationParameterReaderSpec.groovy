@@ -1,5 +1,5 @@
 package com.mangofactory.swagger.readers.operation.parameter
-import com.fasterxml.classmate.TypeResolver
+
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.models.Example
@@ -31,7 +31,7 @@ class OperationParameterReaderSpec extends Specification {
       swaggerGlobalSettings.setIgnorableParameterTypes([ServletRequest, ServletResponse, HttpServletRequest,
           HttpServletResponse, BindingResult, ServletContext, DummyModels.Ignorable.class] as Set)
       SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
-      swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver());
+      swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider();
       swaggerGlobalSettings.setGlobalResponseMessages(newHashMap())
    }
 
