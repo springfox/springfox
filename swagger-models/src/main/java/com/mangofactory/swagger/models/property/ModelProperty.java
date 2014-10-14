@@ -16,7 +16,7 @@ public interface ModelProperty {
 
   Optional<java.util.List<String>> allowableValues();
 
-  Option<String> propertyDescription();
+  Optional<String> propertyDescription();
 
   boolean isRequired();
 }

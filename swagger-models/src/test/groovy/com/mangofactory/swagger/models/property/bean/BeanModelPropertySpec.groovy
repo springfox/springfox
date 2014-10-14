@@ -32,11 +32,11 @@ class BeanModelPropertySpec extends Specification {
 
 
     expect:
-      sut.propertyDescription() == description
+      sut.propertyDescription().get() == description
       sut.required == required
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
-      sut.allowableValues() == null
+      sut.allowableValues().get() == []
 
 
     where:
@@ -65,16 +65,16 @@ class BeanModelPropertySpec extends Specification {
       sut.required == required
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
-      sut.allowableValues() == allowableValues
+      sut.allowableValues().get() == allowableValues
 
     where:
-      methodName    || description              | required  | allowableValues            | typeName  | qualifiedTypeName
-      "getIntProp"  || "int Property Field"     | true      | null                       | "int"     | "int"
-      "isBoolProp"  || "bool Property Getter"   | false     | null                       | "boolean" | "boolean"
-      "getEnumProp" || "enum Prop Getter value" | true      | newArrayList("ONE", "TWO") | "string"  | "com.mangofactory.swagger.models.ExampleEnum"
-      "setIntProp"  || "int Property Field"     | true      | null                       | "int"     | "int"
-      "setBoolProp" || "bool Property Getter"   | false     | null                       | "boolean" | "boolean"
-      "setEnumProp" || "enum Prop Getter value" | true      | newArrayList("ONE", "TWO") | "string"  | "com.mangofactory.swagger.models.ExampleEnum"
+      methodName    || description              | required  | allowableValues             | typeName  | qualifiedTypeName
+      "getIntProp"  || "int Property Field"     | true      | []                          | "int"     | "int"
+      "isBoolProp"  || "bool Property Getter"   | false     | []                          | "boolean" | "boolean"
+      "getEnumProp" || "enum Prop Getter value" | true      | newArrayList("ONE", "TWO")  | "string"  | "com.mangofactory.swagger.models.ExampleEnum"
+      "setIntProp"  || "int Property Field"     | true      | []                          | "int"     | "int"
+      "setBoolProp" || "bool Property Getter"   | false     | []                          | "boolean" | "boolean"
+      "setEnumProp" || "enum Prop Getter value" | true      | newArrayList("ONE", "TWO")  | "string"  | "com.mangofactory.swagger.models.ExampleEnum"
   }
   // @formatter:on
 }
