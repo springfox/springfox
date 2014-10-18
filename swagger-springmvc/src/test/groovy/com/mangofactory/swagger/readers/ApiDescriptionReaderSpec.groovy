@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.readers
 
-import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
@@ -29,7 +28,7 @@ class ApiDescriptionReaderSpec extends Specification {
 
         def settings = new SwaggerGlobalSettings()
         SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
-        settings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver());
+        settings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider();
         context.put("swaggerGlobalSettings", settings)
       when:
         apiDescriptionReader.execute(context)

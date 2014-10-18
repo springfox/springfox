@@ -1,5 +1,5 @@
 package com.mangofactory.swagger.readers
-import com.fasterxml.classmate.TypeResolver
+
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.AuthSupport
@@ -8,7 +8,6 @@ import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.Operation
-import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
@@ -39,7 +38,7 @@ class ApiOperationReaderSpec extends Specification {
 
       def settings = new SwaggerGlobalSettings()
       SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
-      settings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver());
+      settings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider();
       context.put("swaggerGlobalSettings", settings)
       context.put("requestMappingPattern", "/anything")
       context.put("authorizationContext", authorizationContext)

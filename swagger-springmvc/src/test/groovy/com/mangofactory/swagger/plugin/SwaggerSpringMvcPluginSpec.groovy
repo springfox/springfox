@@ -96,7 +96,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
   def "Sets alternative AlternateTypeProvider with a rule"() {
     given:
       def provider = new AlternateTypeProvider()
-      def rule = newMapRule(String, String)
+      def rule = newRule(String, String)
 
     when:
       plugin.alternateTypeProvider(provider)

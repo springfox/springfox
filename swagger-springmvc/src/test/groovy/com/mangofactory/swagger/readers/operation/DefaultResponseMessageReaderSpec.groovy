@@ -1,5 +1,5 @@
 package com.mangofactory.swagger.readers.operation
-import com.fasterxml.classmate.TypeResolver
+
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
@@ -19,7 +19,7 @@ class DefaultResponseMessageReaderSpec extends Specification {
     given:
       SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
       SwaggerModelsConfiguration modelConfig = new SwaggerModelsConfiguration()
-      swaggerGlobalSettings.alternateTypeProvider = modelConfig.alternateTypeProvider(new TypeResolver());
+      swaggerGlobalSettings.alternateTypeProvider = modelConfig.alternateTypeProvider();
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
       swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages())
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
@@ -66,7 +66,7 @@ class DefaultResponseMessageReaderSpec extends Specification {
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
       swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages())
       SwaggerModelsConfiguration modelsConfiguration = new SwaggerModelsConfiguration()
-      swaggerGlobalSettings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider(new TypeResolver());
+      swaggerGlobalSettings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider();
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithConcreteResponseBody'))
 
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)

@@ -93,7 +93,7 @@ public class ModelDependencyProvider {
         continue;
       }
       properties.add(property.getType());
-      if (Collections.isContainerType(property.getType())) {
+      if (Collections.isCollectionType(property.getType())) {
         ResolvedType collectionElementType = Collections.collectionElementType(property.getType());
         if (Types.typeNameFor(collectionElementType.getErasedType()) == null) {
           if (!Types.isBaseType(typeName(collectionElementType))) {

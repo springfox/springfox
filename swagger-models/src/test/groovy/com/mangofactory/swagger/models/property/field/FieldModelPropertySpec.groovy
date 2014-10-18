@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.models.property.field
-
-import com.google.common.collect.Lists
+import com.google.common.base.Optional
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
@@ -17,22 +16,18 @@ class FieldModelPropertySpec extends Specification {
       def sut = new FieldModelProperty(fieldName, field, new AlternateTypeProvider())
 
     expect:
-      sut.propertyDescription() == description
+      sut.propertyDescription() == Optional.fromNullable(description)
       sut.required == isRequired
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
-      if (allowableValues != null) {
-        sut.allowableValues() == Lists.newArrayList(allowableValues)
-      } else {
-        sut.allowableValues() == null
-      }
+      sut.allowableValues() == Optional.fromNullable(allowableValues)
       sut.getName() == fieldName
       sut.getType() == field.getType()
 
 
     where:
     fieldName       || description          | isRequired | typeName             | qualifiedTypeName                                               | allowableValues
-    "intProp"       || "int Property Field" | true       | "int"                | "int"                                                           | null
+    "intProp"       || "int Property Field" | true       | "int"                | "int"                                                           | []
     "boolProp"      || null                 | false      | "boolean"            | "boolean"                                                       | null
     "enumProp"      || null                 | false      | "string"             | "com.mangofactory.swagger.models.ExampleEnum"                   | ["ONE", "TWO"]
     "genericProp"   || null                 | false      | "GenericType«string»"| "com.mangofactory.swagger.models.GenericType<java.lang.String>" | null

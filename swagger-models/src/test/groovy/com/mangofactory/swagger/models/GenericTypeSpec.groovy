@@ -2,42 +2,71 @@ package com.mangofactory.swagger.models
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.wordnik.swagger.models.Model
+import com.wordnik.swagger.models.ModelImpl
+import com.wordnik.swagger.models.properties.ArrayProperty
+import com.wordnik.swagger.models.properties.Property
+import com.wordnik.swagger.models.properties.RefProperty
 import spock.lang.Specification
 
-import static com.google.common.base.Strings.*
-import static com.mangofactory.swagger.models.ModelContext.*
+import static com.google.common.base.Strings.isNullOrEmpty
+import static com.mangofactory.swagger.models.ModelContext.inputParam
+import static com.mangofactory.swagger.models.ModelContext.returnValue
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport])
 class GenericTypeSpec extends Specification{
   def "Generic property on a generic types is inferred correctly"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(modelType)).get()
-      Model asReturn = provider.modelFor(returnValue(modelType)).get()
+      ModelImpl asInput = provider.modelFor(inputParam(modelType)).get()
+      ModelImpl asReturn = provider.modelFor(returnValue(modelType)).get()
 
     expect:
-      asInput.properties.name == expectedModelName(modelNamePart)
-      asInput.properties.genericField
-      def modelProperty = asInput.properties.genericField
-      modelProperty.get().type() == propertyType
-      modelProperty.get().qualifiedType() == qualifiedType
-      modelProperty.get().items().isEmpty() == !"List".equals(propertyType)
+      asInput.name == expectedModelName(typeName)
+      assert asInput.properties.genericField != null
+      Property modelProperty = asInput.properties.genericField
+      assert modelProperty.class == propertyType
+      if (propertyType == RefProperty) {
+        assert ((RefProperty)modelProperty).$ref == typeName
+      } else if (propertyType == ArrayProperty) {
+        def element = ((ArrayProperty)modelProperty).items
+        if (element.class == RefProperty) {
+          assert ((RefProperty)element).$ref == "SimpleType"
+        } else if (element.class == ArrayProperty) {
+          assert ((ArrayProperty)element).items.type == typeName
+        } else {
+          assert ((ObjectProperty)element).type == "object"
+        }
+      } else {
+        assert ((ObjectProperty)modelProperty).type == "object"
+      }
 
-      asReturn.properties.name == expectedModelName(modelNamePart)
+      asReturn.name == expectedModelName(typeName)
       asReturn.properties.genericField
       def retModelProperty = asReturn.properties.genericField
-      retModelProperty.get().type() == propertyType
-      retModelProperty.get().qualifiedType() ==qualifiedType
-      retModelProperty.get().items().isEmpty() == !"List".equals(propertyType)
+      assert retModelProperty.class == propertyType
+      if (propertyType == RefProperty) {
+        assert ((RefProperty)retModelProperty).$ref == typeName
+      } else if (propertyType == ArrayProperty) {
+        def element = ((ArrayProperty)retModelProperty).items
+        if (element.class == RefProperty) {
+          assert ((RefProperty)element).$ref == "SimpleType"
+        } else if (element.class == ArrayProperty) {
+          assert ((ArrayProperty)element).items.type == typeName
+        } else {
+          assert ((ObjectProperty)element).type == "object"
+        }
+      } else {
+        assert ((ObjectProperty)retModelProperty).type == "object"
+      }
 
     where:
-    modelType                       | propertyType                      | modelNamePart                     |  qualifiedType
-    genericClass()                  | "SimpleType"                      | "SimpleType"                      | "com.mangofactory.swagger.models.SimpleType"
-    genericClassWithTypeErased()    | "object"                          | ""                                | "java.lang.Object"
-    genericClassWithListField()     | "List"                            | "List«SimpleType»"                | "java.util.List<com.mangofactory.swagger.models.SimpleType>"
-    genericClassWithGenericField()  | "ResponseEntity«SimpleType»"      | "ResponseEntity«SimpleType»"      | "org.springframework.http.ResponseEntity<com.mangofactory.swagger.models.SimpleType>"
-    genericClassWithDeepGenerics()  | "ResponseEntity«List«SimpleType»»"| "ResponseEntity«List«SimpleType»»"| "org.springframework.http.ResponseEntity<java.util.List<com.mangofactory.swagger.models.SimpleType>>"
-    genericCollectionWithEnum()     | "Collection«string»"              | "Collection«string»"              | "java.util.Collection<com.mangofactory.swagger.models.ExampleEnum>"
+    modelType                       | propertyType    | typeName
+    genericClass()                  | RefProperty     | "SimpleType"
+    genericClassWithTypeErased()    | ObjectProperty  | ""
+    genericClassWithListField()     | ArrayProperty   | "List«SimpleType»"
+    genericClassWithGenericField()  | RefProperty     | "ResponseEntity«SimpleType»"
+    genericClassWithDeepGenerics()  | RefProperty     | "ResponseEntity«List«SimpleType»»"
+    genericCollectionWithEnum()     | RefProperty     | "Collection«string»"
   }
 
 
@@ -50,22 +79,19 @@ class GenericTypeSpec extends Specification{
     expect:
     asInput.properties.strings
     def modelProperty = asInput.properties.strings
-    modelProperty.get().type() == propertyType
-//    modelProperty.get().qualifiedType() == qualifiedType DK TODO: Fix this
+    assert modelProperty.type == "array"
 
     asReturn.properties.("strings")
     def retModelProperty = asReturn.properties.strings
-    retModelProperty.get().type() == propertyType
-//    retModelProperty.get().qualifiedType() ==qualifiedType DK TODO: Fix this
+    assert retModelProperty.type == "array"
 
     where:
-    modelType                         | propertyType              |  qualifiedType
-    genericClass()                    | "List"                    | "java.util.List<java.lang.String>"
-    genericClassWithTypeErased()      | "List"                    | "java.util.List<java.lang.String>"
-    genericClassWithListField()       | "List"                    | "java.util.List<java.lang.String>"
-    genericClassWithGenericField()    | "List"                    | "java.util.List<java.lang.String>"
-    genericClassWithDeepGenerics()    | "List"                    | "java.util.List<java.lang.String>"
-    genericCollectionWithEnum()       | "List"                    | "java.util.List<java.lang.String>"
+    modelType << [genericClass(),
+                  genericClassWithTypeErased(),
+                  genericClassWithListField(),
+                  genericClassWithGenericField(),
+                  genericClassWithDeepGenerics(),
+                  genericCollectionWithEnum()]
   }
 
   def expectedModelName(String modelName) {

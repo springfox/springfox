@@ -23,7 +23,7 @@ public class ResolvedTypes {
   }
 
   public static String typeName(ResolvedType type) {
-    if (isContainerType(type)) {
+    if (isCollectionType(type)) {
       return containerType(type);
     }
     return innerTypeName(type);
@@ -31,7 +31,7 @@ public class ResolvedTypes {
 
   //DK TODO: Eliminate this repetition
   public static String responseTypeName(ResolvedType type) {
-    if (isContainerType(type)) {
+    if (isCollectionType(type)) {
       return String.format("%s%s", containerType(type), optionalContainerTypeQualifierForReturn(type));
     }
     return innerTypeName(type);
@@ -40,7 +40,7 @@ public class ResolvedTypes {
 
   private static String optionalContainerTypeQualifierForReturn(ResolvedType type) {
     if (type.isArray()) {
-      return String.format("[%s]", typeName(type.getArrayElementType()));
+      return String.format("«%s»", typeName(type.getArrayElementType()));
     }
 
     List<ResolvedType> typeParameters = type.getTypeParameters();
@@ -49,10 +49,7 @@ public class ResolvedTypes {
       return "";
     }
     String qualifier = innerTypeName(typeParameters.get(0));
-    if (Types.isBaseType(qualifier)) {
-      return "";
-    }
-    return String.format("[%s]", qualifier);
+    return String.format("«%s»", qualifier);
   }
 
 

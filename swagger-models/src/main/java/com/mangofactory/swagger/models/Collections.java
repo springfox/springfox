@@ -5,6 +5,7 @@ import com.fasterxml.classmate.TypeResolver;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Collections {
@@ -28,13 +29,17 @@ public class Collections {
     }
   }
 
-  public static boolean isContainerType(ResolvedType type) {
+  public static boolean isCollectionType(ResolvedType type) {
     if (List.class.isAssignableFrom(type.getErasedType()) ||
             Set.class.isAssignableFrom(type.getErasedType()) ||
             type.isArray()) {
       return true;
     }
     return false;
+  }
+
+  public static boolean isMap(ResolvedType type) {
+    return Map.class.isAssignableFrom(type.getErasedType());
   }
 
   public static String containerType(ResolvedType type) {

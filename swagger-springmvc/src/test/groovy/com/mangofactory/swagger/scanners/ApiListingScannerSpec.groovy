@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.scanners
 
-import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
@@ -42,7 +41,7 @@ class ApiListingScannerSpec extends Specification {
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
       settings.ignorableParameterTypes = springSwaggerConfig.defaultIgnorableParameterTypes()
       SwaggerModelsConfiguration modelsConfiguration = new SwaggerModelsConfiguration()
-      settings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider(new TypeResolver())
+      settings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider()
       scanner.setSwaggerGlobalSettings(settings)
 
     when:
@@ -77,7 +76,7 @@ class ApiListingScannerSpec extends Specification {
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
       settings.ignorableParameterTypes = springSwaggerConfig.defaultIgnorableParameterTypes()
       SwaggerModelsConfiguration modelsConfiguration = new SwaggerModelsConfiguration()
-      settings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider(new TypeResolver());
+      settings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider();
       scanner.setSwaggerGlobalSettings(settings)
 
       AuthorizationContext authorizationContext = new AuthorizationContext.AuthorizationContextBuilder(defaultAuth())

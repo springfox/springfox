@@ -56,7 +56,7 @@ class ModelProviderSupport {
   }
 
   def defaultAlternateTypesProvider() {
-    return new SwaggerModelsConfiguration().alternateTypeProvider(new TypeResolver())
+    return new SwaggerModelsConfiguration().alternateTypeProvider()
   }
 
   private ModelDependencyProvider modelDependencyProvider(TypeResolver resolver,

@@ -4,6 +4,8 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
+import com.mangofactory.swagger.models.property.EnumProperties;
+import com.mangofactory.swagger.models.property.RefProperties;
 import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.models.Model;
@@ -41,7 +43,7 @@ public class DefaultModelProvider implements ModelProvider {
   @Override
   public Optional<Model> modelFor(ModelContext modelContext) {
     ResolvedType propertiesHost = alternateTypeProvider.alternateFor(modelContext.resolvedType(resolver));
-    if (isContainerType(propertiesHost)
+    if (isCollectionType(propertiesHost)
             || propertiesHost.getErasedType().isEnum()
             || Types.isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))) {
       return Optional.absent();
@@ -49,7 +51,12 @@ public class DefaultModelProvider implements ModelProvider {
     Map<String, Property> properties = newLinkedHashMap();
 
     for (com.mangofactory.swagger.models.property.ModelProperty each : properties(modelContext, propertiesHost)) {
-      properties.put(each.getName(), Properties.from(each));
+      properties.put(each.getName(), SimpleProperties.from(each)
+//              .or(MapProperties.from(each))
+              .or(ArrayProperties.from(each))
+              .or(EnumProperties.from(each))
+              .or(RefProperties.from(each))
+              .or(new ObjectProperty()));
     }
     Model model = new ModelImpl()
             .name(typeName(propertiesHost))
@@ -59,14 +66,6 @@ public class DefaultModelProvider implements ModelProvider {
     addProperties(model, properties);
 
     return Optional.of(model);
-
-//            typeName(propertiesHost),
-//            typeName(propertiesHost),
-//            simpleQualifiedTypeName(propertiesHost),
-//            properties,
-//            modelDescription(propertiesHost), Optional.of(""),
-//            Optional.<String>absent(),
-//            newArrayList()));
   }
 
   private void addProperties(Model model, Map<String, Property> properties) {
@@ -74,7 +73,7 @@ public class DefaultModelProvider implements ModelProvider {
   }
 
   private void applyRequired(Model model, Map<String, Property> properties) {
-
+    //DK TODO: flush out the implementation
   }
 
   private void applyDescription(ResolvedType propertiesHost, Model model) {
@@ -89,8 +88,8 @@ public class DefaultModelProvider implements ModelProvider {
     Map<String, Model> models = newHashMap();
     for (ResolvedType resolvedType : dependencyProvider.dependentModels(modelContext)) {
       Optional<Model> model = modelFor(ModelContext.fromParent(modelContext, resolvedType));
-      if (model.isPresent()) {
-        models.put(String.valueOf(model.get().getProperties().get("name")), model.get());
+      if (model.isPresent() && model.get() instanceof ModelImpl) {
+        models.put(((ModelImpl)model.get()).getName(), model.get());
       }
     }
     return models;

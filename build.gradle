@@ -1,6 +1,7 @@
 import groovy.json.JsonBuilder
 
 apply from: "$rootDir/gradle/dependencies.gradle"
+apply plugin: 'idea'
 
 buildscript {
   repositories {
@@ -16,7 +17,7 @@ buildscript {
 }
 
 ext {
-  apiKey = System.getenv('GIT_HUB_API_KEY')
+  gitHubApiKey = System.getenv('GIT_HUB_API_KEY')
   projectVersion = '2.0.0-SNAPSHOT'
 }
 
@@ -76,9 +77,6 @@ subprojects {
 }
 //This should be moved to a plugin
 task triggerDownstreamBuilds << {
-  def gitToken = System.getenv('GIT_HUB_API_KEY')
-  assert gitToken
-
   def travisClient = new groovyx.net.http.RESTClient('https://api.travis-ci.org/')
   travisClient.ignoreSSLIssues() //Untrusted travisci ssl cert
   def httpHeaders = [
@@ -90,7 +88,7 @@ task triggerDownstreamBuilds << {
 
   def tokBuilder = new JsonBuilder()
   tokBuilder {
-    github_token "$gitToken"
+    github_token "$gitHubApiKey"
   }
   def accessTokenResp = travisClient.post(
           contentType: 'application/json',

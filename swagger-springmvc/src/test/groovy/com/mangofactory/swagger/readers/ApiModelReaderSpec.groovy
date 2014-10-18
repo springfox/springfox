@@ -36,7 +36,7 @@ class ApiModelReaderSpec extends Specification {
       SwaggerGlobalSettings settings = new SwaggerGlobalSettings()
       def modelConfig = new SwaggerModelsConfiguration()
       def typeResolver = new TypeResolver()
-      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider()
       settings.ignorableParameterTypes = new SpringSwaggerConfig().defaultIgnorableParameterTypes()
       context.put("swaggerGlobalSettings", settings)
     when:
@@ -78,7 +78,7 @@ class ApiModelReaderSpec extends Specification {
       SwaggerGlobalSettings settings = new SwaggerGlobalSettings()
       def modelConfig = new SwaggerModelsConfiguration()
       def typeResolver = new TypeResolver()
-      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider()
       settings.ignorableParameterTypes = new SpringSwaggerConfig().defaultIgnorableParameterTypes()
       context.put("swaggerGlobalSettings", settings)
     when:
@@ -114,7 +114,7 @@ class ApiModelReaderSpec extends Specification {
       SwaggerGlobalSettings settings = new SwaggerGlobalSettings()
       def modelConfig = new SwaggerModelsConfiguration()
       def typeResolver = new TypeResolver()
-      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider()
       settings.ignorableParameterTypes = new SpringSwaggerConfig().defaultIgnorableParameterTypes()
       context.put("swaggerGlobalSettings", settings)
     when:
@@ -143,7 +143,7 @@ class ApiModelReaderSpec extends Specification {
     settings.ignorableParameterTypes = new SpringSwaggerConfig().defaultIgnorableParameterTypes();
     def modelConfig = new SwaggerModelsConfiguration()
     def typeResolver = new TypeResolver()
-    settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+    settings.alternateTypeProvider = modelConfig.alternateTypeProvider()
     context.put("swaggerGlobalSettings", settings)
     context
   }
@@ -163,7 +163,7 @@ class ApiModelReaderSpec extends Specification {
       settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
       def modelConfig = new SwaggerModelsConfiguration()
       def typeResolver = new TypeResolver()
-      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider()
       context.put("swaggerGlobalSettings", settings)
     when:
       ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
@@ -187,7 +187,7 @@ class ApiModelReaderSpec extends Specification {
       settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
       def modelConfig = new SwaggerModelsConfiguration()
       def typeResolver = new TypeResolver()
-      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider()
       context.put("swaggerGlobalSettings", settings)
 
     when:
@@ -214,7 +214,7 @@ class ApiModelReaderSpec extends Specification {
       def modelConfig = new SwaggerModelsConfiguration()
       def typeResolver = new TypeResolver()
       settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
-      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider()
       settings.alternateTypeProvider.addRule(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
             typeResolver.resolve(WildcardType.class)));
       settings.alternateTypeProvider.addRule(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
@@ -244,7 +244,7 @@ class ApiModelReaderSpec extends Specification {
       settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
       def modelConfig = new SwaggerModelsConfiguration()
       def typeResolver = new TypeResolver()
-      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider()
       context.put("swaggerGlobalSettings", settings)
 
     when:
@@ -280,7 +280,7 @@ class ApiModelReaderSpec extends Specification {
       settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
       def modelConfig = new SwaggerModelsConfiguration()
       def typeResolver = new TypeResolver()
-      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider()
       context.put("swaggerGlobalSettings", settings)
 
     when:
@@ -316,7 +316,7 @@ class ApiModelReaderSpec extends Specification {
       settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
       def modelConfig = new SwaggerModelsConfiguration()
       def typeResolver = new TypeResolver()
-      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider()
       context.put("swaggerGlobalSettings", settings)
 
     when:
@@ -349,7 +349,7 @@ class ApiModelReaderSpec extends Specification {
       settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
       def modelConfig = new SwaggerModelsConfiguration()
       def typeResolver = new TypeResolver()
-      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider()
       context.put("swaggerGlobalSettings", settings)
 
     when:
