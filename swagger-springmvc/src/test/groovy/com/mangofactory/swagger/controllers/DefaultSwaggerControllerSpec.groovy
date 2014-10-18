@@ -87,7 +87,7 @@ class DefaultSwaggerControllerSpec extends Specification {
         def authTypes = new ArrayList<AuthorizationType>()
         authTypes.add(authorizationTypes());
 
-        swaggerCache.swaggerApiResourceListingMap = [swaggerGroup: resourceListing(authTypes)]
+        swaggerCache.swaggerMap = [swaggerGroup: resourceListing(authTypes)]
         controller.swaggerCache = swaggerCache
       when:
         MvcResult result = mockMvc.perform(get("/api-docs?group=swaggerGroup")).andDo(print()).andReturn()

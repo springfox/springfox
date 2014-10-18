@@ -2,13 +2,16 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
+import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.readers.operation.SwaggerParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.model.AllowableValues;
-import com.wordnik.swagger.model.Parameter;
+//import com.wordnik.swagger.model.AllowableValues;
+//import com.wordnik.swagger.model.Parameter;
+import com.wordnik.swagger.models.Model;
+import com.wordnik.swagger.models.parameters.Parameter;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
 
@@ -19,11 +22,11 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class OperationParameterReader extends SwaggerParameterReader {
 
   @Override
+//  protected Collection<? extends Parameter> readParameters(final RequestMappingContext context) {
   protected Collection<? extends Parameter> readParameters(final RequestMappingContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
@@ -62,20 +65,20 @@ public class OperationParameterReader extends SwaggerParameterReader {
         Map<String, Object> result = parameterContext.getResult();
 
         if (!shouldExpand(methodParameter)) {
-          Parameter parameter = new Parameter(
-                  (String) result.get("name"),
-                  toOption(result.get("description")),
-                  toOption(result.get("defaultValue")),
-                  (Boolean) result.get("required"),
-                  (Boolean) result.get("allowMultiple"),
-                  (String) result.get("dataType"),
-                  (AllowableValues) result.get("allowableValues"),
-                  (String) result.get("paramType"),
-                  toOption(result.get("paramAccess"))
-          );
-          parameters.add(parameter);
+//          Parameter parameter = new Parameter(
+//                  (String) result.get("name"),
+//                  toOption(result.get("description")),
+//                  toOption(result.get("defaultValue")),
+//                  (Boolean) result.get("required"),
+//                  (Boolean) result.get("allowMultiple"),
+//                  (String) result.get("dataType"),
+//                  (AllowableValues) result.get("allowableValues"),
+//                  (String) result.get("paramType"),
+//                  toOption(result.get("paramAccess"))
+//          );
+//          parameters.add(parameter);
         } else {
-          expander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters);
+//          expander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters);
         }
       }
     }

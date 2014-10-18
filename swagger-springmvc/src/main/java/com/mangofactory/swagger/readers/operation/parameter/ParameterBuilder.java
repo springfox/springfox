@@ -5,9 +5,10 @@ import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.Annotations;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.wordnik.swagger.model.AllowableListValues;
-import com.wordnik.swagger.model.AllowableValues;
-import com.wordnik.swagger.model.Parameter;
+//import com.wordnik.swagger.model.AllowableListValues;
+//import com.wordnik.swagger.model.AllowableValues;
+//import com.wordnik.swagger.model.Parameter;
+import com.wordnik.swagger.models.parameters.Parameter;
 import scala.collection.JavaConversions;
 
 import java.lang.reflect.Field;
@@ -17,7 +18,7 @@ import java.util.List;
 import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
+//import static com.mangofactory.swagger.ScalaUtils.*;
 import static com.mangofactory.swagger.readers.operation.parameter.ParameterAllowableReader.*;
 
 class ParameterBuilder {
@@ -54,65 +55,67 @@ class ParameterBuilder {
   }
 
   private Parameter defaultParameter() {
-    AllowableValues allowable = allowableValues(Optional.<String>absent(), field);
+//    AllowableValues allowable = allowableValues(Optional.<String>absent(), field);
 
-    return new Parameter(
-            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
-            toOption(null), //description
-            toOption(null), //default value
-            Boolean.FALSE,  //required
-            Boolean.FALSE,  //allow multiple
-            dataTypeName,   //data type
-            allowable,           //allowable values
-            "query",        //param type
-            toOption(null)  //param access
-    );
-
+//    return new Parameter(
+//            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
+//            toOption(null), //description
+//            toOption(null), //default value
+//            Boolean.FALSE,  //required
+//            Boolean.FALSE,  //allow multiple
+//            dataTypeName,   //data type
+//            allowable,           //allowable values
+//            "query",        //param type
+//            toOption(null)  //param access
+//    );
+return null;
   }
 
   private Parameter fromApiParam(ApiParam apiParam) {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
+//    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
 
-    return new Parameter(
-            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
-            toOption(apiParam.value()),
-            toOption(apiParam.defaultValue()),
-            apiParam.required(),
-            apiParam.allowMultiple(),
-            dataTypeName,
-            allowable,
-            "query", //param type
-            toOption(apiParam.access()));
+//    return new Parameter(
+//            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
+//            toOption(apiParam.value()),
+//            toOption(apiParam.defaultValue()),
+//            apiParam.required(),
+//            apiParam.allowMultiple(),
+//            dataTypeName,
+//            allowable,
+//            "query", //param type
+//            toOption(apiParam.access()));
+    return null;
   }
 
   private Parameter fromApiModelProperty(ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
-    return new Parameter(
-            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
-            toOption(apiModelProperty.value()),
-            toOption(null), //default value
-            apiModelProperty.required(),
-            Boolean.FALSE,  //allow multiple
-            dataTypeName,
-            allowable,
-            "query", //param type
-            toOption(apiModelProperty.access()));
+//    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
+//    return new Parameter(
+//            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
+//            toOption(apiModelProperty.value()),
+//            toOption(null), //default value
+//            apiModelProperty.required(),
+//            Boolean.FALSE,  //allow multiple
+//            dataTypeName,
+//            allowable,
+//            "query", //param type
+//            toOption(apiModelProperty.access()));
+    return null;
   }
 
-  private AllowableValues allowableValues(final Optional<String> optionalAllowable, final Field field) {
-
-    AllowableValues allowable = null;
-    if (field.getType().isEnum()) {
-      allowable = new AllowableListValues(JavaConversions.collectionAsScalaIterable(
-              getEnumValues(field.getType())).toList(), "LIST");
-    } else if (optionalAllowable.isPresent()) {
-      allowable = allowableValueFromString(optionalAllowable.get());
-    }
-
-    return allowable;
-  }
+//  private AllowableValues allowableValues(final Optional<String> optionalAllowable, final Field field) {
+//
+//    AllowableValues allowable = null;
+//    if (field.getType().isEnum()) {
+//      allowable = new AllowableListValues(JavaConversions.collectionAsScalaIterable(
+//              getEnumValues(field.getType())).toList(), "LIST");
+//    } else if (optionalAllowable.isPresent()) {
+//      allowable = allowableValueFromString(optionalAllowable.get());
+//    }
+//
+//    return allowable;
+//  }
 
   private List<String> getEnumValues(final Class<?> subject) {
     return transform(Arrays.asList(subject.getEnumConstants()), new Function<Object, String>() {

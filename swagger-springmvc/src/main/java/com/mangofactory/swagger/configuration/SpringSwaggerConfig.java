@@ -12,7 +12,6 @@ import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration;
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.plugin.SwaggerPluginAdapter;
-import com.wordnik.swagger.model.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,7 +38,6 @@ import java.util.Set;
 
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -114,60 +112,60 @@ public class SpringSwaggerConfig {
   /**
    * Default response messages set on all api operations
    */
-  @Bean
-  public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages() {
-    LinkedHashMap<RequestMethod, List<ResponseMessage>> responses = newLinkedHashMap();
-    responses.put(GET, asList(
-            new ResponseMessage(OK.value(), OK.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-                             ));
-
-    responses.put(PUT, asList(
-            new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-                             ));
-
-    responses.put(POST, asList(
-            new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-                              ));
-
-    responses.put(DELETE, asList(
-            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-                                ));
-
-    responses.put(PATCH, asList(
-            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-                               ));
-
-    responses.put(TRACE, asList(
-            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-                               ));
-
-    responses.put(OPTIONS, asList(
-            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-                                 ));
-    responses.put(HEAD, asList(
-            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
-                              ));
-    return responses;
-  }
+//  @Bean
+//  public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages() {
+//    LinkedHashMap<RequestMethod, List<ResponseMessage>> responses = newLinkedHashMap();
+//    responses.put(GET, asList(
+//            new ResponseMessage(OK.value(), OK.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+//                             ));
+//
+//    responses.put(PUT, asList(
+//            new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+//                             ));
+//
+//    responses.put(POST, asList(
+//            new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+//                              ));
+//
+//    responses.put(DELETE, asList(
+//            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+//                                ));
+//
+//    responses.put(PATCH, asList(
+//            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+//                               ));
+//
+//    responses.put(TRACE, asList(
+//            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+//                               ));
+//
+//    responses.put(OPTIONS, asList(
+//            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+//                                 ));
+//    responses.put(HEAD, asList(
+//            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), toOption(null)),
+//            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), toOption(null))
+//                              ));
+//    return responses;
+//  }
 
   @Bean
   public SwaggerPluginAdapter swaggerPluginAdapter() {
@@ -178,13 +176,13 @@ public class SpringSwaggerConfig {
     return modelProvider;
   }
 
-  private List<ResponseMessage> asList(ResponseMessage... responseMessages) {
-    List<ResponseMessage> list = new ArrayList();
-    for (ResponseMessage responseMessage : responseMessages) {
-      list.add(responseMessage);
-    }
-    return list;
-  }
+//  private List<ResponseMessage> asList(ResponseMessage... responseMessages) {
+//    List<ResponseMessage> list = new ArrayList();
+//    for (ResponseMessage responseMessage : responseMessages) {
+//      list.add(responseMessage);
+//    }
+//    return list;
+//  }
 
   /**
    * Registers some custom serializers needed to transform swagger models to swagger-ui required json format.

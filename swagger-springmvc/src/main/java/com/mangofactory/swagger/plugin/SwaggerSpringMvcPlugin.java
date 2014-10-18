@@ -17,11 +17,11 @@ import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
-import com.wordnik.swagger.model.ApiDescription;
+//import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiInfo;
-import com.wordnik.swagger.model.ApiListingReference;
-import com.wordnik.swagger.model.AuthorizationType;
-import com.wordnik.swagger.model.ResponseMessage;
+//import com.wordnik.swagger.model.ApiListingReference;
+//import com.wordnik.swagger.model.AuthorizationType;
+//import com.wordnik.swagger.model.ResponseMessage;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -50,7 +50,7 @@ public class SwaggerSpringMvcPlugin {
   private String swaggerGroup;
   private List<String> includePatterns;
   private SwaggerPathProvider swaggerPathProvider;
-  private List<AuthorizationType> authorizationTypes;
+//  private List<AuthorizationType> authorizationTypes;
   private ApiInfo apiInfo;
   private AuthorizationContext authorizationContext;
   private List<Class<? extends Annotation>> excludeAnnotations = new ArrayList<Class<? extends Annotation>>();
@@ -58,15 +58,15 @@ public class SwaggerSpringMvcPlugin {
   private String apiVersion = "1.0";
 
   private SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
-  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages = new HashMap<RequestMethod,
-          List<ResponseMessage>>();
+//  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages = new HashMap<RequestMethod,
+//          List<ResponseMessage>>();
   private Set<Class> ignorableParameterTypes = new HashSet<Class>();
   private AlternateTypeProvider alternateTypeProvider;
   private List<AlternateTypeRule> alternateTypeRules = new ArrayList<AlternateTypeRule>();
   private SpringSwaggerConfig springSwaggerConfig;
   private SwaggerApiResourceListing swaggerApiResourceListing;
-  private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
-  private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
+//  private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
+//  private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
   private ApiListingReferenceScanner apiListingReferenceScanner;
   private AtomicBoolean initialized = new AtomicBoolean(false);
   private Collection<RequestMappingReader> customAnnotationReaders;
@@ -102,10 +102,10 @@ public class SwaggerSpringMvcPlugin {
    * @param authorizationTypes a list of global AuthorizationType's
    * @return this SwaggerSpringMvcPlugin
    */
-  public SwaggerSpringMvcPlugin authorizationTypes(List<AuthorizationType> authorizationTypes) {
-    this.authorizationTypes = authorizationTypes;
-    return this;
-  }
+//  public SwaggerSpringMvcPlugin authorizationTypes(List<AuthorizationType> authorizationTypes) {
+//    this.authorizationTypes = authorizationTypes;
+//    return this;
+//  }
 
   /**
    * Configures which api operations (via regex patterns) and HTTP methods to apply swagger authorization to.
@@ -193,11 +193,11 @@ public class SwaggerSpringMvcPlugin {
    * @see com.wordnik.swagger.annotations.ApiResponses
    * @see com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultResponseMessages()
    */
-  public SwaggerSpringMvcPlugin globalResponseMessage(RequestMethod requestMethod,
-                                                      List<ResponseMessage> responseMessages) {
-    this.globalResponseMessages.put(requestMethod, responseMessages);
-    return this;
-  }
+//  public SwaggerSpringMvcPlugin globalResponseMessage(RequestMethod requestMethod,
+//                                                      List<ResponseMessage> responseMessages) {
+//    this.globalResponseMessages.put(requestMethod, responseMessages);
+//    return this;
+//  }
 
   /**
    * Adds ignored controller method parameter types so that the framework does not generate swagger model or parameter
@@ -301,10 +301,10 @@ public class SwaggerSpringMvcPlugin {
    * @param apiListingReferenceOrdering
    * @return this SwaggerSpringMvcPlugin
    */
-  public SwaggerSpringMvcPlugin apiListingReferenceOrdering(Ordering<ApiListingReference> apiListingReferenceOrdering) {
-    this.apiListingReferenceOrdering = apiListingReferenceOrdering;
-    return this;
-  }
+//  public SwaggerSpringMvcPlugin apiListingReferenceOrdering(Ordering<ApiListingReference> apiListingReferenceOrdering) {
+//    this.apiListingReferenceOrdering = apiListingReferenceOrdering;
+//    return this;
+//  }
 
   /**
    * Controls how <code>com.wordnik.swagger.model.ApiDescription</code>'s are ordered.
@@ -314,10 +314,10 @@ public class SwaggerSpringMvcPlugin {
    * @return this SwaggerSpringMvcPlugin
    * @see com.mangofactory.swagger.scanners.ApiListingScanner
    */
-  public SwaggerSpringMvcPlugin apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
-    this.apiDescriptionOrdering = apiDescriptionOrdering;
-    return this;
-  }
+//  public SwaggerSpringMvcPlugin apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
+//    this.apiDescriptionOrdering = apiDescriptionOrdering;
+//    return this;
+//  }
 
   /**
    * Controls which ResourceListing's, RequestMappings belong to.
@@ -372,9 +372,9 @@ public class SwaggerSpringMvcPlugin {
   public SwaggerSpringMvcPlugin build() {
     if (initialized.compareAndSet(false, true)) {
       configure();
-      buildSwaggerGlobalSettings();
+//      buildSwaggerGlobalSettings();
       buildApiListingReferenceScanner();
-      buildSwaggerApiResourceListing();
+//      buildSwaggerApiResourceListing();
     }
     return this;
   }
@@ -413,38 +413,38 @@ public class SwaggerSpringMvcPlugin {
     }
   }
 
-  private void buildSwaggerGlobalSettings() {
-    Map<RequestMethod, List<ResponseMessage>> mergedResponseMessages = new HashMap<RequestMethod,
-            List<ResponseMessage>>();
-    mergedResponseMessages.putAll(springSwaggerConfig.defaultResponseMessages());
-    mergedResponseMessages.putAll(this.globalResponseMessages);
-    swaggerGlobalSettings.setGlobalResponseMessages(mergedResponseMessages);
-
-    Set<Class> mergedIgnorableParameterTypes = new HashSet<Class>();
-    mergedIgnorableParameterTypes.addAll(springSwaggerConfig.defaultIgnorableParameterTypes());
-    mergedIgnorableParameterTypes.addAll(this.ignorableParameterTypes);
-    swaggerGlobalSettings.setIgnorableParameterTypes(mergedIgnorableParameterTypes);
-
-    for (AlternateTypeRule rule : this.alternateTypeRules) {
-      this.alternateTypeProvider.addRule(rule);
-    }
-    swaggerGlobalSettings.setAlternateTypeProvider(this.alternateTypeProvider);
-  }
-
-  private void buildSwaggerApiResourceListing() {
-    swaggerApiResourceListing = new SwaggerApiResourceListing(springSwaggerConfig.swaggerCache(), this.swaggerGroup);
-    swaggerApiResourceListing.setSwaggerGlobalSettings(this.swaggerGlobalSettings);
-    swaggerApiResourceListing.setSwaggerPathProvider(this.swaggerPathProvider);
-    swaggerApiResourceListing.setApiInfo(this.apiInfo);
-    swaggerApiResourceListing.setAuthorizationTypes(this.authorizationTypes);
-    swaggerApiResourceListing.setAuthorizationContext(this.authorizationContext);
-    swaggerApiResourceListing.setModelProvider(this.modelProvider);
-    swaggerApiResourceListing.setApiListingReferenceScanner(this.apiListingReferenceScanner);
-    swaggerApiResourceListing.setApiVersion(this.apiVersion);
-    swaggerApiResourceListing.setApiListingReferenceOrdering(this.apiListingReferenceOrdering);
-    swaggerApiResourceListing.setApiDescriptionOrdering(this.apiDescriptionOrdering);
-    swaggerApiResourceListing.setCustomAnnotationReaders(this.customAnnotationReaders);
-  }
+//  private void buildSwaggerGlobalSettings() {
+//    Map<RequestMethod, List<ResponseMessage>> mergedResponseMessages = new HashMap<RequestMethod,
+//            List<ResponseMessage>>();
+//    mergedResponseMessages.putAll(springSwaggerConfig.defaultResponseMessages());
+//    mergedResponseMessages.putAll(this.globalResponseMessages);
+//    swaggerGlobalSettings.setGlobalResponseMessages(mergedResponseMessages);
+//
+//    Set<Class> mergedIgnorableParameterTypes = new HashSet<Class>();
+//    mergedIgnorableParameterTypes.addAll(springSwaggerConfig.defaultIgnorableParameterTypes());
+//    mergedIgnorableParameterTypes.addAll(this.ignorableParameterTypes);
+//    swaggerGlobalSettings.setIgnorableParameterTypes(mergedIgnorableParameterTypes);
+//
+//    for (AlternateTypeRule rule : this.alternateTypeRules) {
+//      this.alternateTypeProvider.addRule(rule);
+//    }
+//    swaggerGlobalSettings.setAlternateTypeProvider(this.alternateTypeProvider);
+//  }
+//
+//  private void buildSwaggerApiResourceListing() {
+//    swaggerApiResourceListing = new SwaggerApiResourceListing(springSwaggerConfig.swaggerCache(), this.swaggerGroup);
+//    swaggerApiResourceListing.setSwaggerGlobalSettings(this.swaggerGlobalSettings);
+//    swaggerApiResourceListing.setSwaggerPathProvider(this.swaggerPathProvider);
+//    swaggerApiResourceListing.setApiInfo(this.apiInfo);
+//    swaggerApiResourceListing.setAuthorizationTypes(this.authorizationTypes);
+//    swaggerApiResourceListing.setAuthorizationContext(this.authorizationContext);
+//    swaggerApiResourceListing.setModelProvider(this.modelProvider);
+//    swaggerApiResourceListing.setApiListingReferenceScanner(this.apiListingReferenceScanner);
+//    swaggerApiResourceListing.setApiVersion(this.apiVersion);
+//    swaggerApiResourceListing.setApiListingReferenceOrdering(this.apiListingReferenceOrdering);
+//    swaggerApiResourceListing.setApiDescriptionOrdering(this.apiDescriptionOrdering);
+//    swaggerApiResourceListing.setCustomAnnotationReaders(this.customAnnotationReaders);
+//  }
 
   private ApiListingReferenceScanner buildApiListingReferenceScanner() {
     List<Class<? extends Annotation>> mergedExcludedAnnotations = springSwaggerConfig.defaultExcludeAnnotations();

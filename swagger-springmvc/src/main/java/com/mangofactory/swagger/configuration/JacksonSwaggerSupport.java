@@ -1,11 +1,16 @@
 package com.mangofactory.swagger.configuration;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.mangofactory.swagger.models.property.provider.DefaultModelPropertiesProvider;
-import com.wordnik.swagger.model.ApiListing;
-import com.wordnik.swagger.model.ResourceListing;
+import com.wordnik.swagger.models.Model;
+import com.wordnik.swagger.models.properties.Property;
+import com.wordnik.swagger.util.ModelDeserializer;
+import com.wordnik.swagger.util.PropertyDeserializer;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -30,8 +35,8 @@ public class JacksonSwaggerSupport implements ApplicationContextAware {
 
   private Module swaggerSerializationModule() {
     SimpleModule module = new SimpleModule("SwaggerJacksonModule");
-    module.addSerializer(ApiListing.class, new SwaggerApiListingJsonSerializer());
-    module.addSerializer(ResourceListing.class, new SwaggerResourceListingJsonSerializer());
+    module.addDeserializer(Property.class, new PropertyDeserializer());
+    module.addDeserializer(Model.class, new ModelDeserializer());
     return module;
   }
 
@@ -56,6 +61,11 @@ public class JacksonSwaggerSupport implements ApplicationContextAware {
         MappingJackson2HttpMessageConverter m = (MappingJackson2HttpMessageConverter) messageConverter;
         this.springsMessageConverterObjectMapper = m.getObjectMapper();
         this.springsMessageConverterObjectMapper.registerModule(swaggerSerializationModule());
+
+        //This is done by com.wordnik.swagger.util.Json may not be a good idea to interfere with springs object mapper
+        this.springsMessageConverterObjectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        this.springsMessageConverterObjectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        this.springsMessageConverterObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
       }
     }
 

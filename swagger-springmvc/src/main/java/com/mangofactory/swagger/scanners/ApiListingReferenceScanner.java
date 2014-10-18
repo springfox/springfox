@@ -4,7 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimaps;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
-import com.wordnik.swagger.model.ApiListingReference;
+//import com.wordnik.swagger.model.ApiListingReference;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
 import static java.lang.String.*;
 
 public class ApiListingReferenceScanner {
@@ -32,7 +31,7 @@ public class ApiListingReferenceScanner {
 
   private static final Logger log = LoggerFactory.getLogger(ApiListingReferenceScanner.class);
   private List<RequestMappingHandlerMapping> requestMappingHandlerMapping;
-  private List<ApiListingReference> apiListingReferences = newArrayList();
+//  private List<ApiListingReference> apiListingReferences = newArrayList();
   private ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings = ArrayListMultimap
           .create();
   private String swaggerGroup;
@@ -45,20 +44,20 @@ public class ApiListingReferenceScanner {
   public ApiListingReferenceScanner() {
   }
 
-  public List<ApiListingReference> scan() {
-    Assert.notNull(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
-    Assert.notEmpty(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
-    Assert.notNull(resourceGroupingStrategy, "resourceGroupingStrategy is required");
-    Assert.notNull(swaggerGroup, "swaggerGroup is required");
-    if (StringUtils.isBlank(swaggerGroup)) {
-      throw new IllegalArgumentException("swaggerGroup must not be empty");
-    }
-    Assert.notNull(swaggerPathProvider, "swaggerPathProvider is required");
-
-    log.info("Scanning for api listing references");
-    scanSpringRequestMappings();
-    return this.apiListingReferences;
-  }
+//  public List<ApiListingReference> scan() {
+//    Assert.notNull(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
+//    Assert.notEmpty(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
+//    Assert.notNull(resourceGroupingStrategy, "resourceGroupingStrategy is required");
+//    Assert.notNull(swaggerGroup, "swaggerGroup is required");
+//    if (StringUtils.isBlank(swaggerGroup)) {
+//      throw new IllegalArgumentException("swaggerGroup must not be empty");
+//    }
+//    Assert.notNull(swaggerPathProvider, "swaggerPathProvider is required");
+//
+//    log.info("Scanning for api listing references");
+//    scanSpringRequestMappings();
+//    return this.apiListingReferences;
+//  }
 
   public void scanSpringRequestMappings() {
     Map<ResourceGroup, String> resourceGroupDescriptions = new HashMap<ResourceGroup, String>();
@@ -97,7 +96,7 @@ public class ApiListingReferenceScanner {
       String path = swaggerPathProvider.getResourceListingPath(swaggerGroup, resourceGroupName);
       log.info("Created resource listing Path: {} Description: {} Position: {}",
               path, resourceGroupName, position);
-      this.apiListingReferences.add(new ApiListingReference(path, toOption(listingDescription), position));
+//      this.apiListingReferences.add(new ApiListingReference(path, toOption(listingDescription), position));
     }
   }
 
@@ -155,13 +154,13 @@ public class ApiListingReferenceScanner {
     this.requestMappingHandlerMapping = requestMappingHandlerMapping;
   }
 
-  public List<ApiListingReference> getApiListingReferences() {
-    return apiListingReferences;
-  }
-
-  public void setApiListingReferences(List<ApiListingReference> apiListingReferences) {
-    this.apiListingReferences = apiListingReferences;
-  }
+//  public List<ApiListingReference> getApiListingReferences() {
+//    return apiListingReferences;
+//  }
+//
+//  public void setApiListingReferences(List<ApiListingReference> apiListingReferences) {
+//    this.apiListingReferences = apiListingReferences;
+//  }
 
   public void setResourceGroupRequestMappings(ArrayListMultimap<ResourceGroup,
           RequestMappingContext> resourceGroupRequestMappings) {

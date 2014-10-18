@@ -19,9 +19,9 @@ import com.mangofactory.swagger.readers.operation.OperationSummaryReader;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.model.Authorization;
-import com.wordnik.swagger.model.Operation;
-import com.wordnik.swagger.model.Parameter;
+//import com.wordnik.swagger.model.Authorization;
+//import com.wordnik.swagger.model.Operation;
+//import com.wordnik.swagger.model.Parameter;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
@@ -36,7 +36,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class ApiOperationReader implements Command<RequestMappingContext> {
 
@@ -61,7 +60,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
     AuthorizationContext authorizationContext = (AuthorizationContext) outerContext.get("authorizationContext");
     String requestMappingPattern = (String) outerContext.get("requestMappingPattern");
     RequestMethodsRequestCondition requestMethodsRequestCondition = requestMappingInfo.getMethodsCondition();
-    List<Operation> operations = newArrayList();
+//    List<Operation> operations = newArrayList();
 
     Set<RequestMethod> requestMethods = requestMethodsRequestCondition.getMethods();
     Set<RequestMethod> supportedMethods = (requestMethods == null || requestMethods.isEmpty())
@@ -104,29 +103,29 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
 
       List<String> producesMediaTypes = (List<String>) operationResultMap.get("produces");
       List<String> consumesMediaTypes = (List<String>) operationResultMap.get("consumes");
-      List<Parameter> parameterList = (List<Parameter>) operationResultMap.get("parameters");
-      List<Authorization> authorizations = (List<Authorization>) operationResultMap.get("authorizations");
+//      List<Parameter> parameterList = (List<Parameter>) operationResultMap.get("parameters");
+//      List<Authorization> authorizations = (List<Authorization>) operationResultMap.get("authorizations");
 
-      Operation operation = new Operation(
-              (String) operationResultMap.get("httpRequestMethod"),
-              (String) operationResultMap.get("summary"),
-              (String) operationResultMap.get("notes"),
-              (String) operationResultMap.get("responseClass"),
-              (String) operationResultMap.get("nickname"),
-              (Integer) operationResultMap.get("position"),
-              toScalaList(producesMediaTypes),
-              toScalaList(consumesMediaTypes),
-              emptyScalaList(),
-              toScalaList(authorizations),
-              toScalaList(parameterList),
-              toScalaList((List) operationResultMap.get("responseMessages")),
-              toOption(operationResultMap.get("deprecated"))
-      );
-
-      operations.add(operation);
+//      Operation operation = new Operation(
+//              (String) operationResultMap.get("httpRequestMethod"),
+//              (String) operationResultMap.get("summary"),
+//              (String) operationResultMap.get("notes"),
+//              (String) operationResultMap.get("responseClass"),
+//              (String) operationResultMap.get("nickname"),
+//              (Integer) operationResultMap.get("position"),
+//              toScalaList(producesMediaTypes),
+//              toScalaList(consumesMediaTypes),
+//              emptyScalaList(),
+//              toScalaList(authorizations),
+//              toScalaList(parameterList),
+//              toScalaList((List) operationResultMap.get("responseMessages")),
+//              toOption(operationResultMap.get("deprecated"))
+//      );
+//
+//      operations.add(operation);
     }
-    Collections.sort(operations, OPERATION_POSITIONAL_ORDERING);
-    outerContext.put("operations", operations);
+//    Collections.sort(operations, OPERATION_POSITIONAL_ORDERING);
+//    outerContext.put("operations", operations);
   }
 
 }

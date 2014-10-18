@@ -20,10 +20,10 @@ public class OperationAuthReader implements RequestMappingReader {
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
     String requestMappingPattern = (String) context.get("requestMappingPattern");
-    List<com.wordnik.swagger.model.Authorization> authorizations = newArrayList();
+//    List<com.wordnik.swagger.model.Authorization> authorizations = newArrayList();
 
     if (null != authorizationContext) {
-      authorizations = authorizationContext.getAuthorizationsForPath(requestMappingPattern);
+//      authorizations = authorizationContext.getAuthorizationsForPath(requestMappingPattern);
     }
 
     ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
@@ -34,24 +34,24 @@ public class OperationAuthReader implements RequestMappingReader {
               && authorizationAnnotations.length > 0
               && !StringUtils.isBlank(authorizationAnnotations[0].value())) {
 
-        authorizations = newArrayList();
-        for (Authorization authorization : authorizationAnnotations) {
-          String value = authorization.value();
-          AuthorizationScope[] scopes = authorization.scopes();
-          List<com.wordnik.swagger.model.AuthorizationScope> authorizationScopeList = newArrayList();
-          for (AuthorizationScope authorizationScope : scopes) {
-            String description = authorizationScope.description();
-            String scope = authorizationScope.scope();
-            authorizationScopeList.add(new com.wordnik.swagger.model.AuthorizationScope(scope, description));
-          }
-          com.wordnik.swagger.model.AuthorizationScope[] authorizationScopes = authorizationScopeList
-                  .toArray(new com.wordnik.swagger.model.AuthorizationScope[authorizationScopeList.size()]);
-          com.wordnik.swagger.model.Authorization authorizationModel =
-                  new com.wordnik.swagger.model.Authorization(value, authorizationScopes);
-          authorizations.add(authorizationModel);
-        }
+//        authorizations = newArrayList();
+//        for (Authorization authorization : authorizationAnnotations) {
+//          String value = authorization.value();
+//          AuthorizationScope[] scopes = authorization.scopes();
+//          List<com.wordnik.swagger.model.AuthorizationScope> authorizationScopeList = newArrayList();
+//          for (AuthorizationScope authorizationScope : scopes) {
+//            String description = authorizationScope.description();
+//            String scope = authorizationScope.scope();
+//            authorizationScopeList.add(new com.wordnik.swagger.model.AuthorizationScope(scope, description));
+//          }
+//          com.wordnik.swagger.model.AuthorizationScope[] authorizationScopes = authorizationScopeList
+//                  .toArray(new com.wordnik.swagger.model.AuthorizationScope[authorizationScopeList.size()]);
+//          com.wordnik.swagger.model.Authorization authorizationModel =
+//                  new com.wordnik.swagger.model.Authorization(value, authorizationScopes);
+//          authorizations.add(authorizationModel);
+//        }
       }
     }
-    context.put("authorizations", authorizations);
+//    context.put("authorizations", authorizations);
   }
 }

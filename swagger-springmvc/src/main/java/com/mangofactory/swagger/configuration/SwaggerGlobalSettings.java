@@ -2,7 +2,6 @@ package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
-import com.wordnik.swagger.model.ResponseMessage;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class SwaggerGlobalSettings {
    *
    * @see com.mangofactory.swagger.readers.operation.DefaultResponseMessageReader
    */
-  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
+//  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
   private TypeResolver typeResolver = new TypeResolver();
   private AlternateTypeProvider alternateTypeProvider;
 
@@ -37,13 +36,13 @@ public class SwaggerGlobalSettings {
     this.alternateTypeProvider = alternateTypeProvider;
   }
 
-  public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {
-    return globalResponseMessages;
-  }
+//  public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {
+//    return globalResponseMessages;
+//  }
 
-  public void setGlobalResponseMessages(Map<RequestMethod, List<ResponseMessage>> globalResponseMessages) {
-    this.globalResponseMessages = globalResponseMessages;
-  }
+//  public void setGlobalResponseMessages(Map<RequestMethod, List<ResponseMessage>> globalResponseMessages) {
+//    this.globalResponseMessages = globalResponseMessages;
+//  }
 
   public TypeResolver getTypeResolver() {
     return typeResolver;

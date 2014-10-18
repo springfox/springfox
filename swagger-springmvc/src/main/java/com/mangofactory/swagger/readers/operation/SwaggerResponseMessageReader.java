@@ -2,7 +2,8 @@ package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.model.ResponseMessage;
+//import com.wordnik.swagger.model.ResponseMessage;
+import com.wordnik.swagger.models.Response;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
@@ -18,11 +19,11 @@ public abstract class SwaggerResponseMessageReader implements RequestMappingRead
     RequestMethod currentHttpMethod = (RequestMethod) context.get("currentHttpMethod");
     HandlerMethod handlerMethod = context.getHandlerMethod();
 
-    Collection<ResponseMessage> responseMessages = newArrayList();
+    Collection<Response> responseMessages = newArrayList();
     responseMessages.addAll(read(swaggerGlobalSettings, currentHttpMethod, handlerMethod));
     context.put("responseMessages", responseMessages);
   }
 
-  protected abstract Collection<ResponseMessage> read(SwaggerGlobalSettings swaggerGlobalSettings,
+  protected abstract Collection<Response> read(SwaggerGlobalSettings swaggerGlobalSettings,
       RequestMethod currentHttpMethod, HandlerMethod handlerMethod);
 }
