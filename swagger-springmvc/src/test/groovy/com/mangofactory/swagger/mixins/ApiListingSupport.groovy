@@ -1,41 +1,41 @@
 package com.mangofactory.swagger.mixins
-import com.wordnik.swagger.core.SwaggerSpec
-import com.wordnik.swagger.model.ApiListing
-import com.wordnik.swagger.model.ApiListingReference
-import com.wordnik.swagger.model.OAuth
-import com.wordnik.swagger.model.ResourceListing
+//import com.wordnik.swagger.core.SwaggerSpec
+//import com.wordnik.swagger.model.ApiListing
+//import com.wordnik.swagger.model.ApiListingReference
+//import com.wordnik.swagger.model.OAuth
+//import com.wordnik.swagger.model.ResourceListing
 
-import static com.mangofactory.swagger.ScalaUtils.*
+//import static com.mangofactory.swagger.ScalaUtils.*
 
 class ApiListingSupport {
 
    def apiListing(authorizations = emptyScalaList(), models = toOption(null)) {
-      scala.collection.immutable.List emptyList = toScalaList(null);
-      new ApiListing(
-              "1.0",
-              SwaggerSpec.version(),
-              "",
-              "/relative-path-to-endpoint",
-              emptyList,
-              emptyList,
-              emptyList,
-              authorizations,
-              emptyList,
-              models,
-              toOption(null),
-              1);
+//      scala.collection.immutable.List emptyList = toScalaList(null);
+//      new ApiListing(
+//              "1.0",
+//              SwaggerSpec.version(),
+//              "",
+//              "/relative-path-to-endpoint",
+//              emptyList,
+//              emptyList,
+//              emptyList,
+//              authorizations,
+//              emptyList,
+//              models,
+//              toOption(null),
+//              1);
    }
 
    def apiListingReference() {
-      new ApiListingReference("/path", toOption("description"), 3)
+//      new ApiListingReference("/path", toOption("description"), 3)
    }
 
-   def resourceListing(List<OAuth> authorizationTypes) {
-      new ResourceListing(
-              "apiVersion",
-              "swagger version",
-              toScalaList([apiListingReference()]),
-              toScalaList(authorizationTypes),
-              toOption(null))
-   }
+//   def resourceListing(List<OAuth> authorizationTypes) {
+//      new ResourceListing(
+//              "apiVersion",
+//              "swagger version",
+//              toScalaList([apiListingReference()]),
+//              toScalaList(authorizationTypes),
+//              toOption(null))
+//   }
 }

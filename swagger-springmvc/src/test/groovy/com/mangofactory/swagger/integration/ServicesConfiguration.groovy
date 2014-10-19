@@ -145,46 +145,46 @@ public class ServicesConfiguration {
    }
 
 
-   private List<AuthorizationType> authorizationTypes() {
-      ArrayList<AuthorizationType> authorizationTypes = new ArrayList<AuthorizationType>();
+//   private List<AuthorizationType> authorizationTypes() {
+//      ArrayList<AuthorizationType> authorizationTypes = new ArrayList<AuthorizationType>();
+//
+//
+//      List<AuthorizationScope> authorizationScopeList = newArrayList();
+//      authorizationScopeList.add(new AuthorizationScope("global", "access all"));
+//
+//
+//      List<GrantType> grantTypes = newArrayList();
+//
+//      LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.wordnik.com/oauth/dialog");
+//      grantTypes.add(new ImplicitGrant(loginEndpoint, "access_token"));
+//
+//      TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint("http://petstore.swagger.wordnik.com/oauth/requestToken", "client_id", "client_secret");
+//      TokenEndpoint tokenEndpoint = new TokenEndpoint("http://petstore.swagger.wordnik.com/oauth/token", "auth_code");
+//
+//      AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint);
+//      grantTypes.add(authorizationCodeGrant);
+//
+//      OAuth oAuth = new OAuthBuilder()
+//              .scopes(authorizationScopeList)
+//              .grantTypes(grantTypes)
+//              .build();
+//
+//      authorizationTypes.add(oAuth);
+//      return authorizationTypes;
+//   }
 
-
-      List<AuthorizationScope> authorizationScopeList = newArrayList();
-      authorizationScopeList.add(new AuthorizationScope("global", "access all"));
-
-
-      List<GrantType> grantTypes = newArrayList();
-
-      LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.wordnik.com/oauth/dialog");
-      grantTypes.add(new ImplicitGrant(loginEndpoint, "access_token"));
-
-      TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint("http://petstore.swagger.wordnik.com/oauth/requestToken", "client_id", "client_secret");
-      TokenEndpoint tokenEndpoint = new TokenEndpoint("http://petstore.swagger.wordnik.com/oauth/token", "auth_code");
-
-      AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint);
-      grantTypes.add(authorizationCodeGrant);
-
-      OAuth oAuth = new OAuthBuilder()
-              .scopes(authorizationScopeList)
-              .grantTypes(grantTypes)
-              .build();
-
-      authorizationTypes.add(oAuth);
-      return authorizationTypes;
-   }
-
-   @Bean
-   public AuthorizationContext authorizationContext() {
-      List<Authorization> authorizations = newArrayList();
-
-      AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-      AuthorizationScope[] authorizationScopes = [authorizationScope];
-      authorizations.add(new Authorization("oauth2", authorizationScopes));
-      AuthorizationContext authorizationContext =
-              new AuthorizationContext.AuthorizationContextBuilder(authorizations)
-                      .withIncludePatterns(DEFAULT_INCLUDE_PATTERNS)
-                      .build();
-      return authorizationContext;
-   }
+//   @Bean
+//   public AuthorizationContext authorizationContext() {
+//      List<Authorization> authorizations = newArrayList();
+//
+//      AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+//      AuthorizationScope[] authorizationScopes = [authorizationScope];
+//      authorizations.add(new Authorization("oauth2", authorizationScopes));
+//      AuthorizationContext authorizationContext =
+//              new AuthorizationContext.AuthorizationContextBuilder(authorizations)
+//                      .withIncludePatterns(DEFAULT_INCLUDE_PATTERNS)
+//                      .build();
+//      return authorizationContext;
+//   }
 
 }

@@ -5,7 +5,7 @@ import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.wordnik.swagger.model.Parameter
+//import com.wordnik.swagger.model.Parameter
 import org.springframework.validation.BindingResult
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse
 
 import static com.google.common.collect.Lists.newArrayList
 import static com.google.common.collect.Maps.newHashMap
-import static com.mangofactory.swagger.ScalaUtils.toOption
+//import static com.mangofactory.swagger.ScalaUtils.toOption
 
 @Mixin(RequestMappingSupport)
 class OperationParameterRequestConditionReaderTest extends Specification {
@@ -51,7 +51,7 @@ class OperationParameterRequestConditionReaderTest extends Specification {
       Map<String, Object> result = context.getResult()
 
     then:
-      Parameter parameter = result['parameters'][0]
+//      Parameter parameter = result['parameters'][0]
       assert parameter."$property" == expectedValue
     where:
       property        | expectedValue
@@ -93,8 +93,8 @@ class OperationParameterRequestConditionReaderTest extends Specification {
 
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
 
-      def parameter = new Parameter("test", toOption(null), toOption(""), true, false, "string", null, "string",
-              toOption(""))
+//      def parameter = new Parameter("test", toOption(null), toOption(""), true, false, "string", null, "string",
+//              toOption(""))
       context.put("parameters", newArrayList(parameter))
     when:
       OperationParameterRequestConditionReader operationParameterReader = new OperationParameterRequestConditionReader()

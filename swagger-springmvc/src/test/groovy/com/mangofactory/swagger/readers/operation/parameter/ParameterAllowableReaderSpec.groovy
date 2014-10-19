@@ -5,14 +5,14 @@ import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.annotations.ApiParam
-import com.wordnik.swagger.model.AllowableListValues
-import com.wordnik.swagger.model.AllowableRangeValues
+//import com.wordnik.swagger.model.AllowableListValues
+//import com.wordnik.swagger.model.AllowableRangeValues
 import org.springframework.core.MethodParameter
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.mangofactory.swagger.ScalaUtils.fromScalaList
+//import static com.mangofactory.swagger.ScalaUtils.fromScalaList
 
 @Mixin(RequestMappingSupport)
 class ParameterAllowableReaderSpec extends Specification {
@@ -27,7 +27,7 @@ class ParameterAllowableReaderSpec extends Specification {
   when:
     Command operationCommand = new ParameterAllowableReader();
     operationCommand.execute(context)
-    AllowableListValues allowableValues = context.get('allowableValues')
+//    AllowableListValues allowableValues = context.get('allowableValues')
   then:
 
     allowableValues.valueType() == "LIST"
@@ -50,7 +50,7 @@ class ParameterAllowableReaderSpec extends Specification {
   when:
     Command operationCommand = new ParameterAllowableReader();
     operationCommand.execute(context)
-    AllowableListValues allowableValues = context.get('allowableValues')
+//    AllowableListValues allowableValues = context.get('allowableValues')
   then:
     allowableValues.valueType() == "LIST"
     fromScalaList(allowableValues.values()) == expected
@@ -74,7 +74,7 @@ class ParameterAllowableReaderSpec extends Specification {
   when:
     Command operationCommand = new ParameterAllowableReader();
     operationCommand.execute(context)
-    AllowableRangeValues allowableValues = context.get('allowableValues')
+//    AllowableRangeValues allowableValues = context.get('allowableValues')
   then:
     allowableValues.min() == min as String
     allowableValues.max() == max as String
