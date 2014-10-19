@@ -60,9 +60,14 @@ public class JacksonSwaggerSupport implements ApplicationContextAware {
       if (messageConverter instanceof MappingJackson2HttpMessageConverter) {
         MappingJackson2HttpMessageConverter m = (MappingJackson2HttpMessageConverter) messageConverter;
         this.springsMessageConverterObjectMapper = m.getObjectMapper();
-        this.springsMessageConverterObjectMapper.registerModule(swaggerSerializationModule());
 
-        //This is done by com.wordnik.swagger.util.Json may not be a good idea to interfere with springs object mapper
+        /**
+         * TODO - AK
+         * The serialization model and serialization configuration follows the approach in com.wordnik.swagger.util.Json
+         * Consider using a dedicated object mapper rather than using spring's. Otherwise we may be altering the users
+         * object mapping behavior just to support swagger serialization
+         */
+        this.springsMessageConverterObjectMapper.registerModule(swaggerSerializationModule());
         this.springsMessageConverterObjectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         this.springsMessageConverterObjectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         this.springsMessageConverterObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

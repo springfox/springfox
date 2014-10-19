@@ -31,20 +31,20 @@ class DefaultSwaggerControllerSpec extends Specification {
    @Shared
    DefaultSwaggerController controller = new DefaultSwaggerController()
 
-//   def setup() {
-//      def jackson2 = new MappingJackson2HttpMessageConverter()
-//
-//      JacksonSwaggerSupport jacksonScalaSupport = new JacksonSwaggerSupport()
-//      ObjectMapper mapper = new ObjectMapper()
+   def setup() {
+      def jackson2 = new MappingJackson2HttpMessageConverter()
+
+      JacksonSwaggerSupport jacksonScalaSupport = new JacksonSwaggerSupport()
+      ObjectMapper mapper = new ObjectMapper()
 //      mapper.registerModule(new DefaultScalaModule())
-//      mapper.registerModule(jacksonScalaSupport.swaggerSerializationModule())
-//
-//      jackson2.setObjectMapper(mapper)
-//      mockMvc = standaloneSetup(controller)
-//              .setSingleView(mockView)
-//              .setMessageConverters(jackson2)
-//              .build();
-//   }
+      mapper.registerModule(jacksonScalaSupport.swaggerSerializationModule())
+
+      jackson2.setObjectMapper(mapper)
+      mockMvc = standaloneSetup(controller)
+              .setSingleView(mockView)
+              .setMessageConverters(jackson2)
+              .build();
+   }
 
    @Unroll("path: #path")
    def "should return the default or first swagger resource listing"() {
