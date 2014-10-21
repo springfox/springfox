@@ -28,7 +28,7 @@ class ModelAttributeParameterExpander {
         continue;
       }
 
-      if (!typeBelongsToJavaPackage(field) && !field.getType().isEnum()) {
+      if (!typeBelongsToJavaPackage(field) && !field.getType().isEnum() && !field.getType().equals(paramType)) {
 
         expand(field.getName(), field.getType(), parameters);
         continue;
