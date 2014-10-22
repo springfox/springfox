@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/swagger-models/swagger-models.iml" filepath="$PROJECT_DIR$/swagger-models/swagger-models.iml" />
       <module fileurl="file://$PROJECT_DIR$/swagger-springmvc/swagger-springmvc.iml" filepath="$PROJECT_DIR$/swagger-springmvc/swagger-springmvc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/swagger-springmvc-devapp/swagger-springmvc-devapp.iml" filepath="$PROJECT_DIR$/swagger-springmvc-devapp/swagger-springmvc-devapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/swagger-springmvc-parent.iml" filepath="$PROJECT_DIR$/swagger-springmvc-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/swagger-springmvc/swagger-springmvc-ui.iml" filepath="$PROJECT_DIR$/swagger-springmvc/swagger-springmvc-ui.iml" />
     </modules>

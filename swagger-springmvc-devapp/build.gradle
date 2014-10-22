@@ -1,0 +1,35 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE")
+  }
+}
+
+repositories {
+  //Swagger core 2.0 models are in snapshot
+  maven {
+    url "https://oss.sonatype.org/content/repositories/snapshots"
+  }
+  jcenter()
+}
+
+apply plugin: 'war'
+apply plugin: 'spring-boot'
+apply plugin: 'project-report'
+
+
+ext {
+  bootVersion = '1.1.8.RELEASE'
+}
+dependencies {
+
+  compile("org.springframework.boot:spring-boot-starter-web:${bootVersion}")
+  compile("org.springframework.boot:spring-boot-starter-actuator:${bootVersion}")
+
+  compile (project(':swagger-springmvc')){
+    exclude group: 'javax.servlet', module: 'servlet-api'
+  }
+//  compile project(':swagger-springmvc-ui')
+}

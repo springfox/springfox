@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/swagger-models" />
             <option value="$PROJECT_DIR$/swagger-springmvc" />
+            <option value="$PROJECT_DIR$/swagger-springmvc-devapp" />
+            <option value="$PROJECT_DIR$/swagger-springmvc-ui" />
           </set>
         </option>
       </GradleProjectSettings>
