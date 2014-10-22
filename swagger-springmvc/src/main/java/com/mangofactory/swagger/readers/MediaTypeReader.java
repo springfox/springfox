@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static org.apache.commons.lang.StringUtils.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 public class MediaTypeReader implements RequestMappingReader {
 

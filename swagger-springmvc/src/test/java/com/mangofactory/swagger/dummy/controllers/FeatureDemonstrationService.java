@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Lists.newArrayList;
 
 @Controller
 @RequestMapping("/features")

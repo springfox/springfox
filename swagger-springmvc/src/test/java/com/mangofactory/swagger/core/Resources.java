@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-import static com.google.common.base.Throwables.*;
+import static com.google.common.base.Throwables.propagate;
 
 /**
  * Methods for loading resources.

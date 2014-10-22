@@ -1,86 +1,71 @@
 package com.mangofactory.swagger.configuration
-import com.fasterxml.classmate.TypeResolver
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
+
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.models.DefaultModelProvider
-import com.mangofactory.swagger.models.ModelDependencyProvider
-import com.mangofactory.swagger.models.ModelProvider
-import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
-import com.mangofactory.swagger.models.property.bean.AccessorsProvider
-import com.mangofactory.swagger.models.property.bean.BeanModelPropertyProvider
-import com.mangofactory.swagger.models.property.constructor.ConstructorModelPropertyProvider
-import com.mangofactory.swagger.models.property.field.FieldModelPropertyProvider
-import com.mangofactory.swagger.models.property.field.FieldProvider
-import com.mangofactory.swagger.models.property.provider.DefaultModelPropertiesProvider
-import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
-import com.mangofactory.swagger.ordering.ResourceListingPositionalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
-import com.mangofactory.swagger.paths.SwaggerPathProvider
-import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
-//import com.wordnik.swagger.core.SwaggerSpec
-import com.wordnik.swagger.model.*
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
+import com.wordnik.swagger.models.Contact
+import com.wordnik.swagger.models.Info
+import com.wordnik.swagger.models.License
+import com.wordnik.swagger.models.Swagger
 import spock.lang.Specification
-
-//import static com.mangofactory.swagger.ScalaUtils.*
 
 @Mixin([RequestMappingSupport, SpringSwaggerConfigSupport])
 class SwaggerApiResourceListingSpec extends Specification {
 
-//  def "assessors"() {
-//    given:
-//      SwaggerCache cache = new SwaggerCache()
-//      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(cache, null)
-//      List<AuthorizationType> authTypes = Arrays.asList(new ApiKey("", ""))
-//      swaggerApiResourceListing.setAuthorizationTypes(authTypes)
-//      AbsoluteSwaggerPathProvider provider = new AbsoluteSwaggerPathProvider()
-//      swaggerApiResourceListing.setSwaggerPathProvider(provider);
-//    expect:
-//      cache == swaggerApiResourceListing.getSwaggerCache()
-//      authTypes == swaggerApiResourceListing.getAuthorizationTypes()
-//      provider == swaggerApiResourceListing.getSwaggerPathProvider()
-//  }
-//
-//  def "default swagger resource"() {
-//    when: "I create a swagger resource"
-//      SwaggerCache swaggerCache = new SwaggerCache();
-//      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
-//      swaggerApiResourceListing.initialize()
-//
-//    then: "I should should have the correct defaults"
-//      ResourceListing resourceListing = swaggerCache.getResourceListing("default")
-//      def apiListingReferenceList = fromScalaList(resourceListing.apis())
-//      def authorizationTypes = fromScalaList(resourceListing.authorizations())
-//
-//      resourceListing.apiVersion() == "1"
-//      resourceListing.swaggerVersion() == SwaggerSpec.version()
-//
-//      fromOption(resourceListing.info()) == null
-//      apiListingReferenceList == []
-//      authorizationTypes == []
-//  }
-//
-//  def "resource with api info"() {
-//    given:
-//      ApiInfo apiInfo = new ApiInfo("title", "description", "terms", "contact", "license", "licenseUrl")
-//    when:
-//      SwaggerCache swaggerCache = new SwaggerCache();
-//      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
-//      swaggerApiResourceListing.apiInfo = apiInfo
-//      swaggerApiResourceListing.initialize()
-//
-//    then:
-//      swaggerApiResourceListing.apiInfo.title() == "title"
-//      swaggerApiResourceListing.apiInfo.description() == "description"
-//      swaggerApiResourceListing.apiInfo.termsOfServiceUrl() == "terms"
-//      swaggerApiResourceListing.apiInfo.contact() == "contact"
-//      swaggerApiResourceListing.apiInfo.license() == "license"
-//      swaggerApiResourceListing.apiInfo.licenseUrl() == "licenseUrl"
-//  }
+  def "assessors"() {
+    given:
+      SwaggerCache cache = new SwaggerCache()
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(cache, null)
+      AbsoluteSwaggerPathProvider provider = new AbsoluteSwaggerPathProvider()
+      swaggerApiResourceListing.setSwaggerPathProvider(provider);
+    expect:
+      cache == swaggerApiResourceListing.getSwaggerCache()
+      provider == swaggerApiResourceListing.getSwaggerPathProvider()
+  }
+
+  def "default swagger resource"() {
+    when: "I create a swagger resource"
+      SwaggerCache swaggerCache = new SwaggerCache();
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
+      swaggerApiResourceListing.initialize()
+
+    then: "I should should have the correct defaults"
+      Swagger swagger = swaggerCache.getSwagger("default")
+      swagger.swagger == "2.0"
+  }
+
+  def "resource with api info"() {
+    given:
+      Info apiInfo = new Info(
+              title: "title",
+              description: "description",
+              termsOfService: "terms",
+              contact: new Contact(name: 'cname', url: 'curl', email: 'cemail'),
+              license: new License(name: 'lname', url: 'lurl')
+      )
+
+    when:
+      SwaggerCache swaggerCache = new SwaggerCache();
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
+      swaggerApiResourceListing.apiInfo = apiInfo
+      swaggerApiResourceListing.initialize()
+
+    then:
+      swaggerApiResourceListing.apiInfo.getTitle() == "title"
+      swaggerApiResourceListing.apiInfo.getDescription() == "description"
+      swaggerApiResourceListing.apiInfo.getTermsOfService() == "terms"
+
+    and:
+      swaggerApiResourceListing.apiInfo.contact.name == "cname"
+      swaggerApiResourceListing.apiInfo.contact.url == "curl"
+      swaggerApiResourceListing.apiInfo.contact.email == "cemail"
+
+    and:
+      swaggerApiResourceListing.apiInfo.license.name == "lname"
+      swaggerApiResourceListing.apiInfo.license.url == "lurl"
+  }
 //
 //  def "resource with authorization types"() {
 //    given:
@@ -92,7 +77,7 @@ class SwaggerApiResourceListingSpec extends Specification {
 //      swaggerApiResourceListing.initialize()
 //
 //    then:
-//      ResourceListing resourceListing = swaggerCache.getResourceListing("default")
+//      ResourceListing resourceListing = swaggerCache.getSwagger("default")
 //      def authorizationTypes = fromScalaList(resourceListing.authorizations())
 //      def apiKeyAuthType = authorizationTypes[0]
 //      apiKeyAuthType instanceof ApiKey
@@ -151,7 +136,7 @@ class SwaggerApiResourceListingSpec extends Specification {
 //
 //    when:
 //      swaggerApiResourceListing.initialize()
-//      ResourceListing resourceListing = swaggerCache.getResourceListing("swaggerGroup")
+//      ResourceListing resourceListing = swaggerCache.getSwagger("swaggerGroup")
 //
 //    then:
 //      ApiListingReference apiListingReference = resourceListing.apis().head()
@@ -183,7 +168,7 @@ class SwaggerApiResourceListingSpec extends Specification {
 //
 //    when:
 //      swaggerApiResourceListing.initialize()
-//      def apis = fromScalaList(swaggerCache.getResourceListing('default').apis())
+//      def apis = fromScalaList(swaggerCache.getSwagger('default').apis())
 //    then:
 //      apis[0].position == firstPosition
 //      apis[0].path == firstPath

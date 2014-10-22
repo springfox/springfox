@@ -4,13 +4,8 @@ import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.Authorization;
-import com.wordnik.swagger.annotations.AuthorizationScope;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.method.HandlerMethod;
-
-import java.util.List;
-
-import static com.google.common.collect.Lists.*;
 
 public class OperationAuthReader implements RequestMappingReader {
 

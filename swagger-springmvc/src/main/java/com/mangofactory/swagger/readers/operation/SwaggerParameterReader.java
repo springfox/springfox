@@ -1,13 +1,9 @@
 package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.parameters.Parameter;
 
 import java.util.Collection;
-import java.util.List;
-
-import static com.google.common.collect.Lists.*;
 
 public abstract class SwaggerParameterReader implements RequestMappingReader {
 

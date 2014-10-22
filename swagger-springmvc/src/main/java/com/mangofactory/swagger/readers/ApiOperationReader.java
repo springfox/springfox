@@ -19,9 +19,6 @@ import com.mangofactory.swagger.readers.operation.OperationSummaryReader;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-//import com.wordnik.swagger.model.Authorization;
-//import com.wordnik.swagger.model.Operation;
-//import com.wordnik.swagger.model.Parameter;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
@@ -29,13 +26,16 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Lists.newArrayList;
+
+//import com.wordnik.swagger.model.Authorization;
+//import com.wordnik.swagger.model.Operation;
+//import com.wordnik.swagger.model.Parameter;
 
 public class ApiOperationReader implements Command<RequestMappingContext> {
 

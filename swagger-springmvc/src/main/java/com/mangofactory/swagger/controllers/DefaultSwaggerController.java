@@ -25,7 +25,7 @@ public class DefaultSwaggerController {
   public
   @ResponseBody
   ResponseEntity<Swagger> getSwagger(
-      @RequestParam(value = "group",  required = false) String swaggerGroup) {
+          @RequestParam(value = "group", required = false) String swaggerGroup) {
 
     return getSwaggerResourceListing(swaggerGroup);
   }
@@ -51,22 +51,18 @@ public class DefaultSwaggerController {
 //  }
 
   private ResponseEntity<Swagger> getSwaggerResourceListing(String swaggerGroup) {
-//    ResponseEntity<ResourceListing> responseEntity = new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
-//    ResourceListing resourceListing = null;
-//
-//    if (null == swaggerGroup) {
-//      resourceListing = swaggerCache.getSwaggerMap().values().iterator().next();
-//    } else {
-//      if (swaggerCache.getSwaggerMap().containsKey(swaggerGroup)) {
-//        resourceListing = swaggerCache.getSwaggerMap().get(swaggerGroup);
-//      }
-//    }
-//    if (null != resourceListing) {
-//      responseEntity = new ResponseEntity<ResourceListing>(resourceListing, HttpStatus.OK);
-//    }
-
-    Swagger swagger = new Swagger();
-
-    return new ResponseEntity<Swagger>(swagger, HttpStatus.OK);
+    ResponseEntity<Swagger> responseEntity = new ResponseEntity<Swagger>(HttpStatus.NOT_FOUND);
+    Swagger swagger = null;
+    if (null == swaggerGroup) {
+      swagger = swaggerCache.getSwaggerApiMap().values().iterator().next();
+    } else {
+      if (swaggerCache.getSwaggerApiMap().containsKey(swaggerGroup)) {
+        swagger = swaggerCache.getSwaggerApiMap().get(swaggerGroup);
+      }
+    }
+    if (null != swagger) {
+      responseEntity = new ResponseEntity<Swagger>(swagger, HttpStatus.OK);
+    }
+    return responseEntity;
   }
 }

@@ -1,19 +1,12 @@
 package com.mangofactory.swagger.readers;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-//import com.wordnik.swagger.model.AllowableListValues;
-//import com.wordnik.swagger.model.Parameter;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 
-import java.util.List;
-
-import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
-import static scala.collection.JavaConversions.*;
+//import com.wordnik.swagger.model.AllowableListValues;
+//import com.wordnik.swagger.model.Parameter;
 
 public class OperationParameterRequestConditionReader implements RequestMappingReader {
   @Override

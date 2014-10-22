@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Maps.newLinkedHashMap;
 
 @Component
 public class SwaggerCache {
@@ -15,7 +15,7 @@ public class SwaggerCache {
     swaggerApiMap.put(swaggerGroup, swagger);
   }
 
-  public Swagger getResourceListing(String key) {
+  public Swagger getSwagger(String key) {
     return swaggerApiMap.get(key);
   }
 

@@ -2,14 +2,15 @@ package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-//import com.wordnik.swagger.model.ResponseMessage;
 import com.wordnik.swagger.models.Response;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
 import java.util.Collection;
 
-import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Lists.newArrayList;
+
+//import com.wordnik.swagger.model.ResponseMessage;
 
 public abstract class SwaggerResponseMessageReader implements RequestMappingReader {
 

@@ -3,7 +3,7 @@ package com.mangofactory.swagger.paths;
 import org.springframework.util.Assert;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static org.apache.commons.lang.StringUtils.*;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 public abstract class SwaggerPathProvider {
   /**

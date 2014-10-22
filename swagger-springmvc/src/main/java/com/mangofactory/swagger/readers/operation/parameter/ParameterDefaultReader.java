@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ValueConstants;
 
 import java.lang.annotation.Annotation;
 
-import static org.apache.commons.lang.StringUtils.*;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 public class ParameterDefaultReader implements Command<RequestMappingContext> {
   @Override

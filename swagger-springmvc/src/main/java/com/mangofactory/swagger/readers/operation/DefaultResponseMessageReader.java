@@ -2,29 +2,25 @@ package com.mangofactory.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
-import com.mangofactory.swagger.models.Annotations;
-import com.mangofactory.swagger.models.ResolvedTypes;
 import com.wordnik.swagger.annotations.ApiResponse;
-import com.wordnik.swagger.annotations.ApiResponses;
-//import com.wordnik.swagger.model.ResponseMessage;
 import com.wordnik.swagger.models.Response;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import scala.Option;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.uniqueIndex;
+import static com.mangofactory.swagger.core.ModelUtils.handlerReturnType;
+import static com.mangofactory.swagger.models.ResolvedTypes.typeName;
+
+//import com.wordnik.swagger.model.ResponseMessage;
 //import static com.mangofactory.swagger.ScalaUtils.*;
-import static com.mangofactory.swagger.core.ModelUtils.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
 

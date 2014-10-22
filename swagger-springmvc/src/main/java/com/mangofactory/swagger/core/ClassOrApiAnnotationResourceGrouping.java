@@ -13,10 +13,10 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.util.Set;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Sets.*;
-import static com.mangofactory.swagger.core.StringUtils.*;
-import static org.apache.commons.lang.StringUtils.*;
+import static com.google.common.base.Strings.emptyToNull;
+import static com.google.common.collect.Sets.newHashSet;
+import static com.mangofactory.swagger.core.StringUtils.splitCamelCase;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 @Component
 public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStrategy {

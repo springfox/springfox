@@ -3,7 +3,7 @@ package com.mangofactory.swagger.core;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.google.common.base.Strings.*;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class StringUtils {
   private static final Pattern FIRST_PATH_FRAGMENT_REGEX = Pattern.compile("^([/]?[\\w\\-\\.]+[/]?)");

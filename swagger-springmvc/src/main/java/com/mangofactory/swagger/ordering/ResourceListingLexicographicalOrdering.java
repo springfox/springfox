@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.ordering;
 
-import com.google.common.collect.Ordering;
 //import com.wordnik.swagger.model.ApiListingReference;
 
 /**

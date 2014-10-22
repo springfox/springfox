@@ -2,10 +2,7 @@ package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class SwaggerGlobalSettings {

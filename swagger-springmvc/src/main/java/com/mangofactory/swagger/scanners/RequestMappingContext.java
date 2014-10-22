@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.util.Map;
 
-import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Maps.newHashMap;
 
 public class RequestMappingContext implements CommandContext<Map<String, Object>> {
   private final RequestMappingInfo requestMappingInfo;

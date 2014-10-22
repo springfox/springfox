@@ -1,42 +1,33 @@
 package com.mangofactory.swagger.scanners;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
-import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.models.ModelProvider;
-import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.ApiDescriptionReader;
 import com.mangofactory.swagger.readers.ApiModelReader;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.MediaTypeReader;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
-//import com.wordnik.swagger.core.SwaggerSpec;
-//import com.wordnik.swagger.model.ApiDescription;
-//import com.wordnik.swagger.model.ApiListing;
-//import com.wordnik.swagger.model.Authorization;
-//import com.wordnik.swagger.model.Model;
 import com.wordnik.swagger.models.Swagger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Option;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMap;
+
+//import com.wordnik.swagger.core.SwaggerSpec;
+//import com.wordnik.swagger.model.ApiDescription;
+//import com.wordnik.swagger.model.ApiListing;
+//import com.wordnik.swagger.model.Authorization;
+//import com.wordnik.swagger.model.Model;
 
 public class ApiListingScanner {
   private static final Logger log = LoggerFactory.getLogger(ApiListingScanner.class);

@@ -8,8 +8,8 @@ import org.springframework.web.method.HandlerMethod;
 
 import java.lang.reflect.Type;
 
-import static com.mangofactory.swagger.models.ResolvedTypes.*;
-import static com.mangofactory.swagger.readers.operation.HandlerMethodResolver.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolved;
+import static com.mangofactory.swagger.readers.operation.HandlerMethodResolver.use;
 
 public final class ModelUtils {
 

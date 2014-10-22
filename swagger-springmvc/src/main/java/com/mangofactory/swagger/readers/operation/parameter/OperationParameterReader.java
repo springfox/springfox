@@ -2,15 +2,11 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
-import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.readers.operation.SwaggerParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-//import com.wordnik.swagger.model.AllowableValues;
-//import com.wordnik.swagger.model.Parameter;
-import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.parameters.Parameter;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
@@ -21,7 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Lists.newArrayList;
+
+//import com.wordnik.swagger.model.AllowableValues;
+//import com.wordnik.swagger.model.Parameter;
 
 public class OperationParameterReader extends SwaggerParameterReader {
 

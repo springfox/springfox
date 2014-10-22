@@ -10,10 +10,13 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.util.Set;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Sets.*;
-import static com.mangofactory.swagger.core.StringUtils.*;
-import static java.util.Arrays.*;
+import static com.google.common.base.Strings.emptyToNull;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Sets.newHashSet;
+import static com.mangofactory.swagger.core.StringUtils.firstPathSegment;
+import static com.mangofactory.swagger.core.StringUtils.maybeChompLeadingSlash;
+import static com.mangofactory.swagger.core.StringUtils.splitCamelCase;
+import static java.util.Arrays.asList;
 
 /**
  * TODO - fix or remove

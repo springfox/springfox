@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.dummy;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
-
 import com.mangofactory.swagger.dummy.models.Example;
 import com.mangofactory.swagger.dummy.models.FoobarDto;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
@@ -24,7 +23,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
-import static com.mangofactory.swagger.dummy.DummyModels.*;
+import static com.mangofactory.swagger.dummy.DummyModels.Ignorable;
 
 public class DummyClass {
   public void dummyMethod() {
@@ -77,6 +76,7 @@ public class DummyClass {
 
   @ApiOperation(value = "SomeVal",
           authorizations = @Authorization(value = "oauth2",
+                  type = "",
                   scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
                   }))
   public void methodWithAuth() {

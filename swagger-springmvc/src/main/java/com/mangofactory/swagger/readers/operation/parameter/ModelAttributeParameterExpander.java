@@ -12,9 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.mangofactory.swagger.models.Types.*;
-import static java.lang.reflect.Modifier.*;
-
 class ModelAttributeParameterExpander {
 
 //  public void expand(final String parentName, final Class<?> paramType,

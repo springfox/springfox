@@ -4,12 +4,9 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimaps;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
-//import com.wordnik.swagger.model.ApiListingReference;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -22,8 +19,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static java.lang.String.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.String.format;
+
+//import com.wordnik.swagger.model.ApiListingReference;
 
 public class ApiListingReferenceScanner {
   private static final String REQUEST_MAPPINGS_EMPTY =
@@ -88,6 +87,8 @@ public class ApiListingReferenceScanner {
         }
       }
     }
+
+
 
     for (ResourceGroup resourceGroup : resourceGroupDescriptions.keySet()) {
       String resourceGroupName = resourceGroup.getGroupName();

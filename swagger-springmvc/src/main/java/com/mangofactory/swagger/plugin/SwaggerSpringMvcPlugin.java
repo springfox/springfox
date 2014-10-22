@@ -2,7 +2,6 @@ package com.mangofactory.swagger.plugin;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
@@ -12,33 +11,29 @@ import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeRule;
 import com.mangofactory.swagger.models.alternates.WildcardType;
-import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
-import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
-//import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiInfo;
-//import com.wordnik.swagger.model.ApiListingReference;
-//import com.wordnik.swagger.model.AuthorizationType;
-//import com.wordnik.swagger.model.ResponseMessage;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.mangofactory.swagger.models.alternates.Alternates.*;
-import static java.util.Arrays.*;
-import static org.apache.commons.lang.StringUtils.*;
+import static com.mangofactory.swagger.models.alternates.Alternates.newRule;
+import static java.util.Arrays.asList;
+import static org.apache.commons.lang.StringUtils.isBlank;
+
+//import com.wordnik.swagger.model.ApiDescription;
+//import com.wordnik.swagger.model.ApiListingReference;
+//import com.wordnik.swagger.model.AuthorizationType;
+//import com.wordnik.swagger.model.ResponseMessage;
 
 /**
  * A builder which is intended to be the primary interface into the swagger-springmvc framework.
@@ -372,9 +367,9 @@ public class SwaggerSpringMvcPlugin {
   public SwaggerSpringMvcPlugin build() {
     if (initialized.compareAndSet(false, true)) {
       configure();
-//      buildSwaggerGlobalSettings();
+      buildSwaggerGlobalSettings();
       buildApiListingReferenceScanner();
-//      buildSwaggerApiResourceListing();
+      buildSwaggerApiResourceListing();
     }
     return this;
   }
@@ -413,38 +408,38 @@ public class SwaggerSpringMvcPlugin {
     }
   }
 
-//  private void buildSwaggerGlobalSettings() {
+  private void buildSwaggerGlobalSettings() {
 //    Map<RequestMethod, List<ResponseMessage>> mergedResponseMessages = new HashMap<RequestMethod,
 //            List<ResponseMessage>>();
 //    mergedResponseMessages.putAll(springSwaggerConfig.defaultResponseMessages());
 //    mergedResponseMessages.putAll(this.globalResponseMessages);
 //    swaggerGlobalSettings.setGlobalResponseMessages(mergedResponseMessages);
+
+    Set<Class> mergedIgnorableParameterTypes = new HashSet<Class>();
+    mergedIgnorableParameterTypes.addAll(springSwaggerConfig.defaultIgnorableParameterTypes());
+    mergedIgnorableParameterTypes.addAll(this.ignorableParameterTypes);
+    swaggerGlobalSettings.setIgnorableParameterTypes(mergedIgnorableParameterTypes);
+
+    for (AlternateTypeRule rule : this.alternateTypeRules) {
+      this.alternateTypeProvider.addRule(rule);
+    }
+    swaggerGlobalSettings.setAlternateTypeProvider(this.alternateTypeProvider);
+  }
 //
-//    Set<Class> mergedIgnorableParameterTypes = new HashSet<Class>();
-//    mergedIgnorableParameterTypes.addAll(springSwaggerConfig.defaultIgnorableParameterTypes());
-//    mergedIgnorableParameterTypes.addAll(this.ignorableParameterTypes);
-//    swaggerGlobalSettings.setIgnorableParameterTypes(mergedIgnorableParameterTypes);
-//
-//    for (AlternateTypeRule rule : this.alternateTypeRules) {
-//      this.alternateTypeProvider.addRule(rule);
-//    }
-//    swaggerGlobalSettings.setAlternateTypeProvider(this.alternateTypeProvider);
-//  }
-//
-//  private void buildSwaggerApiResourceListing() {
-//    swaggerApiResourceListing = new SwaggerApiResourceListing(springSwaggerConfig.swaggerCache(), this.swaggerGroup);
-//    swaggerApiResourceListing.setSwaggerGlobalSettings(this.swaggerGlobalSettings);
-//    swaggerApiResourceListing.setSwaggerPathProvider(this.swaggerPathProvider);
-//    swaggerApiResourceListing.setApiInfo(this.apiInfo);
+  private void buildSwaggerApiResourceListing() {
+    swaggerApiResourceListing = new SwaggerApiResourceListing(springSwaggerConfig.swaggerCache(), this.swaggerGroup);
+    swaggerApiResourceListing.setSwaggerGlobalSettings(this.swaggerGlobalSettings);
+    swaggerApiResourceListing.setSwaggerPathProvider(this.swaggerPathProvider);
+    swaggerApiResourceListing.setApiInfo(this.apiInfo);
 //    swaggerApiResourceListing.setAuthorizationTypes(this.authorizationTypes);
-//    swaggerApiResourceListing.setAuthorizationContext(this.authorizationContext);
-//    swaggerApiResourceListing.setModelProvider(this.modelProvider);
-//    swaggerApiResourceListing.setApiListingReferenceScanner(this.apiListingReferenceScanner);
-//    swaggerApiResourceListing.setApiVersion(this.apiVersion);
+    swaggerApiResourceListing.setAuthorizationContext(this.authorizationContext);
+    swaggerApiResourceListing.setModelProvider(this.modelProvider);
+    swaggerApiResourceListing.setApiListingReferenceScanner(this.apiListingReferenceScanner);
+    swaggerApiResourceListing.setApiVersion(this.apiVersion);
 //    swaggerApiResourceListing.setApiListingReferenceOrdering(this.apiListingReferenceOrdering);
 //    swaggerApiResourceListing.setApiDescriptionOrdering(this.apiDescriptionOrdering);
-//    swaggerApiResourceListing.setCustomAnnotationReaders(this.customAnnotationReaders);
-//  }
+    swaggerApiResourceListing.setCustomAnnotationReaders(this.customAnnotationReaders);
+  }
 
   private ApiListingReferenceScanner buildApiListingReferenceScanner() {
     List<Class<? extends Annotation>> mergedExcludedAnnotations = springSwaggerConfig.defaultExcludeAnnotations();

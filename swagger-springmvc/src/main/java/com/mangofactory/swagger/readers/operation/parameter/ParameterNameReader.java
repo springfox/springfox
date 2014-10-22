@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.annotation.Annotation;
 
-import static com.google.common.base.Strings.*;
-import static java.lang.String.*;
-import static org.apache.commons.lang.StringUtils.*;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.lang.String.format;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 public class ParameterNameReader implements Command<RequestMappingContext> {
   @Override

@@ -2,7 +2,7 @@ package com.mangofactory.swagger.paths;
 
 import javax.servlet.ServletContext;
 
-import static com.google.common.base.Strings.*;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class RelativeSwaggerPathProvider extends SwaggerPathProvider {
   public static final String ROOT = "/";

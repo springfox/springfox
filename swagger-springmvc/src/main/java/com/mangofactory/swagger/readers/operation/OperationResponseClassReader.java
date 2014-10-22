@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.method.HandlerMethod;
 
-import static com.mangofactory.swagger.core.ModelUtils.*;
+import static com.mangofactory.swagger.core.ModelUtils.handlerReturnType;
 
 public class OperationResponseClassReader implements RequestMappingReader {
   private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);

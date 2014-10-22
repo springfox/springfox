@@ -22,9 +22,9 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.*;
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolved;
 
 public class HandlerMethodResolver {
 

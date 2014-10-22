@@ -1,23 +1,19 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
-import com.google.common.base.Splitter;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiParam;
-//import com.wordnik.swagger.model.AllowableListValues;
-//import com.wordnik.swagger.model.AllowableRangeValues;
-//import com.wordnik.swagger.model.AllowableValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static org.apache.commons.lang.StringUtils.*;
+//import com.wordnik.swagger.model.AllowableListValues;
+//import com.wordnik.swagger.model.AllowableRangeValues;
+//import com.wordnik.swagger.model.AllowableValues;
 
 public class ParameterAllowableReader implements Command<RequestMappingContext> {
   private static final Logger log = LoggerFactory.getLogger(ParameterAllowableReader.class);

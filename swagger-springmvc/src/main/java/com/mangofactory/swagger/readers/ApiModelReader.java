@@ -3,7 +3,6 @@ package com.mangofactory.swagger.readers;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.swagger.models.ModelContext;
@@ -13,7 +12,6 @@ import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.models.Model;
-import com.wordnik.swagger.models.properties.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.*;
+import static com.google.common.collect.Maps.newHashMap;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolved;
 
 @Component
 public class ApiModelReader implements Command<RequestMappingContext> {
