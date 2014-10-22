@@ -1,6 +1,8 @@
 rootProject.name = 'swagger-springmvc-parent'
 include ':swagger-models'
 include ':swagger-springmvc'
+include ':swagger-springmvc-ui'
 
 project(':swagger-models').projectDir = "$rootDir/swagger-models" as File
 project(':swagger-springmvc').projectDir = "$rootDir/swagger-springmvc" as File
+project(':swagger-springmvc-ui').projectDir = "$rootDir/swagger-springmvc-ui" as File

@@ -1,0 +1,37 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'de.undercouch:gradle-download-task:1.0'
+  }
+}
+
+apply plugin: 'download-task'
+defaultTasks 'build'
+
+ext {
+  swaggerUiVersion = 'v2.1.0-alpha.1'
+  downloadUrl = "https://github.com/wordnik/swagger-ui/archive/${swaggerUiVersion}.zip"
+  destinationZip = "$buildDir/zip/${swaggerUiVersion}.zip"
+}
+
+task swaggerUiDownload << {
+  if (!file(destinationZip)?.exists()) {
+    download {
+      src downloadUrl
+      dest destinationZip
+      onlyIfNewer true
+    }
+  }
+}
+
+task unzip(type: Copy) {
+  from zipTree(file(destinationZip))
+  include "*/dist/**"
+  into file("${buildDir}")
+}
+unzip.dependsOn(swaggerUiDownload)
+
+task build << { }
+build.dependsOn unzip

@@ -21,7 +21,7 @@ ext {
   projectVersion = '2.0.0-SNAPSHOT'
 }
 
-subprojects {
+configure(subprojects - project(":swagger-springmvc-ui")) { subproject ->
   apply plugin: 'groovy'
   apply plugin: 'java'
   apply plugin: "com.ofg.uptodate"
