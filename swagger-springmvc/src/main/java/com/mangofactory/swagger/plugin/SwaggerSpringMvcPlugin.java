@@ -343,7 +343,7 @@ public class SwaggerSpringMvcPlugin {
             this.swaggerGroup + " Title",
             "Api Description",
             "Api terms of service",
-            "Contact Email",
+            "Contact Name",
             "Licence Type",
             "License URL"
     );

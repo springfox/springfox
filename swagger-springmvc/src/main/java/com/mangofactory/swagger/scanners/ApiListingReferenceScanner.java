@@ -4,9 +4,11 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimaps;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -43,20 +45,20 @@ public class ApiListingReferenceScanner {
   public ApiListingReferenceScanner() {
   }
 
-//  public List<ApiListingReference> scan() {
-//    Assert.notNull(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
-//    Assert.notEmpty(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
-//    Assert.notNull(resourceGroupingStrategy, "resourceGroupingStrategy is required");
-//    Assert.notNull(swaggerGroup, "swaggerGroup is required");
-//    if (StringUtils.isBlank(swaggerGroup)) {
-//      throw new IllegalArgumentException("swaggerGroup must not be empty");
-//    }
-//    Assert.notNull(swaggerPathProvider, "swaggerPathProvider is required");
-//
-//    log.info("Scanning for api listing references");
-//    scanSpringRequestMappings();
+  public void scan() {
+    Assert.notNull(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
+    Assert.notEmpty(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
+    Assert.notNull(resourceGroupingStrategy, "resourceGroupingStrategy is required");
+    Assert.notNull(swaggerGroup, "swaggerGroup is required");
+    if (StringUtils.isBlank(swaggerGroup)) {
+      throw new IllegalArgumentException("swaggerGroup must not be empty");
+    }
+    Assert.notNull(swaggerPathProvider, "swaggerPathProvider is required");
+
+    log.info("Scanning for api listing references");
+    scanSpringRequestMappings();
 //    return this.apiListingReferences;
-//  }
+  }
 
   public void scanSpringRequestMappings() {
     Map<ResourceGroup, String> resourceGroupDescriptions = new HashMap<ResourceGroup, String>();

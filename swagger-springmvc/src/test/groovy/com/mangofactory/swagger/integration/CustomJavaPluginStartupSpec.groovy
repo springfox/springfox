@@ -28,8 +28,8 @@ class CustomJavaPluginStartupSpec extends Specification {
     then:
       //TODO - reinstate
 //      jsonBodyResponse(petApi, true).apis.size() == 4
-      jsonBodyResponse(petApi, true).swagger == "2.0"
 //      jsonBodyResponse(demoApi).apis.size() == 1
+      jsonBodyResponse(petApi, true).swagger == "2.0"
       jsonBodyResponse(demoApi).swagger == "2.0"
   }
 }

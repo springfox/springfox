@@ -54,7 +54,7 @@ public class ServicesConfiguration {
    @Bean
    public SwaggerGlobalSettings swaggerGlobalSettings() {
       SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
-      swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages());
+//      swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages());
       swaggerGlobalSettings.setIgnorableParameterTypes(springSwaggerConfig.defaultIgnorableParameterTypes());
       swaggerGlobalSettings.setAlternateTypeProvider(springSwaggerConfig.defaultAlternateTypeProvider());
       return swaggerGlobalSettings;
@@ -100,10 +100,10 @@ public class ServicesConfiguration {
       swaggerApiResourceListing.setApiInfo(apiInfo());
 
       //Global authorization - see the swagger documentation
-      swaggerApiResourceListing.setAuthorizationTypes(authorizationTypes());
+//      swaggerApiResourceListing.setAuthorizationTypes(authorizationTypes());
 
       //Sets up an auth context - i.e. which controller request paths to apply global auth to
-      swaggerApiResourceListing.setAuthorizationContext(authorizationContext());
+//      swaggerApiResourceListing.setAuthorizationContext(authorizationContext());
 
       //Every SwaggerApiResourceListing needs an ApiListingReferenceScanner to scan the spring request mappings
       swaggerApiResourceListing.setApiListingReferenceScanner(apiListingReferenceScanner());

@@ -47,14 +47,14 @@ class SwaggerSpringMvcPluginSpec extends Specification {
     then:
       plugin.swaggerGroup == 'default'
       plugin.includePatterns == [".*?"]
-      plugin.authorizationTypes == null
+//      plugin.authorizationTypes == null
 
-      plugin.apiInfo.title() == 'default Title'
-      plugin.apiInfo.description() == 'Api Description'
-      plugin.apiInfo.termsOfServiceUrl() == 'Api terms of service'
-      plugin.apiInfo.contact() == 'Contact Email'
-      plugin.apiInfo.license() == 'Licence Type'
-      plugin.apiInfo.licenseUrl() == 'License URL'
+      plugin.apiInfo.title == 'default Title'
+      plugin.apiInfo.description == 'Api Description'
+      plugin.apiInfo.termsOfService == 'Api terms of service'
+      plugin.apiInfo.contact.name == 'Contact Name'
+      plugin.apiInfo.license.name == 'Licence Type'
+      plugin.apiInfo.license.url == 'License URL'
 
       plugin.excludeAnnotations == []
       plugin.resourceGroupingStrategy instanceof ClassOrApiAnnotationResourceGrouping

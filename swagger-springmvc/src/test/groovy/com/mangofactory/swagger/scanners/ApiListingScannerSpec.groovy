@@ -93,25 +93,25 @@ class ApiListingScannerSpec extends Specification {
 //      listing.authorizations().size() == 1
 //  }
 
-  @Unroll
-  def "should find longest common path"() {
-    given:
-      ApiListingScanner apiListingScanner = new ApiListingScanner(null, null, null, null, null)
-
-    when:
-      String result = apiListingScanner.longestCommonPath(apiDescriptions(paths))
-
-    then:
-      result == expected
-    where:
-      paths                                        | expected
-      []                                           | null
-      ['/a/b', '/a/b']                             | '/a/b'
-      ['/a/b', '/a/b/c']                           | '/a/b'
-      ['/a/b', '/a/']                              | '/a'
-      ['/a/b', '/a/d/e/f']                         | '/a'
-      ['/a/b/c/d/e/f', '/a', '/a/b']               | '/a'
-      ['/d', '/e', 'f']                            | '/'
-      ['/a/b/c', '/a/b/c/d/e/f', '/a/b/c/d/e/f/g'] | '/a/b/c'
-  }
+//  @Unroll
+//  def "should find longest common path"() {
+//    given:
+//      ApiListingScanner apiListingScanner = new ApiListingScanner(null, null, null, null, null)
+//
+//    when:
+//      String result = apiListingScanner.longestCommonPath(apiDescriptions(paths))
+//
+//    then:
+//      result == expected
+//    where:
+//      paths                                        | expected
+//      []                                           | null
+//      ['/a/b', '/a/b']                             | '/a/b'
+//      ['/a/b', '/a/b/c']                           | '/a/b'
+//      ['/a/b', '/a/']                              | '/a'
+//      ['/a/b', '/a/d/e/f']                         | '/a'
+//      ['/a/b/c/d/e/f', '/a', '/a/b']               | '/a'
+//      ['/d', '/e', 'f']                            | '/'
+//      ['/a/b/c', '/a/b/c/d/e/f', '/a/b/c/d/e/f/g'] | '/a/b/c'
+//  }
 }
