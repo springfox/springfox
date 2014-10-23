@@ -58,7 +58,7 @@ class ParameterDataTypeReaderSpec extends Specification {
       byte.class                      | "byte"
       Boolean.class                   | "boolean"
       boolean.class                   | "boolean"
-      Date.class                      | "date-time"
+      Date.class                      | "Date"
 //      DummyClass.CustomClass.class    | "customClassParamType" //DK TODO: Alternate types
       DummyModels.FunkyBusiness.class | "FunkyBusiness"
       Void.class                      | "Void"
