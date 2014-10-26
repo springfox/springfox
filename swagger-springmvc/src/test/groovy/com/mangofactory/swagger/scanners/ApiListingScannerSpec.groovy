@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.scanners
 
+import com.jayway.jsonpath.internal.Path
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
@@ -21,33 +22,33 @@ import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport, AuthSupport, ModelProviderSupport, ApiDescriptionSupport])
 class ApiListingScannerSpec extends Specification {
 
-//  def "Should create an api listing for a single resource grouping "() {
-//    given:
-//      RequestMappingInfo requestMappingInfo =
-//              requestMappingInfo("/businesses",
-//                      [
-//                              consumesRequestCondition: consumesRequestCondition(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE),
-//                              producesRequestCondition: producesRequestCondition(APPLICATION_JSON_VALUE)
-//                      ]
-//              )
-//
-//      RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
-//      Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
-//      resourceGroupRequestMappings.put(new ResourceGroup("businesses"), [requestMappingContext])
-//      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
-//              modelProvider(), null, [])
-//
-//      def settings = new SwaggerGlobalSettings()
-//      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-//      settings.ignorableParameterTypes = springSwaggerConfig.defaultIgnorableParameterTypes()
-//      SwaggerModelsConfiguration modelsConfiguration = new SwaggerModelsConfiguration()
-//      settings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider()
-//      scanner.setSwaggerGlobalSettings(settings)
-//
-//    when:
-//      Map<String, ApiListing> apiListingMap = scanner.scan()
-//    then:
-//      apiListingMap.size() == 1
+  def "Should create an api listing for a single resource grouping "() {
+    given:
+      RequestMappingInfo requestMappingInfo =
+              requestMappingInfo("/businesses",
+                      [
+                              consumesRequestCondition: consumesRequestCondition(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE),
+                              producesRequestCondition: producesRequestCondition(APPLICATION_JSON_VALUE)
+                      ]
+              )
+
+      RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
+      Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
+      resourceGroupRequestMappings.put(new ResourceGroup("businesses"), [requestMappingContext])
+      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
+              modelProvider(), null, [])
+
+      def settings = new SwaggerGlobalSettings()
+      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
+      settings.ignorableParameterTypes = springSwaggerConfig.defaultIgnorableParameterTypes()
+      SwaggerModelsConfiguration modelsConfiguration = new SwaggerModelsConfiguration()
+      settings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider()
+      scanner.setSwaggerGlobalSettings(settings)
+
+    when:
+      Map<String, Path> apiListingMap = scanner.scan()
+    then:
+      apiListingMap.size() == 1
 //
 //      ApiListing listing = apiListingMap['businesses']
 //      listing.swaggerVersion() == SwaggerSpec.version()
@@ -61,8 +62,8 @@ class ApiListingScannerSpec extends Specification {
 //      apiDescription.path() == '/api/v1/businesses'
 //      fromOption(apiDescription.description()) == "methodWithConcreteResponseBody"
 //      def models = apiDescription.operations().head()
-//
-//  }
+
+  }
 
 //  def "should assign global authorizations"() {
 //    given:

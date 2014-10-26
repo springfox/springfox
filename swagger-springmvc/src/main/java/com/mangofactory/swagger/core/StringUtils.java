@@ -17,9 +17,9 @@ public class StringUtils {
                     "(?<=[A-Z])(?=[A-Z][a-z])",
                     "(?<=[^A-Z])(?=[A-Z])",
                     "(?<=[A-Za-z])(?=[^A-Za-z])"
-            ),
+                         ),
             separator
-    );
+                       );
   }
 
   public static String maybeChompLeadingSlash(String anyString) {

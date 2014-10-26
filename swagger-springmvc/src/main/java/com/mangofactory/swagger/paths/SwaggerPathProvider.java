@@ -5,6 +5,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 
+//TODO - consider renaming to URI provider - swagger spec now has the context of path's
 public abstract class SwaggerPathProvider {
   /**
    * e.g the api endpoint resides at  http://myapp.com:8080/<contextPath>/api/v1/businesses

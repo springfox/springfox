@@ -10,7 +10,7 @@ public class RegexRequestMappingPatternMatcher implements RequestMappingPatternM
 
   @Override
   public boolean patternConditionsMatchOneOfIncluded(PatternsRequestCondition patternsCondition,
-      List<String> includePatterns) {
+                                                     List<String> includePatterns) {
 
     Set<String> patterns = patternsCondition.getPatterns();
     for (String path : patterns) {

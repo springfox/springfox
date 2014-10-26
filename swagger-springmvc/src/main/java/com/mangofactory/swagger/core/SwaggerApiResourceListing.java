@@ -10,9 +10,11 @@ import com.mangofactory.swagger.scanners.ApiListingScanner;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.mangofactory.swagger.scanners.ResourceGroup;
 import com.wordnik.swagger.models.Info;
+import com.wordnik.swagger.models.Path;
 import com.wordnik.swagger.models.Swagger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,7 +25,7 @@ public class SwaggerApiResourceListing {
 
   private SwaggerCache swaggerCache;
   private Info apiInfo;
-//  private List<AuthorizationType> authorizationTypes;
+  //  private List<AuthorizationType> authorizationTypes;
   private AuthorizationContext authorizationContext;
   private ApiListingReferenceScanner apiListingReferenceScanner;
   private SwaggerPathProvider swaggerPathProvider;
@@ -31,7 +33,7 @@ public class SwaggerApiResourceListing {
   private String swaggerGroup;
   private ModelProvider modelProvider;
   private String apiVersion = "1";
-//  private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
+  //  private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
 //  private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
   private Collection<RequestMappingReader> customAnnotationReaders;
 
@@ -41,29 +43,31 @@ public class SwaggerApiResourceListing {
   }
 
   public void initialize() {
-    if (null != apiListingReferenceScanner) {
-//      apiListingReferenceScanner.scan();
-//      apiListingReferences = apiListingReferenceScanner.getApiListingReferences();
+    Assert.notNull(apiListingReferenceScanner,
+            String.format("%s not configured", ApiListingReferenceScanner.class.getSimpleName()));
+    apiListingReferenceScanner.scan();
 
-      Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings =
-              apiListingReferenceScanner.getResourceGroupRequestMappings();
-      ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider,
-              modelProvider, authorizationContext, customAnnotationReaders);
+    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings =
+            apiListingReferenceScanner.getResourceGroupRequestMappings();
+    ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider,
+            modelProvider, authorizationContext, customAnnotationReaders);
 
 //      apiListingScanner.setApiDescriptionOrdering(apiDescriptionOrdering);
-      apiListingScanner.setSwaggerGlobalSettings(swaggerGlobalSettings);
-      apiListingScanner.setResourceGroupingStrategy(apiListingReferenceScanner.getResourceGroupingStrategy());
+    apiListingScanner.setSwaggerGlobalSettings(swaggerGlobalSettings);
+    apiListingScanner.setResourceGroupingStrategy(apiListingReferenceScanner.getResourceGroupingStrategy());
 
+    Map<String, Path> apiPaths = apiListingScanner.scan();
+    Swagger swagger = new Swagger();
+    swagger.setInfo(this.apiInfo);
+    swagger.setPaths(apiPaths);
+    swagger.setBasePath(swaggerPathProvider.getApplicationBasePath());
+    swaggerCache.addSwaggerApi(swaggerGroup, swagger);
 //      Map<String, ApiListing> apiListings = apiListingScanner.scan();
 //      swaggerCache.addApiListings(swaggerGroup, apiListings);
 
-    } else {
-      log.error("ApiListingReferenceScanner not configured");
-    }
 
 //    Collections.sort(apiListingReferences, apiListingReferenceOrdering);
-    Swagger swagger = new Swagger();
-    swagger.setInfo(this.apiInfo);
+
 
 //    ResourceListing resourceListing = new ResourceListing(
 //            this.apiVersion,
@@ -81,7 +85,7 @@ public class SwaggerApiResourceListing {
 //      log.info("  {} at location: {}{}", path, prefix, apiListingReference.path());
 //    }
 
-    swaggerCache.addSwaggerApi(swaggerGroup, swagger);
+
   }
 
   public SwaggerCache getSwaggerCache() {

@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class AuthorizationContext {
 
-//  private final List<Authorization> authorizations;
+  //  private final List<Authorization> authorizations;
   private final RequestMappingPatternMatcher requestMappingPatternMatcher;
   private final List<String> includePatterns;
   private final RequestMethod[] requestMethods;
@@ -47,7 +47,7 @@ public class AuthorizationContext {
 
   public static class AuthorizationContextBuilder {
 
-//    private List<Authorization> authorizations;
+    //    private List<Authorization> authorizations;
     private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
     private List<String> includePatterns = Arrays.asList(new String[]{".*?"});
     private RequestMethod[] requestMethods = RequestMethod.values();

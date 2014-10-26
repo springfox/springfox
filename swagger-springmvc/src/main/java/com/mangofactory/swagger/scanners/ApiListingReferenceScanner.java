@@ -32,7 +32,7 @@ public class ApiListingReferenceScanner {
 
   private static final Logger log = LoggerFactory.getLogger(ApiListingReferenceScanner.class);
   private List<RequestMappingHandlerMapping> requestMappingHandlerMapping;
-//  private List<ApiListingReference> apiListingReferences = newArrayList();
+  //  private List<ApiListingReference> apiListingReferences = newArrayList();
   private ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings = ArrayListMultimap
           .create();
   private String swaggerGroup;
@@ -89,7 +89,6 @@ public class ApiListingReferenceScanner {
         }
       }
     }
-
 
 
     for (ResourceGroup resourceGroup : resourceGroupDescriptions.keySet()) {

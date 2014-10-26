@@ -17,6 +17,6 @@ public abstract class SwaggerParameterReader implements RequestMappingReader {
 //    context.put("parameters", parameters);
   }
 
-//  abstract protected Collection<? extends Parameter> readParameters(RequestMappingContext context);
+  //  abstract protected Collection<? extends Parameter> readParameters(RequestMappingContext context);
   abstract protected Collection<? extends Parameter> readParameters(RequestMappingContext context);
 }

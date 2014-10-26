@@ -160,7 +160,6 @@ public class SpringSwaggerConfig {
 //                              ));
 //    return responses;
 //  }
-
   @Bean
   public SwaggerPluginAdapter swaggerPluginAdapter() {
     return new SwaggerPluginAdapter(this);

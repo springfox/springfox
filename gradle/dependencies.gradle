@@ -12,6 +12,8 @@ ext {
   servlet = "2.5"
   guava = "15.0"
   classmate = "1.1.0"
+  logback = '1.0.13'
+
   libs = [
 
           test          : [
@@ -20,10 +22,10 @@ ext {
                   "org.objenesis:objenesis:2.1",
                   "org.mockito:mockito-all:${mockito}",
                   "com.jayway.jsonpath:json-path:1.0.0",
-                  "org.slf4j:slf4j-simple:1.7.7",
                   "org.yaml:snakeyaml:1.14",
                   "org.spockframework:spock-spring:${spock}",
-                  "org.spockframework:spock-core:${spock}"
+                  "org.spockframework:spock-core:${spock}",
+                  "ch.qos.logback:logback-classic:${logback}"
           ],
 
           swaggerCore   : [

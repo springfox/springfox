@@ -30,26 +30,6 @@ public class DefaultSwaggerController {
     return getSwaggerResourceListing(swaggerGroup);
   }
 
-//  @ApiIgnore
-//  @RequestMapping(value = {DOCUMENTATION_BASE_PATH + "/{swaggerGroup}/{apiDeclaration}"}, method = RequestMethod.GET)
-//  public
-//  @ResponseBody
-//  ResponseEntity<ApiListing> getApiListing(@PathVariable String swaggerGroup, @PathVariable String apiDeclaration) {
-//    return getSwaggerApiListing(swaggerGroup, apiDeclaration);
-//  }
-
-//  private ResponseEntity<ApiListing> getSwaggerApiListing(String swaggerGroup, String apiDeclaration) {
-//    ResponseEntity<ApiListing> responseEntity = new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
-//    Map<String, ApiListing> apiListingMap = swaggerCache.getSwaggerApiListingMap().get(swaggerGroup);
-//    if (null != apiListingMap) {
-//      ApiListing apiListing = apiListingMap.get(apiDeclaration);
-//      if (null != apiListing) {
-//        responseEntity = new ResponseEntity<ApiListing>(apiListing, HttpStatus.OK);
-//      }
-//    }
-//    return responseEntity;
-//  }
-
   private ResponseEntity<Swagger> getSwaggerResourceListing(String swaggerGroup) {
     ResponseEntity<Swagger> responseEntity = new ResponseEntity<Swagger>(HttpStatus.NOT_FOUND);
     Swagger swagger = null;

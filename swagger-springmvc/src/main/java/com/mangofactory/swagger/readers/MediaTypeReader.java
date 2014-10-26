@@ -55,7 +55,7 @@ public class MediaTypeReader implements RequestMappingReader {
   }
 
   private boolean handlerMethodHasFileParameter(RequestMappingContext context,
-      SwaggerGlobalSettings swaggerGlobalSettings) {
+                                                SwaggerGlobalSettings swaggerGlobalSettings) {
 
     HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(swaggerGlobalSettings.getTypeResolver());
     List<ResolvedMethodParameter> methodParameters = handlerMethodResolver.methodParameters(context.getHandlerMethod());

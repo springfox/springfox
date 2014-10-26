@@ -45,7 +45,7 @@ public class SwaggerSpringMvcPlugin {
   private String swaggerGroup;
   private List<String> includePatterns;
   private SwaggerPathProvider swaggerPathProvider;
-//  private List<AuthorizationType> authorizationTypes;
+  //  private List<AuthorizationType> authorizationTypes;
   private ApiInfo apiInfo;
   private AuthorizationContext authorizationContext;
   private List<Class<? extends Annotation>> excludeAnnotations = new ArrayList<Class<? extends Annotation>>();
@@ -53,14 +53,14 @@ public class SwaggerSpringMvcPlugin {
   private String apiVersion = "1.0";
 
   private SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
-//  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages = new HashMap<RequestMethod,
+  //  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages = new HashMap<RequestMethod,
 //          List<ResponseMessage>>();
   private Set<Class> ignorableParameterTypes = new HashSet<Class>();
   private AlternateTypeProvider alternateTypeProvider;
   private List<AlternateTypeRule> alternateTypeRules = new ArrayList<AlternateTypeRule>();
   private SpringSwaggerConfig springSwaggerConfig;
   private SwaggerApiResourceListing swaggerApiResourceListing;
-//  private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
+  //  private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
 //  private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
   private ApiListingReferenceScanner apiListingReferenceScanner;
   private AtomicBoolean initialized = new AtomicBoolean(false);
@@ -296,7 +296,8 @@ public class SwaggerSpringMvcPlugin {
    * @param apiListingReferenceOrdering
    * @return this SwaggerSpringMvcPlugin
    */
-//  public SwaggerSpringMvcPlugin apiListingReferenceOrdering(Ordering<ApiListingReference> apiListingReferenceOrdering) {
+//  public SwaggerSpringMvcPlugin apiListingReferenceOrdering(Ordering<ApiListingReference>
+// apiListingReferenceOrdering) {
 //    this.apiListingReferenceOrdering = apiListingReferenceOrdering;
 //    return this;
 //  }
@@ -425,7 +426,8 @@ public class SwaggerSpringMvcPlugin {
     }
     swaggerGlobalSettings.setAlternateTypeProvider(this.alternateTypeProvider);
   }
-//
+
+  //
   private void buildSwaggerApiResourceListing() {
     swaggerApiResourceListing = new SwaggerApiResourceListing(springSwaggerConfig.swaggerCache(), this.swaggerGroup);
     swaggerApiResourceListing.setSwaggerGlobalSettings(this.swaggerGlobalSettings);

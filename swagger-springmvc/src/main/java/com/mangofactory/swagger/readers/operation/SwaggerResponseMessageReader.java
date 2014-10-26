@@ -26,5 +26,5 @@ public abstract class SwaggerResponseMessageReader implements RequestMappingRead
   }
 
   protected abstract Collection<Response> read(SwaggerGlobalSettings swaggerGlobalSettings,
-      RequestMethod currentHttpMethod, HandlerMethod handlerMethod);
+                                               RequestMethod currentHttpMethod, HandlerMethod handlerMethod);
 }

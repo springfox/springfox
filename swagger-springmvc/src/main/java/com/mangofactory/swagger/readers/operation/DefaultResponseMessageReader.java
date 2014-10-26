@@ -26,7 +26,7 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
 
   @Override
   protected Collection<Response> read(SwaggerGlobalSettings swaggerGlobalSettings,
-                                             RequestMethod currentHttpMethod, HandlerMethod handlerMethod) {
+                                      RequestMethod currentHttpMethod, HandlerMethod handlerMethod) {
     List<Response> responseMessages = globalResponseMessages(swaggerGlobalSettings, currentHttpMethod);
     Map<Integer, Response> byStatusCode = newHashMap(uniqueIndex(responseMessages, byStatusCode()));
 
@@ -38,7 +38,7 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
   }
 
   private void applyReturnTypeOverride(SwaggerGlobalSettings swaggerGlobalSettings, HandlerMethod handlerMethod,
-      Map<Integer, Response> byStatusCode) {
+                                       Map<Integer, Response> byStatusCode) {
 
     ResolvedType returnType = handlerReturnType(swaggerGlobalSettings.getTypeResolver(), handlerMethod);
     returnType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(returnType);

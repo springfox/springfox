@@ -19,6 +19,8 @@ import com.mangofactory.swagger.readers.operation.OperationSummaryReader;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
+import com.mangofactory.swagger.scanners.ResourceGroup;
+import com.wordnik.swagger.models.Operation;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
@@ -32,6 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMap;
 
 //import com.wordnik.swagger.model.Authorization;
 //import com.wordnik.swagger.model.Operation;
@@ -59,8 +62,9 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
     SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) outerContext.get("swaggerGlobalSettings");
     AuthorizationContext authorizationContext = (AuthorizationContext) outerContext.get("authorizationContext");
     String requestMappingPattern = (String) outerContext.get("requestMappingPattern");
+    ResourceGroup currentResourceGroup = (ResourceGroup) outerContext.get("currentResourceGroup");
     RequestMethodsRequestCondition requestMethodsRequestCondition = requestMappingInfo.getMethodsCondition();
-//    List<Operation> operations = newArrayList();
+    Map<RequestMethod, Operation> operations = newHashMap();
 
     Set<RequestMethod> requestMethods = requestMethodsRequestCondition.getMethods();
     Set<RequestMethod> supportedMethods = (requestMethods == null || requestMethods.isEmpty())
@@ -103,8 +107,22 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
 
       List<String> producesMediaTypes = (List<String>) operationResultMap.get("produces");
       List<String> consumesMediaTypes = (List<String>) operationResultMap.get("consumes");
+
+
 //      List<Parameter> parameterList = (List<Parameter>) operationResultMap.get("parameters");
 //      List<Authorization> authorizations = (List<Authorization>) operationResultMap.get("authorizations");
+
+
+      RequestMethod requestMethod = RequestMethod.valueOf((String) operationResultMap.get("httpRequestMethod"));
+      Operation operation = new Operation();
+      operation.setSummary((String) operationResultMap.get("summary"));
+      operation.setConsumes(consumesMediaTypes);
+      operation.setProduces(producesMediaTypes);
+      operation.setOperationId((String) operationResultMap.get("nickname"));
+
+      //Tag's control the swagger-ui "groupings"
+      operation.setTags(newArrayList(currentResourceGroup.getGroupName()));
+
 
 //      Operation operation = new Operation(
 //              (String) operationResultMap.get("httpRequestMethod"),
@@ -122,10 +140,10 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
 //              toOption(operationResultMap.get("deprecated"))
 //      );
 //
-//      operations.add(operation);
+      operations.put(requestMethod, operation);
     }
 //    Collections.sort(operations, OPERATION_POSITIONAL_ORDERING);
-//    outerContext.put("operations", operations);
+    outerContext.put("operations", operations);
   }
 
 }

@@ -11,7 +11,7 @@ apply plugin: 'download-task'
 defaultTasks 'build'
 
 ext {
-  swaggerUiVersion = 'v2.1.0-alpha.1'
+  swaggerUiVersion = 'master'
   downloadUrl = "https://github.com/wordnik/swagger-ui/archive/${swaggerUiVersion}.zip"
   destinationZip = "$buildDir/zip/${swaggerUiVersion}.zip"
 }
