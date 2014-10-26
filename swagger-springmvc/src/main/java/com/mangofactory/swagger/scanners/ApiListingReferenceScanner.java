@@ -24,15 +24,12 @@ import java.util.Set;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
 
-//import com.wordnik.swagger.model.ApiListingReference;
-
 public class ApiListingReferenceScanner {
   private static final String REQUEST_MAPPINGS_EMPTY =
           "No RequestMappingHandlerMapping's found have you added <mvc:annotation-driven/>";
 
   private static final Logger log = LoggerFactory.getLogger(ApiListingReferenceScanner.class);
   private List<RequestMappingHandlerMapping> requestMappingHandlerMapping;
-  //  private List<ApiListingReference> apiListingReferences = newArrayList();
   private ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings = ArrayListMultimap
           .create();
   private String swaggerGroup;
@@ -57,7 +54,6 @@ public class ApiListingReferenceScanner {
 
     log.info("Scanning for api listing references");
     scanSpringRequestMappings();
-//    return this.apiListingReferences;
   }
 
   public void scanSpringRequestMappings() {
@@ -88,17 +84,6 @@ public class ApiListingReferenceScanner {
           }
         }
       }
-    }
-
-
-    for (ResourceGroup resourceGroup : resourceGroupDescriptions.keySet()) {
-      String resourceGroupName = resourceGroup.getGroupName();
-      String listingDescription = resourceGroupDescriptions.get(resourceGroup);
-      Integer position = resourceGroup.getPosition();
-      String path = swaggerPathProvider.getResourceListingPath(swaggerGroup, resourceGroupName);
-      log.info("Created resource listing Path: {} Description: {} Position: {}",
-              path, resourceGroupName, position);
-//      this.apiListingReferences.add(new ApiListingReference(path, toOption(listingDescription), position));
     }
   }
 
@@ -155,14 +140,6 @@ public class ApiListingReferenceScanner {
   public void setRequestMappingHandlerMapping(List<RequestMappingHandlerMapping> requestMappingHandlerMapping) {
     this.requestMappingHandlerMapping = requestMappingHandlerMapping;
   }
-
-//  public List<ApiListingReference> getApiListingReferences() {
-//    return apiListingReferences;
-//  }
-//
-//  public void setApiListingReferences(List<ApiListingReference> apiListingReferences) {
-//    this.apiListingReferences = apiListingReferences;
-//  }
 
   public void setResourceGroupRequestMappings(ArrayListMultimap<ResourceGroup,
           RequestMappingContext> resourceGroupRequestMappings) {

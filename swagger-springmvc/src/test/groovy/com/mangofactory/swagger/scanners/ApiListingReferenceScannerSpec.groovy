@@ -2,19 +2,13 @@ package com.mangofactory.swagger.scanners
 
 import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
-import com.mangofactory.swagger.core.ResourceGroupingStrategy
-import com.mangofactory.swagger.core.SpringGroupingStrategy
 import com.mangofactory.swagger.mixins.AccessorAssertions
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
-import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
-//import com.wordnik.swagger.model.ApiListingReference
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
-import spock.lang.Specification
 
-//import static com.mangofactory.swagger.ScalaUtils.fromOption
-//import static com.mangofactory.swagger.ScalaUtils.toOption
+import spock.lang.Specification
 
 @Mixin([AccessorAssertions, RequestMappingSupport])
 class ApiListingReferenceScannerSpec extends Specification {
@@ -70,7 +64,7 @@ class ApiListingReferenceScannerSpec extends Specification {
       def ignorableClass = ignorableClass()
 
     expect:
-      true == apiListingReferenceScanner.classHasIgnoredAnnotatedRequestMapping(ignorableClass)
+      apiListingReferenceScanner.classHasIgnoredAnnotatedRequestMapping(ignorableClass)
   }
 
   def "include requestMapping"() {
@@ -91,36 +85,44 @@ class ApiListingReferenceScannerSpec extends Specification {
 
   }
 
-//  def "should group controller paths"() {
-//    when:
-//      RequestMappingHandlerMapping requestMappingHandlerMapping = Mock()
-//      RequestMappingInfo businessRequestMappingInfo = requestMappingInfo("/api/v1/businesses")
-//      RequestMappingInfo accountsRequestMappingInfo = requestMappingInfo("/api/v1/accounts")
-//
-//      requestMappingHandlerMapping.getHandlerMethods() >>
-//            [
-//                  (businessRequestMappingInfo): dummyHandlerMethod(),
-//                  (accountsRequestMappingInfo): dummyHandlerMethod()
-//            ]
-//
-//      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
-//
-//      ClassOrApiAnnotationResourceGrouping defaultControllerResourceNamingStrategy = new ClassOrApiAnnotationResourceGrouping()
-//
-//      apiListingReferenceScanner.setResourceGroupingStrategy(defaultControllerResourceNamingStrategy)
-//      apiListingReferenceScanner.setRequestMappingHandlerMapping([requestMappingHandlerMapping])
-//      apiListingReferenceScanner.setIncludePatterns([".*"])
-//      apiListingReferenceScanner.setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
-//      apiListingReferenceScanner.setSwaggerGroup("someGroup")
-//      apiListingReferenceScanner.setSwaggerPathProvider(new AbsoluteSwaggerPathProvider(servletContext: servletContext()))
-//      List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
-//
-//    then:
-//      apiListingReferences.size == 1
-////      ApiListingReference businessListingReference = apiListingReferences[0]
-//      businessListingReference.path() ==
-//            'http://localhost:8080/context-path/api-docs/someGroup/dummy-class'
-//  }
+  def "should group controller paths"() {
+    when:
+      RequestMappingHandlerMapping requestMappingHandlerMapping = Mock()
+      RequestMappingInfo businessRequestMappingInfo = requestMappingInfo("/api/v1/businesses")
+      RequestMappingInfo accountsRequestMappingInfo = requestMappingInfo("/api/v1/accounts")
+
+      requestMappingHandlerMapping.getHandlerMethods() >>
+              [
+                      (businessRequestMappingInfo): dummyHandlerMethod(),
+                      (accountsRequestMappingInfo): dummyHandlerMethod()
+              ]
+
+      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
+
+      ClassOrApiAnnotationResourceGrouping defaultControllerResourceNamingStrategy = new ClassOrApiAnnotationResourceGrouping()
+
+      apiListingReferenceScanner.with {
+        setResourceGroupingStrategy(defaultControllerResourceNamingStrategy)
+        setRequestMappingHandlerMapping([requestMappingHandlerMapping])
+        setIncludePatterns([".*"])
+        setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
+        setSwaggerGroup("someGroup")
+        setSwaggerPathProvider(new AbsoluteSwaggerPathProvider(servletContext: servletContext()))
+        scan()
+      }
+
+    then:
+
+      Map<ResourceGroup, RequestMappingContext> requestMappingMultimap =
+              apiListingReferenceScanner.getResourceGroupRequestMappings()
+
+      List requestMappingContexts = requestMappingMultimap.get(new ResourceGroup('dummy-class', 0))
+      requestMappingContexts.size() == 2
+
+      requestMappingContexts.find { it.requestMappingInfo == businessRequestMappingInfo }
+      requestMappingContexts.find { it.requestMappingInfo == accountsRequestMappingInfo }
+
+  }
 
 //  def "grouping of listing references"() {
 //    given:
