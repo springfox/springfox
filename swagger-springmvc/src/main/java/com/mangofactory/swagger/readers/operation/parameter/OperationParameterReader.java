@@ -8,7 +8,6 @@ import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.readers.operation.SwaggerParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.models.parameters.Parameter;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
 
 import java.lang.annotation.Annotation;

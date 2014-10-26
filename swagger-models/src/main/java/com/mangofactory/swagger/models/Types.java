@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.*;
+import static com.google.common.collect.Sets.newHashSet;
 
 public class Types {
   private static final Set<String> baseTypes
@@ -25,6 +25,10 @@ public class Types {
           .put(Character.TYPE, "string")
           .put(Void.TYPE, "Void")
 
+          /** TODO - consider joda and swagger spec date types
+           * date string date As defined by full-date - RFC3339
+           dateTime string date-time As defined by date-time - RFC3339
+           */
           .put(Date.class, "date-time")
           .put(String.class, "string")
           .put(Object.class, "object")
@@ -47,9 +51,4 @@ public class Types {
   public static boolean isBaseType(String typeName) {
     return baseTypes.contains(typeName);
   }
-
-/**
- * date	string	date	As defined by full-date - RFC3339
- dateTime	string	date-time	As defined by date-time - RFC3339
- */
 }
