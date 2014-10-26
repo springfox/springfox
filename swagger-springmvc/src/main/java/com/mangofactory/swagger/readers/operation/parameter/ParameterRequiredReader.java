@@ -2,6 +2,7 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
+import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,8 @@ public class ParameterRequiredReader implements Command<RequestMappingContext> {
       for (Annotation annotation : methodAnnotations) {
         if (annotation instanceof ApiParam) {
           requiredSet.add(((ApiParam) annotation).required());
+        } else if (annotation instanceof ApiImplicitParam) {
+          requiredSet.add(((ApiImplicitParam) annotation).required());
         } else if (annotation instanceof RequestParam) {
           requiredSet.add(!optional && ((RequestParam) annotation).required());
         } else if (annotation instanceof RequestHeader) {

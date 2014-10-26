@@ -21,6 +21,7 @@ import com.mangofactory.swagger.readers.operation.parameter.OperationParameterRe
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.mangofactory.swagger.scanners.ResourceGroup;
 import com.wordnik.swagger.models.Operation;
+import com.wordnik.swagger.models.parameters.Parameter;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
@@ -121,6 +122,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       operation.setOperationId((String) operationResultMap.get("nickname"));
 
       //Tag's control the swagger-ui "groupings"
+      operation.setParameters((List<Parameter>) operationResultMap.get("parameters"));
       operation.setTags(newArrayList(currentResourceGroup.getGroupName()));
 
 

@@ -21,7 +21,7 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
   @Override
   public void execute(RequestMappingContext context) {
     MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
-
+//    AllowableValues allowableValues = null;
 
 
     String allowableValueString = findAnnotatedAllowableValues(methodParameter);

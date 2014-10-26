@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
-//import com.wordnik.swagger.model.Parameter;
+import com.wordnik.swagger.models.parameters.Parameter;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -12,39 +12,42 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.mangofactory.swagger.models.Types.typeNameFor;
+import static java.lang.reflect.Modifier.isStatic;
+
 class ModelAttributeParameterExpander {
 
-//  public void expand(final String parentName, final Class<?> paramType,
-//                     final List<Parameter> parameters) {
-//
-//    Set<String> beanPropNames = getBeanPropertyNames(paramType);
-//    List<Field> fields = getAllFields(paramType);
-//
-//    for (Field field : fields) {
-//      if (isStatic(field.getModifiers()) || field.isSynthetic() || !beanPropNames.contains(field.getName())) {
-//        continue;
-//      }
-//
-//      if (!typeBelongsToJavaPackage(field) && !field.getType().isEnum()) {
-//
-//        expand(field.getName(), field.getType(), parameters);
-//        continue;
-//      }
-//
-//      String dataTypeName = typeNameFor(field.getType());
-//
-//      if (dataTypeName == null) {
-//        dataTypeName = field.getType().getSimpleName();
-//      }
-//
-//      parameters.add(new ParameterBuilder()
-//              .forField(field)
-//              .withDataTypeName(dataTypeName)
-//              .withParentName(parentName)
-//              .build());
-//
-//    }
-//  }
+  public void expand(final String parentName, final Class<?> paramType,
+                     final List<Parameter> parameters) {
+
+    Set<String> beanPropNames = getBeanPropertyNames(paramType);
+    List<Field> fields = getAllFields(paramType);
+
+    for (Field field : fields) {
+      if (isStatic(field.getModifiers()) || field.isSynthetic() || !beanPropNames.contains(field.getName())) {
+        continue;
+      }
+
+      if (!typeBelongsToJavaPackage(field) && !field.getType().isEnum()) {
+
+        expand(field.getName(), field.getType(), parameters);
+        continue;
+      }
+
+      String dataTypeName = typeNameFor(field.getType());
+
+      if (dataTypeName == null) {
+        dataTypeName = field.getType().getSimpleName();
+      }
+
+      parameters.add(new ParameterBuilder()
+              .forField(field)
+              .withDataTypeName(dataTypeName)
+              .withParentName(parentName)
+              .build());
+
+    }
+  }
 
   private boolean typeBelongsToJavaPackage(Field field) {
     return (field.getType().getPackage() == null || field.getType().getPackage().getName().startsWith("java"));

@@ -10,20 +10,19 @@ import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static com.mangofactory.swagger.models.ResolvedTypes.asResolved
 
 @Mixin(RequestMappingSupport)
 class ParameterTypeReaderSpec extends Specification {
 
-  def "param type"() {
+  @Unroll
+  def "should resolve param type [#expected]"() {
     given:
       HandlerMethod handlerMethod = Mock()
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
@@ -48,6 +47,7 @@ class ParameterTypeReaderSpec extends Specification {
       [:] as ModelAttribute | Integer       | "body"
       [:] as RequestHeader  | Integer       | "header"
       [:] as RequestParam   | Integer       | "query"
+      [:] as CookieValue    | Integer       | "cookie"
       null                  | Integer       | "body"
       null                  | MultipartFile | "formData"
   }

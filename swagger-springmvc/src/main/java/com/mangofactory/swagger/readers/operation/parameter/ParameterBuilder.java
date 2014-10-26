@@ -5,7 +5,9 @@ import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.Annotations;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.models.parameters.BodyParameter;
 import com.wordnik.swagger.models.parameters.Parameter;
+import com.wordnik.swagger.models.parameters.PathParameter;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -40,17 +42,19 @@ class ParameterBuilder {
     return this;
   }
 
-  public Parameter build() {
+  public <T extends Parameter> T build() {
     Optional<ApiModelProperty> apiModelPropertyOptional = Annotations.findApiModePropertyAnnotation(field);
     if (apiModelPropertyOptional.isPresent()) {
-      return fromApiModelProperty(apiModelPropertyOptional.get());
+//      return fromApiModelProperty(apiModelPropertyOptional.get());
     }
     Optional<ApiParam> apiParamOptional = Annotations.findApiParamAnnotation(field);
     if (apiParamOptional.isPresent()) {
-      return fromApiParam(apiParamOptional.get());
+//      return fromApiParam(apiParamOptional.get());
     }
-    return defaultParameter();
+//    return defaultParameter();
+    return null;
   }
+
 
   private Parameter defaultParameter() {
 //    AllowableValues allowable = allowableValues(Optional.<String>absent(), field);
@@ -85,6 +89,14 @@ class ParameterBuilder {
 //            toOption(apiParam.access()));
     return null;
   }
+
+  public Parameter fromType(String location) {
+    if (location.equals("path")) {
+      return new PathParameter();
+    }
+    return new BodyParameter();
+  }
+
 
   private Parameter fromApiModelProperty(ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());

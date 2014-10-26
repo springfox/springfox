@@ -5,7 +5,10 @@ import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.lang.annotation.Annotation;
 
 public class ParameterTypeReader implements Command<RequestMappingContext> {
+  private Logger log = LoggerFactory.getLogger(ParameterTypeReader.class);
+
   @Override
   public void execute(RequestMappingContext context) {
     MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
@@ -45,6 +50,9 @@ public class ParameterTypeReader implements Command<RequestMappingContext> {
           return "query";
         } else if (annotation instanceof RequestHeader) {
           return "header";
+        } else if (annotation instanceof CookieValue) {
+          log.info("Found cookie parameter - not yet supported!");
+          return "cookie";
         }
       }
     }
