@@ -19,13 +19,9 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-//import com.wordnik.swagger.model.AllowableValues;
-//import com.wordnik.swagger.model.Parameter;
-
 public class OperationParameterReader extends SwaggerParameterReader {
 
   @Override
-//  protected Collection<? extends Parameter> readParameters(final RequestMappingContext context) {
   protected Collection<? extends Parameter> readParameters(final RequestMappingContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
@@ -61,9 +57,10 @@ public class OperationParameterReader extends SwaggerParameterReader {
 
         commandExecutor.execute(commandList, parameterContext);
 
+
         Map<String, Object> result = parameterContext.getResult();
 
-        if (!shouldExpand(methodParameter)) {
+//        if (!shouldExpand(methodParameter)) {
 //          Parameter parameter = new Parameter(
 //                  (String) result.get("name"),
 //                  toOption(result.get("description")),
@@ -76,9 +73,9 @@ public class OperationParameterReader extends SwaggerParameterReader {
 //                  toOption(result.get("paramAccess"))
 //          );
 //          parameters.add(parameter);
-        } else {
+//        } else {
 //          expander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters);
-        }
+//        }
       }
     }
     return parameters;
@@ -99,14 +96,12 @@ public class OperationParameterReader extends SwaggerParameterReader {
     return false;
   }
 
-  private boolean shouldExpand(final ResolvedMethodParameter parameter) {
-
-    for (Annotation annotation : parameter.getMethodParameter().getParameterAnnotations()) {
-      if (ModelAttribute.class == annotation.annotationType()) {
-        return true;
-      }
-    }
-
-    return false;
-  }
+//  private boolean shouldExpand(final ResolvedMethodParameter parameter) {
+//    for (Annotation annotation : parameter.getMethodParameter().getParameterAnnotations()) {
+//      if (ModelAttribute.class == annotation.annotationType()) {
+//        return true;
+//      }
+//    }
+//    return false;
+//  }
 }

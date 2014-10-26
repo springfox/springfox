@@ -35,7 +35,7 @@ public class Types {
           .put(Float.class, "float")
           .put(Boolean.class, "boolean")
           .put(Byte.class, "byte")
-          .put(BigDecimal.class, "float")
+          .put(BigDecimal.class, "double")
           .put(BigInteger.class, "long")
           .put(Void.class, "Void")
           .build();
@@ -48,5 +48,8 @@ public class Types {
     return baseTypes.contains(typeName);
   }
 
-
+/**
+ * date	string	date	As defined by full-date - RFC3339
+ dateTime	string	date-time	As defined by date-time - RFC3339
+ */
 }

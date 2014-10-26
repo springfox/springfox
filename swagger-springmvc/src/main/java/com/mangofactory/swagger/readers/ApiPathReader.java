@@ -16,9 +16,6 @@ import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
 
-//import com.wordnik.swagger.model.ApiDescription;
-//import com.wordnik.swagger.model.Operation;
-
 public class ApiPathReader implements Command<RequestMappingContext> {
 
   private final SwaggerPathProvider swaggerPathProvider;

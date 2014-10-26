@@ -30,7 +30,7 @@ public class ParameterTypeReader implements Command<RequestMappingContext> {
   private String findParameterType(MethodParameter methodParameter, ResolvedType parameterType) {
     //Multi-part file trumps any other annotations
     if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
-      return "form";
+      return "formData";
     }
     Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
     if (null != methodAnnotations) {

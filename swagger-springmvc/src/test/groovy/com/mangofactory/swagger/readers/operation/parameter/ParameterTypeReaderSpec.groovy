@@ -49,7 +49,7 @@ class ParameterTypeReaderSpec extends Specification {
       [:] as RequestHeader  | Integer       | "header"
       [:] as RequestParam   | Integer       | "query"
       null                  | Integer       | "body"
-      null                  | MultipartFile | "form"
+      null                  | MultipartFile | "formData"
   }
 
   ResolvedType resolve(Class clazz) {
