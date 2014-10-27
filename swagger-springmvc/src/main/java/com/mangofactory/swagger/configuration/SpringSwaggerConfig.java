@@ -194,5 +194,4 @@ public class SpringSwaggerConfig {
   void setTypeResolver(TypeResolver typeResolver) {
     this.typeResolver = new TypeResolver();
   }
-
 }

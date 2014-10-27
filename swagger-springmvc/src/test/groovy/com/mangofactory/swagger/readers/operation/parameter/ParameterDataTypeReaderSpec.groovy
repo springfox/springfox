@@ -20,7 +20,7 @@ import static com.mangofactory.swagger.models.ResolvedTypes.*
 @Mixin(RequestMappingSupport)
 class ParameterDataTypeReaderSpec extends Specification {
 
-  @Unroll("Should resolve #paramType to #expected")
+  @Unroll("Should resolve [#paramType] to [#expected]")
    def "Parameter types"() {
     given:
       HandlerMethod handlerMethod = Stub(HandlerMethod)
@@ -46,25 +46,25 @@ class ParameterDataTypeReaderSpec extends Specification {
       paramType                       | expected
       char.class                      | "string"
       String.class                    | "string"
-      Integer.class                   | "int"
-      int.class                       | "int"
-      Long.class                      | "long"
-      BigInteger.class                | "long"
-      long.class                      | "long"
-      Float.class                     | "float"
-      float.class                     | "float"
-      Double.class                    | "double"
-      double.class                    | "double"
-      BigDecimal.class                | "double"
-      Byte.class                      | "byte"
-      byte.class                      | "byte"
+      Integer.class                   | "integer"
+      int.class                       | "integer"
+      Long.class                      | "integer"
+      BigInteger.class                | "integer" //64b
+      long.class                      | "integer"
+      Float.class                     | "number"
+      float.class                     | "number"
+      Double.class                    | "number"
+      double.class                    | "number"
+      BigDecimal.class                | "number"
+      Byte.class                      | "string"
+      byte.class                      | "string" //byte
       Boolean.class                   | "boolean"
       boolean.class                   | "boolean"
-      Date.class                      | "date-time"
+      Date.class                      | "string"
 //      DummyClass.CustomClass.class    | "customClassParamType" //DK TODO: Alternate types
       DummyModels.FunkyBusiness.class | "FunkyBusiness"
       Void.class                      | "Void"
-      MultipartFile.class             | "File"
+      MultipartFile.class             | "file"
    }
 
   ResolvedType resolve(Class clazz) {

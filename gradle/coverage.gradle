@@ -17,6 +17,7 @@ jacocoTestReport {
   reports {
     //XML required by coveralls and for the below coverage checks
     xml.enabled true
+    html.enabled true
   }
 
   doLast {
