@@ -5,9 +5,7 @@ import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.Annotations;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.wordnik.swagger.models.parameters.BodyParameter;
 import com.wordnik.swagger.models.parameters.Parameter;
-import com.wordnik.swagger.models.parameters.PathParameter;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
