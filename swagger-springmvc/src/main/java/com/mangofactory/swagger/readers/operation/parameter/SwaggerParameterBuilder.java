@@ -1,5 +1,7 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
+import com.mangofactory.swagger.models.SimpleProperties;
+import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.wordnik.swagger.models.parameters.BodyParameter;
 import com.wordnik.swagger.models.parameters.CookieParameter;
 import com.wordnik.swagger.models.parameters.FormParameter;
@@ -18,6 +20,7 @@ public class SwaggerParameterBuilder {
   private String description;
   private String dataType;
   private String defaultValue;
+  private ResolvedMethodParameter methodParameter;
 
   public SwaggerParameterBuilder withType(String type) {
     this.type = type;
@@ -49,6 +52,11 @@ public class SwaggerParameterBuilder {
     return this;
   }
 
+  public SwaggerParameterBuilder withMethodParameter(ResolvedMethodParameter methodParameter) {
+    this.methodParameter = methodParameter;
+    return this;
+  }
+
   public Parameter build() {
     Parameter parameter = fromParamType();
     parameter.setDescription(description);
@@ -60,19 +68,18 @@ public class SwaggerParameterBuilder {
   private Parameter fromParamType() {
     if ("path".equals(type)) {
       PathParameter pathParameter = new PathParameter();
-      pathParameter.setType(dataType);
       pathParameter.setRequired(required);
+      pathParameter.setProperty(SimpleProperties.fromType(methodParameter.getResolvedParameterType()));
       return pathParameter;
     } else if ("header".equals(type)) {
       HeaderParameter headerParameter = new HeaderParameter();
-      headerParameter.setType(dataType);
       headerParameter.setRequired(required);
-
+      headerParameter.setProperty(SimpleProperties.fromType(methodParameter.getResolvedParameterType()));
       return headerParameter;
     } else if ("query".equals(type)) {
       QueryParameter queryParameter = new QueryParameter();
-      queryParameter.setType(dataType);
       queryParameter.setRequired(required);
+      queryParameter.setProperty(SimpleProperties.fromType(methodParameter.getResolvedParameterType()));
       return queryParameter;
     } else if ("formData".equals(type)) {
       FormParameter formParameter = new FormParameter();
@@ -81,8 +88,8 @@ public class SwaggerParameterBuilder {
       return formParameter;
     } else if ("cookie".equals(type)) {
       CookieParameter cookieParameter = new CookieParameter();
-      cookieParameter.setType(dataType);
       cookieParameter.setRequired(required);
+      cookieParameter.setProperty(SimpleProperties.fromType(methodParameter.getResolvedParameterType()));
       return cookieParameter;
     } else if ("body".equals(type)) {
       BodyParameter bodyParameter = new BodyParameter();

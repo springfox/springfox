@@ -90,14 +90,6 @@ class ParameterBuilder {
     return null;
   }
 
-  public Parameter fromType(String location) {
-    if (location.equals("path")) {
-      return new PathParameter();
-    }
-    return new BodyParameter();
-  }
-
-
   private Parameter fromApiModelProperty(ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
 //    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);

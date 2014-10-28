@@ -67,7 +67,11 @@ public class OperationParameterReader extends SwaggerParameterReader {
                 .withName((String) result.get("name"))
                 .withRequired((Boolean) result.get("required"))
                 .withDataType((String) result.get("dataType"))
+                .withMethodParameter(methodParameter)
                 .build();
+
+//        Model asInput = modelProvider.modelFor(ModelContext.inputParam(simpleType())).get();
+
 //        if (!shouldExpand(methodParameter)) {
 //          Parameter parameter = new Parameter(
 //                  (String) result.get("name"),
