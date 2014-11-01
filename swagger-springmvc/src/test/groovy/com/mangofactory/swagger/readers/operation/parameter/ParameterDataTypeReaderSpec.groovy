@@ -15,13 +15,13 @@ import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.mangofactory.swagger.models.ResolvedTypes.*
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolved
 
 @Mixin(RequestMappingSupport)
 class ParameterDataTypeReaderSpec extends Specification {
 
   @Unroll("Should resolve [#paramType] to [#expected]")
-   def "Parameter types"() {
+  def "Parameter types"() {
     given:
       HandlerMethod handlerMethod = Stub(HandlerMethod)
 
@@ -42,30 +42,31 @@ class ParameterDataTypeReaderSpec extends Specification {
       operationCommand.execute(context)
     then:
       context.get('dataType') == expected
+      //TODO - DK? Are these dates as string, byte as string?
     where:
-      paramType                       | expected
-      char.class                      | "string"
-      String.class                    | "string"
-      Integer.class                   | "integer"
-      int.class                       | "integer"
-      Long.class                      | "integer"
-      BigInteger.class                | "integer" //64b
-      long.class                      | "integer"
-      Float.class                     | "number"
-      float.class                     | "number"
-      Double.class                    | "number"
-      double.class                    | "number"
-      BigDecimal.class                | "number"
-      Byte.class                      | "string"
-      byte.class                      | "string" //byte
-      Boolean.class                   | "boolean"
-      boolean.class                   | "boolean"
-      Date.class                      | "string"
+      paramType        | expected
+      char.class       | "string"
+      String.class     | "string"
+      Integer.class    | "int"
+      int.class        | "int"
+      Long.class       | "long"
+      BigInteger.class | "long" //64b
+      long.class       | "long"
+      Float.class      | "float"
+      float.class      | "float"
+      Double.class     | "double"
+      double.class     | "double"
+//      BigDecimal.class                | "number"
+//      Byte.class                      | "string"
+//      byte.class                      | "string" //byte
+      Boolean.class | "boolean"
+      boolean.class | "boolean"
+//      Date.class                      | "string"
 //      DummyClass.CustomClass.class    | "customClassParamType" //DK TODO: Alternate types
       DummyModels.FunkyBusiness.class | "FunkyBusiness"
-      Void.class                      | "Void"
-      MultipartFile.class             | "file"
-   }
+      Void.class | "Void"
+      MultipartFile.class | "file"
+  }
 
   ResolvedType resolve(Class clazz) {
     asResolved(new TypeResolver(), clazz);

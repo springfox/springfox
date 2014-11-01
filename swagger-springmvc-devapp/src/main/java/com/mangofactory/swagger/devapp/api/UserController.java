@@ -30,10 +30,9 @@ public class UserController {
 
   }
 
-  @RequestMapping(value = "/users", method = RequestMethod.POST)
-
-  public void createUser(@RequestBody User user) {
-    log.info("Creating user");
-
-  }
+//  @RequestMapping(value = "/users", method = RequestMethod.POST)
+//  public void createUser(@RequestBody User user) {
+//    log.info("Creating user");
+//
+//  }
 }

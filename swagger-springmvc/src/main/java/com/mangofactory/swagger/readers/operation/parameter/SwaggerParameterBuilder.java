@@ -106,10 +106,11 @@ public class SwaggerParameterBuilder {
       BodyParameter bodyParameter = new BodyParameter();
       bodyParameter.setRequired(required);
       Optional<Model> modelOptional = modelProvider.modelFor(inputParam(methodParameter.getResolvedParameterType()));
-
       if (modelOptional.isPresent()) {
         Model model = modelOptional.get();
         bodyParameter.setSchema(model);
+      } else {
+        log.error("Could not generate a model for {}", methodParameter.getResolvedParameterType());
       }
       return bodyParameter;
     } else {
