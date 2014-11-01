@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
+import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.ordering.OperationPositionalOrdering;
 import com.mangofactory.swagger.readers.operation.DefaultResponseMessageReader;
 import com.mangofactory.swagger.readers.operation.OperationAuthReader;
@@ -66,7 +67,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
     ResourceGroup currentResourceGroup = (ResourceGroup) outerContext.get("currentResourceGroup");
     RequestMethodsRequestCondition requestMethodsRequestCondition = requestMappingInfo.getMethodsCondition();
     Map<RequestMethod, Operation> operations = newHashMap();
-
+    ModelProvider modelProvider = (ModelProvider) outerContext.get("modelProvider");
     Set<RequestMethod> requestMethods = requestMethodsRequestCondition.getMethods();
     Set<RequestMethod> supportedMethods = (requestMethods == null || requestMethods.isEmpty())
             ? allRequestMethods
@@ -99,6 +100,8 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       operationRequestMappingContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
       operationRequestMappingContext.put("authorizationContext", authorizationContext);
       operationRequestMappingContext.put("requestMappingPattern", requestMappingPattern);
+      operationRequestMappingContext.put("modelProvider", modelProvider);
+
 
 
       commandExecutor.execute(commandList, operationRequestMappingContext);

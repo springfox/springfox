@@ -2,6 +2,7 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
+import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
@@ -28,6 +29,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
     HandlerMethodResolver handlerMethodResolver
             = new HandlerMethodResolver(swaggerGlobalSettings.getTypeResolver());
 
+    ModelProvider modelProvider = (ModelProvider) context.get("modelProvider");
     List<ResolvedMethodParameter> methodParameters = handlerMethodResolver.methodParameters(handlerMethod);
     List<Parameter> parameters = newArrayList();
 
@@ -67,6 +69,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
                 .withName((String) result.get("name"))
                 .withRequired((Boolean) result.get("required"))
                 .withDataType((String) result.get("dataType"))
+                .withModelProvider(modelProvider)
                 .withMethodParameter(methodParameter)
                 .build();
 

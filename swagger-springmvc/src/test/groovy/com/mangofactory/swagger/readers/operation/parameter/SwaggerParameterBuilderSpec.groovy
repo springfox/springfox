@@ -2,7 +2,10 @@ package com.mangofactory.swagger.readers.operation.parameter
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.base.Optional
+import com.mangofactory.swagger.models.ModelProvider
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
+import com.wordnik.swagger.models.Model
 import com.wordnik.swagger.models.parameters.*
 import org.springframework.core.MethodParameter
 import spock.lang.Specification
@@ -14,17 +17,21 @@ class SwaggerParameterBuilderSpec extends Specification {
 
   @Unroll
   def "should build a #expected parameter type"() {
-    expect:
+    setup:
+      ModelProvider modelProvider = Mock {
+        modelFor(_) >> Optional.of(Mock(Model))
+      }
       MethodParameter methodParameter = Stub(MethodParameter)
       ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter, resolve(String.class))
-
       SwaggerParameterBuilder builder = new SwaggerParameterBuilder()
               .withType(paramType)
               .withName('name')
               .withDescription('desc')
+              .withModelProvider(modelProvider)
               .withRequired(false)
               .withMethodParameter(resolvedMethodParameter)
 
+    expect:
       def parameter = builder.build()
       parameter in expectedClass
       parameter.in == paramType

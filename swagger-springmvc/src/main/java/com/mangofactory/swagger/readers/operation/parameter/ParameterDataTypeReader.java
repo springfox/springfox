@@ -60,7 +60,9 @@ public class ParameterDataTypeReader implements Command<RequestMappingContext> {
     parameterType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(parameterType);
 
     Class<?> erasedType = parameterType.getErasedType();
-    log.debug("Resolving methodParameter:[{}] erasedType:[{}] parameterType:[{}]", methodParameter, erasedType,
+    log.debug("Resolving methodParameter:[{}] erasedType:[{}] parameterType:[{}]",
+            methodParameter.getMethodParameter().getParameterName(),
+            erasedType,
             parameterType);
     //Multi-part file trumps any other annotations
     if (MultipartFile.class.isAssignableFrom(erasedType)) {

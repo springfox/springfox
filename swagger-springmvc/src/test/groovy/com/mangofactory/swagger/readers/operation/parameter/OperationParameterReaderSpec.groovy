@@ -1,17 +1,21 @@
 package com.mangofactory.swagger.readers.operation.parameter
 
+import com.google.common.base.Optional
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.models.ModelProvider
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
+import com.wordnik.swagger.models.Model
 import org.springframework.core.MethodParameter
 import org.springframework.validation.BindingResult
-
-//import com.wordnik.swagger.model.Parameter
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Shared
+
+//import com.wordnik.swagger.model.Parameter
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
@@ -32,10 +36,17 @@ class OperationParameterReaderSpec extends Specification {
     swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider();
   }
 
-   def "Should ignore ignorables"() {
+  @Unroll
+  def "Should ignore ignorables"() {
     given:
+      ModelProvider modelProvider = Mock {
+        modelFor(_) >> Optional.of(Mock(Model))
+      }
+
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
+      context.put("modelProvider", modelProvider)
+
     when:
       OperationParameterReader operationParameterReader = new OperationParameterReader()
       operationParameterReader.execute(context)
@@ -50,7 +61,7 @@ class OperationParameterReaderSpec extends Specification {
       dummyHandlerMethod('methodWithBindingResult', BindingResult.class)   | 0
       dummyHandlerMethod('methodWithInteger', Integer.class)               | 1
       dummyHandlerMethod('methodWithAnnotatedInteger', Integer.class)      | 0
-   }
+  }
 
   def "Should read a request mapping method without APIParameter annotation"() {
     given:

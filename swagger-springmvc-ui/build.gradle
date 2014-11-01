@@ -12,7 +12,7 @@ defaultTasks 'build'
 
 ext {
   swaggerUiVersion = 'master'
-  downloadUrl = "https://github.com/wordnik/swagger-ui/archive/${swaggerUiVersion}.zip"
+  downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/${swaggerUiVersion}.zip"
   destinationZip = "$buildDir/zip/${swaggerUiVersion}.zip"
 }
 

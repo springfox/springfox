@@ -19,7 +19,6 @@ class ApiPathReaderSpec extends Specification {
   @Unroll
   def "should generate an api paths for each request mapping pattern"() {
     given:
-
       ApiPathReader apiPathReader = new ApiPathReader(pathProvider, [])
       RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
               [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}',
@@ -76,4 +75,6 @@ class ApiPathReaderSpec extends Specification {
       "/foo/bar:{baz:\\w+}"      | "/foo/bar:{baz}"
 
   }
+
+
 }

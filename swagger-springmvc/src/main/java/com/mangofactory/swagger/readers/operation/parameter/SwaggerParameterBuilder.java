@@ -1,7 +1,10 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
+import com.google.common.base.Optional;
+import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.models.SimpleProperties;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
+import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.parameters.BodyParameter;
 import com.wordnik.swagger.models.parameters.CookieParameter;
 import com.wordnik.swagger.models.parameters.FormParameter;
@@ -12,6 +15,8 @@ import com.wordnik.swagger.models.parameters.QueryParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.mangofactory.swagger.models.ModelContext.inputParam;
+
 public class SwaggerParameterBuilder {
   private static final Logger log = LoggerFactory.getLogger(SwaggerParameterBuilder.class);
   private String type;
@@ -21,6 +26,7 @@ public class SwaggerParameterBuilder {
   private String dataType;
   private String defaultValue;
   private ResolvedMethodParameter methodParameter;
+  private ModelProvider modelProvider;
 
   public SwaggerParameterBuilder withType(String type) {
     this.type = type;
@@ -54,6 +60,11 @@ public class SwaggerParameterBuilder {
 
   public SwaggerParameterBuilder withMethodParameter(ResolvedMethodParameter methodParameter) {
     this.methodParameter = methodParameter;
+    return this;
+  }
+
+  public SwaggerParameterBuilder withModelProvider(ModelProvider modelProvider) {
+    this.modelProvider = modelProvider;
     return this;
   }
 
@@ -94,6 +105,12 @@ public class SwaggerParameterBuilder {
     } else if ("body".equals(type)) {
       BodyParameter bodyParameter = new BodyParameter();
       bodyParameter.setRequired(required);
+      Optional<Model> modelOptional = modelProvider.modelFor(inputParam(methodParameter.getResolvedParameterType()));
+
+      if (modelOptional.isPresent()) {
+        Model model = modelOptional.get();
+        bodyParameter.setSchema(model);
+      }
       return bodyParameter;
     } else {
       throw new IllegalArgumentException(String.format("Parameter type [%s] not supported", type));

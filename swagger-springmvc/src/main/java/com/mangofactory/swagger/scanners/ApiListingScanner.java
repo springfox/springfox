@@ -86,6 +86,7 @@ public class ApiListingScanner {
           each.put("authorizationContext", authorizationContext);
           each.put("swaggerGlobalSettings", swaggerGlobalSettings);
           each.put("currentResourceGroup", resourceGroup);
+          each.put("modelProvider", modelProvider);
 
           Map<String, Object> results = commandExecutor.execute(readers, each);
 
