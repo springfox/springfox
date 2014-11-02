@@ -3,7 +3,7 @@ package com.mangofactory.swagger.scanners;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimaps;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
-import com.mangofactory.swagger.paths.SwaggerPathProvider;
+import com.mangofactory.swagger.address.SwaggerAddressProvider;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class ApiListingReferenceScanner {
   private String swaggerGroup;
   private List<Class<? extends Annotation>> excludeAnnotations;
   private ResourceGroupingStrategy resourceGroupingStrategy;
-  private SwaggerPathProvider swaggerPathProvider;
+  private SwaggerAddressProvider swaggerAddressProvider;
   private List<String> includePatterns = newArrayList(".*?");
   private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
 
@@ -50,7 +50,7 @@ public class ApiListingReferenceScanner {
     if (StringUtils.isBlank(swaggerGroup)) {
       throw new IllegalArgumentException("swaggerGroup must not be empty");
     }
-    Assert.notNull(swaggerPathProvider, "swaggerPathProvider is required");
+    Assert.notNull(swaggerAddressProvider, "swaggerPathProvider is required");
 
     log.info("Scanning for api listing references");
     scanSpringRequestMappings();
@@ -170,12 +170,12 @@ public class ApiListingReferenceScanner {
     this.resourceGroupingStrategy = resourceGroupingStrategy;
   }
 
-  public SwaggerPathProvider getSwaggerPathProvider() {
-    return swaggerPathProvider;
+  public SwaggerAddressProvider getSwaggerAddressProvider() {
+    return swaggerAddressProvider;
   }
 
-  public void setSwaggerPathProvider(SwaggerPathProvider swaggerPathProvider) {
-    this.swaggerPathProvider = swaggerPathProvider;
+  public void setSwaggerAddressProvider(SwaggerAddressProvider swaggerAddressProvider) {
+    this.swaggerAddressProvider = swaggerAddressProvider;
   }
 
   public List<String> getIncludePatterns() {

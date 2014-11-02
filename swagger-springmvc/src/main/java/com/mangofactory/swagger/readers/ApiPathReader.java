@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.readers;
 
-import com.mangofactory.swagger.paths.SwaggerPathProvider;
+import com.mangofactory.swagger.address.SwaggerAddressProvider;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.models.Operation;
@@ -18,13 +18,13 @@ import static com.google.common.collect.Maps.newHashMap;
 
 public class ApiPathReader implements Command<RequestMappingContext> {
 
-  private final SwaggerPathProvider swaggerPathProvider;
+  private final SwaggerAddressProvider swaggerAddressProvider;
   private Collection<RequestMappingReader> customAnnotationReaders;
   private static final Logger log = LoggerFactory.getLogger(ApiPathReader.class);
 
-  public ApiPathReader(SwaggerPathProvider pathProvider,
+  public ApiPathReader(SwaggerAddressProvider pathProvider,
                        Collection<RequestMappingReader> customAnnotationReaders) {
-    this.swaggerPathProvider = pathProvider;
+    this.swaggerAddressProvider = pathProvider;
     this.customAnnotationReaders = customAnnotationReaders;
   }
 
@@ -36,7 +36,7 @@ public class ApiPathReader implements Command<RequestMappingContext> {
 
     for (String pattern : patternsCondition.getPatterns()) {
       String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
-      String url = swaggerPathProvider.getOperationPath(cleanedRequestMappingPath);
+      String url = swaggerAddressProvider.getOperationPath(cleanedRequestMappingPath);
       context.put("requestMappingPattern", cleanedRequestMappingPath);
       ApiOperationReader apiOperationReader = new ApiOperationReader(customAnnotationReaders);
       apiOperationReader.execute(context);

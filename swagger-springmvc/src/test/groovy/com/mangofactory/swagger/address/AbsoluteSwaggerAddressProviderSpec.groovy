@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.paths
+package com.mangofactory.swagger.address
 
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import spock.lang.Specification
@@ -6,11 +6,11 @@ import spock.lang.Specification
 import javax.servlet.ServletContext
 
 @Mixin(RequestMappingSupport)
-class AbsoluteSwaggerPathProviderSpec extends Specification {
+class AbsoluteSwaggerAddressProviderSpec extends Specification {
 
    def "assert urls"() {
       given:
-        AbsoluteSwaggerPathProvider provider = new AbsoluteSwaggerPathProvider(servletContext: servletContext)
+        AbsoluteSwaggerAddressProvider provider = new AbsoluteSwaggerAddressProvider(servletContext: servletContext)
 
       expect:
         provider.applicationPath() == expectedAppPath

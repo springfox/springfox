@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.paths;
+package com.mangofactory.swagger.address;
 
 import com.mangofactory.swagger.controllers.DefaultSwaggerController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.ServletContext;
 
 @Component
-public class AbsoluteSwaggerPathProvider extends SwaggerPathProvider {
+public class AbsoluteSwaggerAddressProvider extends SwaggerAddressProvider {
 
   @Autowired
   private ServletContext servletContext;

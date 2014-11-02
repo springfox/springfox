@@ -1,12 +1,11 @@
-package com.mangofactory.swagger.paths;
+package com.mangofactory.swagger.address;
 
 import org.springframework.util.Assert;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 
-//TODO - consider renaming to URI provider - swagger spec now has the context of path's
-public abstract class SwaggerPathProvider {
+public abstract class SwaggerAddressProvider {
   /**
    * e.g the api endpoint resides at  http://myapp.com:8080/<contextPath>/api/v1/businesses
    * Should return api/v1 - no leading or trailing slashes

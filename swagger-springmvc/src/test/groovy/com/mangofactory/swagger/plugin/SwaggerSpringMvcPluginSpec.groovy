@@ -1,36 +1,15 @@
 package com.mangofactory.swagger.plugin
-import com.mangofactory.swagger.annotations.ApiIgnore
-import com.mangofactory.swagger.authorization.AuthorizationContext
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
-import com.mangofactory.swagger.core.SwaggerApiResourceListing
-import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.models.DefaultModelProvider
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
-import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering
-import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
-import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
-import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
-import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
-import com.wordnik.swagger.model.ApiInfo
+import com.mangofactory.swagger.address.RelativeSwaggerAddressProvider
+
 //import com.wordnik.swagger.model.AuthorizationType
 //import com.wordnik.swagger.model.ResponseMessage
-import org.joda.time.LocalDate
-import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
-import org.springframework.aop.framework.ProxyFactoryBean
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
-import spock.lang.Unroll
-
-import javax.servlet.ServletRequest
 
 //import static com.mangofactory.swagger.ScalaUtils.*
-import static com.mangofactory.swagger.models.alternates.Alternates.*
-import static org.springframework.http.HttpStatus.*
-import static org.springframework.web.bind.annotation.RequestMethod.*
-
 @Mixin(SpringSwaggerConfigSupport)
 class SwaggerSpringMvcPluginSpec extends Specification {
 
@@ -58,7 +37,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
       plugin.excludeAnnotations == []
       plugin.resourceGroupingStrategy instanceof ClassOrApiAnnotationResourceGrouping
-      plugin.swaggerPathProvider instanceof RelativeSwaggerPathProvider
+      plugin.swaggerAddressProvider instanceof RelativeSwaggerAddressProvider
       plugin.alternateTypeProvider instanceof AlternateTypeProvider
   }
 
@@ -144,7 +123,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 //    where:
 //      builderMethod          | object                                                         | property
 //      'modelProvider'        | new DefaultModelProvider(null, null, null, null)               | 'modelProvider'
-//      'pathProvider'         | new AbsoluteSwaggerPathProvider()                              | 'swaggerPathProvider'
+//      'addressProvider'         | new AbsoluteSwaggerPathProvider()                              | 'swaggerPathProvider'
 //      'authorizationTypes'   | new ArrayList<AuthorizationType>()                             | 'authorizationTypes'
 //      'authorizationContext' | new AuthorizationContext.AuthorizationContextBuilder().build() | 'authorizationContext'
 //      'includePatterns'      | ['one', 'two', 'three'] as String[]                            | 'includePatterns'

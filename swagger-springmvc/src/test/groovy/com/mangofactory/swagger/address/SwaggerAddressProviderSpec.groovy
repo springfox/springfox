@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.paths
+package com.mangofactory.swagger.address
 
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import spock.lang.Specification
@@ -7,13 +7,13 @@ import spock.lang.Unroll
 import javax.servlet.ServletContext
 
 @Mixin(RequestMappingSupport)
-class SwaggerPathProviderSpec extends Specification {
+class SwaggerAddressProviderSpec extends Specification {
 
   def "relative paths"() {
     given:
       ServletContext servletContext = Mock()
       servletContext.contextPath >> "/"
-      SwaggerPathProvider provider = new RelativeSwaggerPathProvider(servletContext)
+      SwaggerAddressProvider provider = new RelativeSwaggerAddressProvider(servletContext)
       provider.apiResourcePrefix = "some/prefix"
 
     expect:
@@ -23,7 +23,7 @@ class SwaggerPathProviderSpec extends Specification {
 
   def "Absolute paths"() {
     given:
-      SwaggerPathProvider provider = new AbsoluteSwaggerPathProvider(apiResourcePrefix: "", servletContext: servletContext())
+      SwaggerAddressProvider provider = new AbsoluteSwaggerAddressProvider(apiResourcePrefix: "", servletContext: servletContext())
 
     expect:
       provider.getApplicationBasePath() == expectedAppBase
@@ -40,7 +40,7 @@ class SwaggerPathProviderSpec extends Specification {
     when:
       ServletContext servletContext = Mock()
       servletContext.contextPath >> "/"
-      SwaggerPathProvider provider = new RelativeSwaggerPathProvider(servletContext)
+      SwaggerAddressProvider provider = new RelativeSwaggerAddressProvider(servletContext)
       provider.apiResourcePrefix = prefix
     then:
       thrown(IllegalArgumentException)
@@ -53,7 +53,7 @@ class SwaggerPathProviderSpec extends Specification {
     given:
       ServletContext servletContext = Mock()
       servletContext.contextPath >> contextPath
-      SwaggerPathProvider provider = new RelativeSwaggerPathProvider(servletContext)
+      SwaggerAddressProvider provider = new RelativeSwaggerAddressProvider(servletContext)
       provider.apiResourcePrefix = prefix
       provider.getOperationPath(apiDeclaration) == expected
 
@@ -69,7 +69,7 @@ class SwaggerPathProviderSpec extends Specification {
 
   def "should never return a path with duplicate slash"() {
     setup:
-      RelativeSwaggerPathProvider swaggerPathProvider = new RelativeSwaggerPathProvider()
+      RelativeSwaggerAddressProvider swaggerPathProvider = new RelativeSwaggerAddressProvider()
 
     when:
       String path = swaggerPathProvider.getResourceListingPath('/a', '/b')
@@ -81,7 +81,7 @@ class SwaggerPathProviderSpec extends Specification {
 
   def "should replace slashes"() {
     expect:
-      new RelativeSwaggerPathProvider().sanitiseUrl(input) == expected
+      new RelativeSwaggerAddressProvider().sanitiseUrl(input) == expected
     where:
       input             | expected
       '//a/b'           | '/a/b'

@@ -9,8 +9,8 @@ import com.mangofactory.swagger.core.SwaggerCache;
 import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration;
-import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
-import com.mangofactory.swagger.paths.SwaggerPathProvider;
+import com.mangofactory.swagger.address.RelativeSwaggerAddressProvider;
+import com.mangofactory.swagger.address.SwaggerAddressProvider;
 import com.mangofactory.swagger.plugin.SwaggerPluginAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -74,8 +74,8 @@ public class SpringSwaggerConfig {
   }
 
   @Bean
-  public SwaggerPathProvider defaultSwaggerPathProvider() {
-    return new RelativeSwaggerPathProvider(servletContext);
+  public SwaggerAddressProvider defaultSwaggerPathProvider() {
+    return new RelativeSwaggerAddressProvider(servletContext);
   }
 
   @Bean

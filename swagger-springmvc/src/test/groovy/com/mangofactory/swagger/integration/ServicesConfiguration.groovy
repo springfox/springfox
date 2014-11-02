@@ -1,12 +1,12 @@
 package com.mangofactory.swagger.integration
-import com.mangofactory.swagger.authorization.AuthorizationContext
+
 import com.mangofactory.swagger.configuration.DefaultJavaPluginConfig
 import com.mangofactory.swagger.configuration.JacksonSwaggerSupport
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.models.ModelProvider
-import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
+import com.mangofactory.swagger.address.RelativeSwaggerAddressProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.model.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -91,7 +91,7 @@ public class ServicesConfiguration {
       swaggerApiResourceListing.setSwaggerGlobalSettings(swaggerGlobalSettings());
 
       //Use a custom path provider or springSwaggerConfig.defaultSwaggerPathProvider()
-      swaggerApiResourceListing.setSwaggerPathProvider(testPathProvider());
+      swaggerApiResourceListing.setSwaggerAddressProvider(testPathProvider());
 
       // Set the model provider, uses the default autowired model provider.
       swaggerApiResourceListing.setModelProvider(modelProvider);
@@ -111,7 +111,7 @@ public class ServicesConfiguration {
    }
 
    def testPathProvider() {
-      new RelativeSwaggerPathProvider()
+      new RelativeSwaggerAddressProvider()
    }
 
    @Bean
@@ -133,7 +133,7 @@ public class ServicesConfiguration {
       apiListingReferenceScanner.setResourceGroupingStrategy(springSwaggerConfig.defaultResourceGroupingStrategy());
 
       //Path provider used to generate the appropriate uri's
-      apiListingReferenceScanner.setSwaggerPathProvider(testPathProvider());
+      apiListingReferenceScanner.setSwaggerAddressProvider(testPathProvider());
 
       //Must match the swagger group set on the SwaggerApiResourceListing
       apiListingReferenceScanner.setSwaggerGroup(SWAGGER_GROUP);

@@ -4,9 +4,9 @@ import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
-import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
-import com.mangofactory.swagger.paths.SwaggerPathProvider
+import com.mangofactory.swagger.address.AbsoluteSwaggerAddressProvider
+import com.mangofactory.swagger.address.RelativeSwaggerAddressProvider
+import com.mangofactory.swagger.address.SwaggerAddressProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.wordnik.swagger.models.Contact
 import com.wordnik.swagger.models.Info
@@ -21,16 +21,16 @@ class SwaggerApiResourceListingSpec extends Specification {
     given:
       SwaggerCache cache = new SwaggerCache()
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(cache, null)
-      AbsoluteSwaggerPathProvider provider = new AbsoluteSwaggerPathProvider()
-      swaggerApiResourceListing.setSwaggerPathProvider(provider);
+      AbsoluteSwaggerAddressProvider provider = new AbsoluteSwaggerAddressProvider()
+      swaggerApiResourceListing.setSwaggerAddressProvider(provider);
     expect:
       cache == swaggerApiResourceListing.getSwaggerCache()
-      provider == swaggerApiResourceListing.getSwaggerPathProvider()
+      provider == swaggerApiResourceListing.getSwaggerAddressProvider()
   }
 
   def "default swagger resource"() {
     when:
-      SwaggerPathProvider swaggerPathProvider = Mock(RelativeSwaggerPathProvider) {
+      SwaggerAddressProvider swaggerPathProvider = Mock(RelativeSwaggerAddressProvider) {
         1 * getApplicationBasePath() >> "/basePath"
       }
       SwaggerCache swaggerCache = new SwaggerCache();
@@ -38,7 +38,7 @@ class SwaggerApiResourceListingSpec extends Specification {
               swaggerCache, "default",
       )
       swaggerApiResourceListing.apiListingReferenceScanner = Mock(ApiListingReferenceScanner)
-      swaggerApiResourceListing.swaggerPathProvider = swaggerPathProvider
+      swaggerApiResourceListing.swaggerAddressProvider = swaggerPathProvider
       swaggerApiResourceListing.initialize()
 
     then:
@@ -61,7 +61,7 @@ class SwaggerApiResourceListingSpec extends Specification {
       SwaggerCache swaggerCache = new SwaggerCache();
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
       swaggerApiResourceListing.apiListingReferenceScanner = Mock(ApiListingReferenceScanner)
-      swaggerApiResourceListing.swaggerPathProvider = Mock(SwaggerPathProvider)
+      swaggerApiResourceListing.swaggerAddressProvider = Mock(SwaggerAddressProvider)
       swaggerApiResourceListing.apiInfo = apiInfo
       swaggerApiResourceListing.initialize()
 

@@ -11,7 +11,7 @@ import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeRule;
 import com.mangofactory.swagger.models.alternates.WildcardType;
-import com.mangofactory.swagger.paths.SwaggerPathProvider;
+import com.mangofactory.swagger.address.SwaggerAddressProvider;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.wordnik.swagger.model.ApiInfo;
@@ -44,7 +44,7 @@ public class SwaggerSpringMvcPlugin {
   private ModelProvider modelProvider;
   private String swaggerGroup;
   private List<String> includePatterns;
-  private SwaggerPathProvider swaggerPathProvider;
+  private SwaggerAddressProvider swaggerAddressProvider;
   //  private List<AuthorizationType> authorizationTypes;
   private ApiInfo apiInfo;
   private AuthorizationContext authorizationContext;
@@ -133,12 +133,12 @@ public class SwaggerSpringMvcPlugin {
    * By default, relative urls are generated. If absolute urls are required, supply an implementation of
    * AbsoluteSwaggerPathProvider
    *
-   * @param swaggerPathProvider
+   * @param swaggerAddressProvider
    * @return this SwaggerSpringMvcPlugin
-   * @see com.mangofactory.swagger.paths.SwaggerPathProvider
+   * @see com.mangofactory.swagger.address.SwaggerAddressProvider
    */
-  public SwaggerSpringMvcPlugin pathProvider(SwaggerPathProvider swaggerPathProvider) {
-    this.swaggerPathProvider = swaggerPathProvider;
+  public SwaggerSpringMvcPlugin addressProvider(SwaggerAddressProvider swaggerAddressProvider) {
+    this.swaggerAddressProvider = swaggerAddressProvider;
     return this;
   }
 
@@ -392,8 +392,8 @@ public class SwaggerSpringMvcPlugin {
       this.includePatterns = asList(".*?");
     }
 
-    if (null == swaggerPathProvider) {
-      this.swaggerPathProvider = springSwaggerConfig.defaultSwaggerPathProvider();
+    if (null == swaggerAddressProvider) {
+      this.swaggerAddressProvider = springSwaggerConfig.defaultSwaggerPathProvider();
     }
 
     if (null == this.alternateTypeProvider) {
@@ -431,7 +431,7 @@ public class SwaggerSpringMvcPlugin {
   private void buildSwaggerApiResourceListing() {
     swaggerApiResourceListing = new SwaggerApiResourceListing(springSwaggerConfig.swaggerCache(), this.swaggerGroup);
     swaggerApiResourceListing.setSwaggerGlobalSettings(this.swaggerGlobalSettings);
-    swaggerApiResourceListing.setSwaggerPathProvider(this.swaggerPathProvider);
+    swaggerApiResourceListing.setSwaggerAddressProvider(this.swaggerAddressProvider);
     swaggerApiResourceListing.setApiInfo(this.apiInfo);
 //    swaggerApiResourceListing.setAuthorizationTypes(this.authorizationTypes);
     swaggerApiResourceListing.setAuthorizationContext(this.authorizationContext);
@@ -452,7 +452,7 @@ public class SwaggerSpringMvcPlugin {
             .swaggerRequestMappingHandlerMappings());
     apiListingReferenceScanner.setExcludeAnnotations(mergedExcludedAnnotations);
     apiListingReferenceScanner.setResourceGroupingStrategy(this.resourceGroupingStrategy);
-    apiListingReferenceScanner.setSwaggerPathProvider(this.swaggerPathProvider);
+    apiListingReferenceScanner.setSwaggerAddressProvider(this.swaggerAddressProvider);
     apiListingReferenceScanner.setSwaggerGroup(this.swaggerGroup);
     apiListingReferenceScanner.setIncludePatterns(this.includePatterns);
     return apiListingReferenceScanner;

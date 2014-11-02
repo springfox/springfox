@@ -4,7 +4,7 @@ import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.mixins.AccessorAssertions
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
+import com.mangofactory.swagger.address.AbsoluteSwaggerAddressProvider
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 
@@ -107,7 +107,7 @@ class ApiListingReferenceScannerSpec extends Specification {
         setIncludePatterns([".*"])
         setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
         setSwaggerGroup("someGroup")
-        setSwaggerPathProvider(new AbsoluteSwaggerPathProvider(servletContext: servletContext()))
+        setSwaggerAddressProvider(new AbsoluteSwaggerAddressProvider(servletContext: servletContext()))
         scan()
       }
 

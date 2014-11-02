@@ -5,7 +5,7 @@ import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.models.ModelProvider;
-import com.mangofactory.swagger.paths.SwaggerPathProvider;
+import com.mangofactory.swagger.address.SwaggerAddressProvider;
 import com.mangofactory.swagger.readers.ApiModelReader;
 import com.mangofactory.swagger.readers.ApiPathReader;
 import com.mangofactory.swagger.readers.Command;
@@ -37,7 +37,7 @@ public class ApiListingScanner {
   private String apiVersion = "1.0";
   //  private String swaggerVersion = SwaggerSpec.version();
   private Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings;
-  private SwaggerPathProvider swaggerPathProvider;
+  private SwaggerAddressProvider swaggerAddressProvider;
   private SwaggerGlobalSettings swaggerGlobalSettings;
   private ResourceGroupingStrategy resourceGroupingStrategy;
   private AuthorizationContext authorizationContext;
@@ -46,13 +46,13 @@ public class ApiListingScanner {
   private Collection<RequestMappingReader> customAnnotationReaders;
 
   public ApiListingScanner(Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings,
-                           SwaggerPathProvider swaggerPathProvider,
+                           SwaggerAddressProvider swaggerAddressProvider,
                            ModelProvider modelProvider,
                            AuthorizationContext authorizationContext,
                            Collection<RequestMappingReader> customAnnotationReaders) {
 
     this.resourceGroupRequestMappings = resourceGroupRequestMappings;
-    this.swaggerPathProvider = swaggerPathProvider;
+    this.swaggerAddressProvider = swaggerAddressProvider;
     this.authorizationContext = authorizationContext;
     this.modelProvider = modelProvider;
     this.customAnnotationReaders = customAnnotationReaders;
@@ -76,7 +76,7 @@ public class ApiListingScanner {
 
         List<Command<RequestMappingContext>> readers = newArrayList();
         readers.add(new MediaTypeReader());
-        readers.add(new ApiPathReader(swaggerPathProvider, customAnnotationReaders));
+        readers.add(new ApiPathReader(swaggerAddressProvider, customAnnotationReaders));
         readers.add(new ApiModelReader(modelProvider));
 
 //        Map<String, Model> models = new LinkedHashMap<String, Model>();

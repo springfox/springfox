@@ -1,14 +1,14 @@
-package com.mangofactory.swagger.paths;
+package com.mangofactory.swagger.address;
 
 import javax.servlet.ServletContext;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-public class RelativeSwaggerPathProvider extends SwaggerPathProvider {
+public class RelativeSwaggerAddressProvider extends SwaggerAddressProvider {
   public static final String ROOT = "/";
   private final ServletContext servletContext;
 
-  public RelativeSwaggerPathProvider(ServletContext servletContext) {
+  public RelativeSwaggerAddressProvider(ServletContext servletContext) {
     super();
     this.servletContext = servletContext;
   }

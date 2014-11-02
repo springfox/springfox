@@ -3,7 +3,7 @@ package com.mangofactory.swagger.core;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.models.ModelProvider;
-import com.mangofactory.swagger.paths.SwaggerPathProvider;
+import com.mangofactory.swagger.address.SwaggerAddressProvider;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.ApiListingScanner;
@@ -28,7 +28,7 @@ public class SwaggerApiResourceListing {
   //  private List<AuthorizationType> authorizationTypes;
   private AuthorizationContext authorizationContext;
   private ApiListingReferenceScanner apiListingReferenceScanner;
-  private SwaggerPathProvider swaggerPathProvider;
+  private SwaggerAddressProvider swaggerAddressProvider;
   private SwaggerGlobalSettings swaggerGlobalSettings;
   private String swaggerGroup;
   private ModelProvider modelProvider;
@@ -49,7 +49,7 @@ public class SwaggerApiResourceListing {
 
     Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings =
             apiListingReferenceScanner.getResourceGroupRequestMappings();
-    ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider,
+    ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerAddressProvider,
             modelProvider, authorizationContext, customAnnotationReaders);
 
 //      apiListingScanner.setApiDescriptionOrdering(apiDescriptionOrdering);
@@ -64,7 +64,7 @@ public class SwaggerApiResourceListing {
 
     //s
 
-    swagger.setBasePath(swaggerPathProvider.getApplicationBasePath());
+    swagger.setBasePath(swaggerAddressProvider.getApplicationBasePath());
     swaggerCache.addSwaggerApi(swaggerGroup, swagger);
 //      Map<String, ApiListing> apiListings = apiListingScanner.scan();
 //      swaggerCache.addApiListings(swaggerGroup, apiListings);
@@ -112,12 +112,12 @@ public class SwaggerApiResourceListing {
     this.apiListingReferenceScanner = apiListingReferenceScanner;
   }
 
-  public SwaggerPathProvider getSwaggerPathProvider() {
-    return swaggerPathProvider;
+  public SwaggerAddressProvider getSwaggerAddressProvider() {
+    return swaggerAddressProvider;
   }
 
-  public void setSwaggerPathProvider(SwaggerPathProvider swaggerPathProvider) {
-    this.swaggerPathProvider = swaggerPathProvider;
+  public void setSwaggerAddressProvider(SwaggerAddressProvider swaggerAddressProvider) {
+    this.swaggerAddressProvider = swaggerAddressProvider;
   }
 
   public SwaggerGlobalSettings getSwaggerGlobalSettings() {

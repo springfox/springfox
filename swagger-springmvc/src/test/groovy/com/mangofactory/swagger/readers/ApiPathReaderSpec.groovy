@@ -3,7 +3,7 @@ package com.mangofactory.swagger.readers
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
+import com.mangofactory.swagger.mixins.SwaggerAddressProviderSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.mangofactory.swagger.scanners.ResourceGroup
@@ -13,13 +13,13 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 import spock.lang.Unroll
 
-@Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
+@Mixin([RequestMappingSupport, SwaggerAddressProviderSupport])
 class ApiPathReaderSpec extends Specification {
 
   @Unroll
   def "should generate an api paths for each request mapping pattern"() {
     given:
-      ApiPathReader apiPathReader = new ApiPathReader(pathProvider, [])
+      ApiPathReader apiPathReader = new ApiPathReader(addressProvider, [])
       RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
               [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}',
                       '/somePath/another/{businessId:\\d+}')]
@@ -53,14 +53,14 @@ class ApiPathReaderSpec extends Specification {
       }
 
     where:
-      pathProvider                  | prefix
-      absoluteSwaggerPathProvider() | "/api/v1"
-      relativeSwaggerPathProvider() | ""
+      addressProvider                  | prefix
+      absoluteSwaggerAddressProvider() | "/api/v1"
+      relativeSwaggerAddressProvider() | ""
   }
 
   def "should sanitize request mapping endpoints"() {
     expect:
-      new ApiPathReader(absoluteSwaggerPathProvider(), []).sanitizeRequestMappingPattern(mappingPattern) ==
+      new ApiPathReader(absoluteSwaggerAddressProvider(), []).sanitizeRequestMappingPattern(mappingPattern) ==
               expected
 
     where:

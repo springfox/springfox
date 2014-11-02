@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 public class UserController {
 
@@ -26,8 +29,9 @@ public class UserController {
   }
 
   @RequestMapping(value = "/users", method = RequestMethod.GET)
-  public void allUsers() {
-
+  @ResponseBody
+  public List<User> allUsers() {
+    return new ArrayList<User>();
   }
 
 //  @RequestMapping(value = "/users", method = RequestMethod.POST)

@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.scanners
 
 import com.jayway.jsonpath.internal.Path
-import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.*
@@ -11,7 +10,6 @@ import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 //import com.wordnik.swagger.model.ApiListing
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
-import spock.lang.Unroll
 
 import static com.google.common.collect.Maps.newHashMap
 //import static com.mangofactory.swagger.ScalaUtils.fromOption
@@ -19,7 +17,7 @@ import static com.google.common.collect.Maps.newHashMap
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
 
-@Mixin([RequestMappingSupport, SwaggerPathProviderSupport, AuthSupport, ModelProviderSupport, ApiDescriptionSupport])
+@Mixin([RequestMappingSupport, SwaggerAddressProviderSupport, AuthSupport, ModelProviderSupport, ApiDescriptionSupport])
 class ApiListingScannerSpec extends Specification {
 
   def "Should create an api listing for a single resource grouping "() {
@@ -35,7 +33,7 @@ class ApiListingScannerSpec extends Specification {
       RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
       resourceGroupRequestMappings.put(new ResourceGroup("businesses"), [requestMappingContext])
-      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
+      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerAddressProvider(),
               modelProvider(), null, [])
 
       def settings = new SwaggerGlobalSettings()
@@ -71,7 +69,7 @@ class ApiListingScannerSpec extends Specification {
 //      RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
 //      Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
 //      resourceGroupRequestMappings.put(new ResourceGroup("businesses"), [requestMappingContext])
-//      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
+//      ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerAddressProvider(),
 //              modelProvider(), null, [])
 //      def settings = new SwaggerGlobalSettings()
 //      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
