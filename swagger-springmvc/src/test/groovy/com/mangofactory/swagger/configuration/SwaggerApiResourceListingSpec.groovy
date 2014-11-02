@@ -30,8 +30,9 @@ class SwaggerApiResourceListingSpec extends Specification {
 
   def "default swagger resource"() {
     when:
-      SwaggerAddressProvider swaggerPathProvider = Mock(RelativeSwaggerAddressProvider) {
-        1 * getApplicationBasePath() >> "/basePath"
+      SwaggerAddressProvider swaggerPathProvider = Mock(AbsoluteSwaggerAddressProvider) {
+        1 * getHost() >> "localhost:8080"
+        1 * getBasePath() >> '/basePath'
       }
       SwaggerCache swaggerCache = new SwaggerCache();
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(
@@ -44,6 +45,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     then:
       Swagger swagger = swaggerCache.getSwagger("default")
       swagger.swagger == "2.0"
+      swagger.host == 'localhost:8080'
       swagger.basePath == '/basePath'
   }
 

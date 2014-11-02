@@ -107,7 +107,7 @@ class ApiListingReferenceScannerSpec extends Specification {
         setIncludePatterns([".*"])
         setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
         setSwaggerGroup("someGroup")
-        setSwaggerAddressProvider(new AbsoluteSwaggerAddressProvider(servletContext: servletContext()))
+        setSwaggerAddressProvider(new AbsoluteSwaggerAddressProvider(servletContext()))
         scan()
       }
 

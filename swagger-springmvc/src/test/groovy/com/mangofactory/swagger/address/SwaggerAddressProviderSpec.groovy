@@ -9,84 +9,38 @@ import javax.servlet.ServletContext
 @Mixin(RequestMappingSupport)
 class SwaggerAddressProviderSpec extends Specification {
 
-  def "relative paths"() {
-    given:
-      ServletContext servletContext = Mock()
-      servletContext.contextPath >> "/"
-      SwaggerAddressProvider provider = new RelativeSwaggerAddressProvider(servletContext)
-      provider.apiResourcePrefix = "some/prefix"
-
-    expect:
-      provider.getApplicationBasePath() == "/"
-      provider.getResourceListingPath('default', 'api-declaration') == "/default/api-declaration"
-  }
-
-  def "Absolute paths"() {
-    given:
-      SwaggerAddressProvider provider = new AbsoluteSwaggerAddressProvider(apiResourcePrefix: "", servletContext: servletContext())
-
-    expect:
-      provider.getApplicationBasePath() == expectedAppBase
-      provider.getResourceListingPath(swaggerGroup, apiDeclaration) == expectedDoc
-
-    where:
-      swaggerGroup    | apiDeclaration     | expectedAppBase                      | expectedDoc
-      'default'       | 'api-declaration'  | "http://localhost:8080/context-path" | "http://localhost:8080/context-path/api-docs/default/api-declaration"
-      'somethingElse' | 'api-declaration2' | "http://localhost:8080/context-path" | "http://localhost:8080/context-path/api-docs/somethingElse/api-declaration2"
-
-  }
-
-  def "Invalid prefix's"() {
+  @Unroll
+  def "Should throw with invalid prefix [#prefix]"() {
     when:
       ServletContext servletContext = Mock()
       servletContext.contextPath >> "/"
       SwaggerAddressProvider provider = new RelativeSwaggerAddressProvider(servletContext)
-      provider.apiResourcePrefix = prefix
+      provider.setBasePath(prefix)
     then:
       thrown(IllegalArgumentException)
     where:
-      prefix << [null, '/', '/api', '/api/', 'api/v1/', '/api/v1/']
+      prefix << [null, '/', '/api/', 'api/v1/', '/api/v1/']
   }
 
   @Unroll
-  def "api declaration path"() {
+  def "Should generate operation paths"() {
     given:
       ServletContext servletContext = Mock()
-      servletContext.contextPath >> contextPath
       SwaggerAddressProvider provider = new RelativeSwaggerAddressProvider(servletContext)
-      provider.apiResourcePrefix = prefix
+      if (null != prefix) {
+        provider.basePath = prefix
+
+      }
       provider.getOperationPath(apiDeclaration) == expected
 
     where:
-      contextPath | prefix   | apiDeclaration           | expected
-      '/'         | ""       | "/business/{businessId}" | "/business/{businessId}"
-      '/'         | "api"    | "/business/{businessId}" | "/api/business/{businessId}"
-      '/'         | "api/v1" | "/business/{businessId}" | "/api/v1/business/{businessId}"
-      ''          | ""       | "/business/{businessId}" | "/business/{businessId}"
-      ''          | "api"    | "/business/{businessId}" | "/api/business/{businessId}"
-      ''          | "api/v1" | "/business/{businessId}" | "/api/v1/business/{businessId}"
-  }
-
-  def "should never return a path with duplicate slash"() {
-    setup:
-      RelativeSwaggerAddressProvider swaggerPathProvider = new RelativeSwaggerAddressProvider()
-
-    when:
-      String path = swaggerPathProvider.getResourceListingPath('/a', '/b')
-      String opPath = swaggerPathProvider.getOperationPath('//a/b')
-    then:
-      path == '/a/b'
-      opPath == path
-  }
-
-  def "should replace slashes"() {
-    expect:
-      new RelativeSwaggerAddressProvider().sanitiseUrl(input) == expected
-    where:
-      input             | expected
-      '//a/b'           | '/a/b'
-      '//a//b//c'       | '/a/b/c'
-      'http://some//a'  | 'http://some/a'
-      'https://some//a' | 'https://some/a'
+      prefix    | apiDeclaration           | expected
+      null      | "/business/{businessId}" | "/business/{businessId}"
+      null      | "/business/{businessId}" | "/business/{businessId}"
+      "/api"    | "/business/{businessId}" | "/api/business/{businessId}"
+      "/api/v1" | "/business/{businessId}" | "/api/v1/business/{businessId}"
+      "/api"    | "/business/{businessId}" | "/api/business/{businessId}"
+      "/api/v1" | "/business/{businessId}" | "/api/v1/business/{businessId}"
+      "/api/v1" | "/business/{businessId}" | "/api/v1/business/{businessId}"
   }
 }

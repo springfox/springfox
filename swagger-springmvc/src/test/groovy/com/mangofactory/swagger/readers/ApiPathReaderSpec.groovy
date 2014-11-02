@@ -41,8 +41,8 @@ class ApiPathReaderSpec extends Specification {
       Map apiPathMap = result['swaggerPaths']
       apiPathMap.size() == 2
 
-      apiPathMap["$prefix/somePath/{businessId}"]
-      apiPathMap["$prefix/somePath/another/{businessId}"]
+      apiPathMap["/somePath/{businessId}"]
+      apiPathMap["/somePath/another/{businessId}"]
 
     and:
       String[] methods = Path.getAnnotation(JsonPropertyOrder).value()
@@ -53,12 +53,14 @@ class ApiPathReaderSpec extends Specification {
       }
 
     where:
-      addressProvider                  | prefix
-      absoluteSwaggerAddressProvider() | "/api/v1"
-      relativeSwaggerAddressProvider() | ""
+      addressProvider  << [
+              absoluteSwaggerAddressProvider(),
+              relativeSwaggerAddressProvider()
+      ]
   }
 
-  def "should sanitize request mapping endpoints"() {
+  @Unroll
+  def "should sanitize RequestMappingPattern [#mappingPattern] to [#expected]"() {
     expect:
       new ApiPathReader(absoluteSwaggerAddressProvider(), []).sanitizeRequestMappingPattern(mappingPattern) ==
               expected

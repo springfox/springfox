@@ -60,11 +60,8 @@ public class SwaggerApiResourceListing {
     Swagger swagger = new Swagger();
     swagger.setInfo(this.apiInfo);
     swagger.setPaths(apiPaths);
-
-
-    //s
-
-    swagger.setBasePath(swaggerAddressProvider.getApplicationBasePath());
+    swagger.setHost(swaggerAddressProvider.getHost());
+    swagger.setBasePath(swaggerAddressProvider.getBasePath());
     swaggerCache.addSwaggerApi(swaggerGroup, swagger);
 //      Map<String, ApiListing> apiListings = apiListingScanner.scan();
 //      swaggerCache.addApiListings(swaggerGroup, apiListings);

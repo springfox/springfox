@@ -9,7 +9,7 @@ import javax.servlet.ServletContext
 class SwaggerAddressProviderSupport {
   AbsoluteSwaggerAddressProvider absoluteSwaggerAddressProvider(){
       SwaggerAddressProvider swaggerPathProvider = new AbsoluteSwaggerAddressProvider();
-      swaggerPathProvider.setApiResourcePrefix("api/v1");
+      swaggerPathProvider.setBasePath("/api/v1");
       swaggerPathProvider.servletContext = [getContextPath: {return "/context-path"}] as ServletContext
       return swaggerPathProvider
    }
