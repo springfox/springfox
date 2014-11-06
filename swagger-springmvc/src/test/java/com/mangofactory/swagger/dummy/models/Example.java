@@ -25,6 +25,9 @@ public class Example extends Parent implements Serializable {
   private String propertyWithNoGetterMethod;
   private String propertyWithNoSetterMethod;
 
+  @ApiParam(value = "description of allCapsSet", required = false)
+  private CustomAllCapsStringHashSet allCapsSet;
+
   public Example(String foo, int bar, EnumType enumType, NestedType nestedType) {
     this.foo = foo;
     this.bar = bar;
@@ -79,5 +82,14 @@ public class Example extends Parent implements Serializable {
   public String getPropertyWithNoSetterMethod() {
     return this.propertyWithNoSetterMethod;
   }
+
+  public CustomAllCapsStringHashSet getAllCapsSet() {
+    return allCapsSet;
+  }
+
+  public void setAllCapsSet(CustomAllCapsStringHashSet allCapsSet) {
+    this.allCapsSet = allCapsSet;
+  }
+
 }
 

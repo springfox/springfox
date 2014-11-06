@@ -8,8 +8,10 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.mangofactory.swagger.models.Types.*;
@@ -50,7 +52,8 @@ class ModelAttributeParameterExpander {
   }
 
   private boolean typeBelongsToJavaPackage(Field field) {
-    return (field.getType().getPackage() == null || field.getType().getPackage().getName().startsWith("java"));
+    return field.getType().getPackage() == null || field.getType().getPackage().getName().startsWith("java")
+      || Collection.class.isAssignableFrom(field.getType()) || Map.class.isAssignableFrom(field.getType());
   }
 
   private List<Field> getAllFields(final Class<?> type) {
