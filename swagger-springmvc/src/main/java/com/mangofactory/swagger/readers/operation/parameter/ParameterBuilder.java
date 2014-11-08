@@ -14,11 +14,12 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.google.common.base.Optional.*;
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
-import static com.mangofactory.swagger.readers.operation.parameter.ParameterAllowableReader.*;
+import static com.google.common.base.Optional.fromNullable;
+import static com.google.common.base.Strings.emptyToNull;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Lists.transform;
+import static com.mangofactory.swagger.ScalaUtils.toOption;
+import static com.mangofactory.swagger.readers.operation.parameter.ParameterAllowableReader.allowableValueFromString;
 
 class ParameterBuilder {
 

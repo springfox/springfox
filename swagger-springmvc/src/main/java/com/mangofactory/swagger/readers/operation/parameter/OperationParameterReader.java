@@ -2,6 +2,7 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
+import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
@@ -29,6 +30,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
     SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
     HandlerMethodResolver handlerMethodResolver
             = new HandlerMethodResolver(swaggerGlobalSettings.getTypeResolver());
+    AlternateTypeProvider alternateTypeProvider = swaggerGlobalSettings.getAlternateTypeProvider();
 
     List<ResolvedMethodParameter> methodParameters = handlerMethodResolver.methodParameters(handlerMethod);
     List<Parameter> parameters = newArrayList();
@@ -43,7 +45,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
     commandList.add(new ParameterNameReader());
     commandList.add(new ParameterRequiredReader());
 
-    ModelAttributeParameterExpander expander = new ModelAttributeParameterExpander();
+    ModelAttributeParameterExpander expander = new ModelAttributeParameterExpander(alternateTypeProvider);
     for (ResolvedMethodParameter methodParameter : methodParameters) {
 
       if (!shouldIgnore(methodParameter, swaggerGlobalSettings.getIgnorableParameterTypes())) {

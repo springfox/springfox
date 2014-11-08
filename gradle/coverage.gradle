@@ -8,7 +8,7 @@ ext {
           'line'       : 91,
           'complexity' : 84,
           'method'     : 87,
-          'class'      : 95
+          'class'      : 95 //TODO - 100%
   ]
 }
 

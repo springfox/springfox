@@ -2,6 +2,7 @@ package com.mangofactory.swagger.dummy.models;
 
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.joda.time.LocalDateTime;
 
 import java.io.Serializable;
 
@@ -25,6 +26,8 @@ public class Example extends Parent implements Serializable {
   private String propertyWithNoGetterMethod;
   private String propertyWithNoSetterMethod;
 
+  @ApiParam(value = "local date time desc dd-MM-yyyy hh:mm:ss", required = true)
+  private LocalDateTime localDateTime;
   @ApiParam(value = "description of allCapsSet", required = false)
   private CustomAllCapsStringHashSet allCapsSet;
 
@@ -91,5 +94,12 @@ public class Example extends Parent implements Serializable {
     this.allCapsSet = allCapsSet;
   }
 
+  public LocalDateTime getLocalDateTime() {
+    return localDateTime;
+  }
+
+  public void setLocalDateTime(LocalDateTime localDateTime) {
+    this.localDateTime = localDateTime;
+  }
 }
 

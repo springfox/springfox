@@ -6,16 +6,16 @@
 			<param name="ConversionPattern" value="[%d{EEE MMM yyyy HH:mm:ss.SSS}] %5p [%X{accountId}] (%c:%L) - %m%n" />
 		</layout>
 	</appender>
-	<logger name="com.mangofactory" additivity="false">
-		<level value="DEBUG" />
-		<appender-ref ref="CONSOLE_LOG" />
-	</logger>
-	<logger name="org.springframework" additivity="false">
-		<level value="DEBUG" />
-		<appender-ref ref="CONSOLE_LOG" />
-	</logger>
-	<root>
-		<level value="DEBUG" />
-		<appender-ref ref="CONSOLE_LOG" />
-	</root>
+    <logger name="com.mangofactory" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="CONSOLE_LOG"/>
+    </logger>
+    <logger name="org.springframework" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="CONSOLE_LOG"/>
+    </logger>
+    <root>
+        <level value="DEBUG"/>
+        <appender-ref ref="CONSOLE_LOG"/>
+    </root>
 </log4j:configuration>
