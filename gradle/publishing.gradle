@@ -101,6 +101,11 @@ task packageSources(type: Jar) {
   from sourceSets.main.allSource
 }
 
+task javadocJar (type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
 task preRelease << {
   def url = new URL("http://oss.jfrog.org/simple/oss-release-local/com/mangofactory/swagger-springmvc/${project.version}")
   logger.quiet("Checking release repo for duplicate versioning:${url}")
