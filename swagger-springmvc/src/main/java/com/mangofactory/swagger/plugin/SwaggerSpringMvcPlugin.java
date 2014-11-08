@@ -112,7 +112,6 @@ public class SwaggerSpringMvcPlugin {
    *
    * @param authorizationContext
    * @return this SwaggerSpringMvcPlugin
-   * @see <a href="https://github.com/adrianbk/swagger-springmvc-demo/blob/master/spring3-testsuite/src/main/java/com/ak/spring3/testsuite/config/SwaggerConfig.java">SwaggerConfig.java</a>
    */
   public SwaggerSpringMvcPlugin authorizationContext(AuthorizationContext authorizationContext) {
     this.authorizationContext = authorizationContext;
