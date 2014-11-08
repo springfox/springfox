@@ -14,7 +14,7 @@ public interface ResourceGroupingStrategy {
    * @param requestMappingInfo request mapping info
    * @param handlerMethod      handler method
    * @return Resource group uris.
-   * @see <code><ApiListingReferenceScanner/code>
+   * @see <code>ApiListingReferenceScanner</code>
    */
   public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);
 
@@ -33,7 +33,8 @@ public interface ResourceGroupingStrategy {
 
   /**
    * Gets the position of the resource. Typically com.wordnik.swagger.annotations.Api.position
-   *
+   * @param requestMappingInfo
+   * @param handlerMethod
    * @return The numeric position
    */
   public Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);

@@ -36,6 +36,17 @@ ext {
   }
 
   pomMetaData = {
+    resolveStrategy = Closure.DELEGATE_FIRST
+    name "${project.name}"
+    url "https://github.com/martypitt/swagger-springmvc"
+    description "This project integrates swagger with the Spring Web MVC framework"
+
+    scm {
+      url "scm:git:git@github.com:martypitt/swagger-springmvc.git"
+      connection 'scm:git:git@github.com:martypitt/swagger-springmvc.git'
+      developerConnection 'scm:git:git@github.com:martypitt/swagger-springmvc.git'
+    }
+
     licenses {
       license {
         name "The Apache Software License, Version 2.0"
@@ -99,6 +110,11 @@ ext {
 task packageSources(type: Jar) {
   classifier = 'sources'
   from sourceSets.main.allSource
+}
+
+task javadocJar (type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
 }
 
 task preRelease << {

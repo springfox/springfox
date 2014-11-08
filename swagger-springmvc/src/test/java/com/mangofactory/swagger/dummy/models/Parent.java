@@ -1,4 +1,3 @@
-//Copyright 2014 Choice Hotels International
 package com.mangofactory.swagger.dummy.models;
 
 public class Parent {

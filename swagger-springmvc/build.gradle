@@ -20,6 +20,10 @@ publishing {
         classifier "sources"
       }
 
+      artifact (javadocJar) {
+        classifier = 'javadoc'
+      }
+
       pom.withXml swaggerMvcPomConfig
     }
   }
