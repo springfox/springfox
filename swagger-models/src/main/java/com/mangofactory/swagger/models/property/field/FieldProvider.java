@@ -5,13 +5,15 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedField;
+import com.mangofactory.swagger.models.property.ResolvedMemberProvider;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static com.google.common.collect.Lists.*;
 
 @Component
-public class FieldProvider {
+public class FieldProvider implements ResolvedMemberProvider<ResolvedField> {
   private final TypeResolver typeResolver;
 
   @Autowired
@@ -19,7 +21,8 @@ public class FieldProvider {
     this.typeResolver = typeResolver;
   }
 
-  public Iterable<? extends ResolvedField> in(ResolvedType resolvedType) {
+  @Override
+  public Iterable<ResolvedField> in(ResolvedType resolvedType) {
     MemberResolver memberResolver = new MemberResolver(typeResolver);
     if (resolvedType.getErasedType() == Object.class) {
       return newArrayList();

@@ -45,7 +45,9 @@ class TypesForTestingSupport {
   static Class inheritedComplexType() {
     InheritedComplexType
   }
-
+  static Class unwrappedComplexType() {
+    UnwrappedComplexType
+  }
   static ResolvedType genericClassWithTypeErased() {
     resolver.resolve(GenericType)
   }

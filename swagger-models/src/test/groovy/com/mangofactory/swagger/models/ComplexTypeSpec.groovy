@@ -100,4 +100,33 @@ class ComplexTypeSpec extends Specification {
       "customType"        | "double"      | "java.math.BigDecimal"                      | true
       "inheritedProperty" | "string"      | "java.lang.String"                          | true
   }
+  
+  def "unwrapped properties are inferred correctly"() {
+    given:
+      def provider = defaultModelProvider()
+      Model asInput = provider.modelFor(ModelContext.inputParam(unwrappedComplexType())).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(unwrappedComplexType())).get()
+
+    expect:
+      asInput.name() == "UnwrappedComplexType"
+      asInput.properties().contains(property)
+      def modelProperty = asInput.properties().get(property)
+      modelProperty.get().type() == type
+      modelProperty.get().qualifiedType() == qualifiedType
+      modelProperty.get().items().isEmpty()
+      Types.isBaseType(type) == isBaseType
+
+      asReturn.name() == "UnwrappedComplexType"
+      asReturn.properties().contains(property)
+      def retModelProperty = asReturn.properties().get(property)
+      retModelProperty.get().type() == type
+      retModelProperty.get().qualifiedType() == qualifiedType
+      retModelProperty.get().items().isEmpty()
+      Types.isBaseType(type) == isBaseType
+
+    where:
+      property            | type          | qualifiedType                               | isBaseType
+      "value"             | "string"      | "java.lang.String"                          | true
+      "name"              | "string"      | "java.lang.String"                          | true
+  }
 }
