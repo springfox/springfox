@@ -23,6 +23,8 @@ subprojects {
   apply plugin: 'groovy'
   apply plugin: 'java'
   apply plugin: "com.ofg.uptodate"
+  apply plugin: 'maven'
+
   compileJava.options.encoding = 'UTF-8'
   sourceCompatibility = 1.6
   targetCompatibility = 1.6

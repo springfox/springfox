@@ -21,14 +21,14 @@ class GenericTypeSpec extends Specification{
       def modelProperty = asInput.properties().get("genericField")
       modelProperty.get().type() == propertyType
       modelProperty.get().qualifiedType() == qualifiedType
-      modelProperty.get().items().isEmpty() == !"List".equals(propertyType)
+      modelProperty.get().items().isEmpty() == (!"List".equals(propertyType) && !"Array".equals(propertyType))
 
       asReturn.name() == expectedModelName(modelNamePart)
       asReturn.properties().contains("genericField")
       def retModelProperty = asReturn.properties().get("genericField")
       retModelProperty.get().type() == propertyType
       retModelProperty.get().qualifiedType() ==qualifiedType
-      retModelProperty.get().items().isEmpty() == !"List".equals(propertyType)
+      retModelProperty.get().items().isEmpty() == (!"List".equals(propertyType) && !"Array".equals(propertyType))
 
     where:
     modelType                       | propertyType                      | modelNamePart                     |  qualifiedType
@@ -38,6 +38,8 @@ class GenericTypeSpec extends Specification{
     genericClassWithGenericField()  | "ResponseEntity«SimpleType»"      | "ResponseEntity«SimpleType»"      | "org.springframework.http.ResponseEntity<com.mangofactory.swagger.models.SimpleType>"
     genericClassWithDeepGenerics()  | "ResponseEntity«List«SimpleType»»"| "ResponseEntity«List«SimpleType»»"| "org.springframework.http.ResponseEntity<java.util.List<com.mangofactory.swagger.models.SimpleType>>"
     genericCollectionWithEnum()     | "Collection«string»"              | "Collection«string»"              | "java.util.Collection<com.mangofactory.swagger.models.ExampleEnum>"
+    genericTypeWithPrimitiveArray() | "Array"                           | "Array«byte»"                     | "byte"
+    genericTypeWithComplexArray()   | "Array"                           | "Array«SimpleType»"               | null
   }
 
 

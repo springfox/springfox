@@ -92,6 +92,14 @@ public class DummyClass {
     return null;
   }
 
+  public ResponseEntity<byte[]> methodWithGenericPrimitiveArray() {
+    return null;
+  }
+
+  public ResponseEntity<DummyClass[]> methodWithGenericComplexArray() {
+    return null;
+  }
+
   @Deprecated
   public void methodWithDeprecated() {
   }

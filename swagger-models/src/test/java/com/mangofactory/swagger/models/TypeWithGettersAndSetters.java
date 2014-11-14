@@ -8,6 +8,8 @@ public class TypeWithGettersAndSetters {
   private boolean boolProp;
   private ExampleEnum enumProp;
   private GenericType<String> genericProp;
+  private GenericType<byte[]> genericByteArray;
+  private GenericType<Category[]> genericCategoryArray;
 
   public int getIntProp() {
     return intProp;

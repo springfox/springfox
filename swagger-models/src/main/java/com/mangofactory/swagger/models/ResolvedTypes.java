@@ -2,6 +2,7 @@ package com.mangofactory.swagger.models;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.google.common.base.Function;
@@ -91,6 +92,10 @@ public class ResolvedTypes {
       Type primitiveType = type.getErasedType();
       return typeNameFor(primitiveType);
     }
+    if (type instanceof ResolvedArrayType) {
+      return typeNameFor(type.getArrayElementType().getErasedType());
+    }
+
     return type.getErasedType().getName();
   }
 
@@ -101,6 +106,8 @@ public class ResolvedTypes {
       return typeNameFor(erasedType);
     } else if (erasedType.isEnum()) {
       return "string";
+    } else if (type instanceof ResolvedArrayType) {
+      return String.format("Array«%s»", innerTypeName(type.getArrayElementType()));
     } else if (type instanceof ResolvedObjectType) {
       String typeName = typeNameFor(erasedType);
       if (typeName != null) {

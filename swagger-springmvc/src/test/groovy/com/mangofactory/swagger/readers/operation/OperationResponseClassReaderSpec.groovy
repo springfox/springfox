@@ -15,9 +15,9 @@ class OperationResponseClassReaderSpec extends Specification {
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
       def settings = new SwaggerGlobalSettings()
       SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
-    settings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver())
+      settings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver())
 
-    context.put("swaggerGlobalSettings", settings)
+      context.put("swaggerGlobalSettings", settings)
       OperationResponseClassReader operationResponseClassReader = new OperationResponseClassReader()
 
     when:
@@ -32,6 +32,8 @@ class OperationResponseClassReaderSpec extends Specification {
       dummyHandlerMethod('methodApiResponseClass')                         | 'FunkyBusiness'
       dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'FunkyBusiness'
       dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»'
+      dummyHandlerMethod('methodWithGenericPrimitiveArray')                | 'ResponseEntity«Array«byte»»'
+      dummyHandlerMethod('methodWithGenericComplexArray')                  | 'ResponseEntity«Array«DummyClass»»'
 
    }
 }

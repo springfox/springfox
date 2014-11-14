@@ -18,14 +18,14 @@ class ContainerTypesSpec extends Specification {
       responseTypeName(containerType) == name
 
     where:
-      containerType                   | name
-      genericListOfSimpleType()       | "List[SimpleType]"
-      genericListOfInteger()          | "List"
-      erasedList()                    | "List"
-      genericSetOfSimpleType()        | "Set[SimpleType]"
-      genericSetOfInteger()           | "Set"
-      erasedSet()                     | "Set"
-      genericClassWithGenericField()  | "GenericType«ResponseEntity«SimpleType»»"
+      containerType                  | name
+      genericListOfSimpleType()      | "List[SimpleType]"
+      genericListOfInteger()         | "List"
+      erasedList()                   | "List"
+      genericSetOfSimpleType()       | "Set[SimpleType]"
+      genericSetOfInteger()          | "Set"
+      erasedSet()                    | "Set"
+      genericClassWithGenericField() | "GenericType«ResponseEntity«SimpleType»»"
 
   }
 
@@ -58,21 +58,21 @@ class ContainerTypesSpec extends Specification {
       retItem.qualifiedType() == Option.apply(itemQualifiedType)
 
     where:
-    property          | name                  | itemType        | itemRef            | itemQualifiedType
-    "complexTypes"    | "List"                | null            | "ComplexType"      | "com.mangofactory.swagger.models.ComplexType"
-    "enums"           | "List"                | "string"        | null               | "com.mangofactory.swagger.models.ExampleEnum"
-    "aliasOfIntegers" | "List"                | "int"           | null               | "java.lang.Integer"
-    "strings"         | "List"                | "string"        | null               | "java.lang.String"
-    "objects"         | "List"                | "object"        | null               | "java.lang.Object"
+      property          | name   | itemType | itemRef       | itemQualifiedType
+      "complexTypes"    | "List" | null     | "ComplexType" | "com.mangofactory.swagger.models.ComplexType"
+      "enums"           | "List" | "string" | null          | "com.mangofactory.swagger.models.ExampleEnum"
+      "aliasOfIntegers" | "List" | "int"    | null          | "java.lang.Integer"
+      "strings"         | "List" | "string" | null          | "java.lang.String"
+      "objects"         | "List" | "object" | null          | "java.lang.Object"
   }
 
 
   def "Model properties of type Set, are inferred correctly"() {
     given:
-    def sut = typeWithSets()
-    def provider = defaultModelProvider()
-    Model asInput = provider.modelFor(ModelContext.inputParam(sut)).get()
-    Model asReturn = provider.modelFor(ModelContext.returnValue(sut)).get()
+      def sut = typeWithSets()
+      def provider = defaultModelProvider()
+      Model asInput = provider.modelFor(ModelContext.inputParam(sut)).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(sut)).get()
 
     expect:
       asInput.name() == "SetsContainer"
@@ -96,20 +96,20 @@ class ContainerTypesSpec extends Specification {
       retItem.qualifiedType() == Option.apply(itemQualifiedType)
 
     where:
-    property          | type                  | itemType        | itemRef            | itemQualifiedType
-    "complexTypes"    | "Set"                 | null            | "ComplexType"      | "com.mangofactory.swagger.models.ComplexType"
-    "enums"           | "Set"                 | "string"        | null               | "com.mangofactory.swagger.models.ExampleEnum"
-    "aliasOfIntegers" | "Set"                 | "int"           | null               | "java.lang.Integer"
-    "strings"         | "Set"                 | "string"        | null               | "java.lang.String"
-    "objects"         | "Set"                 | "object"        | null               | "java.lang.Object"
+      property          | type  | itemType | itemRef       | itemQualifiedType
+      "complexTypes"    | "Set" | null     | "ComplexType" | "com.mangofactory.swagger.models.ComplexType"
+      "enums"           | "Set" | "string" | null          | "com.mangofactory.swagger.models.ExampleEnum"
+      "aliasOfIntegers" | "Set" | "int"    | null          | "java.lang.Integer"
+      "strings"         | "Set" | "string" | null          | "java.lang.String"
+      "objects"         | "Set" | "object" | null          | "java.lang.Object"
   }
 
   def "Model properties of type Arrays are inferred correctly"() {
     given:
-    def sut = typeWithArrays()
-    def provider = defaultModelProvider()
-    Model asInput = provider.modelFor(ModelContext.inputParam(sut)).get()
-    Model asReturn = provider.modelFor(ModelContext.returnValue(sut)).get()
+      def sut = typeWithArrays()
+      def provider = defaultModelProvider()
+      Model asInput = provider.modelFor(ModelContext.inputParam(sut)).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(sut)).get()
 
     expect:
       asInput.name() == "ArraysContainer"
@@ -133,12 +133,13 @@ class ContainerTypesSpec extends Specification {
       retItem.qualifiedType() == Option.apply(itemQualifiedType)
 
     where:
-    property          | type       | itemType        | itemRef            | itemQualifiedType
-    "complexTypes"    | "Array"    | null            | "ComplexType"      | "com.mangofactory.swagger.models.ComplexType"
-    "enums"           | "Array"    | "string"        | null               | "com.mangofactory.swagger.models.ExampleEnum"
-    "aliasOfIntegers" | "Array"    | "int"           | null               | "java.lang.Integer"
-    "strings"         | "Array"    | "string"        | null               | "java.lang.String"
-    "objects"         | "Array"    | "object"        | null               | "java.lang.Object"
+      property          | type    | itemType | itemRef       | itemQualifiedType
+      "complexTypes"    | "Array" | null     | "ComplexType" | "com.mangofactory.swagger.models.ComplexType"
+      "enums"           | "Array" | "string" | null          | "com.mangofactory.swagger.models.ExampleEnum"
+      "aliasOfIntegers" | "Array" | "int"    | null          | "java.lang.Integer"
+      "strings"         | "Array" | "string" | null          | "java.lang.String"
+      "objects"         | "Array" | "object" | null          | "java.lang.Object"
+      "bytes"           | "Array" | "byte"   | null          | "byte"
   }
 
   def "Model properties of type Map are inferred correctly"() {
@@ -170,10 +171,10 @@ class ContainerTypesSpec extends Specification {
       retItem.qualifiedType() == Option.apply(itemQualifiedType)
 
     where:
-      property              | type   | itemRef                     | itemQualifiedType
-      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"  | "com.mangofactory.swagger.models.alternates.Entry"
-      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"  | "com.mangofactory.swagger.models.alternates.Entry"
-      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»"| "com.mangofactory.swagger.models.alternates.Entry"
+      property              | type   | itemRef                      | itemQualifiedType
+      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
+      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
+      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»" | "com.mangofactory.swagger.models.alternates.Entry"
   }
 
 
@@ -212,10 +213,10 @@ class ContainerTypesSpec extends Specification {
       retItem.qualifiedType() == Option.apply(itemQualifiedType)
 
     where:
-      property              | type   | itemRef                     | itemQualifiedType
-      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"  | "com.mangofactory.swagger.models.alternates.Entry"
-      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"  | "com.mangofactory.swagger.models.alternates.Entry"
-      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»"| "com.mangofactory.swagger.models.alternates.Entry"
+      property              | type   | itemRef                      | itemQualifiedType
+      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
+      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
+      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»" | "com.mangofactory.swagger.models.alternates.Entry"
   }
 
 }

@@ -6,6 +6,7 @@ public class ArraysContainer {
   private Integer[] integers;
   private String[] strings;
   private Object[] objects;
+  private byte[] bytes;
 
   ArraysContainer(ComplexType[] complexTypes) {
     this.complexTypes = complexTypes;
@@ -49,6 +50,14 @@ public class ArraysContainer {
 
   public void setObjects(Object[] objects) {
     this.objects = objects;
+  }
+
+  public byte[] getBytes() {
+    return bytes;
+  }
+
+  public void setBytes(byte[] bytes) {
+    this.bytes = bytes;
   }
 }
 

@@ -77,6 +77,14 @@ class TypesForTestingSupport {
     resolver.resolve(GenericType, resolver.resolve(Collection, ExampleEnum))
   }
 
+  static ResolvedType genericTypeWithPrimitiveArray() {
+    resolver.resolve(GenericType, resolver.arrayType(byte.class))
+  }
+
+  static ResolvedType genericTypeWithComplexArray() {
+    resolver.resolve(GenericType, resolver.arrayType(SimpleType.class))
+  }
+
   static ResolvedType genericListOfSimpleType() {
     resolver.resolve(List, SimpleType)
   }
