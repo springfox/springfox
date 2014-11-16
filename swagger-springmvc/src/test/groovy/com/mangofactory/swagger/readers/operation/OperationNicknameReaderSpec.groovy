@@ -24,9 +24,11 @@ class OperationNicknameReaderSpec extends Specification {
     then:
       nickname == expected
     where:
-      currentHttpMethod | handlerMethod                                 | expected
-      GET               | dummyHandlerMethod('methodWithNickname')      | 'myNickname'
-      GET               | dummyHandlerMethod('methodWithHttpGETMethod') | 'get_public_void_com_mangofactory_swagger_dummy_DummyClass_methodWithHttpGETMethod()'
-      POST              | dummyHandlerMethod('methodWithHttpGETMethod') | 'post_public_void_com_mangofactory_swagger_dummy_DummyClass_methodWithHttpGETMethod()'
+      currentHttpMethod | handlerMethod                                             | expected
+      GET               | dummyHandlerMethod('methodWithNickname')                  | 'myNickname'
+      GET               | dummyHandlerMethod('methodWithHttpGETMethod')             | 'get_public_void_com_mangofactory_swagger_dummy_DummyClass_methodWithHttpGETMethod__'
+      POST              | dummyHandlerMethod('methodWithHttpGETMethod')             | 'post_public_void_com_mangofactory_swagger_dummy_DummyClass_methodWithHttpGETMethod__'
+      POST              | dummyHandlerMethod('methodWithGenericType')               | 'post_public_com_mangofactory_swagger_dummy_DummyModels_com_mangofactory_swagger_dummy_DummyModels_Paginated_com_mangofactory_swagger_dummy_DummyClass_BusinessType__com_mangofactory_swagger_dummy_DummyClass_methodWithGenericType__'
+      POST              | dummyHandlerMethod('methodWithTwoParams', String, String) | 'post_public_void_com_mangofactory_swagger_dummy_DummyClass_methodWithTwoParams_java_lang_String_java_lang_String_'
   }
 }

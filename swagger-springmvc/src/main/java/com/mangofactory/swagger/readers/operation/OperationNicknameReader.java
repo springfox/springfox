@@ -9,7 +9,7 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class OperationNicknameReader implements RequestMappingReader {
   @Override
   public void execute(RequestMappingContext context) {
-    ApiOperation apiOperationAnnotation =  context.getApiOperationAnnotation();
+    ApiOperation apiOperationAnnotation = context.getApiOperationAnnotation();
     String nickname;
     if (null != apiOperationAnnotation && !isEmpty(apiOperationAnnotation.nickname())) {
       nickname = apiOperationAnnotation.nickname();
@@ -23,6 +23,14 @@ public class OperationNicknameReader implements RequestMappingReader {
 
   private String getMethodSignature(RequestMappingContext context) {
     String signature = context.getHandlerMethod().toString();
-    return signature.replaceAll("\\.", "_").replaceAll(" ", "_");
+    return signature
+            .replaceAll("\\.", "_")
+            .replaceAll(",", "_")
+            .replaceAll(" ", "_")
+            .replaceAll("\\(", "_")
+            .replaceAll("\\)", "_")
+            .replaceAll("<", "_")
+            .replaceAll(">", "_")
+            .replaceAll("\\$", "_");
   }
 }

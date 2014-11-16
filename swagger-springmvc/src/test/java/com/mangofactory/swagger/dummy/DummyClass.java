@@ -215,6 +215,9 @@ public class DummyClass {
   public void methodWithApiResponses() {
   }
 
+  public void methodWithTwoParams(String a, String b) {
+  }
+
   @ApiIgnore
   public static class ApiIgnorableClass {
     @ApiIgnore

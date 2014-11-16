@@ -30,7 +30,7 @@ class OperationCommandReaderSpec extends Specification {
       new OperationSummaryReader()    | 'summary'    | dummyHandlerMethod('methodWithSummary')    | 'summary'
       new OperationNotesReader()      | 'notes'      | dummyHandlerMethod()                       | 'dummyMethod'
       new OperationNotesReader()      | 'notes'      | dummyHandlerMethod('methodWithNotes')      | 'some notes'
-      new OperationNicknameReader()   | 'nickname'   | dummyHandlerMethod()                       | 'get_public_void_com_mangofactory_swagger_dummy_DummyClass_dummyMethod()'
+      new OperationNicknameReader()   | 'nickname'   | dummyHandlerMethod()                       | 'get_public_void_com_mangofactory_swagger_dummy_DummyClass_dummyMethod__'
       new OperationPositionReader()   | 'position'   | dummyHandlerMethod()                       | CURRENT_COUNT
       new OperationPositionReader()   | 'position'   | dummyHandlerMethod('methodWithPosition')   | 5
       new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod('methodWithDeprecated') | 'true'
