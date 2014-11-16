@@ -3,6 +3,8 @@ package com.mangofactory.swagger.devapp;
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -27,11 +29,13 @@ public class Application {
     this.springSwaggerConfig = springSwaggerConfig;
   }
 
-//  @Bean
-//  public SwaggerSpringMvcPlugin customImplementation(){
-//    return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
-//            .swaggerGroup("user-group")
-//            .includePatterns(".*users.*");
-//  }
+  @Bean
+  public SwaggerSpringMvcPlugin customImplementation(){
+    return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
+            .swaggerGroup("user-group")
+            .includePatterns(".*?")
+            .directModelSubstitute(LocalDate.class, String.class)
+            .directModelSubstitute(LocalDateTime.class, String.class);
+  }
 
 }

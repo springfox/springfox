@@ -92,6 +92,11 @@ public class DummyClass {
     return null;
   }
 
+  @ApiOperation(value = "", nickname = "myNickname")
+  public void methodWithNickname() {
+
+  }
+
   @Deprecated
   public void methodWithDeprecated() {
   }
