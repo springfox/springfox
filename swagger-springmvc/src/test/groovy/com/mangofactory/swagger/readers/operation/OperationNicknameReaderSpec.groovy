@@ -26,7 +26,7 @@ class OperationNicknameReaderSpec extends Specification {
     where:
       currentHttpMethod | handlerMethod                                 | expected
       GET               | dummyHandlerMethod('methodWithNickname')      | 'myNickname'
-      GET               | dummyHandlerMethod('methodWithHttpGETMethod') | 'get-public void com.mangofactory.swagger.dummy.DummyClass.methodWithHttpGETMethod()'
-      POST              | dummyHandlerMethod('methodWithHttpGETMethod') | 'post-public void com.mangofactory.swagger.dummy.DummyClass.methodWithHttpGETMethod()'
+      GET               | dummyHandlerMethod('methodWithHttpGETMethod') | 'get_public_void_com_mangofactory_swagger_dummy_DummyClass_methodWithHttpGETMethod()'
+      POST              | dummyHandlerMethod('methodWithHttpGETMethod') | 'post_public_void_com_mangofactory_swagger_dummy_DummyClass_methodWithHttpGETMethod()'
   }
 }
