@@ -81,26 +81,31 @@ public class SwaggerParameterBuilder {
       PathParameter pathParameter = new PathParameter();
       pathParameter.setRequired(required);
       pathParameter.setProperty(SimpleProperties.fromType(methodParameter.getResolvedParameterType()));
+      pathParameter.setDefaultValue(defaultValue);
       return pathParameter;
     } else if ("header".equals(type)) {
       HeaderParameter headerParameter = new HeaderParameter();
       headerParameter.setRequired(required);
       headerParameter.setProperty(SimpleProperties.fromType(methodParameter.getResolvedParameterType()));
+      headerParameter.setDefaultValue(defaultValue);
       return headerParameter;
     } else if ("query".equals(type)) {
       QueryParameter queryParameter = new QueryParameter();
       queryParameter.setRequired(required);
       queryParameter.setProperty(SimpleProperties.fromType(methodParameter.getResolvedParameterType()));
+      queryParameter.setDefaultValue(defaultValue);
       return queryParameter;
     } else if ("formData".equals(type)) {
       FormParameter formParameter = new FormParameter();
       formParameter.setType(dataType);
       formParameter.setRequired(required);
+      formParameter.setDefaultValue(defaultValue);
       return formParameter;
     } else if ("cookie".equals(type)) {
       CookieParameter cookieParameter = new CookieParameter();
       cookieParameter.setRequired(required);
       cookieParameter.setProperty(SimpleProperties.fromType(methodParameter.getResolvedParameterType()));
+      cookieParameter.setDefaultValue(defaultValue);
       return cookieParameter;
     } else if ("body".equals(type)) {
       BodyParameter bodyParameter = new BodyParameter();

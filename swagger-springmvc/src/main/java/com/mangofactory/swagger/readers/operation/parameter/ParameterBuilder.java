@@ -1,34 +1,29 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.Annotations;
+import com.mangofactory.swagger.models.SimpleProperties;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.models.parameters.Parameter;
+import com.wordnik.swagger.models.parameters.QueryParameter;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.base.Strings.emptyToNull;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Lists.transform;
-
-//import com.wordnik.swagger.model.AllowableListValues;
-//import com.wordnik.swagger.model.AllowableValues;
-//import com.wordnik.swagger.model.Parameter;
-//import static com.mangofactory.swagger.ScalaUtils.*;
+import static com.mangofactory.swagger.models.ResolvedTypes.asResolved;
 
 class ParameterBuilder {
-
-  private String dataTypeName;
   private String parentName;
   private Field field;
-
-  public ParameterBuilder withDataTypeName(String dataTypeName) {
-    this.dataTypeName = dataTypeName;
-    return this;
-  }
+  private TypeResolver typeResolver = new TypeResolver();
 
   public ParameterBuilder withParentName(String parentName) {
     this.parentName = parentName;
@@ -40,72 +35,64 @@ class ParameterBuilder {
     return this;
   }
 
-  public <T extends Parameter> T build() {
+  public Parameter build() {
     Optional<ApiModelProperty> apiModelPropertyOptional = Annotations.findApiModePropertyAnnotation(field);
     if (apiModelPropertyOptional.isPresent()) {
-//      return fromApiModelProperty(apiModelPropertyOptional.get());
+      return fromApiModelProperty(apiModelPropertyOptional.get());
     }
     Optional<ApiParam> apiParamOptional = Annotations.findApiParamAnnotation(field);
     if (apiParamOptional.isPresent()) {
-//      return fromApiParam(apiParamOptional.get());
+      return fromApiParam(apiParamOptional.get());
     }
-//    return defaultParameter();
-    return null;
+    return defaultParameter();
   }
-
 
   private Parameter defaultParameter() {
 //    AllowableValues allowable = allowableValues(Optional.<String>absent(), field);
+    QueryParameter queryParameter = new QueryParameter();
+    queryParameter.setName(parameterName());
+    queryParameter.setDescription(null);
+    queryParameter.setRequired(false);
+    ResolvedType resolvedType = asResolved(typeResolver, field.getType());
+    queryParameter.setProperty(SimpleProperties.fromType(resolvedType));
+    return queryParameter;
+  }
 
-//    return new Parameter(
-//            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
-//            toOption(null), //description
-//            toOption(null), //default value
-//            Boolean.FALSE,  //required
-//            Boolean.FALSE,  //allow multiple
-//            dataTypeName,   //data type
-//            allowable,           //allowable values
-//            "query",        //param type
-//            toOption(null)  //param access
-//    );
-    return null;
+  private String parameterName() {
+    return isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName());
   }
 
   private Parameter fromApiParam(ApiParam apiParam) {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
 //    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
-
-//    return new Parameter(
-//            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
-//            toOption(apiParam.value()),
-//            toOption(apiParam.defaultValue()),
-//            apiParam.required(),
-//            apiParam.allowMultiple(),
-//            dataTypeName,
-//            allowable,
-//            "query", //param type
-//            toOption(apiParam.access()));
-    return null;
+    QueryParameter queryParameter = new QueryParameter();
+    queryParameter.setName(parameterName());
+    queryParameter.setDescription(apiParam.value());
+    queryParameter.setRequired(apiParam.required());
+    queryParameter.setArray(apiParam.allowMultiple());
+    queryParameter.setAccess(apiParam.access());
+    queryParameter.setDefaultValue(apiParam.defaultValue());
+    ResolvedType resolvedType = asResolved(typeResolver, field.getType());
+    queryParameter.setProperty(SimpleProperties.fromType(resolvedType));
+    return queryParameter;
   }
 
   private Parameter fromApiModelProperty(ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
 //    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
-//    return new Parameter(
-//            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
-//            toOption(apiModelProperty.value()),
-//            toOption(null), //default value
-//            apiModelProperty.required(),
-//            Boolean.FALSE,  //allow multiple
-//            dataTypeName,
-//            allowable,
-//            "query", //param type
-//            toOption(apiModelProperty.access()));
-    return null;
+    QueryParameter queryParameter = new QueryParameter();
+    queryParameter.setName(parameterName());
+    queryParameter.setDescription(apiModelProperty.value());
+    queryParameter.setRequired(apiModelProperty.required());
+    queryParameter.setArray(false);
+    queryParameter.setAccess(apiModelProperty.access());
+    ResolvedType resolvedType = asResolved(typeResolver, field.getType());
+    queryParameter.setProperty(SimpleProperties.fromType(resolvedType));
+    return queryParameter;
+
   }
 
 //  private AllowableValues allowableValues(final Optional<String> optionalAllowable, final Field field) {
-//
 //    AllowableValues allowable = null;
 //    if (field.getType().isEnum()) {
 //      allowable = new AllowableListValues(JavaConversions.collectionAsScalaIterable(

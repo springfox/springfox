@@ -10,6 +10,8 @@ import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.readers.operation.SwaggerParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.models.parameters.Parameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
 
@@ -22,6 +24,7 @@ import java.util.Set;
 import static com.google.common.collect.Lists.newArrayList;
 
 public class OperationParameterReader extends SwaggerParameterReader {
+  private static final Logger LOGGER = LoggerFactory.getLogger(OperationParameterReader.class);
 
   @Override
   protected Collection<? extends Parameter> readParameters(final RequestMappingContext context) {
@@ -45,7 +48,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
     commandList.add(new ParameterNameReader());
     commandList.add(new ParameterRequiredReader());
 
-    ModelAttributeParameterExpander expander = new ModelAttributeParameterExpander(alternateTypeProvider);
+    ModelAttributeParameterExpander parameterExpander = new ModelAttributeParameterExpander(alternateTypeProvider);
     for (ResolvedMethodParameter methodParameter : methodParameters) {
 
       if (!shouldIgnore(methodParameter, swaggerGlobalSettings.getIgnorableParameterTypes())) {
@@ -64,37 +67,23 @@ public class OperationParameterReader extends SwaggerParameterReader {
 
         Map<String, Object> result = parameterContext.getResult();
 
-        SwaggerParameterBuilder swaggerParameterBuilder = new SwaggerParameterBuilder();
-        Parameter parameter = swaggerParameterBuilder
-                .withType((String) result.get("paramType"))
-                .withDescription((String) result.get("description"))
-                .withName((String) result.get("name"))
-                .withRequired((Boolean) result.get("required"))
-                .withDataType((String) result.get("dataType"))
-                .withModelProvider(modelProvider)
-                .withMethodParameter(methodParameter)
-                .build();
 
-//        Model asInput = modelProvider.modelFor(ModelContext.inputParam(simpleType())).get();
-
-//        if (!shouldExpand(methodParameter)) {
-//          Parameter parameter = new Parameter(
-//                  (String) result.get("name"),
-//                  toOption(result.get("description")),
-//                  toOption(result.get("defaultValue")),
-//                  (Boolean) result.get("required"),
-//                  (Boolean) result.get("allowMultiple"),
-//                  (String) result.get("dataType"),
-//                  (AllowableValues) result.get("allowableValues"),
-//                  (String) result.get("paramType"),
-//                  toOption(result.get("paramAccess"))
-//          );
-//          parameters.add(parameter);
-//        } else {
-//          expander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters);
-//        }
-
-        parameters.add(parameter);
+        if (!shouldExpand(methodParameter)) {
+          SwaggerParameterBuilder swaggerParameterBuilder = new SwaggerParameterBuilder();
+          Parameter parameter = swaggerParameterBuilder
+                  .withType((String) result.get("paramType"))
+                  .withDescription((String) result.get("description"))
+                  .withName((String) result.get("name"))
+                  .withRequired((Boolean) result.get("required"))
+                  .withDataType((String) result.get("dataType"))
+                  .withModelProvider(modelProvider)
+                  .withDefaultValue((String) result.get("defaultValue"))
+                  .withMethodParameter(methodParameter)
+                  .build();
+          parameters.add(parameter);
+        } else {
+          parameterExpander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters);
+        }
       }
     }
     return parameters;
@@ -116,11 +105,14 @@ public class OperationParameterReader extends SwaggerParameterReader {
   }
 
   private boolean shouldExpand(final ResolvedMethodParameter parameter) {
+    String name = parameter.getMethodParameter().getMethod().getName();
     for (Annotation annotation : parameter.getMethodParameter().getParameterAnnotations()) {
       if (ModelAttribute.class == annotation.annotationType()) {
+        LOGGER.debug("Found a {} annotation, expanding parameter for method: {}", ModelAttribute.class, name);
         return true;
       }
     }
+    LOGGER.debug("Skipping expansion of method parameter:{}", name);
     return false;
   }
 }

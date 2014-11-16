@@ -3,6 +3,7 @@ package com.mangofactory.swagger.devapp.api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,9 +35,13 @@ public class UserController {
     return new ArrayList<User>();
   }
 
-//  @RequestMapping(value = "/users", method = RequestMethod.POST)
-//  public void createUser(@RequestBody User user) {
-//    log.info("Creating user");
-//
-//  }
+  @RequestMapping(value = "/users/advancedSearch", method = RequestMethod.GET)
+  public
+  @ResponseBody
+  List<User> advancedSearch(@ModelAttribute UserSearch userSearch) {
+    log.info("Search criteria: {}", userSearch);
+    List<User> users = new ArrayList<User>();
+    users.add(new User("id-123", "name-123"));
+    return users;
+  }
 }

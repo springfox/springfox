@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.mangofactory.swagger.models.ResolvedTypes.asResolved;
-import static com.mangofactory.swagger.models.Types.typeNameFor;
 import static java.lang.reflect.Modifier.isStatic;
 
 class ModelAttributeParameterExpander {
@@ -52,15 +51,9 @@ class ModelAttributeParameterExpander {
         continue;
       }
 
-      String dataTypeName = typeNameFor(resolvedType);
-
-      if (dataTypeName == null) {
-        dataTypeName = resolvedType.getSimpleName();
-      }
       LOGGER.debug("Building parameter for field: {}, with type: ", field, resolvedType);
       parameters.add(new ParameterBuilder()
               .forField(field)
-              .withDataTypeName(dataTypeName)
               .withParentName(parentName)
               .build());
 
