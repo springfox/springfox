@@ -15,7 +15,9 @@ import java.lang.reflect.Constructor;
 public class ConstructorModelPropertyProvider extends FieldModelPropertyProvider implements ModelPropertiesProvider {
 
   @Autowired
-  public ConstructorModelPropertyProvider(FieldProvider fieldProvider, AlternateTypeProvider alternateTypeProvider,
+  public ConstructorModelPropertyProvider(
+      FieldProvider fieldProvider,
+      AlternateTypeProvider alternateTypeProvider,
       BeanPropertyNamingStrategy namingStrategy) {
 
     super(fieldProvider, alternateTypeProvider, namingStrategy);

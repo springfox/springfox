@@ -12,6 +12,9 @@ class TypesForTestingSupport {
   static Class simpleType() {
     SimpleType
   }
+  static Class unwrappedType() {
+    UnwrappedType
+  }
   static Class typeWithConstructor() {
     TypeWithConstructor
   }

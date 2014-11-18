@@ -23,7 +23,7 @@ class ModelProviderSupport {
     TypeResolver typeResolver = new TypeResolver()
     AlternateTypeProvider alternateTypeProvider = new AlternateTypeProvider()
     alternateTypeProvider.addRule(new AlternateTypeRule(typeResolver.resolve(LocalDate), typeResolver.resolve(String)))
-    defaultModelProvider(typeResolver, alternateTypeProvider)
+    defaultModelProvider(new ObjectMapper(), typeResolver, alternateTypeProvider)
   }
 
   ModelProvider providerThatSubstitutesResponseEntityOfVoid() {
@@ -31,15 +31,15 @@ class ModelProviderSupport {
     def alternateTypeProvider = new AlternateTypeProvider()
     alternateTypeProvider.addRule(new AlternateTypeRule(resolver.resolve(ResponseEntity, Void),
             resolver.resolve(Void)))
-    defaultModelProvider(resolver, alternateTypeProvider)
+    defaultModelProvider(new ObjectMapper(), resolver, alternateTypeProvider)
   }
 
-  ModelProvider defaultModelProvider(TypeResolver typeResolver = new TypeResolver(),
+  ModelProvider defaultModelProvider(ObjectMapper objectMapper = new ObjectMapper(),
+                                     TypeResolver typeResolver = new  TypeResolver(),
                                      AlternateTypeProvider alternateTypeProvider = defaultAlternateTypesProvider()) {
 
     def fields = new FieldProvider(typeResolver)
 
-    def objectMapper = new ObjectMapper()
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy(objectMapper)
 
     def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver,

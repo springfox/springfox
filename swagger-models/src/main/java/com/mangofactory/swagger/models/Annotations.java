@@ -1,5 +1,7 @@
 package com.mangofactory.swagger.models;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
 import com.wordnik.swagger.annotations.ApiModelProperty;
@@ -35,6 +37,10 @@ public class Annotations {
     }
 
     return annotation;
+  }
+
+  public static boolean memberIsUnwrapped(AnnotatedMember member) {
+    return Optional.fromNullable(member.getAnnotation(JsonUnwrapped.class)).isPresent();
   }
 
   public static Optional<ApiModelProperty> findApiModePropertyAnnotation(AnnotatedElement annotated) {

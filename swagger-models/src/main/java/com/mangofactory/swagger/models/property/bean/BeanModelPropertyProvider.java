@@ -8,8 +8,10 @@ import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.BeanPropertyNamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
@@ -26,6 +28,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.models.Annotations.*;
 import static com.mangofactory.swagger.models.property.BeanPropertyDefinitions.*;
 import static com.mangofactory.swagger.models.property.bean.Accessors.*;
 import static com.mangofactory.swagger.models.property.bean.BeanModelProperty.*;
@@ -41,8 +44,11 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
   private final AlternateTypeProvider alternateTypeProvider;
 
   @Autowired
-  public BeanModelPropertyProvider(AccessorsProvider accessors, TypeResolver typeResolver,
-      AlternateTypeProvider alternateTypeProvider,  BeanPropertyNamingStrategy namingStrategy) {
+  public BeanModelPropertyProvider(
+          AccessorsProvider accessors,
+          TypeResolver typeResolver,
+          AlternateTypeProvider alternateTypeProvider,
+          BeanPropertyNamingStrategy namingStrategy) {
 
     this.typeResolver = typeResolver;
     this.alternateTypeProvider = alternateTypeProvider;
@@ -66,11 +72,48 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
                 = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
         if (accessorMemberIs(childProperty, methodName(member))) {
-          serializationCandidates.add(beanModelProperty(childProperty, jacksonProperty, true));
+          serializationCandidates
+                  .addAll(newArrayList(addSerializationCandidates(member, childProperty, jacksonProperty)));
         }
       }
     }
     return serializationCandidates;
+  }
+
+  @VisibleForTesting
+  Iterable<? extends ModelProperty> addSerializationCandidates(AnnotatedMember member,
+      ResolvedMethod childProperty,
+      Optional<BeanPropertyDefinition> jacksonProperty) {
+
+    if (member instanceof AnnotatedMethod && memberIsUnwrapped(member)) {
+      Iterable<? extends ModelProperty> properties;
+      if (isGetter(((AnnotatedMethod)member).getMember())) {
+        properties = propertiesForSerialization(childProperty.getReturnType());
+      } else {
+        properties = propertiesForSerialization(childProperty.getArgumentType(0));
+      }
+      return properties;
+    } else {
+      return newArrayList(beanModelProperty(childProperty, jacksonProperty, true));
+    }
+  }
+
+  @VisibleForTesting
+  Iterable<? extends ModelProperty> addDeserializationCandidates(AnnotatedMember member,
+      ResolvedMethod childProperty,
+      Optional<BeanPropertyDefinition> jacksonProperty) {
+
+    if (member instanceof AnnotatedMethod && memberIsUnwrapped(member)) {
+      Iterable<? extends ModelProperty> properties;
+      if (isGetter(((AnnotatedMethod)member).getMember())) {
+        properties = propertiesForDeserialization(childProperty.getReturnType());
+      } else {
+        properties = propertiesForDeserialization(childProperty.getArgumentType(0));
+      }
+      return properties;
+    } else {
+      return newArrayList(beanModelProperty(childProperty, jacksonProperty, true));
+    }
   }
 
   @Override
@@ -90,7 +133,8 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
         try {
           AnnotatedMember member = propertyDefinition.getPrimaryMember();
           if (accessorMemberIs(childProperty, methodName(member))) {
-            serializationCandidates.add(beanModelProperty(childProperty, jacksonProperty, false));
+            serializationCandidates
+                    .addAll(newArrayList(addDeserializationCandidates(member, childProperty, jacksonProperty)));
           }
         } catch (Exception e) {
           LOG.warn(e.getMessage());

@@ -15,7 +15,6 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import scala.Option;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -121,8 +120,4 @@ public class DefaultModelProvider implements ModelProvider {
     }
   }
 
-
-  private String id(Type type) {
-    return asResolved(resolver, type).getErasedType().getSimpleName();
-  }
 }

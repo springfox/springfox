@@ -16,6 +16,7 @@ class ObjectMapperNamingStrategySpec extends Specification {
 
     expect:
       sut.nameForSerialization(beanPropertyDefinition) == name
+      sut.nameForDeserialization(beanPropertyDefinition) == name
 
     where:
       beanAccessorMethod     | name
@@ -34,6 +35,7 @@ class ObjectMapperNamingStrategySpec extends Specification {
 
     expect:
       sut.nameForSerialization(beanPropertyDefinition) == name
+      sut.nameForDeserialization(beanPropertyDefinition) == name
 
     where:
       beanAccessorMethod     | name
@@ -52,6 +54,7 @@ class ObjectMapperNamingStrategySpec extends Specification {
 
     expect:
       sut.nameForSerialization(beanPropertyDefinition) == name
+      sut.nameForDeserialization(beanPropertyDefinition) == name
 
     where:
       beanAccessorMethod     | name

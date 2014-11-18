@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.mangofactory.swagger.models.BeanPropertyNamingStrategy;
@@ -25,6 +26,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.models.Annotations.*;
 import static com.mangofactory.swagger.models.property.BeanPropertyDefinitions.*;
 
 @Component
@@ -36,8 +38,11 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
   private ObjectMapper objectMapper;
 
   @Autowired
-  public FieldModelPropertyProvider(FieldProvider fieldProvider, AlternateTypeProvider alternateTypeProvider,
+  public FieldModelPropertyProvider(
+      FieldProvider fieldProvider,
+      AlternateTypeProvider alternateTypeProvider,
       BeanPropertyNamingStrategy namingStrategy) {
+
     this.fieldProvider = fieldProvider;
     this.alternateTypeProvider = alternateTypeProvider;
     this.namingStrategy = namingStrategy;
@@ -58,10 +63,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
         Optional<BeanPropertyDefinition> jacksonProperty
                 = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
-        if (memberIsAField(member)) {
-          String fieldName = name(jacksonProperty.get(), true, namingStrategy);
-          serializationCandidates.add(new FieldModelProperty(fieldName, childField, alternateTypeProvider));
-        }
+        serializationCandidates.addAll(newArrayList(addSerializationCandidates(member, childField, jacksonProperty)));
       }
     }
     return serializationCandidates;
@@ -81,13 +83,38 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
         Optional<BeanPropertyDefinition> jacksonProperty
                 = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
-        if (memberIsAField(member)) {
-          String fieldName = name(jacksonProperty.get(), true, namingStrategy);
-          serializationCandidates.add(new FieldModelProperty(fieldName, childField, alternateTypeProvider));
-        }
+        serializationCandidates.addAll(newArrayList(addDeserializationCandidates(member, childField, jacksonProperty)));
       }
     }
     return serializationCandidates;
+  }
+
+  @VisibleForTesting
+  Iterable<? extends ModelProperty> addDeserializationCandidates(AnnotatedMember member, ResolvedField
+          childField, Optional<BeanPropertyDefinition> jacksonProperty) {
+    if (memberIsAField(member)) {
+      if (memberIsUnwrapped(member)) {
+        return newArrayList(propertiesForDeserialization(childField.getType()));
+      } else {
+        String fieldName = name(jacksonProperty.get(), true, namingStrategy);
+        return newArrayList(new FieldModelProperty(fieldName, childField, alternateTypeProvider));
+      }
+    }
+    return newArrayList();
+  }
+
+  @VisibleForTesting
+  Iterable<? extends ModelProperty> addSerializationCandidates(AnnotatedMember member, ResolvedField
+          childField, Optional<BeanPropertyDefinition> jacksonProperty) {
+    if (memberIsAField(member)) {
+      if (memberIsUnwrapped(member)) {
+        return newArrayList(propertiesForSerialization(childField.getType()));
+      } else {
+        String fieldName = name(jacksonProperty.get(), true, namingStrategy);
+        return newArrayList(new FieldModelProperty(fieldName, childField, alternateTypeProvider));
+      }
+    }
+    return newArrayList();
   }
 
   @Override
