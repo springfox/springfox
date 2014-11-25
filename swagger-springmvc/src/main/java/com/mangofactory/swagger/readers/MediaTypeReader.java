@@ -50,6 +50,12 @@ public class MediaTypeReader implements RequestMappingReader {
       producesList = asList(annotation.produces());
     }
 
+    if (producesList.isEmpty()) {
+      producesList.add(MediaType.ALL_VALUE);
+    }
+    if (consumesList.isEmpty()) {
+      consumesList.add(MediaType.ALL_VALUE);
+    }
     context.put("consumes", consumesList);
     context.put("produces", producesList);
   }
