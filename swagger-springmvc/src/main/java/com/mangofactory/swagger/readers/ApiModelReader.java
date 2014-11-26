@@ -6,6 +6,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.ModelUtils;
+import com.mangofactory.swagger.models.Annotations;
 import com.mangofactory.swagger.models.ModelContext;
 import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.models.ScalaConverters;
@@ -13,6 +14,8 @@ import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import com.wordnik.swagger.model.Model;
 import com.wordnik.swagger.model.ModelProperty;
 import org.slf4j.Logger;
@@ -77,9 +80,43 @@ public class ApiModelReader implements Command<RequestMappingContext> {
       populateDependencies(modelContext, modelMap);
     }
     mergeModelMap(modelMap, readParametersApiModel(handlerMethodResolver, swaggerGlobalSettings, handlerMethod));
+    mergeModelMap(modelMap, readApiResponses(swaggerGlobalSettings, handlerMethod));
 
     log.debug("Finished reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
     context.put("models", modelMap);
+  }
+
+  private Map<String, Model> readApiResponses(SwaggerGlobalSettings settings, HandlerMethod handlerMethod) {
+
+    Optional<ApiResponses> apiResponses = Annotations.findApiResponsesAnnotations(handlerMethod.getMethod());
+    Map<String, Model> modelMap = newHashMap();
+
+    log.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+    if (!apiResponses.isPresent()) {
+      return modelMap;
+    }
+
+    for (ApiResponse response : apiResponses.get().value()) {
+          if (!settings.getIgnorableParameterTypes().contains(response.response())) {
+            ResolvedType modelType = settings.getAlternateTypeProvider()
+                    .alternateFor(asResolved(new TypeResolver(), response.response()));
+            ModelContext modelContext = ModelContext.inputParam(modelType);
+            markIgnorablesAsHasSeen(settings.getTypeResolver(), settings.getIgnorableParameterTypes(),
+                    modelContext);
+            Optional<Model> pModel = modelProvider.modelFor(modelContext);
+            if (pModel.isPresent()) {
+              log.debug("Swagger generated parameter model id: {}, name: {}, schema: {} models",
+                      pModel.get().id(),
+                      pModel.get().name());
+              modelMap.put(pModel.get().id(), pModel.get());
+            } else {
+              log.debug("Swagger core did not find any parameter models for {}", response.response());
+            }
+            populateDependencies(modelContext, modelMap);
+      }
+    }
+    log.debug("Finished reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+    return modelMap;
   }
 
   private void mergeModelMap(Map<String, Model> target, Map<String, Model> source) {
@@ -131,7 +168,8 @@ public class ApiModelReader implements Command<RequestMappingContext> {
   }
 
   private Map<String, Model> readParametersApiModel(HandlerMethodResolver handlerMethodResolver,
-                                                    SwaggerGlobalSettings settings, HandlerMethod handlerMethod) {
+      SwaggerGlobalSettings settings,
+      HandlerMethod handlerMethod) {
 
     Method method = handlerMethod.getMethod();
     Map<String, Model> modelMap = newHashMap();

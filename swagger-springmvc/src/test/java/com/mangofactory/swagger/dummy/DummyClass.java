@@ -79,6 +79,13 @@ public class DummyClass {
   public void methodApiResponseClass() {
   }
 
+  @ApiResponses({
+          @ApiResponse(code = 201, response = Void.class, message = "Rule Scheduled successfuly"),
+          @ApiResponse(code = 500, response = RestError.class, message = "Internal Server Error"),
+          @ApiResponse(code = 406, response = RestError.class, message = "Not acceptable")})
+  public void methodAnnotatedWithApiResponse() {
+  }
+
   @ApiOperation(value = "SomeVal",
           authorizations = @Authorization(value = "oauth2",
                   scopes = {@AuthorizationScope(scope = "scope", description = "scope description")

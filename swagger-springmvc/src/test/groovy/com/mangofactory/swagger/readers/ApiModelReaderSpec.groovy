@@ -128,6 +128,29 @@ class ApiModelReaderSpec extends Specification {
       models['FunkyBusiness'].qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness'
   }
 
+  def "Should pull models from operation's ApiResponse annotations"() {
+    given:
+
+      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodAnnotatedWithApiResponse'), null)
+      SwaggerGlobalSettings settings = new SwaggerGlobalSettings()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      settings.ignorableParameterTypes = new SpringSwaggerConfig().defaultIgnorableParameterTypes()
+      context.put("swaggerGlobalSettings", settings)
+    when:
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
+      apiModelReader.execute(context)
+      Map<String, Object> result = context.getResult()
+
+      Map<String, Model> models = result.get("models")
+    then:
+      println models
+      models.size() == 2
+      models['RestError'].qualifiedType() == 'com.mangofactory.swagger.dummy.RestError'
+      models['Void'].qualifiedType() == 'java.lang.Void'
+  }
+
   def contextWithApiDescription(HandlerMethod handlerMethod, List<Operation> operationList = null) {
     RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
     def scalaOpList = null == operationList ? emptyScalaList() : toScalaList(operationList)
