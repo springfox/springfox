@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.mixins
-
 import com.wordnik.swagger.model.*
 
 import static com.google.common.collect.Lists.newArrayList
@@ -8,7 +7,17 @@ class AuthSupport {
   def defaultAuth() {
     AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything")
     AuthorizationScope[] authorizationScopes = [authorizationScope] as AuthorizationScope[];
-    List<Authorization> authorizations = [new Authorization("oauth2", authorizationScopes)];
+    newArrayList(new Authorization("oauth2", authorizationScopes))
+  }
+
+  def oAuth() {
+    AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything")
+    List<AuthorizationScope> authorizationScopes = newArrayList(authorizationScope)
+    GrantType grantType = new AuthorizationCodeGrant(new TokenRequestEndpoint("some:auth:uri", "test", "secret"),
+            new TokenEndpoint("some:uri", "XX-TOKEN"))
+    List<GrantType> grantTypes = newArrayList(grantType)
+    OAuth oAuth = new OAuthBuilder().scopes(authorizationScopes).grantTypes(grantTypes).build()
+    List<Authorization> authorizations = [oAuth];
     authorizations
   }
 

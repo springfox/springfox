@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.configuration
-
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
@@ -12,7 +11,6 @@ import com.wordnik.swagger.model.Authorization
 import com.wordnik.swagger.model.Model
 import groovy.json.JsonSlurper
 import scala.Option
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.mangofactory.swagger.ScalaUtils.*
@@ -29,7 +27,6 @@ class SwaggerApiListingJsonSerializerSpec extends Specification {
     mapper.registerModule(mod)
   }
 
-  @Ignore
   def "should serialize Authorization types with models attached"() {
   given:
     SwaggerSchemaConverter parser = new SwaggerSchemaConverter();
