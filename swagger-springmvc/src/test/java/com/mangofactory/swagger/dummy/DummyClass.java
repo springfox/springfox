@@ -34,6 +34,10 @@ public class DummyClass {
   public void methodWithHttpGETMethod() {
   }
 
+  @ApiOperation(value = "description", httpMethod = "GET", hidden = true)
+  public void methodThatIsHidden() {
+  }
+
   @ApiOperation(value = "description", httpMethod = "RUBBISH")
   public void methodWithInvalidHttpMethod() {
   }

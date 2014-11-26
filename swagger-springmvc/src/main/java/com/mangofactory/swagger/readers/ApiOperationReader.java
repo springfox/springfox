@@ -8,6 +8,7 @@ import com.mangofactory.swagger.ordering.OperationPositionalOrdering;
 import com.mangofactory.swagger.readers.operation.DefaultResponseMessageReader;
 import com.mangofactory.swagger.readers.operation.OperationAuthReader;
 import com.mangofactory.swagger.readers.operation.OperationDeprecatedReader;
+import com.mangofactory.swagger.readers.operation.OperationHiddenReader;
 import com.mangofactory.swagger.readers.operation.OperationHttpMethodReader;
 import com.mangofactory.swagger.readers.operation.OperationImplicitParameterReader;
 import com.mangofactory.swagger.readers.operation.OperationImplicitParametersReader;
@@ -69,6 +70,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
             : requestMethods;
 
     List<RequestMappingReader> commandList = newArrayList();
+    commandList.add(new OperationHiddenReader());
     commandList.add(new OperationAuthReader());
     commandList.add(new OperationHttpMethodReader());
     commandList.add(new OperationSummaryReader());
@@ -85,6 +87,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
     commandList.add(new OperationDeprecatedReader());
     commandList.addAll(customAnnotationReaders);
     Integer currentCount = 0;
+    Boolean isHidden = false;
     for (RequestMethod httpRequestMethod : supportedMethods) {
       CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
 
@@ -106,24 +109,27 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       List<String> consumesMediaTypes = (List<String>) operationResultMap.get("consumes");
       List<Parameter> parameterList = (List<Parameter>) operationResultMap.get("parameters");
       List<Authorization> authorizations = (List<Authorization>) operationResultMap.get("authorizations");
+      isHidden = (Boolean) operationResultMap.get("isHidden");
 
-      Operation operation = new Operation(
-              (String) operationResultMap.get("httpRequestMethod"),
-              (String) operationResultMap.get("summary"),
-              (String) operationResultMap.get("notes"),
-              (String) operationResultMap.get("responseClass"),
-              (String) operationResultMap.get("nickname"),
-              (Integer) operationResultMap.get("position"),
-              toScalaList(producesMediaTypes),
-              toScalaList(consumesMediaTypes),
-              emptyScalaList(),
-              toScalaList(authorizations),
-              toScalaList(parameterList),
-              toScalaList((List) operationResultMap.get("responseMessages")),
-              toOption(operationResultMap.get("deprecated"))
-      );
+      if (!isHidden) {
+        Operation operation = new Operation(
+                (String) operationResultMap.get("httpRequestMethod"),
+                (String) operationResultMap.get("summary"),
+                (String) operationResultMap.get("notes"),
+                (String) operationResultMap.get("responseClass"),
+                (String) operationResultMap.get("nickname"),
+                (Integer) operationResultMap.get("position"),
+                toScalaList(producesMediaTypes),
+                toScalaList(consumesMediaTypes),
+                emptyScalaList(),
+                toScalaList(authorizations),
+                toScalaList(parameterList),
+                toScalaList((List) operationResultMap.get("responseMessages")),
+                toOption(operationResultMap.get("deprecated"))
+        );
 
-      operations.add(operation);
+        operations.add(operation);
+      }
     }
     Collections.sort(operations, OPERATION_POSITIONAL_ORDERING);
     outerContext.put("operations", operations);
