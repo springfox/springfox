@@ -35,6 +35,12 @@ public class UserController {
     return new ArrayList<User>();
   }
 
+  @RequestMapping(value = "/users", method = RequestMethod.POST)
+  @ResponseBody
+  public void create(@RequestBody User user) {
+
+  }
+
   @RequestMapping(value = "/users/advancedSearch", method = RequestMethod.GET)
   public
   @ResponseBody
@@ -44,4 +50,6 @@ public class UserController {
     users.add(new User("id-123", "name-123"));
     return users;
   }
+
+
 }

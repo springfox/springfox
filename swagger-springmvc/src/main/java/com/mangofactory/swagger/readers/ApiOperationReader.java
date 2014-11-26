@@ -124,6 +124,10 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       operation.setProduces(producesMediaTypes);
       operation.setOperationId((String) operationResultMap.get("nickname"));
 
+//      Scheme scheme;
+//      Response response;
+//      operation.setResponses();
+
       //Tag's control the swagger-ui "groupings"
       operation.setParameters((List<Parameter>) operationResultMap.get("parameters"));
       operation.setTags(newArrayList(currentResourceGroup.getGroupName()));

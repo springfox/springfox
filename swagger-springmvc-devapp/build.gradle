@@ -6,6 +6,7 @@ buildscript {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE")
   }
 }
+apply plugin: 'idea'
 
 repositories {
   //Swagger core 2.0 models are in snapshot
@@ -28,8 +29,10 @@ dependencies {
   compile("org.springframework.boot:spring-boot-starter-web:${bootVersion}")
   compile("org.springframework.boot:spring-boot-starter-actuator:${bootVersion}")
 
-  compile (project(':swagger-springmvc')){
+  compile(project(':swagger-springmvc')) {
     exclude group: 'javax.servlet', module: 'servlet-api'
+    exclude group: 'org.springframework', module: 'spring-web'
+    exclude group: 'org.springframework', module: 'spring-webmvc'
   }
 //  compile project(':swagger-springmvc-ui')
 }

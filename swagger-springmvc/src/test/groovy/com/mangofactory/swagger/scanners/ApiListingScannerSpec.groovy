@@ -1,20 +1,22 @@
 package com.mangofactory.swagger.scanners
 
-import com.jayway.jsonpath.internal.Path
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.*
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
+import com.wordnik.swagger.models.Path
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+
 //import com.wordnik.swagger.core.SwaggerSpec
 //import com.wordnik.swagger.model.ApiDescription
 //import com.wordnik.swagger.model.ApiListing
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 
 import static com.google.common.collect.Maps.newHashMap
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+
 //import static com.mangofactory.swagger.ScalaUtils.fromOption
 //import static com.mangofactory.swagger.ScalaUtils.fromScalaList
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
 
 @Mixin([RequestMappingSupport, SwaggerAddressProviderSupport, AuthSupport, ModelProviderSupport, ApiDescriptionSupport])
@@ -47,6 +49,8 @@ class ApiListingScannerSpec extends Specification {
       Map<String, Path> apiListingMap = scanner.scan()
     then:
       apiListingMap.size() == 1
+      Path path = apiListingMap['/businesses']
+      println path
 //
 //      ApiListing listing = apiListingMap['businesses']
 //      listing.swaggerVersion() == SwaggerSpec.version()

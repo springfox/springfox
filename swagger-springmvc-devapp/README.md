@@ -12,4 +12,6 @@ A development aid to allow running of a real spring application which uses swagg
 ./gradlew :swagger-springmvc-devapp:bootRun
 ```
 
+To Run/debugging in an IDE executable: com.mangofactory.swagger.devapp.Application
+
 [http://localhost:8080/api-docs](http://localhost:8080/api-docs)

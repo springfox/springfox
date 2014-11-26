@@ -1,9 +1,9 @@
 package com.mangofactory.swagger.core;
 
+import com.mangofactory.swagger.address.SwaggerAddressProvider;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.models.ModelProvider;
-import com.mangofactory.swagger.address.SwaggerAddressProvider;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.ApiListingScanner;
@@ -57,11 +57,13 @@ public class SwaggerApiResourceListing {
     apiListingScanner.setResourceGroupingStrategy(apiListingReferenceScanner.getResourceGroupingStrategy());
 
     Map<String, Path> apiPaths = apiListingScanner.scan();
+    apiListingScanner.getSwaggerModels();
     Swagger swagger = new Swagger();
     swagger.setInfo(this.apiInfo);
     swagger.setPaths(apiPaths);
     swagger.setHost(swaggerAddressProvider.getHost());
     swagger.setBasePath(swaggerAddressProvider.getBasePath());
+    swagger.setDefinitions(apiListingScanner.getSwaggerModels());
     swaggerCache.addSwaggerApi(swaggerGroup, swagger);
 //      Map<String, ApiListing> apiListings = apiListingScanner.scan();
 //      swaggerCache.addApiListings(swaggerGroup, apiListings);
