@@ -161,79 +161,6 @@ testcases:
        - type: "string"
          name: "parameter"
 
-#  - parentUri: "/default/pet-grooming-service"
-#    index: 0
-#    testDescription: "Verified that multiple request mappings on controller works"
-#    expectedUri: "/petgrooming"
-#    returnType: "ResponseEntity«boolean»"
-#    parameters:
-#       - type: "string"
-#         name: "type"
-#
-#  - parentUri: "/default/pet-grooming-service"
-#    index: 1
-#    testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
-#    expectedUri: "/petgrooming/voidMethod/{input}"
-#    returnType: ""
-#    parameters:
-#       - type: "string"
-#         name: "input"
-
-#  - parentUri: "/default/pets/grooming"
-#    index: 0
-#    testDescription: "Verified that multiple request mappings on controller works and is grouped correctly"
-#    expectedUri: "/pets/grooming"
-#    returnType: "ResponseEntity«boolean»"
-#    parameters:
-#       - type: "string"
-#         name: "type"
-#
-#  - parentUri: "/default/pets/grooming"
-#    index: 1
-#    testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
-#    expectedUri: "/pets/grooming/voidMethod/{input}"
-#    returnType: ""
-#    parameters:
-#       - type: "string"
-#         name: "input"
-#
-#  - parentUri: "/default/pet-service"
-#    index: 0
-#    testDescription: "Verified that multiple request mappings on controller works and is grouped correctly"
-#    expectedUri: "/pets/grooming"
-#    returnType: "ResponseEntity«boolean»"
-#    parameters:
-#       - type: "string"
-#         name: "type"
-#
-#  - parentUri: "/default/pet-service"
-#    index: 1
-#    httpMethod: "GET"
-#    testDescription: "Verified that multiple request mappings on controller works and is grouped correctly"
-#    expectedUri: "/pets"
-#    returnType: "ResponseEntity«boolean»"
-#    parameters:
-#       - type: "string"
-#         name: "type"
-#
-#  - parentUri: "/default/pet-service"
-#    index: 2
-#    testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
-#    expectedUri: "/pets/grooming/voidMethod/{input}"
-#    returnType: ""
-#    parameters:
-#       - type: "string"
-#         name: "input"
-#
-#  - parentUri: "/default/pet-service"
-#    index: 3
-#    testDescription: "Verified that multiple request mappings on controller works and @RequestStatus is honored"
-#    expectedUri: "/pets/voidMethod/{input}"
-#    returnType: ""
-#    parameters:
-#       - type: "string"
-#         name: "input"
-
   - parentUri: "/default/pet-service"
     index: 4
     testDescription: "Verified multiple @PathVariables is supported"
@@ -397,6 +324,7 @@ testcases:
     parameters:
        - type: "Pet"
          name: "toCreate"
+    returnType: "void"
 
   - parentUri: "/default/concrete-controller"
     index: 20

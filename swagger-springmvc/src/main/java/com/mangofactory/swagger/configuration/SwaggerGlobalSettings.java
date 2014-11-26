@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.Maps.*;
+
 public class SwaggerGlobalSettings {
   /**
    * Set of classes to exclude from spring controller request mapping methods
@@ -21,7 +23,7 @@ public class SwaggerGlobalSettings {
    *
    * @see com.mangofactory.swagger.readers.operation.DefaultResponseMessageReader
    */
-  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
+  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages = newHashMap();
   private TypeResolver typeResolver = new TypeResolver();
   private AlternateTypeProvider alternateTypeProvider;
 

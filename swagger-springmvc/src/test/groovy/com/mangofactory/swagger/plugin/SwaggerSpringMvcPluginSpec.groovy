@@ -20,15 +20,14 @@ import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.ServletRequest
 
-import static com.mangofactory.swagger.ScalaUtils.*
-import static com.mangofactory.swagger.models.alternates.Alternates.*
-import static org.springframework.http.HttpStatus.*
+import static com.mangofactory.swagger.ScalaUtils.toOption
+import static com.mangofactory.swagger.models.alternates.Alternates.newMapRule
+import static org.springframework.http.HttpStatus.OK
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Mixin(SpringSwaggerConfigSupport)
@@ -65,7 +64,8 @@ class SwaggerSpringMvcPluginSpec extends Specification {
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
     when:
       plugin.globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", toOption(null))])
-            .build()
+          .useDefaultResponseMessages(true)
+          .build()
 
     then:
       SwaggerGlobalSettings swaggerGlobalSettings = plugin.swaggerGlobalSettings
@@ -74,9 +74,23 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
     and: "defaults are preserved"
       swaggerGlobalSettings.getGlobalResponseMessages().keySet().containsAll(
-            [POST, PUT, DELETE, PATCH, TRACE, OPTIONS, HEAD]
+              [POST, PUT, DELETE, PATCH, TRACE, OPTIONS, HEAD]
       )
+  }
 
+  def "Swagger global response messages should not be used for a particular RequestMethod"() {
+    when:
+      plugin.globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", toOption(null))])
+              .useDefaultResponseMessages(false)
+              .build()
+
+    then:
+      SwaggerGlobalSettings swaggerGlobalSettings = plugin.swaggerGlobalSettings
+      swaggerGlobalSettings.getGlobalResponseMessages()[GET][0].message() == "blah"
+      swaggerGlobalSettings.getGlobalResponseMessages()[GET].size() == 1
+
+    and: "defaults are preserved"
+      swaggerGlobalSettings.getGlobalResponseMessages().keySet().containsAll([GET])
   }
 
   def "Swagger ignorableParameterTypes should append to the default ignorableParameterTypes"() {

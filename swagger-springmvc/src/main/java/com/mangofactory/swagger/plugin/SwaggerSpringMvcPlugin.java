@@ -29,13 +29,13 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.models.alternates.Alternates.*;
 import static java.util.Arrays.*;
 import static org.apache.commons.lang.StringUtils.*;
@@ -58,8 +58,7 @@ public class SwaggerSpringMvcPlugin {
   private String apiVersion = "1.0";
 
   private SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
-  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages = new HashMap<RequestMethod,
-          List<ResponseMessage>>();
+  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages = newHashMap();
   private Set<Class> ignorableParameterTypes = new HashSet<Class>();
   private AlternateTypeProvider alternateTypeProvider;
   private List<AlternateTypeRule> alternateTypeRules = new ArrayList<AlternateTypeRule>();
@@ -70,6 +69,7 @@ public class SwaggerSpringMvcPlugin {
   private ApiListingReferenceScanner apiListingReferenceScanner;
   private AtomicBoolean initialized = new AtomicBoolean(false);
   private Collection<RequestMappingReader> customAnnotationReaders;
+  private boolean applyDefaultResponseMessages;
 
   /**
    * Default constructor.
@@ -192,7 +192,8 @@ public class SwaggerSpringMvcPlugin {
    * @see com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultResponseMessages()
    */
   public SwaggerSpringMvcPlugin globalResponseMessage(RequestMethod requestMethod,
-                                                      List<ResponseMessage> responseMessages) {
+      List<ResponseMessage> responseMessages) {
+
     this.globalResponseMessages.put(requestMethod, responseMessages);
     return this;
   }
@@ -273,6 +274,17 @@ public class SwaggerSpringMvcPlugin {
     return this;
   }
 
+  /**
+   * Allows ignoring predefined response message defaults
+   * @param apply flag to determine if the default response messages are used
+   *     true   - the default response messages are added to the global response messages
+   *     false  - the default response messages are added to the global response messages
+   * @return this SwaggerSpringMvcPlugin
+   */
+  public SwaggerSpringMvcPlugin useDefaultResponseMessages(boolean apply) {
+    this.applyDefaultResponseMessages = apply;
+    return this;
+  }
   /**
    * Substitutes each generic class with it's direct parameterized type.
    * e.g.
@@ -412,9 +424,10 @@ public class SwaggerSpringMvcPlugin {
   }
 
   private void buildSwaggerGlobalSettings() {
-    Map<RequestMethod, List<ResponseMessage>> mergedResponseMessages = new HashMap<RequestMethod,
-            List<ResponseMessage>>();
-    mergedResponseMessages.putAll(springSwaggerConfig.defaultResponseMessages());
+    Map<RequestMethod, List<ResponseMessage>> mergedResponseMessages = newHashMap();
+    if (this.applyDefaultResponseMessages) {
+      mergedResponseMessages.putAll(springSwaggerConfig.defaultResponseMessages());
+    }
     mergedResponseMessages.putAll(this.globalResponseMessages);
     swaggerGlobalSettings.setGlobalResponseMessages(mergedResponseMessages);
 

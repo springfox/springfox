@@ -36,12 +36,12 @@
   <component name="GradleLocalSettings">
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="5664992741000" />
-        <entry key="$PROJECT_DIR$/../swagger-springmvc-demo" value="12671911154000" />
+        <entry key="$PROJECT_DIR$" value="5668658303000" />
+        <entry key="$PROJECT_DIR$/../swagger-springmvc-demo" value="12687945710000" />
       </map>
     </option>
   </component>
-  <component name="IdProvider" IDEtalkID="951322C4E7C05F2F604829EC759F9831" />
+  <component name="IdProvider" IDEtalkID="EF864C23ED49213432BA1C38F0016BA4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
@@ -193,4 +193,3 @@
     </states>
   </component>
 </project>
-

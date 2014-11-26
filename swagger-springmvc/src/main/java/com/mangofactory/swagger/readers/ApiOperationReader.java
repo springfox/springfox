@@ -23,6 +23,7 @@ import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.model.Authorization;
 import com.wordnik.swagger.model.Operation;
 import com.wordnik.swagger.model.Parameter;
+import com.wordnik.swagger.model.ResponseMessage;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
@@ -53,6 +54,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
             : customAnnotationReaders;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void execute(RequestMappingContext outerContext) {
 
@@ -62,6 +64,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
     AuthorizationContext authorizationContext = (AuthorizationContext) outerContext.get("authorizationContext");
     String requestMappingPattern = (String) outerContext.get("requestMappingPattern");
     RequestMethodsRequestCondition requestMethodsRequestCondition = requestMappingInfo.getMethodsCondition();
+    List<ResponseMessage> responseMessages = newArrayList();
     List<Operation> operations = newArrayList();
 
     Set<RequestMethod> requestMethods = requestMethodsRequestCondition.getMethods();
@@ -86,8 +89,11 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
     commandList.add(new DefaultResponseMessageReader());
     commandList.add(new OperationDeprecatedReader());
     commandList.addAll(customAnnotationReaders);
+
+    //Setup response message list
+
     Integer currentCount = 0;
-    Boolean isHidden = false;
+    Boolean isHidden;
     for (RequestMethod httpRequestMethod : supportedMethods) {
       CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
 
@@ -98,9 +104,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       operationRequestMappingContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
       operationRequestMappingContext.put("authorizationContext", authorizationContext);
       operationRequestMappingContext.put("requestMappingPattern", requestMappingPattern);
-
-
-
+      operationRequestMappingContext.put("responseMessages", responseMessages);
 
       Map<String, Object> operationResultMap = commandExecutor.execute(commandList, operationRequestMappingContext);
       currentCount = (Integer) operationResultMap.get("currentCount");
@@ -124,7 +128,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
                 emptyScalaList(),
                 toScalaList(authorizations),
                 toScalaList(parameterList),
-                toScalaList((List) operationResultMap.get("responseMessages")),
+                toScalaList(responseMessages),
                 toOption(operationResultMap.get("deprecated"))
         );
 
