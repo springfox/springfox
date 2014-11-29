@@ -28,7 +28,7 @@ dependencies {
 
   compile("org.springframework.boot:spring-boot-starter-web:${bootVersion}")
   compile("org.springframework.boot:spring-boot-starter-actuator:${bootVersion}")
-
+  compile("org.springframework.boot:spring-boot-starter-data-rest")
   compile(project(':swagger-springmvc')) {
     exclude group: 'javax.servlet', module: 'servlet-api'
     exclude group: 'org.springframework', module: 'spring-web'
