@@ -100,9 +100,9 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       operationRequestMappingContext.put("requestMappingPattern", requestMappingPattern);
 
 
-      commandExecutor.execute(commandList, operationRequestMappingContext);
 
-      Map<String, Object> operationResultMap = operationRequestMappingContext.getResult();
+
+      Map<String, Object> operationResultMap = commandExecutor.execute(commandList, operationRequestMappingContext);
       currentCount = (Integer) operationResultMap.get("currentCount");
 
       List<String> producesMediaTypes = (List<String>) operationResultMap.get("produces");

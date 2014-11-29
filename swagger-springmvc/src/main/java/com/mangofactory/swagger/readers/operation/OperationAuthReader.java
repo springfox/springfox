@@ -6,6 +6,8 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.Authorization;
 import com.wordnik.swagger.annotations.AuthorizationScope;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import static com.google.common.collect.Lists.*;
 
 public class OperationAuthReader implements RequestMappingReader {
 
+  private static final Logger LOG = LoggerFactory.getLogger(OperationAuthReader.class);
   @Override
   public void execute(RequestMappingContext context) {
     AuthorizationContext authorizationContext = (AuthorizationContext) context.get("authorizationContext");
@@ -52,6 +55,7 @@ public class OperationAuthReader implements RequestMappingReader {
         }
       }
     }
+    LOG.info("Authorization count {} for method {}", handlerMethod.getMethod().getName(), authorizations.size());
     context.put("authorizations", authorizations);
   }
 }
