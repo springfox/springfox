@@ -1,5 +1,9 @@
 dependencies {
-  compile libs.swaggerCore
+  compile (libs.swaggerCore) {
+    exclude group: 'org.scala-lang', module: 'scala-compiler'
+    exclude group: 'org.scala-lang', module: 'scala-reflect'
+    exclude group: 'org.scala-lang', module: 'scala-library'
+  }
   compile libs.core
   compile libs.spring
   provided libs.clientProvided
