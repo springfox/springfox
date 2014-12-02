@@ -36,7 +36,7 @@ __Maven__
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.2</version>
 </dependency>
 
 ```
@@ -49,7 +49,7 @@ repositories {
     jcenter()
 }
 
-compile "com.mangofactory:swagger-springmvc:0.9.0"
+compile "com.mangofactory:swagger-springmvc:0.9.2"
 ```
 
 #### Snapshot version
@@ -67,7 +67,7 @@ __Maven__
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.9.0-SNAPSHOT</version>
+    <version>0.9.3-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -79,7 +79,7 @@ repositories {
    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
-compile "com.mangofactory:swagger-springmvc:0.9.0-SNAPSHOT"
+compile "com.mangofactory:swagger-springmvc:0.9.3-SNAPSHOT"
 ```
 
 ### Usage (Quick guide)
