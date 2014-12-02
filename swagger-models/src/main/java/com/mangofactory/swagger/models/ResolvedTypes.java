@@ -5,18 +5,13 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.wordnik.swagger.model.AllowableListValues;
 import com.wordnik.swagger.model.AllowableValues;
-import scala.collection.JavaConversions;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.*;
-import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.models.Collections.*;
 import static com.mangofactory.swagger.models.Types.*;
 
@@ -125,21 +120,7 @@ public class ResolvedTypes {
     return typeResolver.resolve(type);
   }
 
-
   public static AllowableValues allowableValues(ResolvedType resolvedType) {
-    if (isBaseType(simpleTypeName(resolvedType)) && resolvedType.getErasedType().isEnum()) {
-      List<String> enumValues = getEnumValues(resolvedType.getErasedType());
-      return new AllowableListValues(JavaConversions.collectionAsScalaIterable(enumValues).toList(), "LIST");
-    }
-    return null;
-  }
-
-  static List<String> getEnumValues(Class<?> subject) {
-    return transform(Arrays.asList(subject.getEnumConstants()), new Function<Object, String>() {
-      @Override
-      public String apply(Object input) {
-        return input.toString();
-      }
-    });
+    return Enums.allowableValues(resolvedType.getErasedType());
   }
 }

@@ -85,5 +85,4 @@ public abstract class BaseModelProperty implements ModelProperty {
     return apiModelProperty;
   }
 
-
 }
