@@ -110,9 +110,16 @@ class TypesForTestingSupport {
   static Class typeForTestingGettersAndSetters() {
     TypeWithGettersAndSetters
   }
+  static Class typeForTestingPropertyNames() {
+    TypeForTestingPropertyNames
+  }
 
   static Class typeForTestingAnnotatedGettersAndSetter(){
     TypeWithAnnotatedGettersAndSetters
+  }
+
+  static Class typeForTestingJsonGetterAnnotation(){
+    TypeWithJsonGetterAnnotation
   }
 
   static ResolvedType hashMap(def keyClazz, def valueClazz) {

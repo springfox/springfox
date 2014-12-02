@@ -1,17 +1,13 @@
 package com.mangofactory.swagger.models.property.constructor
-
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.mangofactory.swagger.models.BeanPropertyNamingStrategy
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.models.ModelContext
 import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
-import com.mangofactory.swagger.models.property.BeanPropertyDefinitions
 import com.wordnik.swagger.model.AllowableListValues
 import scala.collection.JavaConversions
 import spock.lang.Specification
-import spock.lang.Unroll
 
 import static com.google.common.collect.Lists.newArrayList
 import static com.mangofactory.swagger.models.ScalaConverters.fromOption
@@ -22,7 +18,7 @@ class ConstructorModelPropertySpec extends Specification {
   def "Extracting information from resolved constructor params" () {
     given:
       def typeToTest = typeWithConstructorProperty()
-      def beanPropertyDefinition = ModelPropertySupport.beanPropertyDefinitionByField(typeToTest, fieldName)
+      def beanPropertyDefinition = beanPropertyDefinitionByField(typeToTest, fieldName)
       def modelContext = ModelContext.inputParam(typeToTest )
       def field = field(typeToTest, fieldName)
       ObjectMapper mapper = new ObjectMapper()

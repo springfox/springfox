@@ -18,6 +18,7 @@ import com.mangofactory.swagger.models.property.provider.DefaultModelPropertiesP
 import org.joda.time.LocalDate
 import org.springframework.http.ResponseEntity
 
+@SuppressWarnings("GrMethodMayBeStatic")
 class ModelProviderSupport {
   ModelProvider providerThatSubstitutesLocalDateWithString() {
     TypeResolver typeResolver = new TypeResolver()

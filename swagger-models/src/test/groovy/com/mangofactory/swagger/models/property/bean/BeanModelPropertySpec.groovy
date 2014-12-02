@@ -4,11 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.mixins.ModelPropertySupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
-
 import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
-import com.mangofactory.swagger.models.ObjectMapperNamingStrategySpec
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
-import com.mangofactory.swagger.models.property.BeanPropertyDefinitions
 import com.wordnik.swagger.model.AllowableListValues
 import spock.lang.Specification
 
@@ -29,7 +26,6 @@ class BeanModelPropertySpec extends Specification {
       def modelContext = ModelContext.inputParam(typeToTest)
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
-      def forSerialization = true
 
       ObjectMapper mapper = new ObjectMapper()
       String propName = name(propertyDefinition, true, new ObjectMapperBeanPropertyNamingStrategy(mapper))
@@ -60,7 +56,6 @@ class BeanModelPropertySpec extends Specification {
       def modelContext = ModelContext.inputParam(typeToTest)
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
-      def forSerialization = true
 
       ObjectMapper mapper = new ObjectMapper()
       String propName = name(propertyDefinition, true, new ObjectMapperBeanPropertyNamingStrategy(mapper))
@@ -84,4 +79,28 @@ class BeanModelPropertySpec extends Specification {
       "setEnumProp" || "enum Prop Getter value" | true      | new AllowableListValues(collectionAsScalaIterable(newArrayList("ONE", "TWO")).toList(), "LIST")  | "string"  | "com.mangofactory.swagger.models.ExampleEnum"
   }
   // @formatter:on
+
+  def "Respects JsonGetter annotations"() {
+
+    given:
+      Class typeToTest = typeForTestingJsonGetterAnnotation()
+      def modelContext = ModelContext.inputParam(typeToTest)
+      def method = accessorMethod(typeToTest, methodName)
+      def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
+
+      ObjectMapper mapper = new ObjectMapper()
+      String propName = name(propertyDefinition, true, new ObjectMapperBeanPropertyNamingStrategy(mapper))
+      def sut = new BeanModelProperty(propName, propertyDefinition, method, isGetter(method.getRawMember()),
+              new TypeResolver(), new AlternateTypeProvider())
+
+    expect:
+      sut.typeName(modelContext) == typeName
+      sut.qualifiedTypeName() == qualifiedTypeName
+      sut.allowableValues() == null
+
+
+    where:
+      methodName    || typeName  | qualifiedTypeName
+      "value1"      || "string"  | "java.lang.String"
+  }
 }

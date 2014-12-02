@@ -66,8 +66,8 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
             BeanPropertyDefinitions.beanPropertyByInternalName());
     for (ResolvedMethod childProperty : accessors.in(resolvedType)) {
-      if (propertyLookup.containsKey(propertyName(childProperty.getName()))) {
-        BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getName()));
+      if (propertyLookup.containsKey(propertyName(childProperty.getRawMember()))) {
+        BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getRawMember()));
         Optional<BeanPropertyDefinition> jacksonProperty
                 = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
@@ -126,8 +126,8 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
             BeanPropertyDefinitions.beanPropertyByInternalName());
     for (ResolvedMethod childProperty : accessors.in(resolvedType)) {
 
-      if (propertyLookup.containsKey(propertyName(childProperty.getName()))) {
-        BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getName()));
+      if (propertyLookup.containsKey(propertyName(childProperty.getRawMember()))) {
+        BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getRawMember()));
         Optional<BeanPropertyDefinition> jacksonProperty
                 = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         try {
