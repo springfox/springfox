@@ -6,7 +6,7 @@ git log --pretty='* %h - %s (%an, %ad)' TAGNAME..HEAD replacing TAGNAME and HEAD
 e.g:  git log --pretty='* %h - %s (%an, %ad)' v0.9.1..6f2bc58
 ```
 
-# 0.9.2 - Fixes for response messages, swagger-core upgrade and excluded transitive scala lib dependencies.
+#### 0.9.2 - Fixes for response messages, swagger-core upgrade and excluded transitive scala lib dependencies.
 
 * 6f2bc58 - Updates readme with latest release (Adrian Kelly, Tue Dec 2 20:48:22 2014 +1100)
 * b0092b6 - Getting ready to release 0.9.2 (Dilip Krishnan, Tue Dec 2 00:08:23 2014 -0600)
