@@ -6,6 +6,7 @@ import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
+import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.core.SwaggerApiResourceListing;
 import com.mangofactory.swagger.models.ModelProvider;
@@ -17,6 +18,7 @@ import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
+import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher;
 import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiInfo;
 import com.wordnik.swagger.model.ApiListingReference;
@@ -70,6 +72,8 @@ public class SwaggerSpringMvcPlugin {
   private AtomicBoolean initialized = new AtomicBoolean(false);
   private Collection<RequestMappingReader> customAnnotationReaders;
   private boolean applyDefaultResponseMessages;
+  private RequestMappingEvaluator requestMappingEvaluator;
+  private RegexRequestMappingPatternMatcher requestMappingPatternMatcher;
 
   /**
    * Default constructor.
@@ -421,6 +425,13 @@ public class SwaggerSpringMvcPlugin {
     if (null == this.customAnnotationReaders) {
       this.customAnnotationReaders = Lists.newArrayList();
     }
+    if (null == this.requestMappingPatternMatcher) {
+      this.requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
+    }
+    List<Class<? extends Annotation>> mergedExcludedAnnotations = springSwaggerConfig.defaultExcludeAnnotations();
+    mergedExcludedAnnotations.addAll(this.excludeAnnotations);
+    requestMappingEvaluator
+            = new RequestMappingEvaluator(mergedExcludedAnnotations, requestMappingPatternMatcher, includePatterns);
   }
 
   private void buildSwaggerGlobalSettings() {
@@ -454,6 +465,7 @@ public class SwaggerSpringMvcPlugin {
     swaggerApiResourceListing.setApiVersion(this.apiVersion);
     swaggerApiResourceListing.setApiListingReferenceOrdering(this.apiListingReferenceOrdering);
     swaggerApiResourceListing.setApiDescriptionOrdering(this.apiDescriptionOrdering);
+    swaggerApiResourceListing.setRequestMappingEvaluator(requestMappingEvaluator);
     swaggerApiResourceListing.setCustomAnnotationReaders(this.customAnnotationReaders);
   }
 
@@ -464,11 +476,12 @@ public class SwaggerSpringMvcPlugin {
     apiListingReferenceScanner = new ApiListingReferenceScanner();
     apiListingReferenceScanner.setRequestMappingHandlerMapping(springSwaggerConfig
             .swaggerRequestMappingHandlerMappings());
-    apiListingReferenceScanner.setExcludeAnnotations(mergedExcludedAnnotations);
     apiListingReferenceScanner.setResourceGroupingStrategy(this.resourceGroupingStrategy);
     apiListingReferenceScanner.setSwaggerPathProvider(this.swaggerPathProvider);
     apiListingReferenceScanner.setSwaggerGroup(this.swaggerGroup);
+    apiListingReferenceScanner.setRequestMappingEvaluator(requestMappingEvaluator);
     apiListingReferenceScanner.setIncludePatterns(this.includePatterns);
+    apiListingReferenceScanner.setExcludeAnnotations(mergedExcludedAnnotations);
     return apiListingReferenceScanner;
   }
 }

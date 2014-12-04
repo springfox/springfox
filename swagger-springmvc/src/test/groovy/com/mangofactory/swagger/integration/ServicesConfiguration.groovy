@@ -1,13 +1,16 @@
 package com.mangofactory.swagger.integration
+
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.DefaultJavaPluginConfig
 import com.mangofactory.swagger.configuration.JacksonSwaggerSupport
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.swagger.core.RequestMappingEvaluator
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.models.ModelProvider
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
+import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
 import com.wordnik.swagger.model.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -107,6 +110,10 @@ public class ServicesConfiguration {
 
       //Every SwaggerApiResourceListing needs an ApiListingReferenceScanner to scan the spring request mappings
       swaggerApiResourceListing.setApiListingReferenceScanner(apiListingReferenceScanner());
+
+      //Set the evaluator for requestmappings
+      swaggerApiResourceListing.setRequestMappingEvaluator(new RequestMappingEvaluator(springSwaggerConfig.defaultExcludeAnnotations(),
+                      new RegexRequestMappingPatternMatcher(), newArrayList(DEFAULT_INCLUDE_PATTERNS)))
       return swaggerApiResourceListing;
    }
 
@@ -140,6 +147,10 @@ public class ServicesConfiguration {
 
       //Only include paths that match the supplied regular expressions
       apiListingReferenceScanner.setIncludePatterns(DEFAULT_INCLUDE_PATTERNS);
+
+      //Set the evaluator for requestmappings
+      apiListingReferenceScanner.setRequestMappingEvaluator(new RequestMappingEvaluator(springSwaggerConfig.defaultExcludeAnnotations(),
+                  new RegexRequestMappingPatternMatcher(), newArrayList(DEFAULT_INCLUDE_PATTERNS)))
 
       return apiListingReferenceScanner;
    }

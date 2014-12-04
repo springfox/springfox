@@ -1,25 +1,29 @@
 package com.mangofactory.swagger.readers
-
 import com.fasterxml.classmate.TypeResolver
+import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.swagger.core.RequestMappingEvaluator
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
+import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.model.ApiDescription
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.ScalaUtils.*
+import static com.google.common.collect.Lists.newArrayList
+import static com.mangofactory.swagger.ScalaUtils.fromOption
 
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
 class ApiDescriptionReaderSpec extends Specification {
 
    def "should generate an api description for each request mapping pattern"() {
       given:
-
-        ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(pathProvider, [])
+        RequestMappingEvaluator evaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
+                RegexRequestMappingPatternMatcher(), newArrayList(".*?"))
+        ApiDescriptionReader apiDescriptionReader = new ApiDescriptionReader(pathProvider, [], evaluator)
         RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
                 [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
         )
@@ -56,8 +60,10 @@ class ApiDescriptionReaderSpec extends Specification {
 
    def "should sanitize request mapping endpoints"() {
       expect:
-        new ApiDescriptionReader(absoluteSwaggerPathProvider(), []).sanitizeRequestMappingPattern(mappingPattern) ==
-                expected
+        RequestMappingEvaluator evaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
+                RegexRequestMappingPatternMatcher(), newArrayList())
+        new ApiDescriptionReader(absoluteSwaggerPathProvider(), [], evaluator)
+                .sanitizeRequestMappingPattern(mappingPattern) == expected
 
       where:
         mappingPattern             | expected

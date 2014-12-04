@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.readers;
 
+import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
@@ -19,11 +20,14 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
 
   private final SwaggerPathProvider swaggerPathProvider;
   private Collection<RequestMappingReader> customAnnotationReaders;
+  private final RequestMappingEvaluator requestMappingEvaluator;
 
   public ApiDescriptionReader(SwaggerPathProvider pathProvider,
-                              Collection<RequestMappingReader> customAnnotationReaders) {
+      Collection<RequestMappingReader> customAnnotationReaders,
+      RequestMappingEvaluator requestMappingEvaluator) {
     this.swaggerPathProvider = pathProvider;
     this.customAnnotationReaders = customAnnotationReaders;
+    this.requestMappingEvaluator = requestMappingEvaluator;
   }
 
   @Override
@@ -34,14 +38,16 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
 
     List<ApiDescription> apiDescriptionList = newArrayList();
     for (String pattern : patternsCondition.getPatterns()) {
-      String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
-      String path = swaggerPathProvider.getOperationPath(cleanedRequestMappingPath);
-      String methodName = handlerMethod.getMethod().getName();
-      context.put("requestMappingPattern", cleanedRequestMappingPath);
-      ApiOperationReader apiOperationReader = new ApiOperationReader(customAnnotationReaders);
-      apiOperationReader.execute(context);
-      List<Operation> operations = (List<Operation>) context.get("operations");
-      apiDescriptionList.add(new ApiDescription(path, toOption(methodName), toScalaList(operations), false));
+      if (requestMappingEvaluator.shouldIncludePath(pattern)) {
+        String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
+        String path = swaggerPathProvider.getOperationPath(cleanedRequestMappingPath);
+        String methodName = handlerMethod.getMethod().getName();
+        context.put("requestMappingPattern", cleanedRequestMappingPath);
+        ApiOperationReader apiOperationReader = new ApiOperationReader(customAnnotationReaders);
+        apiOperationReader.execute(context);
+        List<Operation> operations = (List<Operation>) context.get("operations");
+        apiDescriptionList.add(new ApiDescription(path, toOption(methodName), toScalaList(operations), false));
+      }
     }
     context.put("apiDescriptionList", apiDescriptionList);
   }

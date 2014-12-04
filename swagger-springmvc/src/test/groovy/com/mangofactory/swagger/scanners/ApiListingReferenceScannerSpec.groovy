@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.scanners
-
 import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
+import com.mangofactory.swagger.core.RequestMappingEvaluator
 import com.mangofactory.swagger.core.ResourceGroupingStrategy
 import com.mangofactory.swagger.core.SpringGroupingStrategy
 import com.mangofactory.swagger.mixins.AccessorAssertions
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.ScalaUtils.fromOption
+import static com.google.common.collect.Lists.newArrayList
 import static com.mangofactory.swagger.ScalaUtils.toOption
 
 @Mixin([AccessorAssertions, RequestMappingSupport])
@@ -38,6 +38,8 @@ class ApiListingReferenceScannerSpec extends Specification {
       apiListingReferenceScanner.requestMappingHandlerMapping = handlerMappings
       apiListingReferenceScanner.resourceGroupingStrategy = resourceGroupingStrategy
       apiListingReferenceScanner.swaggerGroup = swaggerGroup
+      apiListingReferenceScanner.requestMappingEvaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
+              RegexRequestMappingPatternMatcher(), newArrayList(".*?"))
       apiListingReferenceScanner.scan()
 
     then:
@@ -52,44 +54,7 @@ class ApiListingReferenceScannerSpec extends Specification {
       [requestMappingInfo("path")] | new ClassOrApiAnnotationResourceGrouping() | null         | "swaggerGroup is required"
   }
 
-  def "ignore requestMappings "() {
-    given:
-      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
-      apiListingReferenceScanner.setExcludeAnnotations([ApiIgnore])
-      def ignorableMethod = ignorableHandlerMethod()
 
-    expect:
-      true == apiListingReferenceScanner.hasIgnoredAnnotatedRequestMapping(ignorableMethod)
-      false == apiListingReferenceScanner.shouldIncludeRequestMapping(requestMappingInfo("p"), ignorableMethod)
-  }
-
-  def "ignore classMapping"() {
-    given:
-      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
-      apiListingReferenceScanner.setExcludeAnnotations([ApiIgnore])
-      def ignorableClass = ignorableClass()
-
-    expect:
-      true == apiListingReferenceScanner.classHasIgnoredAnnotatedRequestMapping(ignorableClass)
-  }
-
-  def "include requestMapping"() {
-    given:
-      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
-      apiListingReferenceScanner.setIncludePatterns([patterns])
-      apiListingReferenceScanner.setExcludeAnnotations([ApiIgnore])
-
-    expect:
-      sholdInclude == apiListingReferenceScanner.shouldIncludeRequestMapping(requestMapping, handlerMethod)
-
-    where:
-      handlerMethod            | requestMapping                   | patterns    | sholdInclude
-      dummyHandlerMethod()     | requestMappingInfo("/some-path") | '.*'        | true
-      ignorableHandlerMethod() | requestMappingInfo("/some-path") | '.*'        | false
-      dummyHandlerMethod()     | requestMappingInfo("/some-path") | '/no-match' | false
-      ignorableHandlerMethod() | requestMappingInfo("/some-path") | '/no-match' | false
-
-  }
 
   def "should group controller paths"() {
     when:
@@ -113,6 +78,8 @@ class ApiListingReferenceScannerSpec extends Specification {
       apiListingReferenceScanner.setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
       apiListingReferenceScanner.setSwaggerGroup("someGroup")
       apiListingReferenceScanner.setSwaggerPathProvider(new AbsoluteSwaggerPathProvider(servletContext: servletContext()))
+      apiListingReferenceScanner.requestMappingEvaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
+              RegexRequestMappingPatternMatcher(), newArrayList(".*?"))
       List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
 
     then:
@@ -146,6 +113,8 @@ class ApiListingReferenceScannerSpec extends Specification {
       apiListingReferenceScanner.setIncludePatterns([".*"])
       apiListingReferenceScanner.setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
       apiListingReferenceScanner.setSwaggerGroup("someGroup")
+      apiListingReferenceScanner.setRequestMappingEvaluator(new RequestMappingEvaluator(newArrayList(ApiIgnore),
+              new RegexRequestMappingPatternMatcher(), newArrayList(".*?")))
       apiListingReferenceScanner.setSwaggerPathProvider(new AbsoluteSwaggerPathProvider(servletContext: servletContext()))
 
       List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
@@ -177,6 +146,8 @@ class ApiListingReferenceScannerSpec extends Specification {
       apiListingReferenceScanner.setRequestMappingHandlerMapping([requestMappingHandlerMapping])
       apiListingReferenceScanner.setIncludePatterns([".*"])
       apiListingReferenceScanner.setSwaggerGroup(["swaggerGroup"])
+      apiListingReferenceScanner.requestMappingEvaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
+              RegexRequestMappingPatternMatcher(), newArrayList(".*"))
       List<ApiListingReference> apiListingReferences = apiListingReferenceScanner.scan()
 
     then: "api-docs should not appear in the path"

@@ -2,16 +2,15 @@ package com.mangofactory.swagger.scanners;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimaps;
+import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.wordnik.swagger.model.ApiListingReference;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -24,7 +23,6 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.ScalaUtils.*;
-import static java.lang.String.*;
 
 public class ApiListingReferenceScanner {
   private static final String REQUEST_MAPPINGS_EMPTY =
@@ -41,6 +39,7 @@ public class ApiListingReferenceScanner {
   private SwaggerPathProvider swaggerPathProvider;
   private List<String> includePatterns = newArrayList(".*?");
   private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
+  private RequestMappingEvaluator requestMappingEvaluator;
 
   public ApiListingReferenceScanner() {
   }
@@ -67,7 +66,7 @@ public class ApiListingReferenceScanner {
               requestMappingHandlerMapping.getHandlerMethods().entrySet()) {
         RequestMappingInfo requestMappingInfo = handlerMethodEntry.getKey();
         HandlerMethod handlerMethod = handlerMethodEntry.getValue();
-        if (shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
+        if (requestMappingEvaluator.shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
           Set<ResourceGroup> resourceGroups = resourceGroupingStrategy.getResourceGroups(requestMappingInfo,
                   handlerMethod);
           String handlerMethodName = handlerMethod.getMethod().getName();
@@ -101,47 +100,7 @@ public class ApiListingReferenceScanner {
     }
   }
 
-  private boolean requestMappingMatchesAnIncludePattern(RequestMappingInfo requestMappingInfo,
-                                                        HandlerMethod handlerMethod) {
-    PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
-    boolean isMatch = requestMappingPatternMatcher.patternConditionsMatchOneOfIncluded(patternsCondition,
-            includePatterns);
-    if (isMatch) {
-      return true;
-    }
-    log.info(format("RequestMappingInfo did not match any include patterns: | %s", requestMappingInfo));
-    return false;
-  }
 
-  private boolean shouldIncludeRequestMapping(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-    return requestMappingMatchesAnIncludePattern(requestMappingInfo, handlerMethod)
-            && !classHasIgnoredAnnotatedRequestMapping(handlerMethod.getMethod().getDeclaringClass())
-            && !hasIgnoredAnnotatedRequestMapping(handlerMethod);
-  }
-
-  public boolean classHasIgnoredAnnotatedRequestMapping(Class<?> handlerClass) {
-    if (null != excludeAnnotations) {
-      for (Class<? extends Annotation> annotation : excludeAnnotations) {
-        if (handlerClass.isAnnotationPresent(annotation)) {
-          log.info(format("Excluding method as its class is annotated with: %s", annotation));
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  public boolean hasIgnoredAnnotatedRequestMapping(HandlerMethod handlerMethod) {
-    if (null != excludeAnnotations) {
-      for (Class<? extends Annotation> annotation : excludeAnnotations) {
-        if (null != AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation)) {
-          log.info(format("Excluding method as it contains the excluded annotation: %s", annotation));
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 
   public Map<ResourceGroup, List<RequestMappingContext>> getResourceGroupRequestMappings() {
     return Multimaps.asMap(resourceGroupRequestMappings);
@@ -180,6 +139,7 @@ public class ApiListingReferenceScanner {
     return excludeAnnotations;
   }
 
+  @Deprecated //As of 0.9.3 use RequestMappings instead
   public void setExcludeAnnotations(List<Class<? extends Annotation>> excludeAnnotations) {
     this.excludeAnnotations = excludeAnnotations;
   }
@@ -204,6 +164,7 @@ public class ApiListingReferenceScanner {
     return includePatterns;
   }
 
+  @Deprecated //As of 0.9.3 use RequestMappings instead
   public void setIncludePatterns(List<String> includePatterns) {
     this.includePatterns = includePatterns;
   }
@@ -214,5 +175,9 @@ public class ApiListingReferenceScanner {
 
   public void setRequestMappingPatternMatcher(RequestMappingPatternMatcher requestMappingPatternMatcher) {
     this.requestMappingPatternMatcher = requestMappingPatternMatcher;
+  }
+
+  public void setRequestMappingEvaluator(RequestMappingEvaluator requestMappingEvaluator) {
+    this.requestMappingEvaluator = requestMappingEvaluator;
   }
 }

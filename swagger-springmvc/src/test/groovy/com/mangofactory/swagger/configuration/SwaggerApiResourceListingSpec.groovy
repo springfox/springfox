@@ -2,6 +2,7 @@ package com.mangofactory.swagger.configuration
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
+import com.mangofactory.swagger.core.RequestMappingEvaluator
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.RequestMappingSupport
@@ -21,11 +22,13 @@ import com.mangofactory.swagger.ordering.ResourceListingPositionalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.SwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
+import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
 import com.wordnik.swagger.core.SwaggerSpec
 import com.wordnik.swagger.model.*
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
 
+import static com.google.common.collect.Lists.newArrayList
 import static com.mangofactory.swagger.ScalaUtils.*
 
 @Mixin([RequestMappingSupport, SpringSwaggerConfigSupport])
@@ -140,14 +143,19 @@ class SwaggerApiResourceListingSpec extends Specification {
       def requestHandlerMapping = Mock(RequestMappingHandlerMapping)
       requestHandlerMapping.getHandlerMethods() >> handlerMethods
 
+      def requestMappingEvaluator = new RequestMappingEvaluator(newArrayList(), new RegexRequestMappingPatternMatcher(),
+              newArrayList(".*"))
       ApiListingReferenceScanner scanner = new ApiListingReferenceScanner()
       scanner.setRequestMappingHandlerMapping([requestHandlerMapping])
       scanner.setResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
       scanner.setSwaggerGroup("swaggerGroup")
+      scanner.setRequestMappingEvaluator(requestMappingEvaluator)
 
       scanner.setSwaggerPathProvider(swaggerPathProvider)
       swaggerApiResourceListing.setModelProvider(modelProvider)
       swaggerApiResourceListing.setApiListingReferenceScanner(scanner)
+
+      swaggerApiResourceListing.setRequestMappingEvaluator(requestMappingEvaluator)
 
     when:
       swaggerApiResourceListing.initialize()

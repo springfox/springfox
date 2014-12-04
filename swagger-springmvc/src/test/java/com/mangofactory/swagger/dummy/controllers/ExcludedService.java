@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.dummy.controllers;
 
+import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.dummy.models.Pet;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -9,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
+@ApiIgnore
 @RequestMapping("/excluded")
-@Api(value = "", description = "Operations that are exluded")
+@Api(value = "", description = "Operations that are excluded")
 public class ExcludedService {
   @RequestMapping(method = RequestMethod.POST)
   public void someExcludedOperation(

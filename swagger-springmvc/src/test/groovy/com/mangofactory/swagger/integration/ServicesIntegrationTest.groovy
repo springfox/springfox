@@ -50,7 +50,7 @@ public class ServicesIntegrationTest extends Specification {
         def bytes = ByteBuffer.wrap(actions.andReturn().response.contentAsByteArray)
         def decoded = Charsets.UTF_8.decode(bytes)
         def response = new JsonSlurper().parseText(decoded.toString())
-        response.apis.size == 9
+        response.apis.size == 8
    }
 
    @Unroll("#parentUri has #operations operations")

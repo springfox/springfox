@@ -1,9 +1,11 @@
 package com.mangofactory.swagger.scanners
 
 import com.fasterxml.classmate.TypeResolver
+import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.swagger.core.RequestMappingEvaluator
 import com.mangofactory.swagger.mixins.*
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.wordnik.swagger.core.SwaggerSpec
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.google.common.collect.Lists.newArrayList
 import static com.google.common.collect.Maps.newHashMap
 import static com.mangofactory.swagger.ScalaUtils.fromOption
 import static com.mangofactory.swagger.ScalaUtils.fromScalaList
@@ -35,8 +38,10 @@ class ApiListingScannerSpec extends Specification {
       RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
       resourceGroupRequestMappings.put(new ResourceGroup("businesses"), [requestMappingContext])
+      RequestMappingEvaluator evaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
+              RegexRequestMappingPatternMatcher(), newArrayList(".*?"))
       ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
-              modelProvider(), null, [])
+              modelProvider(), null, [], evaluator)
 
       def settings = new SwaggerGlobalSettings()
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
@@ -71,8 +76,10 @@ class ApiListingScannerSpec extends Specification {
       RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody"))
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
       resourceGroupRequestMappings.put(new ResourceGroup("businesses"), [requestMappingContext])
+      RequestMappingEvaluator evaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
+              RegexRequestMappingPatternMatcher(), newArrayList(".*?"))
       ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
-              modelProvider(), null, [])
+              modelProvider(), null, [], evaluator)
       def settings = new SwaggerGlobalSettings()
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
       settings.ignorableParameterTypes = springSwaggerConfig.defaultIgnorableParameterTypes()
@@ -97,7 +104,9 @@ class ApiListingScannerSpec extends Specification {
   @Unroll
   def "should find longest common path"() {
     given:
-      ApiListingScanner apiListingScanner = new ApiListingScanner(null, null, null, null, null)
+      RequestMappingEvaluator evaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
+              RegexRequestMappingPatternMatcher(), newArrayList(".*?"))
+      ApiListingScanner apiListingScanner = new ApiListingScanner(null, null, null, null, null, evaluator)
 
     when:
       String result = apiListingScanner.longestCommonPath(apiDescriptions(paths))

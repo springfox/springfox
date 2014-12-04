@@ -24,7 +24,7 @@ class DefaultXmlPluginStartupSpec extends Specification {
       MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
       MvcResult petApi = mockMvc.perform(MockMvcRequestBuilders.get('/api-docs?group=default')).andReturn()
     then:
-      jsonBodyResponse(petApi).apis.size() == 9
+      jsonBodyResponse(petApi).apis.size() == 8
   }
 
 }

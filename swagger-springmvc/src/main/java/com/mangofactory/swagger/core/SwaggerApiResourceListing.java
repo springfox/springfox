@@ -47,6 +47,7 @@ public class SwaggerApiResourceListing {
   private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
   private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
   private Collection<RequestMappingReader> customAnnotationReaders;
+  private RequestMappingEvaluator requestMappingEvaluator;
 
   public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
     this.swaggerCache = swaggerCache;
@@ -62,7 +63,7 @@ public class SwaggerApiResourceListing {
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings =
               apiListingReferenceScanner.getResourceGroupRequestMappings();
       ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider,
-              modelProvider, authorizationContext, customAnnotationReaders);
+              modelProvider, authorizationContext, customAnnotationReaders, requestMappingEvaluator);
 
       apiListingScanner.setApiDescriptionOrdering(apiDescriptionOrdering);
       apiListingScanner.setSwaggerGlobalSettings(swaggerGlobalSettings);
@@ -154,5 +155,9 @@ public class SwaggerApiResourceListing {
 
   public void setCustomAnnotationReaders(Collection<RequestMappingReader> customAnnotationReaders) {
     this.customAnnotationReaders = customAnnotationReaders;
+  }
+
+  public void setRequestMappingEvaluator(RequestMappingEvaluator requestMappingEvaluator) {
+    this.requestMappingEvaluator = requestMappingEvaluator;
   }
 }
