@@ -79,7 +79,7 @@ repositories {
    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
-compile "com.mangofactory:swagger-springmvc:0.9.3-SNAPSHOT"
+compile "com.mangofactory:swagger-springmvc:0.9.4-SNAPSHOT"
 ```
 
 ### Usage (Quick guide)
