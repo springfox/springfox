@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.models;
 
+import java.util.Currency;
 import java.util.Date;
 
 public class SimpleType {
@@ -20,6 +21,7 @@ public class SimpleType {
   Long anObjectLong;
   Float anObjectFloat;
   Double anObjectDouble;
+  Currency currency;
 
   public Byte getAnObjectByte() {
     return anObjectByte;
@@ -155,5 +157,13 @@ public class SimpleType {
 
   public void setAnObject(Object anObject) {
     this.anObject = anObject;
+  }
+
+  public Currency getCurrency() {
+    return currency;
+  }
+
+  public void setCurrency(Currency currency) {
+    this.currency = currency;
   }
 }

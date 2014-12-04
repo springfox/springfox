@@ -48,6 +48,7 @@ class SimpleTypeSpec extends Specification {
       "anObjectLong"        | "long"    | "java.lang.Long"
       "anObjectFloat"       | "float"   | "java.lang.Float"
       "anObjectDouble"      | "double"  | "java.lang.Double"
+      "currency"            | "string"  | "java.util.Currency"
   }
 
   @Ignore

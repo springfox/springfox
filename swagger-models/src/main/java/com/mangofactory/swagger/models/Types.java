@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Currency;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -36,6 +37,7 @@ public class Types {
           .put(Byte.class, "byte")
           .put(BigDecimal.class, "double")
           .put(BigInteger.class, "long")
+          .put(Currency.class, "string")
           .build();
 
   public static String typeNameFor(Type type) {
