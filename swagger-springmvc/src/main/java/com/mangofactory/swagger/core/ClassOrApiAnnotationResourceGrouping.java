@@ -44,7 +44,9 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
 
   @Override
   public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-    String group = getClassOrApiAnnotationValue(handlerMethod).toLowerCase().replaceAll(" ", "-");
+    String group = getClassOrApiAnnotationValue(handlerMethod).toLowerCase()
+            .replaceAll(" ", "-")
+            .replaceAll("/", "");
     Integer position = getResourcePosition(requestMappingInfo, handlerMethod);
     return newHashSet(new ResourceGroup(group.toLowerCase(), position));
   }
@@ -56,8 +58,9 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
     return extractAnnotation(controllerClass, valueExtractor()).or(group);
   }
 
-  private Optional<String> extractAnnotation(Class<?> controllerClass, Function<Api,
-          Optional<String>> annotationExtractor) {
+  private Optional<String> extractAnnotation(Class<?> controllerClass,
+      Function<Api, Optional<String>> annotationExtractor) {
+
     Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
     return annotationExtractor.apply(apiAnnotation);
   }
