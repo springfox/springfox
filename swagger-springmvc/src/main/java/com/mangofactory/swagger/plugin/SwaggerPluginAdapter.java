@@ -45,10 +45,14 @@ public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshe
         log.info("Found custom SwaggerSpringMvcPlugins");
 
         for (Map.Entry<String, SwaggerSpringMvcPlugin> entry : plugins.entrySet()) {
-          log.info("initializing plugin bean {}", entry.getKey());
-          entry.getValue()
-                  .build()
-                  .initialize();
+          if (entry.getValue().isEnabled()) {
+            log.info("initializing plugin bean {}", entry.getKey());
+            entry.getValue()
+                    .build()
+                    .initialize();
+          } else {
+            log.info("Skipping initializing disabled plugin bean {}", entry.getKey());
+          }
         }
       }
       initialized = true;

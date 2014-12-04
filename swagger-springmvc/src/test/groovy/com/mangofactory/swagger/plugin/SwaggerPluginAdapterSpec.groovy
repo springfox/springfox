@@ -30,12 +30,37 @@ class SwaggerPluginAdapterSpec extends Specification {
 
   }
 
+  def "Custom plugins are sensitive to being enabled or disabled"() {
+    given:
+      SpringSwaggerConfig springSwaggerConfig = Stub()
+      ApplicationContext applicationContext = Mock()
+
+      SwaggerSpringMvcPlugin enabledPlugin = Mock(SwaggerSpringMvcPlugin)
+      enabledPlugin.isEnabled() >> true
+      SwaggerSpringMvcPlugin disabledPlugin = Mock(SwaggerSpringMvcPlugin)
+      disabledPlugin.isEnabled() >> false
+      applicationContext.getBeansOfType(SwaggerSpringMvcPlugin.class) >> ['enabled': enabledPlugin,
+                                                                          'disabled': disabledPlugin]
+
+      ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(applicationContext)
+      SwaggerPluginAdapter swaggerPluginAdapter = new SwaggerPluginAdapter(springSwaggerConfig)
+
+    when:
+      swaggerPluginAdapter.onApplicationEvent(contextRefreshedEvent)
+
+    then:
+      1 * enabledPlugin.build() >> enabledPlugin
+      1 * enabledPlugin.initialize()
+      0 * disabledPlugin.build()
+  }
+
   def "Custom plugins are configured"() {
     given:
       SpringSwaggerConfig springSwaggerConfig = Stub()
       ApplicationContext applicationContext = Mock()
 
       SwaggerSpringMvcPlugin swaggerSpringMvcPlugin = Mock(SwaggerSpringMvcPlugin)
+      swaggerSpringMvcPlugin.isEnabled() >> true
       applicationContext.getBeansOfType(SwaggerSpringMvcPlugin.class) >> ['plugin': swaggerSpringMvcPlugin]
 
       ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(applicationContext)

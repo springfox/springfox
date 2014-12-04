@@ -76,6 +76,7 @@ public class SwaggerSpringMvcPlugin {
   private boolean applyDefaultResponseMessages;
   private RequestMappingEvaluator requestMappingEvaluator;
   private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
+  private boolean enabled = true;
 
   /**
    * Default constructor.
@@ -374,6 +375,16 @@ public class SwaggerSpringMvcPlugin {
     return this;
   }
 
+  /**
+   * Hook to externally control the fact the swagger processing engine
+   * @param externallyConfiguredFlag - true to turn it on, false to turn it off
+   * @return this SwaggerSpringMvcPlugin
+   */
+  public SwaggerSpringMvcPlugin enable(boolean externallyConfiguredFlag) {
+    this.enabled = externallyConfiguredFlag;
+    return this;
+  }
+
   private ApiInfo defaultApiInfo() {
     return new ApiInfo(
             this.swaggerGroup + " Title",
@@ -389,7 +400,9 @@ public class SwaggerSpringMvcPlugin {
    * Called by the framework hence protected
    */
   protected void initialize() {
-    this.build().swaggerApiResourceListing.initialize();
+    if (enabled) {
+      this.build().swaggerApiResourceListing.initialize();
+    }
   }
 
   /**
@@ -485,5 +498,9 @@ public class SwaggerSpringMvcPlugin {
     apiListingReferenceScanner.setIncludePatterns(this.includePatterns);
     apiListingReferenceScanner.setExcludeAnnotations(mergedExcludedAnnotations);
     return apiListingReferenceScanner;
+  }
+
+  public boolean isEnabled() {
+    return enabled;
   }
 }
