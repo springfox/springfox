@@ -1,5 +1,7 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -16,13 +18,28 @@ import static java.lang.String.*;
 import static org.apache.commons.lang.StringUtils.*;
 
 public class ParameterNameReader implements Command<RequestMappingContext> {
+
+  private ParameterAnnotationReader annotations = new ParameterAnnotationReader();
+
+  public ParameterNameReader() {
+  }
+
+  @VisibleForTesting
+  ParameterNameReader(ParameterAnnotationReader annotations) {
+    this.annotations = annotations;
+  }
+
   @Override
   public void execute(RequestMappingContext context) {
     MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
-    ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
-    String name = "";
-    if (null != apiParam && !isBlank(apiParam.name())) {
-      name = apiParam.name();
+//    Optional<ApiParam> apiParam = Optional.fromNullable(methodParameter.getParameterAnnotation(ApiParam.class))
+//            .or(annotations.fromHierarchy(methodParameter, ApiParam.class));
+
+    Optional<ApiParam> apiParam = Optional.fromNullable(methodParameter.getParameterAnnotation(ApiParam.class));
+    apiParam = apiParam.or(annotations.fromHierarchy(methodParameter, ApiParam.class));
+    String name;
+    if (apiParam.isPresent() && !isBlank(apiParam.get().name())) {
+      name = apiParam.get().name();
     } else {
       name = findParameterNameFromAnnotations(methodParameter);
       if (isNullOrEmpty(name)) {
