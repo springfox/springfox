@@ -36,7 +36,7 @@ __Maven__
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.9.2</version>
+    <version>0.9.3</version>
 </dependency>
 
 ```
@@ -49,7 +49,7 @@ repositories {
     jcenter()
 }
 
-compile "com.mangofactory:swagger-springmvc:0.9.2"
+compile "com.mangofactory:swagger-springmvc:0.9.3"
 ```
 
 #### Snapshot version
@@ -67,7 +67,7 @@ __Maven__
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.9.4-SNAPSHOT</version>
 </dependency>
 ```
 
