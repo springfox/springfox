@@ -19,4 +19,6 @@ public interface ModelProperty {
   Option<String> propertyDescription();
 
   boolean isRequired();
+
+  int position();
 }

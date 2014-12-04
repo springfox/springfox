@@ -53,11 +53,10 @@ public class DefaultModelProvider implements ModelProvider {
     }
     Map<String, ModelProperty> properties = newLinkedHashMap();
 
-    int index = 0;
     for (com.mangofactory.swagger.models.property.ModelProperty each : properties(modelContext, propertiesHost)) {
       properties.put(each.getName(), new ModelProperty(each.typeName(modelContext),
               each.qualifiedTypeName(),
-              index,
+              each.position(),
               each.isRequired(),
               each.propertyDescription(),
               each.allowableValues(),

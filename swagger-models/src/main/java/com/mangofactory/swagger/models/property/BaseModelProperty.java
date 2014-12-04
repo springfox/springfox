@@ -85,4 +85,8 @@ public abstract class BaseModelProperty implements ModelProperty {
     return apiModelProperty;
   }
 
+  @Override
+  public int position() {
+    return apiModelProperty.transform(toPosition()).or(0);
+  }
 }
