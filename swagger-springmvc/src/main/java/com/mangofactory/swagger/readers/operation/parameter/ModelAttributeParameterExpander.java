@@ -46,10 +46,15 @@ class ModelAttributeParameterExpander {
         continue;
       }
       Class<?> resolvedType = getResolvedType(field);
-      if (!typeBelongsToJavaPackage(resolvedType) && !resolvedType.isEnum()) {
-        LOGGER.debug("Expanding complex field: {} with type: {}", field, resolvedType);
-        expand(field.getName(), field.getType(), parameters);
-        continue;
+      if (!typeBelongsToJavaPackage(resolvedType) && !field.getType().isEnum()) {
+        if (!field.getType().equals(paramType)) {
+          LOGGER.debug("Expanding complex field: {} with type: {}", field, resolvedType);
+          expand(field.getName(), field.getType(), parameters);
+          continue;
+        } else {
+          LOGGER.warn("Skipping expanding complex field: {} with type: {} as it is recursively defined", field,
+                  resolvedType);
+        }
       }
 
       String dataTypeName = typeNameFor(resolvedType);

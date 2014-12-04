@@ -2,6 +2,7 @@ package com.mangofactory.swagger.dummy;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
 
+import com.mangofactory.swagger.dummy.models.Treeish;
 import com.mangofactory.swagger.dummy.models.Example;
 import com.mangofactory.swagger.dummy.models.FoobarDto;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
@@ -131,6 +132,9 @@ public class DummyClass {
   }
 
   public void methodWithoutModelAttribute(Example example) {
+  }
+
+  public void methodWithTreeishModelAttribute(@ModelAttribute Treeish example) {
   }
 
   @RequestMapping("/businesses/{businessId}")
