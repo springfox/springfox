@@ -16,7 +16,7 @@ buildscript {
 
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
-  projectVersion = '0.9.3'
+  projectVersion = '0.9.4-SNAPSHOT'
 }
 
 subprojects {
