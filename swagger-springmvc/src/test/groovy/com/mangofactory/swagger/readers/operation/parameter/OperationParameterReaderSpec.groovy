@@ -4,6 +4,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.models.Example
+import com.mangofactory.swagger.dummy.models.Treeish
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -142,6 +143,24 @@ class OperationParameterReaderSpec extends Specification {
       Parameter localDateTime = result['parameters'].find { it.name == "localDateTime" }
       localDateTime.required
       localDateTime.description().get() == 'local date time desc dd-MM-yyyy hh:mm:ss'
+  }
+
+  def "Should expand ModelAttribute request param if param has treeish field"() {
+    given:
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'),
+              dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class))
+      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
+    when:
+      OperationParameterReader operationParameterReader = new OperationParameterReader()
+      operationParameterReader.execute(context)
+      Map<String, Object> result = context.getResult()
+
+    then:
+      result['parameters'].size == 1
+
+      Parameter annotatedBarParam = result['parameters'][0]
+      annotatedBarParam != null
+      annotatedBarParam.name == 'example'
   }
 
   def "Should not expand unannotated request params"() {
