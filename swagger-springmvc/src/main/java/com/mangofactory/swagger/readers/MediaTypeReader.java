@@ -54,7 +54,7 @@ public class MediaTypeReader implements RequestMappingReader {
       producesList.add(MediaType.ALL_VALUE);
     }
     if (consumesList.isEmpty()) {
-      consumesList.add(MediaType.ALL_VALUE);
+      consumesList.add(MediaType.APPLICATION_JSON_VALUE);
     }
     context.put("consumes", consumesList);
     context.put("produces", producesList);

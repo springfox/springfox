@@ -4,7 +4,6 @@ ext {
   scalaLib = "2.10.4"
   groovy = "2.3.8"
   spock = "0.7-groovy-2.0"
-  jackson = "2.2.3"
   guava = "15.0"
   springHateoas = "0.10.0.RELEASE"
   slf4j = "1.7.7"
