@@ -1,5 +1,5 @@
 package com.mangofactory.swagger.models.property.field
-import com.mangofactory.swagger.mixins.ModelPropertySupport
+import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
@@ -10,7 +10,7 @@ import spock.lang.Specification
 import static com.google.common.collect.Lists.newArrayList
 import static com.mangofactory.swagger.models.ScalaConverters.fromOption
 
-@Mixin([TypesForTestingSupport, ModelPropertySupport])
+@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport])
 class FieldModelPropertySpec extends Specification {
   def "Extracting information from resolved fields" () {
     given:

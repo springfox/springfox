@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.plugin;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.collect.Lists;
+import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
@@ -19,6 +19,7 @@ import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher;
+import com.mangofactory.swagger.scanners.RequestMappingPatternMatcher;
 import com.wordnik.swagger.model.ApiDescription;
 import com.wordnik.swagger.model.ApiInfo;
 import com.wordnik.swagger.model.ApiListingReference;
@@ -37,9 +38,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.models.alternates.Alternates.*;
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang.StringUtils.*;
 
 /**
@@ -50,7 +52,7 @@ public class SwaggerSpringMvcPlugin {
 
   private ModelProvider modelProvider;
   private String swaggerGroup;
-  private List<String> includePatterns;
+  private List<String> includePatterns = newArrayList(".*?");
   private SwaggerPathProvider swaggerPathProvider;
   private List<AuthorizationType> authorizationTypes;
   private ApiInfo apiInfo;
@@ -70,10 +72,10 @@ public class SwaggerSpringMvcPlugin {
   private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
   private ApiListingReferenceScanner apiListingReferenceScanner;
   private AtomicBoolean initialized = new AtomicBoolean(false);
-  private Collection<RequestMappingReader> customAnnotationReaders;
+  private Collection<RequestMappingReader> customAnnotationReaders = newArrayList();
   private boolean applyDefaultResponseMessages;
   private RequestMappingEvaluator requestMappingEvaluator;
-  private RegexRequestMappingPatternMatcher requestMappingPatternMatcher;
+  private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
 
   /**
    * Default constructor.
@@ -353,7 +355,22 @@ public class SwaggerSpringMvcPlugin {
    * @return this SwaggerSpringMvcPlugin
    */
   public SwaggerSpringMvcPlugin customAnnotationReaders(Collection<RequestMappingReader> customAnnotationReaders) {
-    this.customAnnotationReaders = customAnnotationReaders;
+    this.customAnnotationReaders = newArrayList(customAnnotationReaders);
+    return this;
+  }
+
+  /**
+   * Hook for adding custom annotations readers. Useful when you want to add your own annotation to be mapped to swagger
+   * model.
+   *
+   * @param requestMappingPatternMatcher an implementation of {@link com.mangofactory.swagger.scanners
+   * .RequestMappingPatternMatcher}. Out of the box the library comes with
+   * {@link com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher} and
+   * {@link com.mangofactory.swagger.scanners.AntRequestMappingPatternMatcher}
+   * @return this SwaggerSpringMvcPlugin
+   */
+  public SwaggerSpringMvcPlugin requestMappingPatternMatcher(RequestMappingPatternMatcher requestMappingPatternMatcher) {
+    this.requestMappingPatternMatcher = requestMappingPatternMatcher;
     return this;
   }
 
@@ -402,32 +419,17 @@ public class SwaggerSpringMvcPlugin {
       this.apiInfo = defaultApiInfo();
     }
 
-    if (null == this.resourceGroupingStrategy) {
-      this.resourceGroupingStrategy = springSwaggerConfig.defaultResourceGroupingStrategy();
-    }
+    this.resourceGroupingStrategy = Optional.fromNullable(resourceGroupingStrategy)
+            .or(springSwaggerConfig.defaultResourceGroupingStrategy());
 
-    if (null == this.includePatterns || this.includePatterns.size() == 0) {
-      this.includePatterns = asList(".*?");
-    }
+    this.swaggerPathProvider = Optional.fromNullable(swaggerPathProvider)
+            .or(springSwaggerConfig.defaultSwaggerPathProvider());
 
-    if (null == swaggerPathProvider) {
-      this.swaggerPathProvider = springSwaggerConfig.defaultSwaggerPathProvider();
-    }
+    this.alternateTypeProvider = Optional.fromNullable(alternateTypeProvider)
+            .or(springSwaggerConfig.defaultAlternateTypeProvider());
 
-    if (null == this.alternateTypeProvider) {
-      this.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
-    }
+    this.modelProvider = Optional.fromNullable(modelProvider).or(springSwaggerConfig.defaultModelProvider());
 
-    if (null == this.modelProvider) {
-      this.modelProvider = springSwaggerConfig.defaultModelProvider();
-    }
-
-    if (null == this.customAnnotationReaders) {
-      this.customAnnotationReaders = Lists.newArrayList();
-    }
-    if (null == this.requestMappingPatternMatcher) {
-      this.requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
-    }
     List<Class<? extends Annotation>> mergedExcludedAnnotations = springSwaggerConfig.defaultExcludeAnnotations();
     mergedExcludedAnnotations.addAll(this.excludeAnnotations);
     requestMappingEvaluator

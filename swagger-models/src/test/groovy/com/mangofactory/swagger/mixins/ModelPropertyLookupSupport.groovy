@@ -15,7 +15,7 @@ import static com.mangofactory.swagger.models.property.bean.Accessors.propertyNa
 import static com.mangofactory.swagger.models.ResolvedTypes.asResolved
 
 @SuppressWarnings("GrMethodMayBeStatic")
-class ModelPropertySupport {
+class ModelPropertyLookupSupport {
   static final ObjectMapper mapper = new ObjectMapper();
 
   ResolvedMethod accessorMethod(def typeToTest, String methodName) {

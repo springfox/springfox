@@ -46,4 +46,19 @@ class RequestMappingEvaluatorSpec extends Specification {
       ignorableHandlerMethod() | requestMappingInfo("/some-path") | '/no-match' | false
 
   }
+
+  def "include path"() {
+    given:
+      RequestMappingEvaluator apiListingReferenceScanner = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
+              RegexRequestMappingPatternMatcher(), newArrayList(patterns))
+
+    expect:
+      sholdInclude == apiListingReferenceScanner.shouldIncludePath(path)
+
+    where:
+      path         | patterns    | sholdInclude
+      "/some-path" | '.*'        | true
+      "/some-path" | '/no-match' | false
+
+  }
 }

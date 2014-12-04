@@ -28,8 +28,18 @@ class ApiListingReferenceScannerSpec extends Specification {
       method                         | value
       'swaggerGroup'                 | 's'
       'resourceGroupingStrategy'     | new ClassOrApiAnnotationResourceGrouping()
-      'requestMappingHandlerMapping' | []
       'excludeAnnotations'           | []
+  }
+
+
+  def "setter only assertions"() {
+    when:
+      ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner()
+    then:
+      assertSetter(apiListingReferenceScanner, method, value)
+    where:
+      method                         | value
+      'requestMappingHandlerMapping' | []
   }
 
   def "should not get expected exceptions with invalid constructor params"() {
@@ -75,7 +85,6 @@ class ApiListingReferenceScannerSpec extends Specification {
       apiListingReferenceScanner.setResourceGroupingStrategy(defaultControllerResourceNamingStrategy)
       apiListingReferenceScanner.setRequestMappingHandlerMapping([requestMappingHandlerMapping])
       apiListingReferenceScanner.setIncludePatterns([".*"])
-      apiListingReferenceScanner.setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
       apiListingReferenceScanner.setSwaggerGroup("someGroup")
       apiListingReferenceScanner.setSwaggerPathProvider(new AbsoluteSwaggerPathProvider(servletContext: servletContext()))
       apiListingReferenceScanner.requestMappingEvaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
@@ -111,7 +120,6 @@ class ApiListingReferenceScannerSpec extends Specification {
       apiListingReferenceScanner.setResourceGroupingStrategy(defaultControllerResourceNamingStrategy)
       apiListingReferenceScanner.setRequestMappingHandlerMapping([requestMappingHandlerMapping])
       apiListingReferenceScanner.setIncludePatterns([".*"])
-      apiListingReferenceScanner.setRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
       apiListingReferenceScanner.setSwaggerGroup("someGroup")
       apiListingReferenceScanner.setRequestMappingEvaluator(new RequestMappingEvaluator(newArrayList(ApiIgnore),
               new RegexRequestMappingPatternMatcher(), newArrayList(".*?")))

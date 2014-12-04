@@ -30,6 +30,7 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
     this.requestMappingEvaluator = requestMappingEvaluator;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void execute(RequestMappingContext context) {
     RequestMappingInfo requestMappingInfo = context.getRequestMappingInfo();

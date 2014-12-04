@@ -1,11 +1,11 @@
 package com.mangofactory.swagger.models
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.mangofactory.swagger.mixins.ModelPropertySupport
+import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import spock.lang.Specification
 
-@Mixin(value = [ModelPropertySupport, TypesForTestingSupport])
+@Mixin(value = [ModelPropertyLookupSupport, TypesForTestingSupport])
 class ObjectMapperNamingStrategySpec extends Specification {
 
   def "rename without setting an strategy"() {

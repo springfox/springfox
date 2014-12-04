@@ -119,6 +119,7 @@ public class ApiModelReader implements Command<RequestMappingContext> {
     return modelMap;
   }
 
+  @SuppressWarnings("unchecked")
   private void mergeModelMap(Map<String, Model> target, Map<String, Model> source) {
     for (Map.Entry<String, Model> sModelEntry : source.entrySet()) {
       String sourceModelKey = sModelEntry.getKey();

@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.models.property.bean
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mangofactory.swagger.mixins.ModelPropertySupport
+import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
 import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
@@ -15,7 +15,7 @@ import static com.mangofactory.swagger.models.property.BeanPropertyDefinitions.n
 import static com.mangofactory.swagger.models.property.bean.Accessors.isGetter
 import static scala.collection.JavaConversions.collectionAsScalaIterable
 
-@Mixin([TypesForTestingSupport, ModelPropertySupport])
+@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport])
 class BeanModelPropertySpec extends Specification {
 
   // @formatter:off

@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.models.property.constructor
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mangofactory.swagger.mixins.ModelPropertySupport
+import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
 import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
@@ -13,7 +13,7 @@ import static com.google.common.collect.Lists.newArrayList
 import static com.mangofactory.swagger.models.ScalaConverters.fromOption
 import static com.mangofactory.swagger.models.property.BeanPropertyDefinitions.name
 
-@Mixin([TypesForTestingSupport, ModelPropertySupport])
+@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport])
 class ConstructorModelPropertySpec extends Specification {
   def "Extracting information from resolved constructor params" () {
     given:

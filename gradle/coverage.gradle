@@ -5,10 +5,10 @@ ext {
   limits = [
           'instruction': 93,
           'branch'     : 88,
-          'line'       : 91,
+          'line'       : 92,
           'complexity' : 84,
-          'method'     : 87,
-          'class'      : 95 //TODO - 100%
+          'method'     : 90,
+          'class'      : 97 //TODO - 100%
   ]
 }
 

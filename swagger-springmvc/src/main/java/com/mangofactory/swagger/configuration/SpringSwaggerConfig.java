@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.annotations.VisibleForTesting;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
@@ -192,16 +191,6 @@ public class SpringSwaggerConfig {
   @Bean
   public JacksonSwaggerSupport jacksonSwaggerSupport() {
     return new JacksonSwaggerSupport();
-  }
-
-  @VisibleForTesting
-  void setAlternateTypeProvider(AlternateTypeProvider alternateTypeProvider) {
-    this.alternateTypeProvider = alternateTypeProvider;
-  }
-
-  @VisibleForTesting
-  void setTypeResolver(TypeResolver typeResolver) {
-    this.typeResolver = new TypeResolver();
   }
 
 }

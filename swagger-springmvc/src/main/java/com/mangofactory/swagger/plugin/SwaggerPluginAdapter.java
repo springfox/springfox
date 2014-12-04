@@ -4,7 +4,6 @@ import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -23,7 +22,6 @@ public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshe
   private SpringSwaggerConfig springSwaggerConfig;
   private boolean initialized = false;
 
-  @Autowired
   public SwaggerPluginAdapter(SpringSwaggerConfig springSwaggerConfig) {
     this.springSwaggerConfig = springSwaggerConfig;
   }

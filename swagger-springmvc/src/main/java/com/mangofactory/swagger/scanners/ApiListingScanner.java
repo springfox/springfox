@@ -42,12 +42,10 @@ import static com.mangofactory.swagger.ScalaUtils.*;
 public class ApiListingScanner {
   private static final Logger log = LoggerFactory.getLogger(ApiListingScanner.class);
 
-  private String apiVersion = "1.0";
   private String swaggerVersion = SwaggerSpec.version();
   private Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings;
   private SwaggerPathProvider swaggerPathProvider;
   private SwaggerGlobalSettings swaggerGlobalSettings;
-  private ResourceGroupingStrategy resourceGroupingStrategy;
   private AuthorizationContext authorizationContext;
   private final ModelProvider modelProvider;
   private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
@@ -69,6 +67,7 @@ public class ApiListingScanner {
     this.requestMappingEvaluator = requestMappingEvaluator;
   }
 
+  @SuppressWarnings("unchecked")
   public Map<String, ApiListing> scan() {
     Map<String, ApiListing> apiListingMap = newHashMap();
     int position = 0;
@@ -124,6 +123,7 @@ public class ApiListingScanner {
 
         String resourcePath = longestCommonPath(sortedDescriptions);
 
+        String apiVersion = "1.0";
         ApiListing apiListing = new ApiListing(
                 apiVersion,
                 swaggerVersion,
@@ -170,11 +170,10 @@ public class ApiListingScanner {
   }
 
   private List<String> urlParts(ApiDescription apiDescription) {
-    List<String> strings = Splitter.on('/')
+    return Splitter.on('/')
             .omitEmptyStrings()
             .trimResults()
             .splitToList(apiDescription.path());
-    return strings;
   }
 
   public SwaggerGlobalSettings getSwaggerGlobalSettings() {
@@ -185,8 +184,9 @@ public class ApiListingScanner {
     this.swaggerGlobalSettings = swaggerGlobalSettings;
   }
 
+  @SuppressWarnings("UnusedParameters")
+  @Deprecated //As of 0.9.3 (not used)
   public void setResourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
-    this.resourceGroupingStrategy = resourceGroupingStrategy;
   }
 
   public void setAuthorizationContext(AuthorizationContext authorizationContext) {

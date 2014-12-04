@@ -14,10 +14,8 @@ public class AntRequestMappingPatternMatcher implements RequestMappingPatternMat
 
     Set<String> patterns = patternsCondition.getPatterns();
     for (String path : patterns) {
-      for (String includePattern : includePatterns) {
-        if (pathMatchesOneOfIncluded(path, includePatterns)) {
-          return true;
-        }
+      if (pathMatchesOneOfIncluded(path, includePatterns)) {
+        return true;
       }
     }
     return false;

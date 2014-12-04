@@ -14,6 +14,7 @@ import com.mangofactory.swagger.models.property.field.FieldModelPropertyProvider
 import com.mangofactory.swagger.models.property.field.FieldProvider
 import com.mangofactory.swagger.models.property.provider.DefaultModelPropertiesProvider
 
+@SuppressWarnings("GrMethodMayBeStatic")
 class ModelProviderSupport {
 
   ModelProvider modelProvider(TypeResolver typeResolver = new TypeResolver(),

@@ -38,7 +38,6 @@ public class ApiListingReferenceScanner {
   private ResourceGroupingStrategy resourceGroupingStrategy;
   private SwaggerPathProvider swaggerPathProvider;
   private List<String> includePatterns = newArrayList(".*?");
-  private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
   private RequestMappingEvaluator requestMappingEvaluator;
 
   public ApiListingReferenceScanner() {
@@ -59,6 +58,7 @@ public class ApiListingReferenceScanner {
     return this.apiListingReferences;
   }
 
+  @SuppressWarnings("unchecked")
   public void scanSpringRequestMappings() {
     Map<ResourceGroup, String> resourceGroupDescriptions = new HashMap<ResourceGroup, String>();
     for (RequestMappingHandlerMapping requestMappingHandlerMapping : this.requestMappingHandlerMapping) {
@@ -106,25 +106,12 @@ public class ApiListingReferenceScanner {
     return Multimaps.asMap(resourceGroupRequestMappings);
   }
 
-  public List<RequestMappingHandlerMapping> getRequestMappingHandlerMapping() {
-    return requestMappingHandlerMapping;
-  }
-
   public void setRequestMappingHandlerMapping(List<RequestMappingHandlerMapping> requestMappingHandlerMapping) {
     this.requestMappingHandlerMapping = requestMappingHandlerMapping;
   }
 
   public List<ApiListingReference> getApiListingReferences() {
     return apiListingReferences;
-  }
-
-  public void setApiListingReferences(List<ApiListingReference> apiListingReferences) {
-    this.apiListingReferences = apiListingReferences;
-  }
-
-  public void setResourceGroupRequestMappings(ArrayListMultimap<ResourceGroup,
-          RequestMappingContext> resourceGroupRequestMappings) {
-    this.resourceGroupRequestMappings = resourceGroupRequestMappings;
   }
 
   public String getSwaggerGroup() {
@@ -167,14 +154,6 @@ public class ApiListingReferenceScanner {
   @Deprecated //As of 0.9.3 use RequestMappings instead
   public void setIncludePatterns(List<String> includePatterns) {
     this.includePatterns = includePatterns;
-  }
-
-  public RequestMappingPatternMatcher getRequestMappingPatternMatcher() {
-    return requestMappingPatternMatcher;
-  }
-
-  public void setRequestMappingPatternMatcher(RequestMappingPatternMatcher requestMappingPatternMatcher) {
-    this.requestMappingPatternMatcher = requestMappingPatternMatcher;
   }
 
   public void setRequestMappingEvaluator(RequestMappingEvaluator requestMappingEvaluator) {
