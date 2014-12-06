@@ -41,7 +41,7 @@ __Maven__
 <!-- Add provided dependency for the following scala library. This is for 0.9.3 onwards. 
 There are two reasons for this. 
 1. This is in preparation for v2.0 because swagger core is moving away from depending on the scala tool chain. 
-2. The scala toolchain that was transitively pulled in by swagger core was  ref: https://speakerdeck.com/ankinson/documenting-restful-apis --> 
+2. The scala toolchain that was transitively pulled in by swagger core was causing library size to bloat ref: https://speakerdeck.com/ankinson/documenting-restful-apis --> 
 <dependency>
     <groupId>org.scala-lang</groupId>
     <artifactId>scala-library</artifactId>
@@ -82,7 +82,7 @@ __Maven__
 <!-- Add provided dependency for the following scala library. This is for 0.9.3 onwards. 
 There are two reasons for this. 
 1. This is in preparation for v2.0 because swagger core is moving away from depending on the scala tool chain. 
-2. The scala toolchain that was transitively pulled in by swagger core was  ref: https://speakerdeck.com/ankinson/documenting-restful-apis --> 
+2. The scala toolchain that was transitively pulled in by swagger core was causing library size to bloat ref: https://speakerdeck.com/ankinson/documenting-restful-apis --> 
 <dependency>
     <groupId>org.scala-lang</groupId>
     <artifactId>scala-library</artifactId>
