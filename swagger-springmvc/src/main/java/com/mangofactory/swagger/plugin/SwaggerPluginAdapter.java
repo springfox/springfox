@@ -9,18 +9,19 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * After an application context refresh, builds and executes all SwaggerSpringMvcPlugin instances found in the
  * application
  * context.
- * 
+ * <p/>
  * If no instances SwaggerSpringMvcPlugin are found a default one is created and executed.
  */
 public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshedEvent> {
   private static final Logger log = LoggerFactory.getLogger(SwaggerPluginAdapter.class);
   private SpringSwaggerConfig springSwaggerConfig;
-  private boolean initialized = false;
+  private AtomicBoolean initialized = new AtomicBoolean(false);
 
   public SwaggerPluginAdapter(SpringSwaggerConfig springSwaggerConfig) {
     this.springSwaggerConfig = springSwaggerConfig;
@@ -28,7 +29,7 @@ public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshe
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-    if (!initialized) {
+    if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
       ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
 
@@ -55,9 +56,8 @@ public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshe
           }
         }
       }
-      initialized = true;
     } else {
-      log.warn("SwaggerSpringMvcPlugin have already been initialized!");
+      log.info("Skipping SwaggerSpringMvcPlugin initialization already initialized!");
     }
   }
 }
