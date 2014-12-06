@@ -38,6 +38,15 @@ __Maven__
     <artifactId>swagger-springmvc</artifactId>
     <version>0.9.3</version>
 </dependency>
+<!-- Add provided dependency for the following scala library. This is for 0.9.3 onwards. 
+There are two reasons for this. 
+1. This is in preparation for v2.0 because swagger core is moving away from depending on the scala tool chain. 
+2. The scala toolchain that was transitively pulled in by swagger core was  ref: https://speakerdeck.com/ankinson/documenting-restful-apis --> 
+<dependency>
+    <groupId>org.scala-lang</groupId>
+    <artifactId>scala-library</artifactId>
+    <version>2.11.4</version>
+</dependency>
 
 ```
 
@@ -50,6 +59,7 @@ repositories {
 }
 
 compile "com.mangofactory:swagger-springmvc:0.9.3"
+compile "org.scala-lang:scala-library:2.11.4"
 ```
 
 #### Snapshot version
@@ -69,6 +79,16 @@ __Maven__
     <artifactId>swagger-springmvc</artifactId>
     <version>0.9.4-SNAPSHOT</version>
 </dependency>
+<!-- Add provided dependency for the following scala library. This is for 0.9.3 onwards. 
+There are two reasons for this. 
+1. This is in preparation for v2.0 because swagger core is moving away from depending on the scala tool chain. 
+2. The scala toolchain that was transitively pulled in by swagger core was  ref: https://speakerdeck.com/ankinson/documenting-restful-apis --> 
+<dependency>
+    <groupId>org.scala-lang</groupId>
+    <artifactId>scala-library</artifactId>
+    <version>2.11.4</version>
+</dependency>
+
 ```
 
 __Gradle__
@@ -80,6 +100,7 @@ repositories {
 }
 
 compile "com.mangofactory:swagger-springmvc:0.9.4-SNAPSHOT"
+compile "org.scala-lang:scala-library:2.11.4"
 ```
 
 ### Usage (Quick guide)
