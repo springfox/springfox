@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * After an application context refresh, builds and executes all SwaggerSpringMvcPlugin instances found in the
  * application
  * context.
- * <p/>
+ * 
  * If no instances SwaggerSpringMvcPlugin are found a default one is created and executed.
  */
 public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshedEvent> {
