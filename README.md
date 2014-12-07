@@ -45,7 +45,7 @@ There are two reasons for this.
 <dependency>
     <groupId>org.scala-lang</groupId>
     <artifactId>scala-library</artifactId>
-    <version>2.11.4</version>
+    <version>2.10.4</version>
 </dependency>
 
 ```
@@ -59,7 +59,7 @@ repositories {
 }
 
 compile "com.mangofactory:swagger-springmvc:0.9.3"
-compile "org.scala-lang:scala-library:2.11.4"
+compile "org.scala-lang:scala-library:2.10.4"
 ```
 
 #### Snapshot version
@@ -86,7 +86,7 @@ There are two reasons for this.
 <dependency>
     <groupId>org.scala-lang</groupId>
     <artifactId>scala-library</artifactId>
-    <version>2.11.4</version>
+    <version>2.10.4</version>
 </dependency>
 
 ```
@@ -100,7 +100,7 @@ repositories {
 }
 
 compile "com.mangofactory:swagger-springmvc:0.9.4-SNAPSHOT"
-compile "org.scala-lang:scala-library:2.11.4"
+compile "org.scala-lang:scala-library:2.10.4"
 ```
 
 ### Usage (Quick guide)
