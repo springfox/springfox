@@ -2,8 +2,8 @@ package com.mangofactory.swagger.models
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.wordnik.swagger.model.Model
-import spock.lang.Specification
 
+import spock.lang.Specification
 import static com.google.common.base.Strings.*
 import static com.mangofactory.swagger.models.ModelContext.*
 
@@ -70,6 +70,20 @@ class GenericTypeSpec extends Specification{
     genericCollectionWithEnum()       | "List"                    | "java.util.List<java.lang.String>"
   }
 
+  def "Set a generic type naming strategy should succeed if null or populated"() {
+     when:
+     ResolvedTypes.setGenericTypeNamingStrategy(new DefaultGenericTypeNamingStrategy())
+     
+     then: 
+     notThrown(Exception)
+     
+     when:
+     ResolvedTypes.setGenericTypeNamingStrategy(null);
+     
+     then:
+     notThrown(Exception)
+  }
+  
   def expectedModelName(String modelName) {
     if (!isNullOrEmpty(modelName)) {
       String.format("GenericType«%s»", modelName)
