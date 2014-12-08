@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.models
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.wordnik.swagger.model.Model
+import com.mangofactory.swagger.models.dto.Model
 import spock.lang.Specification
 
 import static com.mangofactory.swagger.models.ModelContext.*
@@ -15,20 +15,20 @@ class ComplexTypeSpec extends Specification {
       Model asReturn = provider.modelFor(returnValue(complexType())).get()
 
     expect:
-      asInput.name() == "ComplexType"
-      asInput.properties().contains(property)
-      def modelProperty = asInput.properties().get(property)
-      modelProperty.get().type() == type
-      modelProperty.get().qualifiedType() == qualifiedType
-      modelProperty.get().items().isEmpty()
+      asInput.getName() == "ComplexType"
+      asInput.getProperties().containsKey(property)
+      def modelProperty = asInput.getProperties().get(property)
+      modelProperty.getType() == type
+      modelProperty.getQualifiedType() == qualifiedType
+      modelProperty.getItems() == null
       Types.isBaseType(type) == isBaseType
 
-      asReturn.name() == "ComplexType"
-      asReturn.properties().contains(property)
-      def retModelProperty = asReturn.properties().get(property)
-      retModelProperty.get().type() == type
-      retModelProperty.get().qualifiedType() == qualifiedType
-      retModelProperty.get().items().isEmpty()
+      asReturn.getName() == "ComplexType"
+      asReturn.getProperties().containsKey(property)
+      def retModelProperty = asReturn.getProperties().get(property)
+      retModelProperty.getType() == type
+      retModelProperty.getQualifiedType() == qualifiedType
+      retModelProperty.getItems() == null
       Types.isBaseType(type) == isBaseType
 
     where:
@@ -47,20 +47,20 @@ class ComplexTypeSpec extends Specification {
     Model asReturn = provider.modelFor(returnValue(complexType)).get()
 
     expect:
-      asInput.name() == "RecursiveType"
-      asInput.properties().contains(property)
-      def modelProperty = asInput.properties().get(property)
-      modelProperty.get().type() == type
-      modelProperty.get().qualifiedType() == qualifiedType
-      modelProperty.get().items().isEmpty()
+      asInput.getName() == "RecursiveType"
+      asInput.getProperties().containsKey(property)
+      def modelProperty = asInput.getProperties().get(property)
+      modelProperty.getType() == type
+      modelProperty.getQualifiedType() == qualifiedType
+      modelProperty.getItems() == null
       Types.isBaseType(type) == isBaseType
 
-      asReturn.name() == "RecursiveType"
-      asReturn.properties().contains(property)
-      def retModelProperty = asReturn.properties().get(property)
-      retModelProperty.get().type() == type
-      retModelProperty.get().qualifiedType() == qualifiedType
-      retModelProperty.get().items().isEmpty()
+      asReturn.getName() == "RecursiveType"
+      asReturn.getProperties().containsKey(property)
+      def retModelProperty = asReturn.getProperties().get(property)
+      retModelProperty.getType() == type
+      retModelProperty.getQualifiedType() == qualifiedType
+      retModelProperty.getItems() == null
       Types.isBaseType(type) == isBaseType
 
     where:
@@ -76,20 +76,20 @@ class ComplexTypeSpec extends Specification {
       Model asReturn = provider.modelFor(returnValue(complexType)).get()
 
     expect:
-      asInput.name() == "InheritedComplexType"
-      asInput.properties().contains(property)
-      def modelProperty = asInput.properties().get(property)
-      modelProperty.get().type() == type
-      modelProperty.get().qualifiedType() == qualifiedType
-      modelProperty.get().items().isEmpty()
+      asInput.getName() == "InheritedComplexType"
+      asInput.getProperties().containsKey(property)
+      def modelProperty = asInput.getProperties().get(property)
+      modelProperty.getType() == type
+      modelProperty.getQualifiedType() == qualifiedType
+      modelProperty.getItems() == null
       Types.isBaseType(type) == isBaseType
 
-      asReturn.name() == "InheritedComplexType"
-      asReturn.properties().contains(property)
-      def retModelProperty = asReturn.properties().get(property)
-      retModelProperty.get().type() == type
-      retModelProperty.get().qualifiedType() == qualifiedType
-      retModelProperty.get().items().isEmpty()
+      asReturn.getName() == "InheritedComplexType"
+      asReturn.getProperties().containsKey(property)
+      def retModelProperty = asReturn.getProperties().get(property)
+      retModelProperty.getType() == type
+      retModelProperty.getQualifiedType() == qualifiedType
+      retModelProperty.getItems() == null
       Types.isBaseType(type) == isBaseType
 
     where:

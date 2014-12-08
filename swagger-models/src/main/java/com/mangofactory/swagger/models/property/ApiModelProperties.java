@@ -4,8 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.wordnik.swagger.model.AllowableListValues;
-import scala.collection.JavaConversions;
+import com.mangofactory.swagger.models.dto.AllowableListValues;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public final class ApiModelProperties {
       public AllowableListValues apply(ApiModelProperty annotation) {
         List<String> allowableValues
                 = Splitter.on(',').omitEmptyStrings().splitToList(nullToEmpty(annotation.allowableValues()));
-        return new AllowableListValues(JavaConversions.collectionAsScalaIterable(allowableValues).toList(), "LIST");
+        return new AllowableListValues(allowableValues, "LIST");
       }
     };
   }

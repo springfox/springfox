@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.scanners;
 
 import com.google.common.base.Objects;
-import org.apache.commons.lang.builder.EqualsBuilder;
 
 public class ResourceGroup {
   private String groupName;
@@ -40,10 +39,9 @@ public class ResourceGroup {
     if (obj.getClass() != getClass()) {
       return false;
     }
-    ResourceGroup rhs = (ResourceGroup) obj;
-    return new EqualsBuilder()
-            .append(this.groupName, rhs.groupName)
-            .isEquals();
+    final ResourceGroup rhs = (ResourceGroup) obj;
+
+    return com.google.common.base.Objects.equal(this.groupName, rhs.groupName);
   }
 
   @Override
@@ -55,6 +53,7 @@ public class ResourceGroup {
   public String toString() {
     return "ResourceGroup{" +
             "groupName='" + groupName + '\'' +
+            ", position=" + position +
             '}';
   }
 }

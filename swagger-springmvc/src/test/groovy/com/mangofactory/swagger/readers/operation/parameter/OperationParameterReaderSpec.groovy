@@ -8,7 +8,7 @@ import com.mangofactory.swagger.dummy.models.Treeish
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.wordnik.swagger.model.Parameter
+import com.mangofactory.swagger.models.dto.Parameter
 import org.joda.time.LocalDateTime
 import org.springframework.core.MethodParameter
 import org.springframework.validation.BindingResult
@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 import static com.google.common.collect.Maps.newHashMap
-import static com.mangofactory.swagger.ScalaUtils.toOption
 import static com.mangofactory.swagger.models.alternates.Alternates.newRule
 
 @Mixin(RequestMappingSupport)
@@ -86,7 +85,7 @@ class OperationParameterReaderSpec extends Specification {
     where:
       property        | expectedValue
       'name'          | 'businessId'
-      'description'   | toOption('businessId')
+      'description'   | 'businessId'
       'required'      | true
       'allowMultiple' | false
       'allowMultiple' | false
@@ -111,38 +110,38 @@ class OperationParameterReaderSpec extends Specification {
 
       Parameter annotatedFooParam = result['parameters'].find { it.name == "foo" }
       annotatedFooParam != null
-      annotatedFooParam.description().get() == 'description of foo'
+      annotatedFooParam.getDescription() == 'description of foo'
       annotatedFooParam.required
       annotatedFooParam.allowableValues != null
 
       Parameter annotatedBarParam = result['parameters'].find { it.name == "bar" }
-      annotatedBarParam.description().get() == 'description of bar'
+      annotatedBarParam.getDescription() == 'description of bar'
       !annotatedBarParam.required
       annotatedBarParam.allowableValues == null
 
       Parameter unannotatedEnumTypeParam = result['parameters'].find { it.name == "enumType" }
-      unannotatedEnumTypeParam.description().isEmpty()
+      unannotatedEnumTypeParam.getDescription() == null
       unannotatedEnumTypeParam.allowableValues != null
 
       Parameter annotatedEnumTypeParam = result['parameters'].find { it.name == "annotatedEnumType" }
-      annotatedEnumTypeParam.description().get() == 'description of annotatedEnumType'
+      annotatedEnumTypeParam.getDescription() == 'description of annotatedEnumType'
       annotatedEnumTypeParam.allowableValues != null
 
       Parameter unannotatedNestedTypeNameParam = result['parameters'].find { it.name == "nestedType.name" }
       unannotatedNestedTypeNameParam != null
-      unannotatedNestedTypeNameParam.description().isEmpty()
+      unannotatedNestedTypeNameParam.getDescription() == null
 
       Parameter annotatedAllCapsSetParam = result['parameters'].find { it.name == "allCapsSet" }
-      annotatedAllCapsSetParam.description().get() == 'description of allCapsSet'
+      annotatedAllCapsSetParam.getDescription() == 'description of allCapsSet'
       !annotatedAllCapsSetParam.required
       annotatedAllCapsSetParam.allowableValues == null
 
       Parameter unannotatedParentBeanParam = result['parameters'].find { it.name == "parentBeanProperty" }
-      unannotatedParentBeanParam.description().isEmpty()
+      unannotatedParentBeanParam.getDescription() == null
 
       Parameter localDateTime = result['parameters'].find { it.name == "localDateTime" }
       localDateTime.required
-      localDateTime.description().get() == 'local date time desc dd-MM-yyyy hh:mm:ss'
+      localDateTime.getDescription() == 'local date time desc dd-MM-yyyy hh:mm:ss'
   }
 
   def "Should expand ModelAttribute request param if param has treeish field"() {

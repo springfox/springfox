@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.model.Parameter;
+import com.mangofactory.swagger.models.dto.Parameter;
 
 import java.util.Collection;
 import java.util.List;

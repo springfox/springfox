@@ -7,7 +7,6 @@ import com.mangofactory.swagger.dummy.models.Pet;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import org.apache.commons.lang.NotImplementedException;
 import org.joda.time.LocalDate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,13 +36,13 @@ public class FeatureDemonstrationService {
   public Pet getPetById(
           @ApiParam(value = "ID of pet that needs to be fetched", allowableValues = "range[1,5]", required = true)
           @PathVariable("petId") String petId) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   //Lists all http methods with this operation
   @RequestMapping("/allMethodsAllowed")
   public void allMethodAllowed() {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   //Calculates effective url and ignores UriComponentsBuilder

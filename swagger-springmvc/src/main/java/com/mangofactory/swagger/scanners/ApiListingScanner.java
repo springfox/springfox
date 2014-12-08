@@ -2,6 +2,7 @@ package com.mangofactory.swagger.scanners;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
@@ -16,14 +17,12 @@ import com.mangofactory.swagger.readers.ApiModelReader;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.MediaTypeReader;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
-import com.wordnik.swagger.core.SwaggerSpec;
-import com.wordnik.swagger.model.ApiDescription;
-import com.wordnik.swagger.model.ApiListing;
-import com.wordnik.swagger.model.Authorization;
-import com.wordnik.swagger.model.Model;
+import com.mangofactory.swagger.models.dto.ApiDescription;
+import com.mangofactory.swagger.models.dto.ApiListing;
+import com.mangofactory.swagger.models.dto.Authorization;
+import com.mangofactory.swagger.models.dto.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Option;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,12 +36,11 @@ import java.util.Set;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class ApiListingScanner {
   private static final Logger log = LoggerFactory.getLogger(ApiListingScanner.class);
 
-  private String swaggerVersion = SwaggerSpec.version();
+  private String swaggerVersion = "1.2";
   private Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings;
   private SwaggerPathProvider swaggerPathProvider;
   private SwaggerGlobalSettings swaggerGlobalSettings;
@@ -111,12 +109,10 @@ public class ApiListingScanner {
           apiDescriptions.addAll(apiDescriptionList);
         }
 
-        scala.collection.immutable.List<Authorization> authorizations = emptyScalaList();
+        List<Authorization> authorizations = new ArrayList<Authorization>();
         if (null != authorizationContext) {
           authorizations = authorizationContext.getScalaAuthorizations();
         }
-
-        Option modelOption = toOption(toScalaModelMap(models));
 
         ArrayList sortedDescriptions = new ArrayList(apiDescriptions);
         Collections.sort(sortedDescriptions, this.apiDescriptionOrdering);
@@ -129,13 +125,13 @@ public class ApiListingScanner {
                 swaggerVersion,
                 swaggerPathProvider.getApplicationBasePath(),
                 resourcePath,
-                toScalaList(produces),
-                toScalaList(consumes),
-                emptyScalaList(),
+                Lists.newArrayList(produces),
+                Lists.newArrayList(consumes),
+                new ArrayList<String>(),
                 authorizations,
-                toScalaList(sortedDescriptions),
-                modelOption,
-                toOption(null),
+                sortedDescriptions,
+                models,
+                null,
                 position++);
 
         apiListingMap.put(resourceGroup.getGroupName(), apiListing);
@@ -143,6 +139,7 @@ public class ApiListingScanner {
     }
     return apiListingMap;
   }
+
 
   private String longestCommonPath(ArrayList<ApiDescription> apiDescriptions) {
     List<String> commons = newArrayList();
@@ -173,7 +170,7 @@ public class ApiListingScanner {
     return Splitter.on('/')
             .omitEmptyStrings()
             .trimResults()
-            .splitToList(apiDescription.path());
+            .splitToList(apiDescription.getPath());
   }
 
   public SwaggerGlobalSettings getSwaggerGlobalSettings() {

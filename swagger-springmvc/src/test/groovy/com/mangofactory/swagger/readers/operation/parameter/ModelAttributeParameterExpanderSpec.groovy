@@ -5,7 +5,7 @@ import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.dummy.models.Example
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
-import com.wordnik.swagger.model.Parameter
+import com.mangofactory.swagger.models.dto.Parameter
 import org.joda.time.LocalDateTime
 import spock.lang.Specification
 

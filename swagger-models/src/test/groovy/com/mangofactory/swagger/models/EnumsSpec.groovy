@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.models
 
-import com.wordnik.swagger.model.AllowableListValues
-import scala.collection.JavaConversions
+import com.mangofactory.swagger.models.dto.AllowableListValues
 import spock.lang.Specification
 
 import static com.google.common.collect.Lists.newArrayList
@@ -9,27 +8,24 @@ import static com.google.common.collect.Lists.newArrayList
 class EnumsSpec extends Specification {
   def "enums support @JsonValue annotation"() {
     given:
-      def expected = new AllowableListValues(JavaConversions.collectionAsScalaIterable(newArrayList("One", "Two"))
-              .toList(), "LIST")
+      def expected = new AllowableListValues(newArrayList("One", "Two"), "LIST")
     expect:
-      expected == Enums.allowableValues(JsonValuedEnum)
+      expected.getValues() == Enums.allowableValues(JsonValuedEnum).getValues()
 
   }
 
   def "enums support regular enums"() {
     given:
-      def expected = new AllowableListValues(JavaConversions.collectionAsScalaIterable(newArrayList("ONE", "TWO"))
-              .toList(), "LIST")
+      def expected = new AllowableListValues(newArrayList("ONE", "TWO"), "LIST")
     expect:
-      expected == Enums.allowableValues(ExampleEnum)
+      expected.getValues() == Enums.allowableValues(ExampleEnum).getValues()
   }
 
   def "enums work with incorrectly annotated enums"() {
     given:
-      def expected = new AllowableListValues(JavaConversions.collectionAsScalaIterable(newArrayList("ONE", "TWO"))
-              .toList(), "LIST")
+      def expected = new AllowableListValues(newArrayList("ONE", "TWO"), "LIST")
     expect:
-      expected == Enums.allowableValues(IncorrectlyJsonValuedEnum)
+      expected.getValues() == Enums.allowableValues(IncorrectlyJsonValuedEnum).getValues()
   }
 
   def "Enums class in not instantiable"() {

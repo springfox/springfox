@@ -14,9 +14,9 @@ import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
-import com.wordnik.swagger.model.ApiInfo
-import com.wordnik.swagger.model.AuthorizationType
-import com.wordnik.swagger.model.ResponseMessage
+import com.mangofactory.swagger.models.dto.ApiInfo
+import com.mangofactory.swagger.models.dto.AuthorizationType
+import com.mangofactory.swagger.models.dto.ResponseMessage
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
@@ -26,7 +26,6 @@ import spock.lang.Unroll
 
 import javax.servlet.ServletRequest
 
-import static com.mangofactory.swagger.ScalaUtils.toOption
 import static com.mangofactory.swagger.models.alternates.Alternates.newMapRule
 import static org.springframework.http.HttpStatus.OK
 import static org.springframework.web.bind.annotation.RequestMethod.*
@@ -49,12 +48,12 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       plugin.includePatterns == [".*?"]
       plugin.authorizationTypes == null
 
-      plugin.apiInfo.title() == 'default Title'
-      plugin.apiInfo.description() == 'Api Description'
-      plugin.apiInfo.termsOfServiceUrl() == 'Api terms of service'
-      plugin.apiInfo.contact() == 'Contact Email'
-      plugin.apiInfo.license() == 'Licence Type'
-      plugin.apiInfo.licenseUrl() == 'License URL'
+      plugin.apiInfo.getTitle() == 'default Title'
+      plugin.apiInfo.getDescription() == 'Api Description'
+      plugin.apiInfo.getTermsOfServiceUrl() == 'Api terms of service'
+      plugin.apiInfo.getContact() == 'Contact Email'
+      plugin.apiInfo.getLicense() == 'Licence Type'
+      plugin.apiInfo.getLicenseUrl() == 'License URL'
 
       plugin.excludeAnnotations == []
       plugin.resourceGroupingStrategy instanceof ClassOrApiAnnotationResourceGrouping
@@ -64,13 +63,13 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
     when:
-      plugin.globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", toOption(null))])
-              .useDefaultResponseMessages(true)
-              .build()
+      plugin.globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
+          .useDefaultResponseMessages(true)
+          .build()
 
     then:
       SwaggerGlobalSettings swaggerGlobalSettings = plugin.swaggerGlobalSettings
-      swaggerGlobalSettings.getGlobalResponseMessages()[GET][0].message() == "blah"
+      swaggerGlobalSettings.getGlobalResponseMessages()[GET][0].getMessage() == "blah"
       swaggerGlobalSettings.getGlobalResponseMessages()[GET].size() == 1
 
     and: "defaults are preserved"
@@ -81,13 +80,13 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
   def "Swagger global response messages should not be used for a particular RequestMethod"() {
     when:
-      plugin.globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", toOption(null))])
+      plugin.globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
               .useDefaultResponseMessages(false)
               .build()
 
     then:
       SwaggerGlobalSettings swaggerGlobalSettings = plugin.swaggerGlobalSettings
-      swaggerGlobalSettings.getGlobalResponseMessages()[GET][0].message() == "blah"
+      swaggerGlobalSettings.getGlobalResponseMessages()[GET][0].getMessage() == "blah"
       swaggerGlobalSettings.getGlobalResponseMessages()[GET].size() == 1
 
     and: "defaults are preserved"

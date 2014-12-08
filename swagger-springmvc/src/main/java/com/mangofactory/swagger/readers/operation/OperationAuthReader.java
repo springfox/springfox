@@ -5,9 +5,9 @@ import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.Authorization;
 import com.wordnik.swagger.annotations.AuthorizationScope;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class OperationAuthReader implements RequestMappingReader {
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
     String requestMappingPattern = (String) context.get("requestMappingPattern");
-    List<com.wordnik.swagger.model.Authorization> authorizations = newArrayList();
+    List<com.mangofactory.swagger.models.dto.Authorization> authorizations = newArrayList();
 
     if (null != authorizationContext) {
       authorizations = authorizationContext.getAuthorizationsForPath(requestMappingPattern);
@@ -35,22 +35,22 @@ public class OperationAuthReader implements RequestMappingReader {
       Authorization[] authorizationAnnotations = apiOperationAnnotation.authorizations();
       if (authorizationAnnotations != null
               && authorizationAnnotations.length > 0
-              && !StringUtils.isBlank(authorizationAnnotations[0].value())) {
+              && StringUtils.hasText(authorizationAnnotations[0].value())) {
 
         authorizations = newArrayList();
         for (Authorization authorization : authorizationAnnotations) {
           String value = authorization.value();
           AuthorizationScope[] scopes = authorization.scopes();
-          List<com.wordnik.swagger.model.AuthorizationScope> authorizationScopeList = newArrayList();
+          List<com.mangofactory.swagger.models.dto.AuthorizationScope> authorizationScopeList = newArrayList();
           for (AuthorizationScope authorizationScope : scopes) {
             String description = authorizationScope.description();
             String scope = authorizationScope.scope();
-            authorizationScopeList.add(new com.wordnik.swagger.model.AuthorizationScope(scope, description));
+            authorizationScopeList.add(new com.mangofactory.swagger.models.dto.AuthorizationScope(scope, description));
           }
-          com.wordnik.swagger.model.AuthorizationScope[] authorizationScopes = authorizationScopeList
-                  .toArray(new com.wordnik.swagger.model.AuthorizationScope[authorizationScopeList.size()]);
-          com.wordnik.swagger.model.Authorization authorizationModel =
-                  new com.wordnik.swagger.model.Authorization(value, authorizationScopes);
+          com.mangofactory.swagger.models.dto.AuthorizationScope[] authorizationScopes = authorizationScopeList
+                  .toArray(new com.mangofactory.swagger.models.dto.AuthorizationScope[authorizationScopeList.size()]);
+          com.mangofactory.swagger.models.dto.Authorization authorizationModel =
+                  new com.mangofactory.swagger.models.dto.Authorization(value, authorizationScopes);
           authorizations.add(authorizationModel);
         }
       }

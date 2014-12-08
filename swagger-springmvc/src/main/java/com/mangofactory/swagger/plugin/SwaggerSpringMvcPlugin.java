@@ -22,11 +22,11 @@ import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher;
 import com.mangofactory.swagger.scanners.RequestMappingPatternMatcher;
-import com.wordnik.swagger.model.ApiDescription;
-import com.wordnik.swagger.model.ApiInfo;
-import com.wordnik.swagger.model.ApiListingReference;
-import com.wordnik.swagger.model.AuthorizationType;
-import com.wordnik.swagger.model.ResponseMessage;
+import com.mangofactory.swagger.models.dto.ApiDescription;
+import com.mangofactory.swagger.models.dto.ApiInfo;
+import com.mangofactory.swagger.models.dto.ApiListingReference;
+import com.mangofactory.swagger.models.dto.AuthorizationType;
+import com.mangofactory.swagger.models.dto.ResponseMessage;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -46,7 +46,7 @@ import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.models.alternates.Alternates.*;
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang.StringUtils.*;
+import static org.springframework.util.StringUtils.*;
 
 /**
  * A builder which is intended to be the primary interface into the swagger-springmvc framework.
@@ -440,7 +440,7 @@ public class SwaggerSpringMvcPlugin {
   }
 
   private void configure() {
-    if (isBlank(this.swaggerGroup)) {
+    if (!hasText(this.swaggerGroup)) {
       this.swaggerGroup = "default";
     }
 

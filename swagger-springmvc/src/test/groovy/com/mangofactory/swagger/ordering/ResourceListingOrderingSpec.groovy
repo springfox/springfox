@@ -1,11 +1,8 @@
 package com.mangofactory.swagger.ordering
 
 import com.google.common.collect.Ordering
-import com.wordnik.swagger.model.ApiListingReference
-import scala.Some
+import com.mangofactory.swagger.models.dto.ApiListingReference
 import spock.lang.Specification
-
-import static com.mangofactory.swagger.ScalaUtils.toOption
 
 class ResourceListingOrderingSpec extends Specification {
 
@@ -16,8 +13,8 @@ class ResourceListingOrderingSpec extends Specification {
     when:
       Collections.sort(list, ordering)
     then:
-      list[0].description() == new Some(expectedFirst)
-      list[1].description() == new Some(expectedSecond)
+      list[0].getDescription() == expectedFirst
+      list[1].getDescription() == expectedSecond
 
     where:
       list                                                  | expectedFirst | expectedSecond
@@ -32,8 +29,8 @@ class ResourceListingOrderingSpec extends Specification {
     when:
       Collections.sort(list, ordering)
     then:
-      list[0].description() == new Some(expectedFirst)
-      list[1].description() == new Some(expectedSecond)
+      list[0].getDescription() == expectedFirst
+      list[1].getDescription() == expectedSecond
 
     where:
       list                                                  | expectedFirst | expectedSecond
@@ -42,6 +39,6 @@ class ResourceListingOrderingSpec extends Specification {
   }
 
   private ApiListingReference apiRef(String path, String desc, Integer pos) {
-    new ApiListingReference(path, toOption(desc), pos)
+    new ApiListingReference(path, desc, pos)
   }
 }

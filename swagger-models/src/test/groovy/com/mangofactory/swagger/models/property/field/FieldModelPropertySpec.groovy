@@ -3,12 +3,10 @@ import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
-import com.wordnik.swagger.model.AllowableListValues
-import scala.collection.JavaConversions
+import com.mangofactory.swagger.models.dto.AllowableListValues
 import spock.lang.Specification
 
 import static com.google.common.collect.Lists.newArrayList
-import static com.mangofactory.swagger.models.ScalaConverters.fromOption
 
 @Mixin([TypesForTestingSupport, ModelPropertyLookupSupport])
 class FieldModelPropertySpec extends Specification {
@@ -20,19 +18,18 @@ class FieldModelPropertySpec extends Specification {
       def sut = new FieldModelProperty(fieldName, field, new AlternateTypeProvider())
 
     expect:
-      fromOption(sut.propertyDescription()) == description
+      sut.propertyDescription() == description
       sut.required == isRequired
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       if (allowableValues != null) {
-        def values = JavaConversions.collectionAsScalaIterable(newArrayList(allowableValues)).toList()
+        def values = newArrayList(allowableValues)
         sut.allowableValues() == new AllowableListValues(values, "string")
       } else {
         sut.allowableValues() == null
       }
       sut.getName() == fieldName
       sut.getType() == field.getType()
-
 
     where:
     fieldName       || description          | isRequired | typeName             | qualifiedTypeName                                               | allowableValues

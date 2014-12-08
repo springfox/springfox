@@ -5,11 +5,11 @@ import com.google.common.collect.Multimaps;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
-import com.wordnik.swagger.model.ApiListingReference;
-import org.apache.commons.lang.StringUtils;
+import com.mangofactory.swagger.models.dto.ApiListingReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -22,7 +22,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class ApiListingReferenceScanner {
   private static final String REQUEST_MAPPINGS_EMPTY =
@@ -48,7 +47,7 @@ public class ApiListingReferenceScanner {
     Assert.notEmpty(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
     Assert.notNull(resourceGroupingStrategy, "resourceGroupingStrategy is required");
     Assert.notNull(swaggerGroup, "swaggerGroup is required");
-    if (StringUtils.isBlank(swaggerGroup)) {
+    if (!StringUtils.hasText(swaggerGroup)) {
       throw new IllegalArgumentException("swaggerGroup must not be empty");
     }
     Assert.notNull(swaggerPathProvider, "swaggerPathProvider is required");
@@ -96,7 +95,7 @@ public class ApiListingReferenceScanner {
       String path = swaggerPathProvider.getResourceListingPath(swaggerGroup, resourceGroupName);
       log.info("Created resource listing Path: {} Description: {} Position: {}",
               path, resourceGroupName, position);
-      this.apiListingReferences.add(new ApiListingReference(path, toOption(listingDescription), position));
+      this.apiListingReferences.add(new ApiListingReference(path, listingDescription, position));
     }
   }
 

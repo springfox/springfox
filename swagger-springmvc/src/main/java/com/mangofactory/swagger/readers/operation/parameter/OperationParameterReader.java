@@ -8,8 +8,8 @@ import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.readers.operation.SwaggerParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.model.AllowableValues;
-import com.wordnik.swagger.model.Parameter;
+import com.mangofactory.swagger.models.dto.AllowableValues;
+import com.mangofactory.swagger.models.dto.Parameter;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
 
@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class OperationParameterReader extends SwaggerParameterReader {
 
@@ -66,14 +65,14 @@ public class OperationParameterReader extends SwaggerParameterReader {
         if (!shouldExpand(methodParameter)) {
           Parameter parameter = new Parameter(
                   (String) result.get("name"),
-                  toOption(result.get("description")),
-                  toOption(result.get("defaultValue")),
+                  (String) result.get("description"),
+                  (String) result.get("defaultValue"),
                   (Boolean) result.get("required"),
                   (Boolean) result.get("allowMultiple"),
                   (String) result.get("dataType"),
                   (AllowableValues) result.get("allowableValues"),
                   (String) result.get("paramType"),
-                  toOption(result.get("paramAccess"))
+                  (String) result.get("paramAccess")
           );
           parameters.add(parameter);
         } else {
@@ -100,13 +99,11 @@ public class OperationParameterReader extends SwaggerParameterReader {
   }
 
   private boolean shouldExpand(final ResolvedMethodParameter parameter) {
-
     for (Annotation annotation : parameter.getMethodParameter().getParameterAnnotations()) {
       if (ModelAttribute.class == annotation.annotationType()) {
         return true;
       }
     }
-
     return false;
   }
 }

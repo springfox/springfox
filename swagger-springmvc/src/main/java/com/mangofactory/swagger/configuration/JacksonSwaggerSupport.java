@@ -1,11 +1,8 @@
 package com.mangofactory.swagger.configuration;
 
-import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.mangofactory.swagger.models.property.provider.DefaultModelPropertiesProvider;
-import com.wordnik.swagger.model.ApiListing;
-import com.wordnik.swagger.model.ResourceListing;
+import com.mangofactory.swagger.models.dto.jackson.SwaggerJacksonProvider;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -28,12 +25,11 @@ public class JacksonSwaggerSupport implements ApplicationContextAware {
     return springsMessageConverterObjectMapper;
   }
 
-  private Module swaggerSerializationModule() {
-    SimpleModule module = new SimpleModule("SwaggerJacksonModule");
-    module.addSerializer(ApiListing.class, new SwaggerApiListingJsonSerializer());
-    module.addSerializer(ResourceListing.class, new SwaggerResourceListingJsonSerializer());
-    return module;
-  }
+//  private Module swaggerSerializationModule(ObjectMapper objectMapper) {
+//    InternalObjectMapperProvider internalObjectMapperProvider = new InternalObjectMapperProvider();
+//    return internalObjectMapperProvider.swaggerJacksonModule(objectMapper);
+//  }
+
 
   @Autowired
   public void setRequestMappingHandlerAdapter(RequestMappingHandlerAdapter[] requestMappingHandlerAdapters) {
@@ -55,7 +51,10 @@ public class JacksonSwaggerSupport implements ApplicationContextAware {
       if (messageConverter instanceof MappingJackson2HttpMessageConverter) {
         MappingJackson2HttpMessageConverter m = (MappingJackson2HttpMessageConverter) messageConverter;
         this.springsMessageConverterObjectMapper = m.getObjectMapper();
-        this.springsMessageConverterObjectMapper.registerModule(swaggerSerializationModule());
+
+        //Consider not using the users object mapper to serialize swagger JSON - rewrite DefaultSwaggerController
+        SwaggerJacksonProvider swaggerJacksonProvider = new SwaggerJacksonProvider();
+        this.springsMessageConverterObjectMapper.registerModule(swaggerJacksonProvider.swaggerJacksonModule());
       }
     }
 

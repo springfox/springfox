@@ -1,9 +1,9 @@
 package com.mangofactory.swagger.paths;
 
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static org.apache.commons.lang.StringUtils.*;
 
 public abstract class SwaggerPathProvider {
   /**
@@ -71,7 +71,7 @@ public abstract class SwaggerPathProvider {
    */
   public String getOperationPath(String operationPath) {
     UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath("/");
-    if (!isBlank(apiResourcePrefix)) {
+    if (StringUtils.hasText(apiResourcePrefix)) {
       uriComponentsBuilder.path(apiResourcePrefix);
     }
     return sanitiseUrl(uriComponentsBuilder.path(operationPath).build().toString());

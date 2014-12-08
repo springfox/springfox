@@ -5,9 +5,9 @@ import com.mangofactory.swagger.models.Enums;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.wordnik.swagger.model.AllowableListValues;
-import com.wordnik.swagger.model.AllowableRangeValues;
-import com.wordnik.swagger.model.AllowableValues;
+import com.mangofactory.swagger.models.dto.AllowableListValues;
+import com.mangofactory.swagger.models.dto.AllowableRangeValues;
+import com.mangofactory.swagger.models.dto.AllowableValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -17,8 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
-import static org.apache.commons.lang.StringUtils.*;
+import static org.springframework.util.StringUtils.*;
 
 public class ParameterAllowableReader implements Command<RequestMappingContext> {
   private static final Logger log = LoggerFactory.getLogger(ParameterAllowableReader.class);
@@ -51,10 +50,10 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
       allowableValues = new AllowableRangeValues(ranges.get(0), ranges.get(1));
     } else if (allowableValueString.contains(",")) {
       Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
-      allowableValues = new AllowableListValues(toScalaList(newArrayList(split)), "LIST");
-    } else if (!isBlank(allowableValueString)) {
+      allowableValues = new AllowableListValues(newArrayList(split), "LIST");
+    } else if (hasText(allowableValueString)) {
       List<String> singleVal = Arrays.asList(allowableValueString.trim());
-      allowableValues = new AllowableListValues(toScalaList(singleVal), "LIST");
+      allowableValues = new AllowableListValues(singleVal, "LIST");
     }
     return allowableValues;
   }

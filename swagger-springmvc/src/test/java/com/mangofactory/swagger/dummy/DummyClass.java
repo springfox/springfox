@@ -1,10 +1,9 @@
 package com.mangofactory.swagger.dummy;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
-
-import com.mangofactory.swagger.dummy.models.Treeish;
 import com.mangofactory.swagger.dummy.models.Example;
 import com.mangofactory.swagger.dummy.models.FoobarDto;
+import com.mangofactory.swagger.dummy.models.Treeish;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;

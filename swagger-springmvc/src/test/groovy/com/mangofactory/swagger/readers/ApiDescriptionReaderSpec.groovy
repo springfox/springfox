@@ -8,13 +8,12 @@ import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.wordnik.swagger.model.ApiDescription
+import com.mangofactory.swagger.models.dto.ApiDescription
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 
 import static com.google.common.collect.Lists.newArrayList
-import static com.mangofactory.swagger.ScalaUtils.fromOption
 
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
 class ApiDescriptionReaderSpec extends Specification {
@@ -46,11 +45,11 @@ class ApiDescriptionReaderSpec extends Specification {
         ApiDescription apiDescription = descriptionList[0]
         ApiDescription secondApiDescription = descriptionList[1]
 
-        apiDescription.path() == prefix + '/somePath/{businessId}'
-        fromOption(apiDescription.description()) == dummyHandlerMethod().method.name
+        apiDescription.getPath() == prefix + '/somePath/{businessId}'
+        apiDescription.getDescription() == dummyHandlerMethod().method.name
 
-        secondApiDescription.path() == prefix + '/somePath/{businessId}'
-        fromOption(secondApiDescription.description()) == dummyHandlerMethod().method.name
+        secondApiDescription.getPath() == prefix + '/somePath/{businessId}'
+        secondApiDescription.getDescription() == dummyHandlerMethod().method.name
 
       where:
         pathProvider                  | prefix

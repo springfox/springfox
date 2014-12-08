@@ -1,4 +1,5 @@
 package com.mangofactory.swagger.readers
+
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
@@ -13,10 +14,10 @@ import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.alternates.WildcardType
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.wordnik.swagger.model.ApiDescription
-import com.wordnik.swagger.model.Model
-import com.wordnik.swagger.model.ModelProperty
-import com.wordnik.swagger.model.Operation
+import com.mangofactory.swagger.models.dto.ApiDescription
+import com.mangofactory.swagger.models.dto.Model
+import com.mangofactory.swagger.models.dto.ModelProperty
+import com.mangofactory.swagger.models.dto.Operation
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.method.HandlerMethod
@@ -24,7 +25,6 @@ import spock.lang.Specification
 
 import javax.servlet.http.HttpServletResponse
 
-import static com.mangofactory.swagger.ScalaUtils.*
 import static com.mangofactory.swagger.models.alternates.Alternates.newRule
 
 @Mixin([RequestMappingSupport, ApiOperationSupport, JsonSupport, ModelProviderSupport])
@@ -48,22 +48,20 @@ class ApiModelReaderSpec extends Specification {
       Map<String, Model> models = result.get("models")
       Model model = models['BusinessModel']
       model.id == 'BusinessModel'
-      model.name() == 'BusinessModel'
-      model.qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$BusinessModel'
+      model.getName() == 'BusinessModel'
+      model.getQualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$BusinessModel'
 
-      Map<String, ModelProperty> modelProperties = fromScalaMap(model.properties())
+      Map<String, ModelProperty> modelProperties = model.getProperties()
       modelProperties.size() == 2
 
       ModelProperty nameProp = modelProperties['name']
-      nameProp.type() == 'string'
-      nameProp.qualifiedType() == 'java.lang.String'
-      nameProp.position() == 0
-      nameProp.required() == false
-      nameProp.description() == toOption(null)
+      nameProp.getType() == 'string'
+      nameProp.getQualifiedType() == 'java.lang.String'
+      nameProp.getPosition() == 0
+      nameProp.isRequired() == false
+      nameProp.getDescription() == null
 //      "${nameProp.allowableValues().getClass()}".contains('com.wordnik.swagger.model.AnyAllowableValues')
-      fromOption(nameProp.items()) == null
-
-
+      nameProp.getItems() == null
 
       //TODO test these remaining
 //      println model.description()
@@ -90,21 +88,17 @@ class ApiModelReaderSpec extends Specification {
       Map<String, Model> models = result.get("models")
       Model model = models['AnnotatedBusinessModel']
       model.id == 'AnnotatedBusinessModel'
-      model.name() == 'AnnotatedBusinessModel'
-      model.qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$AnnotatedBusinessModel'
+      model.getName() == 'AnnotatedBusinessModel'
+      model.getQualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$AnnotatedBusinessModel'
 
-      Map<String, ModelProperty> modelProps = fromScalaMap(model.properties())
+      Map<String, ModelProperty> modelProps = model.getProperties()
       ModelProperty prop = modelProps.name
-      prop.type == 'string'
-      fromOption(prop.description()) == 'The name of this business'
-      prop.required() == true
-      println swaggerCoreSerialize(model)
+      prop.getType() == 'string'
+      prop.getDescription() == 'The name of this business'
+      prop.isRequired() == true
 
-      fromOption(modelProps.numEmployees.description()) == 'Total number of current employees'
-      modelProps.numEmployees.required() == false
-
-
-
+      modelProps.numEmployees.getDescription() == 'Total number of current employees'
+      modelProps.numEmployees.isRequired() == false
   }
 
   def "Should pull models from Api Operation response class"() {
@@ -125,7 +119,7 @@ class ApiModelReaderSpec extends Specification {
       Map<String, Model> models = result.get("models")
     then:
       println models
-      models['FunkyBusiness'].qualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness'
+      models['FunkyBusiness'].getQualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness'
   }
 
   def "Should pull models from operation's ApiResponse annotations"() {
@@ -147,18 +141,18 @@ class ApiModelReaderSpec extends Specification {
     then:
       println models
       models.size() == 2
-      models['RestError'].qualifiedType() == 'com.mangofactory.swagger.dummy.RestError'
-      models['Void'].qualifiedType() == 'java.lang.Void'
+      models['RestError'].getQualifiedType() == 'com.mangofactory.swagger.dummy.RestError'
+      models['Void'].getQualifiedType() == 'java.lang.Void'
   }
 
   def contextWithApiDescription(HandlerMethod handlerMethod, List<Operation> operationList = null) {
     RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
-    def scalaOpList = null == operationList ? emptyScalaList() : toScalaList(operationList)
+    def scalaOpList = null == operationList ? [] : operationList
     ApiDescription description = new ApiDescription(
-          "anyPath",
-          toOption("anyDescription"),
-          scalaOpList,
-          false
+            "anyPath",
+            "anyDescription",
+            scalaOpList,
+            false
     )
     context.put("apiDescriptionList", [description])
 
@@ -174,9 +168,9 @@ class ApiModelReaderSpec extends Specification {
   def "should only generate models for request parameters that are annotated with Springs RequestBody"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestBodyAnnotation',
-            DummyModels.BusinessModel,
-            HttpServletResponse.class,
-            DummyModels.AnnotatedBusinessModel.class
+              DummyModels.BusinessModel,
+              HttpServletResponse.class,
+              DummyModels.AnnotatedBusinessModel.class
       )
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
 
@@ -230,7 +224,7 @@ class ApiModelReaderSpec extends Specification {
     given:
       HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
       RequestMappingContext context =
-            new RequestMappingContext(requestMappingInfo('/businesses/responseEntity/{businessId}'), handlerMethod)
+              new RequestMappingContext(requestMappingInfo('/businesses/responseEntity/{businessId}'), handlerMethod)
 
       def settings = new SwaggerGlobalSettings()
       def config = new SpringSwaggerConfig()
@@ -239,9 +233,9 @@ class ApiModelReaderSpec extends Specification {
       settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
       settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
       settings.alternateTypeProvider.addRule(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
-            typeResolver.resolve(WildcardType.class)));
+              typeResolver.resolve(WildcardType.class)));
       settings.alternateTypeProvider.addRule(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
-            typeResolver.resolve(WildcardType.class)));
+              typeResolver.resolve(WildcardType.class)));
       context.put("swaggerGlobalSettings", settings)
 
     when:
@@ -283,11 +277,11 @@ class ApiModelReaderSpec extends Specification {
       models.containsKey(modelName)
 
       Model model = models[modelName]
-      Map modelProperties = fromScalaMap(model.properties())
+      Map modelProperties = model.getProperties()
       modelProperties.containsKey('name')
 
       ModelProperty nameProperty = modelProperties['name']
-      nameProperty.description().isEmpty() == false
+      nameProperty.getDescription().isEmpty() == false
 
   }
 
@@ -319,7 +313,7 @@ class ApiModelReaderSpec extends Specification {
       models.containsKey(modelName)
 
       Model model = models[modelName]
-      Map modelProperties = fromScalaMap(model.properties())
+      Map modelProperties = model.getProperties()
       modelProperties.size() == 2
       modelProperties.containsKey('visibleForSerialize')
       modelProperties.containsKey('alwaysVisible')
@@ -355,7 +349,7 @@ class ApiModelReaderSpec extends Specification {
       models.containsKey(modelName)
 
       Model model = models[modelName]
-      Map modelProperties = fromScalaMap(model.properties())
+      Map modelProperties = model.getProperties()
       modelProperties.size() == 2
       modelProperties.containsKey('visible_for_serialize')
       modelProperties.containsKey('always_visible')
@@ -388,7 +382,7 @@ class ApiModelReaderSpec extends Specification {
       models.containsKey(modelName)
 
       Model model = models[modelName]
-      Map modelProperties = fromScalaMap(model.properties())
+      Map modelProperties = model.getProperties()
       modelProperties.containsKey('visibleForSerialize')
 
   }

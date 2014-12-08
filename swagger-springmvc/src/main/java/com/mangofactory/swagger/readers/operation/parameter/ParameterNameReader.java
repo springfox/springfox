@@ -15,7 +15,7 @@ import java.lang.annotation.Annotation;
 
 import static com.google.common.base.Strings.*;
 import static java.lang.String.*;
-import static org.apache.commons.lang.StringUtils.*;
+import static org.springframework.util.StringUtils.*;
 
 public class ParameterNameReader implements Command<RequestMappingContext> {
 
@@ -38,7 +38,7 @@ public class ParameterNameReader implements Command<RequestMappingContext> {
     Optional<ApiParam> apiParam = Optional.fromNullable(methodParameter.getParameterAnnotation(ApiParam.class));
     apiParam = apiParam.or(annotations.fromHierarchy(methodParameter, ApiParam.class));
     String name;
-    if (apiParam.isPresent() && !isBlank(apiParam.get().name())) {
+    if (apiParam.isPresent() && hasText(apiParam.get().name())) {
       name = apiParam.get().name();
     } else {
       name = findParameterNameFromAnnotations(methodParameter);

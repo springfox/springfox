@@ -1,14 +1,14 @@
 package com.mangofactory.swagger.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.mangofactory.swagger.configuration.JacksonSwaggerSupport
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.ApiListingSupport
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.JsonSupport
-import com.wordnik.swagger.model.AuthorizationType
+import com.mangofactory.swagger.models.dto.AuthorizationType
+import com.mangofactory.swagger.models.dto.jackson.SwaggerJacksonProvider
+import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.MvcResult
@@ -17,85 +17,89 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup
 
 @Mixin([JsonSupport, ApiListingSupport, AuthSupport])
 class DefaultSwaggerControllerSpec extends Specification {
 
-   @Shared
-   MockMvc mockMvc
-   @Shared
-   View mockView
-   @Shared
-   DefaultSwaggerController controller = new DefaultSwaggerController()
+  @Shared
+  MockMvc mockMvc
+  @Shared
+  View mockView
+  @Shared
+  DefaultSwaggerController controller = new DefaultSwaggerController()
 
-   def setup() {
-      def jackson2 = new MappingJackson2HttpMessageConverter()
+  def setup() {
+    def jackson2 = new MappingJackson2HttpMessageConverter()
 
-      JacksonSwaggerSupport jacksonScalaSupport = new JacksonSwaggerSupport()
-      ObjectMapper mapper = new ObjectMapper()
-      mapper.registerModule(new DefaultScalaModule())
-      mapper.registerModule(jacksonScalaSupport.swaggerSerializationModule())
+    jackson2.setSupportedMediaTypes([MediaType.ALL, MediaType.APPLICATION_JSON])
 
-      jackson2.setObjectMapper(mapper)
-      mockMvc = standaloneSetup(controller)
-              .setSingleView(mockView)
-              .setMessageConverters(jackson2)
-              .build();
-   }
+    def mapper = new ObjectMapper()
+    mapper.registerModule(new SwaggerJacksonProvider().swaggerJacksonModule())
 
-   @Unroll("path: #path")
-   def "should return the default or first swagger resource listing"() {
-      given:
-        SwaggerCache swaggerCache = new SwaggerCache();
-        SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
-        swaggerApiResourceListing.initialize()
-        controller.swaggerCache = swaggerCache
+    jackson2.setObjectMapper(mapper)
+    mockMvc = standaloneSetup(controller)
+            .setSingleView(mockView)
+            .setMessageConverters(jackson2)
+            .build();
+  }
+
+  @Unroll("path: #path")
+  def "should return the default or first swagger resource listing"() {
+    given:
+      SwaggerCache swaggerCache = new SwaggerCache();
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
+      swaggerApiResourceListing.initialize()
+      controller.swaggerCache = swaggerCache
 
 
-      when:
-        MvcResult result = mockMvc.perform(get(path)).andDo(print()).andReturn()
-        def responseJson = jsonBodyResponse(result)
-      then:
-        result.getResponse().getStatus() == expectedStatus
-      where:
-        path                      | expectedStatus
-        "/api-docs"               | 200
-        "/api-docs?group=default" | 200
-        "/api-docs?group=unknown" | 404
-   }
+    when:
+      MvcResult result = mockMvc.perform(
+              get(path)
+      )
+              .andDo(print()).andReturn()
 
-   def "should respond with api listing for a given resource group"() {
-      given:
-        SwaggerCache swaggerCache = new SwaggerCache();
-        swaggerCache.swaggerApiListingMap = [swaggerGroup: ['businesses': apiListing()]]
-        controller.swaggerCache = swaggerCache
-      when:
-        MvcResult result = mockMvc.perform(get("/api-docs/swaggerGroup/businesses")).andDo(print()).andReturn()
-        def responseJson = jsonBodyResponse(result)
+      def responseJson = jsonBodyResponse(result)
+    then:
+      result.getResponse().getStatus() == expectedStatus
+    where:
+      path                      | expectedStatus
+      "/api-docs"               | 200
+      "/api-docs?group=default" | 200
+      "/api-docs?group=unknown" | 404
+  }
 
-      then:
-        result.getResponse().getStatus() == 200
-   }
+  def "should respond with api listing for a given resource group"() {
+    given:
+      SwaggerCache swaggerCache = new SwaggerCache();
+      swaggerCache.swaggerApiListingMap = [swaggerGroup: ['businesses': apiListing()]]
+      controller.swaggerCache = swaggerCache
+    when:
+      MvcResult result = mockMvc.perform(get("/api-docs/swaggerGroup/businesses")).andDo(print()).andReturn()
+      def responseJson = jsonBodyResponse(result)
 
-   def "should respond with auth included"() {
-      given:
-        SwaggerCache swaggerCache = new SwaggerCache();
+    then:
+      result.getResponse().getStatus() == 200
+  }
 
-        def authTypes = new ArrayList<AuthorizationType>()
-        authTypes.add(authorizationTypes());
+  def "should respond with auth included"() {
+    given:
+      SwaggerCache swaggerCache = new SwaggerCache();
 
-        swaggerCache.swaggerApiResourceListingMap = [swaggerGroup: resourceListing(authTypes)]
-        controller.swaggerCache = swaggerCache
-      when:
-        MvcResult result = mockMvc.perform(get("/api-docs?group=swaggerGroup")).andDo(print()).andReturn()
-        def json = jsonBodyResponse(result)
-        println json
+      def authTypes = new ArrayList<AuthorizationType>()
+      authTypes.add(authorizationTypes());
 
-      then:
-        result.getResponse().getStatus() == 200
-        assertDefaultAuth(json)
-   }
+      swaggerCache.swaggerApiResourceListingMap = [swaggerGroup: resourceListing(authTypes)]
+      controller.swaggerCache = swaggerCache
+    when:
+      MvcResult result = mockMvc.perform(get("/api-docs?group=swaggerGroup")).andDo(print()).andReturn()
+      def json = jsonBodyResponse(result)
+      println json
+
+    then:
+      result.getResponse().getStatus() == 200
+      assertDefaultAuth(json)
+  }
 }

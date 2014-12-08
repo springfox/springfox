@@ -2,8 +2,8 @@ package com.mangofactory.swagger.controllers;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.SwaggerCache;
-import com.wordnik.swagger.model.ApiListing;
-import com.wordnik.swagger.model.ResourceListing;
+import com.mangofactory.swagger.models.dto.ApiListing;
+import com.mangofactory.swagger.models.dto.ResourceListing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

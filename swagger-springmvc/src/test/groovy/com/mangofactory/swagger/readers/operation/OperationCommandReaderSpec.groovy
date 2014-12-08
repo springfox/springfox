@@ -3,13 +3,14 @@ import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import spock.lang.Specification
+import spock.lang.Unroll
 
 @Mixin(RequestMappingSupport)
 class OperationCommandReaderSpec extends Specification {
 
    private static final int CURRENT_COUNT = 3
 
-//   @Unroll("property #property expected: #expected")
+   @Unroll("property #property expected: #expected")
    def "should set various properties based on method name or swagger annotation"() {
     given:
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)

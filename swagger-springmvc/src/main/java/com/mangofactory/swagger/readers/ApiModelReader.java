@@ -9,15 +9,14 @@ import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.swagger.models.Annotations;
 import com.mangofactory.swagger.models.ModelContext;
 import com.mangofactory.swagger.models.ModelProvider;
-import com.mangofactory.swagger.models.ScalaConverters;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
-import com.wordnik.swagger.model.Model;
-import com.wordnik.swagger.model.ModelProperty;
+import com.mangofactory.swagger.models.dto.Model;
+import com.mangofactory.swagger.models.dto.ModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,6 @@ import java.util.Set;
 
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 @Component
@@ -69,11 +67,11 @@ public class ApiModelReader implements Command<RequestMappingContext> {
               swaggerGlobalSettings.getIgnorableParameterTypes(),
               modelContext);
       Optional<Model> model = modelProvider.modelFor(modelContext);
-      if (model.isPresent() && !"void".equals(model.get().name())) {
+      if (model.isPresent() && !"void".equals(model.get().getName())) {
         log.debug("Swagger generated parameter model id: {}, name: {}, schema: {} models",
-                model.get().id(),
-                model.get().name());
-        modelMap.put(model.get().id(), model.get());
+                model.get().getId(),
+                model.get().getName());
+        modelMap.put(model.get().getId(), model.get());
       } else {
         log.debug("Swagger core did not find any models");
       }
@@ -106,9 +104,9 @@ public class ApiModelReader implements Command<RequestMappingContext> {
             Optional<Model> pModel = modelProvider.modelFor(modelContext);
             if (pModel.isPresent()) {
               log.debug("Swagger generated parameter model id: {}, name: {}, schema: {} models",
-                      pModel.get().id(),
-                      pModel.get().name());
-              modelMap.put(pModel.get().id(), pModel.get());
+                      pModel.get().getId(),
+                      pModel.get().getName());
+              modelMap.put(pModel.get().getId(), pModel.get());
             } else {
               log.debug("Swagger core did not find any parameter models for {}", response.response());
             }
@@ -134,8 +132,8 @@ public class ApiModelReader implements Command<RequestMappingContext> {
         Model targetModelValue = target.get(sourceModelKey);
         Model sourceModelValue = sModelEntry.getValue();
 
-        Map<String, ModelProperty> targetProperties = fromScalaMap(targetModelValue.properties());
-        Map<String, ModelProperty> sourceProperties = fromScalaMap(sourceModelValue.properties());
+        Map<String, ModelProperty> targetProperties = targetModelValue.getProperties();
+        Map<String, ModelProperty> sourceProperties = sourceModelValue.getProperties();
 
         Set<String> newSourcePropKeys = newHashSet(sourceProperties.keySet());
         newSourcePropKeys.removeAll(targetProperties.keySet());
@@ -145,15 +143,15 @@ public class ApiModelReader implements Command<RequestMappingContext> {
         }
 
         // uses scala generated copy constructor.
-        Model mergedModel = targetModelValue.copy(
-                targetModelValue.id(),
-                targetModelValue.name(),
-                targetModelValue.qualifiedType(),
-                ScalaConverters.toScalaLinkedHashMap(mergedTargetProperties),
-                targetModelValue.description(),
-                targetModelValue.baseModel(),
-                targetModelValue.discriminator(),
-                targetModelValue.subTypes());
+        Model mergedModel = new Model(
+                targetModelValue.getId(),
+                targetModelValue.getName(),
+                targetModelValue.getQualifiedType(),
+                mergedTargetProperties,
+                targetModelValue.getDescription(),
+                targetModelValue.getBaseModel(),
+                targetModelValue.getDiscriminator(),
+                targetModelValue.getSubTypes());
 
         target.put(sourceModelKey, mergedModel);
       }
@@ -195,9 +193,9 @@ public class ApiModelReader implements Command<RequestMappingContext> {
             Optional<Model> pModel = modelProvider.modelFor(modelContext);
             if (pModel.isPresent()) {
               log.debug("Swagger generated parameter model id: {}, name: {}, schema: {} models",
-                      pModel.get().id(),
-                      pModel.get().name());
-              modelMap.put(pModel.get().id(), pModel.get());
+                      pModel.get().getId(),
+                      pModel.get().getName());
+              modelMap.put(pModel.get().getId(), pModel.get());
             } else {
               log.debug("Swagger core did not find any parameter models for {}",
                       pType.getResolvedParameterType());

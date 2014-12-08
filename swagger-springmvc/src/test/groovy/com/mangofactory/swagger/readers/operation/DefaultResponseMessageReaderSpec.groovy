@@ -6,12 +6,11 @@ import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.wordnik.swagger.model.ResponseMessage
+import com.mangofactory.swagger.models.dto.ResponseMessage
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
 
-import static com.google.common.collect.Sets.newHashSet
-import static com.mangofactory.swagger.ScalaUtils.fromOption
+import static com.google.common.collect.Lists.newArrayList
 
 @Mixin(RequestMappingSupport)
 class DefaultResponseMessageReaderSpec extends Specification {
@@ -81,8 +80,8 @@ class DefaultResponseMessageReaderSpec extends Specification {
       Map<String, Object> result = context.getResult()
       ResponseMessage responseMessage =  result['responseMessages'].find{ it.code == 200 }
     then:
-      responseMessage.code() == 200
-      fromOption(responseMessage.responseModel()) == 'BusinessModel'
-      responseMessage.message() == "OK"
+      responseMessage.getCode() == 200
+      responseMessage.getResponseModel() == 'BusinessModel'
+      responseMessage.getMessage() == "OK"
    }
 }

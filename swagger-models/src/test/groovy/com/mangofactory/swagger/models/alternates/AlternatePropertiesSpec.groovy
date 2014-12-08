@@ -2,7 +2,7 @@ package com.mangofactory.swagger.models.alternates
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelProvider
-import com.wordnik.swagger.model.Model
+import com.mangofactory.swagger.models.dto.Model
 import spock.lang.Specification
 
 import static com.mangofactory.swagger.models.ModelContext.*
@@ -14,12 +14,12 @@ class AlternatePropertiesSpec extends Specification {
       ModelProvider modelProvider = providerThatSubstitutesLocalDateWithString()
       Model model = modelProvider.modelFor(inputParam(typeWithAlternateProperty())).get()
     expect:
-      model.name() == "TypeWithAlternateProperty"
-      model.properties().contains("localDate")
-      def modelProperty = model.properties().get("localDate")
-      modelProperty.get().type() == "string"
-      modelProperty.get().qualifiedType() == "java.lang.String"
-      modelProperty.get().items().isEmpty()
+      model.getName() == "TypeWithAlternateProperty"
+      model.getProperties().containsKey("localDate")
+      def modelProperty = model.getProperties().get("localDate")
+      modelProperty.getType() == "string"
+      modelProperty.getQualifiedType() == "java.lang.String"
+      modelProperty.getItems() == null
   }
 
   def "ResponseEntity«Void» renders correctly when an alternate type is provided" () {
@@ -27,11 +27,11 @@ class AlternatePropertiesSpec extends Specification {
       ModelProvider modelProvider = providerThatSubstitutesResponseEntityOfVoid()
       Model model = modelProvider.modelFor(inputParam(typeWithResponseEntityOfVoid())).get()
     expect:
-      model.name() == "GenericType«ResponseEntity«Void»»"
-      model.properties().contains("genericField")
-      def modelProperty = model.properties().get("genericField")
-      modelProperty.get().type() == "Void"
-      modelProperty.get().qualifiedType() == "java.lang.Void"
-      modelProperty.get().items().isEmpty()
+      model.getName() == "GenericType«ResponseEntity«Void»»"
+      model.getProperties().containsKey("genericField")
+      def modelProperty = model.getProperties().get("genericField")
+      modelProperty.getType() == "Void"
+      modelProperty.getQualifiedType() == "java.lang.Void"
+      modelProperty.getItems() == null
   }
 }

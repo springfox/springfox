@@ -20,15 +20,16 @@ import com.mangofactory.swagger.readers.operation.OperationSummaryReader;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.model.Authorization;
-import com.wordnik.swagger.model.Operation;
-import com.wordnik.swagger.model.Parameter;
-import com.wordnik.swagger.model.ResponseMessage;
+import com.mangofactory.swagger.models.dto.Authorization;
+import com.mangofactory.swagger.models.dto.Operation;
+import com.mangofactory.swagger.models.dto.Parameter;
+import com.mangofactory.swagger.models.dto.ResponseMessage;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -39,7 +40,6 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
-import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class ApiOperationReader implements Command<RequestMappingContext> {
 
@@ -124,13 +124,13 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
                 (String) operationResultMap.get("responseClass"),
                 (String) operationResultMap.get("nickname"),
                 (Integer) operationResultMap.get("position"),
-                toScalaList(producesMediaTypes),
-                toScalaList(consumesMediaTypes),
-                emptyScalaList(),
-                toScalaList(authorizations),
-                toScalaList(parameterList),
-                toScalaList(responseMessages),
-                toOption(operationResultMap.get("deprecated"))
+                producesMediaTypes,
+                consumesMediaTypes,
+                new ArrayList<String>(0),
+                authorizations,
+                parameterList,
+                responseMessages,
+                (String) operationResultMap.get("deprecated")
         );
 
         operations.add(operation);

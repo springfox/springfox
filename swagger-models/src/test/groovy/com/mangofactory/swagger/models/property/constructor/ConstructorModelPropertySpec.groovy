@@ -1,16 +1,15 @@
 package com.mangofactory.swagger.models.property.constructor
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
 import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
-import com.wordnik.swagger.model.AllowableListValues
-import scala.collection.JavaConversions
+import com.mangofactory.swagger.models.dto.AllowableListValues
 import spock.lang.Specification
 
 import static com.google.common.collect.Lists.newArrayList
-import static com.mangofactory.swagger.models.ScalaConverters.fromOption
 import static com.mangofactory.swagger.models.property.BeanPropertyDefinitions.name
 
 @Mixin([TypesForTestingSupport, ModelPropertyLookupSupport])
@@ -27,13 +26,12 @@ class ConstructorModelPropertySpec extends Specification {
               new AlternateTypeProvider())
 
     expect:
-      fromOption(sut.propertyDescription()) == description
+      sut.propertyDescription() == description
       sut.required == isRequired
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       if (allowableValues != null) {
-        def values = JavaConversions.collectionAsScalaIterable(newArrayList(allowableValues)).toList()
-        sut.allowableValues() == new AllowableListValues(values, "string")
+        sut.allowableValues() == new AllowableListValues(newArrayList(allowableValues), "string")
       } else {
         sut.allowableValues() == null
       }

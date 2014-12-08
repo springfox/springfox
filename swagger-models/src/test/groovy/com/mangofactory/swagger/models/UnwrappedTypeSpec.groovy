@@ -3,7 +3,7 @@ package com.mangofactory.swagger.models
 import com.mangofactory.swagger.mixins.ConfiguredObjectMapperSupport
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.wordnik.swagger.model.Model
+import com.mangofactory.swagger.models.dto.Model
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -17,22 +17,22 @@ class UnwrappedTypeSpec extends Specification {
       Model asReturn = provider.modelFor(ModelContext.returnValue(unwrappedType())).get()
 
     expect:
-      asInput.name() == "UnwrappedType"
-      asInput.properties().size() == 1
-      asInput.properties().contains(property)
-      def modelProperty = asInput.properties().get(property)
-      modelProperty.get().type() == type
-      modelProperty.get().qualifiedType() == qualifiedType
-      modelProperty.get().items().isEmpty()
+      asInput.getName() == "UnwrappedType"
+      asInput.getProperties().size() == 1
+      asInput.getProperties().containsKey(property)
+      def modelProperty = asInput.getProperties().get(property)
+      modelProperty.getType() == type
+      modelProperty.getQualifiedType() == qualifiedType
+      modelProperty.getItems() == null
       Types.isBaseType(type)
 
-      asReturn.name() == "UnwrappedType"
-      asReturn.properties().size() == 1
-      asReturn.properties().contains(property)
-      def retModelProperty = asReturn.properties().get(property)
-      retModelProperty.get().type() == type
-      retModelProperty.get().qualifiedType() == qualifiedType
-      retModelProperty.get().items().isEmpty()
+      asReturn.getName() == "UnwrappedType"
+      asReturn.getProperties().size() == 1
+      asReturn.getProperties().containsKey(property)
+      def retModelProperty = asReturn.getProperties().get(property)
+      retModelProperty.getType() == type
+      retModelProperty.getQualifiedType() == qualifiedType
+      retModelProperty.getItems() == null
       Types.isBaseType(type)
 
     where:

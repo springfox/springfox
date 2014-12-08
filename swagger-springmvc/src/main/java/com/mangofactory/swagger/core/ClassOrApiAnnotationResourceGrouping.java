@@ -16,7 +16,7 @@ import java.util.Set;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.swagger.core.StringUtils.*;
-import static org.apache.commons.lang.StringUtils.*;
+import static org.springframework.util.StringUtils.*;
 
 @Component
 public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStrategy {
@@ -36,7 +36,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
   public Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
     Class<?> controllerClass = handlerMethod.getBeanType();
     Api apiAnnotation = AnnotationUtils.findAnnotation(controllerClass, Api.class);
-    if (null != apiAnnotation && !isBlank(apiAnnotation.value())) {
+    if (null != apiAnnotation && hasText(apiAnnotation.value())) {
       return apiAnnotation.position();
     }
     return 0;

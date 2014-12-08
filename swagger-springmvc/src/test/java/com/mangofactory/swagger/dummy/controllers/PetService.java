@@ -6,7 +6,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +37,7 @@ public class PetService {
   public Pet getPetById(
           @ApiParam(value = "ID of pet that needs to be fetched", allowableValues = "range[1,5]",
                   required = true) @PathVariable("petId") String petId) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   @RequestMapping(method = RequestMethod.POST)
@@ -46,7 +45,7 @@ public class PetService {
   @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
   public void addPet(
           @ApiParam(value = "Pet object that needs to be added to the store", required = true) Pet pet) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   @RequestMapping(method = RequestMethod.PUT)
@@ -56,7 +55,7 @@ public class PetService {
           @ApiResponse(code = 405, message = "Validation exception")})
   public void updatePet(
           @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   @RequestMapping(value = "/findByStatus", method = RequestMethod.GET)
@@ -68,7 +67,7 @@ public class PetService {
           @ApiParam(value = "Status values that need to be considered for filter", required = true,
                   defaultValue = "available", allowableValues = "available,pending,sold", allowMultiple = true)
           @RequestParam("status") String status) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   @RequestMapping(value = "/findByTags", method = RequestMethod.GET)
@@ -80,13 +79,13 @@ public class PetService {
   public Pet findPetsByTags(
           @ApiParam(value = "Tags to filter by", required = true, allowMultiple = true)
           @RequestParam("tags") String tags) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
 
   @RequestMapping(value = "/siblings", method = RequestMethod.POST)
   public List<Pet> siblings(Pet pet) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   @RequestMapping(method = RequestMethod.GET)
@@ -100,34 +99,34 @@ public class PetService {
 
   @RequestMapping(value = "/{name}", method = RequestMethod.POST)
   public HttpEntity<Pet> petByName(@PathVariable String name) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   @RequestMapping(value = "/echo", method = RequestMethod.POST)
   @ResponseBody
   public Map<String, Pet> echo(@RequestBody Map<String, Pet> someInput) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   @RequestMapping(value = "/transformPetNameToPetMapToAny", method = RequestMethod.POST)
   public Map<String, Object> transformPetNameToPetMapToAny(Map<String, Pet> someInput) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   @RequestMapping(value = "/transformPetNameToPetMapToGenericOpenMap", method = RequestMethod.POST)
   public Map<Object, Object> transformPetNameToPetMapToGenericOpenMap(Map<String, Pet> someInput) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
 
   @RequestMapping(value = "/transformPetNameToPetMapToOpenMap", method = RequestMethod.POST)
   public Map transformPetNameToPetMapToOpenMap(Map<String, Pet> someInput) {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   @RequestMapping(value = "/nameToNickNamesMap", method = RequestMethod.POST)
   public Map<String, List<String>> nameToNickNamesMap() {
-    throw new NotImplementedException();
+    throw new RuntimeException("NotImplementedException");
   }
 
   @RequestMapping(value = "byName/{name}", method = RequestMethod.POST)

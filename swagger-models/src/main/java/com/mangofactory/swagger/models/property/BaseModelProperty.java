@@ -6,9 +6,8 @@ import com.mangofactory.swagger.models.ModelContext;
 import com.mangofactory.swagger.models.ResolvedTypes;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.wordnik.swagger.model.AllowableListValues;
-import com.wordnik.swagger.model.AllowableValues;
-import scala.Option;
+import com.mangofactory.swagger.models.dto.AllowableListValues;
+import com.mangofactory.swagger.models.dto.AllowableValues;
 
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 import static com.mangofactory.swagger.models.property.ApiModelProperties.*;
@@ -66,7 +65,7 @@ public abstract class BaseModelProperty implements ModelProperty {
   }
 
   private boolean allowableValuesIsEmpty(Optional<AllowableListValues> listValues) {
-    return !listValues.isPresent() || listValues.get().values().size() == 0;
+    return !listValues.isPresent() || listValues.get().getValues().size() == 0;
   }
 
   @Override
@@ -76,9 +75,9 @@ public abstract class BaseModelProperty implements ModelProperty {
 
 
   @Override
-  public Option<String> propertyDescription() {
+  public String propertyDescription() {
     String description = getApiModelProperty().transform(toDescription()).orNull();
-    return Option.apply(description);
+    return description;
   }
 
   protected Optional<ApiModelProperty> getApiModelProperty() {

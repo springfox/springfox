@@ -2,9 +2,9 @@ package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
@@ -19,7 +19,7 @@ public class OperationHttpMethodReader implements RequestMappingReader {
     String requestMethod = currentHttpMethod.toString();
     ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
 
-    if (apiOperationAnnotation != null && !StringUtils.isBlank(apiOperationAnnotation.httpMethod())) {
+    if (apiOperationAnnotation != null && StringUtils.hasText(apiOperationAnnotation.httpMethod())) {
       String apiMethod = apiOperationAnnotation.httpMethod();
       try {
         RequestMethod.valueOf(apiMethod);

@@ -1,11 +1,9 @@
 package com.mangofactory.swagger.ordering
 
 import com.google.common.collect.Ordering
-import com.wordnik.swagger.model.ApiDescription
+import com.mangofactory.swagger.models.dto.ApiDescription
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.ScalaUtils.emptyScalaList
-import static com.mangofactory.swagger.ScalaUtils.toOption
 
 class ApiDescriptionLexicographicalOrderingSpec extends Specification {
   def "positional order"() {
@@ -16,12 +14,12 @@ class ApiDescriptionLexicographicalOrderingSpec extends Specification {
       println("")
       Collections.sort(list, ordering)
     then:
-      list[0].path() == expectedFirst
-      list[1].path() == expectedSecond
+      list[0].getPath() == expectedFirst
+      list[1].getPath() == expectedSecond
 
     where:
-      list << [[new ApiDescription("/b", toOption(""), emptyScalaList(), false),
-                new ApiDescription("/a", toOption(""), emptyScalaList(), false)]
+      list << [[new ApiDescription("/b", "", [], false),
+                new ApiDescription("/a", "", [], false)]
       ]
       expectedFirst << ["/a"]
       expectedSecond << ["/b"]

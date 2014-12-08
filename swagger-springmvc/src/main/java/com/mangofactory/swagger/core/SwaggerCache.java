@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.core;
 
-import com.wordnik.swagger.model.ApiListing;
-import com.wordnik.swagger.model.ResourceListing;
+import com.mangofactory.swagger.models.dto.ApiListing;
+import com.mangofactory.swagger.models.dto.ResourceListing;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

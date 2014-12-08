@@ -3,10 +3,9 @@ package com.mangofactory.swagger.models;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.wordnik.swagger.model.AllowableListValues;
-import com.wordnik.swagger.model.AllowableValues;
+import com.mangofactory.swagger.models.dto.AllowableListValues;
+import com.mangofactory.swagger.models.dto.AllowableValues;
 import org.springframework.core.annotation.AnnotationUtils;
-import scala.collection.JavaConversions;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -24,7 +23,7 @@ public class Enums {
   public static AllowableValues allowableValues(Class<?> type) {
     if (type.isEnum()) {
       List<String> enumValues = getEnumValues(type);
-      return new AllowableListValues(JavaConversions.collectionAsScalaIterable(enumValues).toList(), "LIST");
+      return new AllowableListValues(enumValues, "LIST");
     }
     return null;
   }

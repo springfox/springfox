@@ -2,8 +2,7 @@ package com.mangofactory.swagger.models.property;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.mangofactory.swagger.models.ModelContext;
-import com.wordnik.swagger.model.AllowableValues;
-import scala.Option;
+import com.mangofactory.swagger.models.dto.AllowableValues;
 
 public interface ModelProperty {
   String getName();
@@ -16,7 +15,7 @@ public interface ModelProperty {
 
   AllowableValues allowableValues();
 
-  Option<String> propertyDescription();
+  String propertyDescription();
 
   boolean isRequired();
 

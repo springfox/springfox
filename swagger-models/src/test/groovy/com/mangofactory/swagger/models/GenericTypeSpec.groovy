@@ -2,7 +2,7 @@ package com.mangofactory.swagger.models
 
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.wordnik.swagger.model.Model
+import com.mangofactory.swagger.models.dto.Model
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -20,19 +20,19 @@ class GenericTypeSpec extends Specification {
       Model asReturn = provider.modelFor(returnValue(modelType)).get()
 
     expect:
-      asInput.name() == expectedModelName(modelNamePart)
-      asInput.properties().contains("genericField")
-      def modelProperty = asInput.properties().get("genericField")
-      modelProperty.get().type() == propertyType
-      modelProperty.get().qualifiedType() == qualifiedType
-      modelProperty.get().items().isEmpty() == (!"List".equals(propertyType) && !"Array".equals(propertyType))
+      asInput.getName() == expectedModelName(modelNamePart)
+      asInput.getProperties().containsKey("genericField")
+      def modelProperty = asInput.getProperties().get("genericField")
+      modelProperty.getType() == propertyType
+      modelProperty.getQualifiedType() == qualifiedType
+      (modelProperty.getItems() == null) == (!"List".equals(propertyType) && !"Array".equals(propertyType))
 
-      asReturn.name() == expectedModelName(modelNamePart)
-      asReturn.properties().contains("genericField")
-      def retModelProperty = asReturn.properties().get("genericField")
-      retModelProperty.get().type() == propertyType
-      retModelProperty.get().qualifiedType() == qualifiedType
-      retModelProperty.get().items().isEmpty() == (!"List".equals(propertyType) && !"Array".equals(propertyType))
+      asReturn.getName() == expectedModelName(modelNamePart)
+      asReturn.getProperties().containsKey("genericField")
+      def retModelProperty = asReturn.getProperties().get("genericField")
+      retModelProperty.getType() == propertyType
+      retModelProperty.getQualifiedType() == qualifiedType
+      (retModelProperty.getItems() == null) == (!"List".equals(propertyType) && !"Array".equals(propertyType))
 
     where:
       modelType                       | propertyType                                  | modelNamePart                                 | qualifiedType
@@ -54,15 +54,15 @@ class GenericTypeSpec extends Specification {
       Model asReturn = provider.modelFor(returnValue(modelType)).get()
 
     expect:
-      asInput.properties().contains("strings")
-      def modelProperty = asInput.properties().get("strings")
-      modelProperty.get().type() == propertyType
-//    modelProperty.get().qualifiedType() == qualifiedType DK TODO: Fix this
+      asInput.getProperties().containsKey("strings")
+      def modelProperty = asInput.getProperties().get("strings")
+      modelProperty.getType() == propertyType
+//    modelProperty.qualifiedType() == qualifiedType DK TODO: Fix this
 
-      asReturn.properties().contains("strings")
-      def retModelProperty = asReturn.properties().get("strings")
-      retModelProperty.get().type() == propertyType
-//    retModelProperty.get().qualifiedType() ==qualifiedType DK TODO: Fix this
+      asReturn.getProperties().containsKey("strings")
+      def retModelProperty = asReturn.getProperties().get("strings")
+      retModelProperty.getType() == propertyType
+//    retModelProperty.qualifiedType() ==qualifiedType DK TODO: Fix this
 
     where:
       modelType                      | propertyType | qualifiedType

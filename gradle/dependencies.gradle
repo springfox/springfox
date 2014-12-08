@@ -11,6 +11,7 @@ ext {
   servlet = "2.5"
   guava = "15.0"
   classmate = "1.1.0"
+  jackson = '2.4.4'
   libs = [
 
           test          : [
@@ -26,7 +27,7 @@ ext {
           ],
 
           swaggerCore   : [
-                  "com.wordnik:swagger-core_2.10:${swaggerCore}"
+                  "com.wordnik:swagger-annotations:${swaggerCore}"
           ],
 
           spring        : [
@@ -35,15 +36,19 @@ ext {
           ],
 
           clientProvided: [
-                  "org.scala-lang:scala-library:${scalaLib}",
-                  "javax.servlet:servlet-api:${servlet}"
+                  "javax.servlet:servlet-api:${servlet}",
+                  "com.fasterxml.jackson.core:jackson-core:${jackson}",
+                  "com.fasterxml.jackson.core:jackson-databind:${jackson}"
+
           ],
 
           core          : [
                   "org.codehaus.groovy:groovy-all:${groovy}",
                   "com.google.guava:guava:${guava}",
                   "com.fasterxml:classmate:${classmate}",
-                  "org.slf4j:slf4j-api:${slf4j}"
+                  "org.slf4j:slf4j-api:${slf4j}",
+                  'joda-time:joda-time:2.5'
+
           ]
 
   ]

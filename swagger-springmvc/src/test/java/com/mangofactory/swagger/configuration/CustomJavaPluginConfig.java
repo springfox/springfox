@@ -3,7 +3,7 @@ package com.mangofactory.swagger.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
-import com.wordnik.swagger.model.ApiInfo;
+import com.mangofactory.swagger.models.dto.ApiInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

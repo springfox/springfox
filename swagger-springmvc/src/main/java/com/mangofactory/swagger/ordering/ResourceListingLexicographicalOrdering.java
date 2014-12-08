@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.ordering;
 
 import com.google.common.collect.Ordering;
-import com.wordnik.swagger.model.ApiListingReference;
+import com.mangofactory.swagger.models.dto.ApiListingReference;
 
 /**
  * Orders ApiListingReference's Lexicographically  by their paths
@@ -9,6 +9,6 @@ import com.wordnik.swagger.model.ApiListingReference;
 public class ResourceListingLexicographicalOrdering extends Ordering<ApiListingReference> {
   @Override
   public int compare(ApiListingReference first, ApiListingReference second) {
-    return first.path().compareTo(second.path());
+    return first.getPath().compareTo(second.getPath());
   }
 }

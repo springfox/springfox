@@ -1,14 +1,12 @@
 package com.mangofactory.swagger.mixins
 
-import com.wordnik.swagger.model.Operation
+import com.mangofactory.swagger.models.dto.Operation
 
-import static com.mangofactory.swagger.ScalaUtils.emptyScalaList
-import static com.mangofactory.swagger.ScalaUtils.toOption
 
 class ApiOperationSupport {
 
   def operation(int position = 0, String method = "someMethod") {
-    scala.collection.immutable.List emptyList = emptyScalaList();
+    def emptyList = []
     new Operation(
           method,
           "summary",
@@ -22,7 +20,7 @@ class ApiOperationSupport {
           emptyList,
           emptyList,
           emptyList,
-          toOption("false")
+          "false"
     )
   }
 }

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.mangofactory.swagger.mixins.AuthSupport
 import spock.lang.Specification
 
@@ -14,7 +13,7 @@ class AuthSerializationSpec extends Specification {
    final ObjectMapper mapper = new ObjectMapper();
 
    def setup() {
-      mapper.registerModule(new DefaultScalaModule())
+//      mapper.registerModule(new DefaultScalaModule())
    }
 
    def "Basic write"() {

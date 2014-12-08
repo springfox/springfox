@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ValueConstants;
 
 import java.lang.annotation.Annotation;
 
-import static org.apache.commons.lang.StringUtils.*;
+import static org.springframework.util.StringUtils.*;
 
 public class ParameterDefaultReader implements Command<RequestMappingContext> {
   @Override
@@ -25,7 +25,7 @@ public class ParameterDefaultReader implements Command<RequestMappingContext> {
     Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
     if (null != methodAnnotations) {
       for (Annotation annotation : methodAnnotations) {
-        if (annotation instanceof ApiParam && !isBlank(((ApiParam) annotation).defaultValue())) {
+        if (annotation instanceof ApiParam && hasText(((ApiParam) annotation).defaultValue())) {
           return ((ApiParam) annotation).defaultValue();
         } else if (annotation instanceof RequestParam) {
           return ((RequestParam) annotation).defaultValue();

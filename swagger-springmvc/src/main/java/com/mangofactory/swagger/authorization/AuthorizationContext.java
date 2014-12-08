@@ -2,14 +2,13 @@ package com.mangofactory.swagger.authorization;
 
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher;
 import com.mangofactory.swagger.scanners.RequestMappingPatternMatcher;
-import com.wordnik.swagger.model.Authorization;
+import com.mangofactory.swagger.models.dto.Authorization;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.mangofactory.swagger.ScalaUtils.*;
 
 /**
  * A class to represent a default set of authorizations to apply to each api operation
@@ -41,11 +40,8 @@ public class AuthorizationContext {
     return authorizations;
   }
 
-  public scala.collection.immutable.List<Authorization> getScalaAuthorizations() {
-    if (!CollectionUtils.isEmpty(authorizations)) {
-      return toScalaList(authorizations);
-    }
-    return emptyScalaList();
+  public List<Authorization> getScalaAuthorizations() {
+    return CollectionUtils.isEmpty(authorizations) ? new ArrayList<Authorization>() : this.authorizations;
   }
 
   public static class AuthorizationContextBuilder {

@@ -9,10 +9,11 @@ import org.springframework.core.MethodParameter
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
+import spock.lang.Unroll
 
 @Mixin(RequestMappingSupport)
 class ParameterReaderSpec extends Specification {
-//   @Unroll("property #resultProperty expected: #expected")
+   @Unroll("property #resultProperty expected: #expected")
    def "should set basic properties based on ApiParam annotation or a sensible default"() {
     given:
       HandlerMethod handlerMethod = Stub(HandlerMethod)
