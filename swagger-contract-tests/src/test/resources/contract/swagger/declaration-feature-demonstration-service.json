@@ -432,7 +432,7 @@
                     "method": "GET",
                     "summary": "getEffective",
                     "notes": "getEffective",
-                    "type": "ResponseEntity\u00abExample\u00bb",
+                    "type": "Example",
                     "nickname": "getEffective",
                     "produces": [
                         "*/*"
@@ -447,7 +447,7 @@
                         {
                             "code": 200,
                             "message": null,
-                            "responseModel": "ResponseEntity\u00abExample\u00bb"
+                            "responseModel": "Example"
                         }
                     ],
                     "deprecated": "false"
@@ -462,7 +462,10 @@
                     "method": "GET",
                     "summary": "getEffectives",
                     "notes": "getEffectives",
-                    "type": "ResponseEntity\u00abList\u00abExample\u00bb\u00bb",
+                    "type": "array",
+                    "items": {
+                        "$ref": "Example"
+                    },
                     "nickname": "getEffectives",
                     "produces": [
                         "*/*"
@@ -477,7 +480,7 @@
                         {
                             "code": 200,
                             "message": null,
-                            "responseModel": "ResponseEntity\u00abList\u00abExample\u00bb\u00bb"
+                            "responseModel": "List"
                         }
                     ],
                     "deprecated": "false"
@@ -604,88 +607,6 @@
         }
     ],
     "models": {
-        "ResponseEntity\u00abExample\u00bb": {
-            "id": "ResponseEntity\u00abExample\u00bb",
-            "description": "",
-            "extends": "",
-            "properties": {
-                "statusCode": {
-                    "type": "string",
-                    "enum": [
-                        "100",
-                        "101",
-                        "102",
-                        "103",
-                        "200",
-                        "201",
-                        "202",
-                        "203",
-                        "204",
-                        "205",
-                        "206",
-                        "207",
-                        "208",
-                        "226",
-                        "300",
-                        "301",
-                        "302",
-                        "302",
-                        "303",
-                        "304",
-                        "305",
-                        "307",
-                        "308",
-                        "400",
-                        "401",
-                        "402",
-                        "403",
-                        "404",
-                        "405",
-                        "406",
-                        "407",
-                        "408",
-                        "409",
-                        "410",
-                        "411",
-                        "412",
-                        "413",
-                        "414",
-                        "415",
-                        "416",
-                        "417",
-                        "418",
-                        "419",
-                        "420",
-                        "421",
-                        "422",
-                        "423",
-                        "424",
-                        "426",
-                        "428",
-                        "429",
-                        "431",
-                        "500",
-                        "501",
-                        "502",
-                        "503",
-                        "504",
-                        "505",
-                        "506",
-                        "507",
-                        "508",
-                        "509",
-                        "510",
-                        "511"
-                    ]
-                },
-                "body": {
-                    "$ref": "Example"
-                },
-                "headers": {
-                    "$ref": "HttpHeaders"
-                }
-            }
-        },
         "Pet": {
             "id": "Pet",
             "description": "",
@@ -717,12 +638,6 @@
                 "supported": {
                     "type": "boolean"
                 },
-                "rangeDurationField": {
-                    "$ref": "DurationField"
-                },
-                "leapDurationField": {
-                    "$ref": "DurationField"
-                },
                 "durationField": {
                     "$ref": "DurationField"
                 },
@@ -736,6 +651,12 @@
                 },
                 "lenient": {
                     "type": "boolean"
+                },
+                "rangeDurationField": {
+                    "$ref": "DurationField"
+                },
+                "leapDurationField": {
+                    "$ref": "DurationField"
                 }
             }
         },
@@ -765,91 +686,6 @@
                 }
             }
         },
-        "ResponseEntity\u00abList\u00abExample\u00bb\u00bb": {
-            "id": "ResponseEntity\u00abList\u00abExample\u00bb\u00bb",
-            "description": "",
-            "extends": "",
-            "properties": {
-                "statusCode": {
-                    "type": "string",
-                    "enum": [
-                        "100",
-                        "101",
-                        "102",
-                        "103",
-                        "200",
-                        "201",
-                        "202",
-                        "203",
-                        "204",
-                        "205",
-                        "206",
-                        "207",
-                        "208",
-                        "226",
-                        "300",
-                        "301",
-                        "302",
-                        "302",
-                        "303",
-                        "304",
-                        "305",
-                        "307",
-                        "308",
-                        "400",
-                        "401",
-                        "402",
-                        "403",
-                        "404",
-                        "405",
-                        "406",
-                        "407",
-                        "408",
-                        "409",
-                        "410",
-                        "411",
-                        "412",
-                        "413",
-                        "414",
-                        "415",
-                        "416",
-                        "417",
-                        "418",
-                        "419",
-                        "420",
-                        "421",
-                        "422",
-                        "423",
-                        "424",
-                        "426",
-                        "428",
-                        "429",
-                        "431",
-                        "500",
-                        "501",
-                        "502",
-                        "503",
-                        "504",
-                        "505",
-                        "506",
-                        "507",
-                        "508",
-                        "509",
-                        "510",
-                        "511"
-                    ]
-                },
-                "body": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "Example"
-                    }
-                },
-                "headers": {
-                    "$ref": "HttpHeaders"
-                }
-            }
-        },
         "LocalDateTime": {
             "id": "LocalDateTime",
             "description": "",
@@ -858,21 +694,6 @@
                 "year": {
                     "type": "integer",
                     "format": "int32"
-                },
-                "dayOfMonth": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "dayOfWeek": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "era": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "chronology": {
-                    "$ref": "Chronology"
                 },
                 "centuryOfEra": {
                     "type": "integer",
@@ -898,11 +719,22 @@
                     "type": "integer",
                     "format": "int32"
                 },
-                "millisOfSecond": {
+                "chronology": {
+                    "$ref": "Chronology"
+                },
+                "dayOfMonth": {
                     "type": "integer",
                     "format": "int32"
                 },
-                "millisOfDay": {
+                "dayOfWeek": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "era": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "dayOfYear": {
                     "type": "integer",
                     "format": "int32"
                 },
@@ -914,11 +746,15 @@
                     "type": "integer",
                     "format": "int32"
                 },
-                "hourOfDay": {
+                "millisOfSecond": {
                     "type": "integer",
                     "format": "int32"
                 },
-                "dayOfYear": {
+                "millisOfDay": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "hourOfDay": {
                     "type": "integer",
                     "format": "int32"
                 },

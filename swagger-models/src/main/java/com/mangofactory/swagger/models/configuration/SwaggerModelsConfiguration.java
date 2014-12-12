@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
@@ -32,6 +34,12 @@ public class SwaggerModelsConfiguration {
     alternateTypeProvider.addRule(newRule(typeResolver.resolve(Map.class, String.class, String.class),
             typeResolver.resolve(Object.class)));
     alternateTypeProvider.addRule(newMapRule(WildcardType.class, WildcardType.class));
+    alternateTypeProvider.addRule(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
+            typeResolver.resolve(WildcardType.class)));
+
+    alternateTypeProvider.addRule(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
+            typeResolver.resolve(WildcardType.class)));
+
     return alternateTypeProvider;
   }
 }

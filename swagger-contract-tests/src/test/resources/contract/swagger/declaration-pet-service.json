@@ -146,7 +146,10 @@
                     "method": "POST",
                     "summary": "petEntities",
                     "notes": "petEntities",
-                    "type": "HttpEntity\u00abList\u00abPet\u00bb\u00bb",
+                    "type": "array",
+                    "items": {
+                        "$ref": "Pet"
+                    },
                     "nickname": "petEntities",
                     "produces": [
                         "*/*"
@@ -169,7 +172,7 @@
                         {
                             "code": 200,
                             "message": null,
-                            "responseModel": "HttpEntity\u00abList\u00abPet\u00bb\u00bb"
+                            "responseModel": "List"
                         }
                     ],
                     "deprecated": "false"
@@ -498,7 +501,7 @@
                     "method": "GET",
                     "summary": "method",
                     "notes": "method",
-                    "type": "ResponseEntity\u00abVoid\u00bb",
+                    "type": "void",
                     "nickname": "method",
                     "produces": [
                         "*/*"
@@ -529,8 +532,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
-                            "responseModel": "ResponseEntity\u00abVoid\u00bb"
+                            "message": null
                         }
                     ],
                     "deprecated": "false"
@@ -545,7 +547,7 @@
                     "method": "POST",
                     "summary": "petByName",
                     "notes": "petByName",
-                    "type": "HttpEntity\u00abPet\u00bb",
+                    "type": "Pet",
                     "nickname": "petByName",
                     "produces": [
                         "*/*"
@@ -568,7 +570,7 @@
                         {
                             "code": 200,
                             "message": null,
-                            "responseModel": "HttpEntity\u00abPet\u00bb"
+                            "responseModel": "Pet"
                         }
                     ],
                     "deprecated": "false"
@@ -623,7 +625,7 @@
                     "method": "POST",
                     "summary": "updatePic",
                     "notes": "updatePic",
-                    "type": "ResponseEntity\u00abVoid\u00bb",
+                    "type": "void",
                     "nickname": "updatePic",
                     "produces": [
                         "*/*"
@@ -654,8 +656,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
-                            "responseModel": "ResponseEntity\u00abVoid\u00bb"
+                            "message": null
                         }
                     ],
                     "deprecated": "false"
@@ -670,7 +671,7 @@
                     "method": "GET",
                     "summary": "updatePic",
                     "notes": "updatePic",
-                    "type": "ResponseEntity\u00abVoid\u00bb",
+                    "type": "void",
                     "nickname": "updatePic",
                     "produces": [
                         "*/*"
@@ -701,8 +702,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
-                            "responseModel": "ResponseEntity\u00abVoid\u00bb"
+                            "message": null
                         }
                     ],
                     "deprecated": "false"
@@ -711,36 +711,38 @@
         }
     ],
     "models": {
+        "Void": {
+            "id": "Void",
+            "description": "",
+            "extends": "",
+            "properties": {
+
+            }
+        },
         "Pet": {
             "id": "Pet",
             "description": "",
             "extends": "",
             "properties": {
+                "name": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
                 "age": {
                     "type": "integer",
                     "format": "int32"
-                },
-                "name": {
-                    "type": "string"
                 }
             }
         },
-        "HttpEntity\u00abList\u00abPet\u00bb\u00bb": {
-            "id": "HttpEntity\u00abList\u00abPet\u00bb\u00bb",
+        "Entry\u00abstring,Pet\u00bb": {
+            "id": "Entry\u00abstring,Pet\u00bb",
             "description": "",
             "extends": "",
             "properties": {
-                "body": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "Pet"
-                    }
-                },
-                "headers": {
-                    "$ref": "HttpHeaders"
+                "key": {
+                    "$ref": "Pet"
                 }
             }
         },
@@ -755,119 +757,6 @@
                         "type": "string"
                     }
                 }
-            }
-        },
-        "Entry\u00abstring,Pet\u00bb": {
-            "id": "Entry\u00abstring,Pet\u00bb",
-            "description": "",
-            "extends": "",
-            "properties": {
-                "key": {
-                    "$ref": "Pet"
-                }
-            }
-        },
-        "ResponseEntity\u00abVoid\u00bb": {
-            "id": "ResponseEntity\u00abVoid\u00bb",
-            "description": "",
-            "extends": "",
-            "properties": {
-                "statusCode": {
-                    "type": "string",
-                    "enum": [
-                        "100",
-                        "101",
-                        "102",
-                        "103",
-                        "200",
-                        "201",
-                        "202",
-                        "203",
-                        "204",
-                        "205",
-                        "206",
-                        "207",
-                        "208",
-                        "226",
-                        "300",
-                        "301",
-                        "302",
-                        "302",
-                        "303",
-                        "304",
-                        "305",
-                        "307",
-                        "308",
-                        "400",
-                        "401",
-                        "402",
-                        "403",
-                        "404",
-                        "405",
-                        "406",
-                        "407",
-                        "408",
-                        "409",
-                        "410",
-                        "411",
-                        "412",
-                        "413",
-                        "414",
-                        "415",
-                        "416",
-                        "417",
-                        "418",
-                        "419",
-                        "420",
-                        "421",
-                        "422",
-                        "423",
-                        "424",
-                        "426",
-                        "428",
-                        "429",
-                        "431",
-                        "500",
-                        "501",
-                        "502",
-                        "503",
-                        "504",
-                        "505",
-                        "506",
-                        "507",
-                        "508",
-                        "509",
-                        "510",
-                        "511"
-                    ]
-                },
-                "body": {
-                    "$ref": "Void"
-                },
-                "headers": {
-                    "$ref": "HttpHeaders"
-                }
-            }
-        },
-        "HttpEntity\u00abPet\u00bb": {
-            "id": "HttpEntity\u00abPet\u00bb",
-            "description": "",
-            "extends": "",
-            "properties": {
-                "body": {
-                    "$ref": "Pet"
-                },
-                "headers": {
-                    "$ref": "HttpHeaders"
-                }
-            }
-        },
-        "Void": {
-            "id": "Void",
-            "description": "",
-            "extends": "",
-            "properties": {
-
             }
         }
     }
