@@ -1,3 +1,7 @@
+configurations {
+  testArtifacts.extendsFrom testRuntime
+}
+
 dependencies {
   compile (libs.swaggerCore) {
     exclude group: 'org.scala-lang', module: 'scala-compiler'
@@ -31,4 +35,13 @@ publishing {
       pom.withXml swaggerMvcPomConfig
     }
   }
+}
+
+task testJar(type: Jar) {
+  classifier "test"
+  from sourceSets.test.output
+  exclude '**/*log4j.xml*', '**/*simplelogger.properties*'
+}
+artifacts {
+  testArtifacts testJar
 }

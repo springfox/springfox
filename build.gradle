@@ -19,7 +19,7 @@ ext {
   projectVersion = '0.9.4-SNAPSHOT'
 }
 
-subprojects {
+configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'swagger-models' }) { subproject ->
   apply plugin: 'groovy'
   apply plugin: 'java'
   apply plugin: "com.ofg.uptodate"

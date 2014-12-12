@@ -1,0 +1,1056 @@
+{
+    "apiVersion": "1.0",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/features",
+    "produces": [
+        "*/*"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "apis": [
+        {
+            "path": "/features/allMethodsAllowed",
+            "description": "allMethodAllowed",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "allMethodAllowed",
+                    "notes": "allMethodAllowed",
+                    "type": "void",
+                    "nickname": "allMethodAllowed",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                },
+                {
+                    "method": "HEAD",
+                    "summary": "allMethodAllowed",
+                    "notes": "allMethodAllowed",
+                    "type": "void",
+                    "nickname": "allMethodAllowed",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                },
+                {
+                    "method": "POST",
+                    "summary": "allMethodAllowed",
+                    "notes": "allMethodAllowed",
+                    "type": "void",
+                    "nickname": "allMethodAllowed",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                },
+                {
+                    "method": "PUT",
+                    "summary": "allMethodAllowed",
+                    "notes": "allMethodAllowed",
+                    "type": "void",
+                    "nickname": "allMethodAllowed",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                },
+                {
+                    "method": "PATCH",
+                    "summary": "allMethodAllowed",
+                    "notes": "allMethodAllowed",
+                    "type": "void",
+                    "nickname": "allMethodAllowed",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "allMethodAllowed",
+                    "notes": "allMethodAllowed",
+                    "type": "void",
+                    "nickname": "allMethodAllowed",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                },
+                {
+                    "method": "OPTIONS",
+                    "summary": "allMethodAllowed",
+                    "notes": "allMethodAllowed",
+                    "type": "void",
+                    "nickname": "allMethodAllowed",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                },
+                {
+                    "method": "TRACE",
+                    "summary": "allMethodAllowed",
+                    "notes": "allMethodAllowed",
+                    "type": "void",
+                    "nickname": "allMethodAllowed",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/features/bare",
+            "description": "getBare",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "getBare",
+                    "notes": "getBare",
+                    "type": "void",
+                    "nickname": "getBare",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "example",
+                            "description": "example",
+                            "defaultValue": "",
+                            "required": false,
+                            "type": "Example",
+                            "paramType": "body",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/features/bigDecimal",
+            "description": "updateBigDecimal",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "updateBigDecimal",
+                    "notes": "updateBigDecimal",
+                    "type": "void",
+                    "nickname": "updateBigDecimal",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "input",
+                            "description": "input",
+                            "defaultValue": "",
+                            "required": false,
+                            "type": "number",
+                            "format": "double",
+                            "paramType": "body",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/features/date",
+            "description": "updateDate",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "updateDate",
+                    "notes": "updateDate",
+                    "type": "void",
+                    "nickname": "updateDate",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "localDate",
+                            "description": "localDate",
+                            "defaultValue": "",
+                            "required": false,
+                            "type": "LocalDate",
+                            "paramType": "body",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/features/effective",
+            "description": "getEffective",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "getEffective",
+                    "notes": "getEffective",
+                    "type": "ResponseEntity\u00abExample\u00bb",
+                    "nickname": "getEffective",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "ResponseEntity\u00abExample\u00bb"
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/features/effectives",
+            "description": "getEffectives",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "getEffectives",
+                    "notes": "getEffectives",
+                    "type": "ResponseEntity\u00abList\u00abExample\u00bb\u00bb",
+                    "nickname": "getEffectives",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "ResponseEntity\u00abList\u00abExample\u00bb\u00bb"
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/features/status",
+            "description": "updateBaz",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "updateBaz",
+                    "notes": "updateBaz",
+                    "type": "void",
+                    "nickname": "updateBaz",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "enumType",
+                            "description": "enumType",
+                            "defaultValue": "",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "body",
+                            "allowMultiple": false,
+                            "enum": [
+                                "ONE",
+                                "TWO"
+                            ]
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/features/statuses",
+            "description": "updateBazes",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "updateBazes",
+                    "notes": "updateBazes",
+                    "type": "void",
+                    "nickname": "updateBazes",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "enumType",
+                            "description": "enumType",
+                            "defaultValue": "",
+                            "required": false,
+                            "type": "Collection\u00abstring\u00bb",
+                            "paramType": "body",
+                            "allowMultiple": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/features/{petId}",
+            "description": "getPetById",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Find pet by ID",
+                    "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+                    "type": "Pet",
+                    "nickname": "getPetById",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "petId",
+                            "description": "ID of pet that needs to be fetched",
+                            "defaultValue": "",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false,
+                            "minimum": "1",
+                            "maximum": "5"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "Pet"
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        }
+    ],
+    "models": {
+        "ResponseEntity\u00abExample\u00bb": {
+            "id": "ResponseEntity\u00abExample\u00bb",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "statusCode": {
+                    "type": "string",
+                    "enum": [
+                        "100",
+                        "101",
+                        "102",
+                        "103",
+                        "200",
+                        "201",
+                        "202",
+                        "203",
+                        "204",
+                        "205",
+                        "206",
+                        "207",
+                        "208",
+                        "226",
+                        "300",
+                        "301",
+                        "302",
+                        "302",
+                        "303",
+                        "304",
+                        "305",
+                        "307",
+                        "308",
+                        "400",
+                        "401",
+                        "402",
+                        "403",
+                        "404",
+                        "405",
+                        "406",
+                        "407",
+                        "408",
+                        "409",
+                        "410",
+                        "411",
+                        "412",
+                        "413",
+                        "414",
+                        "415",
+                        "416",
+                        "417",
+                        "418",
+                        "419",
+                        "420",
+                        "421",
+                        "422",
+                        "423",
+                        "424",
+                        "426",
+                        "428",
+                        "429",
+                        "431",
+                        "500",
+                        "501",
+                        "502",
+                        "503",
+                        "504",
+                        "505",
+                        "506",
+                        "507",
+                        "508",
+                        "509",
+                        "510",
+                        "511"
+                    ]
+                },
+                "body": {
+                    "$ref": "Example"
+                },
+                "headers": {
+                    "$ref": "HttpHeaders"
+                }
+            }
+        },
+        "Pet": {
+            "id": "Pet",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "DateTimeField": {
+            "id": "DateTimeField",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "DateTimeFieldType"
+                },
+                "supported": {
+                    "type": "boolean"
+                },
+                "rangeDurationField": {
+                    "$ref": "DurationField"
+                },
+                "leapDurationField": {
+                    "$ref": "DurationField"
+                },
+                "durationField": {
+                    "$ref": "DurationField"
+                },
+                "minimumValue": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "maximumValue": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "lenient": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "NestedType": {
+            "id": "NestedType",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "DateTimeFieldType": {
+            "id": "DateTimeFieldType",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "durationType": {
+                    "$ref": "DurationFieldType"
+                },
+                "rangeDurationType": {
+                    "$ref": "DurationFieldType"
+                }
+            }
+        },
+        "ResponseEntity\u00abList\u00abExample\u00bb\u00bb": {
+            "id": "ResponseEntity\u00abList\u00abExample\u00bb\u00bb",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "statusCode": {
+                    "type": "string",
+                    "enum": [
+                        "100",
+                        "101",
+                        "102",
+                        "103",
+                        "200",
+                        "201",
+                        "202",
+                        "203",
+                        "204",
+                        "205",
+                        "206",
+                        "207",
+                        "208",
+                        "226",
+                        "300",
+                        "301",
+                        "302",
+                        "302",
+                        "303",
+                        "304",
+                        "305",
+                        "307",
+                        "308",
+                        "400",
+                        "401",
+                        "402",
+                        "403",
+                        "404",
+                        "405",
+                        "406",
+                        "407",
+                        "408",
+                        "409",
+                        "410",
+                        "411",
+                        "412",
+                        "413",
+                        "414",
+                        "415",
+                        "416",
+                        "417",
+                        "418",
+                        "419",
+                        "420",
+                        "421",
+                        "422",
+                        "423",
+                        "424",
+                        "426",
+                        "428",
+                        "429",
+                        "431",
+                        "500",
+                        "501",
+                        "502",
+                        "503",
+                        "504",
+                        "505",
+                        "506",
+                        "507",
+                        "508",
+                        "509",
+                        "510",
+                        "511"
+                    ]
+                },
+                "body": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Example"
+                    }
+                },
+                "headers": {
+                    "$ref": "HttpHeaders"
+                }
+            }
+        },
+        "LocalDateTime": {
+            "id": "LocalDateTime",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "year": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "dayOfMonth": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "dayOfWeek": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "era": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "chronology": {
+                    "$ref": "Chronology"
+                },
+                "centuryOfEra": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "yearOfEra": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "yearOfCentury": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "weekyear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "monthOfYear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "weekOfWeekyear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "millisOfSecond": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "millisOfDay": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "secondOfMinute": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "minuteOfHour": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "hourOfDay": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "dayOfYear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "DateTimeField"
+                    }
+                },
+                "fieldTypes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "DateTimeFieldType"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            }
+        },
+        "DateTimeZone": {
+            "id": "DateTimeZone",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "fixed": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "Example": {
+            "id": "Example",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "foo": {
+                    "type": "string"
+                },
+                "bar": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "description of bar"
+                },
+                "enumType": {
+                    "type": "string",
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ]
+                },
+                "annotatedEnumType": {
+                    "type": "string",
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ]
+                },
+                "nestedType": {
+                    "$ref": "NestedType"
+                },
+                "propertyWithNoSetterMethod": {
+                    "type": "string"
+                },
+                "allCapsSet": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "localDateTime": {
+                    "$ref": "LocalDateTime"
+                },
+                "parentBeanProperty": {
+                    "type": "string"
+                }
+            }
+        },
+        "Chronology": {
+            "id": "Chronology",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "zone": {
+                    "$ref": "DateTimeZone"
+                }
+            }
+        },
+        "DurationFieldType": {
+            "id": "DurationFieldType",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "DurationField": {
+            "id": "DurationField",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "DurationFieldType"
+                },
+                "supported": {
+                    "type": "boolean"
+                },
+                "precise": {
+                    "type": "boolean"
+                },
+                "unitMillis": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "Void": {
+            "id": "Void",
+            "description": "",
+            "extends": "",
+            "properties": {
+
+            }
+        }
+    }
+}

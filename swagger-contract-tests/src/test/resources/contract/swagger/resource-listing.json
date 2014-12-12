@@ -1,0 +1,66 @@
+{
+    "apiVersion": "1.0",
+    "swaggerVersion": "1.2",
+    "apis": [
+        {
+            "path": "/default/basic-error-controller",
+            "description": "Basic Error Controller"
+        },
+        {
+            "path": "/default/business-service",
+            "description": "Services to demonstrate path variable resolution"
+        },
+        {
+            "path": "/default/concrete-controller",
+            "description": "Concrete Controller"
+        },
+        {
+            "path": "/default/controller-with-no-request-mapping-service",
+            "description": "Controller With No Request Mapping Service"
+        },
+        {
+            "path": "/default/endpoint-mvc-adapter",
+            "description": "Endpoint Mvc Adapter"
+        },
+        {
+            "path": "/default/environment-mvc-endpoint",
+            "description": "Environment Mvc Endpoint"
+        },
+        {
+            "path": "/default/fancy-pet-service",
+            "description": "Operations about fancy pets"
+        },
+        {
+            "path": "/default/feature-demonstration-service",
+            "description": "Demonstration of features"
+        },
+        {
+            "path": "/default/health-mvc-endpoint",
+            "description": "Health Mvc Endpoint"
+        },
+        {
+            "path": "/default/inherited-service-impl",
+            "description": "Inherited Service Impl"
+        },
+        {
+            "path": "/default/metrics-mvc-endpoint",
+            "description": "Metrics Mvc Endpoint"
+        },
+        {
+            "path": "/default/pet-grooming-service",
+            "description": "Grooming operations for pets"
+        },
+        {
+            "path": "/default/pet-service",
+            "description": "Operations about pets"
+        }
+    ],
+    "info": {
+        "title": "default Title",
+        "description": "Api Description",
+        "termsOfServiceUrl": "Api terms of service",
+        "contact": "Contact Email",
+        "license": "Licence Type",
+        "licenseUrl": "License URL"
+    }
+}

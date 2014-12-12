@@ -1,0 +1,108 @@
+{
+    "apiVersion": "1.0",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/foo",
+    "produces": [
+        "*/*"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "apis": [
+        {
+            "path": "/foo/create-t",
+            "description": "create",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "create",
+                    "notes": "create",
+                    "type": "void",
+                    "nickname": "create",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "toCreate",
+                            "description": "toCreate",
+                            "defaultValue": "",
+                            "required": false,
+                            "type": "Pet",
+                            "paramType": "body",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/foo/get-t",
+            "description": "get",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "get",
+                    "notes": "get",
+                    "type": "Pet",
+                    "nickname": "get",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "Pet"
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Pet": {
+            "id": "Pet",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "Void": {
+            "id": "Void",
+            "description": "",
+            "extends": "",
+            "properties": {
+
+            }
+        }
+    }
+}

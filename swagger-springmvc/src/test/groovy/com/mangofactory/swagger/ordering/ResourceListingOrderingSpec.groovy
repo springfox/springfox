@@ -9,7 +9,6 @@ import static com.mangofactory.swagger.ScalaUtils.toOption
 
 class ResourceListingOrderingSpec extends Specification {
 
-
   def "lexicographic order"() {
     given:
       Ordering<ApiListingReference> ordering = new ResourceListingLexicographicalOrdering();

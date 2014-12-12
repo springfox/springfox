@@ -1,0 +1,46 @@
+apply plugin: 'groovy'
+apply plugin: 'idea'
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.9.RELEASE")
+  }
+}
+repositories {
+  jcenter()
+}
+
+configurations {
+  //Logback causing spring boot errors
+  all*.exclude group: 'ch.qos.logback'
+}
+
+apply plugin: 'spring-boot'
+
+dependencies {
+  compile("org.springframework.boot:spring-boot-starter-web") {
+    exclude module: "spring-boot-starter-tomcat"
+  }
+  compile("org.springframework.boot:spring-boot-starter-jetty") {
+  }
+  compile("org.springframework.boot:spring-boot-starter-actuator")
+
+  compile 'javax.servlet:javax.servlet-api:3.0.1'
+
+  testCompile libs.test
+
+  testCompile 'org.skyscreamer:jsonassert:1.2.3'
+  testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
+
+  compile(project(':swagger-springmvc')) {
+    exclude group: 'org.springframework', module: 'spring-web'
+    exclude group: 'org.springframework', module: 'pring-webmvc'
+  }
+  compile(project(path: ':swagger-springmvc', configuration: 'testArtifacts')) {
+    exclude group: 'org.springframework', module: 'spring-web'
+    exclude group: 'org.springframework', module: 'pring-webmvc'
+  }
+}

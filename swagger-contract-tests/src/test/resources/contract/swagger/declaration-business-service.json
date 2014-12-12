@@ -1,0 +1,250 @@
+{
+    "apiVersion": "1.0",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/businesses",
+    "produces": [
+        "*/*"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "apis": [
+        {
+            "path": "/businesses/aliased/{otherId}",
+            "description": "getAliasedPathVariable",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Find a business by its id",
+                    "notes": "getAliasedPathVariable",
+                    "type": "string",
+                    "nickname": "getAliasedPathVariable",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "otherId",
+                            "description": "ID of business",
+                            "defaultValue": "",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "string"
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/businesses/non-aliased/{businessId}",
+            "description": "getNonAliasedPathVariable",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Find a business by its id",
+                    "notes": "getNonAliasedPathVariable",
+                    "type": "string",
+                    "nickname": "getNonAliasedPathVariable",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "businessId",
+                            "description": "ID of business",
+                            "defaultValue": "",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "string"
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/businesses/responseEntity/{businessId}",
+            "description": "getResponseEntity",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "getResponseEntity",
+                    "notes": "getResponseEntity",
+                    "type": "ResponseEntity\u00abstring\u00bb",
+                    "nickname": "getResponseEntity",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "businessId",
+                            "description": "businessId",
+                            "defaultValue": "",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "ResponseEntity\u00abstring\u00bb"
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        },
+        {
+            "path": "/businesses/vanilla/{businessId}",
+            "description": "getVanillaPathVariable",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "getVanillaPathVariable",
+                    "notes": "getVanillaPathVariable",
+                    "type": "string",
+                    "nickname": "getVanillaPathVariable",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "businessId",
+                            "description": "businessId",
+                            "defaultValue": "",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "string"
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        }
+    ],
+    "models": {
+        "ResponseEntity\u00abstring\u00bb": {
+            "id": "ResponseEntity\u00abstring\u00bb",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "statusCode": {
+                    "type": "string",
+                    "enum": [
+                        "100",
+                        "101",
+                        "102",
+                        "103",
+                        "200",
+                        "201",
+                        "202",
+                        "203",
+                        "204",
+                        "205",
+                        "206",
+                        "207",
+                        "208",
+                        "226",
+                        "300",
+                        "301",
+                        "302",
+                        "302",
+                        "303",
+                        "304",
+                        "305",
+                        "307",
+                        "308",
+                        "400",
+                        "401",
+                        "402",
+                        "403",
+                        "404",
+                        "405",
+                        "406",
+                        "407",
+                        "408",
+                        "409",
+                        "410",
+                        "411",
+                        "412",
+                        "413",
+                        "414",
+                        "415",
+                        "416",
+                        "417",
+                        "418",
+                        "419",
+                        "420",
+                        "421",
+                        "422",
+                        "423",
+                        "424",
+                        "426",
+                        "428",
+                        "429",
+                        "431",
+                        "500",
+                        "501",
+                        "502",
+                        "503",
+                        "504",
+                        "505",
+                        "506",
+                        "507",
+                        "508",
+                        "509",
+                        "510",
+                        "511"
+                    ]
+                },
+                "body": {
+                    "type": "string"
+                },
+                "headers": {
+                    "$ref": "HttpHeaders"
+                }
+            }
+        }
+    }
+}

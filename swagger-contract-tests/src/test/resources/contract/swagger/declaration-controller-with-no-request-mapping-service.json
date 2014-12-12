@@ -1,0 +1,384 @@
+{
+    "apiVersion": "1.0",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/no-request-mapping",
+    "produces": [
+        "*/*"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "apis": [
+        {
+            "path": "/no-request-mapping",
+            "description": "exampleWithNoRequestMapping",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "exampleWithNoRequestMapping",
+                    "notes": "exampleWithNoRequestMapping",
+                    "type": "ResponseEntity\u00abExample\u00bb",
+                    "nickname": "exampleWithNoRequestMapping",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "ResponseEntity\u00abExample\u00bb"
+                        }
+                    ],
+                    "deprecated": "false"
+                }
+            ]
+        }
+    ],
+    "models": {
+        "ResponseEntity\u00abExample\u00bb": {
+            "id": "ResponseEntity\u00abExample\u00bb",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "statusCode": {
+                    "type": "string",
+                    "enum": [
+                        "100",
+                        "101",
+                        "102",
+                        "103",
+                        "200",
+                        "201",
+                        "202",
+                        "203",
+                        "204",
+                        "205",
+                        "206",
+                        "207",
+                        "208",
+                        "226",
+                        "300",
+                        "301",
+                        "302",
+                        "302",
+                        "303",
+                        "304",
+                        "305",
+                        "307",
+                        "308",
+                        "400",
+                        "401",
+                        "402",
+                        "403",
+                        "404",
+                        "405",
+                        "406",
+                        "407",
+                        "408",
+                        "409",
+                        "410",
+                        "411",
+                        "412",
+                        "413",
+                        "414",
+                        "415",
+                        "416",
+                        "417",
+                        "418",
+                        "419",
+                        "420",
+                        "421",
+                        "422",
+                        "423",
+                        "424",
+                        "426",
+                        "428",
+                        "429",
+                        "431",
+                        "500",
+                        "501",
+                        "502",
+                        "503",
+                        "504",
+                        "505",
+                        "506",
+                        "507",
+                        "508",
+                        "509",
+                        "510",
+                        "511"
+                    ]
+                },
+                "body": {
+                    "$ref": "Example"
+                },
+                "headers": {
+                    "$ref": "HttpHeaders"
+                }
+            }
+        },
+        "DateTimeField": {
+            "id": "DateTimeField",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "DateTimeFieldType"
+                },
+                "supported": {
+                    "type": "boolean"
+                },
+                "rangeDurationField": {
+                    "$ref": "DurationField"
+                },
+                "leapDurationField": {
+                    "$ref": "DurationField"
+                },
+                "durationField": {
+                    "$ref": "DurationField"
+                },
+                "minimumValue": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "maximumValue": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "lenient": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "NestedType": {
+            "id": "NestedType",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "DateTimeFieldType": {
+            "id": "DateTimeFieldType",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "rangeDurationType": {
+                    "$ref": "DurationFieldType"
+                },
+                "durationType": {
+                    "$ref": "DurationFieldType"
+                }
+            }
+        },
+        "LocalDateTime": {
+            "id": "LocalDateTime",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "year": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "chronology": {
+                    "$ref": "Chronology"
+                },
+                "millisOfSecond": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "millisOfDay": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "secondOfMinute": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "minuteOfHour": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "hourOfDay": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "dayOfMonth": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "dayOfWeek": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "era": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "dayOfYear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "centuryOfEra": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "yearOfEra": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "yearOfCentury": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "weekyear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "monthOfYear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "weekOfWeekyear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "DateTimeField"
+                    }
+                },
+                "fieldTypes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "DateTimeFieldType"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            }
+        },
+        "DateTimeZone": {
+            "id": "DateTimeZone",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "fixed": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "Example": {
+            "id": "Example",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "foo": {
+                    "type": "string"
+                },
+                "bar": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "description of bar"
+                },
+                "enumType": {
+                    "type": "string",
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ]
+                },
+                "annotatedEnumType": {
+                    "type": "string",
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ]
+                },
+                "nestedType": {
+                    "$ref": "NestedType"
+                },
+                "propertyWithNoSetterMethod": {
+                    "type": "string"
+                },
+                "allCapsSet": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "localDateTime": {
+                    "$ref": "LocalDateTime"
+                },
+                "parentBeanProperty": {
+                    "type": "string"
+                }
+            }
+        },
+        "Chronology": {
+            "id": "Chronology",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "zone": {
+                    "$ref": "DateTimeZone"
+                }
+            }
+        },
+        "DurationFieldType": {
+            "id": "DurationFieldType",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "DurationField": {
+            "id": "DurationField",
+            "description": "",
+            "extends": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "DurationFieldType"
+                },
+                "supported": {
+                    "type": "boolean"
+                },
+                "precise": {
+                    "type": "boolean"
+                },
+                "unitMillis": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        }
+    }
+}

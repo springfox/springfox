@@ -8,6 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/swagger-contract-tests" />
             <option value="$PROJECT_DIR$/swagger-models" />
             <option value="$PROJECT_DIR$/swagger-springmvc" />
           </set>
@@ -16,4 +17,3 @@
     </option>
   </component>
 </project>
-

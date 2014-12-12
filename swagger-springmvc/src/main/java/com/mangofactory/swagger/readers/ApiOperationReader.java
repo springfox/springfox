@@ -32,7 +32,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +42,7 @@ import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class ApiOperationReader implements Command<RequestMappingContext> {
 
-  private static final Set<RequestMethod> allRequestMethods = new HashSet<RequestMethod>(Arrays.asList(RequestMethod
+  private static final Set<RequestMethod> allRequestMethods = new LinkedHashSet<RequestMethod>(Arrays.asList(RequestMethod
           .values()));
 
   public static final OperationPositionalOrdering OPERATION_POSITIONAL_ORDERING = new OperationPositionalOrdering();
