@@ -9,7 +9,9 @@ import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.core.SwaggerApiResourceListing;
+import com.mangofactory.swagger.models.GenericTypeNamingStrategy;
 import com.mangofactory.swagger.models.ModelProvider;
+import com.mangofactory.swagger.models.ResolvedTypes;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeRule;
 import com.mangofactory.swagger.models.alternates.WildcardType;
@@ -307,6 +309,18 @@ public class SwaggerSpringMvcPlugin {
       this.alternateTypeRules.add(newRule(typeResolver.resolve(clz, WildcardType.class),
               typeResolver.resolve(WildcardType.class)));
     }
+    return this;
+  }
+
+  /**
+   * Controls how generics are encoded as swagger types, specifically around the characters used to open, close,
+   * and delimit lists of types.
+   *
+   * @param strategy a GenericTypeNamingStrategy implementation, defaults to DefaultGenericTypeNamingStrategy
+   * @return this SwaggerSpringMvcPlugin
+   */
+  public SwaggerSpringMvcPlugin genericTypeNamingStrategy(GenericTypeNamingStrategy strategy) {
+    ResolvedTypes.setGenericTypeNamingStrategy(strategy);
     return this;
   }
 

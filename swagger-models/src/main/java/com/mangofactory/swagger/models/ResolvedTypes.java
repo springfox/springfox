@@ -16,9 +16,16 @@ import static com.mangofactory.swagger.models.Collections.*;
 import static com.mangofactory.swagger.models.Types.*;
 
 public class ResolvedTypes {
+  private static GenericTypeNamingStrategy genericTypeNamingStrategy = new DefaultGenericTypeNamingStrategy();
 
   private ResolvedTypes() {
     throw new UnsupportedOperationException();
+  }
+
+  public static void setGenericTypeNamingStrategy(GenericTypeNamingStrategy strategy) {
+    if (strategy != null) {
+      genericTypeNamingStrategy = strategy;
+    }
   }
 
   public static String typeName(ResolvedType type) {
@@ -67,7 +74,7 @@ public class ResolvedTypes {
     String simpleName = Optional
             .fromNullable(typeNameFor(erasedType))
             .or(erasedType.getSimpleName());
-    StringBuilder sb = new StringBuilder(String.format("%s«", simpleName));
+    StringBuilder sb = new StringBuilder(String.format("%s%s", simpleName, genericTypeNamingStrategy.getOpenGeneric()));
     boolean first = true;
     for (int index = 0; index < erasedType.getTypeParameters().length; index++) {
       ResolvedType typeParam = resolvedType.getTypeParameters().get(index);
@@ -75,10 +82,11 @@ public class ResolvedTypes {
         sb.append(innerTypeName(typeParam));
         first = false;
       } else {
-        sb.append(String.format(",%s", innerTypeName(typeParam)));
+        sb.append(String.format("%s%s", genericTypeNamingStrategy.getTypeListDelimiter(),
+                innerTypeName(typeParam)));
       }
     }
-    sb.append("»");
+    sb.append(genericTypeNamingStrategy.getCloseGeneric());
     return sb.toString();
   }
 
@@ -102,7 +110,8 @@ public class ResolvedTypes {
     } else if (erasedType.isEnum()) {
       return "string";
     } else if (type instanceof ResolvedArrayType) {
-      return String.format("Array«%s»", innerTypeName(type.getArrayElementType()));
+      return String.format("Array%s%s%s", genericTypeNamingStrategy.getOpenGeneric(),
+              innerTypeName(type.getArrayElementType()), genericTypeNamingStrategy.getCloseGeneric());
     } else if (type instanceof ResolvedObjectType) {
       String typeName = typeNameFor(erasedType);
       if (typeName != null) {
