@@ -393,11 +393,12 @@ swaggerSpringMvcPlugin.apiDescriptionOrdering(new MyCustomApiDescriptionOrdering
 
 #### Changing how Generic Types are Named
 
-By default, types with generics will be named in the swagger with '\u00ab', '\u00bb', and commas. This can be problematic with things like swagger-codegen. You can
-override this behavior by implementing your own `GenericTypeNamingStrategy`. For example, if you wanted `List<String>` to be encoded as 'ListOfString' and `Map<String, Object>`
+By default, types with generics will be labeled with '\u00ab'(<<), '\u00bb'(>>), and commas. This can be problematic
+with things like swagger-codegen. You can override this behavior by implementing your own `GenericTypeNamingStrategy`.
+For example, if you wanted `List<String>` to be encoded as 'ListOfString' and `Map<String, Object>`
 to be encoded as 'MapOfStringAndObject' you could implement the following:
 
-```
+```java
 public class SimpleGenericNamingStrategy implements GenericTypeNamingStrategy {
     private final static String OPEN = "Of";
     private final static String CLOSE = "";
@@ -423,7 +424,7 @@ public class SimpleGenericNamingStrategy implements GenericTypeNamingStrategy {
 
 then during plugin customization:
 
-```
+```java
 swaggerSpringMvcPlugin.setGenericTypeNamingStrategy(new SimpleGenericTypeNamingStrategy());
 ```
  
