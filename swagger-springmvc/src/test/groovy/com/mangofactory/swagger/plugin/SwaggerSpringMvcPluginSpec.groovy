@@ -130,8 +130,8 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
     where:
       method                    | args                               | expectedSize
-      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 7
-      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 6
+      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 9
+      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 8
   }
 
 

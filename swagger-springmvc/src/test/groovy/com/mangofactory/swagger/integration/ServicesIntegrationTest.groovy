@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import org.yaml.snakeyaml.Yaml
@@ -137,7 +138,7 @@ public class ServicesIntegrationTest extends Specification {
 
   def response(MockMvc mockMvc, String path) {
     def requestBuilder = MockMvcRequestBuilders.get(path).accept(MediaType.APPLICATION_JSON);
-    def actions = mockMvc.perform(requestBuilder) //.andDo(MockMvcResultHandlers.print())
+    def actions = mockMvc.perform(requestBuilder)//.andDo(MockMvcResultHandlers.print())
     def reader = new InputStreamReader(new ByteArrayInputStream(actions.andReturn().response.getContentAsByteArray()))
     def yaml = new Yaml()
     yaml.load(reader) as Map<String, Object>

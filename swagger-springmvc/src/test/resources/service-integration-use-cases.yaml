@@ -34,7 +34,7 @@ testcases:
     index: 3
     testDescription: "Verfied when Response entity has a base type"
     expectedUri: "/businesses/responseEntity/{businessId}"
-    returnType: "ResponseEntity«string»"
+    returnType: "string"
     parameters:
       - type: "string"
         paramType: "path"
@@ -45,7 +45,7 @@ testcases:
     testDescription: "Verified when controller has no request mapping at the class level and ignores
     UriComponentsBuilder"
     expectedUri: "/no-request-mapping"
-    returnType: "ResponseEntity«Example»"
+    returnType: "Example"
 
   - parentUri: "/default/fancy-pet-service"
     index: 0
@@ -116,13 +116,13 @@ testcases:
     httpMethod: "GET"
     testDescription: "Verified ignore type rule for UriComponentsBuilder"
     expectedUri: "/features/effective"
-    returnType: "ResponseEntity«Example»"
+    returnType: "Example"
 
   - parentUri: "/default/feature-demonstration-service"
     index: 5
     testDescription: "Verifed that nested generics are supported"
     expectedUri: "/features/effectives"
-    returnType: "ResponseEntity«List«Example»»"
+    returnType: "List«Example»"
 
   - parentUri: "/default/feature-demonstration-service"
     index: 6
@@ -165,7 +165,7 @@ testcases:
     index: 4
     testDescription: "Verified multiple @PathVariables is supported"
     expectedUri: "/pets/{a}/{b}"
-    returnType: "ResponseEntity«Void»"
+    returnType: "void"
     parameters:
        - type: "string"
          name: "a"
@@ -237,9 +237,9 @@ testcases:
 
   - parentUri: "/default/pet-service"
     index: 12
-    testDescription: "Verfied HttpEntity is supported"
+    testDescription: "Verfied HttpEntity is substituted"
     expectedUri: "/pets/{name}"
-    returnType: "HttpEntity«Pet»"
+    returnType: "Pet"
     parameters:
        - type: "string"
          name: "name"
@@ -288,18 +288,18 @@ testcases:
 
   - parentUri: "/default/pet-service"
     index: 18
-    testDescription: "Verified List of HttpEntity is supported"
+    testDescription: "Verified List of HttpEntity is substituted"
     expectedUri: "/pets/byName/{name}"
-    returnType: "HttpEntity«List«Pet»»"
+    returnType: "List«Pet»"
     parameters:
        - type: "string"
          name: "name"
 
   - parentUri: "/default/pet-service"
     index: 19
-    testDescription: "Verified Void ResponseEntity is supported"
+    testDescription: "Verified Void ResponseEntity substituted by default"
     expectedUri: "/pets/{petId}/pic"
-    returnType: "ResponseEntity«Void»"
+    returnType: "void"
     parameters:
        - type: "string"
          name: "petId"
@@ -310,7 +310,7 @@ testcases:
     index: 20
     testDescription: "Verified naked @PathVariables with no explicit names are supported"
     expectedUri: "/pets/{petId}/pic/{picId}"
-    returnType: "ResponseEntity«Void»"
+    returnType: "void"
     parameters:
        - type: "string"
          name: "petId"

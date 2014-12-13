@@ -5,6 +5,7 @@ import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import org.springframework.http.HttpHeaders
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static com.mangofactory.swagger.models.ResolvedTypes.*
 
@@ -23,9 +24,10 @@ class ModelProviderSpec extends Specification {
 
     where:
       modelType                      | dependencies
-      genericClassWithGenericField() | ["ResponseEntity«SimpleType»", "SimpleType"].sort()
+      genericClassWithGenericField() | ["ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
   }
 
+  @Unroll
   def "dependencies are inferred correctly by the model provider"() {
     given:
       ModelProvider provider = defaultModelProvider()
@@ -44,8 +46,8 @@ class ModelProviderSpec extends Specification {
       typeWithArrays()               | ["Category", "ComplexType"]
       genericClass()                 | ["SimpleType"]
       genericClassWithListField()    | ["SimpleType"]
-      genericClassWithGenericField() | ["Charset", "Entry«string,string»", "HttpHeaders", "MediaType", "ResponseEntity«SimpleType»", "SimpleType", "URI"].sort()
-      genericClassWithDeepGenerics() | ["Charset", "Entry«string,string»", "HttpHeaders", "MediaType", "ResponseEntity«List«SimpleType»»", "SimpleType", "URI"].sort()
+      genericClassWithGenericField() | ["Charset", "Entry«string,string»", "HttpHeaders", "MediaType", "ResponseEntityAlternative«SimpleType»", "SimpleType", "URI"].sort()
+      genericClassWithDeepGenerics() | ["Charset", "Entry«string,string»", "HttpHeaders", "MediaType", "ResponseEntityAlternative«List«SimpleType»»", "SimpleType", "URI"].sort()
       genericCollectionWithEnum()    | ["Collection«string»"]
       recursiveType()                | ["SimpleType"]
   }

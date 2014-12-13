@@ -25,7 +25,7 @@ class ContainerTypesSpec extends Specification {
       genericSetOfSimpleType()       | "Set[SimpleType]"
       genericSetOfInteger()          | "Set"
       erasedSet()                    | "Set"
-      genericClassWithGenericField() | "GenericType«ResponseEntity«SimpleType»»"
+      genericClassWithGenericField() | "GenericType«ResponseEntityAlternative«SimpleType»»"
 
   }
 
@@ -176,7 +176,6 @@ class ContainerTypesSpec extends Specification {
       "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
       "complexToSimpleType" | "List" | "Entry«Category,SimpleType»" | "com.mangofactory.swagger.models.alternates.Entry"
   }
-
 
   def "Model properties of type Map are inferred correctly on generic host"() {
     given:

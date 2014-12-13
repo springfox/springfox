@@ -5,12 +5,13 @@ import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import spock.lang.Specification
+import spock.lang.Unroll
 
 @Mixin(RequestMappingSupport)
 class OperationResponseClassReaderSpec extends Specification {
 
+  @Unroll
    def "should have correct response class"() {
-
     given:
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
       def settings = new SwaggerGlobalSettings()
@@ -32,8 +33,8 @@ class OperationResponseClassReaderSpec extends Specification {
       dummyHandlerMethod('methodApiResponseClass')                         | 'FunkyBusiness'
       dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'FunkyBusiness'
       dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»'
-      dummyHandlerMethod('methodWithGenericPrimitiveArray')                | 'ResponseEntity«Array«byte»»'
-      dummyHandlerMethod('methodWithGenericComplexArray')                  | 'ResponseEntity«Array«DummyClass»»'
+      dummyHandlerMethod('methodWithGenericPrimitiveArray')                | 'Array[byte]'
+      dummyHandlerMethod('methodWithGenericComplexArray')                  | 'Array[DummyClass]'
 
    }
 }

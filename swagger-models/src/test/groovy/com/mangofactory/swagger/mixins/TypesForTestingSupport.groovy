@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
+import com.mangofactory.swagger.generics.ResponseEntityAlternative
 import com.mangofactory.swagger.models.*
 import com.mangofactory.swagger.models.alternates.Entry
 import org.springframework.http.ResponseEntity
@@ -65,15 +66,15 @@ class TypesForTestingSupport {
     resolver.resolve(GenericType, resolver.resolve(List, SimpleType))
   }
   static ResolvedType genericClassWithGenericField() {
-    resolver.resolve(GenericType, resolver.resolve(ResponseEntity, SimpleType))
+    resolver.resolve(GenericType, resolver.resolve(ResponseEntityAlternative, SimpleType))
   }
 
   static ResolvedType genericClassWithDeepGenerics() {
-    resolver.resolve(GenericType, resolver.resolve(ResponseEntity, resolver.resolve(List, SimpleType)))
+    resolver.resolve(GenericType, resolver.resolve(ResponseEntityAlternative, resolver.resolve(List, SimpleType)))
   }
 
   static ResolvedType responseEntityWithDeepGenerics() {
-    resolver.resolve(ResponseEntity, mapsContainer())
+    resolver.resolve(ResponseEntityAlternative, mapsContainer())
   }
 
   static ResolvedType genericCollectionWithEnum() {
