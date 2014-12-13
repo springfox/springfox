@@ -139,6 +139,7 @@ public class ServicesIntegrationTest extends Specification {
   def response(MockMvc mockMvc, String path) {
     def requestBuilder = MockMvcRequestBuilders.get(path).accept(MediaType.APPLICATION_JSON);
     def actions = mockMvc.perform(requestBuilder)//.andDo(MockMvcResultHandlers.print())
+//    System.out.println(JsonOutput.prettyPrint(actions.andReturn().response.getContentAsString()))
     def reader = new InputStreamReader(new ByteArrayInputStream(actions.andReturn().response.getContentAsByteArray()))
     def yaml = new Yaml()
     yaml.load(reader) as Map<String, Object>

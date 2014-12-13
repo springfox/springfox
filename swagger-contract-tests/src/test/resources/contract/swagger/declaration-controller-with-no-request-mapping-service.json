@@ -29,13 +29,6 @@
                     "parameters": [
 
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "Example"
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]

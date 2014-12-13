@@ -37,12 +37,6 @@
                             "allowMultiple": false
                         }
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]
@@ -65,13 +59,6 @@
                     ],
                     "parameters": [
 
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "Pet"
-                        }
                     ],
                     "deprecated": "false"
                 }

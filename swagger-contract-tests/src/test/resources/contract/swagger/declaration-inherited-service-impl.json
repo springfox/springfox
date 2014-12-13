@@ -37,13 +37,6 @@
                             "allowMultiple": false
                         }
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "string"
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]

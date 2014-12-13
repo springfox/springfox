@@ -38,13 +38,6 @@
                             "allowMultiple": false
                         }
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "int"
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]
@@ -74,12 +67,6 @@
                             "type": "Pet",
                             "paramType": "body",
                             "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
                         }
                     ],
                     "deprecated": "false"
@@ -122,13 +109,6 @@
                             "format": "int32",
                             "paramType": "path",
                             "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "int"
                         }
                     ],
                     "deprecated": "false"

@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Sets.*;
 import static com.mangofactory.swagger.ScalaUtils.*;
 
 public class ApiOperationReader implements Command<RequestMappingContext> {
@@ -64,7 +65,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
     AuthorizationContext authorizationContext = (AuthorizationContext) outerContext.get("authorizationContext");
     String requestMappingPattern = (String) outerContext.get("requestMappingPattern");
     RequestMethodsRequestCondition requestMethodsRequestCondition = requestMappingInfo.getMethodsCondition();
-    List<ResponseMessage> responseMessages = newArrayList();
+    Set<ResponseMessage> responseMessages = newHashSet();
     List<Operation> operations = newArrayList();
 
     Set<RequestMethod> requestMethods = requestMethodsRequestCondition.getMethods();

@@ -62,6 +62,7 @@ class SwaggerV1_2Spec extends Specification {
       response.status == 200
       //Uncomment this to see a better json diff when tests fail
 //      actual == contract
+      System.out.print(JsonOutput.prettyPrint(actual))
 
       //Json comparison without considering ordering
       JSONAssert.assertEquals(contract, actual, STRICT_JSON_ASSERT)

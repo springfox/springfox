@@ -39,13 +39,6 @@
                             "allowMultiple": false
                         }
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "boolean"
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]
@@ -76,12 +69,6 @@
                             "type": "string",
                             "paramType": "path",
                             "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
                         }
                     ],
                     "deprecated": "false"
@@ -115,13 +102,6 @@
                             "allowMultiple": false
                         }
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "boolean"
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]
@@ -151,13 +131,6 @@
                             "type": "string",
                             "paramType": "query",
                             "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "boolean"
                         }
                     ],
                     "deprecated": "false"
@@ -192,12 +165,6 @@
                             "allowMultiple": false
                         }
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]
@@ -228,12 +195,6 @@
                             "type": "string",
                             "paramType": "path",
                             "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
                         }
                     ],
                     "deprecated": "false"

@@ -29,12 +29,6 @@
                     "parameters": [
 
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        }
-                    ],
                     "deprecated": "false"
                 },
                 {
@@ -51,16 +45,6 @@
                     ],
                     "parameters": [
 
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        }
                     ],
                     "deprecated": "false"
                 },
@@ -79,20 +63,6 @@
                     "parameters": [
 
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        }
-                    ],
                     "deprecated": "false"
                 },
                 {
@@ -109,24 +79,6 @@
                     ],
                     "parameters": [
 
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        }
                     ],
                     "deprecated": "false"
                 },
@@ -145,28 +97,6 @@
                     "parameters": [
 
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        }
-                    ],
                     "deprecated": "false"
                 },
                 {
@@ -183,32 +113,6 @@
                     ],
                     "parameters": [
 
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        }
                     ],
                     "deprecated": "false"
                 },
@@ -227,36 +131,6 @@
                     "parameters": [
 
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        }
-                    ],
                     "deprecated": "false"
                 },
                 {
@@ -273,40 +147,6 @@
                     ],
                     "parameters": [
 
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        }
                     ],
                     "deprecated": "false"
                 }
@@ -337,12 +177,6 @@
                             "type": "Example",
                             "paramType": "body",
                             "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
                         }
                     ],
                     "deprecated": "false"
@@ -377,12 +211,6 @@
                             "allowMultiple": false
                         }
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]
@@ -414,12 +242,6 @@
                             "allowMultiple": false
                         }
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]
@@ -442,13 +264,6 @@
                     ],
                     "parameters": [
 
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "Example"
-                        }
                     ],
                     "deprecated": "false"
                 }
@@ -475,13 +290,6 @@
                     ],
                     "parameters": [
 
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "List"
-                        }
                     ],
                     "deprecated": "false"
                 }
@@ -518,12 +326,6 @@
                             ]
                         }
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]
@@ -553,12 +355,6 @@
                             "type": "Collection\u00abstring\u00bb",
                             "paramType": "body",
                             "allowMultiple": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
                         }
                     ],
                     "deprecated": "false"
@@ -592,13 +388,6 @@
                             "allowMultiple": false,
                             "minimum": "1",
                             "maximum": "5"
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "Pet"
                         }
                     ],
                     "deprecated": "false"

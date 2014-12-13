@@ -37,13 +37,6 @@
                             "allowMultiple": false
                         }
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "string"
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]
@@ -73,13 +66,6 @@
                             "type": "string",
                             "paramType": "path",
                             "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "string"
                         }
                     ],
                     "deprecated": "false"
@@ -113,13 +99,6 @@
                             "allowMultiple": false
                         }
                     ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "string"
-                        }
-                    ],
                     "deprecated": "false"
                 }
             ]
@@ -149,13 +128,6 @@
                             "type": "string",
                             "paramType": "path",
                             "allowMultiple": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "string"
                         }
                     ],
                     "deprecated": "false"

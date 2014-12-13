@@ -51,7 +51,7 @@ testcases:
     index: 0
     testDescription: "Verified new method on inherited generic type"
     expectedUri: "/fancypets/?{someId}"
-    returnType: "int"
+    returnType: "integer"
     parameters:
       - type: "FancyPet"
         name: "object"
@@ -72,7 +72,7 @@ testcases:
     index: 2
     testDescription: "Verified Inherrited override of a parameterized generic type"
     expectedUri: "/fancypets"
-    returnType: "int"
+    returnType: "integer"
     httpMethod: "POST"
     parameters:
        - type: "FancyPet"

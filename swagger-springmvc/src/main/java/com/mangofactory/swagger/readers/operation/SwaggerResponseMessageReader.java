@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Deprecated as of 0.9.2. This class violates SO"L"ID; explained in #427
@@ -23,9 +25,21 @@ public abstract class SwaggerResponseMessageReader implements RequestMappingRead
 
     //Re-instates this to address #427 :(, Hack will go away as part of removing deprecated class
     @SuppressWarnings("unchecked")
-    List<ResponseMessage> responseMessages = (List<ResponseMessage>) context.get("responseMessages");
-    responseMessages.addAll(read(swaggerGlobalSettings, currentHttpMethod, handlerMethod));
-    context.put("responseMessages", responseMessages);
+    Set<ResponseMessage> responseMessages = (Set<ResponseMessage>) context.get("responseMessages");
+    Collection<ResponseMessage> read = read(swaggerGlobalSettings, currentHttpMethod, handlerMethod);
+    context.put("responseMessages", newSet(responseMessages, read));
+  }
+
+  private Set<ResponseMessage> newSet(Set<ResponseMessage> responseMessages, Collection<ResponseMessage> read) {
+    TreeSet<ResponseMessage> toSet = new TreeSet<ResponseMessage>(new Comparator<ResponseMessage>() {
+      @Override
+      public int compare(ResponseMessage first, ResponseMessage second) {
+        return first.code() - second.code();
+      }
+    });
+    toSet.addAll(responseMessages);
+    toSet.addAll(read);
+    return toSet;
   }
 
   protected abstract Collection<ResponseMessage> read(SwaggerGlobalSettings swaggerGlobalSettings,
