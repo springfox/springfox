@@ -401,7 +401,7 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:
 public class SimpleGenericNamingStrategy implements GenericTypeNamingStrategy {
     private final static String OPEN = "Of";
     private final static String CLOSE = "";
-    private final static String DELIM = ",";
+    private final static String DELIM = "And";
 
     @Override
     public String getOpenGeneric() {
