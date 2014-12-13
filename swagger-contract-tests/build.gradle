@@ -37,10 +37,8 @@ dependencies {
 
   compile(project(':swagger-springmvc')) {
     exclude group: 'org.springframework', module: 'spring-web'
-    exclude group: 'org.springframework', module: 'pring-webmvc'
   }
   compile(project(path: ':swagger-springmvc', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
-    exclude group: 'org.springframework', module: 'pring-webmvc'
   }
 }
