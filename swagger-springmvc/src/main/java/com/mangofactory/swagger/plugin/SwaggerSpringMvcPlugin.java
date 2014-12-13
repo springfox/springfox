@@ -27,6 +27,8 @@ import com.wordnik.swagger.model.ApiInfo;
 import com.wordnik.swagger.model.ApiListingReference;
 import com.wordnik.swagger.model.AuthorizationType;
 import com.wordnik.swagger.model.ResponseMessage;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -320,7 +322,7 @@ public class SwaggerSpringMvcPlugin {
    * @return this SwaggerSpringMvcPlugin
    */
   public SwaggerSpringMvcPlugin genericTypeNamingStrategy(GenericTypeNamingStrategy strategy) {
-    ResolvedTypes.setGenericTypeNamingStrategy(strategy);
+    ResolvedTypes.setNamingStrategy(strategy);
     return this;
   }
 
@@ -475,11 +477,21 @@ public class SwaggerSpringMvcPlugin {
     mergedIgnorableParameterTypes.addAll(springSwaggerConfig.defaultIgnorableParameterTypes());
     mergedIgnorableParameterTypes.addAll(this.ignorableParameterTypes);
     swaggerGlobalSettings.setIgnorableParameterTypes(mergedIgnorableParameterTypes);
+    addSpringMvcPassthroughTypes();
 
     for (AlternateTypeRule rule : this.alternateTypeRules) {
       this.alternateTypeProvider.addRule(rule);
     }
     swaggerGlobalSettings.setAlternateTypeProvider(this.alternateTypeProvider);
+  }
+
+  private void addSpringMvcPassthroughTypes() {
+    TypeResolver typeResolver = swaggerGlobalSettings.getTypeResolver();
+    alternateTypeProvider.addRule(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
+            typeResolver.resolve(WildcardType.class)));
+
+    alternateTypeProvider.addRule(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
+            typeResolver.resolve(WildcardType.class)));
   }
 
   private void buildSwaggerApiResourceListing() {

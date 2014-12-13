@@ -73,8 +73,8 @@ class TypesForTestingSupport {
     resolver.resolve(GenericType, resolver.resolve(ResponseEntityAlternative, resolver.resolve(List, SimpleType)))
   }
 
-  static ResolvedType responseEntityWithDeepGenerics() {
-    resolver.resolve(ResponseEntityAlternative, mapsContainer())
+  static ResolvedType genericTypeOfMapsContainer() {
+    resolver.resolve(GenericType, mapsContainer())
   }
 
   static ResolvedType genericCollectionWithEnum() {

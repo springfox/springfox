@@ -1,4 +1,5 @@
 package com.mangofactory.swagger.plugin
+
 import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
@@ -64,8 +65,8 @@ class SwaggerSpringMvcPluginSpec extends Specification {
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
     when:
       plugin.globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", toOption(null))])
-          .useDefaultResponseMessages(true)
-          .build()
+              .useDefaultResponseMessages(true)
+              .build()
 
     then:
       SwaggerGlobalSettings swaggerGlobalSettings = plugin.swaggerGlobalSettings
@@ -96,8 +97,8 @@ class SwaggerSpringMvcPluginSpec extends Specification {
   def "Swagger ignorableParameterTypes should append to the default ignorableParameterTypes"() {
     when:
       plugin
-            .ignoredParameterTypes(AbstractSingletonProxyFactoryBean.class, ProxyFactoryBean.class)
-            .build()
+              .ignoredParameterTypes(AbstractSingletonProxyFactoryBean.class, ProxyFactoryBean.class)
+              .build()
     then:
       SwaggerGlobalSettings swaggerGlobalSettings = plugin.swaggerGlobalSettings
       swaggerGlobalSettings.getIgnorableParameterTypes().contains(AbstractSingletonProxyFactoryBean.class)
@@ -114,8 +115,8 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
     when:
       plugin.alternateTypeProvider(provider)
-            .alternateTypeRules(rule)
-            .build()
+              .alternateTypeRules(rule)
+              .build()
     then:
       plugin.swaggerGlobalSettings.alternateTypeProvider == provider
       plugin.swaggerGlobalSettings.alternateTypeProvider.rules.contains(rule)
@@ -141,9 +142,9 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
     then:
       plugin.apiListingReferenceScanner.excludeAnnotations.containsAll([
-            AbstractSingletonProxyFactoryBean.class,
-            ProxyFactoryBean.class,
-            ApiIgnore.class
+              AbstractSingletonProxyFactoryBean.class,
+              ProxyFactoryBean.class,
+              ApiIgnore.class
       ])
   }
 

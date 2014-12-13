@@ -75,17 +75,17 @@ class GenericTypeSpec extends Specification {
   }
 
   def "Set a generic type naming strategy should succeed if null or populated"() {
-    when:
-      ResolvedTypes.setGenericTypeNamingStrategy(new DefaultGenericTypeNamingStrategy())
-
-    then:
-      notThrown(Exception)
-
-    when:
-      ResolvedTypes.setGenericTypeNamingStrategy(null);
-
-    then:
-      notThrown(Exception)
+     when:
+     ResolvedTypes.setNamingStrategy(new DefaultGenericTypeNamingStrategy())
+     
+     then: 
+     notThrown(Exception)
+     
+     when:
+     ResolvedTypes.setNamingStrategy(null);
+     
+     then:
+     notThrown(Exception)
   }
 
   def expectedModelName(String modelName) {

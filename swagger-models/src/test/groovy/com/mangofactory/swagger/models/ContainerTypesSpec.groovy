@@ -1,10 +1,8 @@
 package com.mangofactory.swagger.models
-
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.wordnik.swagger.model.Model
 import com.wordnik.swagger.model.ModelRef
-import org.springframework.http.HttpHeaders
 import scala.Option
 import spock.lang.Specification
 
@@ -179,15 +177,13 @@ class ContainerTypesSpec extends Specification {
 
   def "Model properties of type Map are inferred correctly on generic host"() {
     given:
-      def sut = responseEntityWithDeepGenerics()
+      def sut = genericTypeOfMapsContainer()
       def provider = defaultModelProvider()
 
       def modelContext = ModelContext.inputParam(sut)
-      modelContext.seen(resolver.resolve(HttpHeaders.class))
       Model asInput = provider.dependencies(modelContext).get("MapsContainer")
 
       def returnContext = ModelContext.returnValue(sut)
-      returnContext.seen(resolver.resolve(HttpHeaders.class))
       Model asReturn = provider.dependencies(returnContext).get("MapsContainer")
 
     expect:

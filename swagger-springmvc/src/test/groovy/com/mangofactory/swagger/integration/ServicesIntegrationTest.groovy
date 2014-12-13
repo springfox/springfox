@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import org.yaml.snakeyaml.Yaml
@@ -119,7 +118,8 @@ public class ServicesIntegrationTest extends Specification {
 
   private boolean returnParameterMatches(def returnClass, def  candidate) {
     if (candidate.operations[0].type == "array") {
-      candidate.operations[0].items.$ref == "Pet" //DK TODO : hard coded value as this is the only return type so far
+      //DK TODO : hard coded value as this is the only return type so far
+      (candidate.operations[0].items.$ref == "Pet"  || candidate.operations[0].items.$ref == "Example")
     } else {
       returnClass == okMessage(candidate.operations[0].responseMessages)?.responseModel ||
             returnClass == candidate.operations[0].type

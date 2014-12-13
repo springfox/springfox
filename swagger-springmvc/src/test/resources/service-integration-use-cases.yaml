@@ -122,7 +122,7 @@ testcases:
     index: 5
     testDescription: "Verifed that nested generics are supported"
     expectedUri: "/features/effectives"
-    returnType: "List«Example»"
+    returnType: "array"
 
   - parentUri: "/default/feature-demonstration-service"
     index: 6
@@ -290,7 +290,7 @@ testcases:
     index: 18
     testDescription: "Verified List of HttpEntity is substituted"
     expectedUri: "/pets/byName/{name}"
-    returnType: "List«Pet»"
+    returnType: "List[Pet]"
     parameters:
        - type: "string"
          name: "name"
