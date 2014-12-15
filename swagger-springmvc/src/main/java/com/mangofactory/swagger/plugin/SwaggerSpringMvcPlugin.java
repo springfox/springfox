@@ -77,7 +77,7 @@ public class SwaggerSpringMvcPlugin {
   private ApiListingReferenceScanner apiListingReferenceScanner;
   private AtomicBoolean initialized = new AtomicBoolean(false);
   private Collection<RequestMappingReader> customAnnotationReaders = newArrayList();
-  private boolean applyDefaultResponseMessages;
+  private boolean applyDefaultResponseMessages = true;
   private RequestMappingEvaluator requestMappingEvaluator;
   private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
   private boolean enabled = true;

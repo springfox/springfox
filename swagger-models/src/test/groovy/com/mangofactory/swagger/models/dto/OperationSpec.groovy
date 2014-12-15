@@ -14,39 +14,34 @@ class OperationSpec extends InternalJsonSerializationSpec {
           [],
           [],
           [new Parameter('pet', 'pet', '', false, false, 'Pet', null, 'body', null)],
-          [new ResponseMessage(200, 'ok', null)],
+          [new ResponseMessage(200, 'ok', null)] as Set,
           "false")
 
   def "should serialize an operation"() {
     expect:
-      writePretty(operation) ==
-              """{
-  "authorizations" : [ ],
-  "consumes" : [ "application/json" ],
-  "deprecated" : "false",
+      writePretty(operation) =='''{
   "method" : "PUT",
-  "nickname" : "updatePet",
+  "summary" : "updatePet",
   "notes" : "updatePet",
+  "nickname" : "updatePet",
+  "produces" : [ "*/*" ],
+  "consumes" : [ "application/json" ],
   "parameters" : [ {
     "allowMultiple" : false,
-    "dataType" : "Pet",
     "defaultValue" : "",
     "description" : "pet",
-    "name" : "pet",
+    "name" : "body",
     "paramType" : "body",
     "type" : "Pet",
     "required" : false
   } ],
-  "position" : 0,
-  "produces" : [ "*/*" ],
-  "protocol" : [ ],
   "responseMessages" : [ {
     "code" : 200,
     "message" : "ok"
   } ],
-  "summary" : "updatePet",
+  "deprecated" : "false",
   "type" : "void"
-}"""
+}'''
   }
 
   def "should pass coverage"() {

@@ -1,5 +1,7 @@
 package com.mangofactory.swagger.models.dto
 
+import spock.lang.Unroll
+
 class ModelSpec extends InternalJsonSerializationSpec {
 
   final Model model = new Model("id", "name", 'qtype', ['propK': 'propV'], 'desc', 'bModel', 'discrim', ['subtype1'])
@@ -11,13 +13,30 @@ class ModelSpec extends InternalJsonSerializationSpec {
   "description" : "desc",
   "discriminator" : "discrim",
   "id" : "id",
-  "name" : "name",
   "properties" : {
     "propK" : "propV"
   },
-  "qualifiedType" : "qtype",
   "subTypes" : [ "subtype1" ]
 }"""
+  }
+
+  @Unroll
+  def "should serialize ignoring optional fields"() {
+    final Model model = new Model("id", "name", 'qtype', ['propK': 'propV'], 'desc', val, val, listVal)
+
+    expect:
+      writePretty(model) == """{
+  "description" : "desc",
+  "id" : "id",
+  "properties" : {
+    "propK" : "propV"
+  }
+}"""
+
+    where:
+      val  | listVal
+      null | null
+      ""   | []
   }
 
   def "should pass coverage"() {

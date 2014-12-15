@@ -47,54 +47,54 @@ testcases:
     expectedUri: "/no-request-mapping"
     returnType: "Example"
 
-  - parentUri: "/default/fancy-pet-service"
-    index: 0
-    testDescription: "Verified new method on inherited generic type"
-    expectedUri: "/fancypets/?{someId}"
-    returnType: "integer"
-    parameters:
-      - type: "FancyPet"
-        name: "object"
-      - type: "integer"
-        name: "someId"
+#  - parentUri: "/default/fancy-pet-service"
+#    index: 0
+#    testDescription: "Verified new method on inherited generic type"
+#    expectedUri: "/fancypets/?{someId}"
+#    returnType: "int"
+#    parameters:
+#      - type: "FancyPet"
+#        name: "object"
+#      - type: "integer"
+#        name: "someId"
 
-  - parentUri: "/default/fancy-pet-service"
-    index: 1
-    testDescription: "Verified Inheritted class with a generic type"
-    expectedUri: "/fancypets"
-    returnType: "void"
-    httpMethod: "PUT"
-    parameters:
-       - type: Pet
-         name: "pet"
+#  - parentUri: "/default/fancy-pet-service"
+#    index: 1
+#    testDescription: "Verified Inheritted class with a generic type"
+#    expectedUri: "/fancypets"
+#    returnType: "void"
+#    httpMethod: "PUT"
+#    parameters:
+#       - type: Pet
+#         name: "pet"
+#
+#  - parentUri: "/default/fancy-pet-service"
+#    index: 2
+#    testDescription: "Verified Inherrited override of a parameterized generic type"
+#    expectedUri: "/fancypets"
+#    returnType: "int"
+#    httpMethod: "POST"
+#    parameters:
+#       - type: "FancyPet"
+#         name: "object"
 
-  - parentUri: "/default/fancy-pet-service"
-    index: 2
-    testDescription: "Verified Inherrited override of a parameterized generic type"
-    expectedUri: "/fancypets"
-    returnType: "integer"
-    httpMethod: "POST"
-    parameters:
-       - type: "FancyPet"
-         name: "object"
-
-  - parentUri: "/default/feature-demonstration-service"
-    index: 0
-    testDescription: "Verified alternate type for big decimal"
-    expectedUri: "/features/bigDecimal"
-    returnType: "void"
-    parameters:
-       - type: "number"
-         name: "input"
-
-  - parentUri: "/default/feature-demonstration-service"
-    index: 1
-    testDescription: "Verified alternate type for LocalDate"
-    expectedUri: "/features/date"
-    returnType: "void"
-    parameters:
-       - type: "LocalDate"
-         name: "localDate"
+#  - parentUri: "/default/feature-demonstration-service"
+#    index: 0
+#    testDescription: "Verified alternate type for big decimal"
+#    expectedUri: "/features/bigDecimal"
+#    returnType: "void"
+#    parameters:
+#       - type: "number"
+#         name: "input"
+#
+#  - parentUri: "/default/feature-demonstration-service"
+#    index: 1
+#    testDescription: "Verified alternate type for LocalDate"
+#    expectedUri: "/features/date"
+#    returnType: "void"
+#    parameters:
+#       - type: "LocalDate"
+#         name: "localDate"
 
   - parentUri: "/default/feature-demonstration-service"
     index: 2

@@ -22,20 +22,24 @@ class EnumTypeSpec extends Specification {
       asInput.getProperties().containsKey("exampleEnum")
       def modelPropertyOption = asInput.getProperties().get("exampleEnum")
       def modelProperty = modelPropertyOption
-      modelProperty.getType() == "string"
+
+
+      def modelPropType = modelProperty.getType().getAbsoluteType()
+      modelPropType == "string"
       modelProperty.getQualifiedType() == "com.mangofactory.swagger.models.ExampleEnum"
       modelProperty.getItems() == null
-      Types.isBaseType(modelProperty.getType())
+      Types.isBaseType(modelPropType)
       modelProperty.getAllowableValues().getValues() == list
 
       asReturn.getName() == "ExampleWithEnums"
       asReturn.getProperties().containsKey("exampleEnum")
       def retModelPropertyOption = asReturn.getProperties().get("exampleEnum")
       def retModelProperty = retModelPropertyOption
-      retModelProperty.getType() == "string"
+      def retPropType = retModelProperty.getType().dataType.type
+      retPropType == "string"
       retModelProperty.getQualifiedType() == "com.mangofactory.swagger.models.ExampleEnum"
       retModelProperty.getItems() == null
-      Types.isBaseType(modelProperty.getType())
+      Types.isBaseType(retPropType)
       retModelProperty.getAllowableValues().getValues() == list
   }
 }

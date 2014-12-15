@@ -30,25 +30,35 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
               [],
               [],
               [],
-              [:],
-              'description',
+              ['someModel': new Model('id', 'name', 'qtype',
+                      ['aprop': new ModelProperty('ptype', 'qtype', 0, false, 'pdesc', null, null)]
+                      , 'desc', null, null, null)],
+              'mdesc',
               0);
       //TODO - produce larger json by adding ApiDescriptions
       writePretty(apiListing) ==
-              """{
+              '''{
   "apiVersion" : "1",
-  "apis" : [ ],
-  "authorizations" : [ ],
+  "swaggerVersion" : "1.2",
   "basePath" : "/base",
-  "consumes" : [ "application/json" ],
-  "description" : "description",
-  "models" : { },
-  "position" : 0,
-  "produces" : [ "application/json" ],
-  "protocol" : [ ],
   "resourcePath" : "/resource",
-  "swaggerVersion" : "1.2"
-}"""
+  "produces" : [ "application/json" ],
+  "consumes" : [ "application/json" ],
+  "apis" : [ ],
+  "models" : {
+    "someModel" : {
+      "description" : "desc",
+      "id" : "id",
+      "properties" : {
+        "aprop" : {
+          "description" : "pdesc",
+          "required" : false,
+          "$ref" : "ptype"
+        }
+      }
+    }
+  }
+}'''
 
   }
 

@@ -1,9 +1,9 @@
 package com.mangofactory.swagger.models
+
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.dto.Model
 import com.mangofactory.swagger.models.dto.ModelRef
-import org.springframework.http.HttpHeaders
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -40,7 +40,7 @@ class ContainerTypesSpec extends Specification {
       asInput.getName() == "ListsContainer"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.getType() == name
+      modelProperty.getType().dataType.reference == name
       modelProperty.getItems()
       ModelRef item = modelProperty.getItems()
       item.getType() == itemType
@@ -50,7 +50,7 @@ class ContainerTypesSpec extends Specification {
       asReturn.getName() == "ListsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.getType() == name
+      retModelProperty.getType().dataType.reference == name
       retModelProperty.getItems()
       def retItem = retModelProperty.getItems()
       retItem.getType() == itemType
@@ -66,7 +66,7 @@ class ContainerTypesSpec extends Specification {
       "objects"         | "List" | "object" | ""            | "java.lang.Object"
   }
 
-  def "Model properties of type Set, are inferred correctly"() {
+  def "Model properties of type [#type], are inferred correctly"() {
     given:
       def sut = typeWithSets()
       def provider = defaultModelProvider()
@@ -77,7 +77,7 @@ class ContainerTypesSpec extends Specification {
       asInput.getName() == "SetsContainer"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.getType() == type
+      modelProperty.getType().dataType.reference == type
       modelProperty.getItems()
       ModelRef item = modelProperty.getItems()
       item.getType() == itemType
@@ -87,7 +87,7 @@ class ContainerTypesSpec extends Specification {
       asReturn.getName() == "SetsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.getType() == type
+      retModelProperty.getType().dataType.reference == type
       retModelProperty.getItems()
       def retItem = retModelProperty.getItems()
       retItem.getType() == itemType
@@ -115,7 +115,7 @@ class ContainerTypesSpec extends Specification {
       asInput.getName() == "ArraysContainer"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.getType() == type
+      modelProperty.getType().dataType.reference == type
       modelProperty.getItems()
       ModelRef item = modelProperty.getItems()
       item.getType() == itemType
@@ -125,7 +125,7 @@ class ContainerTypesSpec extends Specification {
       asReturn.getName() == "ArraysContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.getType() == type
+      retModelProperty.getType().dataType.reference == type
       retModelProperty.getItems()
       def retItem = retModelProperty.getItems()
       retItem.getType() == itemType
@@ -153,7 +153,7 @@ class ContainerTypesSpec extends Specification {
       asInput.getName() == "MapsContainer"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.getType() == type
+      modelProperty.getType().dataType.reference == type
       modelProperty.getItems()
       ModelRef item = modelProperty.getItems()
       item.getType() == null
@@ -163,7 +163,7 @@ class ContainerTypesSpec extends Specification {
       asReturn.getName() == "MapsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.getType() == type
+      retModelProperty.getType().dataType.reference == type
       retModelProperty.getItems()
       def retItem = retModelProperty.getItems()
       retItem.getType() == null
@@ -192,7 +192,7 @@ class ContainerTypesSpec extends Specification {
       asInput.getName() == "MapsContainer"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.getType() == type
+      modelProperty.getType().dataType.reference == type
       modelProperty.getItems()
       ModelRef item = modelProperty.getItems()
       item.getType() == null
@@ -202,7 +202,7 @@ class ContainerTypesSpec extends Specification {
       asReturn.getName() == "MapsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.getType() == type
+      retModelProperty.getType().dataType.reference == type
       retModelProperty.getItems()
       def retItem = retModelProperty.getItems()
       retItem.getType() == null

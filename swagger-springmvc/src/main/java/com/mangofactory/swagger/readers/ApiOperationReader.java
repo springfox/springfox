@@ -129,7 +129,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
                 new ArrayList<String>(0),
                 authorizations,
                 parameterList,
-                responseMessages,
+                (Set) operationResultMap.get("responseMessages"),
                 (String) operationResultMap.get("deprecated")
         );
 

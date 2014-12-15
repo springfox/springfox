@@ -55,7 +55,7 @@ class ApiModelReaderSpec extends Specification {
       modelProperties.size() == 2
 
       ModelProperty nameProp = modelProperties['name']
-      nameProp.getType() == 'string'
+      nameProp.getType().dataType.type == 'string'
       nameProp.getQualifiedType() == 'java.lang.String'
       nameProp.getPosition() == 0
       nameProp.isRequired() == false
@@ -93,7 +93,7 @@ class ApiModelReaderSpec extends Specification {
 
       Map<String, ModelProperty> modelProps = model.getProperties()
       ModelProperty prop = modelProps.name
-      prop.getType() == 'string'
+      prop.getType().dataType.type == 'string'
       prop.getDescription() == 'The name of this business'
       prop.isRequired() == true
 

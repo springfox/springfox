@@ -34,7 +34,7 @@ public abstract class SwaggerResponseMessageReader implements RequestMappingRead
     TreeSet<ResponseMessage> toSet = new TreeSet<ResponseMessage>(new Comparator<ResponseMessage>() {
       @Override
       public int compare(ResponseMessage first, ResponseMessage second) {
-        return first.code() - second.code();
+        return first.getCode() - second.getCode();
       }
     });
     toSet.addAll(responseMessages);

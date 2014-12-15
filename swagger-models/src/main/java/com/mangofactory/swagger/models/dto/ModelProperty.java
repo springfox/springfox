@@ -1,26 +1,37 @@
 package com.mangofactory.swagger.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 public class ModelProperty {
-  private final String type;
+  @JsonProperty
+  @JsonUnwrapped
+  private final SwaggerDataType type;
+  @JsonIgnore
   private final String qualifiedType;
+  @JsonIgnore
   private final int position;
   private final Boolean required;
   private final String description;
   private final AllowableValues allowableValues;
+
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private final ModelRef items;
 
   public ModelProperty(String type, String qualifiedType, int position, Boolean required, String description,
                        AllowableValues allowableValues, ModelRef items) {
-    this.type = type;
+    this.type = new DataType(type);
     this.qualifiedType = qualifiedType;
-    this.position = position;
+    this.position = position; //TODO Suspect unused
     this.required = required;
     this.description = description;
     this.allowableValues = allowableValues;
     this.items = items;
   }
 
-  public String getType() {
+  public SwaggerDataType getType() {
     return type;
   }
 

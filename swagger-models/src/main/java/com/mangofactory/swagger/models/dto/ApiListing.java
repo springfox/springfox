@@ -1,8 +1,15 @@
 package com.mangofactory.swagger.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.util.List;
 import java.util.Map;
 
+@JsonPropertyOrder({"apiVersion", "swaggerVersion", "basePath", "resourcePath", "produces", "consumes", "apis",
+        "models"})
 public class ApiListing {
   private final String apiVersion;
   private final String swaggerVersion;
@@ -10,11 +17,16 @@ public class ApiListing {
   private final String resourcePath;
   private final List<String> produces;
   private final List<String> consumes;
+  @JsonIgnore
   private final List<String> protocol;
+  @JsonInclude(Include.NON_EMPTY)
   private final List<Authorization> authorizations;
   private final List<ApiDescription> apis;
+  @JsonInclude(Include.NON_EMPTY)
   private final Map<String, Model> models;
+  @JsonIgnore
   private final String description;
+  @JsonIgnore
   private final int position;
 
   public ApiListing(String apiVersion, String swaggerVersion, String basePath, String resourcePath, List<String>

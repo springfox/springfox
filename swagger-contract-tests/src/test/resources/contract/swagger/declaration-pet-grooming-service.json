@@ -20,7 +20,6 @@
                     "method": "GET",
                     "summary": "canGroom",
                     "notes": "canGroom",
-                    "type": "boolean",
                     "nickname": "canGroom",
                     "produces": [
                         "*/*"
@@ -30,16 +29,36 @@
                     ],
                     "parameters": [
                         {
-                            "name": "type",
-                            "description": "type",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": true,
-                            "type": "string",
+                            "description": "type",
+                            "name": "type",
                             "paramType": "query",
-                            "allowMultiple": false
+                            "type": "string",
+                            "required": true
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "boolean"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "boolean"
                 }
             ]
         },
@@ -51,7 +70,6 @@
                     "method": "DELETE",
                     "summary": "groomingFunctionThatReturnsVoid",
                     "notes": "groomingFunctionThatReturnsVoid",
-                    "type": "void",
                     "nickname": "groomingFunctionThatReturnsVoid",
                     "produces": [
                         "application/xml",
@@ -62,16 +80,35 @@
                     ],
                     "parameters": [
                         {
-                            "name": "input",
-                            "description": "input",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": true,
-                            "type": "string",
+                            "description": "input",
+                            "name": "input",
                             "paramType": "path",
-                            "allowMultiple": false
+                            "type": "string",
+                            "required": true
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
                 }
             ]
         },
@@ -83,7 +120,6 @@
                     "method": "GET",
                     "summary": "canGroom",
                     "notes": "canGroom",
-                    "type": "boolean",
                     "nickname": "canGroom",
                     "produces": [
                         "*/*"
@@ -93,16 +129,36 @@
                     ],
                     "parameters": [
                         {
-                            "name": "type",
-                            "description": "type",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": true,
-                            "type": "string",
+                            "description": "type",
+                            "name": "type",
                             "paramType": "query",
-                            "allowMultiple": false
+                            "type": "string",
+                            "required": true
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "boolean"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "boolean"
                 }
             ]
         },
@@ -114,7 +170,6 @@
                     "method": "GET",
                     "summary": "canGroom",
                     "notes": "canGroom",
-                    "type": "boolean",
                     "nickname": "canGroom",
                     "produces": [
                         "*/*"
@@ -124,16 +179,36 @@
                     ],
                     "parameters": [
                         {
-                            "name": "type",
-                            "description": "type",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": true,
-                            "type": "string",
+                            "description": "type",
+                            "name": "type",
                             "paramType": "query",
-                            "allowMultiple": false
+                            "type": "string",
+                            "required": true
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "boolean"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "boolean"
                 }
             ]
         },
@@ -145,7 +220,6 @@
                     "method": "DELETE",
                     "summary": "groomingFunctionThatReturnsVoid",
                     "notes": "groomingFunctionThatReturnsVoid",
-                    "type": "void",
                     "nickname": "groomingFunctionThatReturnsVoid",
                     "produces": [
                         "application/xml",
@@ -156,16 +230,35 @@
                     ],
                     "parameters": [
                         {
-                            "name": "input",
-                            "description": "input",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": true,
-                            "type": "string",
+                            "description": "input",
+                            "name": "input",
                             "paramType": "path",
-                            "allowMultiple": false
+                            "type": "string",
+                            "required": true
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
                 }
             ]
         },
@@ -177,7 +270,6 @@
                     "method": "DELETE",
                     "summary": "groomingFunctionThatReturnsVoid",
                     "notes": "groomingFunctionThatReturnsVoid",
-                    "type": "void",
                     "nickname": "groomingFunctionThatReturnsVoid",
                     "produces": [
                         "application/xml",
@@ -188,25 +280,43 @@
                     ],
                     "parameters": [
                         {
-                            "name": "input",
-                            "description": "input",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": true,
-                            "type": "string",
+                            "description": "input",
+                            "name": "input",
                             "paramType": "path",
-                            "allowMultiple": false
+                            "type": "string",
+                            "required": true
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
                 }
             ]
         }
     ],
     "models": {
         "Void": {
-            "id": "Void",
             "description": "",
-            "extends": "",
+            "id": "Void",
             "properties": {
 
             }

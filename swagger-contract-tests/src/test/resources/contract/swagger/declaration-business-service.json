@@ -18,7 +18,6 @@
                     "method": "GET",
                     "summary": "Find a business by its id",
                     "notes": "getAliasedPathVariable",
-                    "type": "string",
                     "nickname": "getAliasedPathVariable",
                     "produces": [
                         "*/*"
@@ -28,16 +27,36 @@
                     ],
                     "parameters": [
                         {
-                            "name": "otherId",
-                            "description": "ID of business",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": true,
-                            "type": "string",
+                            "description": "ID of business",
+                            "name": "otherId",
                             "paramType": "path",
-                            "allowMultiple": false
+                            "type": "string",
+                            "required": true
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
                 }
             ]
         },
@@ -49,7 +68,6 @@
                     "method": "GET",
                     "summary": "Find a business by its id",
                     "notes": "getNonAliasedPathVariable",
-                    "type": "string",
                     "nickname": "getNonAliasedPathVariable",
                     "produces": [
                         "*/*"
@@ -59,16 +77,36 @@
                     ],
                     "parameters": [
                         {
-                            "name": "businessId",
-                            "description": "ID of business",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": true,
-                            "type": "string",
+                            "description": "ID of business",
+                            "name": "businessId",
                             "paramType": "path",
-                            "allowMultiple": false
+                            "type": "string",
+                            "required": true
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
                 }
             ]
         },
@@ -80,7 +118,6 @@
                     "method": "GET",
                     "summary": "getResponseEntity",
                     "notes": "getResponseEntity",
-                    "type": "string",
                     "nickname": "getResponseEntity",
                     "produces": [
                         "*/*"
@@ -90,16 +127,36 @@
                     ],
                     "parameters": [
                         {
-                            "name": "businessId",
-                            "description": "businessId",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": true,
-                            "type": "string",
+                            "description": "businessId",
+                            "name": "businessId",
                             "paramType": "path",
-                            "allowMultiple": false
+                            "type": "string",
+                            "required": true
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
                 }
             ]
         },
@@ -111,7 +168,6 @@
                     "method": "GET",
                     "summary": "getVanillaPathVariable",
                     "notes": "getVanillaPathVariable",
-                    "type": "string",
                     "nickname": "getVanillaPathVariable",
                     "produces": [
                         "*/*"
@@ -121,16 +177,36 @@
                     ],
                     "parameters": [
                         {
-                            "name": "businessId",
-                            "description": "businessId",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": true,
-                            "type": "string",
+                            "description": "businessId",
+                            "name": "businessId",
                             "paramType": "path",
-                            "allowMultiple": false
+                            "type": "string",
+                            "required": true
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
                 }
             ]
         }

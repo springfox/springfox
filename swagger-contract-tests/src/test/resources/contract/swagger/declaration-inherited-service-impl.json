@@ -18,7 +18,6 @@
                     "method": "GET",
                     "summary": "getSomething",
                     "notes": "getSomething",
-                    "type": "string",
                     "nickname": "getSomething",
                     "produces": [
                         "*/*"
@@ -28,16 +27,36 @@
                     ],
                     "parameters": [
                         {
-                            "name": "parameter",
-                            "description": "parameter",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": false,
-                            "type": "string",
+                            "description": "parameter",
+                            "name": "body",
                             "paramType": "body",
-                            "allowMultiple": false
+                            "type": "string",
+                            "required": false
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
                 }
             ]
         }

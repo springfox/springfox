@@ -1,7 +1,10 @@
 package com.mangofactory.swagger.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class ResponseMessage {
   private final int code;
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private final String message;
   private final String responseModel;
 

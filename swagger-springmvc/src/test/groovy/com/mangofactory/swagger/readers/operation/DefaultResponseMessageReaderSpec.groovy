@@ -10,7 +10,7 @@ import com.mangofactory.swagger.models.dto.ResponseMessage
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
 
-import static com.google.common.collect.Lists.newArrayList
+import static com.google.common.collect.Sets.newHashSet
 
 @Mixin(RequestMappingSupport)
 class DefaultResponseMessageReaderSpec extends Specification {

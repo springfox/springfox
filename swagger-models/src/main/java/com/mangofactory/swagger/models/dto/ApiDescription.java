@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.List;
@@ -9,6 +10,7 @@ public class ApiDescription {
   private final String path;
   private final String description;
   private final List<Operation> operations;
+  @JsonIgnore
   private final Boolean hidden;
 
   public ApiDescription(String path, String description, List<Operation> operations, Boolean hidden) {

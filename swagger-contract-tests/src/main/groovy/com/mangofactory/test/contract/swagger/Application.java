@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableAutoConfiguration
 @EnableSwagger
-@ComponentScan("com.mangofactory.swagger.dummy.controllers")
+@ComponentScan({"com.mangofactory.swagger.dummy.controllers", "com.mangofactory.test.contract.swagger"})
 public class Application {
 
   public static void main(String[] args) {

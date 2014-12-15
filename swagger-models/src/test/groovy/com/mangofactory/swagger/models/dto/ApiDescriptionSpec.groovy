@@ -1,11 +1,18 @@
 package com.mangofactory.swagger.models.dto
 
-import spock.lang.Specification
+class ApiDescriptionSpec extends InternalJsonSerializationSpec {
+  final ApiDescription description = new ApiDescription('p', 'd', [], true)
 
-class ApiDescriptionSpec extends Specification {
+  def "should serialize"() {
+    expect:
+      writePretty(description) == """{
+  "path" : "p",
+  "description" : "d",
+  "operations" : [ ]
+}"""
+  }
 
   def "should pass coverage"() {
-    ApiDescription description = new ApiDescription('p', 'd', [], true)
     expect:
       description.getDescription()
       description.getOperations() == []

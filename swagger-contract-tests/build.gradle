@@ -21,14 +21,16 @@ configurations {
 apply plugin: 'spring-boot'
 
 dependencies {
-  compile("org.springframework.boot:spring-boot-starter-web") {
-    exclude module: "spring-boot-starter-tomcat"
-  }
-  compile("org.springframework.boot:spring-boot-starter-jetty") {
-  }
+  compile("org.springframework.boot:spring-boot-starter-web")
+//  compile("org.springframework.boot:spring-boot-starter-jetty")
+
+//  compile 'org.eclipse.jetty:jetty-webapp:9.2.6.v20141205'
+//  compile 'org.eclipse.jetty:jetty-jsp:9.2.6.v20141205'
   compile("org.springframework.boot:spring-boot-starter-actuator")
 
   compile 'javax.servlet:javax.servlet-api:3.0.1'
+  compile 'javax.servlet:jstl'
+  compile "org.ajar:swagger-spring-mvc-ui:0.2"
 
   testCompile libs.test
 

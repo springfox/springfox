@@ -11,6 +11,7 @@ import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener
 import org.springframework.test.context.web.WebAppConfiguration
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -62,7 +63,6 @@ class SwaggerV1_2Spec extends Specification {
       response.status == 200
       //Uncomment this to see a better json diff when tests fail
 //      actual == contract
-      System.out.print(JsonOutput.prettyPrint(actual))
 
       //Json comparison without considering ordering
       JSONAssert.assertEquals(contract, actual, STRICT_JSON_ASSERT)

@@ -17,7 +17,7 @@ class AlternatePropertiesSpec extends Specification {
       model.getName() == "TypeWithAlternateProperty"
       model.getProperties().containsKey("localDate")
       def modelProperty = model.getProperties().get("localDate")
-      modelProperty.getType() == "string"
+      modelProperty.getType().getAbsoluteType() == "string"
       modelProperty.getQualifiedType() == "java.lang.String"
       modelProperty.getItems() == null
   }
@@ -30,7 +30,7 @@ class AlternatePropertiesSpec extends Specification {
       model.getName() == "GenericType«ResponseEntity«Void»»"
       model.getProperties().containsKey("genericField")
       def modelProperty = model.getProperties().get("genericField")
-      modelProperty.getType() == "Void"
+      modelProperty.getType().dataType.reference == "Void"
       modelProperty.getQualifiedType() == "java.lang.Void"
       modelProperty.getItems() == null
   }

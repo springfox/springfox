@@ -1,21 +1,35 @@
 package com.mangofactory.swagger.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import java.util.List;
 import java.util.Set;
 
+@JsonPropertyOrder({
+        "method", "summary", "notes", "type", "nickname", "produces",
+        "consumes", "parameters", "responseMessages", "deprecated"
+})
 public class Operation {
   private final String method;
   private final String summary;
   private final String notes;
-  @JsonProperty("type")
+  @JsonIgnore
   private final String responseClass;
+  @JsonProperty
+  @JsonUnwrapped
+  private final SwaggerDataType dataType;
   private final String nickname;
+  @JsonIgnore
   private final int position;
   private final List<String> produces;
   private final List<String> consumes;
+  @JsonIgnore
   private final List<String> protocol;
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private final List<Authorization> authorizations;
   private final List<Parameter> parameters;
   private final Set<ResponseMessage> responseMessages;
@@ -28,6 +42,7 @@ public class Operation {
     this.summary = summary;
     this.notes = notes;
     this.responseClass = responseClass;
+    this.dataType = new TypeOnlyDataType(new DataType(responseClass));
     this.nickname = nickname;
     this.position = position;
     this.produces = produces;

@@ -18,7 +18,6 @@
                     "method": "PUT",
                     "summary": "create",
                     "notes": "create",
-                    "type": "void",
                     "nickname": "create",
                     "produces": [
                         "*/*"
@@ -28,16 +27,39 @@
                     ],
                     "parameters": [
                         {
-                            "name": "toCreate",
-                            "description": "toCreate",
+                            "allowMultiple": false,
                             "defaultValue": "",
-                            "required": false,
-                            "type": "Pet",
+                            "description": "toCreate",
+                            "name": "body",
                             "paramType": "body",
-                            "allowMultiple": false
+                            "type": "Pet",
+                            "required": false
                         }
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
                 }
             ]
         },
@@ -49,7 +71,6 @@
                     "method": "GET",
                     "summary": "get",
                     "notes": "get",
-                    "type": "Pet",
                     "nickname": "get",
                     "produces": [
                         "*/*"
@@ -60,33 +81,54 @@
                     "parameters": [
 
                     ],
-                    "deprecated": "false"
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "Pet"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "Pet"
                 }
             ]
         }
     ],
     "models": {
         "Pet": {
-            "id": "Pet",
             "description": "",
-            "extends": "",
+            "id": "Pet",
             "properties": {
                 "name": {
+                    "required": false,
                     "type": "string"
                 },
                 "id": {
+                    "required": false,
                     "type": "string"
                 },
                 "age": {
-                    "type": "integer",
-                    "format": "int32"
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
                 }
             }
         },
         "Void": {
-            "id": "Void",
             "description": "",
-            "extends": "",
+            "id": "Void",
             "properties": {
 
             }

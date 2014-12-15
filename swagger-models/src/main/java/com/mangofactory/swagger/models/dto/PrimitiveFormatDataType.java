@@ -1,11 +1,11 @@
 package com.mangofactory.swagger.models.dto;
 
 
-public class PrimitiveFormatParameterType implements ParameterType {
+public class PrimitiveFormatDataType implements SwaggerDataType {
   private final String type;
   private final String format;
 
-  public PrimitiveFormatParameterType(String type, String format) {
+  public PrimitiveFormatDataType(String type, String format) {
     this.type = type;
     this.format = format;
   }
@@ -16,5 +16,10 @@ public class PrimitiveFormatParameterType implements ParameterType {
 
   public String getFormat() {
     return format;
+  }
+
+  @Override
+  public String getAbsoluteType() {
+    return type;
   }
 }

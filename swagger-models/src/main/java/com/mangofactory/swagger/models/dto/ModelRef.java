@@ -1,9 +1,13 @@
 package com.mangofactory.swagger.models.dto;
 
-public class ModelRef {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+public class ModelRef {
   private final String type;
+  @JsonProperty("$ref")
   private final String ref;
+  @JsonIgnore
   private final String qualifiedType;
 
   public ModelRef(String type, String ref, String qualifiedType) {

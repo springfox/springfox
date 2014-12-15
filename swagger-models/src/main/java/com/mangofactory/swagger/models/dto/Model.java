@@ -1,17 +1,25 @@
 package com.mangofactory.swagger.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 import java.util.Map;
 
 public class Model {
 
   private final String id;
+  @JsonIgnore
   private final String name;
+  @JsonIgnore
   private final String qualifiedType;
   private final Map<String, ModelProperty> properties;
   private final String description;
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private final String baseModel;
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private final String discriminator;
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private final List<String> subTypes;
 
   public Model(String id, String name, String qualifiedType, Map<String, ModelProperty> properties, String

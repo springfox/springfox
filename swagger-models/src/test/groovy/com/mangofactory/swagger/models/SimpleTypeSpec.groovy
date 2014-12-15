@@ -1,13 +1,16 @@
 package com.mangofactory.swagger.models
+
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.dto.Model
 import spock.lang.Ignore
 import spock.lang.Specification
+import spock.lang.Unroll
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport])
 class SimpleTypeSpec extends Specification {
-  def "simple types are rendered correctly"() {
+  @Unroll
+  def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:
       def provider = defaultModelProvider()
       Model asInput = provider.modelFor(ModelContext.inputParam(simpleType())).get()
@@ -17,38 +20,35 @@ class SimpleTypeSpec extends Specification {
       asInput.getName() == "SimpleType"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.getType() == type
+      modelProperty.getType().getAbsoluteType() == type
       modelProperty.getQualifiedType() == qualifiedType
       modelProperty.getItems() == null
-      Types.isBaseType(type)
 
       asReturn.getName() == "SimpleType"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.getType() == type
+      retModelProperty.getType().getAbsoluteType() == type
       retModelProperty.getQualifiedType() == qualifiedType
       retModelProperty.getItems() == null
-      Types.isBaseType(type)
 
     where:
-      property              | type      | qualifiedType
-      "aString"             | "string"  | "java.lang.String"
-      "aByte"               | "byte"    | "byte"
-      "aBoolean"            | "boolean" | "boolean"
-      "aShort"              | "int"     | "int"
-      "anInt"               | "int"     | "int"
-      "aLong"               | "long"    | "long"
-      "aFloat"              | "float"   | "float"
-      "aDouble"             | "double"  | "double"
-      "anObject"            | "object"  | "java.lang.Object"
-      "anObjectByte"        | "byte"    | "java.lang.Byte"
-      "anObjectBoolean"     | "boolean" | "java.lang.Boolean"
-      "anObjectShort"       | "int"     | "java.lang.Short"
-      "anObjectInt"         | "int"     | "java.lang.Integer"
-      "anObjectLong"        | "long"    | "java.lang.Long"
-      "anObjectFloat"       | "float"   | "java.lang.Float"
-      "anObjectDouble"      | "double"  | "java.lang.Double"
-      "currency"            | "string"  | "java.util.Currency"
+      property          | type      | qualifiedType
+      "aString"         | "string"  | "java.lang.String"
+      "aByte"           | "string"  | "byte"
+      "aBoolean"        | "boolean" | "boolean"
+      "aShort"          | "integer" | "int"
+      "anInt"           | "integer" | "int"
+      "aLong"           | "integer" | "long"
+      "aFloat"          | "integer" | "float"
+      "aDouble"         | "number"  | "double"
+      "anObjectByte"    | "string"  | "java.lang.Byte"
+      "anObjectBoolean" | "boolean" | "java.lang.Boolean"
+      "anObjectShort"   | "integer" | "java.lang.Short"
+      "anObjectInt"     | "integer" | "java.lang.Integer"
+      "anObjectLong"    | "integer" | "java.lang.Long"
+      "anObjectFloat"   | "integer" | "java.lang.Float"
+      "anObjectDouble"  | "number"  | "java.lang.Double"
+      "currency"        | "string"  | "java.util.Currency"
   }
 
   @Ignore
@@ -71,8 +71,8 @@ class SimpleTypeSpec extends Specification {
       !asReturn.getProperties().containsKey(property)
 
     where:
-      property              | type      | qualifiedType
-      "stringValue"         | "string"  | "java.lang.String"
+      property      | type     | qualifiedType
+      "stringValue" | "string" | "java.lang.String"
   }
 
   def "Types with properties aliased using JsonProperty annotation"() {
@@ -85,7 +85,7 @@ class SimpleTypeSpec extends Specification {
       asInput.getName() == "TypeWithJsonProperty"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.getType() == type
+      modelProperty.getType().getAbsoluteType() == type
       modelProperty.getQualifiedType() == qualifiedType
       modelProperty.getItems() == null
       Types.isBaseType(type)
@@ -93,13 +93,13 @@ class SimpleTypeSpec extends Specification {
       asReturn.getName() == "TypeWithJsonProperty"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.getType() == type
+      retModelProperty.getType().getAbsoluteType() == type
       retModelProperty.getQualifiedType() == qualifiedType
       retModelProperty.getItems() == null
       Types.isBaseType(type)
 
     where:
-      property              | type      | qualifiedType
-      "some_odd_ball_name"  | "string"  | "java.lang.String"
+      property             | type     | qualifiedType
+      "some_odd_ball_name" | "string" | "java.lang.String"
   }
 }

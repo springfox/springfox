@@ -1,8 +1,8 @@
 package com.mangofactory.swagger.models.dto
 
-class PrimitiveFormatParameterTypeSpec extends InternalJsonSerializationSpec {
+class PrimitiveFormatDataTypeSpec extends InternalJsonSerializationSpec {
 
-  final PrimitiveFormatParameterType primitiveFormatParameterType = new PrimitiveFormatParameterType('type', 'format')
+  final PrimitiveFormatDataType primitiveFormatParameterType = new PrimitiveFormatDataType('type', 'format')
 
   def "should serialize"() {
     expect:
