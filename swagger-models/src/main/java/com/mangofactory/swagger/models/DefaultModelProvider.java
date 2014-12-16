@@ -4,11 +4,11 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
-import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
-import com.wordnik.swagger.annotations.ApiModel;
 import com.mangofactory.swagger.models.dto.Model;
 import com.mangofactory.swagger.models.dto.ModelProperty;
 import com.mangofactory.swagger.models.dto.ModelRef;
+import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
+import com.wordnik.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -20,7 +20,6 @@ import java.util.Map;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.models.Collections.*;
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
-import static com.mangofactory.swagger.models.Types.*;
 
 
 @Component
@@ -108,12 +107,16 @@ public class DefaultModelProvider implements ModelProvider {
     }
     ResolvedType collectionElementType = collectionElementType(type);
     String elementTypeName = typeName(collectionElementType);
-    String qualifiedElementTypeName = simpleQualifiedTypeName(collectionElementType);
-    if (!isBaseType(elementTypeName)) {
-      return new ModelRef(null, elementTypeName, qualifiedElementTypeName);
-    } else {
-      return new ModelRef(elementTypeName, "", qualifiedElementTypeName);
-    }
+//    String qualifiedElementTypeName = simpleQualifiedTypeName(collectionElementType);
+
+    return new ModelRef(elementTypeName);
+//    if (!isBaseType(elementTypeName)) {
+//
+//
+//      return new ModelRef(null, elementTypeName, qualifiedElementTypeName);
+//    } else {
+//      return new ModelRef(elementTypeName, "", qualifiedElementTypeName);
+//    }
   }
 
 }

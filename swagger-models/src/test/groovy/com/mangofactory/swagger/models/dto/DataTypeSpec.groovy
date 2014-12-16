@@ -28,9 +28,9 @@ class DataTypeSpec extends InternalJsonSerializationSpec {
       "UUID"       | { it.type == 'string' && it.format == 'uuid' }
       "date"       | { it.type == 'string' && it.format == 'date' }
       "date-time"  | { it.type == 'string' && it.format == 'date-time' }
-      "pet"        | { it.'$ref' == 'pet' }
-      "Set[Pet]"   | { it.type == 'array' && it.items.'$ref' == 'Pet' && it.uniqueItems == true }
-      "List[Pet]"  | { it.type == 'array' && it.items.'$ref' == 'Pet' && it.uniqueItems == false }
+      "pet"        | { it.'type' == 'pet' }
+      "Set[Pet]"   | { it.type == 'array' && it.items.'type' == 'Pet' && it.uniqueItems == true }
+      "List[Pet]"  | { it.type == 'array' && it.items.'type' == 'Pet' && it.uniqueItems == false }
       "List[int]"  | { it.type == 'array' && it.items.format == 'int32' && it.items.type == 'integer' }
   }
 }

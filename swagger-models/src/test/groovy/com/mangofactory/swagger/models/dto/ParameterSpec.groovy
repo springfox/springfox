@@ -23,6 +23,7 @@ class ParameterSpec extends InternalJsonSerializationSpec {
   "name" : "aname",
   "paramAccess" : "all",
   "paramType" : "path",
+  "format" : "int32",
   "type" : "integer",
   "required" : true
 }"""
@@ -49,6 +50,7 @@ class ParameterSpec extends InternalJsonSerializationSpec {
   "name" : "aname",
   "paramAccess" : "all",
   "paramType" : "path",
+  "format" : "int32",
   "type" : "integer",
   "required" : true
 }"""
@@ -74,7 +76,35 @@ class ParameterSpec extends InternalJsonSerializationSpec {
   "name" : "body",
   "paramAccess" : "all",
   "paramType" : "body",
+  "format" : "int32",
   "type" : "integer",
+  "required" : true
+}"""
+  }
+
+  def "array types are unwrapped"() {
+    expect:
+      Parameter parameter = new Parameter("aname",
+              "adesc",
+              "2",
+              true,
+              true,
+              'Set[Pet]',
+              null,
+              "body",
+              'all')
+      writePretty(parameter) == """{
+  "allowMultiple" : true,
+  "defaultValue" : "2",
+  "description" : "adesc",
+  "name" : "body",
+  "paramAccess" : "all",
+  "paramType" : "body",
+  "type" : "array",
+  "items" : {
+    "type" : "Pet"
+  },
+  "uniqueItems" : true,
   "required" : true
 }"""
   }

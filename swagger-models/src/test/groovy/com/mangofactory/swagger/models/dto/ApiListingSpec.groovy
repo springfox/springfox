@@ -53,7 +53,7 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
         "aprop" : {
           "description" : "pdesc",
           "required" : false,
-          "$ref" : "ptype"
+          "type" : "ptype"
         }
       }
     }

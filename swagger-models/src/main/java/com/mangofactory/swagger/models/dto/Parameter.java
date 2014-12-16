@@ -30,7 +30,7 @@ public class Parameter {
     this.paramType = paramType;
     this.paramAccess = paramAccess;
     this.name = maybeOverrideName(name);
-    this.parameterType = new TypeOnlyDataType(new DataType(dataType));
+    this.parameterType = new DataType(dataType);
   }
 
   private String maybeOverrideName(String aName) {

@@ -2,29 +2,25 @@ package com.mangofactory.swagger.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
-public class ModelRef {
-  private final String type;
-  @JsonProperty("$ref")
-  private final String ref;
+public class ModelRef implements SwaggerDataType{
+  @JsonProperty
+  @JsonUnwrapped
+  private final SwaggerDataType type;
+
+
+  public ModelRef(String type) {
+    this.type = new DataType(type);
+  }
+
+  @Override
+  public String getAbsoluteType() {
+    return type.getAbsoluteType();
+  }
+
   @JsonIgnore
-  private final String qualifiedType;
-
-  public ModelRef(String type, String ref, String qualifiedType) {
-    this.type = type;
-    this.ref = ref;
-    this.qualifiedType = qualifiedType;
-  }
-
-  public String getType() {
+  public SwaggerDataType getType() {
     return type;
-  }
-
-  public String getRef() {
-    return ref;
-  }
-
-  public String getQualifiedType() {
-    return qualifiedType;
   }
 }

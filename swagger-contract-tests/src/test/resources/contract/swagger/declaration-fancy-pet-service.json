@@ -113,6 +113,7 @@
                         }
                     ],
                     "deprecated": "false",
+                    "format": "int32",
                     "type": "integer"
                 }
             ]
@@ -148,6 +149,7 @@
                             "description": "someId",
                             "name": "someId",
                             "paramType": "path",
+                            "format": "int32",
                             "type": "integer",
                             "required": true
                         }
@@ -176,6 +178,7 @@
                         }
                     ],
                     "deprecated": "false",
+                    "format": "int32",
                     "type": "integer"
                 }
             ]
@@ -190,14 +193,14 @@
                     "required": false,
                     "type": "string"
                 },
-                "id": {
-                    "required": false,
-                    "type": "string"
-                },
                 "age": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
                 }
             }
         },
@@ -209,14 +212,14 @@
                     "required": false,
                     "type": "string"
                 },
-                "id": {
-                    "required": false,
-                    "type": "string"
-                },
                 "age": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
                 }
             }
         },

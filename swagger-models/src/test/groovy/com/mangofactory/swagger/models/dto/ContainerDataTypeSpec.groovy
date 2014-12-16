@@ -19,7 +19,7 @@ class ContainerDataTypeSpec extends InternalJsonSerializationSpec {
       writePretty(new ContainerDataType("pet", false)) == '''{
   "type" : "array",
   "items" : {
-    "$ref" : "pet"
+    "type" : "pet"
   },
   "uniqueItems" : false
 }'''
@@ -30,7 +30,7 @@ class ContainerDataTypeSpec extends InternalJsonSerializationSpec {
       writePretty(new ContainerDataType("pet", true)) == '''{
   "type" : "array",
   "items" : {
-    "$ref" : "pet"
+    "type" : "pet"
   },
   "uniqueItems" : true
 }'''

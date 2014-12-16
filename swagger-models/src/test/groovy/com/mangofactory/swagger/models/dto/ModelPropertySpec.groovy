@@ -8,7 +8,7 @@ class ModelPropertySpec extends InternalJsonSerializationSpec {
           true,
           'decs',
           null,
-          new ModelRef('mtype', 'mref', 'mqual')
+          new ModelRef('mtype')
   )
 
   def "should serialize"() {
@@ -16,11 +16,10 @@ class ModelPropertySpec extends InternalJsonSerializationSpec {
       writePretty(modelProperty) == '''{
   "description" : "decs",
   "items" : {
-    "$ref" : "mref",
     "type" : "mtype"
   },
   "required" : true,
-  "$ref" : "atype"
+  "type" : "atype"
 }'''
   }
 

@@ -42,7 +42,7 @@ public class Operation {
     this.summary = summary;
     this.notes = notes;
     this.responseClass = responseClass;
-    this.dataType = new TypeOnlyDataType(new DataType(responseClass));
+    this.dataType = new DataType(responseClass);
     this.nickname = nickname;
     this.position = position;
     this.produces = produces;

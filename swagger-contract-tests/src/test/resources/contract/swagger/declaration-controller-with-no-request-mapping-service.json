@@ -64,15 +64,27 @@
                 },
                 "type": {
                     "required": false,
-                    "$ref": "DateTimeFieldType"
+                    "type": "DateTimeFieldType"
                 },
                 "supported": {
                     "required": false,
                     "type": "boolean"
                 },
+                "lenient": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "rangeDurationField": {
+                    "required": false,
+                    "type": "DurationField"
+                },
+                "leapDurationField": {
+                    "required": false,
+                    "type": "DurationField"
+                },
                 "durationField": {
                     "required": false,
-                    "$ref": "DurationField"
+                    "type": "DurationField"
                 },
                 "minimumValue": {
                     "required": false,
@@ -83,18 +95,6 @@
                     "required": false,
                     "format": "int32",
                     "type": "integer"
-                },
-                "rangeDurationField": {
-                    "required": false,
-                    "$ref": "DurationField"
-                },
-                "leapDurationField": {
-                    "required": false,
-                    "$ref": "DurationField"
-                },
-                "lenient": {
-                    "required": false,
-                    "type": "boolean"
                 }
             }
         },
@@ -144,23 +144,22 @@
                 },
                 "nestedType": {
                     "required": false,
-                    "$ref": "NestedType"
+                    "type": "NestedType"
+                },
+                "allCapsSet": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "required": false,
+                    "type": "Set"
                 },
                 "propertyWithNoSetterMethod": {
                     "required": false,
                     "type": "string"
                 },
-                "allCapsSet": {
-                    "items": {
-                        "$ref": "",
-                        "type": "string"
-                    },
-                    "required": false,
-                    "$ref": "Set"
-                },
                 "localDateTime": {
                     "required": false,
-                    "$ref": "LocalDateTime"
+                    "type": "LocalDateTime"
                 },
                 "parentBeanProperty": {
                     "required": false,
@@ -189,7 +188,7 @@
                 },
                 "chronology": {
                     "required": false,
-                    "$ref": "Chronology"
+                    "type": "Chronology"
                 },
                 "centuryOfEra": {
                     "required": false,
@@ -241,16 +240,6 @@
                     "format": "int32",
                     "type": "integer"
                 },
-                "millisOfDay": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfYear": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
                 "dayOfMonth": {
                     "required": false,
                     "format": "int32",
@@ -266,27 +255,37 @@
                     "format": "int32",
                     "type": "integer"
                 },
+                "millisOfDay": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "dayOfYear": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
                 "fields": {
                     "items": {
-                        "$ref": "DateTimeField"
+                        "type": "DateTimeField"
                     },
                     "required": false,
-                    "$ref": "Array"
+                    "type": "Array"
                 },
                 "values": {
                     "items": {
-                        "$ref": "",
-                        "type": "int"
+                        "format": "int32",
+                        "type": "integer"
                     },
                     "required": false,
-                    "$ref": "Array"
+                    "type": "Array"
                 },
                 "fieldTypes": {
                     "items": {
-                        "$ref": "DateTimeFieldType"
+                        "type": "DateTimeFieldType"
                     },
                     "required": false,
-                    "$ref": "Array"
+                    "type": "Array"
                 }
             }
         },
@@ -310,13 +309,9 @@
                 },
                 "type": {
                     "required": false,
-                    "$ref": "DurationFieldType"
+                    "type": "DurationFieldType"
                 },
                 "supported": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "precise": {
                     "required": false,
                     "type": "boolean"
                 },
@@ -324,6 +319,10 @@
                     "required": false,
                     "format": "int64",
                     "type": "integer"
+                },
+                "precise": {
+                    "required": false,
+                    "type": "boolean"
                 }
             }
         },
@@ -333,7 +332,7 @@
             "properties": {
                 "zone": {
                     "required": false,
-                    "$ref": "DateTimeZone"
+                    "type": "DateTimeZone"
                 }
             }
         },
@@ -345,13 +344,13 @@
                     "required": false,
                     "type": "string"
                 },
-                "rangeDurationType": {
-                    "required": false,
-                    "$ref": "DurationFieldType"
-                },
                 "durationType": {
                     "required": false,
-                    "$ref": "DurationFieldType"
+                    "type": "DurationFieldType"
+                },
+                "rangeDurationType": {
+                    "required": false,
+                    "type": "DurationFieldType"
                 }
             }
         }
