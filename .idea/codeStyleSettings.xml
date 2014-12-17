@@ -6,6 +6,10 @@
         <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="999" />
         <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="0" />
         <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="true" />
+        <GroovyCodeStyleSettings>
+          <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="999" />
+          <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="0" />
+        </GroovyCodeStyleSettings>
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
         </XML>

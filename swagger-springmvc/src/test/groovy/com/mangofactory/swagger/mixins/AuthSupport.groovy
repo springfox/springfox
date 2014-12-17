@@ -11,9 +11,8 @@ import com.mangofactory.swagger.models.dto.OAuth
 import com.mangofactory.swagger.models.dto.OAuthBuilder
 import com.mangofactory.swagger.models.dto.TokenEndpoint
 import com.mangofactory.swagger.models.dto.TokenRequestEndpoint
-import com.wordnik.swagger.model.*
 
-import static com.google.common.collect.Lists.newArrayList
+import static com.google.common.collect.Lists.*
 
 class AuthSupport {
   def defaultAuth() {
@@ -53,14 +52,14 @@ class AuthSupport {
     grantTypes.add(authorizationCodeGrant)
 
     OAuth oAuth = new OAuthBuilder()
-        .scopes(authorizationScopeList)
-        .grantTypes(grantTypes)
-        .build();
+            .scopes(authorizationScopeList)
+            .grantTypes(grantTypes)
+            .build();
     return oAuth
   }
 
   def assertDefaultAuth(json) {
-    def oauth2 = json.authorizations['oauth2']
+    def oauth2 = json.authorizations.get('oauth2')
 
     assert oauth2.type == "oauth2"
     assert oauth2.scopes[0].scope == "global"

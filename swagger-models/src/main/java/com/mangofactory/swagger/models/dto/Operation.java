@@ -5,9 +5,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.google.common.base.Function;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Maps.*;
 
 @JsonPropertyOrder({
         "method", "summary", "notes", "type", "nickname", "produces",
@@ -30,14 +35,16 @@ public class Operation {
   @JsonIgnore
   private final List<String> protocol;
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private final List<Authorization> authorizations;
+  private final Map<String, List<AuthorizationScope>> authorizations;
   private final List<Parameter> parameters;
   private final Set<ResponseMessage> responseMessages;
   private final String deprecated;
 
   public Operation(String method, String summary, String notes, String responseClass, String nickname, int position,
-                   List<String> produces, List<String> consumes, List<String> protocol, List<Authorization>
-          authorizations, List<Parameter> parameters, Set<ResponseMessage> responseMessages, String deprecated) {
+                   List<String> produces, List<String> consumes, List<String> protocol,
+                   List<Authorization>
+                           authorizations, List<Parameter> parameters, Set<ResponseMessage> responseMessages, String
+                           deprecated) {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
@@ -48,10 +55,32 @@ public class Operation {
     this.produces = produces;
     this.consumes = consumes;
     this.protocol = protocol;
-    this.authorizations = authorizations;
+    this.authorizations = toAuthorizationsMap(authorizations);
     this.parameters = parameters;
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
+  }
+
+  private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {
+    return transformEntries(uniqueIndex(authorizations, byType()), toScopes());
+  }
+
+  private EntryTransformer<? super String, ? super Authorization, List<AuthorizationScope>> toScopes() {
+    return new EntryTransformer<String, Authorization, List<AuthorizationScope>>() {
+      @Override
+      public List<AuthorizationScope> transformEntry(String key, Authorization value) {
+        return newArrayList(value.getScopes());
+      }
+    };
+  }
+
+  private Function<? super Authorization, String> byType() {
+    return new Function<Authorization, String>() {
+      @Override
+      public String apply(Authorization input) {
+        return input.getType();
+      }
+    };
   }
 
   public String getMethod() {
@@ -90,7 +119,7 @@ public class Operation {
     return protocol;
   }
 
-  public List<Authorization> getAuthorizations() {
+  public Map<String, List<AuthorizationScope>> getAuthorizations() {
     return authorizations;
   }
 
