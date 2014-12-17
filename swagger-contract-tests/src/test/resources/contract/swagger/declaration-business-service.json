@@ -168,6 +168,14 @@
                             "message": "Not Found"
                         }
                     ],
+                    "authorizations": {
+                        "oauth2": [
+                            {
+                                "scope": "scope",
+                                "description" : "scope description"
+                            }
+                        ]
+                    },
                     "deprecated": "false",
                     "type": "string"
                 }
