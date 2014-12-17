@@ -4,6 +4,8 @@ import com.mangofactory.swagger.dummy.models.Business;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.annotations.Authorization;
+import com.wordnik.swagger.annotations.AuthorizationScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,7 +34,10 @@ public class BusinessService {
   }
 
   @RequestMapping(value = "/businesses/non-aliased/{businessId}", method = RequestMethod.GET)
-  @ApiOperation(value = "Find a business by its id")
+  @ApiOperation(value = "Find a business by its id",
+          authorizations = @Authorization(value = "oauth2",
+                  scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
+                  }))
   public String getNonAliasedPathVariable(
           @ApiParam(value = "ID of business", required = true) @PathVariable("businessId") String businessId) {
     return "This is only a test";

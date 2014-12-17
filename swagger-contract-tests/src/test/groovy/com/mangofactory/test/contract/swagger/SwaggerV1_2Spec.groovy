@@ -1,5 +1,4 @@
 package com.mangofactory.test.contract.swagger
-
 import groovy.json.JsonOutput
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
@@ -11,11 +10,10 @@ import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener
 import org.springframework.test.context.web.WebAppConfiguration
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static groovyx.net.http.ContentType.TEXT
+import static groovyx.net.http.ContentType.*
 
 @ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
 @WebAppConfiguration
@@ -70,7 +68,7 @@ class SwaggerV1_2Spec extends Specification {
     where:
       contractFile                                                  | declarationPath
       'declaration-business-service.json'                           | '/default/business-service'
-      'declaration-concrete-contoller.json'                         | '/default/concrete-controller'
+      'declaration-concrete-controller.json'                        | '/default/concrete-controller'
       'declaration-controller-with-no-request-mapping-service.json' | '/default/controller-with-no-request-mapping-service'
       'declaration-fancy-pet-service.json'                          | '/default/fancy-pet-service'
       'declaration-feature-demonstration-service.json'              | '/default/feature-demonstration-service'
