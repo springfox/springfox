@@ -20,7 +20,7 @@ import static org.springframework.util.StringUtils.*;
 
 @Component
 public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStrategy {
-  private static final Logger log = LoggerFactory.getLogger(ClassOrApiAnnotationResourceGrouping.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ClassOrApiAnnotationResourceGrouping.class);
 
   public ClassOrApiAnnotationResourceGrouping() {
   }
@@ -47,6 +47,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
     String group = getClassOrApiAnnotationValue(handlerMethod).toLowerCase()
             .replaceAll(" ", "-")
             .replaceAll("/", "");
+    LOG.info("Group for method {} was {}", handlerMethod.getMethod().getName(), group);
     Integer position = getResourcePosition(requestMappingInfo, handlerMethod);
     return newHashSet(new ResourceGroup(group.toLowerCase(), position));
   }
@@ -79,7 +80,8 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
       @Override
       public Optional<String> apply(Api input) {
         if (null != input) {
-          return Optional.fromNullable(emptyToNull(input.value()));
+          String stripSlashes = input.value().replace("/", "");
+          return Optional.fromNullable(emptyToNull(stripSlashes));
         }
         return Optional.absent();
       }
