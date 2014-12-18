@@ -1,4 +1,5 @@
 package com.mangofactory.test.contract.swagger
+
 import groovy.json.JsonOutput
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
@@ -65,6 +66,9 @@ class SwaggerV1_2Spec extends Specification {
       //Json comparison without considering ordering
       JSONAssert.assertEquals(contract, actual, STRICT_JSON_ASSERT)
 
+//    and: "both json docs are the same length"
+//      contract.length() == actual.length()
+
     where:
       contractFile                                                  | declarationPath
       'declaration-business-service.json'                           | '/default/business-service'
@@ -75,8 +79,8 @@ class SwaggerV1_2Spec extends Specification {
       'declaration-inherited-service-impl.json'                     | '/default/inherited-service-impl'
       'declaration-pet-grooming-service.json'                       | '/default/pet-grooming-service'
       'declaration-pet-service.json'                                | '/default/pet-service'
+      'declaration-root-controller.json'                            | '/default/root-controller'
   }
-
 
   private String fileContents(String fileName) {
     this.getClass().getResource("/contract/swagger/$fileName").text

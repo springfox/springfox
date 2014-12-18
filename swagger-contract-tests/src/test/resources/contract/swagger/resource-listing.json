@@ -53,6 +53,11 @@
         {
             "path": "/default/pet-service",
             "description": "Operations about pets"
+        },
+        {
+            "description": "Root Controller",
+            "path": "/default/root-controller",
+            "position": 0
         }
     ],
     "info": {
