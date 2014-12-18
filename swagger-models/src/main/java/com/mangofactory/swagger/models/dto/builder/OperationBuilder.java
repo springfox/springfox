@@ -89,6 +89,7 @@ public class OperationBuilder {
   }
 
   public Operation build() {
-    return new Operation(method, summary, notes, responseClass, nickname, position, produces, consumes, protocol, authorizations, parameters, responseMessages, deprecated);
+    return new Operation(method, summary, notes, responseClass, nickname, position, produces,
+            consumes, protocol, authorizations, parameters, responseMessages, deprecated);
   }
 }

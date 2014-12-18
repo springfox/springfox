@@ -3,11 +3,11 @@ package com.mangofactory.swagger.readers.operation.parameter;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.Annotations;
-import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.wordnik.swagger.annotations.ApiParam;
 import com.mangofactory.swagger.models.dto.AllowableListValues;
 import com.mangofactory.swagger.models.dto.AllowableValues;
 import com.mangofactory.swagger.models.dto.Parameter;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+import com.wordnik.swagger.annotations.ApiParam;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -54,10 +54,16 @@ class ParameterBuilder {
   private Parameter defaultParameter() {
     AllowableValues allowable = allowableValues(Optional.<String>absent(), field);
 
-    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder().name(isNullOrEmpty(parentName) ? field
-            .getName() : String.format("%s.%s", parentName, field.getName())).description(null).defaultValue(null)
-            .required(Boolean.FALSE).allowMultiple(Boolean.FALSE).dataType(dataTypeName).allowableValues(allowable)
-            .parameterType("query").parameterAccess(null).build();
+    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder()
+            .name(isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()))
+            .description(null).defaultValue(null)
+            .required(Boolean.FALSE)
+            .allowMultiple(Boolean.FALSE)
+            .dataType(dataTypeName)
+            .allowableValues(allowable)
+            .parameterType("query")
+            .parameterAccess(null)
+            .build();
 
   }
 
@@ -65,19 +71,32 @@ class ParameterBuilder {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
 
-    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder().name(isNullOrEmpty(parentName) ? field
-            .getName() : String.format("%s.%s", parentName, field.getName())).description(apiParam.value())
-            .defaultValue(apiParam.defaultValue()).required(apiParam.required()).allowMultiple(apiParam.allowMultiple
-                    ()).dataType(dataTypeName).allowableValues(allowable).parameterType("query").parameterAccess(apiParam.access()).build();
+    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder()
+            .name(isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()))
+            .description(apiParam.value())
+            .defaultValue(apiParam.defaultValue())
+            .required(apiParam.required())
+            .allowMultiple(apiParam.allowMultiple())
+            .dataType(dataTypeName)
+            .allowableValues(allowable)
+            .parameterType("query")
+            .parameterAccess(apiParam.access())
+            .build();
   }
 
   private Parameter fromApiModelProperty(ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
-    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder().name(isNullOrEmpty(parentName) ? field
-            .getName() : String.format("%s.%s", parentName, field.getName())).description(apiModelProperty.value())
-            .defaultValue(null).required(apiModelProperty.required()).allowMultiple(Boolean.FALSE).dataType
-                    (dataTypeName).allowableValues(allowable).parameterType("query").parameterAccess(apiModelProperty.access()).build();
+    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder()
+            .name(isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()))
+            .description(apiModelProperty.value())
+            .defaultValue(null)
+            .required(apiModelProperty.required())
+            .allowMultiple(Boolean.FALSE)
+            .dataType(dataTypeName)
+            .allowableValues(allowable).parameterType("query")
+            .parameterAccess(apiModelProperty.access())
+            .build();
   }
 
   private AllowableValues allowableValues(final Optional<String> optionalAllowable, final Field field) {

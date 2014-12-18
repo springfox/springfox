@@ -83,6 +83,7 @@ public class ApiListingBuilder {
   }
 
   public ApiListing build() {
-    return new ApiListing(apiVersion, swaggerVersion, basePath, resourcePath, produces, consumes, protocol, authorizations, apis, models, description, position);
+    return new ApiListing(apiVersion, swaggerVersion, basePath,
+            resourcePath, produces, consumes, protocol, authorizations, apis, models, description, position);
   }
 }

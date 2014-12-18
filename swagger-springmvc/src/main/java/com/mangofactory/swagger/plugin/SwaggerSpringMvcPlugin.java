@@ -403,8 +403,13 @@ public class SwaggerSpringMvcPlugin {
   }
 
   private ApiInfo defaultApiInfo() {
-    return new ApiInfoBuilder().title(this.swaggerGroup + " Title").description("Api Description").termsOfServiceUrl
-            ("Api terms of service").contact("Contact Email").license("Licence Type").licenseUrl("License URL")
+    return new ApiInfoBuilder()
+            .title(this.swaggerGroup + " Title")
+            .description("Api Description")
+            .termsOfServiceUrl("Api terms of service")
+            .contact("Contact Email")
+            .license("Licence Type")
+            .licenseUrl("License URL")
             .build();
   }
 
