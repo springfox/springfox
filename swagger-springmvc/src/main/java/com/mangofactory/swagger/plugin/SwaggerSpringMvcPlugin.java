@@ -15,6 +15,7 @@ import com.mangofactory.swagger.models.ResolvedTypes;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeRule;
 import com.mangofactory.swagger.models.alternates.WildcardType;
+import com.mangofactory.swagger.models.dto.builder.ApiInfoBuilder;
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
@@ -402,14 +403,9 @@ public class SwaggerSpringMvcPlugin {
   }
 
   private ApiInfo defaultApiInfo() {
-    return new ApiInfo(
-            this.swaggerGroup + " Title",
-            "Api Description",
-            "Api terms of service",
-            "Contact Email",
-            "Licence Type",
-            "License URL"
-    );
+    return new ApiInfoBuilder().title(this.swaggerGroup + " Title").description("Api Description").termsOfServiceUrl
+            ("Api terms of service").contact("Contact Email").license("Licence Type").licenseUrl("License URL")
+            .build();
   }
 
   /**

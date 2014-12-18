@@ -1,15 +1,17 @@
 package com.mangofactory.swagger.models.dto
 
+import com.mangofactory.swagger.models.dto.builder.ApiInfoBuilder
+
 class ApiInfoSpec extends InternalJsonSerializationSpec {
 
-  final ApiInfo apiInfo = new ApiInfo(
-          " Title",
-          "Api Description",
-          "Api terms of service",
-          "Contact Email",
-          "Licence Type",
-          "License URL"
-  )
+  final ApiInfo apiInfo = new ApiInfoBuilder()
+          .description('Api Description')
+          .contact('Contact Email')
+          .license('Licence Type')
+          .licenseUrl('License URL')
+          .termsOfServiceUrl('Api terms of service')
+          .title('Title')
+          .build()
 
   def "should serialize"() {
     expect:
@@ -19,7 +21,7 @@ class ApiInfoSpec extends InternalJsonSerializationSpec {
   "license" : "Licence Type",
   "licenseUrl" : "License URL",
   "termsOfServiceUrl" : "Api terms of service",
-  "title" : " Title"
+  "title" : "Title"
 }"""
   }
 

@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mangofactory.swagger.models.dto.builder.ApiInfoBuilder;
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
 import com.mangofactory.swagger.models.dto.ApiInfo;
@@ -54,14 +55,9 @@ public class CustomJavaPluginConfig {
   }
 
   private ApiInfo apiInfo() {
-    ApiInfo apiInfo = new ApiInfo(
-            "My Apps API Title",
-            "My Apps API Description",
-            "My Apps API terms of service",
-            "My Apps API Contact Email",
-            "My Apps API Licence Type",
-            "My Apps API License URL"
-    );
+    ApiInfo apiInfo = new ApiInfoBuilder().title("My Apps API Title").description("My Apps API Description")
+            .termsOfServiceUrl("My Apps API terms of service").contact("My Apps API Contact Email").license("My Apps " +
+                    "API Licence Type").licenseUrl("My Apps API License URL").build();
     return apiInfo;
   }
 }

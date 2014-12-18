@@ -54,17 +54,10 @@ class ParameterBuilder {
   private Parameter defaultParameter() {
     AllowableValues allowable = allowableValues(Optional.<String>absent(), field);
 
-    return new Parameter(
-            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
-            null, //description
-            null, //default value
-            Boolean.FALSE,  //required
-            Boolean.FALSE,  //allow multiple
-            dataTypeName,   //data type
-            allowable,           //allowable values
-            "query",        //param type
-            null  //param access
-    );
+    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder().name(isNullOrEmpty(parentName) ? field
+            .getName() : String.format("%s.%s", parentName, field.getName())).description(null).defaultValue(null)
+            .required(Boolean.FALSE).allowMultiple(Boolean.FALSE).dataType(dataTypeName).allowableValues(allowable)
+            .parameterType("query").parameterAccess(null).build();
 
   }
 
@@ -72,31 +65,19 @@ class ParameterBuilder {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
 
-    return new Parameter(
-            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
-            apiParam.value(),
-            apiParam.defaultValue(),
-            apiParam.required(),
-            apiParam.allowMultiple(),
-            dataTypeName,
-            allowable,
-            "query", //param type
-            apiParam.access());
+    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder().name(isNullOrEmpty(parentName) ? field
+            .getName() : String.format("%s.%s", parentName, field.getName())).description(apiParam.value())
+            .defaultValue(apiParam.defaultValue()).required(apiParam.required()).allowMultiple(apiParam.allowMultiple
+                    ()).dataType(dataTypeName).allowableValues(allowable).parameterType("query").parameterAccess(apiParam.access()).build();
   }
 
   private Parameter fromApiModelProperty(ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
-    return new Parameter(
-            isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()),
-            apiModelProperty.value(),
-            null, //default value
-            apiModelProperty.required(),
-            Boolean.FALSE,  //allow multiple
-            dataTypeName,
-            allowable,
-            "query", //param type
-            apiModelProperty.access());
+    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder().name(isNullOrEmpty(parentName) ? field
+            .getName() : String.format("%s.%s", parentName, field.getName())).description(apiModelProperty.value())
+            .defaultValue(null).required(apiModelProperty.required()).allowMultiple(Boolean.FALSE).dataType
+                    (dataTypeName).allowableValues(allowable).parameterType("query").parameterAccess(apiModelProperty.access()).build();
   }
 
   private AllowableValues allowableValues(final Optional<String> optionalAllowable, final Field field) {

@@ -6,6 +6,7 @@ import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.models.dto.Authorization;
 import com.mangofactory.swagger.models.dto.Operation;
+import com.mangofactory.swagger.models.dto.builder.OperationBuilder;
 import com.mangofactory.swagger.models.dto.Parameter;
 import com.mangofactory.swagger.models.dto.ResponseMessage;
 import com.mangofactory.swagger.ordering.OperationPositionalOrdering;
@@ -43,8 +44,9 @@ import static com.google.common.collect.Sets.*;
 
 public class ApiOperationReader implements Command<RequestMappingContext> {
 
-  private static final Set<RequestMethod> allRequestMethods = new LinkedHashSet<RequestMethod>(Arrays.asList(RequestMethod
-          .values()));
+  private static final Set<RequestMethod> allRequestMethods = new LinkedHashSet<RequestMethod>(Arrays.asList
+          (RequestMethod
+                  .values()));
 
   public static final OperationPositionalOrdering OPERATION_POSITIONAL_ORDERING = new OperationPositionalOrdering();
   private Collection<RequestMappingReader> customAnnotationReaders;
@@ -117,22 +119,21 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       isHidden = (Boolean) operationResultMap.get("isHidden");
 
       if (!isHidden) {
-        Operation operation = new Operation(
-                (String) operationResultMap.get("httpRequestMethod"),
-                (String) operationResultMap.get("summary"),
-                (String) operationResultMap.get("notes"),
-                (String) operationResultMap.get("responseClass"),
-                (String) operationResultMap.get("nickname"),
-                (Integer) operationResultMap.get("position"),
-                producesMediaTypes,
-                consumesMediaTypes,
-                new ArrayList<String>(0),
-                authorizations,
-                parameterList,
-                (Set) operationResultMap.get("responseMessages"),
-                (String) operationResultMap.get("deprecated")
-        );
-
+        Operation operation = new OperationBuilder()
+                .method((String) operationResultMap.get("httpRequestMethod"))
+                .summary((String) operationResultMap.get("summary"))
+                .notes((String) operationResultMap.get("notes"))
+                .responseClass((String) operationResultMap.get("responseClass"))
+                .nickname((String) operationResultMap.get("nickname"))
+                .position((Integer) operationResultMap.get("position"))
+                .produces(producesMediaTypes)
+                .consumes(consumesMediaTypes)
+                .protocol(new ArrayList<String>(0))
+                .authorizations(authorizations)
+                .parameters(parameterList)
+                .responseMessages((Set) operationResultMap.get("responseMessages"))
+                .deprecated((String) operationResultMap.get("deprecated"))
+                .build();
         operations.add(operation);
       }
     }

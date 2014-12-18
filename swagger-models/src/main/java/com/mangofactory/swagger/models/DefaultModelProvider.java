@@ -7,6 +7,7 @@ import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.dto.Model;
 import com.mangofactory.swagger.models.dto.ModelProperty;
 import com.mangofactory.swagger.models.dto.ModelRef;
+import com.mangofactory.swagger.models.dto.builder.ModelBuilder;
 import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
 import com.wordnik.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,14 +60,16 @@ public class DefaultModelProvider implements ModelProvider {
               itemModelRef(each.getType())
       ));
     }
-    return Optional.of(new Model(typeName(propertiesHost),
-            typeName(propertiesHost),
-            simpleQualifiedTypeName(propertiesHost),
-            properties,
-            modelDescription(propertiesHost),
-            "",
-            "",
-            new ArrayList<String>()));
+    return Optional.of(
+            new ModelBuilder()
+                    .id(typeName(propertiesHost))
+                    .name(typeName(propertiesHost))
+                    .qualifiedType(simpleQualifiedTypeName(propertiesHost))
+                    .properties(properties).description(modelDescription(propertiesHost))
+                    .baseModel("")
+                    .discriminator("")
+                    .subTypes(new ArrayList<String>())
+                    .build());
   }
 
   @Override

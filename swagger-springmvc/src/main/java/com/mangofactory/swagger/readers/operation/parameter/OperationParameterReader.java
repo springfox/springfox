@@ -63,17 +63,12 @@ public class OperationParameterReader extends SwaggerParameterReader {
         Map<String, Object> result = parameterContext.getResult();
 
         if (!shouldExpand(methodParameter)) {
-          Parameter parameter = new Parameter(
-                  (String) result.get("name"),
-                  (String) result.get("description"),
-                  (String) result.get("defaultValue"),
-                  (Boolean) result.get("required"),
-                  (Boolean) result.get("allowMultiple"),
-                  (String) result.get("dataType"),
-                  (AllowableValues) result.get("allowableValues"),
-                  (String) result.get("paramType"),
-                  (String) result.get("paramAccess")
-          );
+          Parameter parameter = new com.mangofactory.swagger.models.dto.builder.ParameterBuilder().name((String)
+                  result.get("name")).description((String) result.get("description")).defaultValue((String) result
+                  .get("defaultValue")).required((Boolean) result.get("required")).allowMultiple((Boolean) result.get
+                  ("allowMultiple")).dataType((String) result.get("dataType")).allowableValues((AllowableValues)
+                  result.get("allowableValues")).parameterType((String) result.get("paramType")).parameterAccess(
+                  (String) result.get("paramAccess")).build();
           parameters.add(parameter);
         } else {
           expander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters);

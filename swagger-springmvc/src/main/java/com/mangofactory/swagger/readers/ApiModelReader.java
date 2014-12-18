@@ -9,6 +9,7 @@ import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.swagger.models.Annotations;
 import com.mangofactory.swagger.models.ModelContext;
 import com.mangofactory.swagger.models.ModelProvider;
+import com.mangofactory.swagger.models.dto.builder.ModelBuilder;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
@@ -142,16 +143,16 @@ public class ApiModelReader implements Command<RequestMappingContext> {
           mergedTargetProperties.put(newProperty, sourceProperties.get(newProperty));
         }
 
-        // uses scala generated copy constructor.
-        Model mergedModel = new Model(
-                targetModelValue.getId(),
-                targetModelValue.getName(),
-                targetModelValue.getQualifiedType(),
-                mergedTargetProperties,
-                targetModelValue.getDescription(),
-                targetModelValue.getBaseModel(),
-                targetModelValue.getDiscriminator(),
-                targetModelValue.getSubTypes());
+        Model mergedModel = new ModelBuilder()
+                .id(targetModelValue.getId())
+                .name(targetModelValue.getName())
+                .qualifiedType(targetModelValue.getQualifiedType())
+                .properties(mergedTargetProperties)
+                .description(targetModelValue.getDescription())
+                .baseModel(targetModelValue.getBaseModel())
+                .discriminator(targetModelValue.getDiscriminator())
+                .subTypes(targetModelValue.getSubTypes())
+                .build();
 
         target.put(sourceModelKey, mergedModel);
       }

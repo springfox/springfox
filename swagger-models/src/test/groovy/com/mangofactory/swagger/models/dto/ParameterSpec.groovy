@@ -1,16 +1,20 @@
 package com.mangofactory.swagger.models.dto
 
+import com.mangofactory.swagger.models.dto.builder.ParameterBuilder
+
 class ParameterSpec extends InternalJsonSerializationSpec {
 
-  final Parameter testParameter = new Parameter("aname",
-          "adesc",
-          "defaultVal",
-          true,
-          true,
-          'int',
-          new AllowableListValues(['a', 'b'], 'string'),
-          "path",
-          'all')
+  final Parameter testParameter = new ParameterBuilder()
+          .name('aname')
+          .description('adesc')
+          .defaultValue('defaultVal')
+          .required(true)
+          .allowMultiple(true)
+          .dataType("int")
+          .allowableValues(new AllowableListValues(['a', 'b'], 'string'))
+          .parameterType("path")
+          .parameterAccess("all")
+          .build()
 
   def "should serialize with allowable list values"() {
     expect:
@@ -32,15 +36,18 @@ class ParameterSpec extends InternalJsonSerializationSpec {
 
   def "should serialize with allowable range values"() {
     expect:
-      Parameter parameter = new Parameter("aname",
-              "adesc",
-              "2",
-              true,
-              true,
-              'int',
-              new AllowableRangeValues('1', '2'),
-              "path",
-              'all')
+      Parameter parameter = new ParameterBuilder()
+              .name('aname')
+              .description('adesc')
+              .defaultValue('2')
+              .required(true)
+              .allowMultiple(true)
+              .dataType("int")
+              .allowableValues(new AllowableRangeValues('1', '2'))
+              .parameterType("path")
+              .parameterAccess("all")
+              .build()
+
       writePretty(parameter) == """{
   "allowMultiple" : true,
   "maximum" : "2",
@@ -58,15 +65,19 @@ class ParameterSpec extends InternalJsonSerializationSpec {
 
   def "should override body param name"() {
     expect:
-      Parameter parameter = new Parameter("aname",
-              "adesc",
-              "2",
-              true,
-              true,
-              'int',
-              new AllowableRangeValues('1', '2'),
-              "body",
-              'all')
+
+      Parameter parameter = new ParameterBuilder()
+              .name('aname')
+              .description('adesc')
+              .defaultValue('2')
+              .required(true)
+              .allowMultiple(true)
+              .dataType("int")
+              .allowableValues(new AllowableRangeValues('1', '2'))
+              .parameterType("body")
+              .parameterAccess("all")
+              .build()
+
       writePretty(parameter) == """{
   "allowMultiple" : true,
   "maximum" : "2",
@@ -84,15 +95,18 @@ class ParameterSpec extends InternalJsonSerializationSpec {
 
   def "array types are unwrapped"() {
     expect:
-      Parameter parameter = new Parameter("aname",
-              "adesc",
-              "2",
-              true,
-              true,
-              'Set[Pet]',
-              null,
-              "body",
-              'all')
+      Parameter parameter = new ParameterBuilder()
+              .name('aname')
+              .description('adesc')
+              .defaultValue('2')
+              .required(true)
+              .allowMultiple(true)
+              .dataType("Set[Pet]")
+              .allowableValues(null)
+              .parameterType("body")
+              .parameterAccess("all")
+              .build()
+
       writePretty(parameter) == """{
   "allowMultiple" : true,
   "defaultValue" : "2",

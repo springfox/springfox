@@ -10,6 +10,7 @@ import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.models.ModelProvider;
+import com.mangofactory.swagger.models.dto.builder.ApiListingBuilder;
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.ApiDescriptionReader;
@@ -120,19 +121,20 @@ public class ApiListingScanner {
         String resourcePath = longestCommonPath(sortedDescriptions);
 
         String apiVersion = "1.0";
-        ApiListing apiListing = new ApiListing(
-                apiVersion,
-                swaggerVersion,
-                swaggerPathProvider.getApplicationBasePath(),
-                resourcePath,
-                Lists.newArrayList(produces),
-                Lists.newArrayList(consumes),
-                new ArrayList<String>(),
-                authorizations,
-                sortedDescriptions,
-                models,
-                null,
-                position++);
+        ApiListing apiListing = new ApiListingBuilder()
+                .apiVersion(apiVersion)
+                .swaggerVersion(swaggerVersion)
+                .basePath(swaggerPathProvider.getApplicationBasePath())
+                .resourcePath(resourcePath)
+                .produces(Lists.newArrayList(produces))
+                .consumes(Lists.newArrayList(consumes))
+                .protocol(new ArrayList<String>())
+                .authorizations(authorizations)
+                .apis(sortedDescriptions)
+                .models(models)
+                .description(null)
+                .position(position++)
+                .build();
 
         apiListingMap.put(resourceGroup.getGroupName(), apiListing);
       }

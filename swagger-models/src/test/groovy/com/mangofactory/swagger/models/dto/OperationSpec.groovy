@@ -1,25 +1,28 @@
 package com.mangofactory.swagger.models.dto
 
+import com.mangofactory.swagger.models.dto.builder.OperationBuilder
+
 class OperationSpec extends InternalJsonSerializationSpec {
 
-  final Operation operation = new Operation(
-          'PUT',
-          'updatePet',
-          'updatePet',
-          'void',
-          'updatePet',
-          0,
-          ["*/*"],
-          ['application/json'],
-          [],
-          [],
-          [new Parameter('pet', 'pet', '', false, false, 'Pet', null, 'body', null)],
-          [new ResponseMessage(200, 'ok', null)] as Set,
-          "false")
+  final Operation operation = new OperationBuilder()
+          .authorizations([])
+          .consumes(['application/json'])
+          .deprecated("false")
+          .method('PUT')
+          .nickname('updatePet')
+          .notes('updatePet')
+          .parameters([new Parameter('pet', 'pet', '', false, false, 'Pet', null, 'body', null)])
+          .position(0)
+          .produces(["*/*"])
+          .protocol([])
+          .responseClass('void')
+          .responseMessages([new ResponseMessage(200, 'ok', null)] as Set)
+          .summary('updatePet')
+          .build()
 
   def "should serialize an operation"() {
     expect:
-      writePretty(operation) =='''{
+      writePretty(operation) == '''{
   "method" : "PUT",
   "summary" : "updatePet",
   "notes" : "updatePet",

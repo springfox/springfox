@@ -2,10 +2,11 @@ package com.mangofactory.swagger.readers;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
-import com.mangofactory.swagger.readers.operation.RequestMappingReader;
-import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.mangofactory.swagger.models.dto.AllowableListValues;
 import com.mangofactory.swagger.models.dto.Parameter;
+import com.mangofactory.swagger.models.dto.builder.ParameterBuilder;
+import com.mangofactory.swagger.readers.operation.RequestMappingReader;
+import com.mangofactory.swagger.scanners.RequestMappingContext;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 
@@ -24,18 +25,17 @@ public class OperationParameterRequestConditionReader implements RequestMappingR
               withName(expression.getName()))) {
         continue;
       }
-      Parameter parameter = new Parameter(
-              expression.getName(),
-              null,
-              expression.getValue(),
-              true,
-              false,
-              "string",
-              new AllowableListValues(newArrayList(expression.getValue()), "string"),
-              "query",
-              ""
-      );
-
+      Parameter parameter = new ParameterBuilder()
+              .name(expression.getName())
+              .description(null)
+              .defaultValue(expression.getValue())
+              .required(true)
+              .allowMultiple(false)
+              .dataType("string")
+              .allowableValues(new AllowableListValues(newArrayList(expression.getValue()), "string"))
+              .parameterType("query")
+              .parameterAccess("")
+              .build();
       parameters.add(parameter);
     }
   }
