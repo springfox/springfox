@@ -8,10 +8,11 @@ import com.mangofactory.swagger.core.SwaggerCache;
 import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration;
+import com.mangofactory.swagger.models.dto.ResponseMessage;
+import com.mangofactory.swagger.models.dto.builder.ResponseMessageBuilder;
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.plugin.SwaggerPluginAdapter;
-import com.mangofactory.swagger.models.dto.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -116,54 +117,150 @@ public class SpringSwaggerConfig {
   public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages() {
     LinkedHashMap<RequestMethod, List<ResponseMessage>> responses = newLinkedHashMap();
     responses.put(GET, asList(
-            new ResponseMessage(OK.value(), OK.getReasonPhrase(), null),
-            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), null),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), null),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), null)
-                             ));
+            new ResponseMessageBuilder()
+                    .code(OK.value())
+                    .message(OK.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(NOT_FOUND.value())
+                    .message(NOT_FOUND.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(FORBIDDEN.value())
+                    .message(FORBIDDEN.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(UNAUTHORIZED.value())
+                    .message(UNAUTHORIZED.getReasonPhrase())
+                    .responseModel(null).build()));
 
     responses.put(PUT, asList(
-            new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), null),
-            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), null),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), null),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), null)
-                             ));
+            new ResponseMessageBuilder()
+                    .code(CREATED.value())
+                    .message(CREATED.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(NOT_FOUND.value())
+                    .message(NOT_FOUND.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(FORBIDDEN.value())
+                    .message(FORBIDDEN.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(UNAUTHORIZED.value())
+                    .message(UNAUTHORIZED.getReasonPhrase())
+                    .responseModel(null).build()));
 
     responses.put(POST, asList(
-            new ResponseMessage(CREATED.value(), CREATED.getReasonPhrase(), null),
-            new ResponseMessage(NOT_FOUND.value(), NOT_FOUND.getReasonPhrase(), null),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), null),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), null)
-                              ));
+            new ResponseMessageBuilder()
+                    .code(CREATED.value())
+                    .message(CREATED.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(NOT_FOUND.value())
+                    .message(NOT_FOUND.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(FORBIDDEN.value())
+                    .message(FORBIDDEN.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(UNAUTHORIZED.value())
+                    .message(UNAUTHORIZED.getReasonPhrase())
+                    .responseModel(null).build()));
 
     responses.put(DELETE, asList(
-            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), null),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), null),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), null)
-                                ));
+            new ResponseMessageBuilder()
+                    .code(NO_CONTENT.value())
+                    .message(NO_CONTENT.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(FORBIDDEN.value())
+                    .message(FORBIDDEN.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(UNAUTHORIZED.value())
+                    .message(UNAUTHORIZED.getReasonPhrase())
+                    .responseModel(null)
+                    .build()));
 
     responses.put(PATCH, asList(
-            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), null),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), null),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), null)
-                               ));
+            new ResponseMessageBuilder()
+                    .code(NO_CONTENT.value())
+                    .message(NO_CONTENT.getReasonPhrase())
+                    .responseModel(null).build(),
+            new ResponseMessageBuilder()
+                    .code(FORBIDDEN.value())
+                    .message(FORBIDDEN.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(UNAUTHORIZED.value())
+                    .message(UNAUTHORIZED.getReasonPhrase())
+                    .responseModel(null)
+                    .build()));
 
     responses.put(TRACE, asList(
-            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), null),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), null),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), null)
-                               ));
+            new ResponseMessageBuilder()
+                    .code(NO_CONTENT.value())
+                    .message(NO_CONTENT.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(FORBIDDEN.value())
+                    .message(FORBIDDEN.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(UNAUTHORIZED.value())
+                    .message(UNAUTHORIZED.getReasonPhrase())
+                    .responseModel(null)
+                    .build()));
 
     responses.put(OPTIONS, asList(
-            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), null),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), null),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), null)
-                                 ));
+            new ResponseMessageBuilder()
+                    .code(NO_CONTENT.value())
+                    .message(NO_CONTENT.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(FORBIDDEN.value())
+                    .message(FORBIDDEN.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(UNAUTHORIZED.value())
+                    .message(UNAUTHORIZED.getReasonPhrase())
+                    .responseModel(null)
+                    .build()));
     responses.put(HEAD, asList(
-            new ResponseMessage(NO_CONTENT.value(), NO_CONTENT.getReasonPhrase(), null),
-            new ResponseMessage(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase(), null),
-            new ResponseMessage(UNAUTHORIZED.value(), UNAUTHORIZED.getReasonPhrase(), null)
-                              ));
+            new ResponseMessageBuilder()
+                    .code(NO_CONTENT.value())
+                    .message(NO_CONTENT.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(FORBIDDEN.value())
+                    .message(FORBIDDEN.getReasonPhrase())
+                    .responseModel(null)
+                    .build(),
+            new ResponseMessageBuilder()
+                    .code(UNAUTHORIZED.value())
+                    .message(UNAUTHORIZED.getReasonPhrase())
+                    .responseModel(null)
+                    .build()));
     return responses;
   }
 

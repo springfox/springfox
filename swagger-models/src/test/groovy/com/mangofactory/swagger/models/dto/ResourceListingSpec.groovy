@@ -1,6 +1,14 @@
 package com.mangofactory.swagger.models.dto
 
-import static com.google.common.collect.Lists.newArrayList
+import com.mangofactory.swagger.models.dto.builder.AuthorizationCodeGrantBuilder
+import com.mangofactory.swagger.models.dto.builder.ImplicitGrantBuilder
+import com.mangofactory.swagger.models.dto.builder.LoginEndpointBuilder
+import com.mangofactory.swagger.models.dto.builder.OAuthBuilder
+import com.mangofactory.swagger.models.dto.builder.ResourceListingBuilder
+import com.mangofactory.swagger.models.dto.builder.TokenEndpointBuilder
+import com.mangofactory.swagger.models.dto.builder.TokenRequestEndpointBuilder
+
+import static com.google.common.collect.Lists.*
 
 class ResourceListingSpec extends InternalJsonSerializationSpec {
 
@@ -67,12 +75,15 @@ class ResourceListingSpec extends InternalJsonSerializationSpec {
 
   def "should not initialize auth types"() {
     expect:
-      writePretty(new ResourceListing(
-              "apiVersion",
-              "swagger version",
-              [apiListingReference()],
-              null,
-              apiInfo())) == """{
+      writePretty(
+              new ResourceListingBuilder()
+                      .apis([apiListingReference()])
+                      .apiVersion("apiVersion")
+                      .authorizations(null)
+                      .info(apiInfo())
+                      .swaggerVersion("swagger version")
+                      .build()
+      ) == """{
   "apiVersion" : "apiVersion",
   "apis" : [ {
     "description" : "description",
@@ -104,13 +115,24 @@ class ResourceListingSpec extends InternalJsonSerializationSpec {
 
     List<GrantType> grantTypes = newArrayList();
 
-    LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.wordnik.com/oauth/dialog");
-    grantTypes.add(new ImplicitGrant(loginEndpoint, "access_token"));
+    LoginEndpoint loginEndpoint = new LoginEndpointBuilder().url("http://petstore.swagger.wordnik.com/oauth/dialog").build();
+    grantTypes.add(new ImplicitGrantBuilder().loginEndpoint(loginEndpoint).tokenName("access_token").build())
 
-    TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint("http://petstore.swagger.wordnik.com/oauth/requestToken", "client_id", "client_secret");
-    TokenEndpoint tokenEndpoint = new TokenEndpoint("http://petstore.swagger.wordnik.com/oauth/token", "auth_code");
+    TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpointBuilder()
+            .url("http://petstore.swagger.wordnik.com/oauth/requestToken")
+            .clientIdName("client_id")
+            .clientSecretName("client_secret")
+            .build()
 
-    AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint);
+    TokenEndpoint tokenEndpoint = new TokenEndpointBuilder()
+            .url("http://petstore.swagger.wordnik.com/oauth/token").tokenName("auth_code")
+            .build()
+
+    AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrantBuilder()
+            .tokenRequestEndpoint(tokenRequestEndpoint)
+            .tokenEndpoint(tokenEndpoint)
+            .build()
+
     grantTypes.add(authorizationCodeGrant);
 
 

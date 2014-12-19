@@ -8,6 +8,7 @@ import com.mangofactory.swagger.models.dto.Model;
 import com.mangofactory.swagger.models.dto.ModelProperty;
 import com.mangofactory.swagger.models.dto.ModelRef;
 import com.mangofactory.swagger.models.dto.builder.ModelBuilder;
+import com.mangofactory.swagger.models.dto.builder.ModelPropertyBuilder;
 import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
 import com.wordnik.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,14 +52,17 @@ public class DefaultModelProvider implements ModelProvider {
     Map<String, ModelProperty> properties = newLinkedHashMap();
 
     for (com.mangofactory.swagger.models.property.ModelProperty each : properties(modelContext, propertiesHost)) {
-      properties.put(each.getName(), new ModelProperty(each.typeName(modelContext),
-              each.qualifiedTypeName(),
-              each.position(),
-              each.isRequired(),
-              each.propertyDescription(),
-              each.allowableValues(),
-              itemModelRef(each.getType())
-      ));
+      properties.put(each.getName(),
+              new ModelPropertyBuilder()
+                      .type(each.typeName(modelContext))
+                      .qualifiedType(each.qualifiedTypeName())
+                      .position(each.position())
+                      .required(each.isRequired())
+                      .description(each.propertyDescription())
+                      .allowableValues(each.allowableValues())
+                      .iItems(itemModelRef(each.getType()))
+                      .build()
+                    );
     }
     return Optional.of(
             new ModelBuilder()

@@ -5,6 +5,13 @@ import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.controllers.DefaultSwaggerController;
 import com.mangofactory.swagger.models.ModelProvider;
+import com.mangofactory.swagger.models.dto.ApiDescription;
+import com.mangofactory.swagger.models.dto.ApiInfo;
+import com.mangofactory.swagger.models.dto.ApiListing;
+import com.mangofactory.swagger.models.dto.ApiListingReference;
+import com.mangofactory.swagger.models.dto.AuthorizationType;
+import com.mangofactory.swagger.models.dto.ResourceListing;
+import com.mangofactory.swagger.models.dto.builder.ResourceListingBuilder;
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
@@ -13,12 +20,6 @@ import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.ApiListingScanner;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.mangofactory.swagger.scanners.ResourceGroup;
-import com.mangofactory.swagger.models.dto.ApiDescription;
-import com.mangofactory.swagger.models.dto.ApiInfo;
-import com.mangofactory.swagger.models.dto.ApiListing;
-import com.mangofactory.swagger.models.dto.ApiListingReference;
-import com.mangofactory.swagger.models.dto.AuthorizationType;
-import com.mangofactory.swagger.models.dto.ResourceListing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,13 +76,13 @@ public class SwaggerApiResourceListing {
 
     Collections.sort(apiListingReferences, apiListingReferenceOrdering);
 
-    ResourceListing resourceListing = new ResourceListing(
-            this.apiVersion,
-            "1.2",
-            apiListingReferences,
-            authorizationTypes == null ? new ArrayList<AuthorizationType>() : authorizationTypes,
-            apiInfo
-    );
+    ResourceListing resourceListing = new ResourceListingBuilder()
+            .apiVersion(this.apiVersion)
+            .swaggerVersion("1.2")
+            .apis(apiListingReferences)
+            .authorizations(authorizationTypes == null ? new ArrayList<AuthorizationType>() : authorizationTypes)
+            .info(apiInfo)
+            .build();
 
     log.info("Added a resource listing with ({}) api resources: ", apiListingReferences.size());
     for (ApiListingReference apiListingReference : apiListingReferences) {

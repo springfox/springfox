@@ -8,6 +8,7 @@ import com.google.common.primitives.Ints;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.models.Annotations;
 import com.mangofactory.swagger.models.ResolvedTypes;
+import com.mangofactory.swagger.models.dto.builder.ResponseMessageBuilder;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import com.mangofactory.swagger.models.dto.ResponseMessage;
@@ -69,7 +70,8 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
     if (!Void.class.equals(returnType.getErasedType()) && !Void.TYPE.equals(returnType.getErasedType())) {
       simpleName = ResolvedTypes.typeName(returnType);
     }
-    responseWithModel = new ResponseMessage(httpStatusCode, message, simpleName);
+    responseWithModel = new ResponseMessageBuilder().code(httpStatusCode).message(message).responseModel(simpleName)
+            .build();
     byStatusCode.put(httpStatusCode, responseWithModel);
   }
 
@@ -93,15 +95,16 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
         ResponseMessage responseMessage = byStatusCode.get(apiResponse.code());
         if (null == responseMessage) {
           byStatusCode.put(apiResponse.code(),
-                  new ResponseMessage(apiResponse.code(), apiResponse.message(), overrideTypeName));
+                  new ResponseMessageBuilder().code(apiResponse.code()).message(apiResponse.message()).responseModel
+                          (overrideTypeName).build());
         } else {
           String responseModel = responseMessage.getResponseModel();
           if (!isNullOrEmpty(overrideTypeName)) {
             responseModel = overrideTypeName;
           }
           byStatusCode.put(apiResponse.code(),
-                  new ResponseMessage(apiResponse.code(), coalese(apiResponse.message(), responseMessage.getMessage()),
-                          responseModel));
+                  new ResponseMessageBuilder().code(apiResponse.code()).message(coalese(apiResponse.message(),
+                          responseMessage.getMessage())).responseModel(responseModel).build());
         }
       }
     }

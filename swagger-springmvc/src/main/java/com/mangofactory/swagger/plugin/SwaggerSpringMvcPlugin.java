@@ -393,7 +393,8 @@ public class SwaggerSpringMvcPlugin {
   }
 
   /**
-   * Hook to externally control the fact the swagger processing engine
+   * Hook to externally control auto initialization of this swagger plugin instance.
+   * Typically used if defer initialization.
    * @param externallyConfiguredFlag - true to turn it on, false to turn it off
    * @return this SwaggerSpringMvcPlugin
    */

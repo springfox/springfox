@@ -1,11 +1,13 @@
 package com.mangofactory.swagger.models.dto
 
+import com.mangofactory.swagger.models.dto.builder.AuthorizationBuilder
+
 class AuthorizationSpec extends InternalJsonSerializationSpec {
 
-  final Authorization authorization = new Authorization(
-          'atype',
-          [new AuthorizationScope('s', 'd')] as AuthorizationScope[]
-  )
+  final Authorization authorization = new AuthorizationBuilder()
+          .type('atype')
+          .scopes([new AuthorizationScope('s', 'd')] as AuthorizationScope[])
+          .build()
 
   def "should serialize"() {
     expect:

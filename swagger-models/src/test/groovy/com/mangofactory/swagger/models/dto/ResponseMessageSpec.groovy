@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.models.dto
 
+import com.mangofactory.swagger.models.dto.builder.ResponseMessageBuilder
 import spock.lang.Unroll
 
 class ResponseMessageSpec extends InternalJsonSerializationSpec {
@@ -11,8 +12,8 @@ class ResponseMessageSpec extends InternalJsonSerializationSpec {
 
     where:
       responseMessage << [
-              new ResponseMessage(200, "ok", null),
-              new ResponseMessage(200, "ok", 'model')
+              new ResponseMessageBuilder().code(200).message("ok").build(),
+              new ResponseMessageBuilder().code(200).message("ok").responseModel('model').build()
       ]
 
       expected << [

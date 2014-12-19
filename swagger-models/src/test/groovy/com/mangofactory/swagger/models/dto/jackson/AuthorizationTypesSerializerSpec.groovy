@@ -1,6 +1,8 @@
 package com.mangofactory.swagger.models.dto.jackson
 
 import com.mangofactory.swagger.models.dto.*
+import com.mangofactory.swagger.models.dto.builder.AuthorizationCodeGrantBuilder
+import com.mangofactory.swagger.models.dto.builder.OAuthBuilder
 
 class AuthorizationTypesSerializerSpec extends InternalJsonSerializationSpec {
 
@@ -16,7 +18,11 @@ class AuthorizationTypesSerializerSpec extends InternalJsonSerializationSpec {
       TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint("http://petstore.swagger.wordnik.com/oauth/requestToken", "client_id", "client_secret");
       TokenEndpoint tokenEndpoint = new TokenEndpoint("http://petstore.swagger.wordnik.com/oauth/token", "auth_code");
 
-      AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint);
+      AuthorizationCodeGrant authorizationCodeGrant =  new AuthorizationCodeGrantBuilder()
+              .tokenRequestEndpoint(tokenRequestEndpoint)
+              .tokenEndpoint(tokenEndpoint)
+              .build()
+
       grantTypes.add(authorizationCodeGrant);
 
       OAuth oAuth = new OAuthBuilder()

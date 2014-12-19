@@ -1,10 +1,39 @@
 ## Change Logs
 
-- [0.9.3](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.9.3) 
-- [0.9.2](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.9.2)
-- [0.8.8](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.8.8)
+[0.9.4](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.9.4)
+===========================================
+## Highlights
+- Removed all transitive dependencies on scala which reduces dependency size by ~30Mb
+- Provided default model substitutes for spring's ResponseEntity and HttpEntity
+- Upgraded to Jackson 2.4.4
+- Fixed an issue where 'body' parameters were not being named as 'body'
+- Ability to disable default response messages `com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
+.useDefaultResponseMessages`
 
-### git Older releases...
+## Breaking changes
+- All dependencies on swagger-core's scala models (`com.wordnik.swagger.model`) have been removed. The equivalent java models now live in `com.mangofactory.swagger.models.dto`. If an application has configured swagger auth or custom response messages it's likely there will be compilation issues with this upgrade, the fix is to simply import the java equivalents from `com.mangofactory.swagger.models.dto`. There are also builders in `com.mangofactory.swagger.models.dto.builder`. These are the most likely offenders:
+   - com.wordnik.swagger.model.ApiInfo
+   - com.wordnik.swagger.model.Authorization
+   - com.wordnik.swagger.model.AuthorizationCodeGrant
+   - com.wordnik.swagger.model.AuthorizationScope
+   - com.wordnik.swagger.model.AuthorizationType
+   - com.wordnik.swagger.model.GrantType
+   - com.wordnik.swagger.model.ImplicitGrant
+   - com.wordnik.swagger.model.LoginEndpoint
+   - com.wordnik.swagger.model.OAuth
+   - com.wordnik.swagger.model.OAuthBuilder
+   - com.wordnik.swagger.model.TokenEndpoint
+   - com.wordnik.swagger.model.TokenRequestEndpoint
+   - com.wordnik.swagger.model.ResponseMessage
+
+[0.9.3](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.9.3)
+===========================================
+
+[0.9.2](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.9.2)
+===========================================
+
+[0.8.8](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.8.8)
+===========================================
 
 swagger-springmvc-0.8.6
 ===========================================

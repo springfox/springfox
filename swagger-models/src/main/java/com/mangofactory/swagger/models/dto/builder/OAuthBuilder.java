@@ -1,4 +1,8 @@
-package com.mangofactory.swagger.models.dto;
+package com.mangofactory.swagger.models.dto.builder;
+
+import com.mangofactory.swagger.models.dto.AuthorizationScope;
+import com.mangofactory.swagger.models.dto.GrantType;
+import com.mangofactory.swagger.models.dto.OAuth;
 
 import java.util.ArrayList;
 import java.util.List;

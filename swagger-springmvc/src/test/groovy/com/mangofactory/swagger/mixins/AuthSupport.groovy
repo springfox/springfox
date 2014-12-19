@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.mixins
 
 import com.mangofactory.swagger.models.dto.Authorization
+import com.mangofactory.swagger.models.dto.builder.AuthorizationBuilder
 import com.mangofactory.swagger.models.dto.AuthorizationCodeGrant
 import com.mangofactory.swagger.models.dto.AuthorizationScope
 import com.mangofactory.swagger.models.dto.AuthorizationType
@@ -8,9 +9,10 @@ import com.mangofactory.swagger.models.dto.GrantType
 import com.mangofactory.swagger.models.dto.ImplicitGrant
 import com.mangofactory.swagger.models.dto.LoginEndpoint
 import com.mangofactory.swagger.models.dto.OAuth
-import com.mangofactory.swagger.models.dto.OAuthBuilder
+import com.mangofactory.swagger.models.dto.builder.OAuthBuilder
 import com.mangofactory.swagger.models.dto.TokenEndpoint
 import com.mangofactory.swagger.models.dto.TokenRequestEndpoint
+import com.mangofactory.swagger.models.dto.builder.AuthorizationCodeGrantBuilder
 
 import static com.google.common.collect.Lists.*
 
@@ -18,7 +20,7 @@ class AuthSupport {
   def defaultAuth() {
     AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything")
     AuthorizationScope[] authorizationScopes = [authorizationScope] as AuthorizationScope[];
-    newArrayList(new Authorization("oauth2", authorizationScopes))
+    newArrayList(new AuthorizationBuilder().type("oauth2").scopes(authorizationScopes).build())
   }
 
   def oAuth() {
@@ -48,7 +50,11 @@ class AuthSupport {
     TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint("http://petstore.swagger.wordnik.com/oauth/requestToken", "client_id", "client_secret")
     TokenEndpoint tokenEndpoint = new TokenEndpoint("http://petstore.swagger.wordnik.com/oauth/token", "auth_code")
 
-    AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint)
+    AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrantBuilder()
+            .tokenRequestEndpoint(tokenRequestEndpoint)
+            .tokenEndpoint(tokenEndpoint)
+            .build()
+
     grantTypes.add(authorizationCodeGrant)
 
     OAuth oAuth = new OAuthBuilder()

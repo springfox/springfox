@@ -1,8 +1,10 @@
 package com.mangofactory.swagger.models.dto
 
+import com.mangofactory.swagger.models.dto.builder.AuthorizationScopeBuilder
+
 class AuthorizationScopeSpec extends InternalJsonSerializationSpec {
 
-  final AuthorizationScope authorizationScope = new AuthorizationScope('s', 'd')
+  final AuthorizationScope authorizationScope = new AuthorizationScopeBuilder().scope('s').description('d').build()
 
   def "should serialize"() {
     expect:

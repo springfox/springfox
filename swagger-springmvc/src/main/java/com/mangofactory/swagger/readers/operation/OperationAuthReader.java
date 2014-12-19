@@ -1,6 +1,8 @@
 package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.authorization.AuthorizationContext;
+import com.mangofactory.swagger.models.dto.builder.AuthorizationBuilder;
+import com.mangofactory.swagger.models.dto.builder.AuthorizationScopeBuilder;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.Authorization;
@@ -45,12 +47,16 @@ public class OperationAuthReader implements RequestMappingReader {
           for (AuthorizationScope authorizationScope : scopes) {
             String description = authorizationScope.description();
             String scope = authorizationScope.scope();
-            authorizationScopeList.add(new com.mangofactory.swagger.models.dto.AuthorizationScope(scope, description));
+            authorizationScopeList.add(new AuthorizationScopeBuilder().scope(scope).description(description)
+                    .build());
           }
           com.mangofactory.swagger.models.dto.AuthorizationScope[] authorizationScopes = authorizationScopeList
                   .toArray(new com.mangofactory.swagger.models.dto.AuthorizationScope[authorizationScopeList.size()]);
           com.mangofactory.swagger.models.dto.Authorization authorizationModel =
-                  new com.mangofactory.swagger.models.dto.Authorization(value, authorizationScopes);
+                  new AuthorizationBuilder()
+                          .type(value)
+                          .scopes(authorizationScopes)
+                          .build();
           authorizations.add(authorizationModel);
         }
       }
