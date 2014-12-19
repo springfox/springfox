@@ -376,6 +376,7 @@ For example, if you wanted `List<String>` to be encoded as 'ListOfString' and `M
 to be encoded as 'MapOfStringAndObject' you could implement the following:
 
 ```java
+
 public class SimpleGenericNamingStrategy implements GenericTypeNamingStrategy {
     private final static String OPEN = "Of";
     private final static String CLOSE = "";
