@@ -41,7 +41,7 @@ class ConstructorModelPropertySpec extends Specification {
 
     where:
     fieldName             || description  | isRequired | typeName             | qualifiedTypeName                                                     | allowableValues
-    "foobar"              || null         | false      | "string"             | "com.mangofactory.swagger.models.TypeWithConstructorProperty\$Foobar" | ["Foo", "Bar"]
+    "foobar"              || null         | false      | "string"             | "com.mangofactory.swagger.schema.TypeWithConstructorProperty\$Foobar" | ["Foo", "Bar"]
     "visibleForSerialize" || null         | false      | "long"               | "java.lang.Long"                                                      | null
   }
 }

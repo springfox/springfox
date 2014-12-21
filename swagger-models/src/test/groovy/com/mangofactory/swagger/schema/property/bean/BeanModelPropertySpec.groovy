@@ -77,10 +77,10 @@ class BeanModelPropertySpec extends Specification {
       methodName    | description              | required | allowableValues                                             | typeName  | qualifiedTypeName
       "getIntProp"  | "int Property Field"     | true     | null                                                        | "int"     | "int"
       "isBoolProp"  | "bool Property Getter"   | false    | null                                                        | "boolean" | "boolean"
-      "getEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(newArrayList("ONE", "TWO"), "LIST") | "string"  | "com.mangofactory.swagger.models.ExampleEnum"
+      "getEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(newArrayList("ONE", "TWO"), "LIST") | "string"  | "com.mangofactory.swagger.schema.ExampleEnum"
       "setIntProp"  | "int Property Field"     | true     | null                                                        | "int"     | "int"
       "setBoolProp" | "bool Property Getter"   | false    | null                                                        | "boolean" | "boolean"
-      "setEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(newArrayList("ONE", "TWO"), "LIST") | "string"  | "com.mangofactory.swagger.models.ExampleEnum"
+      "setEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(newArrayList("ONE", "TWO"), "LIST") | "string"  | "com.mangofactory.swagger.schema.ExampleEnum"
   }
 
 

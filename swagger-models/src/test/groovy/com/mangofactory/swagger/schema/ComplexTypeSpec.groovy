@@ -38,7 +38,7 @@ class ComplexTypeSpec extends Specification {
       property     | type       | dataTypeProperty | qualifiedType
       "name"       | "string"   | 'type'           | "java.lang.String"
       "age"        | "integer"  | 'type'           | "int"
-      "category"   | "Category" | 'reference'      | "com.mangofactory.swagger.models.Category"
+      "category"   | "Category" | 'reference'      | "com.mangofactory.swagger.schema.Category"
       "customType" | "number"   | 'type'           | "java.math.BigDecimal"
   }
 
@@ -68,7 +68,7 @@ class ComplexTypeSpec extends Specification {
 
     where:
       property | type            | qualifiedType                                   | isBaseType
-      "parent" | "RecursiveType" | "com.mangofactory.swagger.models.RecursiveType" | false
+      "parent" | "RecursiveType" | "com.mangofactory.swagger.schema.RecursiveType" | false
   }
 
   @Unroll
@@ -98,7 +98,7 @@ class ComplexTypeSpec extends Specification {
       property            | type       | typeProperty | qualifiedType
       "name"              | "string"   | 'type'       | "java.lang.String"
       "age"               | "integer"  | 'type'       | "int"
-      "category"          | "Category" | 'reference'  | "com.mangofactory.swagger.models.Category"
+      "category"          | "Category" | 'reference'  | "com.mangofactory.swagger.schema.Category"
       "customType"        | "number"   | 'type'       | "java.math.BigDecimal"
       "inheritedProperty" | "string"   | 'type'       | "java.lang.String"
   }

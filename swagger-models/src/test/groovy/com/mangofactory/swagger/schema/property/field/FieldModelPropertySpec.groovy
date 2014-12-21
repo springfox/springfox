@@ -35,8 +35,8 @@ class FieldModelPropertySpec extends Specification {
     fieldName       || description          | isRequired | typeName             | qualifiedTypeName                                               | allowableValues
     "intProp"       || "int Property Field" | true       | "int"                | "int"                                                           | null
     "boolProp"      || null                 | false      | "boolean"            | "boolean"                                                       | null
-    "enumProp"      || null                 | false      | "string"             | "com.mangofactory.swagger.models.ExampleEnum"                   | ["ONE", "TWO"]
-    "genericProp"   || null                 | false      | "GenericType«string»"| "com.mangofactory.swagger.models.GenericType<java.lang.String>" | null
+    "enumProp"      || null                 | false      | "string"             | "com.mangofactory.swagger.schema.ExampleEnum"                   | ["ONE", "TWO"]
+    "genericProp"   || null                 | false      | "GenericType«string»"| "com.mangofactory.swagger.schema.GenericType<java.lang.String>" | null
   }
 
   def "Extracting information from generic fields with array type binding" () {
@@ -55,7 +55,7 @@ class FieldModelPropertySpec extends Specification {
 
     where:
       fieldName             || typeName                       | qualifiedTypeName
-      "genericByteArray"    || "GenericType«Array«byte»»"     | "com.mangofactory.swagger.models.GenericType<byte[]>"
-      "genericCategoryArray"|| "GenericType«Array«Category»»" | "com.mangofactory.swagger.models.GenericType<com.mangofactory.swagger.models.Category[]>"
+      "genericByteArray"    || "GenericType«Array«byte»»"     | "com.mangofactory.swagger.schema.GenericType<byte[]>"
+      "genericCategoryArray"|| "GenericType«Array«Category»»" | "com.mangofactory.swagger.schema.GenericType<com.mangofactory.swagger.schema.Category[]>"
   }
 }

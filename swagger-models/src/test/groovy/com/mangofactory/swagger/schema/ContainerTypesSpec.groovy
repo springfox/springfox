@@ -55,8 +55,8 @@ class ContainerTypesSpec extends Specification {
 
     where:
       property          | name   | itemType      | itemQualifiedType
-      "complexTypes"    | "List" | 'ComplexType' | "com.mangofactory.swagger.models.ComplexType"
-      "enums"           | "List" | "string"      | "com.mangofactory.swagger.models.ExampleEnum"
+      "complexTypes"    | "List" | 'ComplexType' | "com.mangofactory.swagger.schema.ComplexType"
+      "enums"           | "List" | "string"      | "com.mangofactory.swagger.schema.ExampleEnum"
       "aliasOfIntegers" | "List" | "integer"     | "java.lang.Integer"
       "strings"         | "List" | "string"      | "java.lang.String"
       "objects"         | "List" | "object"      | "java.lang.Object"
@@ -89,8 +89,8 @@ class ContainerTypesSpec extends Specification {
 
     where:
       property          | type  | itemType      | itemQualifiedType
-      "complexTypes"    | "Set" | 'ComplexType' | "com.mangofactory.swagger.models.ComplexType"
-      "enums"           | "Set" | "string"      | "com.mangofactory.swagger.models.ExampleEnum"
+      "complexTypes"    | "Set" | 'ComplexType' | "com.mangofactory.swagger.schema.ComplexType"
+      "enums"           | "Set" | "string"      | "com.mangofactory.swagger.schema.ExampleEnum"
       "aliasOfIntegers" | "Set" | "integer"     | "java.lang.Integer"
       "strings"         | "Set" | "string"      | "java.lang.String"
       "objects"         | "Set" | "object"      | "java.lang.Object"
@@ -123,8 +123,8 @@ class ContainerTypesSpec extends Specification {
 
     where:
       property          | type    | itemType      | itemQualifiedType
-      "complexTypes"    | "Array" | 'ComplexType' | "com.mangofactory.swagger.models.ComplexType"
-      "enums"           | "Array" | "string"      | "com.mangofactory.swagger.models.ExampleEnum"
+      "complexTypes"    | "Array" | 'ComplexType' | "com.mangofactory.swagger.schema.ComplexType"
+      "enums"           | "Array" | "string"      | "com.mangofactory.swagger.schema.ExampleEnum"
       "aliasOfIntegers" | "Array" | "integer"     | "java.lang.Integer"
       "strings"         | "Array" | "string"      | "java.lang.String"
       "objects"         | "Array" | "object"      | "java.lang.Object"
@@ -158,9 +158,9 @@ class ContainerTypesSpec extends Specification {
 
     where:
       property              | type   | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
-      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
-      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»" | "com.mangofactory.swagger.models.alternates.Entry"
+      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.schema.alternates.Entry"
+      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.schema.alternates.Entry"
+      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»" | "com.mangofactory.swagger.schema.alternates.Entry"
   }
 
   @Unroll
@@ -194,8 +194,8 @@ class ContainerTypesSpec extends Specification {
 
     where:
       property              | type   | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
-      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
-      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»" | "com.mangofactory.swagger.models.alternates.Entry"
+      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.schema.alternates.Entry"
+      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.schema.alternates.Entry"
+      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»" | "com.mangofactory.swagger.schema.alternates.Entry"
   }
 }

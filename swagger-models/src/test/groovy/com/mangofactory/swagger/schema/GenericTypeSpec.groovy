@@ -36,12 +36,12 @@ class GenericTypeSpec extends Specification {
 
     where:
       modelType                       | propertyType                                  | modelNamePart                                 | qualifiedType
-      genericClass()                  | "SimpleType"                                  | "SimpleType"                                  | "com.mangofactory.swagger.models.SimpleType"
+      genericClass()                  | "SimpleType"                                  | "SimpleType"                                  | "com.mangofactory.swagger.schema.SimpleType"
       genericClassWithTypeErased()    | "object"                                      | ""                                            | "java.lang.Object"
-      genericClassWithListField()     | "List"                                        | "List«SimpleType»"                            | "java.util.List<com.mangofactory.swagger.models.SimpleType>"
-      genericClassWithGenericField()  | "ResponseEntityAlternative«SimpleType»"       | "ResponseEntityAlternative«SimpleType»"       | "com.mangofactory.swagger.generics.ResponseEntityAlternative<com.mangofactory.swagger.models.SimpleType>"
-      genericClassWithDeepGenerics()  | "ResponseEntityAlternative«List«SimpleType»»" | "ResponseEntityAlternative«List«SimpleType»»" | "com.mangofactory.swagger.generics.ResponseEntityAlternative<java.util.List<com.mangofactory.swagger.models.SimpleType>>"
-      genericCollectionWithEnum()     | "Collection«string»"                          | "Collection«string»"                          | "java.util.Collection<com.mangofactory.swagger.models.ExampleEnum>"
+      genericClassWithListField()     | "List"                                        | "List«SimpleType»"                            | "java.util.List<com.mangofactory.swagger.schema.SimpleType>"
+      genericClassWithGenericField()  | "ResponseEntityAlternative«SimpleType»"       | "ResponseEntityAlternative«SimpleType»"       | "com.mangofactory.swagger.generics.ResponseEntityAlternative<com.mangofactory.swagger.schema.SimpleType>"
+      genericClassWithDeepGenerics()  | "ResponseEntityAlternative«List«SimpleType»»" | "ResponseEntityAlternative«List«SimpleType»»" | "com.mangofactory.swagger.generics.ResponseEntityAlternative<java.util.List<com.mangofactory.swagger.schema.SimpleType>>"
+      genericCollectionWithEnum()     | "Collection«string»"                          | "Collection«string»"                          | "java.util.Collection<com.mangofactory.swagger.schema.ExampleEnum>"
       genericTypeWithPrimitiveArray() | "Array"                                       | "Array«byte»"                                 | "byte"
       genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
   }

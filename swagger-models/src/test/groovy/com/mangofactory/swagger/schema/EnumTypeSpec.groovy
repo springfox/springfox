@@ -26,7 +26,7 @@ class EnumTypeSpec extends Specification {
 
       def modelPropType = modelProperty.getType().getAbsoluteType()
       modelPropType == "string"
-      modelProperty.getQualifiedType() == "com.mangofactory.swagger.models.ExampleEnum"
+      modelProperty.getQualifiedType() == "com.mangofactory.swagger.schema.ExampleEnum"
       modelProperty.getItems() == null
       Types.isBaseType(modelPropType)
       modelProperty.getAllowableValues().getValues() == list
@@ -37,7 +37,7 @@ class EnumTypeSpec extends Specification {
       def retModelProperty = retModelPropertyOption
       def retPropType = retModelProperty.getType().dataType.type
       retPropType == "string"
-      retModelProperty.getQualifiedType() == "com.mangofactory.swagger.models.ExampleEnum"
+      retModelProperty.getQualifiedType() == "com.mangofactory.swagger.schema.ExampleEnum"
       retModelProperty.getItems() == null
       Types.isBaseType(retPropType)
       retModelProperty.getAllowableValues().getValues() == list
