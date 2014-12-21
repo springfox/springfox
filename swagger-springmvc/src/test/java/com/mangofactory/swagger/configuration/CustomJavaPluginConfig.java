@@ -1,10 +1,10 @@
 package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mangofactory.swagger.models.servicemodel.builder.ApiInfoBuilder;
+import com.mangofactory.servicemodel.builder.ApiInfoBuilder;
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
-import com.mangofactory.swagger.models.servicemodel.ApiInfo;
+import com.mangofactory.servicemodel.ApiInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

@@ -1,8 +1,8 @@
 package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.authorization.AuthorizationContext;
-import com.mangofactory.swagger.models.servicemodel.builder.AuthorizationBuilder;
-import com.mangofactory.swagger.models.servicemodel.builder.AuthorizationScopeBuilder;
+import com.mangofactory.servicemodel.builder.AuthorizationBuilder;
+import com.mangofactory.servicemodel.builder.AuthorizationScopeBuilder;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.Authorization;
@@ -25,7 +25,7 @@ public class OperationAuthReader implements RequestMappingReader {
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
     String requestMappingPattern = (String) context.get("requestMappingPattern");
-    List<com.mangofactory.swagger.models.servicemodel.Authorization> authorizations = newArrayList();
+    List<com.mangofactory.servicemodel.Authorization> authorizations = newArrayList();
 
     if (null != authorizationContext) {
       authorizations = authorizationContext.getAuthorizationsForPath(requestMappingPattern);
@@ -43,16 +43,16 @@ public class OperationAuthReader implements RequestMappingReader {
         for (Authorization authorization : authorizationAnnotations) {
           String value = authorization.value();
           AuthorizationScope[] scopes = authorization.scopes();
-          List<com.mangofactory.swagger.models.servicemodel.AuthorizationScope> authorizationScopeList = newArrayList();
+          List<com.mangofactory.servicemodel.AuthorizationScope> authorizationScopeList = newArrayList();
           for (AuthorizationScope authorizationScope : scopes) {
             String description = authorizationScope.description();
             String scope = authorizationScope.scope();
             authorizationScopeList.add(new AuthorizationScopeBuilder().scope(scope).description(description)
                     .build());
           }
-          com.mangofactory.swagger.models.servicemodel.AuthorizationScope[] authorizationScopes = authorizationScopeList
-                  .toArray(new com.mangofactory.swagger.models.servicemodel.AuthorizationScope[authorizationScopeList.size()]);
-          com.mangofactory.swagger.models.servicemodel.Authorization authorizationModel =
+          com.mangofactory.servicemodel.AuthorizationScope[] authorizationScopes = authorizationScopeList
+                  .toArray(new com.mangofactory.servicemodel.AuthorizationScope[authorizationScopeList.size()]);
+          com.mangofactory.servicemodel.Authorization authorizationModel =
                   new AuthorizationBuilder()
                           .type(value)
                           .scopes(authorizationScopes)

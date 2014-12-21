@@ -14,9 +14,9 @@ import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
-import com.mangofactory.swagger.models.servicemodel.ApiInfo
-import com.mangofactory.swagger.models.servicemodel.AuthorizationType
-import com.mangofactory.swagger.models.servicemodel.ResponseMessage
+import com.mangofactory.servicemodel.ApiInfo
+import com.mangofactory.servicemodel.AuthorizationType
+import com.mangofactory.servicemodel.ResponseMessage
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean

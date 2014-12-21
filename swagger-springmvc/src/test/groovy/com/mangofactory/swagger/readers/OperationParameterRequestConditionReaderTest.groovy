@@ -6,7 +6,7 @@ import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.mangofactory.swagger.models.servicemodel.Parameter
+import com.mangofactory.servicemodel.Parameter
 import org.springframework.validation.BindingResult
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition

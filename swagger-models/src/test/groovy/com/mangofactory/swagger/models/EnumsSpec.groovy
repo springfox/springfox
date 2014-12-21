@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.models
 
-import com.mangofactory.swagger.models.servicemodel.AllowableListValues
+import com.mangofactory.servicemodel.AllowableListValues
 import spock.lang.Specification
 
 import static com.google.common.collect.Lists.newArrayList

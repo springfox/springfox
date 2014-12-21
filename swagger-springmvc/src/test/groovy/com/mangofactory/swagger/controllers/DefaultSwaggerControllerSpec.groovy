@@ -6,8 +6,8 @@ import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.ApiListingSupport
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.JsonSupport
-import com.mangofactory.swagger.models.servicemodel.AuthorizationType
-import com.mangofactory.swagger.models.servicemodel.jackson.SwaggerJacksonProvider
+import com.mangofactory.servicemodel.AuthorizationType
+import com.mangofactory.servicemodel.jackson.SwaggerJacksonProvider
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc

@@ -14,10 +14,10 @@ import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.models.alternates.WildcardType
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.mangofactory.swagger.models.servicemodel.ApiDescription
-import com.mangofactory.swagger.models.servicemodel.Model
-import com.mangofactory.swagger.models.servicemodel.ModelProperty
-import com.mangofactory.swagger.models.servicemodel.Operation
+import com.mangofactory.servicemodel.ApiDescription
+import com.mangofactory.servicemodel.Model
+import com.mangofactory.servicemodel.ModelProperty
+import com.mangofactory.servicemodel.Operation
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.method.HandlerMethod

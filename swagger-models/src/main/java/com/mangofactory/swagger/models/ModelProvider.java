@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.models;
 
-import com.mangofactory.swagger.models.servicemodel.Model;
+import com.mangofactory.servicemodel.Model;
 
 public interface ModelProvider {
   com.google.common.base.Optional<Model> modelFor(ModelContext modelContext);

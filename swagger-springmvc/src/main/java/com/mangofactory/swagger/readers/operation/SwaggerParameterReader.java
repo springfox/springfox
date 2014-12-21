@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.mangofactory.swagger.models.servicemodel.Parameter;
+import com.mangofactory.servicemodel.Parameter;
 
 import java.util.Collection;
 import java.util.List;

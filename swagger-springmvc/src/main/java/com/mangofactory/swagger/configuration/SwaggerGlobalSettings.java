@@ -2,7 +2,7 @@ package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
-import com.mangofactory.swagger.models.servicemodel.ResponseMessage;
+import com.mangofactory.servicemodel.ResponseMessage;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;

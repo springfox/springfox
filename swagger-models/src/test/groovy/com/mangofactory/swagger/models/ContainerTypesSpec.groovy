@@ -2,8 +2,8 @@ package com.mangofactory.swagger.models
 
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.mangofactory.swagger.models.servicemodel.Model
-import com.mangofactory.swagger.models.servicemodel.ModelRef
+import com.mangofactory.servicemodel.Model
+import com.mangofactory.servicemodel.ModelRef
 import spock.lang.Specification
 import spock.lang.Unroll
 

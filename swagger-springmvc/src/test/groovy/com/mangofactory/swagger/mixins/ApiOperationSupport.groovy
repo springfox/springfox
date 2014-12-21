@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.mixins
 
-import com.mangofactory.swagger.models.servicemodel.Operation
+import com.mangofactory.servicemodel.Operation
 
 
 class ApiOperationSupport {

@@ -3,7 +3,7 @@ import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.swagger.models.ModelContext
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
-import com.mangofactory.swagger.models.servicemodel.AllowableListValues
+import com.mangofactory.servicemodel.AllowableListValues
 import spock.lang.Specification
 
 import static com.google.common.collect.Lists.newArrayList
