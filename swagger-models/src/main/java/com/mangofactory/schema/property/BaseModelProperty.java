@@ -6,8 +6,8 @@ import com.mangofactory.schema.ModelContext;
 import com.mangofactory.schema.ResolvedTypes;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.mangofactory.servicemodel.AllowableListValues;
-import com.mangofactory.servicemodel.AllowableValues;
+import com.mangofactory.service.model.AllowableListValues;
+import com.mangofactory.service.model.AllowableValues;
 
 import static com.mangofactory.schema.ResolvedTypes.*;
 import static com.mangofactory.schema.property.ApiModelProperties.*;

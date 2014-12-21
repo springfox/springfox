@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.core;
 
-import com.mangofactory.servicemodel.ApiListing;
-import com.mangofactory.servicemodel.ResourceListing;
+import com.mangofactory.service.model.ApiListing;
+import com.mangofactory.service.model.ResourceListing;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

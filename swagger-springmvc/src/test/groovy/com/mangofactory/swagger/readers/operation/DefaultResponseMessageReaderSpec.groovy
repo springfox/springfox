@@ -6,7 +6,7 @@ import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.mangofactory.servicemodel.ResponseMessage
+import com.mangofactory.service.model.ResponseMessage
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
 

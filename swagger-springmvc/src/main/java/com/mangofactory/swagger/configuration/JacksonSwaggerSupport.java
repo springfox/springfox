@@ -2,7 +2,7 @@ package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.schema.property.provider.DefaultModelPropertiesProvider;
-import com.mangofactory.servicemodel.jackson.SwaggerJacksonProvider;
+import com.mangofactory.swagger.dto.jackson.SwaggerJacksonProvider;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

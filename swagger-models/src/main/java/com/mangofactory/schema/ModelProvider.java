@@ -1,6 +1,6 @@
 package com.mangofactory.schema;
 
-import com.mangofactory.servicemodel.Model;
+import com.mangofactory.service.model.Model;
 
 public interface ModelProvider {
   com.google.common.base.Optional<Model> modelFor(ModelContext modelContext);

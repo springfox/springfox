@@ -2,7 +2,7 @@ package com.mangofactory.schema.property;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.mangofactory.schema.ModelContext;
-import com.mangofactory.servicemodel.AllowableValues;
+import com.mangofactory.service.model.AllowableValues;
 
 public interface ModelProperty {
   String getName();

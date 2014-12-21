@@ -8,8 +8,8 @@ import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.RequestMappingEvaluator
 import com.mangofactory.swagger.mixins.*
 import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
-import com.mangofactory.servicemodel.ApiDescription
-import com.mangofactory.servicemodel.ApiListing
+import com.mangofactory.service.model.ApiDescription
+import com.mangofactory.service.model.ApiListing
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 import spock.lang.Unroll

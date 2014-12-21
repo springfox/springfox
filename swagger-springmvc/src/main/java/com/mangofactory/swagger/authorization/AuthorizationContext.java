@@ -2,7 +2,7 @@ package com.mangofactory.swagger.authorization;
 
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher;
 import com.mangofactory.swagger.scanners.RequestMappingPatternMatcher;
-import com.mangofactory.servicemodel.Authorization;
+import com.mangofactory.service.model.Authorization;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 

@@ -6,7 +6,7 @@ import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.google.common.base.Optional;
-import com.mangofactory.servicemodel.AllowableValues;
+import com.mangofactory.service.model.AllowableValues;
 
 import java.lang.reflect.Type;
 import java.util.List;

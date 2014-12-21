@@ -2,7 +2,7 @@ package com.mangofactory.swagger.ordering;
 
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
-import com.mangofactory.servicemodel.ApiListingReference;
+import com.mangofactory.service.model.ApiListingReference;
 
 /**
  * Orders ApiListingReference's by their position

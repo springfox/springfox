@@ -8,8 +8,8 @@ import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.readers.operation.SwaggerParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.mangofactory.servicemodel.AllowableValues;
-import com.mangofactory.servicemodel.Parameter;
+import com.mangofactory.service.model.AllowableValues;
+import com.mangofactory.service.model.Parameter;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
 
@@ -63,7 +63,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
         Map<String, Object> result = parameterContext.getResult();
 
         if (!shouldExpand(methodParameter)) {
-          Parameter parameter = new com.mangofactory.servicemodel.builder.ParameterBuilder().name((String)
+          Parameter parameter = new com.mangofactory.service.model.builder.ParameterBuilder().name((String)
                   result.get("name")).description((String) result.get("description")).defaultValue((String) result
                   .get("defaultValue")).required((Boolean) result.get("required")).allowMultiple((Boolean) result.get
                   ("allowMultiple")).dataType((String) result.get("dataType")).allowableValues((AllowableValues)

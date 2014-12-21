@@ -1,9 +1,9 @@
 package com.mangofactory.swagger.readers;
 
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
-import com.mangofactory.servicemodel.ApiDescription;
-import com.mangofactory.servicemodel.Operation;
-import com.mangofactory.servicemodel.builder.ApiDescriptionBuilder;
+import com.mangofactory.service.model.ApiDescription;
+import com.mangofactory.service.model.Operation;
+import com.mangofactory.service.model.builder.ApiDescriptionBuilder;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
-import com.mangofactory.servicemodel.Parameter;
+import com.mangofactory.service.model.Parameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.method.HandlerMethod;
 

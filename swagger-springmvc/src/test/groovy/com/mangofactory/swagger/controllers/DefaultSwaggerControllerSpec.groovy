@@ -1,13 +1,13 @@
 package com.mangofactory.swagger.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.mangofactory.service.model.AuthorizationType
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
+import com.mangofactory.swagger.dto.jackson.SwaggerJacksonProvider
 import com.mangofactory.swagger.mixins.ApiListingSupport
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.JsonSupport
-import com.mangofactory.servicemodel.AuthorizationType
-import com.mangofactory.servicemodel.jackson.SwaggerJacksonProvider
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
@@ -17,9 +17,9 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*
 
 @Mixin([JsonSupport, ApiListingSupport, AuthSupport])
 class DefaultSwaggerControllerSpec extends Specification {

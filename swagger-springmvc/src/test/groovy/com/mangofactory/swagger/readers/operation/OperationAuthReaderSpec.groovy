@@ -4,8 +4,8 @@ import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.mangofactory.servicemodel.Authorization
-import com.mangofactory.servicemodel.AuthorizationScope
+import com.mangofactory.service.model.Authorization
+import com.mangofactory.service.model.AuthorizationScope
 import spock.lang.Specification
 
 @Mixin([RequestMappingSupport, AuthSupport])

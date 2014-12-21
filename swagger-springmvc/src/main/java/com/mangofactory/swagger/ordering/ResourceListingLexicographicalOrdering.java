@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.ordering;
 
 import com.google.common.collect.Ordering;
-import com.mangofactory.servicemodel.ApiListingReference;
+import com.mangofactory.service.model.ApiListingReference;
 
 /**
  * Orders ApiListingReference's Lexicographically  by their paths

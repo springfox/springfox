@@ -2,7 +2,7 @@ package com.mangofactory.swagger.readers.operation;
 
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.mangofactory.servicemodel.ResponseMessage;
+import com.mangofactory.service.model.ResponseMessage;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 

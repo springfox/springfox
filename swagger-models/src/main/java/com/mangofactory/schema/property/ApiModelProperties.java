@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.mangofactory.servicemodel.AllowableListValues;
+import com.mangofactory.service.model.AllowableListValues;
 
 import java.util.List;
 

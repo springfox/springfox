@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.ordering
 
 import com.google.common.collect.Ordering
-import com.mangofactory.servicemodel.ApiDescription
+import com.mangofactory.service.model.ApiDescription
 import spock.lang.Specification
 
 

@@ -8,7 +8,7 @@ import com.mangofactory.swagger.dummy.models.Treeish
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.mangofactory.servicemodel.Parameter
+import com.mangofactory.service.model.Parameter
 import org.joda.time.LocalDateTime
 import org.springframework.core.MethodParameter
 import org.springframework.validation.BindingResult

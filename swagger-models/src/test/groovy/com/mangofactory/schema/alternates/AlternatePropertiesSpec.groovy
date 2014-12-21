@@ -2,7 +2,7 @@ package com.mangofactory.schema.alternates
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.schema.ModelProvider
-import com.mangofactory.servicemodel.Model
+import com.mangofactory.service.model.Model
 import spock.lang.Specification
 
 import static com.mangofactory.schema.ModelContext.*

@@ -3,7 +3,7 @@ package com.mangofactory.swagger.readers.operation.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
-import com.mangofactory.servicemodel.Parameter;
+import com.mangofactory.service.model.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -5,8 +5,8 @@ import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.annotations.ApiParam
-import com.mangofactory.servicemodel.AllowableListValues
-import com.mangofactory.servicemodel.AllowableRangeValues
+import com.mangofactory.service.model.AllowableListValues
+import com.mangofactory.service.model.AllowableRangeValues
 import org.springframework.core.MethodParameter
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification

@@ -2,7 +2,7 @@ package com.mangofactory.schema
 
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.mangofactory.servicemodel.Model
+import com.mangofactory.service.model.Model
 import spock.lang.Specification
 
 import static com.google.common.collect.Lists.*
