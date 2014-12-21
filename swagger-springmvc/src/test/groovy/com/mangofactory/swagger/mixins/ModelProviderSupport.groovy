@@ -2,17 +2,17 @@ package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.mangofactory.swagger.schema.DefaultModelProvider
-import com.mangofactory.swagger.schema.ModelDependencyProvider
-import com.mangofactory.swagger.schema.ModelProvider
-import com.mangofactory.swagger.schema.ObjectMapperBeanPropertyNamingStrategy
-import com.mangofactory.swagger.schema.alternates.AlternateTypeProvider
-import com.mangofactory.swagger.schema.property.bean.AccessorsProvider
-import com.mangofactory.swagger.schema.property.bean.BeanModelPropertyProvider
-import com.mangofactory.swagger.schema.property.constructor.ConstructorModelPropertyProvider
-import com.mangofactory.swagger.schema.property.field.FieldModelPropertyProvider
-import com.mangofactory.swagger.schema.property.field.FieldProvider
-import com.mangofactory.swagger.schema.property.provider.DefaultModelPropertiesProvider
+import com.mangofactory.schema.DefaultModelProvider
+import com.mangofactory.schema.ModelDependencyProvider
+import com.mangofactory.schema.ModelProvider
+import com.mangofactory.schema.ObjectMapperBeanPropertyNamingStrategy
+import com.mangofactory.schema.alternates.AlternateTypeProvider
+import com.mangofactory.schema.property.bean.AccessorsProvider
+import com.mangofactory.schema.property.bean.BeanModelPropertyProvider
+import com.mangofactory.schema.property.constructor.ConstructorModelPropertyProvider
+import com.mangofactory.schema.property.field.FieldModelPropertyProvider
+import com.mangofactory.schema.property.field.FieldProvider
+import com.mangofactory.schema.property.provider.DefaultModelPropertiesProvider
 
 @SuppressWarnings("GrMethodMayBeStatic")
 class ModelProviderSupport {

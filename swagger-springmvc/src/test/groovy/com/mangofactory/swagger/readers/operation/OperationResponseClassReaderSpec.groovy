@@ -3,15 +3,15 @@ package com.mangofactory.swagger.readers.operation
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.schema.alternates.WildcardType
-import com.mangofactory.swagger.schema.configuration.SwaggerModelsConfiguration
+import com.mangofactory.schema.alternates.WildcardType
+import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.mangofactory.swagger.schema.alternates.Alternates.newRule
+import static com.mangofactory.schema.alternates.Alternates.newRule
 
 @Mixin(RequestMappingSupport)
 class OperationResponseClassReaderSpec extends Specification {

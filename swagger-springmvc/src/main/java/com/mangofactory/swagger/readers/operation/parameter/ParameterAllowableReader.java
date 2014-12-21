@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.google.common.base.Splitter;
-import com.mangofactory.swagger.schema.Enums;
+import com.mangofactory.schema.Enums;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiParam;

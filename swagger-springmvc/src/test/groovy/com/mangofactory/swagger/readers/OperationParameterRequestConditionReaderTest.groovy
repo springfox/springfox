@@ -4,7 +4,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.schema.configuration.SwaggerModelsConfiguration
+import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.mangofactory.servicemodel.Parameter
 import org.springframework.validation.BindingResult

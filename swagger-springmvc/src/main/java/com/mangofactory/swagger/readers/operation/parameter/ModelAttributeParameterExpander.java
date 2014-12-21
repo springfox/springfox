@@ -2,7 +2,7 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.swagger.schema.alternates.AlternateTypeProvider;
+import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.servicemodel.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.mangofactory.swagger.schema.ResolvedTypes.*;
-import static com.mangofactory.swagger.schema.Types.*;
+import static com.mangofactory.schema.ResolvedTypes.*;
+import static com.mangofactory.schema.Types.*;
 import static java.lang.reflect.Modifier.*;
 
 class ModelAttributeParameterExpander {

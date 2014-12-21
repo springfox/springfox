@@ -9,12 +9,12 @@ import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.core.SwaggerApiResourceListing;
-import com.mangofactory.swagger.schema.GenericTypeNamingStrategy;
-import com.mangofactory.swagger.schema.ModelProvider;
-import com.mangofactory.swagger.schema.ResolvedTypes;
-import com.mangofactory.swagger.schema.alternates.AlternateTypeProvider;
-import com.mangofactory.swagger.schema.alternates.AlternateTypeRule;
-import com.mangofactory.swagger.schema.alternates.WildcardType;
+import com.mangofactory.schema.GenericTypeNamingStrategy;
+import com.mangofactory.schema.ModelProvider;
+import com.mangofactory.schema.ResolvedTypes;
+import com.mangofactory.schema.alternates.AlternateTypeProvider;
+import com.mangofactory.schema.alternates.AlternateTypeRule;
+import com.mangofactory.schema.alternates.WildcardType;
 import com.mangofactory.servicemodel.builder.ApiInfoBuilder;
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
-import static com.mangofactory.swagger.schema.alternates.Alternates.*;
+import static com.mangofactory.schema.alternates.Alternates.*;
 import static java.util.Arrays.asList;
 import static org.springframework.util.StringUtils.*;
 
@@ -263,7 +263,7 @@ public class SwaggerSpringMvcPlugin {
    *
    * @param alternateTypeRules
    * @return this SwaggerSpringMvcPlugin
-   * @see com.mangofactory.swagger.schema.alternates.Alternates#newRule(java.lang.reflect.Type, java.lang.reflect.Type)
+   * @see com.mangofactory.schema.alternates.Alternates#newRule(java.lang.reflect.Type, java.lang.reflect.Type)
    */
   public SwaggerSpringMvcPlugin alternateTypeRules(AlternateTypeRule... alternateTypeRules) {
     this.alternateTypeRules.addAll(Arrays.asList(alternateTypeRules));

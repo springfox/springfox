@@ -5,7 +5,7 @@ import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.schema.configuration.SwaggerModelsConfiguration
+import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.mangofactory.servicemodel.Operation

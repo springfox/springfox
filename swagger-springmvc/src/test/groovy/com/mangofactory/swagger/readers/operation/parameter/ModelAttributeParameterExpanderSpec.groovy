@@ -4,12 +4,12 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.dummy.models.Example
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.schema.alternates.AlternateTypeProvider
+import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.servicemodel.Parameter
 import org.joda.time.LocalDateTime
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.schema.alternates.Alternates.newRule
+import static com.mangofactory.schema.alternates.Alternates.newRule
 
 @Mixin(SpringSwaggerConfigSupport)
 class ModelAttributeParameterExpanderSpec extends Specification {

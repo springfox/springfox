@@ -7,7 +7,7 @@ import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.RequestMappingEvaluator
 import com.mangofactory.swagger.mixins.*
-import com.mangofactory.swagger.schema.configuration.SwaggerModelsConfiguration
+import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
 import com.mangofactory.servicemodel.ApiDescription
 import com.mangofactory.servicemodel.ApiListing
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo

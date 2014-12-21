@@ -6,9 +6,9 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.ModelUtils;
-import com.mangofactory.swagger.schema.Annotations;
-import com.mangofactory.swagger.schema.ModelContext;
-import com.mangofactory.swagger.schema.ModelProvider;
+import com.mangofactory.schema.Annotations;
+import com.mangofactory.schema.ModelContext;
+import com.mangofactory.schema.ModelProvider;
 import com.mangofactory.servicemodel.builder.ModelBuilder;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
@@ -33,7 +33,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
-import static com.mangofactory.swagger.schema.ResolvedTypes.*;
+import static com.mangofactory.schema.ResolvedTypes.*;
 
 @Component
 public class ApiModelReader implements Command<RequestMappingContext> {

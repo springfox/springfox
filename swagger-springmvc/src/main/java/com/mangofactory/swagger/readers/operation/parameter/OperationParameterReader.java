@@ -2,7 +2,7 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
-import com.mangofactory.swagger.schema.alternates.AlternateTypeProvider;
+import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
