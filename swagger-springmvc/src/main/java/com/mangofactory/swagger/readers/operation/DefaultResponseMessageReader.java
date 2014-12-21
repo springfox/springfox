@@ -6,8 +6,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
-import com.mangofactory.swagger.models.Annotations;
-import com.mangofactory.swagger.models.ResolvedTypes;
+import com.mangofactory.swagger.schema.Annotations;
+import com.mangofactory.swagger.schema.ResolvedTypes;
 import com.mangofactory.servicemodel.builder.ResponseMessageBuilder;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
@@ -28,7 +28,7 @@ import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.swagger.core.ModelUtils.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.*;
+import static com.mangofactory.swagger.schema.ResolvedTypes.*;
 
 public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
 

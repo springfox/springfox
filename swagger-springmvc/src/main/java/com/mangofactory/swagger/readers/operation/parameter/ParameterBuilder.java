@@ -2,7 +2,7 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.mangofactory.swagger.models.Annotations;
+import com.mangofactory.swagger.schema.Annotations;
 import com.mangofactory.servicemodel.AllowableListValues;
 import com.mangofactory.servicemodel.AllowableValues;
 import com.mangofactory.servicemodel.Parameter;

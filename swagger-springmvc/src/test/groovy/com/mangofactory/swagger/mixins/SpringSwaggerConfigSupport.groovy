@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
-import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
+import com.mangofactory.swagger.schema.configuration.SwaggerModelsConfiguration
 
 @Mixin(ModelProviderSupport)
 class SpringSwaggerConfigSupport {

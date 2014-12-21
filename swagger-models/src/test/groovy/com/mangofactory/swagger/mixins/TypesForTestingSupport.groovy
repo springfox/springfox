@@ -2,8 +2,8 @@ package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.generics.ResponseEntityAlternative
-import com.mangofactory.swagger.models.*
-import com.mangofactory.swagger.models.alternates.Entry
+import com.mangofactory.swagger.schema.*
+import com.mangofactory.swagger.schema.alternates.Entry
 import org.springframework.http.ResponseEntity
 
 class TypesForTestingSupport {

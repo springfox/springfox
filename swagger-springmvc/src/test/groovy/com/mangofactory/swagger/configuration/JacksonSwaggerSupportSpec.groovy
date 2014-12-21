@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.configuration
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.dummy.DummyRequestMappingHandlerAdapter
-import com.mangofactory.swagger.models.property.provider.DefaultModelPropertiesProvider
+import com.mangofactory.swagger.schema.property.provider.DefaultModelPropertiesProvider
 import org.springframework.context.ApplicationContext
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter

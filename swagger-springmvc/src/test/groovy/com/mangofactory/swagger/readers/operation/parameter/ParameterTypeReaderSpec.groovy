@@ -4,7 +4,7 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
+import com.mangofactory.swagger.schema.alternates.AlternateTypeProvider
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -18,7 +18,7 @@ import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.models.ResolvedTypes.asResolved
+import static com.mangofactory.swagger.schema.ResolvedTypes.asResolved
 
 @Mixin(RequestMappingSupport)
 class ParameterTypeReaderSpec extends Specification {

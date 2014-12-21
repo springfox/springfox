@@ -24,7 +24,7 @@ import java.util.List;
 
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.models.ResolvedTypes.*;
+import static com.mangofactory.swagger.schema.ResolvedTypes.*;
 
 public class HandlerMethodResolver {
 

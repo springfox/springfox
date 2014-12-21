@@ -2,19 +2,19 @@ package com.mangofactory.swagger.mixins
 
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mangofactory.swagger.models.DefaultModelProvider
-import com.mangofactory.swagger.models.ModelDependencyProvider
-import com.mangofactory.swagger.models.ModelProvider
-import com.mangofactory.swagger.models.ObjectMapperBeanPropertyNamingStrategy
-import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
-import com.mangofactory.swagger.models.alternates.AlternateTypeRule
-import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
-import com.mangofactory.swagger.models.property.bean.AccessorsProvider
-import com.mangofactory.swagger.models.property.bean.BeanModelPropertyProvider
-import com.mangofactory.swagger.models.property.constructor.ConstructorModelPropertyProvider
-import com.mangofactory.swagger.models.property.field.FieldModelPropertyProvider
-import com.mangofactory.swagger.models.property.field.FieldProvider
-import com.mangofactory.swagger.models.property.provider.DefaultModelPropertiesProvider
+import com.mangofactory.swagger.schema.DefaultModelProvider
+import com.mangofactory.swagger.schema.ModelDependencyProvider
+import com.mangofactory.swagger.schema.ModelProvider
+import com.mangofactory.swagger.schema.ObjectMapperBeanPropertyNamingStrategy
+import com.mangofactory.swagger.schema.alternates.AlternateTypeProvider
+import com.mangofactory.swagger.schema.alternates.AlternateTypeRule
+import com.mangofactory.swagger.schema.configuration.SwaggerModelsConfiguration
+import com.mangofactory.swagger.schema.property.bean.AccessorsProvider
+import com.mangofactory.swagger.schema.property.bean.BeanModelPropertyProvider
+import com.mangofactory.swagger.schema.property.constructor.ConstructorModelPropertyProvider
+import com.mangofactory.swagger.schema.property.field.FieldModelPropertyProvider
+import com.mangofactory.swagger.schema.property.field.FieldProvider
+import com.mangofactory.swagger.schema.property.provider.DefaultModelPropertiesProvider
 import org.joda.time.LocalDate
 import org.springframework.http.ResponseEntity
 

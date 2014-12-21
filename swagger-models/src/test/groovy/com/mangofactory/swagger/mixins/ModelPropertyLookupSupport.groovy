@@ -11,8 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition
 import com.fasterxml.jackson.databind.type.TypeFactory
 
-import static com.mangofactory.swagger.models.property.bean.Accessors.propertyName
-import static com.mangofactory.swagger.models.ResolvedTypes.asResolved
+import static com.mangofactory.swagger.schema.property.bean.Accessors.propertyName
+import static com.mangofactory.swagger.schema.ResolvedTypes.asResolved
 
 @SuppressWarnings("GrMethodMayBeStatic")
 class ModelPropertyLookupSupport {

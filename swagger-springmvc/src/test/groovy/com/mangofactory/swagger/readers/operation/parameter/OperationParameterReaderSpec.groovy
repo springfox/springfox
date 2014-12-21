@@ -6,7 +6,7 @@ import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.models.Example
 import com.mangofactory.swagger.dummy.models.Treeish
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
+import com.mangofactory.swagger.schema.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.mangofactory.servicemodel.Parameter
 import org.joda.time.LocalDateTime
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 import static com.google.common.collect.Maps.newHashMap
-import static com.mangofactory.swagger.models.alternates.Alternates.newRule
+import static com.mangofactory.swagger.schema.alternates.Alternates.newRule
 
 @Mixin(RequestMappingSupport)
 class OperationParameterReaderSpec extends Specification {

@@ -4,7 +4,7 @@ import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.controllers.DefaultSwaggerController;
-import com.mangofactory.swagger.models.ModelProvider;
+import com.mangofactory.swagger.schema.ModelProvider;
 import com.mangofactory.servicemodel.ApiDescription;
 import com.mangofactory.servicemodel.ApiInfo;
 import com.mangofactory.servicemodel.ApiListing;

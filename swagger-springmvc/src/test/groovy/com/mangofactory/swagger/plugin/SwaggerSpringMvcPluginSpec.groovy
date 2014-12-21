@@ -7,8 +7,8 @@ import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.models.DefaultModelProvider
-import com.mangofactory.swagger.models.alternates.AlternateTypeProvider
+import com.mangofactory.swagger.schema.DefaultModelProvider
+import com.mangofactory.swagger.schema.alternates.AlternateTypeProvider
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
@@ -26,7 +26,7 @@ import spock.lang.Unroll
 
 import javax.servlet.ServletRequest
 
-import static com.mangofactory.swagger.models.alternates.Alternates.newMapRule
+import static com.mangofactory.swagger.schema.alternates.Alternates.newMapRule
 import static org.springframework.http.HttpStatus.OK
 import static org.springframework.web.bind.annotation.RequestMethod.*
 

@@ -9,7 +9,7 @@ import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
-import com.mangofactory.swagger.models.ModelProvider;
+import com.mangofactory.swagger.schema.ModelProvider;
 import com.mangofactory.servicemodel.builder.ApiListingBuilder;
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
