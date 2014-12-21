@@ -67,7 +67,7 @@ __Maven__
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.9.4-SNAPSHOT</version>
+    <version>0.9.5-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -79,7 +79,7 @@ repositories {
    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
-compile "com.mangofactory:swagger-springmvc:0.9.4-SNAPSHOT"
+compile "com.mangofactory:swagger-springmvc:0.9.5-SNAPSHOT"
 ```
 
 ### Notable Dependencies
