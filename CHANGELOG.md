@@ -3,7 +3,7 @@
 [0.9.4](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.9.4)
 ===========================================
 ## Highlights
-- Removed all transitive dependencies on scala which reduces dependency size by ~30Mb
+- Removed all transitive dependencies on swagger-core and scala which reduces dependency size by ~30Mb
 - Provided default model substitutes for spring's ResponseEntity and HttpEntity
 - Upgraded to Jackson 2.4.4
 - Fixed an issue where 'body' parameters were not being named as 'body'
@@ -11,7 +11,11 @@
 .useDefaultResponseMessages`
 
 ## Breaking changes
-- All dependencies on swagger-core's scala models (`com.wordnik.swagger.model`) have been removed. The equivalent java models now live in `com.mangofactory.swagger.models.dto`. If an application has configured swagger auth or custom response messages it's likely there will be compilation issues with this upgrade, the fix is to simply import the java equivalents from `com.mangofactory.swagger.models.dto`. There are also builders in `com.mangofactory.swagger.models.dto.builder`. These are the most likely offenders:
+- All dependencies on swagger-core's scala models (`com.wordnik.swagger.model`) have been removed.
+The equivalent java models now live in `com.mangofactory.swagger.models.dto`. If an application has
+configured swagger auth or custom response messages it's likely there will be compilation issues with this
+upgrade, the fix is to simply import the java equivalents from `com.mangofactory.swagger.models.dto`.
+There are also builders in `com.mangofactory.swagger.models.dto.builder`. These are the most likely offenders:
    - com.wordnik.swagger.model.ApiInfo
    - com.wordnik.swagger.model.Authorization
    - com.wordnik.swagger.model.AuthorizationCodeGrant

@@ -9,11 +9,11 @@
 
 This project integrates swagger with the Spring Web MVC framework. The complete swagger specification is available
 at https://github.com/wordnik/swagger-spec and it's worth being familiar with the main concepts of the specification and the documentation on the [Swagger Annotations] (https://github.com/swagger-api/swagger-core/wiki/Annotations)
-Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/wordnik/swagger-ui) 
-to provide the user interface which visualises an applications JSON api's. The most common know use of this project has been 
+Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/wordnik/swagger-ui)
+to provide the user interface which visualises an applications JSON api's. The most common know use of this project has been
 Spring Web MVC applications using springs `MappingJackson2HttpMessageConverter` to produce JSON API endpoints.
 
-The demo project (https://github.com/adrianbk/swagger-springmvc-demo) contains a number of examples using both spring 
+The demo project (https://github.com/adrianbk/swagger-springmvc-demo) contains a number of examples using both spring
 web mvc and spring-boot.
 
 ### Development and contribution guidelines are available [here](https://github.com/martypitt/swagger-springmvc/wiki/Development)
@@ -36,16 +36,7 @@ __Maven__
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.9.3</version>
-</dependency>
-<!-- Add provided dependency for the following scala library. This is for 0.9.3 onwards. 
-There are two reasons for this. 
-1. This is in preparation for v2.0 because swagger core is moving away from depending on the scala tool chain. 
-2. The scala toolchain that was transitively pulled in by swagger core was causing library size to bloat ref: https://speakerdeck.com/ankinson/documenting-restful-apis --> 
-<dependency>
-    <groupId>org.scala-lang</groupId>
-    <artifactId>scala-library</artifactId>
-    <version>2.10.4</version>
+    <version>0.9.4</version>
 </dependency>
 
 ```
@@ -58,8 +49,7 @@ repositories {
     jcenter()
 }
 
-compile "com.mangofactory:swagger-springmvc:0.9.3"
-compile "org.scala-lang:scala-library:2.10.4"
+compile "com.mangofactory:swagger-springmvc:0.9.4"
 ```
 
 #### Snapshot version
@@ -79,16 +69,6 @@ __Maven__
     <artifactId>swagger-springmvc</artifactId>
     <version>0.9.4-SNAPSHOT</version>
 </dependency>
-<!-- Add provided dependency for the following scala library. This is for 0.9.3 onwards. 
-There are two reasons for this. 
-1. This is in preparation for v2.0 because swagger core is moving away from depending on the scala tool chain. 
-2. The scala toolchain that was transitively pulled in by swagger core was causing library size to bloat ref: https://speakerdeck.com/ankinson/documenting-restful-apis --> 
-<dependency>
-    <groupId>org.scala-lang</groupId>
-    <artifactId>scala-library</artifactId>
-    <version>2.10.4</version>
-</dependency>
-
 ```
 
 __Gradle__
@@ -100,11 +80,16 @@ repositories {
 }
 
 compile "com.mangofactory:swagger-springmvc:0.9.4-SNAPSHOT"
-compile "org.scala-lang:scala-library:2.10.4"
 ```
 
+### Notable Dependencies
+- As of v0.9.4 all dependencies on __scala__ have been removed.
+- Spring 3.2.x or above
+- jackson 2.4.4
+- guava 15.0
+
 ### Usage (Quick guide)
-This quick guide outlines how to get swagger-springmvc up and running with a default configuration. 
+This quick guide outlines how to get swagger-springmvc up and running with a default configuration.
 The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin` as explained below.
 
 #### Spring Java Configuration
@@ -121,7 +106,7 @@ public class WebAppConfig {
  ...
 }
 ```
-The `@EnableSwagger` annotation, in this example, enables swagger-springmvc out of the box. The generated swagger 
+The `@EnableSwagger` annotation, in this example, enables swagger-springmvc out of the box. The generated swagger
 json Resource Listing is available at /api-docs
 
 
@@ -132,20 +117,20 @@ json Resource Listing is available at /api-docs
 <mvc:annotation-driven/> <!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
 <bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
 ```
-- The generated swagger 
+- The generated swagger
 json Resource Listing is available at /api-docs
 
 
 ### Usage (SwaggerSpringMvcPlugin)
 
-The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin`. If you are ever 
-going to need to configure or customize how swagger-springmvc generates your application's swagger api documentation 
+The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin`. If you are ever
+going to need to configure or customize how swagger-springmvc generates your application's swagger api documentation
 you are going to need to use the `SwaggerSpringMvcPlugin`.
 
 
 ### SwaggerSpringMvcPlugin XML Configuration
 To use the plugin you must create a spring java configuration class which uses spring's `@Configuration`.
-This config class must then be defined in your xml application context. 
+This config class must then be defined in your xml application context.
 
 
 ```xml
@@ -162,7 +147,7 @@ This config class must then be defined in your xml application context.
 public class MySwaggerConfig {
 
    private SpringSwaggerConfig springSwaggerConfig;
-   
+
    /**
     * Required to autowire SpringSwaggerConfig
     */
@@ -194,7 +179,7 @@ public class MySwaggerConfig {
 @Configuration
 @EnableWebMvc
 @EnableSwagger
-@ComponentScan("com.myapp.controllers") 
+@ComponentScan("com.myapp.controllers")
 public class CustomJavaPluginConfig {
 
    private SpringSwaggerConfig springSwaggerConfig;
@@ -259,19 +244,15 @@ The following is one way to serve static content from /src/main/webapp
 ## Change log available [here](History.md)
 
 ### Migration From 0.8.0 -> 0.8.4+
-Prior to 0.8.4 the configuration of Swagger-springmvc was far too verbose as indicated by a number of users. SwaggerSpringMvcPlugin 
-was introduced to make configuration simpler and less verbose. It is recommended to follow the usage guides above and migrate 
+Prior to 0.8.4 the configuration of Swagger-springmvc was far too verbose as indicated by a number of users. SwaggerSpringMvcPlugin
+was introduced to make configuration simpler and less verbose. It is recommended to follow the usage guides above and migrate
 your swagger-springmvc configuration to use the `SwaggerSpringMvcPlugin`
 
 
 ### How It works
 
 Swagger-springmvc bootstraps your spring application and scans the `RequestMappingHandlerMapping's` created
-by spring to generate the swagger documentation for your applications API's. Swagger-springmvc depends on
-the swagger-core library which is actively maintained by the creators of the swagger specification.
-Swagger-springmvc is written in Java and Swagger core is written in Scala (swagger-springmvc is tested using groovy).
-Swagger-core is effectively the base implementation of the Swagger specification, it defines all models and
-annotations as mentioned in the swagger specification.
+by spring to generate the swagger documentation for your applications API's.
 Swagger-springmvc stores the generated swagger documentation, in memory, and serves it as JSON using a spring controller.
 
 
@@ -297,11 +278,11 @@ Please see the Swagger Specification for a detailed explanation.
 #### API Documentation Endpoints
 
 All swagger documentation (JSON responses) are served from DefaultSwaggerController. The controller maintains a cache
-of ResourcesListing's which are uniquely identified by the `swaggerGroup`. There is a 1:1 relationship between 
-ResourceListings and swagger groups (`SwaggerSpringMvcPlugin` instances). A typical application will have a single 
+of ResourcesListing's which are uniquely identified by the `swaggerGroup`. There is a 1:1 relationship between
+ResourceListings and swagger groups (`SwaggerSpringMvcPlugin` instances). A typical application will have a single
 SwaggerSpringMvcPlugin which is given the unique identifier 'default'.
 
-__Note:__ The below paths are relative to your applications context path and/or DispatcherServlet `url-pattern` 
+__Note:__ The below paths are relative to your applications context path and/or DispatcherServlet `url-pattern`
 
 
 | Path                    | Description                                                             |
@@ -311,20 +292,16 @@ __Note:__ The below paths are relative to your applications context path and/or 
 | /api-docs?group=group1  | Returns the _Resource Listing_ for the swagger group 'group1'           |
 | /api-docs/group1/albums | Returns the album's _Api Declaration_ for the swagger group 'group1'    |
 
-### Notable Dependencies
-- Spring 3.2.x or above 
-- scala lib 2.10.0
-- jackson 2.1.5 (older/newer versions may work)
 
 ### Urls (SwaggerPathProvider)
-The swagger specification recommends the use of absolute URL's where possible - specifically the the `path` attribute of 
-api's within the ResourceListing's and the `basePath` attribute of Api Declarations. Most users of swagger-springmvc have expressed 
-a preference for relative urls hence `RelativeSwaggerPathProvider` is the default `SwaggerPathProvider`. `AbsoluteSwaggerPathProvider` 
-can be used to provide absolute urls. `AbsoluteSwaggerPathProvider` has a hardcoded appRoot but demonstrates the concept. If you wish 
-to use absolute urls use `AbsoluteSwaggerPathProvider` as a guide and configure your `SwaggerSpringMvcPlugin` with: 
- 
+The swagger specification recommends the use of absolute URL's where possible - specifically the the `path` attribute of
+api's within the ResourceListing's and the `basePath` attribute of Api Declarations. Most users of swagger-springmvc have expressed
+a preference for relative urls hence `RelativeSwaggerPathProvider` is the default `SwaggerPathProvider`. `AbsoluteSwaggerPathProvider`
+can be used to provide absolute urls. `AbsoluteSwaggerPathProvider` has a hardcoded appRoot but demonstrates the concept. If you wish
+to use absolute urls use `AbsoluteSwaggerPathProvider` as a guide and configure your `SwaggerSpringMvcPlugin` with:
+
  ```java
-.pathProvider(myPathProvider) 
+.pathProvider(myPathProvider)
  ```
 
 ### Customization
@@ -354,7 +331,7 @@ Configuring per-RequestMappings method response messages
 ```java
 @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
 public .... createSomething(..)
- 
+
 ```
 
 #### Ordering the api's within a ResourceListing
@@ -381,9 +358,9 @@ Use the swagger `ApiOperation` annotation.
    public Model methodWithPosition() {
         ...
    }
- 
+
  ```
- 
+
 #### Ordering ApiDescriptions (withing ApiListing's)
 - Defaults to `ApiDescriptionLexicographicalOrdering`
 
@@ -399,6 +376,7 @@ For example, if you wanted `List<String>` to be encoded as 'ListOfString' and `M
 to be encoded as 'MapOfStringAndObject' you could implement the following:
 
 ```java
+
 public class SimpleGenericNamingStrategy implements GenericTypeNamingStrategy {
     private final static String OPEN = "Of";
     private final static String CLOSE = "";
@@ -427,7 +405,7 @@ then during plugin customization:
 ```java
 swaggerSpringMvcPlugin.setGenericTypeNamingStrategy(new SimpleGenericTypeNamingStrategy());
 ```
- 
+
 ### Model Customization
 #### Excluding spring handler method arguments or custom types
 To exclude controller method arguments form the generated swagger model JSON.
@@ -435,17 +413,17 @@ To exclude controller method arguments form the generated swagger model JSON.
 swaggerSpringMvcPlugin.ignoredParameterTypes(MyCustomType.class)
 ```
 By default, a number of Spring's handler method arguments are ignored. See: com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
- 
 
-##Development 
+
+##Development
 
 - Development environment and build tasks See: [build.md] (https://github.com/martypitt/swagger-springmvc/blob/master/build.md)
 - [Release process](https://github.com/martypitt/swagger-springmvc/issues/422)
 - Contributing - please see the [wiki](https://github.com/martypitt/swagger-springmvc/wiki) for some guidelines
- 
+
 ## Support
 
-If you find issues or bugs please use the github issue [tracker] (https://github.com/martypitt/swagger-springmvc/issues) 
+If you find issues or bugs please use the github issue [tracker] (https://github.com/martypitt/swagger-springmvc/issues)
 
 License
 -------
