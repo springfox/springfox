@@ -8,7 +8,7 @@ import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
 import com.mangofactory.swagger.models.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.mangofactory.swagger.models.dto.ApiDescription
+import com.mangofactory.swagger.models.servicemodel.ApiDescription
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification

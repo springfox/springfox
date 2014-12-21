@@ -9,7 +9,7 @@ import com.mangofactory.swagger.mixins.AccessorAssertions
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
-import com.mangofactory.swagger.models.dto.ApiListingReference
+import com.mangofactory.swagger.models.servicemodel.ApiListingReference
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification

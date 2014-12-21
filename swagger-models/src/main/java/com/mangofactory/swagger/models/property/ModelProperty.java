@@ -2,7 +2,7 @@ package com.mangofactory.swagger.models.property;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.mangofactory.swagger.models.ModelContext;
-import com.mangofactory.swagger.models.dto.AllowableValues;
+import com.mangofactory.swagger.models.servicemodel.AllowableValues;
 
 public interface ModelProperty {
   String getName();

@@ -1,8 +1,8 @@
 package com.mangofactory.swagger.mixins
-import com.mangofactory.swagger.models.dto.ApiListing
-import com.mangofactory.swagger.models.dto.ApiListingReference
-import com.mangofactory.swagger.models.dto.OAuth
-import com.mangofactory.swagger.models.dto.ResourceListing
+import com.mangofactory.swagger.models.servicemodel.ApiListing
+import com.mangofactory.swagger.models.servicemodel.ApiListingReference
+import com.mangofactory.swagger.models.servicemodel.OAuth
+import com.mangofactory.swagger.models.servicemodel.ResourceListing
 
 
 class ApiListingSupport {

@@ -1,18 +1,18 @@
 package com.mangofactory.swagger.mixins
 
-import com.mangofactory.swagger.models.dto.Authorization
-import com.mangofactory.swagger.models.dto.builder.AuthorizationBuilder
-import com.mangofactory.swagger.models.dto.AuthorizationCodeGrant
-import com.mangofactory.swagger.models.dto.AuthorizationScope
-import com.mangofactory.swagger.models.dto.AuthorizationType
-import com.mangofactory.swagger.models.dto.GrantType
-import com.mangofactory.swagger.models.dto.ImplicitGrant
-import com.mangofactory.swagger.models.dto.LoginEndpoint
-import com.mangofactory.swagger.models.dto.OAuth
-import com.mangofactory.swagger.models.dto.builder.OAuthBuilder
-import com.mangofactory.swagger.models.dto.TokenEndpoint
-import com.mangofactory.swagger.models.dto.TokenRequestEndpoint
-import com.mangofactory.swagger.models.dto.builder.AuthorizationCodeGrantBuilder
+import com.mangofactory.swagger.models.servicemodel.Authorization
+import com.mangofactory.swagger.models.servicemodel.builder.AuthorizationBuilder
+import com.mangofactory.swagger.models.servicemodel.AuthorizationCodeGrant
+import com.mangofactory.swagger.models.servicemodel.AuthorizationScope
+import com.mangofactory.swagger.models.servicemodel.AuthorizationType
+import com.mangofactory.swagger.models.servicemodel.GrantType
+import com.mangofactory.swagger.models.servicemodel.ImplicitGrant
+import com.mangofactory.swagger.models.servicemodel.LoginEndpoint
+import com.mangofactory.swagger.models.servicemodel.OAuth
+import com.mangofactory.swagger.models.servicemodel.builder.OAuthBuilder
+import com.mangofactory.swagger.models.servicemodel.TokenEndpoint
+import com.mangofactory.swagger.models.servicemodel.TokenRequestEndpoint
+import com.mangofactory.swagger.models.servicemodel.builder.AuthorizationCodeGrantBuilder
 
 import static com.google.common.collect.Lists.*
 

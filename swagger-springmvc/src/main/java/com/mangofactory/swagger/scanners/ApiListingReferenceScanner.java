@@ -5,7 +5,7 @@ import com.google.common.collect.Multimaps;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
-import com.mangofactory.swagger.models.dto.ApiListingReference;
+import com.mangofactory.swagger.models.servicemodel.ApiListingReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;

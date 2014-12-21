@@ -2,9 +2,9 @@ package com.mangofactory.swagger.readers;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
-import com.mangofactory.swagger.models.dto.AllowableListValues;
-import com.mangofactory.swagger.models.dto.Parameter;
-import com.mangofactory.swagger.models.dto.builder.ParameterBuilder;
+import com.mangofactory.swagger.models.servicemodel.AllowableListValues;
+import com.mangofactory.swagger.models.servicemodel.Parameter;
+import com.mangofactory.swagger.models.servicemodel.builder.ParameterBuilder;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;

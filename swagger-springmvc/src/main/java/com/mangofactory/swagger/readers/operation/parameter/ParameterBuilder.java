@@ -3,9 +3,9 @@ package com.mangofactory.swagger.readers.operation.parameter;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.Annotations;
-import com.mangofactory.swagger.models.dto.AllowableListValues;
-import com.mangofactory.swagger.models.dto.AllowableValues;
-import com.mangofactory.swagger.models.dto.Parameter;
+import com.mangofactory.swagger.models.servicemodel.AllowableListValues;
+import com.mangofactory.swagger.models.servicemodel.AllowableValues;
+import com.mangofactory.swagger.models.servicemodel.Parameter;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
 
@@ -54,7 +54,7 @@ class ParameterBuilder {
   private Parameter defaultParameter() {
     AllowableValues allowable = allowableValues(Optional.<String>absent(), field);
 
-    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder()
+    return new com.mangofactory.swagger.models.servicemodel.builder.ParameterBuilder()
             .name(isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()))
             .description(null).defaultValue(null)
             .required(Boolean.FALSE)
@@ -71,7 +71,7 @@ class ParameterBuilder {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
 
-    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder()
+    return new com.mangofactory.swagger.models.servicemodel.builder.ParameterBuilder()
             .name(isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()))
             .description(apiParam.value())
             .defaultValue(apiParam.defaultValue())
@@ -87,7 +87,7 @@ class ParameterBuilder {
   private Parameter fromApiModelProperty(ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
-    return new com.mangofactory.swagger.models.dto.builder.ParameterBuilder()
+    return new com.mangofactory.swagger.models.servicemodel.builder.ParameterBuilder()
             .name(isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()))
             .description(apiModelProperty.value())
             .defaultValue(null)
