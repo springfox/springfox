@@ -1,3 +1,4 @@
+apply from: "$rootDir/gradle/mapstruct.gradle"
 dependencies {
   compile (libs.swaggerCore) {
     exclude group: 'org.scala-lang', module: 'scala-compiler'

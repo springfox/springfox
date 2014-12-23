@@ -3,6 +3,7 @@ package com.mangofactory.swagger.configuration;
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.service.model.ResponseMessage;
+import com.mangofactory.swagger.dto.mappers.ServiceModelToSwaggerMapper;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class SwaggerGlobalSettings {
   private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages = newHashMap();
   private TypeResolver typeResolver = new TypeResolver();
   private AlternateTypeProvider alternateTypeProvider;
+  private ServiceModelToSwaggerMapper dtoMapper;
 
   public Set<Class> getIgnorableParameterTypes() {
     return ignorableParameterTypes;
@@ -53,5 +55,13 @@ public class SwaggerGlobalSettings {
 
   public AlternateTypeProvider getAlternateTypeProvider() {
     return alternateTypeProvider;
+  }
+
+  public ServiceModelToSwaggerMapper getDtoMapper() {
+    return dtoMapper;
+  }
+
+  public void setDtoMapper(ServiceModelToSwaggerMapper dtoMapper) {
+    this.dtoMapper = dtoMapper;
   }
 }

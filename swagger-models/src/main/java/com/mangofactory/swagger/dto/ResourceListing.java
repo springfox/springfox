@@ -5,11 +5,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class ResourceListing {
-  private final String apiVersion;
-  private final String swaggerVersion;
-  private final List<ApiListingReference> apis;
-  private final LinkedHashMap<String, AuthorizationType> authorizations;
-  private final ApiInfo info;
+  private String apiVersion;
+  private String swaggerVersion;
+  private List<ApiListingReference> apis;
+  private LinkedHashMap<String, AuthorizationType> authorizations;
+  private ApiInfo info;
+
+  public ResourceListing() {
+  }
 
   public ResourceListing(String apiVersion, String swaggerVersion, List<ApiListingReference> apis, List
           <AuthorizationType> authorizations, ApiInfo info) {
@@ -35,19 +38,39 @@ public class ResourceListing {
     return apiVersion;
   }
 
+  public void setApiVersion(String apiVersion) {
+    this.apiVersion = apiVersion;
+  }
+
   public String getSwaggerVersion() {
     return swaggerVersion;
+  }
+
+  public void setSwaggerVersion(String swaggerVersion) {
+    this.swaggerVersion = swaggerVersion;
   }
 
   public List<ApiListingReference> getApis() {
     return apis;
   }
 
+  public void setApis(List<ApiListingReference> apis) {
+    this.apis = apis;
+  }
+
   public List<AuthorizationType> getAuthorizations() {
     return new ArrayList<AuthorizationType>(authorizations.values());
   }
 
+  public void setAuthorizations(List<AuthorizationType> authorizations) {
+    this.authorizations = initializeAuthTypes(authorizations);
+  }
+
   public ApiInfo getInfo() {
     return info;
+  }
+
+  public void setInfo(ApiInfo info) {
+    this.info = info;
   }
 }

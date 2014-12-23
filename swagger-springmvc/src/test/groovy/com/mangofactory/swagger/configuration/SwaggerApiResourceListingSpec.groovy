@@ -13,10 +13,10 @@ import com.mangofactory.schema.ModelProvider
 import com.mangofactory.schema.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.service.model.ApiInfo
 import com.mangofactory.service.model.ApiKey
-import com.mangofactory.service.model.ApiListing
-import com.mangofactory.service.model.ApiListingReference
-import com.mangofactory.service.model.AuthorizationType
-import com.mangofactory.service.model.ResourceListing
+import com.mangofactory.swagger.dto.ApiListing
+import com.mangofactory.swagger.dto.ApiListingReference
+import com.mangofactory.swagger.dto.AuthorizationType
+import com.mangofactory.swagger.dto.ResourceListing
 import com.mangofactory.schema.property.bean.AccessorsProvider
 import com.mangofactory.schema.property.bean.BeanModelPropertyProvider
 import com.mangofactory.schema.property.constructor.ConstructorModelPropertyProvider
@@ -29,7 +29,6 @@ import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.SwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
-import com.wordnik.swagger.model.*
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
 
@@ -37,11 +36,17 @@ import static com.google.common.collect.Lists.newArrayList
 
 @Mixin([RequestMappingSupport, SpringSwaggerConfigSupport])
 class SwaggerApiResourceListingSpec extends Specification {
+  SwaggerGlobalSettings settings = new SwaggerGlobalSettings()
+
+  def setup() {
+    settings.dtoMapper = springSwaggerConfig().dtoMapper
+  }
 
   def "assessors"() {
     given:
       SwaggerCache cache = new SwaggerCache()
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(cache, null)
+
       List<AuthorizationType> authTypes = Arrays.asList(new ApiKey("", ""))
       swaggerApiResourceListing.setAuthorizationTypes(authTypes)
       AbsoluteSwaggerPathProvider provider = new AbsoluteSwaggerPathProvider()
@@ -56,6 +61,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     when: "I create a swagger resource"
       SwaggerCache swaggerCache = new SwaggerCache();
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
+      swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
       swaggerApiResourceListing.initialize()
 
     then: "I should should have the correct defaults"
@@ -78,6 +84,7 @@ class SwaggerApiResourceListingSpec extends Specification {
       SwaggerCache swaggerCache = new SwaggerCache();
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
       swaggerApiResourceListing.apiInfo = apiInfo
+      swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
       swaggerApiResourceListing.initialize()
 
     then:
@@ -96,13 +103,14 @@ class SwaggerApiResourceListingSpec extends Specification {
       SwaggerCache swaggerCache = new SwaggerCache();
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
       swaggerApiResourceListing.authorizationTypes = [apiKey]
+      swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
       swaggerApiResourceListing.initialize()
 
     then:
       ResourceListing resourceListing = swaggerCache.getResourceListing("default")
       def authorizationTypes = resourceListing.getAuthorizations()
       def apiKeyAuthType = authorizationTypes[0]
-      apiKeyAuthType instanceof ApiKey
+      apiKeyAuthType instanceof com.mangofactory.swagger.dto.ApiKey
       apiKeyAuthType.keyname == "api_key"
       apiKeyAuthType.passAs == "header"
   }
@@ -115,8 +123,8 @@ class SwaggerApiResourceListingSpec extends Specification {
 
       SwaggerPathProvider swaggerPathProvider = new AbsoluteSwaggerPathProvider(servletContext: servletContext())
       swaggerApiResourceListing.setSwaggerPathProvider(swaggerPathProvider)
+      swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
 
-      def settings = new SwaggerGlobalSettings()
       settings.setIgnorableParameterTypes(new SpringSwaggerConfig().defaultIgnorableParameterTypes())
       SpringSwaggerConfig springSwaggerConfig = springSwaggerConfig()
       settings.alternateTypeProvider = springSwaggerConfig.defaultAlternateTypeProvider();
@@ -184,11 +192,12 @@ class SwaggerApiResourceListingSpec extends Specification {
       SwaggerCache swaggerCache = new SwaggerCache();
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
       swaggerApiResourceListing.setApiListingReferenceOrdering(ordering)
+      swaggerApiResourceListing.setSwaggerGlobalSettings(settings)
 
       ApiListingReferenceScanner apiListingReferenceScanner = Mock()
       apiListingReferenceScanner.getApiListingReferences() >> [
-            new ApiListingReference("/b", 'b', 1),
-            new ApiListingReference("/a", 'a', 2)
+            new com.mangofactory.service.model.ApiListingReference("/b", 'b', 1),
+            new com.mangofactory.service.model.ApiListingReference("/a", 'a', 2)
       ]
 
       swaggerApiResourceListing.apiListingReferenceScanner = apiListingReferenceScanner

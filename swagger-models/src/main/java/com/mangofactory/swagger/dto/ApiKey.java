@@ -1,8 +1,12 @@
 package com.mangofactory.swagger.dto;
 
 public class ApiKey extends AuthorizationType {
-  private final String keyname;
-  private final String passAs;
+  private String keyname;
+  private String passAs;
+
+  public ApiKey() {
+    super("apiKey");
+  }
 
   public ApiKey(String keyname, String passAs) {
     super("apiKey");
@@ -25,7 +29,15 @@ public class ApiKey extends AuthorizationType {
     return keyname;
   }
 
+  public void setKeyname(String keyname) {
+    this.keyname = keyname;
+  }
+
   public String getPassAs() {
     return passAs;
+  }
+
+  public void setPassAs(String passAs) {
+    this.passAs = passAs;
   }
 }

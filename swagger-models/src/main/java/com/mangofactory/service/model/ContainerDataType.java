@@ -13,6 +13,18 @@ public class ContainerDataType implements SwaggerDataType {
     this.uniqueItems = uniqueItems;
   }
 
+  public String getType() {
+    return type;
+  }
+
+  public boolean isUniqueItems() {
+    return uniqueItems;
+  }
+
+  public SwaggerDataType getItems() {
+    return items;
+  }
+
   @Override
   public String getAbsoluteType() {
     return type;

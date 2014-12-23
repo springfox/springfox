@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ReferenceDataType implements SwaggerDataType {
   @JsonProperty("type")
-  private final String reference;
+  private String reference;
+
+  public ReferenceDataType() {
+  }
 
   public ReferenceDataType(String reference) {
     this.reference = reference;
@@ -12,6 +15,10 @@ public class ReferenceDataType implements SwaggerDataType {
 
   public String getReference() {
     return reference;
+  }
+
+  public void setReference(String reference) {
+    this.reference = reference;
   }
 
   @Override

@@ -8,10 +8,13 @@ import java.util.regex.Pattern;
 
 //CHECKSTYLE:OFF CyclomaticComplexityCheck
 public class DataType implements SwaggerDataType {
+  private static final Pattern containerPattern = Pattern.compile("([a-zA-Z]+)\\[([a-zA-Z\\.\\-]+)\\]");
   @JsonUnwrapped
   @JsonProperty
-  private final SwaggerDataType dataType;
-  private static final Pattern containerPattern = Pattern.compile("([a-zA-Z]+)\\[([a-zA-Z\\.\\-]+)\\]");
+  private SwaggerDataType dataType;
+
+  public DataType() {
+  }
 
   public DataType(String initialType) {
     this.dataType = typeFromDataType(initialType);
@@ -82,6 +85,10 @@ public class DataType implements SwaggerDataType {
   @Override
   public String getAbsoluteType() {
     return dataType.getAbsoluteType();
+  }
+
+  public void setDataType(SwaggerDataType initialType) {
+    this.dataType = initialType;
   }
 }
 //CHECKSTYLE:ON

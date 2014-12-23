@@ -68,6 +68,10 @@ public class Operation {
     };
   }
 
+  public SwaggerDataType getDataType() {
+    return dataType;
+  }
+
   public String getMethod() {
     return method;
   }

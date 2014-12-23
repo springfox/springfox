@@ -11,27 +11,30 @@ import java.util.Map;
 @JsonPropertyOrder({"apiVersion", "swaggerVersion", "basePath", "resourcePath", "produces", "consumes", "apis",
         "models"})
 public class ApiListing {
-  private final String apiVersion;
-  private final String swaggerVersion;
-  private final String basePath;
-  private final String resourcePath;
-  private final List<String> produces;
-  private final List<String> consumes;
+  private String apiVersion;
+  private String swaggerVersion;
+  private String basePath;
+  private String resourcePath;
+  private List<String> produces;
+  private List<String> consumes;
   @JsonIgnore
-  private final List<String> protocol;
+  private List<String> protocol;
   @JsonInclude(Include.NON_EMPTY)
-  private final List<Authorization> authorizations;
-  private final List<ApiDescription> apis;
+  private List<Authorization> authorizations;
+  private List<ApiDescription> apis;
   @JsonInclude(Include.NON_EMPTY)
-  private final Map<String, Model> models;
+  private Map<String, ModelDto> models;
   @JsonIgnore
-  private final String description;
+  private String description;
   @JsonIgnore
-  private final int position;
+  private int position;
+
+  public ApiListing() {
+  }
 
   public ApiListing(String apiVersion, String swaggerVersion, String basePath, String resourcePath, List<String>
           produces, List<String> consumes, List<String> protocol, List<Authorization> authorizations,
-                    List<ApiDescription> apis, Map<String, Model> models, String description, int position) {
+                    List<ApiDescription> apis, Map<String, ModelDto> models, String description, int position) {
     this.apiVersion = apiVersion;
     this.swaggerVersion = swaggerVersion;
     this.basePath = basePath;
@@ -50,48 +53,96 @@ public class ApiListing {
     return apiVersion;
   }
 
+  public void setApiVersion(String apiVersion) {
+    this.apiVersion = apiVersion;
+  }
+
   public String getSwaggerVersion() {
     return swaggerVersion;
+  }
+
+  public void setSwaggerVersion(String swaggerVersion) {
+    this.swaggerVersion = swaggerVersion;
   }
 
   public String getBasePath() {
     return basePath;
   }
 
+  public void setBasePath(String basePath) {
+    this.basePath = basePath;
+  }
+
   public String getResourcePath() {
     return resourcePath;
+  }
+
+  public void setResourcePath(String resourcePath) {
+    this.resourcePath = resourcePath;
   }
 
   public List<String> getProduces() {
     return produces;
   }
 
+  public void setProduces(List<String> produces) {
+    this.produces = produces;
+  }
+
   public List<String> getConsumes() {
     return consumes;
+  }
+
+  public void setConsumes(List<String> consumes) {
+    this.consumes = consumes;
   }
 
   public List<String> getProtocol() {
     return protocol;
   }
 
+  public void setProtocol(List<String> protocol) {
+    this.protocol = protocol;
+  }
+
   public List<Authorization> getAuthorizations() {
     return authorizations;
+  }
+
+  public void setAuthorizations(List<Authorization> authorizations) {
+    this.authorizations = authorizations;
   }
 
   public List<ApiDescription> getApis() {
     return apis;
   }
 
-  public Map<String, Model> getModels() {
+  public void setApis(List<ApiDescription> apis) {
+    this.apis = apis;
+  }
+
+  public Map<String, ModelDto> getModels() {
     return models;
+  }
+
+  public void setModels(Map<String, ModelDto> models) {
+    this.models = models;
   }
 
   public String getDescription() {
     return description;
   }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
   public int getPosition() {
     return position;
+  }
+
+  public void setPosition(int position) {
+    this.position = position;
   }
 }
 

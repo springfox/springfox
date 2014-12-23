@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({"type", "items"})
 public class ContainerDataType implements SwaggerDataType {
-  private final String type = "array";
-  private final boolean uniqueItems;
+  private String type = "array";
+  private boolean uniqueItems;
   @JsonProperty
-  private final SwaggerDataType items;
+  private SwaggerDataType items;
+
+  public ContainerDataType() {
+  }
 
   public ContainerDataType(String innerType, boolean uniqueItems) {
     if (null != innerType && innerType.equals("array")) {
@@ -21,5 +24,17 @@ public class ContainerDataType implements SwaggerDataType {
   @Override
   public String getAbsoluteType() {
     return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public void setUniqueItems(boolean uniqueItems) {
+    this.uniqueItems = uniqueItems;
+  }
+
+  public void setItems(SwaggerDataType items) {
+    this.items = items;
   }
 }

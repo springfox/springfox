@@ -6,8 +6,12 @@ import java.util.List;
 
 public class OAuth extends AuthorizationType {
 
-  private final List<AuthorizationScope> scopes;
-  private final LinkedHashMap<String, GrantType> grantTypes;
+  private List<AuthorizationScope> scopes;
+  private LinkedHashMap<String, GrantType> grantTypes;
+
+  public OAuth() {
+    super("oauth2");
+  }
 
   public OAuth(List<AuthorizationScope> scopes, List<GrantType> gTypes) {
     super("oauth2");
@@ -36,7 +40,15 @@ public class OAuth extends AuthorizationType {
     return scopes;
   }
 
+  public void setScopes(List<AuthorizationScope> scopes) {
+    this.scopes = scopes;
+  }
+
   public List<GrantType> getGrantTypes() {
     return new ArrayList<GrantType>(grantTypes.values());
+  }
+
+  public void setGrantTypes(List<GrantType> grantTypes) {
+    this.grantTypes = initializeGrantTypes(grantTypes);
   }
 }

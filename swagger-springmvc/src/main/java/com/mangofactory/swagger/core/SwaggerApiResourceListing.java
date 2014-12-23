@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.core;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
@@ -28,6 +29,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static com.mangofactory.swagger.dto.mappers.Mappers.*;
 
 public class SwaggerApiResourceListing {
   private static final Logger log = LoggerFactory.getLogger(SwaggerApiResourceListing.class);
@@ -68,7 +71,9 @@ public class SwaggerApiResourceListing {
       apiListingScanner.setResourceGroupingStrategy(apiListingReferenceScanner.getResourceGroupingStrategy());
 
       Map<String, ApiListing> apiListings = apiListingScanner.scan();
-      swaggerCache.addApiListings(swaggerGroup, apiListings);
+      Map<String, com.mangofactory.swagger.dto.ApiListing> dtoApiListing = Maps.transformEntries(apiListings,
+              toApiListingDto(swaggerGlobalSettings.getDtoMapper()));
+      swaggerCache.addApiListings(swaggerGroup, dtoApiListing);
 
     } else {
       log.error("ApiListingReferenceScanner not configured");
@@ -91,9 +96,11 @@ public class SwaggerApiResourceListing {
               .DOCUMENTATION_BASE_PATH;
       log.info("  {} at location: {}{}", path, prefix, apiListingReference.getPath());
     }
-
-    swaggerCache.addSwaggerResourceListing(swaggerGroup, resourceListing);
+    swaggerCache.addSwaggerResourceListing(swaggerGroup,
+            swaggerGlobalSettings.getDtoMapper().toSwagger(resourceListing));
   }
+
+
 
   public SwaggerCache getSwaggerCache() {
     return swaggerCache;

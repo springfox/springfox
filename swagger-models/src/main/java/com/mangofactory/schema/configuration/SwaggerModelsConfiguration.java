@@ -13,7 +13,7 @@ import java.util.Map;
 import static com.mangofactory.schema.alternates.Alternates.*;
 
 @Configuration
-@ComponentScan(basePackages = {"com.mangofactory.schema"})
+@ComponentScan(basePackages = {"com.mangofactory.schema", "com.mangofactory.swagger.dto.mappers"})
 public class SwaggerModelsConfiguration {
   @Bean
   public TypeResolver typeResolver() {

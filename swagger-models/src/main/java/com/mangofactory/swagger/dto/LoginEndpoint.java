@@ -1,7 +1,10 @@
 package com.mangofactory.swagger.dto;
 
 public class LoginEndpoint {
-  private final String url;
+  private String url;
+
+  public LoginEndpoint() {
+  }
 
   public LoginEndpoint(String url) {
     this.url = url;
@@ -9,5 +12,9 @@ public class LoginEndpoint {
 
   public String getUrl() {
     return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
   }
 }

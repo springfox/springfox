@@ -40,6 +40,7 @@ public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshe
       if (plugins.isEmpty()) {
         log.info("Did not find any SwaggerSpringMvcPlugins so creating a default one");
         new SwaggerSpringMvcPlugin(springSwaggerConfig)
+                .dtoMapper(springSwaggerConfig.getDtoMapper())
                 .build()
                 .initialize();
       } else {
@@ -49,6 +50,7 @@ public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshe
           if (entry.getValue().isEnabled()) {
             log.info("initializing plugin bean {}", entry.getKey());
             entry.getValue()
+                    .dtoMapper(springSwaggerConfig.getDtoMapper())
                     .build()
                     .initialize();
           } else {

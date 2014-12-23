@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AllowableRangeValues implements AllowableValues {
   @JsonProperty("minimum")
-  private final String min;
+  private String min;
   @JsonProperty("maximum")
-  private final String max;
+  private String max;
+
+  public AllowableRangeValues() {
+  }
 
   public AllowableRangeValues(String min, String max) {
     this.min = min;
@@ -17,7 +20,15 @@ public class AllowableRangeValues implements AllowableValues {
     return min;
   }
 
+  public void setMin(String min) {
+    this.min = min;
+  }
+
   public String getMax() {
     return max;
+  }
+
+  public void setMax(String max) {
+    this.max = max;
   }
 }

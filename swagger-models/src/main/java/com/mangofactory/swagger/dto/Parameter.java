@@ -8,17 +8,20 @@ import static org.springframework.util.StringUtils.*;
 public class Parameter {
   @JsonProperty
   @JsonUnwrapped
-  private final SwaggerDataType parameterType;
-  private final String name;
-  private final String description;
-  private final String defaultValue;
-  private final Boolean required;
-  private final Boolean allowMultiple;
+  private SwaggerDataType parameterType;
+  private String name;
+  private String description;
+  private String defaultValue;
+  private Boolean required;
+  private Boolean allowMultiple;
   @JsonProperty
   @JsonUnwrapped
-  private final AllowableValues allowableValues;
-  private final String paramType;
-  private final String paramAccess;
+  private AllowableValues allowableValues;
+  private String paramType;
+  private String paramAccess;
+
+  public Parameter() {
+  }
 
   public Parameter(String name, String description, String defaultValue, Boolean required, Boolean allowMultiple,
                    String dataType, AllowableValues allowableValues, String paramType, String paramAccess) {
@@ -44,12 +47,24 @@ public class Parameter {
     return name;
   }
 
+  public void setName(String name) {
+    this.name = name;
+  }
+
   public String getDescription() {
     return description;
   }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
   public String getDefaultValue() {
     return defaultValue;
+  }
+
+  public void setDefaultValue(String defaultValue) {
+    this.defaultValue = defaultValue;
   }
 
   public Boolean isRequired() {
@@ -64,15 +79,39 @@ public class Parameter {
     return allowableValues;
   }
 
+  public void setAllowableValues(AllowableValues allowableValues) {
+    this.allowableValues = allowableValues;
+  }
+
   public String getParamType() {
     return paramType;
+  }
+
+  public void setParamType(String paramType) {
+    this.paramType = paramType;
   }
 
   public String getParamAccess() {
     return paramAccess;
   }
 
+  public void setParamAccess(String paramAccess) {
+    this.paramAccess = paramAccess;
+  }
+
   public SwaggerDataType getParameterType() {
     return parameterType;
+  }
+
+  public void setParameterType(SwaggerDataType parameterType) {
+    this.parameterType = parameterType;
+  }
+
+  public void setRequired(Boolean required) {
+    this.required = required;
+  }
+
+  public void setAllowMultiple(Boolean allowMultiple) {
+    this.allowMultiple = allowMultiple;
   }
 }

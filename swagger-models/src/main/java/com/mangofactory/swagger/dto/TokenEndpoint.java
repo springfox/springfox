@@ -2,8 +2,11 @@ package com.mangofactory.swagger.dto;
 
 public class TokenEndpoint {
 
-  private final String url;
-  private final String tokenName;
+  private String url;
+  private String tokenName;
+
+  public TokenEndpoint() {
+  }
 
   public TokenEndpoint(String url, String tokenName) {
     this.url = url;
@@ -14,7 +17,15 @@ public class TokenEndpoint {
     return url;
   }
 
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
   public String getTokenName() {
     return tokenName;
+  }
+
+  public void setTokenName(String tokenName) {
+    this.tokenName = tokenName;
   }
 }

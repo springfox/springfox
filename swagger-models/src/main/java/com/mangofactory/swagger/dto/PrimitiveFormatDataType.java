@@ -2,8 +2,11 @@ package com.mangofactory.swagger.dto;
 
 
 public class PrimitiveFormatDataType implements SwaggerDataType {
-  private final String type;
-  private final String format;
+  private String type;
+  private String format;
+
+  public PrimitiveFormatDataType() {
+  }
 
   public PrimitiveFormatDataType(String type, String format) {
     this.type = type;
@@ -14,8 +17,16 @@ public class PrimitiveFormatDataType implements SwaggerDataType {
     return type;
   }
 
+  public void setType(String type) {
+    this.type = type;
+  }
+
   public String getFormat() {
     return format;
+  }
+
+  public void setFormat(String format) {
+    this.format = format;
   }
 
   @Override

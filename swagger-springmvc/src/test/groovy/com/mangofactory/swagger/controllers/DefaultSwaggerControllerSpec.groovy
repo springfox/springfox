@@ -1,13 +1,14 @@
 package com.mangofactory.swagger.controllers
-
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mangofactory.service.model.AuthorizationType
+import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
+import com.mangofactory.swagger.dto.AuthorizationType
 import com.mangofactory.swagger.dto.jackson.SwaggerJacksonProvider
 import com.mangofactory.swagger.mixins.ApiListingSupport
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.JsonSupport
+import com.mangofactory.swagger.mixins.MapperSupport
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*
 
-@Mixin([JsonSupport, ApiListingSupport, AuthSupport])
+@Mixin([JsonSupport, ApiListingSupport, AuthSupport, MapperSupport])
 class DefaultSwaggerControllerSpec extends Specification {
 
   @Shared
@@ -30,6 +31,8 @@ class DefaultSwaggerControllerSpec extends Specification {
   View mockView
   @Shared
   DefaultSwaggerController controller = new DefaultSwaggerController()
+  @Shared
+  SwaggerGlobalSettings settings = new SwaggerGlobalSettings()
 
   def setup() {
     def jackson2 = new MappingJackson2HttpMessageConverter()
@@ -39,6 +42,7 @@ class DefaultSwaggerControllerSpec extends Specification {
     def mapper = new ObjectMapper()
     mapper.registerModule(new SwaggerJacksonProvider().swaggerJacksonModule())
 
+    settings.setDtoMapper(serviceMapper())
     jackson2.setObjectMapper(mapper)
     mockMvc = standaloneSetup(controller)
             .setSingleView(mockView)
@@ -51,6 +55,8 @@ class DefaultSwaggerControllerSpec extends Specification {
     given:
       SwaggerCache swaggerCache = new SwaggerCache();
       SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
+
+      swaggerApiResourceListing.swaggerGlobalSettings = settings;
       swaggerApiResourceListing.initialize()
       controller.swaggerCache = swaggerCache
 

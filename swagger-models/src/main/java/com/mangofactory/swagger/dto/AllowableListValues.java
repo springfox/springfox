@@ -7,9 +7,12 @@ import java.util.List;
 
 public class AllowableListValues implements AllowableValues {
   @JsonProperty("enum")
-  private final List<String> values;
+  private List<String> values;
   @JsonIgnore
-  private final String valueType;
+  private String valueType;
+
+  public AllowableListValues() {
+  }
 
   public AllowableListValues(List<String> values, String valueType) {
     this.values = values;
@@ -20,7 +23,15 @@ public class AllowableListValues implements AllowableValues {
     return values;
   }
 
+  public void setValues(List<String> values) {
+    this.values = values;
+  }
+
   public String getValueType() {
     return valueType;
+  }
+
+  public void setValueType(String valueType) {
+    this.valueType = valueType;
   }
 }

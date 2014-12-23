@@ -2,8 +2,12 @@ package com.mangofactory.swagger.dto;
 
 
 public class ImplicitGrant extends GrantType {
-  private final LoginEndpoint loginEndpoint;
-  private final String tokenName;
+  private LoginEndpoint loginEndpoint;
+  private String tokenName;
+
+  public ImplicitGrant() {
+    super("implicit");
+  }
 
   public ImplicitGrant(LoginEndpoint loginEndpoint, String tokenName) {
     super("implicit");
@@ -15,7 +19,15 @@ public class ImplicitGrant extends GrantType {
     return loginEndpoint;
   }
 
+  public void setLoginEndpoint(LoginEndpoint loginEndpoint) {
+    this.loginEndpoint = loginEndpoint;
+  }
+
   public String getTokenName() {
     return tokenName;
+  }
+
+  public void setTokenName(String tokenName) {
+    this.tokenName = tokenName;
   }
 }

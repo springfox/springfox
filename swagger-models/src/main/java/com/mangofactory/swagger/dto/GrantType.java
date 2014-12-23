@@ -1,7 +1,10 @@
 package com.mangofactory.swagger.dto;
 
 public class GrantType {
-  private final String type;
+  private String type;
+
+  public GrantType() {
+  }
 
   public GrantType(String type) {
     this.type = type;
@@ -9,5 +12,9 @@ public class GrantType {
 
   public String getType() {
     return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
   }
 }

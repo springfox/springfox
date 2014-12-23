@@ -1,38 +1,36 @@
 package com.mangofactory.swagger.mixins
 
-import com.mangofactory.service.model.Authorization
-import com.mangofactory.service.model.builder.AuthorizationBuilder
-import com.mangofactory.service.model.AuthorizationCodeGrant
-import com.mangofactory.service.model.AuthorizationScope
-import com.mangofactory.service.model.AuthorizationType
-import com.mangofactory.service.model.GrantType
-import com.mangofactory.service.model.ImplicitGrant
-import com.mangofactory.service.model.LoginEndpoint
-import com.mangofactory.service.model.OAuth
-import com.mangofactory.service.model.builder.OAuthBuilder
-import com.mangofactory.service.model.TokenEndpoint
-import com.mangofactory.service.model.TokenRequestEndpoint
-import com.mangofactory.service.model.builder.AuthorizationCodeGrantBuilder
+import com.mangofactory.swagger.dto.AuthorizationCodeGrant
+import com.mangofactory.swagger.dto.AuthorizationScope
+import com.mangofactory.swagger.dto.AuthorizationType
+import com.mangofactory.swagger.dto.GrantType
+import com.mangofactory.swagger.dto.ImplicitGrant
+import com.mangofactory.swagger.dto.LoginEndpoint
+import com.mangofactory.swagger.dto.OAuth
+import com.mangofactory.swagger.dto.TokenEndpoint
+import com.mangofactory.swagger.dto.TokenRequestEndpoint
 
 import static com.google.common.collect.Lists.*
 
 class AuthSupport {
   def defaultAuth() {
-    AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything")
-    AuthorizationScope[] authorizationScopes = [authorizationScope] as AuthorizationScope[];
-    newArrayList(new AuthorizationBuilder().type("oauth2").scopes(authorizationScopes).build())
+    com.mangofactory.service.model.AuthorizationScope authorizationScope =
+            new com.mangofactory.service.model.AuthorizationScope("global", "accessEverything")
+    com.mangofactory.service.model.AuthorizationScope[] authorizationScopes = [authorizationScope] as
+            com.mangofactory.service.model.AuthorizationScope[];
+    newArrayList(new com.mangofactory.service.model.Authorization("oauth2", authorizationScopes))
   }
-
-  def oAuth() {
-    AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything")
-    List<AuthorizationScope> authorizationScopes = newArrayList(authorizationScope)
-    GrantType grantType = new AuthorizationCodeGrant(new TokenRequestEndpoint("some:auth:uri", "test", "secret"),
-            new TokenEndpoint("some:uri", "XX-TOKEN"))
-    List<GrantType> grantTypes = newArrayList(grantType)
-    OAuth oAuth = new OAuthBuilder().scopes(authorizationScopes).grantTypes(grantTypes).build()
-    List<Authorization> authorizations = [oAuth];
-    authorizations
-  }
+//
+//  def oAuth() {
+//    AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything")
+//    List<AuthorizationScope> authorizationScopes = newArrayList(authorizationScope)
+//    GrantType grantType = new AuthorizationCodeGrant(new TokenRequestEndpoint("some:auth:uri", "test", "secret"),
+//            new TokenEndpoint("some:uri", "XX-TOKEN"))
+//    List<GrantType> grantTypes = newArrayList(grantType)
+//    OAuth oAuth = new OAuth(authorizationScopes, grantTypes)
+//    List<Authorization> authorizations = [oAuth];
+//    authorizations
+//  }
 
   def authorizationTypes() {
     def authorizationTypes = new ArrayList<AuthorizationType>()
@@ -50,17 +48,11 @@ class AuthSupport {
     TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint("http://petstore.swagger.wordnik.com/oauth/requestToken", "client_id", "client_secret")
     TokenEndpoint tokenEndpoint = new TokenEndpoint("http://petstore.swagger.wordnik.com/oauth/token", "auth_code")
 
-    AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrantBuilder()
-            .tokenRequestEndpoint(tokenRequestEndpoint)
-            .tokenEndpoint(tokenEndpoint)
-            .build()
+    AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint)
 
     grantTypes.add(authorizationCodeGrant)
 
-    OAuth oAuth = new OAuthBuilder()
-            .scopes(authorizationScopeList)
-            .grantTypes(grantTypes)
-            .build();
+    OAuth oAuth = new OAuth(authorizationScopeList, grantTypes)
     return oAuth
   }
 

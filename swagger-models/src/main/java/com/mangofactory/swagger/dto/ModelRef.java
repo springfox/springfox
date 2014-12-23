@@ -7,8 +7,10 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 public class ModelRef implements SwaggerDataType {
   @JsonProperty
   @JsonUnwrapped
-  private final SwaggerDataType type;
+  private SwaggerDataType type;
 
+  public ModelRef() {
+  }
 
   public ModelRef(String type) {
     this.type = new DataType(type);
@@ -22,5 +24,9 @@ public class ModelRef implements SwaggerDataType {
   @JsonIgnore
   public SwaggerDataType getType() {
     return type;
+  }
+
+  public void setType(SwaggerDataType type) {
+    this.type = type;
   }
 }

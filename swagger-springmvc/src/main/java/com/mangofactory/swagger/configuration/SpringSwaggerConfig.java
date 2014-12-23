@@ -1,15 +1,16 @@
 package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.swagger.annotations.ApiIgnore;
-import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping;
-import com.mangofactory.swagger.core.ResourceGroupingStrategy;
-import com.mangofactory.swagger.core.SwaggerCache;
 import com.mangofactory.schema.ModelProvider;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.configuration.SwaggerModelsConfiguration;
 import com.mangofactory.service.model.ResponseMessage;
 import com.mangofactory.service.model.builder.ResponseMessageBuilder;
+import com.mangofactory.swagger.annotations.ApiIgnore;
+import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping;
+import com.mangofactory.swagger.core.ResourceGroupingStrategy;
+import com.mangofactory.swagger.core.SwaggerCache;
+import com.mangofactory.swagger.dto.mappers.ServiceModelToSwaggerMapper;
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.plugin.SwaggerPluginAdapter;
@@ -62,6 +63,8 @@ public class SpringSwaggerConfig {
   @Autowired
   private TypeResolver typeResolver;
 
+  @Autowired
+  private ServiceModelToSwaggerMapper dtoMapper;
 
   @Bean
   public List<RequestMappingHandlerMapping> swaggerRequestMappingHandlerMappings() {
@@ -267,6 +270,10 @@ public class SpringSwaggerConfig {
   @Bean
   public SwaggerPluginAdapter swaggerPluginAdapter() {
     return new SwaggerPluginAdapter(this);
+  }
+
+  public ServiceModelToSwaggerMapper getDtoMapper() {
+    return dtoMapper;
   }
 
   public ModelProvider defaultModelProvider() {

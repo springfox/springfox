@@ -1,8 +1,11 @@
 package com.mangofactory.swagger.dto;
 
 public class AuthorizationScope {
-  private final String scope;
-  private final String description;
+  private String scope;
+  private String description;
+
+  public AuthorizationScope() {
+  }
 
   public AuthorizationScope(String scope, String description) {
     this.description = description;
@@ -13,7 +16,15 @@ public class AuthorizationScope {
     return scope;
   }
 
+  public void setScope(String scope) {
+    this.scope = scope;
+  }
+
   public String getDescription() {
     return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 }

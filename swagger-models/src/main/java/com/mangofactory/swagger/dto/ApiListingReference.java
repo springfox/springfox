@@ -1,9 +1,12 @@
 package com.mangofactory.swagger.dto;
 
 public class ApiListingReference {
-  private final String path;
-  private final String description;
-  private final int position;
+  private String path;
+  private String description;
+  private int position;
+
+  public ApiListingReference() {
+  }
 
   public ApiListingReference(String path, String description, int position) {
     this.path = path;
@@ -15,11 +18,23 @@ public class ApiListingReference {
     return path;
   }
 
+  public void setPath(String path) {
+    this.path = path;
+  }
+
   public String getDescription() {
     return description;
   }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
   public int getPosition() {
     return position;
+  }
+
+  public void setPosition(int position) {
+    this.position = position;
   }
 }

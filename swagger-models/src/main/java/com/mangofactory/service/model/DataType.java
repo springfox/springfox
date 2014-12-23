@@ -74,6 +74,10 @@ public class DataType implements SwaggerDataType {
     return initialType.equals(ofType);
   }
 
+  public SwaggerDataType getDataType() {
+    return dataType;
+  }
+
   @Override
   public String getAbsoluteType() {
     return dataType.getAbsoluteType();

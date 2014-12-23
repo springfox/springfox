@@ -3,19 +3,25 @@ package com.mangofactory.swagger.plugin;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
-import com.mangofactory.swagger.authorization.AuthorizationContext;
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
-import com.mangofactory.swagger.core.RequestMappingEvaluator;
-import com.mangofactory.swagger.core.ResourceGroupingStrategy;
-import com.mangofactory.swagger.core.SwaggerApiResourceListing;
 import com.mangofactory.schema.GenericTypeNamingStrategy;
 import com.mangofactory.schema.ModelProvider;
 import com.mangofactory.schema.ResolvedTypes;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.alternates.AlternateTypeRule;
 import com.mangofactory.schema.alternates.WildcardType;
+import com.mangofactory.service.model.ApiDescription;
+import com.mangofactory.service.model.ApiInfo;
+import com.mangofactory.service.model.ApiListingReference;
+import com.mangofactory.service.model.AuthorizationType;
+import com.mangofactory.service.model.ResponseMessage;
 import com.mangofactory.service.model.builder.ApiInfoBuilder;
+import com.mangofactory.swagger.authorization.AuthorizationContext;
+import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
+import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
+import com.mangofactory.swagger.core.RequestMappingEvaluator;
+import com.mangofactory.swagger.core.ResourceGroupingStrategy;
+import com.mangofactory.swagger.core.SwaggerApiResourceListing;
+import com.mangofactory.swagger.dto.mappers.ServiceModelToSwaggerMapper;
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
@@ -23,11 +29,6 @@ import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher;
 import com.mangofactory.swagger.scanners.RequestMappingPatternMatcher;
-import com.mangofactory.service.model.ApiDescription;
-import com.mangofactory.service.model.ApiInfo;
-import com.mangofactory.service.model.ApiListingReference;
-import com.mangofactory.service.model.AuthorizationType;
-import com.mangofactory.service.model.ResponseMessage;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -82,6 +83,7 @@ public class SwaggerSpringMvcPlugin {
   private RequestMappingEvaluator requestMappingEvaluator;
   private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
   private boolean enabled = true;
+  private ServiceModelToSwaggerMapper dtoMapper;
 
   /**
    * Default constructor.
@@ -403,6 +405,16 @@ public class SwaggerSpringMvcPlugin {
     return this;
   }
 
+  /**
+   * Sets the swagger dto mapper
+   * @param mapper - supplied mapper to use
+   * @return
+   */
+  public SwaggerSpringMvcPlugin dtoMapper(ServiceModelToSwaggerMapper mapper) {
+    this.dtoMapper = mapper;
+    return this;
+  }
+
   private ApiInfo defaultApiInfo() {
     return new ApiInfoBuilder()
             .title(this.swaggerGroup + " Title")
@@ -485,6 +497,7 @@ public class SwaggerSpringMvcPlugin {
       this.alternateTypeProvider.addRule(rule);
     }
     swaggerGlobalSettings.setAlternateTypeProvider(this.alternateTypeProvider);
+    swaggerGlobalSettings.setDtoMapper(this.dtoMapper);
   }
 
   private void addSpringMvcPassthroughTypes() {

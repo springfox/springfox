@@ -3,7 +3,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
 
-@Mixin(ModelProviderSupport)
+@Mixin([ModelProviderSupport, MapperSupport])
 class SpringSwaggerConfigSupport {
 
   def SpringSwaggerConfig springSwaggerConfig() {
@@ -13,6 +13,7 @@ class SpringSwaggerConfigSupport {
     springSwaggerConfig.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
     springSwaggerConfig.typeResolver = new TypeResolver()
     springSwaggerConfig.modelProvider = modelProvider(typeResolver, modelConfig.alternateTypeProvider(typeResolver))
+    springSwaggerConfig.dtoMapper = serviceMapper()
     springSwaggerConfig
   }
 }

@@ -2,8 +2,12 @@ package com.mangofactory.swagger.dto;
 
 public class AuthorizationCodeGrant extends GrantType {
 
-  private final TokenRequestEndpoint tokenRequestEndpoint;
-  private final TokenEndpoint tokenEndpoint;
+  private TokenRequestEndpoint tokenRequestEndpoint;
+  private TokenEndpoint tokenEndpoint;
+
+  public AuthorizationCodeGrant() {
+    super("authorization_code");
+  }
 
   public AuthorizationCodeGrant(TokenRequestEndpoint tokenRequestEndpoint, TokenEndpoint tokenEndpoint) {
     super("authorization_code");
@@ -15,7 +19,15 @@ public class AuthorizationCodeGrant extends GrantType {
     return tokenRequestEndpoint;
   }
 
+  public void setTokenRequestEndpoint(TokenRequestEndpoint tokenRequestEndpoint) {
+    this.tokenRequestEndpoint = tokenRequestEndpoint;
+  }
+
   public TokenEndpoint getTokenEndpoint() {
     return tokenEndpoint;
+  }
+
+  public void setTokenEndpoint(TokenEndpoint tokenEndpoint) {
+    this.tokenEndpoint = tokenEndpoint;
   }
 }

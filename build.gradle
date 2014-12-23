@@ -17,6 +17,7 @@ buildscript {
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
   projectVersion = '0.9.5-SNAPSHOT'
+  jdkVersion = 1.6
 }
 
 configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'swagger-models' }) { subproject ->
@@ -25,10 +26,13 @@ configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'sw
   apply plugin: "com.ofg.uptodate"
   apply plugin: 'maven'
   apply plugin: 'idea'
-
+  ext {
+    jdkVersion = 1.6
+  }
   compileJava.options.encoding = 'UTF-8'
-  sourceCompatibility = 1.6
-  targetCompatibility = 1.6
+
+  sourceCompatibility = jdkVersion
+  targetCompatibility = jdkVersion
 
   //Adds provide dependency configuration
   configurations {
@@ -63,6 +67,7 @@ configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'sw
     configFile = file("$rootDir/config/checkstyle.xml")
   }
 
+  checkstyleMain.source = "src/main/java"
   apply plugin: 'maven-publish'
   apply from: "$rootDir/gradle/publishing.gradle"
 

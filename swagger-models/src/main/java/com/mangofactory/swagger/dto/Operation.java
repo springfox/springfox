@@ -19,32 +19,35 @@ import static com.google.common.collect.Maps.*;
         "consumes", "parameters", "responseMessages", "deprecated"
 })
 public class Operation {
-  private final String method;
-  private final String summary;
-  private final String notes;
+  private String method;
+  private String summary;
+  private String notes;
   @JsonIgnore
-  private final String responseClass;
+  private String responseClass;
   @JsonProperty
   @JsonUnwrapped
-  private final SwaggerDataType dataType;
-  private final String nickname;
+  private SwaggerDataType dataType;
+  private String nickname;
   @JsonIgnore
-  private final int position;
-  private final List<String> produces;
-  private final List<String> consumes;
+  private int position;
+  private List<String> produces;
+  private List<String> consumes;
   @JsonIgnore
-  private final List<String> protocol;
+  private List<String> protocol;
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private final Map<String, List<AuthorizationScope>> authorizations;
-  private final List<Parameter> parameters;
-  private final Set<ResponseMessage> responseMessages;
-  private final String deprecated;
+  private Map<String, List<AuthorizationScope>> authorizations;
+  private List<Parameter> parameters;
+  private Set<ResponseMessage> responseMessages;
+  private String deprecated;
+
+  public Operation() {
+  }
 
   public Operation(String method, String summary, String notes, String responseClass, String nickname, int position,
                    List<String> produces, List<String> consumes, List<String> protocol,
-                   List<Authorization>
-                           authorizations, List<Parameter> parameters, Set<ResponseMessage> responseMessages, String
-                           deprecated) {
+                   List<Authorization> authorizations,
+                   List<Parameter> parameters, Set<ResponseMessage> responseMessages,
+                   String deprecated) {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
@@ -87,51 +90,107 @@ public class Operation {
     return method;
   }
 
+  public void setMethod(String method) {
+    this.method = method;
+  }
+
   public String getSummary() {
     return summary;
+  }
+
+  public void setSummary(String summary) {
+    this.summary = summary;
   }
 
   public String getNotes() {
     return notes;
   }
 
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
   public String getResponseClass() {
     return responseClass;
+  }
+
+  public void setResponseClass(String responseClass) {
+    this.responseClass = responseClass;
   }
 
   public String getNickname() {
     return nickname;
   }
 
+  public void setNickname(String nickname) {
+    this.nickname = nickname;
+  }
+
   public int getPosition() {
     return position;
+  }
+
+  public void setPosition(int position) {
+    this.position = position;
   }
 
   public List<String> getProduces() {
     return produces;
   }
 
+  public void setProduces(List<String> produces) {
+    this.produces = produces;
+  }
+
   public List<String> getConsumes() {
     return consumes;
+  }
+
+  public void setConsumes(List<String> consumes) {
+    this.consumes = consumes;
   }
 
   public List<String> getProtocol() {
     return protocol;
   }
 
+  public void setProtocol(List<String> protocol) {
+    this.protocol = protocol;
+  }
+
   public Map<String, List<AuthorizationScope>> getAuthorizations() {
     return authorizations;
+  }
+
+  public void setAuthorizations(Map<String, List<AuthorizationScope>> authorizations) {
+    this.authorizations = authorizations;
   }
 
   public List<Parameter> getParameters() {
     return parameters;
   }
 
+  public void setParameters(List<Parameter> parameters) {
+    this.parameters = parameters;
+  }
+
   public Set<ResponseMessage> getResponseMessages() {
     return responseMessages;
   }
 
+  public void setResponseMessages(Set<ResponseMessage> responseMessages) {
+    this.responseMessages = responseMessages;
+  }
+
   public String getDeprecated() {
     return deprecated;
+  }
+
+  public void setDeprecated(String deprecated) {
+    this.deprecated = deprecated;
+  }
+
+  public void setDataType(SwaggerDataType dataType) {
+    this.dataType = dataType;
   }
 }

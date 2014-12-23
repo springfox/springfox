@@ -1,8 +1,8 @@
 package com.mangofactory.swagger.mixins
-import com.mangofactory.service.model.ApiListing
-import com.mangofactory.service.model.ApiListingReference
-import com.mangofactory.service.model.OAuth
-import com.mangofactory.service.model.ResourceListing
+import com.mangofactory.swagger.dto.ApiListing
+import com.mangofactory.swagger.dto.ApiListingReference
+import com.mangofactory.swagger.dto.OAuth
+import com.mangofactory.swagger.dto.ResourceListing
 
 
 class ApiListingSupport {
@@ -20,7 +20,7 @@ class ApiListingSupport {
               [],
               models,
               null,
-              1);
+              1)
    }
 
    def apiListingReference() {
