@@ -2,6 +2,7 @@ sudo: false
 cache:
   directories:
   - $HOME/.m2
+  - $HOME/.gradle/wrapper
 language: java
 script:
 - TERM=dumb ./gradlew clean check

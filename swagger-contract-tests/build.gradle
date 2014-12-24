@@ -29,7 +29,7 @@ dependencies {
   compile 'taglibs:standard:1.1.2'
   compile 'javax.servlet:jstl:1.2'
 
-  compile "org.ajar:swagger-spring-mvc-ui:0.3"
+  compile "org.ajar:swagger-spring-mvc-ui:0.4"
 
   compile(project(':swagger-springmvc')) {
     exclude group: 'org.springframework', module: 'spring-web'
