@@ -14,7 +14,7 @@ dependencies {
 
 sourceSets.main {
   ext.originalJavaSrcDirs = java.srcDirs
-  java.srcDir "${generatedMapperSourcesDir}"
+  java.srcDir "${generatedMapperSourcesMainDir}"
 }
 
 task generateMappers(type: JavaCompile) {
@@ -37,7 +37,7 @@ task generateMappers(type: JavaCompile) {
                   "-Amapstruct.defaultComponentModel=spring",
                   "-Amapstruct.unmappedTargetPolicy=ERROR"
           ]
-  );
+  )
 
   inputs.dir source
   outputs.dir generatedMapperSourcesDir;
