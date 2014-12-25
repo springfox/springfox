@@ -13,3 +13,4 @@ build/
 private.txt
 *.log
 classes/
+generated-src
