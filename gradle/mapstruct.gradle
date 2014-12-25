@@ -2,7 +2,8 @@ configurations {
   mapstruct
 }
 ext {
-  generatedMapperSourcesDir = "${projectDir}/generated-src/main"
+  generatedMapperSourcesDir = "${projectDir}/generated-src"
+  generatedMapperSourcesMainDir = "${generatedMapperSourcesDir}/main"
 }
 
 dependencies {
@@ -16,13 +17,13 @@ sourceSets.main {
   java.srcDir "${generatedMapperSourcesDir}"
 }
 
-task generateMainMapperClasses(type: JavaCompile) {
+task generateMappers(type: JavaCompile) {
   ext.aptDumpDir = file( "${buildDir}/tmp/apt/mapstruct" )
   destinationDir = aptDumpDir
 
   classpath = compileJava.classpath + configurations.mapstruct
   source = sourceSets.main.originalJavaSrcDirs
-  ext.sourceDestDir = file ( "$generatedMapperSourcesDir" )
+  ext.sourceDestDir = file ( "$generatedMapperSourcesMainDir" )
 
   options.define(
           compilerArgs: [
@@ -49,12 +50,12 @@ task generateMainMapperClasses(type: JavaCompile) {
 }
 
 
-task cleanGenerateMainMapperClasses() {
+task cleanGenerateMappers() {
   delete("${generatedMapperSourcesDir}")
 
 }
-compileJava.dependsOn generateMainMapperClasses
+compileJava.dependsOn generateMappers
 compileJava.options.define(compilerArgs: ["-proc:none", "-encoding", "UTF-8"])
 compileTestJava.options.define(compilerArgs: ["-proc:none", "-encoding", "UTF-8"])
 
-clean.dependsOn cleanGenerateMainMapperClasses
+clean.dependsOn cleanGenerateMappers
