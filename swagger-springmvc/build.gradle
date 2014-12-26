@@ -4,9 +4,7 @@ configurations {
 
 dependencies {
   compile (libs.swaggerCore) {
-    exclude group: 'org.scala-lang', module: 'scala-compiler'
-    exclude group: 'org.scala-lang', module: 'scala-reflect'
-    exclude group: 'org.scala-lang', module: 'scala-library'
+    exclude group: 'org.scala-lang'
   }
   compile libs.core
   compile libs.spring
