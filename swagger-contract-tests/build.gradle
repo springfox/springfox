@@ -34,9 +34,6 @@ dependencies {
   compile(project(':swagger-springmvc')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
-  compile(project(path: ':swagger-springmvc', configuration: 'testArtifacts')) {
-    exclude group: 'org.springframework', module: 'spring-web'
-  }
 
   providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
   providedCompile 'org.apache.tomcat.embed:tomcat-embed-jasper'
@@ -44,4 +41,7 @@ dependencies {
   testCompile libs.test
   testCompile 'org.skyscreamer:jsonassert:1.2.3'
   testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
+  testCompile(project(path: ':swagger-springmvc', configuration: 'testArtifacts')) {
+    exclude group: 'org.springframework', module: 'spring-web'
+  }
 }

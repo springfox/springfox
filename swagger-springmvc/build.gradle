@@ -11,6 +11,8 @@ dependencies {
   provided libs.clientProvided
 
   compile project(':swagger-models')
+
+  testCompile(project(path: ':swagger-models', configuration: 'testArtifacts'))
   testCompile libs.test
 }
 

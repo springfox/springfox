@@ -1,4 +1,15 @@
 apply from: "$rootDir/gradle/mapstruct.gradle"
+configurations {
+  testArtifacts.extendsFrom testRuntime
+}
+task testJar(type: Jar) {
+  classifier "test"
+  from sourceSets.test.output
+  exclude '**/*log4j.xml*', '**/*simplelogger.properties*'
+}
+artifacts {
+  testArtifacts testJar
+}
 dependencies {
   compile (libs.swaggerCore) {
     exclude group: 'org.scala-lang'
