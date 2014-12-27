@@ -97,7 +97,7 @@ public class SwaggerApiResourceListing {
       log.info("  {} at location: {}{}", path, prefix, apiListingReference.getPath());
     }
     swaggerCache.addSwaggerResourceListing(swaggerGroup,
-            swaggerGlobalSettings.getDtoMapper().toSwagger(resourceListing));
+            swaggerGlobalSettings.getDtoMapper().toSwaggerResourceListing(resourceListing));
   }
 
 

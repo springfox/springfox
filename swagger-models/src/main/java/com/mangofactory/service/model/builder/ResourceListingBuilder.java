@@ -7,11 +7,13 @@ import com.mangofactory.service.model.ResourceListing;
 
 import java.util.List;
 
+import static com.google.common.collect.Lists.*;
+
 public class ResourceListingBuilder {
   private String apiVersion;
   private String swaggerVersion;
-  private List<ApiListingReference> apis;
-  private List<AuthorizationType> authorizations;
+  private List<ApiListingReference> apis = newArrayList();
+  private List<AuthorizationType> authorizations = newArrayList();
   private ApiInfo info;
 
   public ResourceListingBuilder apiVersion(String apiVersion) {

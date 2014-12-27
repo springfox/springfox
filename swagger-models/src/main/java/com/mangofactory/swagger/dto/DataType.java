@@ -32,7 +32,7 @@ public class DataType implements SwaggerDataType {
       return new PrimitiveFormatDataType("integer", "int64");
     }
     if (isOfType(initialType, "float")) {
-      return new PrimitiveFormatDataType("integer", "int64");
+      return new PrimitiveFormatDataType("number", "float");
     }
     if (isOfType(initialType, "double")) {
       return new PrimitiveFormatDataType("number", "double");

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static com.google.common.base.Optional.*;
+import static com.google.common.collect.Lists.*;
+
 public class ResourceListing {
   private final String apiVersion;
   private final String swaggerVersion;
@@ -11,8 +14,12 @@ public class ResourceListing {
   private final LinkedHashMap<String, AuthorizationType> authorizations;
   private final ApiInfo info;
 
-  public ResourceListing(String apiVersion, String swaggerVersion, List<ApiListingReference> apis, List
-          <AuthorizationType> authorizations, ApiInfo info) {
+  public ResourceListing(String apiVersion,
+      String swaggerVersion,
+      List<ApiListingReference> apis,
+      List <AuthorizationType> authorizations,
+      ApiInfo info) {
+
     this.apiVersion = apiVersion;
     this.swaggerVersion = swaggerVersion;
     this.apis = apis;
@@ -21,14 +28,12 @@ public class ResourceListing {
   }
 
   private LinkedHashMap<String, AuthorizationType> initializeAuthTypes(List<AuthorizationType> authorizationTypes) {
-    if (null != authorizationTypes) {
-      LinkedHashMap<String, AuthorizationType> map = new LinkedHashMap<String, AuthorizationType>();
-      for (AuthorizationType authorizationType : authorizationTypes) {
-        map.put(authorizationType.getType(), authorizationType);
-      }
-      return map;
+    LinkedHashMap<String, AuthorizationType> mapped = new LinkedHashMap<String, AuthorizationType>();
+    List<AuthorizationType> emptyList = newArrayList();
+    for (AuthorizationType authorizationType : fromNullable(authorizationTypes).or(emptyList)) {
+      mapped.put(authorizationType.getType(), authorizationType);
     }
-    return null;
+    return mapped;
   }
 
   public String getApiVersion() {

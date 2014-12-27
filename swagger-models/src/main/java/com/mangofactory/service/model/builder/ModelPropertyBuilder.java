@@ -43,7 +43,7 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelPropertyBuilder iItems(ModelRef items) {
+  public ModelPropertyBuilder items(ModelRef items) {
     this.items = items;
     return this;
   }

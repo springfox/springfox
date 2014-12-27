@@ -59,7 +59,7 @@ jacocoTestReport {
         logger.quiet(it)
       }
       logger.quiet("---------------------------------------------------------------")
-//      throw new GradleException("Code coverage failed")
+      throw new GradleException("Code coverage failed")
     } else{
       logger.quiet("Passed Code Coverage Checks")
     }

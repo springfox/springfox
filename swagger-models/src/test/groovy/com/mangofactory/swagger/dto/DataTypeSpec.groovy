@@ -16,7 +16,7 @@ class DataTypeSpec extends InternalJsonSerializationSpec {
       "void"       | { it.type == 'void' }
       "int"        | { it.type == 'integer' && it.format == 'int32' }
       "long"       | { it.type == 'integer' && it.format == 'int64' }
-      "float"      | { it.type == 'integer' && it.format == 'int64' }
+      "float"      | { it.type == 'number' && it.format == 'float' }
       "double"     | { it.type == 'number' && it.format == 'double' }
       "Date"       | { it.type == 'string' && it.format == 'date-time' }
       "DateTime"   | { it.type == 'string' && it.format == 'date-time' }

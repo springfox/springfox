@@ -10,7 +10,7 @@ public class Mappers {
     return new Maps.EntryTransformer<String, ApiListing, com.mangofactory.swagger.dto.ApiListing>() {
       @Override
       public com.mangofactory.swagger.dto.ApiListing transformEntry(String key, ApiListing value) {
-        return mapper.toSwagger(value);
+        return mapper.toSwaggerApiListing(value);
       }
     };
   }

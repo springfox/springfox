@@ -60,7 +60,7 @@ public class DefaultModelProvider implements ModelProvider {
                       .required(each.isRequired())
                       .description(each.propertyDescription())
                       .allowableValues(each.allowableValues())
-                      .iItems(itemModelRef(each.getType()))
+                      .items(itemModelRef(each.getType()))
                       .build()
                     );
     }
