@@ -84,6 +84,7 @@ public class SwaggerSpringMvcPlugin {
   private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
   private boolean enabled = true;
   private ServiceModelToSwaggerMapper dtoMapper;
+  private List<Class<? extends Annotation>> mergedExcludedAnnotations = newArrayList();
 
   /**
    * Default constructor.
@@ -146,7 +147,7 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Determines the generated, swagger specific, urls.
-   * 
+   * <p/>
    * By default, relative urls are generated. If absolute urls are required, supply an implementation of
    * AbsoluteSwaggerPathProvider
    *
@@ -173,14 +174,14 @@ public class SwaggerSpringMvcPlugin {
   /**
    * Controls which controllers, more specifically, which Spring RequestMappings to include in the swagger Resource
    * Listing.
-   * 
+   * <p/>
    * Under the hood, <code>com.mangofactory.swagger.scanners.RequestMappingPatternMatcher</code>is used to match a
    * given <code>org.springframework.web.servlet.mvc.condition.PatternsRequestCondition</code> against the
    * includePatterns supplied here.
-   * 
+   * <p/>
    * <code>RegexRequestMappingPatternMatcher</code> is the default implementation and requires these includePatterns
    * are  valid regular expressions.
-   * 
+   * <p/>
    * If not supplied a single pattern ".*?" is used which matches anything and hence all RequestMappings.
    *
    * @param includePatterns - the regular expressions to determine which Spring RequestMappings to include.
@@ -193,7 +194,7 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Overrides the default http response messages at the http request method level.
-   * 
+   * <p/>
    * To set specific response messages for specific api operations use the swagger core annotations on
    * the appropriate controller methods.
    *
@@ -206,7 +207,7 @@ public class SwaggerSpringMvcPlugin {
    * @see com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultResponseMessages()
    */
   public SwaggerSpringMvcPlugin globalResponseMessage(RequestMethod requestMethod,
-      List<ResponseMessage> responseMessages) {
+                                                      List<ResponseMessage> responseMessages) {
 
     this.globalResponseMessages.put(requestMethod, responseMessages);
     return this;
@@ -290,15 +291,17 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Allows ignoring predefined response message defaults
+   *
    * @param apply flag to determine if the default response messages are used
-   *     true   - the default response messages are added to the global response messages
-   *     false  - the default response messages are added to the global response messages
+   *              true   - the default response messages are added to the global response messages
+   *              false  - the default response messages are added to the global response messages
    * @return this SwaggerSpringMvcPlugin
    */
   public SwaggerSpringMvcPlugin useDefaultResponseMessages(boolean apply) {
     this.applyDefaultResponseMessages = apply;
     return this;
   }
+
   /**
    * Substitutes each generic class with it's direct parameterized type.
    * e.g.
@@ -384,12 +387,13 @@ public class SwaggerSpringMvcPlugin {
    * model.
    *
    * @param requestMappingPatternMatcher an implementation of {@link com.mangofactory.swagger.scanners
-   * .RequestMappingPatternMatcher}. Out of the box the library comes with
-   * {@link com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher} and
-   * {@link com.mangofactory.swagger.scanners.AntRequestMappingPatternMatcher}
+   *                                     .RequestMappingPatternMatcher}. Out of the box the library comes with
+   *                                     {@link com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher} and
+   *                                     {@link com.mangofactory.swagger.scanners.AntRequestMappingPatternMatcher}
    * @return this SwaggerSpringMvcPlugin
    */
-  public SwaggerSpringMvcPlugin requestMappingPatternMatcher(RequestMappingPatternMatcher requestMappingPatternMatcher) {
+  public SwaggerSpringMvcPlugin requestMappingPatternMatcher(RequestMappingPatternMatcher
+                                                                     requestMappingPatternMatcher) {
     this.requestMappingPatternMatcher = requestMappingPatternMatcher;
     return this;
   }
@@ -397,6 +401,7 @@ public class SwaggerSpringMvcPlugin {
   /**
    * Hook to externally control auto initialization of this swagger plugin instance.
    * Typically used if defer initialization.
+   *
    * @param externallyConfiguredFlag - true to turn it on, false to turn it off
    * @return this SwaggerSpringMvcPlugin
    */
@@ -473,8 +478,10 @@ public class SwaggerSpringMvcPlugin {
 
     this.modelProvider = Optional.fromNullable(modelProvider).or(springSwaggerConfig.defaultModelProvider());
 
-    List<Class<? extends Annotation>> mergedExcludedAnnotations = springSwaggerConfig.defaultExcludeAnnotations();
+
+    mergedExcludedAnnotations.addAll(springSwaggerConfig.defaultExcludeAnnotations());
     mergedExcludedAnnotations.addAll(this.excludeAnnotations);
+
     requestMappingEvaluator
             = new RequestMappingEvaluator(mergedExcludedAnnotations, requestMappingPatternMatcher, includePatterns);
   }
@@ -526,9 +533,6 @@ public class SwaggerSpringMvcPlugin {
   }
 
   private ApiListingReferenceScanner buildApiListingReferenceScanner() {
-    List<Class<? extends Annotation>> mergedExcludedAnnotations = springSwaggerConfig.defaultExcludeAnnotations();
-    mergedExcludedAnnotations.addAll(this.excludeAnnotations);
-
     apiListingReferenceScanner = new ApiListingReferenceScanner();
     apiListingReferenceScanner.setRequestMappingHandlerMapping(springSwaggerConfig
             .swaggerRequestMappingHandlerMappings());

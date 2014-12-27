@@ -1,22 +1,23 @@
 package com.mangofactory.swagger.plugin
 
+import com.mangofactory.schema.DefaultModelProvider
+import com.mangofactory.schema.alternates.AlternateTypeProvider
+import com.mangofactory.service.model.ApiInfo
+import com.mangofactory.service.model.AuthorizationType
+import com.mangofactory.service.model.ResponseMessage
 import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.authorization.AuthorizationContext
+import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.schema.DefaultModelProvider
-import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
-import com.mangofactory.service.model.ApiInfo
-import com.mangofactory.service.model.AuthorizationType
-import com.mangofactory.service.model.ResponseMessage
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
@@ -26,8 +27,9 @@ import spock.lang.Unroll
 
 import javax.servlet.ServletRequest
 
-import static com.mangofactory.schema.alternates.Alternates.newMapRule
-import static org.springframework.http.HttpStatus.OK
+import static com.mangofactory.schema.alternates.Alternates.*
+import static com.mangofactory.swagger.models.alternates.Alternates.*
+import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Mixin(SpringSwaggerConfigSupport)
@@ -64,8 +66,8 @@ class SwaggerSpringMvcPluginSpec extends Specification {
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
     when:
       plugin.globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
-          .useDefaultResponseMessages(true)
-          .build()
+              .useDefaultResponseMessages(true)
+              .build()
 
     then:
       SwaggerGlobalSettings swaggerGlobalSettings = plugin.swaggerGlobalSettings
@@ -205,5 +207,25 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       apiListingReferenceScanner.includePatterns == plugin.includePatterns
   }
 
+  def "should preserve default exclude annotations"() {
+    setup:
+      List ignores = [ApiIgnore]
+      SpringSwaggerConfig springSwaggerConfig = Stub {
+        defaultExcludeAnnotations() >> ignores
+      }
+      SwaggerSpringMvcPlugin aPlugin = new SwaggerSpringMvcPlugin(springSwaggerConfig)
 
+    when:
+      aPlugin.excludeAnnotations(AbstractSingletonProxyFactoryBean.class, ProxyFactoryBean.class).build()
+
+    then:
+      aPlugin.apiListingReferenceScanner.excludeAnnotations.containsAll([
+              AbstractSingletonProxyFactoryBean.class,
+              ProxyFactoryBean.class,
+              ApiIgnore.class
+      ])
+
+    and: "the default excludes are unmodified"
+      ignores.size() == 1
+  }
 }
