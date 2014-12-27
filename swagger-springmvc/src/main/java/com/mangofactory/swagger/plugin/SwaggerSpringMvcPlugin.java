@@ -147,7 +147,7 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Determines the generated, swagger specific, urls.
-   * <p/>
+   *
    * By default, relative urls are generated. If absolute urls are required, supply an implementation of
    * AbsoluteSwaggerPathProvider
    *
@@ -174,14 +174,14 @@ public class SwaggerSpringMvcPlugin {
   /**
    * Controls which controllers, more specifically, which Spring RequestMappings to include in the swagger Resource
    * Listing.
-   * <p/>
+   *
    * Under the hood, <code>com.mangofactory.swagger.scanners.RequestMappingPatternMatcher</code>is used to match a
    * given <code>org.springframework.web.servlet.mvc.condition.PatternsRequestCondition</code> against the
    * includePatterns supplied here.
-   * <p/>
+   *
    * <code>RegexRequestMappingPatternMatcher</code> is the default implementation and requires these includePatterns
    * are  valid regular expressions.
-   * <p/>
+   *
    * If not supplied a single pattern ".*?" is used which matches anything and hence all RequestMappings.
    *
    * @param includePatterns - the regular expressions to determine which Spring RequestMappings to include.
@@ -194,7 +194,7 @@ public class SwaggerSpringMvcPlugin {
 
   /**
    * Overrides the default http response messages at the http request method level.
-   * <p/>
+   *
    * To set specific response messages for specific api operations use the swagger core annotations on
    * the appropriate controller methods.
    *
