@@ -6,6 +6,7 @@
         <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="999" />
         <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="0" />
         <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="true" />
+        <option name="JD_P_AT_EMPTY_LINES" value="false" />
         <GroovyCodeStyleSettings>
           <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="999" />
           <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="0" />
