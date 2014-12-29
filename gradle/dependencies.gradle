@@ -1,13 +1,13 @@
 ext {
-  swaggerCore = "1.3.11"
+  swaggerCore = "1.3.12"
   spring = "3.2.9.RELEASE"
   scalaLib = "2.10.4"
-  groovy = "2.3.8"
+  groovy = "2.3.9"
   spock = "0.7-groovy-2.0"
   guava = "15.0"
   springHateoas = "0.10.0.RELEASE"
-  slf4j = "1.7.7"
-  mockito = "1.10.13"
+  slf4j = "1.7.9"
+  mockito = "1.10.17"
   servlet = "2.5"
   guava = "15.0"
   classmate = "1.1.0"
@@ -47,7 +47,7 @@ ext {
                   "com.google.guava:guava:${guava}",
                   "com.fasterxml:classmate:${classmate}",
                   "org.slf4j:slf4j-api:${slf4j}",
-                  'joda-time:joda-time:2.5'
+                  'joda-time:joda-time:2.6'
 
           ]
 

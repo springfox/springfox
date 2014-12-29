@@ -28,7 +28,6 @@ import spock.lang.Unroll
 import javax.servlet.ServletRequest
 
 import static com.mangofactory.schema.alternates.Alternates.*
-import static com.mangofactory.swagger.models.alternates.Alternates.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
