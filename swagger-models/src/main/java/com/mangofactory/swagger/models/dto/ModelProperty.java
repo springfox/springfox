@@ -15,6 +15,8 @@ public class ModelProperty {
   private final int position;
   private final Boolean required;
   private final String description;
+  @JsonProperty
+  @JsonUnwrapped
   private final AllowableValues allowableValues;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
