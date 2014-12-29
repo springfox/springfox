@@ -811,22 +811,18 @@
                     "type": "integer"
                 },
                 "enumType": {
-                    "allowableValues": {
-                        "enum": [
-                            "ONE",
-                            "TWO"
-                        ]
-                    },
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ],
                     "required": false,
                     "type": "string"
                 },
                 "annotatedEnumType": {
-                    "allowableValues": {
-                        "enum": [
-                            "ONE",
-                            "TWO"
-                        ]
-                    },
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ],
                     "required": false,
                     "type": "string"
                 },

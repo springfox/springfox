@@ -359,12 +359,10 @@
                     "type": "LocalDate"
                 },
                 "businessType": {
-                    "allowableValues": {
-                        "enum": [
-                            "PRODUCT",
-                            "SERVICE"
-                        ]
-                    },
+                    "enum": [
+                        "PRODUCT",
+                        "SERVICE"
+                    ],
                     "required": false,
                     "type": "string"
                 },

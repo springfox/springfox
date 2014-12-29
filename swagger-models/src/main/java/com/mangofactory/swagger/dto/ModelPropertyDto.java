@@ -15,6 +15,8 @@ public class ModelPropertyDto {
   private int position;
   private Boolean required;
   private String description;
+  @JsonProperty
+  @JsonUnwrapped
   private AllowableValues allowableValues;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
