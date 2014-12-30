@@ -49,7 +49,7 @@ public class DefaultModelProvider implements ModelProvider {
             || Types.isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))) {
       return Optional.absent();
     }
-    Map<String, ModelProperty> properties = newLinkedHashMap();
+    Map<String, ModelProperty> properties = newTreeMap();
 
     for (com.mangofactory.swagger.models.property.ModelProperty each : properties(modelContext, propertiesHost)) {
       properties.put(each.getName(),
