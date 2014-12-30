@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.dummy;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
+import com.mangofactory.swagger.dummy.models.EnumType;
 import com.mangofactory.swagger.dummy.models.Example;
 import com.mangofactory.swagger.dummy.models.FoobarDto;
 import com.mangofactory.swagger.dummy.models.Treeish;
@@ -108,6 +109,9 @@ public class DummyClass {
   }
 
   public ResponseEntity<DummyClass[]> methodWithGenericComplexArray() {
+    return null;
+  }
+  public ResponseEntity<EnumType> methodWithEnumResponse() {
     return null;
   }
 

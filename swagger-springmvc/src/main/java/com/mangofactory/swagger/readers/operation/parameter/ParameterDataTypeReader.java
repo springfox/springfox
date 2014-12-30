@@ -2,7 +2,7 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
-import com.mangofactory.swagger.core.ModelUtils;
+import com.mangofactory.swagger.models.ResolvedTypes;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
@@ -20,7 +20,7 @@ public class ParameterDataTypeReader implements Command<RequestMappingContext> {
     if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
       context.put("dataType", "File");
     } else {
-      context.put("dataType", ModelUtils.getResponseClassName(parameterType));
+      context.put("dataType", ResolvedTypes.parameterTypeName(parameterType));
     }
   }
 

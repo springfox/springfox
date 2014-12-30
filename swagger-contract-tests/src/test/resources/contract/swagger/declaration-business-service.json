@@ -168,16 +168,16 @@
                             "message": "Not Found"
                         }
                     ],
+                    "deprecated": "false",
+                    "type": "string",
                     "authorizations": {
                         "oauth2": [
                             {
-                                "scope": "scope",
-                                "description" : "scope description"
+                                "description": "scope description",
+                                "scope": "scope"
                             }
                         ]
-                    },
-                    "deprecated": "false",
-                    "type": "string"
+                    }
                 }
             ]
         },
@@ -212,6 +212,64 @@
                             "code": 200,
                             "message": "OK",
                             "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "path": "/businesses/typeEcho",
+            "description": "businessTypeEcho",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "businessTypeEcho",
+                    "notes": "businessTypeEcho",
+                    "nickname": "businessTypeEcho",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "enum": [
+                                "PRODUCT",
+                                "SERVICE"
+                            ],
+                            "defaultValue": "",
+                            "description": "business",
+                            "name": "body",
+                            "paramType": "body",
+                            "type": "string",
+                            "required": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
                         },
                         {
                             "code": 401,
@@ -303,14 +361,6 @@
                     "required": false,
                     "type": "boolean"
                 },
-                "rangeDurationField": {
-                    "required": false,
-                    "type": "DurationField"
-                },
-                "leapDurationField": {
-                    "required": false,
-                    "type": "DurationField"
-                },
                 "durationField": {
                     "required": false,
                     "type": "DurationField"
@@ -324,6 +374,14 @@
                     "required": false,
                     "format": "int32",
                     "type": "integer"
+                },
+                "rangeDurationField": {
+                    "required": false,
+                    "type": "DurationField"
+                },
+                "leapDurationField": {
+                    "required": false,
+                    "type": "DurationField"
                 }
             }
         },
@@ -382,6 +440,26 @@
                     "format": "int32",
                     "type": "integer"
                 },
+                "era": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "dayOfYear": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "dayOfWeek": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "dayOfMonth": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
                 "chronology": {
                     "required": false,
                     "type": "Chronology"
@@ -412,26 +490,6 @@
                     "type": "integer"
                 },
                 "weekOfWeekyear": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfMonth": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfWeek": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "era": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfYear": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"

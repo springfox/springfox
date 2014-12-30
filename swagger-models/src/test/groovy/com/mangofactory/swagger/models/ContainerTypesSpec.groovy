@@ -19,10 +19,10 @@ class ContainerTypesSpec extends Specification {
     where:
       containerType                  | name
       genericListOfSimpleType()      | "List[SimpleType]"
-      genericListOfInteger()         | "List"
+      genericListOfInteger()         | "List[int]"
       erasedList()                   | "List"
       genericSetOfSimpleType()       | "Set[SimpleType]"
-      genericSetOfInteger()          | "Set"
+      genericSetOfInteger()          | "Set[int]"
       erasedSet()                    | "Set"
       genericClassWithGenericField() | "GenericType«ResponseEntityAlternative«SimpleType»»"
 
