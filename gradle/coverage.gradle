@@ -54,7 +54,7 @@ jacocoTestReport {
       }
       if (it.value > limit + 1) {
         canIncrease.add("- ${it.key} coverage rate is: ${it.value}%, minimum is ${limit}%")
-      }gi
+      }
     }
 
     if (failures) {
