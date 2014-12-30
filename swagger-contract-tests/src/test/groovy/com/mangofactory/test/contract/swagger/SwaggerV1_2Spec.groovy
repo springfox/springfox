@@ -1,5 +1,4 @@
 package com.mangofactory.test.contract.swagger
-
 import groovy.json.JsonOutput
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
@@ -15,6 +14,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static groovyx.net.http.ContentType.*
+import static org.skyscreamer.jsonassert.JSONCompareMode.*
 
 @ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
 @WebAppConfiguration
@@ -41,8 +41,9 @@ class SwaggerV1_2Spec extends Specification {
       String raw = response.data.text
       String actual = JsonOutput.prettyPrint(raw)
       response.status == 200
+      println(actual)
 
-      JSONAssert.assertEquals(contract, actual, STRICT_JSON_ASSERT)
+      JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
   }
 
   @Unroll
@@ -64,7 +65,7 @@ class SwaggerV1_2Spec extends Specification {
 //      actual == contract
 
       //Json comparison without considering ordering
-      JSONAssert.assertEquals(contract, actual, STRICT_JSON_ASSERT)
+      JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
 
 //    and: "both json docs are the same length"
 //      contract.length() == actual.length()

@@ -3,8 +3,12 @@
     "swaggerVersion": "1.2",
     "basePath": "/",
     "resourcePath": "/",
-    "produces": ["*/*"],
-    "consumes": ["application/json"],
+    "produces": [
+        "*/*"
+    ],
+    "consumes": [
+        "application/json"
+    ],
     "apis": [
         {
             "path": "/",
@@ -15,9 +19,15 @@
                     "summary": "getAll",
                     "notes": "getAll",
                     "nickname": "getAll",
-                    "produces": ["*/*"],
-                    "consumes": ["application/json"],
-                    "parameters": [],
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -38,7 +48,11 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "List"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": false
                 }
             ]
         }

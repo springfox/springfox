@@ -716,6 +716,13 @@
         }
     ],
     "models": {
+        "Void": {
+            "description": "",
+            "id": "Void",
+            "properties": {
+
+            }
+        },
         "Pet": {
             "description": "",
             "id": "Pet",
@@ -733,13 +740,6 @@
                     "format": "int32",
                     "type": "integer"
                 }
-            }
-        },
-        "Void": {
-            "description": "",
-            "id": "Void",
-            "properties": {
-
             }
         },
         "DateTimeField": {
@@ -762,14 +762,6 @@
                     "required": false,
                     "type": "boolean"
                 },
-                "rangeDurationField": {
-                    "required": false,
-                    "type": "DurationField"
-                },
-                "leapDurationField": {
-                    "required": false,
-                    "type": "DurationField"
-                },
                 "durationField": {
                     "required": false,
                     "type": "DurationField"
@@ -783,6 +775,14 @@
                     "required": false,
                     "format": "int32",
                     "type": "integer"
+                },
+                "rangeDurationField": {
+                    "required": false,
+                    "type": "DurationField"
+                },
+                "leapDurationField": {
+                    "required": false,
+                    "type": "DurationField"
                 }
             }
         },
@@ -830,16 +830,16 @@
                     "required": false,
                     "type": "NestedType"
                 },
+                "propertyWithNoSetterMethod": {
+                    "required": false,
+                    "type": "string"
+                },
                 "allCapsSet": {
                     "items": {
                         "type": "string"
                     },
                     "required": false,
                     "type": "Set"
-                },
-                "propertyWithNoSetterMethod": {
-                    "required": false,
-                    "type": "string"
                 },
                 "localDateTime": {
                     "required": false,
@@ -866,6 +866,26 @@
             "id": "LocalDateTime",
             "properties": {
                 "year": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "era": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "dayOfYear": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "dayOfWeek": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "dayOfMonth": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"
@@ -924,27 +944,7 @@
                     "format": "int32",
                     "type": "integer"
                 },
-                "dayOfMonth": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfWeek": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "era": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
                 "millisOfDay": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfYear": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"

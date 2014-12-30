@@ -1,5 +1,6 @@
 package com.mangofactory.schema;
 
+
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
@@ -25,18 +26,45 @@ public class Annotations {
   public static <A extends Annotation> A findPropertyAnnotation(BeanPropertyDefinition beanPropertyDefinition,
       Class<A> annotationClass) {
 
-    A annotation = null;
-    if (beanPropertyDefinition.hasGetter()) {
-      annotation = beanPropertyDefinition.getGetter().getAnnotation(annotationClass);
-    }
-    if (annotation == null && beanPropertyDefinition.hasSetter()) {
-      annotation = beanPropertyDefinition.getSetter().getAnnotation(annotationClass);
-    }
-    if (annotation == null && beanPropertyDefinition.hasField()) {
-      annotation = beanPropertyDefinition.getField().getAnnotation(annotationClass);
-    }
+      return tryGetGetterAnnotation(beanPropertyDefinition, annotationClass)
+              .or(tryGetSetterAnnotation(beanPropertyDefinition, annotationClass))
+              .or(tryGetFieldAnnotation(beanPropertyDefinition, annotationClass))
+              .orNull();
+  }
 
-    return annotation;
+  private static <A extends Annotation> Optional<A> tryGetGetterAnnotation(
+          BeanPropertyDefinition  beanPropertyDefinition,
+          Class<A> annotationClass) {
+
+    try {
+      if (beanPropertyDefinition.hasGetter()) {
+        return Optional.fromNullable(beanPropertyDefinition.getGetter().getAnnotation(annotationClass));
+      }
+    } catch (IllegalArgumentException ignored) {
+    }
+    return Optional.absent();
+  }
+
+  private static <A extends Annotation> Optional<A> tryGetSetterAnnotation(
+          BeanPropertyDefinition beanPropertyDefinition, Class<A> annotationClass) {
+    try {
+      if (beanPropertyDefinition.hasSetter()) {
+        return Optional.fromNullable(beanPropertyDefinition.getSetter().getAnnotation(annotationClass));
+      }
+    } catch (IllegalArgumentException ignored) {
+    }
+    return Optional.absent();
+  }
+
+  private static <A extends Annotation> Optional<A> tryGetFieldAnnotation(
+          BeanPropertyDefinition beanPropertyDefinition, Class<A> annotationClass) {
+    try {
+        if (beanPropertyDefinition.hasField()){
+          return Optional.fromNullable(beanPropertyDefinition.getField().getAnnotation(annotationClass));
+        }
+    } catch (IllegalArgumentException ignored) {
+    }
+    return Optional.absent();
   }
 
   public static boolean memberIsUnwrapped(AnnotatedMember member) {

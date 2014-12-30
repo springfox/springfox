@@ -45,6 +45,7 @@ class OperationResponseClassReaderSpec extends Specification {
       dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»'
       dummyHandlerMethod('methodWithGenericPrimitiveArray')                | 'Array[byte]'
       dummyHandlerMethod('methodWithGenericComplexArray')                  | 'Array[DummyClass]'
+      dummyHandlerMethod('methodWithEnumResponse')                         | 'string'
 
    }
 

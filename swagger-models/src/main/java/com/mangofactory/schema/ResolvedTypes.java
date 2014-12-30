@@ -43,9 +43,19 @@ public class ResolvedTypes {
     return innerTypeName(type);
   }
 
+  public static String parameterTypeName(ResolvedType type) {
+    if (isContainerType(type)) {
+      return String.format("%s%s", containerType(type), optionalContainerTypeQualifierForReturn(type));
+    }
+    return innerTypeName(type);
+  }
+
 
   private static String optionalContainerTypeQualifierForReturn(ResolvedType type) {
     if (type.isArray()) {
+      if ("object".equals(typeName(type.getArrayElementType()))) {
+        return "";
+      }
       return String.format("[%s]", typeName(type.getArrayElementType()));
     }
 
@@ -55,7 +65,7 @@ public class ResolvedTypes {
       return "";
     }
     String qualifier = innerTypeName(typeParameters.get(0));
-    if (Types.isBaseType(qualifier)) {
+    if ("object".equals(qualifier)) {
       return "";
     }
     return String.format("[%s]", qualifier);

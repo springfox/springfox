@@ -3,12 +3,12 @@ apply plugin: "com.github.kt3k.coveralls"
 
 ext {
   limits = [
-          'instruction': 93,
+          'instruction': 95,
           'branch'     : 88,
-          'line'       : 92,
-          'complexity' : 84,
-          'method'     : 90,
-          'class'      : 97 //TODO - 100%
+          'line'       : 94.5,
+          'complexity' : 87.5,
+          'method'     : 93,
+          'class'      : 97.5
   ]
 }
 
@@ -46,10 +46,14 @@ jacocoTestReport {
 
 
     def failures = []
+    def canIncrease = []
     metrics.each {
       def limit = limits[it.key]
       if (it.value < limit) {
         failures.add("- ${it.key} coverage rate is: ${it.value}%, minimum is ${limit}%")
+      }
+      if (it.value > limit + 1) {
+        canIncrease.add("- ${it.key} coverage rate is: ${it.value}%, minimum is ${limit}%")
       }
     }
 
@@ -60,8 +64,13 @@ jacocoTestReport {
       }
       logger.quiet("---------------------------------------------------------------")
       throw new GradleException("Code coverage failed")
-    } else{
-      logger.quiet("Passed Code Coverage Checks")
+    }
+    if (canIncrease) {
+      logger.quiet("------------------ Code Coverage Improved! -----------------------")
+      canIncrease.each {
+        logger.quiet(it)
+      }
+      logger.quiet("---------------------------------------------------------------")
     }
   }
 }

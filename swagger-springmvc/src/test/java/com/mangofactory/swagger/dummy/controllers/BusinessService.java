@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -51,6 +53,13 @@ public class BusinessService {
   @RequestMapping(value = "/businesses/responseEntity/{businessId}", method = RequestMethod.GET)
   public ResponseEntity<String> getResponseEntity(@PathVariable String businessId) {
     return new ResponseEntity<String>("This is only a test", HttpStatus.OK);
+  }
+
+  @RequestMapping(value = { "/businesses/typeEcho" }, method = POST, consumes = APPLICATION_JSON_VALUE,
+          produces = APPLICATION_JSON_VALUE)
+  @ResponseBody
+  public ResponseEntity<Business.BusinessType> businessTypeEcho(@RequestBody Business.BusinessType business) {
+    return new ResponseEntity<Business.BusinessType>(Business.BusinessType.PRODUCT, OK);
   }
 
   @RequestMapping(value = {"/businesses/byTypes"}, method = GET, produces = APPLICATION_JSON_VALUE)

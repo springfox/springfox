@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.schema.ResolvedTypes.*;
 
@@ -36,17 +37,22 @@ public class ModelDependencyProvider {
     return FluentIterable
             .from(resolvedDependencies(modelContext))
             .filter(ignorableTypes(modelContext))
-            .filter(baseTypes())
+            .filter(not(baseTypes(modelContext)))
             .toSet();
   }
 
-  private Predicate<ResolvedType> baseTypes() {
+  private Predicate<ResolvedType> baseTypes(final ModelContext modelContext) {
     return new Predicate<ResolvedType>() {
       @Override
       public boolean apply(ResolvedType resolvedType) {
-        return !Types.isBaseType(typeName(resolvedType));
+        return isBaseType(resolvedType, modelContext);
       }
     };
+  }
+
+  private boolean isBaseType(ResolvedType resolvedType, ModelContext modelContext) {
+    String typeName = modelContext.isReturnType() ? responseTypeName(resolvedType) : typeName(resolvedType);
+    return Types.isBaseType(typeName);
   }
 
   private Predicate<ResolvedType> ignorableTypes(final ModelContext modelContext) {
@@ -61,7 +67,7 @@ public class ModelDependencyProvider {
 
   private List<ResolvedType> resolvedDependencies(ModelContext modelContext) {
     ResolvedType resolvedType = alternateTypeProvider.alternateFor(modelContext.resolvedType(typeResolver));
-    if (Types.isBaseType(typeName(resolvedType))) {
+    if (isBaseType(resolvedType, modelContext)) {
       modelContext.seen(resolvedType);
       return newArrayList();
     }
@@ -80,7 +86,7 @@ public class ModelDependencyProvider {
   }
 
   private List<ResolvedType> resolvedPropertiesAndFields(ModelContext modelContext, ResolvedType resolvedType) {
-    if (modelContext.hasSeenBefore(resolvedType)) {
+    if (modelContext.hasSeenBefore(resolvedType) || resolvedType.getErasedType().isEnum()) {
       return newArrayList();
     }
     modelContext.seen(resolvedType);
@@ -89,7 +95,7 @@ public class ModelDependencyProvider {
       if (Types.typeNameFor(property.getType().getErasedType()) != null) {
         continue;
       }
-      if (Types.isBaseType(typeName(property.getType()))) {
+      if (isBaseType(property.getType(), modelContext)) {
         continue;
       }
       properties.add(property.getType());
