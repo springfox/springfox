@@ -61,7 +61,7 @@ public class OperationAuthReader implements RequestMappingReader {
         }
       }
     }
-    LOG.info("Authorization count {} for method {}", handlerMethod.getMethod().getName(), authorizations.size());
+    LOG.debug("Authorization count {} for method {}", handlerMethod.getMethod().getName(), authorizations.size());
     context.put("authorizations", authorizations);
   }
 }
