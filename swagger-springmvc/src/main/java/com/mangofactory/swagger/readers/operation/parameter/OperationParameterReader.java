@@ -63,12 +63,17 @@ public class OperationParameterReader extends SwaggerParameterReader {
         Map<String, Object> result = parameterContext.getResult();
 
         if (!shouldExpand(methodParameter)) {
-          Parameter parameter = new com.mangofactory.service.model.builder.ParameterBuilder().name((String)
-                  result.get("name")).description((String) result.get("description")).defaultValue((String) result
-                  .get("defaultValue")).required((Boolean) result.get("required")).allowMultiple((Boolean) result.get
-                  ("allowMultiple")).dataType((String) result.get("dataType")).allowableValues((AllowableValues)
-                  result.get("allowableValues")).parameterType((String) result.get("paramType")).parameterAccess(
-                  (String) result.get("paramAccess")).build();
+          Parameter parameter = new com.mangofactory.service.model.builder.ParameterBuilder()
+                  .name((String) result.get("name"))
+                  .description((String) result.get("description"))
+                  .defaultValue((String) result.get("defaultValue"))
+                  .required((Boolean) result.get("required"))
+                  .allowMultiple((Boolean) result.get("allowMultiple"))
+                  .dataType((String) result.get("dataType"))
+                  .allowableValues((AllowableValues) result.get("allowableValues"))
+                  .parameterType((String) result.get("paramType"))
+                  .parameterAccess((String) result.get("paramAccess"))
+                  .build();
           parameters.add(parameter);
         } else {
           expander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters);
