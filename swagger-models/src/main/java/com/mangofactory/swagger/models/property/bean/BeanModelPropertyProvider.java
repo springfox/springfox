@@ -14,9 +14,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.mangofactory.swagger.models.BeanPropertyNamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.property.BeanPropertyDefinitions;
@@ -75,7 +73,8 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
       Optional<BeanPropertyDefinition> jacksonProperty
               = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
       AnnotatedMember member = propertyDefinition.getPrimaryMember();
-      Optional<ResolvedMethod> accessorMethodOptional = findAccessorMethod(resolvedType, member);
+      Optional<ResolvedMethod> accessorMethodOptional = findAccessorMethod(resolvedType, propertyDefinitionEntry
+              .getKey(), member);
       if (accessorMethodOptional.isPresent()) {
           ResolvedMethod accessorMethod = accessorMethodOptional.get();
           serializationCandidates
@@ -85,10 +84,14 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     return serializationCandidates;
   }
 
-  private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType, final AnnotatedMember member) {
+  private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType,
+                                                      final String propertyName ,
+                                                      final AnnotatedMember member) {
     return Iterables.tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
       public boolean apply(ResolvedMethod accessorMethod) {
-        return (accessorMemberIs(accessorMethod, methodName(member)));
+        return (accessorMemberIs(accessorMethod, methodName(member))
+                &&
+                propertyName.equals(propertyName(accessorMethod.getRawMember())));
       }
     });
   }
