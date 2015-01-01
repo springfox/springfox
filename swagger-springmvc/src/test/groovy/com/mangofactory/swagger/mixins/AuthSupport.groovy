@@ -1,24 +1,24 @@
 package com.mangofactory.swagger.mixins
 
-import com.mangofactory.swagger.dto.AuthorizationCodeGrant
-import com.mangofactory.swagger.dto.AuthorizationScope
-import com.mangofactory.swagger.dto.AuthorizationType
-import com.mangofactory.swagger.dto.GrantType
-import com.mangofactory.swagger.dto.ImplicitGrant
-import com.mangofactory.swagger.dto.LoginEndpoint
-import com.mangofactory.swagger.dto.OAuth
-import com.mangofactory.swagger.dto.TokenEndpoint
-import com.mangofactory.swagger.dto.TokenRequestEndpoint
+import com.mangofactory.service.model.Authorization
+import com.mangofactory.service.model.AuthorizationCodeGrant
+import com.mangofactory.service.model.AuthorizationScope
+import com.mangofactory.service.model.AuthorizationType
+import com.mangofactory.service.model.GrantType
+import com.mangofactory.service.model.ImplicitGrant
+import com.mangofactory.service.model.LoginEndpoint
+import com.mangofactory.service.model.OAuth
+import com.mangofactory.service.model.TokenEndpoint
+import com.mangofactory.service.model.TokenRequestEndpoint
 
 import static com.google.common.collect.Lists.*
 
 class AuthSupport {
   def defaultAuth() {
-    com.mangofactory.service.model.AuthorizationScope authorizationScope =
-            new com.mangofactory.service.model.AuthorizationScope("global", "accessEverything")
-    com.mangofactory.service.model.AuthorizationScope[] authorizationScopes = [authorizationScope] as
-            com.mangofactory.service.model.AuthorizationScope[];
-    newArrayList(new com.mangofactory.service.model.Authorization("oauth2", authorizationScopes))
+    AuthorizationScope authorizationScope =
+            new AuthorizationScope("global", "accessEverything")
+    AuthorizationScope[] authorizationScopes = [authorizationScope] as AuthorizationScope[];
+    newArrayList(new Authorization("oauth2", authorizationScopes))
   }
 //
 //  def oAuth() {

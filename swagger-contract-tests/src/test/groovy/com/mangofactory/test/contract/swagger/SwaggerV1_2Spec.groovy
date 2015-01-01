@@ -22,7 +22,6 @@ import static org.skyscreamer.jsonassert.JSONCompareMode.*
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
 class SwaggerV1_2Spec extends Specification {
 
-  public static final boolean STRICT_JSON_ASSERT = false
   @Value('${local.server.port}')
   int port;
 

@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.core;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.mangofactory.schema.ModelProvider;
 import com.mangofactory.service.model.ApiDescription;
@@ -8,7 +7,9 @@ import com.mangofactory.service.model.ApiInfo;
 import com.mangofactory.service.model.ApiListing;
 import com.mangofactory.service.model.ApiListingReference;
 import com.mangofactory.service.model.AuthorizationType;
+import com.mangofactory.service.model.Group;
 import com.mangofactory.service.model.ResourceListing;
+import com.mangofactory.service.model.builder.GroupBuilder;
 import com.mangofactory.service.model.builder.ResourceListingBuilder;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
@@ -22,6 +23,7 @@ import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.mangofactory.swagger.scanners.ResourceGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,12 +33,10 @@ import java.util.Map;
 
 import static com.google.common.base.Strings.*;
 import static com.mangofactory.swagger.controllers.DefaultSwaggerController.*;
-import static com.mangofactory.swagger.dto.mappers.Mappers.*;
 
 public class SwaggerApiResourceListing {
   private static final Logger log = LoggerFactory.getLogger(SwaggerApiResourceListing.class);
 
-  private SwaggerCache swaggerCache;
   private ApiInfo apiInfo;
   private List<AuthorizationType> authorizationTypes;
   private AuthorizationContext authorizationContext;
@@ -50,16 +50,15 @@ public class SwaggerApiResourceListing {
   private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
   private Collection<RequestMappingReader> customAnnotationReaders;
   private RequestMappingEvaluator requestMappingEvaluator;
-
-  public SwaggerApiResourceListing(SwaggerCache swaggerCache, String swaggerGroup) {
-    this.swaggerCache = swaggerCache;
+  public SwaggerApiResourceListing(String swaggerGroup) {
     this.swaggerGroup = swaggerGroup;
   }
 
-  public void initialize() {
+  public Group scan(List<RequestMappingHandlerMapping> handlerMappings) {
+    GroupBuilder group = new GroupBuilder().withName(swaggerGroup);
     List<ApiListingReference> apiListingReferences = new ArrayList<ApiListingReference>();
     if (null != apiListingReferenceScanner) {
-      apiListingReferenceScanner.scan();
+      apiListingReferenceScanner.scan(handlerMappings);
       apiListingReferences = apiListingReferenceScanner.getApiListingReferences();
 
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings =
@@ -72,9 +71,7 @@ public class SwaggerApiResourceListing {
       apiListingScanner.setResourceGroupingStrategy(apiListingReferenceScanner.getResourceGroupingStrategy());
 
       Map<String, ApiListing> apiListings = apiListingScanner.scan();
-      Map<String, com.mangofactory.swagger.dto.ApiListing> dtoApiListing = Maps.transformEntries(apiListings,
-              toApiListingDto(swaggerGlobalSettings.getDtoMapper()));
-      swaggerCache.addApiListings(swaggerGroup, dtoApiListing);
+      group.withApiListings(apiListings);
 
     } else {
       log.error("ApiListingReferenceScanner not configured");
@@ -101,14 +98,10 @@ public class SwaggerApiResourceListing {
       }
       log.info("  {} at location: {}{}", path, prefix, apiListingReference.getPath());
     }
-    swaggerCache.addSwaggerResourceListing(swaggerGroup,
-            swaggerGlobalSettings.getDtoMapper().toSwaggerResourceListing(resourceListing));
+    group.withResourceListing(resourceListing);
+    return group.build();
   }
 
-
-  public SwaggerCache getSwaggerCache() {
-    return swaggerCache;
-  }
 
   public void setApiInfo(ApiInfo apiInfo) {
     this.apiInfo = apiInfo;

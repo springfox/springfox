@@ -1,26 +1,31 @@
 package com.mangofactory.swagger.scanners
 
-import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.swagger.annotations.ApiIgnore
-import com.mangofactory.swagger.authorization.AuthorizationContext
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
-import com.mangofactory.swagger.core.RequestMappingEvaluator
-import com.mangofactory.swagger.mixins.*
-import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
 import com.mangofactory.service.model.ApiDescription
 import com.mangofactory.service.model.ApiListing
+import com.mangofactory.swagger.annotations.ApiIgnore
+import com.mangofactory.swagger.authorization.AuthorizationContext
+import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.swagger.core.RequestMappingEvaluator
+import com.mangofactory.swagger.mixins.ApiDescriptionSupport
+import com.mangofactory.swagger.mixins.AuthSupport
+import com.mangofactory.swagger.mixins.ModelProviderSupport
+import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
+import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.google.common.collect.Lists.newArrayList
-import static com.google.common.collect.Maps.newHashMap
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
-import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
+import javax.servlet.ServletContext
 
-@Mixin([RequestMappingSupport, SwaggerPathProviderSupport, AuthSupport, ModelProviderSupport, ApiDescriptionSupport])
+import static com.google.common.collect.Lists.*
+import static com.google.common.collect.Maps.*
+import static org.springframework.http.MediaType.*
+
+@Mixin([RequestMappingSupport, SwaggerPathProviderSupport, AuthSupport, ModelProviderSupport, ApiDescriptionSupport,
+        SpringSwaggerConfigSupport])
 class ApiListingScannerSpec extends Specification {
+  def defaultValues = defaults(Mock(ServletContext))
 
   def "Should create an api listing for a single resource grouping "() {
     given:
@@ -41,10 +46,8 @@ class ApiListingScannerSpec extends Specification {
               modelProvider(), null, [], evaluator)
 
       def settings = new SwaggerGlobalSettings()
-      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-      settings.ignorableParameterTypes = springSwaggerConfig.defaultIgnorableParameterTypes()
-      SwaggerModelsConfiguration modelsConfiguration = new SwaggerModelsConfiguration()
-      settings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider(new TypeResolver())
+      settings.ignorableParameterTypes = defaultValues.defaultIgnorableParameterTypes()
+      settings.alternateTypeProvider = defaultValues.alternateTypeProvider
       scanner.setSwaggerGlobalSettings(settings)
 
     when:
@@ -78,10 +81,8 @@ class ApiListingScannerSpec extends Specification {
       ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
               modelProvider(), null, [], evaluator)
       def settings = new SwaggerGlobalSettings()
-      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-      settings.ignorableParameterTypes = springSwaggerConfig.defaultIgnorableParameterTypes()
-      SwaggerModelsConfiguration modelsConfiguration = new SwaggerModelsConfiguration()
-      settings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider(new TypeResolver());
+      settings.ignorableParameterTypes = defaultValues.defaultIgnorableParameterTypes()
+      settings.alternateTypeProvider = defaultValues.alternateTypeProvider
       scanner.setSwaggerGlobalSettings(settings)
 
       AuthorizationContext authorizationContext = new AuthorizationContext.AuthorizationContextBuilder(defaultAuth())

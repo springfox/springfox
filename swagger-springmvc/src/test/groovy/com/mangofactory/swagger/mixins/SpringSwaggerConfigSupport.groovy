@@ -1,19 +1,24 @@
 package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
+import com.mangofactory.swagger.configuration.SpringSwaggerConfig
+import com.mangofactory.swagger.controllers.Defaults
+
+import javax.servlet.ServletContext
 
 @Mixin([ModelProviderSupport, MapperSupport])
+@SuppressWarnings("GrMethodMayBeStatic")
 class SpringSwaggerConfigSupport {
 
   def SpringSwaggerConfig springSwaggerConfig() {
-    SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-    def modelConfig = new SwaggerModelsConfiguration()
+    new SpringSwaggerConfig()
+  }
+
+  def Defaults defaults(ServletContext servletContext) {
     def typeResolver = new TypeResolver()
-    springSwaggerConfig.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
-    springSwaggerConfig.typeResolver = new TypeResolver()
-    springSwaggerConfig.modelProvider = modelProvider(typeResolver, modelConfig.alternateTypeProvider(typeResolver))
-    springSwaggerConfig.dtoMapper = serviceMapper()
-    springSwaggerConfig
+    def modelConfig = new SwaggerModelsConfiguration()
+    def alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+    def modelProvider = modelProvider(typeResolver, modelConfig.alternateTypeProvider(typeResolver))
+    new Defaults(servletContext, typeResolver, alternateTypeProvider, modelProvider)
   }
 }

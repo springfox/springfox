@@ -1,9 +1,11 @@
 package com.mangofactory.swagger.controllers
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.mangofactory.service.model.AuthorizationType
+import com.mangofactory.service.model.Group
+import com.mangofactory.service.model.builder.GroupBuilder
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
-import com.mangofactory.swagger.dto.AuthorizationType
 import com.mangofactory.swagger.dto.jackson.SwaggerJacksonProvider
 import com.mangofactory.swagger.mixins.ApiListingSupport
 import com.mangofactory.swagger.mixins.AuthSupport
@@ -35,6 +37,8 @@ class DefaultSwaggerControllerSpec extends Specification {
   SwaggerGlobalSettings settings = new SwaggerGlobalSettings()
 
   def setup() {
+    controller.swaggerCache = new SwaggerCache()
+    controller.mapper = serviceMapper()
     def jackson2 = new MappingJackson2HttpMessageConverter()
 
     jackson2.setSupportedMediaTypes([MediaType.ALL, MediaType.APPLICATION_JSON])
@@ -42,7 +46,6 @@ class DefaultSwaggerControllerSpec extends Specification {
     def mapper = new ObjectMapper()
     mapper.registerModule(new SwaggerJacksonProvider().swaggerJacksonModule())
 
-    settings.setDtoMapper(serviceMapper())
     jackson2.setObjectMapper(mapper)
     mockMvc = standaloneSetup(controller)
             .setSingleView(mockView)
@@ -53,21 +56,18 @@ class DefaultSwaggerControllerSpec extends Specification {
   @Unroll("path: #path")
   def "should return the default or first swagger resource listing"() {
     given:
-      SwaggerCache swaggerCache = new SwaggerCache();
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing(swaggerCache, "default")
-
+      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing("default")
       swaggerApiResourceListing.swaggerGlobalSettings = settings;
-      swaggerApiResourceListing.initialize()
-      controller.swaggerCache = swaggerCache
+      controller.swaggerCache.addGroup(swaggerApiResourceListing.scan([]))
 
 
     when:
-      MvcResult result = mockMvc.perform(
-              get(path)
-      )
-              .andDo(print()).andReturn()
+      MvcResult result = mockMvc
+              .perform(get(path))
+              .andDo(print())
+              .andReturn()
 
-      def responseJson = jsonBodyResponse(result)
+      jsonBodyResponse(result)
     then:
       result.getResponse().getStatus() == expectedStatus
     where:
@@ -79,12 +79,14 @@ class DefaultSwaggerControllerSpec extends Specification {
 
   def "should respond with api listing for a given resource group"() {
     given:
-      SwaggerCache swaggerCache = new SwaggerCache();
-      swaggerCache.swaggerApiListingMap = [swaggerGroup: ['businesses': apiListing()]]
-      controller.swaggerCache = swaggerCache
+      Group group = new GroupBuilder()
+              .withName("swaggerGroup")
+              .withApiListings(['businesses': apiListing()])
+              .build()
+      controller.swaggerCache.addGroup(group)
     when:
       MvcResult result = mockMvc.perform(get("/api-docs/swaggerGroup/businesses")).andDo(print()).andReturn()
-      def responseJson = jsonBodyResponse(result)
+      jsonBodyResponse(result)
 
     then:
       result.getResponse().getStatus() == 200
@@ -92,13 +94,14 @@ class DefaultSwaggerControllerSpec extends Specification {
 
   def "should respond with auth included"() {
     given:
-      SwaggerCache swaggerCache = new SwaggerCache();
-
       def authTypes = new ArrayList<AuthorizationType>()
       authTypes.add(authorizationTypes());
+      Group group = new GroupBuilder()
+              .withName("swaggerGroup")
+              .withResourceListing(resourceListing(authTypes))
+              .build()
 
-      swaggerCache.swaggerApiResourceListingMap = [swaggerGroup: resourceListing(authTypes)]
-      controller.swaggerCache = swaggerCache
+      controller.swaggerCache.addGroup(group)
     when:
       MvcResult result = mockMvc.perform(get("/api-docs?group=swaggerGroup")).andDo(print()).andReturn()
       def json = jsonBodyResponse(result)

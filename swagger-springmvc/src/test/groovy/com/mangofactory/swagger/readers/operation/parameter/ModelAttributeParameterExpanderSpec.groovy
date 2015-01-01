@@ -1,15 +1,16 @@
 package com.mangofactory.swagger.readers.operation.parameter
 
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig
-import com.mangofactory.swagger.dummy.models.Example
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.service.model.Parameter
+import com.mangofactory.swagger.dummy.models.Example
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import org.joda.time.LocalDateTime
 import spock.lang.Specification
 
-import static com.mangofactory.schema.alternates.Alternates.newRule
+import javax.servlet.ServletContext
+
+import static com.mangofactory.schema.alternates.Alternates.*
 
 @Mixin(SpringSwaggerConfigSupport)
 class ModelAttributeParameterExpanderSpec extends Specification {
@@ -17,11 +18,10 @@ class ModelAttributeParameterExpanderSpec extends Specification {
   def "should expand an parameters"() {
     setup:
       List<Parameter> parameters = []
-      SpringSwaggerConfig config = springSwaggerConfig()
+      def defaultValues = defaults(Mock(ServletContext))
 
-      AlternateTypeProvider alternateTypeProvider = config.defaultAlternateTypeProvider()
-      TypeResolver typeResolver = config.typeResolver
-
+      AlternateTypeProvider alternateTypeProvider = defaultValues.alternateTypeProvider
+      TypeResolver typeResolver = defaultValues.typeResolver
       alternateTypeProvider.addRule(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
 
       ModelAttributeParameterExpander expander = new ModelAttributeParameterExpander(alternateTypeProvider)

@@ -1,37 +1,25 @@
 package com.mangofactory.swagger.core;
 
-import com.mangofactory.swagger.dto.ApiListing;
-import com.mangofactory.swagger.dto.ResourceListing;
-import org.springframework.stereotype.Component;
+import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
+import com.mangofactory.service.model.Group;
 
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
 
-@Component
 public class SwaggerCache {
-  private Map<String, ResourceListing> swaggerApiResourceListingMap = newLinkedHashMap();
+  private Map<String, Group> groupLookup = newLinkedHashMap();
 
-  //Map<'swaggerGroup', Map<controllerGroupName>, ApiListing>>
-  private Map<String, Map<String, ApiListing>> swaggerApiListingMap = newLinkedHashMap();
-
-  public void addSwaggerResourceListing(String swaggerGroup, ResourceListing resourceListing) {
-    swaggerApiResourceListingMap.put(swaggerGroup, resourceListing);
+  public void addGroup(Group group) {
+    groupLookup.put(group.getGroupName(), group);
   }
 
-  public void addApiListings(String swaggerGroup, Map<String, ApiListing> apiListings) {
-    swaggerApiListingMap.put(swaggerGroup, apiListings);
+  public Group getGroup(String groupName) {
+    if (Strings.isNullOrEmpty(groupName)) {
+      Iterables.getFirst(groupLookup.values(), null);
+    }
+    return groupLookup.get(groupName);
   }
 
-  public ResourceListing getResourceListing(String key) {
-    return swaggerApiResourceListingMap.get(key);
-  }
-
-  public Map<String, ResourceListing> getSwaggerApiResourceListingMap() {
-    return swaggerApiResourceListingMap;
-  }
-
-  public Map<String, Map<String, ApiListing>> getSwaggerApiListingMap() {
-    return swaggerApiListingMap;
-  }
 }

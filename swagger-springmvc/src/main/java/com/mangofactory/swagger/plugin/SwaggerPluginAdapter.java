@@ -1,65 +1,63 @@
 package com.mangofactory.swagger.plugin;
 
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
+import com.mangofactory.service.model.Group;
+import com.mangofactory.springmvc.plugin.DocumentationPlugin;
+import com.mangofactory.springmvc.plugin.DocumentationType;
+import com.mangofactory.springmvc.plugin.PluginsManager;
+import com.mangofactory.swagger.core.SwaggerCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * After an application context refresh, builds and executes all SwaggerSpringMvcPlugin instances found in the
  * application
  * context.
- * 
+ *
  * If no instances SwaggerSpringMvcPlugin are found a default one is created and executed.
  */
+@Component
 public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshedEvent> {
   private static final Logger log = LoggerFactory.getLogger(SwaggerPluginAdapter.class);
-  private SpringSwaggerConfig springSwaggerConfig;
+  private final PluginsManager pluginsManager;
+  private List<RequestMappingHandlerMapping> handlerMappings;
+  private final SwaggerCache scanned;
   private AtomicBoolean initialized = new AtomicBoolean(false);
 
-  public SwaggerPluginAdapter(SpringSwaggerConfig springSwaggerConfig) {
-    this.springSwaggerConfig = springSwaggerConfig;
+
+  @Autowired
+  public SwaggerPluginAdapter(PluginsManager pluginsManager,
+                              List<RequestMappingHandlerMapping> handlerMappings,
+                              SwaggerCache scanned) {
+    this.pluginsManager = pluginsManager;
+    this.handlerMappings = handlerMappings;
+    this.scanned = scanned;
   }
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
     if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
-      ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
+      DocumentationType swagger = new DocumentationType("swagger", "1.2");
+      List<DocumentationPlugin> plugins = pluginsManager.getDocumentationPluginsFor(swagger);
+      log.info("Found custom SwaggerSpringMvcPlugins");
 
-      Map<String, SwaggerSpringMvcPlugin> plugins = BeanFactoryUtils.beansOfTypeIncludingAncestors(
-              applicationContext,
-              SwaggerSpringMvcPlugin.class);
-
-      if (plugins.isEmpty()) {
-        log.info("Did not find any SwaggerSpringMvcPlugins so creating a default one");
-        new SwaggerSpringMvcPlugin(springSwaggerConfig)
-                .dtoMapper(springSwaggerConfig.getDtoMapper())
-                .build()
-                .initialize();
-      } else {
-        log.info("Found custom SwaggerSpringMvcPlugins");
-
-        for (Map.Entry<String, SwaggerSpringMvcPlugin> entry : plugins.entrySet()) {
-          if (entry.getValue().isEnabled()) {
-            log.info("initializing plugin bean {}", entry.getKey());
-            entry.getValue()
-                    .dtoMapper(springSwaggerConfig.getDtoMapper())
-                    .build()
-                    .initialize();
-          } else {
-            log.info("Skipping initializing disabled plugin bean {}", entry.getKey());
-          }
+      for (DocumentationPlugin each : plugins) {
+        if (each.isEnabled()) {
+          Group group = each.scan(handlerMappings);
+          scanned.addGroup(group);
+        } else {
+          log.info("Skipping initializing disabled plugin bean {}", each.getName());
         }
       }
-    } else {
-      log.info("Skipping SwaggerSpringMvcPlugin initialization already initialized!");
     }
   }
+
 }

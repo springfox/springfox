@@ -24,11 +24,8 @@ import java.util.Set;
 import static com.google.common.collect.Lists.*;
 
 public class ApiListingReferenceScanner {
-  private static final String REQUEST_MAPPINGS_EMPTY =
-          "No RequestMappingHandlerMapping's found have you added <mvc:annotation-driven/>";
 
   private static final Logger log = LoggerFactory.getLogger(ApiListingReferenceScanner.class);
-  private List<RequestMappingHandlerMapping> requestMappingHandlerMapping;
   private List<ApiListingReference> apiListingReferences = newArrayList();
   private ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings = ArrayListMultimap
           .create();
@@ -42,9 +39,7 @@ public class ApiListingReferenceScanner {
   public ApiListingReferenceScanner() {
   }
 
-  public List<ApiListingReference> scan() {
-    Assert.notNull(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
-    Assert.notEmpty(requestMappingHandlerMapping, REQUEST_MAPPINGS_EMPTY);
+  public List<ApiListingReference> scan(List<RequestMappingHandlerMapping> handlerMappings) {
     Assert.notNull(resourceGroupingStrategy, "resourceGroupingStrategy is required");
     Assert.notNull(swaggerGroup, "swaggerGroup is required");
     if (!StringUtils.hasText(swaggerGroup)) {
@@ -53,14 +48,14 @@ public class ApiListingReferenceScanner {
     Assert.notNull(swaggerPathProvider, "swaggerPathProvider is required");
 
     log.info("Scanning for api listing references");
-    scanSpringRequestMappings();
+    scanSpringRequestMappings(handlerMappings);
     return this.apiListingReferences;
   }
 
   @SuppressWarnings("unchecked")
-  public void scanSpringRequestMappings() {
+  public void scanSpringRequestMappings(List<RequestMappingHandlerMapping> handlerMappings) {
     Map<ResourceGroup, String> resourceGroupDescriptions = new HashMap<ResourceGroup, String>();
-    for (RequestMappingHandlerMapping requestMappingHandlerMapping : this.requestMappingHandlerMapping) {
+    for (RequestMappingHandlerMapping requestMappingHandlerMapping : handlerMappings) {
       for (Entry<RequestMappingInfo, HandlerMethod> handlerMethodEntry :
               requestMappingHandlerMapping.getHandlerMethods().entrySet()) {
         RequestMappingInfo requestMappingInfo = handlerMethodEntry.getKey();
@@ -103,10 +98,6 @@ public class ApiListingReferenceScanner {
 
   public Map<ResourceGroup, List<RequestMappingContext>> getResourceGroupRequestMappings() {
     return Multimaps.asMap(resourceGroupRequestMappings);
-  }
-
-  public void setRequestMappingHandlerMapping(List<RequestMappingHandlerMapping> requestMappingHandlerMapping) {
-    this.requestMappingHandlerMapping = requestMappingHandlerMapping;
   }
 
   public List<ApiListingReference> getApiListingReferences() {

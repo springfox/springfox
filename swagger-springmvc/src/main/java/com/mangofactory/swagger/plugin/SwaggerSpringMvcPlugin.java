@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.plugin;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Ordering;
 import com.mangofactory.schema.GenericTypeNamingStrategy;
 import com.mangofactory.schema.ModelProvider;
@@ -13,16 +13,17 @@ import com.mangofactory.service.model.ApiDescription;
 import com.mangofactory.service.model.ApiInfo;
 import com.mangofactory.service.model.ApiListingReference;
 import com.mangofactory.service.model.AuthorizationType;
+import com.mangofactory.service.model.Group;
 import com.mangofactory.service.model.ResponseMessage;
 import com.mangofactory.service.model.builder.ApiInfoBuilder;
+import com.mangofactory.springmvc.plugin.DocumentationPlugin;
+import com.mangofactory.springmvc.plugin.DocumentationType;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
+import com.mangofactory.swagger.controllers.Defaults;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.core.SwaggerApiResourceListing;
-import com.mangofactory.swagger.dto.mappers.ServiceModelToSwaggerMapper;
-
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
@@ -34,6 +35,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.schema.alternates.Alternates.*;
@@ -55,7 +58,7 @@ import static org.springframework.util.StringUtils.*;
  * A builder which is intended to be the primary interface into the swagger-springmvc framework.
  * Provides sensible defaults and convenience methods for configuration.
  */
-public class SwaggerSpringMvcPlugin {
+public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
 
   private ModelProvider modelProvider;
   private String swaggerGroup;
@@ -73,7 +76,7 @@ public class SwaggerSpringMvcPlugin {
   private Set<Class> ignorableParameterTypes = new HashSet<Class>();
   private AlternateTypeProvider alternateTypeProvider;
   private List<AlternateTypeRule> alternateTypeRules = new ArrayList<AlternateTypeRule>();
-  private SpringSwaggerConfig springSwaggerConfig;
+  private Defaults defaults;
   private SwaggerApiResourceListing swaggerApiResourceListing;
   private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
   private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
@@ -84,18 +87,17 @@ public class SwaggerSpringMvcPlugin {
   private RequestMappingEvaluator requestMappingEvaluator;
   private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
   private boolean enabled = true;
-  private ServiceModelToSwaggerMapper dtoMapper;
   private List<Class<? extends Annotation>> mergedExcludedAnnotations = newArrayList();
 
   /**
    * Default constructor.
-   * The argument springSwaggerConfig is used to by this class to establish sensible defaults.
+   * The argument defaults is used to by this class to establish sensible defaults.
    *
-   * @param springSwaggerConfig
+   * @param defaults
    */
-  public SwaggerSpringMvcPlugin(SpringSwaggerConfig springSwaggerConfig) {
-    Assert.notNull(springSwaggerConfig);
-    this.springSwaggerConfig = springSwaggerConfig;
+  public SwaggerSpringMvcPlugin(Defaults defaults) {
+    Assert.notNull(defaults);
+    this.defaults = defaults;
   }
 
 
@@ -205,7 +207,7 @@ public class SwaggerSpringMvcPlugin {
    * @see com.wordnik.swagger.annotations.ApiResponse
    * and
    * @see com.wordnik.swagger.annotations.ApiResponses
-   * @see com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultResponseMessages()
+   * @see com.mangofactory.swagger.controllers.Defaults#defaultResponseMessages()
    */
   public SwaggerSpringMvcPlugin globalResponseMessage(RequestMethod requestMethod,
                                                       List<ResponseMessage> responseMessages) {
@@ -221,7 +223,7 @@ public class SwaggerSpringMvcPlugin {
    *
    * @param classes the classes to ignore
    * @return this SwaggerSpringMvcPlugin
-   * @see com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes()
+   * @see com.mangofactory.swagger.controllers.Defaults#defaultIgnorableParameterTypes()
    */
   public SwaggerSpringMvcPlugin ignoredParameterTypes(Class... classes) {
     this.ignorableParameterTypes.addAll(Arrays.asList(classes));
@@ -364,7 +366,7 @@ public class SwaggerSpringMvcPlugin {
    *
    * @param resourceGroupingStrategy
    * @return this SwaggerSpringMvcPlugin
-   * @see com.mangofactory.swagger.scanners.ApiListingReferenceScanner#scanSpringRequestMappings()
+   * @see com.mangofactory.swagger.scanners.ApiListingReferenceScanner#scanSpringRequestMappings(java.util.List)
    */
   public SwaggerSpringMvcPlugin resourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
     this.resourceGroupingStrategy = resourceGroupingStrategy;
@@ -411,15 +413,6 @@ public class SwaggerSpringMvcPlugin {
     return this;
   }
 
-  /**
-   * Sets the swagger dto mapper
-   * @param mapper - supplied mapper to use
-   * @return
-   */
-  public SwaggerSpringMvcPlugin dtoMapper(ServiceModelToSwaggerMapper mapper) {
-    this.dtoMapper = mapper;
-    return this;
-  }
 
   private ApiInfo defaultApiInfo() {
     return new ApiInfoBuilder()
@@ -430,15 +423,6 @@ public class SwaggerSpringMvcPlugin {
             .license("Licence Type")
             .licenseUrl("License URL")
             .build();
-  }
-
-  /**
-   * Called by the framework hence protected
-   */
-  protected void initialize() {
-    if (enabled) {
-      this.build().swaggerApiResourceListing.initialize();
-    }
   }
 
   /**
@@ -468,19 +452,19 @@ public class SwaggerSpringMvcPlugin {
       this.apiInfo = defaultApiInfo();
     }
 
-    this.resourceGroupingStrategy = Optional.fromNullable(resourceGroupingStrategy)
-            .or(springSwaggerConfig.defaultResourceGroupingStrategy());
+    this.resourceGroupingStrategy
+            = fromNullable(resourceGroupingStrategy).or(defaults.defaultResourceGroupingStrategy());
 
-    this.swaggerPathProvider = Optional.fromNullable(swaggerPathProvider)
-            .or(springSwaggerConfig.defaultSwaggerPathProvider());
+    this.swaggerPathProvider
+            = fromNullable(swaggerPathProvider).or(defaults.defaultSwaggerPathProvider());
 
-    this.alternateTypeProvider = Optional.fromNullable(alternateTypeProvider)
-            .or(springSwaggerConfig.defaultAlternateTypeProvider());
+    this.alternateTypeProvider
+            = fromNullable(alternateTypeProvider).or(defaults.getAlternateTypeProvider());
 
-    this.modelProvider = Optional.fromNullable(modelProvider).or(springSwaggerConfig.defaultModelProvider());
+    this.modelProvider = fromNullable(modelProvider).or(defaults.getModelProvider());
 
 
-    mergedExcludedAnnotations.addAll(springSwaggerConfig.defaultExcludeAnnotations());
+    mergedExcludedAnnotations.addAll(defaults.defaultExcludeAnnotations());
     mergedExcludedAnnotations.addAll(this.excludeAnnotations);
 
     requestMappingEvaluator
@@ -490,13 +474,13 @@ public class SwaggerSpringMvcPlugin {
   private void buildSwaggerGlobalSettings() {
     Map<RequestMethod, List<ResponseMessage>> mergedResponseMessages = newHashMap();
     if (this.applyDefaultResponseMessages) {
-      mergedResponseMessages.putAll(springSwaggerConfig.defaultResponseMessages());
+      mergedResponseMessages.putAll(defaults.defaultResponseMessages());
     }
     mergedResponseMessages.putAll(this.globalResponseMessages);
     swaggerGlobalSettings.setGlobalResponseMessages(mergedResponseMessages);
 
     Set<Class> mergedIgnorableParameterTypes = new HashSet<Class>();
-    mergedIgnorableParameterTypes.addAll(springSwaggerConfig.defaultIgnorableParameterTypes());
+    mergedIgnorableParameterTypes.addAll(defaults.defaultIgnorableParameterTypes());
     mergedIgnorableParameterTypes.addAll(this.ignorableParameterTypes);
     swaggerGlobalSettings.setIgnorableParameterTypes(mergedIgnorableParameterTypes);
     addSpringMvcPassthroughTypes();
@@ -505,7 +489,6 @@ public class SwaggerSpringMvcPlugin {
       this.alternateTypeProvider.addRule(rule);
     }
     swaggerGlobalSettings.setAlternateTypeProvider(this.alternateTypeProvider);
-    swaggerGlobalSettings.setDtoMapper(this.dtoMapper);
   }
 
   private void addSpringMvcPassthroughTypes() {
@@ -518,7 +501,7 @@ public class SwaggerSpringMvcPlugin {
   }
 
   private void buildSwaggerApiResourceListing() {
-    swaggerApiResourceListing = new SwaggerApiResourceListing(springSwaggerConfig.swaggerCache(), this.swaggerGroup);
+    swaggerApiResourceListing = new SwaggerApiResourceListing(this.swaggerGroup);
     swaggerApiResourceListing.setSwaggerGlobalSettings(this.swaggerGlobalSettings);
     swaggerApiResourceListing.setSwaggerPathProvider(this.swaggerPathProvider);
     swaggerApiResourceListing.setApiInfo(this.apiInfo);
@@ -535,8 +518,6 @@ public class SwaggerSpringMvcPlugin {
 
   private ApiListingReferenceScanner buildApiListingReferenceScanner() {
     apiListingReferenceScanner = new ApiListingReferenceScanner();
-    apiListingReferenceScanner.setRequestMappingHandlerMapping(springSwaggerConfig
-            .swaggerRequestMappingHandlerMappings());
     apiListingReferenceScanner.setResourceGroupingStrategy(this.resourceGroupingStrategy);
     apiListingReferenceScanner.setSwaggerPathProvider(this.swaggerPathProvider);
     apiListingReferenceScanner.setSwaggerGroup(this.swaggerGroup);
@@ -548,5 +529,25 @@ public class SwaggerSpringMvcPlugin {
 
   public boolean isEnabled() {
     return enabled;
+  }
+
+  @Override
+  public Group scan(List<RequestMappingHandlerMapping> handlerMappings) {
+    return build().scanResourceListings(handlerMappings);
+  }
+
+  private Group scanResourceListings(List<RequestMappingHandlerMapping> handlerMappings) {
+    Preconditions.checkNotNull(handlerMappings, "Handler mappings cannot be null");
+    return swaggerApiResourceListing.scan(handlerMappings);
+  }
+
+  @Override
+  public String getName() {
+    return "swagger";
+  }
+
+  @Override
+  public boolean supports(DocumentationType delimiter) {
+    return true; //For now supports everything
   }
 }

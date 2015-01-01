@@ -1,84 +1,57 @@
 package com.mangofactory.swagger.plugin
 
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig
-import com.mangofactory.swagger.dto.mappers.ServiceModelToSwaggerMapper
+import com.mangofactory.service.model.Group
+import com.mangofactory.service.model.builder.GroupBuilder
+import com.mangofactory.springmvc.plugin.DocumentationPlugin
+import com.mangofactory.springmvc.plugin.PluginsManager
+import com.mangofactory.swagger.core.SwaggerCache
 import org.springframework.context.ApplicationContext
 import org.springframework.context.event.ContextRefreshedEvent
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
 
 class SwaggerPluginAdapterSpec extends Specification {
-
-  def "default plugin creation"() {
-    given:
-      SpringSwaggerConfig springSwaggerConfig = Stub()
-      springSwaggerConfig.defaultResourceGroupingStrategy() >> {
-        throw new IllegalArgumentException("I was called")
-      }
-
-      ApplicationContext applicationContext = Mock()
-      applicationContext.getBeansOfType(SwaggerSpringMvcPlugin.class) >> [:]
-
-      ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(applicationContext)
-
-      SwaggerPluginAdapter swaggerPluginAdapter = new SwaggerPluginAdapter(springSwaggerConfig)
-
-    when:
-      swaggerPluginAdapter.onApplicationEvent(contextRefreshedEvent)
-
-    then:
-      def e = thrown IllegalArgumentException
-      e.message == "I was called"
-
-  }
-
   def "Custom plugins are sensitive to being enabled or disabled"() {
     given:
-      ServiceModelToSwaggerMapper dtoMapper = Mock()
-      SpringSwaggerConfig springSwaggerConfig = Mock()
       ApplicationContext applicationContext = Mock()
-
-      springSwaggerConfig.getDtoMapper() >> dtoMapper
-
+      PluginsManager pluginManager = Mock()
+      Group group = new GroupBuilder().withName("default").build()
       SwaggerSpringMvcPlugin enabledPlugin = Mock(SwaggerSpringMvcPlugin)
       enabledPlugin.isEnabled() >> true
+      enabledPlugin.scan(_) >> group
       SwaggerSpringMvcPlugin disabledPlugin = Mock(SwaggerSpringMvcPlugin)
       disabledPlugin.isEnabled() >> false
-      applicationContext.getBeansOfType(SwaggerSpringMvcPlugin.class) >> ['enabled': enabledPlugin,
-                                                                          'disabled': disabledPlugin]
+      pluginManager.getDocumentationPluginsFor(_) >>  [enabledPlugin, disabledPlugin]
 
       ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(applicationContext)
-      SwaggerPluginAdapter swaggerPluginAdapter = new SwaggerPluginAdapter(springSwaggerConfig)
+      SwaggerPluginAdapter swaggerPluginAdapter = new SwaggerPluginAdapter(pluginManager, [], new SwaggerCache())
 
     when:
       swaggerPluginAdapter.onApplicationEvent(contextRefreshedEvent)
 
     then:
-      1 * enabledPlugin.dtoMapper(dtoMapper) >> enabledPlugin
-      1 * enabledPlugin.build() >> enabledPlugin
-      1 * enabledPlugin.initialize()
-      0 * disabledPlugin.build()
+      1 * enabledPlugin.scan(_) >> group
+      0 * disabledPlugin.scan(_)
   }
 
   def "Custom plugins are configured"() {
     given:
-      ServiceModelToSwaggerMapper dtoMapper = Mock()
-      SpringSwaggerConfig springSwaggerConfig = Mock()
+      PluginsManager pluginManager = Mock()
       ApplicationContext applicationContext = Mock()
-
-      SwaggerSpringMvcPlugin swaggerSpringMvcPlugin = Mock(SwaggerSpringMvcPlugin)
-      swaggerSpringMvcPlugin.isEnabled() >> true
-      springSwaggerConfig.getDtoMapper() >> dtoMapper
-      applicationContext.getBeansOfType(SwaggerSpringMvcPlugin.class) >> ['plugin': swaggerSpringMvcPlugin]
+      Group group = new GroupBuilder().withName("default").build()
+      List<RequestMappingHandlerMapping> handlers = []
+      DocumentationPlugin plugin = Mock(DocumentationPlugin)
+      pluginManager.getDocumentationPluginsFor(_) >>  [plugin]
+      plugin.isEnabled() >> true
+      plugin.scan(handlers) >> group
 
       ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(applicationContext)
-      SwaggerPluginAdapter swaggerPluginAdapter = new SwaggerPluginAdapter(springSwaggerConfig)
+      SwaggerPluginAdapter swaggerPluginAdapter = new SwaggerPluginAdapter(pluginManager, handlers, new SwaggerCache())
 
     when:
       swaggerPluginAdapter.onApplicationEvent(contextRefreshedEvent)
 
     then:
-      1 * swaggerSpringMvcPlugin.dtoMapper(dtoMapper) >> swaggerSpringMvcPlugin
-      1 * swaggerSpringMvcPlugin.build() >> swaggerSpringMvcPlugin
-      1 * swaggerSpringMvcPlugin.initialize()
+      1 * plugin.scan(handlers) >> group
   }
 }

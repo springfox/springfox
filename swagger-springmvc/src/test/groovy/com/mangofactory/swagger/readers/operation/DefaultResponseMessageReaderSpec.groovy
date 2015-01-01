@@ -1,27 +1,26 @@
 package com.mangofactory.swagger.readers.operation
-import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig
+
+import com.mangofactory.service.model.ResponseMessage
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.schema.alternates.AlternateTypeProvider
-import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.mangofactory.service.model.ResponseMessage
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
 
-import static com.google.common.collect.Sets.newHashSet
+import javax.servlet.ServletContext
 
-@Mixin(RequestMappingSupport)
+import static com.google.common.collect.Sets.*
+
+@Mixin([RequestMappingSupport, SpringSwaggerConfigSupport])
 class DefaultResponseMessageReaderSpec extends Specification {
-
+  def defaultValues = defaults(Mock(ServletContext))
    def "Should add default response messages"() {
     given:
       SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
-      SwaggerModelsConfiguration modelConfig = new SwaggerModelsConfiguration()
-      swaggerGlobalSettings.alternateTypeProvider = modelConfig.alternateTypeProvider(new TypeResolver());
-      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-      swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages())
+
+      swaggerGlobalSettings.alternateTypeProvider = defaultValues.alternateTypeProvider
+      swaggerGlobalSettings.setGlobalResponseMessages(defaultValues.defaultResponseMessages())
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
       context.put("currentHttpMethod", currentHttpMethod)
@@ -42,9 +41,8 @@ class DefaultResponseMessageReaderSpec extends Specification {
    def "swagger annotation should override"() {
     given:
       SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
-      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-      swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages())
-      swaggerGlobalSettings.alternateTypeProvider = new AlternateTypeProvider();
+      swaggerGlobalSettings.alternateTypeProvider = defaultValues.alternateTypeProvider
+      swaggerGlobalSettings.setGlobalResponseMessages(defaultValues.defaultResponseMessages())
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithApiResponses'))
 
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)
@@ -65,10 +63,8 @@ class DefaultResponseMessageReaderSpec extends Specification {
    def "Methods with return type containing a model should override the success response code"(){
     given:
       SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
-      SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
-      swaggerGlobalSettings.setGlobalResponseMessages(springSwaggerConfig.defaultResponseMessages())
-      SwaggerModelsConfiguration modelsConfiguration = new SwaggerModelsConfiguration()
-      swaggerGlobalSettings.alternateTypeProvider = modelsConfiguration.alternateTypeProvider(new TypeResolver());
+      swaggerGlobalSettings.setGlobalResponseMessages(defaultValues.defaultResponseMessages())
+      swaggerGlobalSettings.alternateTypeProvider = defaultValues.alternateTypeProvider
       RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithConcreteResponseBody'))
 
       context.put("swaggerGlobalSettings", swaggerGlobalSettings)

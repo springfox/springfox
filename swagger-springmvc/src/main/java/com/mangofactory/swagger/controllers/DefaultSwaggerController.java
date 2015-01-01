@@ -1,9 +1,13 @@
 package com.mangofactory.swagger.controllers;
 
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.mangofactory.service.model.Group;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.mangofactory.swagger.core.SwaggerCache;
 import com.mangofactory.swagger.dto.ApiListing;
 import com.mangofactory.swagger.dto.ResourceListing;
+import com.mangofactory.swagger.dto.mappers.ServiceModelToSwaggerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 
+import static com.google.common.collect.Maps.*;
+import static com.mangofactory.swagger.dto.mappers.Mappers.*;
+
 @Controller
 public class DefaultSwaggerController {
 
@@ -23,6 +30,9 @@ public class DefaultSwaggerController {
 
   @Autowired
   private SwaggerCache swaggerCache;
+
+  @Autowired
+  private ServiceModelToSwaggerMapper mapper;
 
   @ApiIgnore
   @RequestMapping(value = {DOCUMENTATION_BASE_PATH}, method = RequestMethod.GET)
@@ -43,31 +53,40 @@ public class DefaultSwaggerController {
   }
 
   private ResponseEntity<ApiListing> getSwaggerApiListing(String swaggerGroup, String apiDeclaration) {
-    ResponseEntity<ApiListing> responseEntity = new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
-    Map<String, ApiListing> apiListingMap = swaggerCache.getSwaggerApiListingMap().get(swaggerGroup);
-    if (null != apiListingMap) {
-      ApiListing apiListing = apiListingMap.get(apiDeclaration);
-      if (null != apiListing) {
-        responseEntity = new ResponseEntity<ApiListing>(apiListing, HttpStatus.OK);
-      }
+    String groupName = Optional.fromNullable(swaggerGroup).or("default");
+    Group group = swaggerCache.getGroup(groupName);
+    if (group == null) {
+      return new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
     }
-    return responseEntity;
+    Map<String, com.mangofactory.service.model.ApiListing> apiListingMap = group.getApiListings();
+    Map<String, com.mangofactory.swagger.dto.ApiListing> dtoApiListing
+            = transformEntries(apiListingMap, toApiListingDto(mapper));
+
+    ApiListing apiListing = dtoApiListing.get(apiDeclaration);
+    return Optional.fromNullable(apiListing)
+            .transform(toResponseEntity(ApiListing.class))
+            .or(new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND));
   }
 
   private ResponseEntity<ResourceListing> getSwaggerResourceListing(String swaggerGroup) {
-    ResponseEntity<ResourceListing> responseEntity = new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
-    ResourceListing resourceListing = null;
+    String groupName = Optional.fromNullable(swaggerGroup).or("default");
+    Group group = swaggerCache.getGroup(groupName);
+    if (group == null) {
+      return new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
+    }
+    com.mangofactory.service.model.ResourceListing listing = group.getResourceListing();
+    ResourceListing resourceListing = mapper.toSwaggerResourceListing(listing);
+    return Optional.fromNullable(resourceListing)
+            .transform(toResponseEntity(ResourceListing.class))
+            .or(new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND));
+  }
 
-    if (null == swaggerGroup) {
-      resourceListing = swaggerCache.getSwaggerApiResourceListingMap().values().iterator().next();
-    } else {
-      if (swaggerCache.getSwaggerApiResourceListingMap().containsKey(swaggerGroup)) {
-        resourceListing = swaggerCache.getSwaggerApiResourceListingMap().get(swaggerGroup);
+  private <T> Function<T, ResponseEntity<T>> toResponseEntity(Class<T> clazz) {
+    return new Function<T, ResponseEntity<T>>() {
+      @Override
+      public ResponseEntity<T> apply(T input) {
+        return new ResponseEntity<T>(input, HttpStatus.OK);
       }
-    }
-    if (null != resourceListing) {
-      responseEntity = new ResponseEntity<ResourceListing>(resourceListing, HttpStatus.OK);
-    }
-    return responseEntity;
+    };
   }
 }

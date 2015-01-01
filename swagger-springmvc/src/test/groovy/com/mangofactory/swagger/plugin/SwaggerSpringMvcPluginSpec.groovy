@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.plugin
-
 import com.mangofactory.schema.DefaultModelProvider
 import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.service.model.ApiInfo
@@ -7,13 +6,11 @@ import com.mangofactory.service.model.AuthorizationType
 import com.mangofactory.service.model.ResponseMessage
 import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.authorization.AuthorizationContext
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.swagger.controllers.Defaults
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
-import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
@@ -26,6 +23,7 @@ import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
 import static com.mangofactory.schema.alternates.Alternates.*
@@ -36,9 +34,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
 class SwaggerSpringMvcPluginSpec extends Specification {
 
   SwaggerSpringMvcPlugin plugin
-
+  Defaults defaultValues = defaults(Mock(ServletContext))
   void setup() {
-    plugin = new SwaggerSpringMvcPlugin(springSwaggerConfig())
+    plugin = new SwaggerSpringMvcPlugin(defaultValues)
   }
 
   def "Should have sensible defaults when built with minimal configuration"() {
@@ -185,7 +183,6 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       listing.swaggerPathProvider == plugin.swaggerPathProvider
       listing.apiInfo == plugin.apiInfo
       listing.apiListingReferenceScanner instanceof ApiListingReferenceScanner
-      listing.swaggerCache instanceof SwaggerCache
       listing.swaggerGroup == plugin.swaggerGroup
       listing.apiVersion == plugin.apiVersion
       listing.apiListingReferenceOrdering instanceof ResourceListingLexicographicalOrdering
@@ -198,8 +195,9 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       plugin.build()
       ApiListingReferenceScanner apiListingReferenceScanner = plugin.apiListingReferenceScanner
 
+
     then:
-      apiListingReferenceScanner.excludeAnnotations == plugin.excludeAnnotations + springSwaggerConfig()
+      apiListingReferenceScanner.excludeAnnotations == plugin.excludeAnnotations + defaultValues
               .defaultExcludeAnnotations()
       apiListingReferenceScanner.resourceGroupingStrategy == plugin.resourceGroupingStrategy
       apiListingReferenceScanner.swaggerPathProvider == plugin.swaggerPathProvider
@@ -210,10 +208,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
   def "should preserve default exclude annotations"() {
     setup:
       List ignores = [ApiIgnore]
-      SpringSwaggerConfig springSwaggerConfig = Stub {
-        defaultExcludeAnnotations() >> ignores
-      }
-      SwaggerSpringMvcPlugin aPlugin = new SwaggerSpringMvcPlugin(springSwaggerConfig)
+      SwaggerSpringMvcPlugin aPlugin = new SwaggerSpringMvcPlugin(defaultValues)
 
     when:
       aPlugin.excludeAnnotations(AbstractSingletonProxyFactoryBean.class, ProxyFactoryBean.class).build()
