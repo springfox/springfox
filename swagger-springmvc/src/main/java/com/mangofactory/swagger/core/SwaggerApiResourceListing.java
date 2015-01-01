@@ -2,9 +2,6 @@ package com.mangofactory.swagger.core;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
-import com.mangofactory.swagger.authorization.AuthorizationContext;
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
-import com.mangofactory.swagger.controllers.DefaultSwaggerController;
 import com.mangofactory.schema.ModelProvider;
 import com.mangofactory.service.model.ApiDescription;
 import com.mangofactory.service.model.ApiInfo;
@@ -13,6 +10,8 @@ import com.mangofactory.service.model.ApiListingReference;
 import com.mangofactory.service.model.AuthorizationType;
 import com.mangofactory.service.model.ResourceListing;
 import com.mangofactory.service.model.builder.ResourceListingBuilder;
+import com.mangofactory.swagger.authorization.AuthorizationContext;
+import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
@@ -30,6 +29,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Strings.*;
+import static com.mangofactory.swagger.controllers.DefaultSwaggerController.*;
 import static com.mangofactory.swagger.dto.mappers.Mappers.*;
 
 public class SwaggerApiResourceListing {
@@ -92,14 +93,17 @@ public class SwaggerApiResourceListing {
     log.info("Added a resource listing with ({}) api resources: ", apiListingReferences.size());
     for (ApiListingReference apiListingReference : apiListingReferences) {
       String path = apiListingReference.getDescription();
-      String prefix = (path != null && path.startsWith("http")) ? path : DefaultSwaggerController
-              .DOCUMENTATION_BASE_PATH;
+      String prefix;
+      if (nullToEmpty(path).startsWith("http")) {
+        prefix = path;
+      } else {
+        prefix = DOCUMENTATION_BASE_PATH;
+      }
       log.info("  {} at location: {}{}", path, prefix, apiListingReference.getPath());
     }
     swaggerCache.addSwaggerResourceListing(swaggerGroup,
             swaggerGlobalSettings.getDtoMapper().toSwaggerResourceListing(resourceListing));
   }
-
 
 
   public SwaggerCache getSwaggerCache() {
