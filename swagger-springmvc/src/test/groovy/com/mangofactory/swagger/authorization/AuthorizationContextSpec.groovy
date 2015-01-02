@@ -9,7 +9,7 @@ class AuthorizationContextSpec extends Specification {
 
    def "scala authorizations"() {
     given:
-      AuthorizationContext authorizationContext = new AuthorizationContext.AuthorizationContextBuilder(auth).build()
+      AuthorizationContext authorizationContext = AuthorizationContext.builder().withAuthorizations(auth).build()
       authorizationContext.scalaAuthorizations
     expect:
       authorizationContext.getScalaAuthorizations().size() == expected

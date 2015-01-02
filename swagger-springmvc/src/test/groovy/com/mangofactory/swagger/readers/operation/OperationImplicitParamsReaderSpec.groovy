@@ -1,32 +1,30 @@
 package com.mangofactory.swagger.readers.operation
 
-import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.swagger.controllers.Defaults
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader
+import com.mangofactory.swagger.readers.operation.parameter.ParameterDataTypeReader
+import com.mangofactory.swagger.readers.operation.parameter.ParameterTypeReader
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import spock.lang.Shared
 import spock.lang.Specification
 
-import static com.google.common.collect.Maps.newHashMap
+import javax.servlet.ServletContext
 
-@Mixin(RequestMappingSupport)
+@Mixin([RequestMappingSupport,  SpringSwaggerConfigSupport, DocumentationContextSupport])
 class OperationImplicitParamsReaderSpec extends Specification {
-
-  @Shared SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings()
-
-  def setup() {
-    SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
-    swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver());
-    swaggerGlobalSettings.setGlobalResponseMessages(newHashMap())
-  }
+  Defaults defaultValues = defaults(Mock(ServletContext))
+  DocumentationContext context  = defaultContext(Mock(ServletContext))
 
   def "Should add implicit parameters"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
-      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
-      OperationParameterReader operationParameterReader = new OperationParameterReader()
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'), handlerMethod)
+      OperationParameterReader operationParameterReader = new OperationParameterReader(defaultValues.typeResolver,
+              defaultValues.alternateTypeProvider,
+              new ParameterDataTypeReader(defaultValues.alternateTypeProvider),
+              new ParameterTypeReader(defaultValues.alternateTypeProvider))
       OperationImplicitParametersReader operationImplicitParametersReader = new OperationImplicitParametersReader()
       OperationImplicitParameterReader operationImplicitParameterReader = new OperationImplicitParameterReader()
     when:

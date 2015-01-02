@@ -11,18 +11,12 @@ import static com.google.common.collect.Lists.*;
 
 public class ResourceListingBuilder {
   private String apiVersion;
-  private String swaggerVersion;
   private List<ApiListingReference> apis = newArrayList();
   private List<AuthorizationType> authorizations = newArrayList();
   private ApiInfo info;
 
   public ResourceListingBuilder apiVersion(String apiVersion) {
     this.apiVersion = apiVersion;
-    return this;
-  }
-
-  public ResourceListingBuilder swaggerVersion(String swaggerVersion) {
-    this.swaggerVersion = swaggerVersion;
     return this;
   }
 
@@ -42,6 +36,6 @@ public class ResourceListingBuilder {
   }
 
   public ResourceListing build() {
-    return new ResourceListing(apiVersion, swaggerVersion, apis, authorizations, info);
+    return new ResourceListing(apiVersion, apis, authorizations, info);
   }
 }

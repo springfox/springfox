@@ -1,14 +1,16 @@
 package com.mangofactory.swagger.authorization;
 
+import com.mangofactory.service.model.Authorization;
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher;
 import com.mangofactory.swagger.scanners.RequestMappingPatternMatcher;
-import com.mangofactory.service.model.Authorization;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.google.common.collect.Lists.*;
 
 /**
  * A class to represent a default set of authorizations to apply to each api operation
@@ -22,11 +24,13 @@ public class AuthorizationContext {
   private final List<String> includePatterns;
   private final RequestMethod[] requestMethods;
 
-  private AuthorizationContext(AuthorizationContextBuilder builder) {
-    this.authorizations = builder.authorizations;
-    this.includePatterns = builder.includePatterns;
-    this.requestMappingPatternMatcher = builder.requestMappingPatternMatcher;
-    this.requestMethods = builder.requestMethods;
+  public AuthorizationContext(List<Authorization> authorizations, RequestMappingPatternMatcher
+          requestMappingPatternMatcher, List<String> includePatterns, RequestMethod[] requestMethods) {
+
+    this.authorizations = authorizations;
+    this.requestMappingPatternMatcher = requestMappingPatternMatcher;
+    this.includePatterns = includePatterns;
+    this.requestMethods = requestMethods;
   }
 
   public List<Authorization> getAuthorizationsForPath(String path) {
@@ -44,15 +48,20 @@ public class AuthorizationContext {
     return CollectionUtils.isEmpty(authorizations) ? new ArrayList<Authorization>() : this.authorizations;
   }
 
+  public static AuthorizationContextBuilder builder() {
+    return new AuthorizationContextBuilder();
+  }
+
   public static class AuthorizationContextBuilder {
 
-    private List<Authorization> authorizations;
+    private List<Authorization> authorizations = newArrayList();
     private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
-    private List<String> includePatterns = Arrays.asList(new String[]{".*?"});
+    private List<String> includePatterns = Arrays.asList(".*?");
     private RequestMethod[] requestMethods = RequestMethod.values();
 
-    public AuthorizationContextBuilder(List<Authorization> authorizations) {
+    public AuthorizationContextBuilder withAuthorizations(List<Authorization> authorizations) {
       this.authorizations = authorizations;
+      return this;
     }
 
     public AuthorizationContextBuilder withRequestMappingPatternMatcher(RequestMappingPatternMatcher matcher) {
@@ -71,7 +80,8 @@ public class AuthorizationContext {
     }
 
     public AuthorizationContext build() {
-      return new AuthorizationContext(this);
+      return new AuthorizationContext(authorizations,
+              requestMappingPatternMatcher, includePatterns, requestMethods);
     }
   }
 }

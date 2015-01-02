@@ -1,11 +1,11 @@
 package com.mangofactory.swagger.readers.operation.parameter
-
-import com.fasterxml.classmate.ResolvedType
-import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.swagger.controllers.Defaults
 import com.mangofactory.swagger.dummy.DummyModels
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -14,30 +14,28 @@ import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 
-import static com.mangofactory.schema.ResolvedTypes.*
+import javax.servlet.ServletContext
 
-@Mixin(RequestMappingSupport)
+@Mixin([RequestMappingSupport, DocumentationContextSupport, ModelProviderForServiceSupport, SpringSwaggerConfigSupport])
 class ParameterDataTypeReaderSpec extends Specification {
+  DocumentationContext context  = defaultContext(Mock(ServletContext))
+  Defaults defaultValues = defaults(Mock(ServletContext))
 
    def "Parameter types"() {
     given:
       HandlerMethod handlerMethod = Stub(HandlerMethod)
 
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
       MethodParameter methodParameter = Stub(MethodParameter)
-      ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter, resolve(paramType))
+      ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter,
+              defaultValues.typeResolver.resolve(paramType))
       methodParameter.getParameterType() >> paramType
       context.put("methodParameter", methodParameter)
       context.put("resolvedMethodParameter", resolvedMethodParameter)
 
-      SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings()
-      SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
-      swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(new TypeResolver());
-      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
-
     when:
-      Command operationCommand = new ParameterDataTypeReader();
-      operationCommand.execute(context)
+      Command sut = new ParameterDataTypeReader(defaultValues.alternateTypeProvider)
+      sut.execute(context)
     then:
       context.get('dataType') == expected
     where:
@@ -59,13 +57,9 @@ class ParameterDataTypeReaderSpec extends Specification {
       Boolean.class                   | "boolean"
       boolean.class                   | "boolean"
       Date.class                      | "date-time"
-//      DummyClass.CustomClass.class    | "customClassParamType" //DK TODO: Alternate types
       DummyModels.FunkyBusiness.class | "FunkyBusiness"
       Void.class                      | "Void"
       MultipartFile.class             | "File"
    }
 
-  ResolvedType resolve(Class clazz) {
-    asResolved(new TypeResolver(), clazz);
-  }
 }

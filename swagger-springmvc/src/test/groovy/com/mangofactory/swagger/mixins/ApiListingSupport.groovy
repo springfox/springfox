@@ -9,8 +9,8 @@ class ApiListingSupport {
 
    def apiListing(authorizations = [], models = null) {
       new ApiListing(
-              "1.0",
-              "1.2",
+              "1.0"
+              ,
               "",
               "/relative-path-to-endpoint",
               [],
@@ -29,8 +29,8 @@ class ApiListingSupport {
 
    def resourceListing(List<OAuth> authorizationTypes) {
       new ResourceListing(
-              "apiVersion",
-              "swagger version",
+              "apiVersion"
+              ,
               [apiListingReference()],
               authorizationTypes,
               null)

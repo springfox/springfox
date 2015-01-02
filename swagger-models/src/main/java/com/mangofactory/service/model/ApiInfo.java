@@ -2,6 +2,7 @@ package com.mangofactory.service.model;
 
 public class ApiInfo {
 
+  private final String version;
   private final String title;
   private final String description;
   private final String termsOfServiceUrl;
@@ -9,10 +10,11 @@ public class ApiInfo {
   private final String license;
   private final String licenseUrl;
 
-  public ApiInfo(String title, String description, String termsOfServiceUrl, String contact, String license, String
-          licenseUrl) {
+  public ApiInfo(String title, String description, String version, String termsOfServiceUrl, String contact,
+                 String license, String licenseUrl) {
     this.title = title;
     this.description = description;
+    this.version = version;
     this.termsOfServiceUrl = termsOfServiceUrl;
     this.contact = contact;
     this.license = license;
@@ -41,5 +43,9 @@ public class ApiInfo {
 
   public String getLicenseUrl() {
     return licenseUrl;
+  }
+
+  public String getVersion() {
+    return version;
   }
 }

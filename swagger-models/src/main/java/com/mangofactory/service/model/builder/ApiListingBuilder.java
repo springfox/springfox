@@ -10,7 +10,6 @@ import java.util.Map;
 
 public class ApiListingBuilder {
   private String apiVersion;
-  private String swaggerVersion;
   private String basePath;
   private String resourcePath;
   private List<String> produces;
@@ -24,11 +23,6 @@ public class ApiListingBuilder {
 
   public ApiListingBuilder apiVersion(String apiVersion) {
     this.apiVersion = apiVersion;
-    return this;
-  }
-
-  public ApiListingBuilder swaggerVersion(String swaggerVersion) {
-    this.swaggerVersion = swaggerVersion;
     return this;
   }
 
@@ -83,7 +77,7 @@ public class ApiListingBuilder {
   }
 
   public ApiListing build() {
-    return new ApiListing(apiVersion, swaggerVersion, basePath,
+    return new ApiListing(apiVersion, basePath,
             resourcePath, produces, consumes, protocol, authorizations, apis, models, description, position);
   }
 }

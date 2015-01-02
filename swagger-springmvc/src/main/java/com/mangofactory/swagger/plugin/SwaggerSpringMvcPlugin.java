@@ -1,10 +1,10 @@
 package com.mangofactory.swagger.plugin;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Preconditions;
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
 import com.mangofactory.schema.GenericTypeNamingStrategy;
-import com.mangofactory.schema.ModelProvider;
 import com.mangofactory.schema.ResolvedTypes;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.alternates.AlternateTypeRule;
@@ -13,35 +13,25 @@ import com.mangofactory.service.model.ApiDescription;
 import com.mangofactory.service.model.ApiInfo;
 import com.mangofactory.service.model.ApiListingReference;
 import com.mangofactory.service.model.AuthorizationType;
-import com.mangofactory.service.model.Group;
 import com.mangofactory.service.model.ResponseMessage;
 import com.mangofactory.service.model.builder.ApiInfoBuilder;
+import com.mangofactory.springmvc.plugin.DocumentationContext;
+import com.mangofactory.springmvc.plugin.DocumentationContextBuilder;
 import com.mangofactory.springmvc.plugin.DocumentationPlugin;
 import com.mangofactory.springmvc.plugin.DocumentationType;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.controllers.Defaults;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
-import com.mangofactory.swagger.core.SwaggerApiResourceListing;
 import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering;
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
-import com.mangofactory.swagger.readers.operation.RequestMappingReader;
-import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher;
 import com.mangofactory.swagger.scanners.RequestMappingPatternMatcher;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,6 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Sets.*;
 import static com.mangofactory.schema.alternates.Alternates.*;
 import static java.util.Arrays.asList;
 import static org.springframework.util.StringUtils.*;
@@ -60,51 +51,40 @@ import static org.springframework.util.StringUtils.*;
  */
 public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
 
-  private ModelProvider modelProvider;
-  private String swaggerGroup;
-  private List<String> includePatterns = newArrayList(".*?");
-  private SwaggerPathProvider swaggerPathProvider;
-  private List<AuthorizationType> authorizationTypes;
-  private ApiInfo apiInfo;
-  private AuthorizationContext authorizationContext;
-  private List<Class<? extends Annotation>> excludeAnnotations = new ArrayList<Class<? extends Annotation>>();
-  private ResourceGroupingStrategy resourceGroupingStrategy;
-  private String apiVersion = "1.0";
-
-  private SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
-  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages = newHashMap();
-  private Set<Class> ignorableParameterTypes = new HashSet<Class>();
-  private AlternateTypeProvider alternateTypeProvider;
-  private List<AlternateTypeRule> alternateTypeRules = new ArrayList<AlternateTypeRule>();
-  private Defaults defaults;
-  private SwaggerApiResourceListing swaggerApiResourceListing;
-  private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
-  private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
-  private ApiListingReferenceScanner apiListingReferenceScanner;
   private AtomicBoolean initialized = new AtomicBoolean(false);
-  private Collection<RequestMappingReader> customAnnotationReaders = newArrayList();
+  private boolean enabled = true;
+  private String swaggerGroup;
+
+  private List<String> includePatterns = newArrayList(".*?");
+  private ApiInfo apiInfo;
+  private SwaggerPathProvider swaggerPathProvider;
+  private ResourceGroupingStrategy resourceGroupingStrategy;
+
+  private List<Class<? extends Annotation>> excludeAnnotations = newArrayList();
+  private List<Class<? extends Annotation>> mergedExcludedAnnotations = newArrayList();
+
+  private Map<RequestMethod, List<ResponseMessage>> globalResponseMessages = newHashMap();
+  private Map<RequestMethod, List<ResponseMessage>> mergedResponseMessages;
+
+  private Set<Class> ignorableParameterTypes = newHashSet();
+  private Set<Class> mergedIgnorableParameterTypes;
+
   private boolean applyDefaultResponseMessages = true;
   private RequestMappingEvaluator requestMappingEvaluator;
   private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
-  private boolean enabled = true;
-  private List<Class<? extends Annotation>> mergedExcludedAnnotations = newArrayList();
 
-  /**
-   * Default constructor.
-   * The argument defaults is used to by this class to establish sensible defaults.
-   *
-   * @param defaults
-   */
-  public SwaggerSpringMvcPlugin(Defaults defaults) {
-    Assert.notNull(defaults);
-    this.defaults = defaults;
-  }
+  private List<Function<TypeResolver, AlternateTypeRule>> substitutionRules = newArrayList();
+  private List<AlternateTypeRule> alternateTypeRules = newArrayList();
 
+  private List<AuthorizationType> authorizationTypes;
+  private AuthorizationContext authorizationContext = AuthorizationContext.builder().build();
+  private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
+  private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
 
   /**
    * Sets the api's meta information as included in the json ResourceListing response.
    *
-   * @param apiInfo
+   * @param apiInfo Indicates the api information
    * @return this SwaggerSpringMvcPlugin
    */
   public SwaggerSpringMvcPlugin apiInfo(ApiInfo apiInfo) {
@@ -236,31 +216,8 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
    * @param alternateTypeProvider
    * @return this SwaggerSpringMvcPlugin
    */
+  @Deprecated
   public SwaggerSpringMvcPlugin alternateTypeProvider(AlternateTypeProvider alternateTypeProvider) {
-    this.alternateTypeProvider = alternateTypeProvider;
-    return this;
-  }
-
-  /**
-   * Sets the api version. The 'apiVersion' on the swagger Resource Listing
-   *
-   * @param apiVersion
-   * @return this SwaggerSpringMvcPlugin
-   */
-  public SwaggerSpringMvcPlugin apiVersion(String apiVersion) {
-    Assert.hasText(apiVersion, "apiVersion must contain text");
-    this.apiVersion = apiVersion;
-    return this;
-  }
-
-  /**
-   * Overrides the default <code>com.mangofactory.swagger.models.ModelProvider</code>
-   *
-   * @param modelProvider
-   * @return this SwaggerSpringMvcPlugin
-   */
-  public SwaggerSpringMvcPlugin modelProvider(ModelProvider modelProvider) {
-    this.modelProvider = modelProvider;
     return this;
   }
 
@@ -286,10 +243,19 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
    * @param with  the class which substitutes 'clazz'
    * @return this SwaggerSpringMvcPlugin
    */
-  public SwaggerSpringMvcPlugin directModelSubstitute(Class clazz, Class with) {
-    TypeResolver typeResolver = swaggerGlobalSettings.getTypeResolver();
-    this.alternateTypeRules.add(newRule(typeResolver.resolve(clazz), typeResolver.resolve(with)));
+  public SwaggerSpringMvcPlugin directModelSubstitute(final Class clazz, final Class with) {
+    this.substitutionRules.add(newSubstitutionFunction(clazz, with));
     return this;
+  }
+
+  private Function<TypeResolver, AlternateTypeRule> newSubstitutionFunction(final Class clazz, final Class with) {
+    return new Function<TypeResolver, AlternateTypeRule>() {
+
+      @Override
+      public AlternateTypeRule apply(TypeResolver typeResolver) {
+        return newRule(typeResolver.resolve(clazz), typeResolver.resolve(with));
+      }
+    };
   }
 
   /**
@@ -315,12 +281,19 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
    * @return this SwaggerSpringMvcPlugin
    */
   public SwaggerSpringMvcPlugin genericModelSubstitutes(Class... genericClasses) {
-    TypeResolver typeResolver = swaggerGlobalSettings.getTypeResolver();
     for (Class clz : genericClasses) {
-      this.alternateTypeRules.add(newRule(typeResolver.resolve(clz, WildcardType.class),
-              typeResolver.resolve(WildcardType.class)));
+      this.substitutionRules.add(newGenericSubstitutionFunction(clz));
     }
     return this;
+  }
+
+  private Function<TypeResolver, AlternateTypeRule> newGenericSubstitutionFunction(final Class clz) {
+    return new Function<TypeResolver, AlternateTypeRule>() {
+      @Override
+      public AlternateTypeRule apply(TypeResolver typeResolver) {
+        return newRule(typeResolver.resolve(clz, WildcardType.class), typeResolver.resolve(WildcardType.class));
+      }
+    };
   }
 
   /**
@@ -366,22 +339,11 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
    *
    * @param resourceGroupingStrategy
    * @return this SwaggerSpringMvcPlugin
-   * @see com.mangofactory.swagger.scanners.ApiListingReferenceScanner#scanSpringRequestMappings(java.util.List)
+   * @see com.mangofactory.swagger.scanners.ApiListingReferenceScanner#scan(
+   *  com.mangofactory.springmvc.plugin.DocumentationContext)
    */
   public SwaggerSpringMvcPlugin resourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
     this.resourceGroupingStrategy = resourceGroupingStrategy;
-    return this;
-  }
-
-  /**
-   * Hook for adding custom annotations readers. Useful when you want to add your own annotation to be mapped to swagger
-   * model.
-   *
-   * @param customAnnotationReaders list of {@link com.mangofactory.swagger.readers.operation.RequestMappingReader}
-   * @return this SwaggerSpringMvcPlugin
-   */
-  public SwaggerSpringMvcPlugin customAnnotationReaders(Collection<RequestMappingReader> customAnnotationReaders) {
-    this.customAnnotationReaders = newArrayList(customAnnotationReaders);
     return this;
   }
 
@@ -416,6 +378,7 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
 
   private ApiInfo defaultApiInfo() {
     return new ApiInfoBuilder()
+            .version("1.0")
             .title(this.swaggerGroup + " Title")
             .description("Api Description")
             .termsOfServiceUrl("Api terms of service")
@@ -431,19 +394,30 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
    * NOTE: Calling this method more than once has no effect.
    *
    * @return this SwaggerSpringMvcPlugin
-   * @see com.mangofactory.swagger.plugin.SwaggerPluginAdapter
+   * @see com.mangofactory.springmvc.plugin.DocumentationPluginsBootstrapper
    */
-  public SwaggerSpringMvcPlugin build() {
+  public DocumentationContext build(DocumentationContextBuilder builder) {
     if (initialized.compareAndSet(false, true)) {
-      configure();
-      buildSwaggerGlobalSettings();
-      buildApiListingReferenceScanner();
-      buildSwaggerApiResourceListing();
+      configure(builder.getDefaults());
+      buildScannerContext(builder.getDefaults());
     }
-    return this;
+    return builder
+            .withApiInfo(apiInfo)
+            .withGlobalResponseMessages(mergedResponseMessages)
+            .withRequestMappingEvaluator(requestMappingEvaluator)
+            .withGroupName(swaggerGroup)
+            .withIgnorableParameterTypes(mergedIgnorableParameterTypes)
+            .withSwaggerPathProvider(swaggerPathProvider)
+            .withResourceGroupingStrategy(resourceGroupingStrategy)
+            .withAuthorizationContext(authorizationContext)
+            .withAuthorizationTypes(authorizationTypes)
+            .withApiListingReferenceOrdering(apiListingReferenceOrdering)
+            .withApiDescriptionOrdering(apiDescriptionOrdering)
+            .withExcludedAnnotations(mergedExcludedAnnotations)
+            .build();
   }
 
-  private void configure() {
+  private void configure(Defaults defaults) {
     if (!hasText(this.swaggerGroup)) {
       this.swaggerGroup = "default";
     }
@@ -458,12 +432,6 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
     this.swaggerPathProvider
             = fromNullable(swaggerPathProvider).or(defaults.defaultSwaggerPathProvider());
 
-    this.alternateTypeProvider
-            = fromNullable(alternateTypeProvider).or(defaults.getAlternateTypeProvider());
-
-    this.modelProvider = fromNullable(modelProvider).or(defaults.getModelProvider());
-
-
     mergedExcludedAnnotations.addAll(defaults.defaultExcludeAnnotations());
     mergedExcludedAnnotations.addAll(this.excludeAnnotations);
 
@@ -471,74 +439,45 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
             = new RequestMappingEvaluator(mergedExcludedAnnotations, requestMappingPatternMatcher, includePatterns);
   }
 
-  private void buildSwaggerGlobalSettings() {
-    Map<RequestMethod, List<ResponseMessage>> mergedResponseMessages = newHashMap();
+  private void buildScannerContext(final Defaults defaults) {
+    mergedResponseMessages = newHashMap();
     if (this.applyDefaultResponseMessages) {
       mergedResponseMessages.putAll(defaults.defaultResponseMessages());
     }
     mergedResponseMessages.putAll(this.globalResponseMessages);
-    swaggerGlobalSettings.setGlobalResponseMessages(mergedResponseMessages);
 
-    Set<Class> mergedIgnorableParameterTypes = new HashSet<Class>();
+    mergedIgnorableParameterTypes = newHashSet();
     mergedIgnorableParameterTypes.addAll(defaults.defaultIgnorableParameterTypes());
     mergedIgnorableParameterTypes.addAll(this.ignorableParameterTypes);
-    swaggerGlobalSettings.setIgnorableParameterTypes(mergedIgnorableParameterTypes);
-    addSpringMvcPassthroughTypes();
 
-    for (AlternateTypeRule rule : this.alternateTypeRules) {
-      this.alternateTypeProvider.addRule(rule);
+    TypeResolver typeResolver = defaults.getTypeResolver();
+    for (AlternateTypeRule rule : collectAlternateTypeRules(typeResolver)) {
+      defaults.getAlternateTypeProvider().addRule(rule);
     }
-    swaggerGlobalSettings.setAlternateTypeProvider(this.alternateTypeProvider);
   }
 
-  private void addSpringMvcPassthroughTypes() {
-    TypeResolver typeResolver = swaggerGlobalSettings.getTypeResolver();
-    alternateTypeProvider.addRule(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
-            typeResolver.resolve(WildcardType.class)));
+  private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>
+      evaluator(final TypeResolver typeResolver) {
 
-    alternateTypeProvider.addRule(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
-            typeResolver.resolve(WildcardType.class)));
+    return new Function<Function<TypeResolver,AlternateTypeRule>, AlternateTypeRule>() {
+      @Override
+      public AlternateTypeRule apply(Function<TypeResolver, AlternateTypeRule> input) {
+        return input.apply(typeResolver);
+      }
+    };
   }
 
-  private void buildSwaggerApiResourceListing() {
-    swaggerApiResourceListing = new SwaggerApiResourceListing(this.swaggerGroup);
-    swaggerApiResourceListing.setSwaggerGlobalSettings(this.swaggerGlobalSettings);
-    swaggerApiResourceListing.setSwaggerPathProvider(this.swaggerPathProvider);
-    swaggerApiResourceListing.setApiInfo(this.apiInfo);
-    swaggerApiResourceListing.setAuthorizationTypes(this.authorizationTypes);
-    swaggerApiResourceListing.setAuthorizationContext(this.authorizationContext);
-    swaggerApiResourceListing.setModelProvider(this.modelProvider);
-    swaggerApiResourceListing.setApiListingReferenceScanner(this.apiListingReferenceScanner);
-    swaggerApiResourceListing.setApiVersion(this.apiVersion);
-    swaggerApiResourceListing.setApiListingReferenceOrdering(this.apiListingReferenceOrdering);
-    swaggerApiResourceListing.setApiDescriptionOrdering(this.apiDescriptionOrdering);
-    swaggerApiResourceListing.setRequestMappingEvaluator(requestMappingEvaluator);
-    swaggerApiResourceListing.setCustomAnnotationReaders(this.customAnnotationReaders);
-  }
+  private List<AlternateTypeRule> collectAlternateTypeRules(TypeResolver typeResolver) {
+    alternateTypeRules.addAll(FluentIterable
+            .from(this.substitutionRules)
+            .transform(evaluator(typeResolver))
+            .toList());
 
-  private ApiListingReferenceScanner buildApiListingReferenceScanner() {
-    apiListingReferenceScanner = new ApiListingReferenceScanner();
-    apiListingReferenceScanner.setResourceGroupingStrategy(this.resourceGroupingStrategy);
-    apiListingReferenceScanner.setSwaggerPathProvider(this.swaggerPathProvider);
-    apiListingReferenceScanner.setSwaggerGroup(this.swaggerGroup);
-    apiListingReferenceScanner.setRequestMappingEvaluator(requestMappingEvaluator);
-    apiListingReferenceScanner.setIncludePatterns(this.includePatterns);
-    apiListingReferenceScanner.setExcludeAnnotations(mergedExcludedAnnotations);
-    return apiListingReferenceScanner;
+    return alternateTypeRules;
   }
 
   public boolean isEnabled() {
     return enabled;
-  }
-
-  @Override
-  public Group scan(List<RequestMappingHandlerMapping> handlerMappings) {
-    return build().scanResourceListings(handlerMappings);
-  }
-
-  private Group scanResourceListings(List<RequestMappingHandlerMapping> handlerMappings) {
-    Preconditions.checkNotNull(handlerMappings, "Handler mappings cannot be null");
-    return swaggerApiResourceListing.scan(handlerMappings);
   }
 
   @Override

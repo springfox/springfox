@@ -9,6 +9,7 @@ public class ApiInfoBuilder {
   private String contact;
   private String license;
   private String licenseUrl;
+  private String version;
 
   public ApiInfoBuilder title(String title) {
     this.title = title;
@@ -22,6 +23,11 @@ public class ApiInfoBuilder {
 
   public ApiInfoBuilder termsOfServiceUrl(String termsOfServiceUrl) {
     this.termsOfServiceUrl = termsOfServiceUrl;
+    return this;
+  }
+
+  public ApiInfoBuilder version(String version) {
+    this.version = version;
     return this;
   }
 
@@ -40,7 +46,9 @@ public class ApiInfoBuilder {
     return this;
   }
 
+
+
   public ApiInfo build() {
-    return new ApiInfo(title, description, termsOfServiceUrl, contact, license, licenseUrl);
+    return new ApiInfo(title, description, version, termsOfServiceUrl, contact, license, licenseUrl);
   }
 }

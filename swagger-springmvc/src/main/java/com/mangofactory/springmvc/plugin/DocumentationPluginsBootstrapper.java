@@ -1,9 +1,7 @@
-package com.mangofactory.swagger.plugin;
+package com.mangofactory.springmvc.plugin;
 
-import com.mangofactory.service.model.Group;
-import com.mangofactory.springmvc.plugin.DocumentationPlugin;
-import com.mangofactory.springmvc.plugin.DocumentationType;
-import com.mangofactory.springmvc.plugin.PluginsManager;
+import com.mangofactory.swagger.controllers.Defaults;
+import com.mangofactory.swagger.core.SwaggerApiResourceListing;
 import com.mangofactory.swagger.core.SwaggerCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,21 +22,27 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * If no instances SwaggerSpringMvcPlugin are found a default one is created and executed.
  */
 @Component
-public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshedEvent> {
-  private static final Logger log = LoggerFactory.getLogger(SwaggerPluginAdapter.class);
+public class DocumentationPluginsBootstrapper implements ApplicationListener<ContextRefreshedEvent> {
+  private static final Logger log = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
   private final PluginsManager pluginsManager;
-  private List<RequestMappingHandlerMapping> handlerMappings;
   private final SwaggerCache scanned;
+  private final SwaggerApiResourceListing resourceListing;
+  private final List<RequestMappingHandlerMapping> handlerMappings;
   private AtomicBoolean initialized = new AtomicBoolean(false);
+  private final Defaults defaults;
 
 
   @Autowired
-  public SwaggerPluginAdapter(PluginsManager pluginsManager,
-                              List<RequestMappingHandlerMapping> handlerMappings,
-                              SwaggerCache scanned) {
+  public DocumentationPluginsBootstrapper(PluginsManager pluginsManager,
+                                          List<RequestMappingHandlerMapping> handlerMappings,
+                                          SwaggerCache scanned,
+                                          SwaggerApiResourceListing resourceListing,
+                                          Defaults defaults) {
     this.pluginsManager = pluginsManager;
     this.handlerMappings = handlerMappings;
     this.scanned = scanned;
+    this.resourceListing = resourceListing;
+    this.defaults = defaults;
   }
 
   @Override
@@ -49,10 +53,11 @@ public class SwaggerPluginAdapter implements ApplicationListener<ContextRefreshe
       List<DocumentationPlugin> plugins = pluginsManager.getDocumentationPluginsFor(swagger);
       log.info("Found custom SwaggerSpringMvcPlugins");
 
+      DocumentationContextBuilder contextBuilder = new DocumentationContextBuilder(defaults)
+              .withHandlerMappings(handlerMappings);
       for (DocumentationPlugin each : plugins) {
         if (each.isEnabled()) {
-          Group group = each.scan(handlerMappings);
-          scanned.addGroup(group);
+          scanned.addGroup(resourceListing.scan(each.build(contextBuilder)));
         } else {
           log.info("Skipping initializing disabled plugin bean {}", each.getName());
         }

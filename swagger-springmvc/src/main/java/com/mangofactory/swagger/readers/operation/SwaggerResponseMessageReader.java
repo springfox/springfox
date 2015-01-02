@@ -1,8 +1,7 @@
 package com.mangofactory.swagger.readers.operation;
 
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
-import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.mangofactory.service.model.ResponseMessage;
+import com.mangofactory.swagger.scanners.RequestMappingContext;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
@@ -19,14 +18,13 @@ public abstract class SwaggerResponseMessageReader implements RequestMappingRead
 
   @Override
   public void execute(RequestMappingContext context) {
-    SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
     RequestMethod currentHttpMethod = (RequestMethod) context.get("currentHttpMethod");
     HandlerMethod handlerMethod = context.getHandlerMethod();
 
     //Re-instates this to address #427 :(, Hack will go away as part of removing deprecated class
     @SuppressWarnings("unchecked")
     Set<ResponseMessage> responseMessages = (Set<ResponseMessage>) context.get("responseMessages");
-    Collection<ResponseMessage> read = read(swaggerGlobalSettings, currentHttpMethod, handlerMethod);
+    Collection<ResponseMessage> read = read(context, currentHttpMethod, handlerMethod);
     context.put("responseMessages", newSet(responseMessages, read));
   }
 
@@ -42,6 +40,7 @@ public abstract class SwaggerResponseMessageReader implements RequestMappingRead
     return toSet;
   }
 
-  protected abstract Collection<ResponseMessage> read(SwaggerGlobalSettings swaggerGlobalSettings,
-      RequestMethod currentHttpMethod, HandlerMethod handlerMethod);
+  protected abstract Collection<ResponseMessage> read(RequestMappingContext context,
+                                                      RequestMethod currentHttpMethod,
+                                                      HandlerMethod handlerMethod);
 }

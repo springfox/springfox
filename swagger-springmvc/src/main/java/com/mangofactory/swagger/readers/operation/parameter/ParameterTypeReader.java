@@ -1,11 +1,13 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
+import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,15 +17,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.annotation.Annotation;
 
+@Component
 public class ParameterTypeReader implements Command<RequestMappingContext> {
+  private final AlternateTypeProvider alternateTypeProvider;
+
+  @Autowired
+  public ParameterTypeReader(AlternateTypeProvider alternateTypeProvider) {
+    this.alternateTypeProvider = alternateTypeProvider;
+  }
+
   @Override
   public void execute(RequestMappingContext context) {
     MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
     ResolvedMethodParameter resolvedMethodParameter
             = (ResolvedMethodParameter) context.get("resolvedMethodParameter");
-    SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
     ResolvedType parameterType = resolvedMethodParameter.getResolvedParameterType();
-    parameterType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(parameterType);
+    parameterType = alternateTypeProvider.alternateFor(parameterType);
     context.put("paramType", findParameterType(methodParameter, parameterType));
   }
 

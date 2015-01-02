@@ -1,21 +1,22 @@
 package com.mangofactory.swagger.readers
 
-import com.mangofactory.schema.alternates.WildcardType
 import com.mangofactory.service.model.ApiDescription
 import com.mangofactory.service.model.Model
 import com.mangofactory.service.model.ModelProperty
 import com.mangofactory.service.model.Operation
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.springmvc.plugin.DocumentationContextBuilder
 import com.mangofactory.swagger.controllers.Defaults
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.controllers.BusinessService
 import com.mangofactory.swagger.dummy.controllers.PetService
 import com.mangofactory.swagger.dummy.models.FoobarDto
 import com.mangofactory.swagger.mixins.ApiOperationSupport
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.JsonSupport
-import com.mangofactory.swagger.mixins.ModelProviderSupport
+import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
+import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
@@ -25,19 +26,21 @@ import spock.lang.Specification
 import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletResponse
 
-import static com.mangofactory.schema.alternates.Alternates.*
-
-@Mixin([RequestMappingSupport, ApiOperationSupport, JsonSupport, ModelProviderSupport, SpringSwaggerConfigSupport])
+@Mixin([RequestMappingSupport, ApiOperationSupport, JsonSupport, ModelProviderForServiceSupport,
+        DocumentationContextSupport, SpringSwaggerConfigSupport])
 class ApiModelReaderSpec extends Specification {
 
   Defaults defaultValues
-  SwaggerGlobalSettings settings
+  SwaggerSpringMvcPlugin plugin
+  DocumentationContextBuilder contextBuilder
+  ApiModelReader sut
 
   def setup() {
     defaultValues = defaults(Mock(ServletContext))
-    settings = new SwaggerGlobalSettings()
-    settings.alternateTypeProvider = defaultValues.alternateTypeProvider
-    settings.ignorableParameterTypes = defaultValues.defaultIgnorableParameterTypes()
+    sut = new ApiModelReader(modelProvider(), defaultValues.alternateTypeProvider,
+            defaultValues.typeResolver)
+    contextBuilder = defaultContextBuilder(defaultValues)
+    plugin = new SwaggerSpringMvcPlugin()
   }
 
 
@@ -45,14 +48,11 @@ class ApiModelReaderSpec extends Specification {
     given:
       RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithConcreteResponseBody'))
 
-      context.put("swaggerGlobalSettings", settings)
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
-      apiModelReader.execute(context)
-      Map<String, Object> result = context.getResult()
+      sut.execute(context)
 
     then:
-      Map<String, Model> models = result.get("models")
+      Map<String, Model> models = context.modelMap
       Model model = models['BusinessModel']
       model.id == 'BusinessModel'
       model.getName() == 'BusinessModel'
@@ -80,14 +80,11 @@ class ApiModelReaderSpec extends Specification {
   def "Annotated model"() {
     given:
       RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithModelAnnotations'))
-      context.put("swaggerGlobalSettings", settings)
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
-      apiModelReader.execute(context)
-      Map<String, Object> result = context.getResult()
+      sut.execute(context)
 
     then:
-      Map<String, Model> models = result.get("models")
+      Map<String, Model> models = context.modelMap
       Model model = models['AnnotatedBusinessModel']
       model.id == 'AnnotatedBusinessModel'
       model.getName() == 'AnnotatedBusinessModel'
@@ -107,15 +104,11 @@ class ApiModelReaderSpec extends Specification {
     given:
 
       RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodApiResponseClass'), null)
-      context.put("swaggerGlobalSettings", settings)
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
-      apiModelReader.execute(context)
-      Map<String, Object> result = context.getResult()
+      sut.execute(context)
 
-      Map<String, Model> models = result.get("models")
     then:
-      println models
+      Map<String, Model> models = context.modelMap
       models['FunkyBusiness'].getQualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness'
   }
 
@@ -123,22 +116,18 @@ class ApiModelReaderSpec extends Specification {
     given:
 
       RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodAnnotatedWithApiResponse'), null)
-      context.put("swaggerGlobalSettings", settings)
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
-      apiModelReader.execute(context)
-      Map<String, Object> result = context.getResult()
+      sut.execute(context)
 
-      Map<String, Model> models = result.get("models")
     then:
-      println models
+      Map<String, Model> models = context.modelMap
       models.size() == 2
       models['RestError'].getQualifiedType() == 'com.mangofactory.swagger.dummy.RestError'
       models['Void'].getQualifiedType() == 'java.lang.Void'
   }
 
   def contextWithApiDescription(HandlerMethod handlerMethod, List<Operation> operationList = null) {
-    RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
+    RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'), handlerMethod)
     def scalaOpList = null == operationList ? [] : operationList
     ApiDescription description = new ApiDescription(
             "anyPath",
@@ -148,7 +137,6 @@ class ApiModelReaderSpec extends Specification {
     )
     context.put("apiDescriptionList", [description])
 
-    context.put("swaggerGlobalSettings", settings)
     context
   }
 
@@ -159,14 +147,13 @@ class ApiModelReaderSpec extends Specification {
               HttpServletResponse.class,
               DummyModels.AnnotatedBusinessModel.class
       )
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
-      context.put("swaggerGlobalSettings", settings)
+      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'),
+              handlerMethod)
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
-      apiModelReader.execute(context)
-      Map<String, Object> result = context.getResult()
+      sut.execute(context)
+
     then:
-      Map<String, Model> models = result.get("models")
+      Map<String, Model> models = context.modelMap
       models.size() == 2 // instead of 3
       models.containsKey("BusinessModel")
       models.containsKey("Void")
@@ -176,17 +163,13 @@ class ApiModelReaderSpec extends Specification {
   def "Generates the correct models when there is a Map object in the input parameter"() {
     given:
       HandlerMethod handlerMethod = handlerMethodIn(PetService, 'echo', Map)
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/echo'), handlerMethod)
-
-      context.put("swaggerGlobalSettings", settings)
+      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/echo'), handlerMethod)
 
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
-      apiModelReader.execute(context)
-      Map<String, Object> result = context.getResult()
+      sut.execute(context)
 
     then:
-      Map<String, Model> models = result.get("models")
+      Map<String, Model> models = context.modelMap
       models.size() == 2
       models.containsKey("Entry«string,Pet»")
       models.containsKey("Pet")
@@ -195,24 +178,21 @@ class ApiModelReaderSpec extends Specification {
 
   def "Generates the correct models when alternateTypeProvider returns an ignoreable or base parameter type"() {
     given:
+      def pluginContext = plugin
+              .genericModelSubstitutes(ResponseEntity, HttpEntity)
+              .build(contextBuilder)
+
+    and:
       HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
       RequestMappingContext context =
-              new RequestMappingContext(requestMappingInfo('/businesses/responseEntity/{businessId}'), handlerMethod)
-
-      def resolver = defaultValues.typeResolver
-      settings.alternateTypeProvider.addRule(newRule(resolver.resolve(ResponseEntity.class, WildcardType.class),
-              resolver.resolve(WildcardType.class)));
-      settings.alternateTypeProvider.addRule(newRule(resolver.resolve(HttpEntity.class, WildcardType.class),
-              resolver.resolve(WildcardType.class)));
-      context.put("swaggerGlobalSettings", settings)
-
+              new RequestMappingContext(pluginContext,
+                      requestMappingInfo('/businesses/responseEntity/{businessId}'),
+                      handlerMethod)
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
-      apiModelReader.execute(context)
-      Map<String, Object> result = context.getResult()
+      sut.execute(context)
 
     then:
-      Map<String, Model> models = result.get("models")
+      Map<String, Model> models = context.modelMap
       models.size() == 0
 
   }
@@ -222,17 +202,13 @@ class ApiModelReaderSpec extends Specification {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSameAnnotatedModelInReturnAndRequestBodyParam',
               DummyModels.AnnotatedBusinessModel
       )
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
-
-      context.put("swaggerGlobalSettings", settings)
+      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'), handlerMethod)
 
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
-      apiModelReader.execute(context)
-      Map<String, Model> result = context.getResult()
+      sut.execute(context)
 
     then:
-      Map<String, Model> models = result.get("models")
+      Map<String, Model> models = context.modelMap
       models.size() == 1
 
       String modelName = DummyModels.AnnotatedBusinessModel.class.simpleName
@@ -252,17 +228,14 @@ class ApiModelReaderSpec extends Specification {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
               DummyModels.ModelWithSerializeOnlyProperty
       )
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
-
-      context.put("swaggerGlobalSettings", settings)
+      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'),
+              handlerMethod)
 
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
-      apiModelReader.execute(context)
-      Map<String, Model> result = context.getResult()
+      sut.execute(context)
 
     then:
-      Map<String, Model> models = result.get("models")
+      Map<String, Model> models = context.modelMap
       models.size() == 1
 
       String modelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
@@ -282,17 +255,15 @@ class ApiModelReaderSpec extends Specification {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
               DummyModels.ModelWithSerializeOnlyProperty
       )
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
-
-      context.put("swaggerGlobalSettings", settings)
-
+      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'), handlerMethod)
+    and:
+      def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(), defaultValues.alternateTypeProvider,
+              defaultValues.typeResolver)
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy())
-      apiModelReader.execute(context)
-      Map<String, Model> result = context.getResult()
+      snakeCaseReader.execute(context)
 
     then:
-      Map<String, Model> models = result.get("models")
+      Map<String, Model> models = context.modelMap
       models.size() == 1
 
       String modelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
@@ -309,17 +280,13 @@ class ApiModelReaderSpec extends Specification {
   def "Test to verify issue #283"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestFoobarDto', FoobarDto)
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
-
-      context.put("swaggerGlobalSettings", settings)
+      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'), handlerMethod)
 
     when:
-      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
-      apiModelReader.execute(context)
-      Map<String, Model> result = context.getResult()
+      sut.execute(context)
 
     then:
-      Map<String, Model> models = result.get("models")
+      Map<String, Model> models = context.modelMap
       models.size() == 1
 
       String modelName = FoobarDto.simpleName

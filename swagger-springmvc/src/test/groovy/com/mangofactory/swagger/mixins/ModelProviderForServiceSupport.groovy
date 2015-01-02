@@ -15,7 +15,7 @@ import com.mangofactory.schema.property.field.FieldProvider
 import com.mangofactory.schema.property.provider.DefaultModelPropertiesProvider
 
 @SuppressWarnings("GrMethodMayBeStatic")
-class ModelProviderSupport {
+class ModelProviderForServiceSupport {
 
   ModelProvider modelProvider(TypeResolver typeResolver = new TypeResolver(),
                               AlternateTypeProvider alternateTypeProvider = new AlternateTypeProvider()) {

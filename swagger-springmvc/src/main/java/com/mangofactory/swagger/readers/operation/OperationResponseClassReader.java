@@ -1,32 +1,43 @@
 package com.mangofactory.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
+import com.fasterxml.classmate.TypeResolver;
+import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
 import static com.mangofactory.swagger.core.ModelUtils.*;
 
+@Component
 public class OperationResponseClassReader implements RequestMappingReader {
   private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
+  private final TypeResolver typeResolver;
+  private final AlternateTypeProvider alternateTypeProvider;
+
+  @Autowired
+  public OperationResponseClassReader(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider) {
+    this.typeResolver = typeResolver;
+    this.alternateTypeProvider = alternateTypeProvider;
+  }
 
   @Override
   public void execute(RequestMappingContext context) {
-    SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
     HandlerMethod handlerMethod = context.getHandlerMethod();
     ApiOperation methodAnnotation = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), ApiOperation.class);
     ResolvedType returnType;
     if ((null != methodAnnotation) && Void.class != methodAnnotation.response()) {
       log.debug("Overriding response class with annotated response class");
-      returnType = swaggerGlobalSettings.getTypeResolver().resolve(methodAnnotation.response());
+      returnType = typeResolver.resolve(methodAnnotation.response());
     } else {
-      returnType = handlerReturnType(swaggerGlobalSettings.getTypeResolver(), handlerMethod);
-      returnType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(returnType);
+      returnType = handlerReturnType(typeResolver, handlerMethod);
+      returnType = alternateTypeProvider.alternateFor(returnType);
     }
     if (Void.class.equals(returnType.getErasedType()) || Void.TYPE.equals(returnType.getErasedType())) {
       context.put("responseClass", "void");

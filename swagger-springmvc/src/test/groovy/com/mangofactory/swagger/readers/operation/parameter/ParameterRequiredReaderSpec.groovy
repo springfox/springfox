@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.readers.operation.parameter
-
+import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -11,15 +12,17 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
 
+import javax.servlet.ServletContext
 import java.lang.annotation.Annotation
 
-@Mixin(RequestMappingSupport)
+@Mixin([RequestMappingSupport, DocumentationContextSupport])
 class ParameterRequiredReaderSpec extends Specification {
+  DocumentationContext context = defaultContext(Mock(ServletContext))
 
   def "parameters required"() {
   given:
     HandlerMethod handlerMethod = Mock()
-    RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
+    RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
     MethodParameter methodParameter = Mock(MethodParameter)
     methodParameter.getParameterAnnotations() >> (paramAnnotations as Annotation[])
     methodParameter.getParameterType() >> Object.class
@@ -50,7 +53,7 @@ class ParameterRequiredReaderSpec extends Specification {
   def "should detect java.util.Optional parameters"() {
   given:
     HandlerMethod handlerMethod = Mock()
-    RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
+    RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
     MethodParameter methodParameter = Mock(MethodParameter)
     methodParameter.getParameterAnnotations() >> (paramAnnotations as Annotation[])
     context.put("methodParameter", methodParameter)

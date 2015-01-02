@@ -1,8 +1,8 @@
 package com.mangofactory.swagger.controllers;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.schema.ModelProvider;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
+import com.mangofactory.schema.alternates.WildcardType;
 import com.mangofactory.service.model.ResponseMessage;
 import com.mangofactory.service.model.builder.ResponseMessageBuilder;
 import com.mangofactory.swagger.annotations.ApiIgnore;
@@ -11,7 +11,9 @@ import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +34,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static com.mangofactory.schema.alternates.Alternates.*;
 import static java.util.Arrays.*;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -41,22 +44,69 @@ public class Defaults {
 
   private final TypeResolver typeResolver;
   private final AlternateTypeProvider alternateTypeProvider;
-  private final ModelProvider modelProvider;
   private ServletContext servletContext;
+  private HashSet<Class> ignored;
+  private LinkedHashMap<RequestMethod, List<ResponseMessage>> responses;
+  private ClassOrApiAnnotationResourceGrouping resourceGrouping;
+  private List<Class<? extends Annotation>> annotations;
 
   @Autowired
   public Defaults(ServletContext servletContext,
                   TypeResolver typeResolver,
-                  AlternateTypeProvider alternateTypeProvider,
-                  ModelProvider modelProvider) {
+                  AlternateTypeProvider alternateTypeProvider) {
     this.servletContext = servletContext;
     this.typeResolver = typeResolver;
     this.alternateTypeProvider = alternateTypeProvider;
-    this.modelProvider = modelProvider;
+
+    init(typeResolver, alternateTypeProvider);
   }
 
   public Set<Class> defaultIgnorableParameterTypes() {
-    HashSet<Class> ignored = newHashSet();
+    return ignored;
+  }
+
+  /**
+   * Default response messages set on all api operations
+   */
+  public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages() {
+    return responses;
+  }
+
+  public ResourceGroupingStrategy defaultResourceGroupingStrategy() {
+    return resourceGrouping;
+  }
+
+  public SwaggerPathProvider defaultSwaggerPathProvider() {
+    return new RelativeSwaggerPathProvider(servletContext);
+  }
+
+  public List<Class<? extends Annotation>> defaultExcludeAnnotations() {
+    return annotations;
+  }
+
+  public TypeResolver getTypeResolver() {
+    return typeResolver;
+  }
+
+  public AlternateTypeProvider getAlternateTypeProvider() {
+    return alternateTypeProvider;
+  }
+
+  private void init(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider) {
+    applySpringMvcRules(typeResolver, alternateTypeProvider);
+    initIgnorableTypes();
+    initResponseMessages();
+    initExcludeAnnotations();
+    resourceGrouping = new ClassOrApiAnnotationResourceGrouping();
+  }
+
+  private void initExcludeAnnotations() {
+    annotations = new ArrayList<Class<? extends Annotation>>();
+    annotations.add(ApiIgnore.class);
+  }
+
+  private void initIgnorableTypes() {
+    ignored = newHashSet();
     ignored.add(ServletRequest.class);
     ignored.add(HttpHeaders.class);
     ignored.add(ServletResponse.class);
@@ -67,14 +117,18 @@ public class Defaults {
     ignored.add(ServletContext.class);
     ignored.add(UriComponentsBuilder.class);
     ignored.add(ApiIgnore.class);
-    return ignored;
   }
 
-  /**
-   * Default response messages set on all api operations
-   */
-  public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages() {
-    LinkedHashMap<RequestMethod, List<ResponseMessage>> responses = newLinkedHashMap();
+  private void applySpringMvcRules(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider) {
+    alternateTypeProvider.addRule(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
+            typeResolver.resolve(WildcardType.class)));
+
+    alternateTypeProvider.addRule(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
+            typeResolver.resolve(WildcardType.class)));
+  }
+
+  private void initResponseMessages() {
+    responses = newLinkedHashMap();
     responses.put(GET, asList(
             new ResponseMessageBuilder()
                     .code(OK.value())
@@ -220,32 +274,6 @@ public class Defaults {
                     .message(UNAUTHORIZED.getReasonPhrase())
                     .responseModel(null)
                     .build()));
-    return responses;
   }
 
-  public ResourceGroupingStrategy defaultResourceGroupingStrategy() {
-    return new ClassOrApiAnnotationResourceGrouping();
-  }
-
-  public SwaggerPathProvider defaultSwaggerPathProvider() {
-    return new RelativeSwaggerPathProvider(servletContext);
-  }
-
-  public List<Class<? extends Annotation>> defaultExcludeAnnotations() {
-    List<Class<? extends Annotation>> annotations = new ArrayList<Class<? extends Annotation>>();
-    annotations.add(ApiIgnore.class);
-    return annotations;
-  }
-
-  public TypeResolver getTypeResolver() {
-    return typeResolver;
-  }
-
-  public AlternateTypeProvider getAlternateTypeProvider() {
-    return alternateTypeProvider;
-  }
-
-  public ModelProvider getModelProvider() {
-    return modelProvider;
-  }
 }

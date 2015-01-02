@@ -13,6 +13,9 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
 @Configuration
 @ComponentScan(basePackages = {
         "com.mangofactory.swagger.controllers",
+        "com.mangofactory.swagger.scanners",
+        "com.mangofactory.swagger.core",
+        "com.mangofactory.swagger.readers",
         "com.mangofactory.springmvc.plugin",
         "com.mangofactory.swagger.plugin"
 })

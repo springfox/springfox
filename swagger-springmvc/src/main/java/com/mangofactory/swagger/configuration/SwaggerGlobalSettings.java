@@ -11,6 +11,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Maps.*;
 
+@Deprecated
 public class SwaggerGlobalSettings {
   /**
    * Set of classes to exclude from spring controller request mapping methods

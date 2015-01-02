@@ -1,5 +1,9 @@
 package com.mangofactory.swagger.readers.operation.parameter
+
+import com.mangofactory.springmvc.plugin.DocumentationContext
 import com.mangofactory.swagger.dummy.DummyClass
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -8,14 +12,17 @@ import org.springframework.core.MethodParameter
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
 
-@Mixin(RequestMappingSupport)
+import javax.servlet.ServletContext
+
+@Mixin([RequestMappingSupport, DocumentationContextSupport, ModelProviderForServiceSupport])
 class ParameterMultiplesReaderSpec extends Specification {
+  DocumentationContext context  = defaultContext(Mock(ServletContext))
 
 //   @Unroll
    def "param multiples"() {
     given:
       HandlerMethod handlerMethod = Stub()
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
       MethodParameter methodParameter = Stub(MethodParameter)
       methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
       methodParameter.getParameterType() >> paramType

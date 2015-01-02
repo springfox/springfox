@@ -9,19 +9,16 @@ import static com.google.common.collect.Lists.*;
 
 public class ResourceListing {
   private final String apiVersion;
-  private final String swaggerVersion;
   private final List<ApiListingReference> apis;
   private final LinkedHashMap<String, AuthorizationType> authorizations;
   private final ApiInfo info;
 
   public ResourceListing(String apiVersion,
-      String swaggerVersion,
-      List<ApiListingReference> apis,
-      List <AuthorizationType> authorizations,
-      ApiInfo info) {
+                         List<ApiListingReference> apis,
+                         List<AuthorizationType> authorizations,
+                         ApiInfo info) {
 
     this.apiVersion = apiVersion;
-    this.swaggerVersion = swaggerVersion;
     this.apis = apis;
     this.authorizations = initializeAuthTypes(authorizations);
     this.info = info;
@@ -38,10 +35,6 @@ public class ResourceListing {
 
   public String getApiVersion() {
     return apiVersion;
-  }
-
-  public String getSwaggerVersion() {
-    return swaggerVersion;
   }
 
   public List<ApiListingReference> getApis() {

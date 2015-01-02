@@ -2,19 +2,18 @@ package com.mangofactory.swagger.scanners;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimaps;
+import com.mangofactory.service.model.ApiListingReference;
+import com.mangofactory.springmvc.plugin.DocumentationContext;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
-import com.mangofactory.service.model.ApiListingReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,43 +22,25 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 
+@Component
 public class ApiListingReferenceScanner {
 
-  private static final Logger log = LoggerFactory.getLogger(ApiListingReferenceScanner.class);
-  private List<ApiListingReference> apiListingReferences = newArrayList();
-  private ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings = ArrayListMultimap
-          .create();
-  private String swaggerGroup;
-  private List<Class<? extends Annotation>> excludeAnnotations;
-  private ResourceGroupingStrategy resourceGroupingStrategy;
-  private SwaggerPathProvider swaggerPathProvider;
-  private List<String> includePatterns = newArrayList(".*?");
-  private RequestMappingEvaluator requestMappingEvaluator;
+  private static final Logger LOG = LoggerFactory.getLogger(ApiListingReferenceScanner.class);
 
-  public ApiListingReferenceScanner() {
-  }
+  public ApiListingReferenceScanResult scan(DocumentationContext context) {
+    LOG.info("Scanning for api listing references");
 
-  public List<ApiListingReference> scan(List<RequestMappingHandlerMapping> handlerMappings) {
-    Assert.notNull(resourceGroupingStrategy, "resourceGroupingStrategy is required");
-    Assert.notNull(swaggerGroup, "swaggerGroup is required");
-    if (!StringUtils.hasText(swaggerGroup)) {
-      throw new IllegalArgumentException("swaggerGroup must not be empty");
-    }
-    Assert.notNull(swaggerPathProvider, "swaggerPathProvider is required");
-
-    log.info("Scanning for api listing references");
-    scanSpringRequestMappings(handlerMappings);
-    return this.apiListingReferences;
-  }
-
-  @SuppressWarnings("unchecked")
-  public void scanSpringRequestMappings(List<RequestMappingHandlerMapping> handlerMappings) {
+    List<ApiListingReference> apiListingReferences = newArrayList();
+    ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
+            = ArrayListMultimap.create();
     Map<ResourceGroup, String> resourceGroupDescriptions = new HashMap<ResourceGroup, String>();
-    for (RequestMappingHandlerMapping requestMappingHandlerMapping : handlerMappings) {
+    for (RequestMappingHandlerMapping requestMappingHandlerMapping : context.getHandlerMappings()) {
       for (Entry<RequestMappingInfo, HandlerMethod> handlerMethodEntry :
               requestMappingHandlerMapping.getHandlerMethods().entrySet()) {
         RequestMappingInfo requestMappingInfo = handlerMethodEntry.getKey();
         HandlerMethod handlerMethod = handlerMethodEntry.getValue();
+        RequestMappingEvaluator requestMappingEvaluator = context.getRequestMappingEvaluator();
+        ResourceGroupingStrategy resourceGroupingStrategy = context.getResourceGroupingStrategy();
         if (requestMappingEvaluator.shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
           Set<ResourceGroup> resourceGroups = resourceGroupingStrategy.getResourceGroups(requestMappingInfo,
                   handlerMethod);
@@ -67,14 +48,14 @@ public class ApiListingReferenceScanner {
 
           String resourceDescription = resourceGroupingStrategy.getResourceDescription(requestMappingInfo,
                   handlerMethod);
-          RequestMappingContext requestMappingContext = new RequestMappingContext(requestMappingInfo,
+          RequestMappingContext requestMappingContext = new RequestMappingContext(context, requestMappingInfo,
                   handlerMethod);
 
-          log.info("Request mapping: {} belongs to groups: [{}] ", handlerMethodName, resourceGroups);
+          LOG.info("Request mapping: {} belongs to groups: [{}] ", handlerMethodName, resourceGroups);
           for (ResourceGroup group : resourceGroups) {
             resourceGroupDescriptions.put(group, resourceDescription);
 
-            log.info("Adding resource to group:{} with description:{} for handler method:{}",
+            LOG.info("Adding resource to group:{} with description:{} for handler method:{}",
                     group, resourceDescription, handlerMethodName);
 
             resourceGroupRequestMappings.put(group, requestMappingContext);
@@ -87,66 +68,12 @@ public class ApiListingReferenceScanner {
       String resourceGroupName = resourceGroup.getGroupName();
       String listingDescription = resourceGroupDescriptions.get(resourceGroup);
       Integer position = resourceGroup.getPosition();
-      String path = swaggerPathProvider.getResourceListingPath(swaggerGroup, resourceGroupName);
-      log.info("Created resource listing Path: {} Description: {} Position: {}",
+      SwaggerPathProvider swaggerPathProvider = context.getSwaggerPathProvider();
+      String path = swaggerPathProvider.getResourceListingPath(context.getGroupName(), resourceGroupName);
+      LOG.info("Created resource listing Path: {} Description: {} Position: {}",
               path, resourceGroupName, position);
-      this.apiListingReferences.add(new ApiListingReference(path, listingDescription, position));
+      apiListingReferences.add(new ApiListingReference(path, listingDescription, position));
     }
-  }
-
-
-
-  public Map<ResourceGroup, List<RequestMappingContext>> getResourceGroupRequestMappings() {
-    return Multimaps.asMap(resourceGroupRequestMappings);
-  }
-
-  public List<ApiListingReference> getApiListingReferences() {
-    return apiListingReferences;
-  }
-
-  public String getSwaggerGroup() {
-    return swaggerGroup;
-  }
-
-  public void setSwaggerGroup(String swaggerGroup) {
-    this.swaggerGroup = swaggerGroup;
-  }
-
-  public List<Class<? extends Annotation>> getExcludeAnnotations() {
-    return excludeAnnotations;
-  }
-
-  @Deprecated //As of 0.9.3 use RequestMappings instead
-  public void setExcludeAnnotations(List<Class<? extends Annotation>> excludeAnnotations) {
-    this.excludeAnnotations = excludeAnnotations;
-  }
-
-  public ResourceGroupingStrategy getResourceGroupingStrategy() {
-    return resourceGroupingStrategy;
-  }
-
-  public void setResourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
-    this.resourceGroupingStrategy = resourceGroupingStrategy;
-  }
-
-  public SwaggerPathProvider getSwaggerPathProvider() {
-    return swaggerPathProvider;
-  }
-
-  public void setSwaggerPathProvider(SwaggerPathProvider swaggerPathProvider) {
-    this.swaggerPathProvider = swaggerPathProvider;
-  }
-
-  public List<String> getIncludePatterns() {
-    return includePatterns;
-  }
-
-  @Deprecated //As of 0.9.3 use RequestMappings instead
-  public void setIncludePatterns(List<String> includePatterns) {
-    this.includePatterns = includePatterns;
-  }
-
-  public void setRequestMappingEvaluator(RequestMappingEvaluator requestMappingEvaluator) {
-    this.requestMappingEvaluator = requestMappingEvaluator;
+    return new ApiListingReferenceScanResult(apiListingReferences, Multimaps.asMap(resourceGroupRequestMappings));
   }
 }

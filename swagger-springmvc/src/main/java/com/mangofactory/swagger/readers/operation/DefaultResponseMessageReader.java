@@ -1,19 +1,23 @@
 package com.mangofactory.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.schema.Annotations;
 import com.mangofactory.schema.ResolvedTypes;
+import com.mangofactory.schema.alternates.AlternateTypeProvider;
+import com.mangofactory.service.model.ResponseMessage;
 import com.mangofactory.service.model.builder.ResponseMessageBuilder;
+import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
-import com.mangofactory.service.model.ResponseMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.HandlerMethod;
@@ -27,20 +31,30 @@ import java.util.Map;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
-import static com.mangofactory.swagger.core.ModelUtils.*;
 import static com.mangofactory.schema.ResolvedTypes.*;
+import static com.mangofactory.swagger.core.ModelUtils.*;
 
+@Component
 public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
 
+  private final TypeResolver typeResolver;
+  private final AlternateTypeProvider alternateTypeProvider;
+
+  @Autowired
+  public DefaultResponseMessageReader(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider) {
+    this.typeResolver = typeResolver;
+    this.alternateTypeProvider = alternateTypeProvider;
+  }
+
   @Override
-  protected Collection<ResponseMessage> read(SwaggerGlobalSettings swaggerGlobalSettings,
-                                             RequestMethod currentHttpMethod, HandlerMethod handlerMethod) {
-    List<ResponseMessage> responseMessages = globalResponseMessages(swaggerGlobalSettings, currentHttpMethod);
+  protected Collection<ResponseMessage> read(RequestMappingContext context, RequestMethod currentHttpMethod,
+                                             HandlerMethod handlerMethod) {
+    List<ResponseMessage> responseMessages = globalResponseMessages(context, currentHttpMethod);
     Map<Integer, ResponseMessage> byStatusCode = newHashMap(uniqueIndex(responseMessages, byStatusCode()));
 
-    applyAnnotatedOverrides(swaggerGlobalSettings, handlerMethod, byStatusCode);
+    applyAnnotatedOverrides(handlerMethod, byStatusCode);
 
-    applyReturnTypeOverride(swaggerGlobalSettings, handlerMethod, byStatusCode);
+    applyReturnTypeOverride(handlerMethod, byStatusCode);
 
     return Ordering.from(responseMessageComparer()).sortedCopy(byStatusCode.values());
   }
@@ -54,11 +68,11 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
     };
   }
 
-  private void applyReturnTypeOverride(SwaggerGlobalSettings swaggerGlobalSettings, HandlerMethod handlerMethod,
+  private void applyReturnTypeOverride(HandlerMethod handlerMethod,
       Map<Integer, ResponseMessage> byStatusCode) {
 
-    ResolvedType returnType = handlerReturnType(swaggerGlobalSettings.getTypeResolver(), handlerMethod);
-    returnType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(returnType);
+    ResolvedType returnType = handlerReturnType(typeResolver, handlerMethod);
+    returnType = alternateTypeProvider.alternateFor(returnType);
     int httpStatusCode = httpStatusCode(handlerMethod);
     ResponseMessage responseMessage = byStatusCode.get(httpStatusCode);
     String message = null;
@@ -85,13 +99,13 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
     return httpStatusCode;
   }
 
-  private void applyAnnotatedOverrides(SwaggerGlobalSettings swaggerGlobalSettings, HandlerMethod handlerMethod,
+  private void applyAnnotatedOverrides(HandlerMethod handlerMethod,
                                        Map<Integer, ResponseMessage> byStatusCode) {
     Optional<ApiResponses> apiResponsesOptional = Annotations.findApiResponsesAnnotations(handlerMethod.getMethod());
     if (apiResponsesOptional.isPresent()) {
       ApiResponse[] apiResponseAnnotations = apiResponsesOptional.get().value();
       for (ApiResponse apiResponse : apiResponseAnnotations) {
-        String overrideTypeName = overrideTypeName(swaggerGlobalSettings, apiResponse);
+        String overrideTypeName = overrideTypeName(apiResponse);
         ResponseMessage responseMessage = byStatusCode.get(apiResponse.code());
         if (null == responseMessage) {
           byStatusCode.put(apiResponse.code(),
@@ -110,9 +124,9 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
     }
   }
 
-  private String overrideTypeName(SwaggerGlobalSettings swaggerGlobalSettings, ApiResponse apiResponse) {
+  private String overrideTypeName(ApiResponse apiResponse) {
     if (apiResponse.response() != null) {
-      return typeName(swaggerGlobalSettings.getTypeResolver().resolve(apiResponse.response()));
+      return typeName(typeResolver.resolve(apiResponse.response()));
     }
     return "";
   }
@@ -133,11 +147,10 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
     };
   }
 
-  private List<ResponseMessage> globalResponseMessages(SwaggerGlobalSettings swaggerGlobalSettings,
-      RequestMethod currentHttpMethod) {
+  private List<ResponseMessage> globalResponseMessages(RequestMappingContext context, RequestMethod currentHttpMethod) {
     List<ResponseMessage> responseMessages = newArrayList();
     Map<RequestMethod, List<ResponseMessage>> globalResponseMessages
-            = swaggerGlobalSettings.getGlobalResponseMessages();
+            = context.getDocumentationContext().getGlobalResponseMessages();
 
     if (null != globalResponseMessages) {
       responseMessages.addAll(

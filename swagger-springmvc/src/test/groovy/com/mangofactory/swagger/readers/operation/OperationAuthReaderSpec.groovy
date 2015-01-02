@@ -1,20 +1,27 @@
 package com.mangofactory.swagger.readers.operation
 
-import com.mangofactory.swagger.authorization.AuthorizationContext
-import com.mangofactory.swagger.mixins.AuthSupport
-import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.mangofactory.service.model.Authorization
 import com.mangofactory.service.model.AuthorizationScope
+import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.swagger.authorization.AuthorizationContext
+import com.mangofactory.swagger.mixins.AuthSupport
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
+import com.mangofactory.swagger.scanners.RequestMappingContext
 import spock.lang.Specification
 
-@Mixin([RequestMappingSupport, AuthSupport])
+import javax.servlet.ServletContext
+
+@Mixin([RequestMappingSupport, AuthSupport, SpringSwaggerConfigSupport, DocumentationContextSupport])
 class OperationAuthReaderSpec extends Specification {
 
+  DocumentationContext context  = defaultContext(Mock(ServletContext))
    def "should read from annotations"(){
       given:
       OperationAuthReader authReader = new OperationAuthReader()
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), dummyHandlerMethod("methodWithAuth"))
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), dummyHandlerMethod
+              ("methodWithAuth"))
       context.put("requestMappingPattern", "/anyPath")
 
       when:
@@ -32,9 +39,10 @@ class OperationAuthReaderSpec extends Specification {
    def "should apply global auth"(){
     given:
       OperationAuthReader authReader = new OperationAuthReader()
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), dummyHandlerMethod())
-      List<Authorization> authorizations = defaultAuth()
-      AuthorizationContext authorizationContext = new AuthorizationContext.AuthorizationContextBuilder(defaultAuth())
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"),
+              dummyHandlerMethod())
+      AuthorizationContext authorizationContext = AuthorizationContext.builder()
+              .withAuthorizations(defaultAuth())
               .withIncludePatterns(['/anyPath.*'])
                .build()
 
@@ -57,9 +65,10 @@ class OperationAuthReaderSpec extends Specification {
    def "should apply global auth when ApiOperationAnnotation exists without auth values"(){
     given:
       OperationAuthReader authReader = new OperationAuthReader()
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), dummyHandlerMethod("methodWithHttpGETMethod"))
-      List<Authorization> authorizations = defaultAuth()
-      AuthorizationContext authorizationContext = new AuthorizationContext.AuthorizationContextBuilder(defaultAuth())
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), dummyHandlerMethod
+              ("methodWithHttpGETMethod"))
+      AuthorizationContext authorizationContext = AuthorizationContext.builder()
+              .withAuthorizations(defaultAuth())
               .withIncludePatterns(['/anyPath.*'])
               .build()
 

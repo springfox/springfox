@@ -3,7 +3,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.service.model.AuthorizationType
 import com.mangofactory.service.model.Group
 import com.mangofactory.service.model.builder.GroupBuilder
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.springmvc.plugin.DocumentationContextBuilder
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.dto.jackson.SwaggerJacksonProvider
@@ -11,6 +12,11 @@ import com.mangofactory.swagger.mixins.ApiListingSupport
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.JsonSupport
 import com.mangofactory.swagger.mixins.MapperSupport
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
+import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
+import com.mangofactory.swagger.scanners.ApiListingReferenceScanResult
+import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
+import com.mangofactory.swagger.scanners.ApiListingScanner
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
@@ -20,11 +26,14 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import javax.servlet.ServletContext
+
+import static com.google.common.collect.Maps.newHashMap
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*
 
-@Mixin([JsonSupport, ApiListingSupport, AuthSupport, MapperSupport])
+@Mixin([JsonSupport, ApiListingSupport, AuthSupport, MapperSupport, SpringSwaggerConfigSupport])
 class DefaultSwaggerControllerSpec extends Specification {
 
   @Shared
@@ -33,11 +42,18 @@ class DefaultSwaggerControllerSpec extends Specification {
   View mockView
   @Shared
   DefaultSwaggerController controller = new DefaultSwaggerController()
-  @Shared
-  SwaggerGlobalSettings settings = new SwaggerGlobalSettings()
+  def defaultValues
+  DocumentationContextBuilder contextBuilder
+  DocumentationContext context
+  ApiListingReferenceScanner listingReferenceScanner
 
   def setup() {
+    defaultValues = defaults(Mock(ServletContext))
+    contextBuilder = new DocumentationContextBuilder(defaultValues).withHandlerMappings([])
+    context = new SwaggerSpringMvcPlugin().build(contextBuilder)
     controller.swaggerCache = new SwaggerCache()
+    listingReferenceScanner = Mock(ApiListingReferenceScanner)
+    listingReferenceScanner.scan(context) >> new ApiListingReferenceScanResult([], newHashMap())
     controller.mapper = serviceMapper()
     def jackson2 = new MappingJackson2HttpMessageConverter()
 
@@ -56,11 +72,9 @@ class DefaultSwaggerControllerSpec extends Specification {
   @Unroll("path: #path")
   def "should return the default or first swagger resource listing"() {
     given:
-      SwaggerApiResourceListing swaggerApiResourceListing = new SwaggerApiResourceListing("default")
-      swaggerApiResourceListing.swaggerGlobalSettings = settings;
-      controller.swaggerCache.addGroup(swaggerApiResourceListing.scan([]))
-
-
+      SwaggerApiResourceListing swaggerApiResourceListing =
+              new SwaggerApiResourceListing(listingReferenceScanner, Mock(ApiListingScanner))
+      controller.swaggerCache.addGroup(swaggerApiResourceListing.scan(context))
     when:
       MvcResult result = mockMvc
               .perform(get(path))

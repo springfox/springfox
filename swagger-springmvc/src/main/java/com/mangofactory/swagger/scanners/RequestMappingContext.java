@@ -1,5 +1,7 @@
 package com.mangofactory.swagger.scanners;
 
+import com.mangofactory.service.model.Model;
+import com.mangofactory.springmvc.plugin.DocumentationContext;
 import com.mangofactory.swagger.core.CommandContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -13,9 +15,15 @@ import static com.google.common.collect.Maps.*;
 public class RequestMappingContext implements CommandContext<Map<String, Object>> {
   private final RequestMappingInfo requestMappingInfo;
   private final HandlerMethod handlerMethod;
-  private Map<String, Object> context = newHashMap();
+  private final Map<String, Object> context = newHashMap();
+  private final Map<String, Model> modelMap = newHashMap();
+  private final DocumentationContext documentationContext;
 
-  public RequestMappingContext(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+  public RequestMappingContext(DocumentationContext context,
+                               RequestMappingInfo requestMappingInfo,
+                               HandlerMethod handlerMethod) {
+
+    this.documentationContext = context;
     this.requestMappingInfo = requestMappingInfo;
     this.handlerMethod = handlerMethod;
   }
@@ -49,8 +57,19 @@ public class RequestMappingContext implements CommandContext<Map<String, Object>
     return handlerMethod;
   }
 
-  public Map<String, Object> getContext() {
-    return context;
+  public DocumentationContext getDocumentationContext() {
+    return documentationContext;
   }
 
+  public Map<String, Model> getModelMap() {
+    return modelMap;
+  }
+
+  public RequestMappingContext newCopyUsingHandlerMethod(HandlerMethod handlerMethod) {
+    return new RequestMappingContext(this.documentationContext, this.requestMappingInfo, handlerMethod);
+  }
+
+  public RequestMappingContext newCopy() {
+    return new RequestMappingContext(this.documentationContext, this.requestMappingInfo, handlerMethod);
+  }
 }

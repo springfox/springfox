@@ -1,19 +1,20 @@
 package com.mangofactory.swagger.readers.operation.parameter
 
-import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.service.model.Parameter
+import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.swagger.controllers.Defaults
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.models.Example
 import com.mangofactory.swagger.dummy.models.Treeish
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import com.mangofactory.service.model.Parameter
 import org.joda.time.LocalDateTime
 import org.springframework.core.MethodParameter
 import org.springframework.validation.BindingResult
 import org.springframework.web.method.HandlerMethod
-import spock.lang.Shared
 import spock.lang.Specification
 
 import javax.servlet.ServletContext
@@ -22,36 +23,34 @@ import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-import static com.google.common.collect.Maps.newHashMap
-import static com.mangofactory.schema.alternates.Alternates.newRule
+import static com.mangofactory.schema.alternates.Alternates.*
 
-@Mixin(RequestMappingSupport)
+@Mixin([RequestMappingSupport, DocumentationContextSupport, ModelProviderForServiceSupport, SpringSwaggerConfigSupport])
 class OperationParameterReaderSpec extends Specification {
-
-  @Shared
-  SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings()
-  @Shared
-  TypeResolver typeResolver = new TypeResolver()
-
+  DocumentationContext context
+  OperationParameterReader sut
+  Defaults defaultValues = defaults(Mock(ServletContext))
   def setup() {
-    swaggerGlobalSettings.setIgnorableParameterTypes(
-            [ServletRequest, ServletResponse, HttpServletRequest,
-             HttpServletResponse, BindingResult, ServletContext,
-             DummyModels.Ignorable.class
-            ] as Set)
-    SwaggerModelsConfiguration springSwaggerConfig = new SwaggerModelsConfiguration()
+    def typeResolver = defaultValues.typeResolver
+    context = defaultPlugin()
+            .ignoredParameterTypes(ServletRequest, ServletResponse, HttpServletRequest,
+              HttpServletResponse, BindingResult, ServletContext,
+              DummyModels.Ignorable.class
+            )
+            .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
+            .build(defaultContextBuilder(defaultValues))
 
-    swaggerGlobalSettings.alternateTypeProvider = springSwaggerConfig.alternateTypeProvider(typeResolver);
-    swaggerGlobalSettings.setGlobalResponseMessages(newHashMap())
+    sut = new OperationParameterReader(typeResolver, defaultValues
+            .alternateTypeProvider,
+            new ParameterDataTypeReader(defaultValues.alternateTypeProvider),
+            new ParameterTypeReader(defaultValues.alternateTypeProvider))
   }
 
   def "Should ignore ignorables"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
-      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'), handlerMethod)
     when:
-      OperationParameterReader operationParameterReader = new OperationParameterReader()
-      operationParameterReader.execute(context)
+      sut.execute(context)
       Map<String, Object> result = context.getResult()
 
     then:
@@ -69,14 +68,12 @@ class OperationParameterReaderSpec extends Specification {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSinglePathVariable', String.class)
 
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'), handlerMethod)
       MethodParameter methodParameter = new MethodParameter(handlerMethod.getMethod(), 1)
 
-      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
       context.put("methodParameter", methodParameter)
     when:
-      OperationParameterReader operationParameterReader = new OperationParameterReader()
-      operationParameterReader.execute(context)
+      sut.execute(context)
       Map<String, Object> result = context.getResult()
 
     then:
@@ -95,14 +92,10 @@ class OperationParameterReaderSpec extends Specification {
 
   def "Should expand ModelAttribute request params"() {
     given:
-      swaggerGlobalSettings.alternateTypeProvider.addRule(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'),
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'),
               dummyHandlerMethod('methodWithModelAttribute', Example.class))
-      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
     when:
-      OperationParameterReader operationParameterReader = new OperationParameterReader()
-      operationParameterReader.execute(context)
+      sut.execute(context)
       Map<String, Object> result = context.getResult()
 
     then:
@@ -146,12 +139,10 @@ class OperationParameterReaderSpec extends Specification {
 
   def "Should expand ModelAttribute request param if param has treeish field"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'),
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'),
               dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class))
-      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
     when:
-      OperationParameterReader operationParameterReader = new OperationParameterReader()
-      operationParameterReader.execute(context)
+      sut.execute(context)
       Map<String, Object> result = context.getResult()
 
     then:
@@ -164,11 +155,9 @@ class OperationParameterReaderSpec extends Specification {
 
   def "Should not expand unannotated request params"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
-      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'), handlerMethod)
     when:
-      OperationParameterReader operationParameterReader = new OperationParameterReader()
-      operationParameterReader.execute(context)
+      sut.execute(context)
       Map<String, Object> result = context.getResult()
 
     then:

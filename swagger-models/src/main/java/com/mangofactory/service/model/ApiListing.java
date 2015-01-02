@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class ApiListing {
   private final String apiVersion;
-  private final String swaggerVersion;
   private final String basePath;
   private final String resourcePath;
   private final List<String> produces;
@@ -17,11 +16,10 @@ public class ApiListing {
   private final String description;
   private final int position;
 
-  public ApiListing(String apiVersion, String swaggerVersion, String basePath, String resourcePath, List<String>
+  public ApiListing(String apiVersion, String basePath, String resourcePath, List<String>
           produces, List<String> consumes, List<String> protocol, List<Authorization> authorizations,
                     List<ApiDescription> apis, Map<String, Model> models, String description, int position) {
     this.apiVersion = apiVersion;
-    this.swaggerVersion = swaggerVersion;
     this.basePath = basePath;
     this.resourcePath = resourcePath;
     this.produces = produces;
@@ -36,10 +34,6 @@ public class ApiListing {
 
   public String getApiVersion() {
     return apiVersion;
-  }
-
-  public String getSwaggerVersion() {
-    return swaggerVersion;
   }
 
   public String getBasePath() {

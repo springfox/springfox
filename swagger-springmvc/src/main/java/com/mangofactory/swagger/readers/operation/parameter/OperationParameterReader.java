@@ -1,15 +1,17 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
-import com.mangofactory.swagger.core.CommandExecutor;
+import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
+import com.mangofactory.service.model.AllowableValues;
+import com.mangofactory.service.model.Parameter;
+import com.mangofactory.swagger.core.CommandExecutor;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.readers.operation.SwaggerParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.mangofactory.service.model.AllowableValues;
-import com.mangofactory.service.model.Parameter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
 
@@ -21,23 +23,35 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 
+@Component
 public class OperationParameterReader extends SwaggerParameterReader {
+  private final TypeResolver typeResolver;
+  private final AlternateTypeProvider alternateTypeProvider;
+  private final ParameterDataTypeReader parameterDataTypeReader;
+  private final ParameterTypeReader parameterTypeReader;
+
+  @Autowired
+  public OperationParameterReader(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider,
+                                  ParameterDataTypeReader parameterDataTypeReader, ParameterTypeReader
+          parameterTypeReader) {
+    this.typeResolver = typeResolver;
+    this.alternateTypeProvider = alternateTypeProvider;
+    this.parameterDataTypeReader = parameterDataTypeReader;
+    this.parameterTypeReader = parameterTypeReader;
+  }
 
   @Override
   protected Collection<? extends Parameter> readParameters(final RequestMappingContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
-    HandlerMethodResolver handlerMethodResolver
-            = new HandlerMethodResolver(swaggerGlobalSettings.getTypeResolver());
-    AlternateTypeProvider alternateTypeProvider = swaggerGlobalSettings.getAlternateTypeProvider();
+    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(typeResolver);
 
     List<ResolvedMethodParameter> methodParameters = handlerMethodResolver.methodParameters(handlerMethod);
     List<Parameter> parameters = newArrayList();
 
     List<Command<RequestMappingContext>> commandList = newArrayList();
     commandList.add(new ParameterAllowableReader());
-    commandList.add(new ParameterDataTypeReader());
-    commandList.add(new ParameterTypeReader());
+    commandList.add(parameterDataTypeReader);
+    commandList.add(parameterTypeReader);
     commandList.add(new ParameterDefaultReader());
     commandList.add(new ParameterDescriptionReader());
     commandList.add(new ParameterMultiplesReader());
@@ -47,14 +61,12 @@ public class OperationParameterReader extends SwaggerParameterReader {
     ModelAttributeParameterExpander expander = new ModelAttributeParameterExpander(alternateTypeProvider);
     for (ResolvedMethodParameter methodParameter : methodParameters) {
 
-      if (!shouldIgnore(methodParameter, swaggerGlobalSettings.getIgnorableParameterTypes())) {
+      if (!shouldIgnore(methodParameter, context.getDocumentationContext().getIgnorableParameterTypes())) {
 
-        RequestMappingContext parameterContext
-                = new RequestMappingContext(context.getRequestMappingInfo(), handlerMethod);
+        RequestMappingContext parameterContext = context.newCopyUsingHandlerMethod(handlerMethod);
 
         parameterContext.put("methodParameter", methodParameter.getMethodParameter());
         parameterContext.put("resolvedMethodParameter", methodParameter);
-        parameterContext.put("swaggerGlobalSettings", swaggerGlobalSettings);
 
         CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
 

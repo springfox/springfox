@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.readers.operation
-
 import com.mangofactory.service.model.ResponseMessage
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -12,22 +12,20 @@ import javax.servlet.ServletContext
 
 import static com.google.common.collect.Sets.*
 
-@Mixin([RequestMappingSupport, SpringSwaggerConfigSupport])
+@Mixin([RequestMappingSupport, SpringSwaggerConfigSupport, DocumentationContextSupport])
 class DefaultResponseMessageReaderSpec extends Specification {
+  DocumentationContext context  = defaultContext(Mock(ServletContext))
   def defaultValues = defaults(Mock(ServletContext))
+  DefaultResponseMessageReader sut = new DefaultResponseMessageReader(defaultValues
+          .typeResolver, defaultValues.alternateTypeProvider)
+
    def "Should add default response messages"() {
     given:
-      SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
-
-      swaggerGlobalSettings.alternateTypeProvider = defaultValues.alternateTypeProvider
-      swaggerGlobalSettings.setGlobalResponseMessages(defaultValues.defaultResponseMessages())
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
-      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'), handlerMethod)
       context.put("currentHttpMethod", currentHttpMethod)
       context.put("responseMessages", newHashSet())
     when:
-      DefaultResponseMessageReader operationResponseMessageReader = new DefaultResponseMessageReader()
-      operationResponseMessageReader.execute(context)
+      sut.execute(context)
       Map<String, Object> result = context.getResult()
 
     then:
@@ -40,17 +38,13 @@ class DefaultResponseMessageReaderSpec extends Specification {
 
    def "swagger annotation should override"() {
     given:
-      SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
-      swaggerGlobalSettings.alternateTypeProvider = defaultValues.alternateTypeProvider
-      swaggerGlobalSettings.setGlobalResponseMessages(defaultValues.defaultResponseMessages())
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithApiResponses'))
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'),
+              dummyHandlerMethod('methodWithApiResponses'))
 
-      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
       context.put("currentHttpMethod", RequestMethod.GET)
       context.put("responseMessages", newHashSet())
     when:
-      DefaultResponseMessageReader operationResponseMessageReader = new DefaultResponseMessageReader()
-      operationResponseMessageReader.execute(context)
+      sut.execute(context)
       Map<String, Object> result = context.getResult()
 
     then:
@@ -62,17 +56,13 @@ class DefaultResponseMessageReaderSpec extends Specification {
 
    def "Methods with return type containing a model should override the success response code"(){
     given:
-      SwaggerGlobalSettings swaggerGlobalSettings = new SwaggerGlobalSettings();
-      swaggerGlobalSettings.setGlobalResponseMessages(defaultValues.defaultResponseMessages())
-      swaggerGlobalSettings.alternateTypeProvider = defaultValues.alternateTypeProvider
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), dummyHandlerMethod('methodWithConcreteResponseBody'))
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'),
+              dummyHandlerMethod('methodWithConcreteResponseBody'))
 
-      context.put("swaggerGlobalSettings", swaggerGlobalSettings)
       context.put("currentHttpMethod", RequestMethod.GET)
       context.put("responseMessages", newHashSet())
     when:
-      DefaultResponseMessageReader operationResponseMessageReader = new DefaultResponseMessageReader()
-      operationResponseMessageReader.execute(context)
+      sut.execute(context)
       Map<String, Object> result = context.getResult()
       ResponseMessage responseMessage =  result['responseMessages'].find{ it.code == 200 }
     then:

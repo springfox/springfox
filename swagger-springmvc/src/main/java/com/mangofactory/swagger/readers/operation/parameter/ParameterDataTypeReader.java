@@ -1,22 +1,30 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
+import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.mangofactory.schema.ResolvedTypes.*;
 
+@Component
 public class ParameterDataTypeReader implements Command<RequestMappingContext> {
+  private final AlternateTypeProvider alternateTypeProvider;
+
+  @Autowired
+  public ParameterDataTypeReader(AlternateTypeProvider alternateTypeProvider) {
+    this.alternateTypeProvider = alternateTypeProvider;
+  }
 
   @Override
   public void execute(RequestMappingContext context) {
     ResolvedMethodParameter methodParameter = (ResolvedMethodParameter) context.get("resolvedMethodParameter");
-    SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
     ResolvedType parameterType = methodParameter.getResolvedParameterType();
-    parameterType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(parameterType);
+    parameterType = alternateTypeProvider.alternateFor(parameterType);
     //Multi-part file trumps any other annotations
     if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
       context.put("dataType", "File");

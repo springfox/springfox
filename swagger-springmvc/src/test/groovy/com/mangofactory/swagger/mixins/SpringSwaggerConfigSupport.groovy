@@ -6,7 +6,7 @@ import com.mangofactory.swagger.controllers.Defaults
 
 import javax.servlet.ServletContext
 
-@Mixin([ModelProviderSupport, MapperSupport])
+@Mixin([ModelProviderForServiceSupport, MapperSupport])
 @SuppressWarnings("GrMethodMayBeStatic")
 class SpringSwaggerConfigSupport {
 
@@ -19,6 +19,6 @@ class SpringSwaggerConfigSupport {
     def modelConfig = new SwaggerModelsConfiguration()
     def alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
     def modelProvider = modelProvider(typeResolver, modelConfig.alternateTypeProvider(typeResolver))
-    new Defaults(servletContext, typeResolver, alternateTypeProvider, modelProvider)
+    new Defaults(servletContext, typeResolver, alternateTypeProvider)
   }
 }

@@ -1,13 +1,15 @@
 package com.mangofactory.swagger.readers;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Splitter;
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition;
 import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition;
@@ -20,11 +22,18 @@ import java.util.Set;
 import static com.google.common.collect.Lists.*;
 import static org.springframework.util.StringUtils.*;
 
+@Component
 public class MediaTypeReader implements RequestMappingReader {
+
+  private final TypeResolver typeResolver;
+
+  @Autowired
+  public MediaTypeReader(TypeResolver typeResolver) {
+    this.typeResolver = typeResolver;
+  }
 
   @Override
   public void execute(RequestMappingContext context) {
-    SwaggerGlobalSettings swaggerGlobalSettings = (SwaggerGlobalSettings) context.get("swaggerGlobalSettings");
 
     RequestMappingInfo requestMappingInfo = context.getRequestMappingInfo();
     ConsumesRequestCondition consumesCondition = requestMappingInfo.getConsumesCondition();
@@ -41,7 +50,7 @@ public class MediaTypeReader implements RequestMappingReader {
       consumesList = asList(annotation.consumes());
     }
 
-    if (handlerMethodHasFileParameter(context, swaggerGlobalSettings)) {
+    if (handlerMethodHasFileParameter(context)) {
       //Swagger spec requires consumes is multipart/form-data for file parameter types
       consumesList = Arrays.asList("multipart/form-data");
     }
@@ -63,10 +72,9 @@ public class MediaTypeReader implements RequestMappingReader {
     context.put("produces", producesList);
   }
 
-  private boolean handlerMethodHasFileParameter(RequestMappingContext context,
-      SwaggerGlobalSettings swaggerGlobalSettings) {
+  private boolean handlerMethodHasFileParameter(RequestMappingContext context) {
 
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(swaggerGlobalSettings.getTypeResolver());
+    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(typeResolver);
     List<ResolvedMethodParameter> methodParameters = handlerMethodResolver.methodParameters(context.getHandlerMethod());
 
     for (ResolvedMethodParameter resolvedMethodParameter : methodParameters) {

@@ -1,6 +1,9 @@
 package com.mangofactory.swagger.readers.operation.parameter
 
 import com.google.common.base.Optional
+import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -13,15 +16,18 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
 
-@Mixin(RequestMappingSupport)
+import javax.servlet.ServletContext
+
+@Mixin([RequestMappingSupport, DocumentationContextSupport, ModelProviderForServiceSupport])
 class ParameterNameReaderSpec extends Specification {
+  DocumentationContext context  = defaultContext(Mock(ServletContext))
 
 //   @Unroll
   def "param required"() {
     given:
       HandlerMethod handlerMethod = Mock(HandlerMethod)
       ParameterAnnotationReader annotations = Mock(ParameterAnnotationReader)
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
       MethodParameter methodParameter = Stub(MethodParameter)
       methodParameter.getParameterAnnotation(ApiParam.class) >> null
       annotations.fromHierarchy(methodParameter, ApiParam.class) >> { return Optional.absent() }

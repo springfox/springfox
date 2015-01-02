@@ -1,19 +1,26 @@
 package com.mangofactory.swagger.readers.operation
+
+import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import spock.lang.Specification
 import spock.lang.Unroll
 
-@Mixin(RequestMappingSupport)
+import javax.servlet.ServletContext
+
+@Mixin([RequestMappingSupport,  SpringSwaggerConfigSupport, DocumentationContextSupport])
 class OperationCommandReaderSpec extends Specification {
+  DocumentationContext context  = defaultContext(Mock(ServletContext))
 
    private static final int CURRENT_COUNT = 3
 
    @Unroll("property #property expected: #expected")
    def "should set various properties based on method name or swagger annotation"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
       context.put("currentCount", CURRENT_COUNT)
     when:
       Command operationCommand = command

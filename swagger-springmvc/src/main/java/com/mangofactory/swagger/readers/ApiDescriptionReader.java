@@ -1,33 +1,29 @@
 package com.mangofactory.swagger.readers;
 
-import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.service.model.ApiDescription;
 import com.mangofactory.service.model.Operation;
 import com.mangofactory.service.model.builder.ApiDescriptionBuilder;
+import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;
-import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
-import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 
+@Component
 public class ApiDescriptionReader implements Command<RequestMappingContext> {
 
-  private final SwaggerPathProvider swaggerPathProvider;
-  private Collection<RequestMappingReader> customAnnotationReaders;
-  private final RequestMappingEvaluator requestMappingEvaluator;
+  private final ApiOperationReader operationReader;
 
-  public ApiDescriptionReader(SwaggerPathProvider pathProvider,
-                              Collection<RequestMappingReader> customAnnotationReaders,
-                              RequestMappingEvaluator requestMappingEvaluator) {
-    this.swaggerPathProvider = pathProvider;
-    this.customAnnotationReaders = customAnnotationReaders;
-    this.requestMappingEvaluator = requestMappingEvaluator;
+  @Autowired
+  public ApiDescriptionReader(ApiOperationReader operationReader) {
+    this.operationReader = operationReader;
   }
 
   @SuppressWarnings("unchecked")
@@ -36,6 +32,8 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
     RequestMappingInfo requestMappingInfo = context.getRequestMappingInfo();
     HandlerMethod handlerMethod = context.getHandlerMethod();
     PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
+    RequestMappingEvaluator requestMappingEvaluator = context.getDocumentationContext().getRequestMappingEvaluator();
+    SwaggerPathProvider swaggerPathProvider = context.getDocumentationContext().getSwaggerPathProvider();
 
     List<ApiDescription> apiDescriptionList = newArrayList();
     for (String pattern : patternsCondition.getPatterns()) {
@@ -44,8 +42,7 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
         String path = swaggerPathProvider.getOperationPath(cleanedRequestMappingPath);
         String methodName = handlerMethod.getMethod().getName();
         context.put("requestMappingPattern", cleanedRequestMappingPath);
-        ApiOperationReader apiOperationReader = new ApiOperationReader(customAnnotationReaders);
-        apiOperationReader.execute(context);
+        operationReader.execute(context);
         List<Operation> operations = (List<Operation>) context.get("operations");
         apiDescriptionList.add(
                 new ApiDescriptionBuilder()
@@ -69,7 +66,7 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
    * @param requestMappingPattern
    * @return the request mapping endpoint
    */
-  public String sanitizeRequestMappingPattern(String requestMappingPattern) {
+  static String sanitizeRequestMappingPattern(String requestMappingPattern) {
     String result = requestMappingPattern;
     //remove regex portion '/{businessId:\\w+}'
     result = result.replaceAll("\\{([^}]*?):.*?\\}", "{$1}");

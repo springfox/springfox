@@ -94,7 +94,6 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                   .position(1)
                   .resourcePath("/resource-path")
                   .protocol(null)
-                  .swaggerVersion("1.2")
                   .build()
       def sut = serviceMapper()
     when:
@@ -134,7 +133,6 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                   .apis([new ApiListingReference("test", "test description", 1)])
                   .apiVersion("1.0")
                   .authorizations(null)
-                  .swaggerVersion("1.2")
                   .info(new ApiInfoBuilder()
                     .contact("test@ssmvc.com")
                     .description("test api")
@@ -154,7 +152,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mapped.apis.first().position == built.apis.first().position
       mapped.apiVersion == built.apiVersion
       mapped.authorizations == built.authorizations
-      mapped.swaggerVersion == built.swaggerVersion
+      mapped.swaggerVersion == "1.2"
       mapped.info.contact == built.info.contact
       mapped.info.description == built.info.description
       mapped.info.license == built.info.license
@@ -169,7 +167,6 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
               .apis([new ApiListingReference("test", "test description", 1)])
               .apiVersion("1.0")
               .authorizations([])
-              .swaggerVersion("1.2")
               .info(new ApiInfoBuilder()
               .contact("test@ssmvc.com")
               .description("test api")
@@ -189,7 +186,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mapped.apis.first().position == built.apis.first().position
       mapped.apiVersion == built.apiVersion
       mapped.authorizations == built.authorizations
-      mapped.swaggerVersion == built.swaggerVersion
+      mapped.swaggerVersion == "1.2"
       mapped.info.contact == built.info.contact
       mapped.info.description == built.info.description
       mapped.info.license == built.info.license

@@ -1,24 +1,31 @@
 package com.mangofactory.swagger.readers.operation.parameter
 
+import com.mangofactory.service.model.AllowableListValues
+import com.mangofactory.service.model.AllowableRangeValues
+import com.mangofactory.springmvc.plugin.DocumentationContext
 import com.mangofactory.swagger.dummy.DummyClass
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.annotations.ApiParam
-import com.mangofactory.service.model.AllowableListValues
-import com.mangofactory.service.model.AllowableRangeValues
 import org.springframework.core.MethodParameter
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
 import spock.lang.Unroll
 
-@Mixin(RequestMappingSupport)
+import javax.servlet.ServletContext
+
+@Mixin([RequestMappingSupport, DocumentationContextSupport, ModelProviderForServiceSupport, SpringSwaggerConfigSupport])
 class ParameterAllowableReaderSpec extends Specification {
+  DocumentationContext context  = defaultContext(Mock(ServletContext))
 
   def "enum types"() {
     given:
       HandlerMethod handlerMethod = handler
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'), handlerMethod)
       MethodParameter methodParameter = new MethodParameter(handlerMethod.getMethod(), 0)
       context.put("methodParameter", methodParameter)
 
@@ -40,7 +47,7 @@ class ParameterAllowableReaderSpec extends Specification {
   def "Api annotation with list type"() {
     given:
       HandlerMethod handlerMethod = Stub()
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
       MethodParameter methodParameter = Stub(MethodParameter)
       methodParameter.getParameterAnnotations() >> [apiParamAnnotation]
       context.put("methodParameter", methodParameter)
@@ -64,7 +71,7 @@ class ParameterAllowableReaderSpec extends Specification {
   def "Api annotation with ranges"() {
     given:
       HandlerMethod handlerMethod = Stub()
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
       MethodParameter methodParameter = Stub(MethodParameter)
       methodParameter.getParameterAnnotations() >> [apiParamAnnotation]
       context.put("methodParameter", methodParameter)

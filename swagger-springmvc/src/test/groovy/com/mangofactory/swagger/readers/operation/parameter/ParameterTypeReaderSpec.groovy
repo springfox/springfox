@@ -1,10 +1,11 @@
 package com.mangofactory.swagger.readers.operation.parameter
-
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.swagger.configuration.SwaggerGlobalSettings
+import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.swagger.controllers.Defaults
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.schema.alternates.AlternateTypeProvider
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -18,27 +19,27 @@ import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 
-import static com.mangofactory.schema.ResolvedTypes.asResolved
+import javax.servlet.ServletContext
 
-@Mixin(RequestMappingSupport)
+import static com.mangofactory.schema.ResolvedTypes.*
+
+@Mixin([RequestMappingSupport,  SpringSwaggerConfigSupport, DocumentationContextSupport])
 class ParameterTypeReaderSpec extends Specification {
+  DocumentationContext context  = defaultContext(Mock(ServletContext))
+  Defaults defaultValues = defaults(Mock(ServletContext))
 
   def "param type"() {
     given:
       HandlerMethod handlerMethod = Mock()
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
       MethodParameter methodParameter = Stub(MethodParameter)
       methodParameter.getParameterAnnotation(ApiParam.class) >> null
       methodParameter.getParameterAnnotations() >> [annotation]
       context.put("methodParameter", methodParameter)
-
-      def settings = new SwaggerGlobalSettings()
-      settings.alternateTypeProvider = new AlternateTypeProvider();
-      context.put("swaggerGlobalSettings", settings);
       context.put("resolvedMethodParameter", new ResolvedMethodParameter(methodParameter, resolve(type)));
 
     when:
-      Command operationCommand = new ParameterTypeReader()
+      Command operationCommand = new ParameterTypeReader(defaultValues.alternateTypeProvider)
       operationCommand.execute(context)
     then:
       context.get('paramType') == expected

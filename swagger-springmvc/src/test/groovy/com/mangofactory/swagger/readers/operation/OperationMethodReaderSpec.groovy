@@ -1,17 +1,23 @@
 package com.mangofactory.swagger.readers.operation
 
+import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
 
-@Mixin(RequestMappingSupport)
+import javax.servlet.ServletContext
+
+@Mixin([RequestMappingSupport,  SpringSwaggerConfigSupport, DocumentationContextSupport])
 class OperationMethodReaderSpec extends Specification {
+  DocumentationContext context  = defaultContext(Mock(ServletContext))
 
    def "should return api method annotation when present"() {
 
     given:
-      RequestMappingContext context = new RequestMappingContext(requestMappingInfo("somePath"), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
 
       context.put("currentHttpMethod", currentHttpMethod)
       OperationHttpMethodReader operationMethodReader = new OperationHttpMethodReader();
