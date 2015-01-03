@@ -18,7 +18,6 @@ class SpringSwaggerConfigSupport {
     def typeResolver = new TypeResolver()
     def modelConfig = new SwaggerModelsConfiguration()
     def alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
-    def modelProvider = modelProvider(typeResolver, modelConfig.alternateTypeProvider(typeResolver))
     new Defaults(servletContext, typeResolver, alternateTypeProvider)
   }
 }

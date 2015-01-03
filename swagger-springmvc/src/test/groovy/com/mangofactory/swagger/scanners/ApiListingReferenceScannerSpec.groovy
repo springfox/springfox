@@ -1,38 +1,30 @@
 package com.mangofactory.swagger.scanners
 import com.mangofactory.service.model.ApiListingReference
-import com.mangofactory.springmvc.plugin.DocumentationContextBuilder
 import com.mangofactory.swagger.annotations.ApiIgnore
-import com.mangofactory.swagger.controllers.Defaults
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.core.SpringGroupingStrategy
 import com.mangofactory.swagger.mixins.AccessorAssertions
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
-import spock.lang.Specification
 
 import javax.servlet.ServletContext
 
-@Mixin([AccessorAssertions, RequestMappingSupport, DocumentationContextSupport, SpringSwaggerConfigSupport])
-class ApiListingReferenceScannerSpec extends Specification {
-  Defaults defaultValues = defaults(Mock(ServletContext))
-  DocumentationContextBuilder contextBuilder = defaultContextBuilder(defaultValues)
-  RequestMappingHandlerMapping requestMappingHandlerMapping
-  SwaggerSpringMvcPlugin pluginBuilder
+@Mixin([AccessorAssertions, RequestMappingSupport])
+class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
   ApiListingReferenceScanner sut = new ApiListingReferenceScanner()
+  RequestMappingHandlerMapping requestMappingHandlerMapping
 
   def setup() {
     requestMappingHandlerMapping = Mock(RequestMappingHandlerMapping)
     contextBuilder.withHandlerMappings([requestMappingHandlerMapping])
     ClassOrApiAnnotationResourceGrouping defaultControllerResourceNamingStrategy =
             new ClassOrApiAnnotationResourceGrouping()
-    pluginBuilder = new SwaggerSpringMvcPlugin()
+    plugin
             .pathProvider(new AbsoluteSwaggerPathProvider(servletContext: servletContext()))
             .resourceGroupingStrategy(defaultControllerResourceNamingStrategy)
             .swaggerGroup("swaggerGroup")
@@ -46,7 +38,7 @@ class ApiListingReferenceScannerSpec extends Specification {
       contextBuilder.withHandlerMappings(handlerMappings)
 
     when:
-      def pluginContext = pluginBuilder
+      def pluginContext = plugin
               .swaggerGroup(swaggerGroup)
               .resourceGroupingStrategy(resourceGroupingStrategy)
               .build(contextBuilder)
@@ -72,7 +64,7 @@ class ApiListingReferenceScannerSpec extends Specification {
               ]
 
       contextBuilder.withHandlerMappings([requestMappingHandlerMapping])
-      def pluginContext = pluginBuilder.build(contextBuilder)
+      def pluginContext = plugin.build(contextBuilder)
 
       ApiListingReferenceScanResult result = sut.scan(pluginContext)
 
@@ -97,7 +89,7 @@ class ApiListingReferenceScannerSpec extends Specification {
 
     when:
       contextBuilder.withHandlerMappings([requestMappingHandlerMapping])
-      def pluginContext = pluginBuilder
+      def pluginContext = plugin
               .resourceGroupingStrategy(new SpringGroupingStrategy())
               .build(contextBuilder)
     and:
@@ -122,7 +114,7 @@ class ApiListingReferenceScannerSpec extends Specification {
 
     when:
       contextBuilder.withHandlerMappings([requestMappingHandlerMapping])
-      def pluginContext = pluginBuilder
+      def pluginContext = plugin
               .pathProvider(new RelativeSwaggerPathProvider(Mock(ServletContext)))
               .build(contextBuilder)
       List<ApiListingReference> apiListingReferences = sut.scan(pluginContext).apiListingReferences

@@ -5,48 +5,31 @@ import com.mangofactory.service.model.ApiListingReference
 import com.mangofactory.service.model.Group
 import com.mangofactory.service.model.ResourceListing
 import com.mangofactory.springmvc.plugin.DocumentationContext
-import com.mangofactory.springmvc.plugin.DocumentationContextBuilder
-import com.mangofactory.swagger.controllers.Defaults
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
 import com.mangofactory.swagger.ordering.ResourceListingPositionalOrdering
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
 import com.mangofactory.swagger.paths.SwaggerPathProvider
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanResult
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
 import com.mangofactory.swagger.scanners.ApiListingScanner
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import spock.lang.Specification
 
-import javax.servlet.ServletContext
+import static com.google.common.collect.Maps.*
 
-import static com.google.common.collect.Maps.newHashMap
-
-@Mixin([RequestMappingSupport, SpringSwaggerConfigSupport])
-class SwaggerApiResourceListingSpec extends Specification {
-  Defaults defaultValues
-  SwaggerApiResourceListing swaggerApiResourceListing
+@Mixin([RequestMappingSupport])
+class SwaggerApiResourceListingSpec extends DocumentationContextSpec {
   ApiListingReferenceScanner listingReferenceScanner = Mock(ApiListingReferenceScanner)
   ApiListingScanner listingScanner = Mock(ApiListingScanner)
-  DocumentationContextBuilder contextBuilder
-
-  def setup() {
-    def servlet = Mock(ServletContext)
-    defaultValues = defaults(servlet)
-    swaggerApiResourceListing = new SwaggerApiResourceListing(listingReferenceScanner, listingScanner)
-    contextBuilder = new DocumentationContextBuilder(defaultValues)
-            .withHandlerMappings([])
-  }
+  SwaggerApiResourceListing  swaggerApiResourceListing = new SwaggerApiResourceListing(listingReferenceScanner, listingScanner)
 
   def "default swagger resource"() {
     when: "I create a swagger resource"
-      DocumentationContext context = new SwaggerSpringMvcPlugin().build(contextBuilder)
-      listingReferenceScanner.scan(context) >> new ApiListingReferenceScanResult([], newHashMap())
+      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     and:
-      Group scanned = swaggerApiResourceListing.scan(context)
+      Group scanned = swaggerApiResourceListing.scan(context())
 
     then: "I should should have the correct defaults"
       ResourceListing resourceListing = scanned.resourceListing
@@ -65,7 +48,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     given:
       ApiInfo expected = new ApiInfo("title", "description", "1.0", "terms", "contact", "license", "licenseUrl")
     when:
-      DocumentationContext context = new SwaggerSpringMvcPlugin()
+      DocumentationContext context = plugin
               .swaggerGroup("swaggerGroup")
               .includePatterns(".*")
               .apiInfo(expected)
@@ -88,7 +71,7 @@ class SwaggerApiResourceListingSpec extends Specification {
     given:
       ApiKey apiKey = new ApiKey("api_key", "header")
     when:
-      DocumentationContext context = new SwaggerSpringMvcPlugin()
+      DocumentationContext context = plugin
               .swaggerGroup("swaggerGroup")
               .includePatterns(".*")
               .authorizationTypes([apiKey])
@@ -108,7 +91,7 @@ class SwaggerApiResourceListingSpec extends Specification {
   def "resource with mocked apis"() {
     given:
       SwaggerPathProvider swaggerPathProvider = new AbsoluteSwaggerPathProvider(servletContext: servletContext())
-      DocumentationContext context = new SwaggerSpringMvcPlugin()
+      DocumentationContext context = plugin
               .swaggerGroup("swaggerGroup")
               .includePatterns(".*")
               .pathProvider(swaggerPathProvider)
@@ -132,7 +115,7 @@ class SwaggerApiResourceListingSpec extends Specification {
 
   def "Should sort based on position"() {
     given:
-      DocumentationContext context = new SwaggerSpringMvcPlugin()
+      DocumentationContext context = plugin
               .swaggerGroup("swaggerGroup")
               .includePatterns(".*")
               .apiListingReferenceOrdering(ordering)

@@ -1,31 +1,23 @@
 package com.mangofactory.swagger.readers.operation.parameter
-import com.mangofactory.springmvc.plugin.DocumentationContext
-import com.mangofactory.swagger.controllers.Defaults
+
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.DocumentationContextSupport
-import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.core.MethodParameter
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
-import spock.lang.Specification
 
-import javax.servlet.ServletContext
-
-@Mixin([RequestMappingSupport, DocumentationContextSupport, ModelProviderForServiceSupport, SpringSwaggerConfigSupport])
-class ParameterDataTypeReaderSpec extends Specification {
-  DocumentationContext context  = defaultContext(Mock(ServletContext))
-  Defaults defaultValues = defaults(Mock(ServletContext))
-
+@Mixin([RequestMappingSupport, DocumentationContextSupport])
+class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
    def "Parameter types"() {
     given:
       HandlerMethod handlerMethod = Stub(HandlerMethod)
 
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo("somePath"), handlerMethod)
       MethodParameter methodParameter = Stub(MethodParameter)
       ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter,
               defaultValues.typeResolver.resolve(paramType))

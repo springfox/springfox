@@ -1,21 +1,17 @@
 package com.mangofactory.swagger.readers.operation.parameter
-
 import com.mangofactory.service.model.Parameter
-import com.mangofactory.springmvc.plugin.DocumentationContext
-import com.mangofactory.swagger.controllers.Defaults
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.models.Example
 import com.mangofactory.swagger.dummy.models.Treeish
 import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.joda.time.LocalDateTime
 import org.springframework.core.MethodParameter
 import org.springframework.validation.BindingResult
 import org.springframework.web.method.HandlerMethod
-import spock.lang.Specification
 
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
@@ -25,14 +21,12 @@ import javax.servlet.http.HttpServletResponse
 
 import static com.mangofactory.schema.alternates.Alternates.*
 
-@Mixin([RequestMappingSupport, DocumentationContextSupport, ModelProviderForServiceSupport, SpringSwaggerConfigSupport])
-class OperationParameterReaderSpec extends Specification {
-  DocumentationContext context
+@Mixin([RequestMappingSupport, DocumentationContextSupport, ModelProviderForServiceSupport])
+class OperationParameterReaderSpec extends DocumentationContextSpec {
   OperationParameterReader sut
-  Defaults defaultValues = defaults(Mock(ServletContext))
   def setup() {
     def typeResolver = defaultValues.typeResolver
-    context = defaultPlugin()
+    plugin
             .ignoredParameterTypes(ServletRequest, ServletResponse, HttpServletRequest,
               HttpServletResponse, BindingResult, ServletContext,
               DummyModels.Ignorable.class
@@ -48,7 +42,8 @@ class OperationParameterReaderSpec extends Specification {
 
   def "Should ignore ignorables"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
+              handlerMethod)
     when:
       sut.execute(context)
       Map<String, Object> result = context.getResult()
@@ -68,7 +63,8 @@ class OperationParameterReaderSpec extends Specification {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSinglePathVariable', String.class)
 
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
+              handlerMethod)
       MethodParameter methodParameter = new MethodParameter(handlerMethod.getMethod(), 1)
 
       context.put("methodParameter", methodParameter)
@@ -92,7 +88,7 @@ class OperationParameterReaderSpec extends Specification {
 
   def "Should expand ModelAttribute request params"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'),
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
               dummyHandlerMethod('methodWithModelAttribute', Example.class))
     when:
       sut.execute(context)
@@ -139,7 +135,7 @@ class OperationParameterReaderSpec extends Specification {
 
   def "Should expand ModelAttribute request param if param has treeish field"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'),
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
               dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class))
     when:
       sut.execute(context)
@@ -155,7 +151,8 @@ class OperationParameterReaderSpec extends Specification {
 
   def "Should not expand unannotated request params"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
+      handlerMethod)
     when:
       sut.execute(context)
       Map<String, Object> result = context.getResult()

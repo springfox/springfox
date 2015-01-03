@@ -1,11 +1,8 @@
 package com.mangofactory.swagger.readers.operation.parameter
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.springmvc.plugin.DocumentationContext
-import com.mangofactory.swagger.controllers.Defaults
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.mangofactory.swagger.scanners.RequestMappingContext
@@ -17,21 +14,16 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
-import spock.lang.Specification
-
-import javax.servlet.ServletContext
 
 import static com.mangofactory.schema.ResolvedTypes.*
 
-@Mixin([RequestMappingSupport,  SpringSwaggerConfigSupport, DocumentationContextSupport])
-class ParameterTypeReaderSpec extends Specification {
-  DocumentationContext context  = defaultContext(Mock(ServletContext))
-  Defaults defaultValues = defaults(Mock(ServletContext))
+@Mixin([RequestMappingSupport])
+class ParameterTypeReaderSpec extends DocumentationContextSpec {
 
   def "param type"() {
     given:
       HandlerMethod handlerMethod = Mock()
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo("somePath"), handlerMethod)
       MethodParameter methodParameter = Stub(MethodParameter)
       methodParameter.getParameterAnnotation(ApiParam.class) >> null
       methodParameter.getParameterAnnotations() >> [annotation]

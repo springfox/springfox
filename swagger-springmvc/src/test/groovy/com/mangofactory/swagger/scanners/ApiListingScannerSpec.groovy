@@ -1,35 +1,29 @@
 package com.mangofactory.swagger.scanners
 import com.mangofactory.service.model.ApiListing
-import com.mangofactory.springmvc.plugin.DocumentationContext
-import com.mangofactory.springmvc.plugin.DocumentationContextBuilder
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.core.ApiListingScanningContext
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.ApiDescriptionSupport
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
 import com.mangofactory.swagger.readers.ApiDescriptionReader
 import com.mangofactory.swagger.readers.ApiModelReader
 import com.mangofactory.swagger.readers.MediaTypeReader
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
-import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.ServletContext
 
 import static com.google.common.collect.Maps.*
-import static com.mangofactory.swagger.scanners.ApiListingScanner.longestCommonPath
+import static com.mangofactory.swagger.scanners.ApiListingScanner.*
 import static org.springframework.http.MediaType.*
 
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport, AuthSupport, ModelProviderForServiceSupport, ApiDescriptionSupport,
         SpringSwaggerConfigSupport])
-class ApiListingScannerSpec extends Specification {
-  def defaultValues
-  DocumentationContextBuilder contextBuilder
-  DocumentationContext context
+class ApiListingScannerSpec extends DocumentationContextSpec {
   MediaTypeReader mediaTypeReader
   ApiDescriptionReader apiDescriptionReader
   ApiModelReader apiModelReader
@@ -38,13 +32,12 @@ class ApiListingScannerSpec extends Specification {
 
   def setup() {
     defaultValues = defaults(Mock(ServletContext))
-    contextBuilder = new DocumentationContextBuilder(defaultValues).withHandlerMappings([])
     AuthorizationContext authorizationContext = AuthorizationContext.builder()
             .withAuthorizations(defaultAuth())
             .withIncludePatterns(['/anyPath.*'])
             .build()
 
-    context = new SwaggerSpringMvcPlugin()
+    plugin
             .authorizationContext(authorizationContext)
             .build(contextBuilder)
     mediaTypeReader = Stub(MediaTypeReader)
@@ -63,6 +56,8 @@ class ApiListingScannerSpec extends Specification {
                       ]
               )
 
+
+      def context = context()
       RequestMappingContext requestMappingContext = new RequestMappingContext(context, requestMappingInfo,
               dummyHandlerMethod("methodWithConcreteResponseBody"))
       ResourceGroup resourceGroup = new ResourceGroup("businesses")
@@ -89,6 +84,8 @@ class ApiListingScannerSpec extends Specification {
   def "should assign global authorizations"() {
     given:
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
+
+      def context = context()
       RequestMappingContext requestMappingContext = new RequestMappingContext(context, requestMappingInfo,
               dummyHandlerMethod("methodWithConcreteResponseBody"))
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()

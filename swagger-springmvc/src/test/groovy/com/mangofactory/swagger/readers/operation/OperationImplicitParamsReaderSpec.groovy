@@ -1,26 +1,18 @@
 package com.mangofactory.swagger.readers.operation
-
-import com.mangofactory.springmvc.plugin.DocumentationContext
-import com.mangofactory.swagger.controllers.Defaults
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader
 import com.mangofactory.swagger.readers.operation.parameter.ParameterDataTypeReader
 import com.mangofactory.swagger.readers.operation.parameter.ParameterTypeReader
 import com.mangofactory.swagger.scanners.RequestMappingContext
-import spock.lang.Specification
 
-import javax.servlet.ServletContext
-
-@Mixin([RequestMappingSupport,  SpringSwaggerConfigSupport, DocumentationContextSupport])
-class OperationImplicitParamsReaderSpec extends Specification {
-  Defaults defaultValues = defaults(Mock(ServletContext))
-  DocumentationContext context  = defaultContext(Mock(ServletContext))
+@Mixin([RequestMappingSupport])
+class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
 
   def "Should add implicit parameters"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
+              handlerMethod)
       OperationParameterReader operationParameterReader = new OperationParameterReader(defaultValues.typeResolver,
               defaultValues.alternateTypeProvider,
               new ParameterDataTypeReader(defaultValues.alternateTypeProvider),

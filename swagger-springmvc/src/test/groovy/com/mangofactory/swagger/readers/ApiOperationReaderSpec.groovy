@@ -1,14 +1,9 @@
 package com.mangofactory.swagger.readers
-
 import com.mangofactory.service.model.Operation
-import com.mangofactory.springmvc.plugin.DocumentationContextBuilder
 import com.mangofactory.swagger.authorization.AuthorizationContext
-import com.mangofactory.swagger.controllers.Defaults
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.AuthSupport
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
 import com.mangofactory.swagger.readers.operation.DefaultResponseMessageReader
 import com.mangofactory.swagger.readers.operation.OperationResponseClassReader
 import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader
@@ -18,29 +13,21 @@ import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
-import spock.lang.Specification
-
-import javax.servlet.ServletContext
 
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
-@Mixin([RequestMappingSupport, AuthSupport, SpringSwaggerConfigSupport, DocumentationContextSupport])
-class ApiOperationReaderSpec extends Specification {
-  Defaults defaultValues
-  SwaggerSpringMvcPlugin plugin
-  DocumentationContextBuilder contextBuilder
+@Mixin([RequestMappingSupport, AuthSupport])
+class ApiOperationReaderSpec extends DocumentationContextSpec {
   ApiOperationReader sut
 
   def setup() {
-    defaultValues = defaults(Mock(ServletContext))
-    contextBuilder = defaultContextBuilder(defaultValues)
     AuthorizationContext authorizationContext = AuthorizationContext.builder()
             .withAuthorizations(defaultAuth())
             .withRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
             .withIncludePatterns([".*"])
             .withRequestMethods(values())
             .build()
-    plugin = new SwaggerSpringMvcPlugin().authorizationContext(authorizationContext)
+    plugin.authorizationContext(authorizationContext)
     MediaTypeReader mediaTypeReader = new MediaTypeReader(defaultValues.typeResolver)
     OperationResponseClassReader operationClassReader = new OperationResponseClassReader(defaultValues.typeResolver,
             defaultValues.alternateTypeProvider)
@@ -65,7 +52,7 @@ class ApiOperationReaderSpec extends Specification {
 
       HandlerMethod handlerMethod = dummyHandlerMethod()
 
-      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder),
+      RequestMappingContext context = new RequestMappingContext(context(),
               requestMappingInfo,
               handlerMethod)
       context.put("requestMappingPattern", "/doesNotMatterForThisTest")
@@ -98,7 +85,7 @@ class ApiOperationReaderSpec extends Specification {
       )
 
       HandlerMethod handlerMethod = dummyHandlerMethod("methodThatIsHidden")
-      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo, handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo, handlerMethod)
       context.put("requestMappingPattern", "/doesNotMatterForThisTest") //TODO: Fix this
 
 

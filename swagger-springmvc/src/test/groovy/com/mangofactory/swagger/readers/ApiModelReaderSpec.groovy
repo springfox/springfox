@@ -1,46 +1,32 @@
 package com.mangofactory.swagger.readers
-
 import com.mangofactory.service.model.ApiDescription
 import com.mangofactory.service.model.Model
 import com.mangofactory.service.model.ModelProperty
 import com.mangofactory.service.model.Operation
-import com.mangofactory.springmvc.plugin.DocumentationContextBuilder
-import com.mangofactory.swagger.controllers.Defaults
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.controllers.BusinessService
 import com.mangofactory.swagger.dummy.controllers.PetService
 import com.mangofactory.swagger.dummy.models.FoobarDto
 import com.mangofactory.swagger.mixins.ApiOperationSupport
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.JsonSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.method.HandlerMethod
-import spock.lang.Specification
 
-import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletResponse
 
-@Mixin([RequestMappingSupport, ApiOperationSupport, JsonSupport, ModelProviderForServiceSupport,
-        DocumentationContextSupport, SpringSwaggerConfigSupport])
-class ApiModelReaderSpec extends Specification {
+@Mixin([RequestMappingSupport, ApiOperationSupport, JsonSupport, ModelProviderForServiceSupport])
+class ApiModelReaderSpec extends DocumentationContextSpec {
 
-  Defaults defaultValues
-  SwaggerSpringMvcPlugin plugin
-  DocumentationContextBuilder contextBuilder
   ApiModelReader sut
 
   def setup() {
-    defaultValues = defaults(Mock(ServletContext))
     sut = new ApiModelReader(modelProvider(), defaultValues.alternateTypeProvider,
             defaultValues.typeResolver)
-    contextBuilder = defaultContextBuilder(defaultValues)
-    plugin = new SwaggerSpringMvcPlugin()
   }
 
 
@@ -127,7 +113,7 @@ class ApiModelReaderSpec extends Specification {
   }
 
   def contextWithApiDescription(HandlerMethod handlerMethod, List<Operation> operationList = null) {
-    RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'), handlerMethod)
+    RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
     def scalaOpList = null == operationList ? [] : operationList
     ApiDescription description = new ApiDescription(
             "anyPath",
@@ -147,7 +133,7 @@ class ApiModelReaderSpec extends Specification {
               HttpServletResponse.class,
               DummyModels.AnnotatedBusinessModel.class
       )
-      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'),
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
               handlerMethod)
     when:
       sut.execute(context)
@@ -163,7 +149,7 @@ class ApiModelReaderSpec extends Specification {
   def "Generates the correct models when there is a Map object in the input parameter"() {
     given:
       HandlerMethod handlerMethod = handlerMethodIn(PetService, 'echo', Map)
-      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/echo'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/echo'), handlerMethod)
 
     when:
       sut.execute(context)
@@ -202,7 +188,7 @@ class ApiModelReaderSpec extends Specification {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSameAnnotatedModelInReturnAndRequestBodyParam',
               DummyModels.AnnotatedBusinessModel
       )
-      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
 
     when:
       sut.execute(context)
@@ -228,7 +214,7 @@ class ApiModelReaderSpec extends Specification {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
               DummyModels.ModelWithSerializeOnlyProperty
       )
-      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'),
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
               handlerMethod)
 
     when:
@@ -255,7 +241,7 @@ class ApiModelReaderSpec extends Specification {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
               DummyModels.ModelWithSerializeOnlyProperty
       )
-      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
     and:
       def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(), defaultValues.alternateTypeProvider,
               defaultValues.typeResolver)
@@ -280,7 +266,7 @@ class ApiModelReaderSpec extends Specification {
   def "Test to verify issue #283"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestFoobarDto', FoobarDto)
-      RequestMappingContext context = new RequestMappingContext(plugin.build(contextBuilder), requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
 
     when:
       sut.execute(context)
