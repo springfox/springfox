@@ -25,6 +25,7 @@ configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'sw
   apply plugin: "com.ofg.uptodate"
   apply plugin: 'maven'
   apply plugin: 'idea'
+  apply plugin: 'pmd'
 
   compileJava.options.encoding = 'UTF-8'
   sourceCompatibility = 1.6

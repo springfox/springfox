@@ -71,7 +71,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
     List<Operation> operations = newArrayList();
 
     Set<RequestMethod> requestMethods = requestMethodsRequestCondition.getMethods();
-    Set<RequestMethod> supportedMethods = (requestMethods == null || requestMethods.isEmpty())
+    Set<RequestMethod> supportedMethods = requestMethods == null || requestMethods.isEmpty()
             ? allRequestMethods
             : requestMethods;
 

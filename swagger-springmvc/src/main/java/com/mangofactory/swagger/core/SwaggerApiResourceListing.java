@@ -3,7 +3,6 @@ package com.mangofactory.swagger.core;
 import com.google.common.collect.Ordering;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
-import com.mangofactory.swagger.controllers.DefaultSwaggerController;
 import com.mangofactory.swagger.models.ModelProvider;
 import com.mangofactory.swagger.models.dto.ApiDescription;
 import com.mangofactory.swagger.models.dto.ApiInfo;
@@ -28,6 +27,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static com.google.common.base.Strings.*;
+import static com.mangofactory.swagger.controllers.DefaultSwaggerController.*;
 
 public class SwaggerApiResourceListing {
   private static final Logger log = LoggerFactory.getLogger(SwaggerApiResourceListing.class);
@@ -87,8 +89,7 @@ public class SwaggerApiResourceListing {
     log.info("Added a resource listing with ({}) api resources: ", apiListingReferences.size());
     for (ApiListingReference apiListingReference : apiListingReferences) {
       String path = apiListingReference.getDescription();
-      String prefix = (path != null && path.startsWith("http")) ? path : DefaultSwaggerController
-              .DOCUMENTATION_BASE_PATH;
+      String prefix = nullToEmpty(path).startsWith("http") ? path : DOCUMENTATION_BASE_PATH;
       log.info("  {} at location: {}{}", path, prefix, apiListingReference.getPath());
     }
 

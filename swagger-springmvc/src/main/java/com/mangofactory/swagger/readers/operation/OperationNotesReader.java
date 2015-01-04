@@ -12,7 +12,7 @@ public class OperationNotesReader implements RequestMappingReader {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     String notes = handlerMethod.getMethod().getName();
     ApiOperation methodAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
-    if ((null != methodAnnotation) && StringUtils.hasText(methodAnnotation.notes())) {
+    if (null != methodAnnotation && StringUtils.hasText(methodAnnotation.notes())) {
       notes = methodAnnotation.notes();
     }
     context.put("notes", notes);

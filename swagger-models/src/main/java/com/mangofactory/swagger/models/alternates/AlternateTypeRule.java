@@ -43,7 +43,7 @@ public class AlternateTypeRule {
    * @return the boolean
    */
   public boolean appliesTo(ResolvedType type) {
-    return (hasWildcards(original) && wildcardMatch(type, original)) || exactMatch(original, type);
+    return hasWildcards(original) && wildcardMatch(type, original) || exactMatch(original, type);
   }
 
 }

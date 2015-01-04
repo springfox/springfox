@@ -11,7 +11,7 @@ public class OperationHiddenReader implements RequestMappingReader {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     boolean isHidden = false;
     ApiOperation methodAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
-    if ((null != methodAnnotation)) {
+    if (null != methodAnnotation) {
       isHidden = methodAnnotation.hidden();
     }
     context.put("isHidden", isHidden);
