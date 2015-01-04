@@ -96,7 +96,7 @@ public class OperationParameterReader extends SwaggerParameterReader {
   }
 
   private boolean shouldIgnore(final ResolvedMethodParameter parameter, final Set<Class> ignorableParamTypes) {
-    if (null != ignorableParamTypes && !ignorableParamTypes.isEmpty()) {
+    if (!ignorableParamTypes.isEmpty()) {
 
       if (ignorableParamTypes.contains(parameter.getMethodParameter().getParameterType())) {
         return true;
