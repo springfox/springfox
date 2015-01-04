@@ -10,12 +10,6 @@ public class ApiKey extends AuthorizationType {
     this.passAs = passAs;
   }
 
-  public ApiKey(String keyname) {
-    super("apiKey");
-    this.keyname = keyname;
-    this.passAs = "header";
-  }
-
   @Override
   public String getName() {
     return keyname;

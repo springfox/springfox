@@ -1,6 +1,5 @@
 package com.mangofactory.swagger.core
-
-import org.springframework.web.util.UriUtils
+import com.google.common.base.Objects
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -34,5 +33,15 @@ class ControllerNamingUtilsSpec extends Specification {
     where:
       path << [null, '', "", "           "]
    }
+
+   def "decode illegal path should return path as-is"() {
+    when:
+      def decoded = ControllerNamingUtils.decode(path)
+    then:
+      Objects.equal(decoded, path)
+    where:
+      path << [null, '', ""]
+  }
+
 }
 

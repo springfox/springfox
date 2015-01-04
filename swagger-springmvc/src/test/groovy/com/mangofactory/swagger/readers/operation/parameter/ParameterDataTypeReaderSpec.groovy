@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.readers.operation.parameter
-
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.DocumentationContextSupport
@@ -13,12 +12,12 @@ import org.springframework.web.multipart.MultipartFile
 
 @Mixin([RequestMappingSupport, DocumentationContextSupport])
 class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
+  HandlerMethod handlerMethod = Stub(HandlerMethod)
+  MethodParameter methodParameter = Stub(MethodParameter)
+
    def "Parameter types"() {
     given:
-      HandlerMethod handlerMethod = Stub(HandlerMethod)
-
       RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo("somePath"), handlerMethod)
-      MethodParameter methodParameter = Stub(MethodParameter)
       ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter,
               defaultValues.typeResolver.resolve(paramType))
       methodParameter.getParameterType() >> paramType

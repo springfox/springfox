@@ -5,6 +5,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -79,7 +80,8 @@ public class HandlerMethodResolver {
     return asResolved(typeResolver, methodToResolve.getReturnType());
   }
 
-  private ResolvedMethod getResolvedMethod(final Method methodToResolve, Class<?> beanType) {
+  @VisibleForTesting
+  ResolvedMethod getResolvedMethod(final Method methodToResolve, Class<?> beanType) {
     ResolvedType enclosingType = typeResolver.resolve(beanType);
     MemberResolver resolver = new MemberResolver(typeResolver);
     resolver.setIncludeLangObject(false);
@@ -110,10 +112,8 @@ public class HandlerMethodResolver {
       } else {
         return byArgumentCount().max(covariantMethods);
       }
-    } else if (Iterables.size(filtered) == 1) {
-      return Iterables.getFirst(filtered, null);
     }
-    return null;
+    return Iterables.getFirst(filtered, null);
   }
 
   private static Ordering<ResolvedMethod> byArgumentCount() {
@@ -147,9 +147,12 @@ public class HandlerMethodResolver {
     };
   }
 
-  private boolean bothAreVoids(ResolvedType candidateMethodReturnValue, Type returnType) {
-    return Void.class == candidateMethodReturnValue.getErasedType()
-            && (Void.TYPE == returnType || Void.class == returnType);
+  @VisibleForTesting
+  boolean bothAreVoids(ResolvedType candidateMethodReturnValue, Type returnType) {
+    return (Void.class == candidateMethodReturnValue.getErasedType()
+            || Void.TYPE == candidateMethodReturnValue.getErasedType())
+            && (Void.TYPE == returnType
+              || Void.class == returnType);
   }
 
   private ResolvedType returnTypeOrVoid(ResolvedMethod input) {
@@ -160,34 +163,39 @@ public class HandlerMethodResolver {
     return returnType;
   }
 
-  private boolean contravariant(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
+  boolean contravariant(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
     return isSubClass(candidateMethodReturnValue, returnValueOnMethod)
             || isGenericTypeSubclass(candidateMethodReturnValue, returnValueOnMethod);
   }
 
-  private boolean isGenericTypeSubclass(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
+  @VisibleForTesting
+  boolean isGenericTypeSubclass(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
     return returnValueOnMethod instanceof ParameterizedType &&
             candidateMethodReturnValue.getErasedType()
                     .isAssignableFrom((Class<?>) ((ParameterizedType) returnValueOnMethod).getRawType());
   }
 
-  private boolean isSubClass(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
+  @VisibleForTesting
+  boolean isSubClass(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
     return returnValueOnMethod instanceof Class
             && candidateMethodReturnValue.getErasedType().isAssignableFrom((Class<?>) returnValueOnMethod);
   }
 
-  private boolean covariant(ResolvedType candidateMethodArgument, Type argumentOnMethod) {
+  @VisibleForTesting
+  boolean covariant(ResolvedType candidateMethodArgument, Type argumentOnMethod) {
     return isSuperClass(candidateMethodArgument, argumentOnMethod)
             || isGenericTypeSuperClass(candidateMethodArgument, argumentOnMethod);
   }
 
-  private boolean isGenericTypeSuperClass(ResolvedType candidateMethodArgument, Type argumentOnMethod) {
+  @VisibleForTesting
+  boolean isGenericTypeSuperClass(ResolvedType candidateMethodArgument, Type argumentOnMethod) {
     return argumentOnMethod instanceof ParameterizedType &&
             ((Class<?>) ((ParameterizedType) argumentOnMethod).getRawType())
                     .isAssignableFrom(candidateMethodArgument.getErasedType());
   }
 
-  private boolean isSuperClass(ResolvedType candidateMethodArgument, Type argumentOnMethod) {
+  @VisibleForTesting
+  boolean isSuperClass(ResolvedType candidateMethodArgument, Type argumentOnMethod) {
     return argumentOnMethod instanceof Class
             && ((Class<?>) argumentOnMethod).isAssignableFrom(candidateMethodArgument.getErasedType());
   }

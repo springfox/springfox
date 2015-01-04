@@ -54,8 +54,9 @@ class ParameterBuilder {
   private Parameter defaultParameter() {
     AllowableValues allowable = allowableValues(Optional.<String>absent(), field);
 
+    String name = isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName());
     return new com.mangofactory.service.model.builder.ParameterBuilder()
-            .name(isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()))
+            .name(name)
             .description(null).defaultValue(null)
             .required(Boolean.FALSE)
             .allowMultiple(Boolean.FALSE)
@@ -70,9 +71,9 @@ class ParameterBuilder {
   private Parameter fromApiParam(ApiParam apiParam) {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
-
+    String name = isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName());
     return new com.mangofactory.service.model.builder.ParameterBuilder()
-            .name(isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()))
+            .name(name)
             .description(apiParam.value())
             .defaultValue(apiParam.defaultValue())
             .required(apiParam.required())
@@ -87,8 +88,9 @@ class ParameterBuilder {
   private Parameter fromApiModelProperty(ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), field);
+    String name = isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName());
     return new com.mangofactory.service.model.builder.ParameterBuilder()
-            .name(isNullOrEmpty(parentName) ? field.getName() : String.format("%s.%s", parentName, field.getName()))
+            .name(name)
             .description(apiModelProperty.value())
             .defaultValue(null)
             .required(apiModelProperty.required())

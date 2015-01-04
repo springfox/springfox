@@ -2,11 +2,13 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.annotations.VisibleForTesting;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.service.model.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -19,12 +21,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.base.Strings.*;
+import static com.google.common.collect.Sets.*;
 import static com.mangofactory.schema.ResolvedTypes.*;
 import static com.mangofactory.schema.Types.*;
 import static java.lang.reflect.Modifier.*;
 
 class ModelAttributeParameterExpander {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ModelAttributeParameterExpander.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ModelAttributeParameterExpander.class);
   private AlternateTypeProvider alternateTypeProvider;
   private TypeResolver resolver = new TypeResolver();
 
@@ -37,22 +41,22 @@ class ModelAttributeParameterExpander {
 
     Set<String> beanPropNames = getBeanPropertyNames(paramType);
     List<Field> fields = getAllFields(paramType);
-    LOGGER.debug("Expanding parameter type: {}", paramType);
+    LOG.debug("Expanding parameter type: {}", paramType);
     for (Field field : fields) {
-      LOGGER.debug("Attempting to expanding field: {}", field);
+      LOG.debug("Attempting to expanding field: {}", field);
 
       if (isStatic(field.getModifiers()) || field.isSynthetic() || !beanPropNames.contains(field.getName())) {
-        LOGGER.debug("Skipping expansion of field: {}, not a valid bean property", field);
+        LOG.debug("Skipping expansion of field: {}, not a valid bean property", field);
         continue;
       }
       Class<?> resolvedType = getResolvedType(field);
       if (!typeBelongsToJavaPackage(resolvedType) && !field.getType().isEnum()) {
         if (!field.getType().equals(paramType)) {
-          LOGGER.debug("Expanding complex field: {} with type: {}", field, resolvedType);
-          expand(field.getName(), field.getType(), parameters);
+          LOG.debug("Expanding complex field: {} with type: {}", field, resolvedType);
+          expand(nestedParentName(parentName, field), field.getType(), parameters);
           continue;
         } else {
-          LOGGER.warn("Skipping expanding complex field: {} with type: {} as it is recursively defined", field,
+          LOG.warn("Skipping expanding complex field: {} with type: {} as it is recursively defined", field,
                   resolvedType);
         }
       }
@@ -62,7 +66,7 @@ class ModelAttributeParameterExpander {
       if (dataTypeName == null) {
         dataTypeName = resolvedType.getSimpleName();
       }
-      LOGGER.debug("Building parameter for field: {}, with type: ", field, resolvedType);
+      LOG.debug("Building parameter for field: {}, with type: ", field, resolvedType);
       parameters.add(new ParameterBuilder()
               .forField(field)
               .withDataTypeName(dataTypeName)
@@ -72,13 +76,20 @@ class ModelAttributeParameterExpander {
     }
   }
 
+  private String nestedParentName(String parentName, Field field) {
+    if (isNullOrEmpty(parentName)) {
+      return field.getName();
+    }
+    return String.format("%s.%s", parentName, field.getName());
+  }
+
   private Class<?> getResolvedType(Field field) {
     Class<?> type = field.getType();
     ResolvedType resolvedType = asResolved(resolver, type);
     ResolvedType alternativeType = alternateTypeProvider.alternateFor(resolvedType);
     Class<?> erasedType = alternativeType.getErasedType();
     if (type != erasedType) {
-      LOGGER.debug("Found alternative type [{}] for field: [{}-{}]", erasedType, field, type);
+      LOG.debug("Found alternative type [{}] for field: [{}-{}]", erasedType, field, type);
     }
     return erasedType;
   }
@@ -107,21 +118,26 @@ class ModelAttributeParameterExpander {
 
     try {
       Set<String> beanProps = new HashSet<String>();
-      PropertyDescriptor[] propDescriptors = Introspector.getBeanInfo(clazz).getPropertyDescriptors();
+      PropertyDescriptor[] propDescriptors = getBeanInfo(clazz).getPropertyDescriptors();
 
-      for (int i = 0; i < propDescriptors.length; i++) {
+      for (PropertyDescriptor propDescriptor : propDescriptors) {
 
-        if (propDescriptors[i].getReadMethod() != null && propDescriptors[i].getWriteMethod() != null) {
-          beanProps.add(propDescriptors[i].getName());
+        if (propDescriptor.getReadMethod() != null && propDescriptor.getWriteMethod() != null) {
+          beanProps.add(propDescriptor.getName());
         }
       }
 
       return beanProps;
 
     } catch (IntrospectionException e) {
-      throw new RuntimeException(new StringBuilder("Failed to get bean properties on ").append(clazz).toString(), e);
+      LOG.warn(String.format("Failed to get bean properties on (%s)", clazz), e);
     }
+    return newHashSet();
+  }
 
+  @VisibleForTesting
+  BeanInfo getBeanInfo(Class<?> clazz) throws IntrospectionException {
+    return Introspector.getBeanInfo(clazz);
   }
 
 }

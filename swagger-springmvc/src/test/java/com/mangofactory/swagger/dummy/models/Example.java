@@ -31,6 +31,9 @@ public class Example extends Parent implements Serializable {
   @ApiParam(value = "description of allCapsSet", required = false)
   private CustomAllCapsStringHashSet allCapsSet;
 
+  class InnerSynthetic {
+  }
+
   public Example(String foo, int bar, EnumType enumType, NestedType nestedType) {
     this.foo = foo;
     this.bar = bar;
