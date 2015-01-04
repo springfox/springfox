@@ -1,17 +1,16 @@
 ext {
   swaggerCore = "1.3.12"
   spring = "3.2.9.RELEASE"
-  scalaLib = "2.10.4"
   groovy = "2.3.9"
   spock = "0.7-groovy-2.0"
   guava = "15.0"
   springHateoas = "0.10.0.RELEASE"
   slf4j = "1.7.9"
-  mockito = "1.10.17"
+  mockito = "1.10.19"
   servlet = "2.5"
   guava = "15.0"
   classmate = "1.1.0"
-  jackson = '2.4.4'
+  jackson = '2.5.0'
   libs = [
 
           test          : [
@@ -20,7 +19,7 @@ ext {
                   "org.objenesis:objenesis:2.1",
                   "org.mockito:mockito-all:${mockito}",
                   "com.jayway.jsonpath:json-path:1.2.0",
-                  "org.slf4j:slf4j-simple:1.7.7",
+                  "org.slf4j:slf4j-simple:${slf4j}",
                   "org.yaml:snakeyaml:1.14",
                   "org.spockframework:spock-spring:${spock}",
                   "org.spockframework:spock-core:${spock}"
