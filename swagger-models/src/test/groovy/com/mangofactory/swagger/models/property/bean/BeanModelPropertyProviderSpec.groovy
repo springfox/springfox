@@ -25,12 +25,15 @@ class BeanModelPropertyProviderSpec extends Specification {
       def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver,
             new AlternateTypeProvider(), new ObjectMapperBeanPropertyNamingStrategy(mapper))
       beanModelPropertyProvider.objectMapper = mapper
-      def properties = beanModelPropertyProvider.propertiesForSerialization(resolvedType)
-      def propNames = properties.collect({it.name})
+      def serializationPropNames = beanModelPropertyProvider.propertiesForSerialization(resolvedType).collect({it.name})
+      def deSerializationPropNames = beanModelPropertyProvider.propertiesForDeserialization(resolvedType).collect({it
+              .name})
 
     expect:
-      propNames == ['name', 'age', 'category', 'customType']
+      serializationPropNames == ['name', 'age', 'category', 'customType']
+      deSerializationPropNames == ['name', 'age', 'category', 'customType']
 
 
   }
+
 }
