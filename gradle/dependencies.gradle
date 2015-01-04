@@ -3,12 +3,11 @@ ext {
   spring = "3.2.9.RELEASE"
   groovy = "2.3.9"
   spock = "0.7-groovy-2.0"
-  guava = "15.0"
+  guava = "18.0"
   springHateoas = "0.10.0.RELEASE"
   slf4j = "1.7.9"
   mockito = "1.10.19"
   servlet = "2.5"
-  guava = "15.0"
   classmate = "1.1.0"
   jackson = '2.5.0'
   libs = [
@@ -51,6 +50,5 @@ ext {
                   'joda-time:joda-time:2.6'
 
           ]
-
   ]
 }

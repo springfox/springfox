@@ -86,7 +86,7 @@ compile "com.mangofactory:swagger-springmvc:0.9.5-SNAPSHOT"
 - As of v0.9.4 all dependencies on __scala__ have been removed.
 - Spring 3.2.x or above
 - jackson 2.4.4
-- guava 15.0
+- guava 18.0
 
 ### Usage (Quick guide)
 This quick guide outlines how to get swagger-springmvc up and running with a default configuration.
