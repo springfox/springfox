@@ -12,6 +12,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 
 import static com.mangofactory.schema.Annotations.*;
 
+
 public class BeanModelProperty extends BaseModelProperty {
 
   private final ResolvedMethod method;
@@ -31,6 +32,10 @@ public class BeanModelProperty extends BaseModelProperty {
     this.typeResolver = typeResolver;
   }
 
+  public static boolean accessorMemberIs(ResolvedMember method, String methodName) {
+    return method.getRawMember().getName().equals(methodName);
+  }
+
   @Override
   protected ResolvedType realType() {
     if (isGetter) {
@@ -46,9 +51,5 @@ public class BeanModelProperty extends BaseModelProperty {
         return typeResolver.resolve(method.getArgumentType(0).getErasedType());
       }
     }
-  }
-
-  public static boolean accessorMemberIs(ResolvedMember method, String methodName) {
-    return method.getRawMember().getName().equals(methodName);
   }
 }

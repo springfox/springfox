@@ -20,7 +20,7 @@ public class OperationPositionReader implements RequestMappingReader {
       operationPosition = apiOperation.position();
     }
     context.put("position", operationPosition);
-    int next = max((origPosition + 1), operationPosition);
+    int next = max(origPosition + 1, operationPosition);
     context.put("currentCount", next);
     log.debug("Added operation at position: {}. Next position is: {}", operationPosition, next);
   }

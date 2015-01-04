@@ -32,7 +32,7 @@ public class OperationResponseClassReader implements RequestMappingReader {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     ApiOperation methodAnnotation = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), ApiOperation.class);
     ResolvedType returnType;
-    if ((null != methodAnnotation) && Void.class != methodAnnotation.response()) {
+    if (null != methodAnnotation && Void.class != methodAnnotation.response()) {
       log.debug("Overriding response class with annotated response class");
       returnType = typeResolver.resolve(methodAnnotation.response());
     } else {

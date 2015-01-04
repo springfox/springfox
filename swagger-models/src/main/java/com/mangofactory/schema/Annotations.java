@@ -1,6 +1,5 @@
 package com.mangofactory.schema;
 
-
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
@@ -31,7 +30,7 @@ public class Annotations {
               .or(tryGetFieldAnnotation(beanPropertyDefinition, annotationClass))
               .orNull();
   }
-
+  @SuppressWarnings("PMD")
   private static <A extends Annotation> Optional<A> tryGetGetterAnnotation(
           BeanPropertyDefinition  beanPropertyDefinition,
           Class<A> annotationClass) {
@@ -44,7 +43,7 @@ public class Annotations {
     }
     return Optional.absent();
   }
-
+  @SuppressWarnings("PMD")
   private static <A extends Annotation> Optional<A> tryGetSetterAnnotation(
           BeanPropertyDefinition beanPropertyDefinition, Class<A> annotationClass) {
     try {
@@ -55,7 +54,7 @@ public class Annotations {
     }
     return Optional.absent();
   }
-
+  @SuppressWarnings("PMD")
   private static <A extends Annotation> Optional<A> tryGetFieldAnnotation(
           BeanPropertyDefinition beanPropertyDefinition, Class<A> annotationClass) {
     try {

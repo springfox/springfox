@@ -72,6 +72,7 @@ configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'sw
   apply from: "$rootDir/gradle/publishing.gradle"
 
   apply from: "$rootDir/gradle/coverage.gradle"
+  apply from: "$rootDir/gradle/code-quality.gradle"
 
   repositories {
     jcenter()

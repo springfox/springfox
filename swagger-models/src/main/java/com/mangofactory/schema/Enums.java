@@ -41,7 +41,7 @@ public class Enums {
       }
     });
   }
-
+  @SuppressWarnings("PMD")
   private static Function<Method, String> evaluateJsonValue(final Object enumConstant) {
     return new Function<Method, String>() {
       @Override

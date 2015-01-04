@@ -61,12 +61,8 @@ public class SwaggerApiResourceListing {
     log.info("Added a resource listing with ({}) api resources: ", apiListingReferences.size());
     for (ApiListingReference apiListingReference : apiListingReferences) {
       String path = apiListingReference.getDescription();
-      String prefix;
-      if (nullToEmpty(path).startsWith("http")) {
-        prefix = path;
-      } else {
-        prefix = DOCUMENTATION_BASE_PATH;
-      }
+
+      String prefix = nullToEmpty(path).startsWith("http") ? path : DOCUMENTATION_BASE_PATH;
       log.info("  {} at location: {}{}", path, prefix, apiListingReference.getPath());
     }
     group.withResourceListing(resourceListing);
