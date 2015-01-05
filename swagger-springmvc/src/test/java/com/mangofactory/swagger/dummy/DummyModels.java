@@ -39,8 +39,7 @@ public class DummyModels {
 
   @ApiModel(value = "Swagger annotated model", description = "More descriptive model text")
   public class AnnotatedBusinessModel {
-    //TODO - @ApiModelProperty has no effect on members - only setters
-//        @ApiModelProperty(value = "The name of this business", required = true)
+//    @ApiModelProperty(value = "The name of this business", required = true)
     private String name;
     //        @ApiModelProperty(value = "Total number of current employees")
     private String numEmployees;

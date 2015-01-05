@@ -7,6 +7,8 @@ import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.service.model.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -27,13 +29,16 @@ import static com.mangofactory.schema.ResolvedTypes.*;
 import static com.mangofactory.schema.Types.*;
 import static java.lang.reflect.Modifier.*;
 
-class ModelAttributeParameterExpander {
+@Component
+public class ModelAttributeParameterExpander {
   private static final Logger LOG = LoggerFactory.getLogger(ModelAttributeParameterExpander.class);
-  private AlternateTypeProvider alternateTypeProvider;
-  private TypeResolver resolver = new TypeResolver();
+  private final AlternateTypeProvider alternateTypeProvider;
+  private final TypeResolver resolver;
 
-  public ModelAttributeParameterExpander(AlternateTypeProvider alternateTypeProvider) {
+  @Autowired
+  public ModelAttributeParameterExpander(AlternateTypeProvider alternateTypeProvider, TypeResolver resolver) {
     this.alternateTypeProvider = alternateTypeProvider;
+    this.resolver = resolver;
   }
 
   public void expand(final String parentName, final Class<?> paramType,

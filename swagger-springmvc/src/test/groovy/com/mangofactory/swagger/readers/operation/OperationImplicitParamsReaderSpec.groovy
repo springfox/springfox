@@ -1,6 +1,8 @@
 package com.mangofactory.swagger.readers.operation
+
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.readers.operation.parameter.ModelAttributeParameterExpander
 import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader
 import com.mangofactory.swagger.readers.operation.parameter.ParameterDataTypeReader
 import com.mangofactory.swagger.readers.operation.parameter.ParameterTypeReader
@@ -13,10 +15,12 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
     given:
       RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
               handlerMethod)
-      OperationParameterReader operationParameterReader = new OperationParameterReader(defaultValues.typeResolver,
-              defaultValues.alternateTypeProvider,
-              new ParameterDataTypeReader(defaultValues.alternateTypeProvider),
-              new ParameterTypeReader(defaultValues.alternateTypeProvider))
+      def alternateTypeProvider = defaultValues.alternateTypeProvider
+      def typeResolver = defaultValues.typeResolver
+      OperationParameterReader operationParameterReader = new OperationParameterReader(typeResolver,
+              new ParameterDataTypeReader(alternateTypeProvider),
+              new ParameterTypeReader(alternateTypeProvider),
+              new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver))
       OperationImplicitParametersReader operationImplicitParametersReader = new OperationImplicitParametersReader()
       OperationImplicitParameterReader operationImplicitParameterReader = new OperationImplicitParameterReader()
     when:

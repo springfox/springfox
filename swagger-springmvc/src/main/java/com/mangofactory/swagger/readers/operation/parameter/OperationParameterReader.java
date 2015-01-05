@@ -1,7 +1,6 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.service.model.AllowableValues;
 import com.mangofactory.service.model.Parameter;
 import com.mangofactory.swagger.core.CommandExecutor;
@@ -26,18 +25,19 @@ import static com.google.common.collect.Lists.*;
 @Component
 public class OperationParameterReader extends SwaggerParameterReader {
   private final TypeResolver typeResolver;
-  private final AlternateTypeProvider alternateTypeProvider;
   private final ParameterDataTypeReader parameterDataTypeReader;
   private final ParameterTypeReader parameterTypeReader;
+  private final ModelAttributeParameterExpander expander;
 
   @Autowired
-  public OperationParameterReader(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider,
-                                  ParameterDataTypeReader parameterDataTypeReader, ParameterTypeReader
-          parameterTypeReader) {
+  public OperationParameterReader(TypeResolver typeResolver,
+                                  ParameterDataTypeReader parameterDataTypeReader,
+                                  ParameterTypeReader parameterTypeReader,
+                                  ModelAttributeParameterExpander expander) {
     this.typeResolver = typeResolver;
-    this.alternateTypeProvider = alternateTypeProvider;
     this.parameterDataTypeReader = parameterDataTypeReader;
     this.parameterTypeReader = parameterTypeReader;
+    this.expander = expander;
   }
 
   @Override
@@ -58,7 +58,6 @@ public class OperationParameterReader extends SwaggerParameterReader {
     commandList.add(new ParameterNameReader());
     commandList.add(new ParameterRequiredReader());
 
-    ModelAttributeParameterExpander expander = new ModelAttributeParameterExpander(alternateTypeProvider);
     for (ResolvedMethodParameter methodParameter : methodParameters) {
 
       if (!shouldIgnore(methodParameter, context.getDocumentationContext().getIgnorableParameterTypes())) {

@@ -1,4 +1,6 @@
 package com.mangofactory.swagger.readers.operation.parameter
+
+import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.service.model.Parameter
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.DummyModels
@@ -26,6 +28,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   OperationParameterReader sut
   def setup() {
     def typeResolver = defaultValues.typeResolver
+    AlternateTypeProvider alternateTypeProvider = defaultValues.alternateTypeProvider
     plugin
             .ignoredParameterTypes(ServletRequest, ServletResponse, HttpServletRequest,
               HttpServletResponse, BindingResult, ServletContext,
@@ -34,10 +37,10 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
             .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
             .build(defaultContextBuilder(defaultValues))
 
-    sut = new OperationParameterReader(typeResolver, defaultValues
-            .alternateTypeProvider,
-            new ParameterDataTypeReader(defaultValues.alternateTypeProvider),
-            new ParameterTypeReader(defaultValues.alternateTypeProvider))
+    sut = new OperationParameterReader(typeResolver,
+            new ParameterDataTypeReader(alternateTypeProvider),
+            new ParameterTypeReader(alternateTypeProvider),
+            new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver))
   }
 
   def "Should ignore ignorables"() {

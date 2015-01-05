@@ -53,8 +53,7 @@ public class ModelContext {
 
   public boolean hasSeenBefore(ResolvedType resolvedType) {
     return seenTypes.contains(resolvedType)
-            || seenTypes.contains(asResolved(new TypeResolver(), resolvedType.getErasedType())) // DK TODO : fix
-            // alternate types
+            || seenTypes.contains(asResolved(new TypeResolver(), resolvedType.getErasedType()))
             || parentHasSeenBefore(resolvedType);
   }
 

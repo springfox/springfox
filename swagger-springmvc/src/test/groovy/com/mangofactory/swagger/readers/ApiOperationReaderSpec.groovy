@@ -6,6 +6,7 @@ import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.readers.operation.DefaultResponseMessageReader
 import com.mangofactory.swagger.readers.operation.OperationResponseClassReader
+import com.mangofactory.swagger.readers.operation.parameter.ModelAttributeParameterExpander
 import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader
 import com.mangofactory.swagger.readers.operation.parameter.ParameterDataTypeReader
 import com.mangofactory.swagger.readers.operation.parameter.ParameterTypeReader
@@ -29,14 +30,16 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
             .build()
     plugin.authorizationContext(authorizationContext)
     MediaTypeReader mediaTypeReader = new MediaTypeReader(defaultValues.typeResolver)
-    OperationResponseClassReader operationClassReader = new OperationResponseClassReader(defaultValues.typeResolver,
-            defaultValues.alternateTypeProvider)
-    OperationParameterReader operationParameterReader = new OperationParameterReader(defaultValues.typeResolver,
-            defaultValues.alternateTypeProvider,
-            new ParameterDataTypeReader(defaultValues.alternateTypeProvider),
-            new ParameterTypeReader(defaultValues.alternateTypeProvider))
-    DefaultResponseMessageReader defaultMessageReader = new DefaultResponseMessageReader(defaultValues.typeResolver,
-            defaultValues.alternateTypeProvider)
+    def alternateTypeProvider = defaultValues.alternateTypeProvider
+    def typeResolver = defaultValues.typeResolver
+    OperationResponseClassReader operationClassReader =
+            new OperationResponseClassReader(typeResolver, alternateTypeProvider)
+    OperationParameterReader operationParameterReader = new OperationParameterReader(typeResolver,
+            new ParameterDataTypeReader(alternateTypeProvider),
+            new ParameterTypeReader(alternateTypeProvider),
+            new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver))
+    DefaultResponseMessageReader defaultMessageReader =
+            new DefaultResponseMessageReader(typeResolver, alternateTypeProvider)
     sut = new ApiOperationReader(mediaTypeReader, operationClassReader, operationParameterReader, defaultMessageReader)
   }
 

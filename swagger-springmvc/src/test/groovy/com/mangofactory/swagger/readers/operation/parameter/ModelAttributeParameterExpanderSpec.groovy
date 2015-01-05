@@ -12,18 +12,21 @@ import java.beans.IntrospectionException
 import static com.mangofactory.schema.alternates.Alternates.*
 
 class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
+  List<Parameter> parameters = []
+  AlternateTypeProvider alternateTypeProvider
+  TypeResolver typeResolver
+  ModelAttributeParameterExpander sut
+
+  def setup() {
+    typeResolver = defaultValues.typeResolver
+    alternateTypeProvider = defaultValues.alternateTypeProvider
+    alternateTypeProvider.addRule(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
+    sut = new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver)
+  }
 
   def "should expand an parameters"() {
-    setup:
-      List<Parameter> parameters = []
-
-      AlternateTypeProvider alternateTypeProvider = defaultValues.alternateTypeProvider
-      TypeResolver typeResolver = defaultValues.typeResolver
-      alternateTypeProvider.addRule(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-
-      ModelAttributeParameterExpander expander = new ModelAttributeParameterExpander(alternateTypeProvider)
     when:
-      expander.expand("", Example, parameters);
+      sut.expand("", Example, parameters);
     then:
       parameters.size() == 8
       parameters.find { it.name == 'parentBeanProperty' }
@@ -37,16 +40,8 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   }
 
   def "should expand an parameters when parent name is not empty"() {
-    setup:
-      List<Parameter> parameters = []
-
-      AlternateTypeProvider alternateTypeProvider = defaultValues.alternateTypeProvider
-      TypeResolver typeResolver = defaultValues.typeResolver
-      alternateTypeProvider.addRule(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-
-      ModelAttributeParameterExpander expander = new ModelAttributeParameterExpander(alternateTypeProvider)
     when:
-      expander.expand("parent", Example, parameters);
+      sut.expand("parent", Example, parameters);
     then:
       parameters.size() == 8
       parameters.find { it.name == 'parent.parentBeanProperty' }
@@ -60,14 +55,9 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   }
 
   def "Should return empty set when there is an exception"() {
-    setup:
-      List<Parameter> parameters = []
-
-      AlternateTypeProvider alternateTypeProvider = defaultValues.alternateTypeProvider
-      TypeResolver typeResolver = defaultValues.typeResolver
-      alternateTypeProvider.addRule(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-
-      ModelAttributeParameterExpander expander = new ModelAttributeParameterExpander(alternateTypeProvider) {
+    given:
+      ModelAttributeParameterExpander expander =
+              new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver) {
         @Override
         def BeanInfo getBeanInfo(Class<?> clazz) throws IntrospectionException {
           throw new IntrospectionException("Fail");
