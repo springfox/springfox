@@ -20,39 +20,39 @@ class SimpleTypeSpec extends Specification {
       asInput.getName() == "SimpleType"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.getType().getAbsoluteType() == type
+      modelProperty.typeName() == type
       modelProperty.getQualifiedType() == qualifiedType
       modelProperty.getItems() == null
 
       asReturn.getName() == "SimpleType"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.getType().getAbsoluteType() == type
+      retModelProperty.typeName() == type
       retModelProperty.getQualifiedType() == qualifiedType
       retModelProperty.getItems() == null
 
     where:
       property          | type      | qualifiedType
       "aString"         | "string"  | "java.lang.String"
-      "aByte"           | "string"  | "byte"
+      "aByte"           | "byte"    | "byte"
       "aBoolean"        | "boolean" | "boolean"
-      "aShort"          | "integer" | "int"
-      "anInt"           | "integer" | "int"
-      "aLong"           | "integer" | "long"
-      "aFloat"          | "number"  | "float"
-      "aDouble"         | "number"  | "double"
-      "anObjectByte"    | "string"  | "java.lang.Byte"
+      "aShort"          | "int"     | "int"
+      "anInt"           | "int"     | "int"
+      "aLong"           | "long"    | "long"
+      "aFloat"          | "float"   | "float"
+      "aDouble"         | "double"  | "double"
+      "anObjectByte"    | "byte"    | "java.lang.Byte"
       "anObjectBoolean" | "boolean" | "java.lang.Boolean"
-      "anObjectShort"   | "integer" | "java.lang.Short"
-      "anObjectInt"     | "integer" | "java.lang.Integer"
-      "anObjectLong"    | "integer" | "java.lang.Long"
-      "anObjectFloat"   | "number"  | "java.lang.Float"
-      "anObjectDouble"  | "number"  | "java.lang.Double"
+      "anObjectShort"   | "int"     | "java.lang.Short"
+      "anObjectInt"     | "int"     | "java.lang.Integer"
+      "anObjectLong"    | "long"    | "java.lang.Long"
+      "anObjectFloat"   | "float"   | "java.lang.Float"
+      "anObjectDouble"  | "double"  | "java.lang.Double"
       "currency"        | "string"  | "java.util.Currency"
   }
 
   @Ignore
-  def "type with constructor all properties are infered"() {
+  def "type with constructor all properties are inferred"() {
     given:
       def provider = defaultModelProvider()
       Model asInput = provider.modelFor(ModelContext.inputParam(typeWithConstructor())).get()
@@ -85,7 +85,7 @@ class SimpleTypeSpec extends Specification {
       asInput.getName() == "TypeWithJsonProperty"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.getType().getAbsoluteType() == type
+      modelProperty.typeName() == type
       modelProperty.getQualifiedType() == qualifiedType
       modelProperty.getItems() == null
       Types.isBaseType(type)
@@ -93,7 +93,7 @@ class SimpleTypeSpec extends Specification {
       asReturn.getName() == "TypeWithJsonProperty"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.getType().getAbsoluteType() == type
+      retModelProperty.typeName() == type
       retModelProperty.getQualifiedType() == qualifiedType
       retModelProperty.getItems() == null
       Types.isBaseType(type)

@@ -3,7 +3,7 @@ package com.mangofactory.service.model;
 import static org.springframework.util.StringUtils.*;
 
 public class Parameter {
-  private final SwaggerDataType parameterType;
+  private final String parameterType;
   private final String name;
   private final String description;
   private final String defaultValue;
@@ -23,14 +23,7 @@ public class Parameter {
     this.paramType = paramType;
     this.paramAccess = paramAccess;
     this.name = maybeOverrideName(name);
-    this.parameterType = new DataType(dataType);
-  }
-
-  private String maybeOverrideName(String aName) {
-    if (hasText(this.paramType) && paramType.equals("body")) {
-      return paramType;
-    }
-    return aName;
+    this.parameterType = dataType;
   }
 
   public String getName() {
@@ -65,7 +58,14 @@ public class Parameter {
     return paramAccess;
   }
 
-  public SwaggerDataType getParameterType() {
+  public String getParameterType() {
     return parameterType;
+  }
+
+  private String maybeOverrideName(String aName) {
+    if (hasText(this.paramType) && paramType.equals("body")) {
+      return paramType;
+    }
+    return aName;
   }
 }

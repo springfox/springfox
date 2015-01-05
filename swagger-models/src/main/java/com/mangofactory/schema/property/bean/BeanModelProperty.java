@@ -4,13 +4,8 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMember;
 import com.fasterxml.classmate.members.ResolvedMethod;
-import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.base.Optional;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.property.BaseModelProperty;
-import com.wordnik.swagger.annotations.ApiModelProperty;
-
-import static com.mangofactory.schema.Annotations.*;
 
 
 public class BeanModelProperty extends BaseModelProperty {
@@ -20,12 +15,11 @@ public class BeanModelProperty extends BaseModelProperty {
   private TypeResolver typeResolver;
 
 
-  public BeanModelProperty(String propertyName, BeanPropertyDefinition beanPropertyDefinition, ResolvedMethod method,
+  public BeanModelProperty(String propertyName, ResolvedMethod method,
                            boolean isGetter, TypeResolver typeResolver,
                            AlternateTypeProvider alternateTypeProvider) {
 
-    super(propertyName, alternateTypeProvider,
-            Optional.fromNullable(findPropertyAnnotation(beanPropertyDefinition, ApiModelProperty.class)));
+    super(propertyName, alternateTypeProvider);
 
     this.method = method;
     this.isGetter = isGetter;

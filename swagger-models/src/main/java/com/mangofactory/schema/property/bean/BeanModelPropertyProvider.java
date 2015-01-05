@@ -13,11 +13,16 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
+import com.mangofactory.documentation.plugins.ModelPropertyContext;
+import com.mangofactory.documentation.plugins.PluginsManager;
 import com.mangofactory.schema.BeanPropertyNamingStrategy;
+import com.mangofactory.schema.ModelContext;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.property.BeanPropertyDefinitions;
-import com.mangofactory.schema.property.ModelProperty;
 import com.mangofactory.schema.property.provider.ModelPropertiesProvider;
+import com.mangofactory.service.model.ModelProperty;
+import com.mangofactory.service.model.ModelRef;
+import com.mangofactory.service.model.builder.ModelPropertyBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +34,8 @@ import java.util.Map;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.schema.Annotations.*;
+import static com.mangofactory.schema.Collections.*;
+import static com.mangofactory.schema.ResolvedTypes.*;
 import static com.mangofactory.schema.property.BeanPropertyDefinitions.*;
 import static com.mangofactory.schema.property.bean.Accessors.*;
 import static com.mangofactory.schema.property.bean.BeanModelProperty.*;
@@ -42,99 +49,71 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
   private ObjectMapper objectMapper;
   private final TypeResolver typeResolver;
   private final AlternateTypeProvider alternateTypeProvider;
+  private final PluginsManager pluginsManager;
 
   @Autowired
   public BeanModelPropertyProvider(
           AccessorsProvider accessors,
           TypeResolver typeResolver,
           AlternateTypeProvider alternateTypeProvider,
-          BeanPropertyNamingStrategy namingStrategy) {
+          BeanPropertyNamingStrategy namingStrategy,
+          PluginsManager pluginsManager) {
 
     this.typeResolver = typeResolver;
     this.alternateTypeProvider = alternateTypeProvider;
     this.accessors = accessors;
     this.namingStrategy = namingStrategy;
-  }
-
-
-  @Override
-  public Iterable<? extends ModelProperty> propertiesForSerialization(ResolvedType resolvedType) {
-    List<ModelProperty> serializationCandidates = newArrayList();
-    SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
-    BeanDescription beanDescription = serializationConfig.introspect(TypeFactory.defaultInstance()
-            .constructType(resolvedType.getErasedType()));
-    Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
-            BeanPropertyDefinitions.beanPropertyByInternalName());
-    for (ResolvedMethod childProperty : accessors.in(resolvedType)) {
-      if (propertyLookup.containsKey(propertyName(childProperty.getRawMember()))) {
-        BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getRawMember()));
-        Optional<BeanPropertyDefinition> jacksonProperty
-                = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
-        AnnotatedMember member = propertyDefinition.getPrimaryMember();
-        if (accessorMemberIs(childProperty, methodName(member))) {
-          serializationCandidates
-                  .addAll(newArrayList(addSerializationCandidates(member, childProperty, jacksonProperty)));
-        }
-      }
-    }
-    return serializationCandidates;
+    this.pluginsManager = pluginsManager;
   }
 
   @VisibleForTesting
-  Iterable<? extends ModelProperty> addSerializationCandidates(AnnotatedMember member,
+  List<com.mangofactory.service.model.ModelProperty> addCandidateProperties(AnnotatedMember member,
       ResolvedMethod childProperty,
-      Optional<BeanPropertyDefinition> jacksonProperty) {
+      Optional<BeanPropertyDefinition> jacksonProperty,
+      ModelContext givenContext) {
 
     if (member instanceof AnnotatedMethod && memberIsUnwrapped(member)) {
-      Iterable<? extends ModelProperty> properties;
       if (isGetter(((AnnotatedMethod)member).getMember())) {
-        properties = propertiesForSerialization(childProperty.getReturnType());
+        return propertiesFor(childProperty.getReturnType(), givenContext);
       } else {
-        properties = propertiesForSerialization(childProperty.getArgumentType(0));
+        return propertiesFor(childProperty.getArgumentType(0), givenContext);
       }
-      return properties;
     } else {
-      return newArrayList(beanModelProperty(childProperty, jacksonProperty, true));
+      return newArrayList(beanModelProperty(childProperty, jacksonProperty, givenContext));
     }
   }
 
-  @VisibleForTesting
-  Iterable<? extends ModelProperty> addDeserializationCandidates(AnnotatedMember member,
-      ResolvedMethod childProperty,
-      Optional<BeanPropertyDefinition> jacksonProperty) {
-
-    if (member instanceof AnnotatedMethod && memberIsUnwrapped(member)) {
-      Iterable<? extends ModelProperty> properties;
-      if (isGetter(((AnnotatedMethod)member).getMember())) {
-        properties = propertiesForDeserialization(childProperty.getReturnType());
-      } else {
-        properties = propertiesForDeserialization(childProperty.getArgumentType(0));
-      }
-      return properties;
+  private BeanDescription beanDescription(ResolvedType type, ModelContext context) {
+    if (context.isReturnType()) {
+      SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
+      return serializationConfig.introspect(TypeFactory.defaultInstance()
+              .constructType(type.getErasedType()));
     } else {
-      return newArrayList(beanModelProperty(childProperty, jacksonProperty, true));
+      DeserializationConfig serializationConfig = objectMapper.getDeserializationConfig();
+      return serializationConfig.introspect(TypeFactory.defaultInstance()
+              .constructType(type.getErasedType()));
     }
   }
 
   @Override
-  public Iterable<? extends ModelProperty> propertiesForDeserialization(ResolvedType resolvedType) {
-    List<ModelProperty> serializationCandidates = newArrayList();
-    DeserializationConfig serializationConfig = objectMapper.getDeserializationConfig();
-    BeanDescription beanDescription = serializationConfig.introspect(TypeFactory.defaultInstance()
-            .constructType(resolvedType.getErasedType()));
+  public List<com.mangofactory.service.model.ModelProperty> propertiesFor(ResolvedType type, ModelContext
+          givenContext) {
+    List<com.mangofactory.service.model.ModelProperty> serializationCandidates = newArrayList();
+    BeanDescription beanDescription = beanDescription(type, givenContext);
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
             BeanPropertyDefinitions.beanPropertyByInternalName());
-    for (ResolvedMethod childProperty : accessors.in(resolvedType)) {
+    for (ResolvedMethod childProperty : accessors.in(type)) {
 
-      if (propertyLookup.containsKey(propertyName(childProperty.getRawMember()))) {
-        BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getRawMember()));
+      String propertyName = propertyName(childProperty.getRawMember());
+      if (propertyLookup.containsKey(propertyName)) {
+        BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName);
         Optional<BeanPropertyDefinition> jacksonProperty
                 = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         try {
           AnnotatedMember member = propertyDefinition.getPrimaryMember();
           if (accessorMemberIs(childProperty, methodName(member))) {
             serializationCandidates
-                    .addAll(newArrayList(addDeserializationCandidates(member, childProperty, jacksonProperty)));
+                    .addAll(newArrayList(addCandidateProperties(member, childProperty, jacksonProperty, givenContext)));
           }
         } catch (Exception e) {
           LOG.warn(e.getMessage());
@@ -158,14 +137,34 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
   }
 
 
-  private BeanModelProperty beanModelProperty(ResolvedMethod childProperty, Optional<BeanPropertyDefinition>
-          jacksonProperty, boolean forSerialization) {
+  private ModelProperty beanModelProperty(ResolvedMethod childProperty, Optional<BeanPropertyDefinition>
+          jacksonProperty, ModelContext modelContext) {
 
     BeanPropertyDefinition beanPropertyDefinition = jacksonProperty.get();
-    String propertyName = name(beanPropertyDefinition, forSerialization, namingStrategy);
-    return new BeanModelProperty(propertyName, beanPropertyDefinition, childProperty,
+    String propertyName = name(beanPropertyDefinition, modelContext.isReturnType(), namingStrategy);
+    BeanModelProperty beanModelProperty = new BeanModelProperty(propertyName, childProperty,
             isGetter(childProperty.getRawMember()),
             typeResolver, alternateTypeProvider);
+    ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
+            .name(beanModelProperty.getName())
+            .type(beanModelProperty.getType())
+            .qualifiedType(beanModelProperty.qualifiedTypeName())
+            .position(beanModelProperty.position())
+            .required(beanModelProperty.isRequired())
+            .description(beanModelProperty.propertyDescription())
+            .allowableValues(beanModelProperty.allowableValues())
+            .items(itemModelRef(beanModelProperty.getType()));
+    return pluginsManager.enrichProperty(
+            new ModelPropertyContext(propertyBuilder, beanPropertyDefinition, modelContext.getDocumentationType()));
   }
 
+  private ModelRef itemModelRef(ResolvedType type) {
+    if (!isContainerType(type)) {
+      return null;
+    }
+    ResolvedType collectionElementType = collectionElementType(type);
+    String elementTypeName = typeName(collectionElementType);
+
+    return new ModelRef(elementTypeName);
+  }
 }

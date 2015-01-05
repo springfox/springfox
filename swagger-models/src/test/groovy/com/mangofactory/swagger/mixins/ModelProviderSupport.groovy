@@ -2,6 +2,9 @@ package com.mangofactory.swagger.mixins
 
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.mangofactory.documentation.plugins.DocumentationType
+import com.mangofactory.documentation.plugins.ModelPropertyEnricher
+import com.mangofactory.documentation.plugins.PluginsManager
 import com.mangofactory.schema.DefaultModelProvider
 import com.mangofactory.schema.ModelDependencyProvider
 import com.mangofactory.schema.ModelProvider
@@ -15,11 +18,23 @@ import com.mangofactory.schema.property.constructor.ConstructorModelPropertyProv
 import com.mangofactory.schema.property.field.FieldModelPropertyProvider
 import com.mangofactory.schema.property.field.FieldProvider
 import com.mangofactory.schema.property.provider.DefaultModelPropertiesProvider
+import com.mangofactory.swagger.plugins.SwaggerAnnotationPropertyEnricher
 import org.joda.time.LocalDate
 import org.springframework.http.ResponseEntity
+import org.springframework.plugin.core.OrderAwarePluginRegistry
+import org.springframework.plugin.core.PluginRegistry
+
+import static com.google.common.collect.Lists.newArrayList
 
 @SuppressWarnings("GrMethodMayBeStatic")
 class ModelProviderSupport {
+
+  def pluginsManager() {
+    PluginRegistry<ModelPropertyEnricher, DocumentationType> registry =
+            OrderAwarePluginRegistry.create(newArrayList(new SwaggerAnnotationPropertyEnricher()))
+    new PluginsManager(registry)
+  }
+
   ModelProvider providerThatSubstitutesLocalDateWithString() {
     TypeResolver typeResolver = new TypeResolver()
     AlternateTypeProvider alternateTypeProvider = new AlternateTypeProvider()
@@ -41,13 +56,14 @@ class ModelProviderSupport {
 
     def fields = new FieldProvider(typeResolver)
 
+    def pluginsManager = pluginsManager()
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy(objectMapper)
 
     def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver,
-            alternateTypeProvider, namingStrategy)
-    def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, alternateTypeProvider, namingStrategy)
+            alternateTypeProvider, namingStrategy, pluginsManager)
+    def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, alternateTypeProvider, namingStrategy, pluginsManager)
     def constructorModelPropertyProvider =
-            new ConstructorModelPropertyProvider(fields, alternateTypeProvider, namingStrategy)
+            new ConstructorModelPropertyProvider(fields, alternateTypeProvider, namingStrategy, pluginsManager)
 
     def modelPropertiesProvider = new DefaultModelPropertiesProvider(beanModelPropertyProvider,
             fieldModelPropertyProvider, constructorModelPropertyProvider)
@@ -70,14 +86,15 @@ class ModelProviderSupport {
     def fields = new FieldProvider(typeResolver)
     def alternateTypeProvider = new AlternateTypeProvider()
 
+    def pluginsManager = pluginsManager()
     def objectMapper = new ObjectMapper()
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy(objectMapper);
 
     def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver,
-            alternateTypeProvider, namingStrategy)
-    def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, alternateTypeProvider, namingStrategy)
+            alternateTypeProvider, namingStrategy, pluginsManager)
+    def fieldModelPropertyProvider = new FieldModelPropertyProvider(fields, alternateTypeProvider, namingStrategy, pluginsManager)
     def constructorModelPropertyProvider =
-            new ConstructorModelPropertyProvider(fields, alternateTypeProvider, namingStrategy)
+            new ConstructorModelPropertyProvider(fields, alternateTypeProvider, namingStrategy, pluginsManager)
 
     def modelPropertiesProvider = new DefaultModelPropertiesProvider(beanModelPropertyProvider,
             fieldModelPropertyProvider, constructorModelPropertyProvider)

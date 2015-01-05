@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
-public class ModelPropertyDto {
+public class  ModelPropertyDto {
   @JsonProperty
   @JsonUnwrapped
   private SwaggerDataType type;
@@ -20,13 +20,16 @@ public class ModelPropertyDto {
   private AllowableValues allowableValues;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private ModelRef items;
+  private DataType items;
+  @JsonIgnore
+  private String name;
 
   public ModelPropertyDto() {
   }
 
-  public ModelPropertyDto(String type, String qualifiedType, int position, Boolean required, String description,
-                          AllowableValues allowableValues, ModelRef items) {
+  public ModelPropertyDto(String name, String type, String qualifiedType, int position, Boolean required, String
+          description, AllowableValues allowableValues, DataType items) {
+    this.name = name;
     this.type = new DataType(type);
     this.qualifiedType = qualifiedType;
     this.position = position; //TODO Suspect unused
@@ -80,12 +83,20 @@ public class ModelPropertyDto {
     this.allowableValues = allowableValues;
   }
 
-  public ModelRef getItems() {
+  public DataType getItems() {
     return items;
   }
 
-  public void setItems(ModelRef items) {
+  public void setItems(DataType items) {
     this.items = items;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public void setRequired(Boolean required) {

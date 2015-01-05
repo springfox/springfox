@@ -2,6 +2,7 @@ package com.mangofactory.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.mangofactory.documentation.plugins.DocumentationType;
 
 import java.lang.reflect.Type;
 import java.util.Set;
@@ -14,6 +15,7 @@ public class ModelContext {
   private final Type type;
   private final boolean returnType;
   private Set<ResolvedType> seenTypes = newHashSet();
+  private DocumentationType documentationType;
 
   ModelContext(Type type, boolean returnType) {
     this.parentContext = null;
@@ -55,6 +57,10 @@ public class ModelContext {
     return seenTypes.contains(resolvedType)
             || seenTypes.contains(asResolved(new TypeResolver(), resolvedType.getErasedType()))
             || parentHasSeenBefore(resolvedType);
+  }
+
+  public DocumentationType getDocumentationType() {
+    return documentationType;
   }
 
   private boolean parentHasSeenBefore(ResolvedType resolvedType) {

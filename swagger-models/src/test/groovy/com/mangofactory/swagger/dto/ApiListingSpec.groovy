@@ -20,7 +20,7 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
     apiListing.models =
             ['someModel':
                      new ModelDto('id', 'name', 'qtype',
-                             ['aprop': new ModelPropertyDto('ptype', 'qtype', 0, false, 'pdesc', null, null)]
+                             ['aprop': new ModelPropertyDto("aProp", 'ptype', 'qtype', 0, false, 'pdesc', null, null)]
                              , 'desc', null, null, null)
             ]
     apiListing.description = 'description'

@@ -1,22 +1,13 @@
 package com.mangofactory.service.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-public class ModelRef implements SwaggerDataType {
-  private final SwaggerDataType type;
-
+public class ModelRef {
+  private final String type;
 
   public ModelRef(String type) {
-    this.type = new DataType(type);
+    this.type = type;
   }
 
-  @Override
-  public String getAbsoluteType() {
-    return type.getAbsoluteType();
-  }
-
-  @JsonIgnore
-  public SwaggerDataType getType() {
+  public String getType() {
     return type;
   }
 }

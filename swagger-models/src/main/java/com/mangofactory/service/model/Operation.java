@@ -14,7 +14,7 @@ public class Operation {
   private final String summary;
   private final String notes;
   private final String responseClass;
-  private final SwaggerDataType dataType;
+  private final String dataType;
   private final String nickname;
   private final int position;
   private final List<String> produces;
@@ -34,7 +34,7 @@ public class Operation {
     this.summary = summary;
     this.notes = notes;
     this.responseClass = responseClass;
-    this.dataType = new DataType(responseClass);
+    this.dataType = responseClass;
     this.nickname = nickname;
     this.position = position;
     this.produces = produces;
@@ -68,7 +68,7 @@ public class Operation {
     };
   }
 
-  public SwaggerDataType getDataType() {
+  public String getDataType() {
     return dataType;
   }
 

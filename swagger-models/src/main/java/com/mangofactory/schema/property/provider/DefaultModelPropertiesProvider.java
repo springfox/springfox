@@ -2,13 +2,16 @@ package com.mangofactory.schema.property.provider;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Iterables;
-import com.mangofactory.schema.property.ModelProperty;
+import com.mangofactory.schema.ModelContext;
 import com.mangofactory.schema.property.bean.BeanModelPropertyProvider;
 import com.mangofactory.schema.property.constructor.ConstructorModelPropertyProvider;
 import com.mangofactory.schema.property.field.FieldModelPropertyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+import static com.google.common.collect.Lists.*;
 
 @Component(value = "default")
 public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
@@ -27,17 +30,13 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
   }
 
   @Override
-  public Iterable<? extends ModelProperty> propertiesForSerialization(ResolvedType type) {
-    return Iterables.concat(fieldModelPropertyProvider.propertiesForSerialization(type),
-            beanModelPropertyProvider.propertiesForSerialization(type),
-            constructorModelPropertyProvider.propertiesForSerialization(type));
-  }
-
-  @Override
-  public Iterable<? extends ModelProperty> propertiesForDeserialization(ResolvedType type) {
-    return Iterables.concat(fieldModelPropertyProvider.propertiesForDeserialization(type),
-            beanModelPropertyProvider.propertiesForDeserialization(type),
-            constructorModelPropertyProvider.propertiesForDeserialization(type));
+  public List<com.mangofactory.service.model.ModelProperty> propertiesFor(ResolvedType type, ModelContext
+          givenContext) {
+    List<com.mangofactory.service.model.ModelProperty> concat
+            = newArrayList(fieldModelPropertyProvider.propertiesFor(type, givenContext));
+    concat.addAll(beanModelPropertyProvider.propertiesFor(type, givenContext));
+    concat.addAll(constructorModelPropertyProvider.propertiesFor(type, givenContext));
+    return concat;
   }
 
   @Override

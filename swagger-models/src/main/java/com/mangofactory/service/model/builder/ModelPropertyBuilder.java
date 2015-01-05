@@ -1,19 +1,27 @@
 package com.mangofactory.service.model.builder;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.mangofactory.service.model.AllowableListValues;
 import com.mangofactory.service.model.AllowableValues;
-import com.mangofactory.service.model.ModelRef;
 import com.mangofactory.service.model.ModelProperty;
+import com.mangofactory.service.model.ModelRef;
 
 public class ModelPropertyBuilder {
-  private String type;
+  private ResolvedType type;
   private String qualifiedType;
   private int position;
   private Boolean required;
   private String description;
   private AllowableValues allowableValues;
   private ModelRef items;
+  private String name;
 
-  public ModelPropertyBuilder type(String type) {
+  public ModelPropertyBuilder name(String name) {
+    this.name = name;
+    return this;
+  }
+
+  public ModelPropertyBuilder type(ResolvedType type) {
     this.type = type;
     return this;
   }
@@ -39,8 +47,21 @@ public class ModelPropertyBuilder {
   }
 
   public ModelPropertyBuilder allowableValues(AllowableValues allowableValues) {
-    this.allowableValues = allowableValues;
+    //Preference to inferred allowable values over list values via ApiModelProperty
+    if (this.allowableValues == null && !allowableValuesIsEmpty(allowableValues)) {
+      this.allowableValues = allowableValues;
+    }
     return this;
+  }
+
+  private boolean allowableValuesIsEmpty(AllowableValues values) {
+    if (values != null) {
+      if (values instanceof AllowableListValues) {
+        return ((AllowableListValues) values).getValues().isEmpty();
+      }
+      return true;
+    }
+    return false;
   }
 
   public ModelPropertyBuilder items(ModelRef items) {
@@ -49,6 +70,6 @@ public class ModelPropertyBuilder {
   }
 
   public ModelProperty build() {
-    return new ModelProperty(type, qualifiedType, position, required, description, allowableValues, items);
+    return new ModelProperty(name, type, qualifiedType, position, required, description, allowableValues, items);
   }
 }

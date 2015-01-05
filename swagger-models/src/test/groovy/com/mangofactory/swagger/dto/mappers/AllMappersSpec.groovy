@@ -8,14 +8,9 @@ import com.mangofactory.service.model.Authorization
 import com.mangofactory.service.model.AuthorizationCodeGrant
 import com.mangofactory.service.model.AuthorizationScope
 import com.mangofactory.service.model.BasicAuth
-import com.mangofactory.service.model.ContainerDataType
 import com.mangofactory.service.model.ImplicitGrant
 import com.mangofactory.service.model.LoginEndpoint
-import com.mangofactory.service.model.ModelRef
 import com.mangofactory.service.model.OAuth
-import com.mangofactory.service.model.PrimitiveDataType
-import com.mangofactory.service.model.PrimitiveFormatDataType
-import com.mangofactory.service.model.ReferenceDataType
 import com.mangofactory.service.model.ResourceListing
 import com.mangofactory.service.model.TokenEndpoint
 import com.mangofactory.service.model.TokenRequestEndpoint
@@ -52,17 +47,6 @@ public class AllMappersSpec extends Specification {
       mapped == null
     where:
       typeToTest << [AllowableListValues, AllowableRangeValues]
-  }
-
-  def "All DataTypeMapper null sources are mapped to null targets"() {
-    given:
-      DataTypeMapper mapper = dataTypeMapper()
-    when:
-      def mapped = mapper."toSwagger$typeToTest.simpleName"(null)
-    then:
-      mapped == null
-    where:
-      typeToTest << [PrimitiveDataType, PrimitiveFormatDataType, ModelRef, ReferenceDataType, ContainerDataType]
   }
 
   def "All ServiceModelToSwaggerMapper null sources are mapped to null targets"() {

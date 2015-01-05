@@ -1,18 +1,15 @@
 package com.mangofactory.schema
-
+import com.mangofactory.service.model.Model
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.mangofactory.service.model.Model
 import spock.lang.Specification
-import spock.lang.Unroll
 
-import static com.google.common.base.Strings.isNullOrEmpty
-import static com.mangofactory.schema.ModelContext.inputParam
-import static com.mangofactory.schema.ModelContext.returnValue
+import static com.google.common.base.Strings.*
+import static com.mangofactory.schema.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport])
 class GenericTypeSpec extends Specification {
-  @Unroll
+
   def "Generic property on a generic types is inferred correctly"() {
     given:
       def provider = defaultModelProvider()
@@ -23,14 +20,14 @@ class GenericTypeSpec extends Specification {
       asInput.getName() == expectedModelName(modelNamePart)
       asInput.getProperties().containsKey("genericField")
       def modelProperty = asInput.getProperties().get("genericField")
-      modelProperty.getType().dataType.reference == propertyType
+      ResolvedTypes.typeName(modelProperty.getType()) == propertyType
       modelProperty.getQualifiedType() == qualifiedType
       (modelProperty.getItems() == null) == (!"List".equals(propertyType) && !"Array".equals(propertyType))
 
       asReturn.getName() == expectedModelName(modelNamePart)
       asReturn.getProperties().containsKey("genericField")
       def retModelProperty = asReturn.getProperties().get("genericField")
-      retModelProperty.getType().dataType.reference == propertyType
+      ResolvedTypes.typeName(retModelProperty.getType()) == propertyType
       retModelProperty.getQualifiedType() == qualifiedType
       (retModelProperty.getItems() == null) == (!"List".equals(propertyType) && !"Array".equals(propertyType))
 
@@ -46,8 +43,6 @@ class GenericTypeSpec extends Specification {
       genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
   }
 
-
-  @Unroll
   def "Generic properties are inferred correctly even when they are not participating in the type bindings"() {
     given:
       def provider = defaultModelProvider()
@@ -57,13 +52,13 @@ class GenericTypeSpec extends Specification {
     expect:
       asInput.getProperties().containsKey("strings")
       def modelProperty = asInput.getProperties().get("strings")
-      modelProperty.getType().dataType.reference == propertyType
-//    modelProperty.qualifiedType() == qualifiedType DK TODO: Fix this AK - I think its not even required
+      ResolvedTypes.typeName(modelProperty.getType()) == propertyType
+//      modelProperty.qualifiedType == qualifiedType
 
       asReturn.getProperties().containsKey("strings")
       def retModelProperty = asReturn.getProperties().get("strings")
-      retModelProperty.getType().dataType.reference == propertyType
-//    retModelProperty.qualifiedType() ==qualifiedType DK TODO: Fix this AK - I think its not even required
+      ResolvedTypes.typeName(retModelProperty.getType()) == propertyType
+//      retModelProperty.qualifiedType == qualifiedType //Not working as expected in classmate
 
     where:
       modelType                      | propertyType | qualifiedType

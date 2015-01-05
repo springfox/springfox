@@ -1,7 +1,11 @@
 package com.mangofactory.service.model;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.mangofactory.schema.ResolvedTypes;
+
 public class ModelProperty {
-  private final SwaggerDataType type;
+  private final String name;
+  private final ResolvedType type;
   private final String qualifiedType;
   private final int position;
   private final Boolean required;
@@ -10,9 +14,10 @@ public class ModelProperty {
 
   private final ModelRef items;
 
-  public ModelProperty(String type, String qualifiedType, int position, Boolean required, String description,
+  public ModelProperty(String name, ResolvedType type, String qualifiedType, int position, Boolean required, String description,
                        AllowableValues allowableValues, ModelRef items) {
-    this.type = new DataType(type);
+    this.name = name;
+    this.type = type;
     this.qualifiedType = qualifiedType;
     this.position = position; //TODO Suspect unused
     this.required = required;
@@ -21,7 +26,14 @@ public class ModelProperty {
     this.items = items;
   }
 
-  public SwaggerDataType getType() {
+  public String getName() {
+    return name;
+  }
+
+  public String typeName() {
+    return ResolvedTypes.typeName(getType());
+  }
+  public ResolvedType getType() {
     return type;
   }
 

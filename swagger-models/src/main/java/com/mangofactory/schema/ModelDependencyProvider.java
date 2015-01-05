@@ -5,7 +5,6 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
-import com.mangofactory.schema.property.ModelProperty;
 import com.mangofactory.schema.property.provider.ModelPropertiesProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -91,7 +90,7 @@ public class ModelDependencyProvider {
     }
     modelContext.seen(resolvedType);
     List<ResolvedType> properties = newArrayList();
-    for (ModelProperty property : propertiesFor(modelContext, resolvedType)) {
+    for (com.mangofactory.service.model.ModelProperty property : propertiesFor(modelContext, resolvedType)) {
       if (Types.typeNameFor(property.getType().getErasedType()) != null) {
         continue;
       }
@@ -114,12 +113,8 @@ public class ModelDependencyProvider {
     return properties;
   }
 
-  private Iterable<? extends ModelProperty> propertiesFor(ModelContext modelContext, ResolvedType resolvedType) {
-    if (modelContext.isReturnType()) {
-      return propertiesProvider.propertiesForSerialization(resolvedType);
-    } else {
-      return propertiesProvider.propertiesForDeserialization(resolvedType);
-    }
+  private List<com.mangofactory.service.model.ModelProperty> propertiesFor(ModelContext modelContext, ResolvedType resolvedType) {
+    return propertiesProvider.propertiesFor(resolvedType, modelContext);
   }
 
 

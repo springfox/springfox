@@ -4,6 +4,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.schema.GenericTypeNamingStrategy;
 import com.mangofactory.schema.ResolvedTypes;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
@@ -18,7 +19,6 @@ import com.mangofactory.service.model.builder.ApiInfoBuilder;
 import com.mangofactory.springmvc.plugins.DocumentationContext;
 import com.mangofactory.springmvc.plugins.DocumentationContextBuilder;
 import com.mangofactory.springmvc.plugins.DocumentationPlugin;
-import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.controllers.Defaults;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
@@ -444,7 +444,7 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
   }
 
   private void buildScannerContext(final Defaults defaults) {
-    mergedResponseMessages = newHashMap();
+    mergedResponseMessages = newTreeMap();
     if (this.applyDefaultResponseMessages) {
       mergedResponseMessages.putAll(defaults.defaultResponseMessages());
     }

@@ -1,4 +1,5 @@
 package com.mangofactory.swagger.dto.mappers
+import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.service.model.AllowableListValues
 import com.mangofactory.service.model.ApiListingReference
 import com.mangofactory.service.model.ModelRef
@@ -17,6 +18,7 @@ import com.mangofactory.swagger.mixins.MapperSupport
 import spock.lang.Specification
 
 import static com.google.common.collect.Sets.*
+import static com.mangofactory.schema.ResolvedTypes.*
 
 @Mixin(MapperSupport)
 class ServiceModelToSwaggerMapperSpec extends Specification {
@@ -87,7 +89,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                                       .position(1)
                                       .qualifiedType("qualified.Test")
                                       .required(true)
-                                      .type("Test")
+                                      .type(asResolved(new TypeResolver(), String))
                                       .build()
                             ])
                             .build()])
@@ -117,7 +119,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mappedOperation.parameters.first().name == builtOperation.parameters.first().name
       mappedOperation.position == builtOperation.position
       mappedOperation.notes == builtOperation.notes
-      mappedOperation.dataType.absoluteType == builtOperation.dataType.absoluteType
+      mappedOperation.dataType.absoluteType == "string"
       mappedOperation.deprecated == builtOperation.deprecated
       mappedOperation.protocol.first() == builtOperation.protocol.first()
       mappedOperation.responseClass == builtOperation.responseClass

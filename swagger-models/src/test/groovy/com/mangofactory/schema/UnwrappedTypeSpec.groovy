@@ -21,7 +21,7 @@ class UnwrappedTypeSpec extends Specification {
       asInput.getProperties().size() == 1
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.getType().dataType.type == type
+      modelProperty.typeName() == type
       modelProperty.getQualifiedType() == qualifiedType
       modelProperty.getItems() == null
       Types.isBaseType(type)
@@ -30,7 +30,7 @@ class UnwrappedTypeSpec extends Specification {
       asReturn.getProperties().size() == 1
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.getType().getAbsoluteType() == type
+      retModelProperty.typeName() == type
       retModelProperty.getQualifiedType() == qualifiedType
       retModelProperty.getItems() == null
       Types.isBaseType(type)

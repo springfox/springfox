@@ -18,8 +18,8 @@ class FieldModelPropertySpec extends Specification {
       def sut = new FieldModelProperty(fieldName, field, new AlternateTypeProvider())
 
     expect:
-      sut.propertyDescription() == description
-      sut.required == isRequired
+      sut.propertyDescription() == null //TODO: Added test
+      !sut.required
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       if (allowableValues != null) {

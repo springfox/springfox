@@ -5,8 +5,6 @@ import com.fasterxml.classmate.members.ResolvedField;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.property.BaseModelProperty;
 
-import static com.mangofactory.schema.Annotations.*;
-
 public class FieldModelProperty extends BaseModelProperty {
 
   private final ResolvedField childField;
@@ -15,7 +13,7 @@ public class FieldModelProperty extends BaseModelProperty {
       ResolvedField childField,
       AlternateTypeProvider alternateTypeProvider) {
 
-    super(fieldName, alternateTypeProvider, findApiModePropertyAnnotation(childField.getRawMember()));
+    super(fieldName, alternateTypeProvider);
     this.childField = childField;
   }
 

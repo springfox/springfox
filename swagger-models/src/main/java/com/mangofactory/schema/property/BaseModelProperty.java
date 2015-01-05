@@ -5,23 +5,17 @@ import com.google.common.base.Optional;
 import com.mangofactory.schema.ModelContext;
 import com.mangofactory.schema.ResolvedTypes;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
-import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.mangofactory.service.model.AllowableListValues;
 import com.mangofactory.service.model.AllowableValues;
 
 import static com.mangofactory.schema.ResolvedTypes.*;
-import static com.mangofactory.schema.property.ApiModelProperties.*;
 
 public abstract class BaseModelProperty implements ModelProperty {
 
-  private final Optional<ApiModelProperty> apiModelProperty;
   private final String name;
   private final AlternateTypeProvider alternateTypeProvider;
 
-  public BaseModelProperty(String name, AlternateTypeProvider alternateTypeProvider,
-                           Optional<ApiModelProperty> apiModelProperty) {
+  public BaseModelProperty(String name, AlternateTypeProvider alternateTypeProvider) {
     this.name = name;
-    this.apiModelProperty = apiModelProperty;
     this.alternateTypeProvider = alternateTypeProvider;
   }
 
@@ -53,39 +47,26 @@ public abstract class BaseModelProperty implements ModelProperty {
   @Override
   public AllowableValues allowableValues() {
     Optional<AllowableValues> allowableValues = Optional.fromNullable(ResolvedTypes.allowableValues(getType()));
-    Optional<AllowableListValues> listValues = apiModelProperty.transform(toAllowableList());
     //Preference to inferred allowable values over list values via ApiModelProperty
     if (allowableValues.isPresent()) {
       return allowableValues.get();
     }
-    if (allowableValuesIsEmpty(listValues)) {
-      return null;
-    }
-    return listValues.orNull();
-  }
-
-  private boolean allowableValuesIsEmpty(Optional<AllowableListValues> listValues) {
-    return !listValues.isPresent() || listValues.get().getValues().size() == 0;
+    return null;
   }
 
   @Override
   public boolean isRequired() {
-    return apiModelProperty.transform(toIsRequired()).or(false);
+    return false;
   }
 
 
   @Override
   public String propertyDescription() {
-    String description = getApiModelProperty().transform(toDescription()).orNull();
-    return description;
-  }
-
-  protected Optional<ApiModelProperty> getApiModelProperty() {
-    return apiModelProperty;
+    return null;
   }
 
   @Override
   public int position() {
-    return apiModelProperty.transform(toPosition()).or(0);
+    return 0;
   }
 }

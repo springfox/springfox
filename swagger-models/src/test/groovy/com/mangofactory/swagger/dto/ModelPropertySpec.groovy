@@ -1,13 +1,13 @@
 package com.mangofactory.swagger.dto
 
 class ModelPropertySpec extends InternalJsonSerializationSpec {
-  final ModelPropertyDto modelProperty = new ModelPropertyDto('atype'
+  final ModelPropertyDto modelProperty = new ModelPropertyDto("aName",'atype'
           , 'com.qual'
           , 1
           , true
           , 'decs'
           , null
-          , new ModelRef('mtype'))
+          , new DataType('mtype'))
 
   def "should serialize"() {
     expect:
