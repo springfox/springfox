@@ -1,4 +1,4 @@
-package com.mangofactory.springmvc.plugin;
+package com.mangofactory.springmvc.plugins;
 
 import com.google.common.collect.Ordering;
 import com.mangofactory.service.model.ApiDescription;

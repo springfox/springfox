@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.readers.operation.parameter
 
 import com.google.common.base.Optional
-import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.springmvc.plugins.DocumentationContext
 import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport

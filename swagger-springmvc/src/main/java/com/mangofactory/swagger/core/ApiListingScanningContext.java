@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.core;
 
-import com.mangofactory.springmvc.plugin.DocumentationContext;
+import com.mangofactory.springmvc.plugins.DocumentationContext;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.mangofactory.swagger.scanners.ResourceGroup;
 

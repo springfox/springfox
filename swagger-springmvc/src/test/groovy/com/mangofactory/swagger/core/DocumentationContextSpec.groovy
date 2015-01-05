@@ -1,5 +1,5 @@
 package com.mangofactory.swagger.core
-import com.mangofactory.springmvc.plugin.DocumentationContextBuilder
+import com.mangofactory.springmvc.plugins.DocumentationContextBuilder
 import com.mangofactory.swagger.controllers.Defaults
 import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport

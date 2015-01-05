@@ -1,5 +1,5 @@
 package com.mangofactory.swagger.mixins
-import com.mangofactory.springmvc.plugin.DocumentationContextBuilder
+import com.mangofactory.springmvc.plugins.DocumentationContextBuilder
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
 
 @Mixin(SpringSwaggerConfigSupport)

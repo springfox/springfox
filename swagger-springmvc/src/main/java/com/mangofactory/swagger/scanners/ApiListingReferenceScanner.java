@@ -3,7 +3,7 @@ package com.mangofactory.swagger.scanners;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimaps;
 import com.mangofactory.service.model.ApiListingReference;
-import com.mangofactory.springmvc.plugin.DocumentationContext;
+import com.mangofactory.springmvc.plugins.DocumentationContext;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
 import com.mangofactory.swagger.core.ResourceGroupingStrategy;
 import com.mangofactory.swagger.paths.SwaggerPathProvider;

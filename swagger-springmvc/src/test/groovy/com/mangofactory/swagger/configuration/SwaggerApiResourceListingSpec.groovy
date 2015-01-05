@@ -4,7 +4,7 @@ import com.mangofactory.service.model.ApiKey
 import com.mangofactory.service.model.ApiListingReference
 import com.mangofactory.service.model.Group
 import com.mangofactory.service.model.ResourceListing
-import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.springmvc.plugins.DocumentationContext
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.mixins.RequestMappingSupport

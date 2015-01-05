@@ -5,7 +5,7 @@ import com.mangofactory.service.model.Group;
 import com.mangofactory.service.model.ResourceListing;
 import com.mangofactory.service.model.builder.GroupBuilder;
 import com.mangofactory.service.model.builder.ResourceListingBuilder;
-import com.mangofactory.springmvc.plugin.DocumentationContext;
+import com.mangofactory.springmvc.plugins.DocumentationContext;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanResult;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
 import com.mangofactory.swagger.scanners.ApiListingScanner;

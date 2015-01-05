@@ -1,6 +1,10 @@
-package com.mangofactory.springmvc.plugin
+package com.mangofactory.springmvc.plugins
 
 import com.mangofactory.service.model.Group
+import com.mangofactory.springmvc.plugins.DocumentationContext
+import com.mangofactory.springmvc.plugins.DocumentationPlugin
+import com.mangofactory.springmvc.plugins.DocumentationPluginsBootstrapper
+import com.mangofactory.springmvc.plugins.DocumentationPluginsManager
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
@@ -15,7 +19,7 @@ import javax.servlet.ServletContext
 class DocumentationPluginsBootstrapperSpec extends Specification {
   ApplicationContext applicationContext = Mock()
   ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(applicationContext)
-  PluginsManager pluginManager = Mock()
+  DocumentationPluginsManager pluginManager = Mock()
   DocumentationContext context = Mock(DocumentationContext)
   Group group = Mock(Group)
   SwaggerApiResourceListing resourceListing = Mock(SwaggerApiResourceListing)

@@ -3,8 +3,8 @@ package com.mangofactory.swagger.plugin
 import com.mangofactory.service.model.ApiInfo
 import com.mangofactory.service.model.AuthorizationType
 import com.mangofactory.service.model.ResponseMessage
-import com.mangofactory.springmvc.plugin.DocumentationContext
-import com.mangofactory.springmvc.plugin.DocumentationContextBuilder
+import com.mangofactory.springmvc.plugins.DocumentationContext
+import com.mangofactory.springmvc.plugins.DocumentationContextBuilder
 import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.controllers.Defaults

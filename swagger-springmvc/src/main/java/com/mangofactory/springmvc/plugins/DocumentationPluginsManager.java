@@ -1,5 +1,6 @@
-package com.mangofactory.springmvc.plugin;
+package com.mangofactory.springmvc.plugins;
 
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class PluginsManager {
+public class DocumentationPluginsManager {
   @Autowired
   @Qualifier("documentationPluginRegistry")
   private PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins;

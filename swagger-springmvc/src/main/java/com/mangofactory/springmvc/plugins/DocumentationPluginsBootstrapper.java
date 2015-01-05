@@ -1,5 +1,6 @@
-package com.mangofactory.springmvc.plugin;
+package com.mangofactory.springmvc.plugins;
 
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.swagger.controllers.Defaults;
 import com.mangofactory.swagger.core.SwaggerApiResourceListing;
 import com.mangofactory.swagger.core.SwaggerCache;
@@ -24,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Component
 public class DocumentationPluginsBootstrapper implements ApplicationListener<ContextRefreshedEvent> {
   private static final Logger log = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
-  private final PluginsManager pluginsManager;
+  private final DocumentationPluginsManager documentationPluginsManager;
   private final SwaggerCache scanned;
   private final SwaggerApiResourceListing resourceListing;
   private final List<RequestMappingHandlerMapping> handlerMappings;
@@ -33,12 +34,12 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
 
 
   @Autowired
-  public DocumentationPluginsBootstrapper(PluginsManager pluginsManager,
+  public DocumentationPluginsBootstrapper(DocumentationPluginsManager documentationPluginsManager,
                                           List<RequestMappingHandlerMapping> handlerMappings,
                                           SwaggerCache scanned,
                                           SwaggerApiResourceListing resourceListing,
                                           Defaults defaults) {
-    this.pluginsManager = pluginsManager;
+    this.documentationPluginsManager = documentationPluginsManager;
     this.handlerMappings = handlerMappings;
     this.scanned = scanned;
     this.resourceListing = resourceListing;
@@ -50,7 +51,7 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
     if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
       DocumentationType swagger = new DocumentationType("swagger", "1.2");
-      List<DocumentationPlugin> plugins = pluginsManager.getDocumentationPluginsFor(swagger);
+      List<DocumentationPlugin> plugins = documentationPluginsManager.getDocumentationPluginsFor(swagger);
       log.info("Found custom SwaggerSpringMvcPlugins");
 
       DocumentationContextBuilder contextBuilder = new DocumentationContextBuilder(defaults)

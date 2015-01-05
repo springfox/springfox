@@ -3,7 +3,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.service.model.AuthorizationType
 import com.mangofactory.service.model.Group
 import com.mangofactory.service.model.builder.GroupBuilder
-import com.mangofactory.springmvc.plugin.DocumentationContextBuilder
+import com.mangofactory.springmvc.plugins.DocumentationContextBuilder
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.core.SwaggerApiResourceListing
 import com.mangofactory.swagger.core.SwaggerCache

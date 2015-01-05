@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.scanners;
 
 import com.mangofactory.service.model.Model;
-import com.mangofactory.springmvc.plugin.DocumentationContext;
+import com.mangofactory.springmvc.plugins.DocumentationContext;
 import com.mangofactory.swagger.core.CommandContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;

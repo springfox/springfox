@@ -15,10 +15,10 @@ import com.mangofactory.service.model.ApiListingReference;
 import com.mangofactory.service.model.AuthorizationType;
 import com.mangofactory.service.model.ResponseMessage;
 import com.mangofactory.service.model.builder.ApiInfoBuilder;
-import com.mangofactory.springmvc.plugin.DocumentationContext;
-import com.mangofactory.springmvc.plugin.DocumentationContextBuilder;
-import com.mangofactory.springmvc.plugin.DocumentationPlugin;
-import com.mangofactory.springmvc.plugin.DocumentationType;
+import com.mangofactory.springmvc.plugins.DocumentationContext;
+import com.mangofactory.springmvc.plugins.DocumentationContextBuilder;
+import com.mangofactory.springmvc.plugins.DocumentationPlugin;
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.controllers.Defaults;
 import com.mangofactory.swagger.core.RequestMappingEvaluator;
@@ -340,7 +340,7 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
    * @param resourceGroupingStrategy
    * @return this SwaggerSpringMvcPlugin
    * @see com.mangofactory.swagger.scanners.ApiListingReferenceScanner#scan(
-   *  com.mangofactory.springmvc.plugin.DocumentationContext)
+   *com.mangofactory.springmvc.plugins.DocumentationContext)
    */
   public SwaggerSpringMvcPlugin resourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
     this.resourceGroupingStrategy = resourceGroupingStrategy;
@@ -394,7 +394,7 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
    * NOTE: Calling this method more than once has no effect.
    *
    * @return this SwaggerSpringMvcPlugin
-   * @see com.mangofactory.springmvc.plugin.DocumentationPluginsBootstrapper
+   * @see com.mangofactory.springmvc.plugins.DocumentationPluginsBootstrapper
    */
   public DocumentationContext build(DocumentationContextBuilder builder) {
     if (initialized.compareAndSet(false, true)) {

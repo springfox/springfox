@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.readers.operation.parameter
 
-import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.springmvc.plugins.DocumentationContext
 import com.mangofactory.swagger.dummy.DummyClass
 import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport

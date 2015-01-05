@@ -2,7 +2,7 @@ package com.mangofactory.swagger.readers.operation
 
 import com.mangofactory.service.model.Authorization
 import com.mangofactory.service.model.AuthorizationScope
-import com.mangofactory.springmvc.plugin.DocumentationContext
+import com.mangofactory.springmvc.plugins.DocumentationContext
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.DocumentationContextSupport
