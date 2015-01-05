@@ -142,7 +142,7 @@ This config class must then be defined in your xml application context.
 
 ```java
 
-@Configuration
+//@Configuration
 @EnableSwagger //Loads the spring beans required by the framework
 public class MySwaggerConfig {
 
