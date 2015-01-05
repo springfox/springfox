@@ -35,10 +35,11 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
 
   @Autowired
   public DocumentationPluginsBootstrapper(DocumentationPluginsManager documentationPluginsManager,
-                                          List<RequestMappingHandlerMapping> handlerMappings,
-                                          SwaggerCache scanned,
-                                          SwaggerApiResourceListing resourceListing,
-                                          Defaults defaults) {
+      List<RequestMappingHandlerMapping> handlerMappings,
+      SwaggerCache scanned,
+      SwaggerApiResourceListing resourceListing,
+      Defaults defaults) {
+
     this.documentationPluginsManager = documentationPluginsManager;
     this.handlerMappings = handlerMappings;
     this.scanned = scanned;
@@ -50,7 +51,8 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
   public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
     if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
-      DocumentationType swagger = new DocumentationType("swagger", "1.2");
+      DocumentationType swagger = new DocumentationType("swagger", "1.2"); //DK TODO: Need to figure out how to get this
+      // from the @EnableXXXX annotations
       List<DocumentationPlugin> plugins = documentationPluginsManager.getDocumentationPluginsFor(swagger);
       log.info("Found custom SwaggerSpringMvcPlugins");
 
