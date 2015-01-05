@@ -81,6 +81,10 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
   private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
   private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
 
+  public SwaggerSpringMvcPlugin() {
+
+  }
+
   /**
    * Sets the api's meta information as included in the json ResourceListing response.
    *

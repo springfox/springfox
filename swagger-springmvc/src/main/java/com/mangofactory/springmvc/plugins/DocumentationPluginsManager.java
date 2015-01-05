@@ -18,12 +18,12 @@ public class DocumentationPluginsManager {
   public List<DocumentationPlugin> getDocumentationPluginsFor(DocumentationType type) {
     List<DocumentationPlugin> plugins = documentationPlugins.getPluginsFor(type);
     if (plugins.isEmpty()) {
-      plugins.add(defaultDocumentationPluginFor(type));
+      plugins.add(defaultDocumentationPlugin());
     }
     return plugins;
   }
 
-  private DocumentationPlugin defaultDocumentationPluginFor(DocumentationType type) {
+  private DocumentationPlugin defaultDocumentationPlugin() {
     return new SwaggerSpringMvcPlugin();
   }
 }
