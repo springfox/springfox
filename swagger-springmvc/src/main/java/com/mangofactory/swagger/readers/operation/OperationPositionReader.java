@@ -15,7 +15,7 @@ public class OperationPositionReader implements RequestMappingReader {
   public void execute(RequestMappingContext context) {
     int origPosition = (Integer) context.get("currentCount");
     Integer operationPosition = origPosition;
-    ApiOperation apiOperation = context.getApiOperationAnnotation();
+    ApiOperation apiOperation = context.getHandlerMethod().getMethodAnnotation(ApiOperation.class);
     if (null != apiOperation && apiOperation.position() > 0) {
       operationPosition = apiOperation.position();
     }

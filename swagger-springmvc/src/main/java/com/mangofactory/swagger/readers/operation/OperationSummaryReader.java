@@ -9,7 +9,7 @@ public class OperationSummaryReader implements RequestMappingReader {
   @Override
   public void execute(RequestMappingContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    ApiOperation apiOperationAnnotation = context.getApiOperationAnnotation();
+    ApiOperation apiOperationAnnotation = context.getHandlerMethod().getMethodAnnotation(ApiOperation.class);
 
     String summary = handlerMethod.getMethod().getName();
     if (null != apiOperationAnnotation && StringUtils.hasText(apiOperationAnnotation.value())) {

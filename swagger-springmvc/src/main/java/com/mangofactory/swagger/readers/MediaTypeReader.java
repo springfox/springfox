@@ -6,7 +6,6 @@ import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
-import static org.springframework.util.StringUtils.*;
 
 @Component
 public class MediaTypeReader implements RequestMappingReader {
@@ -45,10 +43,11 @@ public class MediaTypeReader implements RequestMappingReader {
     List<String> consumesList = toList(consumesMediaTypes);
     List<String> producesList = toList(producesMediaTypes);
 
-    ApiOperation annotation = context.getApiOperationAnnotation();
-    if (null != annotation && hasText(annotation.consumes())) {
-      consumesList = asList(annotation.consumes());
-    }
+
+//    ApiOperation annotation = context.getApiOperationAnnotation();
+//    if (null != annotation && hasText(annotation.consumes())) {
+//      consumesList = asList(annotation.consumes());
+//    }
 
     if (handlerMethodHasFileParameter(context)) {
       //Swagger spec requires consumes is multipart/form-data for file parameter types
@@ -56,9 +55,9 @@ public class MediaTypeReader implements RequestMappingReader {
     }
 
 
-    if (null != annotation && hasText(annotation.produces())) {
-      producesList = asList(annotation.produces());
-    }
+//    if (null != annotation && hasText(annotation.produces())) {
+//      producesList = asList(annotation.produces());
+//    }
 
     //TODO asList() returns unmodifiable collection so any add..() so this add..() can potentially explode,
     // seems wrong to depend on varying type conversions and logic - either immutable or not
