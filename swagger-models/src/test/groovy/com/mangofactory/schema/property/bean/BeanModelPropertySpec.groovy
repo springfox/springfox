@@ -7,6 +7,7 @@ import com.mangofactory.schema.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.service.model.AllowableListValues
 import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
+import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -15,14 +16,14 @@ import static com.google.common.collect.Lists.*
 import static com.mangofactory.schema.property.BeanPropertyDefinitions.*
 import static com.mangofactory.schema.property.bean.Accessors.*
 
-@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport])
+@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, ModelProviderSupport])
 class BeanModelPropertySpec extends Specification {
 
   def "Extracting information from resolved properties"() {
 
     given:
       Class typeToTest = typeForTestingGettersAndSetters()
-      def modelContext = ModelContext.inputParam(typeToTest)
+      def modelContext = ModelContext.inputParam(typeToTest, documentationType())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -52,7 +53,7 @@ class BeanModelPropertySpec extends Specification {
   def "Extracting information from ApiModelProperty annotation"() {
     given:
       Class typeToTest = typeForTestingAnnotatedGettersAndSetter()
-      def modelContext = ModelContext.inputParam(typeToTest)
+      def modelContext = ModelContext.inputParam(typeToTest, documentationType())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -87,7 +88,7 @@ class BeanModelPropertySpec extends Specification {
 
     given:
       Class typeToTest = typeForTestingJsonGetterAnnotation()
-      def modelContext = ModelContext.inputParam(typeToTest)
+      def modelContext = ModelContext.inputParam(typeToTest, documentationType())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 

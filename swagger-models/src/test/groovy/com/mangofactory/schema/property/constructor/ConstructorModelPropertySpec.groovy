@@ -2,6 +2,7 @@ package com.mangofactory.schema.property.constructor
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
+import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.schema.ModelContext
 import com.mangofactory.schema.ObjectMapperBeanPropertyNamingStrategy
@@ -12,13 +13,13 @@ import spock.lang.Specification
 import static com.google.common.collect.Lists.newArrayList
 import static com.mangofactory.schema.property.BeanPropertyDefinitions.name
 
-@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport])
+@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, ModelProviderSupport])
 class ConstructorModelPropertySpec extends Specification {
   def "Extracting information from resolved constructor params" () {
     given:
       def typeToTest = typeWithConstructorProperty()
       def beanPropertyDefinition = beanPropertyDefinitionByField(typeToTest, fieldName)
-      def modelContext = ModelContext.inputParam(typeToTest )
+      def modelContext = ModelContext.inputParam(typeToTest, documentationType())
       def field = field(typeToTest, fieldName)
       ObjectMapper mapper = new ObjectMapper()
       String propName = name(beanPropertyDefinition, true,  new ObjectMapperBeanPropertyNamingStrategy(mapper))

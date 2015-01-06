@@ -1,6 +1,7 @@
 package com.mangofactory.schema.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.mangofactory.documentation.plugins.ModelEnricher;
 import com.mangofactory.documentation.plugins.ModelPropertyEnricher;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.alternates.WildcardType;
@@ -21,7 +22,10 @@ import static com.mangofactory.schema.alternates.Alternates.*;
         "com.mangofactory.documentation.plugins",
         "com.mangofactory.swagger.plugins"
 })
-@EnablePluginRegistries({ModelPropertyEnricher.class})
+@EnablePluginRegistries({
+        ModelEnricher.class,
+        ModelPropertyEnricher.class
+})
 public class SwaggerModelsConfiguration {
   @Bean
   public TypeResolver typeResolver() {

@@ -4,17 +4,13 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.mangofactory.documentation.plugins.PluginsManager;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.property.provider.ModelPropertiesProvider;
 import com.mangofactory.service.model.Model;
 import com.mangofactory.service.model.ModelProperty;
-import com.mangofactory.service.model.builder.ModelBuilder;
-import com.wordnik.swagger.annotations.ApiModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -28,20 +24,22 @@ import static com.mangofactory.schema.ResolvedTypes.*;
 
 @Component
 public class DefaultModelProvider implements ModelProvider {
-  private static final Logger LOG = LoggerFactory.getLogger(DefaultModelProvider.class);
   private final TypeResolver resolver;
   private final AlternateTypeProvider alternateTypeProvider;
   private final ModelPropertiesProvider propertiesProvider;
   private final ModelDependencyProvider dependencyProvider;
+  private final PluginsManager pluginsManager;
 
   @Autowired
   public DefaultModelProvider(TypeResolver resolver, AlternateTypeProvider alternateTypeProvider,
                               @Qualifier("default") ModelPropertiesProvider propertiesProvider,
-                              ModelDependencyProvider dependencyProvider) {
+                              ModelDependencyProvider dependencyProvider,
+                              PluginsManager pluginsManager) {
     this.resolver = resolver;
     this.alternateTypeProvider = alternateTypeProvider;
     this.propertiesProvider = propertiesProvider;
     this.dependencyProvider = dependencyProvider;
+    this.pluginsManager = pluginsManager;
   }
 
   @Override
@@ -55,16 +53,22 @@ public class DefaultModelProvider implements ModelProvider {
     Map<String, ModelProperty> properties = newTreeMap();
     properties.putAll(uniqueIndex(properties(modelContext, propertiesHost), byPropertyName()));
 
-    return Optional.of(
-            new ModelBuilder()
-                    .id(typeName(propertiesHost))
-                    .name(typeName(propertiesHost))
-                    .qualifiedType(simpleQualifiedTypeName(propertiesHost))
-                    .properties(properties).description(modelDescription(propertiesHost))
-                    .baseModel("")
-                    .discriminator("")
-                    .subTypes(new ArrayList<String>())
-                    .build());
+    return Optional.of(modelBuilder(propertiesHost, properties, modelContext));
+  }
+
+  private Model modelBuilder(ResolvedType propertiesHost,
+                                    Map<String, ModelProperty> properties,
+                                    ModelContext modelContext) {
+    modelContext.getBuilder()
+            .id(typeName(propertiesHost))
+            .name(typeName(propertiesHost))
+            .qualifiedType(simpleQualifiedTypeName(propertiesHost))
+            .properties(properties)
+            .description("")
+            .baseModel("")
+            .discriminator("")
+            .subTypes(new ArrayList<String>());
+    return pluginsManager.enrichModel(modelContext);
   }
 
   @Override
@@ -86,14 +90,6 @@ public class DefaultModelProvider implements ModelProvider {
         return input.getName();
       }
     };
-  }
-
-  private String modelDescription(ResolvedType type) {
-    ApiModel annotation = AnnotationUtils.findAnnotation(type.getErasedType(), ApiModel.class);
-    if (annotation != null) {
-      return annotation.description();
-    }
-    return "";
   }
 
   private List<ModelProperty> properties(ModelContext context, ResolvedType propertiesHost) {

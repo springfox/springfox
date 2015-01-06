@@ -4,6 +4,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.schema.Annotations;
@@ -67,8 +68,10 @@ public class ApiModelReader implements Command<RequestMappingContext> {
       modelType = asResolved(typeResolver, apiOperationAnnotation.response());
     }
     Set<Class> ignorableTypes = context.getDocumentationContext().getIgnorableParameterTypes();
+    DocumentationType documentationType = context.getDocumentationContext().getDocumentationType();
     if (!ignorableTypes.contains(modelType.getErasedType())) {
-      ModelContext modelContext = ModelContext.returnValue(modelType);
+      ModelContext modelContext = ModelContext.returnValue(modelType,
+              documentationType);
       markIgnorablesAsHasSeen(typeResolver, ignorableTypes, modelContext);
       Optional<Model> model = modelProvider.modelFor(modelContext);
       if (model.isPresent() && !"void".equals(model.get().getName())) {
@@ -81,13 +84,16 @@ public class ApiModelReader implements Command<RequestMappingContext> {
       }
       populateDependencies(modelContext, modelMap);
     }
-    mergeModelMap(modelMap, readParametersApiModel(handlerMethodResolver, handlerMethod, ignorableTypes));
-    mergeModelMap(modelMap, readApiResponses(handlerMethod, ignorableTypes));
+    mergeModelMap(modelMap, readParametersApiModel(handlerMethodResolver, handlerMethod,
+            ignorableTypes, documentationType));
+    mergeModelMap(modelMap, readApiResponses(handlerMethod, ignorableTypes,
+            documentationType));
 
     log.debug("Finished reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
   }
 
-  private Map<String, Model> readApiResponses(HandlerMethod handlerMethod, Set<Class> ignorableTypes) {
+  private Map<String, Model> readApiResponses(HandlerMethod handlerMethod, Set<Class> ignorableTypes,
+                                              DocumentationType documentationType) {
 
     Optional<ApiResponses> apiResponses = Annotations.findApiResponsesAnnotations(handlerMethod.getMethod());
     Map<String, Model> modelMap = newHashMap();
@@ -100,7 +106,7 @@ public class ApiModelReader implements Command<RequestMappingContext> {
     for (ApiResponse response : apiResponses.get().value()) {
           if (!ignorableTypes.contains(response.response())) {
             ResolvedType modelType = alternateTypeProvider.alternateFor(asResolved(typeResolver, response.response()));
-            ModelContext modelContext = ModelContext.inputParam(modelType);
+            ModelContext modelContext = ModelContext.returnValue(modelType, documentationType);
             markIgnorablesAsHasSeen(typeResolver, ignorableTypes,  modelContext);
             Optional<Model> pModel = modelProvider.modelFor(modelContext);
             if (pModel.isPresent()) {
@@ -168,7 +174,8 @@ public class ApiModelReader implements Command<RequestMappingContext> {
   }
 
   private Map<String, Model> readParametersApiModel(HandlerMethodResolver handlerMethodResolver,
-                                                    HandlerMethod handlerMethod, Set<Class> ignorableTypes) {
+                                                    HandlerMethod handlerMethod, Set<Class> ignorableTypes,
+                                                    DocumentationType documentationType) {
 
     Method method = handlerMethod.getMethod();
     Map<String, Model> modelMap = newHashMap();
@@ -185,7 +192,7 @@ public class ApiModelReader implements Command<RequestMappingContext> {
           ResolvedMethodParameter pType = parameterTypes.get(i);
           if (!ignorableTypes .contains(pType.getResolvedParameterType().getErasedType())) {
             ResolvedType modelType = alternateTypeProvider.alternateFor(pType.getResolvedParameterType());
-            ModelContext modelContext = ModelContext.inputParam(modelType);
+            ModelContext modelContext = ModelContext.inputParam(modelType, documentationType);
             markIgnorablesAsHasSeen(typeResolver, ignorableTypes, modelContext);
             Optional<Model> pModel = modelProvider.modelFor(modelContext);
             if (pModel.isPresent()) {

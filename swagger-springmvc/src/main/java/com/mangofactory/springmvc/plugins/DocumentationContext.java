@@ -1,6 +1,7 @@
 package com.mangofactory.springmvc.plugins;
 
 import com.google.common.collect.Ordering;
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.service.model.ApiDescription;
 import com.mangofactory.service.model.ApiInfo;
 import com.mangofactory.service.model.ApiListingReference;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class DocumentationContext {
+  private final DocumentationType documentationType;
   private final List<RequestMappingHandlerMapping> handlerMappings;
   private final ApiInfo apiInfo;
   private final String groupName;
@@ -41,7 +43,7 @@ public class DocumentationContext {
   private final Ordering<ApiListingReference> listingReferenceOrdering;
   private final Ordering<ApiDescription> apiDescriptionOrdering;
 
-  public DocumentationContext(List<RequestMappingHandlerMapping> handlerMappings,
+  public DocumentationContext(DocumentationType documentationType, List<RequestMappingHandlerMapping> handlerMappings,
                               ApiInfo apiInfo, String groupName,
                               RequestMappingEvaluator requestMappingEvaluator,
                               Set<Class> ignorableParameterTypes,
@@ -52,7 +54,7 @@ public class DocumentationContext {
                               List<AuthorizationType> authorizationTypes,
                               Ordering<ApiListingReference> listingReferenceOrdering,
                               Ordering<ApiDescription> apiDescriptionOrdering) {
-
+    this.documentationType = documentationType;
     this.handlerMappings = handlerMappings;
     this.apiInfo = apiInfo;
     this.groupName = groupName;
@@ -65,6 +67,10 @@ public class DocumentationContext {
     this.authorizationTypes = authorizationTypes;
     this.listingReferenceOrdering = listingReferenceOrdering;
     this.apiDescriptionOrdering = apiDescriptionOrdering;
+  }
+
+  public DocumentationType getDocumentationType() {
+    return documentationType;
   }
 
   public List<RequestMappingHandlerMapping> getHandlerMappings() {

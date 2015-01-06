@@ -14,8 +14,8 @@ class EnumTypeSpec extends Specification {
     given:
       def list = newArrayList("ONE", "TWO")
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(enumType())).get()
-      Model asReturn = provider.modelFor(returnValue(enumType())).get()
+      Model asInput = provider.modelFor(inputParam(enumType(), documentationType())).get()
+      Model asReturn = provider.modelFor(returnValue(enumType(), documentationType())).get()
 
     expect:
       asInput.getName() == "ExampleWithEnums"

@@ -3,6 +3,7 @@ package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.documentation.plugins.DocumentationType
+import com.mangofactory.documentation.plugins.ModelEnricher
 import com.mangofactory.documentation.plugins.ModelPropertyEnricher
 import com.mangofactory.documentation.plugins.PluginsManager
 import com.mangofactory.schema.DefaultModelProvider
@@ -18,21 +19,29 @@ import com.mangofactory.schema.property.constructor.ConstructorModelPropertyProv
 import com.mangofactory.schema.property.field.FieldModelPropertyProvider
 import com.mangofactory.schema.property.field.FieldProvider
 import com.mangofactory.schema.property.provider.DefaultModelPropertiesProvider
-import com.mangofactory.swagger.plugins.SwaggerAnnotationPropertyEnricher
+import com.mangofactory.swagger.plugins.ApiModelEnricher
+import com.mangofactory.swagger.plugins.ApiModelPropertyPropertyEnricher
 import org.joda.time.LocalDate
 import org.springframework.http.ResponseEntity
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 
-import static com.google.common.collect.Lists.newArrayList
+import static com.google.common.collect.Lists.*
 
 @SuppressWarnings("GrMethodMayBeStatic")
 class ModelProviderSupport {
 
+  def documentationType() {
+    new DocumentationType("swagger", "1.2")
+  }
   def pluginsManager() {
-    PluginRegistry<ModelPropertyEnricher, DocumentationType> registry =
-            OrderAwarePluginRegistry.create(newArrayList(new SwaggerAnnotationPropertyEnricher()))
-    new PluginsManager(registry)
+    PluginRegistry<ModelPropertyEnricher, DocumentationType> propRegistry =
+            OrderAwarePluginRegistry.create(newArrayList(new ApiModelPropertyPropertyEnricher()))
+
+    PluginRegistry<ModelEnricher, DocumentationType> modelRegistry =
+            OrderAwarePluginRegistry.create(newArrayList(new ApiModelEnricher(new TypeResolver())))
+
+    new PluginsManager(propRegistry, modelRegistry)
   }
 
   ModelProvider providerThatSubstitutesLocalDateWithString() {
@@ -69,7 +78,8 @@ class ModelProviderSupport {
             fieldModelPropertyProvider, constructorModelPropertyProvider)
     modelPropertiesProvider.objectMapper = objectMapper
     def modelDependenciesProvider = modelDependencyProvider(typeResolver, alternateTypeProvider, modelPropertiesProvider)
-    new DefaultModelProvider(typeResolver, alternateTypeProvider, modelPropertiesProvider, modelDependenciesProvider)
+    new DefaultModelProvider(typeResolver, alternateTypeProvider, modelPropertiesProvider, modelDependenciesProvider,
+            pluginsManager)
   }
 
   def defaultAlternateTypesProvider() {

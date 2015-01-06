@@ -13,8 +13,8 @@ class GenericTypeSpec extends Specification {
   def "Generic property on a generic types is inferred correctly"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(modelType)).get()
-      Model asReturn = provider.modelFor(returnValue(modelType)).get()
+      Model asInput = provider.modelFor(inputParam(modelType, documentationType())).get()
+      Model asReturn = provider.modelFor(returnValue(modelType, documentationType())).get()
 
     expect:
       asInput.getName() == expectedModelName(modelNamePart)
@@ -46,8 +46,8 @@ class GenericTypeSpec extends Specification {
   def "Generic properties are inferred correctly even when they are not participating in the type bindings"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(modelType)).get()
-      Model asReturn = provider.modelFor(returnValue(modelType)).get()
+      Model asInput = provider.modelFor(inputParam(modelType, documentationType())).get()
+      Model asReturn = provider.modelFor(returnValue(modelType, documentationType())).get()
 
     expect:
       asInput.getProperties().containsKey("strings")

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
-import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponses;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -67,10 +66,6 @@ public class Annotations {
 
   public static boolean memberIsUnwrapped(AnnotatedMember member) {
     return Optional.fromNullable(member.getAnnotation(JsonUnwrapped.class)).isPresent();
-  }
-
-  public static Optional<ApiModelProperty> findApiModePropertyAnnotation(AnnotatedElement annotated) {
-    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class));
   }
 
   public static Optional<ApiParam> findApiParamAnnotation(AnnotatedElement annotated) {

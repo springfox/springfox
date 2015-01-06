@@ -1,5 +1,6 @@
 package com.mangofactory.schema.property.field
 import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
+import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.schema.ModelContext
 import com.mangofactory.schema.alternates.AlternateTypeProvider
@@ -8,17 +9,17 @@ import spock.lang.Specification
 
 import static com.google.common.collect.Lists.newArrayList
 
-@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport])
+@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, ModelProviderSupport])
 class FieldModelPropertySpec extends Specification {
   def "Extracting information from resolved fields" () {
     given:
       def typeToTest = typeForTestingGettersAndSetters()
-      def modelContext = ModelContext.inputParam(typeToTest )
+      def modelContext = ModelContext.inputParam(typeToTest, documentationType())
       def field = field(typeToTest, fieldName)
       def sut = new FieldModelProperty(fieldName, field, new AlternateTypeProvider())
 
     expect:
-      sut.propertyDescription() == null //TODO: Added test
+      sut.propertyDescription() == null //documentationType(): Added test
       !sut.required
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
@@ -42,7 +43,7 @@ class FieldModelPropertySpec extends Specification {
   def "Extracting information from generic fields with array type binding" () {
     given:
       def typeToTest = typeForTestingGettersAndSetters()
-      def modelContext = ModelContext.inputParam(typeToTest )
+      def modelContext = ModelContext.inputParam(typeToTest, documentationType())
       def field = field(typeToTest, fieldName)
       def sut = new FieldModelProperty(fieldName, field, new AlternateTypeProvider())
 

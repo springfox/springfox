@@ -1,11 +1,14 @@
-package com.mangofactory.schema.property;
+package com.mangofactory.swagger.plugins;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.mangofactory.service.model.AllowableListValues;
+import org.springframework.core.annotation.AnnotationUtils;
 
+import java.lang.reflect.AnnotatedElement;
 import java.util.List;
 
 import static com.google.common.base.Strings.*;
@@ -59,5 +62,9 @@ public final class ApiModelProperties {
         return annotation.position();
       }
     };
+  }
+
+  public static Optional<ApiModelProperty> findApiModePropertyAnnotation(AnnotatedElement annotated) {
+    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class));
   }
 }

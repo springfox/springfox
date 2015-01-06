@@ -417,7 +417,6 @@ public class SwaggerSpringMvcPlugin implements DocumentationPlugin {
             .withAuthorizationTypes(authorizationTypes)
             .withApiListingReferenceOrdering(apiListingReferenceOrdering)
             .withApiDescriptionOrdering(apiDescriptionOrdering)
-            .withExcludedAnnotations(mergedExcludedAnnotations)
             .build();
   }
 

@@ -57,6 +57,7 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
       log.info("Found custom SwaggerSpringMvcPlugins");
 
       DocumentationContextBuilder contextBuilder = new DocumentationContextBuilder(defaults)
+              .withDocumentationType(swagger)
               .withHandlerMappings(handlerMappings);
       for (DocumentationPlugin each : plugins) {
         if (each.isEnabled()) {

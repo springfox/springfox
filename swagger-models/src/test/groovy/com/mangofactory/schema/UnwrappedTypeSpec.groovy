@@ -13,8 +13,8 @@ class UnwrappedTypeSpec extends Specification {
   def "Unwrapped types are rendered correctly"() {
     given:
       def provider = defaultModelProvider(objectMapperToUse)
-      Model asInput = provider.modelFor(ModelContext.inputParam(unwrappedType())).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(unwrappedType())).get()
+      Model asInput = provider.modelFor(ModelContext.inputParam(unwrappedType(), documentationType())).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(unwrappedType(), documentationType())).get()
 
     expect:
       asInput.getName() == "UnwrappedType"

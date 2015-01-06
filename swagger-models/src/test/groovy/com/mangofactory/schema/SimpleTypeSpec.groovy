@@ -13,8 +13,8 @@ class SimpleTypeSpec extends Specification {
   def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(simpleType())).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(simpleType())).get()
+      Model asInput = provider.modelFor(ModelContext.inputParam(simpleType(), documentationType())).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(simpleType(), documentationType())).get()
 
     expect:
       asInput.getName() == "SimpleType"
@@ -55,8 +55,8 @@ class SimpleTypeSpec extends Specification {
   def "type with constructor all properties are inferred"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(typeWithConstructor())).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(typeWithConstructor())).get()
+      Model asInput = provider.modelFor(ModelContext.inputParam(typeWithConstructor(), documentationType())).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(typeWithConstructor(), documentationType())).get()
 
     expect:
       asInput.getName() == "TypeWithConstructor"
@@ -78,8 +78,8 @@ class SimpleTypeSpec extends Specification {
   def "Types with properties aliased using JsonProperty annotation"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(typeWithJsonPropertyAnnotation())).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(typeWithJsonPropertyAnnotation())).get()
+      Model asInput = provider.modelFor(ModelContext.inputParam(typeWithJsonPropertyAnnotation(), documentationType())).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(typeWithJsonPropertyAnnotation(), documentationType())).get()
 
     expect:
       asInput.getName() == "TypeWithJsonProperty"

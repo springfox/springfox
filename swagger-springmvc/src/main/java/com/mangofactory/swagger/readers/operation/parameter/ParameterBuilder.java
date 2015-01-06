@@ -6,6 +6,7 @@ import com.mangofactory.schema.Annotations;
 import com.mangofactory.service.model.AllowableListValues;
 import com.mangofactory.service.model.AllowableValues;
 import com.mangofactory.service.model.Parameter;
+import com.mangofactory.swagger.plugins.ApiModelProperties;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
 
@@ -40,7 +41,7 @@ class ParameterBuilder {
   }
 
   public Parameter build() {
-    Optional<ApiModelProperty> apiModelPropertyOptional = Annotations.findApiModePropertyAnnotation(field);
+    Optional<ApiModelProperty> apiModelPropertyOptional = ApiModelProperties.findApiModePropertyAnnotation(field);
     if (apiModelPropertyOptional.isPresent()) {
       return fromApiModelProperty(apiModelPropertyOptional.get());
     }

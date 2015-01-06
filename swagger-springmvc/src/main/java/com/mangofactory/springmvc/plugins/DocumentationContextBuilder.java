@@ -1,6 +1,7 @@
 package com.mangofactory.springmvc.plugins;
 
 import com.google.common.collect.Ordering;
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.service.model.ApiDescription;
 import com.mangofactory.service.model.ApiInfo;
 import com.mangofactory.service.model.ApiListingReference;
@@ -33,6 +34,8 @@ public class DocumentationContextBuilder {
   private List<AuthorizationType> authorizationTypes;
   private Ordering<ApiListingReference> listingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
+  private List<Class<? extends Annotation>> excludedAnnotations;
+  private DocumentationType documentationType;
 
   DocumentationContextBuilder(Defaults defaults) {
     this.defaults = defaults;
@@ -85,7 +88,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContext build() {
-    return new DocumentationContext(handlerMappings, apiInfo, groupName, requestMappingEvaluator,
+    return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName, requestMappingEvaluator,
             ignorableParameterTypes, globalResponseMessages, resourceGroupingStrategy, swaggerPathProvider,
             authorizationContext, authorizationTypes, listingReferenceOrdering, apiDescriptionOrdering);
   }
@@ -111,7 +114,8 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder withExcludedAnnotations(List<Class<? extends Annotation>> excludedAnnotations) {
+  public DocumentationContextBuilder withDocumentationType(DocumentationType documentationType) {
+    this.documentationType = documentationType;
     return this;
   }
 }

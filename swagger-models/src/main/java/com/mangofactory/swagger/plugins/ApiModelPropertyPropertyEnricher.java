@@ -8,10 +8,10 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.springframework.stereotype.Component;
 
 import static com.mangofactory.schema.Annotations.*;
-import static com.mangofactory.schema.property.ApiModelProperties.*;
+import static com.mangofactory.swagger.plugins.ApiModelProperties.*;
 
 @Component
-public class SwaggerAnnotationPropertyEnricher implements ModelPropertyEnricher {
+public class ApiModelPropertyPropertyEnricher implements ModelPropertyEnricher {
   @Override
   public void enrich(ModelPropertyContext context) {
     Optional<ApiModelProperty> annotation = Optional.absent();

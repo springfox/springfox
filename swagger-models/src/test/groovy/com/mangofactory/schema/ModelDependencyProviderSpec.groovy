@@ -10,7 +10,7 @@ class ModelDependencyProviderSpec extends Specification {
   def "dependencies are inferred correctly" () {
     given:
       ModelDependencyProvider provider = defaultModelDependencyProvider()
-      def context = ModelContext.inputParam(modelType)
+      def context = ModelContext.inputParam(modelType, documentationType())
       def dependentTypes = provider.dependentModels(context)
       def dependentTypeNames = dependentTypes.collect() { ResolvedTypes.typeName(it) }.unique().sort()
     expect:
@@ -39,7 +39,7 @@ class ModelDependencyProviderSpec extends Specification {
   def "dependencies are inferred correctly for return parameters" () {
     given:
       ModelDependencyProvider provider = defaultModelDependencyProvider()
-      def context = ModelContext.returnValue(modelType)
+      def context = ModelContext.returnValue(modelType, documentationType())
       def dependentTypes = provider.dependentModels(context)
       def dependentTypeNames = dependentTypes.collect { ResolvedTypes.responseTypeName(it) }.unique().sort()
     expect:

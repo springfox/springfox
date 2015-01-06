@@ -12,8 +12,8 @@ class ComplexTypeSpec extends Specification {
   def "complex type properties are inferred correctly"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(complexType())).get()
-      Model asReturn = provider.modelFor(returnValue(complexType())).get()
+      Model asInput = provider.modelFor(inputParam(complexType(), documentationType())).get()
+      Model asReturn = provider.modelFor(returnValue(complexType(), documentationType())).get()
 
     expect:
       asInput.getName() == "ComplexType"
@@ -42,8 +42,8 @@ class ComplexTypeSpec extends Specification {
     given:
       def complexType = recursiveType()
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(complexType)).get()
-      Model asReturn = provider.modelFor(returnValue(complexType)).get()
+      Model asInput = provider.modelFor(inputParam(complexType, documentationType())).get()
+      Model asReturn = provider.modelFor(returnValue(complexType, documentationType())).get()
 
     expect:
       asInput.getName() == "RecursiveType"
@@ -71,8 +71,8 @@ class ComplexTypeSpec extends Specification {
     given:
       def complexType = inheritedComplexType()
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(complexType)).get()
-      Model asReturn = provider.modelFor(returnValue(complexType)).get()
+      Model asInput = provider.modelFor(inputParam(complexType, documentationType())).get()
+      Model asReturn = provider.modelFor(returnValue(complexType, documentationType())).get()
 
     expect:
       asInput.getName() == "InheritedComplexType"

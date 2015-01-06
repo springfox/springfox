@@ -12,7 +12,7 @@ class AlternatePropertiesSpec extends Specification {
   def "Nested properties that have alternate types defined are rendered correctly" () {
     given:
       ModelProvider modelProvider = providerThatSubstitutesLocalDateWithString()
-      Model model = modelProvider.modelFor(inputParam(typeWithAlternateProperty())).get()
+      Model model = modelProvider.modelFor(inputParam(typeWithAlternateProperty(), documentationType())).get()
     expect:
       model.getName() == "TypeWithAlternateProperty"
       model.getProperties().containsKey("localDate")
@@ -25,7 +25,7 @@ class AlternatePropertiesSpec extends Specification {
   def "ResponseEntity«Void» renders correctly when an alternate type is provided" () {
     given:
       ModelProvider modelProvider = providerThatSubstitutesResponseEntityOfVoid()
-      Model model = modelProvider.modelFor(inputParam(typeWithResponseEntityOfVoid())).get()
+      Model model = modelProvider.modelFor(inputParam(typeWithResponseEntityOfVoid(), documentationType())).get()
     expect:
       model.getName() == "GenericType«ResponseEntity«Void»»"
       model.getProperties().containsKey("genericField")

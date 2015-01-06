@@ -31,8 +31,8 @@ class ContainerTypesSpec extends Specification {
     given:
       def sut = typeWithLists()
       ModelProvider provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(sut)).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(sut)).get()
+      Model asInput = provider.modelFor(ModelContext.inputParam(sut, documentationType())).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(sut, documentationType())).get()
 
     expect:
       asInput.getName() == "ListsContainer"
@@ -64,8 +64,8 @@ class ContainerTypesSpec extends Specification {
     given:
       def sut = typeWithSets()
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(sut)).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(sut)).get()
+      Model asInput = provider.modelFor(ModelContext.inputParam(sut, documentationType())).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(sut, documentationType())).get()
 
     expect:
       asInput.getName() == "SetsContainer"
@@ -97,8 +97,8 @@ class ContainerTypesSpec extends Specification {
     given:
       def sut = typeWithArrays()
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(sut)).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(sut)).get()
+      Model asInput = provider.modelFor(ModelContext.inputParam(sut, documentationType())).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(sut, documentationType())).get()
 
     expect:
       asInput.getName() == "ArraysContainer"
@@ -131,8 +131,8 @@ class ContainerTypesSpec extends Specification {
     given:
       def sut = mapsContainer()
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(sut)).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(sut)).get()
+      Model asInput = provider.modelFor(ModelContext.inputParam(sut, documentationType())).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(sut, documentationType())).get()
 
     expect:
       asInput.getName() == "MapsContainer"
@@ -163,10 +163,10 @@ class ContainerTypesSpec extends Specification {
       def sut = genericTypeOfMapsContainer()
       def provider = defaultModelProvider()
 
-      def modelContext = ModelContext.inputParam(sut)
+      def modelContext = ModelContext.inputParam(sut, documentationType())
       Model asInput = provider.dependencies(modelContext).get("MapsContainer")
 
-      def returnContext = ModelContext.returnValue(sut)
+      def returnContext = ModelContext.returnValue(sut, documentationType())
       Model asReturn = provider.dependencies(returnContext).get("MapsContainer")
 
     expect:

@@ -67,12 +67,7 @@ public class RequestMappingEvaluator {
   private boolean requestMappingMatchesAnIncludePattern(RequestMappingInfo requestMappingInfo) {
 
     PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
-    boolean isMatch
-            = requestMappingPatternMatcher.patternConditionsMatchOneOfIncluded(patternsCondition, includePatterns);
-    if (isMatch) {
-      return true;
-    }
-    return false;
+    return requestMappingPatternMatcher.patternConditionsMatchOneOfIncluded(patternsCondition, includePatterns);
   }
 
 

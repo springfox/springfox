@@ -3,6 +3,7 @@ package com.mangofactory.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.service.model.builder.ModelBuilder;
 
 import java.lang.reflect.Type;
 import java.util.Set;
@@ -16,17 +17,22 @@ public class ModelContext {
   private final boolean returnType;
   private Set<ResolvedType> seenTypes = newHashSet();
   private DocumentationType documentationType;
+  private ModelBuilder modelBuilder;
 
-  ModelContext(Type type, boolean returnType) {
+  ModelContext(Type type, boolean returnType, DocumentationType documentationType) {
+    this.documentationType = documentationType;
     this.parentContext = null;
     this.type = type;
     this.returnType = returnType;
+    this.modelBuilder = new ModelBuilder();
   }
 
   ModelContext(ModelContext parentContext, ResolvedType input) {
     this.parentContext = parentContext;
     this.type = input;
     this.returnType = parentContext.isReturnType();
+    this.documentationType = parentContext.getDocumentationType();
+    this.modelBuilder = new ModelBuilder();
   }
 
   public Type getType() {
@@ -41,12 +47,12 @@ public class ModelContext {
     return returnType;
   }
 
-  public static ModelContext inputParam(Type type) {
-    return new ModelContext(type, false);
+  public static ModelContext inputParam(Type type, DocumentationType documentationType) {
+    return new ModelContext(type, false, documentationType);
   }
 
-  public static ModelContext returnValue(Type type) {
-    return new ModelContext(type, true);
+  public static ModelContext returnValue(Type type, DocumentationType documentationType) {
+    return new ModelContext(type, true, documentationType);
   }
 
   public static ModelContext fromParent(ModelContext context, ResolvedType input) {
@@ -68,6 +74,10 @@ public class ModelContext {
       return false;
     }
     return parentContext.hasSeenBefore(resolvedType);
+  }
+
+  public ModelBuilder getBuilder() {
+    return modelBuilder;
   }
 
   public void seen(ResolvedType resolvedType) {
