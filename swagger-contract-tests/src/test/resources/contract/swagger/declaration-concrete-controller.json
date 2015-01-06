@@ -1,13 +1,14 @@
+
 {
     "apiVersion": "1.0",
     "swaggerVersion": "1.2",
     "basePath": "/",
     "resourcePath": "/foo",
     "produces": [
-        "*/*"
+
     ],
     "consumes": [
-        "application/json"
+
     ],
     "apis": [
         {
@@ -111,11 +112,11 @@
             "description": "",
             "id": "Pet",
             "properties": {
-                "name": {
+                "id": {
                     "required": false,
                     "type": "string"
                 },
-                "id": {
+                "name": {
                     "required": false,
                     "type": "string"
                 },

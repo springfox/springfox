@@ -40,10 +40,7 @@ public class SwaggerApiResourceListing {
   public Group scan(DocumentationContext context) {
     ApiListingReferenceScanResult result = apiListingReferenceScanner.scan(context);
     List<ApiListingReference> apiListingReferences = result.getApiListingReferences();
-    ApiListingScanningContext listingContext = new ApiListingScanningContextBuilder()
-            .withDocumenationContext(context)
-            .withRequestMappingsByResourceGroup(result.getResourceGroupRequestMappings())
-            .build();
+    ApiListingScanningContext listingContext = new ApiListingScanningContext(context, result.getResourceGroupRequestMappings());
 
     GroupBuilder group = new GroupBuilder()
             .withName(context.getGroupName())

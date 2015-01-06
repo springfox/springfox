@@ -188,6 +188,8 @@ public class ApiModelReader implements Command<RequestMappingContext> {
     for (int i = 0; i < annotations.length; i++) {
       Annotation[] pAnnotations = annotations[i];
       for (Annotation annotation : pAnnotations) {
+        //TODO: This may need to be externalized to RequestMappingContext Spring Data Reset @RestController will
+        // break this check
         if (annotation instanceof RequestBody) {
           ResolvedMethodParameter pType = parameterTypes.get(i);
           if (!ignorableTypes .contains(pType.getResolvedParameterType().getErasedType())) {

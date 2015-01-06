@@ -18,6 +18,7 @@ import static com.google.common.collect.Sets.*;
 import static com.mangofactory.swagger.core.StringUtils.*;
 import static org.springframework.util.StringUtils.*;
 
+//TODO: Make this swagger only
 @Component
 public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStrategy {
   private static final Logger LOG = LoggerFactory.getLogger(ClassOrApiAnnotationResourceGrouping.class);
@@ -49,7 +50,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
             .replaceAll("/", "");
     LOG.info("Group for method {} was {}", handlerMethod.getMethod().getName(), group);
     Integer position = getResourcePosition(requestMappingInfo, handlerMethod);
-    return newHashSet(new ResourceGroup(group.toLowerCase(), position));
+    return newHashSet(new ResourceGroup(group.toLowerCase(), handlerMethod.getBeanType(), position));
   }
 
   private String getClassOrApiAnnotationValue(HandlerMethod handlerMethod) {

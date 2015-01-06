@@ -2,6 +2,9 @@ package com.mangofactory.swagger.readers;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Splitter;
+import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.springmvc.plugins.ApiListingContext;
+import com.mangofactory.springmvc.plugins.ApiListingEnricher;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
@@ -9,6 +12,7 @@ import com.mangofactory.swagger.scanners.RequestMappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition;
 import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition;
@@ -19,9 +23,10 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
+import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
-public class MediaTypeReader implements RequestMappingReader {
+public class MediaTypeReader implements RequestMappingReader, ApiListingEnricher {
 
   private final TypeResolver typeResolver;
 
@@ -43,8 +48,7 @@ public class MediaTypeReader implements RequestMappingReader {
     List<String> consumesList = toList(consumesMediaTypes);
     List<String> producesList = toList(producesMediaTypes);
 
-
-//    ApiOperation annotation = context.getApiOperationAnnotation();
+//    ApiOperation annotation = context.getHandlerMethod().getApiOperationAnnotation();
 //    if (null != annotation && hasText(annotation.consumes())) {
 //      consumesList = asList(annotation.consumes());
 //    }
@@ -54,7 +58,7 @@ public class MediaTypeReader implements RequestMappingReader {
       consumesList = Arrays.asList("multipart/form-data");
     }
 
-
+//
 //    if (null != annotation && hasText(annotation.produces())) {
 //      producesList = asList(annotation.produces());
 //    }
@@ -69,6 +73,21 @@ public class MediaTypeReader implements RequestMappingReader {
     }
     context.put("consumes", consumesList);
     context.put("produces", producesList);
+  }
+
+  @Override
+  public void enrich(ApiListingContext context) {
+    RequestMapping annotation = findAnnotation(context.getResourceGroup().getControllerClass(), RequestMapping.class);
+    if (annotation != null) {
+      context.getApiListingBuilder()
+              .appendProduces(newArrayList(annotation.produces()))
+              .appendConsumes(newArrayList(annotation.consumes()));
+    }
+  }
+
+  @Override
+  public boolean supports(DocumentationType delimiter) {
+    return true;
   }
 
   private boolean handlerMethodHasFileParameter(RequestMappingContext context) {

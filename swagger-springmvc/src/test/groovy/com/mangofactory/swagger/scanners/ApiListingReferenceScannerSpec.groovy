@@ -4,6 +4,8 @@ import com.mangofactory.swagger.annotations.ApiIgnore
 import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.core.SpringGroupingStrategy
+import com.mangofactory.swagger.dummy.DummyClass
+import com.mangofactory.swagger.dummy.DummyController
 import com.mangofactory.swagger.mixins.AccessorAssertions
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
@@ -102,8 +104,8 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
     and:
       result.resourceGroupRequestMappings.size() == 2
-      result.resourceGroupRequestMappings[new ResourceGroup("dummy-controller")].size() == 1
-      result.resourceGroupRequestMappings[new ResourceGroup("dummy-class")].size() == 5
+      result.resourceGroupRequestMappings[new ResourceGroup("dummy-controller", DummyController)].size() == 1
+      result.resourceGroupRequestMappings[new ResourceGroup("dummy-class", DummyClass)].size() == 5
   }
 
   def "Relative Paths"() {

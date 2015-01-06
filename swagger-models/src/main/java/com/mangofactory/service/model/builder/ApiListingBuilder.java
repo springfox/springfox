@@ -8,12 +8,14 @@ import com.mangofactory.service.model.Model;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.Lists.*;
+
 public class ApiListingBuilder {
   private String apiVersion;
   private String basePath;
   private String resourcePath;
-  private List<String> produces;
-  private List<String> consumes;
+  private List<String> produces = newArrayList();
+  private List<String> consumes = newArrayList();
   private List<String> protocol;
   private List<Authorization> authorizations;
   private List<ApiDescription> apis;
@@ -37,12 +39,22 @@ public class ApiListingBuilder {
   }
 
   public ApiListingBuilder produces(List<String> produces) {
-    this.produces = produces;
+    this.produces = newArrayList(produces);
     return this;
   }
 
   public ApiListingBuilder consumes(List<String> consumes) {
-    this.consumes = consumes;
+    this.consumes = newArrayList(consumes);
+    return this;
+  }
+
+  public ApiListingBuilder appendProduces(List<String> produces) {
+    this.produces.addAll(produces);
+    return this;
+  }
+
+  public ApiListingBuilder appendConsumes(List<String> consumes) {
+    this.consumes.addAll(consumes);
     return this;
   }
 

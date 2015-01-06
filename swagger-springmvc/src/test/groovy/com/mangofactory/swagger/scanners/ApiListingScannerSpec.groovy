@@ -3,6 +3,7 @@ import com.mangofactory.service.model.ApiListing
 import com.mangofactory.swagger.authorization.AuthorizationContext
 import com.mangofactory.swagger.core.ApiListingScanningContext
 import com.mangofactory.swagger.core.DocumentationContextSpec
+import com.mangofactory.swagger.dummy.DummyClass
 import com.mangofactory.swagger.mixins.ApiDescriptionSupport
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
@@ -11,7 +12,6 @@ import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
 import com.mangofactory.swagger.readers.ApiDescriptionReader
 import com.mangofactory.swagger.readers.ApiModelReader
-import com.mangofactory.swagger.readers.MediaTypeReader
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
 
@@ -24,7 +24,6 @@ import static org.springframework.http.MediaType.*
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport, AuthSupport, ModelProviderForServiceSupport, ApiDescriptionSupport,
         SpringSwaggerConfigSupport])
 class ApiListingScannerSpec extends DocumentationContextSpec {
-  MediaTypeReader mediaTypeReader
   ApiDescriptionReader apiDescriptionReader
   ApiModelReader apiModelReader
   ApiListingScanningContext listingContext
@@ -40,35 +39,24 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     plugin
             .authorizationContext(authorizationContext)
             .build(contextBuilder)
-    mediaTypeReader = Stub(MediaTypeReader)
     apiDescriptionReader = Stub(ApiDescriptionReader)
     apiModelReader = Mock(ApiModelReader)
-    scanner = new ApiListingScanner(mediaTypeReader, apiDescriptionReader, apiModelReader)
+    scanner = new ApiListingScanner(apiDescriptionReader, apiModelReader, springPluginsManager())
   }
 
   def "Should create an api listing for a single resource grouping "() {
     given:
-      RequestMappingInfo requestMappingInfo =
-              requestMappingInfo("/businesses",
-                      [
-                              consumesRequestCondition: consumesRequestCondition(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE),
-                              producesRequestCondition: producesRequestCondition(APPLICATION_JSON_VALUE)
-                      ]
-              )
+      RequestMappingInfo requestMappingInfo = requestMappingInfo("/businesses")
 
 
       def context = context()
       RequestMappingContext requestMappingContext = new RequestMappingContext(context, requestMappingInfo,
               dummyHandlerMethod("methodWithConcreteResponseBody"))
-      ResourceGroup resourceGroup = new ResourceGroup("businesses")
+      ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
       resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
       listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
     when:
-      mediaTypeReader.execute(requestMappingContext) >> {
-        requestMappingContext.put("consumes", [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
-        requestMappingContext.put("produces", [APPLICATION_JSON_VALUE])
-      }
       apiDescriptionReader.execute(requestMappingContext) >> {
         requestMappingContext.put("apiDescriptionList", [])
       }
@@ -89,16 +77,12 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       RequestMappingContext requestMappingContext = new RequestMappingContext(context, requestMappingInfo,
               dummyHandlerMethod("methodWithConcreteResponseBody"))
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
-      resourceGroupRequestMappings.put(new ResourceGroup("businesses"), [requestMappingContext])
+      resourceGroupRequestMappings.put(new ResourceGroup("businesses", DummyClass), [requestMappingContext])
 
       listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
     and:
       apiDescriptionReader.execute(requestMappingContext) >> {
         requestMappingContext.put("apiDescriptionList", [])
-      }
-      mediaTypeReader.execute(requestMappingContext) >> {
-        requestMappingContext.put("consumes", [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE])
-        requestMappingContext.put("produces", [APPLICATION_JSON_VALUE])
       }
     when:
       Map<String, ApiListing> apiListingMap = scanner.scan(listingContext)

@@ -2,16 +2,20 @@ package com.mangofactory.swagger.scanners;
 
 import com.google.common.base.Objects;
 
-public class ResourceGroup {
-  private String groupName;
-  private Integer position = 0;
+import static com.google.common.base.Objects.*;
 
-  public ResourceGroup(String groupName) {
-    this.groupName = groupName;
+public class ResourceGroup {
+  private final String groupName;
+  private final Class<?> controllerClazz;
+  private final Integer position;
+
+  public ResourceGroup(String groupName, Class<?> controllerClazz) {
+    this(groupName, controllerClazz, 0);
   }
 
-  public ResourceGroup(String groupName, Integer position) {
+  public ResourceGroup(String groupName, Class<?> controllerClazz, Integer position) {
     this.groupName = groupName;
+    this.controllerClazz = controllerClazz;
     this.position = position;
   }
 
@@ -19,12 +23,12 @@ public class ResourceGroup {
     return groupName;
   }
 
-  public void setPosition(Integer position) {
-    this.position = position;
-  }
-
   public Integer getPosition() {
     return position;
+  }
+
+  public Class<?> getControllerClass() {
+    return controllerClazz;
   }
 
   @Override
@@ -41,19 +45,19 @@ public class ResourceGroup {
     }
     final ResourceGroup rhs = (ResourceGroup) obj;
 
-    return com.google.common.base.Objects.equal(this.groupName, rhs.groupName);
+    return equal(this.groupName, rhs.groupName)
+      && equal(this.position, rhs.position)
+      && equal(this.controllerClazz, rhs.controllerClazz);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(groupName);
+    return Objects.hashCode(groupName, controllerClazz, position);
   }
 
   @Override
   public String toString() {
-    return "ResourceGroup{" +
-            "groupName='" + groupName + '\'' +
-            ", position=" + position +
-            '}';
+    return String.format("ResourceGroup{groupName='%s', position=%d, controller=%s}", groupName, position,
+            controllerClazz.getName());
   }
 }

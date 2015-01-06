@@ -1,13 +1,14 @@
+
 {
     "apiVersion": "1.0",
     "swaggerVersion": "1.2",
     "basePath": "/",
     "resourcePath": "/features",
     "produces": [
-        "*/*"
+
     ],
     "consumes": [
-        "application/json"
+
     ],
     "apis": [
         {
@@ -30,20 +31,20 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": "OK"
-                        },
-                        {
                             "code": 401,
                             "message": "Unauthorized"
                         },
                         {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
                             "code": 404,
                             "message": "Not Found"
+                        },
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
                         }
                     ],
                     "deprecated": "false",
@@ -65,20 +66,20 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 204,
-                            "message": "No Content"
-                        },
-                        {
                             "code": 401,
                             "message": "Unauthorized"
                         },
                         {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
                             "code": 403,
                             "message": "Forbidden"
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
                         }
                     ],
                     "deprecated": "false",
@@ -104,16 +105,16 @@
                             "message": null
                         },
                         {
-                            "code": 201,
-                            "message": "Created"
+                            "code": 403,
+                            "message": "Forbidden"
                         },
                         {
                             "code": 401,
                             "message": "Unauthorized"
                         },
                         {
-                            "code": 403,
-                            "message": "Forbidden"
+                            "code": 201,
+                            "message": "Created"
                         },
                         {
                             "code": 404,
@@ -143,6 +144,10 @@
                             "message": null
                         },
                         {
+                            "code": 404,
+                            "message": "Not Found"
+                        },
+                        {
                             "code": 201,
                             "message": "Created"
                         },
@@ -153,10 +158,6 @@
                         {
                             "code": 403,
                             "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
                         }
                     ],
                     "deprecated": "false",
@@ -178,20 +179,20 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 204,
-                            "message": "No Content"
+                            "code": 403,
+                            "message": "Forbidden"
                         },
                         {
                             "code": 401,
                             "message": "Unauthorized"
                         },
                         {
-                            "code": 403,
-                            "message": "Forbidden"
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 200,
+                            "message": null
                         }
                     ],
                     "deprecated": "false",
@@ -213,20 +214,20 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null
+                            "code": 403,
+                            "message": "Forbidden"
                         },
                         {
-                            "code": 204,
-                            "message": "No Content"
+                            "code": 200,
+                            "message": null
                         },
                         {
                             "code": 401,
                             "message": "Unauthorized"
                         },
                         {
-                            "code": 403,
-                            "message": "Forbidden"
+                            "code": 204,
+                            "message": "No Content"
                         }
                     ],
                     "deprecated": "false",
@@ -248,20 +249,20 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 204,
-                            "message": "No Content"
+                            "code": 403,
+                            "message": "Forbidden"
                         },
                         {
                             "code": 401,
                             "message": "Unauthorized"
                         },
                         {
-                            "code": 403,
-                            "message": "Forbidden"
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
                         }
                     ],
                     "deprecated": "false",
@@ -283,20 +284,20 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
                             "code": 204,
                             "message": "No Content"
                         },
                         {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
                             "code": 403,
                             "message": "Forbidden"
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
                         }
                     ],
                     "deprecated": "false",
@@ -332,24 +333,24 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null
+                            "code": 404,
+                            "message": "Not Found"
                         },
                         {
-                            "code": 201,
-                            "message": "Created"
+                            "code": 200,
+                            "message": null
                         },
                         {
                             "code": 401,
                             "message": "Unauthorized"
                         },
                         {
-                            "code": 403,
-                            "message": "Forbidden"
+                            "code": 201,
+                            "message": "Created"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 403,
+                            "message": "Forbidden"
                         }
                     ],
                     "deprecated": "false",
@@ -386,6 +387,10 @@
                     ],
                     "responseMessages": [
                         {
+                            "code": 404,
+                            "message": "Not Found"
+                        },
+                        {
                             "code": 200,
                             "message": null
                         },
@@ -400,10 +405,6 @@
                         {
                             "code": 403,
                             "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
                         }
                     ],
                     "deprecated": "false",
@@ -439,8 +440,8 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null
+                            "code": 404,
+                            "message": "Not Found"
                         },
                         {
                             "code": 201,
@@ -455,8 +456,8 @@
                             "message": "Forbidden"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 200,
+                            "message": null
                         }
                     ],
                     "deprecated": "false",
@@ -489,12 +490,12 @@
                             "responseModel": "Example"
                         },
                         {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
                             "code": 403,
                             "message": "Forbidden"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
                         },
                         {
                             "code": 404,
@@ -526,21 +527,21 @@
                     ],
                     "responseMessages": [
                         {
+                            "code": 404,
+                            "message": "Not Found"
+                        },
+                        {
                             "code": 200,
                             "message": "OK",
                             "responseModel": "List"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
                         },
                         {
                             "code": 403,
                             "message": "Forbidden"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 401,
+                            "message": "Unauthorized"
                         }
                     ],
                     "deprecated": "false",
@@ -588,20 +589,20 @@
                             "message": null
                         },
                         {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
                             "code": 401,
                             "message": "Unauthorized"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
                         },
                         {
                             "code": 403,
                             "message": "Forbidden"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 201,
+                            "message": "Created"
                         }
                     ],
                     "deprecated": "false",
@@ -637,10 +638,6 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
                             "code": 201,
                             "message": "Created"
                         },
@@ -649,12 +646,16 @@
                             "message": "Unauthorized"
                         },
                         {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
                             "code": 404,
                             "message": "Not Found"
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
                         }
                     ],
                     "deprecated": "false",
@@ -692,21 +693,21 @@
                     ],
                     "responseMessages": [
                         {
+                            "code": 404,
+                            "message": "Not Found"
+                        },
+                        {
                             "code": 200,
                             "message": "OK",
                             "responseModel": "Pet"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
                         },
                         {
                             "code": 403,
                             "message": "Forbidden"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 401,
+                            "message": "Unauthorized"
                         }
                     ],
                     "deprecated": "false",
@@ -716,51 +717,18 @@
         }
     ],
     "models": {
-        "Void": {
-            "description": "",
-            "id": "Void",
-            "properties": {
-
-            }
-        },
-        "Pet": {
-            "description": "",
-            "id": "Pet",
-            "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "id": {
-                    "required": false,
-                    "type": "string"
-                },
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                }
-            }
-        },
         "DateTimeField": {
             "description": "",
             "id": "DateTimeField",
             "properties": {
-                "name": {
+                "maximumValue": {
                     "required": false,
-                    "type": "string"
+                    "format": "int32",
+                    "type": "integer"
                 },
-                "type": {
+                "leapDurationField": {
                     "required": false,
-                    "type": "DateTimeFieldType"
-                },
-                "supported": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "lenient": {
-                    "required": false,
-                    "type": "boolean"
+                    "type": "DurationField"
                 },
                 "durationField": {
                     "required": false,
@@ -771,18 +739,80 @@
                     "format": "int32",
                     "type": "integer"
                 },
-                "maximumValue": {
+                "supported": {
                     "required": false,
-                    "format": "int32",
-                    "type": "integer"
+                    "type": "boolean"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
                 },
                 "rangeDurationField": {
                     "required": false,
                     "type": "DurationField"
                 },
-                "leapDurationField": {
+                "type": {
                     "required": false,
-                    "type": "DurationField"
+                    "type": "DateTimeFieldType"
+                },
+                "lenient": {
+                    "required": false,
+                    "type": "boolean"
+                }
+            }
+        },
+        "Example": {
+            "description": "",
+            "id": "Example",
+            "properties": {
+                "nestedType": {
+                    "required": false,
+                    "type": "NestedType"
+                },
+                "propertyWithNoSetterMethod": {
+                    "required": false,
+                    "type": "string"
+                },
+                "enumType": {
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ],
+                    "required": false,
+                    "type": "string"
+                },
+                "foo": {
+                    "required": false,
+                    "type": "string"
+                },
+                "bar": {
+                    "description": "description of bar",
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "allCapsSet": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "required": false,
+                    "type": "Set"
+                },
+                "localDateTime": {
+                    "required": false,
+                    "type": "LocalDateTime"
+                },
+                "annotatedEnumType": {
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ],
+                    "required": false,
+                    "type": "string"
+                },
+                "parentBeanProperty": {
+                    "required": false,
+                    "type": "string"
                 }
             }
         },
@@ -796,58 +826,22 @@
                 }
             }
         },
-        "Example": {
+        "Pet": {
             "description": "",
-            "id": "Example",
+            "id": "Pet",
             "properties": {
-                "foo": {
+                "id": {
                     "required": false,
                     "type": "string"
                 },
-                "bar": {
-                    "description": "description of bar",
+                "name": {
+                    "required": false,
+                    "type": "string"
+                },
+                "age": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"
-                },
-                "enumType": {
-                    "enum": [
-                        "ONE",
-                        "TWO"
-                    ],
-                    "required": false,
-                    "type": "string"
-                },
-                "annotatedEnumType": {
-                    "enum": [
-                        "ONE",
-                        "TWO"
-                    ],
-                    "required": false,
-                    "type": "string"
-                },
-                "nestedType": {
-                    "required": false,
-                    "type": "NestedType"
-                },
-                "propertyWithNoSetterMethod": {
-                    "required": false,
-                    "type": "string"
-                },
-                "allCapsSet": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "required": false,
-                    "type": "Set"
-                },
-                "localDateTime": {
-                    "required": false,
-                    "type": "LocalDateTime"
-                },
-                "parentBeanProperty": {
-                    "required": false,
-                    "type": "string"
                 }
             }
         },
@@ -861,11 +855,18 @@
                 }
             }
         },
+        "Void": {
+            "description": "",
+            "id": "Void",
+            "properties": {
+
+            }
+        },
         "LocalDateTime": {
             "description": "",
             "id": "LocalDateTime",
             "properties": {
-                "year": {
+                "centuryOfEra": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"
@@ -875,26 +876,12 @@
                     "format": "int32",
                     "type": "integer"
                 },
+                "hourOfDay": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
                 "dayOfYear": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfWeek": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfMonth": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "chronology": {
-                    "required": false,
-                    "type": "Chronology"
-                },
-                "centuryOfEra": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"
@@ -904,12 +891,24 @@
                     "format": "int32",
                     "type": "integer"
                 },
-                "yearOfCentury": {
+                "values": {
+                    "items": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "required": false,
+                    "type": "Array"
+                },
+                "chronology": {
+                    "required": false,
+                    "type": "Chronology"
+                },
+                "minuteOfHour": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"
                 },
-                "weekyear": {
+                "dayOfMonth": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"
@@ -919,32 +918,39 @@
                     "format": "int32",
                     "type": "integer"
                 },
+                "weekyear": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "year": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "yearOfCentury": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "fieldTypes": {
+                    "items": {
+                        "type": "DateTimeFieldType"
+                    },
+                    "required": false,
+                    "type": "Array"
+                },
                 "weekOfWeekyear": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"
                 },
-                "hourOfDay": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "minuteOfHour": {
+                "dayOfWeek": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"
                 },
                 "secondOfMinute": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "millisOfSecond": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "millisOfDay": {
                     "required": false,
                     "format": "int32",
                     "type": "integer"
@@ -956,20 +962,15 @@
                     "required": false,
                     "type": "Array"
                 },
-                "values": {
-                    "items": {
-                        "format": "int32",
-                        "type": "integer"
-                    },
+                "millisOfDay": {
                     "required": false,
-                    "type": "Array"
+                    "format": "int32",
+                    "type": "integer"
                 },
-                "fieldTypes": {
-                    "items": {
-                        "type": "DateTimeFieldType"
-                    },
+                "millisOfSecond": {
                     "required": false,
-                    "type": "Array"
+                    "format": "int32",
+                    "type": "integer"
                 }
             }
         },
@@ -987,6 +988,10 @@
             "description": "",
             "id": "DurationField",
             "properties": {
+                "supported": {
+                    "required": false,
+                    "type": "boolean"
+                },
                 "name": {
                     "required": false,
                     "type": "string"
@@ -994,10 +999,6 @@
                 "type": {
                     "required": false,
                     "type": "DurationFieldType"
-                },
-                "supported": {
-                    "required": false,
-                    "type": "boolean"
                 },
                 "unitMillis": {
                     "required": false,
@@ -1024,15 +1025,15 @@
             "description": "",
             "id": "DateTimeFieldType",
             "properties": {
+                "rangeDurationType": {
+                    "required": false,
+                    "type": "DurationFieldType"
+                },
                 "name": {
                     "required": false,
                     "type": "string"
                 },
                 "durationType": {
-                    "required": false,
-                    "type": "DurationFieldType"
-                },
-                "rangeDurationType": {
                     "required": false,
                     "type": "DurationFieldType"
                 }

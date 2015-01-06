@@ -10,7 +10,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.schema.ResolvedTypes.*;
-
+//TODO:Move this closer to plugins
 public class ModelContext {
   private final ModelContext parentContext;
   private final Type type;

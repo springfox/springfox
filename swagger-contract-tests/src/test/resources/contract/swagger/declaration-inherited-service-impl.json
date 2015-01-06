@@ -1,13 +1,14 @@
+
 {
     "apiVersion": "1.0",
     "swaggerVersion": "1.2",
     "basePath": "/",
     "resourcePath": "/child/child-method",
     "produces": [
-        "*/*"
+
     ],
     "consumes": [
-        "application/json"
+
     ],
     "apis": [
         {
@@ -43,16 +44,16 @@
                             "responseModel": "string"
                         },
                         {
-                            "code": 401,
-                            "message": "Unauthorized"
+                            "code": 404,
+                            "message": "Not Found"
                         },
                         {
                             "code": 403,
                             "message": "Forbidden"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 401,
+                            "message": "Unauthorized"
                         }
                     ],
                     "deprecated": "false",

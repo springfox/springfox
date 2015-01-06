@@ -4,6 +4,7 @@ import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import spock.lang.Ignore
 
 @Mixin([RequestMappingSupport])
 class MediaTypeReaderSpec extends DocumentationContextSpec {
@@ -39,6 +40,7 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
       ['application/json', 'application/xml'] as String[] | ['application/xml'] as String[]  | dummyHandlerMethod()
   }
 
+  @Ignore("This test should now test the plugin")
   def "handler method should override spring media types"() {
     RequestMappingInfo requestMappingInfo =
           requestMappingInfo('/somePath',

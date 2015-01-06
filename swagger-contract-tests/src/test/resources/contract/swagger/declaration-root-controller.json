@@ -4,10 +4,10 @@
     "basePath": "/",
     "resourcePath": "/",
     "produces": [
-        "*/*"
+
     ],
     "consumes": [
-        "application/json"
+
     ],
     "apis": [
         {
@@ -30,9 +30,8 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "List"
+                            "code": 404,
+                            "message": "Not Found"
                         },
                         {
                             "code": 401,
@@ -43,8 +42,9 @@
                             "message": "Forbidden"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "List"
                         }
                     ],
                     "deprecated": "false",

@@ -1,13 +1,14 @@
+
 {
     "apiVersion": "1.0",
     "swaggerVersion": "1.2",
     "basePath": "/",
     "resourcePath": "/fancypets",
     "produces": [
-        "*/*"
+
     ],
     "consumes": [
-        "application/json"
+
     ],
     "apis": [
         {
@@ -38,24 +39,24 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
+                            "code": 404,
+                            "message": "Not Found"
                         },
                         {
                             "code": 403,
                             "message": "Forbidden"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 200,
+                            "message": null
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
                         }
                     ],
                     "deprecated": "false",
@@ -91,25 +92,25 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "int"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
+                            "code": 404,
+                            "message": "Not Found"
                         },
                         {
                             "code": 401,
                             "message": "Unauthorized"
                         },
                         {
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "int"
+                        },
+                        {
                             "code": 403,
                             "message": "Forbidden"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 201,
+                            "message": "Created"
                         }
                     ],
                     "deprecated": "false",
@@ -156,25 +157,25 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "int"
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
                         },
                         {
                             "code": 201,
                             "message": "Created"
                         },
                         {
-                            "code": 401,
-                            "message": "Unauthorized"
+                            "code": 200,
+                            "message": null,
+                            "responseModel": "int"
                         },
                         {
                             "code": 403,
                             "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
                         }
                     ],
                     "deprecated": "false",
@@ -185,29 +186,14 @@
         }
     ],
     "models": {
-        "FancyPet": {
-            "description": "",
-            "id": "FancyPet",
-            "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "id": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
         "Pet": {
             "description": "",
             "id": "Pet",
             "properties": {
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
                 "name": {
                     "required": false,
                     "type": "string"
@@ -216,10 +202,6 @@
                     "required": false,
                     "format": "int32",
                     "type": "integer"
-                },
-                "id": {
-                    "required": false,
-                    "type": "string"
                 }
             }
         },
@@ -228,6 +210,25 @@
             "id": "Void",
             "properties": {
 
+            }
+        },
+        "FancyPet": {
+            "description": "",
+            "id": "FancyPet",
+            "properties": {
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                },
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                }
             }
         }
     }

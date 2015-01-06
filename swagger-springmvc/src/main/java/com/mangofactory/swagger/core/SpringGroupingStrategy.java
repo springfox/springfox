@@ -50,14 +50,14 @@ public class SpringGroupingStrategy implements ResourceGroupingStrategy {
       for (String groupFromReqMapping : asList(requestMapping.get().value())) {
         if (!isNullOrEmpty(groupFromReqMapping)) {
           String groupName = maybeChompLeadingSlash(firstPathSegment(groupFromReqMapping));
-          groups.add(new ResourceGroup(groupName));
+          groups.add(new ResourceGroup(groupName, handlerMethod.getBeanType()));
         }
       }
       if (groups.size() > 0) {
         return groups;
       }
     }
-    return newHashSet(new ResourceGroup(maybeChompLeadingSlash(defaultGroup.toLowerCase())));
+    return newHashSet(new ResourceGroup(maybeChompLeadingSlash(defaultGroup.toLowerCase()), handlerMethod.getBeanType()));
   }
 
   private String getDescription(HandlerMethod handlerMethod) {

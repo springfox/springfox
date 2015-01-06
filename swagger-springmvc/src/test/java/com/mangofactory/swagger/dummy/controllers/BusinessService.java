@@ -7,6 +7,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.Authorization;
 import com.wordnik.swagger.annotations.AuthorizationScope;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
 @Api(value = "/", description = "Services to demonstrate path variable resolution")
+@RequestMapping(produces = {MediaType.ALL_VALUE, MediaType.APPLICATION_JSON_VALUE},
+        consumes = MediaType.APPLICATION_JSON_VALUE)
 public class BusinessService {
 
   @RequestMapping(value = "/businesses/aliased/{otherId}", method = RequestMethod.GET)

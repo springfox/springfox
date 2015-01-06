@@ -21,6 +21,7 @@
                     "notes": "getAliasedPathVariable",
                     "nickname": "getAliasedPathVariable",
                     "produces": [
+                        "application/json",
                         "*/*"
                     ],
                     "consumes": [
@@ -133,6 +134,7 @@
                     "notes": "getNonAliasedPathVariable",
                     "nickname": "getNonAliasedPathVariable",
                     "produces": [
+                        "application/json",
                         "*/*"
                     ],
                     "consumes": [
@@ -191,6 +193,7 @@
                     "notes": "getResponseEntity",
                     "nickname": "getResponseEntity",
                     "produces": [
+                        "application/json",
                         "*/*"
                     ],
                     "consumes": [
@@ -299,6 +302,7 @@
                     "notes": "getVanillaPathVariable",
                     "nickname": "getVanillaPathVariable",
                     "produces": [
+                        "application/json",
                         "*/*"
                     ],
                     "consumes": [

@@ -27,6 +27,7 @@ import java.util.Date;
 
 import static com.mangofactory.swagger.dummy.DummyModels.*;
 
+@RequestMapping(produces = {"application/json"}, consumes = {"application/json", "application/xml"})
 public class DummyClass {
   public void dummyMethod() {
   }

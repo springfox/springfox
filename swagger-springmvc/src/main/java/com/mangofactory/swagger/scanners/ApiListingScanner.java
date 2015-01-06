@@ -8,6 +8,8 @@ import com.mangofactory.service.model.ApiListing;
 import com.mangofactory.service.model.Authorization;
 import com.mangofactory.service.model.Model;
 import com.mangofactory.service.model.builder.ApiListingBuilder;
+import com.mangofactory.springmvc.plugins.ApiListingContext;
+import com.mangofactory.springmvc.plugins.DocumentationPluginsManager;
 import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.mangofactory.swagger.core.ApiListingScanningContext;
 import com.mangofactory.swagger.core.CommandExecutor;
@@ -15,9 +17,6 @@ import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.readers.ApiDescriptionReader;
 import com.mangofactory.swagger.readers.ApiModelReader;
 import com.mangofactory.swagger.readers.Command;
-import com.mangofactory.swagger.readers.MediaTypeReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,18 +34,17 @@ import static com.google.common.collect.Sets.*;
 
 @Component
 public class ApiListingScanner {
-  private static final Logger LOG = LoggerFactory.getLogger(ApiListingScanner.class);
-  private final MediaTypeReader mediaTypeReader;
   private final ApiDescriptionReader apiDescriptionReader;
   private final ApiModelReader apiModelReader;
+  private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ApiListingScanner(MediaTypeReader mediaTypeReader,
-      ApiDescriptionReader apiDescriptionReader,
-      ApiModelReader apiModelReader) {
-    this.mediaTypeReader = mediaTypeReader;
+  public ApiListingScanner(ApiDescriptionReader apiDescriptionReader,
+                           ApiModelReader apiModelReader,
+                           DocumentationPluginsManager pluginsManager) {
     this.apiDescriptionReader = apiDescriptionReader;
     this.apiModelReader = apiModelReader;
+    this.pluginsManager = pluginsManager;
   }
 
   @SuppressWarnings("unchecked")
@@ -65,10 +63,10 @@ public class ApiListingScanner {
       Set<ApiDescription> apiDescriptions = newHashSet();
 
       List<Command<RequestMappingContext>> readers = newArrayList();
-      readers.add(mediaTypeReader);
       readers.add(apiDescriptionReader);
       readers.add(apiModelReader);
 
+      //TODO: This may not be required at this level
       Map<String, Model> models = new LinkedHashMap<String, Model>();
       AuthorizationContext authorizationContext = context.getDocumentationContext().getAuthorizationContext();
       for (RequestMappingContext each : entry.getValue()) {
@@ -79,11 +77,7 @@ public class ApiListingScanner {
 
         Map<String, Object> results = commandExecutor.execute(readers, each);
 
-        List<String> producesMediaTypes = (List<String>) results.get("produces");
-        List<String> consumesMediaTypes = (List<String>) results.get("consumes");
         models.putAll(each.getModelMap());
-        produces.addAll(producesMediaTypes);
-        consumes.addAll(consumesMediaTypes);
 
         List<ApiDescription> apiDescriptionList = (List<ApiDescription>) results.get("apiDescriptionList");
         apiDescriptions.addAll(apiDescriptionList);
@@ -98,7 +92,7 @@ public class ApiListingScanner {
 
       String apiVersion = "1.0";
       SwaggerPathProvider swaggerPathProvider = context.getDocumentationContext().getSwaggerPathProvider();
-      ApiListing apiListing = new ApiListingBuilder()
+      ApiListingBuilder apiListingBuilder = new ApiListingBuilder()
               .apiVersion(apiVersion)
               .basePath(swaggerPathProvider.getApplicationBasePath())
               .resourcePath(resourcePath)
@@ -109,10 +103,12 @@ public class ApiListingScanner {
               .apis(sortedDescriptions)
               .models(models)
               .description(null)
-              .position(position++)
-              .build();
+              .position(position++);
 
-      apiListingMap.put(resourceGroup.getGroupName(), apiListing);
+      ApiListingContext apiListingContext = new ApiListingContext(context.getDocumentationContext(), resourceGroup,
+              apiListingBuilder);
+
+      apiListingMap.put(resourceGroup.getGroupName(), pluginsManager.enrich(apiListingContext));
     }
     return apiListingMap;
   }

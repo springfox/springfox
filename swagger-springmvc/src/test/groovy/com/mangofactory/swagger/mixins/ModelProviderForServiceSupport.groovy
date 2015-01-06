@@ -1,4 +1,5 @@
 package com.mangofactory.swagger.mixins
+
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
@@ -17,12 +18,16 @@ import com.mangofactory.schema.property.constructor.ConstructorModelPropertyProv
 import com.mangofactory.schema.property.field.FieldModelPropertyProvider
 import com.mangofactory.schema.property.field.FieldProvider
 import com.mangofactory.schema.property.provider.DefaultModelPropertiesProvider
+import com.mangofactory.springmvc.plugins.ApiListingEnricher
+import com.mangofactory.springmvc.plugins.DocumentationPlugin
+import com.mangofactory.springmvc.plugins.DocumentationPluginsManager
 import com.mangofactory.swagger.plugins.ApiModelEnricher
 import com.mangofactory.swagger.plugins.ApiModelPropertyPropertyEnricher
+import com.mangofactory.swagger.readers.MediaTypeReader
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 
-import static com.google.common.collect.Lists.newArrayList
+import static com.google.common.collect.Lists.*
 
 @SuppressWarnings("GrMethodMayBeStatic")
 class ModelProviderForServiceSupport {
@@ -36,6 +41,14 @@ class ModelProviderForServiceSupport {
             OrderAwarePluginRegistry.create(newArrayList(new ApiModelEnricher(new TypeResolver())))
 
     new PluginsManager(propRegistry, modelRegistry)
+  }
+
+  def springPluginsManager() {
+    PluginRegistry<ApiListingEnricher, DocumentationType> apiListingRegistry =
+            OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(new TypeResolver())))
+    PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins =
+            OrderAwarePluginRegistry.create([])
+    new DocumentationPluginsManager(documentationPlugins, apiListingRegistry)
   }
 
   ModelProvider modelProvider(TypeResolver typeResolver = new TypeResolver(),
