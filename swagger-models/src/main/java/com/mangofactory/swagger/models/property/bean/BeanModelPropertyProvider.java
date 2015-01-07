@@ -89,9 +89,9 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
                                                       final AnnotatedMember member) {
     return Iterables.tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
       public boolean apply(ResolvedMethod accessorMethod) {
-        return (accessorMemberIs(accessorMethod, methodName(member))
+        return accessorMemberIs(accessorMethod, methodName(member))
                 &&
-                propertyName.equals(propertyName(accessorMethod.getRawMember())));
+                propertyName.equals(propertyName(accessorMethod.getRawMember()));
       }
     });
   }
