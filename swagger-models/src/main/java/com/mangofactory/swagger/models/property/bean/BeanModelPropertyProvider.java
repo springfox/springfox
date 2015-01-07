@@ -140,22 +140,23 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
             .constructType(resolvedType.getErasedType()));
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
             BeanPropertyDefinitions.beanPropertyByInternalName());
-    for (ResolvedMethod childProperty : accessors.in(resolvedType)) {
-
-      if (propertyLookup.containsKey(propertyName(childProperty.getRawMember()))) {
-        BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getRawMember()));
-        Optional<BeanPropertyDefinition> jacksonProperty
-                = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
-        try {
-          AnnotatedMember member = propertyDefinition.getPrimaryMember();
-          if (accessorMemberIs(childProperty, methodName(member))) {
-            serializationCandidates
-                    .addAll(newArrayList(addDeserializationCandidates(member, childProperty, jacksonProperty)));
-          }
-        } catch (Exception e) {
-          LOG.warn(e.getMessage());
+    for (Map.Entry<String, BeanPropertyDefinition> propertyDefinitionEntry : propertyLookup.entrySet()) {
+      BeanPropertyDefinition propertyDefinition = propertyDefinitionEntry.getValue();
+      Optional<BeanPropertyDefinition> jacksonProperty
+              = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+      try {
+        AnnotatedMember member = propertyDefinition.getPrimaryMember();
+        Optional<ResolvedMethod> accessorMethodOptional = findAccessorMethod(resolvedType, propertyDefinitionEntry
+                .getKey(), member);
+        if (accessorMethodOptional.isPresent()) {
+          ResolvedMethod accessorMethod = accessorMethodOptional.get();
+          serializationCandidates
+                  .addAll(newArrayList(addDeserializationCandidates(member, accessorMethod, jacksonProperty)));
         }
+      } catch (Exception e) {
+        LOG.warn(e.getMessage());
       }
+
     }
     return serializationCandidates;
   }
