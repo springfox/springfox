@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.readers.operation.parameter
 
 import com.google.common.base.Optional
+import com.mangofactory.swagger.plugins.operation.parameter.ParameterAnnotationReader
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import spock.lang.Specification

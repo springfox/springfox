@@ -3,7 +3,6 @@ package com.mangofactory.swagger.scanners;
 import com.mangofactory.service.model.Model;
 import com.mangofactory.springmvc.plugins.DocumentationContext;
 import com.mangofactory.swagger.core.CommandContext;
-import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
@@ -38,10 +37,6 @@ public class RequestMappingContext implements CommandContext<Map<String, Object>
   @Override
   public Map<String, Object> getResult() {
     return context;
-  }
-
-  public ApiParam getApiParamAnnotation() {
-    return this.handlerMethod.getMethodAnnotation(ApiParam.class);
   }
 
   public RequestMappingInfo getRequestMappingInfo() {

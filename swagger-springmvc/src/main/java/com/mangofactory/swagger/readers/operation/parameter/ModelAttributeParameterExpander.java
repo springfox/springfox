@@ -3,8 +3,11 @@ package com.mangofactory.swagger.readers.operation.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.annotations.VisibleForTesting;
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.service.model.Parameter;
+import com.mangofactory.springmvc.plugins.DocumentationPluginsManager;
+import com.mangofactory.springmvc.plugins.ParameterExpansionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +37,18 @@ public class ModelAttributeParameterExpander {
   private static final Logger LOG = LoggerFactory.getLogger(ModelAttributeParameterExpander.class);
   private final AlternateTypeProvider alternateTypeProvider;
   private final TypeResolver resolver;
+  private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ModelAttributeParameterExpander(AlternateTypeProvider alternateTypeProvider, TypeResolver resolver) {
+  public ModelAttributeParameterExpander(AlternateTypeProvider alternateTypeProvider, TypeResolver resolver,
+                                         DocumentationPluginsManager pluginsManager) {
     this.alternateTypeProvider = alternateTypeProvider;
     this.resolver = resolver;
+    this.pluginsManager = pluginsManager;
   }
 
   public void expand(final String parentName, final Class<?> paramType,
-                     final List<Parameter> parameters) {
+                     final List<Parameter> parameters, DocumentationType documentationType) {
 
     Set<String> beanPropNames = getBeanPropertyNames(paramType);
     List<Field> fields = getAllFields(paramType);
@@ -58,7 +64,7 @@ public class ModelAttributeParameterExpander {
       if (!typeBelongsToJavaPackage(resolvedType) && !field.getType().isEnum()) {
         if (!field.getType().equals(paramType)) {
           LOG.debug("Expanding complex field: {} with type: {}", field, resolvedType);
-          expand(nestedParentName(parentName, field), field.getType(), parameters);
+          expand(nestedParentName(parentName, field), field.getType(), parameters, documentationType);
           continue;
         } else {
           LOG.warn("Skipping expanding complex field: {} with type: {} as it is recursively defined", field,
@@ -72,11 +78,9 @@ public class ModelAttributeParameterExpander {
         dataTypeName = resolvedType.getSimpleName();
       }
       LOG.debug("Building parameter for field: {}, with type: ", field, resolvedType);
-      parameters.add(new ParameterBuilder()
-              .forField(field)
-              .withDataTypeName(dataTypeName)
-              .withParentName(parentName)
-              .build());
+      ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(dataTypeName, parentName,
+              field, documentationType);
+      parameters.add(pluginsManager.expandParameter(parameterExpansionContext));
 
     }
   }

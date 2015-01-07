@@ -8,6 +8,7 @@ import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
+import com.mangofactory.swagger.plugins.operation.parameter.ParameterAllowableReader
 import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import com.wordnik.swagger.annotations.ApiParam

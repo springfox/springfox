@@ -1,4 +1,4 @@
-package com.mangofactory.swagger.readers.operation.parameter;
+package com.mangofactory.swagger.plugins.operation.parameter;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;

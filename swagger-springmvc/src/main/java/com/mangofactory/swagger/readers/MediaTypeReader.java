@@ -3,8 +3,8 @@ package com.mangofactory.swagger.readers;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Splitter;
 import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.springmvc.plugins.ApiListingBuilderPlugin;
 import com.mangofactory.springmvc.plugins.ApiListingContext;
-import com.mangofactory.springmvc.plugins.ApiListingEnricher;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
@@ -26,7 +26,7 @@ import static com.google.common.collect.Lists.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
-public class MediaTypeReader implements RequestMappingReader, ApiListingEnricher {
+public class MediaTypeReader implements RequestMappingReader, ApiListingBuilderPlugin {
 
   private final TypeResolver typeResolver;
 
@@ -48,23 +48,11 @@ public class MediaTypeReader implements RequestMappingReader, ApiListingEnricher
     List<String> consumesList = toList(consumesMediaTypes);
     List<String> producesList = toList(producesMediaTypes);
 
-//    ApiOperation annotation = context.getHandlerMethod().getApiOperationAnnotation();
-//    if (null != annotation && hasText(annotation.consumes())) {
-//      consumesList = asList(annotation.consumes());
-//    }
-
     if (handlerMethodHasFileParameter(context)) {
       //Swagger spec requires consumes is multipart/form-data for file parameter types
       consumesList = Arrays.asList("multipart/form-data");
     }
 
-//
-//    if (null != annotation && hasText(annotation.produces())) {
-//      producesList = asList(annotation.produces());
-//    }
-
-    //TODO asList() returns unmodifiable collection so any add..() so this add..() can potentially explode,
-    // seems wrong to depend on varying type conversions and logic - either immutable or not
     if (producesList.isEmpty()) {
       producesList.add(MediaType.ALL_VALUE);
     }
@@ -76,10 +64,10 @@ public class MediaTypeReader implements RequestMappingReader, ApiListingEnricher
   }
 
   @Override
-  public void enrich(ApiListingContext context) {
+  public void apply(ApiListingContext context) {
     RequestMapping annotation = findAnnotation(context.getResourceGroup().getControllerClass(), RequestMapping.class);
     if (annotation != null) {
-      context.getApiListingBuilder()
+      context.apiListingBuilder()
               .appendProduces(newArrayList(annotation.produces()))
               .appendConsumes(newArrayList(annotation.consumes()));
     }

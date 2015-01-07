@@ -3,6 +3,6 @@ package com.mangofactory.springmvc.plugins;
 import com.mangofactory.documentation.plugins.DocumentationType;
 import org.springframework.plugin.core.Plugin;
 
-public interface ApiListingEnricher extends Plugin<DocumentationType> {
-  public void enrich(ApiListingContext apiListingContext);
+public interface ParameterBuilderPlugin extends Plugin<DocumentationType> {
+  public void apply(ParameterContext parameterContext);
 }

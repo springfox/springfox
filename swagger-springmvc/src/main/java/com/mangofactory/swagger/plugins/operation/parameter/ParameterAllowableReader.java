@@ -1,16 +1,18 @@
-package com.mangofactory.swagger.readers.operation.parameter;
+package com.mangofactory.swagger.plugins.operation.parameter;
 
 import com.google.common.base.Splitter;
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.schema.Enums;
-import com.mangofactory.swagger.readers.Command;
-import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.annotations.ApiParam;
 import com.mangofactory.service.model.AllowableListValues;
 import com.mangofactory.service.model.AllowableRangeValues;
 import com.mangofactory.service.model.AllowableValues;
+import com.mangofactory.springmvc.plugins.ParameterBuilderPlugin;
+import com.mangofactory.springmvc.plugins.ParameterContext;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -19,12 +21,13 @@ import java.util.List;
 import static com.google.common.collect.Lists.*;
 import static org.springframework.util.StringUtils.*;
 
-public class ParameterAllowableReader implements Command<RequestMappingContext> {
+@Component("swaggerParameterAllowableReader")
+public class ParameterAllowableReader implements ParameterBuilderPlugin {
   private static final Logger log = LoggerFactory.getLogger(ParameterAllowableReader.class);
 
   @Override
-  public void execute(RequestMappingContext context) {
-    MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
+  public void apply(ParameterContext context) {
+    MethodParameter methodParameter = context.methodParameter();
     AllowableValues allowableValues = null;
     String allowableValueString = findAnnotatedAllowableValues(methodParameter);
     if (allowableValueString != null && !"".equals(allowableValueString)) {
@@ -37,7 +40,7 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
         allowableValues = Enums.allowableValues(methodParameter.getParameterType().getComponentType());
       }
     }
-    context.put("allowableValues", allowableValues);
+    context.parameterBuilder().allowableValues(allowableValues);
   }
 
   public static AllowableValues allowableValueFromString(String allowableValueString) {
@@ -56,6 +59,11 @@ public class ParameterAllowableReader implements Command<RequestMappingContext> 
       allowableValues = new AllowableListValues(singleVal, "LIST");
     }
     return allowableValues;
+  }
+
+  @Override
+  public boolean supports(DocumentationType delimiter) {
+    return true;
   }
 
   private String findAnnotatedAllowableValues(MethodParameter methodParameter) {

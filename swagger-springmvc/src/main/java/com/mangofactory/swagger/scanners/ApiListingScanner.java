@@ -72,7 +72,7 @@ public class ApiListingScanner {
       for (RequestMappingContext each : entry.getValue()) {
 
         CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
-        each.put("authorizationContext", authorizationContext);
+        each.put("authorizationContext", authorizationContext);//TODO: Fix this reference
         each.put("currentResourceGroup", resourceGroup);
 
         Map<String, Object> results = commandExecutor.execute(readers, each);
@@ -108,7 +108,7 @@ public class ApiListingScanner {
       ApiListingContext apiListingContext = new ApiListingContext(context.getDocumentationContext(), resourceGroup,
               apiListingBuilder);
 
-      apiListingMap.put(resourceGroup.getGroupName(), pluginsManager.enrich(apiListingContext));
+      apiListingMap.put(resourceGroup.getGroupName(), pluginsManager.apiListing(apiListingContext));
     }
     return apiListingMap;
   }

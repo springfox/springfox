@@ -1,9 +1,10 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
-import com.mangofactory.swagger.readers.Command;
-import com.mangofactory.swagger.scanners.RequestMappingContext;
-import com.wordnik.swagger.annotations.ApiParam;
+import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.springmvc.plugins.ParameterBuilderPlugin;
+import com.mangofactory.springmvc.plugins.ParameterContext;
 import org.springframework.core.MethodParameter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,11 +13,17 @@ import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ParameterRequiredReader implements Command<RequestMappingContext> {
+@Component
+public class ParameterRequiredReader implements ParameterBuilderPlugin {
   @Override
-  public void execute(RequestMappingContext context) {
-    MethodParameter methodParameter = (MethodParameter) context.get("methodParameter");
-    context.put("required", getAnnotatedRequired(methodParameter));
+  public void apply(ParameterContext context) {
+    MethodParameter methodParameter = context.methodParameter();
+    context.parameterBuilder().required(getAnnotatedRequired(methodParameter));
+  }
+
+  @Override
+  public boolean supports(DocumentationType delimiter) {
+    return true;
   }
 
   private Boolean getAnnotatedRequired(MethodParameter methodParameter) {
@@ -29,9 +36,7 @@ public class ParameterRequiredReader implements Command<RequestMappingContext> {
 
     if (null != methodAnnotations) {
       for (Annotation annotation : methodAnnotations) {
-        if (annotation instanceof ApiParam) {
-          requiredSet.add(((ApiParam) annotation).required());
-        } else if (annotation instanceof RequestParam) {
+        if (annotation instanceof RequestParam) {
           requiredSet.add(!optional && ((RequestParam) annotation).required());
         } else if (annotation instanceof RequestHeader) {
           requiredSet.add(!optional && ((RequestHeader) annotation).required());

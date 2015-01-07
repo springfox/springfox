@@ -23,7 +23,7 @@ public class ApiListingContext {
     return resourceGroup;
   }
 
-  public ApiListingBuilder getApiListingBuilder() {
+  public ApiListingBuilder apiListingBuilder() {
     return apiListingBuilder;
   }
 }

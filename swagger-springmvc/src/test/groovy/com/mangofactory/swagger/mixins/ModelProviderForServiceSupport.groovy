@@ -1,5 +1,4 @@
 package com.mangofactory.swagger.mixins
-
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
@@ -18,7 +17,7 @@ import com.mangofactory.schema.property.constructor.ConstructorModelPropertyProv
 import com.mangofactory.schema.property.field.FieldModelPropertyProvider
 import com.mangofactory.schema.property.field.FieldProvider
 import com.mangofactory.schema.property.provider.DefaultModelPropertiesProvider
-import com.mangofactory.springmvc.plugins.ApiListingEnricher
+import com.mangofactory.springmvc.plugins.ApiListingBuilderPlugin
 import com.mangofactory.springmvc.plugins.DocumentationPlugin
 import com.mangofactory.springmvc.plugins.DocumentationPluginsManager
 import com.mangofactory.swagger.plugins.ApiModelEnricher
@@ -44,7 +43,7 @@ class ModelProviderForServiceSupport {
   }
 
   def springPluginsManager() {
-    PluginRegistry<ApiListingEnricher, DocumentationType> apiListingRegistry =
+    PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingRegistry =
             OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(new TypeResolver())))
     PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins =
             OrderAwarePluginRegistry.create([])

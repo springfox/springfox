@@ -8,8 +8,6 @@ import com.mangofactory.swagger.readers.operation.DefaultResponseMessageReader
 import com.mangofactory.swagger.readers.operation.OperationResponseClassReader
 import com.mangofactory.swagger.readers.operation.parameter.ModelAttributeParameterExpander
 import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader
-import com.mangofactory.swagger.readers.operation.parameter.ParameterDataTypeReader
-import com.mangofactory.swagger.readers.operation.parameter.ParameterTypeReader
 import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
 import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.web.method.HandlerMethod
@@ -35,8 +33,6 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
     OperationResponseClassReader operationClassReader =
             new OperationResponseClassReader(typeResolver, alternateTypeProvider)
     OperationParameterReader operationParameterReader = new OperationParameterReader(typeResolver,
-            new ParameterDataTypeReader(alternateTypeProvider),
-            new ParameterTypeReader(alternateTypeProvider),
             new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver))
     DefaultResponseMessageReader defaultMessageReader =
             new DefaultResponseMessageReader(typeResolver, alternateTypeProvider)

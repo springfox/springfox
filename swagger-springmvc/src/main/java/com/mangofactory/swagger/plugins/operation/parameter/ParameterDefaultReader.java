@@ -1,19 +1,19 @@
-package com.mangofactory.swagger.readers.operation.parameter;
+package com.mangofactory.swagger.plugins.operation.parameter;
 
 import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.springmvc.plugins.ParameterBuilderPlugin;
 import com.mangofactory.springmvc.plugins.ParameterContext;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ValueConstants;
 
 import java.lang.annotation.Annotation;
 
 import static com.google.common.base.Strings.*;
+import static org.springframework.util.StringUtils.*;
 
-@Component
+@Component("swaggerParameterDefaultReader")
 public class ParameterDefaultReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
@@ -34,10 +34,8 @@ public class ParameterDefaultReader implements ParameterBuilderPlugin {
     Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
     if (null != methodAnnotations) {
       for (Annotation annotation : methodAnnotations) {
-        if (annotation instanceof RequestParam) {
-          return ((RequestParam) annotation).defaultValue();
-        } else if (annotation instanceof RequestHeader) {
-          return ((RequestHeader) annotation).defaultValue();
+        if (annotation instanceof ApiParam && hasText(((ApiParam) annotation).defaultValue())) {
+          return ((ApiParam) annotation).defaultValue();
         }
       }
     }

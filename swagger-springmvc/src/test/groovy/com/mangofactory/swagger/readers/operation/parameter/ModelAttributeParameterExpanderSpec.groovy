@@ -26,7 +26,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
   def "should expand an parameters"() {
     when:
-      sut.expand("", Example, parameters);
+      sut.expand("", Example, parameters, documentationType);
     then:
       parameters.size() == 8
       parameters.find { it.name == 'parentBeanProperty' }
@@ -41,7 +41,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
   def "should expand an parameters when parent name is not empty"() {
     when:
-      sut.expand("parent", Example, parameters);
+      sut.expand("parent", Example, parameters, documentationType);
     then:
       parameters.size() == 8
       parameters.find { it.name == 'parent.parentBeanProperty' }
@@ -64,7 +64,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
         }
       }
     when:
-      expander.expand("", Example, parameters);
+      expander.expand("", Example, parameters, documentationType);
     then:
       parameters.size() == 0;
   }

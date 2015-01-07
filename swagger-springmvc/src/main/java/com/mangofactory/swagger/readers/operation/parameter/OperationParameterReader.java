@@ -1,10 +1,10 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.service.model.AllowableValues;
 import com.mangofactory.service.model.Parameter;
-import com.mangofactory.swagger.core.CommandExecutor;
-import com.mangofactory.swagger.readers.Command;
+import com.mangofactory.service.model.builder.ParameterBuilder;
+import com.mangofactory.springmvc.plugins.DocumentationPluginsManager;
+import com.mangofactory.springmvc.plugins.ParameterContext;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.readers.operation.SwaggerParameterReader;
@@ -17,7 +17,6 @@ import org.springframework.web.method.HandlerMethod;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
@@ -25,19 +24,16 @@ import static com.google.common.collect.Lists.*;
 @Component
 public class OperationParameterReader extends SwaggerParameterReader {
   private final TypeResolver typeResolver;
-  private final ParameterDataTypeReader parameterDataTypeReader;
-  private final ParameterTypeReader parameterTypeReader;
   private final ModelAttributeParameterExpander expander;
+  private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
   public OperationParameterReader(TypeResolver typeResolver,
-                                  ParameterDataTypeReader parameterDataTypeReader,
-                                  ParameterTypeReader parameterTypeReader,
-                                  ModelAttributeParameterExpander expander) {
+                                  ModelAttributeParameterExpander expander,
+                                  DocumentationPluginsManager pluginsManager) {
     this.typeResolver = typeResolver;
-    this.parameterDataTypeReader = parameterDataTypeReader;
-    this.parameterTypeReader = parameterTypeReader;
     this.expander = expander;
+    this.pluginsManager = pluginsManager;
   }
 
   @Override
@@ -48,46 +44,22 @@ public class OperationParameterReader extends SwaggerParameterReader {
     List<ResolvedMethodParameter> methodParameters = handlerMethodResolver.methodParameters(handlerMethod);
     List<Parameter> parameters = newArrayList();
 
-    List<Command<RequestMappingContext>> commandList = newArrayList();
-    commandList.add(new ParameterAllowableReader());
-    commandList.add(parameterDataTypeReader);
-    commandList.add(parameterTypeReader);
-    commandList.add(new ParameterDefaultReader());
-    commandList.add(new ParameterDescriptionReader());
-    commandList.add(new ParameterMultiplesReader());
-    commandList.add(new ParameterNameReader());
-    commandList.add(new ParameterRequiredReader());
-
     for (ResolvedMethodParameter methodParameter : methodParameters) {
 
       if (!shouldIgnore(methodParameter, context.getDocumentationContext().getIgnorableParameterTypes())) {
 
-        RequestMappingContext parameterContext = context.newCopyUsingHandlerMethod(handlerMethod);
+        RequestMappingContext parameterRMCContext = context.newCopyUsingHandlerMethod(handlerMethod);
+        parameterRMCContext.put("methodParameter", methodParameter.getMethodParameter());
+        parameterRMCContext.put("resolvedMethodParameter", methodParameter);
 
-        parameterContext.put("methodParameter", methodParameter.getMethodParameter());
-        parameterContext.put("resolvedMethodParameter", methodParameter);
-
-        CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
-
-        commandExecutor.execute(commandList, parameterContext);
-
-        Map<String, Object> result = parameterContext.getResult();
+        ParameterContext parameterContext = new ParameterContext(methodParameter, new  ParameterBuilder(),
+                context.getDocumentationContext());
 
         if (!shouldExpand(methodParameter)) {
-          Parameter parameter = new com.mangofactory.service.model.builder.ParameterBuilder()
-                  .name((String) result.get("name"))
-                  .description((String) result.get("description"))
-                  .defaultValue((String) result.get("defaultValue"))
-                  .required((Boolean) result.get("required"))
-                  .allowMultiple((Boolean) result.get("allowMultiple"))
-                  .dataType((String) result.get("dataType"))
-                  .allowableValues((AllowableValues) result.get("allowableValues"))
-                  .parameterType((String) result.get("paramType"))
-                  .parameterAccess((String) result.get("paramAccess"))
-                  .build();
-          parameters.add(parameter);
+          parameters.add(pluginsManager.parameter(parameterContext));
         } else {
-          expander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters);
+          expander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters, context
+                  .getDocumentationContext().getDocumentationType());
         }
       }
     }
