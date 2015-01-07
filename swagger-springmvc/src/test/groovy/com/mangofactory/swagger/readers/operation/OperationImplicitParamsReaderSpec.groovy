@@ -2,6 +2,8 @@ package com.mangofactory.swagger.readers.operation
 
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.plugins.operation.OperationImplicitParameterReader
+import com.mangofactory.swagger.plugins.operation.OperationImplicitParametersReader
 import com.mangofactory.swagger.readers.operation.parameter.ModelAttributeParameterExpander
 import com.mangofactory.swagger.readers.operation.parameter.OperationParameterReader
 import com.mangofactory.swagger.readers.operation.parameter.ParameterDataTypeReader

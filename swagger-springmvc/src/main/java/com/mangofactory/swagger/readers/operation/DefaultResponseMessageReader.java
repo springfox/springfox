@@ -27,6 +27,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
@@ -35,7 +37,7 @@ import static com.mangofactory.schema.ResolvedTypes.*;
 import static com.mangofactory.swagger.core.ModelUtils.*;
 
 @Component
-public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
+public class DefaultResponseMessageReader implements RequestMappingReader {
 
   private final TypeResolver typeResolver;
   private final AlternateTypeProvider alternateTypeProvider;
@@ -47,6 +49,15 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
   }
 
   @Override
+  public void execute(RequestMappingContext context) {
+    RequestMethod currentHttpMethod = (RequestMethod) context.get("currentHttpMethod");
+    HandlerMethod handlerMethod = context.getHandlerMethod();
+
+    Set<ResponseMessage> responseMessages = (Set<ResponseMessage>) context.get("responseMessages");
+    Collection<ResponseMessage> read = read(context, currentHttpMethod, handlerMethod);
+    context.put("responseMessages", newSet(responseMessages, read));
+  }
+
   protected Collection<ResponseMessage> read(RequestMappingContext context, RequestMethod currentHttpMethod,
                                              HandlerMethod handlerMethod) {
     List<ResponseMessage> responseMessages = globalResponseMessages(context, currentHttpMethod);
@@ -160,4 +171,15 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
     return responseMessages;
   }
 
+  private Set<ResponseMessage> newSet(Set<ResponseMessage> responseMessages, Collection<ResponseMessage> read) {
+    TreeSet<ResponseMessage> toSet = new TreeSet<ResponseMessage>(new Comparator<ResponseMessage>() {
+      @Override
+      public int compare(ResponseMessage first, ResponseMessage second) {
+        return first.getCode() - second.getCode();
+      }
+    });
+    toSet.addAll(responseMessages);
+    toSet.addAll(read);
+    return toSet;
+  }
 }

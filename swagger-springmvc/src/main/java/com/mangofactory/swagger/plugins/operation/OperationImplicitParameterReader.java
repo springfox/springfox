@@ -3,7 +3,7 @@ package com.mangofactory.swagger.plugins.operation;
 import com.google.common.collect.Lists;
 import com.mangofactory.service.model.Parameter;
 import com.mangofactory.service.model.builder.ParameterBuilder;
-import com.mangofactory.swagger.readers.operation.SwaggerParameterReader;
+import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -13,11 +13,21 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 
+import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.plugins.operation.parameter.ParameterAllowableReader.*;
 
-public class OperationImplicitParameterReader extends SwaggerParameterReader {
+public class OperationImplicitParameterReader implements RequestMappingReader {
 
   @Override
+  public final void execute(RequestMappingContext context) {
+    List<Parameter> parameters = (List<Parameter>) context.get("parameters");
+    if (parameters == null) {
+      parameters = newArrayList();
+    }
+    parameters.addAll(this.readParameters(context));
+    context.put("parameters", parameters);
+  }
+
   protected Collection<? extends Parameter> readParameters(RequestMappingContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     Method method = handlerMethod.getMethod();

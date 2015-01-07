@@ -6,8 +6,8 @@ import com.mangofactory.service.model.builder.ParameterBuilder;
 import com.mangofactory.springmvc.plugins.DocumentationPluginsManager;
 import com.mangofactory.springmvc.plugins.ParameterContext;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
+import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
-import com.mangofactory.swagger.readers.operation.SwaggerParameterReader;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ import java.util.Set;
 import static com.google.common.collect.Lists.*;
 
 @Component
-public class OperationParameterReader extends SwaggerParameterReader {
+public class OperationParameterReader implements RequestMappingReader {
   private final TypeResolver typeResolver;
   private final ModelAttributeParameterExpander expander;
   private final DocumentationPluginsManager pluginsManager;
@@ -37,6 +37,15 @@ public class OperationParameterReader extends SwaggerParameterReader {
   }
 
   @Override
+  public final void execute(RequestMappingContext context) {
+    List<Parameter> parameters = (List<Parameter>) context.get("parameters");
+    if (parameters == null) {
+      parameters = newArrayList();
+    }
+    parameters.addAll(this.readParameters(context));
+    context.put("parameters", parameters);
+  }
+
   protected Collection<? extends Parameter> readParameters(final RequestMappingContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(typeResolver);
