@@ -28,12 +28,12 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
 
   @SuppressWarnings("unchecked")
   @Override
-  public void execute(RequestMappingContext context) {
-    RequestMappingInfo requestMappingInfo = context.getRequestMappingInfo();
-    HandlerMethod handlerMethod = context.getHandlerMethod();
+  public void execute(RequestMappingContext outerContext) {
+    RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
+    HandlerMethod handlerMethod = outerContext.getHandlerMethod();
     PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
-    RequestMappingEvaluator requestMappingEvaluator = context.getDocumentationContext().getRequestMappingEvaluator();
-    SwaggerPathProvider swaggerPathProvider = context.getDocumentationContext().getSwaggerPathProvider();
+    RequestMappingEvaluator requestMappingEvaluator = outerContext.getDocumentationContext().getRequestMappingEvaluator();
+    SwaggerPathProvider swaggerPathProvider = outerContext.getDocumentationContext().getSwaggerPathProvider();
 
     List<ApiDescription> apiDescriptionList = newArrayList();
     for (String pattern : patternsCondition.getPatterns()) {
@@ -41,19 +41,18 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
         String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
         String path = swaggerPathProvider.getOperationPath(cleanedRequestMappingPath);
         String methodName = handlerMethod.getMethod().getName();
-        context.put("requestMappingPattern", cleanedRequestMappingPath);
-        operationReader.execute(context);
-        List<Operation> operations = (List<Operation>) context.get("operations");
+        RequestMappingContext operationContext = outerContext.copyPatternUsing(cleanedRequestMappingPath);
+        operationReader.execute(operationContext);
         apiDescriptionList.add(
                 new ApiDescriptionBuilder()
                         .path(path)
                         .description(methodName)
-                        .operations(operations)
+                        .operations((List<Operation>) operationContext.get("operations"))
                         .hidden(false)
                         .build());
       }
     }
-    context.put("apiDescriptionList", apiDescriptionList);
+    outerContext.put("apiDescriptionList", apiDescriptionList);
   }
 
   /**

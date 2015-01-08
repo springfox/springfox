@@ -1,10 +1,12 @@
 package com.mangofactory.swagger.readers
+import com.mangofactory.service.model.builder.OperationBuilder
+import com.mangofactory.springmvc.plugins.OperationContext
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.scanners.RequestMappingContext
+import com.mangofactory.swagger.plugins.operation.SwaggerMediaTypeReader
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
-import spock.lang.Ignore
 
 @Mixin([RequestMappingSupport])
 class MediaTypeReaderSpec extends DocumentationContextSpec {
@@ -24,23 +26,25 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
                         'producesRequestCondition': producesRequestCondition(produces)
                   ]
             )
-      RequestMappingContext requestMappingContext = new RequestMappingContext(context(), requestMappingInfo,
-              handlerMethod)
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
+              context(), "")
     when:
-      sut.execute(requestMappingContext)
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
 
     then:
-      requestMappingContext.get("consumes") == consumes
-      requestMappingContext.get("produces") == produces
+      operation.consumes == consumes
+      operation.produces == produces
 
     where:
       consumes                                            | produces                         | handlerMethod
       ['application/json'] as String[]                    | ['application/json'] as String[] | dummyHandlerMethod()
       ['application/json'] as String[]                    | ['application/xml'] as String[]  | dummyHandlerMethod()
+      ['multipart/form-data'] as String[]                 | ['application/json'] as String[] | dummyHandlerMethod('methodWithMediaTypeAndFile', MultipartFile)
       ['application/json', 'application/xml'] as String[] | ['application/xml'] as String[]  | dummyHandlerMethod()
   }
 
-  @Ignore("This test should now test the plugin")
   def "handler method should override spring media types"() {
     RequestMappingInfo requestMappingInfo =
           requestMappingInfo('/somePath',
@@ -49,20 +53,22 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
                       'producesRequestCondition': producesRequestCondition(['application/json'] as String[])
                 ]
           )
-    RequestMappingContext requestMappingContext = new RequestMappingContext(context(), requestMappingInfo,
-            handlerMethod)
+    OperationContext operationContext = new OperationContext(new OperationBuilder(),
+            RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
+            context(), "")
     when:
-      sut.execute(requestMappingContext)
+      new SwaggerMediaTypeReader().apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
 
     then:
-      requestMappingContext.get("consumes") == expectedConsumes
-      requestMappingContext.get("produces") == expectedProduces
+      operation.consumes == expectedConsumes
+      operation.produces == expectedProduces
 
     where:
       expectedConsumes                        | expectedProduces                        | handlerMethod
-      ['application/xml'] as String[]         | ['application/json'] as String[]        | dummyHandlerMethod('methodWithXmlConsumes')
-      ['application/json'] as String[]        | ['application/xml'] as String[]         | dummyHandlerMethod('methodWithXmlProduces')
-      ["multipart/form-data"]                 | ['application/json']                    | dummyHandlerMethod('methodWithMediaTypeAndFile', MultipartFile)
+      ['application/xml'] as String[]         | [] as String[]                          | dummyHandlerMethod('methodWithXmlConsumes')
+      [] as String[]                          | ['application/xml'] as String[]         | dummyHandlerMethod('methodWithXmlProduces')
+      ['application/xml']                     | ['application/json']                    | dummyHandlerMethod('methodWithMediaTypeAndFile', MultipartFile)
       ['application/xml'] as String[]         | ['application/xml'] as String[]         | dummyHandlerMethod('methodWithBothXmlMediaTypes')
       ['application/xml', 'application/json'] | ['application/xml', 'application/json'] | dummyHandlerMethod('methodWithMultipleMediaTypes')
 

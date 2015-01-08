@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -72,15 +73,11 @@ public class ApiListingScanner {
       for (RequestMappingContext each : entry.getValue()) {
 
         CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
-        each.put("authorizationContext", authorizationContext);//TODO: Fix this reference
-        each.put("currentResourceGroup", resourceGroup);
-
         Map<String, Object> results = commandExecutor.execute(readers, each);
 
         models.putAll(each.getModelMap());
 
-        List<ApiDescription> apiDescriptionList = (List<ApiDescription>) results.get("apiDescriptionList");
-        apiDescriptions.addAll(apiDescriptionList);
+        apiDescriptions.addAll((Collection<? extends ApiDescription>) results.get("apiDescriptionList"));
       }
 
       List<Authorization> authorizations = authorizationContext.getScalaAuthorizations();

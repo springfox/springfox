@@ -1,34 +1,31 @@
 package com.mangofactory.swagger.readers.operation.parameter
+import com.mangofactory.service.model.builder.ParameterBuilder
+import com.mangofactory.springmvc.plugins.ParameterContext
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.DummyModels
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.readers.Command
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
-import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.springframework.core.MethodParameter
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
 
-@Mixin([RequestMappingSupport, DocumentationContextSupport])
+@Mixin([RequestMappingSupport])
 class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   HandlerMethod handlerMethod = Stub(HandlerMethod)
   MethodParameter methodParameter = Stub(MethodParameter)
 
    def "Parameter types"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo("somePath"), handlerMethod)
       ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter,
               defaultValues.typeResolver.resolve(paramType))
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
       methodParameter.getParameterType() >> paramType
-      context.put("methodParameter", methodParameter)
-      context.put("resolvedMethodParameter", resolvedMethodParameter)
 
     when:
-      Command sut = new ParameterDataTypeReader(defaultValues.alternateTypeProvider)
-      sut.execute(context)
+      def sut = new ParameterDataTypeReader(defaultValues.alternateTypeProvider)
+      sut.apply(parameterContext)
     then:
-      context.get('dataType') == expected
+      parameterContext.parameterBuilder().build().parameterType == expected
     where:
       paramType                       | expected
       char.class                      | "string"

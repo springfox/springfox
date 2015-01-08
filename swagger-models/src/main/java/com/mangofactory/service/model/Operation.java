@@ -20,6 +20,7 @@ public class Operation {
   private final List<String> produces;
   private final List<String> consumes;
   private final List<String> protocol;
+  private final boolean isHidden;
   private final Map<String, List<AuthorizationScope>> authorizations;
   private final List<Parameter> parameters;
   private final Set<ResponseMessage> responseMessages;
@@ -29,7 +30,7 @@ public class Operation {
                    List<String> produces, List<String> consumes, List<String> protocol,
                    List<Authorization>
                            authorizations, List<Parameter> parameters, Set<ResponseMessage> responseMessages, String
-                           deprecated) {
+                           deprecated, boolean isHidden) {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
@@ -40,10 +41,15 @@ public class Operation {
     this.produces = produces;
     this.consumes = consumes;
     this.protocol = protocol;
+    this.isHidden = isHidden;
     this.authorizations = toAuthorizationsMap(authorizations);
     this.parameters = parameters;
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
+  }
+
+  public boolean isHidden() {
+    return isHidden;
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {

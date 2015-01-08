@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 
-class ParameterAnnotationReader {
+public class ParameterAnnotationReader {
   private static <A extends Annotation> Predicate<? super Annotation> annotationOfType(final Class<A> annotationType) {
     return new Predicate<Annotation>() {
       @Override

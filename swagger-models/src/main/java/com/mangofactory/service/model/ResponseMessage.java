@@ -22,4 +22,24 @@ public class ResponseMessage {
   public String getResponseModel() {
     return responseModel;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ResponseMessage that = (ResponseMessage) o;
+
+    return code == that.code;
+
+  }
+
+  @Override
+  public int hashCode() {
+    return code;
+  }
 }

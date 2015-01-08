@@ -10,9 +10,9 @@ public class ParameterContext {
   private final ResolvedMethodParameter resolvedMethodParameter;
   private final DocumentationContext documentationContext;
 
-  public ParameterContext(ResolvedMethodParameter
-                                  resolvedMethodParameter, ParameterBuilder parameterBuilder, DocumentationContext
-          documentationContext) {
+  public ParameterContext(ResolvedMethodParameter resolvedMethodParameter,
+                          ParameterBuilder parameterBuilder,
+                          DocumentationContext documentationContext) {
     this.parameterBuilder = parameterBuilder;
     this.resolvedMethodParameter = resolvedMethodParameter;
     this.documentationContext = documentationContext;
@@ -28,6 +28,10 @@ public class ParameterContext {
 
   public ParameterBuilder parameterBuilder() {
     return parameterBuilder;
+  }
+
+  public DocumentationContext getDocumentationContext() {
+    return documentationContext;
   }
 
   public DocumentationType getDocumentationType() {

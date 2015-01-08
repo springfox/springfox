@@ -6,11 +6,16 @@ import com.mangofactory.springmvc.plugins.OperationContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OperationDeprecatedReader implements OperationBuilderPlugin {
+public class DefaultOperationBuilder implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
-    boolean isDeprecated = context.getHandlerMethod().getMethodAnnotation(Deprecated.class) != null;
-    context.operationBuilder().deprecated(String.valueOf(isDeprecated));
+    String operationName = context.getHandlerMethod().getMethod().getName();
+    context.operationBuilder()
+            .method(context.httpMethod())
+            .nickname(operationName)
+            .notes(operationName)
+            .position(context.operationIndex())
+            .summary(operationName);
   }
 
   @Override

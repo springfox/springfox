@@ -1,12 +1,20 @@
 package com.mangofactory.service.model.builder;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import com.mangofactory.service.model.Authorization;
 import com.mangofactory.service.model.Operation;
 import com.mangofactory.service.model.Parameter;
-import com.mangofactory.service.model.Authorization;
 import com.mangofactory.service.model.ResponseMessage;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Set;
+
+import static com.google.common.base.Strings.*;
+import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Sets.*;
 
 public class OperationBuilder {
   private String method;
@@ -15,13 +23,14 @@ public class OperationBuilder {
   private String responseClass;
   private String nickname;
   private int position;
-  private List<String> produces;
-  private List<String> consumes;
+  private List<String> produces = newArrayList();
+  private List<String> consumes = newArrayList();
   private List<String> protocol;
-  private List<Authorization> authorizations;
-  private List<Parameter> parameters;
-  private Set<ResponseMessage> responseMessages;
+  private List<Authorization> authorizations = newArrayList();
+  private List<Parameter> parameters = newArrayList();
+  private Set<ResponseMessage> responseMessages = newHashSet();
   private String deprecated;
+  private boolean isHidden;
 
   public OperationBuilder method(String method) {
     this.method = method;
@@ -54,12 +63,12 @@ public class OperationBuilder {
   }
 
   public OperationBuilder produces(List<String> produces) {
-    this.produces = produces;
+    this.produces.addAll(produces);
     return this;
   }
 
   public OperationBuilder consumes(List<String> consumes) {
-    this.consumes = consumes;
+    this.consumes.addAll(consumes);
     return this;
   }
 
@@ -74,15 +83,48 @@ public class OperationBuilder {
   }
 
   public OperationBuilder parameters(List<Parameter> parameters) {
-    this.parameters = parameters;
+    this.parameters.addAll(parameters);
     return this;
   }
 
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = responseMessages;
+    //Add logic to consolidate the response messages
+    ImmutableMap<Integer, ResponseMessage> responsesByCode = Maps.uniqueIndex(this.responseMessages,
+            byStatusCode());
+    Set<ResponseMessage> merged = newHashSet(this.responseMessages);
+    for (ResponseMessage each : responseMessages) {
+      if (responsesByCode.containsKey(each.getCode())) {
+        ResponseMessage responseMessage = responsesByCode.get(each.getCode());
+        String message = coalese(responseMessage.getMessage(), HttpStatus.OK.getReasonPhrase());
+        String responseWithModel = coalese(responseMessage.getResponseModel(), each.getResponseModel());
+        merged.remove(each);
+        merged.add(new ResponseMessageBuilder()
+                .code(each.getCode())
+                .message(message)
+                .responseModel(responseWithModel)
+                .build());
+      } else {
+        merged.add(each);
+      }
+    }
+    this.responseMessages = newHashSet(merged);
     return this;
   }
 
+  private String coalese(String overrideMessage, String defaultMessage) {
+    if (isNullOrEmpty(overrideMessage)) {
+      return defaultMessage;
+    }
+    return overrideMessage;
+  }
+  private Function<? super ResponseMessage, Integer> byStatusCode() {
+    return new Function<ResponseMessage, Integer>() {
+      @Override
+      public Integer apply(ResponseMessage input) {
+        return input.getCode();
+      }
+    };
+  }
   public OperationBuilder deprecated(String deprecated) {
     this.deprecated = deprecated;
     return this;
@@ -90,6 +132,11 @@ public class OperationBuilder {
 
   public Operation build() {
     return new Operation(method, summary, notes, responseClass, nickname, position, produces,
-            consumes, protocol, authorizations, parameters, responseMessages, deprecated);
+            consumes, protocol, authorizations, parameters, responseMessages, deprecated, isHidden);
+  }
+
+  public OperationBuilder hidden(boolean isHidden) {
+    this.isHidden = isHidden;
+    return this;
   }
 }

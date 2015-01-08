@@ -16,14 +16,27 @@ public class RequestMappingContext implements CommandContext<Map<String, Object>
   private final Map<String, Object> context = newHashMap();
   private final Map<String, Model> modelMap = newHashMap();
   private final DocumentationContext documentationContext;
+  private final String requestMappingPattern;
 
-  public RequestMappingContext(DocumentationContext context,
-                               RequestMappingInfo requestMappingInfo,
-                               HandlerMethod handlerMethod) {
+  private RequestMappingContext(DocumentationContext context,
+                                 RequestMappingInfo requestMappingInfo,
+                                 HandlerMethod handlerMethod,
+                                 String requestMappingPattern) {
 
     this.documentationContext = context;
     this.requestMappingInfo = requestMappingInfo;
     this.handlerMethod = handlerMethod;
+    this.requestMappingPattern = requestMappingPattern;
+  }
+
+  public RequestMappingContext(DocumentationContext context,
+                                RequestMappingInfo requestMappingInfo,
+                                HandlerMethod handlerMethod) {
+
+    this.documentationContext = context;
+    this.requestMappingInfo = requestMappingInfo;
+    this.handlerMethod = handlerMethod;
+    this.requestMappingPattern = "";
   }
 
   public Object get(String lookupKey) {
@@ -55,11 +68,11 @@ public class RequestMappingContext implements CommandContext<Map<String, Object>
     return modelMap;
   }
 
-  public RequestMappingContext newCopyUsingHandlerMethod(HandlerMethod handlerMethod) {
-    return new RequestMappingContext(this.documentationContext, this.requestMappingInfo, handlerMethod);
+  public String getRequestMappingPattern() {
+    return requestMappingPattern;
   }
 
-  public RequestMappingContext newCopy() {
-    return new RequestMappingContext(this.documentationContext, this.requestMappingInfo, handlerMethod);
+  public RequestMappingContext copyPatternUsing(String requestMappingPattern) {
+    return new RequestMappingContext(documentationContext, requestMappingInfo, handlerMethod, requestMappingPattern);
   }
 }

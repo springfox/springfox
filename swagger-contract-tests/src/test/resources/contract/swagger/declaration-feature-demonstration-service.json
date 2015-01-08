@@ -71,7 +71,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 403,
@@ -102,7 +102,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 403,
@@ -141,7 +141,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 404,
@@ -192,7 +192,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         }
                     ],
                     "deprecated": "false",
@@ -219,7 +219,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 401,
@@ -258,7 +258,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 204,
@@ -293,7 +293,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 401,
@@ -338,7 +338,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 401,
@@ -392,7 +392,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -457,7 +457,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         }
                     ],
                     "deprecated": "false",
@@ -586,7 +586,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 401,
@@ -651,7 +651,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 403,

@@ -5,18 +5,16 @@ import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;
 import com.mangofactory.springmvc.plugins.OperationContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
+import org.springframework.util.StringUtils;
 
 @Component
-public class OperationHiddenReader implements OperationBuilderPlugin {
+public class OperationSummaryReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {
-
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    ApiOperation methodAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
-    if (null != methodAnnotation) {
-      context.operationBuilder().hidden(methodAnnotation.hidden());
+    ApiOperation apiOperationAnnotation = context.getHandlerMethod().getMethodAnnotation(ApiOperation.class);
+    if (null != apiOperationAnnotation && StringUtils.hasText(apiOperationAnnotation.value())) {
+      context.operationBuilder().summary(apiOperationAnnotation.value());
     }
   }
 

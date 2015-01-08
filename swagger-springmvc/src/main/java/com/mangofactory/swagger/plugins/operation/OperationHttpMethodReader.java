@@ -1,33 +1,39 @@
-package com.mangofactory.swagger.readers.operation;
+package com.mangofactory.swagger.plugins.operation;
 
-import com.mangofactory.swagger.scanners.RequestMappingContext;
+import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;
+import com.mangofactory.springmvc.plugins.OperationContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
-public class OperationHttpMethodReader implements RequestMappingReader {
+@Component
+public class OperationHttpMethodReader implements OperationBuilderPlugin {
   private static final Logger log = LoggerFactory.getLogger(OperationHttpMethodReader.class);
 
   @Override
-  public void execute(RequestMappingContext context) {
-    RequestMethod currentHttpMethod = (RequestMethod) context.get("currentHttpMethod");
+  public void apply(OperationContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
 
-    String requestMethod = currentHttpMethod.toString();
     ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
 
     if (apiOperationAnnotation != null && StringUtils.hasText(apiOperationAnnotation.httpMethod())) {
       String apiMethod = apiOperationAnnotation.httpMethod();
       try {
         RequestMethod.valueOf(apiMethod);
-        requestMethod = apiMethod;
+        context.operationBuilder().method(apiMethod);
       } catch (IllegalArgumentException e) {
         log.error("Invalid http method: " + apiMethod + "Valid ones are [" + RequestMethod.values() + "]", e);
       }
     }
-    context.put("httpRequestMethod", requestMethod);
+  }
+
+  @Override
+  public boolean supports(DocumentationType delimiter) {
+    return true;
   }
 }

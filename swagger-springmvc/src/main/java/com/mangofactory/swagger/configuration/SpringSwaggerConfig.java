@@ -3,6 +3,7 @@ package com.mangofactory.swagger.configuration;
 import com.mangofactory.schema.configuration.SwaggerModelsConfiguration;
 import com.mangofactory.springmvc.plugins.ApiListingBuilderPlugin;
 import com.mangofactory.springmvc.plugins.DocumentationPlugin;
+import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;
 import com.mangofactory.springmvc.plugins.ParameterBuilderPlugin;
 import com.mangofactory.springmvc.plugins.ParameterExpanderPlugin;
 import com.mangofactory.swagger.controllers.Defaults;
@@ -24,6 +25,7 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
 @Import({ SwaggerModelsConfiguration.class, Defaults.class })
 @EnablePluginRegistries({DocumentationPlugin.class,
         ApiListingBuilderPlugin.class,
+        OperationBuilderPlugin.class,
         ParameterBuilderPlugin.class,
         ParameterExpanderPlugin.class})
 public class SpringSwaggerConfig {

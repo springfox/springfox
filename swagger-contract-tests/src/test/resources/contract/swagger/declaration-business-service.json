@@ -267,7 +267,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "string"
                         },
                         {

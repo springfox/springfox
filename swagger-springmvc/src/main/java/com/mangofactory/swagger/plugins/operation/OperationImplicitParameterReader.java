@@ -1,34 +1,35 @@
 package com.mangofactory.swagger.plugins.operation;
 
 import com.google.common.collect.Lists;
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.service.model.Parameter;
 import com.mangofactory.service.model.builder.ParameterBuilder;
-import com.mangofactory.swagger.readers.operation.RequestMappingReader;
-import com.mangofactory.swagger.scanners.RequestMappingContext;
+import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;
+import com.mangofactory.springmvc.plugins.OperationContext;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
 import static com.mangofactory.swagger.plugins.operation.parameter.ParameterAllowableReader.*;
 
-public class OperationImplicitParameterReader implements RequestMappingReader {
+@Component
+public class OperationImplicitParameterReader implements OperationBuilderPlugin {
 
   @Override
-  public final void execute(RequestMappingContext context) {
-    List<Parameter> parameters = (List<Parameter>) context.get("parameters");
-    if (parameters == null) {
-      parameters = newArrayList();
-    }
-    parameters.addAll(this.readParameters(context));
-    context.put("parameters", parameters);
+  public void apply(OperationContext context) {
+    context.operationBuilder().parameters(readParameters(context));
   }
 
-  protected Collection<? extends Parameter> readParameters(RequestMappingContext context) {
+  @Override
+  public boolean supports(DocumentationType delimiter) {
+    return true;
+  }
+
+  protected List<Parameter> readParameters(OperationContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     Method method = handlerMethod.getMethod();
     ApiImplicitParam annotation = AnnotationUtils.findAnnotation(method, ApiImplicitParam.class);

@@ -94,7 +94,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 403,
@@ -248,7 +248,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 204,
@@ -298,7 +298,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 401,

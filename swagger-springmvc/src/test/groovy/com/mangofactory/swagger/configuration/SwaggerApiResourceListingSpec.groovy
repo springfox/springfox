@@ -98,7 +98,7 @@ class SwaggerApiResourceListingSpec extends DocumentationContextSpec {
               .build(contextBuilder)
 
       RequestMappingContext requestMappingContext = new RequestMappingContext(context, (requestMappingInfo
-              ("somePath/")), dummyHandlerMethod())
+              ("somePath/")), dummyHandlerMethod(), "")
 
     when:
       listingReferenceScanner.scan(context) >>

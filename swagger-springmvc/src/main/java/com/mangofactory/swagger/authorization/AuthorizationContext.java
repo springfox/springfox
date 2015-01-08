@@ -22,15 +22,13 @@ public class AuthorizationContext {
   private final List<Authorization> authorizations;
   private final RequestMappingPatternMatcher requestMappingPatternMatcher;
   private final List<String> includePatterns;
-  private final RequestMethod[] requestMethods;
 
   public AuthorizationContext(List<Authorization> authorizations, RequestMappingPatternMatcher
-          requestMappingPatternMatcher, List<String> includePatterns, RequestMethod[] requestMethods) {
+          requestMappingPatternMatcher, List<String> includePatterns) {
 
     this.authorizations = authorizations;
     this.requestMappingPatternMatcher = requestMappingPatternMatcher;
     this.includePatterns = includePatterns;
-    this.requestMethods = requestMethods;
   }
 
   public List<Authorization> getAuthorizationsForPath(String path) {
@@ -57,7 +55,6 @@ public class AuthorizationContext {
     private List<Authorization> authorizations = newArrayList();
     private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
     private List<String> includePatterns = Arrays.asList(".*?");
-    private RequestMethod[] requestMethods = RequestMethod.values();
 
     public AuthorizationContextBuilder withAuthorizations(List<Authorization> authorizations) {
       this.authorizations = authorizations;
@@ -75,13 +72,12 @@ public class AuthorizationContext {
     }
 
     public AuthorizationContextBuilder withRequestMethods(RequestMethod[] requestMethods) {
-      this.requestMethods = requestMethods;
       return this;
     }
 
     public AuthorizationContext build() {
       return new AuthorizationContext(authorizations,
-              requestMappingPatternMatcher, includePatterns, requestMethods);
+              requestMappingPatternMatcher, includePatterns);
     }
   }
 }

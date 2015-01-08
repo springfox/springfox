@@ -2,10 +2,6 @@ package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.mangofactory.documentation.plugins.DocumentationType
-import com.mangofactory.documentation.plugins.ModelEnricher
-import com.mangofactory.documentation.plugins.ModelPropertyEnricher
-import com.mangofactory.documentation.plugins.PluginsManager
 import com.mangofactory.schema.DefaultModelProvider
 import com.mangofactory.schema.ModelDependencyProvider
 import com.mangofactory.schema.ModelProvider
@@ -17,38 +13,10 @@ import com.mangofactory.schema.property.constructor.ConstructorModelPropertyProv
 import com.mangofactory.schema.property.field.FieldModelPropertyProvider
 import com.mangofactory.schema.property.field.FieldProvider
 import com.mangofactory.schema.property.provider.DefaultModelPropertiesProvider
-import com.mangofactory.springmvc.plugins.ApiListingBuilderPlugin
-import com.mangofactory.springmvc.plugins.DocumentationPlugin
-import com.mangofactory.springmvc.plugins.DocumentationPluginsManager
-import com.mangofactory.swagger.plugins.ApiModelEnricher
-import com.mangofactory.swagger.plugins.ApiModelPropertyPropertyEnricher
-import com.mangofactory.swagger.readers.MediaTypeReader
-import org.springframework.plugin.core.OrderAwarePluginRegistry
-import org.springframework.plugin.core.PluginRegistry
-
-import static com.google.common.collect.Lists.*
 
 @SuppressWarnings("GrMethodMayBeStatic")
+@Mixin(PluginsSupport)
 class ModelProviderForServiceSupport {
-
-
-  def pluginsManager() {
-    PluginRegistry<ModelPropertyEnricher, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new ApiModelPropertyPropertyEnricher()))
-
-    PluginRegistry<ModelEnricher, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new ApiModelEnricher(new TypeResolver())))
-
-    new PluginsManager(propRegistry, modelRegistry)
-  }
-
-  def springPluginsManager() {
-    PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(new TypeResolver())))
-    PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins =
-            OrderAwarePluginRegistry.create([])
-    new DocumentationPluginsManager(documentationPlugins, apiListingRegistry)
-  }
 
   ModelProvider modelProvider(TypeResolver typeResolver = new TypeResolver(),
                               AlternateTypeProvider alternateTypeProvider = new AlternateTypeProvider()) {

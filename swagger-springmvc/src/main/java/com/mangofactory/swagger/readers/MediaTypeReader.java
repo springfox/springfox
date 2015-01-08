@@ -1,14 +1,13 @@
 package com.mangofactory.swagger.readers;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Splitter;
 import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.springmvc.plugins.ApiListingBuilderPlugin;
 import com.mangofactory.springmvc.plugins.ApiListingContext;
+import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;
+import com.mangofactory.springmvc.plugins.OperationContext;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
-import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
-import com.mangofactory.swagger.scanners.RequestMappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,7 @@ import static com.google.common.collect.Lists.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
-public class MediaTypeReader implements RequestMappingReader, ApiListingBuilderPlugin {
+public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilderPlugin {
 
   private final TypeResolver typeResolver;
 
@@ -36,7 +35,7 @@ public class MediaTypeReader implements RequestMappingReader, ApiListingBuilderP
   }
 
   @Override
-  public void execute(RequestMappingContext context) {
+  public void apply(OperationContext context) {
 
     RequestMappingInfo requestMappingInfo = context.getRequestMappingInfo();
     ConsumesRequestCondition consumesCondition = requestMappingInfo.getConsumesCondition();
@@ -59,8 +58,8 @@ public class MediaTypeReader implements RequestMappingReader, ApiListingBuilderP
     if (consumesList.isEmpty()) {
       consumesList.add(MediaType.APPLICATION_JSON_VALUE);
     }
-    context.put("consumes", consumesList);
-    context.put("produces", producesList);
+    context.operationBuilder().consumes(consumesList);
+    context.operationBuilder().produces(producesList);
   }
 
   @Override
@@ -78,7 +77,7 @@ public class MediaTypeReader implements RequestMappingReader, ApiListingBuilderP
     return true;
   }
 
-  private boolean handlerMethodHasFileParameter(RequestMappingContext context) {
+  private boolean handlerMethodHasFileParameter(OperationContext context) {
 
     HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(typeResolver);
     List<ResolvedMethodParameter> methodParameters = handlerMethodResolver.methodParameters(context.getHandlerMethod());
@@ -89,13 +88,6 @@ public class MediaTypeReader implements RequestMappingReader, ApiListingBuilderP
       }
     }
     return false;
-  }
-
-  private List<String> asList(String mediaTypes) {
-    return Splitter.on(',')
-            .trimResults()
-            .omitEmptyStrings()
-            .splitToList(mediaTypes);
   }
 
   private List<String> toList(Set<MediaType> mediaTypeSet) {

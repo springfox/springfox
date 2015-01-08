@@ -1,89 +1,78 @@
 package com.mangofactory.swagger.readers.operation
 
-import com.mangofactory.service.model.Authorization
 import com.mangofactory.service.model.AuthorizationScope
-import com.mangofactory.springmvc.plugins.DocumentationContext
+import com.mangofactory.service.model.builder.OperationBuilder
+import com.mangofactory.springmvc.plugins.OperationContext
 import com.mangofactory.swagger.authorization.AuthorizationContext
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.AuthSupport
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.scanners.RequestMappingContext
-import spock.lang.Specification
+import com.mangofactory.swagger.plugins.operation.OperationAuthReader
+import org.springframework.web.bind.annotation.RequestMethod
 
-import javax.servlet.ServletContext
+@Mixin([RequestMappingSupport, AuthSupport])
+class OperationAuthReaderSpec extends DocumentationContextSpec {
 
-@Mixin([RequestMappingSupport, AuthSupport, SpringSwaggerConfigSupport, DocumentationContextSupport])
-class OperationAuthReaderSpec extends Specification {
-
-  DocumentationContext context  = defaultContext(Mock(ServletContext))
+  OperationAuthReader sut = new OperationAuthReader()
    def "should read from annotations"(){
       given:
-      OperationAuthReader authReader = new OperationAuthReader()
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), dummyHandlerMethod
-              ("methodWithAuth"))
-      context.put("requestMappingPattern", "/anyPath")
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+                RequestMethod.GET, dummyHandlerMethod('methodWithAuth'), 0, requestMappingInfo("somePath"),
+                context(), "/anyPath")
 
       when:
-      authReader.execute(context)
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
 
       then:
-      def results = context.get("authorizations")
-      Authorization authorization = results[0]
-      authorization.getType() == 'oauth2'
-      AuthorizationScope authorizationScope = authorization.getScopes()[0]
+      operation.authorizations.containsKey("oauth2")
+      AuthorizationScope authorizationScope = operation.authorizations.get("oauth2")[0]
       authorizationScope.getDescription() == "scope description"
       authorizationScope.getScope() == "scope"
    }
 
    def "should apply global auth"(){
     given:
-      OperationAuthReader authReader = new OperationAuthReader()
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"),
-              dummyHandlerMethod())
+
       AuthorizationContext authorizationContext = AuthorizationContext.builder()
               .withAuthorizations(defaultAuth())
               .withIncludePatterns(['/anyPath.*'])
                .build()
+      plugin.authorizationContext(authorizationContext)
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, dummyHandlerMethod(), 0, requestMappingInfo("somePath"),
+              context(), "/anyPath")
 
-      context.put("authorizationContext", authorizationContext)
-      context.put("requestMappingPattern", "/anyPath")
 
     when:
-      authReader.execute(context)
+      sut.apply(operationContext)
+      def authorizations = operationContext.operationBuilder().build().authorizations
 
     then:
-      def results = context.get("authorizations")
-      println(results)
-      Authorization authorization = results[0]
-      authorization.getType() == 'oauth2'
-      AuthorizationScope authorizationScope = authorization.getScopes()[0]
+      def scopes  = authorizations.get('oauth2')
+      AuthorizationScope authorizationScope = scopes[0]
       authorizationScope.getDescription() == "accessEverything"
       authorizationScope.getScope() == "global"
    }
 
    def "should apply global auth when ApiOperationAnnotation exists without auth values"(){
     given:
-      OperationAuthReader authReader = new OperationAuthReader()
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), dummyHandlerMethod
-              ("methodWithHttpGETMethod"))
       AuthorizationContext authorizationContext = AuthorizationContext.builder()
               .withAuthorizations(defaultAuth())
               .withIncludePatterns(['/anyPath.*'])
               .build()
-
-      context.put("authorizationContext", authorizationContext)
-      context.put("requestMappingPattern", "/anyPath")
+      plugin.authorizationContext(authorizationContext)
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, dummyHandlerMethod('methodWithHttpGETMethod'), 0, requestMappingInfo("somePath"),
+              context(), "/anyPath")
 
     when:
-      authReader.execute(context)
+      sut.apply(operationContext)
+      def authorizations = operationContext.operationBuilder().build().authorizations
 
     then:
-      def results = context.get("authorizations")
-      println(results)
-      Authorization authorization = results[0]
-      authorization.getType() == 'oauth2'
-      AuthorizationScope authorizationScope = authorization.getScopes()[0]
+      def scopes = authorizations.get("oauth2")
+      AuthorizationScope authorizationScope = scopes[0]
       authorizationScope.getDescription() == "accessEverything"
       authorizationScope.getScope() == "global"
    }

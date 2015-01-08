@@ -1,39 +1,33 @@
 package com.mangofactory.swagger.readers
 import com.mangofactory.service.model.Parameter
-import com.mangofactory.springmvc.plugins.DocumentationContext
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.service.model.builder.OperationBuilder
+import com.mangofactory.springmvc.plugins.OperationContext
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.scanners.RequestMappingContext
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition
-import spock.lang.Specification
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 
-import javax.servlet.ServletContext
+@Mixin([RequestMappingSupport])
+class OperationParameterRequestConditionReaderSpec extends DocumentationContextSpec {
 
-import static com.google.common.collect.Lists.*
-
-@Mixin([RequestMappingSupport, SpringSwaggerConfigSupport, DocumentationContextSupport])
-class OperationParameterRequestConditionReaderSpec extends Specification {
-
-  DocumentationContext context  = defaultContext(Mock(ServletContext))
   OperationParameterRequestConditionReader sut = new OperationParameterRequestConditionReader()
   def "Should read a parameter given a parameter request condition"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
       ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=testValue")
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo
-              ('/parameter-conditions',
-              ["paramsCondition": paramCondition]),
-              handlerMethod)
-
-      context.put("parameters", newArrayList())
+      RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
+              ["paramsCondition": paramCondition])
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
+              context(), "")
     when:
-      sut.execute(context)
-      Map<String, Object> result = context.getResult()
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
 
     then:
-      Parameter parameter = result['parameters'][0]
+      Parameter parameter = operation.parameters[0]
       assert parameter."$property" == expectedValue
     where:
       property        | expectedValue
@@ -49,18 +43,18 @@ class OperationParameterRequestConditionReaderSpec extends Specification {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
       ParamsRequestCondition paramCondition = new ParamsRequestCondition("!test")
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo
-              ('/parameter-conditions',
-              ["paramsCondition": paramCondition]),
-              handlerMethod)
+      RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
+              ["paramsCondition": paramCondition])
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
+              context(), "")
 
-      context.put("parameters", newArrayList())
     when:
-      sut.execute(context)
-      Map<String, Object> result = context.getResult()
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
 
     then:
-      0 == result['parameters'].size()
+      0 == operation.parameters.size()
 
   }
 
@@ -68,20 +62,17 @@ class OperationParameterRequestConditionReaderSpec extends Specification {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
       ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=3")
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo
-              ('/parameter-conditions',
-              ["paramsCondition": paramCondition]),
-              handlerMethod)
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, handlerMethod, 0,  requestMappingInfo('/parameter-conditions',
+                      ["paramsCondition": paramCondition]),
+              context(), "/anyPath")
 
-      def parameter = new Parameter("test", null, "", true, false, "string", null, "string", "")
-      context.put("parameters", newArrayList(parameter))
     when:
       OperationParameterRequestConditionReader operationParameterReader = new OperationParameterRequestConditionReader()
-      operationParameterReader.execute(context)
-      Map<String, Object> result = context.getResult()
+      operationParameterReader.apply(operationContext)
 
     then:
-      1 == result['parameters'].size()
+      1 == operationContext.operationBuilder().build().parameters.size()
 
   }
 }

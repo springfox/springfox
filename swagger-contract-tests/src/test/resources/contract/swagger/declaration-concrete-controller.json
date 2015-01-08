@@ -40,7 +40,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,

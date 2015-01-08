@@ -13,7 +13,7 @@ public class Parameter {
   private final String paramType;
   private final String paramAccess;
 
-  public Parameter(String name, String description, String defaultValue, Boolean required, Boolean allowMultiple,
+  public Parameter(String name, String description, String defaultValue, boolean required, boolean allowMultiple,
                    String dataType, AllowableValues allowableValues, String paramType, String paramAccess) {
     this.description = description;
     this.defaultValue = defaultValue;

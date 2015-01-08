@@ -1,19 +1,20 @@
 package com.mangofactory.swagger.readers.operation.parameter
-
 import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.service.model.Parameter
+import com.mangofactory.service.model.builder.OperationBuilder
+import com.mangofactory.springmvc.plugins.OperationContext
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.models.Example
 import com.mangofactory.swagger.dummy.models.Treeish
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
+import com.mangofactory.swagger.mixins.PluginsSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.scanners.RequestMappingContext
 import org.joda.time.LocalDateTime
-import org.springframework.core.MethodParameter
 import org.springframework.validation.BindingResult
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
+import spock.lang.Ignore
 
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
@@ -23,9 +24,10 @@ import javax.servlet.http.HttpServletResponse
 
 import static com.mangofactory.schema.alternates.Alternates.*
 
-@Mixin([RequestMappingSupport, DocumentationContextSupport, ModelProviderForServiceSupport])
+@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, PluginsSupport])
 class OperationParameterReaderSpec extends DocumentationContextSpec {
   OperationParameterReader sut
+  def pluginsManager = springPluginsManager()
   def setup() {
     def typeResolver = defaultValues.typeResolver
     AlternateTypeProvider alternateTypeProvider = defaultValues.alternateTypeProvider
@@ -35,24 +37,25 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
               DummyModels.Ignorable.class
             )
             .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-            .build(defaultContextBuilder(defaultValues))
+            .build(contextBuilder)
+
 
     sut = new OperationParameterReader(typeResolver,
-            new ParameterDataTypeReader(alternateTypeProvider),
-            new ParameterTypeReader(alternateTypeProvider),
-            new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver))
+            new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver, pluginsManager),
+            pluginsManager)
   }
 
   def "Should ignore ignorables"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-              handlerMethod)
-    when:
-      sut.execute(context)
-      Map<String, Object> result = context.getResult()
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
+              context(), "/anyPath")
 
+    when:
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
     then:
-      result['parameters'].size == expectedSize
+      operation.parameters.size() == expectedSize
 
     where:
       handlerMethod                                                        | expectedSize
@@ -62,21 +65,20 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
       dummyHandlerMethod('methodWithAnnotatedInteger', Integer.class)      | 0
   }
 
+  @Ignore("This is an integration test")
   def "Should read a request mapping method without APIParameter annotation"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSinglePathVariable', String.class)
 
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-              handlerMethod)
-      MethodParameter methodParameter = new MethodParameter(handlerMethod.getMethod(), 1)
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
+              context(), "/anyPath")
 
-      context.put("methodParameter", methodParameter)
     when:
-      sut.execute(context)
-      Map<String, Object> result = context.getResult()
-
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
     then:
-      Parameter parameter = result['parameters'][0]
+      Parameter parameter = operation.parameters[0]
       assert parameter."$property" == expectedValue
     where:
       property        | expectedValue
@@ -86,86 +88,88 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
       'allowMultiple' | false
       'allowMultiple' | false
       'paramType'     | "path"
-
   }
 
   def "Should expand ModelAttribute request params"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-              dummyHandlerMethod('methodWithModelAttribute', Example.class))
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, dummyHandlerMethod('methodWithModelAttribute', Example.class), 0, requestMappingInfo("/somePath"),
+              context(), "/anyPath")
+
     when:
-      sut.execute(context)
-      Map<String, Object> result = context.getResult()
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
 
     then:
-      result['parameters'].size == 8
+      operation.parameters.size() == 8
 
-      Parameter annotatedFooParam = result['parameters'].find { it.name == "foo" }
+      Parameter annotatedFooParam = operation.parameters.find { it.name == "foo" }
       annotatedFooParam != null
       annotatedFooParam.getDescription() == 'description of foo'
       annotatedFooParam.required
       annotatedFooParam.allowableValues != null
 
-      Parameter annotatedBarParam = result['parameters'].find { it.name == "bar" }
+      Parameter annotatedBarParam = operation.parameters.find { it.name == "bar" }
       annotatedBarParam.getDescription() == 'description of bar'
       !annotatedBarParam.required
       annotatedBarParam.allowableValues == null
 
-      Parameter unannotatedEnumTypeParam = result['parameters'].find { it.name == "enumType" }
+      Parameter unannotatedEnumTypeParam = operation.parameters.find { it.name == "enumType" }
       unannotatedEnumTypeParam.getDescription() == null
       unannotatedEnumTypeParam.allowableValues != null
 
-      Parameter annotatedEnumTypeParam = result['parameters'].find { it.name == "annotatedEnumType" }
+      Parameter annotatedEnumTypeParam = operation.parameters.find { it.name == "annotatedEnumType" }
       annotatedEnumTypeParam.getDescription() == 'description of annotatedEnumType'
       annotatedEnumTypeParam.allowableValues != null
 
-      Parameter unannotatedNestedTypeNameParam = result['parameters'].find { it.name == "nestedType.name" }
+      Parameter unannotatedNestedTypeNameParam = operation.parameters.find { it.name == "nestedType.name" }
       unannotatedNestedTypeNameParam != null
       unannotatedNestedTypeNameParam.getDescription() == null
 
-      Parameter annotatedAllCapsSetParam = result['parameters'].find { it.name == "allCapsSet" }
+      Parameter annotatedAllCapsSetParam = operation.parameters.find { it.name == "allCapsSet" }
       annotatedAllCapsSetParam.getDescription() == 'description of allCapsSet'
       !annotatedAllCapsSetParam.required
       annotatedAllCapsSetParam.allowableValues == null
 
-      Parameter unannotatedParentBeanParam = result['parameters'].find { it.name == "parentBeanProperty" }
+      Parameter unannotatedParentBeanParam = operation.parameters.find { it.name == "parentBeanProperty" }
       unannotatedParentBeanParam.getDescription() == null
 
-      Parameter localDateTime = result['parameters'].find { it.name == "localDateTime" }
+      Parameter localDateTime = operation.parameters.find { it.name == "localDateTime" }
       localDateTime.required
       localDateTime.getDescription() == 'local date time desc dd-MM-yyyy hh:mm:ss'
   }
 
   def "Should expand ModelAttribute request param if param has treeish field"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-              dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class))
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class), 0, requestMappingInfo("/somePath"),
+              context(), "/anyPath")
+
     when:
-      sut.execute(context)
-      Map<String, Object> result = context.getResult()
-
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
     then:
-      result['parameters'].size == 1
+      operation.parameters.size() == 1
 
-      Parameter annotatedBarParam = result['parameters'][0]
+      Parameter annotatedBarParam = operation.parameters[0]
       annotatedBarParam != null
       annotatedBarParam.name == 'example'
   }
 
   def "Should not expand unannotated request params"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-      handlerMethod)
-    when:
-      sut.execute(context)
-      Map<String, Object> result = context.getResult()
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
+              context(), "/anyPath")
 
+    when:
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
     then:
-      result['parameters'].size == expectedSize
+      operation.parameters.size() == expectedSize
 
     where:
       handlerMethod                                                    | expectedSize
       dummyHandlerMethod('methodWithoutModelAttribute', Example.class) | 1
   }
-
 }

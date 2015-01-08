@@ -1,38 +1,57 @@
 package com.mangofactory.swagger.readers.operation
-
-import com.mangofactory.springmvc.plugins.DocumentationContext
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.service.model.builder.OperationBuilder
+import com.mangofactory.springmvc.plugins.OperationContext
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.scanners.RequestMappingContext
+import com.mangofactory.swagger.plugins.operation.OperationHttpMethodReader
 import org.springframework.web.bind.annotation.RequestMethod
-import spock.lang.Specification
 
-import javax.servlet.ServletContext
-
-@Mixin([RequestMappingSupport,  SpringSwaggerConfigSupport, DocumentationContextSupport])
-class OperationMethodReaderSpec extends Specification {
-  DocumentationContext context  = defaultContext(Mock(ServletContext))
-
+@Mixin([RequestMappingSupport])
+class OperationMethodReaderSpec extends DocumentationContextSpec {
    def "should return api method annotation when present"() {
 
     given:
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              currentHttpMethod, handlerMethod, 0, requestMappingInfo("/somePath"),
+              context(), "/anyPath")
 
-      context.put("currentHttpMethod", currentHttpMethod)
       OperationHttpMethodReader operationMethodReader = new OperationHttpMethodReader();
     when:
-      operationMethodReader.execute(context)
-      Map<String, Object> result = context.getResult()
+      operationMethodReader.apply(operationContext)
+    and:
+      def operation = operationContext.operationBuilder().build()
 
     then:
-      result['httpRequestMethod'] == expected
+      operation.method == expected
     where:
       currentHttpMethod  | handlerMethod                                     | expected
-      RequestMethod.GET  | dummyHandlerMethod()                              | 'GET'
-      RequestMethod.PUT  | dummyHandlerMethod()                              | 'PUT'
+      RequestMethod.GET  | dummyHandlerMethod()                              | null
+      RequestMethod.PUT  | dummyHandlerMethod()                              | null
       RequestMethod.POST | dummyHandlerMethod('methodWithHttpGETMethod')     | 'GET'
-      RequestMethod.POST | dummyHandlerMethod('methodWithInvalidHttpMethod') | 'POST'
+      RequestMethod.POST | dummyHandlerMethod('methodWithInvalidHttpMethod') | null
    }
+
+  def "should return api method when using default reader"() {
+
+    given:
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              currentHttpMethod, handlerMethod, 0, requestMappingInfo("/somePath"),
+              context(), "/anyPath")
+
+      def operationMethodReader = new DefaultOperationBuilder();
+    when:
+      operationMethodReader.apply(operationContext)
+    and:
+      def operation = operationContext.operationBuilder().build()
+
+    then:
+      operation.method == expected
+    where:
+      currentHttpMethod  | handlerMethod                                     | expected
+      RequestMethod.GET  | dummyHandlerMethod()                              | "GET"
+      RequestMethod.PUT  | dummyHandlerMethod()                              | "PUT"
+      RequestMethod.POST | dummyHandlerMethod('methodWithHttpGETMethod')     | 'POST'
+      RequestMethod.POST | dummyHandlerMethod('methodWithInvalidHttpMethod') | "POST"
+  }
 
 }

@@ -7,22 +7,20 @@ import com.mangofactory.swagger.dummy.DummyClass
 import com.mangofactory.swagger.mixins.ApiDescriptionSupport
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
+import com.mangofactory.swagger.mixins.PluginsSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.mixins.SwaggerPathProviderSupport
 import com.mangofactory.swagger.readers.ApiDescriptionReader
 import com.mangofactory.swagger.readers.ApiModelReader
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
 
-import javax.servlet.ServletContext
-
 import static com.google.common.collect.Maps.*
 import static com.mangofactory.swagger.scanners.ApiListingScanner.*
 import static org.springframework.http.MediaType.*
 
-@Mixin([RequestMappingSupport, SwaggerPathProviderSupport, AuthSupport, ModelProviderForServiceSupport, ApiDescriptionSupport,
-        SpringSwaggerConfigSupport])
+@Mixin([RequestMappingSupport, SwaggerPathProviderSupport, AuthSupport, ModelProviderForServiceSupport,
+        PluginsSupport, ApiDescriptionSupport])
 class ApiListingScannerSpec extends DocumentationContextSpec {
   ApiDescriptionReader apiDescriptionReader
   ApiModelReader apiModelReader
@@ -30,7 +28,6 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
   ApiListingScanner scanner
 
   def setup() {
-    defaultValues = defaults(Mock(ServletContext))
     AuthorizationContext authorizationContext = AuthorizationContext.builder()
             .withAuthorizations(defaultAuth())
             .withIncludePatterns(['/anyPath.*'])

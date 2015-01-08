@@ -5,20 +5,20 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.mangofactory.documentation.plugins.DocumentationType;
-import com.mangofactory.schema.alternates.AlternateTypeProvider;
-import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.schema.Annotations;
 import com.mangofactory.schema.ModelContext;
 import com.mangofactory.schema.ModelProvider;
+import com.mangofactory.schema.alternates.AlternateTypeProvider;
+import com.mangofactory.service.model.Model;
+import com.mangofactory.service.model.ModelProperty;
 import com.mangofactory.service.model.builder.ModelBuilder;
+import com.mangofactory.swagger.core.ModelUtils;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
-import com.mangofactory.service.model.Model;
-import com.mangofactory.service.model.ModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,12 +53,12 @@ public class ApiModelReader implements Command<RequestMappingContext> {
   }
 
   @Override
-  public void execute(RequestMappingContext context) {
-    HandlerMethod handlerMethod = context.getHandlerMethod();
+  public void execute(RequestMappingContext outerContext) {
+    HandlerMethod handlerMethod = outerContext.getHandlerMethod();
 
     log.debug("Reading models for handlerMethod |{}|", handlerMethod.getMethod().getName());
 
-    Map<String, Model> modelMap = context.getModelMap();
+    Map<String, Model> modelMap = outerContext.getModelMap();
     HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(typeResolver);
     ResolvedType modelType = ModelUtils.handlerReturnType(typeResolver, handlerMethod);
     modelType = alternateTypeProvider.alternateFor(modelType);
@@ -67,8 +67,8 @@ public class ApiModelReader implements Command<RequestMappingContext> {
     if (null != apiOperationAnnotation && Void.class != apiOperationAnnotation.response()) {
       modelType = asResolved(typeResolver, apiOperationAnnotation.response());
     }
-    Set<Class> ignorableTypes = context.getDocumentationContext().getIgnorableParameterTypes();
-    DocumentationType documentationType = context.getDocumentationContext().getDocumentationType();
+    Set<Class> ignorableTypes = outerContext.getDocumentationContext().getIgnorableParameterTypes();
+    DocumentationType documentationType = outerContext.getDocumentationContext().getDocumentationType();
     if (!ignorableTypes.contains(modelType.getErasedType())) {
       ModelContext modelContext = ModelContext.returnValue(modelType,
               documentationType);

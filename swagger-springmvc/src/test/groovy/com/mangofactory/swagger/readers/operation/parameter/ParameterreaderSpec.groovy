@@ -1,65 +1,58 @@
 package com.mangofactory.swagger.readers.operation.parameter
 
-import com.google.common.base.Optional
-import com.mangofactory.springmvc.plugins.DocumentationContext
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.service.model.builder.ParameterBuilder
+import com.mangofactory.springmvc.plugins.ParameterContext
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.plugins.operation.parameter.ParameterAccessReader
-import com.mangofactory.swagger.plugins.operation.parameter.ParameterAnnotationReader
 import com.mangofactory.swagger.plugins.operation.parameter.ParameterDescriptionReader
-import com.mangofactory.swagger.readers.Command
-import com.mangofactory.swagger.scanners.RequestMappingContext
+import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.method.HandlerMethod
-import spock.lang.Specification
 import spock.lang.Unroll
 
-import javax.servlet.ServletContext
-
-@Mixin([RequestMappingSupport, DocumentationContextSupport, ModelProviderForServiceSupport])
-class ParameterReaderSpec extends Specification {
-   DocumentationContext context  = defaultContext(Mock(ServletContext))
-
+@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
+class ParameterReaderSpec extends DocumentationContextSpec {
    @Unroll("property #resultProperty expected: #expected")
    def "should set basic properties based on ApiParam annotation or a sensible default"() {
     given:
-      HandlerMethod handlerMethod = Stub(HandlerMethod)
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
       MethodParameter methodParameter = Stub(MethodParameter)
       methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
       methodParameter.getParameterAnnotation(RequestParam.class) >> reqParamAnnot
       methodParameter.getParameterAnnotations() >> [apiParamAnnotation, reqParamAnnot]
       methodParameter."$springParameterMethod"() >> methodReturnValue
-
-      context.put("methodParameter", methodParameter);
+      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
+      resolvedMethodParameter.methodParameter >> methodParameter
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
     when:
-      Command operationCommand = command
-      operationCommand.execute(context)
-      Map<String, Object> result = context.getResult()
+      parameterPlugin.apply(parameterContext)
 
     then:
-      result[resultProperty] == expected
+      parameterContext.parameterBuilder().build()."$resultProperty" == expected
     where:
-      command                                       | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation                     | reqParamAnnot                          | expected
-      new ParameterNameReader(annotationReader())   | 'name'         | 'getParameterName'    | 'someName'        | null                                   | null                                   | 'someName'
-      new ParameterNameReader(annotationReader())   | 'name'         | 'none'                | 'any'             | apiParam ([name: {-> 'AnName' }])      | null                                   | 'AnName'
-      new ParameterNameReader(annotationReader())   | 'name'         | 'none'                | 'any'             | null                                   | reqParam([value: {-> 'ArName' }])      | 'ArName'
-      new ParameterDescriptionReader()              | 'description'  | 'getParameterName'    | 'someName'        | null                                   | null                                   | 'someName'
-      new ParameterDescriptionReader()              | 'description'  | 'none'                | 'any'             | apiParam([value: {-> 'AnDesc' }])      | null                                   | 'AnDesc'
-      new ParameterDefaultReader()                  | 'defaultValue' | 'none'                | 'any'             | null                                   | null                                   | ''
-      new ParameterDefaultReader()                  | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: {-> 'defl' }]) | null                                   | 'defl'
-      new ParameterDefaultReader()                  | 'defaultValue' | 'none'                | 'any'             | null                                   | reqParam([defaultValue: {-> 'defr' }]) | 'defr'
-      new ParameterAccessReader()                   | 'paramAccess'  | 'none'                | 'any'             | apiParam([access: {-> 'myAccess' }])   | null                                   | 'myAccess'
+      parameterPlugin                     | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation                     | reqParamAnnot                          | expected
+      new ParameterNameReader()           | 'name'         | 'getParameterName'    | 'someName'        | null                                   | null                                   | 'someName'
+      new ParameterNameReader()           | 'name'         | 'none'                | 'any'             | apiParam ([name: {-> 'AnName' }])      | null                                   | 'param0'
+      new ParameterNameReader()           | 'name'         | 'none'                | 'any'             | null                                   | reqParam([value: {-> 'ArName' }])      | 'ArName'
+      new ParameterDescriptionReader()    | 'description'  | 'getParameterName'    | 'someName'        | null                                   | null                                   | 'someName'
+      new ParameterDescriptionReader()    | 'description'  | 'none'                | 'any'             | apiParam([value: {-> 'AnDesc' }])      | null                                   | 'AnDesc'
+      new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | null                                   | null                                   | ''
+      swaggerDefaultReader()              | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: {-> 'defl' }]) | null                                   | 'defl'
+      new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: {-> 'defl' }]) | null                                   | ''
+      new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | null                                   | reqParam([defaultValue: {-> 'defr' }]) | 'defr'
+      new ParameterAccessReader()         | 'paramAccess'  | 'none'                | 'any'             | apiParam([access: {-> 'myAccess' }])   | null                                   | 'myAccess'
    }
 
-  private ParameterAnnotationReader annotationReader() {
-    def annotation = Mock(ParameterAnnotationReader)
-    annotation.fromHierarchy(_, ApiParam.class) >> Optional.absent()
-    return annotation
+  com.mangofactory.swagger.plugins.operation.parameter.ParameterNameReader swaggerParameterNameReader() {
+    return new com.mangofactory.swagger.plugins.operation.parameter.ParameterNameReader()
   }
+
+  com.mangofactory.swagger.plugins.operation.parameter.ParameterDefaultReader swaggerDefaultReader() {
+    new com.mangofactory.swagger.plugins.operation.parameter.ParameterDefaultReader()
+  }
+
 
   private ApiParam apiParam(Map closureMap) {
       closureMap as ApiParam

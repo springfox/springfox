@@ -1,35 +1,47 @@
 package com.mangofactory.swagger.readers.operation
-
-import com.mangofactory.springmvc.plugins.DocumentationContext
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.service.model.builder.OperationBuilder
+import com.mangofactory.springmvc.plugins.OperationContext
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.scanners.RequestMappingContext
-import spock.lang.Specification
+import com.mangofactory.swagger.plugins.operation.OperationPositionReader
+import org.springframework.web.bind.annotation.RequestMethod
 
-import javax.servlet.ServletContext
+@Mixin([RequestMappingSupport])
+class OperationPositionReaderSpec extends DocumentationContextSpec {
 
-@Mixin([RequestMappingSupport,  SpringSwaggerConfigSupport, DocumentationContextSupport])
-class OperationPositionReaderSpec extends Specification {
-
-  DocumentationContext context  = defaultContext(Mock(ServletContext))
-   def "should have correct api position after several invocations"() {
+   def "should have correct api position using default reader"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
-      OperationPositionReader operationPositionReader = new OperationPositionReader();
-      context.put("currentCount", 0)
-    when:
-      numCalls.times { operationPositionReader.execute(context) }
-      Map<String, Object> result = context.getResult()
+          OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, handlerMethod, contextCount, requestMappingInfo("/somePath"),
+              context(), "/anyPath")
 
+      def operationPositionReader = new DefaultOperationBuilder();
+    when:
+      operationPositionReader.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
     then:
-      result['currentCount'] == expectedCurrentCount
-      result['position'] == expectedLastPosition
+      operation.position == expectedCount
     where:
-      numCalls | handlerMethod                            | expectedCurrentCount | expectedLastPosition
-      1        | dummyHandlerMethod()                     | 1                    | 0
-      2        | dummyHandlerMethod()                     | 2                    | 1
-      5        | dummyHandlerMethod()                     | 5                    | 4
-      2        | dummyHandlerMethod('methodWithPosition') | 6                    | 5
+      handlerMethod                            | contextCount  | expectedCount
+      dummyHandlerMethod()                     | 2             | 2
+      dummyHandlerMethod('methodWithPosition') | 3             | 3
    }
+
+  def "should have correct api position using swagger reader"() {
+    given:
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, handlerMethod, contextCount, requestMappingInfo("/somePath"),
+              context(), "/anyPath")
+
+      OperationPositionReader operationPositionReader = new OperationPositionReader();
+    when:
+      operationPositionReader.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
+    then:
+      operation.position == expectedCount
+    where:
+      handlerMethod                            | contextCount  | expectedCount
+      dummyHandlerMethod()                     | 2             | 0
+      dummyHandlerMethod('methodWithPosition') | 3             | 5
+  }
 }

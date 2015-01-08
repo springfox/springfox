@@ -52,7 +52,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -101,7 +101,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "int"
                         },
                         {
@@ -170,7 +170,7 @@
                         },
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "int"
                         },
                         {

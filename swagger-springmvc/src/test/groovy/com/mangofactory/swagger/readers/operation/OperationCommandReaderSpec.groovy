@@ -1,42 +1,37 @@
 package com.mangofactory.swagger.readers.operation
-
-import com.mangofactory.springmvc.plugins.DocumentationContext
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
+import com.mangofactory.service.model.builder.OperationBuilder
+import com.mangofactory.springmvc.plugins.OperationContext
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.readers.Command
-import com.mangofactory.swagger.scanners.RequestMappingContext
-import spock.lang.Specification
+import com.mangofactory.swagger.plugins.operation.OperationNotesReader
+import com.mangofactory.swagger.plugins.operation.OperationPositionReader
+import com.mangofactory.swagger.plugins.operation.OperationSummaryReader
+import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Unroll
 
-import javax.servlet.ServletContext
-
-@Mixin([RequestMappingSupport,  SpringSwaggerConfigSupport, DocumentationContextSupport])
-class OperationCommandReaderSpec extends Specification {
-  DocumentationContext context  = defaultContext(Mock(ServletContext))
-
+@Mixin([RequestMappingSupport])
+class OperationCommandReaderSpec extends DocumentationContextSpec {
    private static final int CURRENT_COUNT = 3
 
    @Unroll("property #property expected: #expected")
    def "should set various properties based on method name or swagger annotation"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
-      context.put("currentCount", CURRENT_COUNT)
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, handlerMethod, CURRENT_COUNT, requestMappingInfo("somePath"),
+              context(), "/anyPath")
     when:
-      Command operationCommand = command
-      operationCommand.execute(context)
-      Map<String, Object> result = context.getResult()
+      command.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
 
     then:
-      result[property] == expected
+      operation."$property" == expected
     where:
       command                         | property     | handlerMethod                              | expected
-      new OperationSummaryReader()    | 'summary'    | dummyHandlerMethod()                       | 'dummyMethod'
       new OperationSummaryReader()    | 'summary'    | dummyHandlerMethod('methodWithSummary')    | 'summary'
-      new OperationNotesReader()      | 'notes'      | dummyHandlerMethod()                       | 'dummyMethod'
+      new DefaultOperationBuilder()   | 'notes'      | dummyHandlerMethod()                       | 'dummyMethod'
       new OperationNotesReader()      | 'notes'      | dummyHandlerMethod('methodWithNotes')      | 'some notes'
-      new OperationNicknameReader()   | 'nickname'   | dummyHandlerMethod()                       | 'dummyMethod'
-      new OperationPositionReader()   | 'position'   | dummyHandlerMethod()                       | CURRENT_COUNT
+      new DefaultOperationBuilder()   | 'nickname'   | dummyHandlerMethod()                       | 'dummyMethod'
+      new DefaultOperationBuilder()   | 'position'   | dummyHandlerMethod()                       | CURRENT_COUNT
       new OperationPositionReader()   | 'position'   | dummyHandlerMethod('methodWithPosition')   | 5
       new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod('methodWithDeprecated') | 'true'
       new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod()                       | 'false'

@@ -33,7 +33,7 @@ public class DocumentationContext {
   /**
    * Map of spring RequestMethod's to a list of http status codes and accompanying messages
    *
-   * @see com.mangofactory.swagger.readers.operation.DefaultResponseMessageReader
+   * @see com.mangofactory.swagger.readers.operation.ResponseMessagesReader
    */
   private final Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
   private final ResourceGroupingStrategy resourceGroupingStrategy;

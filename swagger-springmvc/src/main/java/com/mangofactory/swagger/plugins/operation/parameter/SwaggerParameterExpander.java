@@ -7,8 +7,8 @@ import com.mangofactory.schema.Annotations;
 import com.mangofactory.service.model.AllowableListValues;
 import com.mangofactory.service.model.AllowableValues;
 import com.mangofactory.springmvc.plugins.ParameterExpanderPlugin;
-import com.mangofactory.swagger.plugins.ApiModelProperties;
 import com.mangofactory.springmvc.plugins.ParameterExpansionContext;
+import com.mangofactory.swagger.plugins.ApiModelProperties;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.stereotype.Component;
@@ -40,15 +40,15 @@ public class SwaggerParameterExpander implements ParameterExpanderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    throw new UnsupportedOperationException();
+    return true;
   }
 
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField());
-    String name = isNullOrEmpty(context.getParentName()) ? context.getField().getName() : String.format("%s.%s", context.getParentName
-            (), context
-            .getField().getName());
+    String name = isNullOrEmpty(context.getParentName())
+            ? context.getField().getName()
+            : String.format("%s.%s",  context.getParentName(), context.getField().getName());
     context.getParameterBuilder()
             .name(name)
             .description(apiParam.value())

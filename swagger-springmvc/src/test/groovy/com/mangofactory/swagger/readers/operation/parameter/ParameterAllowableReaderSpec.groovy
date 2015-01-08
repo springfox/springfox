@@ -1,45 +1,38 @@
 package com.mangofactory.swagger.readers.operation.parameter
-
 import com.mangofactory.service.model.AllowableListValues
 import com.mangofactory.service.model.AllowableRangeValues
-import com.mangofactory.springmvc.plugins.DocumentationContext
+import com.mangofactory.service.model.builder.ParameterBuilder
+import com.mangofactory.springmvc.plugins.ParameterContext
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.DummyClass
-import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
 import com.mangofactory.swagger.plugins.operation.parameter.ParameterAllowableReader
-import com.mangofactory.swagger.readers.Command
-import com.mangofactory.swagger.scanners.RequestMappingContext
+import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
-import org.springframework.web.method.HandlerMethod
-import spock.lang.Specification
 import spock.lang.Unroll
 
-import javax.servlet.ServletContext
-
-@Mixin([RequestMappingSupport, DocumentationContextSupport, ModelProviderForServiceSupport, SpringSwaggerConfigSupport])
-class ParameterAllowableReaderSpec extends Specification {
-  DocumentationContext context  = defaultContext(Mock(ServletContext))
+@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
+class ParameterAllowableReaderSpec extends DocumentationContextSpec {
 
   def "enum types"() {
     given:
-      HandlerMethod handlerMethod = handler
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo('/somePath'), handlerMethod)
       MethodParameter methodParameter = new MethodParameter(handlerMethod.getMethod(), 0)
-      context.put("methodParameter", methodParameter)
+      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
+      resolvedMethodParameter.methodParameter >> methodParameter
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
 
     when:
-      Command operationCommand = new ParameterAllowableReader();
-      operationCommand.execute(context)
-      AllowableListValues allowableValues = context.get('allowableValues')
+      ParameterAllowableReader operationCommand = new ParameterAllowableReader();
+      operationCommand.apply(parameterContext)
+      AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
     then:
-
+      allowableValues != null
       allowableValues.getValueType() == "LIST"
       allowableValues.getValues() == ["PRODUCT", "SERVICE"]
     where:
-      handler                                                                          | expected
+      handlerMethod                                                                    | expected
       dummyHandlerMethod('methodWithSingleEnum', DummyClass.BusinessType.class)        | AllowableListValues
       dummyHandlerMethod('methodWithSingleEnumArray', DummyClass.BusinessType[].class) | AllowableListValues
   }
@@ -47,16 +40,16 @@ class ParameterAllowableReaderSpec extends Specification {
   @Unroll
   def "Api annotation with list type"() {
     given:
-      HandlerMethod handlerMethod = Stub()
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
       MethodParameter methodParameter = Stub(MethodParameter)
       methodParameter.getParameterAnnotations() >> [apiParamAnnotation]
-      context.put("methodParameter", methodParameter)
+      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
+      resolvedMethodParameter.methodParameter >> methodParameter
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
 
     when:
-      Command operationCommand = new ParameterAllowableReader();
-      operationCommand.execute(context)
-      AllowableListValues allowableValues = context.get('allowableValues')
+      ParameterAllowableReader operationCommand = new ParameterAllowableReader();
+      operationCommand.apply(parameterContext)
+      AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
     then:
       allowableValues.getValueType() == "LIST"
       allowableValues.getValues() == expected
@@ -71,16 +64,16 @@ class ParameterAllowableReaderSpec extends Specification {
   @Unroll("Range: #min | #max")
   def "Api annotation with ranges"() {
     given:
-      HandlerMethod handlerMethod = Stub()
-      RequestMappingContext context = new RequestMappingContext(context, requestMappingInfo("somePath"), handlerMethod)
       MethodParameter methodParameter = Stub(MethodParameter)
       methodParameter.getParameterAnnotations() >> [apiParamAnnotation]
-      context.put("methodParameter", methodParameter)
+      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
+      resolvedMethodParameter.methodParameter >> methodParameter
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
 
     when:
-      Command operationCommand = new ParameterAllowableReader();
-      operationCommand.execute(context)
-      AllowableRangeValues allowableValues = context.get('allowableValues')
+      ParameterAllowableReader operationCommand = new ParameterAllowableReader();
+      operationCommand.apply(parameterContext)
+      AllowableRangeValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableRangeValues
     then:
       allowableValues.getMin() == min as String
       allowableValues.getMax() == max as String

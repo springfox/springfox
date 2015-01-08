@@ -12,52 +12,6 @@
     "apis": [
         {
             "path": "/pets",
-            "description": "listPets",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "List all pets",
-                    "notes": "listPets",
-                    "nickname": "listPets",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "List"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "array",
-                    "items": {
-                        "type": "Pet"
-                    },
-                    "uniqueItems": false
-                }
-            ]
-        },
-        {
-            "path": "/pets",
             "description": "updatePet",
             "operations": [
                 {
@@ -84,17 +38,8 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 404,
-                            "message": "Pet not found",
-                            "responseModel": "Void"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 400,
@@ -102,8 +47,12 @@
                             "responseModel": "Void"
                         },
                         {
-                            "code": 405,
-                            "message": "Validation exception",
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found",
                             "responseModel": "Void"
                         },
                         {
@@ -111,8 +60,13 @@
                             "message": "Unauthorized"
                         },
                         {
-                            "code": 403,
-                            "message": "Forbidden"
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 405,
+                            "message": "Validation exception",
+                            "responseModel": "Void"
                         }
                     ],
                     "deprecated": "false",
@@ -148,18 +102,6 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
                             "code": 401,
                             "message": "Unauthorized"
                         },
@@ -169,12 +111,70 @@
                             "responseModel": "Void"
                         },
                         {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
                             "code": 404,
                             "message": "Not Found"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
                         }
                     ],
                     "deprecated": "false",
                     "type": "void"
+                }
+            ]
+        },
+        {
+            "path": "/pets",
+            "description": "listPets",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "List all pets",
+                    "notes": "listPets",
+                    "nickname": "listPets",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "List"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "array",
+                    "items": {
+                        "type": "Pet"
+                    },
+                    "uniqueItems": false
                 }
             ]
         },
@@ -206,25 +206,25 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
                             "code": 404,
                             "message": "Not Found"
+                        },
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "List"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
                         },
                         {
                             "code": 403,
                             "message": "Forbidden"
                         },
                         {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "List"
+                            "code": 201,
+                            "message": "Created"
                         }
                     ],
                     "deprecated": "false",
@@ -264,6 +264,15 @@
                     ],
                     "responseMessages": [
                         {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "List"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        },
+                        {
                             "code": 401,
                             "message": "Unauthorized"
                         },
@@ -272,17 +281,8 @@
                             "message": "Created"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
-                        },
-                        {
                             "code": 403,
                             "message": "Forbidden"
-                        },
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "List"
                         }
                     ],
                     "deprecated": "false",
@@ -323,12 +323,8 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
+                            "code": 404,
+                            "message": "Not Found"
                         },
                         {
                             "code": 200,
@@ -341,8 +337,12 @@
                             "responseModel": "Void"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
                         }
                     ],
                     "deprecated": "false",
@@ -378,13 +378,17 @@
                     ],
                     "responseMessages": [
                         {
+                            "code": 404,
+                            "message": "Not Found"
+                        },
+                        {
                             "code": 400,
                             "message": "Invalid tag value",
                             "responseModel": "Void"
                         },
                         {
-                            "code": 403,
-                            "message": "Forbidden"
+                            "code": 401,
+                            "message": "Unauthorized"
                         },
                         {
                             "code": 200,
@@ -392,12 +396,8 @@
                             "responseModel": "Pet"
                         },
                         {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 403,
+                            "message": "Forbidden"
                         }
                     ],
                     "deprecated": "true",
@@ -425,12 +425,16 @@
                     ],
                     "responseMessages": [
                         {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
                             "code": 403,
                             "message": "Forbidden"
                         },
                         {
-                            "code": 201,
-                            "message": "Created"
+                            "code": 404,
+                            "message": "Not Found"
                         },
                         {
                             "code": 401,
@@ -438,12 +442,8 @@
                         },
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "List"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
                         }
                     ],
                     "deprecated": "false",
@@ -479,8 +479,9 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "List"
                         },
                         {
                             "code": 401,
@@ -495,9 +496,8 @@
                             "message": "Created"
                         },
                         {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "List"
+                            "code": 404,
+                            "message": "Not Found"
                         }
                     ],
                     "deprecated": "false",
@@ -537,13 +537,8 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "object"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
+                            "code": 403,
+                            "message": "Forbidden"
                         },
                         {
                             "code": 404,
@@ -554,8 +549,13 @@
                             "message": "Unauthorized"
                         },
                         {
-                            "code": 403,
-                            "message": "Forbidden"
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "object"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
                         }
                     ],
                     "deprecated": "false",
@@ -591,15 +591,6 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "object"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
                             "code": 401,
                             "message": "Unauthorized"
                         },
@@ -610,6 +601,15 @@
                         {
                             "code": 404,
                             "message": "Not Found"
+                        },
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "object"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
                         }
                     ],
                     "deprecated": "false",
@@ -645,21 +645,21 @@
                     ],
                     "responseMessages": [
                         {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "object"
+                        },
+                        {
                             "code": 201,
                             "message": "Created"
                         },
                         {
                             "code": 403,
                             "message": "Forbidden"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "object"
                         },
                         {
                             "code": 404,
@@ -708,20 +708,20 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 200,
-                            "message": "OK"
-                        },
-                        {
                             "code": 404,
                             "message": "Not Found"
                         },
                         {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
                             "code": 403,
                             "message": "Forbidden"
+                        },
+                        {
+                            "code": 200,
+                            "message": "OK"
                         }
                     ],
                     "deprecated": "false",
@@ -757,25 +757,25 @@
                     ],
                     "responseMessages": [
                         {
-                            "code": 200,
-                            "message": null,
-                            "responseModel": "Pet"
+                            "code": 404,
+                            "message": "Not Found"
                         },
                         {
                             "code": 401,
                             "message": "Unauthorized"
                         },
                         {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "Pet"
                         },
                         {
                             "code": 201,
                             "message": "Created"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
                         }
                     ],
                     "deprecated": "false",
@@ -813,16 +813,16 @@
                     ],
                     "responseMessages": [
                         {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
                             "code": 404,
                             "message": "Not Found"
                         },
                         {
                             "code": 403,
                             "message": "Forbidden"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
                         },
                         {
                             "code": 200,
@@ -873,7 +873,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 404,
@@ -938,16 +938,16 @@
                             "message": "Forbidden"
                         },
                         {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
                             "code": 401,
                             "message": "Unauthorized"
                         },
                         {
                             "code": 404,
                             "message": "Not Found"
-                        },
-                        {
-                            "code": 200,
-                            "message": "OK"
                         }
                     ],
                     "deprecated": "false",

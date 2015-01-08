@@ -6,6 +6,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.service.model.Parameter;
+import com.mangofactory.service.model.builder.ParameterBuilder;
 import com.mangofactory.springmvc.plugins.DocumentationPluginsManager;
 import com.mangofactory.springmvc.plugins.ParameterExpansionContext;
 import org.slf4j.Logger;
@@ -79,7 +80,7 @@ public class ModelAttributeParameterExpander {
       }
       LOG.debug("Building parameter for field: {}, with type: ", field, resolvedType);
       ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(dataTypeName, parentName,
-              field, documentationType);
+              field, documentationType, new ParameterBuilder());
       parameters.add(pluginsManager.expandParameter(parameterExpansionContext));
 
     }

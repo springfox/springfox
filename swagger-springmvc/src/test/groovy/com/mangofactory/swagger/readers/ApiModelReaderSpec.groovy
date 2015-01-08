@@ -173,7 +173,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       RequestMappingContext context =
               new RequestMappingContext(pluginContext,
                       requestMappingInfo('/businesses/responseEntity/{businessId}'),
-                      handlerMethod)
+                      handlerMethod, "")
     when:
       sut.execute(context)
 
@@ -188,7 +188,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSameAnnotatedModelInReturnAndRequestBodyParam',
               DummyModels.AnnotatedBusinessModel
       )
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod, "")
 
     when:
       sut.execute(context)
@@ -215,7 +215,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
               DummyModels.ModelWithSerializeOnlyProperty
       )
       RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-              handlerMethod)
+              handlerMethod, "")
 
     when:
       sut.execute(context)

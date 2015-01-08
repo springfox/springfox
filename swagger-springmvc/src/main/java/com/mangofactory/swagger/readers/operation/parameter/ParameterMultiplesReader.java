@@ -14,9 +14,11 @@ public class ParameterMultiplesReader implements ParameterBuilderPlugin {
     MethodParameter methodParameter = context.methodParameter();
     Boolean allowMultiple;
     Class<?> parameterType = methodParameter.getParameterType();
-    allowMultiple = parameterType.isArray()
+    if (parameterType != null) {
+      allowMultiple = parameterType.isArray()
               || Iterable.class.isAssignableFrom(parameterType);
-    context.parameterBuilder().allowMultiple(allowMultiple);
+      context.parameterBuilder().allowMultiple(allowMultiple);
+    }
   }
 
   @Override

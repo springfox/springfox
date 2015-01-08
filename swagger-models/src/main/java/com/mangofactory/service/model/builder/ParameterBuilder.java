@@ -7,8 +7,8 @@ public class ParameterBuilder {
   private String name;
   private String description;
   private String defaultValue;
-  private Boolean required;
-  private Boolean allowMultiple;
+  private boolean required;
+  private boolean allowMultiple;
   private String dataType;
   private AllowableValues allowableValues;
   private String paramType;

@@ -1,16 +1,9 @@
 package com.mangofactory.springmvc.plugins;
 
-import com.google.common.base.Function;
 import com.mangofactory.documentation.plugins.DocumentationType;
-import com.mangofactory.service.model.AllowableListValues;
-import com.mangofactory.service.model.AllowableValues;
 import com.mangofactory.service.model.builder.ParameterBuilder;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
-
-import static com.google.common.collect.Lists.*;
 
 public class ParameterExpansionContext {
 
@@ -21,11 +14,12 @@ public class ParameterExpansionContext {
   private ParameterBuilder parameterBuilder;
 
   public ParameterExpansionContext(String dataTypeName, String parentName, Field field, DocumentationType
-          documentationType) {
+          documentationType, ParameterBuilder parameterBuilder) {
     this.dataTypeName = dataTypeName;
     this.parentName = parentName;
     this.field = field;
     this.documentationType = documentationType;
+    this.parameterBuilder = parameterBuilder;
   }
 
   public String getDataTypeName() {

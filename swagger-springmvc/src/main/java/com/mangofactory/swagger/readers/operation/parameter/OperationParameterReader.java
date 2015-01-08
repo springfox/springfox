@@ -1,28 +1,28 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.service.model.Parameter;
 import com.mangofactory.service.model.builder.ParameterBuilder;
 import com.mangofactory.springmvc.plugins.DocumentationPluginsManager;
+import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;
+import com.mangofactory.springmvc.plugins.OperationContext;
 import com.mangofactory.springmvc.plugins.ParameterContext;
 import com.mangofactory.swagger.readers.operation.HandlerMethodResolver;
-import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
-import com.mangofactory.swagger.scanners.RequestMappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 
 @Component
-public class OperationParameterReader implements RequestMappingReader {
+public class OperationParameterReader implements OperationBuilderPlugin {
   private final TypeResolver typeResolver;
   private final ModelAttributeParameterExpander expander;
   private final DocumentationPluginsManager pluginsManager;
@@ -37,16 +37,16 @@ public class OperationParameterReader implements RequestMappingReader {
   }
 
   @Override
-  public final void execute(RequestMappingContext context) {
-    List<Parameter> parameters = (List<Parameter>) context.get("parameters");
-    if (parameters == null) {
-      parameters = newArrayList();
-    }
-    parameters.addAll(this.readParameters(context));
-    context.put("parameters", parameters);
+  public void apply(OperationContext context) {
+    context.operationBuilder().parameters(readParameters(context));
   }
 
-  protected Collection<? extends Parameter> readParameters(final RequestMappingContext context) {
+  @Override
+  public boolean supports(DocumentationType delimiter) {
+    return true;
+  }
+
+  protected List<Parameter> readParameters(final OperationContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(typeResolver);
 
@@ -56,10 +56,6 @@ public class OperationParameterReader implements RequestMappingReader {
     for (ResolvedMethodParameter methodParameter : methodParameters) {
 
       if (!shouldIgnore(methodParameter, context.getDocumentationContext().getIgnorableParameterTypes())) {
-
-        RequestMappingContext parameterRMCContext = context.newCopyUsingHandlerMethod(handlerMethod);
-        parameterRMCContext.put("methodParameter", methodParameter.getMethodParameter());
-        parameterRMCContext.put("resolvedMethodParameter", methodParameter);
 
         ParameterContext parameterContext = new ParameterContext(methodParameter, new  ParameterBuilder(),
                 context.getDocumentationContext());

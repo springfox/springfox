@@ -1,14 +1,17 @@
-package com.mangofactory.swagger.readers.operation;
+package com.mangofactory.swagger.plugins.operation;
 
-import com.mangofactory.swagger.authorization.AuthorizationContext;
+import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.service.model.builder.AuthorizationBuilder;
 import com.mangofactory.service.model.builder.AuthorizationScopeBuilder;
-import com.mangofactory.swagger.scanners.RequestMappingContext;
+import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;
+import com.mangofactory.springmvc.plugins.OperationContext;
+import com.mangofactory.swagger.authorization.AuthorizationContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.Authorization;
 import com.wordnik.swagger.annotations.AuthorizationScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 
@@ -16,15 +19,17 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 
-public class OperationAuthReader implements RequestMappingReader {
+@Component
+public class OperationAuthReader implements OperationBuilderPlugin {
 
   private static final Logger LOG = LoggerFactory.getLogger(OperationAuthReader.class);
   @Override
-  public void execute(RequestMappingContext context) {
-    AuthorizationContext authorizationContext = (AuthorizationContext) context.get("authorizationContext");
+  public void apply(OperationContext context) {
+
+    AuthorizationContext authorizationContext = context.authorizationContext();
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    String requestMappingPattern = (String) context.get("requestMappingPattern");
+    String requestMappingPattern = context.requestMappingPattern();
     List<com.mangofactory.service.model.Authorization> authorizations = newArrayList();
 
     if (null != authorizationContext) {
@@ -61,7 +66,14 @@ public class OperationAuthReader implements RequestMappingReader {
         }
       }
     }
-    LOG.debug("Authorization count {} for method {}", authorizations.size(), handlerMethod.getMethod().getName());
-    context.put("authorizations", authorizations);
+    if (authorizations != null) {
+      LOG.debug("Authorization count {} for method {}", authorizations.size(), handlerMethod.getMethod().getName());
+      context.operationBuilder().authorizations(authorizations);
+    }
+  }
+
+  @Override
+  public boolean supports(DocumentationType delimiter) {
+    return true;
   }
 }

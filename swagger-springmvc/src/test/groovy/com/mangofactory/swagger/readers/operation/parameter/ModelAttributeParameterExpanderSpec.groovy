@@ -1,9 +1,11 @@
 package com.mangofactory.swagger.readers.operation.parameter
 import com.fasterxml.classmate.TypeResolver
+import com.mangofactory.documentation.plugins.DocumentationType
 import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.service.model.Parameter
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.models.Example
+import com.mangofactory.swagger.mixins.PluginsSupport
 import org.joda.time.LocalDateTime
 
 import java.beans.BeanInfo
@@ -11,6 +13,7 @@ import java.beans.IntrospectionException
 
 import static com.mangofactory.schema.alternates.Alternates.*
 
+@Mixin([PluginsSupport])
 class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   List<Parameter> parameters = []
   AlternateTypeProvider alternateTypeProvider
@@ -21,12 +24,12 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     typeResolver = defaultValues.typeResolver
     alternateTypeProvider = defaultValues.alternateTypeProvider
     alternateTypeProvider.addRule(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-    sut = new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver)
+    sut = new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver, springPluginsManager())
   }
 
   def "should expand an parameters"() {
     when:
-      sut.expand("", Example, parameters, documentationType);
+      sut.expand("", Example, parameters, new DocumentationType("swagger", "1.2"));
     then:
       parameters.size() == 8
       parameters.find { it.name == 'parentBeanProperty' }
@@ -41,7 +44,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
   def "should expand an parameters when parent name is not empty"() {
     when:
-      sut.expand("parent", Example, parameters, documentationType);
+      sut.expand("parent", Example, parameters, new DocumentationType("swagger", "1.2"));
     then:
       parameters.size() == 8
       parameters.find { it.name == 'parent.parentBeanProperty' }
@@ -57,14 +60,14 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   def "Should return empty set when there is an exception"() {
     given:
       ModelAttributeParameterExpander expander =
-              new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver) {
+              new ModelAttributeParameterExpander(alternateTypeProvider, typeResolver, springPluginsManager()) {
         @Override
         def BeanInfo getBeanInfo(Class<?> clazz) throws IntrospectionException {
           throw new IntrospectionException("Fail");
         }
       }
     when:
-      expander.expand("", Example, parameters, documentationType);
+      expander.expand("", Example, parameters, new DocumentationType("swagger", "1.2"));
     then:
       parameters.size() == 0;
   }

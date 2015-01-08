@@ -1,7 +1,9 @@
 package com.mangofactory.swagger.readers.operation
+import com.mangofactory.service.model.builder.OperationBuilder
+import com.mangofactory.springmvc.plugins.OperationContext
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.scanners.RequestMappingContext
+import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Unroll
 
 @Mixin([RequestMappingSupport])
@@ -9,17 +11,19 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
   @Unroll
    def "should have correct response class"() {
     given:
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo("somePath"), handlerMethod)
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
+              context(), "/anyPath")
 
       OperationResponseClassReader operationResponseClassReader = new OperationResponseClassReader(
               defaultValues.typeResolver, defaultValues.alternateTypeProvider)
 
     when:
-      operationResponseClassReader.execute(context)
-      Map<String, Object> result = context.getResult()
-
+      operationResponseClassReader.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
     then:
-      result['responseClass'] == expectedClass
+      operation.responseClass == expectedClass
+
     where:
       handlerMethod                                                        | expectedClass
       dummyHandlerMethod('methodWithConcreteResponseBody')                 | 'BusinessModel'
