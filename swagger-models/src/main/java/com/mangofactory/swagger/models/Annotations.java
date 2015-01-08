@@ -11,6 +11,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 
 public class Annotations {
   /**
@@ -78,7 +79,7 @@ public class Annotations {
     return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiParam.class));
   }
 
-  public static Optional<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
-    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiResponses.class));
+  public static Optional<ApiResponses> findApiResponsesAnnotations(Method method) {
+    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, ApiResponses.class));
   }
 }
