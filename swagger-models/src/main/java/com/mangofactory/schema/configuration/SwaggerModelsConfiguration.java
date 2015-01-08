@@ -1,8 +1,8 @@
 package com.mangofactory.schema.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.documentation.plugins.ModelEnricher;
-import com.mangofactory.documentation.plugins.ModelPropertyEnricher;
+import com.mangofactory.documentation.plugins.ModelBuilderPlugin;
+import com.mangofactory.documentation.plugins.ModelPropertyBuilderPlugin;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.alternates.WildcardType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ import static com.mangofactory.schema.alternates.Alternates.*;
         "com.mangofactory.swagger.plugins"
 })
 @EnablePluginRegistries({
-        ModelEnricher.class,
-        ModelPropertyEnricher.class
+        ModelBuilderPlugin.class,
+        ModelPropertyBuilderPlugin.class
 })
 public class SwaggerModelsConfiguration {
   @Bean

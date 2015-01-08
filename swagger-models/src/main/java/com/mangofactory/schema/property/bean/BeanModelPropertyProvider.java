@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.plugins.ModelPropertyContext;
-import com.mangofactory.documentation.plugins.PluginsManager;
+import com.mangofactory.documentation.plugins.SchemaPluginsManager;
 import com.mangofactory.schema.BeanPropertyNamingStrategy;
 import com.mangofactory.schema.ModelContext;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
@@ -49,7 +49,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
   private ObjectMapper objectMapper;
   private final TypeResolver typeResolver;
   private final AlternateTypeProvider alternateTypeProvider;
-  private final PluginsManager pluginsManager;
+  private final SchemaPluginsManager schemaPluginsManager;
 
   @Autowired
   public BeanModelPropertyProvider(
@@ -57,13 +57,13 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
           TypeResolver typeResolver,
           AlternateTypeProvider alternateTypeProvider,
           BeanPropertyNamingStrategy namingStrategy,
-          PluginsManager pluginsManager) {
+          SchemaPluginsManager schemaPluginsManager) {
 
     this.typeResolver = typeResolver;
     this.alternateTypeProvider = alternateTypeProvider;
     this.accessors = accessors;
     this.namingStrategy = namingStrategy;
-    this.pluginsManager = pluginsManager;
+    this.schemaPluginsManager = schemaPluginsManager;
   }
 
   @VisibleForTesting
@@ -154,7 +154,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
             .description(beanModelProperty.propertyDescription())
             .allowableValues(beanModelProperty.allowableValues())
             .items(itemModelRef(beanModelProperty.getType()));
-    return pluginsManager.enrichProperty(
+    return schemaPluginsManager.enrichProperty(
             new ModelPropertyContext(propertyBuilder, beanPropertyDefinition, modelContext.getDocumentationType()));
   }
 

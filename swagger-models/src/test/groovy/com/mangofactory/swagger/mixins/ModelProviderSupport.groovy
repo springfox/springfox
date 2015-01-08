@@ -3,9 +3,9 @@ package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.documentation.plugins.DocumentationType
-import com.mangofactory.documentation.plugins.ModelEnricher
-import com.mangofactory.documentation.plugins.ModelPropertyEnricher
-import com.mangofactory.documentation.plugins.PluginsManager
+import com.mangofactory.documentation.plugins.ModelBuilderPlugin
+import com.mangofactory.documentation.plugins.ModelPropertyBuilderPlugin
+import com.mangofactory.documentation.plugins.SchemaPluginsManager
 import com.mangofactory.schema.DefaultModelProvider
 import com.mangofactory.schema.ModelDependencyProvider
 import com.mangofactory.schema.ModelProvider
@@ -19,8 +19,8 @@ import com.mangofactory.schema.property.constructor.ConstructorModelPropertyProv
 import com.mangofactory.schema.property.field.FieldModelPropertyProvider
 import com.mangofactory.schema.property.field.FieldProvider
 import com.mangofactory.schema.property.provider.DefaultModelPropertiesProvider
-import com.mangofactory.swagger.plugins.ApiModelEnricher
-import com.mangofactory.swagger.plugins.ApiModelPropertyPropertyEnricher
+import com.mangofactory.swagger.plugins.ApiModelBuilderPlugin
+import com.mangofactory.swagger.plugins.ApiModelPropertyPropertyBuilderPlugin
 import org.joda.time.LocalDate
 import org.springframework.http.ResponseEntity
 import org.springframework.plugin.core.OrderAwarePluginRegistry
@@ -35,13 +35,13 @@ class ModelProviderSupport {
     new DocumentationType("swagger", "1.2")
   }
   def pluginsManager() {
-    PluginRegistry<ModelPropertyEnricher, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new ApiModelPropertyPropertyEnricher()))
+    PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
+            OrderAwarePluginRegistry.create(newArrayList(new ApiModelPropertyPropertyBuilderPlugin()))
 
-    PluginRegistry<ModelEnricher, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new ApiModelEnricher(new TypeResolver())))
+    PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
+            OrderAwarePluginRegistry.create(newArrayList(new ApiModelBuilderPlugin(new TypeResolver())))
 
-    new PluginsManager(propRegistry, modelRegistry)
+    new SchemaPluginsManager(propRegistry, modelRegistry)
   }
 
   ModelProvider providerThatSubstitutesLocalDateWithString() {

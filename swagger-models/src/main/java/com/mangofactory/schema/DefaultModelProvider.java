@@ -4,7 +4,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.mangofactory.documentation.plugins.PluginsManager;
+import com.mangofactory.documentation.plugins.SchemaPluginsManager;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.property.provider.ModelPropertiesProvider;
 import com.mangofactory.service.model.Model;
@@ -28,18 +28,18 @@ public class DefaultModelProvider implements ModelProvider {
   private final AlternateTypeProvider alternateTypeProvider;
   private final ModelPropertiesProvider propertiesProvider;
   private final ModelDependencyProvider dependencyProvider;
-  private final PluginsManager pluginsManager;
+  private final SchemaPluginsManager schemaPluginsManager;
 
   @Autowired
   public DefaultModelProvider(TypeResolver resolver, AlternateTypeProvider alternateTypeProvider,
                               @Qualifier("default") ModelPropertiesProvider propertiesProvider,
                               ModelDependencyProvider dependencyProvider,
-                              PluginsManager pluginsManager) {
+                              SchemaPluginsManager schemaPluginsManager) {
     this.resolver = resolver;
     this.alternateTypeProvider = alternateTypeProvider;
     this.propertiesProvider = propertiesProvider;
     this.dependencyProvider = dependencyProvider;
-    this.pluginsManager = pluginsManager;
+    this.schemaPluginsManager = schemaPluginsManager;
   }
 
   @Override
@@ -68,7 +68,7 @@ public class DefaultModelProvider implements ModelProvider {
             .baseModel("")
             .discriminator("")
             .subTypes(new ArrayList<String>());
-    return pluginsManager.enrichModel(modelContext);
+    return schemaPluginsManager.enrichModel(modelContext);
   }
 
   @Override

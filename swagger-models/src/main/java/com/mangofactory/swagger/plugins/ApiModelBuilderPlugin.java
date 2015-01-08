@@ -2,7 +2,7 @@ package com.mangofactory.swagger.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.documentation.plugins.DocumentationType;
-import com.mangofactory.documentation.plugins.ModelEnricher;
+import com.mangofactory.documentation.plugins.ModelBuilderPlugin;
 import com.mangofactory.schema.ModelContext;
 import com.wordnik.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +10,17 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ApiModelEnricher implements ModelEnricher {
+public class ApiModelBuilderPlugin implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
 
   @Autowired
-  public ApiModelEnricher(TypeResolver typeResolver) {
+  public ApiModelBuilderPlugin(TypeResolver typeResolver) {
     this.typeResolver = typeResolver;
   }
 
 
   @Override
-  public void enrich(ModelContext context) {
+  public void apply(ModelContext context) {
     ApiModel annotation = AnnotationUtils.findAnnotation(forClass(context), ApiModel.class);
     if (annotation != null) {
       context.getBuilder()

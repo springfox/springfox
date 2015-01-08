@@ -13,7 +13,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.mangofactory.documentation.plugins.ModelPropertyContext;
-import com.mangofactory.documentation.plugins.PluginsManager;
+import com.mangofactory.documentation.plugins.SchemaPluginsManager;
 import com.mangofactory.schema.BeanPropertyNamingStrategy;
 import com.mangofactory.schema.ModelContext;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
@@ -41,19 +41,19 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
   private final AlternateTypeProvider alternateTypeProvider;
   private final BeanPropertyNamingStrategy namingStrategy;
   private ObjectMapper objectMapper;
-  private final PluginsManager pluginsManager;
+  private final SchemaPluginsManager schemaPluginsManager;
 
   @Autowired
   public FieldModelPropertyProvider(
           FieldProvider fieldProvider,
           AlternateTypeProvider alternateTypeProvider,
           BeanPropertyNamingStrategy namingStrategy,
-          PluginsManager pluginsManager) {
+          SchemaPluginsManager schemaPluginsManager) {
 
     this.fieldProvider = fieldProvider;
     this.alternateTypeProvider = alternateTypeProvider;
     this.namingStrategy = namingStrategy;
-    this.pluginsManager = pluginsManager;
+    this.schemaPluginsManager = schemaPluginsManager;
   }
 
   @VisibleForTesting
@@ -82,7 +82,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
             .description(fieldModelProperty.propertyDescription())
             .allowableValues(fieldModelProperty.allowableValues())
             .items(itemModelRef(fieldModelProperty.getType()));
-    return pluginsManager.enrichProperty(new ModelPropertyContext(propertyBuilder,
+    return schemaPluginsManager.enrichProperty(new ModelPropertyContext(propertyBuilder,
             childField.getRawMember(),  modelContext.getDocumentationType()));
   }
 

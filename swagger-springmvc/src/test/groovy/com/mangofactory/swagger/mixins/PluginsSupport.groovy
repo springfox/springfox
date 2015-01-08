@@ -1,17 +1,17 @@
 package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.plugins.DocumentationType
-import com.mangofactory.documentation.plugins.ModelEnricher
-import com.mangofactory.documentation.plugins.ModelPropertyEnricher
-import com.mangofactory.documentation.plugins.PluginsManager
+import com.mangofactory.documentation.plugins.ModelBuilderPlugin
+import com.mangofactory.documentation.plugins.ModelPropertyBuilderPlugin
+import com.mangofactory.documentation.plugins.SchemaPluginsManager
 import com.mangofactory.springmvc.plugins.ApiListingBuilderPlugin
 import com.mangofactory.springmvc.plugins.DocumentationPlugin
 import com.mangofactory.springmvc.plugins.DocumentationPluginsManager
 import com.mangofactory.springmvc.plugins.OperationBuilderPlugin
 import com.mangofactory.springmvc.plugins.ParameterBuilderPlugin
 import com.mangofactory.springmvc.plugins.ParameterExpanderPlugin
-import com.mangofactory.swagger.plugins.ApiModelEnricher
-import com.mangofactory.swagger.plugins.ApiModelPropertyPropertyEnricher
+import com.mangofactory.swagger.plugins.ApiModelBuilderPlugin
+import com.mangofactory.swagger.plugins.ApiModelPropertyPropertyBuilderPlugin
 import com.mangofactory.swagger.plugins.operation.parameter.SwaggerParameterExpander
 import com.mangofactory.swagger.readers.MediaTypeReader
 import com.mangofactory.swagger.readers.operation.parameter.ParameterExpander
@@ -23,14 +23,14 @@ import static com.google.common.collect.Lists.*
 @SuppressWarnings("GrMethodMayBeStatic")
 class PluginsSupport {
 
-  PluginsManager pluginsManager() {
-    PluginRegistry<ModelPropertyEnricher, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new ApiModelPropertyPropertyEnricher()))
+  SchemaPluginsManager pluginsManager() {
+    PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
+            OrderAwarePluginRegistry.create(newArrayList(new ApiModelPropertyPropertyBuilderPlugin()))
 
-    PluginRegistry<ModelEnricher, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new ApiModelEnricher(new TypeResolver())))
+    PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
+            OrderAwarePluginRegistry.create(newArrayList(new ApiModelBuilderPlugin(new TypeResolver())))
 
-    new PluginsManager(propRegistry, modelRegistry)
+    new SchemaPluginsManager(propRegistry, modelRegistry)
   }
 
   DocumentationPluginsManager springPluginsManager() {
