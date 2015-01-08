@@ -10,9 +10,6 @@ public class ContainerDataType implements SwaggerDataType {
   @JsonProperty
   private SwaggerDataType items;
 
-  public ContainerDataType() {
-  }
-
   public ContainerDataType(String innerType, boolean uniqueItems) {
     if (null != innerType && innerType.equals("array")) {
       throw new IllegalArgumentException("Nested arrays not supported");

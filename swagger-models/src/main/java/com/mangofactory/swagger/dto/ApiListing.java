@@ -29,26 +29,6 @@ public class ApiListing {
   @JsonIgnore
   private int position;
 
-  public ApiListing() {
-  }
-
-  public ApiListing(String apiVersion, String swaggerVersion, String basePath, String resourcePath, List<String>
-          produces, List<String> consumes, List<String> protocol, List<Authorization> authorizations,
-                    List<ApiDescription> apis, Map<String, ModelDto> models, String description, int position) {
-    this.apiVersion = apiVersion;
-    this.swaggerVersion = swaggerVersion;
-    this.basePath = basePath;
-    this.resourcePath = resourcePath;
-    this.produces = produces;
-    this.consumes = consumes;
-    this.protocol = protocol;
-    this.authorizations = authorizations;
-    this.apis = apis;
-    this.models = models;
-    this.description = description;
-    this.position = position;
-  }
-
   public String getApiVersion() {
     return apiVersion;
   }
