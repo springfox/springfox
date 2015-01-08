@@ -1,6 +1,6 @@
 package com.mangofactory.springmvc.plugins;
 
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.service.model.ApiListing;
 import com.mangofactory.service.model.Operation;
 import com.mangofactory.service.model.Parameter;

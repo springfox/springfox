@@ -1,8 +1,7 @@
-package com.mangofactory.schema;
+package com.mangofactory.schema.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.documentation.plugins.DocumentationType;
 import com.mangofactory.service.model.builder.ModelBuilder;
 
 import java.lang.reflect.Type;
@@ -10,7 +9,6 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.schema.ResolvedTypes.*;
-//TODO:Move this closer to plugins
 public class ModelContext {
   private final ModelContext parentContext;
   private final Type type;

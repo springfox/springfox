@@ -1,6 +1,6 @@
 package com.mangofactory.springmvc.plugins;
 
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.service.model.ResponseMessage;
 import com.mangofactory.service.model.builder.OperationBuilder;
 import com.mangofactory.swagger.authorization.AuthorizationContext;

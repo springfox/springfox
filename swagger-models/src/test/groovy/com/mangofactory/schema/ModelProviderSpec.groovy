@@ -1,6 +1,7 @@
 package com.mangofactory.schema
 
 import com.fasterxml.classmate.TypeResolver
+import com.mangofactory.schema.plugins.ModelContext
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import org.springframework.http.HttpHeaders

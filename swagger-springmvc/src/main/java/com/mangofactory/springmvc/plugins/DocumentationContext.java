@@ -1,7 +1,7 @@
 package com.mangofactory.springmvc.plugins;
 
 import com.google.common.collect.Ordering;
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.service.model.ApiDescription;
 import com.mangofactory.service.model.ApiInfo;
 import com.mangofactory.service.model.ApiListingReference;

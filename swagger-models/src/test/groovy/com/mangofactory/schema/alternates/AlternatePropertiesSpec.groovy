@@ -5,7 +5,7 @@ import com.mangofactory.schema.ModelProvider
 import com.mangofactory.service.model.Model
 import spock.lang.Specification
 
-import static com.mangofactory.schema.ModelContext.*
+import static com.mangofactory.schema.plugins.ModelContext.*
 
 @Mixin([ModelProviderSupport, TypesForTestingSupport])
 class AlternatePropertiesSpec extends Specification {

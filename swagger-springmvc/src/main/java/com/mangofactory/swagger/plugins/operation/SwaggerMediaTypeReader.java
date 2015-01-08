@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.plugins.operation;
 
 import com.google.common.base.Splitter;
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;
 import com.mangofactory.springmvc.plugins.OperationContext;
 import com.wordnik.swagger.annotations.ApiOperation;

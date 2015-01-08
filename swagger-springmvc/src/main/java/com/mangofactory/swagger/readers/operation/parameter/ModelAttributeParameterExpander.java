@@ -3,7 +3,7 @@ package com.mangofactory.swagger.readers.operation.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.annotations.VisibleForTesting;
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.service.model.Parameter;
 import com.mangofactory.service.model.builder.ParameterBuilder;

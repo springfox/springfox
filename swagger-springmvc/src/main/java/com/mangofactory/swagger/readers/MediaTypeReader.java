@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.readers;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.springmvc.plugins.ApiListingBuilderPlugin;
 import com.mangofactory.springmvc.plugins.ApiListingContext;
 import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;

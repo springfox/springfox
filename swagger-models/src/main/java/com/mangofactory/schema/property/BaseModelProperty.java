@@ -2,7 +2,7 @@ package com.mangofactory.schema.property;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
-import com.mangofactory.schema.ModelContext;
+import com.mangofactory.schema.plugins.ModelContext;
 import com.mangofactory.schema.ResolvedTypes;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.service.model.AllowableValues;

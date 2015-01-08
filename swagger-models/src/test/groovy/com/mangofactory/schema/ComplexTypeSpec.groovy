@@ -4,7 +4,7 @@ import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import spock.lang.Specification
 
-import static com.mangofactory.schema.ModelContext.*
+import static com.mangofactory.schema.plugins.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport])
 class ComplexTypeSpec extends Specification {

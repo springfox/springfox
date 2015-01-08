@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.plugins.operation;
 
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.service.model.builder.AuthorizationBuilder;
 import com.mangofactory.service.model.builder.AuthorizationScopeBuilder;
 import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;

@@ -1,9 +1,9 @@
 package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.documentation.plugins.DocumentationType
-import com.mangofactory.documentation.plugins.ModelBuilderPlugin
-import com.mangofactory.documentation.plugins.ModelPropertyBuilderPlugin
-import com.mangofactory.documentation.plugins.SchemaPluginsManager
+import com.mangofactory.schema.plugins.DocumentationType
+import com.mangofactory.schema.plugins.ModelBuilderPlugin
+import com.mangofactory.schema.plugins.ModelPropertyBuilderPlugin
+import com.mangofactory.schema.plugins.SchemaPluginsManager
 import com.mangofactory.springmvc.plugins.ApiListingBuilderPlugin
 import com.mangofactory.springmvc.plugins.DocumentationPlugin
 import com.mangofactory.springmvc.plugins.DocumentationPluginsManager

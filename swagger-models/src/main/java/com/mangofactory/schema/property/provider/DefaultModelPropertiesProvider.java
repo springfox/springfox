@@ -2,7 +2,7 @@ package com.mangofactory.schema.property.provider;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mangofactory.schema.ModelContext;
+import com.mangofactory.schema.plugins.ModelContext;
 import com.mangofactory.schema.property.bean.BeanModelPropertyProvider;
 import com.mangofactory.schema.property.constructor.ConstructorModelPropertyProvider;
 import com.mangofactory.schema.property.field.FieldModelPropertyProvider;

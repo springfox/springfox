@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.plugins;
+package com.mangofactory.schema.plugins;
 
 import org.springframework.http.MediaType;
 import org.springframework.plugin.metadata.SimplePluginMetadata;

@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.springmvc.plugins.ParameterBuilderPlugin;
 import com.mangofactory.springmvc.plugins.ParameterContext;
 import org.springframework.core.MethodParameter;

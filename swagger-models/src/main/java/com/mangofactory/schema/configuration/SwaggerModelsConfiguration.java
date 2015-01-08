@@ -1,8 +1,8 @@
 package com.mangofactory.schema.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.documentation.plugins.ModelBuilderPlugin;
-import com.mangofactory.documentation.plugins.ModelPropertyBuilderPlugin;
+import com.mangofactory.schema.plugins.ModelBuilderPlugin;
+import com.mangofactory.schema.plugins.ModelPropertyBuilderPlugin;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.alternates.WildcardType;
 import org.springframework.beans.factory.annotation.Autowired;

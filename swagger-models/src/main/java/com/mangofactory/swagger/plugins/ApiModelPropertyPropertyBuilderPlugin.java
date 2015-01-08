@@ -1,9 +1,9 @@
 package com.mangofactory.swagger.plugins;
 
 import com.google.common.base.Optional;
-import com.mangofactory.documentation.plugins.DocumentationType;
-import com.mangofactory.documentation.plugins.ModelPropertyContext;
-import com.mangofactory.documentation.plugins.ModelPropertyBuilderPlugin;
+import com.mangofactory.schema.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.ModelPropertyContext;
+import com.mangofactory.schema.plugins.ModelPropertyBuilderPlugin;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.springframework.stereotype.Component;
 

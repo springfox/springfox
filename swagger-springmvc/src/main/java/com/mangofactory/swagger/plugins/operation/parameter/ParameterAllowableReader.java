@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.plugins.operation.parameter;
 
 import com.google.common.base.Splitter;
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.schema.Enums;
 import com.mangofactory.service.model.AllowableListValues;
 import com.mangofactory.service.model.AllowableRangeValues;

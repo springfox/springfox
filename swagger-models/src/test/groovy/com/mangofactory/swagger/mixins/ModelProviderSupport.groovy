@@ -2,10 +2,10 @@ package com.mangofactory.swagger.mixins
 
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mangofactory.documentation.plugins.DocumentationType
-import com.mangofactory.documentation.plugins.ModelBuilderPlugin
-import com.mangofactory.documentation.plugins.ModelPropertyBuilderPlugin
-import com.mangofactory.documentation.plugins.SchemaPluginsManager
+import com.mangofactory.schema.plugins.DocumentationType
+import com.mangofactory.schema.plugins.ModelBuilderPlugin
+import com.mangofactory.schema.plugins.ModelPropertyBuilderPlugin
+import com.mangofactory.schema.plugins.SchemaPluginsManager
 import com.mangofactory.schema.DefaultModelProvider
 import com.mangofactory.schema.ModelDependencyProvider
 import com.mangofactory.schema.ModelProvider

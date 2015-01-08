@@ -1,5 +1,6 @@
 package com.mangofactory.schema;
 
+import com.mangofactory.schema.plugins.ModelContext;
 import com.mangofactory.service.model.Model;
 
 public interface ModelProvider {

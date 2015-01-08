@@ -1,5 +1,6 @@
 package com.mangofactory.schema
 
+import com.mangofactory.schema.plugins.ModelContext
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.service.model.Model

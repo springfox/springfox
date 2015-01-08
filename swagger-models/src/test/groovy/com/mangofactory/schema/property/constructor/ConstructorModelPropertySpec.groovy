@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.mangofactory.schema.ModelContext
+import com.mangofactory.schema.plugins.ModelContext
 import com.mangofactory.schema.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.service.model.AllowableListValues

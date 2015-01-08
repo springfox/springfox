@@ -1,4 +1,6 @@
 package com.mangofactory.schema
+
+import com.mangofactory.schema.plugins.ModelContext
 import com.mangofactory.service.model.Model
 import com.mangofactory.service.model.ModelRef
 import com.mangofactory.swagger.mixins.ModelProviderSupport

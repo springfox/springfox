@@ -1,6 +1,5 @@
-package com.mangofactory.documentation.plugins;
+package com.mangofactory.schema.plugins;
 
-import com.mangofactory.schema.ModelContext;
 import com.mangofactory.service.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -4,7 +4,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.schema.GenericTypeNamingStrategy;
 import com.mangofactory.schema.ResolvedTypes;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;

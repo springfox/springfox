@@ -2,7 +2,7 @@ package com.mangofactory.schema.property.field
 import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
 import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import com.mangofactory.schema.ModelContext
+import com.mangofactory.schema.plugins.ModelContext
 import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.service.model.AllowableListValues
 import spock.lang.Specification

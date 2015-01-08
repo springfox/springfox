@@ -5,7 +5,7 @@ import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import spock.lang.Specification
 
 import static com.google.common.base.Strings.*
-import static com.mangofactory.schema.ModelContext.*
+import static com.mangofactory.schema.plugins.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport])
 class GenericTypeSpec extends Specification {

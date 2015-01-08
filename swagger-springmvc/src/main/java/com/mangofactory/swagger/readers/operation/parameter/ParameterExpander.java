@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.google.common.base.Function;
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.service.model.AllowableListValues;
 import com.mangofactory.service.model.AllowableValues;
 import com.mangofactory.springmvc.plugins.ParameterExpanderPlugin;

@@ -5,6 +5,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
+import com.mangofactory.schema.plugins.ModelContext;
 import com.mangofactory.schema.property.provider.ModelPropertiesProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

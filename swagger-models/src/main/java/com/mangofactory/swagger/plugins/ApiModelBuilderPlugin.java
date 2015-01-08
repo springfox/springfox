@@ -1,9 +1,9 @@
 package com.mangofactory.swagger.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.documentation.plugins.DocumentationType;
-import com.mangofactory.documentation.plugins.ModelBuilderPlugin;
-import com.mangofactory.schema.ModelContext;
+import com.mangofactory.schema.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.ModelBuilderPlugin;
+import com.mangofactory.schema.plugins.ModelContext;
 import com.wordnik.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;

@@ -2,7 +2,7 @@ package com.mangofactory.swagger.readers;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.service.model.AllowableListValues;
 import com.mangofactory.service.model.Parameter;
 import com.mangofactory.service.model.builder.ParameterBuilder;

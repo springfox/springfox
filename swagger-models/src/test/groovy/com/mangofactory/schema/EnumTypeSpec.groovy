@@ -6,7 +6,7 @@ import com.mangofactory.service.model.Model
 import spock.lang.Specification
 
 import static com.google.common.collect.Lists.*
-import static com.mangofactory.schema.ModelContext.*
+import static com.mangofactory.schema.plugins.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport])
 class EnumTypeSpec extends Specification {

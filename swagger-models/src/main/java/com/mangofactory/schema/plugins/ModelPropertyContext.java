@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.plugins;
+package com.mangofactory.schema.plugins;
 
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;

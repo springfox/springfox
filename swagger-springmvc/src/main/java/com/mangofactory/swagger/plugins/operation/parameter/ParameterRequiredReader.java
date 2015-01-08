@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.plugins.operation.parameter;
 
 import com.google.common.base.Optional;
-import com.mangofactory.documentation.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.springmvc.plugins.ParameterBuilderPlugin;
 import com.mangofactory.springmvc.plugins.ParameterContext;
 import com.wordnik.swagger.annotations.ApiParam;
