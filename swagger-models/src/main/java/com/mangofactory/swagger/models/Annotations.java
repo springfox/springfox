@@ -8,6 +8,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponses;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -81,5 +82,9 @@ public class Annotations {
 
   public static Optional<ApiResponses> findApiResponsesAnnotations(Method method) {
     return Optional.fromNullable(AnnotationUtils.findAnnotation(method, ApiResponses.class));
+  }
+
+  public static Optional<ResponseStatus> findResponseStatusAnnotation(Method method) {
+    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, ResponseStatus.class));
   }
 }

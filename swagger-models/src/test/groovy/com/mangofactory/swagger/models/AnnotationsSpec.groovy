@@ -14,4 +14,11 @@ class AnnotationsSpec extends Specification {
       Annotations.findApiResponsesAnnotations(annotatedElement).isPresent() == true
   }
 
+  def "ResponseStatus annotation should be looked up through the entire inheritance hierarchy"(){
+    given:
+      AnnotatedElement annotatedElement = ServiceWithAnnotationOnInterface.SimpleServiceImpl.getMethod("aMethod")
+    expect:
+      Annotations.findResponseStatusAnnotation(annotatedElement).isPresent() == true
+  }
+
 }

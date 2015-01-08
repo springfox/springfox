@@ -2,6 +2,8 @@ package com.mangofactory.swagger.models;
 
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 public class ServiceWithAnnotationOnInterface {
 
@@ -15,6 +17,7 @@ public class ServiceWithAnnotationOnInterface {
 
   public static interface SimpleService {
 
+    @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses({
             @ApiResponse(code = 201, message = "201 Created")
     })

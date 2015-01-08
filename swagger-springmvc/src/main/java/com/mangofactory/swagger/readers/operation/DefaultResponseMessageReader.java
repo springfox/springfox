@@ -12,7 +12,6 @@ import com.mangofactory.swagger.models.dto.builder.ResponseMessageBuilder;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import com.mangofactory.swagger.models.dto.ResponseMessage;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -76,8 +75,7 @@ public class DefaultResponseMessageReader extends SwaggerResponseMessageReader {
   }
 
   private int httpStatusCode(HandlerMethod handlerMethod) {
-    Optional<ResponseStatus> responseStatus = Optional.fromNullable(AnnotationUtils.getAnnotation(handlerMethod
-            .getMethod(), ResponseStatus.class));
+    Optional<ResponseStatus> responseStatus = Annotations.findResponseStatusAnnotation(handlerMethod.getMethod());
     int httpStatusCode = 200;
     if (responseStatus.isPresent()) {
       httpStatusCode = responseStatus.get().value().value();
