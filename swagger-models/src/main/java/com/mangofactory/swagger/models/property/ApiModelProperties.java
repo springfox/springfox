@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.mangofactory.swagger.models.dto.AllowableListValues;
+import com.google.common.base.CharMatcher;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public final class ApiModelProperties {
       @Override
       public AllowableListValues apply(ApiModelProperty annotation) {
         List<String> allowableValues
-                = Splitter.on(',').omitEmptyStrings().splitToList(nullToEmpty(annotation.allowableValues()));
+                = Splitter.on(CharMatcher.anyOf("[, ]")).omitEmptyStrings().splitToList(nullToEmpty(annotation.allowableValues()));
         return new AllowableListValues(allowableValues, "LIST");
       }
     };
