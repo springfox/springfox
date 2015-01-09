@@ -8,16 +8,18 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponses;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 
 public class Annotations {
   /**
    * Finds first annotation of the given type on the given bean property and returns it.
    * Search precedence is getter, setter, field.
    *
-   * @param beanPropertyDefinition introspected jackson proprty defintion
+   * @param beanPropertyDefinition introspected jackson property definition
    * @param annotationClass        class object representing desired annotation
    * @param <A>                    type that extends Annotation
    * @return first annotation found for property
@@ -78,7 +80,11 @@ public class Annotations {
     return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiParam.class));
   }
 
-  public static Optional<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
-    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiResponses.class));
+  public static Optional<ApiResponses> findApiResponsesAnnotations(Method method) {
+    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, ApiResponses.class));
+  }
+
+  public static Optional<ResponseStatus> findResponseStatusAnnotation(Method method) {
+    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, ResponseStatus.class));
   }
 }
