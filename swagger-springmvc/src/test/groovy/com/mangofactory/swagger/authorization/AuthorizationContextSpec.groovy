@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.authorization
 
+import com.mangofactory.spring.web.plugins.AuthorizationContext
 import com.mangofactory.swagger.mixins.AuthSupport
 import spock.lang.Specification
 

@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.core
 import com.google.common.base.Objects
+import com.mangofactory.spring.web.ControllerNamingUtils
 import spock.lang.Specification
 import spock.lang.Unroll
 

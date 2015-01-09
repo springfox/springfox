@@ -7,7 +7,7 @@
 - Provided default model substitutes for spring's ResponseEntity and HttpEntity
 - Upgraded to Jackson 2.4.4
 - Fixed an issue where 'body' parameters were not being named as 'body'
-- Ability to disable default response messages `com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
+- Ability to disable default response messages `com.mangofactory.swagger.plugins.SwaggerSpringMvcPlugin
 .useDefaultResponseMessages`
 
 ## Breaking changes

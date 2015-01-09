@@ -3,7 +3,7 @@ package com.mangofactory.schema.property.bean
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.schema.plugins.ModelContext
-import com.mangofactory.schema.ObjectMapperBeanPropertyNamingStrategy
+import com.mangofactory.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.service.model.AllowableListValues
 import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport

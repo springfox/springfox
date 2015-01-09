@@ -1,30 +1,25 @@
 package com.mangofactory.swagger.plugin
-
 import com.mangofactory.service.model.ApiInfo
 import com.mangofactory.service.model.AuthorizationType
 import com.mangofactory.service.model.ResponseMessage
-import com.mangofactory.springmvc.plugins.DocumentationContext
-import com.mangofactory.springmvc.plugins.DocumentationContextBuilder
-import com.mangofactory.swagger.annotations.ApiIgnore
-import com.mangofactory.swagger.authorization.AuthorizationContext
-import com.mangofactory.swagger.controllers.Defaults
-import com.mangofactory.swagger.core.ClassOrApiAnnotationResourceGrouping
+import com.mangofactory.spring.web.RelativePathProvider
+import com.mangofactory.spring.web.annotations.ApiIgnore
+import com.mangofactory.spring.web.ordering.ApiDescriptionLexicographicalOrdering
+import com.mangofactory.spring.web.ordering.ResourceListingLexicographicalOrdering
+import com.mangofactory.spring.web.plugins.AuthorizationContext
+import com.mangofactory.spring.web.plugins.DocumentationConfigurer
+import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.ordering.ApiDescriptionLexicographicalOrdering
-import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
-import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
-import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
+import com.mangofactory.swagger.web.AbsolutePathProvider
+import com.mangofactory.swagger.web.ClassOrApiAnnotationResourceGrouping
 import com.wordnik.swagger.annotations.Api
 import com.wordnik.swagger.annotations.ApiOperation
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.http.ResponseEntity
-import spock.lang.Specification
-import spock.lang.Unroll
 
-import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
 import static com.mangofactory.schema.alternates.Alternates.*
@@ -32,15 +27,11 @@ import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Mixin([SpringSwaggerConfigSupport, DocumentationContextSupport])
-class SwaggerSpringMvcPluginSpec extends Specification {
-  Defaults defaultValues = defaults(Mock(ServletContext))
-  DocumentationContextBuilder contextBuilder = defaultContextBuilder(defaultValues)
-
-  DocumentationContext pluginContext
+class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
 
   def "Should have sensible defaults when built with minimal configuration"() {
     when:
-      pluginContext = new SwaggerSpringMvcPlugin().build(contextBuilder)
+      def pluginContext = new DocumentationConfigurer().build(contextBuilder)
 
     then:
       pluginContext.groupName == 'default'
@@ -55,12 +46,12 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       pluginContext.apiInfo.version == "1.0"
 
       pluginContext.resourceGroupingStrategy instanceof ClassOrApiAnnotationResourceGrouping
-      pluginContext.swaggerPathProvider instanceof RelativeSwaggerPathProvider
+      pluginContext.pathProvider instanceof RelativePathProvider
   }
 
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
     when:
-      pluginContext = new SwaggerSpringMvcPlugin()
+      def pluginContext = new DocumentationConfigurer()
               .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
               .useDefaultResponseMessages(true)
               .build(contextBuilder)
@@ -77,7 +68,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
   def "Swagger global response messages should not be used for a particular RequestMethod"() {
     when:
-      pluginContext = new SwaggerSpringMvcPlugin()
+      def pluginContext = new DocumentationConfigurer()
               .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
               .useDefaultResponseMessages(false)
               .build(contextBuilder)
@@ -92,7 +83,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
   def "Swagger ignorableParameterTypes should append to the default ignorableParameterTypes"() {
     when:
-      pluginContext = new SwaggerSpringMvcPlugin()
+      def pluginContext = new DocumentationConfigurer()
               .ignoredParameterTypes(AbstractSingletonProxyFactoryBean.class, ProxyFactoryBean.class)
               .build(contextBuilder)
     then:
@@ -106,17 +97,16 @@ class SwaggerSpringMvcPluginSpec extends Specification {
   def "Sets alternative AlternateTypeProvider with a rule"() {
     given:
       def rule = newMapRule(String, String)
-      pluginContext = new SwaggerSpringMvcPlugin()
+      new DocumentationConfigurer()
               .alternateTypeRules(rule)
               .build(contextBuilder)
     expect:
       defaultValues.alternateTypeProvider.rules.contains(rule)
   }
 
-  @Unroll
   def "Model substitution registers new rules"() {
     when:
-      pluginContext = new SwaggerSpringMvcPlugin()
+      new DocumentationConfigurer()
               ."${method}"(*args)
               .build(contextBuilder)
     then:
@@ -131,7 +121,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
   def "should contain both default and custom exclude annotations"() {
     when:
-      pluginContext = new SwaggerSpringMvcPlugin()
+      def pluginContext = new DocumentationConfigurer()
               .excludeAnnotations(ApiOperation.class, Api.class)
               .build(contextBuilder)
 
@@ -143,10 +133,9 @@ class SwaggerSpringMvcPluginSpec extends Specification {
       ])
   }
 
-  @Unroll
   def "Basic property checks"() {
     when:
-      pluginContext = new SwaggerSpringMvcPlugin()
+      def pluginContext = new DocumentationConfigurer()
               ."$builderMethod"(object)
               .build(contextBuilder)
 
@@ -155,24 +144,22 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
     where:
       builderMethod          | object                                                         | property
-      'pathProvider'         | new AbsoluteSwaggerPathProvider()                              | 'swaggerPathProvider'
+      'pathProvider'         | new AbsolutePathProvider()                                     | 'pathProvider'
       'authorizationTypes'   | new ArrayList<AuthorizationType>()                             | 'authorizationTypes'
       'authorizationContext' | new AuthorizationContext.AuthorizationContextBuilder().build() | 'authorizationContext'
-//      'includePatterns'      | ['one', 'two', 'three'] as String[]                            | 'requestMappingEvaluator.includePatterns'
-      'swaggerGroup'         | 'someGroup'                                                    | 'groupName'
+      'groupName'            | 'someGroup'                                                    | 'groupName'
       'apiInfo'              | new ApiInfo('', '', "", '', '', '', '')                        | 'apiInfo'
   }
 
   def "non nullable swaggerApiResourceListing properties"() {
 
     when:
-      pluginContext = new SwaggerSpringMvcPlugin()
+      def pluginContext = new DocumentationConfigurer()
               .build(contextBuilder)
 
     then:
       "default" == pluginContext.groupName
-      null != pluginContext.swaggerPathProvider
-      null != pluginContext.resourceGroupingStrategy
+      null != pluginContext.pathProvider
       null != pluginContext.apiInfo
       null != pluginContext.requestMappingEvaluator
       null != pluginContext.globalResponseMessages
@@ -184,7 +171,7 @@ class SwaggerSpringMvcPluginSpec extends Specification {
 
   def "should preserve default exclude annotations"() {
     when:
-      pluginContext = new SwaggerSpringMvcPlugin()
+      def pluginContext = new DocumentationConfigurer()
               .excludeAnnotations(Api.class, ApiOperation.class)
               .build(contextBuilder)
 

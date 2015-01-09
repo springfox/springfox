@@ -2,10 +2,10 @@ package com.mangofactory.swagger.core
 
 import spock.lang.Specification
 
-import static com.mangofactory.swagger.core.StringUtils.firstPathSegment
-import static com.mangofactory.swagger.core.StringUtils.maybeChompLeadingSlash
-import static com.mangofactory.swagger.core.StringUtils.maybeChompTrailingSlash
-import static com.mangofactory.swagger.core.StringUtils.splitCamelCase
+import static com.mangofactory.spring.web.Paths.firstPathSegment
+import static com.mangofactory.spring.web.Paths.maybeChompLeadingSlash
+import static com.mangofactory.spring.web.Paths.maybeChompTrailingSlash
+import static com.mangofactory.spring.web.Paths.splitCamelCase
 
 class StringUtilsSpec extends Specification {
   def "maybe chomping the leading slash works"() {

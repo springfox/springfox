@@ -1,8 +1,10 @@
 package com.mangofactory.swagger.core
-import com.mangofactory.swagger.annotations.ApiIgnore
+
+import com.mangofactory.spring.web.RequestMappingEvaluator
+import com.mangofactory.spring.web.annotations.ApiIgnore
 import com.mangofactory.swagger.mixins.AccessorAssertions
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.scanners.RegexRequestMappingPatternMatcher
+import com.mangofactory.spring.web.scanners.RegexRequestMappingPatternMatcher
 import spock.lang.Specification
 
 import static com.google.common.collect.Lists.newArrayList

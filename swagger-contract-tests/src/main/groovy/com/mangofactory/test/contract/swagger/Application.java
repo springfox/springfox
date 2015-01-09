@@ -1,6 +1,6 @@
 package com.mangofactory.test.contract.swagger;
 
-import com.mangofactory.swagger.plugin.EnableSwagger;
+import com.mangofactory.swagger.annotations.EnableSwagger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;

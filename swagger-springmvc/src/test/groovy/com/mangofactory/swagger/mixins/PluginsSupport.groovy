@@ -4,17 +4,19 @@ import com.mangofactory.schema.plugins.DocumentationType
 import com.mangofactory.schema.plugins.ModelBuilderPlugin
 import com.mangofactory.schema.plugins.ModelPropertyBuilderPlugin
 import com.mangofactory.schema.plugins.SchemaPluginsManager
-import com.mangofactory.springmvc.plugins.ApiListingBuilderPlugin
-import com.mangofactory.springmvc.plugins.DocumentationPlugin
-import com.mangofactory.springmvc.plugins.DocumentationPluginsManager
-import com.mangofactory.springmvc.plugins.OperationBuilderPlugin
-import com.mangofactory.springmvc.plugins.ParameterBuilderPlugin
-import com.mangofactory.springmvc.plugins.ParameterExpanderPlugin
+import com.mangofactory.spring.web.ResourceGroupingStrategy
+import com.mangofactory.spring.web.plugins.ApiListingBuilderPlugin
+import com.mangofactory.spring.web.plugins.DocumentationPlugin
+import com.mangofactory.spring.web.plugins.DocumentationPluginsManager
+import com.mangofactory.spring.web.plugins.OperationBuilderPlugin
+import com.mangofactory.spring.web.plugins.ParameterBuilderPlugin
+import com.mangofactory.spring.web.plugins.ParameterExpanderPlugin
 import com.mangofactory.swagger.plugins.ApiModelBuilderPlugin
 import com.mangofactory.swagger.plugins.ApiModelPropertyPropertyBuilderPlugin
 import com.mangofactory.swagger.plugins.operation.parameter.SwaggerParameterExpander
-import com.mangofactory.swagger.readers.MediaTypeReader
-import com.mangofactory.swagger.readers.operation.parameter.ParameterExpander
+import com.mangofactory.spring.web.readers.MediaTypeReader
+import com.mangofactory.spring.web.readers.operation.parameter.ParameterExpander
+import com.mangofactory.swagger.web.ClassOrApiAnnotationResourceGrouping
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 
@@ -44,7 +46,9 @@ class PluginsSupport {
             OrderAwarePluginRegistry.create([])
     PluginRegistry<OperationBuilderPlugin, DocumentationType>  operationBuilderPlugins=
             OrderAwarePluginRegistry.create([])
+    PluginRegistry<ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies =
+            OrderAwarePluginRegistry.create([new ClassOrApiAnnotationResourceGrouping()])
     new DocumentationPluginsManager(documentationPlugins, apiListingRegistry, parameterBuilderPlugins,
-            parameterExpanderPlugin, operationBuilderPlugins)
+            parameterExpanderPlugin, operationBuilderPlugins, resourceGroupingStrategies)
   }
 }

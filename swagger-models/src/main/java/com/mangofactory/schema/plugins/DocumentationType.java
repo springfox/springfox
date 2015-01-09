@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 import org.springframework.plugin.metadata.SimplePluginMetadata;
 
 public class DocumentationType extends SimplePluginMetadata {
+  public static final DocumentationType SWAGGER_12 = new DocumentationType("swagger", "1.2");
   private final MediaType mediaType;
 
   /**

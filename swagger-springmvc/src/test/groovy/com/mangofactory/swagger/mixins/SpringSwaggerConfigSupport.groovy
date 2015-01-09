@@ -2,7 +2,7 @@ package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.schema.configuration.SwaggerModelsConfiguration
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig
-import com.mangofactory.swagger.controllers.Defaults
+import com.mangofactory.spring.web.plugins.Defaults
 
 import javax.servlet.ServletContext
 

@@ -1,8 +1,9 @@
 package com.mangofactory.swagger.core
 
+import com.mangofactory.spring.web.ResourceGroupingStrategy
+import com.mangofactory.spring.web.SpringGroupingStrategy
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import spock.lang.Specification
 
 @Mixin(RequestMappingSupport)
@@ -24,10 +25,10 @@ class SpringGroupingStrategySpec extends Specification {
     where:
       handlerMethod                                         | groupNames              | description
       dummyHandlerMethod()                                  | ["dummy-class"]         | "Dummy Class"
-      dummyControllerHandlerMethod()                        | ["dummy-controller"]    | "Group name"
-      petServiceHandlerMethod()                             | ["pets"]                | "Operations about pets"
+      dummyControllerHandlerMethod()                        | ["dummy-controller"]    | "Dummy Controller"
+      petServiceHandlerMethod()                             | ["pets"]                | "Pet Service"
       fancyPetServiceHandlerMethod()                        | ["fancypets"]           | "Fancy Pet Service"
-      multipleRequestMappingsHandlerMethod()                | ["pets", "petgrooming"] | "Grooming operations for pets"
+      multipleRequestMappingsHandlerMethod()                | ["pets", "petgrooming"] | "Pet Grooming Service"
       dummyHandlerMethod('methodWithRatherLongRequestPath') | ["dummy-class"]         | "Dummy Class"
 
   }

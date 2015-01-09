@@ -1,21 +1,21 @@
 package com.mangofactory.swagger.mixins
-import com.mangofactory.springmvc.plugins.DocumentationContextBuilder
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
+import com.mangofactory.spring.web.plugins.DocumentationContextBuilder
+import com.mangofactory.spring.web.plugins.DocumentationConfigurer
 
 @Mixin(SpringSwaggerConfigSupport)
 class DocumentationContextSupport {
 
   def defaultContext(servletContext) {
     DocumentationContextBuilder contextBuilder = defaultContextBuilder(defaults(servletContext))
-    new SwaggerSpringMvcPlugin()
-            .swaggerGroup("swaggerGroup")
+    new DocumentationConfigurer()
+            .groupName("groupName")
             .includePatterns(".*")
             .build(contextBuilder)
   }
 
-  SwaggerSpringMvcPlugin defaultPlugin() {
-    new SwaggerSpringMvcPlugin()
-            .swaggerGroup("swaggerGroup")
+  DocumentationConfigurer defaultPlugin() {
+    new DocumentationConfigurer()
+            .groupName("groupName")
             .includePatterns(".*")
   }
 

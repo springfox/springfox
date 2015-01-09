@@ -1,10 +1,11 @@
 package com.mangofactory.swagger.core
-import com.mangofactory.springmvc.plugins.DocumentationContextBuilder
-import com.mangofactory.swagger.controllers.Defaults
+import com.mangofactory.spring.web.plugins.DocumentationContextBuilder
+import com.mangofactory.spring.web.plugins.Defaults
 import com.mangofactory.swagger.mixins.DocumentationContextSupport
 import com.mangofactory.swagger.mixins.SpringSwaggerConfigSupport
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin
-import com.mangofactory.swagger.readers.ApiOperationReader
+import com.mangofactory.spring.web.plugins.DocumentationConfigurer
+import com.mangofactory.spring.web.readers.ApiOperationReader
+import com.mangofactory.swagger.web.ClassOrApiAnnotationResourceGrouping
 import spock.lang.Specification
 
 import javax.servlet.ServletContext
@@ -12,14 +13,15 @@ import javax.servlet.ServletContext
 @Mixin([DocumentationContextSupport, SpringSwaggerConfigSupport])
 public class DocumentationContextSpec extends Specification {
   DocumentationContextBuilder contextBuilder
-  SwaggerSpringMvcPlugin plugin
+  DocumentationConfigurer plugin
   ApiOperationReader operationReader
   Defaults defaultValues
 
   def setup() {
     defaultValues = defaults(Mock(ServletContext))
     contextBuilder = defaultContextBuilder(defaultValues)
-    plugin = new SwaggerSpringMvcPlugin()
+            .withResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
+    plugin = new DocumentationConfigurer()
     operationReader = Mock(ApiOperationReader)
   }
 

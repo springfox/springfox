@@ -1,6 +1,6 @@
 package com.mangofactory.swagger.dummy;
 
-import com.mangofactory.swagger.annotations.ApiIgnore;
+import com.mangofactory.spring.web.annotations.ApiIgnore;
 import com.mangofactory.swagger.dummy.models.EnumType;
 import com.mangofactory.swagger.dummy.models.Example;
 import com.mangofactory.swagger.dummy.models.FoobarDto;

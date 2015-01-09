@@ -3,6 +3,7 @@ package com.mangofactory.swagger.core
 import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.type.SimpleType
+import com.mangofactory.spring.web.ModelUtils
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import spock.lang.Specification

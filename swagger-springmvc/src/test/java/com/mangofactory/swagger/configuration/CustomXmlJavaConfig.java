@@ -1,7 +1,8 @@
 package com.mangofactory.swagger.configuration;
 
-import com.mangofactory.swagger.plugin.EnableSwagger;
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
+import com.mangofactory.schema.plugins.DocumentationType;
+import com.mangofactory.spring.web.plugins.DocumentationConfigurer;
+import com.mangofactory.swagger.annotations.EnableSwagger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,16 +10,16 @@ import org.springframework.context.annotation.Configuration;
 @EnableSwagger
 public class CustomXmlJavaConfig {
   @Bean
-  public SwaggerSpringMvcPlugin customImplementation() {
-    return new SwaggerSpringMvcPlugin()
-            .swaggerGroup("customPlugin")
+  public DocumentationConfigurer customImplementation() {
+    return new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+            .groupName("customPlugin")
             .includePatterns(".*pet.*");
   }
 
   @Bean
-  public SwaggerSpringMvcPlugin secondCustomImplementation() {
-    return new SwaggerSpringMvcPlugin()
-            .swaggerGroup("secondCustomPlugin")
+  public DocumentationConfigurer secondCustomImplementation() {
+    return new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+            .groupName("secondCustomPlugin")
             .includePatterns("/feature.*");
   }
 }

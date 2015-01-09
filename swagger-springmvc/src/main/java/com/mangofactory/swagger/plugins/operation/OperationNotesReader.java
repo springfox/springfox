@@ -1,8 +1,8 @@
 package com.mangofactory.swagger.plugins.operation;
 
 import com.mangofactory.schema.plugins.DocumentationType;
-import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;
-import com.mangofactory.springmvc.plugins.OperationContext;
+import com.mangofactory.spring.web.plugins.OperationBuilderPlugin;
+import com.mangofactory.spring.web.plugins.OperationContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

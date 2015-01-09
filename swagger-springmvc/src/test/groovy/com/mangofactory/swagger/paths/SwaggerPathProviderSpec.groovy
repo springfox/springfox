@@ -1,6 +1,8 @@
 package com.mangofactory.swagger.paths
-
+import com.mangofactory.spring.web.PathProvider
+import com.mangofactory.spring.web.RelativePathProvider
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.web.AbsolutePathProvider
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -13,7 +15,7 @@ class SwaggerPathProviderSpec extends Specification {
     given:
       ServletContext servletContext = Mock()
       servletContext.contextPath >> "/"
-      SwaggerPathProvider provider = new RelativeSwaggerPathProvider(servletContext)
+      PathProvider provider = new RelativePathProvider(servletContext)
       provider.apiResourcePrefix = "some/prefix"
 
     expect:
@@ -21,16 +23,17 @@ class SwaggerPathProviderSpec extends Specification {
       provider.getResourceListingPath('default', 'api-declaration') == "/default/api-declaration"
   }
 
+  @Unroll
   def "Absolute paths"() {
     given:
-      SwaggerPathProvider provider = new AbsoluteSwaggerPathProvider(apiResourcePrefix: "", servletContext: servletContext())
+      PathProvider provider = new AbsolutePathProvider(apiResourcePrefix: "", servletContext: servletContext())
 
     expect:
       provider.getApplicationBasePath() == expectedAppBase
-      provider.getResourceListingPath(swaggerGroup, apiDeclaration) == expectedDoc
+      provider.getResourceListingPath(groupName, apiDeclaration) == expectedDoc
 
     where:
-      swaggerGroup    | apiDeclaration     | expectedAppBase                      | expectedDoc
+      groupName    | apiDeclaration     | expectedAppBase                      | expectedDoc
       'default'       | 'api-declaration'  | "http://localhost:8080/context-path" | "http://localhost:8080/context-path/api-docs/default/api-declaration"
       'somethingElse' | 'api-declaration2' | "http://localhost:8080/context-path" | "http://localhost:8080/context-path/api-docs/somethingElse/api-declaration2"
 
@@ -40,7 +43,7 @@ class SwaggerPathProviderSpec extends Specification {
     when:
       ServletContext servletContext = Mock()
       servletContext.contextPath >> "/"
-      SwaggerPathProvider provider = new RelativeSwaggerPathProvider(servletContext)
+      PathProvider provider = new RelativePathProvider(servletContext)
       provider.apiResourcePrefix = prefix
     then:
       thrown(IllegalArgumentException)
@@ -48,12 +51,11 @@ class SwaggerPathProviderSpec extends Specification {
       prefix << [null, '/', '/api', '/api/', 'api/v1/', '/api/v1/']
   }
 
-  @Unroll
   def "api declaration path"() {
     given:
       ServletContext servletContext = Mock()
       servletContext.contextPath >> contextPath
-      SwaggerPathProvider provider = new RelativeSwaggerPathProvider(servletContext)
+      PathProvider provider = new RelativePathProvider(servletContext)
       provider.apiResourcePrefix = prefix
       provider.getOperationPath(apiDeclaration) == expected
 
@@ -69,7 +71,7 @@ class SwaggerPathProviderSpec extends Specification {
 
   def "should never return a path with duplicate slash"() {
     setup:
-      RelativeSwaggerPathProvider swaggerPathProvider = new RelativeSwaggerPathProvider()
+      RelativePathProvider swaggerPathProvider = new RelativePathProvider()
 
     when:
       String path = swaggerPathProvider.getResourceListingPath('/a', '/b')
@@ -81,7 +83,7 @@ class SwaggerPathProviderSpec extends Specification {
 
   def "should replace slashes"() {
     expect:
-      new RelativeSwaggerPathProvider().sanitiseUrl(input) == expected
+      new RelativePathProvider().sanitiseUrl(input) == expected
     where:
       input             | expected
       '//a/b'           | '/a/b'

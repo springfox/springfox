@@ -1,6 +1,7 @@
 package com.mangofactory.swagger.paths
 
 import com.mangofactory.swagger.mixins.RequestMappingSupport
+import com.mangofactory.swagger.web.AbsolutePathProvider
 import spock.lang.Specification
 
 import javax.servlet.ServletContext
@@ -10,7 +11,7 @@ class AbsoluteSwaggerPathProviderSpec extends Specification {
 
    def "assert urls"() {
       given:
-        AbsoluteSwaggerPathProvider provider = new AbsoluteSwaggerPathProvider(servletContext: servletContext)
+        AbsolutePathProvider provider = new AbsolutePathProvider(servletContext: servletContext)
 
       expect:
         provider.applicationPath() == expectedAppPath

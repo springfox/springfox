@@ -4,18 +4,18 @@ import com.mangofactory.service.model.ApiKey
 import com.mangofactory.service.model.ApiListingReference
 import com.mangofactory.service.model.Group
 import com.mangofactory.service.model.ResourceListing
-import com.mangofactory.springmvc.plugins.DocumentationContext
+import com.mangofactory.spring.web.plugins.DocumentationContext
 import com.mangofactory.swagger.core.DocumentationContextSpec
-import com.mangofactory.swagger.core.SwaggerApiResourceListing
+import com.mangofactory.spring.web.scanners.ApiGroupScanner
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.swagger.ordering.ResourceListingLexicographicalOrdering
-import com.mangofactory.swagger.ordering.ResourceListingPositionalOrdering
-import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
-import com.mangofactory.swagger.paths.SwaggerPathProvider
-import com.mangofactory.swagger.scanners.ApiListingReferenceScanResult
-import com.mangofactory.swagger.scanners.ApiListingReferenceScanner
-import com.mangofactory.swagger.scanners.ApiListingScanner
-import com.mangofactory.swagger.scanners.RequestMappingContext
+import com.mangofactory.spring.web.ordering.ResourceListingLexicographicalOrdering
+import com.mangofactory.spring.web.ordering.ResourceListingPositionalOrdering
+import com.mangofactory.swagger.web.AbsolutePathProvider
+import com.mangofactory.spring.web.PathProvider
+import com.mangofactory.spring.web.scanners.ApiListingReferenceScanResult
+import com.mangofactory.spring.web.scanners.ApiListingReferenceScanner
+import com.mangofactory.spring.web.scanners.ApiListingScanner
+import com.mangofactory.spring.web.scanners.RequestMappingContext
 
 import static com.google.common.collect.Maps.*
 
@@ -23,7 +23,7 @@ import static com.google.common.collect.Maps.*
 class SwaggerApiResourceListingSpec extends DocumentationContextSpec {
   ApiListingReferenceScanner listingReferenceScanner = Mock(ApiListingReferenceScanner)
   ApiListingScanner listingScanner = Mock(ApiListingScanner)
-  SwaggerApiResourceListing  swaggerApiResourceListing = new SwaggerApiResourceListing(listingReferenceScanner, listingScanner)
+  ApiGroupScanner  swaggerApiResourceListing = new ApiGroupScanner(listingReferenceScanner, listingScanner)
 
   def "default swagger resource"() {
     when: "I create a swagger resource"
@@ -49,7 +49,7 @@ class SwaggerApiResourceListingSpec extends DocumentationContextSpec {
       ApiInfo expected = new ApiInfo("title", "description", "1.0", "terms", "contact", "license", "licenseUrl")
     when:
       DocumentationContext context = plugin
-              .swaggerGroup("swaggerGroup")
+              .groupName("groupName")
               .includePatterns(".*")
               .apiInfo(expected)
               .build(contextBuilder)
@@ -72,7 +72,7 @@ class SwaggerApiResourceListingSpec extends DocumentationContextSpec {
       ApiKey apiKey = new ApiKey("api_key", "header")
     when:
       DocumentationContext context = plugin
-              .swaggerGroup("swaggerGroup")
+              .groupName("groupName")
               .includePatterns(".*")
               .authorizationTypes([apiKey])
               .build(contextBuilder)
@@ -90,15 +90,15 @@ class SwaggerApiResourceListingSpec extends DocumentationContextSpec {
 
   def "resource with mocked apis"() {
     given:
-      SwaggerPathProvider swaggerPathProvider = new AbsoluteSwaggerPathProvider(servletContext: servletContext())
+      PathProvider pathProvider = new AbsolutePathProvider(servletContext: servletContext())
       DocumentationContext context = plugin
-              .swaggerGroup("swaggerGroup")
+              .groupName("groupName")
               .includePatterns(".*")
-              .pathProvider(swaggerPathProvider)
+              .pathProvider(pathProvider)
               .build(contextBuilder)
 
       RequestMappingContext requestMappingContext = new RequestMappingContext(context, (requestMappingInfo
-              ("somePath/")), dummyHandlerMethod(), "")
+              ("somePath/")), dummyHandlerMethod())
 
     when:
       listingReferenceScanner.scan(context) >>
@@ -108,7 +108,7 @@ class SwaggerApiResourceListingSpec extends DocumentationContextSpec {
       scanned.resourceListing != null
 
     then:
-      scanned.groupName == "swaggerGroup"
+      scanned.groupName == "groupName"
       1 * listingReferenceScanner.scan(context) >>
               new ApiListingReferenceScanResult([Mock(ApiListingReference)], [resourceGroup: [requestMappingContext]])
   }
@@ -116,7 +116,7 @@ class SwaggerApiResourceListingSpec extends DocumentationContextSpec {
   def "Should sort based on position"() {
     given:
       DocumentationContext context = plugin
-              .swaggerGroup("swaggerGroup")
+              .groupName("groupName")
               .includePatterns(".*")
               .apiListingReferenceOrdering(ordering)
               .build(contextBuilder)

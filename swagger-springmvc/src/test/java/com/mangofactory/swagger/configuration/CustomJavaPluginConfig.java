@@ -1,10 +1,11 @@
 package com.mangofactory.swagger.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.service.model.ApiInfo;
 import com.mangofactory.service.model.builder.ApiInfoBuilder;
-import com.mangofactory.swagger.plugin.EnableSwagger;
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
+import com.mangofactory.spring.web.plugins.DocumentationConfigurer;
+import com.mangofactory.swagger.annotations.EnableSwagger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,16 +23,16 @@ public class CustomJavaPluginConfig {
    * swagger groups i.e. same code base multiple swagger resource listings
    */
   @Bean
-  public SwaggerSpringMvcPlugin customImplementation() {
-    return new SwaggerSpringMvcPlugin()
-            .swaggerGroup("customPlugin")
+  public DocumentationConfigurer customImplementation() {
+    return new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+            .groupName("customPlugin")
             .includePatterns(".*pet.*");
   }
 
   @Bean
-  public SwaggerSpringMvcPlugin secondCustomImplementation() {
-    return new SwaggerSpringMvcPlugin()
-            .swaggerGroup("secondCustomPlugin")
+  public DocumentationConfigurer secondCustomImplementation() {
+    return new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+            .groupName("secondCustomPlugin")
             .apiInfo(apiInfo())
             .includePatterns("/feature.*");
   }

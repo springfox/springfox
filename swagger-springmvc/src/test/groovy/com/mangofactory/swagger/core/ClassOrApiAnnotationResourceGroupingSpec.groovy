@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.core
 
+import com.mangofactory.swagger.web.ClassOrApiAnnotationResourceGrouping
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
@@ -22,9 +23,13 @@ class ClassOrApiAnnotationResourceGroupingSpec extends Specification {
       strategy.getResourceDescription(requestMappingInfo, handlerMethod) == description
 
     where:
-      handlerMethod                                    | groupName     | description                    | position
-      dummyHandlerMethod()                             | "dummy-class" | "Dummy Class"                  | 0
-      dummyControllerHandlerMethod()                   | "group-name"  | "Group name"                   | 2
-      dummyControllerWithApiDescriptionHandlerMethod() | "group-name"  | "Dummy Controller Description" | 2
+      handlerMethod                                    | groupName              | description                    | position
+      dummyHandlerMethod()                             | "dummy-class"          | "Dummy Class"                  | 0
+      dummyControllerHandlerMethod()                   | "group-name"           | "Group name"                   | 2
+      dummyControllerWithApiDescriptionHandlerMethod() | "group-name"           | "Dummy Controller Description" | 2
+      petServiceHandlerMethod()                        | "pet-service"          | "Operations about pets"        | 0
+      multipleRequestMappingsHandlerMethod()           | "pet-grooming-service" | "Grooming operations for pets" | 0
+
+
   }
 }

@@ -1,20 +1,20 @@
 package com.mangofactory.swagger.mixins
 
-import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider
-import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider
-import com.mangofactory.swagger.paths.SwaggerPathProvider
+import com.mangofactory.swagger.web.AbsolutePathProvider
+import com.mangofactory.spring.web.RelativePathProvider
+import com.mangofactory.spring.web.PathProvider
 
 import javax.servlet.ServletContext
 
 class SwaggerPathProviderSupport {
-  AbsoluteSwaggerPathProvider absoluteSwaggerPathProvider(){
-      SwaggerPathProvider swaggerPathProvider = new AbsoluteSwaggerPathProvider();
+  AbsolutePathProvider absoluteSwaggerPathProvider(){
+      PathProvider swaggerPathProvider = new AbsolutePathProvider();
       swaggerPathProvider.setApiResourcePrefix("api/v1");
       swaggerPathProvider.servletContext = [getContextPath: {return "/context-path"}] as ServletContext
       return swaggerPathProvider
    }
 
-  RelativeSwaggerPathProvider relativeSwaggerPathProvider(){
-      new RelativeSwaggerPathProvider()
+  RelativePathProvider relativeSwaggerPathProvider(){
+      new RelativePathProvider()
    }
 }

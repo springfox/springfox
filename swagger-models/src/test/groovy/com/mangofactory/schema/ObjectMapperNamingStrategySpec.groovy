@@ -1,6 +1,7 @@
 package com.mangofactory.schema
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.mangofactory.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import spock.lang.Specification

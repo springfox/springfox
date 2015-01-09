@@ -15,7 +15,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.mangofactory.schema.plugins.ModelPropertyContext;
 import com.mangofactory.schema.plugins.SchemaPluginsManager;
-import com.mangofactory.schema.BeanPropertyNamingStrategy;
+import com.mangofactory.schema.property.BeanPropertyNamingStrategy;
 import com.mangofactory.schema.plugins.ModelContext;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.property.BeanPropertyDefinitions;

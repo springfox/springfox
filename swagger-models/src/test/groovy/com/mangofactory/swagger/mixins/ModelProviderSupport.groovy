@@ -9,7 +9,7 @@ import com.mangofactory.schema.plugins.SchemaPluginsManager
 import com.mangofactory.schema.DefaultModelProvider
 import com.mangofactory.schema.ModelDependencyProvider
 import com.mangofactory.schema.ModelProvider
-import com.mangofactory.schema.ObjectMapperBeanPropertyNamingStrategy
+import com.mangofactory.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.schema.alternates.AlternateTypeRule
 import com.mangofactory.schema.configuration.SwaggerModelsConfiguration

@@ -1,13 +1,14 @@
 package com.mangofactory.swagger.configuration;
 
 import com.mangofactory.schema.configuration.SwaggerModelsConfiguration;
-import com.mangofactory.springmvc.plugins.ApiListingBuilderPlugin;
-import com.mangofactory.springmvc.plugins.DocumentationPlugin;
-import com.mangofactory.springmvc.plugins.OperationBuilderPlugin;
-import com.mangofactory.springmvc.plugins.ParameterBuilderPlugin;
-import com.mangofactory.springmvc.plugins.ParameterExpanderPlugin;
-import com.mangofactory.swagger.controllers.Defaults;
-import com.mangofactory.swagger.core.SwaggerCache;
+import com.mangofactory.spring.web.GroupCache;
+import com.mangofactory.spring.web.ResourceGroupingStrategy;
+import com.mangofactory.spring.web.plugins.ApiListingBuilderPlugin;
+import com.mangofactory.spring.web.plugins.Defaults;
+import com.mangofactory.spring.web.plugins.DocumentationPlugin;
+import com.mangofactory.spring.web.plugins.OperationBuilderPlugin;
+import com.mangofactory.spring.web.plugins.ParameterBuilderPlugin;
+import com.mangofactory.spring.web.plugins.ParameterExpanderPlugin;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,24 +17,25 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
 
 @Configuration
 @ComponentScan(basePackages = {
-        "com.mangofactory.swagger.controllers",
-        "com.mangofactory.swagger.scanners",
-        "com.mangofactory.swagger.core",
-        "com.mangofactory.swagger.readers",
-        "com.mangofactory.springmvc.plugins"
+        "com.mangofactory.spring.web.scanners",
+        "com.mangofactory.spring.web.readers",
+        "com.mangofactory.spring.web.plugins",
+        "com.mangofactory.swagger.web",
+        "com.mangofactory.swagger.plugins"
 })
 @Import({ SwaggerModelsConfiguration.class, Defaults.class })
 @EnablePluginRegistries({DocumentationPlugin.class,
         ApiListingBuilderPlugin.class,
         OperationBuilderPlugin.class,
         ParameterBuilderPlugin.class,
-        ParameterExpanderPlugin.class})
+        ParameterExpanderPlugin.class,
+        ResourceGroupingStrategy.class})
 public class SpringSwaggerConfig {
 
 
   @Bean
-  public SwaggerCache swaggerCache() {
-    return new SwaggerCache();
+  public GroupCache resourceGroupCache() {
+    return new GroupCache();
   }
 
   /**
@@ -43,6 +45,5 @@ public class SpringSwaggerConfig {
   public JacksonSwaggerSupport jacksonSwaggerSupport() {
     return new JacksonSwaggerSupport();
   }
-
 
 }
