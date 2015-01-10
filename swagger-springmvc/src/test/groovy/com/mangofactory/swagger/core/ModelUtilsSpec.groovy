@@ -3,10 +3,13 @@ package com.mangofactory.swagger.core
 import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.type.SimpleType
+import com.mangofactory.schema.ResolvedTypes
 import com.mangofactory.spring.web.ModelUtils
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import spock.lang.Specification
+
+import static com.mangofactory.schema.ResolvedTypes.asResolved
 
 @Mixin(RequestMappingSupport)
 class ModelUtilsSpec extends Specification {
@@ -16,7 +19,7 @@ class ModelUtilsSpec extends Specification {
       def type = ModelUtils.handlerReturnType(new TypeResolver(), handlerMethod)
       println "TYPE: $type"
       type.getErasedType() == expectedType
-      ModelUtils.getModelName(new TypeResolver(), String.class)
+      ResolvedTypes.typeName(asResolved(new TypeResolver(), String.class))
 
     where:
       handlerMethod                                            | expectedType
@@ -26,7 +29,7 @@ class ModelUtilsSpec extends Specification {
 
   def "Get response class name from ResolvedType"(){
     expect:
-      def modelResponseClass = ModelUtils.getResponseClassName(new TypeResolver().resolve(GenericType, clazz))
+      def modelResponseClass = ResolvedTypes.responseTypeName(new TypeResolver().resolve(GenericType, clazz))
       modelResponseClass == expectedResponseClassName
 
     where:
