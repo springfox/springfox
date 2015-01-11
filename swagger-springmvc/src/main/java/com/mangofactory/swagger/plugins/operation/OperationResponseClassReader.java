@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
 import static com.mangofactory.schema.ResolvedTypes.*;
-import static com.mangofactory.spring.web.ModelUtils.*;
+import static com.mangofactory.spring.web.HandlerMethodReturnTypes.*;
 
 @Component("swaggerOperationClassReader")
 public class OperationResponseClassReader implements OperationBuilderPlugin {

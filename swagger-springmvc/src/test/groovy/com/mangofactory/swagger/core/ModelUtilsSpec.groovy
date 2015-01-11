@@ -4,7 +4,7 @@ import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.type.SimpleType
 import com.mangofactory.schema.ResolvedTypes
-import com.mangofactory.spring.web.ModelUtils
+import com.mangofactory.spring.web.HandlerMethodReturnTypes
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import spock.lang.Specification
@@ -16,7 +16,7 @@ class ModelUtilsSpec extends Specification {
 
    def "model types"() {
     expect:
-      def type = ModelUtils.handlerReturnType(new TypeResolver(), handlerMethod)
+      def type = HandlerMethodReturnTypes.handlerReturnType(new TypeResolver(), handlerMethod)
       println "TYPE: $type"
       type.getErasedType() == expectedType
       ResolvedTypes.typeName(asResolved(new TypeResolver(), String.class))

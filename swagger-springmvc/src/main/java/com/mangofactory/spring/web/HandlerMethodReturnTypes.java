@@ -7,10 +7,9 @@ import org.springframework.web.method.HandlerMethod;
 
 import static com.mangofactory.spring.web.readers.operation.HandlerMethodResolver.*;
 
-@Deprecated
-public final class ModelUtils {
+public final class HandlerMethodReturnTypes {
 
-  private ModelUtils() {
+  private HandlerMethodReturnTypes() {
     throw new UnsupportedOperationException();
   }
 
@@ -19,5 +18,4 @@ public final class ModelUtils {
             .or(handlerMethod.getMethod().getDeclaringClass());
     return new HandlerMethodResolver(resolver).methodReturnType(handlerMethod.getMethod(), hostClass);
   }
-
 }

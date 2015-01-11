@@ -7,6 +7,7 @@ import com.mangofactory.spring.web.plugins.ApiListingBuilderPlugin;
 import com.mangofactory.spring.web.plugins.Defaults;
 import com.mangofactory.spring.web.plugins.DocumentationPlugin;
 import com.mangofactory.spring.web.plugins.OperationBuilderPlugin;
+import com.mangofactory.spring.web.plugins.OperationModelsProviderPlugin;
 import com.mangofactory.spring.web.plugins.ParameterBuilderPlugin;
 import com.mangofactory.spring.web.plugins.ParameterExpanderPlugin;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +30,8 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
         OperationBuilderPlugin.class,
         ParameterBuilderPlugin.class,
         ParameterExpanderPlugin.class,
-        ResourceGroupingStrategy.class})
+        ResourceGroupingStrategy.class,
+        OperationModelsProviderPlugin.class})
 public class SpringSwaggerConfig {
 
 

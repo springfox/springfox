@@ -1,5 +1,6 @@
 package com.mangofactory.spring.web.plugins;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.service.model.ApiDescription;
@@ -88,8 +89,8 @@ public class DocumentationContext {
     return requestMappingEvaluator;
   }
 
-  public Set<Class> getIgnorableParameterTypes() {
-    return ignorableParameterTypes;
+  public ImmutableSet<Class> getIgnorableParameterTypes() {
+    return ImmutableSet.copyOf(ignorableParameterTypes);
   }
 
   public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {

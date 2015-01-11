@@ -3,6 +3,7 @@ import com.mangofactory.service.model.ApiDescription
 import com.mangofactory.service.model.Model
 import com.mangofactory.service.model.ModelProperty
 import com.mangofactory.service.model.Operation
+import com.mangofactory.spring.web.plugins.DocumentationPluginsManager
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.controllers.BusinessService
@@ -11,6 +12,7 @@ import com.mangofactory.swagger.dummy.models.FoobarDto
 import com.mangofactory.swagger.mixins.ApiOperationSupport
 import com.mangofactory.swagger.mixins.JsonSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
+import com.mangofactory.swagger.mixins.PluginsSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.spring.web.scanners.RequestMappingContext
 import org.springframework.http.HttpEntity
@@ -19,14 +21,15 @@ import org.springframework.web.method.HandlerMethod
 
 import javax.servlet.http.HttpServletResponse
 
-@Mixin([RequestMappingSupport, ApiOperationSupport, JsonSupport, ModelProviderForServiceSupport])
+@Mixin([RequestMappingSupport, ApiOperationSupport, JsonSupport, ModelProviderForServiceSupport, PluginsSupport])
 class ApiModelReaderSpec extends DocumentationContextSpec {
 
   ApiModelReader sut
+  DocumentationPluginsManager pluginsManager
 
   def setup() {
-    sut = new ApiModelReader(modelProvider(), defaultValues.alternateTypeProvider,
-            defaultValues.typeResolver)
+    pluginsManager = springPluginsManagerWithDefaults(defaultValues)
+    sut = new ApiModelReader(modelProvider(), defaultValues.typeResolver, pluginsManager)
   }
 
 
@@ -171,9 +174,8 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     and:
       HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
       RequestMappingContext context =
-              new RequestMappingContext(pluginContext,
-                      requestMappingInfo('/businesses/responseEntity/{businessId}'),
-                      handlerMethod, "")
+              new RequestMappingContext(pluginContext, requestMappingInfo('/businesses/responseEntity/{businessId}'),
+                      handlerMethod )
     when:
       sut.execute(context)
 
@@ -188,7 +190,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSameAnnotatedModelInReturnAndRequestBodyParam',
               DummyModels.AnnotatedBusinessModel
       )
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod, "")
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
 
     when:
       sut.execute(context)
@@ -215,7 +217,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
               DummyModels.ModelWithSerializeOnlyProperty
       )
       RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-              handlerMethod, "")
+              handlerMethod)
 
     when:
       sut.execute(context)
@@ -243,8 +245,8 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       )
       RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
     and:
-      def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(), defaultValues.alternateTypeProvider,
-              defaultValues.typeResolver)
+      def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(),
+              defaultValues.typeResolver, springPluginsManager())
     when:
       snakeCaseReader.execute(context)
 

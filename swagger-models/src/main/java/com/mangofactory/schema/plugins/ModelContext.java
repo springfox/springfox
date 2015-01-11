@@ -2,6 +2,7 @@ package com.mangofactory.schema.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Objects;
 import com.mangofactory.service.model.builder.ModelBuilder;
 
 import java.lang.reflect.Type;
@@ -80,5 +81,27 @@ public class ModelContext {
 
   public void seen(ResolvedType resolvedType) {
     seenTypes.add(resolvedType);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)  {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ModelContext that = (ModelContext) o;
+
+    return Objects.equal(type, that.type) &&
+            Objects.equal(documentationType, that.documentationType) &&
+            Objects.equal(returnType, that.returnType);
+
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(type, documentationType, returnType);
   }
 }

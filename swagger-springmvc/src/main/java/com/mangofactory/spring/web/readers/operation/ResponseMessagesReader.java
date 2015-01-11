@@ -20,7 +20,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.util.List;
 
 import static com.google.common.collect.Sets.*;
-import static com.mangofactory.spring.web.ModelUtils.*;
+import static com.mangofactory.spring.web.HandlerMethodReturnTypes.*;
 
 @Component
 public class ResponseMessagesReader implements OperationBuilderPlugin {

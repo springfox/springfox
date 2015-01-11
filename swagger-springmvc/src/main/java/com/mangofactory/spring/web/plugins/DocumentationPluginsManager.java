@@ -1,17 +1,20 @@
 package com.mangofactory.spring.web.plugins;
 
 import com.mangofactory.schema.plugins.DocumentationType;
+import com.mangofactory.schema.plugins.ModelContext;
 import com.mangofactory.service.model.ApiListing;
 import com.mangofactory.service.model.Operation;
 import com.mangofactory.service.model.Parameter;
 import com.mangofactory.spring.web.ResourceGroupingStrategy;
 import com.mangofactory.spring.web.SpringGroupingStrategy;
+import com.mangofactory.spring.web.scanners.RequestMappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 
@@ -24,6 +27,7 @@ public class DocumentationPluginsManager {
   private final PluginRegistry<ParameterExpanderPlugin, DocumentationType> parameterExpanderPlugins;
   private final PluginRegistry<OperationBuilderPlugin, DocumentationType> operationBuilderPlugins;
   private final PluginRegistry<ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies;
+  private final PluginRegistry<OperationModelsProviderPlugin, DocumentationType> operationModelsProviders;
 
   @Autowired
   public DocumentationPluginsManager(
@@ -38,13 +42,16 @@ public class DocumentationPluginsManager {
           @Qualifier("operationBuilderPluginRegistry")
           PluginRegistry<OperationBuilderPlugin, DocumentationType> operationBuilderPlugins,
           @Qualifier("resourceGroupingStrategyRegistry")
-          PluginRegistry <ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies) {
+          PluginRegistry <ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies,
+          @Qualifier("operationModelsProviderPluginRegistry")
+          PluginRegistry <OperationModelsProviderPlugin, DocumentationType> operationModelsProviders) {
     this.documentationPlugins = documentationPlugins;
     this.apiListingPlugins = apiListingPlugins;
     this.parameterPlugins = parameterPlugins;
     this.parameterExpanderPlugins = parameterExpanderPlugins;
     this.operationBuilderPlugins = operationBuilderPlugins;
     this.resourceGroupingStrategies = resourceGroupingStrategies;
+    this.operationModelsProviders = operationModelsProviders;
   }
 
 
@@ -86,6 +93,14 @@ public class DocumentationPluginsManager {
       each.apply(context);
     }
     return context.apiListingBuilder().build();
+  }
+
+  public Set<ModelContext> modelContexts(RequestMappingContext context) {
+    DocumentationType documentationType = context.getDocumentationContext().getDocumentationType();
+    for (OperationModelsProviderPlugin each : operationModelsProviders.getPluginsFor(documentationType)) {
+      each.apply(context);
+    }
+    return context.operationModelsBuilder().build();
   }
 
   public ResourceGroupingStrategy resourceGroupingStrategy(DocumentationType documentationType) {
