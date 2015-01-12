@@ -13,9 +13,6 @@ public class DataType implements SwaggerDataType {
   @JsonProperty
   private SwaggerDataType dataType;
 
-  public DataType() {
-  }
-
   public DataType(String initialType) {
     this.dataType = typeFromDataType(initialType);
   }
@@ -87,8 +84,5 @@ public class DataType implements SwaggerDataType {
     return dataType.getAbsoluteType();
   }
 
-  public void setDataType(SwaggerDataType initialType) {
-    this.dataType = initialType;
-  }
 }
 //CHECKSTYLE:ON

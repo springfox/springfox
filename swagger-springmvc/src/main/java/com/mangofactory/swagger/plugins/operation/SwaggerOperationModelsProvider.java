@@ -3,7 +3,6 @@ package com.mangofactory.swagger.plugins.operation;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
-import com.mangofactory.schema.Annotations;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.spring.web.plugins.OperationModelsProviderPlugin;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
 import static com.mangofactory.schema.ResolvedTypes.*;
+import static com.mangofactory.swagger.annotations.Annotations.*;
 
 @Component
 public class SwaggerOperationModelsProvider implements OperationModelsProviderPlugin {
@@ -38,6 +38,10 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
     collectApiResponses(context);
   }
 
+  @Override
+  public boolean supports(DocumentationType delimiter) {
+    return true;
+  }
 
   private void collectFromApiOperation(RequestMappingContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
@@ -52,7 +56,7 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
   private void collectApiResponses(RequestMappingContext context) {
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    Optional<ApiResponses> apiResponses = Annotations.findApiResponsesAnnotations(handlerMethod.getMethod());
+    Optional<ApiResponses> apiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
 
     log.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
     if (!apiResponses.isPresent()) {
@@ -64,10 +68,5 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
       context.operationModelsBuilder().addReturn(modelType);
     }
     log.debug("Finished reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
-  }
-
-  @Override
-  public boolean supports(DocumentationType delimiter) {
-    return true;
   }
 }

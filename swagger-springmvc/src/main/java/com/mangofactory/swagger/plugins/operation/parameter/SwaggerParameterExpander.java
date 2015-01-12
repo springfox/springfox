@@ -3,12 +3,10 @@ package com.mangofactory.swagger.plugins.operation.parameter;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.mangofactory.schema.plugins.DocumentationType;
-import com.mangofactory.schema.Annotations;
 import com.mangofactory.service.model.AllowableListValues;
 import com.mangofactory.service.model.AllowableValues;
 import com.mangofactory.spring.web.plugins.ParameterExpanderPlugin;
 import com.mangofactory.spring.web.plugins.ParameterExpansionContext;
-import com.mangofactory.swagger.plugins.ApiModelProperties;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.stereotype.Component;
@@ -20,6 +18,8 @@ import java.util.List;
 import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static com.mangofactory.swagger.annotations.Annotations.*;
+import static com.mangofactory.swagger.plugins.ApiModelProperties.*;
 import static com.mangofactory.swagger.plugins.operation.parameter.ParameterAllowableReader.*;
 
 @Component
@@ -27,12 +27,11 @@ public class SwaggerParameterExpander implements ParameterExpanderPlugin {
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<ApiModelProperty> apiModelPropertyOptional = ApiModelProperties.findApiModePropertyAnnotation
-            (context.getField());
+    Optional<ApiModelProperty> apiModelPropertyOptional = findApiModePropertyAnnotation(context.getField());
     if (apiModelPropertyOptional.isPresent()) {
       fromApiModelProperty(context, apiModelPropertyOptional.get());
     }
-    Optional<ApiParam> apiParamOptional = Annotations.findApiParamAnnotation(context.getField());
+    Optional<ApiParam> apiParamOptional = findApiParamAnnotation(context.getField());
     if (apiParamOptional.isPresent()) {
       fromApiParam(context, apiParamOptional.get());
     }
@@ -48,7 +47,7 @@ public class SwaggerParameterExpander implements ParameterExpanderPlugin {
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField());
     String name = isNullOrEmpty(context.getParentName())
             ? context.getField().getName()
-            : String.format("%s.%s",  context.getParentName(), context.getField().getName());
+            : String.format("%s.%s", context.getParentName(), context.getField().getName());
     context.getParameterBuilder()
             .name(name)
             .description(apiParam.value())

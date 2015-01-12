@@ -3,10 +3,10 @@ package com.mangofactory.swagger.dto.mappers;
 import com.mangofactory.schema.ResolvedTypes;
 import com.mangofactory.service.model.ModelRef;
 import com.mangofactory.swagger.dto.DataType;
-import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 
-@Mapper
-public abstract class DataTypeMapper {
+@Component
+public class DataTypeMapper {
   public com.mangofactory.swagger.dto.SwaggerDataType map(com.fasterxml.classmate.ResolvedType value) {
     return new DataType(ResolvedTypes.typeName(value));
   }

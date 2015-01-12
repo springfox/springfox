@@ -17,14 +17,16 @@ public class OperationModelsBuilder {
     this.documentationType = documentationType;
   }
 
-  public void addReturn(Type type) {
+  public OperationModelsBuilder addReturn(Type type) {
     ModelContext returnValue = ModelContext.returnValue(type, documentationType);
     this.contexts.add(returnValue);
+    return this;
   }
 
-  public void addInputParam(Type type) {
+  public OperationModelsBuilder addInputParam(Type type) {
     ModelContext inputParam = ModelContext.inputParam(type, documentationType);
     this.contexts.add(inputParam);
+    return this;
   }
 
   public Set<ModelContext> build() {

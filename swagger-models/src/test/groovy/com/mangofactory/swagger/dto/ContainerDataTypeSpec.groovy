@@ -42,4 +42,11 @@ class ContainerDataTypeSpec extends InternalJsonSerializationSpec {
     then:
       thrown(IllegalArgumentException)
   }
+
+  def "should fail to serialize a null"() {
+    when:
+      new ContainerDataType(null, false)
+    then:
+      thrown(NullPointerException)
+  }
 }

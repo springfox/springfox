@@ -3,6 +3,8 @@ package com.mangofactory.service.model.builder;
 import com.mangofactory.service.model.AllowableValues;
 import com.mangofactory.service.model.Parameter;
 
+import static org.springframework.util.StringUtils.*;
+
 public class ParameterBuilder {
   private String name;
   private String description;
@@ -59,8 +61,16 @@ public class ParameterBuilder {
     return this;
   }
 
+  //TODO: Whats the rule that needs this to be the case?
+  private String maybeOverrideName(String aName) {
+    if (hasText(this.paramType) && paramType.equals("body")) {
+      return paramType;
+    }
+    return aName;
+  }
+
   public Parameter build() {
-    return new Parameter(name, description, defaultValue, required, allowMultiple, dataType, allowableValues,
-            paramType, paramAccess);
+    return new Parameter(maybeOverrideName(name), description, defaultValue, required, allowMultiple, dataType,
+            allowableValues, paramType, paramAccess);
   }
 }

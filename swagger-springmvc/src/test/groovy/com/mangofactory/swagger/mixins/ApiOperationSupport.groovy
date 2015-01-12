@@ -7,6 +7,7 @@ class ApiOperationSupport {
 
   def operation(int position = 0, String method = "someMethod") {
     def emptyList = []
+    def emptySet = [] as Set
     new Operation(
             method,
             "summary",
@@ -14,12 +15,12 @@ class ApiOperationSupport {
             "responseClass",
             "nickname",
             position,
+            emptySet,
+            emptySet,
+            emptySet,
             emptyList,
             emptyList,
-            emptyList,
-            emptyList,
-            emptyList,
-            [] as Set,
+            emptySet,
             "false",
             false)
   }

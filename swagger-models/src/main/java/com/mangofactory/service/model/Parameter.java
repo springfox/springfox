@@ -1,7 +1,5 @@
 package com.mangofactory.service.model;
 
-import static org.springframework.util.StringUtils.*;
-
 public class Parameter {
   private final String parameterType;
   private final String name;
@@ -22,7 +20,7 @@ public class Parameter {
     this.allowableValues = allowableValues;
     this.paramType = paramType;
     this.paramAccess = paramAccess;
-    this.name = maybeOverrideName(name);
+    this.name = name;
     this.parameterType = dataType;
   }
 
@@ -62,10 +60,4 @@ public class Parameter {
     return parameterType;
   }
 
-  private String maybeOverrideName(String aName) {
-    if (hasText(this.paramType) && paramType.equals("body")) {
-      return paramType;
-    }
-    return aName;
-  }
 }

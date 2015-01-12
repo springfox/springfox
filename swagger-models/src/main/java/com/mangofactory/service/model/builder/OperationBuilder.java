@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
@@ -23,9 +24,9 @@ public class OperationBuilder {
   private String responseClass;
   private String nickname;
   private int position;
-  private List<String> produces = newArrayList();
-  private List<String> consumes = newArrayList();
-  private List<String> protocol;
+  private Set<String> produces = newHashSet();
+  private Set<String> consumes = newHashSet();
+  private Set<String> protocol = newHashSet();
   private List<Authorization> authorizations = newArrayList();
   private List<Parameter> parameters = newArrayList();
   private Set<ResponseMessage> responseMessages = newHashSet();
@@ -33,27 +34,27 @@ public class OperationBuilder {
   private boolean isHidden;
 
   public OperationBuilder method(String method) {
-    this.method = method;
+    this.method = defaultIfAbsent(method, this.method);
     return this;
   }
 
   public OperationBuilder summary(String summary) {
-    this.summary = summary;
+    this.summary = defaultIfAbsent(summary, this.summary);
     return this;
   }
 
   public OperationBuilder notes(String notes) {
-    this.notes = notes;
+    this.notes = defaultIfAbsent(notes, this.notes);
     return this;
   }
 
   public OperationBuilder responseClass(String responseClass) {
-    this.responseClass = responseClass;
+    this.responseClass = defaultIfAbsent(responseClass, this.responseClass);
     return this;
   }
 
   public OperationBuilder nickname(String nickname) {
-    this.nickname = nickname;
+    this.nickname = defaultIfAbsent(nickname, this.nickname);
     return this;
   }
 
@@ -73,12 +74,12 @@ public class OperationBuilder {
   }
 
   public OperationBuilder protocol(List<String> protocol) {
-    this.protocol = protocol;
+    this.protocol.addAll(protocol);
     return this;
   }
 
   public OperationBuilder authorizations(List<Authorization> authorizations) {
-    this.authorizations = authorizations;
+    this.authorizations.addAll(authorizations);
     return this;
   }
 
@@ -88,15 +89,35 @@ public class OperationBuilder {
   }
 
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
+    this.responseMessages = newHashSet(mergeResponseMessages(responseMessages));
+    return this;
+  }
+
+  public OperationBuilder deprecated(String deprecated) {
+    this.deprecated = defaultIfAbsent(deprecated, this.deprecated);
+    return this;
+  }
+
+  public OperationBuilder hidden(boolean isHidden) {
+    this.isHidden = isHidden;
+    return this;
+  }
+
+  public Operation build() {
+    return new Operation(method, summary, notes, responseClass, nickname, position, produces,
+            consumes, protocol, authorizations, parameters, responseMessages, deprecated, isHidden);
+  }
+
+  private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
     //Add logic to consolidate the response messages
-    ImmutableMap<Integer, ResponseMessage> responsesByCode = Maps.uniqueIndex(this.responseMessages,
-            byStatusCode());
+    ImmutableMap<Integer, ResponseMessage> responsesByCode = Maps.uniqueIndex(this.responseMessages, byStatusCode());
     Set<ResponseMessage> merged = newHashSet(this.responseMessages);
     for (ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
-        String message = coalese(responseMessage.getMessage(), HttpStatus.OK.getReasonPhrase());
-        String responseWithModel = coalese(responseMessage.getResponseModel(), each.getResponseModel());
+        String message = defaultIfAbsent(emptyToNull(responseMessage.getMessage()), HttpStatus.OK.getReasonPhrase());
+        String responseWithModel = defaultIfAbsent(emptyToNull(responseMessage.getResponseModel()),
+                each.getResponseModel());
         merged.remove(each);
         merged.add(new ResponseMessageBuilder()
                 .code(each.getCode())
@@ -107,16 +128,15 @@ public class OperationBuilder {
         merged.add(each);
       }
     }
-    this.responseMessages = newHashSet(merged);
-    return this;
+    return merged;
   }
 
-  private String coalese(String overrideMessage, String defaultMessage) {
-    if (isNullOrEmpty(overrideMessage)) {
-      return defaultMessage;
-    }
-    return overrideMessage;
+  private String defaultIfAbsent(String newValue, String defaultValue) {
+    return fromNullable(newValue)
+            .or(fromNullable(defaultValue))
+            .orNull();
   }
+
   private Function<? super ResponseMessage, Integer> byStatusCode() {
     return new Function<ResponseMessage, Integer>() {
       @Override
@@ -124,19 +144,5 @@ public class OperationBuilder {
         return input.getCode();
       }
     };
-  }
-  public OperationBuilder deprecated(String deprecated) {
-    this.deprecated = deprecated;
-    return this;
-  }
-
-  public Operation build() {
-    return new Operation(method, summary, notes, responseClass, nickname, position, produces,
-            consumes, protocol, authorizations, parameters, responseMessages, deprecated, isHidden);
-  }
-
-  public OperationBuilder hidden(boolean isHidden) {
-    this.isHidden = isHidden;
-    return this;
   }
 }

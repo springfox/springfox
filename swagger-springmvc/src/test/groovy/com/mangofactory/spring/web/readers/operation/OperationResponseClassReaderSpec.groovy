@@ -34,7 +34,6 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
       dummyHandlerMethod('methodWithGenericPrimitiveArray')                | 'Array[byte]'
       dummyHandlerMethod('methodWithGenericComplexArray')                  | 'Array[DummyClass]'
       dummyHandlerMethod('methodWithEnumResponse')                         | 'string'
-
    }
 
 }

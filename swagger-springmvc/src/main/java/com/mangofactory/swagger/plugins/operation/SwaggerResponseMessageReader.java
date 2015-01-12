@@ -3,7 +3,6 @@ package com.mangofactory.swagger.plugins.operation;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import com.mangofactory.schema.plugins.DocumentationType;
-import com.mangofactory.schema.Annotations;
 import com.mangofactory.service.model.ResponseMessage;
 import com.mangofactory.service.model.builder.ResponseMessageBuilder;
 import com.mangofactory.spring.web.plugins.OperationBuilderPlugin;
@@ -18,6 +17,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.schema.ResolvedTypes.*;
+import static com.mangofactory.swagger.annotations.Annotations.*;
 
 @Component
 public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
@@ -43,7 +43,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   }
 
   protected Set<ResponseMessage> read(HandlerMethod handlerMethod) {
-    Optional<ApiResponses> apiResponsesOptional = Annotations.findApiResponsesAnnotations(handlerMethod.getMethod());
+    Optional<ApiResponses> apiResponsesOptional = findApiResponsesAnnotations(handlerMethod.getMethod());
     Set<ResponseMessage> responseMessages = newHashSet();
     if (apiResponsesOptional.isPresent()) {
       ApiResponse[] apiResponseAnnotations = apiResponsesOptional.get().value();

@@ -20,10 +20,10 @@ public class ModelPropertyContext {
     this.documentationType = documentationType;
   }
 
-  public ModelPropertyContext(ModelPropertyBuilder propertyBuilder, BeanPropertyDefinition beanPropertyDefinition,
+  public ModelPropertyContext(ModelPropertyBuilder builder, BeanPropertyDefinition beanPropertyDefinition,
                               DocumentationType documentationType) {
 
-    builder = propertyBuilder;
+    this.builder = builder;
     this.beanPropertyDefinition = Optional.fromNullable(beanPropertyDefinition);
     this.documentationType = documentationType;
     annotatedElement = Optional.absent();

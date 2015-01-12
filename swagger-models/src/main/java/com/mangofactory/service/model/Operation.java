@@ -14,12 +14,11 @@ public class Operation {
   private final String summary;
   private final String notes;
   private final String responseClass;
-  private final String dataType;
   private final String nickname;
   private final int position;
-  private final List<String> produces;
-  private final List<String> consumes;
-  private final List<String> protocol;
+  private final Set<String> produces;
+  private final Set<String> consumes;
+  private final Set<String> protocol;
   private final boolean isHidden;
   private final Map<String, List<AuthorizationScope>> authorizations;
   private final List<Parameter> parameters;
@@ -27,15 +26,13 @@ public class Operation {
   private final String deprecated;
 
   public Operation(String method, String summary, String notes, String responseClass, String nickname, int position,
-                   List<String> produces, List<String> consumes, List<String> protocol,
-                   List<Authorization>
-                           authorizations, List<Parameter> parameters, Set<ResponseMessage> responseMessages, String
-                           deprecated, boolean isHidden) {
+                   Set<String> produces, Set<String> consumes, Set<String> protocol,
+                   List<Authorization> authorizations, List<Parameter> parameters,
+                   Set<ResponseMessage> responseMessages, String deprecated, boolean isHidden) {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
     this.responseClass = responseClass;
-    this.dataType = responseClass;
     this.nickname = nickname;
     this.position = position;
     this.produces = produces;
@@ -74,10 +71,6 @@ public class Operation {
     };
   }
 
-  public String getDataType() {
-    return dataType;
-  }
-
   public String getMethod() {
     return method;
   }
@@ -102,15 +95,15 @@ public class Operation {
     return position;
   }
 
-  public List<String> getProduces() {
+  public Set<String> getProduces() {
     return produces;
   }
 
-  public List<String> getConsumes() {
+  public Set<String> getConsumes() {
     return consumes;
   }
 
-  public List<String> getProtocol() {
+  public Set<String> getProtocol() {
     return protocol;
   }
 

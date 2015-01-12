@@ -2,36 +2,36 @@ package com.mangofactory.swagger.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.google.common.base.Preconditions;
 
 @JsonPropertyOrder({"type", "items"})
 public class ContainerDataType implements SwaggerDataType {
   private String type = "array";
-  private boolean uniqueItems;
+  private final boolean uniqueItems;
   @JsonProperty
-  private SwaggerDataType items;
+  private final SwaggerDataType items;
 
   public ContainerDataType(String innerType, boolean uniqueItems) {
-    if (null != innerType && innerType.equals("array")) {
-      throw new IllegalArgumentException("Nested arrays not supported");
-    }
+    Preconditions.checkNotNull(innerType);
+    Preconditions.checkArgument(!innerType.equals("array"), "Nested arrays not supported");
     items = new DataType(innerType);
     this.uniqueItems = uniqueItems;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public boolean isUniqueItems() {
+    return uniqueItems;
+  }
+
+  public SwaggerDataType getItems() {
+    return items;
   }
 
   @Override
   public String getAbsoluteType() {
     return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
-  }
-
-  public void setUniqueItems(boolean uniqueItems) {
-    this.uniqueItems = uniqueItems;
-  }
-
-  public void setItems(SwaggerDataType items) {
-    this.items = items;
   }
 }

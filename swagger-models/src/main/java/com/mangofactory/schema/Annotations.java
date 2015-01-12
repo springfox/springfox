@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.wordnik.swagger.annotations.ApiResponses;
-import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
 
 public class Annotations {
+
+  private Annotations() {
+    throw new UnsupportedOperationException();
+  }
+
   /**
    * Finds first annotation of the given type on the given bean property and returns it.
    * Search precedence is getter, setter, field.
@@ -68,11 +69,4 @@ public class Annotations {
     return Optional.fromNullable(member.getAnnotation(JsonUnwrapped.class)).isPresent();
   }
 
-  public static Optional<ApiParam> findApiParamAnnotation(AnnotatedElement annotated) {
-    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiParam.class));
-  }
-
-  public static Optional<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
-    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiResponses.class));
-  }
 }

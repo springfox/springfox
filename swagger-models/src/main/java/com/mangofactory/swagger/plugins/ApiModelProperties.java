@@ -55,15 +55,6 @@ public final class ApiModelProperties {
     };
   }
 
-  public static Function<ApiModelProperty, Integer> toPosition() {
-    return new Function<ApiModelProperty, Integer>() {
-      @Override
-      public Integer apply(ApiModelProperty annotation) {
-        return annotation.position();
-      }
-    };
-  }
-
   public static Optional<ApiModelProperty> findApiModePropertyAnnotation(AnnotatedElement annotated) {
     return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class));
   }

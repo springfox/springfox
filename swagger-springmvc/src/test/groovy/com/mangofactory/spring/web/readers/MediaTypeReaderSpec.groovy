@@ -1,4 +1,5 @@
 package com.mangofactory.spring.web.readers
+
 import com.mangofactory.service.model.builder.OperationBuilder
 import com.mangofactory.spring.web.plugins.OperationContext
 import com.mangofactory.swagger.core.DocumentationContextSpec
@@ -7,11 +8,14 @@ import com.mangofactory.swagger.plugins.operation.SwaggerMediaTypeReader
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import spock.lang.Shared
+
+import static com.google.common.collect.Sets.*
 
 @Mixin([RequestMappingSupport])
 class MediaTypeReaderSpec extends DocumentationContextSpec {
   MediaTypeReader sut
-
+  @Shared Set<String> emptySet = newHashSet()
   def setup() {
     sut = new MediaTypeReader(defaultValues.typeResolver)
   }
@@ -34,8 +38,8 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
       def operation = operationContext.operationBuilder().build()
 
     then:
-      operation.consumes == consumes
-      operation.produces == produces
+      operation.consumes == newHashSet(consumes)
+      operation.produces == newHashSet(produces)
 
     where:
       consumes                                            | produces                         | handlerMethod
@@ -65,12 +69,12 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
       operation.produces == expectedProduces
 
     where:
-      expectedConsumes                        | expectedProduces                        | handlerMethod
-      ['application/xml'] as String[]         | [] as String[]                          | dummyHandlerMethod('methodWithXmlConsumes')
-      [] as String[]                          | ['application/xml'] as String[]         | dummyHandlerMethod('methodWithXmlProduces')
-      ['application/xml']                     | ['application/json']                    | dummyHandlerMethod('methodWithMediaTypeAndFile', MultipartFile)
-      ['application/xml'] as String[]         | ['application/xml'] as String[]         | dummyHandlerMethod('methodWithBothXmlMediaTypes')
-      ['application/xml', 'application/json'] | ['application/xml', 'application/json'] | dummyHandlerMethod('methodWithMultipleMediaTypes')
+      expectedConsumes                                  | expectedProduces                                  | handlerMethod
+      newHashSet('application/xml')                     | newHashSet()                                      | dummyHandlerMethod('methodWithXmlConsumes')
+      emptySet                                          | newHashSet('application/xml')                     | dummyHandlerMethod('methodWithXmlProduces')
+      newHashSet('application/xml')                     | newHashSet('application/json')                    | dummyHandlerMethod ('methodWithMediaTypeAndFile', MultipartFile)
+      newHashSet('application/xml')                     | newHashSet('application/xml')                     | dummyHandlerMethod  ('methodWithBothXmlMediaTypes')
+      newHashSet('application/xml', 'application/json') | newHashSet('application/xml', 'application/json') | dummyHandlerMethod('methodWithMultipleMediaTypes')
 
   }
 }

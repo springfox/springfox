@@ -13,6 +13,10 @@ import java.util.Set;
 import static com.google.common.collect.Sets.*;
 
 public class Types {
+  private Types() {
+    throw new UnsupportedOperationException();
+  }
+
   private static final Set<String> baseTypes
           = newHashSet("int", "date", "string", "double", "float", "boolean", "byte", "object", "long");
   private static final Map<Type, String> typeNameLookup = ImmutableMap.<Type, String>builder()
