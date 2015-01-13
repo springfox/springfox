@@ -20,10 +20,10 @@ import static com.google.common.collect.Lists.*;
 import static java.util.Arrays.asList;
 
 @Component
-public class ApiOperationReader implements Command<RequestMappingContext> {
+public class ApiOperationReader {
 
-  private static final Set<RequestMethod> allRequestMethods  = new LinkedHashSet<RequestMethod>(asList(RequestMethod
-          .values()));
+  private static final Set<RequestMethod> allRequestMethods
+          = new LinkedHashSet<RequestMethod>(asList(RequestMethod.values()));
   private static final OperationPositionalOrdering OPERATION_POSITIONAL_ORDERING = new OperationPositionalOrdering();
   private final DocumentationPluginsManager pluginsManager;
 
@@ -32,9 +32,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
     this.pluginsManager = pluginsManager;
   }
 
-  @SuppressWarnings("unchecked")
-  @Override
-  public void execute(RequestMappingContext outerContext) {
+  public List<Operation> read(RequestMappingContext outerContext) {
 
     RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
     String requestMappingPattern = outerContext.getRequestMappingPattern();
@@ -63,7 +61,7 @@ public class ApiOperationReader implements Command<RequestMappingContext> {
       }
     }
     Collections.sort(operations, OPERATION_POSITIONAL_ORDERING);
-    outerContext.put("operations", operations);
+    return operations;
   }
 
 }

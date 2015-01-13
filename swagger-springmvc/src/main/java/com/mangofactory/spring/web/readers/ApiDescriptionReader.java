@@ -1,10 +1,9 @@
 package com.mangofactory.spring.web.readers;
 
 import com.mangofactory.service.model.ApiDescription;
-import com.mangofactory.service.model.Operation;
 import com.mangofactory.service.model.builder.ApiDescriptionBuilder;
-import com.mangofactory.spring.web.RequestMappingEvaluator;
 import com.mangofactory.spring.web.PathProvider;
+import com.mangofactory.spring.web.RequestMappingEvaluator;
 import com.mangofactory.spring.web.scanners.RequestMappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,7 @@ import java.util.List;
 import static com.google.common.collect.Lists.*;
 
 @Component
-public class ApiDescriptionReader implements Command<RequestMappingContext> {
+public class ApiDescriptionReader {
 
   private final ApiOperationReader operationReader;
 
@@ -26,9 +25,7 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
     this.operationReader = operationReader;
   }
 
-  @SuppressWarnings("unchecked")
-  @Override
-  public void execute(RequestMappingContext outerContext) {
+  public List<ApiDescription> read(RequestMappingContext outerContext) {
     RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
     HandlerMethod handlerMethod = outerContext.getHandlerMethod();
     PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
@@ -42,17 +39,16 @@ public class ApiDescriptionReader implements Command<RequestMappingContext> {
         String path = pathProvider.getOperationPath(cleanedRequestMappingPath);
         String methodName = handlerMethod.getMethod().getName();
         RequestMappingContext operationContext = outerContext.copyPatternUsing(cleanedRequestMappingPath);
-        operationReader.execute(operationContext);
         apiDescriptionList.add(
                 new ApiDescriptionBuilder()
                         .path(path)
                         .description(methodName)
-                        .operations((List<Operation>) operationContext.get("operations"))
+                        .operations(operationReader.read(operationContext))
                         .hidden(false)
                         .build());
       }
     }
-    outerContext.put("apiDescriptionList", apiDescriptionList);
+    return apiDescriptionList;
   }
 
   /**

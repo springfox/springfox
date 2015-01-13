@@ -8,19 +8,16 @@ import com.mangofactory.service.model.ApiListing;
 import com.mangofactory.service.model.Authorization;
 import com.mangofactory.service.model.Model;
 import com.mangofactory.service.model.builder.ApiListingBuilder;
-import com.mangofactory.spring.web.plugins.ApiListingContext;
-import com.mangofactory.spring.web.plugins.DocumentationPluginsManager;
-import com.mangofactory.spring.web.plugins.AuthorizationContext;
-import com.mangofactory.spring.web.readers.CommandExecutor;
 import com.mangofactory.spring.web.PathProvider;
+import com.mangofactory.spring.web.plugins.ApiListingContext;
+import com.mangofactory.spring.web.plugins.AuthorizationContext;
+import com.mangofactory.spring.web.plugins.DocumentationPluginsManager;
 import com.mangofactory.spring.web.readers.ApiDescriptionReader;
 import com.mangofactory.spring.web.readers.ApiModelReader;
-import com.mangofactory.spring.web.readers.Command;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -62,21 +59,11 @@ public class ApiListingScanner {
       Set<String> consumes = new LinkedHashSet<String>(2);
       Set<ApiDescription> apiDescriptions = newHashSet();
 
-      List<Command<RequestMappingContext>> readers = newArrayList();
-      readers.add(apiDescriptionReader);
-      readers.add(apiModelReader);
-
-      //TODO: This may not be required at this level
       Map<String, Model> models = new LinkedHashMap<String, Model>();
       AuthorizationContext authorizationContext = context.getDocumentationContext().getAuthorizationContext();
       for (RequestMappingContext each : entry.getValue()) {
-
-        CommandExecutor<Map<String, Object>, RequestMappingContext> commandExecutor = new CommandExecutor();
-        Map<String, Object> results = commandExecutor.execute(readers, each);
-
-        models.putAll(each.getModelMap());
-
-        apiDescriptions.addAll((Collection<? extends ApiDescription>) results.get("apiDescriptionList"));
+        models.putAll(apiModelReader.read(each));
+        apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
       List<Authorization> authorizations = authorizationContext.getScalaAuthorizations();

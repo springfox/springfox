@@ -1,22 +1,14 @@
 package com.mangofactory.spring.web.scanners;
 
-import com.mangofactory.service.model.Model;
 import com.mangofactory.spring.web.plugins.DocumentationContext;
 import com.mangofactory.spring.web.plugins.OperationModelsBuilder;
-import com.mangofactory.spring.web.readers.CommandContext;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
-import java.util.Map;
-
-import static com.google.common.collect.Maps.*;
-
-public class RequestMappingContext implements CommandContext<Map<String, Object>> {
+public class RequestMappingContext  {
   private final RequestMappingInfo requestMappingInfo;
   private final HandlerMethod handlerMethod;
-  private final Map<String, Object> context = newHashMap();
   private final OperationModelsBuilder operationModelsBuilder;
-  private final Map<String, Model> modelMap = newHashMap();
   private final DocumentationContext documentationContext;
   private final String requestMappingPattern;
 
@@ -44,19 +36,6 @@ public class RequestMappingContext implements CommandContext<Map<String, Object>
     this.operationModelsBuilder = new OperationModelsBuilder(context.getDocumentationType());
   }
 
-  public Object get(String lookupKey) {
-    return context.get(lookupKey);
-  }
-
-  public void put(String key, Object object) {
-    context.put(key, object);
-  }
-
-  @Override
-  public Map<String, Object> getResult() {
-    return context;
-  }
-
   public RequestMappingInfo getRequestMappingInfo() {
     return requestMappingInfo;
   }
@@ -82,11 +61,4 @@ public class RequestMappingContext implements CommandContext<Map<String, Object>
     return operationModelsBuilder;
   }
 
-  public Map<String, Model> getModelMap() {
-    return modelMap;
-  }
-
-  public void setModelMap(Map<String, Model> modelMap) {
-    this.modelMap.putAll(modelMap);
-  }
 }

@@ -23,7 +23,7 @@ import static com.google.common.collect.Sets.*;
 import static com.mangofactory.schema.ResolvedTypes.*;
 
 @Component
-public class ApiModelReader implements Command<RequestMappingContext> {
+public class ApiModelReader  {
   private static final Logger log = LoggerFactory.getLogger(ApiModelReader.class);
   private final ModelProvider modelProvider;
   private final TypeResolver typeResolver;
@@ -38,8 +38,7 @@ public class ApiModelReader implements Command<RequestMappingContext> {
     this.pluginsManager = pluginsManager;
   }
 
-  @Override
-  public void execute(RequestMappingContext outerContext) {
+  public Map<String, Model> read(RequestMappingContext outerContext) {
 
     Set<Class> ignorableTypes = newHashSet(outerContext.getDocumentationContext().getIgnorableParameterTypes());
     Set<ModelContext> modelContexts = pluginsManager.modelContexts(outerContext);
@@ -57,7 +56,7 @@ public class ApiModelReader implements Command<RequestMappingContext> {
       }
       populateDependencies(each, modelMap);
     }
-    outerContext.setModelMap(modelMap);
+    return modelMap;
   }
 
   @SuppressWarnings("unchecked")

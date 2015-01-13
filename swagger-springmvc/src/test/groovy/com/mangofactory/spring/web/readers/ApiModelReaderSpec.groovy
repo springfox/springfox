@@ -1,9 +1,8 @@
 package com.mangofactory.spring.web.readers
-import com.mangofactory.service.model.ApiDescription
 import com.mangofactory.service.model.Model
 import com.mangofactory.service.model.ModelProperty
-import com.mangofactory.service.model.Operation
 import com.mangofactory.spring.web.plugins.DocumentationPluginsManager
+import com.mangofactory.spring.web.scanners.RequestMappingContext
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.DummyModels
 import com.mangofactory.swagger.dummy.controllers.BusinessService
@@ -14,7 +13,6 @@ import com.mangofactory.swagger.mixins.JsonSupport
 import com.mangofactory.swagger.mixins.ModelProviderForServiceSupport
 import com.mangofactory.swagger.mixins.PluginsSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.spring.web.scanners.RequestMappingContext
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.method.HandlerMethod
@@ -35,13 +33,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Method return type model"() {
     given:
-      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithConcreteResponseBody'))
+      RequestMappingContext context = context(dummyHandlerMethod('methodWithConcreteResponseBody'))
 
     when:
-      sut.execute(context)
+      def models = sut.read(context)
 
     then:
-      Map<String, Model> models = context.modelMap
       Model model = models['BusinessModel']
       model.id == 'BusinessModel'
       model.getName() == 'BusinessModel'
@@ -54,7 +51,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       nameProp.typeName() == 'string'
       nameProp.getQualifiedType() == 'java.lang.String'
       nameProp.getPosition() == 0
-      nameProp.isRequired() == false
+      !nameProp.isRequired()
       nameProp.getDescription() == null
 //      "${nameProp.allowableValues().getClass()}".contains('com.wordnik.swagger.model.AnyAllowableValues')
       nameProp.getItems() == null
@@ -68,12 +65,11 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Annotated model"() {
     given:
-      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodWithModelAnnotations'))
+      RequestMappingContext context = context(dummyHandlerMethod('methodWithModelAnnotations'))
     when:
-      sut.execute(context)
+      def models = sut.read(context)
 
     then:
-      Map<String, Model> models = context.modelMap
       Model model = models['AnnotatedBusinessModel']
       model.id == 'AnnotatedBusinessModel'
       model.getName() == 'AnnotatedBusinessModel'
@@ -83,50 +79,38 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       ModelProperty prop = modelProps.name
       prop.typeName() == 'string'
       prop.getDescription() == 'The name of this business'
-      prop.isRequired() == true
+      prop.isRequired()
 
       modelProps.numEmployees.getDescription() == 'Total number of current employees'
-      modelProps.numEmployees.isRequired() == false
+      !modelProps.numEmployees.isRequired()
   }
 
   def "Should pull models from Api Operation response class"() {
     given:
 
-      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodApiResponseClass'), null)
+      RequestMappingContext context = context(dummyHandlerMethod('methodApiResponseClass'))
     when:
-      sut.execute(context)
+      def models = sut.read(context)
 
     then:
-      Map<String, Model> models = context.modelMap
       models['FunkyBusiness'].getQualifiedType() == 'com.mangofactory.swagger.dummy.DummyModels$FunkyBusiness'
   }
 
   def "Should pull models from operation's ApiResponse annotations"() {
     given:
 
-      RequestMappingContext context = contextWithApiDescription(dummyHandlerMethod('methodAnnotatedWithApiResponse'), null)
+      RequestMappingContext context = context(dummyHandlerMethod('methodAnnotatedWithApiResponse'))
     when:
-      sut.execute(context)
+      def models = sut.read(context)
 
     then:
-      Map<String, Model> models = context.modelMap
       models.size() == 2
       models['RestError'].getQualifiedType() == 'com.mangofactory.swagger.dummy.RestError'
       models['Void'].getQualifiedType() == 'java.lang.Void'
   }
 
-  def contextWithApiDescription(HandlerMethod handlerMethod, List<Operation> operationList = null) {
-    RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
-    def scalaOpList = null == operationList ? [] : operationList
-    ApiDescription description = new ApiDescription(
-            "anyPath",
-            "anyDescription",
-            scalaOpList,
-            false
-    )
-    context.put("apiDescriptionList", [description])
-
-    context
+  def context(HandlerMethod handlerMethod) {
+    return new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
   }
 
   def "should only generate models for request parameters that are annotated with Springs RequestBody"() {
@@ -139,10 +123,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
               handlerMethod)
     when:
-      sut.execute(context)
+      def models = sut.read(context)
 
     then:
-      Map<String, Model> models = context.modelMap
       models.size() == 2 // instead of 3
       models.containsKey("BusinessModel")
       models.containsKey("Void")
@@ -155,10 +138,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/echo'), handlerMethod)
 
     when:
-      sut.execute(context)
+      def models = sut.read(context)
 
     then:
-      Map<String, Model> models = context.modelMap
       models.size() == 2
       models.containsKey("Entry«string,Pet»")
       models.containsKey("Pet")
@@ -177,10 +159,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
               new RequestMappingContext(pluginContext, requestMappingInfo('/businesses/responseEntity/{businessId}'),
                       handlerMethod )
     when:
-      sut.execute(context)
+      def models = sut.read(context)
 
     then:
-      Map<String, Model> models = context.modelMap
       models.size() == 0
 
   }
@@ -193,10 +174,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
 
     when:
-      sut.execute(context)
+      def models = sut.read(context)
 
     then:
-      Map<String, Model> models = context.modelMap
       models.size() == 1
 
       String modelName = DummyModels.AnnotatedBusinessModel.class.simpleName
@@ -207,7 +187,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       modelProperties.containsKey('name')
 
       ModelProperty nameProperty = modelProperties['name']
-      nameProperty.getDescription().isEmpty() == false
+      !nameProperty.getDescription().isEmpty()
 
   }
 
@@ -220,10 +200,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
               handlerMethod)
 
     when:
-      sut.execute(context)
+      def models = sut.read(context)
 
     then:
-      Map<String, Model> models = context.modelMap
       models.size() == 1
 
       String modelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
@@ -248,10 +227,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(),
               defaultValues.typeResolver, springPluginsManager())
     when:
-      snakeCaseReader.execute(context)
+      def models = snakeCaseReader.read(context)
 
     then:
-      Map<String, Model> models = context.modelMap
       models.size() == 1
 
       String modelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
@@ -271,10 +249,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
 
     when:
-      sut.execute(context)
+      def models = sut.read(context)
 
     then:
-      Map<String, Model> models = context.modelMap
       models.size() == 1
 
       String modelName = FoobarDto.simpleName

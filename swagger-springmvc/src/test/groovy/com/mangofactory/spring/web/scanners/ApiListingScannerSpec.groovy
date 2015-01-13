@@ -35,8 +35,10 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     plugin
             .authorizationContext(authorizationContext)
             .build(contextBuilder)
-    apiDescriptionReader = Stub(ApiDescriptionReader)
+    apiDescriptionReader = Mock(ApiDescriptionReader)
+    apiDescriptionReader.read(_) >> []
     apiModelReader = Mock(ApiModelReader)
+    apiModelReader.read(_) >> newHashMap()
     scanner = new ApiListingScanner(apiDescriptionReader, apiModelReader, springPluginsManager())
   }
 
@@ -53,9 +55,8 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
       listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
     when:
-      apiDescriptionReader.execute(requestMappingContext) >> {
-        requestMappingContext.put("apiDescriptionList", [])
-      }
+      apiDescriptionReader.read(requestMappingContext) >> []
+
     and:
       def scanned = scanner.scan(listingContext)
     then:
@@ -76,10 +77,6 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       resourceGroupRequestMappings.put(new ResourceGroup("businesses", DummyClass), [requestMappingContext])
 
       listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
-    and:
-      apiDescriptionReader.execute(requestMappingContext) >> {
-        requestMappingContext.put("apiDescriptionList", [])
-      }
     when:
       Map<String, ApiListing> apiListingMap = scanner.scan(listingContext)
     then:

@@ -47,10 +47,10 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
               requestMappingInfo,
               handlerMethod)
     when:
-      sut.execute(context)
+      def operations = sut.read(context)
 
     then:
-      Operation apiOperation = result['operations'][0]
+      Operation apiOperation = operations[0]
       apiOperation.getMethod() == PATCH.toString()
       apiOperation.getSummary() == handlerMethod.method.name
       apiOperation.getNotes() == handlerMethod.method.name
@@ -58,7 +58,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
       apiOperation.getPosition() == 0
       apiOperation.getAuthorizations().size() == 1
 
-      def secondApiOperation = result['operations'][1]
+      def secondApiOperation = operations[1]
       secondApiOperation.position == 1
   }
 
@@ -75,16 +75,13 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
 
       HandlerMethod handlerMethod = dummyHandlerMethod("methodThatIsHidden")
       RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo, handlerMethod)
-      context.put("requestMappingPattern", "/doesNotMatterForThisTest") //TODO: Fix this
-
 
     when:
       def mock = Mock(DocumentationPluginsManager)
       mock.operation(_) >> new OperationBuilder().hidden(true).build()
-      new ApiOperationReader(mock).execute(context)
-      Map<String, Object> result = context.getResult()
+      def operations = new ApiOperationReader(mock).read(context)
 
     then:
-      0 == result['operations'].size()
+      0 == operations.size()
   }
 }

@@ -21,12 +21,10 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         RequestMappingContext mappingContext = new RequestMappingContext(context, requestMappingInfo, dummyHandlerMethod())
 
       when:
-        sut.execute(mappingContext)
-        Map<String, Object> result = mappingContext.getResult()
+        def descriptionList = sut.read(mappingContext)
 
       then:
-        def descriptionList = result['apiDescriptionList']
-        descriptionList.size == 2
+        descriptionList.size() == 2
 
         ApiDescription apiDescription = descriptionList[0]
         ApiDescription secondApiDescription = descriptionList[1]
