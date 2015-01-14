@@ -82,7 +82,7 @@ public class ResolvedTypes {
     return apiModelValue(type.getErasedType()).or(simpleTypeName(type));
   }
 
-  public static String genericTypeName(ResolvedType resolvedType) {
+  private static String genericTypeName(ResolvedType resolvedType) {
     Class<?> erasedType = resolvedType.getErasedType();
     String simpleName = Optional
             .fromNullable(typeNameFor(erasedType))
@@ -116,7 +116,7 @@ public class ResolvedTypes {
   }
 
 
-  public static String simpleTypeName(ResolvedType type) {
+  private static String simpleTypeName(ResolvedType type) {
     Class<?> erasedType = type.getErasedType();
     if (type instanceof ResolvedPrimitiveType) {
       return typeNameFor(erasedType);
