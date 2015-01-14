@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.mangofactory.swagger.models.BeanPropertyNamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
 import com.mangofactory.swagger.models.property.BeanPropertyDefinitions;
@@ -65,19 +67,33 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
             .constructType(resolvedType.getErasedType()));
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
             BeanPropertyDefinitions.beanPropertyByInternalName());
-    for (ResolvedMethod childProperty : accessors.in(resolvedType)) {
-      if (propertyLookup.containsKey(propertyName(childProperty.getRawMember()))) {
-        BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getRawMember()));
-        Optional<BeanPropertyDefinition> jacksonProperty
-                = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
-        AnnotatedMember member = propertyDefinition.getPrimaryMember();
-        if (accessorMemberIs(childProperty, methodName(member))) {
+
+    for (Map.Entry<String, BeanPropertyDefinition> propertyDefinitionEntry : propertyLookup.entrySet()) {
+      BeanPropertyDefinition propertyDefinition = propertyDefinitionEntry.getValue();
+      Optional<BeanPropertyDefinition> jacksonProperty
+              = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+      AnnotatedMember member = propertyDefinition.getPrimaryMember();
+      Optional<ResolvedMethod> accessorMethodOptional = findAccessorMethod(resolvedType, propertyDefinitionEntry
+              .getKey(), member);
+      if (accessorMethodOptional.isPresent()) {
+          ResolvedMethod accessorMethod = accessorMethodOptional.get();
           serializationCandidates
-                  .addAll(newArrayList(addSerializationCandidates(member, childProperty, jacksonProperty)));
-        }
+                  .addAll(newArrayList(addSerializationCandidates(member, accessorMethod, jacksonProperty)));
       }
     }
     return serializationCandidates;
+  }
+
+  private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType,
+                                                      final String propertyName ,
+                                                      final AnnotatedMember member) {
+    return Iterables.tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
+      public boolean apply(ResolvedMethod accessorMethod) {
+        return accessorMemberIs(accessorMethod, methodName(member))
+                &&
+                propertyName.equals(propertyName(accessorMethod.getRawMember()));
+      }
+    });
   }
 
   @VisibleForTesting
@@ -124,22 +140,23 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
             .constructType(resolvedType.getErasedType()));
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
             BeanPropertyDefinitions.beanPropertyByInternalName());
-    for (ResolvedMethod childProperty : accessors.in(resolvedType)) {
-
-      if (propertyLookup.containsKey(propertyName(childProperty.getRawMember()))) {
-        BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName(childProperty.getRawMember()));
-        Optional<BeanPropertyDefinition> jacksonProperty
-                = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
-        try {
-          AnnotatedMember member = propertyDefinition.getPrimaryMember();
-          if (accessorMemberIs(childProperty, methodName(member))) {
-            serializationCandidates
-                    .addAll(newArrayList(addDeserializationCandidates(member, childProperty, jacksonProperty)));
-          }
-        } catch (Exception e) {
-          LOG.warn(e.getMessage());
+    for (Map.Entry<String, BeanPropertyDefinition> propertyDefinitionEntry : propertyLookup.entrySet()) {
+      BeanPropertyDefinition propertyDefinition = propertyDefinitionEntry.getValue();
+      Optional<BeanPropertyDefinition> jacksonProperty
+              = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+      try {
+        AnnotatedMember member = propertyDefinition.getPrimaryMember();
+        Optional<ResolvedMethod> accessorMethodOptional = findAccessorMethod(resolvedType, propertyDefinitionEntry
+                .getKey(), member);
+        if (accessorMethodOptional.isPresent()) {
+          ResolvedMethod accessorMethod = accessorMethodOptional.get();
+          serializationCandidates
+                  .addAll(newArrayList(addDeserializationCandidates(member, accessorMethod, jacksonProperty)));
         }
+      } catch (Exception e) {
+        LOG.warn(e.getMessage());
       }
+
     }
     return serializationCandidates;
   }
