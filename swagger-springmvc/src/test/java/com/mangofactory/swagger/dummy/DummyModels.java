@@ -37,7 +37,6 @@ public class DummyModels {
     }
   }
 
-  @ApiModel(value = "Swagger annotated model", description = "More descriptive model text")
   public class AnnotatedBusinessModel {
     //TODO - @ApiModelProperty has no effect on members - only setters
 //        @ApiModelProperty(value = "The name of this business", required = true)
@@ -64,8 +63,11 @@ public class DummyModels {
     }
   }
 
-  public class CorporationModel extends BusinessModel {
+  @ApiModel(value = "AlternateBusinessModelName", description = "Swagger annotated model")
+  public class NamedBusinessModel extends BusinessModel {
+  }
 
+  public class CorporationModel extends BusinessModel {
   }
 
   public class Paginated<T> {

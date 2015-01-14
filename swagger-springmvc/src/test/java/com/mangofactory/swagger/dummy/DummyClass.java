@@ -206,7 +206,12 @@ public class DummyClass {
   }
 
   @ResponseBody
-  public DummyModels.AnnotatedBusinessModel methodWithModelAnnotations() {
+  public DummyModels.AnnotatedBusinessModel methodWithModelPropertyAnnotations() {
+    return null;
+  }
+
+  @ResponseBody
+  public DummyModels.NamedBusinessModel methodWithModelAnnotations() {
     return null;
   }
 

@@ -6,7 +6,10 @@ import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.google.common.base.Optional;
+import com.google.common.base.Strings;
 import com.mangofactory.swagger.models.dto.AllowableValues;
+import com.wordnik.swagger.annotations.ApiModel;
+import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -50,6 +53,28 @@ public class ResolvedTypes {
     return innerTypeName(type);
   }
 
+  public static String simpleQualifiedTypeName(ResolvedType type) {
+    if (type instanceof ResolvedPrimitiveType) {
+      Type primitiveType = type.getErasedType();
+      return typeNameFor(primitiveType);
+    }
+    if (type instanceof ResolvedArrayType) {
+      return typeNameFor(type.getArrayElementType().getErasedType());
+    }
+
+    return type.getErasedType().getName();
+  }
+
+  public static ResolvedType asResolved(TypeResolver typeResolver, Type type) {
+    if (type instanceof ResolvedType) {
+      return (ResolvedType) type;
+    }
+    return typeResolver.resolve(type);
+  }
+
+  public static AllowableValues allowableValues(ResolvedType resolvedType) {
+    return Enums.allowableValues(resolvedType.getErasedType());
+  }
 
   private static String optionalContainerTypeQualifierForReturn(ResolvedType type) {
     if (type.isArray()) {
@@ -71,19 +96,18 @@ public class ResolvedTypes {
     return String.format("[%s]", qualifier);
   }
 
-
   private static String innerTypeName(ResolvedType type) {
     if (type.getTypeParameters().size() > 0 && type.getErasedType().getTypeParameters().length > 0) {
       return genericTypeName(type);
     }
-    return simpleTypeName(type);
+    return apiModelValue(type.getErasedType()).or(simpleTypeName(type));
   }
 
-  public static String genericTypeName(ResolvedType resolvedType) {
+  private static String genericTypeName(ResolvedType resolvedType) {
     Class<?> erasedType = resolvedType.getErasedType();
     String simpleName = Optional
             .fromNullable(typeNameFor(erasedType))
-            .or(erasedType.getSimpleName());
+            .or(apiModelValue(erasedType).or(erasedType.getSimpleName()));
     StringBuilder sb = new StringBuilder(String.format("%s%s", simpleName, namingStrategy.getOpenGeneric()));
     boolean first = true;
     for (int index = 0; index < erasedType.getTypeParameters().length; index++) {
@@ -100,20 +124,7 @@ public class ResolvedTypes {
     return sb.toString();
   }
 
-  public static String simpleQualifiedTypeName(ResolvedType type) {
-    if (type instanceof ResolvedPrimitiveType) {
-      Type primitiveType = type.getErasedType();
-      return typeNameFor(primitiveType);
-    }
-    if (type instanceof ResolvedArrayType) {
-      return typeNameFor(type.getArrayElementType().getErasedType());
-    }
-
-    return type.getErasedType().getName();
-  }
-
-
-  public static String simpleTypeName(ResolvedType type) {
+  private static String simpleTypeName(ResolvedType type) {
     Class<?> erasedType = type.getErasedType();
     if (type instanceof ResolvedPrimitiveType) {
       return typeNameFor(erasedType);
@@ -131,15 +142,11 @@ public class ResolvedTypes {
     return erasedType.getSimpleName();
   }
 
-
-  public static ResolvedType asResolved(TypeResolver typeResolver, Type type) {
-    if (type instanceof ResolvedType) {
-      return (ResolvedType) type;
+  private static Optional<String> apiModelValue(Class<?> type) {
+    ApiModel annotation = AnnotationUtils.findAnnotation(type, ApiModel.class);
+    if (annotation != null) {
+      return Optional.fromNullable(Strings.emptyToNull(annotation.value()));
     }
-    return typeResolver.resolve(type);
-  }
-
-  public static AllowableValues allowableValues(ResolvedType resolvedType) {
-    return Enums.allowableValues(resolvedType.getErasedType());
+    return Optional.absent();
   }
 }
