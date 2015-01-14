@@ -40,9 +40,9 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
   private static final Logger LOG = LoggerFactory.getLogger(BeanModelPropertyProvider.class);
   private final AccessorsProvider accessors;
   private final BeanPropertyNamingStrategy namingStrategy;
-  private ObjectMapper objectMapper;
   private final TypeResolver typeResolver;
   private final AlternateTypeProvider alternateTypeProvider;
+  private ObjectMapper objectMapper;
 
   @Autowired
   public BeanModelPropertyProvider(
@@ -81,6 +81,41 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
       }
     }
     return serializationCandidates;
+  }
+
+  @Override
+  public Iterable<? extends ModelProperty> propertiesForDeserialization(ResolvedType resolvedType) {
+    List<ModelProperty> serializationCandidates = newArrayList();
+    DeserializationConfig serializationConfig = objectMapper.getDeserializationConfig();
+    BeanDescription beanDescription = serializationConfig.introspect(TypeFactory.defaultInstance()
+            .constructType(resolvedType.getErasedType()));
+    Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
+            beanPropertyByInternalName());
+    for (Map.Entry<String, BeanPropertyDefinition> propertyDefinitionEntry : propertyLookup.entrySet()) {
+      BeanPropertyDefinition propertyDefinition = propertyDefinitionEntry.getValue();
+      Optional<BeanPropertyDefinition> jacksonProperty
+              = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+      try {
+        AnnotatedMember member = propertyDefinition.getPrimaryMember();
+        Optional<ResolvedMethod> accessorMethodOptional = findAccessorMethod(resolvedType, propertyDefinitionEntry
+                .getKey(), member);
+        if (accessorMethodOptional.isPresent()) {
+          ResolvedMethod accessorMethod = accessorMethodOptional.get();
+          serializationCandidates
+                  .addAll(newArrayList(addDeserializationCandidates(member, accessorMethod, jacksonProperty)));
+        }
+      } catch (Exception e) {
+        LOG.warn(e.getMessage());
+      }
+
+    }
+    return serializationCandidates;
+  }
+
+  @Override
+  public void setObjectMapper(ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
+    this.namingStrategy.setObjectMapper(objectMapper);
   }
 
   private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType,
@@ -129,41 +164,6 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     } else {
       return newArrayList(beanModelProperty(childProperty, jacksonProperty, true));
     }
-  }
-
-  @Override
-  public Iterable<? extends ModelProperty> propertiesForDeserialization(ResolvedType resolvedType) {
-    List<ModelProperty> serializationCandidates = newArrayList();
-    DeserializationConfig serializationConfig = objectMapper.getDeserializationConfig();
-    BeanDescription beanDescription = serializationConfig.introspect(TypeFactory.defaultInstance()
-            .constructType(resolvedType.getErasedType()));
-    Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
-            beanPropertyByInternalName());
-    for (Map.Entry<String, BeanPropertyDefinition> propertyDefinitionEntry : propertyLookup.entrySet()) {
-      BeanPropertyDefinition propertyDefinition = propertyDefinitionEntry.getValue();
-      Optional<BeanPropertyDefinition> jacksonProperty
-              = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
-      try {
-        AnnotatedMember member = propertyDefinition.getPrimaryMember();
-        Optional<ResolvedMethod> accessorMethodOptional = findAccessorMethod(resolvedType, propertyDefinitionEntry
-                .getKey(), member);
-        if (accessorMethodOptional.isPresent()) {
-          ResolvedMethod accessorMethod = accessorMethodOptional.get();
-          serializationCandidates
-                  .addAll(newArrayList(addDeserializationCandidates(member, accessorMethod, jacksonProperty)));
-        }
-      } catch (Exception e) {
-        LOG.warn(e.getMessage());
-      }
-
-    }
-    return serializationCandidates;
-  }
-
-  @Override
-  public void setObjectMapper(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
-    this.namingStrategy.setObjectMapper(objectMapper);
   }
 
   private String methodName(AnnotatedMember member) {
