@@ -17,7 +17,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.mangofactory.swagger.models.BeanPropertyNamingStrategy;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
-import com.mangofactory.swagger.models.property.BeanPropertyDefinitions;
 import com.mangofactory.swagger.models.property.ModelProperty;
 import com.mangofactory.swagger.models.property.provider.ModelPropertiesProvider;
 import org.slf4j.Logger;
@@ -66,7 +65,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     BeanDescription beanDescription = serializationConfig.introspect(TypeFactory.defaultInstance()
             .constructType(resolvedType.getErasedType()));
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
-            BeanPropertyDefinitions.beanPropertyByInternalName());
+            beanPropertyByInternalName());
 
     for (Map.Entry<String, BeanPropertyDefinition> propertyDefinitionEntry : propertyLookup.entrySet()) {
       BeanPropertyDefinition propertyDefinition = propertyDefinitionEntry.getValue();
@@ -76,16 +75,16 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
       Optional<ResolvedMethod> accessorMethodOptional = findAccessorMethod(resolvedType, propertyDefinitionEntry
               .getKey(), member);
       if (accessorMethodOptional.isPresent()) {
-          ResolvedMethod accessorMethod = accessorMethodOptional.get();
-          serializationCandidates
-                  .addAll(newArrayList(addSerializationCandidates(member, accessorMethod, jacksonProperty)));
+        ResolvedMethod accessorMethod = accessorMethodOptional.get();
+        serializationCandidates
+                .addAll(newArrayList(addSerializationCandidates(member, accessorMethod, jacksonProperty)));
       }
     }
     return serializationCandidates;
   }
 
   private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType,
-                                                      final String propertyName ,
+                                                      final String propertyName,
                                                       final AnnotatedMember member) {
     return Iterables.tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
       public boolean apply(ResolvedMethod accessorMethod) {
@@ -98,12 +97,12 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
   @VisibleForTesting
   Iterable<? extends ModelProperty> addSerializationCandidates(AnnotatedMember member,
-      ResolvedMethod childProperty,
-      Optional<BeanPropertyDefinition> jacksonProperty) {
+                                                               ResolvedMethod childProperty,
+                                                               Optional<BeanPropertyDefinition> jacksonProperty) {
 
     if (member instanceof AnnotatedMethod && memberIsUnwrapped(member)) {
       Iterable<? extends ModelProperty> properties;
-      if (isGetter(((AnnotatedMethod)member).getMember())) {
+      if (isGetter(((AnnotatedMethod) member).getMember())) {
         properties = propertiesForSerialization(childProperty.getReturnType());
       } else {
         properties = propertiesForSerialization(childProperty.getArgumentType(0));
@@ -116,12 +115,12 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
   @VisibleForTesting
   Iterable<? extends ModelProperty> addDeserializationCandidates(AnnotatedMember member,
-      ResolvedMethod childProperty,
-      Optional<BeanPropertyDefinition> jacksonProperty) {
+                                                                 ResolvedMethod childProperty,
+                                                                 Optional<BeanPropertyDefinition> jacksonProperty) {
 
     if (member instanceof AnnotatedMethod && memberIsUnwrapped(member)) {
       Iterable<? extends ModelProperty> properties;
-      if (isGetter(((AnnotatedMethod)member).getMember())) {
+      if (isGetter(((AnnotatedMethod) member).getMember())) {
         properties = propertiesForDeserialization(childProperty.getReturnType());
       } else {
         properties = propertiesForDeserialization(childProperty.getArgumentType(0));
@@ -139,7 +138,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     BeanDescription beanDescription = serializationConfig.introspect(TypeFactory.defaultInstance()
             .constructType(resolvedType.getErasedType()));
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
-            BeanPropertyDefinitions.beanPropertyByInternalName());
+            beanPropertyByInternalName());
     for (Map.Entry<String, BeanPropertyDefinition> propertyDefinitionEntry : propertyLookup.entrySet()) {
       BeanPropertyDefinition propertyDefinition = propertyDefinitionEntry.getValue();
       Optional<BeanPropertyDefinition> jacksonProperty
