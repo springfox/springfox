@@ -4,6 +4,8 @@ cache:
   - $HOME/.m2
   - $HOME/.gradle/wrapper
 language: java
+install:
+  - true
 script:
 - TERM=dumb ./gradlew clean check
 

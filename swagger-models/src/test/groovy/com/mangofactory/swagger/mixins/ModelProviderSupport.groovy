@@ -34,7 +34,7 @@ class ModelProviderSupport {
   def documentationType() {
     new DocumentationType("swagger", "1.2")
   }
-  def pluginsManager() {
+  SchemaPluginsManager pluginsManager() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
             OrderAwarePluginRegistry.create(newArrayList(new ApiModelPropertyPropertyBuilderPlugin()))
 

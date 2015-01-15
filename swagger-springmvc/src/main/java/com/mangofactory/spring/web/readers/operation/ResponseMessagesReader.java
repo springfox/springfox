@@ -3,15 +3,14 @@ package com.mangofactory.spring.web.readers.operation;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
-import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.schema.ResolvedTypes;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
+import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.service.model.ResponseMessage;
 import com.mangofactory.service.model.builder.ResponseMessageBuilder;
 import com.mangofactory.spring.web.plugins.OperationBuilderPlugin;
 import com.mangofactory.spring.web.plugins.OperationContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,8 +18,10 @@ import org.springframework.web.method.HandlerMethod;
 
 import java.util.List;
 
+import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.spring.web.HandlerMethodReturnTypes.*;
+import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
 public class ResponseMessagesReader implements OperationBuilderPlugin {
@@ -67,8 +68,8 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   }
 
   private int httpStatusCode(HandlerMethod handlerMethod) {
-    Optional<ResponseStatus> responseStatus = Optional.fromNullable(AnnotationUtils.getAnnotation(handlerMethod
-            .getMethod(), ResponseStatus.class));
+    Optional<ResponseStatus> responseStatus
+            = fromNullable(getAnnotation(handlerMethod.getMethod(), ResponseStatus.class));
     int httpStatusCode = 200;
     if (responseStatus.isPresent()) {
       httpStatusCode = responseStatus.get().value().value();

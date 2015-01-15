@@ -65,7 +65,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Annotated model"() {
     given:
-      RequestMappingContext context = context(dummyHandlerMethod('methodWithModelAnnotations'))
+      RequestMappingContext context = context(dummyHandlerMethod('methodWithModelPropertyAnnotations'))
     when:
       def models = sut.read(context)
 

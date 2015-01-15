@@ -225,7 +225,7 @@
                   <match>
                     <AND>
                       <METHOD>true</METHOD>
-                      <STATIC>true</STATIC>
+                      <PUBLIC>true</PUBLIC>
                     </AND>
                   </match>
                 </rule>
@@ -235,18 +235,7 @@
                   <match>
                     <AND>
                       <METHOD>true</METHOD>
-                      <PUBLIC>true</PUBLIC>
                       <STATIC>true</STATIC>
-                    </AND>
-                  </match>
-                </rule>
-              </section>
-              <section>
-                <rule>
-                  <match>
-                    <AND>
-                      <METHOD>true</METHOD>
-                      <PUBLIC>true</PUBLIC>
                     </AND>
                   </match>
                 </rule>
@@ -264,7 +253,21 @@
               <section>
                 <rule>
                   <match>
-                    <METHOD>true</METHOD>
+                    <AND>
+                      <METHOD>true</METHOD>
+                      <PUBLIC>false</PUBLIC>
+                      <STATIC>true</STATIC>
+                    </AND>
+                  </match>
+                </rule>
+              </section>
+              <section>
+                <rule>
+                  <match>
+                    <AND>
+                      <METHOD>true</METHOD>
+                      <PUBLIC>false</PUBLIC>
+                    </AND>
                   </match>
                 </rule>
               </section>

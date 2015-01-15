@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.mangofactory.schema.plugins.ModelPropertyContext;
 import com.mangofactory.schema.plugins.SchemaPluginsManager;
 import com.mangofactory.schema.property.BeanPropertyNamingStrategy;
@@ -96,31 +98,41 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
   }
 
   @Override
-  public List<com.mangofactory.service.model.ModelProperty> propertiesFor(ResolvedType type, ModelContext
-          givenContext) {
+  public List<com.mangofactory.service.model.ModelProperty> propertiesFor(ResolvedType type,
+          ModelContext givenContext) {
+
     List<com.mangofactory.service.model.ModelProperty> serializationCandidates = newArrayList();
     BeanDescription beanDescription = beanDescription(type, givenContext);
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
             BeanPropertyDefinitions.beanPropertyByInternalName());
-    for (ResolvedMethod childProperty : accessors.in(type)) {
+    for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
 
-      String propertyName = propertyName(childProperty.getRawMember());
-      if (propertyLookup.containsKey(propertyName)) {
-        BeanPropertyDefinition propertyDefinition = propertyLookup.get(propertyName);
+        BeanPropertyDefinition propertyDefinition = each.getValue();
         Optional<BeanPropertyDefinition> jacksonProperty
                 = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         try {
           AnnotatedMember member = propertyDefinition.getPrimaryMember();
-          if (accessorMemberIs(childProperty, methodName(member))) {
+          Optional<ResolvedMethod> accessor = findAccessorMethod(type, each.getKey(), member);
+          if (accessor.isPresent()) {
             serializationCandidates
-                    .addAll(newArrayList(addCandidateProperties(member, childProperty, jacksonProperty, givenContext)));
+                    .addAll(addCandidateProperties(member, accessor.get(), jacksonProperty, givenContext));
           }
         } catch (Exception e) {
           LOG.warn(e.getMessage());
         }
-      }
     }
     return serializationCandidates;
+  }
+
+  private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType,
+                                                      final String propertyName,
+                                                      final AnnotatedMember member) {
+    return Iterables.tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
+      public boolean apply(ResolvedMethod accessorMethod) {
+        return accessorMemberIs(accessorMethod, methodName(member))
+                && propertyName.equals(propertyName(accessorMethod.getRawMember()));
+      }
+    });
   }
 
   @Override

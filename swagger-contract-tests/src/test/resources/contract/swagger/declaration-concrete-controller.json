@@ -99,6 +99,11 @@
                         {
                             "code": 404,
                             "message": "Not Found"
+                        },
+                        {
+                            "code": 405,
+                            "message": "Invalid input",
+                            "responseModel": "Void"
                         }
                     ],
                     "deprecated": "false",

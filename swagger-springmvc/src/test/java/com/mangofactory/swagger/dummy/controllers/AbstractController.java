@@ -1,5 +1,7 @@
 package com.mangofactory.swagger.dummy.controllers;
 
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -11,6 +13,7 @@ public abstract class AbstractController<T> {
   }
 
   @RequestMapping(value = "/get-t", method = RequestMethod.GET)
+  @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
   public T get() {
     throw new UnsupportedOperationException();
   }

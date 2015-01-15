@@ -17,7 +17,7 @@ public class Annotations {
    * Finds first annotation of the given type on the given bean property and returns it.
    * Search precedence is getter, setter, field.
    *
-   * @param beanPropertyDefinition introspected jackson proprty defintion
+   * @param beanPropertyDefinition introspected jackson property definition
    * @param annotationClass        class object representing desired annotation
    * @param <A>                    type that extends Annotation
    * @return first annotation found for property
