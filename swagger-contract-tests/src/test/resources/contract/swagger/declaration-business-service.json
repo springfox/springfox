@@ -118,7 +118,7 @@
                     "deprecated": "false",
                     "type": "array",
                     "items": {
-                        "type": "Business"
+                        "type": "Biz"
                     },
                     "uniqueItems": false
                 }
@@ -399,9 +399,9 @@
                 }
             }
         },
-        "Business": {
+        "Biz": {
             "description": "",
-            "id": "Business",
+            "id": "Biz",
             "properties": {
                 "id": {
                     "required": false,

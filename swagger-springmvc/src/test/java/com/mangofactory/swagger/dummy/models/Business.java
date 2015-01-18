@@ -1,10 +1,12 @@
 package com.mangofactory.swagger.dummy.models;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import org.joda.time.LocalDate;
 
 import java.util.Date;
 
 
+@ApiModel(value = "Biz")
 public class Business {
    //not private - just for testing
    public int id;

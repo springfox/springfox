@@ -18,10 +18,10 @@ import static com.mangofactory.schema.alternates.Alternates.*;
 
 @Configuration
 @ComponentScan(basePackages = {
-        "com.mangofactory.schema",
-        "com.mangofactory.swagger.dto.mappers",
         "com.mangofactory.schema.plugins",
-        "com.mangofactory.swagger.plugins"
+        "com.mangofactory.schema",
+        "com.mangofactory.swagger.plugins",
+        "com.mangofactory.swagger.dto.mappers"
 })
 @EnablePluginRegistries({
         ModelBuilderPlugin.class,

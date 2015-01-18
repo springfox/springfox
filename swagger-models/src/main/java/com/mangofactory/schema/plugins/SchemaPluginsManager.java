@@ -1,18 +1,12 @@
 package com.mangofactory.schema.plugins;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
+import com.mangofactory.schema.DefaultTypeNameProvider;
 import com.mangofactory.schema.ModelNameContext;
 import com.mangofactory.service.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-
-import static com.google.common.base.Optional.*;
-import static com.google.common.collect.Lists.*;
 
 @Component
 public class SchemaPluginsManager {
@@ -48,12 +42,8 @@ public class SchemaPluginsManager {
   }
 
   public String typeName(ModelNameContext context) {
-    Optional<String> toReturn = Optional.absent();
-    //Last one wins
-    List<TypeNameProviderPlugin> pluginsFor = reverse(typeNameProviders.getPluginsFor(context.getDocumentationType()));
-    for(TypeNameProviderPlugin each: pluginsFor) {
-      toReturn = toReturn.or(fromNullable(each.nameFor(context.getType())));
-    }
-    return toReturn.orNull();
+    TypeNameProviderPlugin selected =
+            typeNameProviders.getPluginFor(context.getDocumentationType(), new DefaultTypeNameProvider());
+    return selected.nameFor(context.getType());
   }
 }
