@@ -2,11 +2,14 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/mangodocs.iml" filepath="$PROJECT_DIR$/mangodocs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mangodocs-core/mangodocs-core.iml" filepath="$PROJECT_DIR$/mangodocs-core/mangodocs-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mangodocs-schema/mangodocs-schema.iml" filepath="$PROJECT_DIR$/mangodocs-schema/mangodocs-schema.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mangodocs-spi/mangodocs-spi.iml" filepath="$PROJECT_DIR$/mangodocs-spi/mangodocs-spi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mangodocs-spring-web/mangodocs-spring-web.iml" filepath="$PROJECT_DIR$/mangodocs-spring-web/mangodocs-spring-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mangodocs-swagger/mangodocs-swagger.iml" filepath="$PROJECT_DIR$/mangodocs-swagger/mangodocs-swagger.iml" />
       <module fileurl="file://$PROJECT_DIR$/swagger-contract-tests/swagger-contract-tests.iml" filepath="$PROJECT_DIR$/swagger-contract-tests/swagger-contract-tests.iml" />
-      <module fileurl="file://$PROJECT_DIR$/swagger-models/swagger-models.iml" filepath="$PROJECT_DIR$/swagger-models/swagger-models.iml" />
-      <module fileurl="file://$PROJECT_DIR$/swagger-springmvc/swagger-springmvc.iml" filepath="$PROJECT_DIR$/swagger-springmvc/swagger-springmvc.iml" />
       <module fileurl="file://$PROJECT_DIR$/swagger-springmvc-parent.iml" filepath="$PROJECT_DIR$/swagger-springmvc-parent.iml" />
     </modules>
   </component>
 </project>
-

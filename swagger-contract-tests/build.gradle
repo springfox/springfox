@@ -31,7 +31,7 @@ dependencies {
 
   compile "org.ajar:swagger-spring-mvc-ui:0.4"
 
-  compile(project(':swagger-springmvc')) {
+  compile(project(':mangodocs-swagger')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 
@@ -41,7 +41,7 @@ dependencies {
   testCompile libs.test
   testCompile 'org.skyscreamer:jsonassert:1.2.3'
   testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
-  testCompile(project(path: ':swagger-springmvc', configuration: 'testArtifacts')) {
+  testCompile(project(path: ':mangodocs-swagger', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 }

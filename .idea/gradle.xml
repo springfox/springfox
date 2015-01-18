@@ -8,13 +8,15 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/mangodocs-core" />
+            <option value="$PROJECT_DIR$/mangodocs-schema" />
+            <option value="$PROJECT_DIR$/mangodocs-spi" />
+            <option value="$PROJECT_DIR$/mangodocs-spring-web" />
+            <option value="$PROJECT_DIR$/mangodocs-swagger" />
             <option value="$PROJECT_DIR$/swagger-contract-tests" />
-            <option value="$PROJECT_DIR$/swagger-models" />
-            <option value="$PROJECT_DIR$/swagger-springmvc" />
           </set>
         </option>
       </GradleProjectSettings>
     </option>
   </component>
 </project>
-

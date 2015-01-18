@@ -1,0 +1,21 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+
+configurations {
+  testArtifacts.extendsFrom testRuntime
+}
+
+task testJar(type: Jar) {
+  classifier "test"
+  from sourceSets.test.output
+}
+
+artifacts {
+  testArtifacts testJar
+}
+
+dependencies {
+  compile project(':mangodocs-core')
+  compile project(':mangodocs-spi')
+  testCompile libs.test
+}

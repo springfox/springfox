@@ -1,0 +1,51 @@
+configurations {
+  testArtifacts.extendsFrom testRuntime
+}
+
+dependencies {
+  compile (libs.swaggerCore) {
+    exclude group: 'org.scala-lang'
+  }
+  compile libs.core
+  compile libs.spring
+  provided libs.clientProvided
+
+  compile project(':mangodocs-spi')
+  compile project(':mangodocs-schema')
+
+  testCompile project(':mangodocs-core')
+  testCompile libs.test
+  testCompile(project(path: ':mangodocs-schema', configuration: 'testArtifacts')) {
+    exclude group: 'org.springframework', module: 'spring-web'
+  }
+}
+
+publishing {
+  repositories {
+    configure(releaseRepos)
+  }
+  publications {
+    ssmvc(MavenPublication) {
+      from components.java
+
+      artifact packageSources {
+        classifier "sources"
+      }
+
+      artifact (javadocJar) {
+        classifier = 'javadoc'
+      }
+
+      pom.withXml swaggerMvcPomConfig
+    }
+  }
+}
+
+task testJar(type: Jar) {
+  classifier "test"
+  from sourceSets.test.output
+  exclude '**/*log4j.xml*', '**/*simplelogger.properties*'
+}
+artifacts {
+  testArtifacts testJar
+}

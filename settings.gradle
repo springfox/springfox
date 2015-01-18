@@ -1,8 +1,9 @@
-rootProject.name = 'swagger-springmvc-parent'
-include ':swagger-models'
-include ':swagger-springmvc'
-include ':swagger-contract-tests'
+rootProject.name = 'mangodocs'
+include 'mangodocs-core'
+include 'mangodocs-spi'
+include 'mangodocs-schema'
+include 'mangodocs-spring-web'
+include 'mangodocs-swagger'
+include 'swagger-contract-tests'
 
-project(':swagger-models').projectDir = "$rootDir/swagger-models" as File
-project(':swagger-springmvc').projectDir = "$rootDir/swagger-springmvc" as File
-project(':swagger-contract-tests').projectDir = "$rootDir/swagger-contract-tests" as File
+

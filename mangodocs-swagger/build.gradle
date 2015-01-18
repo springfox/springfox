@@ -1,0 +1,51 @@
+apply from: "$rootDir/gradle/mapstruct.gradle"
+configurations {
+  testArtifacts.extendsFrom testRuntime
+}
+task testJar(type: Jar) {
+  classifier "test"
+  from sourceSets.test.output
+  exclude '**/*log4j.xml*', '**/*simplelogger.properties*'
+}
+artifacts {
+  testArtifacts testJar
+}
+dependencies {
+  compile (libs.swaggerCore) {
+    exclude group: 'org.scala-lang'
+  }
+  compile project(':mangodocs-spi')
+  compile project(':mangodocs-schema')
+  compile project(':mangodocs-spring-web')
+  testCompile project(':mangodocs-core')
+  testCompile(project(path: ':mangodocs-schema', configuration: 'testArtifacts'))
+  testCompile(project(path: ':mangodocs-spring-web', configuration: 'testArtifacts')) {
+    exclude group: 'org.springframework', module: 'spring-web'
+  }
+  compile libs.core
+  compile libs.spring
+  provided libs.clientProvided
+  testCompile libs.test
+}
+
+publishing {
+  repositories {
+    configure(releaseRepos)
+  }
+  publications {
+    models(MavenPublication) {
+      from components.java
+
+
+      artifact packageSources {
+        classifier "sources"
+      }
+
+      artifact (javadocJar) {
+        classifier = 'javadoc'
+      }
+
+      pom.withXml swaggerMvcPomConfig
+    }
+  }
+}

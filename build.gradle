@@ -20,7 +20,7 @@ ext {
   jdkVersion = 1.6
 }
 
-configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'swagger-models' }) { subproject ->
+configure(subprojects.findAll { it.name != 'swagger-contract-tests'}) { subproject ->
   apply plugin: 'groovy'
   apply plugin: 'java'
   apply plugin: "com.ofg.uptodate"
@@ -45,7 +45,7 @@ configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'sw
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
   jvmsrc {
-    packageName "${group}.swagger"
+    packageName "${group}"
   }
 
   jar {
