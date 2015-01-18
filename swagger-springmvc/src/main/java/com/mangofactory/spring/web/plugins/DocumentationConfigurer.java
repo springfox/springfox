@@ -4,8 +4,6 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
-import com.mangofactory.schema.GenericTypeNamingStrategy;
-import com.mangofactory.schema.ResolvedTypes;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.alternates.AlternateTypeRule;
 import com.mangofactory.schema.alternates.WildcardType;
@@ -272,18 +270,6 @@ public class DocumentationConfigurer implements DocumentationPlugin {
     for (Class clz : genericClasses) {
       this.substitutionRules.add(newGenericSubstitutionFunction(clz));
     }
-    return this;
-  }
-
-  /**
-   * Controls how generics are encoded as swagger types, specifically around the characters used to open, close,
-   * and delimit lists of types.
-   *
-   * @param strategy a GenericTypeNamingStrategy implementation, defaults to DefaultGenericTypeNamingStrategy
-   * @return this DocumentationConfigurer
-   */
-  public DocumentationConfigurer genericTypeNamingStrategy(GenericTypeNamingStrategy strategy) {
-    ResolvedTypes.setNamingStrategy(strategy);
     return this;
   }
 

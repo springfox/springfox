@@ -2,7 +2,6 @@ package com.mangofactory.schema.property;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
-import com.mangofactory.schema.plugins.ModelContext;
 import com.mangofactory.schema.ResolvedTypes;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.service.model.AllowableValues;
@@ -37,11 +36,6 @@ public abstract class BaseModelProperty implements ModelProperty {
       return getType().toString();
     }
     return simpleQualifiedTypeName(getType());
-  }
-
-  @Override
-  public String typeName(ModelContext modelContext) {
-    return ResolvedTypes.typeName(getType());
   }
 
   @Override

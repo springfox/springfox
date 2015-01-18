@@ -1,21 +1,20 @@
 package com.mangofactory.schema
 
-import com.mangofactory.schema.plugins.ModelContext
+import com.mangofactory.schema.plugins.DocumentationType
 import com.mangofactory.service.model.Model
 import com.mangofactory.service.model.ModelRef
-import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import spock.lang.Specification
 
 import static com.mangofactory.schema.Collections.*
-import static com.mangofactory.schema.ResolvedTypes.*
+import static com.mangofactory.schema.plugins.ModelContext.*
 
-@Mixin([TypesForTestingSupport, ModelProviderSupport])
-class ContainerTypesSpec extends Specification {
+@Mixin([TypesForTestingSupport])
+class ContainerTypesSpec extends SchemaSpecification {
   def "Response class for container types are inferred correctly"() {
     given:
+      def context = returnValue(containerType, DocumentationType.SWAGGER_12)
     expect:
-      responseTypeName(containerType) == name
+      typeNameExtractor.typeName(context) == name
 
     where:
       containerType                  | name
@@ -32,15 +31,14 @@ class ContainerTypesSpec extends Specification {
   def "Model properties of type List, are inferred correctly"() {
     given:
       def sut = typeWithLists()
-      ModelProvider provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(sut, documentationType())).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(sut, documentationType())).get()
+      Model asInput = modelProvider.modelFor(inputParam(sut, documentationType())).get()
+      Model asReturn = modelProvider.modelFor(returnValue(sut, documentationType())).get()
 
     expect:
       asInput.getName() == "ListsContainer"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.typeName() == name
+      modelProperty.type.erasedType == name
       modelProperty.getItems()
       ModelRef item = modelProperty.getItems()
       item.type == itemType
@@ -48,26 +46,25 @@ class ContainerTypesSpec extends Specification {
       asReturn.getName() == "ListsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.typeName() == name
+      retModelProperty.type.erasedType == name
       retModelProperty.getItems()
       def retItem = retModelProperty.getItems()
       retItem.type == itemType
 
     where:
-      property          | name   | itemType      | itemQualifiedType
-      "complexTypes"    | "List" | 'ComplexType' | "com.mangofactory.schema.ComplexType"
-      "enums"           | "List" | "string"      | "com.mangofactory.schema.ExampleEnum"
-      "aliasOfIntegers" | "List" | "int"         | "java.lang.Integer"
-      "strings"         | "List" | "string"      | "java.lang.String"
-      "objects"         | "List" | "object"      | "java.lang.Object"
+      property          | name      | itemType      | itemQualifiedType
+      "complexTypes"    | List      | 'ComplexType' | "com.mangofactory.schema.ComplexType"
+      "enums"           | List      | "string"      | "com.mangofactory.schema.ExampleEnum"
+      "aliasOfIntegers" | List      | "int"         | "java.lang.Integer"
+      "strings"         | ArrayList | "string"      | "java.lang.String"
+      "objects"         | List      | "object"      | "java.lang.Object"
   }
 
-  def "Model properties of type [#type], are inferred correctly"() {
+  def "Model properties are inferred correctly"() {
     given:
       def sut = typeWithSets()
-      def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(sut, documentationType())).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(sut, documentationType())).get()
+      Model asInput = modelProvider.modelFor(inputParam(sut, documentationType())).get()
+      Model asReturn = modelProvider.modelFor(returnValue(sut, documentationType())).get()
 
     expect:
       asInput.getName() == "SetsContainer"
@@ -98,15 +95,14 @@ class ContainerTypesSpec extends Specification {
   def "Model properties of type Arrays are inferred correctly"() {
     given:
       def sut = typeWithArrays()
-      def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(sut, documentationType())).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(sut, documentationType())).get()
+      Model asInput = modelProvider.modelFor(inputParam(sut, documentationType())).get()
+      Model asReturn = modelProvider.modelFor(returnValue(sut, documentationType())).get()
 
     expect:
       asInput.getName() == "ArraysContainer"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.typeName() == type
+      modelProperty.type.erasedType == type
       modelProperty.getItems()
       ModelRef item = modelProperty.getItems()
       item.type == itemType
@@ -114,33 +110,32 @@ class ContainerTypesSpec extends Specification {
       asReturn.getName() == "ArraysContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.typeName() == type
+      retModelProperty.type.erasedType == type
       retModelProperty.getItems()
       def retItem = retModelProperty.getItems()
       retItem.type == itemType
 
     where:
-      property          | type    | itemType      | itemQualifiedType
-      "complexTypes"    | "Array" | 'ComplexType' | "com.mangofactory.schema.ComplexType"
-      "enums"           | "Array" | "string"      | "com.mangofactory.schema.ExampleEnum"
-      "aliasOfIntegers" | "Array" | "int"         | "java.lang.Integer"
-      "strings"         | "Array" | "string"      | "java.lang.String"
-      "objects"         | "Array" | "object"      | "java.lang.Object"
-      "bytes"           | "Array" | "byte"        | "byte"
+      property          | type          | itemType      | itemQualifiedType
+      "complexTypes"    | ComplexType[] | 'ComplexType' | "com.mangofactory.schema.ComplexType"
+      "enums"           | ExampleEnum[] | "string"      | "com.mangofactory.schema.ExampleEnum"
+      "aliasOfIntegers" | Integer[]     | "int"         | "java.lang.Integer"
+      "strings"         | String[]      | "string"      | "java.lang.String"
+      "objects"         | Object[]      | "object"      | "java.lang.Object"
+      "bytes"           | byte[]        | "byte"        | "byte"
   }
 
   def "Model properties of type Map are inferred correctly"() {
     given:
       def sut = mapsContainer()
-      def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(sut, documentationType())).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(sut, documentationType())).get()
+      Model asInput = modelProvider.modelFor(inputParam(sut, documentationType())).get()
+      Model asReturn = modelProvider.modelFor(returnValue(sut, documentationType())).get()
 
     expect:
       asInput.getName() == "MapsContainer"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.typeName() == type
+      modelProperty.type.erasedType == type
       modelProperty.getItems()
       ModelRef item = modelProperty.getItems()
       item.type == itemRef
@@ -148,34 +143,33 @@ class ContainerTypesSpec extends Specification {
       asReturn.getName() == "MapsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.typeName() == type
+      retModelProperty.type.erasedType == type
       retModelProperty.getItems()
       def retItem = retModelProperty.getItems()
       retItem.type == itemRef
 
     where:
       property              | type   | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.schema.alternates.Entry"
-      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.schema.alternates.Entry"
-      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»" | "com.mangofactory.schema.alternates.Entry"
+      "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "com.mangofactory.schema.alternates.Entry"
+      "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "com.mangofactory.schema.alternates.Entry"
+      "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "com.mangofactory.schema.alternates.Entry"
   }
 
   def "Model properties of type Map are inferred correctly on generic host"() {
     given:
       def sut = genericTypeOfMapsContainer()
-      def provider = defaultModelProvider()
 
-      def modelContext = ModelContext.inputParam(sut, documentationType())
-      Model asInput = provider.dependencies(modelContext).get("MapsContainer")
+      def modelContext = inputParam(sut, documentationType())
+      Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
 
-      def returnContext = ModelContext.returnValue(sut, documentationType())
-      Model asReturn = provider.dependencies(returnContext).get("MapsContainer")
+      def returnContext = returnValue(sut, documentationType())
+      Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
 
     expect:
       asInput.getName() == "MapsContainer"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.typeName() == type
+      modelProperty.type.erasedType == type
       modelProperty.getItems()
       ModelRef item = modelProperty.getItems()
       item.type == itemRef
@@ -183,15 +177,15 @@ class ContainerTypesSpec extends Specification {
       asReturn.getName() == "MapsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.typeName() == type
+      retModelProperty.type.erasedType == type
       retModelProperty.getItems()
       def retItem = retModelProperty.getItems()
       retItem.type == itemRef
 
     where:
       property              | type   | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.schema.alternates.Entry"
-      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.schema.alternates.Entry"
-      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»" | "com.mangofactory.schema.alternates.Entry"
+      "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "com.mangofactory.schema.alternates.Entry"
+      "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "com.mangofactory.schema.alternates.Entry"
+      "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "com.mangofactory.schema.alternates.Entry"
   }
 }

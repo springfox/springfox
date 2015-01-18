@@ -1,7 +1,6 @@
 package com.mangofactory.service.model;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.mangofactory.schema.ResolvedTypes;
 
 public class ModelProperty {
   private final String name;
@@ -30,9 +29,6 @@ public class ModelProperty {
     return name;
   }
 
-  public String typeName() {
-    return ResolvedTypes.typeName(getType());
-  }
   public ResolvedType getType() {
     return type;
   }

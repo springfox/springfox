@@ -3,7 +3,7 @@ package com.mangofactory.spring.web.readers.operation;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
-import com.mangofactory.schema.ResolvedTypes;
+import com.mangofactory.schema.TypeNameExtractor;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.service.model.ResponseMessage;
@@ -20,6 +20,7 @@ import java.util.List;
 
 import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Sets.*;
+import static com.mangofactory.schema.plugins.ModelContext.*;
 import static com.mangofactory.spring.web.HandlerMethodReturnTypes.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
@@ -28,11 +29,14 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
 
   private final TypeResolver typeResolver;
   private final AlternateTypeProvider alternateTypeProvider;
+  private final TypeNameExtractor typeNameExtractor;
 
   @Autowired
-  public ResponseMessagesReader(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider) {
+  public ResponseMessagesReader(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider,
+                                TypeNameExtractor typeNameExtractor) {
     this.typeResolver = typeResolver;
     this.alternateTypeProvider = alternateTypeProvider;
+    this.typeNameExtractor = typeNameExtractor;
   }
 
   @Override
@@ -57,7 +61,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     String message = HttpStatus.valueOf(httpStatusCode).getReasonPhrase();
     String simpleName = null;
     if (!Void.class.equals(returnType.getErasedType()) && !Void.TYPE.equals(returnType.getErasedType())) {
-      simpleName = ResolvedTypes.typeName(returnType);
+      simpleName = typeNameExtractor.typeName(returnValueWithoutContainerType(returnType, context.getDocumentationType()));
     }
     ResponseMessage built = new ResponseMessageBuilder()
             .code(httpStatusCode)

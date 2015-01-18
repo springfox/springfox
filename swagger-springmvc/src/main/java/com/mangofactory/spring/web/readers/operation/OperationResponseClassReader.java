@@ -2,6 +2,7 @@ package com.mangofactory.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.mangofactory.schema.TypeNameExtractor;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.plugins.DocumentationType;
 import com.mangofactory.spring.web.plugins.OperationBuilderPlugin;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
-import static com.mangofactory.schema.ResolvedTypes.*;
+import static com.mangofactory.schema.plugins.ModelContext.*;
 import static com.mangofactory.spring.web.HandlerMethodReturnTypes.*;
 
 @Component
@@ -20,11 +21,14 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
   private final TypeResolver typeResolver;
   private final AlternateTypeProvider alternateTypeProvider;
+  private final TypeNameExtractor nameExtractor;
 
   @Autowired
-  public OperationResponseClassReader(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider) {
+  public OperationResponseClassReader(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider,
+                                      TypeNameExtractor nameExtractor) {
     this.typeResolver = typeResolver;
     this.alternateTypeProvider = alternateTypeProvider;
+    this.nameExtractor = nameExtractor;
   }
 
   @Override
@@ -32,7 +36,7 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     ResolvedType returnType = handlerReturnType(typeResolver, handlerMethod);
     returnType = alternateTypeProvider.alternateFor(returnType);
-    String responseTypeName = responseTypeName(returnType);
+    String responseTypeName = nameExtractor.typeName(returnValue(returnType, context.getDocumentationType()));
     log.debug("Setting spring response class to:" + responseTypeName);
     context.operationBuilder().responseClass(responseTypeName);
   }

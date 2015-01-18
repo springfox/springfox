@@ -16,7 +16,6 @@ import org.springframework.web.method.HandlerMethod;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
-import static com.mangofactory.schema.ResolvedTypes.*;
 import static com.mangofactory.swagger.annotations.Annotations.*;
 
 @Component
@@ -63,7 +62,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
   private String overrideTypeName(ApiResponse apiResponse) {
     if (apiResponse.response() != null) {
-      return typeName(typeResolver.resolve(apiResponse.response()));
+      return apiResponse.response().getSimpleName();
     }
     return "";
   }

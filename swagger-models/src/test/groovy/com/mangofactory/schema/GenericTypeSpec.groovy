@@ -1,36 +1,35 @@
 package com.mangofactory.schema
 import com.mangofactory.service.model.Model
-import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
-import spock.lang.Specification
 
 import static com.google.common.base.Strings.*
 import static com.mangofactory.schema.plugins.ModelContext.*
 
-@Mixin([TypesForTestingSupport, ModelProviderSupport])
-class GenericTypeSpec extends Specification {
-
-  def "Generic property on a generic types is inferred correctly"() {
+@Mixin([TypesForTestingSupport])
+class GenericTypeSpec extends SchemaSpecification {
+  def "Generic property on a generic types is inferred correctly for inbound types"() {
     given:
-      def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(modelType, documentationType())).get()
-      Model asReturn = provider.modelFor(returnValue(modelType, documentationType())).get()
 
+      def inputContext = inputParam(modelType, documentationType)
+      Model asInput = modelProvider.modelFor(inputContext).get()
+
+      def returnContext = returnValue(modelType, documentationType)
+      Model asReturn = modelProvider.modelFor(returnContext).get()
     expect:
       asInput.getName() == expectedModelName(modelNamePart)
       asInput.getProperties().containsKey("genericField")
       def modelProperty = asInput.getProperties().get("genericField")
-      ResolvedTypes.typeName(modelProperty.getType()) == propertyType
+      def typeName = typeNameExtractor.typeName(fromParent(inputContext, modelProperty.getType()))
+      typeName == propertyType
       modelProperty.getQualifiedType() == qualifiedType
-      (modelProperty.getItems() == null) == (!"List".equals(propertyType) && !"Array".equals(propertyType))
+      (modelProperty.getItems() == null) == (!propertyType.startsWith("List") && !propertyType.startsWith("Array"))
 
       asReturn.getName() == expectedModelName(modelNamePart)
       asReturn.getProperties().containsKey("genericField")
       def retModelProperty = asReturn.getProperties().get("genericField")
-      ResolvedTypes.typeName(retModelProperty.getType()) == propertyType
+      typeNameExtractor.typeName(fromParent(returnContext, retModelProperty.getType())) == propertyType
       retModelProperty.getQualifiedType() == qualifiedType
-      (retModelProperty.getItems() == null) == (!"List".equals(propertyType) && !"Array".equals(propertyType))
-
+      (retModelProperty.getItems() == null) == (!propertyType.startsWith("List") && !propertyType.startsWith("Array"))
     where:
       modelType                       | propertyType                                  | modelNamePart                                 | qualifiedType
       genericClass()                  | "SimpleType"                                  | "SimpleType"                                  | "com.mangofactory.schema.SimpleType"
@@ -45,43 +44,31 @@ class GenericTypeSpec extends Specification {
 
   def "Generic properties are inferred correctly even when they are not participating in the type bindings"() {
     given:
-      def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(modelType, documentationType())).get()
-      Model asReturn = provider.modelFor(returnValue(modelType, documentationType())).get()
+      def inputContext = inputParam(modelType, documentationType)
+      Model asInput = modelProvider.modelFor(inputContext).get()
+
+      def returnContext = returnValue(modelType, documentationType)
+      Model asReturn = modelProvider.modelFor(returnContext).get()
 
     expect:
       asInput.getProperties().containsKey("strings")
       def modelProperty = asInput.getProperties().get("strings")
-      ResolvedTypes.typeName(modelProperty.getType()) == propertyType
+      typeNameExtractor.typeName(fromParent(inputContext, modelProperty.getType())) == propertyType
 //      modelProperty.qualifiedType == qualifiedType
 
       asReturn.getProperties().containsKey("strings")
       def retModelProperty = asReturn.getProperties().get("strings")
-      ResolvedTypes.typeName(retModelProperty.getType()) == propertyType
-//      retModelProperty.qualifiedType == qualifiedType //Not working as expected in classmate
+      typeNameExtractor.typeName(fromParent(inputContext, retModelProperty.getType())) == propertyType
+//      retModelProperty.qualifiedType == qualifiedType // Not working as expected because of bug with classmate
 
     where:
-      modelType                      | propertyType | qualifiedType
-      genericClass()                 | "List"       | "java.util.List<java.lang.String>"
-      genericClassWithTypeErased()   | "List"       | "java.util.List<java.lang.String>"
-      genericClassWithListField()    | "List"       | "java.util.List<java.lang.String>"
-      genericClassWithGenericField() | "List"       | "java.util.List<java.lang.String>"
-      genericClassWithDeepGenerics() | "List"       | "java.util.List<java.lang.String>"
-      genericCollectionWithEnum()    | "List"       | "java.util.List<java.lang.String>"
-  }
-
-  def "Set a generic type naming strategy should succeed if null or populated"() {
-     when:
-     ResolvedTypes.setNamingStrategy(new DefaultGenericTypeNamingStrategy())
-     
-     then: 
-     notThrown(Exception)
-     
-     when:
-     ResolvedTypes.setNamingStrategy(null);
-     
-     then:
-     notThrown(Exception)
+      modelType                      | propertyType     | qualifiedType
+      genericClass()                 | "List"           | "java.util.List<java.lang.String>"
+      genericClassWithTypeErased()   | "List"           | "java.util.List<java.lang.String>"
+      genericClassWithListField()    | "List"           | "java.util.List<java.lang.String>"
+      genericClassWithGenericField() | "List"           | "java.util.List<java.lang.String>"
+      genericClassWithDeepGenerics() | "List"           | "java.util.List<java.lang.String>"
+      genericCollectionWithEnum()    | "List"           | "java.util.List<java.lang.String>"
   }
 
   def expectedModelName(String modelName) {

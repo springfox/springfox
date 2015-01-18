@@ -1,6 +1,7 @@
 package com.mangofactory.schema.property.constructor;
 
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
+import com.mangofactory.schema.TypeNameExtractor;
 import com.mangofactory.schema.plugins.SchemaPluginsManager;
 import com.mangofactory.schema.property.BeanPropertyNamingStrategy;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
@@ -20,9 +21,10 @@ public class ConstructorModelPropertyProvider extends FieldModelPropertyProvider
           FieldProvider fieldProvider,
           AlternateTypeProvider alternateTypeProvider,
           BeanPropertyNamingStrategy namingStrategy,
-          SchemaPluginsManager schemaPluginsManager) {
+          SchemaPluginsManager schemaPluginsManager,
+          TypeNameExtractor extractor) {
 
-    super(fieldProvider, alternateTypeProvider, namingStrategy, schemaPluginsManager);
+    super(fieldProvider, alternateTypeProvider, namingStrategy, schemaPluginsManager, extractor);
   }
 
   @Override

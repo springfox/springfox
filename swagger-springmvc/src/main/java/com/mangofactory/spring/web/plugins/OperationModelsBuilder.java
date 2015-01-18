@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
+import static com.mangofactory.schema.plugins.ModelContext.*;
 
 public class OperationModelsBuilder {
   private final DocumentationType documentationType;
@@ -18,7 +19,7 @@ public class OperationModelsBuilder {
   }
 
   public OperationModelsBuilder addReturn(Type type) {
-    ModelContext returnValue = ModelContext.returnValue(type, documentationType);
+    ModelContext returnValue = returnValue(type, documentationType);
     this.contexts.add(returnValue);
     return this;
   }

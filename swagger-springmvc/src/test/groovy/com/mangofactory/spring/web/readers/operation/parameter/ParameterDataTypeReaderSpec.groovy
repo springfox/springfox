@@ -1,15 +1,20 @@
 package com.mangofactory.spring.web.readers.operation.parameter
+
+import com.fasterxml.classmate.TypeResolver
+import com.mangofactory.schema.DefaultGenericTypeNamingStrategy
+import com.mangofactory.schema.TypeNameExtractor
 import com.mangofactory.service.model.builder.ParameterBuilder
 import com.mangofactory.spring.web.plugins.ParameterContext
+import com.mangofactory.spring.web.readers.operation.ResolvedMethodParameter
 import com.mangofactory.swagger.core.DocumentationContextSpec
 import com.mangofactory.swagger.dummy.DummyModels
+import com.mangofactory.swagger.mixins.PluginsSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
-import com.mangofactory.spring.web.readers.operation.ResolvedMethodParameter
 import org.springframework.core.MethodParameter
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
 
-@Mixin([RequestMappingSupport])
+@Mixin([RequestMappingSupport, PluginsSupport])
 class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   HandlerMethod handlerMethod = Stub(HandlerMethod)
   MethodParameter methodParameter = Stub(MethodParameter)
@@ -22,7 +27,9 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       methodParameter.getParameterType() >> paramType
 
     when:
-      def sut = new ParameterDataTypeReader(defaultValues.alternateTypeProvider)
+      def typeNameExtractor =
+              new TypeNameExtractor(new TypeResolver(), new DefaultGenericTypeNamingStrategy(),  pluginsManager())
+      def sut = new ParameterDataTypeReader(defaultValues.alternateTypeProvider, typeNameExtractor)
       sut.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().parameterType == expected

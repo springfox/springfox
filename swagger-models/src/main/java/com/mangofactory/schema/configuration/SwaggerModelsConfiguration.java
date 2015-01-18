@@ -2,6 +2,7 @@ package com.mangofactory.schema.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.schema.plugins.ModelBuilderPlugin;
+import com.mangofactory.schema.plugins.TypeNameProviderPlugin;
 import com.mangofactory.schema.plugins.ModelPropertyBuilderPlugin;
 import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.alternates.WildcardType;
@@ -19,12 +20,13 @@ import static com.mangofactory.schema.alternates.Alternates.*;
 @ComponentScan(basePackages = {
         "com.mangofactory.schema",
         "com.mangofactory.swagger.dto.mappers",
-        "com.mangofactory.documentation.plugins",
+        "com.mangofactory.schema.plugins",
         "com.mangofactory.swagger.plugins"
 })
 @EnablePluginRegistries({
         ModelBuilderPlugin.class,
-        ModelPropertyBuilderPlugin.class
+        ModelPropertyBuilderPlugin.class,
+        TypeNameProviderPlugin.class
 })
 public class SwaggerModelsConfiguration {
   @Bean

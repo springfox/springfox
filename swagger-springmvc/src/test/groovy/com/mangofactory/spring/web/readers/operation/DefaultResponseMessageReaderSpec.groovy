@@ -1,20 +1,24 @@
 package com.mangofactory.spring.web.readers.operation
-
 import com.fasterxml.classmate.TypeResolver
+import com.mangofactory.schema.DefaultGenericTypeNamingStrategy
+import com.mangofactory.schema.TypeNameExtractor
 import com.mangofactory.service.model.ResponseMessage
 import com.mangofactory.service.model.builder.OperationBuilder
 import com.mangofactory.spring.web.plugins.OperationContext
 import com.mangofactory.swagger.core.DocumentationContextSpec
+import com.mangofactory.swagger.mixins.PluginsSupport
 import com.mangofactory.swagger.mixins.RequestMappingSupport
 import com.mangofactory.swagger.plugins.operation.SwaggerResponseMessageReader
 import org.springframework.web.bind.annotation.RequestMethod
 
-@Mixin([RequestMappingSupport])
+@Mixin([RequestMappingSupport, PluginsSupport])
 class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
   ResponseMessagesReader sut
 
   def setup() {
-    sut = new ResponseMessagesReader(defaultValues.typeResolver, defaultValues.alternateTypeProvider)
+    def typeNameExtractor =
+            new TypeNameExtractor(new TypeResolver(), new DefaultGenericTypeNamingStrategy(),  pluginsManager())
+    sut = new ResponseMessagesReader(defaultValues.typeResolver, defaultValues.alternateTypeProvider, typeNameExtractor)
   }
   def "Should add default response messages"() {
     given:

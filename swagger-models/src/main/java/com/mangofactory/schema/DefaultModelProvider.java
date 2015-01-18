@@ -21,6 +21,7 @@ import java.util.Map;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.schema.Collections.*;
 import static com.mangofactory.schema.ResolvedTypes.*;
+import static com.mangofactory.schema.plugins.ModelContext.*;
 
 
 @Component
@@ -30,17 +31,20 @@ public class DefaultModelProvider implements ModelProvider {
   private final ModelPropertiesProvider propertiesProvider;
   private final ModelDependencyProvider dependencyProvider;
   private final SchemaPluginsManager schemaPluginsManager;
+  private final TypeNameExtractor typeNameExtractor;
 
   @Autowired
   public DefaultModelProvider(TypeResolver resolver, AlternateTypeProvider alternateTypeProvider,
                               @Qualifier("default") ModelPropertiesProvider propertiesProvider,
                               ModelDependencyProvider dependencyProvider,
-                              SchemaPluginsManager schemaPluginsManager) {
+                              SchemaPluginsManager schemaPluginsManager,
+                              TypeNameExtractor typeNameExtractor) {
     this.resolver = resolver;
     this.alternateTypeProvider = alternateTypeProvider;
     this.propertiesProvider = propertiesProvider;
     this.dependencyProvider = dependencyProvider;
     this.schemaPluginsManager = schemaPluginsManager;
+    this.typeNameExtractor = typeNameExtractor;
   }
 
   @Override
@@ -60,9 +64,10 @@ public class DefaultModelProvider implements ModelProvider {
   private Model modelBuilder(ResolvedType propertiesHost,
                                     Map<String, ModelProperty> properties,
                                     ModelContext modelContext) {
+    String typeName = typeNameExtractor.typeName(fromParent(modelContext, propertiesHost));
     modelContext.getBuilder()
-            .id(typeName(propertiesHost))
-            .name(typeName(propertiesHost))
+            .id(typeName)
+            .name(typeName)
             .qualifiedType(simpleQualifiedTypeName(propertiesHost))
             .properties(properties)
             .description("")
@@ -76,7 +81,7 @@ public class DefaultModelProvider implements ModelProvider {
   public Map<String, Model> dependencies(ModelContext modelContext) {
     Map<String, Model> models = newHashMap();
     for (ResolvedType resolvedType : dependencyProvider.dependentModels(modelContext)) {
-      Optional<Model> model = modelFor(ModelContext.fromParent(modelContext, resolvedType));
+      Optional<Model> model = modelFor(fromParent(modelContext, resolvedType));
       if (model.isPresent()) {
         models.put(model.get().getName(), model.get());
       }

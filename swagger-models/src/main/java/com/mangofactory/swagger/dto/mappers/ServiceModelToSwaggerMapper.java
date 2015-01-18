@@ -30,7 +30,7 @@ public interface ServiceModelToSwaggerMapper {
 
   @Mappings({
           @Mapping(target = "type",
-                  expression = "java( new com.mangofactory.swagger.dto.DataType( from.typeName() ) )"),
+                  expression = "java( dataTypeMapper.fromResolvedType( from.getType() ) )"),
           @Mapping(target = "items",
                   expression = "java( dataTypeMapper.fromModelRef( from.getItems() ) )")
   })

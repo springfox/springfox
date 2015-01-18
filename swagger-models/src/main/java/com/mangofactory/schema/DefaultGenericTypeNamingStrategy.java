@@ -1,8 +1,11 @@
 package com.mangofactory.schema;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Strategy that uses \u00ab, \u00bb, and comma in generic type names
  */
+@Component
 public class DefaultGenericTypeNamingStrategy implements GenericTypeNamingStrategy {
   private static final String OPEN = "«";
   private static final String CLOSE = "»";

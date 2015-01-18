@@ -16,7 +16,7 @@ import java.util.Set;
 
 import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.schema.ResolvedTypes.*;
+import static com.mangofactory.schema.plugins.ModelContext.*;
 
 @Component
 public class ModelDependencyProvider {
@@ -24,13 +24,16 @@ public class ModelDependencyProvider {
   private final TypeResolver typeResolver;
   private final AlternateTypeProvider alternateTypeProvider;
   private final ModelPropertiesProvider propertiesProvider;
+  private final TypeNameExtractor nameExtractor;
 
   @Autowired
   public ModelDependencyProvider(TypeResolver typeResolver, AlternateTypeProvider alternateTypeProvider,
-                                 @Qualifier("default") ModelPropertiesProvider propertiesProvider) {
+                                 @Qualifier("default") ModelPropertiesProvider propertiesProvider,
+                                 TypeNameExtractor nameExtractor) {
     this.typeResolver = typeResolver;
     this.alternateTypeProvider = alternateTypeProvider;
     this.propertiesProvider = propertiesProvider;
+    this.nameExtractor = nameExtractor;
   }
 
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
@@ -45,13 +48,13 @@ public class ModelDependencyProvider {
     return new Predicate<ResolvedType>() {
       @Override
       public boolean apply(ResolvedType resolvedType) {
-        return isBaseType(resolvedType, modelContext);
+        return isBaseType(fromParent(modelContext, resolvedType));
       }
     };
   }
 
-  private boolean isBaseType(ResolvedType resolvedType, ModelContext modelContext) {
-    String typeName = modelContext.isReturnType() ? responseTypeName(resolvedType) : typeName(resolvedType);
+  private boolean isBaseType(ModelContext modelContext) {
+    String typeName = nameExtractor.typeName(modelContext);
     return Types.isBaseType(typeName);
   }
 
@@ -67,7 +70,7 @@ public class ModelDependencyProvider {
 
   private List<ResolvedType> resolvedDependencies(ModelContext modelContext) {
     ResolvedType resolvedType = alternateTypeProvider.alternateFor(modelContext.resolvedType(typeResolver));
-    if (isBaseType(resolvedType, modelContext)) {
+    if (isBaseType(fromParent(modelContext, resolvedType))) {
       modelContext.seen(resolvedType);
       return newArrayList();
     }
@@ -80,7 +83,7 @@ public class ModelDependencyProvider {
     List<ResolvedType> parameters = newArrayList();
     for (ResolvedType parameter : resolvedType.getTypeParameters()) {
       parameters.add(alternateTypeProvider.alternateFor(parameter));
-      parameters.addAll(resolvedDependencies(ModelContext.fromParent(modelContext, parameter)));
+      parameters.addAll(resolvedDependencies(fromParent(modelContext, parameter)));
     }
     return parameters;
   }
@@ -95,21 +98,21 @@ public class ModelDependencyProvider {
       if (Types.typeNameFor(property.getType().getErasedType()) != null) {
         continue;
       }
-      if (isBaseType(property.getType(), modelContext)) {
+      if (isBaseType(fromParent(modelContext, resolvedType))) {
         continue;
       }
       properties.add(property.getType());
       if (Collections.isContainerType(property.getType())) {
         ResolvedType collectionElementType = Collections.collectionElementType(property.getType());
         if (Types.typeNameFor(collectionElementType.getErasedType()) == null) {
-          if (!Types.isBaseType(typeName(collectionElementType))) {
+          if (!isBaseType(fromParent(modelContext, collectionElementType))) {
             properties.add(collectionElementType);
           }
-          properties.addAll(resolvedDependencies(ModelContext.fromParent(modelContext, collectionElementType)));
+          properties.addAll(resolvedDependencies(fromParent(modelContext, collectionElementType)));
         }
         continue;
       }
-      properties.addAll(resolvedDependencies(ModelContext.fromParent(modelContext, property.getType())));
+      properties.addAll(resolvedDependencies(fromParent(modelContext, property.getType())));
     }
     return properties;
   }

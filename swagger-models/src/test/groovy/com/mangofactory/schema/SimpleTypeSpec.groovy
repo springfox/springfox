@@ -1,69 +1,64 @@
 package com.mangofactory.schema
-
 import com.mangofactory.schema.plugins.ModelContext
-import com.mangofactory.swagger.mixins.ModelProviderSupport
-import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import com.mangofactory.service.model.Model
+import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import spock.lang.Ignore
-import spock.lang.Specification
 import spock.lang.Unroll
 
-@Mixin([TypesForTestingSupport, ModelProviderSupport])
-class SimpleTypeSpec extends Specification {
+@Mixin(TypesForTestingSupport)
+class SimpleTypeSpec extends SchemaSpecification {
   @Unroll
   def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:
-      def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(simpleType(), documentationType())).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(simpleType(), documentationType())).get()
+      Model asInput = modelProvider.modelFor(ModelContext.inputParam(simpleType(), documentationType())).get()
+      Model asReturn = modelProvider.modelFor(ModelContext.returnValue(simpleType(), documentationType())).get()
 
     expect:
       asInput.getName() == "SimpleType"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.typeName() == type
+      modelProperty.type.erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
       modelProperty.getItems() == null
 
       asReturn.getName() == "SimpleType"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.typeName() == type
+      retModelProperty.type.erasedType == type
       retModelProperty.getQualifiedType() == qualifiedType
       retModelProperty.getItems() == null
 
     where:
-      property          | type      | qualifiedType
-      "aString"         | "string"  | "java.lang.String"
-      "aByte"           | "byte"    | "byte"
-      "aBoolean"        | "boolean" | "boolean"
-      "aShort"          | "int"     | "int"
-      "anInt"           | "int"     | "int"
-      "aLong"           | "long"    | "long"
-      "aFloat"          | "float"   | "float"
-      "aDouble"         | "double"  | "double"
-      "anObjectByte"    | "byte"    | "java.lang.Byte"
-      "anObjectBoolean" | "boolean" | "java.lang.Boolean"
-      "anObjectShort"   | "int"     | "java.lang.Short"
-      "anObjectInt"     | "int"     | "java.lang.Integer"
-      "anObjectLong"    | "long"    | "java.lang.Long"
-      "anObjectFloat"   | "float"   | "java.lang.Float"
-      "anObjectDouble"  | "double"  | "java.lang.Double"
-      "currency"        | "string"  | "java.util.Currency"
+      property          | type    | qualifiedType
+      "aString"         | String  | "java.lang.String"
+      "aByte"           | byte    | "byte"
+      "aBoolean"        | boolean | "boolean"
+      "aShort"          | short   | "int"
+      "anInt"           | int     | "int"
+      "aLong"           | long    | "long"
+      "aFloat"          | float   | "float"
+      "aDouble"         | double  | "double"
+      "anObjectByte"    | Byte    | "java.lang.Byte"
+      "anObjectBoolean" | Boolean | "java.lang.Boolean"
+      "anObjectShort"   | Short   | "java.lang.Short"
+      "anObjectInt"     | Integer | "java.lang.Integer"
+      "anObjectLong"    | Long    | "java.lang.Long"
+      "anObjectFloat"   | Float   | "java.lang.Float"
+      "anObjectDouble"  | Double  | "java.lang.Double"
+      "currency"        | Currency| "java.util.Currency"
   }
 
   @Ignore
   def "type with constructor all properties are inferred"() {
     given:
-      def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(typeWithConstructor(), documentationType())).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(typeWithConstructor(), documentationType())).get()
+      Model asInput = modelProvider.modelFor(ModelContext.inputParam(typeWithConstructor(), documentationType)).get()
+      Model asReturn = modelProvider.modelFor(ModelContext.returnValue(typeWithConstructor(), documentationType)).get()
 
     expect:
       asInput.getName() == "TypeWithConstructor"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.getType() == type
+      modelProperty.getType().erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
       modelProperty.getItems() == null
       Types.isBaseType(type)
@@ -73,34 +68,31 @@ class SimpleTypeSpec extends Specification {
 
     where:
       property      | type     | qualifiedType
-      "stringValue" | "string" | "java.lang.String"
+      "stringValue" | String   | "java.lang.String"
   }
 
   def "Types with properties aliased using JsonProperty annotation"() {
     given:
-      def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(ModelContext.inputParam(typeWithJsonPropertyAnnotation(), documentationType())).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(typeWithJsonPropertyAnnotation(), documentationType())).get()
+      Model asInput = modelProvider.modelFor(ModelContext.inputParam(typeWithJsonPropertyAnnotation(), documentationType)).get()
+      Model asReturn = modelProvider.modelFor(ModelContext.returnValue(typeWithJsonPropertyAnnotation(), documentationType)).get()
 
     expect:
       asInput.getName() == "TypeWithJsonProperty"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.typeName() == type
+      modelProperty.type.erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
       modelProperty.getItems() == null
-      Types.isBaseType(type)
 
       asReturn.getName() == "TypeWithJsonProperty"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.typeName() == type
+      retModelProperty.type.erasedType == type
       retModelProperty.getQualifiedType() == qualifiedType
       retModelProperty.getItems() == null
-      Types.isBaseType(type)
 
     where:
       property             | type     | qualifiedType
-      "some_odd_ball_name" | "string" | "java.lang.String"
+      "some_odd_ball_name" | String   | "java.lang.String"
   }
 }

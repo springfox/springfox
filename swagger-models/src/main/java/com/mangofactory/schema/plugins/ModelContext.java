@@ -15,10 +15,12 @@ public class ModelContext {
   private final Type type;
   private final boolean returnType;
   private Set<ResolvedType> seenTypes = newHashSet();
+  private final boolean renderContainerType;
   private DocumentationType documentationType;
   private ModelBuilder modelBuilder;
 
-  ModelContext(Type type, boolean returnType, DocumentationType documentationType) {
+  ModelContext(Type type, boolean returnType, boolean renderContainerType, DocumentationType documentationType) {
+    this.renderContainerType = renderContainerType;
     this.documentationType = documentationType;
     this.parentContext = null;
     this.type = type;
@@ -32,7 +34,9 @@ public class ModelContext {
     this.returnType = parentContext.isReturnType();
     this.documentationType = parentContext.getDocumentationType();
     this.modelBuilder = new ModelBuilder();
+    renderContainerType = false;
   }
+
 
   public Type getType() {
     return type;
@@ -42,16 +46,32 @@ public class ModelContext {
     return asResolved(resolver, getType());
   }
 
+  public boolean hasParent() {
+    return parentContext != null;
+  }
+
   public boolean isReturnType() {
     return returnType;
   }
 
+  public boolean shouldRenderContainerType() {
+    return renderContainerType;
+  }
+
   public static ModelContext inputParam(Type type, DocumentationType documentationType) {
-    return new ModelContext(type, false, documentationType);
+    return new ModelContext(type, false, true, documentationType);
+  }
+
+  public static ModelContext inputParamWithoutContainerType(Type type, DocumentationType documentationType) {
+    return new ModelContext(type, false, false, documentationType);
+  }
+
+  public static ModelContext returnValueWithoutContainerType(Type type, DocumentationType documentationType) {
+    return new ModelContext(type, true, false, documentationType);
   }
 
   public static ModelContext returnValue(Type type, DocumentationType documentationType) {
-    return new ModelContext(type, true, documentationType);
+    return new ModelContext(type, true, true, documentationType);
   }
 
   public static ModelContext fromParent(ModelContext context, ResolvedType input) {

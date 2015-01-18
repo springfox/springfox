@@ -48,7 +48,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       modelProperties.size() == 2
 
       ModelProperty nameProp = modelProperties['name']
-      nameProp.typeName() == 'string'
+      nameProp.type.erasedType == String
       nameProp.getQualifiedType() == 'java.lang.String'
       nameProp.getPosition() == 0
       !nameProp.isRequired()
@@ -77,7 +77,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
       Map<String, ModelProperty> modelProps = model.getProperties()
       ModelProperty prop = modelProps.name
-      prop.typeName() == 'string'
+      prop.type.erasedType == String
       prop.getDescription() == 'The name of this business'
       prop.isRequired()
 

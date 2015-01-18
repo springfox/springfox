@@ -2,6 +2,7 @@ package com.mangofactory.schema.property.bean
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.mangofactory.schema.TypeNameExtractor
 import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.schema.plugins.DocumentationType
 import com.mangofactory.schema.property.ObjectMapperBeanPropertyNamingStrategy
@@ -25,7 +26,8 @@ class BeanModelPropertyProviderSpec extends Specification {
       ObjectMapper mapper = new ObjectMapper()
 
       def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver,
-            new AlternateTypeProvider(), new ObjectMapperBeanPropertyNamingStrategy(mapper), pluginsManager())
+              new AlternateTypeProvider(), new ObjectMapperBeanPropertyNamingStrategy(mapper), pluginsManager(),
+              Mock(TypeNameExtractor))
       beanModelPropertyProvider.objectMapper = mapper
       def serializationPropNames = beanModelPropertyProvider.propertiesFor(resolvedType,
               returnValue(resolvedType, DocumentationType.SWAGGER_12))

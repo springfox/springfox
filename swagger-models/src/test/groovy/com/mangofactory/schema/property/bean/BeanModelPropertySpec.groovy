@@ -1,29 +1,28 @@
 package com.mangofactory.schema.property.bean
-
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.mangofactory.schema.SchemaSpecification
+import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.schema.plugins.ModelContext
 import com.mangofactory.schema.property.ObjectMapperBeanPropertyNamingStrategy
-import com.mangofactory.schema.alternates.AlternateTypeProvider
 import com.mangofactory.service.model.AllowableListValues
 import com.mangofactory.swagger.mixins.ModelPropertyLookupSupport
-import com.mangofactory.swagger.mixins.ModelProviderSupport
 import com.mangofactory.swagger.mixins.TypesForTestingSupport
 import spock.lang.Ignore
-import spock.lang.Specification
 
 import static com.google.common.collect.Lists.*
+import static com.mangofactory.schema.plugins.ModelContext.fromParent
 import static com.mangofactory.schema.property.BeanPropertyDefinitions.*
 import static com.mangofactory.schema.property.bean.Accessors.*
 
-@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, ModelProviderSupport])
-class BeanModelPropertySpec extends Specification {
+@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport])
+class BeanModelPropertySpec extends SchemaSpecification {
 
   def "Extracting information from resolved properties"() {
 
     given:
       Class typeToTest = typeForTestingGettersAndSetters()
-      def modelContext = ModelContext.inputParam(typeToTest, documentationType())
+      def modelContext = ModelContext.inputParam(typeToTest, documentationType)
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -36,7 +35,7 @@ class BeanModelPropertySpec extends Specification {
     expect:
       sut.propertyDescription() == null
       !sut.required
-      sut.typeName(modelContext) == typeName
+      typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       sut.allowableValues() == null
 
@@ -53,7 +52,7 @@ class BeanModelPropertySpec extends Specification {
   def "Extracting information from ApiModelProperty annotation"() {
     given:
       Class typeToTest = typeForTestingAnnotatedGettersAndSetter()
-      def modelContext = ModelContext.inputParam(typeToTest, documentationType())
+      def modelContext = ModelContext.inputParam(typeToTest, documentationType)
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -65,7 +64,7 @@ class BeanModelPropertySpec extends Specification {
     expect:
       sut.propertyDescription() == description
       sut.required == required
-      sut.typeName(modelContext) == typeName
+      typeNameExtractor.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
 
       if (sut.allowableValues()) {
@@ -98,7 +97,7 @@ class BeanModelPropertySpec extends Specification {
               new TypeResolver(), new AlternateTypeProvider())
 
     expect:
-      sut.typeName(modelContext) == typeName
+      typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       sut.allowableValues() == null
 

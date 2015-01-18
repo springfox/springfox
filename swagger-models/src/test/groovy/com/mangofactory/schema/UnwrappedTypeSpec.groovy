@@ -22,24 +22,22 @@ class UnwrappedTypeSpec extends Specification {
       asInput.getProperties().size() == 1
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
-      modelProperty.typeName() == type
+      modelProperty.type.erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
       modelProperty.getItems() == null
-      Types.isBaseType(type)
 
       asReturn.getName() == "UnwrappedType"
       asReturn.getProperties().size() == 1
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.typeName() == type
+      retModelProperty.type.erasedType == type
       retModelProperty.getQualifiedType() == qualifiedType
       retModelProperty.getItems() == null
-      Types.isBaseType(type)
 
     where:
-      property    | type      | qualifiedType       | objectMapperToUse             | typeOfOM
-      "name"      | "string"  | "java.lang.String"  | objectMapperThatUsesFields()  | "fields"
-      "name"      | "string"  | "java.lang.String"  | objectMapperThatUsesGetters() | "getters"
-      "name"      | "string"  | "java.lang.String"  | objectMapperThatUsesSetters() | "setters"
+      property    | type    | qualifiedType       | objectMapperToUse             | typeOfOM
+      "name"      | String  | "java.lang.String"  | objectMapperThatUsesFields()  | "fields"
+      "name"      | String  | "java.lang.String"  | objectMapperThatUsesGetters() | "getters"
+      "name"      | String  | "java.lang.String"  | objectMapperThatUsesSetters() | "setters"
   }
 }

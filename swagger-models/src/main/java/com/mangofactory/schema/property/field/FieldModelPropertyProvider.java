@@ -12,12 +12,13 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import com.mangofactory.schema.TypeNameExtractor;
+import com.mangofactory.schema.alternates.AlternateTypeProvider;
+import com.mangofactory.schema.plugins.ModelContext;
 import com.mangofactory.schema.plugins.ModelPropertyContext;
 import com.mangofactory.schema.plugins.SchemaPluginsManager;
-import com.mangofactory.schema.property.BeanPropertyNamingStrategy;
-import com.mangofactory.schema.plugins.ModelContext;
-import com.mangofactory.schema.alternates.AlternateTypeProvider;
 import com.mangofactory.schema.property.BeanPropertyDefinitions;
+import com.mangofactory.schema.property.BeanPropertyNamingStrategy;
 import com.mangofactory.schema.property.provider.ModelPropertiesProvider;
 import com.mangofactory.service.model.ModelRef;
 import com.mangofactory.service.model.builder.ModelPropertyBuilder;
@@ -31,7 +32,7 @@ import java.util.Map;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.schema.Annotations.*;
 import static com.mangofactory.schema.Collections.*;
-import static com.mangofactory.schema.ResolvedTypes.*;
+import static com.mangofactory.schema.plugins.ModelContext.*;
 import static com.mangofactory.schema.property.BeanPropertyDefinitions.*;
 
 @Component
@@ -42,18 +43,21 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
   private final BeanPropertyNamingStrategy namingStrategy;
   private ObjectMapper objectMapper;
   private final SchemaPluginsManager schemaPluginsManager;
+  private final TypeNameExtractor typeNameExtractor;
 
   @Autowired
   public FieldModelPropertyProvider(
           FieldProvider fieldProvider,
           AlternateTypeProvider alternateTypeProvider,
           BeanPropertyNamingStrategy namingStrategy,
-          SchemaPluginsManager schemaPluginsManager) {
+          SchemaPluginsManager schemaPluginsManager,
+          TypeNameExtractor typeNameExtractor) {
 
     this.fieldProvider = fieldProvider;
     this.alternateTypeProvider = alternateTypeProvider;
     this.namingStrategy = namingStrategy;
     this.schemaPluginsManager = schemaPluginsManager;
+    this.typeNameExtractor = typeNameExtractor;
   }
 
   @VisibleForTesting
@@ -81,7 +85,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
             .required(fieldModelProperty.isRequired())
             .description(fieldModelProperty.propertyDescription())
             .allowableValues(fieldModelProperty.allowableValues())
-            .items(itemModelRef(fieldModelProperty.getType()));
+            .items(itemModelRef(fieldModelProperty.getType(), modelContext));
     return schemaPluginsManager.enrichProperty(new ModelPropertyContext(propertyBuilder,
             childField.getRawMember(),  modelContext.getDocumentationType()));
   }
@@ -107,12 +111,12 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
     }
     return serializationCandidates;
   }
-  private ModelRef itemModelRef(ResolvedType type) {
+  private ModelRef itemModelRef(ResolvedType type, ModelContext modelContext) {
     if (!isContainerType(type)) {
       return null;
     }
     ResolvedType collectionElementType = collectionElementType(type);
-    String elementTypeName = typeName(collectionElementType);
+    String elementTypeName =  typeNameExtractor.typeName(fromParent(modelContext, collectionElementType));
 
     return new ModelRef(elementTypeName);
   }

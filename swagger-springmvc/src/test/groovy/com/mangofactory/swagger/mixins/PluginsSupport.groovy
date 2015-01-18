@@ -1,7 +1,9 @@
 package com.mangofactory.swagger.mixins
 import com.fasterxml.classmate.TypeResolver
+import com.mangofactory.schema.DefaultTypeNameProvider
 import com.mangofactory.schema.plugins.DocumentationType
 import com.mangofactory.schema.plugins.ModelBuilderPlugin
+import com.mangofactory.schema.plugins.TypeNameProviderPlugin
 import com.mangofactory.schema.plugins.ModelPropertyBuilderPlugin
 import com.mangofactory.schema.plugins.SchemaPluginsManager
 import com.mangofactory.spring.web.ResourceGroupingStrategy
@@ -37,7 +39,10 @@ class PluginsSupport {
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
             OrderAwarePluginRegistry.create(newArrayList(new ApiModelBuilderPlugin(new TypeResolver())))
 
-    new SchemaPluginsManager(propRegistry, modelRegistry)
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+            OrderAwarePluginRegistry.create(newArrayList(new DefaultTypeNameProvider()))
+
+    new SchemaPluginsManager(propRegistry, modelRegistry, modelNameRegistry)
   }
 
   DocumentationPluginsManager springPluginsManager() {
