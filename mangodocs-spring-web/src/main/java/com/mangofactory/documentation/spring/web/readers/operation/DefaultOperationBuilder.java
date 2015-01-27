@@ -3,9 +3,12 @@ package com.mangofactory.documentation.spring.web.readers.operation;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class DefaultOperationBuilder implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {

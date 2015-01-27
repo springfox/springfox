@@ -9,7 +9,6 @@ import com.mangofactory.documentation.service.model.builder.ResponseMessageBuild
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -31,11 +30,10 @@ import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.schema.AlternateTypeRules.*;
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
-@Component
 public class Defaults {
 
   private HashSet<Class> ignored;

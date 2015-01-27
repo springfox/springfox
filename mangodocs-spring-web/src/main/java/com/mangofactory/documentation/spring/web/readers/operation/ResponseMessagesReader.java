@@ -10,6 +10,8 @@ import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,6 +26,7 @@ import static com.mangofactory.documentation.spring.web.HandlerMethodReturnTypes
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ResponseMessagesReader implements OperationBuilderPlugin {
 
   private final TypeResolver typeResolver;

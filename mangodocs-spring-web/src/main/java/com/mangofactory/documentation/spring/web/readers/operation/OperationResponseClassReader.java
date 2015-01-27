@@ -9,6 +9,8 @@ import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
@@ -16,6 +18,7 @@ import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 import static com.mangofactory.documentation.spring.web.HandlerMethodReturnTypes.*;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
   private final TypeResolver typeResolver;

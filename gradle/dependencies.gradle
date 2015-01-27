@@ -29,6 +29,7 @@ ext {
           ],
 
           spring        : [
+                  "org.springframework:spring-core:$spring",
                   "org.springframework:spring-web:$spring",
                   "org.springframework:spring-webmvc:$spring",
                   'org.springframework.plugin:spring-plugin-core:1.1.0.RELEASE',

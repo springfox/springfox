@@ -11,17 +11,14 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
 
 @Configuration
 @ComponentScan(basePackages = {
-        "com.mangofactory.documentation.schema.plugins",
-        "com.mangofactory.documentation.schema",
-        "com.mangofactory.swagger.plugins",
-        "com.mangofactory.documentation.swagger.dto.mappers"
+        "com.mangofactory.documentation.schema"
 })
 @EnablePluginRegistries({
         ModelBuilderPlugin.class,
         ModelPropertyBuilderPlugin.class,
         TypeNameProviderPlugin.class
 })
-public class SwaggerModelsConfiguration {
+public class ModelsConfiguration {
   @Bean
   public TypeResolver typeResolver() {
     return new TypeResolver();

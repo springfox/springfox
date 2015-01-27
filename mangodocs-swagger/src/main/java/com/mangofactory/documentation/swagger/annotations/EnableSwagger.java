@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.swagger.annotations;
 
-import com.mangofactory.documentation.swagger.configuration.SpringSwaggerConfig;
+import com.mangofactory.documentation.swagger.configuration.SwaggerSpringMvcDocumentationConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.Documented;
@@ -19,6 +19,6 @@ import java.lang.annotation.Target;
 @Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target(value = {java.lang.annotation.ElementType.TYPE})
 @Documented
-@Import(SpringSwaggerConfig.class)
+@Import(SwaggerSpringMvcDocumentationConfiguration.class)
 public @interface EnableSwagger {
 }

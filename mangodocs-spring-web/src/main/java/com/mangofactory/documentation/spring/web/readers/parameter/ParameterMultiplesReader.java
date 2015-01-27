@@ -4,9 +4,12 @@ import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.ParameterBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterMultiplesReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
