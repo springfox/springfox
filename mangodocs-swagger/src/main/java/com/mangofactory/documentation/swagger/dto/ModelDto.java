@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ModelDto {
 
@@ -13,7 +14,7 @@ public class ModelDto {
   private String name;
   @JsonIgnore
   private String qualifiedType;
-  private Map<String, ModelPropertyDto> properties;
+  private TreeMap<String, ModelPropertyDto> properties = new TreeMap<String, ModelPropertyDto>();
   private String description;
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private String baseModel;
@@ -30,7 +31,7 @@ public class ModelDto {
     this.id = id;
     this.name = name;
     this.qualifiedType = qualifiedType;
-    this.properties = properties;
+    this.properties.putAll(properties);
     this.description = description;
     this.baseModel = baseModel;
     this.discriminator = discriminator;
@@ -66,7 +67,7 @@ public class ModelDto {
   }
 
   public void setProperties(Map<String, ModelPropertyDto> properties) {
-    this.properties = properties;
+    this.properties.putAll(properties);
   }
 
   public String getDescription() {

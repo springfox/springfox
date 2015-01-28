@@ -116,6 +116,11 @@
             "description": "",
             "id": "Pet",
             "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
                 "id": {
                     "required": false,
                     "type": "string"
@@ -123,11 +128,6 @@
                 "name": {
                     "required": false,
                     "type": "string"
-                },
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
                 }
             }
         },

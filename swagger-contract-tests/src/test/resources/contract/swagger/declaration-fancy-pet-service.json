@@ -1,4 +1,3 @@
-
 {
     "apiVersion": "1.0",
     "swaggerVersion": "1.2",
@@ -11,6 +10,59 @@
 
     ],
     "apis": [
+        {
+            "path": "/fancypets",
+            "description": "updatePet",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "updatePet",
+                    "notes": "updatePet",
+                    "nickname": "updatePet",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "defaultValue": "",
+                            "description": "pet",
+                            "name": "body",
+                            "paramType": "body",
+                            "type": "Pet",
+                            "required": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
+                }
+            ]
+        },
         {
             "path": "/fancypets",
             "description": "createObject",
@@ -63,59 +115,6 @@
                     "deprecated": "false",
                     "format": "int32",
                     "type": "integer"
-                }
-            ]
-        },
-        {
-            "path": "/fancypets",
-            "description": "updatePet",
-            "operations": [
-                {
-                    "method": "PUT",
-                    "summary": "updatePet",
-                    "notes": "updatePet",
-                    "nickname": "updatePet",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "pet",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "Pet",
-                            "required": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "void"
                 }
             ]
         },
@@ -190,6 +189,11 @@
             "description": "",
             "id": "Pet",
             "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
                 "id": {
                     "required": false,
                     "type": "string"
@@ -197,11 +201,6 @@
                 "name": {
                     "required": false,
                     "type": "string"
-                },
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
                 }
             }
         },
@@ -216,6 +215,11 @@
             "description": "",
             "id": "FancyPet",
             "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
                 "id": {
                     "required": false,
                     "type": "string"
@@ -223,11 +227,6 @@
                 "name": {
                     "required": false,
                     "type": "string"
-                },
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
                 }
             }
         }

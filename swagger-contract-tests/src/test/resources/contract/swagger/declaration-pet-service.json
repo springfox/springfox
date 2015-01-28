@@ -12,6 +12,64 @@
     "apis": [
         {
             "path": "/pets",
+            "description": "addPet",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Add a new pet to the store",
+                    "notes": "addPet",
+                    "nickname": "addPet",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "defaultValue": "",
+                            "description": "Pet object that needs to be added to the store",
+                            "name": "body",
+                            "paramType": "body",
+                            "type": "Pet",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        },
+                        {
+                            "code": 405,
+                            "message": "Invalid input",
+                            "responseModel": "Void"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
+                }
+            ]
+        },
+        {
+            "path": "/pets",
             "description": "updatePet",
             "operations": [
                 {
@@ -117,64 +175,6 @@
                         "type": "Pet"
                     },
                     "uniqueItems": false
-                }
-            ]
-        },
-        {
-            "path": "/pets",
-            "description": "addPet",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "Add a new pet to the store",
-                    "notes": "addPet",
-                    "nickname": "addPet",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "Pet object that needs to be added to the store",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "Pet",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        },
-                        {
-                            "code": 405,
-                            "message": "Invalid input",
-                            "responseModel": "Void"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "void"
                 }
             ]
         },
@@ -961,6 +961,11 @@
             "description": "",
             "id": "Pet",
             "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
                 "id": {
                     "required": false,
                     "type": "string"
@@ -968,11 +973,6 @@
                 "name": {
                     "required": false,
                     "type": "string"
-                },
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
                 }
             }
         },
