@@ -6,11 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.base.Function;
+import com.google.common.primitives.Ints;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 
+import static com.google.common.collect.ImmutableSortedSet.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 
@@ -37,7 +41,7 @@ public class Operation {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private Map<String, List<AuthorizationScope>> authorizations;
   private List<Parameter> parameters;
-  private Set<ResponseMessage> responseMessages;
+  private SortedSet<ResponseMessage> responseMessages;
   private String deprecated;
 
   public Operation() {
@@ -60,8 +64,17 @@ public class Operation {
     this.protocol = protocol;
     this.authorizations = toAuthorizationsMap(authorizations);
     this.parameters = parameters;
-    this.responseMessages = responseMessages;
+    this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
     this.deprecated = deprecated;
+  }
+
+  private Comparator<ResponseMessage> responseMessageOrdering() {
+    return new Comparator<ResponseMessage>() {
+      @Override
+      public int compare(ResponseMessage first, ResponseMessage second) {
+        return Ints.compare(first.getCode(), second.getCode());
+      }
+    };
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {
@@ -179,7 +192,7 @@ public class Operation {
   }
 
   public void setResponseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = responseMessages;
+    this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
   }
 
   public String getDeprecated() {

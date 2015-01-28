@@ -1,4 +1,3 @@
-
 {
     "apiVersion": "1.0",
     "swaggerVersion": "1.2",
@@ -44,16 +43,16 @@
                             "responseModel": "string"
                         },
                         {
-                            "code": 404,
-                            "message": "Not Found"
+                            "code": 401,
+                            "message": "Unauthorized"
                         },
                         {
                             "code": 403,
                             "message": "Forbidden"
                         },
                         {
-                            "code": 401,
-                            "message": "Unauthorized"
+                            "code": 404,
+                            "message": "Not Found"
                         }
                     ],
                     "deprecated": "false",
