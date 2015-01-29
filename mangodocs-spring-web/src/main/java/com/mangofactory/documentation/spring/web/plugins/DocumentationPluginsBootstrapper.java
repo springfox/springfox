@@ -2,14 +2,13 @@ package com.mangofactory.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.documentation.spi.DocumentationType;
-import com.mangofactory.documentation.spi.service.contexts.Defaults;
-import com.mangofactory.documentation.spi.service.contexts.DocumentationContextBuilder;
 import com.mangofactory.documentation.spi.service.DocumentationPlugin;
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;
+import com.mangofactory.documentation.spi.service.contexts.Defaults;
+import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
+import com.mangofactory.documentation.spi.service.contexts.DocumentationContextBuilder;
 import com.mangofactory.documentation.spring.web.GroupCache;
-import com.mangofactory.documentation.spring.web.RelativePathProvider;
 import com.mangofactory.documentation.spring.web.scanners.ApiGroupScanner;
-import com.mangofactory.documentation.spring.web.scanners.RegexRequestMappingPatternMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +34,10 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
   private final DocumentationPluginsManager documentationPluginsManager;
   private final GroupCache scanned;
   private final ApiGroupScanner resourceListing;
+  private final DefaultConfiguration defaultConfigurer;
   private final List<RequestMappingHandlerMapping> handlerMappings;
-  private final Defaults defaults;
-  private final ServletContext servletContext;
+
   private AtomicBoolean initialized = new AtomicBoolean(false);
-  private final TypeResolver typeResolver;
 
   @Autowired
   public DocumentationPluginsBootstrapper(DocumentationPluginsManager documentationPluginsManager,
@@ -51,12 +49,11 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
         ServletContext servletContext) {
 
     this.documentationPluginsManager = documentationPluginsManager;
-    this.handlerMappings = handlerMappings;
     this.scanned = scanned;
     this.resourceListing = resourceListing;
-    this.typeResolver = typeResolver;
-    this.defaults = defaults;
-    this.servletContext = servletContext;
+    this.handlerMappings = handlerMappings;
+    this.defaultConfigurer
+            = new DefaultConfiguration(defaults, typeResolver, servletContext);
   }
 
   @Override
@@ -68,7 +65,7 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
       for (DocumentationPlugin each : plugins) {
         DocumentationType documentationType = each.getDocumentationType();
         if (each.isEnabled()) {
-          scanDocumentation(each);
+          scanDocumentation(buildContext(each));
         } else {
           log.info("Skipping initializing disabled plugin bean {} v{}",
                   documentationType.getName(), documentationType.getVersion());
@@ -77,21 +74,27 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
     }
   }
 
-  private void scanDocumentation(DocumentationPlugin each) {
+  private DocumentationContext buildContext(DocumentationPlugin each) {
+    DocumentationContextBuilder contextBuilder = defaultContextBuilder(each);
+    each.configure(contextBuilder); //TODO:refactor this to one method call
+    return contextBuilder.build();
+  }
+
+  private void scanDocumentation(DocumentationContext context) {
+    scanned.addGroup(resourceListing.scan(context));
+  }
+
+  private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin each) {
     DocumentationType documentationType = each.getDocumentationType();
+
     ResourceGroupingStrategy resourceGroupingStrategy
             = documentationPluginsManager.resourceGroupingStrategy(documentationType);
-
-    DocumentationContextBuilder contextBuilder = new DocumentationContextBuilder(defaults)
-            .withDocumentationType(documentationType)
-            .withHandlerMappings(handlerMappings)
-            .typeResolver(typeResolver)
-            .pathProvider(new RelativePathProvider(servletContext))
-            .requestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
-            .withResourceGroupingStrategy(resourceGroupingStrategy);
-
-    each.configure(contextBuilder);
-    scanned.addGroup(resourceListing.scan(contextBuilder.build()));
+    DocumentationContextBuilder contextBuilder = new DocumentationContextBuilder();
+    defaultConfigurer.configure(contextBuilder);
+    contextBuilder
+            .withResourceGroupingStrategy(resourceGroupingStrategy)
+            .withHandlerMappings(handlerMappings);
+    return contextBuilder;
   }
 
 }

@@ -33,7 +33,6 @@ import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
 
 public class DocumentationContextBuilder {
-  private final Defaults defaults;
 
   private TypeResolver typeResolver;
   private List<RequestMappingHandlerMapping> handlerMappings;
@@ -49,26 +48,13 @@ public class DocumentationContextBuilder {
   private RequestMappingPatternMatcher requestMappingPatternMatcher;
   private Ordering<Operation> operationOrdering;
 
+  private boolean applyDefaultResponseMessages;
   private Set<Class> ignorableParameterTypes = newHashSet();
   private Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
   private Set<Class<? extends Annotation>> excludeAnnotations = newHashSet();
   private Set<String> includePatterns = newHashSet();
-  private boolean applyDefaultResponseMessages;
-  private List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
-  private List<AlternateTypeRule> explicitRules = newArrayList();
-
-
-  public DocumentationContextBuilder(Defaults defaults) {
-    this.defaults = defaults;
-    this.operationOrdering = defaults.operationOrdering();
-    this.apiDescriptionOrdering = defaults.apiDescriptionOrdering();
-    this.listingReferenceOrdering = defaults.apiListingReferenceOrdering();
-    this.ignorableParameterTypes.addAll(defaults.defaultIgnorableParameterTypes());
-  }
-
-  public Defaults getDefaults() {
-    return defaults;
-  }
+  private List<AlternateTypeRule> rules = newArrayList();
+  private Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
 
   public DocumentationContextBuilder withHandlerMappings(List<RequestMappingHandlerMapping> handlerMappings) {
     this.handlerMappings = handlerMappings;
@@ -134,27 +120,13 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContext build() {
-    excludeAnnotations.addAll(defaults.defaultExcludeAnnotations());
-    RequestMappingEvaluator requestMappingEvaluator
-            = new RequestMappingEvaluator(requestMappingPatternMatcher, excludeAnnotations, includePatterns);
-    Map<RequestMethod, List<ResponseMessage>> responseMessages = newTreeMap();
+  private Map<RequestMethod, List<ResponseMessage>> aggregateResponseMessages() {
+    Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
     if (applyDefaultResponseMessages) {
-      responseMessages.putAll(defaults.defaultResponseMessages());
+      responseMessages.putAll(defaultResponseMessages);
     }
     responseMessages.putAll(responseMessageOverrides);
-    if (authorizationContext == null) {
-      authorizationContext = new AuthorizationContext.AuthorizationContextBuilder()
-              .withAuthorizations(new ArrayList<Authorization>())
-              .withIncludePatterns(includePatterns)
-              .withRequestMappingPatternMatcher(requestMappingPatternMatcher)
-              .build();
-    }
-    return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName, requestMappingEvaluator,
-            ignorableParameterTypes, responseMessages, resourceGroupingStrategy, pathProvider,
-            authorizationContext, authorizationTypes, collectAlternateTypeRules(typeResolver),
-            listingReferenceOrdering, apiDescriptionOrdering,
-            operationOrdering);
+    return responseMessages;
   }
 
   public DocumentationContextBuilder additionalExcludedAnnotations(
@@ -184,7 +156,9 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder ruleBuilders(List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders) {
-    this.ruleBuilders.addAll(ruleBuilders);
+    rules.addAll(from(ruleBuilders)
+            .transform(evaluator(typeResolver))
+            .toList());
     return this;
   }
 
@@ -198,14 +172,34 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-
-  private List<AlternateTypeRule> collectAlternateTypeRules(TypeResolver typeResolver) {
-    explicitRules.addAll(defaults.defaultRules(typeResolver));
-    explicitRules.addAll(from(this.ruleBuilders)
-            .transform(evaluator(typeResolver))
-            .toList());
-    return explicitRules;
+  public DocumentationContextBuilder rules(List<AlternateTypeRule> rules) {
+    this.rules.addAll(rules);
+    return this;
   }
+
+  public DocumentationContextBuilder defaultResponseMessages(
+          Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages) {
+    this.defaultResponseMessages.putAll(defaultResponseMessages);
+    return this;
+  }
+
+  public DocumentationContext build() {
+    RequestMappingEvaluator requestMappingEvaluator
+            = new RequestMappingEvaluator(requestMappingPatternMatcher, excludeAnnotations, includePatterns);
+    Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
+    AuthorizationContext authorizationContext = fromNullable(this.authorizationContext)
+            .or(new AuthorizationContext.AuthorizationContextBuilder()
+                    .withAuthorizations(new ArrayList<Authorization>())
+                    .withIncludePatterns(includePatterns)
+                    .withRequestMappingPatternMatcher(requestMappingPatternMatcher)
+                    .build());
+    return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName, requestMappingEvaluator,
+            ignorableParameterTypes, responseMessages, resourceGroupingStrategy, pathProvider,
+            authorizationContext, authorizationTypes, rules,
+            listingReferenceOrdering, apiDescriptionOrdering,
+            operationOrdering);
+  }
+
 
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>
   evaluator(final TypeResolver typeResolver) {
