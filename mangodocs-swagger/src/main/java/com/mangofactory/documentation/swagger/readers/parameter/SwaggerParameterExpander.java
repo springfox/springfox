@@ -19,6 +19,7 @@ import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.documentation.swagger.annotations.Annotations.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 import static com.mangofactory.documentation.swagger.schema.ApiModelProperties.*;
 import static com.mangofactory.documentation.swagger.readers.parameter.ParameterAllowableReader.*;
 
@@ -39,7 +40,7 @@ public class SwaggerParameterExpander implements ParameterExpanderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {

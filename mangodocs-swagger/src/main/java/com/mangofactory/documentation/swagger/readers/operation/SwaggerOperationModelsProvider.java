@@ -17,6 +17,7 @@ import org.springframework.web.method.HandlerMethod;
 
 import static com.mangofactory.documentation.schema.ResolvedTypes.*;
 import static com.mangofactory.documentation.swagger.annotations.Annotations.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
 public class SwaggerOperationModelsProvider implements OperationModelsProviderPlugin {
@@ -37,7 +38,7 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 
   private void collectFromApiOperation(RequestMappingContext context) {

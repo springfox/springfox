@@ -11,6 +11,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
+
 @Component
 public class OperationHttpMethodReader implements OperationBuilderPlugin {
   private static final Logger log = LoggerFactory.getLogger(OperationHttpMethodReader.class);
@@ -34,6 +36,6 @@ public class OperationHttpMethodReader implements OperationBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 }

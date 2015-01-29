@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
@@ -23,6 +24,6 @@ public class ApiModelTypeNameProvider extends DefaultTypeNameProvider {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 }

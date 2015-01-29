@@ -7,6 +7,8 @@ import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
+
 @Component("swaggerParameterMultiplesReader")
 public class ParameterMultiplesReader implements ParameterBuilderPlugin {
   @Override
@@ -26,6 +28,6 @@ public class ParameterMultiplesReader implements ParameterBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 }

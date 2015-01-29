@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
+
 @Component("swaggerParameterRequiredReader")
 public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
@@ -23,7 +25,7 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 
   private Optional<Boolean> getAnnotatedRequired(MethodParameter methodParameter) {

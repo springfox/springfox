@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ValueConstants;
 import java.lang.annotation.Annotation;
 
 import static com.google.common.base.Strings.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 import static org.springframework.util.StringUtils.*;
 
 @Component("swaggerParameterDefaultReader")
@@ -27,7 +28,7 @@ public class ParameterDefaultReader implements ParameterBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 
   private String findAnnotatedDefaultValue(MethodParameter methodParameter) {

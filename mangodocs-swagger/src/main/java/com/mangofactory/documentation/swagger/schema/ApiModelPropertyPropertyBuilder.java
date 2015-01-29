@@ -8,10 +8,11 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.springframework.stereotype.Component;
 
 import static com.mangofactory.documentation.schema.Annotations.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 import static com.mangofactory.documentation.swagger.schema.ApiModelProperties.*;
 
 @Component
-public class ApiModelPropertyPropertyBuilderPlugin implements ModelPropertyBuilderPlugin {
+public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlugin {
   @Override
   public void apply(ModelPropertyContext context) {
     Optional<ApiModelProperty> annotation = Optional.absent();
@@ -33,6 +34,6 @@ public class ApiModelPropertyPropertyBuilderPlugin implements ModelPropertyBuild
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;//TODO
+    return pluginDoesApply(delimiter);
   }
 }

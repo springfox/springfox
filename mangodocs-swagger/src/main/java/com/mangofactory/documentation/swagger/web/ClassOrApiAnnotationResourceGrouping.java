@@ -18,6 +18,7 @@ import java.util.Set;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Sets.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 import static org.springframework.util.StringUtils.*;
 
 @Component
@@ -53,7 +54,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 
   private String getClassOrApiAnnotationValue(HandlerMethod handlerMethod) {

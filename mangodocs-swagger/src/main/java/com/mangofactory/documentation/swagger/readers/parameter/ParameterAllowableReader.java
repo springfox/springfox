@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 import static org.springframework.util.StringUtils.*;
 
 @Component("swaggerParameterAllowableReader")
@@ -63,7 +64,7 @@ public class ParameterAllowableReader implements ParameterBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 
   private String findAnnotatedAllowableValues(MethodParameter methodParameter) {

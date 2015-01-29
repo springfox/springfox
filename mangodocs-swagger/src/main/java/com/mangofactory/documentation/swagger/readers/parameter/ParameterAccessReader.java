@@ -8,6 +8,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 
 import static com.google.common.base.Strings.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component("swaggerParameterAccessReader")
 public class ParameterAccessReader implements ParameterBuilderPlugin {
@@ -23,6 +24,6 @@ public class ParameterAccessReader implements ParameterBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 }

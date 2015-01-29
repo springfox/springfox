@@ -16,6 +16,7 @@ import org.springframework.web.method.HandlerMethod;
 
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 import static com.mangofactory.documentation.spring.web.HandlerMethodReturnTypes.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component("swaggerOperationClassReader")
 public class OperationResponseClassReader implements OperationBuilderPlugin {
@@ -55,6 +56,6 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 }

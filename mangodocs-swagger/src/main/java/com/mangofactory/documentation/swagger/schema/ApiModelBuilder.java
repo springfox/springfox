@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
+
 @Component
-public class ApiModelBuilderPlugin implements ModelBuilderPlugin {
+public class ApiModelBuilder implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
 
   @Autowired
-  public ApiModelBuilderPlugin(TypeResolver typeResolver) {
+  public ApiModelBuilder(TypeResolver typeResolver) {
     this.typeResolver = typeResolver;
   }
 
@@ -35,6 +37,6 @@ public class ApiModelBuilderPlugin implements ModelBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 }

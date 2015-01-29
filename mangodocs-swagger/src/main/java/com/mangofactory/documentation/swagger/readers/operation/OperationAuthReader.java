@@ -18,6 +18,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
 public class OperationAuthReader implements OperationBuilderPlugin {
@@ -74,6 +75,6 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 }

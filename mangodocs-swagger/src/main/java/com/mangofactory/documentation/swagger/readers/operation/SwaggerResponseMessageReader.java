@@ -1,15 +1,13 @@
 package com.mangofactory.documentation.swagger.readers.operation;
 
-import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
-import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.service.model.ResponseMessage;
 import com.mangofactory.documentation.service.model.builder.ResponseMessageBuilder;
+import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
@@ -17,16 +15,10 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.swagger.annotations.Annotations.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
 public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
-
-  private final TypeResolver typeResolver;
-
-  @Autowired
-  public SwaggerResponseMessageReader(TypeResolver typeResolver) {
-    this.typeResolver = typeResolver;
-  }
 
   @Override
   public void apply(OperationContext context) {
@@ -38,7 +30,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 
   protected Set<ResponseMessage> read(HandlerMethod handlerMethod) {

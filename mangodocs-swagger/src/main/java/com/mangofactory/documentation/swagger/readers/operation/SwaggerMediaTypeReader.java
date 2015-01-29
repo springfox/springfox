@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static com.google.common.base.Strings.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
@@ -25,7 +26,7 @@ public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
 
 

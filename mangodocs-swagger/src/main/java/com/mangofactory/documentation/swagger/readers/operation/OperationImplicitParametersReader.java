@@ -14,6 +14,8 @@ import org.springframework.web.method.HandlerMethod;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
+
 @Component
 public class OperationImplicitParametersReader implements OperationBuilderPlugin {
 
@@ -24,8 +26,9 @@ public class OperationImplicitParametersReader implements OperationBuilderPlugin
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true;
+    return pluginDoesApply(delimiter);
   }
+
   protected List<Parameter> readParameters(OperationContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     Method method = handlerMethod.getMethod();

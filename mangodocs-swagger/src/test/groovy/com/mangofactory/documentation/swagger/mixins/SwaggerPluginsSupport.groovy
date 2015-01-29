@@ -19,8 +19,8 @@ import com.mangofactory.documentation.spring.web.readers.operation.OperationMode
 import com.mangofactory.documentation.spring.web.readers.parameter.ParameterExpander
 import com.mangofactory.documentation.swagger.readers.operation.SwaggerOperationModelsProvider
 import com.mangofactory.documentation.swagger.readers.parameter.SwaggerParameterExpander
-import com.mangofactory.documentation.swagger.schema.ApiModelBuilderPlugin
-import com.mangofactory.documentation.swagger.schema.ApiModelPropertyPropertyBuilderPlugin
+import com.mangofactory.documentation.swagger.schema.ApiModelBuilder
+import com.mangofactory.documentation.swagger.schema.ApiModelPropertyPropertyBuilder
 import com.mangofactory.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
@@ -31,10 +31,10 @@ import static com.google.common.collect.Lists.*
 class SwaggerPluginsSupport {
   SchemaPluginsManager swaggerSchemaPlugins() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new ApiModelPropertyPropertyBuilderPlugin()))
+            OrderAwarePluginRegistry.create(newArrayList(new ApiModelPropertyPropertyBuilder()))
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new ApiModelBuilderPlugin(new TypeResolver())))
+            OrderAwarePluginRegistry.create(newArrayList(new ApiModelBuilder(new TypeResolver())))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
             OrderAwarePluginRegistry.create(newArrayList(new DefaultTypeNameProvider()))

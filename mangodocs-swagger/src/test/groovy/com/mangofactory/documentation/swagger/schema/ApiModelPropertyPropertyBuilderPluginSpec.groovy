@@ -19,7 +19,7 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
 
   def "ApiModelProperty annotated models get enriched with additional info given a bean property" (){
     given:
-      ApiModelPropertyPropertyBuilderPlugin sut = new ApiModelPropertyPropertyBuilderPlugin()
+      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
       def properties = beanDescription.findProperties()
       def context = new ModelPropertyContext(new ModelPropertyBuilder(),
               properties.find { it.name == property },
@@ -41,7 +41,7 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
 
   def "ApiModelProperty annotated models get enriched with additional info given an annotated element" (){
     given:
-      ApiModelPropertyPropertyBuilderPlugin sut = new ApiModelPropertyPropertyBuilderPlugin()
+      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
       def properties = beanDescription.findProperties()
       def context = new ModelPropertyContext(new ModelPropertyBuilder(),
               properties.find { it.name == property }.getter.annotated,
