@@ -5,11 +5,10 @@ import com.mangofactory.documentation.service.model.ApiKey
 import com.mangofactory.documentation.service.model.ApiListingReference
 import com.mangofactory.documentation.service.model.Group
 import com.mangofactory.documentation.service.model.ResourceListing
+import com.mangofactory.documentation.spi.service.contexts.Defaults
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
 import com.mangofactory.documentation.spring.web.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
-import com.mangofactory.documentation.spring.web.ordering.ResourceListingLexicographicalOrdering
-import com.mangofactory.documentation.spring.web.ordering.ResourceListingPositionalOrdering
 import com.mangofactory.documentation.swagger.web.AbsolutePathProvider
 
 import static com.google.common.collect.Maps.*
@@ -111,6 +110,7 @@ class ApiGroupScannerSpec extends DocumentationContextSpec {
 
   def "Should sort based on position"() {
     given:
+      def ordering = new Defaults().apiListingReferenceOrdering()
       plugin
               .groupName("groupName")
               .includePatterns(".*")
@@ -119,6 +119,7 @@ class ApiGroupScannerSpec extends DocumentationContextSpec {
 
       def refs = [
             new ApiListingReference("/b", 'b', 1),
+            new ApiListingReference("/c", 'c', 2),
             new ApiListingReference("/a", 'a', 2)
       ]
       listingReferenceScanner.scan(_) >>
@@ -128,12 +129,13 @@ class ApiGroupScannerSpec extends DocumentationContextSpec {
       Group scanned = swaggerApiResourceListing.scan(context())
       def apis = scanned.resourceListing.getApis()
     then:
-      apis[0].position == firstPosition
-      apis[0].path == firstPath
+      apis[index].position == position
+      apis[index].path == path
 
     where:
-      ordering                                     | firstPath | firstPosition
-      new ResourceListingPositionalOrdering()      | '/b'      | 1
-      new ResourceListingLexicographicalOrdering() | '/a'      | 2
+      index | path  | position
+      0     | '/b' | 1
+      1     | '/a' | 2
+      2     | '/c' | 2
   }
 }

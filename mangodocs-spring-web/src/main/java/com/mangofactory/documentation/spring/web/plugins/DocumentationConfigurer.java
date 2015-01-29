@@ -11,14 +11,12 @@ import com.mangofactory.documentation.service.model.ApiDescription;
 import com.mangofactory.documentation.service.model.ApiInfo;
 import com.mangofactory.documentation.service.model.ApiListingReference;
 import com.mangofactory.documentation.service.model.AuthorizationType;
+import com.mangofactory.documentation.service.model.Operation;
 import com.mangofactory.documentation.service.model.ResponseMessage;
-import com.mangofactory.documentation.service.model.builder.ApiInfoBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.DocumentationPlugin;
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContextBuilder;
-import com.mangofactory.documentation.spring.web.ordering.ApiDescriptionLexicographicalOrdering;
-import com.mangofactory.documentation.spring.web.ordering.ResourceListingLexicographicalOrdering;
 import com.mangofactory.documentation.spring.web.scanners.RegexRequestMappingPatternMatcher;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -43,6 +41,7 @@ import static org.springframework.util.StringUtils.*;
  */
 public class DocumentationConfigurer implements DocumentationPlugin {
 
+  private static final String DEFAULT_GROUP_NAME = "default";
   private final DocumentationType documentationType;
   private String groupName;
   private ApiInfo apiInfo;
@@ -59,8 +58,9 @@ public class DocumentationConfigurer implements DocumentationPlugin {
   private Set<Class> ignorableParameterTypes = newHashSet();
   private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
   private List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
-  private Ordering<ApiListingReference> apiListingReferenceOrdering = new ResourceListingLexicographicalOrdering();
-  private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
+  private Ordering<ApiListingReference> apiListingReferenceOrdering;
+  private Ordering<ApiDescription> apiDescriptionOrdering;
+  private Ordering<Operation> operationOrdering;
 
 
   public DocumentationConfigurer(DocumentationType documentationType) {
@@ -209,6 +209,10 @@ public class DocumentationConfigurer implements DocumentationPlugin {
     return this;
   }
 
+  public void setOperationOrdering(Ordering<Operation> operationOrdering) {
+    this.operationOrdering = operationOrdering;
+  }
+
   private Function<AlternateTypeRule, Function<TypeResolver, AlternateTypeRule>> identityRuleBuilder() {
     return new Function<AlternateTypeRule, Function<TypeResolver, AlternateTypeRule>>() {
       @Override
@@ -337,7 +341,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    */
   public void configure(DocumentationContextBuilder builder) {
     if (initialized.compareAndSet(false, true)) {
-      configureDefaults(builder);
+      configureDefaults();
     }
     builder
             .apiInfo(apiInfo)
@@ -353,7 +357,8 @@ public class DocumentationConfigurer implements DocumentationPlugin {
             .authorizationContext(authorizationContext)
             .authorizationTypes(authorizationTypes)
             .apiListingReferenceOrdering(apiListingReferenceOrdering)
-            .apiDescriptionOrdering(apiDescriptionOrdering);
+            .apiDescriptionOrdering(apiDescriptionOrdering)
+            .operationOrdering(operationOrdering);
   }
 
   public boolean isEnabled() {
@@ -389,27 +394,14 @@ public class DocumentationConfigurer implements DocumentationPlugin {
     };
   }
 
-  private ApiInfo defaultApiInfo() {
-    return new ApiInfoBuilder()
-            .version("1.0")
-            .title(this.groupName + " Title")
-            .description("Api Description")
-            .termsOfServiceUrl("Api terms of service")
-            .contact("Contact Email")
-            .license("Licence Type")
-            .licenseUrl("License URL")
-            .build();
-  }
-
-  private void configureDefaults(DocumentationContextBuilder defaults) {
+  private void configureDefaults() {
     if (!hasText(this.groupName)) {
-      this.groupName = "default";
+      this.groupName = DEFAULT_GROUP_NAME;
     }
 
     if (null == this.apiInfo) {
-      this.apiInfo = defaultApiInfo();
+      this.apiInfo = ApiInfo.DEFAULT;
     }
   }
-
 
 }

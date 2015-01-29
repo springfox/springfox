@@ -12,6 +12,64 @@
     "apis": [
         {
             "path": "/pets",
+            "description": "addPet",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Add a new pet to the store",
+                    "notes": "addPet",
+                    "nickname": "addPet",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "defaultValue": "",
+                            "description": "Pet object that needs to be added to the store",
+                            "name": "body",
+                            "paramType": "body",
+                            "type": "Pet",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        },
+                        {
+                            "code": 405,
+                            "message": "Invalid input",
+                            "responseModel": "Void"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
+                }
+            ]
+        },
+        {
+            "path": "/pets",
             "description": "updatePet",
             "operations": [
                 {
@@ -66,64 +124,6 @@
                         {
                             "code": 405,
                             "message": "Validation exception",
-                            "responseModel": "Void"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "void"
-                }
-            ]
-        },
-        {
-            "path": "/pets",
-            "description": "addPet",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "Add a new pet to the store",
-                    "notes": "addPet",
-                    "nickname": "addPet",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "Pet object that needs to be added to the store",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "Pet",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        },
-                        {
-                            "code": 405,
-                            "message": "Invalid input",
                             "responseModel": "Void"
                         }
                     ],

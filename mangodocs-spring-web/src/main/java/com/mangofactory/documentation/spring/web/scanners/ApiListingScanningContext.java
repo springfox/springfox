@@ -1,9 +1,11 @@
 package com.mangofactory.documentation.spring.web.scanners;
 
+import com.google.common.collect.Ordering;
+import com.mangofactory.documentation.service.model.ApiDescription;
+import com.mangofactory.documentation.service.model.ResourceGroup;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;
-import com.mangofactory.documentation.service.model.ResourceGroup;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,10 @@ public class ApiListingScanningContext {
 
   public DocumentationContext getDocumentationContext() {
     return documentationContext;
+  }
+
+  public Ordering<ApiDescription> apiDescriptionOrdering() {
+    return documentationContext.getApiDescriptionOrdering();
   }
 
   public DocumentationType getDocumentationType() {

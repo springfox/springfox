@@ -17,11 +17,12 @@ public class ApiListing {
   private String resourcePath;
   private List<String> produces;
   private List<String> consumes;
+  private List<ApiDescription> apis;
+
   @JsonIgnore
   private List<String> protocol;
   @JsonInclude(Include.NON_EMPTY)
   private List<Authorization> authorizations;
-  private List<ApiDescription> apis;
   @JsonInclude(Include.NON_EMPTY)
   private Map<String, ModelDto> models;
   @JsonIgnore

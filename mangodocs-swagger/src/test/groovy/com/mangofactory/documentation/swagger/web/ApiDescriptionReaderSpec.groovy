@@ -1,30 +1,30 @@
 package com.mangofactory.documentation.swagger.web
-
 import com.mangofactory.documentation.service.model.ApiDescription
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
-import com.mangofactory.documentation.spring.web.scanners.ApiDescriptionReader
-import com.mangofactory.documentation.spring.web.readers.operation.ApiOperationReader
-import com.mangofactory.documentation.swagger.mixins.SwaggerPathProviderSupport
 import com.mangofactory.documentation.spring.web.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
+import com.mangofactory.documentation.spring.web.readers.operation.ApiOperationReader
+import com.mangofactory.documentation.spring.web.scanners.ApiDescriptionReader
+import com.mangofactory.documentation.swagger.mixins.SwaggerPathProviderSupport
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 
-import static com.mangofactory.documentation.spring.web.scanners.ApiDescriptionReader.sanitizeRequestMappingPattern
-
+import static com.mangofactory.documentation.spring.web.scanners.ApiDescriptionReader.*
 
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
 class ApiDescriptionReaderSpec extends DocumentationContextSpec {
-  ApiDescriptionReader sut = new ApiDescriptionReader(Mock(ApiOperationReader))
 
    def "should generate an api description for each request mapping pattern"() {
       given:
+        def operationReader = Mock(ApiOperationReader)
+        ApiDescriptionReader sut = new ApiDescriptionReader(operationReader)
+      and:
         plugin.pathProvider(pathProvider)
         RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
                 [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
         )
         RequestMappingContext mappingContext = new RequestMappingContext(context(), requestMappingInfo,
                 dummyHandlerMethod())
-
+        operationReader.read(_) >> []
       when:
         def descriptionList = sut.read(mappingContext)
 

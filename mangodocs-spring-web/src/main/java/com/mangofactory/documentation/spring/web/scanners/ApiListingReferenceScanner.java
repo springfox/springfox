@@ -1,14 +1,13 @@
 package com.mangofactory.documentation.spring.web.scanners;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimaps;
-import com.mangofactory.documentation.service.model.ApiListingReference;
-import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
-import com.mangofactory.documentation.service.RequestMappingEvaluator;
-import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;
 import com.mangofactory.documentation.service.PathProvider;
-import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;
+import com.mangofactory.documentation.service.RequestMappingEvaluator;
+import com.mangofactory.documentation.service.model.ApiListingReference;
 import com.mangofactory.documentation.service.model.ResourceGroup;
+import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;
+import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
+import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -23,6 +22,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Multimaps.*;
 
 @Component
 public class ApiListingReferenceScanner {
@@ -76,6 +76,7 @@ public class ApiListingReferenceScanner {
               path, resourceGroupName, position);
       apiListingReferences.add(new ApiListingReference(path, listingDescription, position));
     }
-    return new ApiListingReferenceScanResult(apiListingReferences, Multimaps.asMap(resourceGroupRequestMappings));
+    List<ApiListingReference> sorted = context.getListingReferenceOrdering().sortedCopy(apiListingReferences);
+    return new ApiListingReferenceScanResult(sorted,  asMap(resourceGroupRequestMappings));
   }
 }

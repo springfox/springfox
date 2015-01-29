@@ -69,7 +69,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
         .path("/api-path")
         .operations([operation1])
         .build()
-      def built = new ApiListingBuilder()
+      def built = new ApiListingBuilder(new Defaults().apiDescriptionOrdering())
                   .apis([description])
                   .apiVersion("1.0")
                   .authorizations(null)

@@ -74,7 +74,7 @@ public class ApiListingScanner {
 
       String apiVersion = "1.0";
       PathProvider pathProvider = context.getDocumentationContext().getPathProvider();
-      ApiListingBuilder apiListingBuilder = new ApiListingBuilder()
+      ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
               .apiVersion(apiVersion)
               .basePath(pathProvider.getApplicationBasePath())
               .resourcePath(resourcePath)

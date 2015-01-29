@@ -9,8 +9,6 @@ import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext
 import com.mangofactory.documentation.spring.web.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.RelativePathProvider
 import com.mangofactory.documentation.spring.web.mixins.DocumentationContextSupport
-import com.mangofactory.documentation.spring.web.ordering.ApiDescriptionLexicographicalOrdering
-import com.mangofactory.documentation.spring.web.ordering.ResourceListingLexicographicalOrdering
 import com.mangofactory.documentation.spring.web.plugins.DocumentationConfigurer
 import com.mangofactory.documentation.swagger.mixins.SpringSwaggerConfigSupport
 import com.wordnik.swagger.annotations.Api
@@ -32,6 +30,7 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
 
   def "Should have sensible defaults when built with minimal configuration"() {
     when:
+      plugin.configure(contextBuilder)
       def pluginContext = contextBuilder.build()
     then:
       pluginContext.groupName == 'default'
@@ -192,8 +191,8 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
       null != pluginContext.requestMappingEvaluator
       null != pluginContext.globalResponseMessages
       null != pluginContext.ignorableParameterTypes
-      pluginContext.listingReferenceOrdering instanceof ResourceListingLexicographicalOrdering
-      pluginContext.apiDescriptionOrdering instanceof ApiDescriptionLexicographicalOrdering
+      null != pluginContext.listingReferenceOrdering
+      null != pluginContext.apiDescriptionOrdering
 
   }
 

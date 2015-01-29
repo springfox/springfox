@@ -1,11 +1,13 @@
 package com.mangofactory.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
-import com.google.common.primitives.Ints;
 import com.mangofactory.documentation.schema.AlternateTypeRule;
 import com.mangofactory.documentation.schema.WildcardType;
 import com.mangofactory.documentation.service.annotations.ApiIgnore;
+import com.mangofactory.documentation.service.model.ApiDescription;
+import com.mangofactory.documentation.service.model.ApiListingReference;
 import com.mangofactory.documentation.service.model.Operation;
 import com.mangofactory.documentation.service.model.ResponseMessage;
 import com.mangofactory.documentation.service.model.builder.ResponseMessageBuilder;
@@ -23,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,8 +33,10 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Ordering.*;
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.schema.AlternateTypeRules.*;
+import static com.mangofactory.documentation.spi.service.contexts.Orderings.*;
 import static java.util.Arrays.asList;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -44,6 +47,8 @@ public class Defaults {
   private LinkedHashMap<RequestMethod, List<ResponseMessage>> responses;
   private List<Class<? extends Annotation>> annotations;
   private Ordering<Operation> operationOrdering;
+  private Ordering<ApiDescription> apiDescriptionOrdering;
+  private Ordering<ApiListingReference> apiListingReferenceOrdering;
 
   public Defaults() {
     init();
@@ -68,18 +73,59 @@ public class Defaults {
     return operationOrdering;
   }
 
+
+  public Ordering<ApiDescription> apiDescriptionOrdering() {
+    return apiDescriptionOrdering;
+  }
+
+  public Ordering<ApiListingReference> apiListingReferenceOrdering() {
+    return apiListingReferenceOrdering;
+  }
+
+  public static <T> T defaultIfAbsent(T newValue, T defaultValue) {
+      return Optional.fromNullable(newValue)
+            .or(Optional.fromNullable(defaultValue))
+            .orNull();
+  }
+
+  public List<AlternateTypeRule> defaultRules(TypeResolver typeResolver) {
+    List<AlternateTypeRule> alternateTypeProvider = newArrayList();
+    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class), typeResolver.resolve(Object.class)));
+    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class, String.class, Object.class),
+            typeResolver.resolve(Object.class)));
+    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class, Object.class, Object.class),
+            typeResolver.resolve(Object.class)));
+    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
+            typeResolver.resolve(Object.class)));
+    alternateTypeProvider.add(newMapRule(WildcardType.class, WildcardType.class));
+
+    alternateTypeProvider.add(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
+            typeResolver.resolve(WildcardType.class)));
+
+    alternateTypeProvider.add(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
+            typeResolver.resolve(WildcardType.class)));
+    return alternateTypeProvider;
+  }
+
+
+
   private void init() {
     initIgnorableTypes();
     initResponseMessages();
     initExcludeAnnotations();
-    operationOrdering = Ordering.from(positionComparator()).compound(nickNameComparator());
+    initOrderings();
+  }
+
+  private void initOrderings() {
+    operationOrdering = from(positionComparator()).compound(nickNameComparator());
+    apiDescriptionOrdering = from(apiPathCompatator());
+    apiListingReferenceOrdering = from(listingPositionComparator()).compound(listingReferencePathComparator());
   }
 
   private void initExcludeAnnotations() {
     annotations = new ArrayList<Class<? extends Annotation>>();
     annotations.add(ApiIgnore.class);
   }
-
 
   private void initIgnorableTypes() {
     ignored = newHashSet();
@@ -244,40 +290,5 @@ public class Defaults {
                     .build()));
   }
 
-  public List<AlternateTypeRule> defaultRules(TypeResolver typeResolver) {
-    List<AlternateTypeRule> alternateTypeProvider = newArrayList();
-    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class), typeResolver.resolve(Object.class)));
-    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class, String.class, Object.class),
-            typeResolver.resolve(Object.class)));
-    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class, Object.class, Object.class),
-            typeResolver.resolve(Object.class)));
-    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
-            typeResolver.resolve(Object.class)));
-    alternateTypeProvider.add(newMapRule(WildcardType.class, WildcardType.class));
 
-    alternateTypeProvider.add(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
-            typeResolver.resolve(WildcardType.class)));
-
-    alternateTypeProvider.add(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
-            typeResolver.resolve(WildcardType.class)));
-    return alternateTypeProvider;
-  }
-
-  private Comparator<Operation> nickNameComparator() {
-    return new Comparator<Operation>() {
-      @Override
-      public int compare(Operation first, Operation second) {
-        return first.getNickname().compareTo(second.getNickname());
-      }
-    };
-  }
-
-  private Comparator<Operation> positionComparator() {
-    return new Comparator<Operation>() {
-      @Override
-      public int compare(Operation first, Operation second) {
-        return Ints.compare(first.getPosition(), second.getPosition());
-      }
-    };
-  }
 }

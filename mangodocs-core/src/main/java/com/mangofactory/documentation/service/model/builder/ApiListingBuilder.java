@@ -1,6 +1,7 @@
 package com.mangofactory.documentation.service.model.builder;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import com.mangofactory.documentation.service.model.ApiDescription;
 import com.mangofactory.documentation.service.model.ApiListing;
 import com.mangofactory.documentation.service.model.Authorization;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ApiListingBuilder {
+  private final Ordering<ApiDescription> descriptionOrdering;
   private String apiVersion;
   private String basePath;
   private String resourcePath;
@@ -21,6 +23,10 @@ public class ApiListingBuilder {
   private Map<String, Model> models;
   private String description;
   private int position;
+
+  public ApiListingBuilder(Ordering<ApiDescription> descriptionOrdering) {
+    this.descriptionOrdering = descriptionOrdering;
+  }
 
   public ApiListingBuilder apiVersion(String apiVersion) {
     this.apiVersion = apiVersion;
@@ -68,7 +74,7 @@ public class ApiListingBuilder {
   }
 
   public ApiListingBuilder apis(List<ApiDescription> apis) {
-    this.apis = apis;
+    this.apis = descriptionOrdering.sortedCopy(apis);
     return this;
   }
 

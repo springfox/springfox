@@ -26,14 +26,13 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.base.Optional.*;
-import static com.google.common.base.Strings.*;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static com.mangofactory.documentation.spi.service.contexts.Defaults.*;
 
 public class DocumentationContextBuilder {
-  private static final String DEFAULT_GROUP_NAME = "default";
   private final Defaults defaults;
 
   private TypeResolver typeResolver;
@@ -59,10 +58,11 @@ public class DocumentationContextBuilder {
   private List<AlternateTypeRule> explicitRules = newArrayList();
 
 
-
   public DocumentationContextBuilder(Defaults defaults) {
     this.defaults = defaults;
     this.operationOrdering = defaults.operationOrdering();
+    this.apiDescriptionOrdering = defaults.apiDescriptionOrdering();
+    this.listingReferenceOrdering = defaults.apiListingReferenceOrdering();
     this.ignorableParameterTypes.addAll(defaults.defaultIgnorableParameterTypes());
   }
 
@@ -76,12 +76,12 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder apiInfo(ApiInfo apiInfo) {
-    this.apiInfo = apiInfo;
+    this.apiInfo = defaultIfAbsent(apiInfo, this.apiInfo);
     return this;
   }
 
   public DocumentationContextBuilder groupName(String groupName) {
-    this.groupName = groupName;
+    this.groupName = defaultIfAbsent(groupName, this.groupName);
     return this;
   }
 
@@ -102,12 +102,12 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder pathProvider(PathProvider pathProvider) {
-    this.pathProvider = fromNullable(pathProvider).or(fromNullable(this.pathProvider)).orNull();
+    this.pathProvider = defaultIfAbsent(pathProvider, this.pathProvider);
     return this;
   }
 
   public DocumentationContextBuilder authorizationContext(AuthorizationContext authorizationContext) {
-    this.authorizationContext = authorizationContext;
+    this.authorizationContext = defaultIfAbsent(authorizationContext, this.authorizationContext);
     return this;
   }
 
@@ -116,14 +116,15 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder apiListingReferenceOrdering(Ordering<ApiListingReference>
-                                                                         listingReferenceOrdering) {
-    this.listingReferenceOrdering = listingReferenceOrdering;
+  public DocumentationContextBuilder apiListingReferenceOrdering(
+          Ordering<ApiListingReference> listingReferenceOrdering) {
+
+    this.listingReferenceOrdering = defaultIfAbsent(listingReferenceOrdering, this.listingReferenceOrdering);
     return this;
   }
 
   public DocumentationContextBuilder apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
-    this.apiDescriptionOrdering = apiDescriptionOrdering;
+    this.apiDescriptionOrdering = defaultIfAbsent(apiDescriptionOrdering, this.apiDescriptionOrdering);
     return this;
   }
 
@@ -147,12 +148,6 @@ public class DocumentationContextBuilder {
               .withIncludePatterns(includePatterns)
               .withRequestMappingPatternMatcher(requestMappingPatternMatcher)
               .build();
-    }
-    if (isNullOrEmpty(groupName)) {
-      groupName = DEFAULT_GROUP_NAME;
-    }
-    if (apiInfo == null) {
-      apiInfo = ApiInfo.DEFAULT;
     }
     return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName, requestMappingEvaluator,
             ignorableParameterTypes, responseMessages, resourceGroupingStrategy, pathProvider,
@@ -197,6 +192,11 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+  public DocumentationContextBuilder operationOrdering(Ordering<Operation> operationOrdering) {
+    this.operationOrdering = defaultIfAbsent(operationOrdering, this.operationOrdering);
+    return this;
+  }
+
 
   private List<AlternateTypeRule> collectAlternateTypeRules(TypeResolver typeResolver) {
     explicitRules.addAll(defaults.defaultRules(typeResolver));
@@ -207,7 +207,7 @@ public class DocumentationContextBuilder {
   }
 
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>
-      evaluator(final TypeResolver typeResolver) {
+  evaluator(final TypeResolver typeResolver) {
 
     return new Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>() {
       @Override
