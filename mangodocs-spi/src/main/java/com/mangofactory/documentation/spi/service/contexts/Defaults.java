@@ -82,22 +82,22 @@ public class Defaults {
   }
 
   public List<AlternateTypeRule> defaultRules(TypeResolver typeResolver) {
-    List<AlternateTypeRule> alternateTypeProvider = newArrayList();
-    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class), typeResolver.resolve(Object.class)));
-    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class, String.class, Object.class),
+    List<AlternateTypeRule> rules = newArrayList();
+    rules.add(newRule(typeResolver.resolve(Map.class), typeResolver.resolve(Object.class)));
+    rules.add(newRule(typeResolver.resolve(Map.class, String.class, Object.class),
             typeResolver.resolve(Object.class)));
-    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class, Object.class, Object.class),
+    rules.add(newRule(typeResolver.resolve(Map.class, Object.class, Object.class),
             typeResolver.resolve(Object.class)));
-    alternateTypeProvider.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
+    rules.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
             typeResolver.resolve(Object.class)));
-    alternateTypeProvider.add(newMapRule(WildcardType.class, WildcardType.class));
+    rules.add(newMapRule(WildcardType.class, WildcardType.class));
 
-    alternateTypeProvider.add(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
+    rules.add(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
             typeResolver.resolve(WildcardType.class)));
 
-    alternateTypeProvider.add(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
+    rules.add(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
             typeResolver.resolve(WildcardType.class)));
-    return alternateTypeProvider;
+    return rules;
   }
 
 
