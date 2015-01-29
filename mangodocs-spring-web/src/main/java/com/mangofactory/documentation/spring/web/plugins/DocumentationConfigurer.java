@@ -16,6 +16,7 @@ import com.mangofactory.documentation.service.model.ResponseMessage;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.DocumentationPlugin;
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext;
+import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContextBuilder;
 import com.mangofactory.documentation.spring.web.scanners.RegexRequestMappingPatternMatcher;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -339,11 +340,11 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    *
    * @see com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsBootstrapper
    */
-  public void configure(DocumentationContextBuilder builder) {
+  public DocumentationContext configure(DocumentationContextBuilder builder) {
     if (initialized.compareAndSet(false, true)) {
       configureDefaults();
     }
-    builder
+    return builder
             .apiInfo(apiInfo)
             .withDocumentationType(documentationType)
             .applyDefaultResponseMessages(applyDefaultResponseMessages)
@@ -359,7 +360,8 @@ public class DocumentationConfigurer implements DocumentationPlugin {
             .authorizationTypes(authorizationTypes)
             .apiListingReferenceOrdering(apiListingReferenceOrdering)
             .apiDescriptionOrdering(apiDescriptionOrdering)
-            .operationOrdering(operationOrdering);
+            .operationOrdering(operationOrdering)
+            .build();
   }
 
   public boolean isEnabled() {

@@ -25,6 +25,5 @@ public class DocumentationContextSpec extends Specification {
 
   def context() {
     plugin.configure(contextBuilder)
-    contextBuilder.build()
   }
 }

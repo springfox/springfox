@@ -76,8 +76,7 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
 
   private DocumentationContext buildContext(DocumentationPlugin each) {
     DocumentationContextBuilder contextBuilder = defaultContextBuilder(each);
-    each.configure(contextBuilder); //TODO:refactor this to one method call
-    return contextBuilder.build();
+    return each.configure(contextBuilder);
   }
 
   private void scanDocumentation(DocumentationContext context) {
