@@ -3,7 +3,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.service.model.Parameter
 import com.mangofactory.documentation.service.model.builder.OperationBuilder
 import com.mangofactory.documentation.spi.service.contexts.OperationContext
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyModels
 import com.mangofactory.documentation.spring.web.dummy.models.Example
 import com.mangofactory.documentation.spring.web.dummy.models.Treeish

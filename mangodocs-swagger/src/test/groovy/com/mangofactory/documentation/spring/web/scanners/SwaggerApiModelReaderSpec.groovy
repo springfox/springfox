@@ -3,7 +3,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.schema.Model
 import com.mangofactory.documentation.schema.ModelProperty
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyModels
 import com.mangofactory.documentation.spring.web.dummy.controllers.BusinessService
 import com.mangofactory.documentation.spring.web.dummy.controllers.PetService

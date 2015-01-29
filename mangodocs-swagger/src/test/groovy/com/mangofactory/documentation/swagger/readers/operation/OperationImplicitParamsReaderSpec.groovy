@@ -5,7 +5,7 @@ import com.mangofactory.documentation.service.model.builder.OperationBuilder
 import com.mangofactory.documentation.spi.service.contexts.OperationContext
 import com.mangofactory.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
 import com.mangofactory.documentation.spring.web.readers.parameter.OperationParameterReader
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.ServicePluginsSupport
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import org.springframework.web.bind.annotation.RequestMethod

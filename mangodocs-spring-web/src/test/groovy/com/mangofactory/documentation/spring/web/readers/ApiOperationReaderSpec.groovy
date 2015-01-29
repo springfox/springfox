@@ -4,7 +4,7 @@ import com.mangofactory.documentation.service.model.Operation
 import com.mangofactory.documentation.service.model.builder.OperationBuilder
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.AuthSupport
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.mixins.ServicePluginsSupport

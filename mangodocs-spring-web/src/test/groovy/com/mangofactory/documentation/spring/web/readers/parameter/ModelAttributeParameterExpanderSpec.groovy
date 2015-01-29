@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.service.model.Parameter
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.models.Example
 import com.mangofactory.documentation.spring.web.mixins.ServicePluginsSupport
 import org.joda.time.LocalDateTime

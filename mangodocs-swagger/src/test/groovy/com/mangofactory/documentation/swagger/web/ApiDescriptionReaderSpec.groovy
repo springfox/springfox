@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.swagger.web
 import com.mangofactory.documentation.service.model.ApiDescription
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.readers.operation.ApiOperationReader
 import com.mangofactory.documentation.spring.web.scanners.ApiDescriptionReader

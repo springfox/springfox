@@ -6,7 +6,7 @@ import com.mangofactory.documentation.service.model.AuthorizationType
 import com.mangofactory.documentation.service.model.ResponseMessage
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.RelativePathProvider
 import com.mangofactory.documentation.spring.web.mixins.DocumentationContextSupport
 import com.mangofactory.documentation.spring.web.plugins.DocumentationConfigurer

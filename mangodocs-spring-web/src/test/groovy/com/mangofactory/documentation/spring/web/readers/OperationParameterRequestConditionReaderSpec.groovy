@@ -2,7 +2,7 @@ package com.mangofactory.documentation.spring.web.readers
 import com.mangofactory.documentation.service.model.Parameter
 import com.mangofactory.documentation.service.model.builder.OperationBuilder
 import com.mangofactory.documentation.spi.service.contexts.OperationContext
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.readers.operation.OperationParameterRequestConditionReader
 import org.springframework.web.bind.annotation.RequestMethod

@@ -1,11 +1,9 @@
-package com.mangofactory.documentation.spring.web
-
-import com.mangofactory.documentation.service.RequestMappingPatternMatcher
+package com.mangofactory.documentation.spring.web.plugins
+import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.spi.DocumentationType
-import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy
+import com.mangofactory.documentation.spi.service.contexts.Defaults
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContextBuilder
 import com.mangofactory.documentation.spring.web.mixins.DocumentationContextSupport
-import com.mangofactory.documentation.spring.web.plugins.DocumentationConfigurer
 import com.mangofactory.documentation.spring.web.readers.operation.ApiOperationReader
 import spock.lang.Specification
 
@@ -19,9 +17,8 @@ public class DocumentationContextSpec extends Specification {
 
   def setup() {
     contextBuilder = defaultContextBuilder()
-            .withResourceGroupingStrategy(Mock(ResourceGroupingStrategy))
-            .pathProvider(new RelativePathProvider(Mock(ServletContext)))
-            .requestMappingPatternMatcher(Mock(RequestMappingPatternMatcher))
+    def defaultConfigurer = new DefaultConfiguration(new Defaults(), new TypeResolver(), Mock(ServletContext))
+    defaultConfigurer.configure(contextBuilder)
     plugin = new DocumentationConfigurer(DocumentationType.SWAGGER_12)
     operationReader = Mock(ApiOperationReader)
   }

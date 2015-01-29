@@ -3,7 +3,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.documentation.service.model.AuthorizationType
 import com.mangofactory.documentation.service.model.Group
 import com.mangofactory.documentation.service.model.builder.GroupBuilder
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.GroupCache
 import com.mangofactory.documentation.spring.web.mixins.ApiListingSupport
 import com.mangofactory.documentation.spring.web.mixins.AuthSupport

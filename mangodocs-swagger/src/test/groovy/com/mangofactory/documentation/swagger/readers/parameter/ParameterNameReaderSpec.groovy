@@ -3,7 +3,7 @@ import com.google.common.base.Optional
 import com.mangofactory.documentation.service.model.ResolvedMethodParameter
 import com.mangofactory.documentation.service.model.builder.ParameterBuilder
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.wordnik.swagger.annotations.ApiParam

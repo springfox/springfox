@@ -4,7 +4,7 @@ import com.mangofactory.documentation.spring.web.RelativePathProvider
 import com.mangofactory.documentation.spring.web.SpringGroupingStrategy
 import com.mangofactory.documentation.service.annotations.ApiIgnore
 import com.mangofactory.documentation.service.model.ResourceGroup
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyClass
 import com.mangofactory.documentation.spring.web.dummy.DummyController
 import com.mangofactory.documentation.spring.web.mixins.AccessorAssertions

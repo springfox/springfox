@@ -7,7 +7,7 @@ import com.mangofactory.documentation.service.model.Group
 import com.mangofactory.documentation.service.model.ResourceListing
 import com.mangofactory.documentation.spi.service.contexts.Defaults
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
-import com.mangofactory.documentation.spring.web.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.swagger.web.AbsolutePathProvider
 
