@@ -22,7 +22,7 @@ public class ModelProperty {
     this.type = type;
     this.typeName = typeName;
     this.qualifiedType = qualifiedType;
-    this.position = position; //TODO Suspect unused
+    this.position = position;
     this.required = required;
     this.description = description;
     this.allowableValues = allowableValues;

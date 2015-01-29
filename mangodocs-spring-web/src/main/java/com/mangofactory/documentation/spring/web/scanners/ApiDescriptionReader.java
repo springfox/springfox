@@ -5,6 +5,7 @@ import com.mangofactory.documentation.service.model.builder.ApiDescriptionBuilde
 import com.mangofactory.documentation.service.PathProvider;
 import com.mangofactory.documentation.service.RequestMappingEvaluator;
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;
+import com.mangofactory.documentation.spring.web.Paths;
 import com.mangofactory.documentation.spring.web.readers.operation.ApiOperationReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,7 @@ public class ApiDescriptionReader {
     List<ApiDescription> apiDescriptionList = newArrayList();
     for (String pattern : patternsCondition.getPatterns()) {
       if (requestMappingEvaluator.shouldIncludePath(pattern)) {
-        String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
+        String cleanedRequestMappingPath = Paths.sanitizeRequestMappingPattern(pattern);
         String path = pathProvider.getOperationPath(cleanedRequestMappingPath);
         String methodName = handlerMethod.getMethod().getName();
         RequestMappingContext operationContext = outerContext.copyPatternUsing(cleanedRequestMappingPath);
@@ -52,21 +53,4 @@ public class ApiDescriptionReader {
     return apiDescriptionList;
   }
 
-  /**
-   * Gets a uri friendly path from a request mapping pattern.
-   * Typically involves removing any regex patterns or || conditions from a spring request mapping
-   * This method will be called to resolve every request mapping endpoint.
-   * A good extension point if you need to alter endpoints by adding or removing path segments.
-   * Note: this should not be an absolute  uri
-   *
-   * @param requestMappingPattern
-   * @return the request mapping endpoint
-   */
-  //TODO: Move this to a shared library
-  public static String sanitizeRequestMappingPattern(String requestMappingPattern) {
-    String result = requestMappingPattern;
-    //remove regex portion '/{businessId:\\w+}'
-    result = result.replaceAll("\\{([^}]*?):.*?\\}", "{$1}");
-    return result.isEmpty() ? "/" : result;
-  }
 }
