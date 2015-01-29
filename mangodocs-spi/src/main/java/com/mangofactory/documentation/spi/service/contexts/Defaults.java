@@ -1,9 +1,12 @@
 package com.mangofactory.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.collect.Ordering;
+import com.google.common.primitives.Ints;
 import com.mangofactory.documentation.schema.AlternateTypeRule;
 import com.mangofactory.documentation.schema.WildcardType;
 import com.mangofactory.documentation.service.annotations.ApiIgnore;
+import com.mangofactory.documentation.service.model.Operation;
 import com.mangofactory.documentation.service.model.ResponseMessage;
 import com.mangofactory.documentation.service.model.builder.ResponseMessageBuilder;
 import org.springframework.http.HttpEntity;
@@ -20,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -39,6 +43,7 @@ public class Defaults {
   private HashSet<Class> ignored;
   private LinkedHashMap<RequestMethod, List<ResponseMessage>> responses;
   private List<Class<? extends Annotation>> annotations;
+  private Ordering<Operation> operationOrdering;
 
   public Defaults() {
     init();
@@ -59,16 +64,22 @@ public class Defaults {
     return annotations;
   }
 
+  public Ordering<Operation> operationOrdering() {
+    return operationOrdering;
+  }
+
   private void init() {
     initIgnorableTypes();
     initResponseMessages();
     initExcludeAnnotations();
+    operationOrdering = Ordering.from(positionComparator()).compound(nickNameComparator());
   }
 
   private void initExcludeAnnotations() {
     annotations = new ArrayList<Class<? extends Annotation>>();
     annotations.add(ApiIgnore.class);
   }
+
 
   private void initIgnorableTypes() {
     ignored = newHashSet();
@@ -83,7 +94,6 @@ public class Defaults {
     ignored.add(UriComponentsBuilder.class);
     ignored.add(ApiIgnore.class);
   }
-
 
   private void initResponseMessages() {
     responses = newLinkedHashMap();
@@ -251,5 +261,23 @@ public class Defaults {
     alternateTypeProvider.add(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
             typeResolver.resolve(WildcardType.class)));
     return alternateTypeProvider;
+  }
+
+  private Comparator<Operation> nickNameComparator() {
+    return new Comparator<Operation>() {
+      @Override
+      public int compare(Operation first, Operation second) {
+        return first.getNickname().compareTo(second.getNickname());
+      }
+    };
+  }
+
+  private Comparator<Operation> positionComparator() {
+    return new Comparator<Operation>() {
+      @Override
+      public int compare(Operation first, Operation second) {
+        return Ints.compare(first.getPosition(), second.getPosition());
+      }
+    };
   }
 }

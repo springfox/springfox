@@ -1,6 +1,8 @@
 package com.mangofactory.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.collect.Ordering;
+import com.mangofactory.documentation.service.model.Operation;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
@@ -63,5 +65,9 @@ public class RequestMappingContext  {
 
   public ResolvedType alternateFor(ResolvedType resolvedType) {
     return documentationContext.getAlternateTypeProvider().alternateFor(resolvedType);
+  }
+
+  public Ordering<Operation> operationOrdering() {
+    return documentationContext.operationOrdering();
   }
 }

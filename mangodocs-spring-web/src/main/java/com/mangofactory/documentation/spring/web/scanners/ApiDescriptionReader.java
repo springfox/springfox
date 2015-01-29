@@ -41,7 +41,7 @@ public class ApiDescriptionReader {
         String methodName = handlerMethod.getMethod().getName();
         RequestMappingContext operationContext = outerContext.copyPatternUsing(cleanedRequestMappingPath);
         apiDescriptionList.add(
-                new ApiDescriptionBuilder()
+                new ApiDescriptionBuilder(outerContext.operationOrdering())
                         .path(path)
                         .description(methodName)
                         .operations(operationReader.read(operationContext))

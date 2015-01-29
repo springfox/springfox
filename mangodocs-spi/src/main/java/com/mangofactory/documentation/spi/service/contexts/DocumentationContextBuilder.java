@@ -12,6 +12,7 @@ import com.mangofactory.documentation.service.model.ApiInfo;
 import com.mangofactory.documentation.service.model.ApiListingReference;
 import com.mangofactory.documentation.service.model.Authorization;
 import com.mangofactory.documentation.service.model.AuthorizationType;
+import com.mangofactory.documentation.service.model.Operation;
 import com.mangofactory.documentation.service.model.ResponseMessage;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;
@@ -47,6 +48,7 @@ public class DocumentationContextBuilder {
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private DocumentationType documentationType;
   private RequestMappingPatternMatcher requestMappingPatternMatcher;
+  private Ordering<Operation> operationOrdering;
 
   private Set<Class> ignorableParameterTypes = newHashSet();
   private Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
@@ -56,9 +58,11 @@ public class DocumentationContextBuilder {
   private List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
   private List<AlternateTypeRule> explicitRules = newArrayList();
 
+
+
   public DocumentationContextBuilder(Defaults defaults) {
     this.defaults = defaults;
-
+    this.operationOrdering = defaults.operationOrdering();
     this.ignorableParameterTypes.addAll(defaults.defaultIgnorableParameterTypes());
   }
 
@@ -152,11 +156,14 @@ public class DocumentationContextBuilder {
     }
     return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName, requestMappingEvaluator,
             ignorableParameterTypes, responseMessages, resourceGroupingStrategy, pathProvider,
-            authorizationContext, authorizationTypes, listingReferenceOrdering, apiDescriptionOrdering,
-            collectAlternateTypeRules(typeResolver));
+            authorizationContext, authorizationTypes, collectAlternateTypeRules(typeResolver),
+            listingReferenceOrdering, apiDescriptionOrdering,
+            operationOrdering);
   }
 
-  public DocumentationContextBuilder additionalExcludedAnnotations(List<Class<? extends Annotation>> excludeAnnotations) {
+  public DocumentationContextBuilder additionalExcludedAnnotations(
+          List<Class<? extends Annotation>> excludeAnnotations) {
+
     this.excludeAnnotations.addAll(excludeAnnotations);
     return this;
   }
@@ -166,7 +173,9 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder requestMappingPatternMatcher(RequestMappingPatternMatcher requestMappingPatternMatcher) {
+  public DocumentationContextBuilder requestMappingPatternMatcher(
+          RequestMappingPatternMatcher requestMappingPatternMatcher) {
+
     this.requestMappingPatternMatcher = fromNullable(requestMappingPatternMatcher)
             .or(fromNullable(this.requestMappingPatternMatcher)).orNull();
 

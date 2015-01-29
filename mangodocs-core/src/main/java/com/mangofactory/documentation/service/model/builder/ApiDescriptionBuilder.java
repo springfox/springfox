@@ -1,5 +1,6 @@
 package com.mangofactory.documentation.service.model.builder;
 
+import com.google.common.collect.Ordering;
 import com.mangofactory.documentation.service.model.ApiDescription;
 import com.mangofactory.documentation.service.model.Operation;
 
@@ -9,7 +10,12 @@ public class ApiDescriptionBuilder {
   private String path;
   private String description;
   private List<Operation> operations;
+  private Ordering<Operation> operationOrdering;
   private Boolean hidden;
+
+  public ApiDescriptionBuilder(Ordering<Operation> operationOrdering) {
+    this.operationOrdering = operationOrdering;
+  }
 
   public ApiDescriptionBuilder path(String path) {
     this.path = path;
@@ -22,7 +28,7 @@ public class ApiDescriptionBuilder {
   }
 
   public ApiDescriptionBuilder operations(List<Operation> operations) {
-    this.operations = operations;
+    this.operations = operationOrdering.sortedCopy(operations);
     return this;
   }
 

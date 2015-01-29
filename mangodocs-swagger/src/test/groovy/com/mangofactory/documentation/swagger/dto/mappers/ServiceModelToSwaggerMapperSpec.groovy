@@ -1,8 +1,9 @@
 package com.mangofactory.documentation.swagger.dto.mappers
+
 import com.fasterxml.classmate.TypeResolver
+import com.mangofactory.documentation.schema.ModelRef
 import com.mangofactory.documentation.service.model.AllowableListValues
 import com.mangofactory.documentation.service.model.ApiListingReference
-import com.mangofactory.documentation.schema.ModelRef
 import com.mangofactory.documentation.service.model.builder.ApiDescriptionBuilder
 import com.mangofactory.documentation.service.model.builder.ApiInfoBuilder
 import com.mangofactory.documentation.service.model.builder.ApiListingBuilder
@@ -14,6 +15,7 @@ import com.mangofactory.documentation.service.model.builder.OperationBuilder
 import com.mangofactory.documentation.service.model.builder.ParameterBuilder
 import com.mangofactory.documentation.service.model.builder.ResourceListingBuilder
 import com.mangofactory.documentation.service.model.builder.ResponseMessageBuilder
+import com.mangofactory.documentation.spi.service.contexts.Defaults
 import com.mangofactory.documentation.swagger.mixins.MapperSupport
 import spock.lang.Specification
 
@@ -24,6 +26,7 @@ import static com.mangofactory.documentation.schema.ResolvedTypes.*
 class ServiceModelToSwaggerMapperSpec extends Specification {
   def "Maps the api description correctly"() {
     given:
+      def defaults = new Defaults()
       def scope = new AuthorizationScopeBuilder()
               .scope("test")
               .description("test scope")
@@ -60,7 +63,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                         .responseClass("string")
                         .responseMessages(newHashSet(response))
                       .build()
-      def description = new ApiDescriptionBuilder()
+      def description = new ApiDescriptionBuilder(defaults.operationOrdering())
         .description("test")
         .hidden(true)
         .path("/api-path")
