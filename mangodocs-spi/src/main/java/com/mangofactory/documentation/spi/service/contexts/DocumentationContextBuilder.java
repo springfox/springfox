@@ -30,7 +30,7 @@ import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
-import static com.mangofactory.documentation.spi.service.contexts.Defaults.*;
+import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
 
 public class DocumentationContextBuilder {
   private final Defaults defaults;
@@ -119,7 +119,8 @@ public class DocumentationContextBuilder {
   public DocumentationContextBuilder apiListingReferenceOrdering(
           Ordering<ApiListingReference> listingReferenceOrdering) {
 
-    this.listingReferenceOrdering = defaultIfAbsent(listingReferenceOrdering, this.listingReferenceOrdering);
+    this.listingReferenceOrdering = defaultIfAbsent(listingReferenceOrdering, this
+            .listingReferenceOrdering);
     return this;
   }
 

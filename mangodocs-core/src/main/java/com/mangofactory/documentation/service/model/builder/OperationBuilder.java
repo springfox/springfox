@@ -1,7 +1,6 @@
 package com.mangofactory.documentation.service.model.builder;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -15,6 +14,8 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Set;
+
+import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
 
 public class OperationBuilder {
   private String method;
@@ -128,12 +129,6 @@ public class OperationBuilder {
       }
     }
     return merged;
-  }
-
-  private String defaultIfAbsent(String newValue, String defaultValue) {
-    return Optional.fromNullable(newValue)
-            .or(Optional.fromNullable(defaultValue))
-            .orNull();
   }
 
   private Function<? super ResponseMessage, Integer> byStatusCode() {

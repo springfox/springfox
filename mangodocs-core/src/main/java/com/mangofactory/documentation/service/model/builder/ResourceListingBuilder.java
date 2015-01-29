@@ -1,6 +1,5 @@
 package com.mangofactory.documentation.service.model.builder;
 
-import com.google.common.collect.Lists;
 import com.mangofactory.documentation.service.model.ApiInfo;
 import com.mangofactory.documentation.service.model.ApiListingReference;
 import com.mangofactory.documentation.service.model.AuthorizationType;
@@ -8,29 +7,32 @@ import com.mangofactory.documentation.service.model.ResourceListing;
 
 import java.util.List;
 
+import static com.google.common.collect.Lists.*;
+import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
+
 public class ResourceListingBuilder {
   private String apiVersion;
-  private List<ApiListingReference> apis = Lists.newArrayList();
-  private List<AuthorizationType> authorizations = Lists.newArrayList();
+  private List<ApiListingReference> apis = newArrayList();
+  private List<AuthorizationType> authorizations = newArrayList();
   private ApiInfo info;
 
   public ResourceListingBuilder apiVersion(String apiVersion) {
-    this.apiVersion = apiVersion;
+    this.apiVersion = defaultIfAbsent(apiVersion, this.apiVersion);
     return this;
   }
 
   public ResourceListingBuilder apis(List<ApiListingReference> apis) {
-    this.apis = apis;
+    this.apis.addAll(nullToEmptyList(apis));
     return this;
   }
 
   public ResourceListingBuilder authorizations(List<AuthorizationType> authorizations) {
-    this.authorizations = authorizations;
+    this.authorizations.addAll(nullToEmptyList(authorizations));
     return this;
   }
 
   public ResourceListingBuilder info(ApiInfo info) {
-    this.info = info;
+    this.info = defaultIfAbsent(info, this.info);
     return this;
   }
 

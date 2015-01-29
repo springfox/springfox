@@ -28,7 +28,7 @@ public class OperationModelContextsBuilder {
   }
 
   public OperationModelContextsBuilder addInputParam(Type type) {
-    ModelContext inputParam = ModelContext.inputParam(type, documentationType, alternateTypeProvider);
+    ModelContext inputParam = inputParam(type, documentationType, alternateTypeProvider);
     this.contexts.add(inputParam);
     return this;
   }

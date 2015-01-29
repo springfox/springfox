@@ -6,6 +6,8 @@ import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.service.model.AllowableValues;
 import com.mangofactory.documentation.schema.ModelProperty;
 
+import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
+
 public class ModelPropertyBuilder {
   private ResolvedType type;
   private String qualifiedType;
@@ -18,17 +20,17 @@ public class ModelPropertyBuilder {
   private String typeName;
 
   public ModelPropertyBuilder name(String name) {
-    this.name = name;
+    this.name = defaultIfAbsent(name, this.name);
     return this;
   }
 
   public ModelPropertyBuilder type(ResolvedType type) {
-    this.type = type;
+    this.type = defaultIfAbsent(type, this.type);
     return this;
   }
 
   public ModelPropertyBuilder qualifiedType(String qualifiedType) {
-    this.qualifiedType = qualifiedType;
+    this.qualifiedType = defaultIfAbsent(qualifiedType, this.qualifiedType);
     return this;
   }
 
@@ -37,13 +39,13 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelPropertyBuilder required(Boolean required) {
+  public ModelPropertyBuilder required(boolean required) {
     this.required = required;
     return this;
   }
 
   public ModelPropertyBuilder description(String description) {
-    this.description = description;
+    this.description = defaultIfAbsent(description, this.description);
     return this;
   }
 
@@ -56,7 +58,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelPropertyBuilder typeName(String typeName) {
-    this.typeName = typeName;
+    this.typeName = defaultIfAbsent(typeName, this.typeName);
     return this;
   }
 
@@ -71,7 +73,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelPropertyBuilder items(ModelRef items) {
-    this.items = items;
+    this.items = defaultIfAbsent(items, this.items);
     return this;
   }
 

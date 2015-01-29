@@ -1,23 +1,25 @@
 package com.mangofactory.documentation.service.model.builder;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+import com.mangofactory.documentation.schema.Model;
 import com.mangofactory.documentation.service.model.ApiDescription;
 import com.mangofactory.documentation.service.model.ApiListing;
 import com.mangofactory.documentation.service.model.Authorization;
-import com.mangofactory.documentation.schema.Model;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.google.common.collect.Lists.*;
+import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
 
 public class ApiListingBuilder {
   private final Ordering<ApiDescription> descriptionOrdering;
   private String apiVersion;
   private String basePath;
   private String resourcePath;
-  private List<String> produces = Lists.newArrayList();
-  private List<String> consumes = Lists.newArrayList();
-  private List<String> protocol;
+  private List<String> produces = newArrayList();
+  private List<String> consumes = newArrayList();
+  private List<String> protocol = newArrayList();
   private List<Authorization> authorizations;
   private List<ApiDescription> apis;
   private Map<String, Model> models;
@@ -29,27 +31,27 @@ public class ApiListingBuilder {
   }
 
   public ApiListingBuilder apiVersion(String apiVersion) {
-    this.apiVersion = apiVersion;
+    this.apiVersion = defaultIfAbsent(apiVersion, this.apiVersion);
     return this;
   }
 
   public ApiListingBuilder basePath(String basePath) {
-    this.basePath = basePath;
+    this.basePath = defaultIfAbsent(basePath, this.basePath);
     return this;
   }
 
   public ApiListingBuilder resourcePath(String resourcePath) {
-    this.resourcePath = resourcePath;
+    this.resourcePath = defaultIfAbsent(resourcePath, resourcePath);
     return this;
   }
 
   public ApiListingBuilder produces(List<String> produces) {
-    this.produces = Lists.newArrayList(produces);
+    this.produces = newArrayList(produces);
     return this;
   }
 
   public ApiListingBuilder consumes(List<String> consumes) {
-    this.consumes = Lists.newArrayList(consumes);
+    this.consumes = newArrayList(consumes);
     return this;
   }
 
@@ -64,7 +66,7 @@ public class ApiListingBuilder {
   }
 
   public ApiListingBuilder protocol(List<String> protocol) {
-    this.protocol = protocol;
+    this.protocol.addAll(nullToEmptyList(protocol));
     return this;
   }
 

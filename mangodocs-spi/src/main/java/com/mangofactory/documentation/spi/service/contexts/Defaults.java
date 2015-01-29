@@ -1,7 +1,6 @@
 package com.mangofactory.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import com.mangofactory.documentation.schema.AlternateTypeRule;
 import com.mangofactory.documentation.schema.WildcardType;
@@ -80,12 +79,6 @@ public class Defaults {
 
   public Ordering<ApiListingReference> apiListingReferenceOrdering() {
     return apiListingReferenceOrdering;
-  }
-
-  public static <T> T defaultIfAbsent(T newValue, T defaultValue) {
-      return Optional.fromNullable(newValue)
-            .or(Optional.fromNullable(defaultValue))
-            .orNull();
   }
 
   public List<AlternateTypeRule> defaultRules(TypeResolver typeResolver) {

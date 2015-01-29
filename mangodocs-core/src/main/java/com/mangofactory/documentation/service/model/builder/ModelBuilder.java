@@ -7,6 +7,8 @@ import com.mangofactory.documentation.schema.ModelProperty;
 import java.util.List;
 import java.util.Map;
 
+import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
+
 public class ModelBuilder {
   private String id;
   private String name;
@@ -19,17 +21,17 @@ public class ModelBuilder {
   private ResolvedType modelType;
 
   public ModelBuilder id(String id) {
-    this.id = id;
+    this.id = defaultIfAbsent(id, this.id);
     return this;
   }
 
   public ModelBuilder name(String name) {
-    this.name = name;
+    this.name = defaultIfAbsent(name, this.name);
     return this;
   }
 
   public ModelBuilder qualifiedType(String qualifiedType) {
-    this.qualifiedType = qualifiedType;
+    this.qualifiedType = defaultIfAbsent(qualifiedType, this.qualifiedType);
     return this;
   }
 
@@ -39,17 +41,17 @@ public class ModelBuilder {
   }
 
   public ModelBuilder description(String description) {
-    this.description = description;
+    this.description = defaultIfAbsent(description, this.description);
     return this;
   }
 
   public ModelBuilder baseModel(String baseModel) {
-    this.baseModel = baseModel;
+    this.baseModel = defaultIfAbsent(baseModel, this.baseModel);
     return this;
   }
 
   public ModelBuilder discriminator(String discriminator) {
-    this.discriminator = discriminator;
+    this.discriminator = defaultIfAbsent(discriminator, this.discriminator);
     return this;
   }
 
@@ -59,7 +61,7 @@ public class ModelBuilder {
   }
 
   public ModelBuilder type(ResolvedType modelType) {
-    this.modelType = modelType;
+    this.modelType = defaultIfAbsent(modelType, this.modelType);
     return this;
   }
 

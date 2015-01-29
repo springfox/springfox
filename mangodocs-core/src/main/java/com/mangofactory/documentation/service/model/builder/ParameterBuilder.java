@@ -4,6 +4,8 @@ import com.mangofactory.documentation.service.model.AllowableValues;
 import com.mangofactory.documentation.service.model.Parameter;
 import org.springframework.util.StringUtils;
 
+import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
+
 public class ParameterBuilder {
   private String name;
   private String description;
@@ -16,37 +18,37 @@ public class ParameterBuilder {
   private String paramAccess;
 
   public ParameterBuilder name(String name) {
-    this.name = name;
+    this.name = defaultIfAbsent(name, this.name);
     return this;
   }
 
   public ParameterBuilder description(String description) {
-    this.description = description;
+    this.description = defaultIfAbsent(description, this.description);
     return this;
   }
 
   public ParameterBuilder defaultValue(String defaultValue) {
-    this.defaultValue = defaultValue;
+    this.defaultValue = defaultIfAbsent(defaultValue, this.defaultValue);
     return this;
   }
 
-  public ParameterBuilder required(Boolean required) {
+  public ParameterBuilder required(boolean required) {
     this.required = required;
     return this;
   }
 
-  public ParameterBuilder allowMultiple(Boolean allowMultiple) {
+  public ParameterBuilder allowMultiple(boolean allowMultiple) {
     this.allowMultiple = allowMultiple;
     return this;
   }
 
   public ParameterBuilder dataType(String dataType) {
-    this.dataType = dataType;
+    this.dataType = defaultIfAbsent(dataType, this.dataType);
     return this;
   }
 
   public ParameterBuilder allowableValues(AllowableValues allowableValues) {
-    this.allowableValues = allowableValues;
+    this.allowableValues = defaultIfAbsent(allowableValues, this.allowableValues);
     return this;
   }
 

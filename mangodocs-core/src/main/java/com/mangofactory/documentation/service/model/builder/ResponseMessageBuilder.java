@@ -2,6 +2,8 @@ package com.mangofactory.documentation.service.model.builder;
 
 import com.mangofactory.documentation.service.model.ResponseMessage;
 
+import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
+
 public class ResponseMessageBuilder {
   private int code;
   private String message;
@@ -13,12 +15,12 @@ public class ResponseMessageBuilder {
   }
 
   public ResponseMessageBuilder message(String message) {
-    this.message = message;
+    this.message = defaultIfAbsent(message, this.message);
     return this;
   }
 
   public ResponseMessageBuilder responseModel(String responseModel) {
-    this.responseModel = responseModel;
+    this.responseModel = defaultIfAbsent(responseModel, this.responseModel);
     return this;
   }
 

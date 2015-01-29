@@ -6,13 +6,15 @@ import com.mangofactory.documentation.service.model.ResourceListing;
 
 import java.util.Map;
 
+import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
+
 public class GroupBuilder {
   private String groupName;
   private Map<String, ApiListing> apiListings;
   private ResourceListing resourceListing;
 
   public GroupBuilder withName(String groupName) {
-    this.groupName = groupName;
+    this.groupName = defaultIfAbsent(groupName, this.groupName);
     return this;
   }
 
@@ -23,7 +25,7 @@ public class GroupBuilder {
   }
 
   public GroupBuilder withResourceListing(ResourceListing resourceListing) {
-    this.resourceListing = resourceListing;
+    this.resourceListing = defaultIfAbsent(resourceListing, this.resourceListing);
     return this;
   }
 

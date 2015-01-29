@@ -6,6 +6,8 @@ import com.mangofactory.documentation.service.model.Operation;
 
 import java.util.List;
 
+import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
+
 public class ApiDescriptionBuilder {
   private String path;
   private String description;
@@ -18,12 +20,12 @@ public class ApiDescriptionBuilder {
   }
 
   public ApiDescriptionBuilder path(String path) {
-    this.path = path;
+    this.path = defaultIfAbsent(path, this.path);
     return this;
   }
 
   public ApiDescriptionBuilder description(String description) {
-    this.description = description;
+    this.description = defaultIfAbsent(description, this.description);
     return this;
   }
 
@@ -32,7 +34,7 @@ public class ApiDescriptionBuilder {
     return this;
   }
 
-  public ApiDescriptionBuilder hidden(Boolean hidden) {
+  public ApiDescriptionBuilder hidden(boolean hidden) {
     this.hidden = hidden;
     return this;
   }
