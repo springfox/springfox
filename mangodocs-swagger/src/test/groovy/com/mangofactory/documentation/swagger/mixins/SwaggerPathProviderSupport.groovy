@@ -14,7 +14,7 @@ class SwaggerPathProviderSupport {
       return swaggerPathProvider
    }
 
-  RelativePathProvider relativeSwaggerPathProvider(){
-      new RelativePathProvider()
+  RelativePathProvider relativeSwaggerPathProvider(ServletContext servletContext){
+      new RelativePathProvider(servletContext)
    }
 }

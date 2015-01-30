@@ -1,8 +1,10 @@
 package com.mangofactory.documentation.spring.web.readers.operation
-
 import com.fasterxml.classmate.GenericType
+import com.fasterxml.classmate.MemberResolver
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.classmate.members.ResolvedMethod
+import com.google.common.base.Predicate
+import com.google.common.collect.FluentIterable
 import com.mangofactory.documentation.spring.web.dummy.DummyClass
 import com.mangofactory.documentation.spring.web.dummy.models.Example
 import com.mangofactory.documentation.spring.web.dummy.models.Parent
@@ -16,15 +18,18 @@ import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
+import static com.google.common.collect.Lists.*
+import static com.mangofactory.documentation.spring.web.readers.operation.HandlerMethodResolver.*
+
 @Mixin(HandlerMethodsSupport)
 class HandlerMethodResolverSpec extends Specification {
   def "Methods with same name are distinguished based on variance of parameters and return types" () {
     given:
-      def methodResolver = new HandlerMethodResolver(new TypeResolver())
-      def resolvedParameters = methodResolver.methodParameters(handlerMethod)
+      def sut = new HandlerMethodResolver(new TypeResolver())
+      def resolvedParameters = sut.methodParameters(handlerMethod)
               .collect() { it.resolvedParameterType.getErasedType().simpleName }
               .sort()
-      def resolvedReturnType = methodResolver.methodReturnType(handlerMethod.method, handlerMethod.getBeanType()).erasedType.simpleName
+      def resolvedReturnType = sut.methodReturnType(handlerMethod.method, handlerMethod.getBeanType()).erasedType.simpleName
     expect:
       parameters == resolvedParameters
       returnType == resolvedReturnType
@@ -36,14 +41,14 @@ class HandlerMethodResolverSpec extends Specification {
 
   def "When method was not resolvable calling methodParameters returns empty list" () {
     given:
-      def methodResolver = new HandlerMethodResolver(new TypeResolver()) {
+      def sut = new HandlerMethodResolver(new TypeResolver()) {
         @Override
         def ResolvedMethod getResolvedMethod(Method methodToResolve, Class<?> beanType) {
           return null;
         }
       }
     when:
-      def parameters = methodResolver.methodParameters(handlerMethod)
+      def parameters = sut.methodParameters(handlerMethod)
     then:
       parameters.size() == 0
     where:
@@ -52,14 +57,14 @@ class HandlerMethodResolverSpec extends Specification {
 
   def "When method was not resolvable calling methodReturnType returns return type as resolved" () {
     given:
-      def methodResolver = new HandlerMethodResolver(new TypeResolver()) {
+      def sut = new HandlerMethodResolver(new TypeResolver()) {
         @Override
         def ResolvedMethod getResolvedMethod(Method methodToResolve, Class<?> beanType) {
           return null;
         }
       }
     when:
-      def returnType = methodResolver.methodReturnType(handlerMethod.method, handlerMethod.getBeanType())
+      def returnType = sut.methodReturnType(handlerMethod.method, handlerMethod.getBeanType())
     then:
       expectedReturnType.equals(returnType.erasedType.simpleName)
     where:
@@ -68,17 +73,49 @@ class HandlerMethodResolverSpec extends Specification {
       methodWithParent()| "ResponseEntity"
   }
 
+  def "Sorts on argument count" () {
+    given:
+      def resolver = new TypeResolver()
+      def memberResolver = new MemberResolver(resolver)
+      def dummyClass = memberResolver.resolve(resolver.resolve(DummyClass), null, null)
+      def allMethods = newArrayList(dummyClass.memberMethods)
+
+    when:
+      def list = FluentIterable.from(allMethods).filter(subset())
+      def sorted = byArgumentCount().sortedCopy(list)
+
+    then:
+      sorted.get(0).name == 'methodWithNoArgs'
+      sorted.get(1).name == 'methodWithOneArgs'
+      sorted.get(2).name == 'methodWithTwoArgs'
+    where:
+      handlerMethods  << [
+              methodOnDummyClasss('methodWithTwoArgs', int, String),
+              methodOnDummyClasss('methodWithOneArgs', int),
+              methodOnDummyClasss('methodWithNoArgs')
+              ]
+  }
+
+  private Predicate<ResolvedMethod> subset() {
+    new Predicate<ResolvedMethod>() {
+      @Override
+      boolean apply(ResolvedMethod input) {
+        return ['methodWithNoArgs', 'methodWithOneArgs', 'methodWithTwoArgs'].contains(input.name)
+      }
+    }
+  }
+
+
   def "When method was resolved with incorrect number of arguments it returns empty list" () {
     given:
-
-      def methodResolver = new HandlerMethodResolver(new TypeResolver()) {
+      def sut = new HandlerMethodResolver(new TypeResolver()) {
         @Override
         def ResolvedMethod getResolvedMethod(Method methodToResolve, Class<?> beanType) {
           return resolvedMethod();
         }
       }
     when:
-      def parameters = methodResolver.methodParameters(handlerMethod)
+      def parameters = sut.methodParameters(handlerMethod)
     then:
       parameters.size() == 0
     where:
@@ -88,11 +125,11 @@ class HandlerMethodResolverSpec extends Specification {
   def "Is able to determine if both types are void" () {
     given:
       def resolver = new TypeResolver()
-      def methodResolver = new HandlerMethodResolver(resolver)
+      def sut = new HandlerMethodResolver(resolver)
     and:
       def resolvedType = resolver.resolve(subClass)
     expect:
-      methodResolver.bothAreVoids(resolvedType, superClass) == areSame
+      sut.bothAreVoids(resolvedType, superClass) == areSame
     where:
       superClass     | subClass     | areSame
       Void.TYPE      | Integer      | false
@@ -106,11 +143,11 @@ class HandlerMethodResolverSpec extends Specification {
   def "Is able to determine super classes" () {
     given:
       def resolver = new TypeResolver()
-      def methodResolver = new HandlerMethodResolver(resolver)
+      def sut = new HandlerMethodResolver(resolver)
     and:
       def resolvedType = resolver.resolve(subClass)
     expect:
-      methodResolver.isSuperClass(resolvedType, superClass) == isSuperClass
+      sut.isSuperClass(resolvedType, superClass) == isSuperClass
     where:
       superClass          | subClass          | isSuperClass
       Parent              | DummyClass.Child  | false
@@ -123,11 +160,11 @@ class HandlerMethodResolverSpec extends Specification {
   def "Is able to determine sub classes" () {
     given:
       def resolver = new TypeResolver()
-      def methodResolver = new HandlerMethodResolver(resolver)
+      def sut = new HandlerMethodResolver(resolver)
     and:
       def resolvedType = resolver.resolve(superClass)
     expect:
-      methodResolver.isSubClass(resolvedType, subClass) == isSubClass
+      sut.isSubClass(resolvedType, subClass) == isSubClass
     where:
       superClass          | subClass          | isSubClass
       Parent              | DummyClass.Child  | false
@@ -139,12 +176,12 @@ class HandlerMethodResolverSpec extends Specification {
   def "Is able to determine generic super classes" () {
     given:
       def resolver = new TypeResolver()
-      def methodResolver = new HandlerMethodResolver(resolver)
+      def sut = new HandlerMethodResolver(resolver)
     and:
       def resolvedType =  resolver.resolve(ChildResponseEntity, subClass)
       def superClassParameterized = parameterizedType(superClass, parameterizedType)
     expect:
-      methodResolver.isGenericTypeSuperClass(resolvedType, superClassParameterized) == isSuperClass
+      sut.isGenericTypeSuperClass(resolvedType, superClassParameterized) == isSuperClass
     where:
       parameterizedType   | superClass          | subClass          | isSuperClass
       ResponseEntity      | Parent              | DummyClass.Child  | true
@@ -164,12 +201,12 @@ class HandlerMethodResolverSpec extends Specification {
   def "Is able to determine generic classes are covariant" () {
     given:
       def resolver = new TypeResolver()
-      def methodResolver = new HandlerMethodResolver(resolver)
+      def sut = new HandlerMethodResolver(resolver)
     and:
       def resolvedType =  resolver.resolve(ChildResponseEntity, subClass)
       def superClassParameterized = parameterizedType(superClass, parameterizedType)
     expect:
-      methodResolver.covariant(resolvedType, superClassParameterized) == isSuperClass
+      sut.covariant(resolvedType, superClassParameterized) == isSuperClass
     where:
       parameterizedType   | superClass          | subClass          | isSuperClass
       ResponseEntity      | Parent              | DummyClass.Child  | true
@@ -189,12 +226,12 @@ class HandlerMethodResolverSpec extends Specification {
   def "Is able to determine generic sub classes" () {
     given:
       def resolver = new TypeResolver()
-      def methodResolver = new HandlerMethodResolver(resolver)
+      def sut = new HandlerMethodResolver(resolver)
     and:
       def resolvedType =  resolver.resolve(ResponseEntity, superClass)
       def superClassParameterized = parameterizedType(subClass, parameterizedType)
     expect:
-      methodResolver.isGenericTypeSubclass(resolvedType, superClassParameterized) == isSubclass
+      sut.isGenericTypeSubclass(resolvedType, superClassParameterized) == isSubclass
     where:
       parameterizedType   | superClass          | subClass          | isSubclass
       ResponseEntity      | Parent              | DummyClass.Child  | true

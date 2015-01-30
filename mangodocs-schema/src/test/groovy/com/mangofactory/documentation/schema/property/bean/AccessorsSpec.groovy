@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.schema.property
+package com.mangofactory.documentation.schema.property.bean
 
 import com.mangofactory.documentation.schema.TypeForTestingPropertyNames
 import com.mangofactory.documentation.schema.TypeWithGettersAndSetters
@@ -6,7 +6,14 @@ import spock.lang.Specification
 
 import static com.mangofactory.documentation.schema.property.bean.Accessors.*
 
-class DefaultModelPropertiesProviderSpec extends Specification {
+class AccessorsSpec extends Specification {
+  def "Cannot instantiate the Accessors helper"() {
+    when:
+      new Accessors()
+    then:
+      thrown(UnsupportedOperationException)
+  }
+
   def "Property names are identified correctly based on (get/set) method names"() {
     given:
       def sut = TypeForTestingPropertyNames
@@ -31,6 +38,34 @@ class DefaultModelPropertiesProviderSpec extends Specification {
       "setAnotherProp" || "prop"
       "getPropFallback"|| "propFallback"
       "setPropFallback"|| "propFallback"
+  }
+
+  def "Identifies JsonSetter annotation"() {
+    given:
+      def sut = TypeForTestingPropertyNames
+
+    when:
+      def method = sut.methods.find { it.name.equals(methodName) }
+
+    then:
+      isSetter(method)
+
+    where:
+      methodName << ["setAnotherProp", "anotherProp"]
+  }
+
+  def "Identifies JsonGetter annotation"() {
+    given:
+      def sut = TypeForTestingPropertyNames
+
+    when:
+      def method = sut.methods.find { it.name.equals(methodName) }
+
+    then:
+      isGetter(method)
+
+    where:
+      methodName << ["yetAnotherProp", "getAnotherProp"]
   }
 
   def "Getters are identified correctly"() {

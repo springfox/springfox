@@ -210,8 +210,9 @@ public class DocumentationConfigurer implements DocumentationPlugin {
     return this;
   }
 
-  public void setOperationOrdering(Ordering<Operation> operationOrdering) {
+  public DocumentationConfigurer operationOrdering(Ordering<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;
+    return this;
   }
 
   private Function<AlternateTypeRule, Function<TypeResolver, AlternateTypeRule>> identityRuleBuilder() {
@@ -375,7 +376,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return true; //For now supports everything
+    return documentationType.equals(delimiter);
   }
 
   private Function<TypeResolver, AlternateTypeRule> newSubstitutionFunction(final Class clazz, final Class with) {

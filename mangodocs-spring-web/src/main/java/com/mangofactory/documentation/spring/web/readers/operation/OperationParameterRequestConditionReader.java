@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
+import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
 
 public class OperationParameterRequestConditionReader implements OperationBuilderPlugin {
 
@@ -46,13 +47,6 @@ public class OperationParameterRequestConditionReader implements OperationBuilde
   @Override
   public boolean supports(DocumentationType delimiter) {
     return true;
-  }
-
-  private Iterable<Parameter> nullToEmptyList(List<Parameter> parameters) {
-    if (parameters == null) {
-      return newArrayList();
-    }
-    return parameters;
   }
 
   private Predicate<? super Parameter> withName(final String name) {

@@ -12,6 +12,7 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import com.wordnik.swagger.annotations.Authorization;
 import com.wordnik.swagger.annotations.AuthorizationScope;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
@@ -30,6 +32,15 @@ import static com.mangofactory.documentation.spring.web.dummy.DummyModels.*;
 @RequestMapping(produces = {"application/json"}, consumes = {"application/json", "application/xml"})
 public class DummyClass {
   public void dummyMethod() {
+  }
+
+  public void methodWithOneArgs(int a) {
+  }
+
+  public void methodWithTwoArgs(int a, String b) {
+  }
+
+  public void methodWithNoArgs() {
   }
 
   @ApiOperation(value = "description", httpMethod = "GET")
@@ -203,6 +214,12 @@ public class DummyClass {
 
   @ResponseBody
   public DummyModels.BusinessModel methodWithConcreteResponseBody() {
+    return null;
+  }
+
+  @ResponseBody
+  @ResponseStatus(value = HttpStatus.ACCEPTED, reason = "Accepted request")
+  public DummyModels.BusinessModel methodWithResponseStatusAnnotation() {
     return null;
   }
 

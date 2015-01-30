@@ -15,6 +15,9 @@ class Accessors {
   private static Pattern getter = Pattern.compile("^get([a-zA-Z_0-9].*)");
   private static Pattern isGetter = Pattern.compile("^is([a-zA-Z_0_9].*)");
   private static Pattern setter = Pattern.compile("^set([a-zA-Z_0-9].*)");
+  private Accessors() {
+    throw new UnsupportedOperationException();
+  }
 
   public static boolean isGetter(Method method) {
     if (method.getParameterTypes().length == 0) {
@@ -25,29 +28,8 @@ class Accessors {
     return false;
   }
 
-  private static boolean isGetterThatIsNotAVoidMethod(Method method) {
-    return getter.matcher(method.getName()).find() &&
-            !method.getReturnType().equals(void.class);
-  }
-
-  private static boolean isBooleanGetterMethod(Method method) {
-    return isGetter.matcher(method.getName()).find() && method.getReturnType().equals(boolean.class);
-  }
-
-  private static Optional<JsonGetter> getterAnnotation(Method method) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, JsonGetter.class));
-  }
-
-  private static Optional<JsonSetter> setterAnnotation(Method method) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, JsonSetter.class));
-  }
-
   public static boolean isSetter(Method method) {
     return isSetterMethod(method) || setterAnnotation(method).isPresent();
-  }
-
-  private static boolean isSetterMethod(Method method) {
-    return method.getParameterTypes().length == 1 && setter.matcher(method.getName()).find();
   }
 
   public static String toCamelCase(String s) {
@@ -57,7 +39,7 @@ class Accessors {
 
   public static String propertyName(Method method) {
     Optional<JsonGetter> jsonGetterAnnotation = getterAnnotation(method);
-    if (jsonGetterAnnotation.isPresent() && !isNullOrEmpty(jsonGetterAnnotation.get().value())){
+    if (jsonGetterAnnotation.isPresent() && !isNullOrEmpty(jsonGetterAnnotation.get().value())) {
       return jsonGetterAnnotation.get().value();
     }
     Optional<JsonSetter> jsonSetterAnnotation = setterAnnotation(method);
@@ -77,5 +59,26 @@ class Accessors {
       return toCamelCase(matcher.group(1));
     }
     return "";
+  }
+
+  private static boolean isGetterThatIsNotAVoidMethod(Method method) {
+    return getter.matcher(method.getName()).find() &&
+            !method.getReturnType().equals(void.class);
+  }
+
+  private static boolean isBooleanGetterMethod(Method method) {
+    return isGetter.matcher(method.getName()).find() && method.getReturnType().equals(boolean.class);
+  }
+
+  private static Optional<JsonGetter> getterAnnotation(Method method) {
+    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, JsonGetter.class));
+  }
+
+  private static Optional<JsonSetter> setterAnnotation(Method method) {
+    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, JsonSetter.class));
+  }
+
+  private static boolean isSetterMethod(Method method) {
+    return method.getParameterTypes().length == 1 && setter.matcher(method.getName()).find();
   }
 }

@@ -56,7 +56,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     ResolvedType returnType = handlerReturnType(typeResolver, context.getHandlerMethod());
     returnType = context.alternateFor(returnType);
     int httpStatusCode = httpStatusCode(context.getHandlerMethod());
-    String message = HttpStatus.valueOf(httpStatusCode).getReasonPhrase();
+    String message = message(context.getHandlerMethod());
     String simpleName = null;
     if (!Void.class.equals(returnType.getErasedType()) && !Void.TYPE.equals(returnType.getErasedType())) {
       simpleName = typeNameExtractor.typeName(returnValueWithoutContainerType(returnType,
@@ -73,11 +73,21 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   private int httpStatusCode(HandlerMethod handlerMethod) {
     Optional<ResponseStatus> responseStatus
             = fromNullable(getAnnotation(handlerMethod.getMethod(), ResponseStatus.class));
-    int httpStatusCode = 200;
+    int httpStatusCode = HttpStatus.OK.value();
     if (responseStatus.isPresent()) {
       httpStatusCode = responseStatus.get().value().value();
     }
     return httpStatusCode;
+  }
+
+  private String message(HandlerMethod handlerMethod) {
+    Optional<ResponseStatus> responseStatus
+            = fromNullable(getAnnotation(handlerMethod.getMethod(), ResponseStatus.class));
+    String reasonPhrase = HttpStatus.OK.getReasonPhrase();
+    if (responseStatus.isPresent()) {
+      reasonPhrase = responseStatus.get().reason();
+    }
+    return reasonPhrase;
   }
 
 }

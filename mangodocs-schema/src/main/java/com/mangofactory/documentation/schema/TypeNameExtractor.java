@@ -5,6 +5,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
+import com.google.common.collect.Iterables;
 import com.mangofactory.documentation.schema.plugins.SchemaPluginsManager;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.schema.contexts.ModelContext;
@@ -15,7 +16,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import static com.google.common.base.Optional.*;
-import static com.google.common.base.Preconditions.*;
 import static com.mangofactory.documentation.schema.Collections.*;
 import static com.mangofactory.documentation.schema.Types.*;
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
@@ -59,11 +59,10 @@ public class TypeNameExtractor {
     }
 
     List<ResolvedType> typeParameters = type.getTypeParameters();
-    checkArgument(typeParameters.size() <= 1, "Expects container to have at most one generic parameter");
     if (typeParameters.size() == 0) {
       return "";
     }
-    String qualifier = innerTypeName(typeParameters.get(0), context.getDocumentationType());
+    String qualifier = innerTypeName(Iterables.getFirst(typeParameters, null), context.getDocumentationType());
     if ("object".equals(qualifier)) {
       return "";
     }
@@ -71,9 +70,6 @@ public class TypeNameExtractor {
   }
 
   private ResolvedType asResolved(Type type) {
-    if (type instanceof ResolvedType) {
-      return (ResolvedType) type;
-    }
     return typeResolver.resolve(type);
   }
 

@@ -1,18 +1,16 @@
-package com.mangofactory.documentation.swagger.web
-
+package com.mangofactory.documentation.spring.web.scanners
 import com.mangofactory.documentation.service.model.ApiDescription
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
 import com.mangofactory.documentation.spring.web.Paths
+import com.mangofactory.documentation.spring.web.RelativePathProvider
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.readers.operation.ApiOperationReader
-import com.mangofactory.documentation.spring.web.scanners.ApiDescriptionReader
-import com.mangofactory.documentation.swagger.mixins.SwaggerPathProviderSupport
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 
 import javax.servlet.ServletContext
 
-@Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
+@Mixin([RequestMappingSupport])
 class ApiDescriptionReaderSpec extends DocumentationContextSpec {
 
    def "should generate an api description for each request mapping pattern"() {
@@ -43,9 +41,8 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         secondApiDescription.getDescription() == dummyHandlerMethod().method.name
 
       where:
-        pathProvider                                      | prefix
-        absoluteSwaggerPathProvider()                     | "/api/v1"
-        relativeSwaggerPathProvider(Mock(ServletContext)) | ""
+        pathProvider                                    | prefix
+        new RelativePathProvider(Mock(ServletContext))  | ""
    }
 
    def "should sanitize request mapping endpoints"() {

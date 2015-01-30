@@ -3,6 +3,8 @@ package com.mangofactory.documentation.spring.web.readers.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.mangofactory.documentation.service.model.Parameter;
 import com.mangofactory.documentation.service.model.builder.ParameterBuilder;
 import com.mangofactory.documentation.spi.schema.AlternateTypeProvider;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.base.Predicates.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.schema.ResolvedTypes.*;
@@ -50,15 +53,12 @@ public class ModelAttributeParameterExpander {
                      final List<Parameter> parameters, DocumentationContext documentationContext) {
 
     Set<String> beanPropNames = getBeanPropertyNames(paramType);
-    List<Field> fields = getAllFields(paramType);
+    Iterable<Field> fields = FluentIterable.from(getInstanceFields(paramType))
+            .filter(onlyBeanProperties(beanPropNames));
     LOG.debug("Expanding parameter type: {}", paramType);
     for (Field field : fields) {
       LOG.debug("Attempting to expanding field: {}", field);
 
-      if (isStatic(field.getModifiers()) || field.isSynthetic() || !beanPropNames.contains(field.getName())) {
-        LOG.debug("Skipping expansion of field: {}, not a valid bean property", field);
-        continue;
-      }
       Class<?> resolvedType = getResolvedType(documentationContext.getAlternateTypeProvider(), field);
       if (!typeBelongsToJavaPackage(resolvedType) && !field.getType().isEnum()) {
         if (!field.getType().equals(paramType)) {
@@ -82,6 +82,15 @@ public class ModelAttributeParameterExpander {
       parameters.add(pluginsManager.expandParameter(parameterExpansionContext));
 
     }
+  }
+
+  private Predicate<Field> onlyBeanProperties(final Set<String> beanPropNames) {
+    return new Predicate<Field>() {
+      @Override
+      public boolean apply(Field input) {
+        return beanPropNames.contains(input.getName());
+      }
+    };
   }
 
   private String nestedParentName(String parentName, Field field) {
@@ -109,17 +118,41 @@ public class ModelAttributeParameterExpander {
             || Map.class.isAssignableFrom(type);
   }
 
-  private List<Field> getAllFields(final Class<?> type) {
+  private List<Field> getInstanceFields(final Class<?> type) {
 
     List<Field> result = new ArrayList<Field>();
 
     Class<?> i = type;
-    while (i != null && i != Object.class) {
+    while (!rootType(i)) {
       result.addAll(Arrays.asList(i.getDeclaredFields()));
       i = i.getSuperclass();
     }
+    return FluentIterable.from(result)
+            .filter(not(staticField()))
+            .filter(not(syntheticFields()))
+            .toList();
+  }
 
-    return result;
+  private Predicate<Field> syntheticFields() {
+    return new Predicate<Field>() {
+      @Override
+      public boolean apply(Field input) {
+        return input.isSynthetic();
+      }
+    };
+  }
+
+  private Predicate<Field> staticField() {
+    return new Predicate<Field>() {
+      @Override
+      public boolean apply(Field input) {
+        return isStatic(input.getModifiers());
+      }
+    };
+  }
+
+  private boolean rootType(Class<?> i) {
+    return i == null || i == Object.class;
   }
 
   private Set<String> getBeanPropertyNames(final Class<?> clazz) {

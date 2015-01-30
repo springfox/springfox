@@ -1,6 +1,7 @@
 package com.mangofactory.documentation.spring.web.readers
 import com.mangofactory.documentation.service.model.Parameter
 import com.mangofactory.documentation.service.model.builder.OperationBuilder
+import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.contexts.OperationContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
@@ -28,8 +29,12 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
       def operation = operationContext.operationBuilder().build()
 
     then:
+      sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+    and:
       Parameter parameter = operation.parameters[0]
       assert parameter."$property" == expectedValue
+
     where:
       property        | expectedValue
       'name'          | 'test'

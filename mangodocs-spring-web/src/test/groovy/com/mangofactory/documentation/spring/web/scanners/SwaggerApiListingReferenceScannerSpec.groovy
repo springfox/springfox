@@ -1,16 +1,15 @@
 package com.mangofactory.documentation.spring.web.scanners
+
+import com.mangofactory.documentation.service.annotations.ApiIgnore
 import com.mangofactory.documentation.service.model.ApiListingReference
+import com.mangofactory.documentation.service.model.ResourceGroup
 import com.mangofactory.documentation.spring.web.RelativePathProvider
 import com.mangofactory.documentation.spring.web.SpringGroupingStrategy
-import com.mangofactory.documentation.service.annotations.ApiIgnore
-import com.mangofactory.documentation.service.model.ResourceGroup
-import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyClass
 import com.mangofactory.documentation.spring.web.dummy.DummyController
 import com.mangofactory.documentation.spring.web.mixins.AccessorAssertions
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
-import com.mangofactory.documentation.swagger.web.AbsolutePathProvider
-import com.mangofactory.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 
@@ -25,9 +24,9 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
   def setup() {
     requestMappingHandlerMapping = Mock(RequestMappingHandlerMapping)
     contextBuilder.withHandlerMappings([requestMappingHandlerMapping])
-      .withResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
+            .withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
-            .pathProvider(new AbsolutePathProvider(servletContext: servletContext()))
+            .pathProvider(new RelativePathProvider(servletContext()))
             .groupName("groupName")
             .excludeAnnotations(ApiIgnore)
             .requestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
@@ -46,9 +45,9 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
     then:
       context().groupName == "default"
     where:
-      handlerMappings              | resourceGroupingStrategy                   | groupName | message
-      [requestMappingInfo("path")] | null                                       | null      | "resourceGroupingStrategy is required"
-      [requestMappingInfo("path")] | new ClassOrApiAnnotationResourceGrouping() | null      | "groupName is required"
+      handlerMappings              | resourceGroupingStrategy     | groupName | message
+      [requestMappingInfo("path")] | null                         | null      | "resourceGroupingStrategy is required"
+      [requestMappingInfo("path")] | new SpringGroupingStrategy() | null      | "groupName is required"
   }
 
   def "should group controller paths"() {
@@ -71,7 +70,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       result.getApiListingReferences().size() == 1
       ApiListingReference businessListingReference = result.getApiListingReferences()[0]
       businessListingReference.getPath() ==
-              'http://localhost:8080/context-path/api-docs/groupName/dummy-class'
+              '/groupName/dummy-class'
   }
 
   def "grouping of listing references using Spring grouping strategy"() {
@@ -91,7 +90,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
       plugin.configure(contextBuilder)
     and:
-      ApiListingReferenceScanResult result= sut.scan(context())
+      ApiListingReferenceScanResult result = sut.scan(context())
 
     then:
       result.apiListingReferences.size() == 2
@@ -120,16 +119,16 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.withHandlerMappings([requestMappingHandlerMapping])
       plugin.configure(contextBuilder)
     and:
-      ApiListingReferenceScanResult result= sut.scan(context())
+      ApiListingReferenceScanResult result = sut.scan(context())
 
     then:
       result.apiListingReferences.size() == 2
       result.apiListingReferences.find({ it.getDescription() == 'Dummy Class' })
-      result.apiListingReferences.find({ it.getDescription() == 'Group name' })
+      result.apiListingReferences.find({ it.getDescription() == 'Dummy Controller' })
 
     and:
       result.resourceGroupRequestMappings.size() == 2
-      result.resourceGroupRequestMappings[new ResourceGroup("group-name", DummyController, 2)].size() == 1
+      result.resourceGroupRequestMappings[new ResourceGroup("dummy-controller", DummyController)].size() == 1
       result.resourceGroupRequestMappings[new ResourceGroup("dummy-class", DummyClass)].size() == 5
   }
 
@@ -146,6 +145,6 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
     then: "api-docs should not appear in the path"
       ApiListingReference apiListingReference = apiListingReferences[0]
-      apiListingReference.getPath() == "/groupName/group-name"
+      apiListingReference.getPath() == "/groupName/dummy-controller"
   }
 }

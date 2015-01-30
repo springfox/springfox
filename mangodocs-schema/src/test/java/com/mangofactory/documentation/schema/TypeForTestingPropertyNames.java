@@ -42,6 +42,14 @@ public class TypeForTestingPropertyNames {
   public void setAnotherProp(int a) {
     throw new UnsupportedOperationException();
   }
+  @JsonSetter("prop2")
+  public void anotherProp(int a) {
+    throw new UnsupportedOperationException();
+  }
+  @JsonGetter("prop3")
+  public int yetAnotherProp() {
+    throw new UnsupportedOperationException();
+  }
   @JsonGetter
   public int getPropFallback() {
     throw new UnsupportedOperationException();

@@ -6,7 +6,6 @@ import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
@@ -27,6 +26,7 @@ import java.util.List;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.documentation.schema.ResolvedTypes.*;
+import static com.mangofactory.documentation.spring.web.HandlerMethodReturnTypes.*;
 
 public class HandlerMethodResolver {
 
@@ -38,7 +38,7 @@ public class HandlerMethodResolver {
   }
 
   public List<ResolvedMethodParameter> methodParameters(final HandlerMethod methodToResolve) {
-    Class hostClass = use(methodToResolve.getBeanType())
+    Class hostClass = useType(methodToResolve.getBeanType())
             .or(methodToResolve.getMethod().getDeclaringClass());
     ResolvedMethod resolvedMethod = getResolvedMethod(methodToResolve.getMethod(), hostClass);
     List<ResolvedMethodParameter> parameters = newArrayList();
@@ -59,13 +59,6 @@ public class HandlerMethodResolver {
     return parameters;
   }
 
-  public static Optional<Class> use(Class beanType) {
-    if (Class.class.getName().equals(beanType.getName())) {
-      return Optional.absent();
-    }
-    return Optional.fromNullable(beanType);
-  }
-
   /**
    * Resolves the return type of the given method in the class.
    *
@@ -81,6 +74,36 @@ public class HandlerMethodResolver {
     return asResolved(typeResolver, methodToResolve.getReturnType());
   }
 
+  private static Predicate<ResolvedMethod> methodNamesAreSame(final Method methodToResolve) {
+    return new Predicate<ResolvedMethod>() {
+      @Override
+      public boolean apply(ResolvedMethod input) {
+        return input.getRawMember().getName().equals(methodToResolve.getName());
+      }
+    };
+  }
+
+  @VisibleForTesting
+  static Ordering<ResolvedMethod> byArgumentCount() {
+    return Ordering.from(new Comparator<ResolvedMethod>() {
+      @Override
+      public int compare(ResolvedMethod first, ResolvedMethod second) {
+        return Ints.compare(first.getArgumentCount(), second.getArgumentCount());
+      }
+    });
+  }
+
+  private static Iterable<ResolvedMethod> methodsWithSameNumberOfParams(Iterable<ResolvedMethod> filtered,
+                                                                        final Method methodToResolve) {
+
+    return filter(filtered, new Predicate<ResolvedMethod>() {
+      @Override
+      public boolean apply(ResolvedMethod input) {
+        return input.getArgumentCount() == methodToResolve.getParameterTypes().length;
+      }
+    });
+  }
+
   @VisibleForTesting
   ResolvedMethod getResolvedMethod(final Method methodToResolve, Class<?> beanType) {
     ResolvedType enclosingType = typeResolver.resolve(beanType);
@@ -90,15 +113,6 @@ public class HandlerMethodResolver {
     Iterable<ResolvedMethod> filtered = filter(newArrayList(typeWithMembers.getMemberMethods()),
             methodNamesAreSame(methodToResolve));
     return resolveToMethodWithMaxResolvedTypes(filtered, methodToResolve);
-  }
-
-  private static Predicate<ResolvedMethod> methodNamesAreSame(final Method methodToResolve) {
-    return new Predicate<ResolvedMethod>() {
-      @Override
-      public boolean apply(ResolvedMethod input) {
-        return input.getRawMember().getName().equals(methodToResolve.getName());
-      }
-    };
   }
 
   private ResolvedMethod resolveToMethodWithMaxResolvedTypes(Iterable<ResolvedMethod> filtered,
@@ -115,15 +129,6 @@ public class HandlerMethodResolver {
       }
     }
     return Iterables.getFirst(filtered, null);
-  }
-
-  private static Ordering<ResolvedMethod> byArgumentCount() {
-    return Ordering.from(new Comparator<ResolvedMethod>() {
-      @Override
-      public int compare(ResolvedMethod first, ResolvedMethod second) {
-        return Ints.compare(first.getArgumentCount(), second.getArgumentCount());
-      }
-    });
   }
 
   private Iterable<ResolvedMethod> covariantMethods(Iterable<ResolvedMethod> filtered,
@@ -153,7 +158,7 @@ public class HandlerMethodResolver {
     return (Void.class == candidateMethodReturnValue.getErasedType()
             || Void.TYPE == candidateMethodReturnValue.getErasedType())
             && (Void.TYPE == returnType
-              || Void.class == returnType);
+            || Void.class == returnType);
   }
 
   private ResolvedType returnTypeOrVoid(ResolvedMethod input) {
@@ -199,17 +204,5 @@ public class HandlerMethodResolver {
   boolean isSuperClass(ResolvedType candidateMethodArgument, Type argumentOnMethod) {
     return argumentOnMethod instanceof Class
             && ((Class<?>) argumentOnMethod).isAssignableFrom(candidateMethodArgument.getErasedType());
-  }
-
-
-  private static Iterable<ResolvedMethod> methodsWithSameNumberOfParams(Iterable<ResolvedMethod> filtered,
-                                                                        final Method methodToResolve) {
-
-    return filter(filtered, new Predicate<ResolvedMethod>() {
-      @Override
-      public boolean apply(ResolvedMethod input) {
-        return input.getArgumentCount() == methodToResolve.getParameterTypes().length;
-      }
-    });
   }
 }
