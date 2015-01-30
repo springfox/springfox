@@ -1,10 +1,10 @@
 ## Change Logs
 [0.9.5](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.9.5)
 ===========================================
-#552 Enable ApiResponses annotation on interface
-#541 Fix the rendering of enums in model properties. Attempt to clean up logic to handle bare enums in the response
-#539 Prevents excludeAnnotations from modifying the defaults in SpringSwaggerConfig
-#496 Upgerades swagger-ui webjar version. Adds jstl dependencies to fix webjar context path
+[#552] Enable ApiResponses annotation on interface
+[#541] Fix the rendering of enums in model properties. Attempt to clean up logic to handle bare enums in the response
+[#539] Prevents excludeAnnotations from modifying the defaults in SpringSwaggerConfig
+[#496] Upgerades swagger-ui webjar version. Adds jstl dependencies to fix webjar context path
 
 
 Use @ApiModel.value as alternate type name for serialization
