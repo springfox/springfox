@@ -1,5 +1,4 @@
 package com.mangofactory.documentation.schema
-
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.schema.mixins.TypesForTestingSupport
 import com.mangofactory.documentation.spi.schema.AlternateTypeProvider
@@ -7,8 +6,7 @@ import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.mangofactory.documentation.schema.ResolvedTypes.*
-import static AlternateTypeRules.*
+import static com.mangofactory.documentation.schema.AlternateTypeRules.*
 import static com.mangofactory.documentation.schema.mixins.TypesForTestingSupport.*
 
 @Mixin(TypesForTestingSupport)
@@ -32,11 +30,11 @@ class AlternateTypeProviderSpec extends Specification {
   def "Alternate types are provided for specified types"() {
     given:
       def resolver = new TypeResolver()
-      def resolvedSource = asResolved(resolver, source)
+      def resolvedSource = resolver.resolve(source)
       AlternateTypeProvider sut = new AlternateTypeProvider([])
       sut.addRule(rule)
     expect:
-      sut.alternateFor(resolvedSource) == asResolved(resolver, expectedAlternate)
+      sut.alternateFor(resolvedSource) == resolver.resolve(expectedAlternate)
 
     where:
       rule                                                    | source                          | expectedAlternate

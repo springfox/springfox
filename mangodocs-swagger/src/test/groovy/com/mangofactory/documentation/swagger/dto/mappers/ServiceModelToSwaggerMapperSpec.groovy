@@ -1,5 +1,4 @@
 package com.mangofactory.documentation.swagger.dto.mappers
-
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.schema.ModelRef
 import com.mangofactory.documentation.service.model.AllowableListValues
@@ -20,7 +19,6 @@ import com.mangofactory.documentation.swagger.mixins.MapperSupport
 import spock.lang.Specification
 
 import static com.google.common.collect.Sets.*
-import static com.mangofactory.documentation.schema.ResolvedTypes.*
 
 @Mixin(MapperSupport)
 class ServiceModelToSwaggerMapperSpec extends Specification {
@@ -92,7 +90,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                                       .position(1)
                                       .qualifiedType("qualified.Test")
                                       .required(true)
-                                      .type(asResolved(new TypeResolver(), String))
+                                      .type(new TypeResolver().resolve(String))
                                       .typeName("String")
                                       .build()
                             ])

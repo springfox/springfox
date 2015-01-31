@@ -25,7 +25,6 @@ import java.util.List;
 
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.documentation.schema.ResolvedTypes.*;
 import static com.mangofactory.documentation.spring.web.HandlerMethodReturnTypes.*;
 
 public class HandlerMethodResolver {
@@ -71,7 +70,7 @@ public class HandlerMethodResolver {
     if (resolvedMethod != null) {
       return returnTypeOrVoid(resolvedMethod);
     }
-    return asResolved(typeResolver, methodToResolve.getReturnType());
+    return typeResolver.resolve(methodToResolve.getReturnType());
   }
 
   private static Predicate<ResolvedMethod> methodNamesAreSame(final Method methodToResolve) {

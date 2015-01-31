@@ -1,11 +1,11 @@
 package com.mangofactory.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
+import com.mangofactory.documentation.service.model.ResolvedMethodParameter
 import com.mangofactory.documentation.service.model.builder.ParameterBuilder
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext
-import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
-import com.mangofactory.documentation.service.model.ResolvedMethodParameter
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
-
-import static com.mangofactory.documentation.schema.ResolvedTypes.*
 
 @Mixin([RequestMappingSupport])
 class ParameterTypeReaderSpec extends DocumentationContextSpec {
@@ -44,6 +42,6 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
   }
 
   ResolvedType resolve(Class clazz) {
-    asResolved(new TypeResolver(), clazz);
+    new TypeResolver().resolve(clazz);
   }
 }

@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.mangofactory.documentation.schema.ResolvedTypes.*
 import static com.mangofactory.documentation.spi.DocumentationType.*
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*
 
@@ -17,7 +16,7 @@ class ModelProviderSpec extends Specification {
     given:
       ModelProvider sut = defaultModelProvider()
       def context = inputParam(modelType, SWAGGER_12, alternateTypeProvider())
-      context.seen(asResolved(new TypeResolver(), HttpHeaders))
+      context.seen(new TypeResolver().resolve(HttpHeaders))
       def dependentTypeNames = sut.dependencies(context).keySet().sort()
 
     expect:

@@ -32,7 +32,6 @@ import java.util.Set;
 import static com.google.common.base.Predicates.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Sets.*;
-import static com.mangofactory.documentation.schema.ResolvedTypes.*;
 import static com.mangofactory.documentation.schema.Types.*;
 import static java.lang.reflect.Modifier.*;
 
@@ -102,7 +101,7 @@ public class ModelAttributeParameterExpander {
 
   private Class<?> getResolvedType(AlternateTypeProvider alternateTypeProvider, Field field) {
     Class<?> type = field.getType();
-    ResolvedType resolvedType = asResolved(resolver, type);
+    ResolvedType resolvedType = resolver.resolve(type);
     ResolvedType alternativeType = alternateTypeProvider.alternateFor(resolvedType);
     Class<?> erasedType = alternativeType.getErasedType();
     if (type != erasedType) {

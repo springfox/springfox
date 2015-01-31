@@ -20,7 +20,6 @@ import java.util.Set;
 
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
-import static com.mangofactory.documentation.schema.ResolvedTypes.*;
 
 @Component
 public class ApiModelReader  {
@@ -103,7 +102,7 @@ public class ApiModelReader  {
                                        ModelContext modelContext) {
 
     for (Class ignorableParameterType : ignorableParameterTypes) {
-      modelContext.seen(asResolved(typeResolver, ignorableParameterType));
+      modelContext.seen(typeResolver.resolve(ignorableParameterType));
     }
   }
 

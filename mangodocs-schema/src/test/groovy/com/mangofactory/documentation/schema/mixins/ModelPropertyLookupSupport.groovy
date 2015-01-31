@@ -1,5 +1,4 @@
 package com.mangofactory.documentation.schema.mixins
-
 import com.fasterxml.classmate.MemberResolver
 import com.fasterxml.classmate.ResolvedTypeWithMembers
 import com.fasterxml.classmate.TypeResolver
@@ -11,8 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition
 import com.fasterxml.jackson.databind.type.TypeFactory
 
-import static com.mangofactory.documentation.schema.property.bean.Accessors.propertyName
-import static com.mangofactory.documentation.schema.ResolvedTypes.asResolved
+import static com.mangofactory.documentation.schema.property.bean.Accessors.*
 
 @SuppressWarnings("GrMethodMayBeStatic")
 class ModelPropertyLookupSupport {
@@ -23,7 +21,7 @@ class ModelPropertyLookupSupport {
     MemberResolver memberResolver = new MemberResolver(resolver);
     memberResolver.setIncludeLangObject(false);
 
-    ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(asResolved(resolver, typeToTest), null, null);
+    ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(resolver.resolve(typeToTest), null, null);
     typeWithMembers.memberMethods.find { it.name == methodName}
   }
 
@@ -32,7 +30,7 @@ class ModelPropertyLookupSupport {
     MemberResolver memberResolver = new MemberResolver(resolver);
     memberResolver.setIncludeLangObject(false);
 
-    ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(asResolved(resolver, typeToTest), null, null);
+    ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(resolver.resolve(typeToTest), null, null);
     typeWithMembers.memberFields.find { it.name == fieldName}
   }
 

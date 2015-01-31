@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
-import static com.mangofactory.documentation.schema.ResolvedTypes.*;
 import static com.mangofactory.documentation.swagger.annotations.Annotations.*;
 import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 
@@ -46,7 +45,7 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
     ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
     ResolvedType modelType;
     if (null != apiOperationAnnotation && Void.class != apiOperationAnnotation.response()) {
-      modelType = asResolved(typeResolver, apiOperationAnnotation.response());
+      modelType = typeResolver.resolve(apiOperationAnnotation.response());
       context.operationModelsBuilder().addReturn(modelType);
     }
   }
@@ -62,7 +61,7 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
     }
 
     for (ApiResponse response : apiResponses.get().value()) {
-      ResolvedType modelType = context.alternateFor(asResolved(typeResolver, response.response()));
+      ResolvedType modelType = context.alternateFor(typeResolver.resolve(response.response()));
       context.operationModelsBuilder().addReturn(modelType);
     }
     log.debug("Finished reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());

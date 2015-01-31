@@ -1,7 +1,6 @@
 package com.mangofactory.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.mangofactory.documentation.service.model.AllowableValues;
@@ -26,13 +25,6 @@ public class ResolvedTypes {
     }
 
     return type.getErasedType().getName();
-  }
-
-  public static ResolvedType asResolved(TypeResolver typeResolver, Type type) {
-    if (type instanceof ResolvedType) {
-      return (ResolvedType) type;
-    }
-    return typeResolver.resolve(type);
   }
 
   public static AllowableValues allowableValues(ResolvedType resolvedType) {
