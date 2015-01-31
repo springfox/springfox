@@ -1,8 +1,10 @@
 package com.mangofactory.documentation.spring.web;
 
 import com.google.common.base.Optional;
-import com.mangofactory.documentation.spi.DocumentationType;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.mangofactory.documentation.service.model.ResourceGroup;
+import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,18 +54,27 @@ public class SpringGroupingStrategy implements ResourceGroupingStrategy {
             = Optional.fromNullable(AnnotationUtils.findAnnotation(controllerClass, RequestMapping.class));
     if (requestMapping.isPresent()) {
       Set<ResourceGroup> groups = newHashSet();
-      //noinspection ConstantConditions
-      for (String groupFromReqMapping : asList(requestMapping.get().value())) {
-        if (!isNullOrEmpty(groupFromReqMapping)) {
-          String groupName = maybeChompLeadingSlash(firstPathSegment(groupFromReqMapping));
-          groups.add(new ResourceGroup(groupName, handlerMethod.getBeanType()));
-        }
+      Iterable<String> groupNames = FluentIterable.from(asList(requestMapping.get().value()))
+              .filter(notNullOrEmpty());
+      for (String each : groupNames) {
+        String groupName = maybeChompLeadingSlash(firstPathSegment(each));
+        groups.add(new ResourceGroup(groupName, handlerMethod.getBeanType()));
       }
       if (groups.size() > 0) {
         return groups;
       }
     }
-    return newHashSet(new ResourceGroup(maybeChompLeadingSlash(defaultGroup.toLowerCase()), handlerMethod.getBeanType()));
+    return newHashSet(new ResourceGroup(maybeChompLeadingSlash(defaultGroup.toLowerCase()),
+            handlerMethod.getBeanType()));
+  }
+
+  private Predicate<String> notNullOrEmpty() {
+    return new Predicate<String>() {
+      @Override
+      public boolean apply(String input) {
+        return !isNullOrEmpty(input);
+      }
+    };
   }
 
   private String getDescription(HandlerMethod handlerMethod) {

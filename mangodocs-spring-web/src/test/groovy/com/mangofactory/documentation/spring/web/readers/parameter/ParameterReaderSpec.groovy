@@ -1,6 +1,8 @@
 package com.mangofactory.documentation.spring.web.readers.parameter
+
 import com.mangofactory.documentation.service.model.ResolvedMethodParameter
 import com.mangofactory.documentation.service.model.builder.ParameterBuilder
+import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -33,10 +35,34 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       new ParameterNameReader()           | 'name'         | 'getParameterName'    | 'someName'        | null                                   | null                                   | 'someName'
       new ParameterNameReader()           | 'name'         | 'none'                | 'any'             | apiParam ([name: {-> 'AnName' }])      | null                                   | 'param0'
       new ParameterNameReader()           | 'name'         | 'none'                | 'any'             | null                                   | reqParam([value: {-> 'ArName' }])      | 'ArName'
-      new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | null                                   | null                                   | ''
-      new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: {-> 'defl' }]) | null                                   | ''
+      new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | null                                   | null                                   | null
+      new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: {-> 'defl' }]) | null                                   | null
       new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | null                                   | reqParam([defaultValue: {-> 'defr' }]) | 'defr'
    }
+
+  def "ParameterNameReader supports all documentationTypes"() {
+    given:
+      def sut = new ParameterNameReader()
+    expect:
+      sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+  }
+
+  def "ParameterDefaultReader should work with any documentationType"() {
+    given:
+      def sut = new ParameterDefaultReader()
+    expect:
+      sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+  }
+
+  def "ParameterTypeReader should work with any documentationType"() {
+    given:
+      def sut = new ParameterTypeReader()
+    expect:
+      sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+  }
 
   private ApiParam apiParam(Map closureMap) {
       closureMap as ApiParam

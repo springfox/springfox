@@ -153,7 +153,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
       Parameter annotatedBarParam = operation.parameters[0]
       annotatedBarParam != null
-      annotatedBarParam.name == 'example'
+      annotatedBarParam.name == 'treeishField'
   }
 
   def "Should not expand unannotated request params"() {

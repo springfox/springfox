@@ -37,15 +37,13 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
     // since the value is always a non-null Optional after conversion
     boolean optional = isOptional(methodParameter);
 
-    if (null != methodAnnotations) {
-      for (Annotation annotation : methodAnnotations) {
-        if (annotation instanceof RequestParam) {
-          requiredSet.add(!optional && ((RequestParam) annotation).required());
-        } else if (annotation instanceof RequestHeader) {
-          requiredSet.add(!optional && ((RequestHeader) annotation).required());
-        } else if (annotation instanceof PathVariable) {
-          requiredSet.add(true);
-        }
+    for (Annotation annotation : methodAnnotations) {
+      if (annotation instanceof RequestParam) {
+        requiredSet.add(!optional && ((RequestParam) annotation).required());
+      } else if (annotation instanceof RequestHeader) {
+        requiredSet.add(!optional && ((RequestHeader) annotation).required());
+      } else if (annotation instanceof PathVariable) {
+        requiredSet.add(true);
       }
     }
     return requiredSet.contains(true);

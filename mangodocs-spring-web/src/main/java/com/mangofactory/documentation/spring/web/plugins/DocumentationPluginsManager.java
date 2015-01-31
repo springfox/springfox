@@ -74,9 +74,6 @@ public class DocumentationPluginsManager {
   }
 
   public Parameter parameter(ParameterContext parameterContext) {
-    for (ParameterBuilderPlugin each : parameterPlugins.getPluginsFor(new DocumentationType("spring", "3+"))) {
-      each.apply(parameterContext);
-    }
     for (ParameterBuilderPlugin each : parameterPlugins.getPluginsFor(parameterContext.getDocumentationType())) {
       each.apply(parameterContext);
     }

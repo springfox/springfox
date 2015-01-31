@@ -2,6 +2,7 @@ package com.mangofactory.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.service.model.Parameter
 import com.mangofactory.documentation.service.model.builder.OperationBuilder
+import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.contexts.OperationContext
 import com.mangofactory.documentation.spring.web.dummy.DummyModels
 import com.mangofactory.documentation.spring.web.dummy.models.Example
@@ -10,6 +11,7 @@ import com.mangofactory.documentation.spring.web.mixins.ModelProviderForServiceS
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.mixins.ServicePluginsSupport
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsManager
 import org.joda.time.LocalDateTime
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.RequestMethod
@@ -42,6 +44,11 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     sut = new OperationParameterReader(typeResolver,
             new ModelAttributeParameterExpander(typeResolver, pluginsManager), pluginsManager)
   }
+  def "Should support all documentation types"() {
+    sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+  }
+
 
   def "Should ignore ignorables"() {
     given:
@@ -170,5 +177,14 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     where:
       handlerMethod                                                    | expectedSize
       dummyHandlerMethod('methodWithoutModelAttribute', Example.class) | 1
+  }
+
+  def "OperationParameterReader supports all documentationTypes"() {
+    given:
+      def sut = new OperationParameterReader(new TypeResolver(), Mock(ModelAttributeParameterExpander),
+              Mock(DocumentationPluginsManager))
+    expect:
+      sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
   }
 }

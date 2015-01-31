@@ -15,7 +15,6 @@ import java.util.List;
 
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
 
 public class OperationParameterRequestConditionReader implements OperationBuilderPlugin {
 
@@ -24,8 +23,7 @@ public class OperationParameterRequestConditionReader implements OperationBuilde
     ParamsRequestCondition paramsCondition = context.getRequestMappingInfo().getParamsCondition();
     List<Parameter> parameters = newArrayList();
     for (NameValueExpression<String> expression : paramsCondition.getExpressions()) {
-      if (expression.isNegated() || any(nullToEmptyList(parameters),
-              withName(expression.getName()))) {
+      if (skipParameter(parameters, expression)) {
         continue;
       }
       Parameter parameter = new ParameterBuilder()
@@ -42,6 +40,14 @@ public class OperationParameterRequestConditionReader implements OperationBuilde
       parameters.add(parameter);
     }
     context.operationBuilder().parameters(parameters);
+  }
+
+  private boolean skipParameter(List<Parameter> parameters, NameValueExpression<String> expression) {
+    return expression.isNegated() || parameterHandled(parameters, expression);
+  }
+
+  private boolean parameterHandled(List<Parameter> parameters, NameValueExpression<String> expression) {
+    return any(parameters, withName(expression.getName()));
   }
 
   @Override

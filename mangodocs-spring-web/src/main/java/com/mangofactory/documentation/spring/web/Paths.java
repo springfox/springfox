@@ -8,6 +8,10 @@ import static com.google.common.base.Strings.*;
 public class Paths {
   private static final Pattern FIRST_PATH_FRAGMENT_REGEX = Pattern.compile("^([/]?[\\w\\-\\.]+[/]?)");
 
+  private Paths() {
+    throw new UnsupportedOperationException();
+  }
+
   public static String splitCamelCase(String s, String separator) {
     if (isNullOrEmpty(s)) {
       return "";

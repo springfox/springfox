@@ -26,7 +26,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   DocumentationPluginsManager pluginsManager
 
   def setup() {
-    pluginsManager = springPluginsManagerWithDefaults()
+    pluginsManager = defaultWebPlugins()
     sut = new ApiModelReader(modelProvider(), new TypeResolver(), pluginsManager)
   }
 

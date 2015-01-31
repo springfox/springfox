@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.util.UriUtils;
 
+import java.io.UnsupportedEncodingException;
+
 public class ControllerNamingUtils {
   private static Logger log = LoggerFactory.getLogger(ControllerNamingUtils.class);
   private static final String ISO_8859_1 = "ISO-8859-1";
@@ -28,8 +30,8 @@ public class ControllerNamingUtils {
   public static String encode(String path) {
     try {
       path = UriUtils.encodePath(path, ISO_8859_1);
-    } catch (Exception e) {
-      log.error("Could not decode:" + path, e);
+    } catch (UnsupportedEncodingException e) {
+      log.error("Could not encode:" + path, e);
     }
     return path;
   }

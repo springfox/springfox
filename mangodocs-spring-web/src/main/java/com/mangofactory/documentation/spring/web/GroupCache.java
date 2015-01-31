@@ -1,7 +1,5 @@
 package com.mangofactory.documentation.spring.web;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
 import com.mangofactory.documentation.service.model.Group;
 
 import java.util.Map;
@@ -16,9 +14,6 @@ public class GroupCache {
   }
 
   public Group getGroup(String groupName) {
-    if (Strings.isNullOrEmpty(groupName)) {
-      Iterables.getFirst(groupLookup.values(), null);
-    }
     return groupLookup.get(groupName);
   }
 

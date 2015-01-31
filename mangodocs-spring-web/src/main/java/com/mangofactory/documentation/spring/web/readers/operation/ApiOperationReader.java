@@ -24,7 +24,6 @@ public class ApiOperationReader {
 
   private static final Set<RequestMethod> allRequestMethods
           = new LinkedHashSet<RequestMethod>(asList(RequestMethod.values()));
-  private static final OperationPositionalOrdering OPERATION_POSITIONAL_ORDERING = new OperationPositionalOrdering();
   private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
@@ -60,7 +59,7 @@ public class ApiOperationReader {
         currentCount++;
       }
     }
-    Collections.sort(operations, OPERATION_POSITIONAL_ORDERING);
+    Collections.sort(operations, outerContext.operationOrdering());
     return operations;
   }
 

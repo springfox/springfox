@@ -69,4 +69,11 @@ class PathsSpec extends Specification {
       ""              || ""
       null            || ""
   }
+
+  def "Cannot instantiate HandlerMethodReturnTypes helper class" () {
+    when:
+      new Paths()
+    then:
+      thrown(UnsupportedOperationException)
+  }
 }

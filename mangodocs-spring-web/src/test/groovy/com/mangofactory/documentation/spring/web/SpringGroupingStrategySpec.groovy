@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spring.web
 
+import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy
-import com.mangofactory.documentation.spring.web.SpringGroupingStrategy
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
@@ -21,6 +21,7 @@ class SpringGroupingStrategySpec extends Specification {
         group.groupName == groupNames[index]
       }
       strategy.getResourceDescription(requestMappingInfo, handlerMethod) == description
+      strategy.getResourcePosition(requestMappingInfo, handlerMethod) == 0
 
     where:
       handlerMethod                                         | groupNames              | description
@@ -30,6 +31,13 @@ class SpringGroupingStrategySpec extends Specification {
       fancyPetServiceHandlerMethod()                        | ["fancypets"]           | "Fancy Pet Service"
       multipleRequestMappingsHandlerMethod()                | ["pets", "petgrooming"] | "Pet Grooming Service"
       dummyHandlerMethod('methodWithRatherLongRequestPath') | ["dummy-class"]         | "Dummy Class"
+  }
 
+  def "Supports any documentation type" () {
+    given:
+      def groupingStrategy = new SpringGroupingStrategy()
+    expect:
+      groupingStrategy.supports(DocumentationType.SPRING_WEB)
+      groupingStrategy.supports(DocumentationType.SWAGGER_12)
   }
 }

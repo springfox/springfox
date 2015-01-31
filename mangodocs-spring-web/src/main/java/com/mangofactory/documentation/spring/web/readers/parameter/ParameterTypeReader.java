@@ -39,19 +39,17 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
       return "form";
     }
     Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
-    if (null != methodAnnotations) {
-      for (Annotation annotation : methodAnnotations) {
-        if (annotation instanceof PathVariable) {
-          return "path";
-        } else if (annotation instanceof ModelAttribute) {
-          return "body";
-        } else if (annotation instanceof RequestBody) {
-          return "body";
-        } else if (annotation instanceof RequestParam) {
-          return "query";
-        } else if (annotation instanceof RequestHeader) {
-          return "header";
-        }
+    for (Annotation annotation : methodAnnotations) {
+      if (annotation instanceof PathVariable) {
+        return "path";
+      } else if (annotation instanceof ModelAttribute) {
+        return "body";
+      } else if (annotation instanceof RequestBody) {
+        return "body";
+      } else if (annotation instanceof RequestParam) {
+        return "query";
+      } else if (annotation instanceof RequestHeader) {
+        return "header";
       }
     }
     return "body";

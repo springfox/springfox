@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.ValueConstants;
 
 import java.lang.annotation.Annotation;
 
-import static com.google.common.base.Strings.*;
-
 @Component
 public class ParameterDefaultReader implements ParameterBuilderPlugin {
   @Override
@@ -21,7 +19,7 @@ public class ParameterDefaultReader implements ParameterBuilderPlugin {
     String defaultValue = findAnnotatedDefaultValue(methodParameter);
     boolean isSkip = ValueConstants.DEFAULT_NONE.equals(defaultValue);
     if (!isSkip) {
-      context.parameterBuilder().defaultValue(nullToEmpty(defaultValue));
+      context.parameterBuilder().defaultValue(defaultValue);
     }
   }
 
@@ -32,13 +30,11 @@ public class ParameterDefaultReader implements ParameterBuilderPlugin {
 
   private String findAnnotatedDefaultValue(MethodParameter methodParameter) {
     Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
-    if (null != methodAnnotations) {
-      for (Annotation annotation : methodAnnotations) {
-        if (annotation instanceof RequestParam) {
-          return ((RequestParam) annotation).defaultValue();
-        } else if (annotation instanceof RequestHeader) {
-          return ((RequestHeader) annotation).defaultValue();
-        }
+    for (Annotation annotation : methodAnnotations) {
+      if (annotation instanceof RequestParam) {
+        return ((RequestParam) annotation).defaultValue();
+      } else if (annotation instanceof RequestHeader) {
+        return ((RequestHeader) annotation).defaultValue();
       }
     }
     return null;

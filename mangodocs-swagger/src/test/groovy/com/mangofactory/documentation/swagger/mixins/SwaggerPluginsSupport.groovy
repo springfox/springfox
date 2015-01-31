@@ -54,7 +54,7 @@ class SwaggerPluginsSupport {
     PluginRegistry<OperationBuilderPlugin, DocumentationType>  operationBuilderPlugins=
             OrderAwarePluginRegistry.create([])
     PluginRegistry<ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies =
-            OrderAwarePluginRegistry.create([new ClassOrApiAnnotationResourceGrouping()]) //
+            OrderAwarePluginRegistry.create([new ClassOrApiAnnotationResourceGrouping()])
     PluginRegistry<OperationModelsProviderPlugin, DocumentationType> modelProviders =
             OrderAwarePluginRegistry.create([
               new OperationModelsProvider(new TypeResolver()),

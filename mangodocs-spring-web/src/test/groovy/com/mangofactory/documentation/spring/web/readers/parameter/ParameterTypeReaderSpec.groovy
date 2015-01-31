@@ -3,6 +3,7 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.service.model.ResolvedMethodParameter
 import com.mangofactory.documentation.service.model.builder.ParameterBuilder
+import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
@@ -39,6 +40,14 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
       [:] as RequestParam   | Integer       | "query"
       null                  | Integer       | "body"
       null                  | MultipartFile | "form"
+  }
+
+  def "Should work with any documentationType"() {
+    given:
+      ParameterTypeReader sut = new ParameterTypeReader()
+    expect:
+      sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
   }
 
   ResolvedType resolve(Class clazz) {

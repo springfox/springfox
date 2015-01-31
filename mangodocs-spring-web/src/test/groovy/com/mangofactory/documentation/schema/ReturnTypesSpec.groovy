@@ -44,4 +44,11 @@ class ReturnTypesSpec extends Specification {
       Integer     | "GenericType«int»"
   }
 
+  def "Cannot instantiate HandlerMethodReturnTypes helper class" () {
+    when:
+      new HandlerMethodReturnTypes()
+    then:
+      thrown(UnsupportedOperationException)
+  }
+
 }
