@@ -3,6 +3,8 @@ package com.mangofactory.documentation.spring.web.readers.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.mangofactory.documentation.service.model.Parameter;
@@ -31,6 +33,7 @@ import java.util.Set;
 
 import static com.google.common.base.Predicates.*;
 import static com.google.common.base.Strings.*;
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.schema.Types.*;
 import static java.lang.reflect.Modifier.*;
@@ -52,35 +55,92 @@ public class ModelAttributeParameterExpander {
                      final List<Parameter> parameters, DocumentationContext documentationContext) {
 
     Set<String> beanPropNames = getBeanPropertyNames(paramType);
-    Iterable<Field> fields = FluentIterable.from(getInstanceFields(paramType))
+    Iterable<Field> fields = from(getInstanceFields(paramType))
             .filter(onlyBeanProperties(beanPropNames));
     LOG.debug("Expanding parameter type: {}", paramType);
-    for (Field field : fields) {
-      LOG.debug("Attempting to expanding field: {}", field);
-
-      Class<?> resolvedType = getResolvedType(documentationContext.getAlternateTypeProvider(), field);
-      if (!typeBelongsToJavaPackage(resolvedType) && !field.getType().isEnum()) {
-        if (!field.getType().equals(paramType)) {
-          LOG.debug("Expanding complex field: {} with type: {}", field, resolvedType);
-          expand(nestedParentName(parentName, field), field.getType(), parameters, documentationContext);
-          continue;
-        } else {
-          LOG.warn("Skipping expanding complex field: {} with type: {} as it is recursively defined", field,
-                  resolvedType);
-        }
-      }
-
-      String dataTypeName = typeNameFor(resolvedType);
-
-      if (dataTypeName == null) {
-        dataTypeName = resolvedType.getSimpleName();
-      }
-      LOG.debug("Building parameter for field: {}, with type: ", field, resolvedType);
-      ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(dataTypeName, parentName,
-              field, documentationContext.getDocumentationType(), new ParameterBuilder());
-      parameters.add(pluginsManager.expandParameter(parameterExpansionContext));
-
+    AlternateTypeProvider alternateTypeProvider = documentationContext.getAlternateTypeProvider();
+    FluentIterable<ModelAttributeField> expendables = from(fields)
+            .transform(toModelAttributeField(alternateTypeProvider))
+            .filter(not(simpleType()))
+            .filter(not(recursiveType(paramType)));
+    for (ModelAttributeField each : expendables) {
+      LOG.debug("Attempting to expand expandable field: {}", each.getField());
+      expand(nestedParentName(parentName, each.getField()), each.getFieldType(), parameters, documentationContext);
     }
+    FluentIterable<ModelAttributeField> simpleFields = from(fields)
+            .transform(toModelAttributeField(alternateTypeProvider))
+            .filter(simpleType());
+    for (ModelAttributeField each : simpleFields) {
+      LOG.debug("Attempting to expand field: {}", each);
+      String dataTypeName = Optional.fromNullable(typeNameFor(each.getFieldType()))
+              .or(each.getFieldType().getSimpleName());
+      LOG.debug("Building parameter for field: {}, with type: ", each, each.getFieldType());
+      ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(dataTypeName, parentName,
+              each.getField(), documentationContext.getDocumentationType(), new ParameterBuilder());
+      parameters.add(pluginsManager.expandParameter(parameterExpansionContext));
+    }
+  }
+
+  private Predicate<ModelAttributeField> recursiveType(final Class<?> paramType) {
+    return new Predicate<ModelAttributeField>() {
+      @Override
+      public boolean apply(ModelAttributeField input) {
+        return input.getFieldType() == paramType;
+      }
+    };
+  }
+
+  private Predicate<ModelAttributeField> simpleType() {
+    return or(
+              or(belongsToJavaPackage(),
+                or(isCollection(), isMap())),
+              isEnum());
+  }
+
+  private Predicate<ModelAttributeField> isCollection() {
+    return new Predicate<ModelAttributeField>() {
+      @Override
+      public boolean apply(ModelAttributeField input) {
+        return Collection.class.isAssignableFrom(input.getFieldType());
+      }
+    };
+  }
+
+  private Predicate<ModelAttributeField> isMap() {
+    return new Predicate<ModelAttributeField>() {
+      @Override
+      public boolean apply(ModelAttributeField input) {
+        return Map.class.isAssignableFrom(input.getFieldType());
+      }
+    };
+  }
+
+  private Predicate<ModelAttributeField> isEnum() {
+    return new Predicate<ModelAttributeField>() {
+      @Override
+      public boolean apply(ModelAttributeField input) {
+        return input.getFieldType().isEnum();
+      }
+    };
+  }
+
+  private Predicate<ModelAttributeField> belongsToJavaPackage() {
+    return new Predicate<ModelAttributeField>() {
+      @Override
+      public boolean apply(ModelAttributeField input) {
+        return packageName(input.getFieldType()).startsWith("java");
+      }
+    };
+  }
+
+  private Function<Field, ModelAttributeField> toModelAttributeField(final AlternateTypeProvider
+                                                                             alternateTypeProvider) {
+    return new Function<Field, ModelAttributeField>() {
+      @Override
+      public ModelAttributeField apply(Field input) {
+        return new ModelAttributeField(fieldType(alternateTypeProvider, input), input);
+      }
+    };
   }
 
   private Predicate<Field> onlyBeanProperties(final Set<String> beanPropNames) {
@@ -99,7 +159,7 @@ public class ModelAttributeParameterExpander {
     return String.format("%s.%s", parentName, field.getName());
   }
 
-  private Class<?> getResolvedType(AlternateTypeProvider alternateTypeProvider, Field field) {
+  private Class<?> fieldType(AlternateTypeProvider alternateTypeProvider, Field field) {
     Class<?> type = field.getType();
     ResolvedType resolvedType = resolver.resolve(type);
     ResolvedType alternativeType = alternateTypeProvider.alternateFor(resolvedType);
@@ -110,11 +170,17 @@ public class ModelAttributeParameterExpander {
     return erasedType;
   }
 
-  private boolean typeBelongsToJavaPackage(Class<?> type) {
-    return type.getPackage() == null
-            || type.getPackage().getName().startsWith("java")
-            || Collection.class.isAssignableFrom(type)
-            || Map.class.isAssignableFrom(type);
+  private String packageName(Class<?> type) {
+    return Optional.fromNullable(type.getPackage()).transform(toPackageName()).or("java");
+  }
+
+  private Function<Package, String> toPackageName() {
+    return new Function<Package, String>() {
+      @Override
+      public String apply(Package input) {
+        return input.getName();
+      }
+    };
   }
 
   private List<Field> getInstanceFields(final Class<?> type) {
@@ -126,7 +192,7 @@ public class ModelAttributeParameterExpander {
       result.addAll(Arrays.asList(i.getDeclaredFields()));
       i = i.getSuperclass();
     }
-    return FluentIterable.from(result)
+    return from(result)
             .filter(not(staticField()))
             .filter(not(syntheticFields()))
             .toList();
@@ -150,8 +216,8 @@ public class ModelAttributeParameterExpander {
     };
   }
 
-  private boolean rootType(Class<?> i) {
-    return i == null || i == Object.class;
+  private boolean rootType(Class clazz) {
+    return Optional.fromNullable(clazz).or(Object.class) == Object.class;
   }
 
   private Set<String> getBeanPropertyNames(final Class<?> clazz) {

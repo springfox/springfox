@@ -3,13 +3,13 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.service.model.Parameter
 import com.mangofactory.documentation.service.model.builder.OperationBuilder
 import com.mangofactory.documentation.spi.service.contexts.OperationContext
-import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyModels
 import com.mangofactory.documentation.spring.web.dummy.models.Example
 import com.mangofactory.documentation.spring.web.dummy.models.Treeish
 import com.mangofactory.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.mixins.ServicePluginsSupport
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import org.joda.time.LocalDateTime
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.RequestMethod
@@ -152,7 +152,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
       Parameter annotatedBarParam = operation.parameters[0]
       annotatedBarParam != null
-      annotatedBarParam.name == 'example'
+      annotatedBarParam.name == 'treeishField'
   }
 
   def "Should not expand unannotated request params"() {
