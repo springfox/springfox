@@ -3,9 +3,7 @@ package com.mangofactory.documentation.service.model.builder;
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.mangofactory.documentation.service.model.Authorization;
 import com.mangofactory.documentation.service.model.Operation;
 import com.mangofactory.documentation.service.model.Parameter;
@@ -15,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
 
 public class OperationBuilder {
@@ -24,12 +24,12 @@ public class OperationBuilder {
   private String responseClass;
   private String nickname;
   private int position;
-  private Set<String> produces = Sets.newHashSet();
-  private Set<String> consumes = Sets.newHashSet();
-  private Set<String> protocol = Sets.newHashSet();
-  private List<Authorization> authorizations = Lists.newArrayList();
-  private List<Parameter> parameters = Lists.newArrayList();
-  private Set<ResponseMessage> responseMessages = Sets.newHashSet();
+  private Set<String> produces = newHashSet();
+  private Set<String> consumes = newHashSet();
+  private Set<String> protocol = newHashSet();
+  private List<Authorization> authorizations = newArrayList();
+  private List<Parameter> parameters = newArrayList();
+  private Set<ResponseMessage> responseMessages = newHashSet();
   private String deprecated;
   private boolean isHidden;
 
@@ -63,33 +63,33 @@ public class OperationBuilder {
     return this;
   }
 
-  public OperationBuilder produces(List<String> produces) {
-    this.produces.addAll(produces);
+  public OperationBuilder produces(Set<String> produces) {
+    this.produces.addAll(nullToEmptySet(produces));
     return this;
   }
 
-  public OperationBuilder consumes(List<String> consumes) {
-    this.consumes.addAll(consumes);
+  public OperationBuilder consumes(Set<String> consumes) {
+    this.consumes.addAll(nullToEmptySet(consumes));
     return this;
   }
 
-  public OperationBuilder protocol(List<String> protocol) {
-    this.protocol.addAll(protocol);
+  public OperationBuilder protocols(Set<String> protocols) {
+    this.protocol.addAll(nullToEmptySet(protocols));
     return this;
   }
 
   public OperationBuilder authorizations(List<Authorization> authorizations) {
-    this.authorizations.addAll(authorizations);
+    this.authorizations.addAll(nullToEmptyList(authorizations));
     return this;
   }
 
   public OperationBuilder parameters(List<Parameter> parameters) {
-    this.parameters.addAll(parameters);
+    this.parameters.addAll(nullToEmptyList(parameters));
     return this;
   }
 
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = Sets.newHashSet(mergeResponseMessages(responseMessages));
+    this.responseMessages = newHashSet(mergeResponseMessages(responseMessages));
     return this;
   }
 
@@ -111,7 +111,7 @@ public class OperationBuilder {
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
     //Add logic to consolidate the response messages
     ImmutableMap<Integer, ResponseMessage> responsesByCode = Maps.uniqueIndex(this.responseMessages, byStatusCode());
-    Set<ResponseMessage> merged = Sets.newHashSet(this.responseMessages);
+    Set<ResponseMessage> merged = newHashSet(this.responseMessages);
     for (ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());

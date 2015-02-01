@@ -20,7 +20,7 @@ public class ApiListing {
   private List<ApiDescription> apis;
 
   @JsonIgnore
-  private List<String> protocol;
+  private List<String> protocols;
   @JsonInclude(Include.NON_EMPTY)
   private List<Authorization> authorizations;
   @JsonInclude(Include.NON_EMPTY)
@@ -78,12 +78,12 @@ public class ApiListing {
     this.consumes = consumes;
   }
 
-  public List<String> getProtocol() {
-    return protocol;
+  public List<String> getProtocols() {
+    return protocols;
   }
 
-  public void setProtocol(List<String> protocol) {
-    this.protocol = protocol;
+  public void setProtocols(List<String> protocols) {
+    this.protocols = protocols;
   }
 
   public List<Authorization> getAuthorizations() {

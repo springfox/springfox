@@ -15,11 +15,11 @@ class GroupSpec extends Specification {
     given:
       List<AuthorizationType> authorizations = [new ApiKey("test", "header")]
       Group built = new GroupBuilder()
-              .withResourceListing(new ResourceListingBuilder()
+              .resourceListing(new ResourceListingBuilder()
                 .authorizations(authorizations)
                 .apis([Mock(ApiListingReference)])
                 .build())
-              .withApiListings(newHashMap())
+              .apiListingsByGroup(newHashMap())
               .build()
     expect:
       built.apiListings.size() == 0

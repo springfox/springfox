@@ -1,6 +1,19 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
 
+configurations {
+  testArtifacts.extendsFrom testRuntime
+}
+
+task testJar(type: Jar) {
+  classifier "test"
+  from sourceSets.test.output
+}
+
+artifacts {
+  testArtifacts testJar
+}
+
 dependencies {
   compile libs.core
   compile libs.spring

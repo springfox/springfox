@@ -53,12 +53,12 @@ public class ParameterBuilder {
   }
 
   public ParameterBuilder parameterType(String paramType) {
-    this.paramType = paramType;
+    this.paramType = defaultIfAbsent(paramType, this.paramType);
     return this;
   }
 
   public ParameterBuilder parameterAccess(String paramAccess) {
-    this.paramAccess = paramAccess;
+    this.paramAccess = defaultIfAbsent(paramAccess, this.paramAccess);
     return this;
   }
 

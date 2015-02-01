@@ -92,7 +92,7 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
     defaultConfigurer.configure(contextBuilder);
     contextBuilder
             .withResourceGroupingStrategy(resourceGroupingStrategy)
-            .withHandlerMappings(handlerMappings);
+            .handlerMappings(handlerMappings);
     return contextBuilder;
   }
 

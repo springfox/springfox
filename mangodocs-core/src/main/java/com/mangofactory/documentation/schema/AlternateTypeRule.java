@@ -28,7 +28,7 @@ public class AlternateTypeRule {
   public ResolvedType alternateFor(ResolvedType type) {
     if (appliesTo(type)) {
       if (hasWildcards(original)) {
-        return replaceWildcardsFrom(WildcardType.collectReplaceables(type, original), alternate);
+        return replaceWildcardsFrom(collectReplaceables(type, original), alternate);
       } else {
         return alternate;
       }

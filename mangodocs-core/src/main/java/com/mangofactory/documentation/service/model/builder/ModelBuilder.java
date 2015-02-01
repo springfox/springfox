@@ -7,18 +7,21 @@ import com.mangofactory.documentation.schema.ModelProperty;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Maps.*;
 import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
 
 public class ModelBuilder {
   private String id;
   private String name;
   private String qualifiedType;
-  private Map<String, ModelProperty> properties;
   private String description;
   private String baseModel;
   private String discriminator;
-  private List<String> subTypes;
   private ResolvedType modelType;
+
+  private Map<String, ModelProperty> properties = newHashMap();
+  private List<String> subTypes = newArrayList();
 
   public ModelBuilder id(String id) {
     this.id = defaultIfAbsent(id, this.id);
@@ -36,7 +39,9 @@ public class ModelBuilder {
   }
 
   public ModelBuilder properties(Map<String, ModelProperty> properties) {
-    this.properties = properties;
+    if (properties != null) {
+      this.properties.putAll(properties);
+    }
     return this;
   }
 
@@ -56,7 +61,9 @@ public class ModelBuilder {
   }
 
   public ModelBuilder subTypes(List<String> subTypes) {
-    this.subTypes = subTypes;
+    if (subTypes != null) {
+      this.subTypes.addAll(subTypes);
+    }
     return this;
   }
 

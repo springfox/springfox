@@ -1,5 +1,5 @@
 package com.mangofactory.documentation.spring.web.scanners
-import com.mangofactory.documentation.service.PathProvider
+import com.mangofactory.documentation.spring.web.AbstractPathProvider
 import com.mangofactory.documentation.service.model.ApiInfo
 import com.mangofactory.documentation.service.model.ApiKey
 import com.mangofactory.documentation.service.model.ApiListingReference
@@ -85,7 +85,7 @@ class ApiGroupScannerSpec extends DocumentationContextSpec {
 
   def "resource with mocked apis"() {
     given:
-      PathProvider pathProvider = new AbsolutePathProvider(servletContext: servletContext())
+      AbstractPathProvider pathProvider = new AbsolutePathProvider(servletContext())
       plugin
               .groupName("groupName")
               .includePatterns(".*")

@@ -54,7 +54,7 @@ public class ApiListing {
     return consumes;
   }
 
-  public List<String> getProtocol() {
+  public List<String> getProtocols() {
     return protocol;
   }
 

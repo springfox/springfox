@@ -68,4 +68,8 @@ public class Paths {
     result = result.replaceAll("\\{([^}]*?):.*?\\}", "{$1}");
     return result.isEmpty() ? "/" : result;
   }
+
+  public static String sanitiseUrl(String candidate) {
+    return candidate.replaceAll("(?<!(http:|https:))//", "/");
+  }
 }

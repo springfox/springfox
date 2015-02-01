@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.swagger.web;
 
-import com.mangofactory.documentation.service.PathProvider;
+import com.mangofactory.documentation.spring.web.AbstractPathProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -8,10 +8,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.ServletContext;
 
 @Component
-public class AbsolutePathProvider extends PathProvider {
+public class AbsolutePathProvider extends AbstractPathProvider {
+
+  private final ServletContext servletContext;
 
   @Autowired
-  private ServletContext servletContext;
+  public AbsolutePathProvider(ServletContext servletContext) {
+    this.servletContext = servletContext;
+  }
 
   @Override
   protected String applicationPath() {

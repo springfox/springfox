@@ -1,8 +1,6 @@
 package com.mangofactory.documentation.swagger.web
-
 import com.mangofactory.documentation.service.model.ApiDescription
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
-import com.mangofactory.documentation.spring.web.Paths
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.readers.operation.ApiOperationReader
@@ -12,8 +10,10 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 
 import javax.servlet.ServletContext
 
+import static com.mangofactory.documentation.spring.web.Paths.*
+
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
-class ApiDescriptionReaderSpec extends DocumentationContextSpec {
+class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
 
    def "should generate an api description for each request mapping pattern"() {
       given:
@@ -36,10 +36,10 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         ApiDescription apiDescription = descriptionList[0]
         ApiDescription secondApiDescription = descriptionList[1]
 
-        apiDescription.getPath() == prefix + '/somePath/{businessId}'
+        apiDescription.getPath() == '/somePath/{businessId}'
         apiDescription.getDescription() == dummyHandlerMethod().method.name
 
-        secondApiDescription.getPath() == prefix + '/somePath/{businessId}'
+        secondApiDescription.getPath() == '/somePath/{businessId}'
         secondApiDescription.getDescription() == dummyHandlerMethod().method.name
 
       where:
@@ -50,7 +50,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
 
    def "should sanitize request mapping endpoints"() {
       expect:
-        Paths.sanitizeRequestMappingPattern(mappingPattern) == expected
+        sanitizeRequestMappingPattern(mappingPattern) == expected
 
       where:
         mappingPattern             | expected

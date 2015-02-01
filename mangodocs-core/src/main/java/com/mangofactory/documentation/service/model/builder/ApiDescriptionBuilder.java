@@ -30,7 +30,9 @@ public class ApiDescriptionBuilder {
   }
 
   public ApiDescriptionBuilder operations(List<Operation> operations) {
-    this.operations = operationOrdering.sortedCopy(operations);
+    if (operations != null) {
+      this.operations = operationOrdering.sortedCopy(operations);
+    }
     return this;
   }
 

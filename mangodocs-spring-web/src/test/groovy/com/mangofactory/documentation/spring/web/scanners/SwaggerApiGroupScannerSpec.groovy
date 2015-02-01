@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web.scanners
 
-import com.mangofactory.documentation.service.PathProvider
+import com.mangofactory.documentation.spring.web.AbstractPathProvider
 import com.mangofactory.documentation.service.model.ApiInfo
 import com.mangofactory.documentation.service.model.ApiKey
 import com.mangofactory.documentation.service.model.ApiListingReference
@@ -15,7 +15,7 @@ import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpe
 import static com.google.common.collect.Maps.*
 
 @Mixin([RequestMappingSupport])
-class ApiGroupScannerSpec extends DocumentationContextSpec {
+class SwaggerApiGroupScannerSpec extends DocumentationContextSpec {
 
   ApiListingReferenceScanner listingReferenceScanner = Mock(ApiListingReferenceScanner)
   ApiListingScanner listingScanner = Mock(ApiListingScanner)
@@ -86,7 +86,7 @@ class ApiGroupScannerSpec extends DocumentationContextSpec {
 
   def "resource with mocked apis"() {
     given:
-      PathProvider pathProvider = new RelativePathProvider(servletContext())
+      AbstractPathProvider pathProvider = new RelativePathProvider(servletContext())
       plugin
               .groupName("groupName")
               .includePatterns(".*")

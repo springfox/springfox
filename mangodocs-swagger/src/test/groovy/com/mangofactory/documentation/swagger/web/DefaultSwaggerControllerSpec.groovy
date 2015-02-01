@@ -82,8 +82,8 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
   def "should respond with api listing for a given resource group"() {
     given:
       Group group = new GroupBuilder()
-              .withName("groupName")
-              .withApiListings(['businesses': apiListing()])
+              .name("groupName")
+              .apiListingsByGroup(['businesses': apiListing()])
               .build()
       controller.groupCache.addGroup(group)
     when:
@@ -99,8 +99,8 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
       def authTypes = new ArrayList<AuthorizationType>()
       authTypes.add(authorizationTypes());
       Group group = new GroupBuilder()
-              .withName("groupName")
-              .withResourceListing(resourceListing(authTypes))
+              .name("groupName")
+              .resourceListing(resourceListing(authTypes))
               .build()
 
       controller.groupCache.addGroup(group)

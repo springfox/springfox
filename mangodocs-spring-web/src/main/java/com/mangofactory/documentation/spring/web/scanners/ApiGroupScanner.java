@@ -33,8 +33,8 @@ public class ApiGroupScanner {
     ApiListingScanningContext listingContext = new ApiListingScanningContext(context, result.getResourceGroupRequestMappings());
 
     GroupBuilder group = new GroupBuilder()
-            .withName(context.getGroupName())
-            .withApiListings(apiListingScanner.scan(listingContext));
+            .name(context.getGroupName())
+            .apiListingsByGroup(apiListingScanner.scan(listingContext));
 
     Collections.sort(apiListingReferences, context.getListingReferenceOrdering());
 
@@ -52,7 +52,7 @@ public class ApiGroupScanner {
 //      String prefix = nullToEmpty(path).startsWith("http") ? path : DOCUMENTATION_BASE_PATH;
 //      log.info("  {} at location: {}{}", path, prefix, apiListingReference.getPath());
 //    }
-    group.withResourceListing(resourceListing);
+    group.resourceListing(resourceListing);
     return group.build();
   }
 

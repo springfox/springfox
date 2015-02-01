@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.swagger.web
 
-import com.mangofactory.documentation.service.PathProvider
+import com.mangofactory.documentation.spring.web.AbstractPathProvider
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -12,7 +12,7 @@ class AbsolutePathProviderSpec extends Specification {
 
    def "assert urls"() {
       given:
-        AbsolutePathProvider provider = new AbsolutePathProvider(servletContext: servletContext)
+        AbsolutePathProvider provider = new AbsolutePathProvider(servletContext)
 
       expect:
         provider.applicationPath() == expectedAppPath
@@ -28,7 +28,7 @@ class AbsolutePathProviderSpec extends Specification {
   @Unroll
   def "Absolute paths"() {
     given:
-      PathProvider provider = new AbsolutePathProvider(apiResourcePrefix: "", servletContext: servletContext())
+      AbstractPathProvider provider = new AbsolutePathProvider(servletContext())
 
     expect:
       provider.getApplicationBasePath() == expectedAppBase

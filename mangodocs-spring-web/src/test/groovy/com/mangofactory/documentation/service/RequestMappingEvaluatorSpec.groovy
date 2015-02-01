@@ -1,19 +1,18 @@
 package com.mangofactory.documentation.service
-
 import com.mangofactory.documentation.service.annotations.ApiIgnore
-import com.mangofactory.documentation.spring.web.mixins.AccessorAssertions
+import com.mangofactory.documentation.spring.web.SpringRequestMappingEvaluator
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.scanners.RegexRequestMappingPatternMatcher
 import spock.lang.Specification
 
 import static com.google.common.collect.Sets.*
 
-@Mixin([AccessorAssertions, RequestMappingSupport])
+@Mixin([RequestMappingSupport])
 class RequestMappingEvaluatorSpec extends Specification {
   def "ignore requestMappings "() {
     given:
-      RequestMappingEvaluator sut = new RequestMappingEvaluator(new
-              RegexRequestMappingPatternMatcher(), newHashSet(ApiIgnore), newHashSet())
+      SpringRequestMappingEvaluator sut = new SpringRequestMappingEvaluator(new RegexRequestMappingPatternMatcher())
+      sut.appendExcludeAnnotations(newHashSet(ApiIgnore))
       def ignorableMethod = ignorableHandlerMethod()
 
     expect:
@@ -23,8 +22,8 @@ class RequestMappingEvaluatorSpec extends Specification {
 
   def "ignore classMapping"() {
     given:
-      RequestMappingEvaluator sut = new RequestMappingEvaluator(new
-              RegexRequestMappingPatternMatcher(), newHashSet(ApiIgnore), newHashSet())
+      SpringRequestMappingEvaluator sut = new SpringRequestMappingEvaluator(new RegexRequestMappingPatternMatcher())
+      sut.appendExcludeAnnotations(newHashSet(ApiIgnore))
       def ignorableClass = ignorableClass()
 
     expect:
@@ -33,11 +32,12 @@ class RequestMappingEvaluatorSpec extends Specification {
 
   def "include requestMapping"() {
     given:
-      RequestMappingEvaluator apiListingReferenceScanner = new RequestMappingEvaluator(new
-              RegexRequestMappingPatternMatcher(), newHashSet(ApiIgnore), newHashSet(patterns))
+      SpringRequestMappingEvaluator evaluator = new SpringRequestMappingEvaluator(new RegexRequestMappingPatternMatcher())
+      evaluator.appendExcludeAnnotations(newHashSet(ApiIgnore))
+      evaluator.appendIncludePatterns(newHashSet(patterns))
 
     expect:
-      sholdInclude == apiListingReferenceScanner.shouldIncludeRequestMapping(requestMapping, handlerMethod)
+      sholdInclude == evaluator.shouldIncludeRequestMapping(requestMapping, handlerMethod)
 
     where:
       handlerMethod            | requestMapping                   | patterns    | sholdInclude
@@ -50,11 +50,12 @@ class RequestMappingEvaluatorSpec extends Specification {
 
   def "include path"() {
     given:
-      RequestMappingEvaluator apiListingReferenceScanner = new RequestMappingEvaluator(new
-              RegexRequestMappingPatternMatcher(), newHashSet(ApiIgnore), newHashSet(patterns))
+      SpringRequestMappingEvaluator evaluator = new SpringRequestMappingEvaluator(new RegexRequestMappingPatternMatcher())
+      evaluator.appendExcludeAnnotations(newHashSet(ApiIgnore))
+      evaluator.appendIncludePatterns(newHashSet(patterns))
 
     expect:
-      sholdInclude == apiListingReferenceScanner.shouldIncludePath(path)
+      sholdInclude == evaluator.shouldIncludePath(path)
 
     where:
       path         | patterns    | sholdInclude

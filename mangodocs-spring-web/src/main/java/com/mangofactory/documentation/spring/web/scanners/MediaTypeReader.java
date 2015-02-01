@@ -1,13 +1,13 @@
 package com.mangofactory.documentation.spring.web.scanners;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.mangofactory.documentation.service.model.ResolvedMethodParameter;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.ApiListingBuilderPlugin;
-import com.mangofactory.documentation.spi.service.contexts.ApiListingContext;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
+import com.mangofactory.documentation.spi.service.contexts.ApiListingContext;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import com.mangofactory.documentation.spring.web.readers.operation.HandlerMethodResolver;
-import com.mangofactory.documentation.service.model.ResolvedMethodParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -17,11 +17,11 @@ import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition;
 import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Sets.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
@@ -44,11 +44,11 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
     Set<MediaType> consumesMediaTypes = consumesCondition.getConsumableMediaTypes();
     Set<MediaType> producesMediaTypes = producesRequestCondition.getProducibleMediaTypes();
 
-    List<String> consumesList = toList(consumesMediaTypes);
-    List<String> producesList = toList(producesMediaTypes);
+    Set<String> consumesList = toSet(consumesMediaTypes);
+    Set<String> producesList = toSet(producesMediaTypes);
 
     if (handlerMethodHasFileParameter(context)) {
-      consumesList = Arrays.asList("multipart/form-data");
+      consumesList = newHashSet(MediaType.MULTIPART_FORM_DATA_VALUE);
     }
 
     if (producesList.isEmpty()) {
@@ -89,8 +89,8 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
     return false;
   }
 
-  private List<String> toList(Set<MediaType> mediaTypeSet) {
-    List<String> mediaTypes = newArrayList();
+  private Set<String> toSet(Set<MediaType> mediaTypeSet) {
+    Set<String> mediaTypes = newHashSet();
     for (MediaType mediaType : mediaTypeSet) {
       mediaTypes.add(mediaType.toString());
     }

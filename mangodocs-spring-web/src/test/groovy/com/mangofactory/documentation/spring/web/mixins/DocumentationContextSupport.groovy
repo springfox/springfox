@@ -7,7 +7,7 @@ class DocumentationContextSupport {
   @SuppressWarnings("GrMethodMayBeStatic")
   DocumentationContextBuilder defaultContextBuilder() {
     new DocumentationContextBuilder()
-            .withHandlerMappings([])
+            .handlerMappings([])
             .typeResolver(new TypeResolver())
   }
 

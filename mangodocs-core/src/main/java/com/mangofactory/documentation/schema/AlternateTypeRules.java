@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public class AlternateTypeRules {
+  private AlternateTypeRules() {
+    throw new UnsupportedOperationException();
+  }
 
   /**
    * Helper method to create a new alternate rule.

@@ -80,7 +80,7 @@ public class ApiListingScanner {
               .resourcePath(resourcePath)
               .produces(newArrayList(produces))
               .consumes(newArrayList(consumes))
-              .protocol(new ArrayList<String>())
+              .protocols(new ArrayList<String>())
               .authorizations(authorizations)
               .apis(sortedDescriptions)
               .models(models)

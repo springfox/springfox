@@ -4,6 +4,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.documentation.spi.service.contexts.Defaults;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContextBuilder;
 import com.mangofactory.documentation.spring.web.RelativePathProvider;
+import com.mangofactory.documentation.spring.web.SpringRequestMappingEvaluator;
 import com.mangofactory.documentation.spring.web.scanners.RegexRequestMappingPatternMatcher;
 
 import javax.servlet.ServletContext;
@@ -34,7 +35,8 @@ class DefaultConfiguration {
       .defaultResponseMessages(defaults.defaultResponseMessages())
       .pathProvider(new RelativePathProvider(servletContext))
       .requestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
-      .typeResolver(typeResolver);
+      .typeResolver(typeResolver)
+      .requestMappingEvaluator(new SpringRequestMappingEvaluator(new RegexRequestMappingPatternMatcher()));
 
   }
 }

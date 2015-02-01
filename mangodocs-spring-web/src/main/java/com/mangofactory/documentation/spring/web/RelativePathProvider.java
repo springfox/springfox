@@ -1,12 +1,10 @@
 package com.mangofactory.documentation.spring.web;
 
-import com.mangofactory.documentation.service.PathProvider;
-
 import javax.servlet.ServletContext;
 
 import static com.google.common.base.Strings.*;
 
-public class RelativePathProvider extends PathProvider {
+public class RelativePathProvider extends AbstractPathProvider {
   public static final String ROOT = "/";
   private final ServletContext servletContext;
 

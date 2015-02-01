@@ -14,12 +14,16 @@ public class OAuthBuilder {
 
 
   public OAuthBuilder scopes(List<AuthorizationScope> scopes) {
-    this.scopes.addAll(scopes);
+    if (scopes != null) {
+      this.scopes.addAll(scopes);
+    }
     return this;
   }
 
   public OAuthBuilder grantTypes(List<GrantType> grantTypes) {
-    this.grantTypes.addAll(grantTypes);
+    if (grantTypes != null) {
+      this.grantTypes.addAll(grantTypes);
+    }
     return this;
   }
 

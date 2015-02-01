@@ -123,7 +123,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    *
    * @param pathProvider
    * @return this DocumentationConfigurer
-   * @see PathProvider
+   * @see com.mangofactory.documentation.spring.web.AbstractPathProvider
    */
   public DocumentationConfigurer pathProvider(PathProvider pathProvider) {
     this.pathProvider = pathProvider;
@@ -347,7 +347,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
     }
     return builder
             .apiInfo(apiInfo)
-            .withDocumentationType(documentationType)
+            .documentationType(documentationType)
             .applyDefaultResponseMessages(applyDefaultResponseMessages)
             .additionalResponseMessages(responseMessages)
             .additionalIgnorableTypes(ignorableParameterTypes)

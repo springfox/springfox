@@ -47,6 +47,7 @@ public class DocumentationContextBuilder {
   private DocumentationType documentationType;
   private RequestMappingPatternMatcher requestMappingPatternMatcher;
   private Ordering<Operation> operationOrdering;
+  private RequestMappingEvaluator requestMappingEvaluator;
 
   private boolean applyDefaultResponseMessages;
   private Set<Class> ignorableParameterTypes = newHashSet();
@@ -56,7 +57,7 @@ public class DocumentationContextBuilder {
   private List<AlternateTypeRule> rules = newArrayList();
   private Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
 
-  public DocumentationContextBuilder withHandlerMappings(List<RequestMappingHandlerMapping> handlerMappings) {
+  public DocumentationContextBuilder handlerMappings(List<RequestMappingHandlerMapping> handlerMappings) {
     this.handlerMappings = handlerMappings;
     return this;
   }
@@ -115,8 +116,13 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder withDocumentationType(DocumentationType documentationType) {
+  public DocumentationContextBuilder documentationType(DocumentationType documentationType) {
     this.documentationType = documentationType;
+    return this;
+  }
+
+  public DocumentationContextBuilder requestMappingEvaluator(RequestMappingEvaluator requestMappingEvaluator) {
+    this.requestMappingEvaluator = requestMappingEvaluator;
     return this;
   }
 
@@ -184,8 +190,8 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContext build() {
-    RequestMappingEvaluator requestMappingEvaluator
-            = new RequestMappingEvaluator(requestMappingPatternMatcher, excludeAnnotations, includePatterns);
+    requestMappingEvaluator.appendExcludeAnnotations(excludeAnnotations);
+    requestMappingEvaluator.appendIncludePatterns(includePatterns);
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
     AuthorizationContext authorizationContext = fromNullable(this.authorizationContext)
             .or(new AuthorizationContext.AuthorizationContextBuilder()
@@ -193,8 +199,9 @@ public class DocumentationContextBuilder {
                     .withIncludePatterns(includePatterns)
                     .withRequestMappingPatternMatcher(requestMappingPatternMatcher)
                     .build());
-    return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName, requestMappingEvaluator,
-            ignorableParameterTypes, responseMessages, resourceGroupingStrategy, pathProvider,
+    return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName,
+            requestMappingEvaluator, ignorableParameterTypes, responseMessages,
+            resourceGroupingStrategy, pathProvider,
             authorizationContext, authorizationTypes, rules,
             listingReferenceOrdering, apiDescriptionOrdering,
             operationOrdering);

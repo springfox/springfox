@@ -8,7 +8,7 @@ class GroupCacheSpec extends Specification {
     given:
       def sut = new GroupCache()
     and:
-      sut.addGroup(new GroupBuilder().withName("test").build())
+      sut.addGroup(new GroupBuilder().name("test").build())
 
     when:
       def group = sut.getGroup("test")

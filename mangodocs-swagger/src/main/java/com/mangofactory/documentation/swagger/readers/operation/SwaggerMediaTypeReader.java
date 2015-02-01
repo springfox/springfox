@@ -7,9 +7,10 @@ import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
 
 import static com.google.common.base.Strings.*;
+import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
@@ -19,8 +20,8 @@ public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
   public void apply(OperationContext context) {
     ApiOperation annotation = findAnnotation(context.getHandlerMethod().getMethod(), ApiOperation.class);
     if (null != annotation) {
-      context.operationBuilder().consumes(asList(nullToEmpty(annotation.consumes())));
-      context.operationBuilder().produces(asList(nullToEmpty(annotation.produces())));
+      context.operationBuilder().consumes(asSet(nullToEmpty(annotation.consumes())));
+      context.operationBuilder().produces(asSet(nullToEmpty(annotation.produces())));
     }
   }
 
@@ -30,11 +31,11 @@ public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
   }
 
 
-  private List<String> asList(String mediaTypes) {
-    return Splitter.on(',')
+  private Set<String> asSet(String mediaTypes) {
+    return newHashSet(Splitter.on(',')
             .trimResults()
             .omitEmptyStrings()
-            .splitToList(mediaTypes);
+            .splitToList(mediaTypes));
   }
 
 

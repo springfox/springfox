@@ -1,11 +1,12 @@
 package com.mangofactory.documentation.service.model.builder;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.mangofactory.documentation.service.model.AllowableListValues;
-import com.mangofactory.documentation.schema.ModelRef;
-import com.mangofactory.documentation.service.model.AllowableValues;
 import com.mangofactory.documentation.schema.ModelProperty;
+import com.mangofactory.documentation.schema.ModelRef;
+import com.mangofactory.documentation.service.model.AllowableListValues;
+import com.mangofactory.documentation.service.model.AllowableValues;
 
+import static com.mangofactory.documentation.schema.Enums.*;
 import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
 
 public class ModelPropertyBuilder {
@@ -50,9 +51,12 @@ public class ModelPropertyBuilder {
   }
 
   public ModelPropertyBuilder allowableValues(AllowableValues allowableValues) {
-    //Preference to inferred allowable values over list values via ApiModelProperty
-    if (this.allowableValues == null && !allowableValuesIsEmpty(allowableValues)) {
-      this.allowableValues = allowableValues;
+    if (allowableValues != null) {
+      if (allowableValues instanceof AllowableListValues) {
+        this.allowableValues = emptyListValuesToNull((AllowableListValues) allowableValues);
+      } else {
+        this.allowableValues = allowableValues;
+      }
     }
     return this;
   }
@@ -60,16 +64,6 @@ public class ModelPropertyBuilder {
   public ModelPropertyBuilder typeName(String typeName) {
     this.typeName = defaultIfAbsent(typeName, this.typeName);
     return this;
-  }
-
-  private boolean allowableValuesIsEmpty(AllowableValues values) {
-    if (values != null) {
-      if (values instanceof AllowableListValues) {
-        return ((AllowableListValues) values).getValues().isEmpty();
-      }
-      return true;
-    }
-    return false;
   }
 
   public ModelPropertyBuilder items(ModelRef items) {
@@ -81,4 +75,5 @@ public class ModelPropertyBuilder {
     return new ModelProperty(name, type, typeName, qualifiedType, position, required, description, allowableValues,
             items);
   }
+
 }

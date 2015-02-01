@@ -14,7 +14,7 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
     apiListing.resourcePath= '/resource'
     apiListing.consumes= [MediaType.APPLICATION_JSON_VALUE]
     apiListing.produces= [MediaType.APPLICATION_JSON_VALUE]
-    apiListing.protocol= []
+    apiListing.protocols= []
     apiListing.authorizations= []
     apiListing.apis = []
     apiListing.models =
@@ -69,7 +69,7 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
         getDescription()
         getModels()
         getPosition()
-        getProtocol()
+        getProtocols()
         getResourcePath()
         getSwaggerVersion()
       }
