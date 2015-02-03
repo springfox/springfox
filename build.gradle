@@ -16,7 +16,7 @@ buildscript {
 
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
-  projectVersion = '0.9.5-SNAPSHOT'
+  projectVersion = '2.0.0-SNAPSHOT'
   jdkVersion = 1.6
 }
 
