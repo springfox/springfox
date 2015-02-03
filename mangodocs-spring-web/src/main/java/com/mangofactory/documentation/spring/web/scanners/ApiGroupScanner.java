@@ -34,7 +34,7 @@ public class ApiGroupScanner {
 
     GroupBuilder group = new GroupBuilder()
             .name(context.getGroupName())
-            .apiListingsByGroup(apiListingScanner.scan(listingContext));
+            .apiListingsByResourceGroupName(apiListingScanner.scan(listingContext));
 
     Collections.sort(apiListingReferences, context.getListingReferenceOrdering());
 

@@ -19,7 +19,7 @@ class GroupSpec extends Specification {
                 .authorizations(authorizations)
                 .apis([Mock(ApiListingReference)])
                 .build())
-              .apiListingsByGroup(newHashMap())
+              .apiListingsByResourceGroupName(newHashMap())
               .build()
     expect:
       built.apiListings.size() == 0

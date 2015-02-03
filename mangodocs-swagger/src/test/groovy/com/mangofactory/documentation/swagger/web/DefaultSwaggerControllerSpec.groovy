@@ -83,7 +83,7 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
     given:
       Group group = new GroupBuilder()
               .name("groupName")
-              .apiListingsByGroup(['businesses': apiListing()])
+              .apiListingsByResourceGroupName(['businesses': apiListing()])
               .build()
       controller.groupCache.addGroup(group)
     when:

@@ -19,8 +19,7 @@ public class GroupBuilder {
     return this;
   }
 
-  //TODO: Something fishy here... this should just be apiListings since we already know what group it is
-  public GroupBuilder apiListingsByGroup(Map<String, ApiListing> apiListings) {
+  public GroupBuilder apiListingsByResourceGroupName(Map<String, ApiListing> apiListings) {
     if (apiListings != null) {
       this.apiListings.putAll(apiListings);
     }
