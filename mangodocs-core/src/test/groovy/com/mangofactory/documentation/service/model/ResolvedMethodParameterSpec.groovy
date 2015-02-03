@@ -1,6 +1,7 @@
 package com.mangofactory.documentation.service.model
 
 import com.fasterxml.classmate.TypeResolver
+import com.mangofactory.documentation.service.ResolvedMethodParameter
 import org.springframework.core.MethodParameter
 import spock.lang.Specification
 

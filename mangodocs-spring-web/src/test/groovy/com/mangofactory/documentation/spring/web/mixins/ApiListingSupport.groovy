@@ -1,9 +1,9 @@
 package com.mangofactory.documentation.spring.web.mixins
 
-import com.mangofactory.documentation.service.model.ApiListing
-import com.mangofactory.documentation.service.model.ApiListingReference
-import com.mangofactory.documentation.service.model.OAuth
-import com.mangofactory.documentation.service.model.ResourceListing
+import com.mangofactory.documentation.service.ApiListing
+import com.mangofactory.documentation.service.ApiListingReference
+import com.mangofactory.documentation.service.OAuth
+import com.mangofactory.documentation.service.ResourceListing
 
 class ApiListingSupport {
 

@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.service.model;
+package com.mangofactory.documentation.service;
 
 public class ApiKey extends AuthorizationType {
   private final String keyname;

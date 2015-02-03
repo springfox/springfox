@@ -1,8 +1,8 @@
 package com.mangofactory.documentation.builders
 
-import com.mangofactory.documentation.service.model.ApiInfo
-import com.mangofactory.documentation.service.model.ApiListingReference
-import com.mangofactory.documentation.service.model.AuthorizationType
+import com.mangofactory.documentation.service.ApiInfo
+import com.mangofactory.documentation.service.ApiListingReference
+import com.mangofactory.documentation.service.AuthorizationType
 import spock.lang.Specification
 
 class ResourceListingBuilderSpec extends Specification {

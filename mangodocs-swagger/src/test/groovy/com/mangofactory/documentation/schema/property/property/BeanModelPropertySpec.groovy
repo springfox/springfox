@@ -9,7 +9,7 @@ import com.mangofactory.documentation.schema.mixins.ModelPropertyLookupSupport
 import com.mangofactory.documentation.schema.mixins.TypesForTestingSupport
 import com.mangofactory.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.documentation.schema.property.bean.BeanModelProperty
-import com.mangofactory.documentation.service.model.AllowableListValues
+import com.mangofactory.documentation.service.AllowableListValues
 import spock.lang.Ignore
 
 import static com.google.common.collect.Lists.*

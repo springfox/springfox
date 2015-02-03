@@ -2,9 +2,9 @@ package com.mangofactory.documentation.builders;
 
 import com.google.common.collect.Ordering;
 import com.mangofactory.documentation.schema.Model;
-import com.mangofactory.documentation.service.model.ApiDescription;
-import com.mangofactory.documentation.service.model.ApiListing;
-import com.mangofactory.documentation.service.model.Authorization;
+import com.mangofactory.documentation.service.ApiDescription;
+import com.mangofactory.documentation.service.ApiListing;
+import com.mangofactory.documentation.service.Authorization;
 
 import java.util.List;
 import java.util.Map;

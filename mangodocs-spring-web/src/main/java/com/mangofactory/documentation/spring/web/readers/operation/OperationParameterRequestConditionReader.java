@@ -2,8 +2,8 @@ package com.mangofactory.documentation.spring.web.readers.operation;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
-import com.mangofactory.documentation.service.model.AllowableListValues;
-import com.mangofactory.documentation.service.model.Parameter;
+import com.mangofactory.documentation.service.AllowableListValues;
+import com.mangofactory.documentation.service.Parameter;
 import com.mangofactory.documentation.builders.ParameterBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;

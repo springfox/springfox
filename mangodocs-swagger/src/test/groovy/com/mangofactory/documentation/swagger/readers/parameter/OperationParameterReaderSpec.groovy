@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.swagger.readers.parameter
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.documentation.service.model.Parameter
+import com.mangofactory.documentation.service.Parameter
 import com.mangofactory.documentation.builders.OperationBuilder
 import com.mangofactory.documentation.spi.service.contexts.OperationContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec

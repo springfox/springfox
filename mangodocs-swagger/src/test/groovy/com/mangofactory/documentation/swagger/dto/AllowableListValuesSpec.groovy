@@ -6,7 +6,7 @@ class AllowableListValuesSpec extends Specification {
 
   def "should pass coverage"() {
     expect:
-      new com.mangofactory.documentation.service.model.AllowableListValues(['a'], 'string').with {
+      new com.mangofactory.documentation.service.AllowableListValues(['a'], 'string').with {
         getValues()
         getValueType()
       }

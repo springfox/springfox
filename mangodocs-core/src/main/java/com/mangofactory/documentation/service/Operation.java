@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.service.model;
+package com.mangofactory.documentation.service;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;

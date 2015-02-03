@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.service.model;
+package com.mangofactory.documentation.service;
 
 public class AllowableRangeValues implements AllowableValues {
   private final String min;

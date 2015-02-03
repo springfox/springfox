@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.service.model;
+package com.mangofactory.documentation.service;
 
 import java.util.Map;
 

@@ -2,8 +2,8 @@ package com.mangofactory.documentation.spring.web.scanners
 
 import com.mangofactory.documentation.schema.mixins.SchemaPluginsSupport
 import com.mangofactory.documentation.RequestMappingPatternMatcher
-import com.mangofactory.documentation.service.model.ApiListing
-import com.mangofactory.documentation.service.model.ResourceGroup
+import com.mangofactory.documentation.service.ApiListing
+import com.mangofactory.documentation.service.ResourceGroup
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec

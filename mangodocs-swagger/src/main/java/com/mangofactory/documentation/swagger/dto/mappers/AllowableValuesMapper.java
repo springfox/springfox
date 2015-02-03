@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.swagger.dto.mappers;
 
 
-import com.mangofactory.documentation.service.model.AllowableValues;
+import com.mangofactory.documentation.service.AllowableValues;
 import com.mangofactory.documentation.swagger.dto.AllowableListValues;
 import com.mangofactory.documentation.swagger.dto.AllowableRangeValues;
 import org.mapstruct.Mapper;
@@ -11,10 +11,10 @@ public abstract class AllowableValuesMapper {
 
   //Allowable values related
   public abstract AllowableListValues toSwaggerAllowableListValues(
-          com.mangofactory.documentation.service.model.AllowableListValues from);
+          com.mangofactory.documentation.service.AllowableListValues from);
 
   public abstract AllowableRangeValues toSwaggerAllowableRangeValues(
-          com.mangofactory.documentation.service.model.AllowableRangeValues from);
+          com.mangofactory.documentation.service.AllowableRangeValues from);
 
   public com.mangofactory.documentation.swagger.dto.AllowableValues toSwaggerAllowableValues(
           AllowableValues original) {
@@ -22,10 +22,10 @@ public abstract class AllowableValuesMapper {
       return null;
     }
 
-    if (original instanceof com.mangofactory.documentation.service.model.AllowableListValues) {
-      return toSwaggerAllowableListValues((com.mangofactory.documentation.service.model.AllowableListValues) original);
-    } else if (original instanceof com.mangofactory.documentation.service.model.AllowableRangeValues) {
-      return toSwaggerAllowableRangeValues((com.mangofactory.documentation.service.model.AllowableRangeValues)
+    if (original instanceof com.mangofactory.documentation.service.AllowableListValues) {
+      return toSwaggerAllowableListValues((com.mangofactory.documentation.service.AllowableListValues) original);
+    } else if (original instanceof com.mangofactory.documentation.service.AllowableRangeValues) {
+      return toSwaggerAllowableRangeValues((com.mangofactory.documentation.service.AllowableRangeValues)
               original);
     }
     throw new UnsupportedOperationException();

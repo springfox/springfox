@@ -1,5 +1,5 @@
 package com.mangofactory.documentation.swagger.web
-import com.mangofactory.documentation.service.model.ApiDescription
+import com.mangofactory.documentation.service.ApiDescription
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec

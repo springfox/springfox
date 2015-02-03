@@ -1,5 +1,6 @@
 package com.mangofactory.documentation.service.model
 
+import com.mangofactory.documentation.service.ResourceGroup
 import spock.lang.Shared
 import spock.lang.Specification
 

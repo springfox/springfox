@@ -10,7 +10,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
-import com.mangofactory.documentation.service.model.ResolvedMethodParameter;
+import com.mangofactory.documentation.service.ResolvedMethodParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;

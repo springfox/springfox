@@ -3,7 +3,7 @@ package com.mangofactory.documentation.spring.web;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import com.mangofactory.documentation.service.model.ResourceGroup;
+import com.mangofactory.documentation.service.ResourceGroup;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;
 import org.springframework.core.annotation.AnnotationUtils;

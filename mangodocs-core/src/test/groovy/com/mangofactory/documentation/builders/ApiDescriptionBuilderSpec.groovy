@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.builders
 import com.google.common.collect.Ordering
-import com.mangofactory.documentation.service.model.Operation
+import com.mangofactory.documentation.service.Operation
 import spock.lang.Specification
 
 class ApiDescriptionBuilderSpec extends Specification {

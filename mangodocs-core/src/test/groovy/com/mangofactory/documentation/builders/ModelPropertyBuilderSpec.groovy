@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.builders
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.schema.ModelRef
-import com.mangofactory.documentation.service.model.AllowableListValues
+import com.mangofactory.documentation.service.AllowableListValues
 import spock.lang.Specification
 
 class ModelPropertyBuilderSpec extends Specification {

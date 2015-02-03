@@ -2,7 +2,7 @@ package com.mangofactory.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.collect.Ordering;
-import com.mangofactory.documentation.service.model.Operation;
+import com.mangofactory.documentation.service.Operation;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 

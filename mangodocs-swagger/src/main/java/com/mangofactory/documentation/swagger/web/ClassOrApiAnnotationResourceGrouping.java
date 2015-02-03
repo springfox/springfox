@@ -2,7 +2,7 @@ package com.mangofactory.documentation.swagger.web;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.mangofactory.documentation.service.model.ResourceGroup;
+import com.mangofactory.documentation.service.ResourceGroup;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;
 import com.mangofactory.documentation.spring.web.Paths;

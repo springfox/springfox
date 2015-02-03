@@ -3,8 +3,8 @@ package com.mangofactory.documentation.builders;
 import com.fasterxml.classmate.ResolvedType;
 import com.mangofactory.documentation.schema.ModelProperty;
 import com.mangofactory.documentation.schema.ModelRef;
-import com.mangofactory.documentation.service.model.AllowableListValues;
-import com.mangofactory.documentation.service.model.AllowableValues;
+import com.mangofactory.documentation.service.AllowableListValues;
+import com.mangofactory.documentation.service.AllowableValues;
 
 import static com.mangofactory.documentation.schema.Enums.*;
 import static com.mangofactory.documentation.builders.BuilderDefaults.*;

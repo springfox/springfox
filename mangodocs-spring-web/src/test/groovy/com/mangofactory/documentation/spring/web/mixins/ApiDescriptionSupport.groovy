@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web.mixins
 
-import com.mangofactory.documentation.service.model.ApiDescription
+import com.mangofactory.documentation.service.ApiDescription
 
 
 class ApiDescriptionSupport {

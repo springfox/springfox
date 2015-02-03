@@ -7,7 +7,7 @@ import com.mangofactory.documentation.schema.mixins.ModelPropertyLookupSupport
 import com.mangofactory.documentation.schema.mixins.TypesForTestingSupport
 import com.mangofactory.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import com.mangofactory.documentation.schema.property.field.FieldModelProperty
-import com.mangofactory.documentation.service.model.AllowableListValues
+import com.mangofactory.documentation.service.AllowableListValues
 
 import static com.google.common.collect.Lists.*
 import static com.mangofactory.documentation.schema.property.BeanPropertyDefinitions.*

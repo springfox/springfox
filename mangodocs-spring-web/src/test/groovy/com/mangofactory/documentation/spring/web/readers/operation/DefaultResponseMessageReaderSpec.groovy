@@ -3,7 +3,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.schema.DefaultGenericTypeNamingStrategy
 import com.mangofactory.documentation.schema.TypeNameExtractor
 import com.mangofactory.documentation.schema.mixins.SchemaPluginsSupport
-import com.mangofactory.documentation.service.model.ResponseMessage
+import com.mangofactory.documentation.service.ResponseMessage
 import com.mangofactory.documentation.builders.OperationBuilder
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.contexts.OperationContext

@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.service.model;
+package com.mangofactory.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.MethodParameter;

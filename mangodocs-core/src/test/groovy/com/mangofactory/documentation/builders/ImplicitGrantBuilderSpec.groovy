@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.builders
 
-import com.mangofactory.documentation.service.model.LoginEndpoint
+import com.mangofactory.documentation.service.LoginEndpoint
 import spock.lang.Specification
 
 class ImplicitGrantBuilderSpec extends Specification {

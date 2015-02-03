@@ -1,9 +1,9 @@
 package com.mangofactory.service.model
 
-import com.mangofactory.documentation.service.model.ApiKey
-import com.mangofactory.documentation.service.model.ApiListingReference
-import com.mangofactory.documentation.service.model.AuthorizationType
-import com.mangofactory.documentation.service.model.Group
+import com.mangofactory.documentation.service.ApiKey
+import com.mangofactory.documentation.service.ApiListingReference
+import com.mangofactory.documentation.service.AuthorizationType
+import com.mangofactory.documentation.service.Group
 import com.mangofactory.documentation.builders.GroupBuilder
 import com.mangofactory.documentation.builders.ResourceListingBuilder
 import spock.lang.Specification

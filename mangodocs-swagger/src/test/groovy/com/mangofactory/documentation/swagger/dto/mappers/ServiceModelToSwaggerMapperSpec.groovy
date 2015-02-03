@@ -1,8 +1,8 @@
 package com.mangofactory.documentation.swagger.dto.mappers
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.schema.ModelRef
-import com.mangofactory.documentation.service.model.AllowableListValues
-import com.mangofactory.documentation.service.model.ApiListingReference
+import com.mangofactory.documentation.service.AllowableListValues
+import com.mangofactory.documentation.service.ApiListingReference
 import com.mangofactory.documentation.builders.ApiDescriptionBuilder
 import com.mangofactory.documentation.builders.ApiInfoBuilder
 import com.mangofactory.documentation.builders.ApiListingBuilder

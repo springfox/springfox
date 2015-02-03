@@ -1,9 +1,9 @@
 package com.mangofactory.documentation.spi.service.contexts;
 
 import com.google.common.primitives.Ints;
-import com.mangofactory.documentation.service.model.ApiDescription;
-import com.mangofactory.documentation.service.model.ApiListingReference;
-import com.mangofactory.documentation.service.model.Operation;
+import com.mangofactory.documentation.service.ApiDescription;
+import com.mangofactory.documentation.service.ApiListingReference;
+import com.mangofactory.documentation.service.Operation;
 
 import java.util.Comparator;
 

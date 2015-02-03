@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spring.web.scanners;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.documentation.service.model.ResolvedMethodParameter;
+import com.mangofactory.documentation.service.ResolvedMethodParameter;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.ApiListingBuilderPlugin;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;

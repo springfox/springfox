@@ -1,15 +1,15 @@
 package com.mangofactory.documentation.spring.web.mixins
 
-import com.mangofactory.documentation.service.model.Authorization
-import com.mangofactory.documentation.service.model.AuthorizationCodeGrant
-import com.mangofactory.documentation.service.model.AuthorizationScope
-import com.mangofactory.documentation.service.model.AuthorizationType
-import com.mangofactory.documentation.service.model.GrantType
-import com.mangofactory.documentation.service.model.ImplicitGrant
-import com.mangofactory.documentation.service.model.LoginEndpoint
-import com.mangofactory.documentation.service.model.OAuth
-import com.mangofactory.documentation.service.model.TokenEndpoint
-import com.mangofactory.documentation.service.model.TokenRequestEndpoint
+import com.mangofactory.documentation.service.Authorization
+import com.mangofactory.documentation.service.AuthorizationCodeGrant
+import com.mangofactory.documentation.service.AuthorizationScope
+import com.mangofactory.documentation.service.AuthorizationType
+import com.mangofactory.documentation.service.GrantType
+import com.mangofactory.documentation.service.ImplicitGrant
+import com.mangofactory.documentation.service.LoginEndpoint
+import com.mangofactory.documentation.service.OAuth
+import com.mangofactory.documentation.service.TokenEndpoint
+import com.mangofactory.documentation.service.TokenRequestEndpoint
 
 import static com.google.common.collect.Lists.*
 

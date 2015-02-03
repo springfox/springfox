@@ -5,7 +5,7 @@ import com.mangofactory.documentation.schema.SchemaSpecification
 import com.mangofactory.documentation.schema.TypeWithGettersAndSetters
 import com.mangofactory.documentation.schema.mixins.ModelPropertyLookupSupport
 import com.mangofactory.documentation.schema.mixins.TypesForTestingSupport
-import com.mangofactory.documentation.service.model.AllowableListValues
+import com.mangofactory.documentation.service.AllowableListValues
 
 import static com.google.common.collect.Lists.*
 import static com.mangofactory.documentation.spi.DocumentationType.*

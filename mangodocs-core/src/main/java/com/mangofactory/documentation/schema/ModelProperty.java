@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.mangofactory.documentation.service.model.AllowableValues;
+import com.mangofactory.documentation.service.AllowableValues;
 
 public class ModelProperty {
   private final String name;

@@ -2,7 +2,7 @@ package com.mangofactory.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.mangofactory.documentation.service.model.ResolvedMethodParameter;
+import com.mangofactory.documentation.service.ResolvedMethodParameter;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.OperationModelsProviderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;

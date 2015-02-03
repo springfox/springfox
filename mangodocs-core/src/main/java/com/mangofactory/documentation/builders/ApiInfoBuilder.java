@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.builders;
 
-import com.mangofactory.documentation.service.model.ApiInfo;
+import com.mangofactory.documentation.service.ApiInfo;
 
 public class ApiInfoBuilder {
   private String title;

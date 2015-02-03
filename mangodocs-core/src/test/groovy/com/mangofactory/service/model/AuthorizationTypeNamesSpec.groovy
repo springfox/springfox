@@ -1,8 +1,8 @@
 package com.mangofactory.service.model
 
-import com.mangofactory.documentation.service.model.ApiKey
-import com.mangofactory.documentation.service.model.BasicAuth
-import com.mangofactory.documentation.service.model.OAuth
+import com.mangofactory.documentation.service.ApiKey
+import com.mangofactory.documentation.service.BasicAuth
+import com.mangofactory.documentation.service.OAuth
 import spock.lang.Specification
 
 class AuthorizationTypeNamesSpec extends Specification {

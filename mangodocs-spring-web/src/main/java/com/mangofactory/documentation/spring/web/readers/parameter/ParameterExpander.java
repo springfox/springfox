@@ -2,8 +2,8 @@ package com.mangofactory.documentation.spring.web.readers.parameter;
 
 import com.google.common.base.Function;
 import com.mangofactory.documentation.spi.DocumentationType;
-import com.mangofactory.documentation.service.model.AllowableListValues;
-import com.mangofactory.documentation.service.model.AllowableValues;
+import com.mangofactory.documentation.service.AllowableListValues;
+import com.mangofactory.documentation.service.AllowableValues;
 import com.mangofactory.documentation.spi.service.ParameterExpanderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.ParameterExpansionContext;
 import org.springframework.stereotype.Component;

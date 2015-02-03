@@ -1,8 +1,8 @@
 package com.mangofactory.documentation.builders;
 
-import com.mangofactory.documentation.service.model.TokenRequestEndpoint;
-import com.mangofactory.documentation.service.model.AuthorizationCodeGrant;
-import com.mangofactory.documentation.service.model.TokenEndpoint;
+import com.mangofactory.documentation.service.TokenRequestEndpoint;
+import com.mangofactory.documentation.service.AuthorizationCodeGrant;
+import com.mangofactory.documentation.service.TokenEndpoint;
 
 import static com.mangofactory.documentation.builders.BuilderDefaults.*;
 

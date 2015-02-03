@@ -1,8 +1,8 @@
 package com.mangofactory.documentation.spring.web.scanners;
 
-import com.mangofactory.documentation.service.model.ApiListingReference;
-import com.mangofactory.documentation.service.model.Group;
-import com.mangofactory.documentation.service.model.ResourceListing;
+import com.mangofactory.documentation.service.ApiListingReference;
+import com.mangofactory.documentation.service.Group;
+import com.mangofactory.documentation.service.ResourceListing;
 import com.mangofactory.documentation.builders.GroupBuilder;
 import com.mangofactory.documentation.builders.ResourceListingBuilder;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;

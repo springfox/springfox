@@ -1,8 +1,8 @@
 package com.mangofactory.service.model.builder
 
-import com.mangofactory.documentation.service.model.Authorization
-import com.mangofactory.documentation.service.model.Parameter
-import com.mangofactory.documentation.service.model.ResponseMessage
+import com.mangofactory.documentation.service.Authorization
+import com.mangofactory.documentation.service.Parameter
+import com.mangofactory.documentation.service.ResponseMessage
 import com.mangofactory.documentation.builders.OperationBuilder
 import com.mangofactory.documentation.builders.ResponseMessageBuilder
 import spock.lang.Specification

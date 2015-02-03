@@ -1,11 +1,11 @@
 package com.mangofactory.documentation.swagger.dto.mappers
-import com.mangofactory.documentation.service.model.ApiKey
-import com.mangofactory.documentation.service.model.Authorization
-import com.mangofactory.documentation.service.model.AuthorizationScope
-import com.mangofactory.documentation.service.model.BasicAuth
-import com.mangofactory.documentation.service.model.GrantType
-import com.mangofactory.documentation.service.model.LoginEndpoint
-import com.mangofactory.documentation.service.model.OAuth
+import com.mangofactory.documentation.service.ApiKey
+import com.mangofactory.documentation.service.Authorization
+import com.mangofactory.documentation.service.AuthorizationScope
+import com.mangofactory.documentation.service.BasicAuth
+import com.mangofactory.documentation.service.GrantType
+import com.mangofactory.documentation.service.LoginEndpoint
+import com.mangofactory.documentation.service.OAuth
 import com.mangofactory.documentation.builders.AuthorizationBuilder
 import com.mangofactory.documentation.builders.AuthorizationCodeGrantBuilder
 import com.mangofactory.documentation.builders.AuthorizationScopeBuilder
@@ -133,7 +133,7 @@ class AuthorizationTypesMapperSpec extends Specification {
 
   def "Polymorphic authorization types are handled"() {
     given:
-      List<com.mangofactory.documentation.service.model.AuthorizationType> listAuthType =
+      List<com.mangofactory.documentation.service.AuthorizationType> listAuthType =
               newArrayList(createOAuth(), new BasicAuth(), new ApiKey("test", "header"))
 
     when:
@@ -166,7 +166,7 @@ class AuthorizationTypesMapperSpec extends Specification {
     given:
       AuthorizationTypesMapper mapper = authMapper()
     when:
-      mapper.toSwaggerAuthorizationType(new com.mangofactory.documentation.service.model.AuthorizationType("unknown") {
+      mapper.toSwaggerAuthorizationType(new com.mangofactory.documentation.service.AuthorizationType("unknown") {
         @Override
         String getName() {
           throw new UnsupportedOperationException()

@@ -1,10 +1,10 @@
 package com.mangofactory.documentation.spring.web.scanners
 import com.mangofactory.documentation.spring.web.AbstractPathProvider
-import com.mangofactory.documentation.service.model.ApiInfo
-import com.mangofactory.documentation.service.model.ApiKey
-import com.mangofactory.documentation.service.model.ApiListingReference
-import com.mangofactory.documentation.service.model.Group
-import com.mangofactory.documentation.service.model.ResourceListing
+import com.mangofactory.documentation.service.ApiInfo
+import com.mangofactory.documentation.service.ApiKey
+import com.mangofactory.documentation.service.ApiListingReference
+import com.mangofactory.documentation.service.Group
+import com.mangofactory.documentation.service.ResourceListing
 import com.mangofactory.documentation.spi.service.contexts.Defaults
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec

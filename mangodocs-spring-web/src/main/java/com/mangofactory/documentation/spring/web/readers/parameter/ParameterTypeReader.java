@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.mangofactory.documentation.service.model.ResolvedMethodParameter;
+import com.mangofactory.documentation.service.ResolvedMethodParameter;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.ParameterBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext;

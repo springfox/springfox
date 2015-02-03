@@ -4,7 +4,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.schema.ResolvedTypes;
 import com.mangofactory.documentation.spi.schema.AlternateTypeProvider;
-import com.mangofactory.documentation.service.model.AllowableValues;
+import com.mangofactory.documentation.service.AllowableValues;
 
 import static com.mangofactory.documentation.schema.ResolvedTypes.*;
 

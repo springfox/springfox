@@ -7,7 +7,7 @@ import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpe
 import com.mangofactory.documentation.spring.web.dummy.DummyClass
 import com.mangofactory.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
-import com.mangofactory.documentation.service.model.ResolvedMethodParameter
+import com.mangofactory.documentation.service.ResolvedMethodParameter
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 

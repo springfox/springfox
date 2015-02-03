@@ -1,8 +1,8 @@
 package com.mangofactory.documentation.builders;
 
 import com.google.common.collect.Ordering;
-import com.mangofactory.documentation.service.model.ApiDescription;
-import com.mangofactory.documentation.service.model.Operation;
+import com.mangofactory.documentation.service.ApiDescription;
+import com.mangofactory.documentation.service.Operation;
 
 import java.util.List;
 

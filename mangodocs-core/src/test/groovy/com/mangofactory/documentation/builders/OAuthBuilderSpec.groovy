@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.builders
 
-import com.mangofactory.documentation.service.model.AuthorizationScope
-import com.mangofactory.documentation.service.model.GrantType
+import com.mangofactory.documentation.service.AuthorizationScope
+import com.mangofactory.documentation.service.GrantType
 import spock.lang.Specification
 
 class OAuthBuilderSpec extends Specification {

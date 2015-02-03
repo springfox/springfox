@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web.plugins
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.documentation.service.model.Group
+import com.mangofactory.documentation.service.Group
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.DocumentationPlugin
 import com.mangofactory.documentation.spi.service.contexts.Defaults

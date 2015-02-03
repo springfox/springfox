@@ -2,7 +2,7 @@ package com.mangofactory.documentation.spi.service.contexts;
 
 import com.google.common.base.Preconditions;
 import com.mangofactory.documentation.RequestMappingPatternMatcher;
-import com.mangofactory.documentation.service.model.Authorization;
+import com.mangofactory.documentation.service.Authorization;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;

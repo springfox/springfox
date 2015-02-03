@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.builders
 
-import com.mangofactory.documentation.service.model.ApiListing
-import com.mangofactory.documentation.service.model.ResourceListing
+import com.mangofactory.documentation.service.ApiListing
+import com.mangofactory.documentation.service.ResourceListing
 import spock.lang.Specification
 
 class GroupBuilderSpec extends Specification {

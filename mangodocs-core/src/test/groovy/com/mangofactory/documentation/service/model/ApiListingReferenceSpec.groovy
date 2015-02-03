@@ -1,5 +1,6 @@
 package com.mangofactory.documentation.service.model
 
+import com.mangofactory.documentation.service.ApiListingReference
 import spock.lang.Specification
 
 class ApiListingReferenceSpec extends Specification {

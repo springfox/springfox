@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.builders;
 
-import com.mangofactory.documentation.service.model.LoginEndpoint;
-import com.mangofactory.documentation.service.model.ImplicitGrant;
+import com.mangofactory.documentation.service.LoginEndpoint;
+import com.mangofactory.documentation.service.ImplicitGrant;
 
 import static com.mangofactory.documentation.builders.BuilderDefaults.*;
 

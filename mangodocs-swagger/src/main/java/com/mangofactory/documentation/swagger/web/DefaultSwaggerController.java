@@ -2,7 +2,7 @@ package com.mangofactory.documentation.swagger.web;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.mangofactory.documentation.service.model.Group;
+import com.mangofactory.documentation.service.Group;
 import com.mangofactory.documentation.annotations.ApiIgnore;
 import com.mangofactory.documentation.spring.web.GroupCache;
 import com.mangofactory.documentation.swagger.dto.ApiListing;
@@ -58,7 +58,7 @@ public class DefaultSwaggerController {
     if (group == null) {
       return new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
     }
-    Map<String, com.mangofactory.documentation.service.model.ApiListing> apiListingMap = group.getApiListings();
+    Map<String, com.mangofactory.documentation.service.ApiListing> apiListingMap = group.getApiListings();
     Map<String, com.mangofactory.documentation.swagger.dto.ApiListing> dtoApiListing
             = transformEntries(apiListingMap, toApiListingDto(mapper));
 
@@ -74,7 +74,7 @@ public class DefaultSwaggerController {
     if (group == null) {
       return new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
     }
-    com.mangofactory.documentation.service.model.ResourceListing listing = group.getResourceListing();
+    com.mangofactory.documentation.service.ResourceListing listing = group.getResourceListing();
     ResourceListing resourceListing = mapper.toSwaggerResourceListing(listing);
     return Optional.fromNullable(resourceListing)
             .transform(toResponseEntity(ResourceListing.class))

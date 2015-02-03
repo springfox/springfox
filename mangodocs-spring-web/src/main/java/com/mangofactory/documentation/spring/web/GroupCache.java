@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web;
 
-import com.mangofactory.documentation.service.model.Group;
+import com.mangofactory.documentation.service.Group;
 
 import java.util.Map;
 

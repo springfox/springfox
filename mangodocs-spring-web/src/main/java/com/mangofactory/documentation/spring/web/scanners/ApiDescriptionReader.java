@@ -2,7 +2,7 @@ package com.mangofactory.documentation.spring.web.scanners;
 
 import com.mangofactory.documentation.PathProvider;
 import com.mangofactory.documentation.RequestMappingEvaluator;
-import com.mangofactory.documentation.service.model.ApiDescription;
+import com.mangofactory.documentation.service.ApiDescription;
 import com.mangofactory.documentation.builders.ApiDescriptionBuilder;
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;
 import com.mangofactory.documentation.spring.web.Paths;

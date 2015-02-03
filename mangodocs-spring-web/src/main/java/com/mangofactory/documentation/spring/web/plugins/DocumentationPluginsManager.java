@@ -1,8 +1,8 @@
 package com.mangofactory.documentation.spring.web.plugins;
 
-import com.mangofactory.documentation.service.model.ApiListing;
-import com.mangofactory.documentation.service.model.Operation;
-import com.mangofactory.documentation.service.model.Parameter;
+import com.mangofactory.documentation.service.ApiListing;
+import com.mangofactory.documentation.service.Operation;
+import com.mangofactory.documentation.service.Parameter;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.schema.contexts.ModelContext;
 import com.mangofactory.documentation.spi.service.ApiListingBuilderPlugin;

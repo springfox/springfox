@@ -3,7 +3,7 @@ package com.mangofactory.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
-import com.mangofactory.documentation.service.model.AllowableValues;
+import com.mangofactory.documentation.service.AllowableValues;
 
 import java.lang.reflect.Type;
 

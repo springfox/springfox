@@ -5,7 +5,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.mangofactory.documentation.service.model.AllowableListValues;
+import com.mangofactory.documentation.service.AllowableListValues;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.AnnotatedElement;

@@ -19,16 +19,16 @@ import org.mapstruct.Mappings;
 @Mapper(uses = {AllowableValuesMapper.class, DataTypeMapper.class, AuthorizationTypesMapper.class})
 public interface ServiceModelToSwaggerMapper {
   //Api related
-  public ApiDescription toSwaggerApiDescription(com.mangofactory.documentation.service.model.ApiDescription from);
-  public ApiInfo toSwaggerApiInfo(com.mangofactory.documentation.service.model.ApiInfo from);
-  public ResponseMessage toSwaggerResponseMessage(com.mangofactory.documentation.service.model.ResponseMessage from);
-  public ApiListingReference toSwaggerApiListingReference(com.mangofactory.documentation.service.model.ApiListingReference from);
+  public ApiDescription toSwaggerApiDescription(com.mangofactory.documentation.service.ApiDescription from);
+  public ApiInfo toSwaggerApiInfo(com.mangofactory.documentation.service.ApiInfo from);
+  public ResponseMessage toSwaggerResponseMessage(com.mangofactory.documentation.service.ResponseMessage from);
+  public ApiListingReference toSwaggerApiListingReference(com.mangofactory.documentation.service.ApiListingReference from);
   public ModelDto toSwaggerModelDto(Model from);
 
   @Mappings({
           @Mapping(target = "swaggerVersion", constant = "1.2")
   })
-  public ApiListing toSwaggerApiListing(com.mangofactory.documentation.service.model.ApiListing from);
+  public ApiListing toSwaggerApiListing(com.mangofactory.documentation.service.ApiListing from);
 
   @Mappings({
           @Mapping(target = "type",
@@ -42,16 +42,16 @@ public interface ServiceModelToSwaggerMapper {
           @Mapping(target = "dataType",
                   expression = "java( new com.mangofactory.documentation.swagger.dto.DataType( from.getResponseClass() ) )")
   })
-  public Operation toSwaggerOperation(com.mangofactory.documentation.service.model.Operation from);
+  public Operation toSwaggerOperation(com.mangofactory.documentation.service.Operation from);
 
   @Mappings({
           @Mapping(target = "parameterType",
                   expression = "java( new com.mangofactory.documentation.swagger.dto.DataType( from.getParameterType() ) )")
   })
-  public Parameter toSwaggerParameter(com.mangofactory.documentation.service.model.Parameter from);
+  public Parameter toSwaggerParameter(com.mangofactory.documentation.service.Parameter from);
 
   @Mappings({
           @Mapping(target = "swaggerVersion", constant = "1.2")
   })
-  public ResourceListing toSwaggerResourceListing(com.mangofactory.documentation.service.model.ResourceListing from);
+  public ResourceListing toSwaggerResourceListing(com.mangofactory.documentation.service.ResourceListing from);
 }

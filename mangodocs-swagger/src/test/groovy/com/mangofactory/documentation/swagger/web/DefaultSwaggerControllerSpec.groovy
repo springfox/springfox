@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.swagger.web
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mangofactory.documentation.service.model.AuthorizationType
-import com.mangofactory.documentation.service.model.Group
+import com.mangofactory.documentation.service.AuthorizationType
+import com.mangofactory.documentation.service.Group
 import com.mangofactory.documentation.builders.GroupBuilder
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.GroupCache

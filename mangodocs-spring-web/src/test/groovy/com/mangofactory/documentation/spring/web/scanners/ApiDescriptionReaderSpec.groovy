@@ -1,5 +1,5 @@
 package com.mangofactory.documentation.spring.web.scanners
-import com.mangofactory.documentation.service.model.ApiDescription
+import com.mangofactory.documentation.service.ApiDescription
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
 import com.mangofactory.documentation.spring.web.Paths
 import com.mangofactory.documentation.spring.web.RelativePathProvider

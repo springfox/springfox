@@ -1,9 +1,9 @@
 package com.mangofactory.documentation.builders;
 
-import com.mangofactory.documentation.service.model.ApiInfo;
-import com.mangofactory.documentation.service.model.ApiListingReference;
-import com.mangofactory.documentation.service.model.AuthorizationType;
-import com.mangofactory.documentation.service.model.ResourceListing;
+import com.mangofactory.documentation.service.ApiInfo;
+import com.mangofactory.documentation.service.ApiListingReference;
+import com.mangofactory.documentation.service.AuthorizationType;
+import com.mangofactory.documentation.service.ResourceListing;
 
 import java.util.List;
 

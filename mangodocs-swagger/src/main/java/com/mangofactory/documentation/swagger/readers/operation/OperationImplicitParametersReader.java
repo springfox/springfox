@@ -2,7 +2,7 @@ package com.mangofactory.documentation.swagger.readers.operation;
 
 import com.google.common.collect.Lists;
 import com.mangofactory.documentation.spi.DocumentationType;
-import com.mangofactory.documentation.service.model.Parameter;
+import com.mangofactory.documentation.service.Parameter;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import com.wordnik.swagger.annotations.ApiImplicitParam;

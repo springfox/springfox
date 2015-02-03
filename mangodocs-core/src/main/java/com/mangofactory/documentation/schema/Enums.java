@@ -3,8 +3,8 @@ package com.mangofactory.documentation.schema;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.mangofactory.documentation.service.model.AllowableListValues;
-import com.mangofactory.documentation.service.model.AllowableValues;
+import com.mangofactory.documentation.service.AllowableListValues;
+import com.mangofactory.documentation.service.AllowableValues;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Method;

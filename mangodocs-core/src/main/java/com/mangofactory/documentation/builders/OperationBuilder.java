@@ -4,10 +4,10 @@ import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.mangofactory.documentation.service.model.Authorization;
-import com.mangofactory.documentation.service.model.Operation;
-import com.mangofactory.documentation.service.model.Parameter;
-import com.mangofactory.documentation.service.model.ResponseMessage;
+import com.mangofactory.documentation.service.Authorization;
+import com.mangofactory.documentation.service.Operation;
+import com.mangofactory.documentation.service.Parameter;
+import com.mangofactory.documentation.service.ResponseMessage;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;

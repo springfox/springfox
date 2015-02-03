@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spi.service;
 
 import com.mangofactory.documentation.spi.DocumentationType;
-import com.mangofactory.documentation.service.model.ResourceGroup;
+import com.mangofactory.documentation.service.ResourceGroup;
 import org.springframework.plugin.core.Plugin;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;

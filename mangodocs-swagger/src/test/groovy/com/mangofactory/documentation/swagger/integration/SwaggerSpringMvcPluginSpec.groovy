@@ -1,9 +1,9 @@
 package com.mangofactory.documentation.swagger.integration
 import com.mangofactory.documentation.RequestMappingPatternMatcher
 import com.mangofactory.documentation.annotations.ApiIgnore
-import com.mangofactory.documentation.service.model.ApiInfo
-import com.mangofactory.documentation.service.model.AuthorizationType
-import com.mangofactory.documentation.service.model.ResponseMessage
+import com.mangofactory.documentation.service.ApiInfo
+import com.mangofactory.documentation.service.AuthorizationType
+import com.mangofactory.documentation.service.ResponseMessage
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec

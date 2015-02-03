@@ -1,8 +1,8 @@
 package com.mangofactory.documentation.builders
 import com.google.common.collect.Ordering
 import com.mangofactory.documentation.schema.Model
-import com.mangofactory.documentation.service.model.ApiDescription
-import com.mangofactory.documentation.service.model.Authorization
+import com.mangofactory.documentation.service.ApiDescription
+import com.mangofactory.documentation.service.Authorization
 import spock.lang.Specification
 
 class ApiListingBuilderSpec extends Specification {

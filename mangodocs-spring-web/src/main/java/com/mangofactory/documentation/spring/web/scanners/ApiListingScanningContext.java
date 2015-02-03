@@ -1,8 +1,8 @@
 package com.mangofactory.documentation.spring.web.scanners;
 
 import com.google.common.collect.Ordering;
-import com.mangofactory.documentation.service.model.ApiDescription;
-import com.mangofactory.documentation.service.model.ResourceGroup;
+import com.mangofactory.documentation.service.ApiDescription;
+import com.mangofactory.documentation.service.ResourceGroup;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;

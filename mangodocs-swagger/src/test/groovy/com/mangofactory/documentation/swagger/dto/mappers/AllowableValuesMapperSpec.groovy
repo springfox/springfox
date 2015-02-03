@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.swagger.dto.mappers
-import com.mangofactory.documentation.service.model.AllowableListValues
-import com.mangofactory.documentation.service.model.AllowableRangeValues
-import com.mangofactory.documentation.service.model.AllowableValues
+import com.mangofactory.documentation.service.AllowableListValues
+import com.mangofactory.documentation.service.AllowableRangeValues
+import com.mangofactory.documentation.service.AllowableValues
 import com.mangofactory.documentation.swagger.mixins.MapperSupport
 import spock.lang.Specification
 

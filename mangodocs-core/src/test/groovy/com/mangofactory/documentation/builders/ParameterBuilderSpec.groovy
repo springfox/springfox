@@ -1,5 +1,5 @@
 package com.mangofactory.documentation.builders
-import com.mangofactory.documentation.service.model.AllowableListValues
+import com.mangofactory.documentation.service.AllowableListValues
 import spock.lang.Specification
 
 class ParameterBuilderSpec extends Specification {

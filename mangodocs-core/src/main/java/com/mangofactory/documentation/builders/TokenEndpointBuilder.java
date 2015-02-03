@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.builders;
 
-import com.mangofactory.documentation.service.model.TokenEndpoint;
+import com.mangofactory.documentation.service.TokenEndpoint;
 
 import static com.mangofactory.documentation.builders.BuilderDefaults.*;
 

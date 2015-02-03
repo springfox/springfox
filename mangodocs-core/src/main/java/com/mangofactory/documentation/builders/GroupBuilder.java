@@ -1,8 +1,8 @@
 package com.mangofactory.documentation.builders;
 
-import com.mangofactory.documentation.service.model.ApiListing;
-import com.mangofactory.documentation.service.model.Group;
-import com.mangofactory.documentation.service.model.ResourceListing;
+import com.mangofactory.documentation.service.ApiListing;
+import com.mangofactory.documentation.service.Group;
+import com.mangofactory.documentation.service.ResourceListing;
 
 import java.util.Map;
 

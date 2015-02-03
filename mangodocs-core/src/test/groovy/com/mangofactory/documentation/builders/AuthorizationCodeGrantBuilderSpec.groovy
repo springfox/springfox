@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.builders
 
-import com.mangofactory.documentation.service.model.TokenEndpoint
-import com.mangofactory.documentation.service.model.TokenRequestEndpoint
+import com.mangofactory.documentation.service.TokenEndpoint
+import com.mangofactory.documentation.service.TokenRequestEndpoint
 import spock.lang.Specification
 
 class AuthorizationCodeGrantBuilderSpec extends Specification {

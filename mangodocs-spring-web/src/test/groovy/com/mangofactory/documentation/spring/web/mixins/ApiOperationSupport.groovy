@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web.mixins
 
-import com.mangofactory.documentation.service.model.Operation
+import com.mangofactory.documentation.service.Operation
 
 
 class ApiOperationSupport {

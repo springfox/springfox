@@ -1,5 +1,6 @@
 package com.mangofactory.documentation.service.model
 
+import com.mangofactory.documentation.service.ApiKey
 import spock.lang.Specification
 
 class ApiKeySpec extends Specification {

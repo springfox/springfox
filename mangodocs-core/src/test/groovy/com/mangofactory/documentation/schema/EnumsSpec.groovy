@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.schema
 
-import com.mangofactory.documentation.service.model.AllowableListValues
+import com.mangofactory.documentation.service.AllowableListValues
 import spock.lang.Specification
 
 import static com.google.common.collect.Lists.newArrayList

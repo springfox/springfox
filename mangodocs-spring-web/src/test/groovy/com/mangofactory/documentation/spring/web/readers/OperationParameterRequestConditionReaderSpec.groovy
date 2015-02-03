@@ -1,5 +1,5 @@
 package com.mangofactory.documentation.spring.web.readers
-import com.mangofactory.documentation.service.model.Parameter
+import com.mangofactory.documentation.service.Parameter
 import com.mangofactory.documentation.builders.OperationBuilder
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.contexts.OperationContext

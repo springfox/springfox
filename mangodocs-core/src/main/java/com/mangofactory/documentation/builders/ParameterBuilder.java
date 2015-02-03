@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.builders;
 
-import com.mangofactory.documentation.service.model.AllowableValues;
-import com.mangofactory.documentation.service.model.Parameter;
+import com.mangofactory.documentation.service.AllowableValues;
+import com.mangofactory.documentation.service.Parameter;
 import org.springframework.util.StringUtils;
 
 import static com.mangofactory.documentation.builders.BuilderDefaults.*;

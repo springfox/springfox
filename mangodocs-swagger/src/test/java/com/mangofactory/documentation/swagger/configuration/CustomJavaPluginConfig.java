@@ -2,7 +2,7 @@ package com.mangofactory.documentation.swagger.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.documentation.spi.DocumentationType;
-import com.mangofactory.documentation.service.model.ApiInfo;
+import com.mangofactory.documentation.service.ApiInfo;
 import com.mangofactory.documentation.builders.ApiInfoBuilder;
 import com.mangofactory.documentation.spring.web.plugins.DocumentationConfigurer;
 import com.mangofactory.documentation.swagger.annotations.EnableSwagger;

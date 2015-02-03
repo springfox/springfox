@@ -4,7 +4,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.schema.TypeNameExtractor;
-import com.mangofactory.documentation.service.model.ResponseMessage;
+import com.mangofactory.documentation.service.ResponseMessage;
 import com.mangofactory.documentation.builders.ResponseMessageBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;

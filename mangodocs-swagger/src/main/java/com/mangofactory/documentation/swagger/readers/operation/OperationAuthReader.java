@@ -31,7 +31,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
     String requestMappingPattern = context.requestMappingPattern();
-    List<com.mangofactory.documentation.service.model.Authorization> authorizations = newArrayList();
+    List<com.mangofactory.documentation.service.Authorization> authorizations = newArrayList();
 
     if (null != authorizationContext) {
       authorizations = authorizationContext.getAuthorizationsForPath(requestMappingPattern);
@@ -49,16 +49,16 @@ public class OperationAuthReader implements OperationBuilderPlugin {
         for (Authorization authorization : authorizationAnnotations) {
           String value = authorization.value();
           AuthorizationScope[] scopes = authorization.scopes();
-          List<com.mangofactory.documentation.service.model.AuthorizationScope> authorizationScopeList = newArrayList();
+          List<com.mangofactory.documentation.service.AuthorizationScope> authorizationScopeList = newArrayList();
           for (AuthorizationScope authorizationScope : scopes) {
             String description = authorizationScope.description();
             String scope = authorizationScope.scope();
             authorizationScopeList.add(new AuthorizationScopeBuilder().scope(scope).description(description)
                     .build());
           }
-          com.mangofactory.documentation.service.model.AuthorizationScope[] authorizationScopes = authorizationScopeList
-                  .toArray(new com.mangofactory.documentation.service.model.AuthorizationScope[authorizationScopeList.size()]);
-          com.mangofactory.documentation.service.model.Authorization authorizationModel =
+          com.mangofactory.documentation.service.AuthorizationScope[] authorizationScopes = authorizationScopeList
+                  .toArray(new com.mangofactory.documentation.service.AuthorizationScope[authorizationScopeList.size()]);
+          com.mangofactory.documentation.service.Authorization authorizationModel =
                   new AuthorizationBuilder()
                           .type(value)
                           .scopes(authorizationScopes)
