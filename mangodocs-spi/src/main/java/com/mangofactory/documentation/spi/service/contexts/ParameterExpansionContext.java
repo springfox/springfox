@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spi.service.contexts;
 
 
-import com.mangofactory.documentation.builder.ParameterBuilder;
+import com.mangofactory.documentation.builders.ParameterBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 
 import java.lang.reflect.Field;

@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web
 
-import com.mangofactory.documentation.builder.GroupBuilder
+import com.mangofactory.documentation.builders.GroupBuilder
 import spock.lang.Specification
 
 class GroupCacheSpec extends Specification {

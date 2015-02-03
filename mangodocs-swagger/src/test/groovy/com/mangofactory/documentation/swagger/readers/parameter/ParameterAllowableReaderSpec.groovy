@@ -2,7 +2,7 @@ package com.mangofactory.documentation.swagger.readers.parameter
 import com.mangofactory.documentation.service.model.AllowableListValues
 import com.mangofactory.documentation.service.model.AllowableRangeValues
 import com.mangofactory.documentation.service.model.ResolvedMethodParameter
-import com.mangofactory.documentation.builder.ParameterBuilder
+import com.mangofactory.documentation.builders.ParameterBuilder
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyClass

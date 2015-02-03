@@ -4,7 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.mangofactory.documentation.service.model.AllowableListValues;
 import com.mangofactory.documentation.service.model.Parameter;
-import com.mangofactory.documentation.builder.ParameterBuilder;
+import com.mangofactory.documentation.builders.ParameterBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;

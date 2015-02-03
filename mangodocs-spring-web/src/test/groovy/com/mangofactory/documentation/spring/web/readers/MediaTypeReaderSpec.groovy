@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spring.web.readers
 
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.documentation.builder.OperationBuilder
+import com.mangofactory.documentation.builders.OperationBuilder
 import com.mangofactory.documentation.spi.service.contexts.OperationContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport

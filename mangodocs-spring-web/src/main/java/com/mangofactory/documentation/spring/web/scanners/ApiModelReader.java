@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 import com.mangofactory.documentation.schema.ModelProvider;
 import com.mangofactory.documentation.schema.Model;
 import com.mangofactory.documentation.schema.ModelProperty;
-import com.mangofactory.documentation.builder.ModelBuilder;
+import com.mangofactory.documentation.builders.ModelBuilder;
 import com.mangofactory.documentation.spi.schema.contexts.ModelContext;
 import com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsManager;
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;

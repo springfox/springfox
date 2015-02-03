@@ -9,7 +9,7 @@ import com.mangofactory.documentation.service.model.ApiDescription;
 import com.mangofactory.documentation.service.model.ApiListingReference;
 import com.mangofactory.documentation.service.model.Operation;
 import com.mangofactory.documentation.service.model.ResponseMessage;
-import com.mangofactory.documentation.builder.ResponseMessageBuilder;
+import com.mangofactory.documentation.builders.ResponseMessageBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

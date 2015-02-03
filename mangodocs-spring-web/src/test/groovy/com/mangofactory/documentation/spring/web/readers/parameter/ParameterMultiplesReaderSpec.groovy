@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.documentation.builder.ParameterBuilder
+import com.mangofactory.documentation.builders.ParameterBuilder
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyClass

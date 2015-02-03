@@ -3,7 +3,7 @@ package com.mangofactory.documentation.spring.web.readers.parameter;
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.documentation.service.model.Parameter;
 import com.mangofactory.documentation.service.model.ResolvedMethodParameter;
-import com.mangofactory.documentation.builder.ParameterBuilder;
+import com.mangofactory.documentation.builders.ParameterBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;

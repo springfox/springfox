@@ -1,8 +1,8 @@
 package com.mangofactory.documentation.swagger.readers.operation;
 
 import com.mangofactory.documentation.spi.DocumentationType;
-import com.mangofactory.documentation.builder.AuthorizationBuilder;
-import com.mangofactory.documentation.builder.AuthorizationScopeBuilder;
+import com.mangofactory.documentation.builders.AuthorizationBuilder;
+import com.mangofactory.documentation.builders.AuthorizationScopeBuilder;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext;

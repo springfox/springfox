@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spring.web.plugins
 
-import com.mangofactory.documentation.builder.OperationBuilder
-import com.mangofactory.documentation.builder.ParameterBuilder
+import com.mangofactory.documentation.builders.OperationBuilder
+import com.mangofactory.documentation.builders.ParameterBuilder
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.DocumentationPlugin
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin

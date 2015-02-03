@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.mangofactory.documentation.builder.ParameterBuilder;
+import com.mangofactory.documentation.builders.ParameterBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.service.model.ResolvedMethodParameter;
 import com.mangofactory.documentation.spi.schema.AlternateTypeProvider;

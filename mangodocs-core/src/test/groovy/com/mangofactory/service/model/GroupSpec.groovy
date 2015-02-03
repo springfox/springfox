@@ -4,8 +4,8 @@ import com.mangofactory.documentation.service.model.ApiKey
 import com.mangofactory.documentation.service.model.ApiListingReference
 import com.mangofactory.documentation.service.model.AuthorizationType
 import com.mangofactory.documentation.service.model.Group
-import com.mangofactory.documentation.builder.GroupBuilder
-import com.mangofactory.documentation.builder.ResourceListingBuilder
+import com.mangofactory.documentation.builders.GroupBuilder
+import com.mangofactory.documentation.builders.ResourceListingBuilder
 import spock.lang.Specification
 
 import static com.google.common.collect.Maps.newHashMap

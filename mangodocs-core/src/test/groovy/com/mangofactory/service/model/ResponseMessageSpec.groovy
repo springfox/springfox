@@ -1,5 +1,5 @@
 package com.mangofactory.service.model
-import com.mangofactory.documentation.builder.ResponseMessageBuilder
+import com.mangofactory.documentation.builders.ResponseMessageBuilder
 import spock.lang.Specification
 
 class ResponseMessageSpec extends Specification {

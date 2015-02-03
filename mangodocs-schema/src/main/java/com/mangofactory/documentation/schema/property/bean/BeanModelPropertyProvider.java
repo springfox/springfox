@@ -22,7 +22,7 @@ import com.mangofactory.documentation.schema.plugins.SchemaPluginsManager;
 import com.mangofactory.documentation.schema.property.BeanPropertyDefinitions;
 import com.mangofactory.documentation.schema.property.BeanPropertyNamingStrategy;
 import com.mangofactory.documentation.schema.property.provider.ModelPropertiesProvider;
-import com.mangofactory.documentation.builder.ModelPropertyBuilder;
+import com.mangofactory.documentation.builders.ModelPropertyBuilder;
 import com.mangofactory.documentation.spi.schema.contexts.ModelContext;
 import com.mangofactory.documentation.spi.schema.contexts.ModelPropertyContext;
 import org.slf4j.Logger;

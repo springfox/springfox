@@ -3,7 +3,7 @@ package com.mangofactory.documentation.spi.schema.contexts;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Objects;
-import com.mangofactory.documentation.builder.ModelBuilder;
+import com.mangofactory.documentation.builders.ModelBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.schema.AlternateTypeProvider;
 

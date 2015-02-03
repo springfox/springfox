@@ -2,7 +2,7 @@ package com.mangofactory.documentation.schema.plugins
 
 import com.mangofactory.documentation.schema.ModelNameContext
 import com.mangofactory.documentation.schema.TypeForTestingPropertyNames
-import com.mangofactory.documentation.builder.ModelPropertyBuilder
+import com.mangofactory.documentation.builders.ModelPropertyBuilder
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.schema.AlternateTypeProvider
 import com.mangofactory.documentation.spi.schema.ModelBuilderPlugin

@@ -3,8 +3,8 @@ package com.mangofactory.service.model.builder
 import com.mangofactory.documentation.service.model.Authorization
 import com.mangofactory.documentation.service.model.Parameter
 import com.mangofactory.documentation.service.model.ResponseMessage
-import com.mangofactory.documentation.builder.OperationBuilder
-import com.mangofactory.documentation.builder.ResponseMessageBuilder
+import com.mangofactory.documentation.builders.OperationBuilder
+import com.mangofactory.documentation.builders.ResponseMessageBuilder
 import spock.lang.Specification
 
 import static com.google.common.collect.Sets.*
