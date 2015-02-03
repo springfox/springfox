@@ -45,7 +45,7 @@ class SchemaPluginsManagerSpec extends Specification {
     given:
       def context = new ModelPropertyContext(Mock(ModelPropertyBuilder), Mock(AnnotatedElement), SPRING_WEB)
     when:
-      sut.enrichProperty(context)
+      sut.property(context)
     then:
       1 * propertyPlugin.apply(context)
   }
@@ -56,7 +56,7 @@ class SchemaPluginsManagerSpec extends Specification {
     and:
       context.documentationType >> SPRING_WEB
     when:
-      sut.enrichModel(context)
+      sut.model(context)
     then:
       1 * modelPlugin.apply(context)
   }

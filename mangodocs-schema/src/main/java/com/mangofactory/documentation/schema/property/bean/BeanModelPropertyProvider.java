@@ -168,7 +168,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
             .description(beanModelProperty.propertyDescription())
             .allowableValues(beanModelProperty.allowableValues())
             .items(itemModelRef(beanModelProperty.getType(), modelContext));
-    return schemaPluginsManager.enrichProperty(
+    return schemaPluginsManager.property(
             new ModelPropertyContext(propertyBuilder, beanPropertyDefinition, modelContext.getDocumentationType()));
   }
 

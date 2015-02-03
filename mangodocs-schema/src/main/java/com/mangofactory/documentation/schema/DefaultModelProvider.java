@@ -70,7 +70,7 @@ public class DefaultModelProvider implements ModelProvider {
             .baseModel("")
             .discriminator("")
             .subTypes(new ArrayList<String>());
-    return schemaPluginsManager.enrichModel(modelContext);
+    return schemaPluginsManager.model(modelContext);
   }
 
   @Override

@@ -86,8 +86,8 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
             .description(fieldModelProperty.propertyDescription())
             .allowableValues(fieldModelProperty.allowableValues())
             .items(itemModelRef(fieldModelProperty.getType(), modelContext));
-    return schemaPluginsManager.enrichProperty(new ModelPropertyContext(propertyBuilder,
-            childField.getRawMember(),  modelContext.getDocumentationType()));
+    return schemaPluginsManager.property(new ModelPropertyContext(propertyBuilder,
+            childField.getRawMember(), modelContext.getDocumentationType()));
   }
 
   @Override

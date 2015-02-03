@@ -34,14 +34,14 @@ public class SchemaPluginsManager {
     this.typeNameProviders = typeNameProviders;
   }
 
-  public ModelProperty enrichProperty(ModelPropertyContext context) {
+  public ModelProperty property(ModelPropertyContext context) {
     for (ModelPropertyBuilderPlugin enricher : propertyEnrichers.getPluginsFor(context.getDocumentationType())) {
       enricher.apply(context);
     }
     return context.getBuilder().build();
   }
 
-  public Model enrichModel(ModelContext context) {
+  public Model model(ModelContext context) {
     for (ModelBuilderPlugin enricher : modelEnrichers.getPluginsFor(context.getDocumentationType())) {
       enricher.apply(context);
     }
