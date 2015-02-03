@@ -4,7 +4,7 @@ import com.mangofactory.documentation.schema.DefaultGenericTypeNamingStrategy
 import com.mangofactory.documentation.schema.TypeNameExtractor
 import com.mangofactory.documentation.schema.mixins.SchemaPluginsSupport
 import com.mangofactory.documentation.service.model.ResolvedMethodParameter
-import com.mangofactory.documentation.service.model.builder.ParameterBuilder
+import com.mangofactory.documentation.builder.ParameterBuilder
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyModels

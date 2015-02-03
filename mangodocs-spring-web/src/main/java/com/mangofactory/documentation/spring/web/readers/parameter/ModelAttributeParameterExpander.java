@@ -8,7 +8,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.mangofactory.documentation.service.model.Parameter;
-import com.mangofactory.documentation.service.model.builder.ParameterBuilder;
+import com.mangofactory.documentation.builder.ParameterBuilder;
 import com.mangofactory.documentation.spi.schema.AlternateTypeProvider;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
 import com.mangofactory.documentation.spi.service.contexts.ParameterExpansionContext;

@@ -2,7 +2,7 @@ package com.mangofactory.documentation.swagger.readers.operation;
 
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.service.model.ResponseMessage;
-import com.mangofactory.documentation.service.model.builder.ResponseMessageBuilder;
+import com.mangofactory.documentation.builder.ResponseMessageBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;

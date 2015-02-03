@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
 import com.mangofactory.documentation.schema.TypeWithAnnotatedGettersAndSetters
 import com.mangofactory.documentation.schema.mixins.ConfiguredObjectMapperSupport
-import com.mangofactory.documentation.service.model.builder.ModelPropertyBuilder
+import com.mangofactory.documentation.builder.ModelPropertyBuilder
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.schema.contexts.ModelPropertyContext
 import spock.lang.Specification

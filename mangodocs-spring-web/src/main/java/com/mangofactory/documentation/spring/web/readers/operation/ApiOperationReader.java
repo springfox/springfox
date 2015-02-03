@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spring.web.readers.operation;
 
 import com.mangofactory.documentation.service.model.Operation;
-import com.mangofactory.documentation.service.model.builder.OperationBuilder;
+import com.mangofactory.documentation.builder.OperationBuilder;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;
 import com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsManager;

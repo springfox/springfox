@@ -2,7 +2,7 @@ package com.mangofactory.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.mangofactory.documentation.service.model.ResponseMessage;
-import com.mangofactory.documentation.service.model.builder.OperationBuilder;
+import com.mangofactory.documentation.builder.OperationBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.schema.AlternateTypeProvider;
 import org.springframework.web.bind.annotation.RequestMethod;

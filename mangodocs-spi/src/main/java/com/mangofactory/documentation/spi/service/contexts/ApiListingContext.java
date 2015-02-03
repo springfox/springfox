@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spi.service.contexts;
 
 import com.mangofactory.documentation.service.model.ResourceGroup;
-import com.mangofactory.documentation.service.model.builder.ApiListingBuilder;
+import com.mangofactory.documentation.builder.ApiListingBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 
 public class ApiListingContext {

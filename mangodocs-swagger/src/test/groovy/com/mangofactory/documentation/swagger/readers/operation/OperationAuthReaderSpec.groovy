@@ -2,7 +2,7 @@ package com.mangofactory.documentation.swagger.readers.operation
 
 import com.mangofactory.documentation.service.RequestMappingPatternMatcher
 import com.mangofactory.documentation.service.model.AuthorizationScope
-import com.mangofactory.documentation.service.model.builder.OperationBuilder
+import com.mangofactory.documentation.builder.OperationBuilder
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext
 import com.mangofactory.documentation.spi.service.contexts.OperationContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec

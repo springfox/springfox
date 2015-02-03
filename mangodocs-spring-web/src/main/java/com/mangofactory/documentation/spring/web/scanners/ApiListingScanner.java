@@ -8,7 +8,7 @@ import com.mangofactory.documentation.service.model.ApiDescription;
 import com.mangofactory.documentation.service.model.ApiListing;
 import com.mangofactory.documentation.service.model.Authorization;
 import com.mangofactory.documentation.service.model.ResourceGroup;
-import com.mangofactory.documentation.service.model.builder.ApiListingBuilder;
+import com.mangofactory.documentation.builder.ApiListingBuilder;
 import com.mangofactory.documentation.spi.service.contexts.ApiListingContext;
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext;
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;

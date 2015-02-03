@@ -3,7 +3,7 @@ package com.mangofactory.documentation.spi.schema.contexts;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.spi.DocumentationType;
-import com.mangofactory.documentation.service.model.builder.ModelPropertyBuilder;
+import com.mangofactory.documentation.builder.ModelPropertyBuilder;
 
 import java.lang.reflect.AnnotatedElement;
 

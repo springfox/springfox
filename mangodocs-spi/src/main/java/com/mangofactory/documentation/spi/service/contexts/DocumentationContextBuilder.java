@@ -30,7 +30,7 @@ import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
-import static com.mangofactory.documentation.service.model.builder.BuilderDefaults.*;
+import static com.mangofactory.documentation.builder.BuilderDefaults.*;
 
 public class DocumentationContextBuilder {
 

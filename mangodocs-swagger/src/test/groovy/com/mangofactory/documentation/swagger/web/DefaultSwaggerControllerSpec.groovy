@@ -2,7 +2,7 @@ package com.mangofactory.documentation.swagger.web
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.documentation.service.model.AuthorizationType
 import com.mangofactory.documentation.service.model.Group
-import com.mangofactory.documentation.service.model.builder.GroupBuilder
+import com.mangofactory.documentation.builder.GroupBuilder
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.GroupCache
 import com.mangofactory.documentation.spring.web.mixins.ApiListingSupport
