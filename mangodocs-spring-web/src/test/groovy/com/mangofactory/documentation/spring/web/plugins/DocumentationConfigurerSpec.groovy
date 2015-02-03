@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spring.web.plugins
 import com.google.common.collect.Ordering
-import com.mangofactory.documentation.service.RequestMappingPatternMatcher
-import com.mangofactory.documentation.service.annotations.ApiIgnore
+import com.mangofactory.documentation.RequestMappingPatternMatcher
+import com.mangofactory.documentation.annotations.ApiIgnore
 import com.mangofactory.documentation.service.model.ApiDescription
 import com.mangofactory.documentation.service.model.ApiInfo
 import com.mangofactory.documentation.service.model.AuthorizationType

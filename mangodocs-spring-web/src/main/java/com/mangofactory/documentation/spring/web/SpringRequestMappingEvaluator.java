@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.spring.web;
 
-import com.mangofactory.documentation.service.RequestMappingEvaluator;
-import com.mangofactory.documentation.service.RequestMappingPatternMatcher;
+import com.mangofactory.documentation.RequestMappingEvaluator;
+import com.mangofactory.documentation.RequestMappingPatternMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;

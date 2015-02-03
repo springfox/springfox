@@ -5,8 +5,8 @@ import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 import com.mangofactory.documentation.schema.AlternateTypeRule;
 import com.mangofactory.documentation.schema.WildcardType;
-import com.mangofactory.documentation.service.PathProvider;
-import com.mangofactory.documentation.service.RequestMappingPatternMatcher;
+import com.mangofactory.documentation.PathProvider;
+import com.mangofactory.documentation.RequestMappingPatternMatcher;
 import com.mangofactory.documentation.service.model.ApiDescription;
 import com.mangofactory.documentation.service.model.ApiInfo;
 import com.mangofactory.documentation.service.model.ApiListingReference;
@@ -145,7 +145,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * Controls which controllers, more specifically, which Spring RequestMappings to include in the swagger Resource
    * Listing.
    *
-   * Under the hood, <code>com.mangofactory.documentation.service.RequestMappingPatternMatcher</code>is used to match a
+   * Under the hood, <code>com.mangofactory.documentation.RequestMappingPatternMatcher</code>is used to match a
    * given <code>org.springframework.web.servlet.mvc.condition.PatternsRequestCondition</code> against the
    * includePatterns supplied here.
    *

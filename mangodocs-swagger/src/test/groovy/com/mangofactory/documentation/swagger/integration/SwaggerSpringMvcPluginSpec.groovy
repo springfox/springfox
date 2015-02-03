@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.swagger.integration
-import com.mangofactory.documentation.service.RequestMappingPatternMatcher
-import com.mangofactory.documentation.service.annotations.ApiIgnore
+import com.mangofactory.documentation.RequestMappingPatternMatcher
+import com.mangofactory.documentation.annotations.ApiIgnore
 import com.mangofactory.documentation.service.model.ApiInfo
 import com.mangofactory.documentation.service.model.AuthorizationType
 import com.mangofactory.documentation.service.model.ResponseMessage

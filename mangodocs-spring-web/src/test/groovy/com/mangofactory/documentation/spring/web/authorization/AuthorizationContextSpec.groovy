@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web.authorization
 
-import com.mangofactory.documentation.service.RequestMappingPatternMatcher
+import com.mangofactory.documentation.RequestMappingPatternMatcher
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext
 import com.mangofactory.documentation.spring.web.mixins.AuthSupport
 import spock.lang.Specification

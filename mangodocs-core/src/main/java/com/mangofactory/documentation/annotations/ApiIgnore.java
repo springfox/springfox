@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.service.annotations;
+package com.mangofactory.documentation.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

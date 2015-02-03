@@ -3,7 +3,7 @@ package com.mangofactory.documentation.spring.web.scanners;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.mangofactory.documentation.schema.Model;
-import com.mangofactory.documentation.service.PathProvider;
+import com.mangofactory.documentation.PathProvider;
 import com.mangofactory.documentation.service.model.ApiDescription;
 import com.mangofactory.documentation.service.model.ApiListing;
 import com.mangofactory.documentation.service.model.Authorization;

@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web;
 
-import com.mangofactory.documentation.service.PathProvider;
+import com.mangofactory.documentation.PathProvider;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import static com.mangofactory.documentation.spring.web.Paths.*;

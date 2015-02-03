@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.service;
+package com.mangofactory.documentation;
 
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 

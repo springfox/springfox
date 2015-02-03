@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.swagger.readers.operation
 
-import com.mangofactory.documentation.service.RequestMappingPatternMatcher
+import com.mangofactory.documentation.RequestMappingPatternMatcher
 import com.mangofactory.documentation.service.model.AuthorizationScope
 import com.mangofactory.documentation.builders.OperationBuilder
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext

@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web.scanners;
 
-import com.mangofactory.documentation.service.RequestMappingPatternMatcher;
+import com.mangofactory.documentation.RequestMappingPatternMatcher;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.Assert;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;

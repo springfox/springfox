@@ -3,7 +3,7 @@ package com.mangofactory.documentation.swagger.web;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.service.model.Group;
-import com.mangofactory.documentation.service.annotations.ApiIgnore;
+import com.mangofactory.documentation.annotations.ApiIgnore;
 import com.mangofactory.documentation.spring.web.GroupCache;
 import com.mangofactory.documentation.swagger.dto.ApiListing;
 import com.mangofactory.documentation.swagger.dto.ResourceListing;

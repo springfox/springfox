@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web.dummy;
 
-import com.mangofactory.documentation.service.annotations.ApiIgnore;
+import com.mangofactory.documentation.annotations.ApiIgnore;
 import com.mangofactory.documentation.spring.web.dummy.models.EnumType;
 import com.mangofactory.documentation.spring.web.dummy.models.Example;
 import com.mangofactory.documentation.spring.web.dummy.models.FoobarDto;

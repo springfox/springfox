@@ -4,7 +4,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.collect.Ordering;
 import com.mangofactory.documentation.schema.AlternateTypeRule;
 import com.mangofactory.documentation.schema.WildcardType;
-import com.mangofactory.documentation.service.annotations.ApiIgnore;
+import com.mangofactory.documentation.annotations.ApiIgnore;
 import com.mangofactory.documentation.service.model.ApiDescription;
 import com.mangofactory.documentation.service.model.ApiListingReference;
 import com.mangofactory.documentation.service.model.Operation;

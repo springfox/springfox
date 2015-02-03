@@ -1,8 +1,8 @@
 package com.mangofactory.documentation.spring.web.scanners;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.mangofactory.documentation.service.PathProvider;
-import com.mangofactory.documentation.service.RequestMappingEvaluator;
+import com.mangofactory.documentation.PathProvider;
+import com.mangofactory.documentation.RequestMappingEvaluator;
 import com.mangofactory.documentation.service.model.ApiListingReference;
 import com.mangofactory.documentation.service.model.ResourceGroup;
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;

@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web.dummy.controllers;
 
-import com.mangofactory.documentation.service.annotations.ApiIgnore;
+import com.mangofactory.documentation.annotations.ApiIgnore;
 import com.mangofactory.documentation.spring.web.dummy.models.Pet;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiParam;

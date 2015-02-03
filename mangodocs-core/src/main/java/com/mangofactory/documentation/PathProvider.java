@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.service;
+package com.mangofactory.documentation;
 
 public interface PathProvider {
   String getApplicationBasePath();

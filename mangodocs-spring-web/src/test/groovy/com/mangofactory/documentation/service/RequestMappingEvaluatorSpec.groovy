@@ -1,5 +1,5 @@
 package com.mangofactory.documentation.service
-import com.mangofactory.documentation.service.annotations.ApiIgnore
+import com.mangofactory.documentation.annotations.ApiIgnore
 import com.mangofactory.documentation.spring.web.SpringRequestMappingEvaluator
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.scanners.RegexRequestMappingPatternMatcher
