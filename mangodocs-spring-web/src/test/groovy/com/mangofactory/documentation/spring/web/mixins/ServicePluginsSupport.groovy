@@ -6,11 +6,11 @@ import com.mangofactory.documentation.spi.service.DocumentationPlugin
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin
 import com.mangofactory.documentation.spi.service.OperationModelsProviderPlugin
 import com.mangofactory.documentation.spi.service.ParameterBuilderPlugin
-import com.mangofactory.documentation.spi.service.ParameterExpanderPlugin
+import com.mangofactory.documentation.spi.service.ExpandedParameterBuilderPlugin
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy
 import com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsManager
 import com.mangofactory.documentation.spring.web.readers.operation.OperationModelsProvider
-import com.mangofactory.documentation.spring.web.readers.parameter.ParameterExpander
+import com.mangofactory.documentation.spring.web.readers.parameter.ExpandedParameterBuilder
 import com.mangofactory.documentation.spring.web.scanners.MediaTypeReader
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
@@ -25,8 +25,8 @@ class ServicePluginsSupport {
             OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(new TypeResolver())))
     PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins =
             OrderAwarePluginRegistry.create([])
-    PluginRegistry<ParameterExpanderPlugin, DocumentationType> parameterExpanderPlugin =
-            OrderAwarePluginRegistry.create([new ParameterExpander()])
+    PluginRegistry<ExpandedParameterBuilderPlugin, DocumentationType> parameterExpanderPlugin =
+            OrderAwarePluginRegistry.create([new ExpandedParameterBuilder()])
     PluginRegistry<ParameterBuilderPlugin, DocumentationType>  parameterBuilderPlugins=
             OrderAwarePluginRegistry.create([])
     PluginRegistry<OperationBuilderPlugin, DocumentationType>  operationBuilderPlugins=
@@ -47,8 +47,8 @@ class ServicePluginsSupport {
             OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(new TypeResolver())))
     PluginRegistry<DocumentationPlugin, DocumentationType> documentationPluginRegistry =
             OrderAwarePluginRegistry.create(documentationPlugins)
-    PluginRegistry<ParameterExpanderPlugin, DocumentationType> parameterExpanderPlugin =
-            OrderAwarePluginRegistry.create([new ParameterExpander()])
+    PluginRegistry<ExpandedParameterBuilderPlugin, DocumentationType> parameterExpanderPlugin =
+            OrderAwarePluginRegistry.create([new ExpandedParameterBuilder()])
     PluginRegistry<ParameterBuilderPlugin, DocumentationType>  parameterBuilderPlugins=
             OrderAwarePluginRegistry.create(paramPlugins)
     PluginRegistry<OperationBuilderPlugin, DocumentationType>  operationBuilderPlugins=

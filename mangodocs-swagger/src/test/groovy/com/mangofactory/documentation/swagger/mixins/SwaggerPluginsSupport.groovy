@@ -11,14 +11,14 @@ import com.mangofactory.documentation.spi.service.DocumentationPlugin
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin
 import com.mangofactory.documentation.spi.service.OperationModelsProviderPlugin
 import com.mangofactory.documentation.spi.service.ParameterBuilderPlugin
-import com.mangofactory.documentation.spi.service.ParameterExpanderPlugin
+import com.mangofactory.documentation.spi.service.ExpandedParameterBuilderPlugin
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy
 import com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsManager
 import com.mangofactory.documentation.spring.web.scanners.MediaTypeReader
 import com.mangofactory.documentation.spring.web.readers.operation.OperationModelsProvider
-import com.mangofactory.documentation.spring.web.readers.parameter.ParameterExpander
+import com.mangofactory.documentation.spring.web.readers.parameter.ExpandedParameterBuilder
 import com.mangofactory.documentation.swagger.readers.operation.SwaggerOperationModelsProvider
-import com.mangofactory.documentation.swagger.readers.parameter.SwaggerParameterExpander
+import com.mangofactory.documentation.swagger.readers.parameter.SwaggerExpandedParameterBuilder
 import com.mangofactory.documentation.swagger.schema.ApiModelBuilder
 import com.mangofactory.documentation.swagger.schema.ApiModelPropertyPropertyBuilder
 import com.mangofactory.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
@@ -47,8 +47,8 @@ class SwaggerPluginsSupport {
             OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(new TypeResolver())))
     PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins =
             OrderAwarePluginRegistry.create([])
-    PluginRegistry<ParameterExpanderPlugin, DocumentationType> parameterExpanderPlugin =
-            OrderAwarePluginRegistry.create([new ParameterExpander(), new SwaggerParameterExpander()])
+    PluginRegistry<ExpandedParameterBuilderPlugin, DocumentationType> parameterExpanderPlugin =
+            OrderAwarePluginRegistry.create([new ExpandedParameterBuilder(), new SwaggerExpandedParameterBuilder()])
     PluginRegistry<ParameterBuilderPlugin, DocumentationType>  parameterBuilderPlugins=
             OrderAwarePluginRegistry.create([])
     PluginRegistry<OperationBuilderPlugin, DocumentationType>  operationBuilderPlugins=

@@ -5,7 +5,7 @@ import com.google.common.base.Optional;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.service.AllowableListValues;
 import com.mangofactory.documentation.service.AllowableValues;
-import com.mangofactory.documentation.spi.service.ParameterExpanderPlugin;
+import com.mangofactory.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.ParameterExpansionContext;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -24,7 +24,7 @@ import static com.mangofactory.documentation.swagger.schema.ApiModelProperties.*
 import static com.mangofactory.documentation.swagger.readers.parameter.ParameterAllowableReader.*;
 
 @Component
-public class SwaggerParameterExpander implements ParameterExpanderPlugin {
+public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilderPlugin {
 
   @Override
   public void apply(ParameterExpansionContext context) {

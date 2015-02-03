@@ -6,7 +6,7 @@ import com.mangofactory.documentation.spi.service.DocumentationPlugin;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.OperationModelsProviderPlugin;
 import com.mangofactory.documentation.spi.service.ParameterBuilderPlugin;
-import com.mangofactory.documentation.spi.service.ParameterExpanderPlugin;
+import com.mangofactory.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;
 import com.mangofactory.documentation.spi.service.contexts.Defaults;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +27,7 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
         ApiListingBuilderPlugin.class,
         OperationBuilderPlugin.class,
         ParameterBuilderPlugin.class,
-        ParameterExpanderPlugin.class,
+        ExpandedParameterBuilderPlugin.class,
         ResourceGroupingStrategy.class,
         OperationModelsProviderPlugin.class})
 public class SpringMvcDocumentationConfiguration {

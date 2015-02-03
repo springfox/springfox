@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.service.AllowableListValues;
 import com.mangofactory.documentation.service.AllowableValues;
-import com.mangofactory.documentation.spi.service.ParameterExpanderPlugin;
+import com.mangofactory.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.ParameterExpansionContext;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 
 @Component
-public class ParameterExpander implements ParameterExpanderPlugin {
+public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin {
   @Override
   public void apply(ParameterExpansionContext context) {
     AllowableValues allowable = allowableValues(context.getField());

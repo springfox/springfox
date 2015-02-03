@@ -13,7 +13,7 @@ import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import com.mangofactory.documentation.spi.service.OperationModelsProviderPlugin;
 import com.mangofactory.documentation.spi.service.ParameterBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext;
-import com.mangofactory.documentation.spi.service.ParameterExpanderPlugin;
+import com.mangofactory.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.ParameterExpansionContext;
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;
@@ -34,7 +34,7 @@ public class DocumentationPluginsManager {
   private final PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins;
   private final PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingPlugins;
   private final PluginRegistry<ParameterBuilderPlugin, DocumentationType> parameterPlugins;
-  private final PluginRegistry<ParameterExpanderPlugin, DocumentationType> parameterExpanderPlugins;
+  private final PluginRegistry<ExpandedParameterBuilderPlugin, DocumentationType> parameterExpanderPlugins;
   private final PluginRegistry<OperationBuilderPlugin, DocumentationType> operationBuilderPlugins;
   private final PluginRegistry<ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies;
   private final PluginRegistry<OperationModelsProviderPlugin, DocumentationType> operationModelsProviders;
@@ -47,8 +47,8 @@ public class DocumentationPluginsManager {
           PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingPlugins,
           @Qualifier("parameterBuilderPluginRegistry")
           PluginRegistry<ParameterBuilderPlugin, DocumentationType> parameterPlugins,
-          @Qualifier("parameterExpanderPluginRegistry")
-          PluginRegistry<ParameterExpanderPlugin, DocumentationType> parameterExpanderPlugins,
+          @Qualifier("expandedParameterBuilderPluginRegistry")
+          PluginRegistry<ExpandedParameterBuilderPlugin, DocumentationType> parameterExpanderPlugins,
           @Qualifier("operationBuilderPluginRegistry")
           PluginRegistry<OperationBuilderPlugin, DocumentationType> operationBuilderPlugins,
           @Qualifier("resourceGroupingStrategyRegistry")
@@ -81,7 +81,7 @@ public class DocumentationPluginsManager {
   }
 
   public Parameter expandParameter(ParameterExpansionContext context) {
-    for (ParameterExpanderPlugin each : parameterExpanderPlugins.getPluginsFor(context.getDocumentationType())) {
+    for (ExpandedParameterBuilderPlugin each : parameterExpanderPlugins.getPluginsFor(context.getDocumentationType())) {
       each.apply(context);
     }
     return context.getParameterBuilder().build();
