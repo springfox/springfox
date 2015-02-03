@@ -21,9 +21,10 @@ public class ParameterExpander implements ParameterExpanderPlugin {
   public void apply(ParameterExpansionContext context) {
     AllowableValues allowable = allowableValues(context.getField());
 
-    String name = isNullOrEmpty(context.getParentName()) ? context.getField().getName() : String.format("%s.%s",
-            context.getParentName(),
-            context.getField().getName());
+    String name = isNullOrEmpty(context.getParentName())
+            ? context.getField().getName()
+            : String.format("%s.%s", context.getParentName(), context.getField().getName());
+
     context.getParameterBuilder()
             .name(name)
             .description(null).defaultValue(null)
