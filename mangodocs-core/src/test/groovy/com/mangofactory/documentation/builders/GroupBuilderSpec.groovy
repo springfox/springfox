@@ -16,10 +16,10 @@ class GroupBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod        | value                          | property
-      'name'               | 'group1'                       | 'groupName'
-      'apiListingsByGroup' | [group1: [Mock(ApiListing)]]   | 'apiListings'
-      'resourceListing'    | Mock(ResourceListing)          | 'resourceListing'
+      builderMethod                     | value                          | property
+      'name'                            | 'group1'                       | 'groupName'
+      'apiListingsByResourceGroupName'  | [group1: [Mock(ApiListing)]]   | 'apiListings'
+      'resourceListing'                 | Mock(ResourceListing)          | 'resourceListing'
   }
 
   def "Setting builder properties to null values preserves existing values"() {
@@ -34,9 +34,9 @@ class GroupBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod         | value                           | property
-      'name'                | 'group1'                        | 'groupName'
-      'apiListingsByGroup'  | [group1: [Mock(ApiListing)]]    | 'apiListings'
-      'resourceListing'     | Mock(ResourceListing)           | 'resourceListing'
+      builderMethod                     | value                           | property
+      'name'                            | 'group1'                        | 'groupName'
+      'apiListingsByResourceGroupName'  | [group1: [Mock(ApiListing)]]    | 'apiListings'
+      'resourceListing'                 | Mock(ResourceListing)           | 'resourceListing'
   }
 }
