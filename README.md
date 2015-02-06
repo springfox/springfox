@@ -1,5 +1,5 @@
 # Swagger-springmvc
-[ ![Download](https://api.bintray.com/packages/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/images/download.png) ](https://bintray.com/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/_latestVersion)
+[![Download](https://api.bintray.com/packages/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/images/download.svg) ](https://bintray.com/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/_latestVersion)
 
 | Unit  | Functional   | Coverage   |
 |---|---|---|
@@ -36,7 +36,7 @@ __Maven__
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.9.4</version>
+    <version>0.9.5</version>
 </dependency>
 
 ```
@@ -49,7 +49,7 @@ repositories {
     jcenter()
 }
 
-compile "com.mangofactory:swagger-springmvc:0.9.4"
+compile "com.mangofactory:swagger-springmvc:0.9.5"
 ```
 
 #### Snapshot version
@@ -67,7 +67,7 @@ __Maven__
 <dependency>
     <groupId>com.mangofactory</groupId>
     <artifactId>swagger-springmvc</artifactId>
-    <version>0.9.5-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -79,11 +79,11 @@ repositories {
    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
-compile "com.mangofactory:swagger-springmvc:0.9.5-SNAPSHOT"
+compile "com.mangofactory:swagger-springmvc:2.0.0-SNAPSHOT"
 ```
 
 ### Notable Dependencies
-- As of v0.9.4 all dependencies on __scala__ have been removed.
+- As of v0.9.5 all dependencies on __scala__ have been removed.
 - Spring 3.2.x or above
 - jackson 2.4.4
 - guava 18.0

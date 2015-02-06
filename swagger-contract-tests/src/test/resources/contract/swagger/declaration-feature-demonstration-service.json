@@ -1062,35 +1062,6 @@
                 }
             }
         },
-        "Pet": {
-            "description": "",
-            "id": "Pet",
-            "properties": {
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "id": {
-                    "required": false,
-                    "type": "string"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
-        "DateTimeZone": {
-            "description": "",
-            "id": "DateTimeZone",
-            "properties": {
-                "fixed": {
-                    "required": false,
-                    "type": "boolean"
-                }
-            }
-        },
         "Example": {
             "description": "",
             "id": "Example",
@@ -1141,6 +1112,35 @@
                     "type": "string"
                 },
                 "propertyWithNoSetterMethod": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "DateTimeZone": {
+            "description": "",
+            "id": "DateTimeZone",
+            "properties": {
+                "fixed": {
+                    "required": false,
+                    "type": "boolean"
+                }
+            }
+        },
+        "Pet": {
+            "description": "",
+            "id": "Pet",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
                     "required": false,
                     "type": "string"
                 }
