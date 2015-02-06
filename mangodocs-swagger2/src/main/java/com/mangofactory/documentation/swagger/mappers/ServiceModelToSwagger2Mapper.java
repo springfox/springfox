@@ -119,7 +119,7 @@ public abstract class ServiceModelToSwagger2Mapper {
     return responses;
   }
 
-  protected Map<String, Path> map(Map<String, ApiListing> apiListings) {
+  protected Map<String, Path> mapPaths(Map<String, ApiListing> apiListings) {
     Map<String, Path> paths = newHashMap();
     for (ApiListing each : apiListings.values()) {
       for (ApiDescription api : each.getApis()) {
