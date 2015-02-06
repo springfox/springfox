@@ -13,7 +13,6 @@ import com.mangofactory.documentation.service.ResponseMessage;
 import com.wordnik.swagger.models.Contact;
 import com.wordnik.swagger.models.Info;
 import com.wordnik.swagger.models.License;
-import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.Operation;
 import com.wordnik.swagger.models.Path;
 import com.wordnik.swagger.models.Response;
@@ -138,10 +137,10 @@ public abstract class ServiceModelToSwagger2Mapper {
     return path;
   }
 
-  protected Map<String, Model> allApiModels(Group group) {
-    Map<String, Model> definitions = newHashMap();
+  protected Map<String, com.mangofactory.documentation.schema.Model> allApiModels(Group group) {
+    Map<String, com.mangofactory.documentation.schema.Model> definitions = newHashMap();
     for (ApiListing each : group.getApiListings().values()) {
-      definitions.putAll(transformValues(each.getModels(), modelToDto()));
+      definitions.putAll(each.getModels());
     }
     return definitions;
   }
@@ -159,13 +158,6 @@ public abstract class ServiceModelToSwagger2Mapper {
     };
   }
 
-  private Function<com.mangofactory.documentation.schema.Model, Model> modelToDto() {
-    return new Function<com.mangofactory.documentation.schema.Model, Model>() {
-      @Override
-      public Model apply(com.mangofactory.documentation.schema.Model input) {
-        return map(input);
-      }
-    };
-  }
+
 
 }

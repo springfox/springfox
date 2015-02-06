@@ -22,8 +22,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 @Mapper
 public abstract class ModelMapper {
-
-  public Model resolve(com.mangofactory.documentation.schema.Model source, 
+  public Model resolve(com.mangofactory.documentation.schema.Model source,
                        @TargetType Class<? extends Model> entityClass) {
     throw new NotImplementedException();
   }
