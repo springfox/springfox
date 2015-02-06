@@ -20,8 +20,27 @@ import org.mapstruct.Mapper;
 import org.mapstruct.TargetType;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mapper
 public abstract class ModelMapper {
+  public Map<String, Model> map(Map<String, com.mangofactory.documentation.schema.Model> from)  {
+    if ( from == null ) {
+      return null;
+    }
+
+    Map<String, Model> map = new HashMap<String, Model>();
+
+    for ( java.util.Map.Entry<String, com.mangofactory.documentation.schema.Model> entry : from.entrySet() ) {
+      String key = entry.getKey();
+      Model value = resolve( entry.getValue() , Model.class );
+      map.put( key, value );
+    }
+
+    return map;
+  }
+  
   public Model resolve(com.mangofactory.documentation.schema.Model source,
                        @TargetType Class<? extends Model> entityClass) {
     throw new NotImplementedException();

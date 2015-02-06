@@ -45,8 +45,9 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "produces", expression = "java(anyApi(from).getProduces())"),
           @Mapping(target = "consumes", expression = "java(anyApi(from).getConsumes())"),
           @Mapping(target = "parameters", expression = "java(new java.util.HashMap())"),
-          @Mapping(target = "definitions", expression = "java(allApiModels(from))"),
-          @Mapping(target = "securityDefinitions", expression = "java(toSecuritySchemeDefinitions(anyApi(from)))"),
+          @Mapping(target = "definitions", expression = "java(modelMapper.map(allApiModels(from)))"),
+          @Mapping(target = "securityDefinitions", 
+                  expression = "java(securityMapper.toSecuritySchemeDefinitions(anyApi(from)))"),
           @Mapping(target = "externalDocs", ignore = true)
   })
   public abstract Swagger map(com.mangofactory.documentation.service.Group from);
