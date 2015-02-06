@@ -11,6 +11,308 @@
     ],
     "apis": [
         {
+            "path": "/features",
+            "description": "all",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "all",
+                    "notes": "all",
+                    "nickname": "all",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                },
+                {
+                    "method": "HEAD",
+                    "summary": "all",
+                    "notes": "all",
+                    "nickname": "all",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                },
+                {
+                    "method": "POST",
+                    "summary": "all",
+                    "notes": "all",
+                    "nickname": "all",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                },
+                {
+                    "method": "PUT",
+                    "summary": "all",
+                    "notes": "all",
+                    "nickname": "all",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                },
+                {
+                    "method": "PATCH",
+                    "summary": "all",
+                    "notes": "all",
+                    "nickname": "all",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "all",
+                    "notes": "all",
+                    "nickname": "all",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                },
+                {
+                    "method": "OPTIONS",
+                    "summary": "all",
+                    "notes": "all",
+                    "nickname": "all",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                },
+                {
+                    "method": "TRACE",
+                    "summary": "all",
+                    "notes": "all",
+                    "nickname": "all",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                }
+            ]
+        },
+        {
             "path": "/features/allMethodsAllowed",
             "description": "allMethodAllowed",
             "operations": [
@@ -760,6 +1062,35 @@
                 }
             }
         },
+        "Pet": {
+            "description": "",
+            "id": "Pet",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "DateTimeZone": {
+            "description": "",
+            "id": "DateTimeZone",
+            "properties": {
+                "fixed": {
+                    "required": false,
+                    "type": "boolean"
+                }
+            }
+        },
         "Example": {
             "description": "",
             "id": "Example",
@@ -810,35 +1141,6 @@
                     "type": "string"
                 },
                 "propertyWithNoSetterMethod": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
-        "DateTimeZone": {
-            "description": "",
-            "id": "DateTimeZone",
-            "properties": {
-                "fixed": {
-                    "required": false,
-                    "type": "boolean"
-                }
-            }
-        },
-        "Pet": {
-            "description": "",
-            "id": "Pet",
-            "properties": {
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "id": {
-                    "required": false,
-                    "type": "string"
-                },
-                "name": {
                     "required": false,
                     "type": "string"
                 }

@@ -90,4 +90,8 @@ public class FeatureDemonstrationService {
     //No-op
   }
 
+  @RequestMapping
+  public String all() {
+    throw new UnsupportedOperationException();
+  }
 }
