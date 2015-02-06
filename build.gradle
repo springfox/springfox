@@ -40,7 +40,7 @@ configure(subprojects.findAll { it.name != 'swagger-contract-tests'}) { subproje
     compile.extendsFrom provided
   }
 
-  group = 'com.mangofactory'
+  group = 'com.mangofactory.documentation'
   version = projectVersion
 
   apply plugin: 'com.github.adrianbk.jvmsrc'

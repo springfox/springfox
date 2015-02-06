@@ -4,6 +4,6 @@ include 'mangodocs-spi'
 include 'mangodocs-schema'
 include 'mangodocs-spring-web'
 include 'mangodocs-swagger'
+include 'mangodocs-swagger2'
 include 'swagger-contract-tests'
-
 

@@ -36,7 +36,7 @@ publishing {
         classifier = 'javadoc'
       }
 
-      pom.withXml swaggerMvcPomConfig
+      pom.withXml mangodocsPomConfig
     }
   }
 }

@@ -1,5 +1,4 @@
 apply from: "$rootDir/gradle/mapstruct.gradle"
-
 configurations {
   testArtifacts.extendsFrom testRuntime
 }
@@ -12,11 +11,8 @@ artifacts {
   testArtifacts testJar
 }
 
-
 dependencies {
-  compile (libs.swaggerCore) {
-    exclude group: 'org.scala-lang'
-  }
+  compile libs.swagger2Core
   compile project(':mangodocs-spi')
   compile project(':mangodocs-schema')
   compile project(':mangodocs-spring-web')

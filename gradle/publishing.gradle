@@ -76,8 +76,8 @@ ext {
     }
   }
 
-  //Gralde's maven-publish plugin does not yet handles pom generation correctly. Fix expected in 2.1
-  swaggerMvcPomConfig = {
+  //Gradle's maven-publish plugin does not yet handles pom generation correctly. Fix expected in 2.1
+  mangodocsPomConfig = {
     def root = asNode()
     def dependencies = root.dependencies
     def allDependencies = dependencies.'*'
