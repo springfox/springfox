@@ -8,6 +8,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.joda.time.LocalDate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -89,5 +90,10 @@ public class FeatureDemonstrationService {
   public void updateBigDecimal(BigDecimal input) {
     //No-op
   }
-
+  
+  @RequestMapping
+  @ApiOperation(value = "all")
+  public HttpEntity<String> all() {
+    throw new UnsupportedOperationException();
+  }
 }
