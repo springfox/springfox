@@ -45,7 +45,7 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "produces", expression = "java(anyApi(from).getProduces())"),
           @Mapping(target = "consumes", expression = "java(anyApi(from).getConsumes())"),
           @Mapping(target = "parameters", expression = "java(new java.util.HashMap())"),
-          @Mapping(target = "definitions", expression = "java(modelMapper.map(allApiModels(from)))"),
+          @Mapping(target = "definitions", expression = "java(modelMapper.mapModels(allApiModels(from)))"),
           @Mapping(target = "securityDefinitions", 
                   expression = "java(securityMapper.toSecuritySchemeDefinitions(anyApi(from)))"),
           @Mapping(target = "externalDocs", ignore = true)
@@ -59,18 +59,6 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "vendorExtensions", ignore = true)
   })
   protected abstract Info map(com.mangofactory.documentation.service.ApiInfo from);
-
-  protected License toLicense(ApiInfo from) {
-    return new License().name(from.getLicense()).url(from.getLicenseUrl());
-  }
-
-  protected List<Scheme> toSchemes(ApiListing from) {
-    return FluentIterable.from(from.getProtocols()).transform(toScheme()).toList();
-  }
-
-  protected Contact toContact(ApiInfo from) {
-    return new Contact().name(from.getContact());
-  }
 
   @Mappings({
           @Mapping(target = "description", source = "notes"),
@@ -86,6 +74,18 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "externalDocs", ignore = true)
   })
   protected abstract Operation map(com.mangofactory.documentation.service.Operation from);
+
+  protected License toLicense(ApiInfo from) {
+    return new License().name(from.getLicense()).url(from.getLicenseUrl());
+  }
+
+  protected List<Scheme> toSchemes(ApiListing from) {
+    return FluentIterable.from(from.getProtocols()).transform(toScheme()).toList();
+  }
+
+  protected Contact toContact(ApiInfo from) {
+    return new Contact().name(from.getContact());
+  }
 
   protected List<Map<String, List<String>>> map(
           Map<String, List<com.mangofactory.documentation.service.AuthorizationScope>> from) {
@@ -158,7 +158,5 @@ public abstract class ServiceModelToSwagger2Mapper {
       }
     };
   }
-
-
 
 }

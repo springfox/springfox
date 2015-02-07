@@ -1,11 +1,13 @@
 package com.mangofactory.documentation.spring.web.readers.parameter;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.service.AllowableListValues;
 import com.mangofactory.documentation.service.AllowableValues;
 import com.mangofactory.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.ParameterExpansionContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -17,6 +19,13 @@ import static com.google.common.collect.Lists.*;
 
 @Component
 public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin {
+  private final TypeResolver resolver;
+
+  @Autowired
+  public ExpandedParameterBuilder(TypeResolver resolver) {
+    this.resolver = resolver;
+  }
+
   @Override
   public void apply(ParameterExpansionContext context) {
     AllowableValues allowable = allowableValues(context.getField());
@@ -30,6 +39,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
             .description(null).defaultValue(null)
             .required(Boolean.FALSE)
             .allowMultiple(Boolean.FALSE)
+            .type(resolver.resolve(context.getField().getType()))
             .dataType(context.getDataTypeName())
             .allowableValues(allowable)
             .parameterType("query")

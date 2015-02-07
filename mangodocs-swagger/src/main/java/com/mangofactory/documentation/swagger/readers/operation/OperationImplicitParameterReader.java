@@ -43,10 +43,17 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
   }
 
   public static Parameter getImplicitParameter(ApiImplicitParam param) {
-    return new ParameterBuilder().name(param.name()).description(param.value()).defaultValue(param.defaultValue())
-            .required(param.required()).allowMultiple(param.allowMultiple()).dataType(param.dataType())
+    return new ParameterBuilder()
+            .name(param.name())
+            .description(param.value())
+            .defaultValue(param.defaultValue())
+            .required(param.required())
+            .allowMultiple(param.allowMultiple())
+            .dataType(param.dataType())
             .allowableValues(allowableValueFromString(param.allowableValues()))
-            .parameterType(param.paramType()).parameterAccess(param.access()).build();
+            .parameterType(param.paramType())
+            .parameterAccess(param.access())
+            .build();
   }
 
 }

@@ -1,5 +1,6 @@
 package com.mangofactory.documentation.spring.web.readers.operation;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.mangofactory.documentation.service.AllowableListValues;
@@ -8,6 +9,8 @@ import com.mangofactory.documentation.builders.ParameterBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
 
@@ -16,7 +19,15 @@ import java.util.List;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 
+@Component
 public class OperationParameterRequestConditionReader implements OperationBuilderPlugin {
+
+  private final TypeResolver resolver;
+
+  @Autowired
+  public OperationParameterRequestConditionReader(TypeResolver resolver) {
+    this.resolver = resolver;
+  }
 
   @Override
   public void apply(OperationContext context) {
@@ -26,12 +37,14 @@ public class OperationParameterRequestConditionReader implements OperationBuilde
       if (skipParameter(parameters, expression)) {
         continue;
       }
+      
       Parameter parameter = new ParameterBuilder()
               .name(expression.getName())
               .description(null)
               .defaultValue(expression.getValue())
               .required(true)
               .allowMultiple(false)
+              .type(resolver.resolve(String.class))
               .dataType("string")
               .allowableValues(new AllowableListValues(newArrayList(expression.getValue()), "string"))
               .parameterType("query")

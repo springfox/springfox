@@ -23,13 +23,14 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
     given:
       ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter,
               new TypeResolver().resolve(paramType))
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+      ParameterContext parameterContext = 
+              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
       methodParameter.getParameterType() >> paramType
 
     when:
       def typeNameExtractor =
               new TypeNameExtractor(new TypeResolver(), new DefaultGenericTypeNamingStrategy(),  defaultSchemaPlugins())
-      def sut = new ParameterDataTypeReader(typeNameExtractor)
+      def sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
       sut.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().parameterType == expected

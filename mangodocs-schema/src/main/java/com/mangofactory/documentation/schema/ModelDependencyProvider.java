@@ -101,6 +101,7 @@ public class ModelDependencyProvider {
       properties.add(property.getType());
       if (Collections.isContainerType(property.getType())) {
         ResolvedType collectionElementType = Collections.collectionElementType(property.getType());
+        //TODO: may not be required to check this because the very next step if this is true is to check this again
         if (Types.typeNameFor(collectionElementType.getErasedType()) == null) {
           if (!isBaseType(fromParent(modelContext, collectionElementType))) {
             properties.add(collectionElementType);

@@ -1,4 +1,6 @@
 package com.mangofactory.documentation.spring.web.readers
+
+import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.service.Parameter
 import com.mangofactory.documentation.builders.OperationBuilder
 import com.mangofactory.documentation.spi.DocumentationType
@@ -14,7 +16,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 @Mixin([RequestMappingSupport])
 class OperationParameterRequestConditionReaderSpec extends DocumentationContextSpec {
 
-  OperationParameterRequestConditionReader sut = new OperationParameterRequestConditionReader()
+  OperationParameterRequestConditionReader sut = new OperationParameterRequestConditionReader(new TypeResolver())
   def "Should read a parameter given a parameter request condition"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
@@ -74,7 +76,8 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
               context(), "/anyPath")
 
     when:
-      OperationParameterRequestConditionReader operationParameterReader = new OperationParameterRequestConditionReader()
+      OperationParameterRequestConditionReader operationParameterReader = 
+              new OperationParameterRequestConditionReader(new TypeResolver())
       operationParameterReader.apply(operationContext)
 
     then:

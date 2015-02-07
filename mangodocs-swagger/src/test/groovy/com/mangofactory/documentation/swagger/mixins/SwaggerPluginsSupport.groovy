@@ -43,12 +43,13 @@ class SwaggerPluginsSupport {
   }
 
   DocumentationPluginsManager swaggerServicePlugins() {
+    def resolver = new TypeResolver()
     PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(new TypeResolver())))
+            OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(resolver)))
     PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins =
             OrderAwarePluginRegistry.create([])
     PluginRegistry<ExpandedParameterBuilderPlugin, DocumentationType> parameterExpanderPlugin =
-            OrderAwarePluginRegistry.create([new ExpandedParameterBuilder(), new SwaggerExpandedParameterBuilder()])
+            OrderAwarePluginRegistry.create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder()])
     PluginRegistry<ParameterBuilderPlugin, DocumentationType>  parameterBuilderPlugins=
             OrderAwarePluginRegistry.create([])
     PluginRegistry<OperationBuilderPlugin, DocumentationType>  operationBuilderPlugins=
@@ -57,8 +58,8 @@ class SwaggerPluginsSupport {
             OrderAwarePluginRegistry.create([new ClassOrApiAnnotationResourceGrouping()])
     PluginRegistry<OperationModelsProviderPlugin, DocumentationType> modelProviders =
             OrderAwarePluginRegistry.create([
-              new OperationModelsProvider(new TypeResolver()),
-              new SwaggerOperationModelsProvider(new TypeResolver())])
+              new OperationModelsProvider(resolver),
+              new SwaggerOperationModelsProvider(resolver)])
     new DocumentationPluginsManager(documentationPlugins, apiListingRegistry, parameterBuilderPlugins,
             parameterExpanderPlugin, operationBuilderPlugins, resourceGroupingStrategies, modelProviders)
   }
