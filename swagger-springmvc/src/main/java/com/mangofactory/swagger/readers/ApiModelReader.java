@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.method.HandlerMethod;
 
 import java.lang.annotation.Annotation;
@@ -182,7 +183,7 @@ public class ApiModelReader implements Command<RequestMappingContext> {
     for (int i = 0; i < annotations.length; i++) {
       Annotation[] pAnnotations = annotations[i];
       for (Annotation annotation : pAnnotations) {
-        if (annotation instanceof RequestBody) {
+        if (annotation instanceof RequestBody || annotation instanceof RequestPart) {
           ResolvedMethodParameter pType = parameterTypes.get(i);
           if (!settings.getIgnorableParameterTypes()
                   .contains(pType.getResolvedParameterType().getErasedType())) {
