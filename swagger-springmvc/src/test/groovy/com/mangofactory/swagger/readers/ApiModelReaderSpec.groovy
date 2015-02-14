@@ -217,6 +217,63 @@ class ApiModelReaderSpec extends Specification {
 
   }
 
+  def "should only generate models for request parameters that are annotated with Springs RequestPart"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestPartAnnotation',
+              DummyModels.BusinessModel,
+              HttpServletResponse.class,
+              DummyModels.AnnotatedBusinessModel.class
+      )
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
+
+      def settings = new SwaggerGlobalSettings()
+
+      def config = new SpringSwaggerConfig()
+      settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      context.put("swaggerGlobalSettings", settings)
+    when:
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
+      apiModelReader.execute(context)
+      Map<String, Object> result = context.getResult()
+    then:
+      Map<String, Model> models = result.get("models")
+      models.size() == 2 // instead of 3
+      models.containsKey("BusinessModel")
+      models.containsKey("Void")
+
+  }
+
+  def "should not generate models for simple type request parameters that are annotated with Springs RequestPart"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestPartAnnotationOnSimpleType',
+              String,
+              HttpServletResponse.class,
+              DummyModels.AnnotatedBusinessModel.class
+      )
+      RequestMappingContext context = new RequestMappingContext(requestMappingInfo('/somePath'), handlerMethod)
+
+      def settings = new SwaggerGlobalSettings()
+
+      def config = new SpringSwaggerConfig()
+      settings.ignorableParameterTypes = config.defaultIgnorableParameterTypes()
+      def modelConfig = new SwaggerModelsConfiguration()
+      def typeResolver = new TypeResolver()
+      settings.alternateTypeProvider = modelConfig.alternateTypeProvider(typeResolver)
+      context.put("swaggerGlobalSettings", settings)
+    when:
+      ApiModelReader apiModelReader = new ApiModelReader(modelProvider())
+      apiModelReader.execute(context)
+      Map<String, Object> result = context.getResult()
+    then:
+      Map<String, Model> models = result.get("models")
+      models.size() == 1 // instead of 3
+      models.containsKey("Void")
+
+  }
+
   def "Generates the correct models when there is a Map object in the input parameter"() {
     given:
       HandlerMethod handlerMethod = handlerMethodIn(PetService, 'echo', Map)

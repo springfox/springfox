@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
@@ -48,6 +49,7 @@ class ParameterTypeReaderSpec extends Specification {
       [:] as ModelAttribute | Integer       | "body"
       [:] as RequestHeader  | Integer       | "header"
       [:] as RequestParam   | Integer       | "query"
+      [:] as RequestPart    | Integer       | "form"
       null                  | Integer       | "body"
       null                  | MultipartFile | "form"
   }
