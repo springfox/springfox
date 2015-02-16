@@ -6,4 +6,5 @@ include 'mangodocs-spring-web'
 include 'mangodocs-swagger'
 include 'mangodocs-swagger2'
 include 'swagger-contract-tests'
+include 'mangodocs-petstore'
 

@@ -1,0 +1,4 @@
+dependencies {
+  compile libs.spring
+  compile libs.swaggerCore
+}

@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/mangodocs-core" />
+            <option value="$PROJECT_DIR$/mangodocs-petstore" />
             <option value="$PROJECT_DIR$/mangodocs-schema" />
             <option value="$PROJECT_DIR$/mangodocs-spi" />
             <option value="$PROJECT_DIR$/mangodocs-spring-web" />
