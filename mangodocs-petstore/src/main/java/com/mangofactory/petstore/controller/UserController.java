@@ -73,7 +73,7 @@ public class UserController {
   @RequestMapping(value = "/createWithList", method = POST)
   @ResponseBody
   @ApiOperation(value = "Creates list of users with given input array")
-  public ResponseEntity createUsersWithListInput(
+  public ResponseEntity<String> createUsersWithListInput(
           @ApiParam(value = "List of user object", required = true) List<User> users) {
     for (User user : users) {
       userRepository.add(user);
@@ -87,7 +87,7 @@ public class UserController {
   @ApiResponses(value = {
           @ApiResponse(code = 400, message = "Invalid user supplied"),
           @ApiResponse(code = 404, message = "User not found")})
-  public ResponseEntity updateUser(
+  public ResponseEntity<String> updateUser(
           @ApiParam(value = "name that need to be deleted", required = true)
           @PathVariable("username") String username,
           @ApiParam(value = "Updated user object", required = true) User user) {
@@ -104,7 +104,7 @@ public class UserController {
   @ApiResponses(value = {
           @ApiResponse(code = 400, message = "Invalid username supplied"),
           @ApiResponse(code = 404, message = "User not found")})
-  public ResponseEntity deleteUser(
+  public ResponseEntity<String> deleteUser(
           @ApiParam(value = "The name that needs to be deleted", required = true) @PathVariable("username") String
                   username) {
     if (userRepository.exists(username)) {
@@ -144,7 +144,7 @@ public class UserController {
 
   @RequestMapping(value = "/logout", method = GET)
   @ApiOperation(value = "Logs out current logged in user session")
-  public ResponseEntity logoutUser() {
+  public ResponseEntity<String> logoutUser() {
     return ok();
   }
 }

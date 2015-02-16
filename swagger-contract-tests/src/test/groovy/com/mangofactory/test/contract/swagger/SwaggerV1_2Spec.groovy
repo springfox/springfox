@@ -20,7 +20,7 @@ import static org.skyscreamer.jsonassert.JSONCompareMode.*
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
-class SwaggerV1_2Spec extends Specification {
+class SwaggerV1_2Spec extends Specification implements FileAccess {
 
   @Value('${local.server.port}')
   int port;
@@ -80,9 +80,5 @@ class SwaggerV1_2Spec extends Specification {
       'declaration-pet-grooming-service.json'                       | '/default/pet-grooming-service'
       'declaration-pet-service.json'                                | '/default/pet-service'
       'declaration-root-controller.json'                            | '/default/root-controller'
-  }
-
-  private String fileContents(String fileName) {
-    this.getClass().getResource("/contract/swagger/$fileName").text
   }
 }

@@ -5,6 +5,8 @@ import com.fasterxml.classmate.TypeBindings;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.Iterator;
@@ -100,6 +102,7 @@ public class WildcardType {
   private static List<ResolvedType> breadthFirstSearch(ResolvedType replacingType, ResolvedType wildcardType) {
     TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
     TypeBindings bindingsToMatch = replacingType.getTypeBindings();
+    //TODO - this fails when a controller method return type is a non paramaterized ResponseEntity
     Preconditions.checkArgument(typeBindingsAreOfSameSize(wildcardType, replacingType));
     List<ResolvedType> bindings = newArrayList();
     for (int index = 0; index < bindingsToMatch.size(); index++) {
