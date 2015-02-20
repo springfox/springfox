@@ -1,4 +1,5 @@
 package com.mangofactory.documentation.schema
+
 import com.mangofactory.documentation.schema.mixins.ModelProviderSupport
 import com.mangofactory.documentation.schema.mixins.TypesForTestingSupport
 import spock.lang.Specification
@@ -8,7 +9,6 @@ import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
 class ComplexTypeSpec extends Specification {
-
   def "complex type properties are inferred correctly"() {
     given:
       def provider = defaultModelProvider()
@@ -21,21 +21,25 @@ class ComplexTypeSpec extends Specification {
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
-      modelProperty.getItems() == null
+      modelProperty.getModelRef().type == typeName
+      !modelProperty.getModelRef().collection
+      modelProperty.getModelRef().itemType == null
 
       asReturn.getName() == "ComplexType"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
       retModelProperty.getQualifiedType() == qualifiedType
-      retModelProperty.getItems() == null
+      retModelProperty.getModelRef().type == typeName
+      !retModelProperty.getModelRef().collection
+      retModelProperty.getModelRef().itemType == null
 
     where:
-      property     | type         |  qualifiedType
-      "name"       | String       |  "java.lang.String"
-      "age"        | Integer.TYPE |  "int"
-      "category"   | Category     |  "com.mangofactory.documentation.schema.Category"
-      "customType" | BigDecimal   |  "java.math.BigDecimal"
+      property     | type         |  typeName     |qualifiedType
+      "name"       | String       |  "string"     |"java.lang.String"
+      "age"        | Integer.TYPE |  "int"        |"int"
+      "category"   | Category     |  "Category"   |"com.mangofactory.documentation.schema.Category"
+      "customType" | BigDecimal   |  "double"     |"java.math.BigDecimal"
   }
 
   def "recursive type properties are inferred correctly"() {
@@ -51,14 +55,18 @@ class ComplexTypeSpec extends Specification {
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
-      modelProperty.getItems() == null
+      modelProperty.getModelRef().type == "RecursiveType"
+      !modelProperty.getModelRef().collection
+      modelProperty.getModelRef().itemType == null
 
       asReturn.getName() == "RecursiveType"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
       retModelProperty.getQualifiedType() == qualifiedType
-      retModelProperty.getItems() == null
+      retModelProperty.getModelRef().type == "RecursiveType"
+      !retModelProperty.getModelRef().collection
+      retModelProperty.getModelRef().itemType == null
 
     where:
       property | type           | qualifiedType
@@ -78,21 +86,25 @@ class ComplexTypeSpec extends Specification {
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
-      modelProperty.getItems() == null
+      modelProperty.getModelRef().type == typeName
+      !modelProperty.getModelRef().collection
+      modelProperty.getModelRef().itemType == null
 
       asReturn.getName() == "InheritedComplexType"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
       retModelProperty.getQualifiedType() == qualifiedType
-      retModelProperty.getItems() == null
+      retModelProperty.getModelRef().type == typeName
+      !retModelProperty.getModelRef().collection
+      retModelProperty.getModelRef().itemType == null
 
     where:
-      property            | type          | typeProperty | qualifiedType
-      "name"              | String        | 'type'       | "java.lang.String"
-      "age"               | Integer.TYPE  | 'type'       | "int"
-      "category"          | Category      | 'reference'  | "com.mangofactory.documentation.schema.Category"
-      "customType"        | BigDecimal    | 'type'       | "java.math.BigDecimal"
-      "inheritedProperty" | String        | 'type'       | "java.lang.String"
+      property            | type          | typeName   | typeProperty | qualifiedType
+      "name"              | String        | "string"   | 'type'       | "java.lang.String"
+      "age"               | Integer.TYPE  | "int"      | 'type'       | "int"
+      "category"          | Category      | "Category" | 'reference'  | "com.mangofactory.documentation.schema.Category"
+      "customType"        | BigDecimal    | "double"   | 'type'       | "java.math.BigDecimal"
+      "inheritedProperty" | String        | "string"   | 'type'       | "java.lang.String"
   }
 }

@@ -167,18 +167,18 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
             .required(beanModelProperty.isRequired())
             .description(beanModelProperty.propertyDescription())
             .allowableValues(beanModelProperty.allowableValues())
-            .items(itemModelRef(beanModelProperty.getType(), modelContext));
+            .modelRef(modelRef(beanModelProperty.getType(), modelContext));
     return schemaPluginsManager.property(
             new ModelPropertyContext(propertyBuilder, beanPropertyDefinition, modelContext.getDocumentationType()));
   }
 
-  private ModelRef itemModelRef(ResolvedType type, ModelContext modelContext) {
+  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
     if (!isContainerType(type)) {
-      return null;
+      String typeName = typeNameExtractor.typeName(fromParent(modelContext, type));
+      return new ModelRef(typeName);
     }
     ResolvedType collectionElementType = collectionElementType(type);
     String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, collectionElementType));
-
-    return new ModelRef(elementTypeName);
+    return new ModelRef(containerType(type), elementTypeName);
   }
 }

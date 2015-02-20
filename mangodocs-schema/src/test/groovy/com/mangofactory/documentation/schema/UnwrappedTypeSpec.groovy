@@ -25,7 +25,10 @@ class UnwrappedTypeSpec extends Specification {
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
-      modelProperty.getItems() == null
+      def item = modelProperty.getModelRef()
+      item.type == "string"
+      !item.collection
+      item.itemType == null
 
       asReturn.getName() == "UnwrappedType"
       asReturn.getProperties().size() == 1
@@ -33,7 +36,10 @@ class UnwrappedTypeSpec extends Specification {
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
       retModelProperty.getQualifiedType() == qualifiedType
-      retModelProperty.getItems() == null
+      def retItem = retModelProperty.getModelRef()
+      retItem.type == "string"
+      !retItem.collection
+      retItem.itemType == null
 
     where:
       property    | type    | qualifiedType       | objectMapperToUse             | typeOfOM

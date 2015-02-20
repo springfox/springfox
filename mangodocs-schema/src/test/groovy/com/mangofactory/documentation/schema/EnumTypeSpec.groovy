@@ -28,7 +28,9 @@ class EnumTypeSpec extends Specification {
 
       modelProperty.type.erasedType == ExampleEnum
       modelProperty.getQualifiedType() == "com.mangofactory.documentation.schema.ExampleEnum"
-      modelProperty.getItems() == null
+      modelProperty.getModelRef().type == "string"
+      !modelProperty.getModelRef().collection
+      modelProperty.getModelRef().itemType == null
       modelProperty.getAllowableValues().getValues() == list
 
       asReturn.getName() == "ExampleWithEnums"
@@ -37,7 +39,9 @@ class EnumTypeSpec extends Specification {
       def retModelProperty = retModelPropertyOption
       retModelProperty.type.erasedType == ExampleEnum
       retModelProperty.getQualifiedType() == "com.mangofactory.documentation.schema.ExampleEnum"
-      retModelProperty.getItems() == null
+      retModelProperty.getModelRef().type == "string"
+      !retModelProperty.getModelRef().collection
+      retModelProperty.getModelRef().itemType == null 
       retModelProperty.getAllowableValues().getValues() == list
   }
 }

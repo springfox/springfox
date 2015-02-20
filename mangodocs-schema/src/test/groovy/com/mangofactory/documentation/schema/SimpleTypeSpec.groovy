@@ -20,14 +20,20 @@ class SimpleTypeSpec extends SchemaSpecification {
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
-      modelProperty.getItems() == null
+      def item = modelProperty.modelRef
+      item.type == Types.typeNameFor(type)
+      !item.collection
+      item.itemType == null
 
       asReturn.getName() == "SimpleType"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
       retModelProperty.getQualifiedType() == qualifiedType
-      retModelProperty.getItems() == null
+      def retItem = retModelProperty.modelRef
+      retItem.type == Types.typeNameFor(type)
+      !retItem.collection
+      retItem.itemType == null
 
     where:
       property          | type    | qualifiedType
@@ -61,8 +67,10 @@ class SimpleTypeSpec extends SchemaSpecification {
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.getType().erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
-      modelProperty.getItems() == null
-      Types.isBaseType(type)
+      def item = modelProperty.getModelRef()
+      item.type == Types.typeNameFor(type)
+      !item.collection
+      item.itemType == null
 
       asReturn.getName() == "TypeWithConstructor"
       !asReturn.getProperties().containsKey(property)
@@ -83,14 +91,20 @@ class SimpleTypeSpec extends SchemaSpecification {
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
-      modelProperty.getItems() == null
+      def item = modelProperty.getModelRef()
+      item.type == Types.typeNameFor(type)
+      !item.collection
+      item.itemType == null
 
       asReturn.getName() == "TypeWithJsonProperty"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
       retModelProperty.getQualifiedType() == qualifiedType
-      retModelProperty.getItems() == null
+      def retItem = retModelProperty.getModelRef()
+      retItem.type == Types.typeNameFor(type)
+      !retItem.collection
+      retItem.itemType == null
 
     where:
       property             | type     | qualifiedType

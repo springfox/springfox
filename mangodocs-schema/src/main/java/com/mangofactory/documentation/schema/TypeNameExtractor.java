@@ -43,7 +43,7 @@ public class TypeNameExtractor {
     }
     return innerTypeName(type, context.getDocumentationType());
   }
-
+  
   private String optionalContainerTypeQualifierForReturn(ModelContext context) {
     ResolvedType type = asResolved(context.getType());
     if (!context.shouldRenderContainerType()) {

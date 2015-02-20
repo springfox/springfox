@@ -12,12 +12,11 @@ public class ModelProperty {
   private final Boolean required;
   private final String description;
   private final AllowableValues allowableValues;
-
-  private final ModelRef items;
+  private final ModelRef modelRef;
 
   public ModelProperty(String name, ResolvedType type, String typeName, String qualifiedType,
                        int position, Boolean required, String description, AllowableValues allowableValues,
-                       ModelRef items) {
+                       ModelRef modelRef) {
     this.name = name;
     this.type = type;
     this.typeName = typeName;
@@ -26,7 +25,7 @@ public class ModelProperty {
     this.required = required;
     this.description = description;
     this.allowableValues = allowableValues;
-    this.items = items;
+    this.modelRef = modelRef;
   }
 
   public String getName() {
@@ -61,7 +60,7 @@ public class ModelProperty {
     return allowableValues;
   }
 
-  public ModelRef getItems() {
-    return items;
+  public ModelRef getModelRef() {
+    return modelRef;
   }
 }

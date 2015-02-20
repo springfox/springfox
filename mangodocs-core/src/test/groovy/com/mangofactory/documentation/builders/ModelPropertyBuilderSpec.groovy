@@ -25,7 +25,7 @@ class ModelPropertyBuilderSpec extends Specification {
       'required'          | true                                  | 'required'
       'typeName'          | 'model1'                              | 'typeName'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
-      'items'             | new ModelRef("test")                  | 'items'
+      'modelRef'          | new ModelRef("test")                  | 'modelRef'
   }
 
   def "Setting builder properties to null values preserves existing values"() {
@@ -46,8 +46,8 @@ class ModelPropertyBuilderSpec extends Specification {
       'qualifiedType'     | 'com.Model1'                          | 'qualifiedType'
       'description'       | 'model1 desc'                         | 'description'
       'typeName'          | 'model1'                              | 'typeName'
-      'allowableValues'   | new AllowableListValues(['a'], "LIST")   | 'allowableValues'
-      'items'             | Mock(ModelRef)                        | 'items'
+      'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
+      'modelRef'          | Mock(ModelRef)                        | 'modelRef'
   }
 
   def "When allowable list value is empty builder sets the value to null"() {

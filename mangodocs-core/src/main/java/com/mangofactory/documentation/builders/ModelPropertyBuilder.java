@@ -16,7 +16,7 @@ public class ModelPropertyBuilder {
   private Boolean required;
   private String description;
   private AllowableValues allowableValues;
-  private ModelRef items;
+  private ModelRef modelRef;
   private String name;
   private String typeName;
 
@@ -66,14 +66,14 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelPropertyBuilder items(ModelRef items) {
-    this.items = defaultIfAbsent(items, this.items);
+  public ModelPropertyBuilder modelRef(ModelRef modelRef) {
+    this.modelRef = defaultIfAbsent(modelRef, this.modelRef);
     return this;
   }
 
   public ModelProperty build() {
     return new ModelProperty(name, type, typeName, qualifiedType, position, required, description, allowableValues,
-            items);
+            modelRef);
   }
 
 }

@@ -1,5 +1,4 @@
 package com.mangofactory.documentation.schema.mixins
-
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -25,8 +24,7 @@ class ModelProviderSupport {
     def fields = new FieldProvider(typeResolver)
 
     def pluginsManager = defaultSchemaPlugins()
-    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, new DefaultGenericTypeNamingStrategy(),
-            pluginsManager)
+    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, new DefaultGenericTypeNamingStrategy(), pluginsManager)
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy(objectMapper)
 
     def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver
@@ -46,7 +44,8 @@ class ModelProviderSupport {
   }
 
   ModelDependencyProvider modelDependencyProvider(TypeResolver resolver,
-                                                  DefaultModelPropertiesProvider modelPropertiesProvider, TypeNameExtractor typeNameExtractor) {
+      DefaultModelPropertiesProvider modelPropertiesProvider, 
+      TypeNameExtractor typeNameExtractor) {
     new ModelDependencyProvider(resolver, modelPropertiesProvider, typeNameExtractor)
   }
 

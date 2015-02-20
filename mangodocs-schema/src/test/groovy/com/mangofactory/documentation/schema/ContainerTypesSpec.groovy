@@ -36,17 +36,21 @@ class ContainerTypesSpec extends SchemaSpecification {
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == name
-      modelProperty.getItems()
-      ModelRef item = modelProperty.getItems()
-      item.type == itemType
+      modelProperty.getModelRef()
+      ModelRef item = modelProperty.getModelRef()
+      item.type == "List"
+      item.itemType == itemType
+      item.collection
 
       asReturn.getName() == "ListsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == name
-      retModelProperty.getItems()
-      def retItem = retModelProperty.getItems()
-      retItem.type == itemType
+      retModelProperty.getModelRef()
+      def retItem = retModelProperty.getModelRef()
+      retItem.type == "List"
+      retItem.itemType == itemType
+      retItem.collection
 
     where:
       property          | name      | itemType      | itemQualifiedType
@@ -68,17 +72,21 @@ class ContainerTypesSpec extends SchemaSpecification {
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
       containerType(modelProperty.getType()) == type
-      modelProperty.getItems()
-      ModelRef item = modelProperty.getItems()
-      item.type == itemType
+      modelProperty.getModelRef()
+      ModelRef item = modelProperty.getModelRef()
+      item.type == type
+      item.itemType == itemType
+      item.collection
 
       asReturn.getName() == "SetsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       containerType(retModelProperty.type) == type
-      retModelProperty.getItems()
-      def retItem = retModelProperty.getItems()
-      retItem.type == itemType
+      retModelProperty.getModelRef()
+      def retItem = retModelProperty.getModelRef()
+      retItem.type == type
+      retItem.itemType == itemType
+      retItem.collection
 
     where:
       property          | type  | itemType      | itemQualifiedType
@@ -100,17 +108,21 @@ class ContainerTypesSpec extends SchemaSpecification {
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
-      modelProperty.getItems()
-      ModelRef item = modelProperty.getItems()
-      item.type == itemType
+      modelProperty.getModelRef()
+      ModelRef item = modelProperty.getModelRef()
+      item.type == "Array"
+      item.itemType == itemType
+      item.collection
 
       asReturn.getName() == "ArraysContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
-      retModelProperty.getItems()
-      def retItem = retModelProperty.getItems()
-      retItem.type == itemType
+      retModelProperty.getModelRef()
+      def retItem = retModelProperty.getModelRef()
+      retItem.type == "Array"
+      retItem.itemType == itemType
+      retItem.collection
 
     where:
       property          | type          | itemType      | itemQualifiedType
@@ -133,20 +145,24 @@ class ContainerTypesSpec extends SchemaSpecification {
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
-      modelProperty.getItems()
-      ModelRef item = modelProperty.getItems()
-      item.type == itemRef
+      modelProperty.getModelRef()
+      ModelRef item = modelProperty.getModelRef()
+      item.type == "List"
+      item.itemType == itemRef 
+      item.collection
 
       asReturn.getName() == "MapsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
-      retModelProperty.getItems()
-      def retItem = retModelProperty.getItems()
-      retItem.type == itemRef
+      retModelProperty.getModelRef()
+      def retItem = retModelProperty.getModelRef()
+      retItem.type == "List"
+      retItem.itemType == itemRef
+      retItem.collection
 
     where:
-      property              | type   | itemRef                      | itemQualifiedType
+      property              | type  | itemRef                      | itemQualifiedType
       "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "com.mangofactory.documentation.schema.Entry"
       "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "com.mangofactory.documentation.schema.Entry"
       "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "com.mangofactory.documentation.schema.Entry"
@@ -167,17 +183,21 @@ class ContainerTypesSpec extends SchemaSpecification {
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
-      modelProperty.getItems()
-      ModelRef item = modelProperty.getItems()
-      item.type == itemRef
+      modelProperty.getModelRef()
+      ModelRef item = modelProperty.getModelRef()
+      item.type == "List"
+      item.itemType == itemRef
+      item.collection
 
       asReturn.getName() == "MapsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
-      retModelProperty.getItems()
-      def retItem = retModelProperty.getItems()
-      retItem.type == itemRef
+      retModelProperty.getModelRef()
+      def retItem = retModelProperty.getModelRef()
+      retItem.type == "List"
+      retItem.itemType == itemRef
+      retItem.collection
 
     where:
       property              | type   | itemRef                      | itemQualifiedType

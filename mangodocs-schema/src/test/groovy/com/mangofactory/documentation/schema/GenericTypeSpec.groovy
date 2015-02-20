@@ -1,12 +1,14 @@
 package com.mangofactory.documentation.schema
 
 import com.mangofactory.documentation.schema.mixins.TypesForTestingSupport
+import spock.lang.Unroll
 
 import static com.google.common.base.Strings.*
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class GenericTypeSpec extends SchemaSpecification {
+  @Unroll
   def "Generic property on a generic types is inferred correctly for inbound types"() {
     given:
 
@@ -22,14 +24,32 @@ class GenericTypeSpec extends SchemaSpecification {
       def typeName = typeNameExtractor.typeName(fromParent(inputContext, modelProperty.getType()))
       typeName == propertyType
       modelProperty.getQualifiedType() == qualifiedType
-      (modelProperty.getItems() == null) == (!propertyType.startsWith("List") && !propertyType.startsWith("Array"))
+      def item = modelProperty.getModelRef()
+      item.type == propertyType
+      if (!propertyType.startsWith("List") && !propertyType.startsWith("Array")) {
+        assert !item.collection
+        assert item.itemType == null
+      } else {
+        assert item.collection
+        assert item.itemType == Collections.collectionElementType(modelProperty.type).erasedType.simpleName
+      }
+    
 
       asReturn.getName() == expectedModelName(modelNamePart)
       asReturn.getProperties().containsKey("genericField")
       def retModelProperty = asReturn.getProperties().get("genericField")
       typeNameExtractor.typeName(fromParent(returnContext, retModelProperty.getType())) == propertyType
       retModelProperty.getQualifiedType() == qualifiedType
-      (retModelProperty.getItems() == null) == (!propertyType.startsWith("List") && !propertyType.startsWith("Array"))
+      def retItem = retModelProperty.getModelRef()
+      retItem.type == propertyType
+      if (!propertyType.startsWith("List") && !propertyType.startsWith("Array")) {
+        assert !retItem.collection
+        assert retItem.itemType == null
+      } else {
+        assert retItem.collection
+        assert retItem.itemType == Collections.collectionElementType(retModelProperty.type).erasedType.simpleName
+      }
+    
     where:
       modelType                       | propertyType                                  | modelNamePart                                 | qualifiedType
       genericClass()                  | "SimpleType"                                  | "SimpleType"                                  | "com.mangofactory.documentation.schema.SimpleType"
@@ -42,6 +62,7 @@ class GenericTypeSpec extends SchemaSpecification {
       genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
   }
 
+  @Unroll
   def "Generic properties are inferred correctly even when they are not participating in the type bindings"() {
     given:
       def inputContext = inputParam(modelType, documentationType, alternateTypeProvider())

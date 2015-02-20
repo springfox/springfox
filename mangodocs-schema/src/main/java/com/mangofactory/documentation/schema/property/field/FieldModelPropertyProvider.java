@@ -85,7 +85,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
             .required(fieldModelProperty.isRequired())
             .description(fieldModelProperty.propertyDescription())
             .allowableValues(fieldModelProperty.allowableValues())
-            .items(itemModelRef(fieldModelProperty.getType(), modelContext));
+            .modelRef(modelRef(fieldModelProperty.getType(), modelContext));
     return schemaPluginsManager.property(new ModelPropertyContext(propertyBuilder,
             childField.getRawMember(), modelContext.getDocumentationType()));
   }
@@ -111,14 +111,15 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
     }
     return serializationCandidates;
   }
-  private ModelRef itemModelRef(ResolvedType type, ModelContext modelContext) {
+  
+  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
     if (!isContainerType(type)) {
-      return null;
+      String typeName = typeNameExtractor.typeName(modelContext);
+      return new ModelRef(typeName);
     }
     ResolvedType collectionElementType = collectionElementType(type);
-    String elementTypeName =  typeNameExtractor.typeName(fromParent(modelContext, collectionElementType));
-
-    return new ModelRef(elementTypeName);
+    String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, collectionElementType));
+    return new ModelRef(containerType(type), elementTypeName);
   }
 
   private BeanDescription beanDescription(ResolvedType type, ModelContext context) {

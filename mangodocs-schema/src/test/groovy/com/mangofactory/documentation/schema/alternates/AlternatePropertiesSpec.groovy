@@ -1,5 +1,4 @@
 package com.mangofactory.documentation.schema.alternates
-
 import com.mangofactory.documentation.schema.AlternateTypeRule
 import com.mangofactory.documentation.schema.AlternateTypesSupport
 import com.mangofactory.documentation.schema.Model
@@ -28,7 +27,10 @@ class AlternatePropertiesSpec extends Specification {
       def modelProperty = model.getProperties().get("localDate")
       modelProperty.type.erasedType == String
       modelProperty.getQualifiedType() == "java.lang.String"
-      modelProperty.getItems() == null
+      def item = modelProperty.getModelRef()
+      item.type == "string"
+      !item.collection
+      item.itemType == null
   }
 
   def "ResponseEntity«Void» renders correctly when an alternate type is provided" () {
@@ -44,6 +46,9 @@ class AlternatePropertiesSpec extends Specification {
       def modelProperty = model.getProperties().get("genericField")
       modelProperty.type.erasedType == Void
       modelProperty.getQualifiedType() == "java.lang.Void"
-      modelProperty.getItems() == null
+      def item = modelProperty.getModelRef()
+      item.type == "Void"
+      !item.collection
+      item.itemType == null
   }
 }

@@ -54,7 +54,10 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       !nameProp.isRequired()
       nameProp.getDescription() == null
 //      "${nameProp.allowableValues().getClass()}".contains('com.wordnik.swagger.model.AnyAllowableValues')
-      nameProp.getItems() == null
+      def item = nameProp.getModelRef()
+      item.type == "string"
+      !item.collection
+      item.itemType == null
 
       //TODO test these remaining
 //      println model.description()
