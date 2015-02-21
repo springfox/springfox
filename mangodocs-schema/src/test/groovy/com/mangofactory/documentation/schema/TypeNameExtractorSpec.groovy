@@ -1,7 +1,44 @@
 package com.mangofactory.documentation.schema
 
+import com.mangofactory.documentation.schema.mixins.TypesForTestingSupport
+
+import static com.mangofactory.documentation.spi.DocumentationType.*
+import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*
+
+@Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class TypeNameExtractorSpec extends SchemaSpecification {
-  //TODO: test cases for inputParam (withAndWithout)
-  //TODO: test cases for returnValue (withAndWithout)
+  def "Response class for container types are inferred correctly"() {
+    given:
+      def context = returnValue(containerType, SWAGGER_12, alternateTypeProvider())
+    expect:
+      typeNameExtractor.typeName(context) == name
+
+    where:
+      containerType                  | name
+      genericListOfSimpleType()      | "List"
+      genericListOfInteger()         | "List"
+      erasedList()                   | "List"
+      genericSetOfSimpleType()       | "Set"
+      genericSetOfInteger()          | "Set"
+      erasedSet()                    | "Set"
+      genericClassWithGenericField() | "GenericType«ResponseEntityAlternative«SimpleType»»"
+  }
+  
+  def "Input class for container types are inferred correctly"() {
+    given:
+      def context = returnValue(containerType, SWAGGER_12, alternateTypeProvider())
+    expect:
+      typeNameExtractor.typeName(context) == name
+
+    where:
+      containerType                  | name
+      genericListOfSimpleType()      | "List"
+      genericListOfInteger()         | "List"
+      erasedList()                   | "List"
+      genericSetOfSimpleType()       | "Set"
+      genericSetOfInteger()          | "Set"
+      erasedSet()                    | "Set"
+      genericClassWithGenericField() | "GenericType«ResponseEntityAlternative«SimpleType»»"
+  }
   //TODO: test cases for parent (withAndWithout)
 }

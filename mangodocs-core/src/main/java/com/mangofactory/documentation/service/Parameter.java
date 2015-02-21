@@ -5,7 +5,6 @@ import com.google.common.base.Optional;
 import com.mangofactory.documentation.schema.ModelRef;
 
 public class Parameter {
-  private final String parameterType;
   private final String name;
   private final String description;
   private final String defaultValue;
@@ -18,7 +17,7 @@ public class Parameter {
   private final String paramAccess;
 
   public Parameter(String name, String description, String defaultValue, boolean required, boolean allowMultiple,
-                   String dataType, ModelRef modelRef, Optional<ResolvedType> type,
+                   ModelRef modelRef, Optional<ResolvedType> type,
                    AllowableValues allowableValues, String paramType, String paramAccess) {
     this.description = description;
     this.defaultValue = defaultValue;
@@ -30,7 +29,6 @@ public class Parameter {
     this.paramType = paramType;
     this.paramAccess = paramAccess;
     this.name = name;
-    this.parameterType = dataType;
   }
 
   public Optional<ResolvedType> getType() {
@@ -67,10 +65,6 @@ public class Parameter {
 
   public String getParamAccess() {
     return paramAccess;
-  }
-
-  public String getParameterType() {
-    return parameterType;
   }
 
   public ModelRef getModelRef() {

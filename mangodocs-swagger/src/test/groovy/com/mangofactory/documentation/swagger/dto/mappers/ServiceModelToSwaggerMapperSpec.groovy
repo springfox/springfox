@@ -54,6 +54,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                           .name("order")
                           .parameterAccess("access")
                           .parameterType("body")
+                          .modelRef(new ModelRef("string"))
                           .required(true)
                           .build()])
                         .position(1)

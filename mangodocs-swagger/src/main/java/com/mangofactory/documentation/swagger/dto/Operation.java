@@ -120,6 +120,7 @@ public class Operation {
     this.notes = notes;
   }
 
+
   public String getNickname() {
     return nickname;
   }

@@ -33,7 +33,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       def sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
       sut.apply(parameterContext)
     then:
-      parameterContext.parameterBuilder().build().parameterType == expected
+      parameterContext.parameterBuilder().build().modelRef.type == expected
     where:
       paramType                       | expected
       char.class                      | "string"

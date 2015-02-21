@@ -5,7 +5,6 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
-import com.google.common.collect.Iterables;
 import com.mangofactory.documentation.schema.plugins.SchemaPluginsManager;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.schema.contexts.ModelContext;
@@ -13,12 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import static com.google.common.base.Optional.*;
 import static com.mangofactory.documentation.schema.Collections.*;
 import static com.mangofactory.documentation.schema.Types.*;
-import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
 public class TypeNameExtractor {
@@ -39,34 +36,9 @@ public class TypeNameExtractor {
   public String typeName(ModelContext context) {
     ResolvedType type = asResolved(context.getType());
     if (isContainerType(type)) {
-      return String.format("%s%s", containerType(type), optionalContainerTypeQualifierForReturn(context));
+      return containerType(type);
     }
     return innerTypeName(type, context.getDocumentationType());
-  }
-  
-  private String optionalContainerTypeQualifierForReturn(ModelContext context) {
-    ResolvedType type = asResolved(context.getType());
-    if (!context.shouldRenderContainerType()) {
-      return "";
-    }
-
-    if (type.isArray()) {
-      ModelContext childContext = fromParent(context, type.getArrayElementType());
-      if ("object".equals(typeName(childContext))) {
-        return "";
-      }
-      return String.format("[%s]", typeName(childContext));
-    }
-
-    List<ResolvedType> typeParameters = type.getTypeParameters();
-    if (typeParameters.size() == 0) {
-      return "";
-    }
-    String qualifier = innerTypeName(Iterables.getFirst(typeParameters, null), context.getDocumentationType());
-    if ("object".equals(qualifier)) {
-      return "";
-    }
-    return String.format("[%s]", qualifier);
   }
 
   private ResolvedType asResolved(Type type) {

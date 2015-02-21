@@ -26,21 +26,19 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
       simpleType()                    | []
       complexType()                   | ["Category"]
       enumType()                      | []
-      typeWithLists()                 | ["List", "Category",  "ComplexType", "List[ComplexType]", "List[int]", "List[string]"].sort()
-      typeWithSets()                  | ["Set", "Category",  "ComplexType", "Set[ComplexType]", "Set[int]", "Set[string]"].sort()
-      typeWithArrays()                | ["Array", "Category", "ComplexType", "Array[ComplexType]", "Array[int]",
-                                         "Array[string]", "Array[byte]"].sort()
-      genericClass()                  | ["List[string]", "SimpleType"].sort()
-      genericClassWithListField()     | ["List[string]", "List[SimpleType]", "SimpleType"].sort()
-      genericClassWithGenericField()  | ["Charset", "HttpHeaders", "List[Charset]", "List[MediaType]", "List[string]",
-                                         "MediaType", "ResponseEntityAlternative«SimpleType»", "Set[string]",
-                                         "SimpleType", "URI", "List[Entry«string,string»]", "Entry«string,string»",
+      typeWithLists()                 | ["List", "Category",  "ComplexType"].sort()
+      typeWithSets()                  | ["Set", "Category",  "ComplexType"].sort()
+      typeWithArrays()                | ["Array", "Category", "ComplexType"].sort()
+      genericClass()                  | ["List", "SimpleType"].sort()
+      genericClassWithListField()     | ["List", "SimpleType"].sort()
+      genericClassWithGenericField()  | ["Charset", "HttpHeaders", "List",
+                                         "MediaType", "ResponseEntityAlternative«SimpleType»", "Set",
+                                         "SimpleType", "URI", "Entry«string,string»",
                                          "Map«string,string»"].sort()
-      genericClassWithDeepGenerics()  | ["Charset", "HttpHeaders", "List[Charset]", "List[MediaType]", "List[string]",
-                                         "List[SimpleType]", "List[Entry«string,string»]", "MediaType",
+      genericClassWithDeepGenerics()  | ["Charset", "HttpHeaders", "List", "MediaType",
                                          "Entry«string,string»", "ResponseEntityAlternative«List«SimpleType»»",
-                                         "Set[string]", "SimpleType", "URI", "Map«string,string»"].sort()
-      genericCollectionWithEnum()     | ["Collection«string»", "List[string]"].sort()
+                                         "Set", "SimpleType", "URI", "Map«string,string»"].sort()
+      genericCollectionWithEnum()     | ["Collection«string»", "List"].sort()
       recursiveType()                 | ["SimpleType"]
   }
 
@@ -62,19 +60,18 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
       complexType()                   | ["Category"]
       enumType()                      | []
       inheritedComplexType()          | ["Category"]
-      typeWithLists()                 | ["List", "Category",  "ComplexType", "List[ComplexType]", "List[int]", "List[string]"].sort()
-      typeWithSets()                  | ["Set", "Category",  "ComplexType", "Set[ComplexType]", "Set[int]", "Set[string]"].sort()
-      typeWithArrays()                | ["Array", "Category", "ComplexType", "Array[ComplexType]", "Array[int]",
-                                         "Array[string]", "Array[byte]"].sort()
-      genericClass()                  | ["List[string]", "SimpleType"].sort()
-      genericClassWithListField()     | ["List[string]", "List[SimpleType]", "SimpleType"].sort()
-      genericClassWithGenericField()  | ["Charset", "HttpHeaders", "List[Charset]", "List[MediaType]", "List[string]",
+      typeWithLists()                 | ["List", "Category",  "ComplexType" ].sort()
+      typeWithSets()                  | ["Set", "Category",  "ComplexType"].sort()
+      typeWithArrays()                | ["Array", "Category", "ComplexType"].sort()
+      genericClass()                  | ["List", "SimpleType"].sort()
+      genericClassWithListField()     | ["List", "SimpleType"].sort()
+      genericClassWithGenericField()  | ["Charset", "HttpHeaders", "List",
                                          "MediaType", "ResponseEntityAlternative«SimpleType»",
-                                         "Set[string]", "SimpleType", "URI"].sort()
-      genericClassWithDeepGenerics()  | ["Charset", "HttpHeaders", "List[Charset]", "List[MediaType]", "List[string]",
-                                         "List[SimpleType]", "MediaType", "ResponseEntityAlternative«List«SimpleType»»",
-                                         "Set[string]", "SimpleType", "URI"].sort()
-      genericCollectionWithEnum()     | ["Collection«string»", "List[string]"].sort()
+                                         "Set", "SimpleType", "URI"].sort()
+      genericClassWithDeepGenerics()  | ["Charset", "HttpHeaders", "List",
+                                         "MediaType", "ResponseEntityAlternative«List«SimpleType»»",
+                                         "Set", "SimpleType", "URI"].sort()
+      genericCollectionWithEnum()     | ["Collection«string»", "List"].sort()
       recursiveType()                 | ["SimpleType"]
   }
 

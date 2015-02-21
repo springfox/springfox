@@ -55,7 +55,7 @@ public interface ServiceModelToSwaggerMapper {
 
   @Mappings({
     @Mapping(target = "parameterType",
-      expression = "java( new com.mangofactory.documentation.swagger.dto.DataType( from.getParameterType()))")
+      expression = "java( dataTypeMapper.operationTypeFromModelRef( from.getModelRef()))")
   })
   Parameter toSwaggerParameter(com.mangofactory.documentation.service.Parameter from);
 

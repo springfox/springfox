@@ -1,4 +1,6 @@
 package com.mangofactory.documentation.builders
+
+import com.mangofactory.documentation.schema.ModelRef
 import com.mangofactory.documentation.service.AllowableListValues
 import spock.lang.Specification
 
@@ -18,7 +20,7 @@ class ParameterBuilderSpec extends Specification {
       'name'            | 'param1'                              | 'name'
       'description'     | 'param1 desc'                         | 'description'
       'defaultValue'    | 'default'                             | 'defaultValue'
-      'dataType'        | 'string'                              | 'parameterType'
+      'modelRef'        | new ModelRef('string')                | 'modelRef'
       'parameterType'   | 'string'                              | 'paramType'
       'parameterAccess' | 'public'                              | 'paramAccess'
       'allowMultiple'   | true                                  | 'allowMultiple'
@@ -42,7 +44,7 @@ class ParameterBuilderSpec extends Specification {
       'name'            | 'param1'                              | 'name'
       'description'     | 'param1 desc'                         | 'description'
       'defaultValue'    | 'default'                             | 'defaultValue'
-      'dataType'        | 'string'                              | 'parameterType'
+      'modelRef'        | new ModelRef('string')                | 'modelRef'
       'parameterType'   | 'string'                              | 'paramType'
       'parameterAccess' | 'public'                              | 'paramAccess'
       'allowableValues' | new AllowableListValues([], "LIST")   | 'allowableValues'

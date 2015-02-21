@@ -68,12 +68,12 @@ public class ParameterBuilder {
   }
 
   public ParameterBuilder type(ResolvedType type) {
-    this.type = type;
+    this.type = defaultIfAbsent(type, this.type);
     return this;
   }
 
   public ParameterBuilder modelRef(ModelRef modelRef) {
-    this.modelRef = modelRef;
+    this.modelRef = defaultIfAbsent(modelRef, this.modelRef);
     return this;
   }
   
@@ -86,7 +86,7 @@ public class ParameterBuilder {
   }
 
   public Parameter build() {
-    return new Parameter(maybeOverrideName(name), description, defaultValue, required, allowMultiple, dataType, 
+    return new Parameter(maybeOverrideName(name), description, defaultValue, required, allowMultiple,
             modelRef, Optional.fromNullable(type), allowableValues, paramType, paramAccess);
   }
 }

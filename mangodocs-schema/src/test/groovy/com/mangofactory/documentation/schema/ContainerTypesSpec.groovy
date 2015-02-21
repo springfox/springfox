@@ -7,24 +7,6 @@ import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ContainerTypesSpec extends SchemaSpecification {
-  def "Response class for container types are inferred correctly"() {
-    given:
-      def context = returnValue(containerType, SWAGGER_12, alternateTypeProvider())
-    expect:
-      typeNameExtractor.typeName(context) == name
-
-    where:
-      containerType                  | name
-      genericListOfSimpleType()      | "List[SimpleType]"
-      genericListOfInteger()         | "List[int]"
-      erasedList()                   | "List"
-      genericSetOfSimpleType()       | "Set[SimpleType]"
-      genericSetOfInteger()          | "Set[int]"
-      erasedSet()                    | "Set"
-      genericClassWithGenericField() | "GenericType«ResponseEntityAlternative«SimpleType»»"
-
-  }
-
   def "Model properties of type List, are inferred correctly"() {
     given:
       def sut = typeWithLists()

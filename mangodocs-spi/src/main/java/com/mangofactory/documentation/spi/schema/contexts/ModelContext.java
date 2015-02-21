@@ -18,14 +18,12 @@ public class ModelContext {
   private final DocumentationType documentationType;
 
   private final ModelContext parentContext;
-  private final boolean renderContainerType;
   private final Set<ResolvedType> seenTypes = newHashSet();
   private final ModelBuilder modelBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
 
-  ModelContext(Type type, boolean returnType, boolean renderContainerType, DocumentationType documentationType,
-          AlternateTypeProvider alternateTypeProvider) {
-    this.renderContainerType = renderContainerType;
+  ModelContext(Type type, boolean returnType, DocumentationType documentationType,
+               AlternateTypeProvider alternateTypeProvider) {
     this.documentationType = documentationType;
     this.alternateTypeProvider = alternateTypeProvider;
     this.parentContext = null;
@@ -41,7 +39,6 @@ public class ModelContext {
     this.documentationType = parentContext.getDocumentationType();
     this.modelBuilder = new ModelBuilder();
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
-    renderContainerType = false;
   }
 
   public Type getType() {
@@ -56,10 +53,6 @@ public class ModelContext {
     return returnType;
   }
 
-  public boolean shouldRenderContainerType() {
-    return renderContainerType;
-  }
-
   public AlternateTypeProvider getAlternateTypeProvider() {
     return alternateTypeProvider;
   }
@@ -71,26 +64,13 @@ public class ModelContext {
   public static ModelContext inputParam(Type type,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeRules) {
-
-    return new ModelContext(type, false, true, documentationType, alternateTypeRules);
-  }
-
-  public static ModelContext inputParamWithoutContainerType(Type type,
-      DocumentationType documentationType,
-     AlternateTypeProvider alternateTypeProvider) {
-    return new ModelContext(type, false, false, documentationType, alternateTypeProvider);
-  }
-
-  public static ModelContext returnValueWithoutContainerType(Type type,
-      DocumentationType documentationType,
-      AlternateTypeProvider alternateTypeProvider) {
-    return new ModelContext(type, true, false, documentationType, alternateTypeProvider);
+    return new ModelContext(type, false, documentationType, alternateTypeRules);
   }
 
   public static ModelContext returnValue(Type type,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider) {
-    return new ModelContext(type, true, true, documentationType, alternateTypeProvider);
+    return new ModelContext(type, true, documentationType, alternateTypeProvider);
   }
 
   public static ModelContext fromParent(ModelContext context, ResolvedType input) {
