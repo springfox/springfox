@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/mangodocs.iml" filepath="$PROJECT_DIR$/mangodocs.iml" />
       <module fileurl="file://$PROJECT_DIR$/mangodocs-core/mangodocs-core.iml" filepath="$PROJECT_DIR$/mangodocs-core/mangodocs-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/mangodocs-petstore/mangodocs-petstore.iml" filepath="$PROJECT_DIR$/mangodocs-petstore/mangodocs-petstore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mangodocs-petstore/mangodocs-petstore.iml" filepath="$PROJECT_DIR$/mangodocs-petstore/mangodocs-petstore.iml" />
       <module fileurl="file://$PROJECT_DIR$/mangodocs-schema/mangodocs-schema.iml" filepath="$PROJECT_DIR$/mangodocs-schema/mangodocs-schema.iml" />
       <module fileurl="file://$PROJECT_DIR$/mangodocs-spi/mangodocs-spi.iml" filepath="$PROJECT_DIR$/mangodocs-spi/mangodocs-spi.iml" />
       <module fileurl="file://$PROJECT_DIR$/mangodocs-spring-web/mangodocs-spring-web.iml" filepath="$PROJECT_DIR$/mangodocs-spring-web/mangodocs-spring-web.iml" />

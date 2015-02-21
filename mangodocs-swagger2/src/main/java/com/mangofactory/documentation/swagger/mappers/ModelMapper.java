@@ -37,14 +37,14 @@ public abstract class ModelMapper {
 
     for (java.util.Map.Entry<String, com.mangofactory.documentation.schema.Model> entry : from.entrySet()) {
       String key = entry.getKey();
-      Model value = resolve(entry.getValue());
+      Model value = mapProperties(entry.getValue());
       map.put(key, value);
     }
 
     return map;
   }
 
-  public Model resolve(com.mangofactory.documentation.schema.Model source) {
+  public Model mapProperties(com.mangofactory.documentation.schema.Model source) {
     ModelImpl model = new ModelImpl()
             .description(source.getDescription())
             .discriminator(source.getDiscriminator())
@@ -59,9 +59,7 @@ public abstract class ModelMapper {
     return model;
   }
 
-
-
-  public Property resolve(ModelProperty source) {
+  public Property mapProperty(ModelProperty source) {
     String typeName = source.getModelRef().getType();
     String name = source.getName();
     return property(name, typeName);
