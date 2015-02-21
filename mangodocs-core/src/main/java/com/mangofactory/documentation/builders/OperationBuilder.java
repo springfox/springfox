@@ -106,7 +106,7 @@ public class OperationBuilder {
   }
 
   public OperationBuilder responseType(ModelRef responseType) {
-    this.responseType = responseType;
+    this.responseType = defaultIfAbsent(responseType, this.responseType);
     return this;
   }
 
@@ -123,7 +123,7 @@ public class OperationBuilder {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
         String message = defaultIfAbsent(Strings.emptyToNull(responseMessage.getMessage()), HttpStatus.OK.getReasonPhrase());
-        String responseWithModel = defaultIfAbsent(Strings.emptyToNull(responseMessage.getResponseModel()),
+        ModelRef responseWithModel = defaultIfAbsent(responseMessage.getResponseModel(),
                 each.getResponseModel());
         merged.remove(each);
         merged.add(new ResponseMessageBuilder()

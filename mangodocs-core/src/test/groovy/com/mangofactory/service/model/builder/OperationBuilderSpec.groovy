@@ -1,18 +1,27 @@
 package com.mangofactory.service.model.builder
 
+import com.mangofactory.documentation.builders.OperationBuilder
+import com.mangofactory.documentation.builders.ResponseMessageBuilder
+import com.mangofactory.documentation.schema.ModelRef
 import com.mangofactory.documentation.service.Authorization
 import com.mangofactory.documentation.service.Parameter
 import com.mangofactory.documentation.service.ResponseMessage
-import com.mangofactory.documentation.builders.OperationBuilder
-import com.mangofactory.documentation.builders.ResponseMessageBuilder
 import spock.lang.Specification
 
 import static com.google.common.collect.Sets.*
 
 class OperationBuilderSpec extends Specification {
   OperationBuilder sut = new OperationBuilder()
-  ResponseMessage partialOk = new ResponseMessageBuilder().code(200).message(null).responseModel(null).build()
-  ResponseMessage fullOk = new ResponseMessageBuilder().code(200).message("OK").responseModel("String").build()
+  ResponseMessage partialOk = new ResponseMessageBuilder()
+          .code(200)
+          .message(null)
+          .responseModel(null)
+          .build()
+  ResponseMessage fullOk = new ResponseMessageBuilder()
+          .code(200)
+          .message("OK")
+          .responseModel(new ModelRef("String"))
+          .build()
 
   def "Merges response messages when new response messages are applied" () {
     given:
@@ -25,7 +34,8 @@ class OperationBuilderSpec extends Specification {
       operation.responseMessages.size() == 1
       operation.responseMessages.first().code == 200
       operation.responseMessages.first().message == "OK"
-      operation.responseMessages.first().responseModel == "String"
+      operation.responseMessages.first().responseModel.type == "String"
+      operation.responseMessages.first().responseModel.itemType == null
   }
 
   def "Response message builder is non-destructive" () {
@@ -39,7 +49,8 @@ class OperationBuilderSpec extends Specification {
       operation.responseMessages.size() == 1
       operation.responseMessages.first().code == 200
       operation.responseMessages.first().message == "OK"
-      operation.responseMessages.first().responseModel == "String"
+      operation.responseMessages.first().responseModel.type == "String"
+      operation.responseMessages.first().responseModel.itemType == null
   }
 
   def "Setting properties on the builder with non-null values"() {
@@ -58,6 +69,7 @@ class OperationBuilderSpec extends Specification {
       'summary'         | 'method1 summary'       | 'summary'
       'notes'           | 'method1 notes'         | 'notes'
       'responseClass'   | 'string'                | 'responseClass'
+      'responseType'    | new ModelRef('string')  | 'responseType'
       'deprecated'      | 'deprecated'            | 'deprecated'
       'nickname'        | 'method1'               | 'nickname'
       'produces'        | newHashSet('app/json')  | 'produces'
@@ -85,6 +97,7 @@ class OperationBuilderSpec extends Specification {
       'summary'         | 'method1 summary'       | 'summary'
       'notes'           | 'method1 notes'         | 'notes'
       'responseClass'   | 'string'                | 'responseClass'
+      'responseType'    | new ModelRef('string')  | 'responseType'
       'deprecated'      | 'deprecated'            | 'deprecated'
       'nickname'        | 'method1'               | 'nickname'
       'produces'        | newHashSet('app/json')  | 'produces'

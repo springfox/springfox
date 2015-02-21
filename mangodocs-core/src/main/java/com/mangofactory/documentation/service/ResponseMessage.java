@@ -1,11 +1,13 @@
 package com.mangofactory.documentation.service;
 
+import com.mangofactory.documentation.schema.ModelRef;
+
 public class ResponseMessage {
   private final int code;
   private final String message;
-  private final String responseModel;
+  private final ModelRef responseModel;
 
-  public ResponseMessage(int code, String message, String responseModel) {
+  public ResponseMessage(int code, String message, ModelRef responseModel) {
     this.code = code;
     this.message = message;
     this.responseModel = responseModel;
@@ -19,7 +21,7 @@ public class ResponseMessage {
     return message;
   }
 
-  public String getResponseModel() {
+  public ModelRef getResponseModel() {
     return responseModel;
   }
 

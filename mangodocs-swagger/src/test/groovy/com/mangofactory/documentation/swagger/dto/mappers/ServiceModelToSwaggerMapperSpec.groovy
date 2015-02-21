@@ -32,7 +32,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       def response = new ResponseMessageBuilder()
               .code(200)
               .message("Success")
-              .responseModel("string")
+              .responseModel(new ModelRef("string"))
               .build()
       def operation1 = new OperationBuilder()
                         .authorizations([new AuthorizationBuilder()
@@ -59,6 +59,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                         .position(1)
                         .protocols(newHashSet("https"))
                         .responseClass("string")
+                        .responseType(new ModelRef("string"))
                         .responseMessages(newHashSet(response))
                       .build()
       def description = new ApiDescriptionBuilder(defaults.operationOrdering())
@@ -128,7 +129,8 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mappedOperation.responseMessages.size() == builtOperation.responseMessages.size()
       mappedOperation.responseMessages.first().code == builtOperation.responseMessages.first().code
       mappedOperation.responseMessages.first().message == builtOperation.responseMessages.first().message
-      mappedOperation.responseMessages.first().responseModel == builtOperation.responseMessages.first().responseModel
+      mappedOperation.responseMessages.first().responseModel == 
+              builtOperation.responseMessages.first().responseModel.type
   }
 
   def "Resource listings are mapped correctly"() {

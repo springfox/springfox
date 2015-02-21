@@ -1,5 +1,6 @@
 package com.mangofactory.service.model
 import com.mangofactory.documentation.builders.ResponseMessageBuilder
+import com.mangofactory.documentation.schema.ModelRef
 import spock.lang.Specification
 
 class ResponseMessageSpec extends Specification {
@@ -18,6 +19,8 @@ class ResponseMessageSpec extends Specification {
   }
 
   def responseMessage(code, message, responseModel) {
-    new ResponseMessageBuilder().code(code).message(message).responseModel(responseModel).build()
+    new ResponseMessageBuilder().code(code)
+            .message(message)
+            .responseModel(new ModelRef(responseModel)).build()
   }
 }

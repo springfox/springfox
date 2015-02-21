@@ -1,5 +1,6 @@
 package com.mangofactory.documentation.builders
 
+import com.mangofactory.documentation.schema.ModelRef
 import spock.lang.Specification
 
 class ResponseMessageBuilderSpec extends Specification {
@@ -14,10 +15,10 @@ class ResponseMessageBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod     | value         | property
-      'code'            | 200           | 'code'
-      'message'         | 'OK'          | 'message'
-      'responseModel'   | 'String'      | 'responseModel'
+      builderMethod     | value                   | property
+      'code'            | 200                     | 'code'
+      'message'         | 'OK'                    | 'message'
+      'responseModel'   | new ModelRef('String')  | 'responseModel'
   }
 
   def "Setting builder properties to null values preserves existing values"() {
@@ -32,8 +33,8 @@ class ResponseMessageBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod     | value         | property
-      'message'         | 'OK'          | 'message'
-      'responseModel'   | 'String'      | 'responseModel'
+      builderMethod     | value                   | property
+      'message'         | 'OK'                    | 'message'
+      'responseModel'   | new ModelRef('String')  | 'responseModel'
   }
 }

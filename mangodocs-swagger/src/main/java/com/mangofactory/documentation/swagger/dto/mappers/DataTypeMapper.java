@@ -18,6 +18,17 @@ public class DataTypeMapper {
   public com.mangofactory.documentation.swagger.dto.SwaggerDataType fromTypeName(String typeName) {
     return new DataType(typeName);
   }
+  
+  public String responseTypeName(ModelRef modelRef) {
+    if (modelRef == null) {
+      return null;
+    }
+    //TODO: Verify this is not needed
+//    if (modelRef.isCollection()) {
+//      return String.format("%s[%s]", modelRef.getType(), modelRef.getItemType());
+//    }
+    return modelRef.getType();
+  }
 
   public com.mangofactory.documentation.swagger.dto.DataType fromModelRef(ModelRef modelRef) {
     if (modelRef.isCollection()) {

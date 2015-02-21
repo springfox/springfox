@@ -21,6 +21,10 @@ public interface ServiceModelToSwaggerMapper {
   //Api related
   public ApiDescription toSwaggerApiDescription(com.mangofactory.documentation.service.ApiDescription from);
   public ApiInfo toSwaggerApiInfo(com.mangofactory.documentation.service.ApiInfo from);
+  @Mappings({
+          @Mapping(target = "responseModel", 
+                  expression = "java(dataTypeMapper.responseTypeName(from.getResponseModel()))")
+  })
   public ResponseMessage toSwaggerResponseMessage(com.mangofactory.documentation.service.ResponseMessage from);
   public ApiListingReference toSwaggerApiListingReference(com.mangofactory.documentation.service.ApiListingReference from);
   public ModelDto toSwaggerModelDto(Model from);

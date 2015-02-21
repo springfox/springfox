@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.service.ApiDescription;
 import com.mangofactory.documentation.service.ApiInfo;
 import com.mangofactory.documentation.service.ApiListing;
@@ -19,7 +20,6 @@ import com.wordnik.swagger.models.Response;
 import com.wordnik.swagger.models.Scheme;
 import com.wordnik.swagger.models.Swagger;
 import com.wordnik.swagger.models.properties.Property;
-import com.wordnik.swagger.models.properties.RefProperty;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -32,6 +32,7 @@ import java.util.Set;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.documentation.swagger.mappers.ModelMapper.*;
 
 @Mapper(uses = {ModelMapper.class, ParameterMapper.class, SecurityMapper.class})
 public abstract class ServiceModelToSwagger2Mapper {
@@ -107,12 +108,15 @@ public abstract class ServiceModelToSwagger2Mapper {
     };
   }
 
-  protected Map<String, Response> map(Set<ResponseMessage> from) {
+  protected static Map<String, Response> map(Set<ResponseMessage> from) {
     HashMap<String, Response> responses = newHashMap();
     for (ResponseMessage responseMessage : from) {
+      Property responseProperty;
+      ModelRef modelRef = responseMessage.getResponseModel();
+      responseProperty = modelRefToProperty(modelRef);
       Response response = new Response()
               .description(responseMessage.getMessage())
-              .schema(new RefProperty(responseMessage.getResponseModel()));
+              .schema(responseProperty);
       response.setExamples(Maps.<String, String>newHashMap());
       response.setHeaders(Maps.<String, Property>newHashMap());
     }

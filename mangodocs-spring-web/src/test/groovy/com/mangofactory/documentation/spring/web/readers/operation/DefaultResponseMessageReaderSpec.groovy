@@ -74,7 +74,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
     then:
       ResponseMessage responseMessage = responseMessages.find { it.code == 200 }
       responseMessage.getCode() == 200
-      responseMessage.getResponseModel() == 'BusinessModel'
+      responseMessage.getResponseModel().type == 'BusinessModel'
       responseMessage.getMessage() == "OK"
   }
 
@@ -90,7 +90,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
     then:
       ResponseMessage responseMessage = responseMessages.find { it.code == 202 }
       responseMessage.getCode() == HttpStatus.ACCEPTED.value()
-      responseMessage.getResponseModel() == 'BusinessModel'
+      responseMessage.getResponseModel().type == 'BusinessModel'
       responseMessage.getMessage() == "Accepted request"
   }
 }

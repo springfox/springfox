@@ -4,8 +4,10 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.mangofactory.documentation.schema.ModelProperty;
+import com.mangofactory.documentation.schema.ModelRef;
 import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.ModelImpl;
+import com.wordnik.swagger.models.properties.ArrayProperty;
 import com.wordnik.swagger.models.properties.BooleanProperty;
 import com.wordnik.swagger.models.properties.DateProperty;
 import com.wordnik.swagger.models.properties.DateTimeProperty;
@@ -65,6 +67,17 @@ public abstract class ModelMapper {
     return property(name, typeName);
   }
 
+  static Property modelRefToProperty(ModelRef modelRef) {
+    Property responseProperty;
+    if (modelRef.isCollection()) {
+      String itemType = modelRef.getItemType();
+      responseProperty = new ArrayProperty(property(itemType));
+    } else {
+      responseProperty = property(modelRef.getType());
+    }
+    return responseProperty;
+  }
+
   protected abstract Map<String, Property> mapProperties(Map<String, ModelProperty> properties);
 
   private Function<ModelProperty, String> propertyName() {
@@ -86,7 +99,11 @@ public abstract class ModelMapper {
   }
 
 
-  Property property(String name, String typeName) {
+  static Property property(String typeName) {
+    return property(typeName, typeName); 
+  }
+  
+  static Property property(String name, String typeName) {
     if (isOfType(typeName, "void")) {
       return new ObjectProperty().title(name);
     }
@@ -128,7 +145,7 @@ public abstract class ModelMapper {
     return new RefProperty(typeName).title(name);
   }
 
-  private boolean isOfType(String initialType, String ofType) {
+  private static boolean isOfType(String initialType, String ofType) {
     return initialType.equalsIgnoreCase(ofType);
   }
 }

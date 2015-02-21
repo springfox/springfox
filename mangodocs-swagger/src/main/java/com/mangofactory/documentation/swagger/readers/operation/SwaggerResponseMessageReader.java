@@ -1,6 +1,7 @@
 package com.mangofactory.documentation.swagger.readers.operation;
 
 import com.google.common.base.Optional;
+import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.service.ResponseMessage;
 import com.mangofactory.documentation.builders.ResponseMessageBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
@@ -44,7 +45,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
         responseMessages.add(new ResponseMessageBuilder()
                 .code(apiResponse.code())
                 .message(apiResponse.message())
-                .responseModel(overrideTypeName)
+                .responseModel(new ModelRef(overrideTypeName))
                 .build());
       }
     }
@@ -56,7 +57,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     if (apiResponse.response() != null) {
       return apiResponse.response().getSimpleName();
     }
-    return "";
+    return "";//TODO: May not be correct
   }
 
 }
