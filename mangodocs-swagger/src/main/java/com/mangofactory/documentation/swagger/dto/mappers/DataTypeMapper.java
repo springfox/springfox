@@ -44,7 +44,11 @@ public class DataTypeMapper {
     return new DataType(operationTypeName(modelRef));
   }
   
-  public com.mangofactory.documentation.swagger.dto.DataType fromModelRef(ModelRef modelRef) {
+  public com.mangofactory.documentation.swagger.dto.DataType typeFromModelRef(ModelRef modelRef) {
+    return new DataType(modelRef.getType());
+  }
+  
+  public com.mangofactory.documentation.swagger.dto.DataType itemTypeFromModelRef(ModelRef modelRef) {
     if (modelRef.isCollection()) {
       return new DataType(modelRef.getItemType());
     }

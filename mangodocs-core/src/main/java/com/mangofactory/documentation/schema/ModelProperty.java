@@ -6,7 +6,6 @@ import com.mangofactory.documentation.service.AllowableValues;
 public class ModelProperty {
   private final String name;
   private final ResolvedType type;
-  private final String typeName;
   private final String qualifiedType;
   private final int position;
   private final Boolean required;
@@ -14,12 +13,11 @@ public class ModelProperty {
   private final AllowableValues allowableValues;
   private final ModelRef modelRef;
 
-  public ModelProperty(String name, ResolvedType type, String typeName, String qualifiedType,
+  public ModelProperty(String name, ResolvedType type, String qualifiedType,
                        int position, Boolean required, String description, AllowableValues allowableValues,
                        ModelRef modelRef) {
     this.name = name;
     this.type = type;
-    this.typeName = typeName;
     this.qualifiedType = qualifiedType;
     this.position = position;
     this.required = required;
@@ -34,10 +32,6 @@ public class ModelProperty {
 
   public ResolvedType getType() {
     return type;
-  }
-
-  public String getTypeName() {
-    return typeName;
   }
 
   public String getQualifiedType() {

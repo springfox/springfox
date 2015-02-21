@@ -23,7 +23,6 @@ class ModelPropertyBuilderSpec extends Specification {
       'qualifiedType'     | 'com.Model1'                          | 'qualifiedType'
       'description'       | 'model1 desc'                         | 'description'
       'required'          | true                                  | 'required'
-      'typeName'          | 'model1'                              | 'typeName'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
       'modelRef'          | new ModelRef("test")                  | 'modelRef'
   }
@@ -45,7 +44,6 @@ class ModelPropertyBuilderSpec extends Specification {
       'type'              | new TypeResolver().resolve(String)    | 'type'
       'qualifiedType'     | 'com.Model1'                          | 'qualifiedType'
       'description'       | 'model1 desc'                         | 'description'
-      'typeName'          | 'model1'                              | 'typeName'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
       'modelRef'          | Mock(ModelRef)                        | 'modelRef'
   }

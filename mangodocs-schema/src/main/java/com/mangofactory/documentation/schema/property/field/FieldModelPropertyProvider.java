@@ -75,17 +75,15 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
       ModelContext modelContext) {
     FieldModelProperty fieldModelProperty = new FieldModelProperty(fieldName, childField, modelContext
             .getAlternateTypeProvider());
-    String typeName = typeNameExtractor.typeName(fromParent(modelContext, childField.getType()));
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
             .name(fieldModelProperty.getName())
             .type(childField.getType())
-            .typeName(typeName)
             .qualifiedType(fieldModelProperty.qualifiedTypeName())
             .position(fieldModelProperty.position())
             .required(fieldModelProperty.isRequired())
             .description(fieldModelProperty.propertyDescription())
             .allowableValues(fieldModelProperty.allowableValues())
-            .modelRef(modelRef(fieldModelProperty.getType(), modelContext));
+            .modelRef(modelRef(fieldModelProperty.getType(), fromParent(modelContext, fieldModelProperty.getType())));
     return schemaPluginsManager.property(new ModelPropertyContext(propertyBuilder,
             childField.getRawMember(), modelContext.getDocumentationType()));
   }

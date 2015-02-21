@@ -62,7 +62,7 @@ public abstract class ModelMapper {
 
 
   public Property resolve(ModelProperty source) {
-    String typeName = source.getTypeName();
+    String typeName = source.getModelRef().getType();
     String name = source.getName();
     return property(name, typeName);
   }

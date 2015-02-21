@@ -41,9 +41,9 @@ public interface ServiceModelToSwaggerMapper {
 
   @Mappings({
           @Mapping(target = "type",
-                  expression = "java( dataTypeMapper.fromTypeName( from.getTypeName() ) )"),
+                  expression = "java( dataTypeMapper.typeFromModelRef( from.getModelRef() ) )"),
           @Mapping(target = "items",
-                  expression = "java( dataTypeMapper.fromModelRef( from.getModelRef() ) )")
+                  expression = "java( dataTypeMapper.itemTypeFromModelRef( from.getModelRef() ) )")
   })
   ModelPropertyDto toSwaggerModelPropertyDto(ModelProperty from);
 

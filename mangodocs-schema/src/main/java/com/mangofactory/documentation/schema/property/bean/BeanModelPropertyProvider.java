@@ -157,24 +157,22 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     BeanModelProperty beanModelProperty
             = new BeanModelProperty(propertyName,  childProperty, isGetter(childProperty.getRawMember()),
             typeResolver, modelContext.getAlternateTypeProvider());
-    String typeName = typeNameExtractor.typeName(fromParent(modelContext, beanModelProperty.getType()));
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
             .name(beanModelProperty.getName())
             .type(beanModelProperty.getType())
-            .typeName(typeName)
             .qualifiedType(beanModelProperty.qualifiedTypeName())
             .position(beanModelProperty.position())
             .required(beanModelProperty.isRequired())
             .description(beanModelProperty.propertyDescription())
             .allowableValues(beanModelProperty.allowableValues())
-            .modelRef(modelRef(beanModelProperty.getType(), modelContext));
+            .modelRef(modelRef(beanModelProperty.getType(), fromParent(modelContext, beanModelProperty.getType())));
     return schemaPluginsManager.property(
             new ModelPropertyContext(propertyBuilder, beanPropertyDefinition, modelContext.getDocumentationType()));
   }
 
   private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
     if (!isContainerType(type)) {
-      String typeName = typeNameExtractor.typeName(fromParent(modelContext, type));
+      String typeName = typeNameExtractor.typeName(modelContext);
       return new ModelRef(typeName);
     }
     ResolvedType collectionElementType = collectionElementType(type);

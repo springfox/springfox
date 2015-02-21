@@ -18,7 +18,6 @@ public class ModelPropertyBuilder {
   private AllowableValues allowableValues;
   private ModelRef modelRef;
   private String name;
-  private String typeName;
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -61,18 +60,13 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelPropertyBuilder typeName(String typeName) {
-    this.typeName = defaultIfAbsent(typeName, this.typeName);
-    return this;
-  }
-
   public ModelPropertyBuilder modelRef(ModelRef modelRef) {
     this.modelRef = defaultIfAbsent(modelRef, this.modelRef);
     return this;
   }
 
   public ModelProperty build() {
-    return new ModelProperty(name, type, typeName, qualifiedType, position, required, description, allowableValues,
+    return new ModelProperty(name, type, qualifiedType, position, required, description, allowableValues,
             modelRef);
   }
 
