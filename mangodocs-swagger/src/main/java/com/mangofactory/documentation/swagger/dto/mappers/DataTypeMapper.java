@@ -20,8 +20,8 @@ public class DataTypeMapper {
   }
 
   public com.mangofactory.documentation.swagger.dto.DataType fromModelRef(ModelRef modelRef) {
-    if (modelRef != null) {
-      return new DataType(modelRef.getType());
+    if (modelRef.isCollection()) {
+      return new DataType(modelRef.getItemType());
     }
     return null;
   }
