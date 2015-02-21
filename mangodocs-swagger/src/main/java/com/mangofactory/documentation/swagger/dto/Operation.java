@@ -26,8 +26,6 @@ public class Operation {
   private String method;
   private String summary;
   private String notes;
-  @JsonIgnore
-  private String responseClass;
   @JsonProperty
   @JsonUnwrapped
   private SwaggerDataType dataType;
@@ -55,7 +53,6 @@ public class Operation {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
-    this.responseClass = responseClass;
     this.dataType = new DataType(responseClass);
     this.nickname = nickname;
     this.position = position;
@@ -121,14 +118,6 @@ public class Operation {
 
   public void setNotes(String notes) {
     this.notes = notes;
-  }
-
-  public String getResponseClass() {
-    return responseClass;
-  }
-
-  public void setResponseClass(String responseClass) {
-    this.responseClass = responseClass;
   }
 
   public String getNickname() {

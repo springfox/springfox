@@ -30,6 +30,20 @@ public class DataTypeMapper {
     return modelRef.getType();
   }
 
+  public String operationTypeName(ModelRef modelRef) {
+    if (modelRef == null) {
+      return null;
+    }
+    if (modelRef.isCollection()) {
+      return String.format("%s[%s]", modelRef.getType(), modelRef.getItemType());
+    }
+    return modelRef.getType();
+  }
+  
+  public com.mangofactory.documentation.swagger.dto.DataType operationTypeFromModelRef(ModelRef modelRef) {
+    return new DataType(operationTypeName(modelRef));
+  }
+  
   public com.mangofactory.documentation.swagger.dto.DataType fromModelRef(ModelRef modelRef) {
     if (modelRef.isCollection()) {
       return new DataType(modelRef.getItemType());

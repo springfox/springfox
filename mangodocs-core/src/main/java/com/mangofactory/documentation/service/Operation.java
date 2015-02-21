@@ -15,8 +15,7 @@ public class Operation {
   private final String method;
   private final String summary;
   private final String notes;
-  private final String responseClass;
-  private final ModelRef responseType;
+  private final ModelRef responseModel;
   private final String nickname;
   private final int position;
   private final Set<String> produces;
@@ -28,7 +27,7 @@ public class Operation {
   private final Set<ResponseMessage> responseMessages;
   private final String deprecated;
 
-  public Operation(String method, String summary, String notes, String responseClass, ModelRef responseType, 
+  public Operation(String method, String summary, String notes, ModelRef responseModel,
                    String nickname, int position,
                    Set<String> produces, Set<String> consumes, Set<String> protocol,
                    List<Authorization> authorizations, List<Parameter> parameters,
@@ -36,8 +35,7 @@ public class Operation {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
-    this.responseClass = responseClass;
-    this.responseType = responseType;
+    this.responseModel = responseModel;
     this.nickname = nickname;
     this.position = position;
     this.produces = produces;
@@ -54,8 +52,8 @@ public class Operation {
     return isHidden;
   }
 
-  public ModelRef getResponseType() {
-    return responseType;
+  public ModelRef getResponseModel() {
+    return responseModel;
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {
@@ -90,10 +88,6 @@ public class Operation {
 
   public String getNotes() {
     return notes;
-  }
-
-  public String getResponseClass() {
-    return responseClass;
   }
 
   public String getNickname() {

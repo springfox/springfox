@@ -50,7 +50,7 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     if (Void.class.equals(returnType.getErasedType()) || Void.TYPE.equals(returnType.getErasedType())) {
       context.operationBuilder()
               .responseClass("void")
-              .responseType(new ModelRef("void"));
+              .responseModel(new ModelRef("void"));
       return;
     }
     ModelContext modelContext = returnValue(returnType, context.getDocumentationType(),
@@ -59,7 +59,7 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     log.debug("Setting response class to:" + responseTypeName);
     context.operationBuilder()
             .responseClass(responseTypeName)
-            .responseType(modelRef(returnType, modelContext));
+            .responseModel(modelRef(returnType, modelContext));
   }
 
   private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {

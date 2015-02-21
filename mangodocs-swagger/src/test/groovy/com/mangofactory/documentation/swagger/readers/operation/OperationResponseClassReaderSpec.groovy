@@ -28,7 +28,11 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
       operationResponseClassReader.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
     then:
-      operation.responseClass == expectedClass
+      if (operation.responseModel.collection) {
+        assert expectedClass == String.format("%s[%s]", operation.responseModel.type, operation.responseModel.itemType)
+      } else {
+        assert expectedClass == operation.responseModel.type
+      }
 
     where:
       handlerMethod                                                        | expectedClass

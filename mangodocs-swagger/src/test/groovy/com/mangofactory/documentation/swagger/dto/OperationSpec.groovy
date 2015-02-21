@@ -57,7 +57,6 @@ class OperationSpec extends InternalJsonSerializationSpec {
         getPosition()
         getProduces()
         getProtocol()
-        getResponseClass()
         getResponseMessages()
         getSummary()
       }

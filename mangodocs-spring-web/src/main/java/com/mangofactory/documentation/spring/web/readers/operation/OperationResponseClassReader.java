@@ -45,7 +45,7 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     log.debug("Setting spring response class to:" + responseTypeName);
     context.operationBuilder()
             .responseClass(responseTypeName)
-            .responseType(modelRef(returnType, modelContext))
+            .responseModel(modelRef(returnType, modelContext))
     ;
   }
 

@@ -33,7 +33,7 @@ public class OperationBuilder {
   private Set<ResponseMessage> responseMessages = newHashSet();
   private String deprecated;
   private boolean isHidden;
-  private ModelRef responseType;
+  private ModelRef responseModel;
 
   public OperationBuilder method(String method) {
     this.method = defaultIfAbsent(method, this.method);
@@ -105,13 +105,13 @@ public class OperationBuilder {
     return this;
   }
 
-  public OperationBuilder responseType(ModelRef responseType) {
-    this.responseType = defaultIfAbsent(responseType, this.responseType);
+  public OperationBuilder responseModel(ModelRef responseType) {
+    this.responseModel = defaultIfAbsent(responseType, this.responseModel);
     return this;
   }
 
   public Operation build() {
-    return new Operation(method, summary, notes, responseClass, responseType, nickname, position, produces,
+    return new Operation(method, summary, notes, responseModel, nickname, position, produces,
             consumes, protocol, authorizations, parameters, responseMessages, deprecated, isHidden);
   }
 
