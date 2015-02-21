@@ -86,7 +86,7 @@ public class ParameterBuilder {
   }
 
   public Parameter build() {
-    return new Parameter(maybeOverrideName(name), description, defaultValue, required, allowMultiple, dataType,
-            Optional.fromNullable(type), allowableValues, paramType, paramAccess);
+    return new Parameter(maybeOverrideName(name), description, defaultValue, required, allowMultiple, dataType, 
+            modelRef, Optional.fromNullable(type), allowableValues, paramType, paramAccess);
   }
 }

@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.service.Authorization;
 import com.mangofactory.documentation.service.Operation;
 import com.mangofactory.documentation.service.Parameter;
@@ -32,6 +33,7 @@ public class OperationBuilder {
   private Set<ResponseMessage> responseMessages = newHashSet();
   private String deprecated;
   private boolean isHidden;
+  private ModelRef responseType;
 
   public OperationBuilder method(String method) {
     this.method = defaultIfAbsent(method, this.method);
@@ -103,8 +105,13 @@ public class OperationBuilder {
     return this;
   }
 
+  public OperationBuilder responseType(ModelRef responseType) {
+    this.responseType = responseType;
+    return this;
+  }
+
   public Operation build() {
-    return new Operation(method, summary, notes, responseClass, nickname, position, produces,
+    return new Operation(method, summary, notes, responseClass, responseType, nickname, position, produces,
             consumes, protocol, authorizations, parameters, responseMessages, deprecated, isHidden);
   }
 

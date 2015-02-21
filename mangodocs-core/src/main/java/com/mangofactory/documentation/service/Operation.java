@@ -3,6 +3,7 @@ package com.mangofactory.documentation.service;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mangofactory.documentation.schema.ModelRef;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ public class Operation {
   private final String summary;
   private final String notes;
   private final String responseClass;
+  private final ModelRef responseType;
   private final String nickname;
   private final int position;
   private final Set<String> produces;
@@ -26,7 +28,8 @@ public class Operation {
   private final Set<ResponseMessage> responseMessages;
   private final String deprecated;
 
-  public Operation(String method, String summary, String notes, String responseClass, String nickname, int position,
+  public Operation(String method, String summary, String notes, String responseClass, ModelRef responseType, 
+                   String nickname, int position,
                    Set<String> produces, Set<String> consumes, Set<String> protocol,
                    List<Authorization> authorizations, List<Parameter> parameters,
                    Set<ResponseMessage> responseMessages, String deprecated, boolean isHidden) {
@@ -34,6 +37,7 @@ public class Operation {
     this.summary = summary;
     this.notes = notes;
     this.responseClass = responseClass;
+    this.responseType = responseType;
     this.nickname = nickname;
     this.position = position;
     this.produces = produces;
@@ -48,6 +52,10 @@ public class Operation {
 
   public boolean isHidden() {
     return isHidden;
+  }
+
+  public ModelRef getResponseType() {
+    return responseType;
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {

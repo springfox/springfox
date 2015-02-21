@@ -12,7 +12,7 @@ class ApiOperationSupport {
             method,
             "summary",
             "notes",
-            "responseClass",
+            "responseClass", responseType,
             "nickname",
             position,
             emptySet,

@@ -2,8 +2,10 @@ package com.mangofactory.documentation.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.schema.TypeNameExtractor;
 import com.mangofactory.documentation.spi.DocumentationType;
+import com.mangofactory.documentation.spi.schema.contexts.ModelContext;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -14,6 +16,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
+import static com.mangofactory.documentation.schema.Collections.*;
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 import static com.mangofactory.documentation.spring.web.HandlerMethodReturnTypes.*;
 import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
@@ -45,13 +48,28 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
       returnType = context.alternateFor(returnType);
     }
     if (Void.class.equals(returnType.getErasedType()) || Void.TYPE.equals(returnType.getErasedType())) {
-      context.operationBuilder().responseClass("void");
+      context.operationBuilder()
+              .responseClass("void")
+              .responseType(new ModelRef("void"));
       return;
     }
-    String responseTypeName = nameExtractor.typeName(returnValue(returnType, context.getDocumentationType(),
-            context.getAlternateTypeProvider()));
+    ModelContext modelContext = returnValue(returnType, context.getDocumentationType(),
+            context.getAlternateTypeProvider());
+    String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting response class to:" + responseTypeName);
-    context.operationBuilder().responseClass(responseTypeName);
+    context.operationBuilder()
+            .responseClass(responseTypeName)
+            .responseType(modelRef(returnType, modelContext));
+  }
+
+  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
+    if (!isContainerType(type)) {
+      String typeName = nameExtractor.typeName(fromParent(modelContext, type));
+      return new ModelRef(typeName);
+    }
+    ResolvedType collectionElementType = collectionElementType(type);
+    String elementTypeName = nameExtractor.typeName(fromParent(modelContext, collectionElementType));
+    return new ModelRef(containerType(type), elementTypeName);
   }
 
   @Override
