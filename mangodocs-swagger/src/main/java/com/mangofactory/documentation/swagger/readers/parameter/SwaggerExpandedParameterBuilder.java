@@ -2,6 +2,7 @@ package com.mangofactory.documentation.swagger.readers.parameter;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.service.AllowableListValues;
 import com.mangofactory.documentation.service.AllowableValues;
@@ -56,6 +57,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
             .required(apiParam.required())
             .allowMultiple(apiParam.allowMultiple())
             .dataType(context.getDataTypeName())
+            .modelRef(new ModelRef(context.getDataTypeName()))
             .allowableValues(allowable)
             .parameterType("query")
             .parameterAccess(apiParam.access())
@@ -75,6 +77,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
             .required(apiModelProperty.required())
             .allowMultiple(Boolean.FALSE)
             .dataType(context.getDataTypeName())
+            .modelRef(new ModelRef(context.getDataTypeName()))
             .allowableValues(allowable).parameterType("query")
             .parameterAccess(apiModelProperty.access())
             .build();

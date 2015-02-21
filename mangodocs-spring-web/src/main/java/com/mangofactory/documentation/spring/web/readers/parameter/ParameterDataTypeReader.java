@@ -2,9 +2,11 @@ package com.mangofactory.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.schema.TypeNameExtractor;
 import com.mangofactory.documentation.service.ResolvedMethodParameter;
 import com.mangofactory.documentation.spi.DocumentationType;
+import com.mangofactory.documentation.spi.schema.contexts.ModelContext;
 import com.mangofactory.documentation.spi.service.ParameterBuilderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 
+import static com.mangofactory.documentation.schema.Collections.*;
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
@@ -40,13 +43,26 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
       context.parameterBuilder()
               .type(resolver.resolve(File.class))
-              .dataType("File");
+              .dataType("File")
+              .modelRef(new ModelRef("File"));
     } else {
-      String typeName = nameExtractor.typeName(inputParam(parameterType, context.getDocumentationType(),
-              context.getAlternateTypeProvider()));
+      ModelContext modelContext = inputParam(parameterType, context.getDocumentationType(),
+              context.getAlternateTypeProvider());
+      String typeName = nameExtractor.typeName(modelContext);
       context.parameterBuilder()
               .type(parameterType)
+              .modelRef(modelRef(parameterType, modelContext))
               .dataType(typeName);
     }
+    
+  }
+  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
+    if (!isContainerType(type)) {
+      String typeName = nameExtractor.typeName(fromParent(modelContext, type));
+      return new ModelRef(typeName);
+    }
+    ResolvedType collectionElementType = collectionElementType(type);
+    String elementTypeName = nameExtractor.typeName(fromParent(modelContext, collectionElementType));
+    return new ModelRef(containerType(type), elementTypeName);
   }
 }

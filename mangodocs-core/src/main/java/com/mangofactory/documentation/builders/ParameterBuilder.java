@@ -2,6 +2,7 @@ package com.mangofactory.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.service.AllowableValues;
 import com.mangofactory.documentation.service.Parameter;
 import org.springframework.util.StringUtils;
@@ -19,6 +20,7 @@ public class ParameterBuilder {
   private String paramType;
   private String paramAccess;
   private ResolvedType type;
+  private ModelRef modelRef;
 
   public ParameterBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -70,6 +72,11 @@ public class ParameterBuilder {
     return this;
   }
 
+  public ParameterBuilder modelRef(ModelRef modelRef) {
+    this.modelRef = modelRef;
+    return this;
+  }
+  
   //TODO: Whats the rule that needs this to be the case?
   private String maybeOverrideName(String aName) {
     if (StringUtils.hasText(this.paramType) && paramType.equals("body")) {

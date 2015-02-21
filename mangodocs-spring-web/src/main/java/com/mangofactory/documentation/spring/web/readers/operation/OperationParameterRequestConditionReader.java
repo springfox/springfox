@@ -3,6 +3,7 @@ package com.mangofactory.documentation.spring.web.readers.operation;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
+import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.service.AllowableListValues;
 import com.mangofactory.documentation.service.Parameter;
 import com.mangofactory.documentation.builders.ParameterBuilder;
@@ -46,6 +47,7 @@ public class OperationParameterRequestConditionReader implements OperationBuilde
               .allowMultiple(false)
               .type(resolver.resolve(String.class))
               .dataType("string")
+              .modelRef(new ModelRef("string"))
               .allowableValues(new AllowableListValues(newArrayList(expression.getValue()), "string"))
               .parameterType("query")
               .parameterAccess("")

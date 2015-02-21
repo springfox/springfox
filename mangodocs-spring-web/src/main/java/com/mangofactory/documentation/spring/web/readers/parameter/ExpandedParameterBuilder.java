@@ -2,6 +2,7 @@ package com.mangofactory.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
+import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.service.AllowableListValues;
 import com.mangofactory.documentation.service.AllowableValues;
@@ -41,6 +42,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
             .allowMultiple(Boolean.FALSE)
             .type(resolver.resolve(context.getField().getType()))
             .dataType(context.getDataTypeName())
+            .modelRef(new ModelRef(context.getDataTypeName()))
             .allowableValues(allowable)
             .parameterType("query")
             .parameterAccess(null);

@@ -1,6 +1,7 @@
 package com.mangofactory.documentation.swagger.readers.operation;
 
 import com.google.common.collect.Lists;
+import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.service.Parameter;
 import com.mangofactory.documentation.builders.ParameterBuilder;
 import com.mangofactory.documentation.spi.DocumentationType;
@@ -50,6 +51,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
             .required(param.required())
             .allowMultiple(param.allowMultiple())
             .dataType(param.dataType())
+            .modelRef(new ModelRef(param.dataType()))
             .allowableValues(allowableValueFromString(param.allowableValues()))
             .parameterType(param.paramType())
             .parameterAccess(param.access())
