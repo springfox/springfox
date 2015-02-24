@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.swagger.mappers;
+package com.mangofactory.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
@@ -32,7 +32,7 @@ import java.util.Set;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
-import static com.mangofactory.documentation.swagger.mappers.ModelMapper.*;
+import static com.mangofactory.documentation.swagger2.mappers.ModelMapper.*;
 
 @Mapper(uses = {ModelMapper.class, ParameterMapper.class, SecurityMapper.class})
 public abstract class ServiceModelToSwagger2Mapper {

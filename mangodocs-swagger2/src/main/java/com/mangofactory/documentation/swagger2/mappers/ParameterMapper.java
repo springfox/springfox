@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.swagger.mappers;
+package com.mangofactory.documentation.swagger2.mappers;
 
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.schema.ModelRef;
@@ -17,7 +17,7 @@ import com.wordnik.swagger.models.properties.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static com.mangofactory.documentation.swagger.mappers.ModelMapper.*;
+import static com.mangofactory.documentation.swagger2.mappers.ModelMapper.*;
 
 
 @Component

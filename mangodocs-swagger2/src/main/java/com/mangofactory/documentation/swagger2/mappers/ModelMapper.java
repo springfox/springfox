@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.swagger.mappers;
+package com.mangofactory.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
