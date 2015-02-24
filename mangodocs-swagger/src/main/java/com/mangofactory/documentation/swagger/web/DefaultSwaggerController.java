@@ -2,8 +2,8 @@ package com.mangofactory.documentation.swagger.web;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.mangofactory.documentation.service.Group;
 import com.mangofactory.documentation.annotations.ApiIgnore;
+import com.mangofactory.documentation.service.Group;
 import com.mangofactory.documentation.spring.web.GroupCache;
 import com.mangofactory.documentation.swagger.dto.ApiListing;
 import com.mangofactory.documentation.swagger.dto.ResourceListing;
@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 import static com.mangofactory.documentation.swagger.mappers.Mappers.*;
 
 @Controller
 public class DefaultSwaggerController {
 
-  public static final String DOCUMENTATION_BASE_PATH = "/api-docs";
 
   @Autowired
   private GroupCache groupCache;

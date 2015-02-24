@@ -7,6 +7,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletContext;
 
+import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
+
 @Component
 public class AbsolutePathProvider extends AbstractPathProvider {
 
@@ -27,7 +29,7 @@ public class AbsolutePathProvider extends AbstractPathProvider {
   @Override
   protected String getDocumentationPath() {
     return getAppRoot()
-            .path(DefaultSwaggerController.DOCUMENTATION_BASE_PATH)
+            .path(DOCUMENTATION_BASE_PATH)
             .build()
             .toString();
   }

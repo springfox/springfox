@@ -7,6 +7,8 @@ public class SwaggerPluginSupport {
     throw new UnsupportedOperationException();
   }
 
+  public static final String DOCUMENTATION_BASE_PATH = "/api-docs";
+  
   public static boolean pluginDoesApply(DocumentationType documentationType) {
     return DocumentationType.SWAGGER_12.equals(documentationType);
   }
