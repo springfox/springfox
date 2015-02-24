@@ -20,6 +20,7 @@ dependencies {
   compile project(':mangodocs-spi')
   compile project(':mangodocs-schema')
   compile project(':mangodocs-spring-web')
+  compile project(':mangodocs-swagger-common')
   testCompile project(':mangodocs-core')
   testCompile(project(path: ':mangodocs-schema', configuration: 'testArtifacts'))
   testCompile(project(path: ':mangodocs-spring-web', configuration: 'testArtifacts')) {

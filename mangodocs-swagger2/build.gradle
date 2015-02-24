@@ -15,6 +15,7 @@ dependencies {
   compile libs.swagger2Core
   compile project(':mangodocs-spi')
   compile project(':mangodocs-schema')
+  compile project(':mangodocs-swagger-common')
   compile project(':mangodocs-spring-web')
   testCompile project(':mangodocs-core')
   testCompile(project(path: ':mangodocs-schema', configuration: 'testArtifacts'))
