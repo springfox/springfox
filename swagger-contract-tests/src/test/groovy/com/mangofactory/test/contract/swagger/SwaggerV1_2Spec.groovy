@@ -16,7 +16,7 @@ import spock.lang.Unroll
 import static groovyx.net.http.ContentType.*
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 
-@ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
+@ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = SwaggerApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])

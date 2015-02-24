@@ -5,6 +5,7 @@ import com.mangofactory.documentation.spring.web.plugins.DocumentationConfigurer
 import com.mangofactory.documentation.swagger.annotations.EnableSwagger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
         "com.mangofactory.test.contract.swagger",
         "com.mangofactory.petstore.controller"
 })
-public class Application {
+public class SwaggerApplication {
 
 
   @Bean
@@ -35,6 +36,6 @@ public class Application {
             .includePatterns("/api/.*");
   }
   public static void main(String[] args) {
-    SpringApplication.run(Application.class, args);
+    SpringApplication.run(SwaggerApplication.class, args);
   }
 }

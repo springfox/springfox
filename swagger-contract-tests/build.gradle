@@ -45,7 +45,9 @@ dependencies {
   compile(project(path: ':mangodocs-swagger', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
-
+  compile(project(path: ':mangodocs-swagger2', configuration: 'testArtifacts')) {
+    exclude group: 'org.springframework', module: 'spring-web'
+  }
   compile(project(path: ':mangodocs-petstore')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }

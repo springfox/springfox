@@ -14,7 +14,7 @@ import spock.lang.Specification
 
 import static groovyx.net.http.ContentType.*
 
-@ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
+@ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Swagger2Application.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
@@ -31,7 +31,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     when:
       def response = http.get(
               path: '/api-docs',
-              query: [group: 'petstore'],
+//              query: [group: 'petstore'],
               contentType: TEXT, //Allows to access the raw response body
               headers: [Accept: 'application/json']
       )
