@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Import;
         "com.mangofactory.documentation.swagger.web",
         "com.mangofactory.documentation.swagger.readers.operation",
         "com.mangofactory.documentation.swagger.readers.parameter",
-        "com.mangofactory.documentation.swagger.dto.mappers"
+        "com.mangofactory.documentation.swagger.mappers"
 })
 public class SwaggerSpringMvcDocumentationConfiguration {
 

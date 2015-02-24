@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.swagger.dto.jackson;
+package com.mangofactory.documentation.swagger.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

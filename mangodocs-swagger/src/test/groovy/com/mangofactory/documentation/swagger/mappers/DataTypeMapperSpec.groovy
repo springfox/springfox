@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.swagger.dto.mappers
+package com.mangofactory.documentation.swagger.mappers
 
 import com.mangofactory.documentation.swagger.mixins.MapperSupport
 import spock.lang.Specification

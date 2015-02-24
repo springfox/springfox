@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.swagger.dto.mappers;
+package com.mangofactory.documentation.swagger.mappers;
 
 import com.mangofactory.documentation.swagger.dto.ApiKey;
 import com.mangofactory.documentation.swagger.dto.Authorization;

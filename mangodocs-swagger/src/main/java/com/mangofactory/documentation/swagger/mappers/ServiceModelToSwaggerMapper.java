@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.swagger.dto.mappers;
+package com.mangofactory.documentation.swagger.mappers;
 
 import com.mangofactory.documentation.schema.Model;
 import com.mangofactory.documentation.schema.ModelProperty;

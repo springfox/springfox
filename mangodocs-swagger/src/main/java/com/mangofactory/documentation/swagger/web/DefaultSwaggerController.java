@@ -7,7 +7,7 @@ import com.mangofactory.documentation.annotations.ApiIgnore;
 import com.mangofactory.documentation.spring.web.GroupCache;
 import com.mangofactory.documentation.swagger.dto.ApiListing;
 import com.mangofactory.documentation.swagger.dto.ResourceListing;
-import com.mangofactory.documentation.swagger.dto.mappers.ServiceModelToSwaggerMapper;
+import com.mangofactory.documentation.swagger.mappers.ServiceModelToSwaggerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
-import static com.mangofactory.documentation.swagger.dto.mappers.Mappers.*;
+import static com.mangofactory.documentation.swagger.mappers.Mappers.*;
 
 @Controller
 public class DefaultSwaggerController {

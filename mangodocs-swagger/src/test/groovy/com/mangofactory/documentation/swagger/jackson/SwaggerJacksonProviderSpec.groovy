@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.swagger.dto.jackson
+package com.mangofactory.documentation.swagger.jackson
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonInclude

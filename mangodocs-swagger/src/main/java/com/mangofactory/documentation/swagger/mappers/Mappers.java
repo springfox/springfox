@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.swagger.dto.mappers;
+package com.mangofactory.documentation.swagger.mappers;
 
 import com.google.common.collect.Maps;
 import com.mangofactory.documentation.service.ApiListing;

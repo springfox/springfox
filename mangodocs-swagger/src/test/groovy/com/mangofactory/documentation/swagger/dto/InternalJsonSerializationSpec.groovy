@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.swagger.dto
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mangofactory.documentation.swagger.dto.jackson.SwaggerJacksonProvider
+import com.mangofactory.documentation.swagger.jackson.SwaggerJacksonProvider
 import groovy.json.JsonSlurper
 import spock.lang.Shared
 import spock.lang.Specification

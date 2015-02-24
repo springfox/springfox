@@ -1,4 +1,4 @@
-package com.mangofactory.documentation.swagger.dto.jackson
+package com.mangofactory.documentation.swagger.jackson
 
 import com.mangofactory.documentation.swagger.dto.InternalJsonSerializationSpec
 import com.mangofactory.documentation.swagger.dto.AuthorizationCodeGrant

@@ -12,7 +12,7 @@ import com.mangofactory.documentation.spring.web.scanners.ApiGroupScanner
 import com.mangofactory.documentation.spring.web.scanners.ApiListingReferenceScanResult
 import com.mangofactory.documentation.spring.web.scanners.ApiListingReferenceScanner
 import com.mangofactory.documentation.spring.web.scanners.ApiListingScanner
-import com.mangofactory.documentation.swagger.dto.jackson.SwaggerJacksonProvider
+import com.mangofactory.documentation.swagger.jackson.SwaggerJacksonProvider
 import com.mangofactory.documentation.swagger.mixins.MapperSupport
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
