@@ -14,9 +14,7 @@ artifacts {
 
 
 dependencies {
-  compile (libs.swaggerCore) {
-    exclude group: 'org.scala-lang'
-  }
+  compile libs.swagger2Core
   compile project(':mangodocs-spi')
   compile project(':mangodocs-schema')
   compile project(':mangodocs-spring-web')

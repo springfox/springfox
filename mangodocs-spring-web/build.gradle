@@ -3,9 +3,6 @@ configurations {
 }
 
 dependencies {
-  compile (libs.swaggerCore) {
-    exclude group: 'org.scala-lang'
-  }
   compile libs.core
   compile libs.spring
   provided libs.clientProvided
@@ -15,6 +12,7 @@ dependencies {
 
   testCompile project(':mangodocs-core')
   testCompile libs.test
+  testCompile libs.swagger2Core
   testCompile(project(path: ':mangodocs-schema', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
