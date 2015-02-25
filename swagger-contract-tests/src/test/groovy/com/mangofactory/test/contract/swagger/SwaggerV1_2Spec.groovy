@@ -37,7 +37,7 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
   def 'should honor swagger resource listing'() {
     given:
       RESTClient http = new RESTClient("http://localhost:$port")
-      String contract = fileContents('resource-listing.json')
+      String contract = fileContents('/contract/swagger/resource-listing.json')
 
     when:
       def response = http.get(
@@ -58,7 +58,7 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
   def 'should honor api declaration contract [#contractFile] at endpoint [#declarationPath]'() {
     given:
       RESTClient http = new RESTClient("http://localhost:$port")
-      String contract = fileContents(contractFile)
+      String contract = fileContents("/contract/swagger/$contractFile")
     when:
       def response = http.get(
               path: "/v1/api-docs${declarationPath}",

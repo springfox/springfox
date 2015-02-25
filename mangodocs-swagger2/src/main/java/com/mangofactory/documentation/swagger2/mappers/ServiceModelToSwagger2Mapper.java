@@ -137,7 +137,7 @@ public abstract class ServiceModelToSwagger2Mapper {
     Path path = new Path();
     for (com.mangofactory.documentation.service.Operation each : api.getOperations()) {
       Operation operation = map(each);
-      path.set(each.getMethod(), operation);
+      path.set(each.getMethod().toLowerCase(), operation);
     }
     return path;
   }

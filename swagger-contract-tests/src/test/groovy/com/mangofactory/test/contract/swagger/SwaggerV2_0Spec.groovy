@@ -1,10 +1,10 @@
 package com.mangofactory.test.contract.swagger
-
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spring.web.plugins.DocumentationConfigurer
 import com.mangofactory.documentation.swagger2.annotations.EnableSwagger2
 import groovy.json.JsonOutput
 import groovyx.net.http.RESTClient
+import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
@@ -19,6 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration
 import spock.lang.Specification
 
 import static groovyx.net.http.ContentType.*
+import static org.skyscreamer.jsonassert.JSONCompareMode.*
 
 @ContextConfiguration(loader = SpringApplicationContextLoader, classes = Config)
 @WebAppConfiguration
@@ -32,7 +33,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
   def 'should honor swagger resource listing'() {
     given:
       RESTClient http = new RESTClient("http://localhost:$port")
-//      String contract = fileContents('resource-listing.json')
+      String contract = fileContents('/contract/swagger2/swagger.json')
 
     when:
       def response = http.get(
@@ -47,7 +48,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
       response.status == 200
       println(actual)
 
-//      JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
+      JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
   }
 
   @Configuration
