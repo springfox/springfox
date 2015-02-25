@@ -40,7 +40,7 @@ public class BusinessService {
 
   @RequestMapping(value = "/businesses/non-aliased/{businessId}", method = RequestMethod.GET)
   @ApiOperation(value = "Find a business by its id",
-          authorizations = @Authorization(value = "oauth2",
+          authorizations = @Authorization(value = "oauth2", type="",
                   scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
                   }))
   public String getNonAliasedPathVariable(

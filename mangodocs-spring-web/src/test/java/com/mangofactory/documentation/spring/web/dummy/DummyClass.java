@@ -100,7 +100,7 @@ public class DummyClass {
   }
 
   @ApiOperation(value = "SomeVal",
-          authorizations = @Authorization(value = "oauth2",
+          authorizations = @Authorization(value = "oauth2", type = "",
                   scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
                   }))
   public void methodWithAuth() {
