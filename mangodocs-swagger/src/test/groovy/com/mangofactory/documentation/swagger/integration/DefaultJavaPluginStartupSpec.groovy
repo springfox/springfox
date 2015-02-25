@@ -23,7 +23,7 @@ class DefaultJavaPluginStartupSpec extends Specification{
   def "Should start app with default java config"() {
     when:
       MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
-      MvcResult petApi = mockMvc.perform(MockMvcRequestBuilders.get('/api-docs')).andReturn()
+      MvcResult petApi = mockMvc.perform(MockMvcRequestBuilders.get('/v1/api-docs')).andReturn()
     then:
       jsonBodyResponse(petApi).apis.size() == 9
   }

@@ -66,6 +66,9 @@ public abstract class ModelMapper {
   }
 
   static Property modelRefToProperty(ModelRef modelRef) {
+    if (modelRef == null) {
+      return null;
+    }
     Property responseProperty;
     if (modelRef.isCollection()) {
       String itemType = modelRef.getItemType();

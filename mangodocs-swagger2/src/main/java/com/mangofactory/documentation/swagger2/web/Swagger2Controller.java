@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class Swagger2Controller {
-  public static final String DOCUMENTATION_BASE_PATH = "/api-docs";
+  public static final String DOCUMENTATION_BASE_PATH = "/v2/api-docs";
 
   @Autowired
   private GroupCache groupCache;

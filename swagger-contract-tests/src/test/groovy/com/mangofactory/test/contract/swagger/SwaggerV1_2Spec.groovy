@@ -1,10 +1,17 @@
 package com.mangofactory.test.contract.swagger
+
+import com.mangofactory.documentation.spi.DocumentationType
+import com.mangofactory.documentation.spring.web.plugins.DocumentationConfigurer
+import com.mangofactory.documentation.swagger.annotations.EnableSwagger
 import groovy.json.JsonOutput
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
@@ -16,7 +23,9 @@ import spock.lang.Unroll
 import static groovyx.net.http.ContentType.*
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 
-@ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = SwaggerApplication.class)
+@ContextConfiguration(
+        loader = SpringApplicationContextLoader,
+        classes = Config)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
@@ -32,7 +41,7 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
 
     when:
       def response = http.get(
-              path: '/api-docs',
+              path: '/v1/api-docs',
               contentType: TEXT, //Allows to access the raw response body
               headers: [Accept: 'application/json']
       )
@@ -52,7 +61,7 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
       String contract = fileContents(contractFile)
     when:
       def response = http.get(
-              path: "/api-docs${declarationPath}",
+              path: "/v1/api-docs${declarationPath}",
               contentType: TEXT, //Allow access to the raw response body
               headers: [Accept: 'application/json']
       )
@@ -80,5 +89,28 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
       'declaration-pet-grooming-service.json'                       | '/default/pet-grooming-service'
       'declaration-pet-service.json'                                | '/default/pet-service'
       'declaration-root-controller.json'                            | '/default/root-controller'
+  }
+  
+  @Configuration
+  @EnableSwagger
+  @ComponentScan([
+    "com.mangofactory.documentation.spring.web.dummy.controllers",
+    "com.mangofactory.test.contract.swagger",
+    "com.mangofactory.petstore.controller"
+  ])
+  static class Config {
+    @Bean
+    public DocumentationConfigurer testCases() {
+      return new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+              .groupName("default")
+              .includePatterns("^((?!\\/api).)*\$"); //Not beginning with /api
+    }
+
+    @Bean
+    public DocumentationConfigurer petstore() {
+      return new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+              .groupName("petstore")
+              .includePatterns("/api/.*");
+    }
   }
 }
