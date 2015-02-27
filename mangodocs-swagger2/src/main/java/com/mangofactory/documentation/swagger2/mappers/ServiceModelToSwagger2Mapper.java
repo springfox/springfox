@@ -1,6 +1,7 @@
 package com.mangofactory.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
@@ -127,14 +128,14 @@ public abstract class ServiceModelToSwagger2Mapper {
     Map<String, Path> paths = newHashMap();
     for (ApiListing each : apiListings.values()) {
       for (ApiDescription api : each.getApis()) {
-        paths.put(api.getPath(), map(api));
+        paths.put(api.getPath(), map(api, Optional.fromNullable(paths.get(api.getPath()))));
       }
     }
     return paths;
   }
 
-  protected Path map(ApiDescription api) {
-    Path path = new Path();
+  protected Path map(ApiDescription api, Optional<Path> existingPath) {
+    Path path = existingPath.or(new Path());
     for (com.mangofactory.documentation.service.Operation each : api.getOperations()) {
       Operation operation = map(each);
       path.set(each.getMethod().toLowerCase(), operation);

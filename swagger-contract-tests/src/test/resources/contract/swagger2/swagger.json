@@ -24,1776 +24,17 @@
 
     ],
     "produces": [
-
+        "application/json",
+        "application/xml"
     ],
     "paths": {
-        "/": {
-            "get": {
-                "tags": null,
-                "summary": "getAll",
-                "description": "getAll",
-                "operationId": "getAll",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/autoconfig": {
-            "get": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/beans": {
-            "get": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/businesses/aliased/{otherId}": {
-            "get": {
-                "tags": null,
-                "summary": "Find a business by its id",
-                "description": "getAliasedPathVariable",
-                "operationId": "getAliasedPathVariable",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*",
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "otherId",
-                        "in": "path",
-                        "description": "ID of business",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/businesses/byTypes": {
-            "get": {
-                "tags": null,
-                "summary": "businessesByCategories",
-                "description": "businessesByCategories",
-                "operationId": "businessesByCategories",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "types",
-                        "in": "query",
-                        "description": "types",
-                        "required": true,
-                        "type": "array",
-                        "items": {
-                            "type": "string",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "minLength": null,
-                            "maxLength": null,
-                            "pattern": null,
-                            "enum": null
-                        },
-                        "collectionFormat": "csv",
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/businesses/non-aliased/{businessId}": {
-            "get": {
-                "tags": null,
-                "summary": "Find a business by its id",
-                "description": "getNonAliasedPathVariable",
-                "operationId": "getNonAliasedPathVariable",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*",
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "businessId",
-                        "in": "path",
-                        "description": "ID of business",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-                    {
-                        "oauth2": [
-                            "scope"
-                        ]
-                    }
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/businesses/responseEntity/{businessId}": {
-            "get": {
-                "tags": null,
-                "summary": "getResponseEntity",
-                "description": "getResponseEntity",
-                "operationId": "getResponseEntity",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*",
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "businessId",
-                        "in": "path",
-                        "description": "businessId",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/businesses/typeEcho": {
+        "/api/pet": {
             "get": null,
             "post": {
                 "tags": null,
-                "summary": "businessTypeEcho",
-                "description": "businessTypeEcho",
-                "operationId": "businessTypeEcho",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "business",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/string"
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/businesses/vanilla/{businessId}": {
-            "get": {
-                "tags": null,
-                "summary": "getVanillaPathVariable",
-                "description": "getVanillaPathVariable",
-                "operationId": "getVanillaPathVariable",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*",
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "businessId",
-                        "in": "path",
-                        "description": "businessId",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/child/child-method": {
-            "get": {
-                "tags": null,
-                "summary": "getSomething",
-                "description": "getSomething",
-                "operationId": "getSomething",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "parameter",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/string"
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/configprops": {
-            "get": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/dump": {
-            "get": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/env": {
-            "get": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/env/{name}": {
-            "get": {
-                "tags": null,
-                "summary": "value",
-                "description": "value",
-                "operationId": "value",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "path",
-                        "description": "name",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/error": {
-            "get": {
-                "tags": null,
-                "summary": "errorHtml",
-                "description": "errorHtml",
-                "operationId": "errorHtml",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "text/html"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": {
-                "tags": null,
-                "summary": "errorHtml",
-                "description": "errorHtml",
-                "operationId": "errorHtml",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "text/html"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": {
-                "tags": null,
-                "summary": "errorHtml",
-                "description": "errorHtml",
-                "operationId": "errorHtml",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "text/html"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "delete": {
-                "tags": null,
-                "summary": "errorHtml",
-                "description": "errorHtml",
-                "operationId": "errorHtml",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "text/html"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "options": {
-                "tags": null,
-                "summary": "errorHtml",
-                "description": "errorHtml",
-                "operationId": "errorHtml",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "text/html"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "patch": {
-                "tags": null,
-                "summary": "errorHtml",
-                "description": "errorHtml",
-                "operationId": "errorHtml",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "text/html"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "parameters": null
-        },
-        "/fancypets": {
-            "get": null,
-            "post": null,
-            "put": {
-                "tags": null,
-                "summary": "updatePet",
-                "description": "updatePet",
-                "operationId": "updatePet",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "pet",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/Pet"
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/fancypets/?{someId}": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "createObject",
-                "description": "createObject",
-                "operationId": "createObject",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "object",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/FancyPet"
-                        }
-                    },
-                    {
-                        "name": "someId",
-                        "in": "path",
-                        "description": "someId",
-                        "required": true,
-                        "type": "integer",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": "int32"
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/features": {
-            "get": {
-                "tags": null,
-                "summary": "all",
-                "description": "all",
-                "operationId": "all",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": {
-                "tags": null,
-                "summary": "all",
-                "description": "all",
-                "operationId": "all",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": {
-                "tags": null,
-                "summary": "all",
-                "description": "all",
-                "operationId": "all",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "delete": {
-                "tags": null,
-                "summary": "all",
-                "description": "all",
-                "operationId": "all",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "options": {
-                "tags": null,
-                "summary": "all",
-                "description": "all",
-                "operationId": "all",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "patch": {
-                "tags": null,
-                "summary": "all",
-                "description": "all",
-                "operationId": "all",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "parameters": null
-        },
-        "/features/allMethodsAllowed": {
-            "get": {
-                "tags": null,
-                "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
-                "operationId": "allMethodAllowed",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": {
-                "tags": null,
-                "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
-                "operationId": "allMethodAllowed",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": {
-                "tags": null,
-                "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
-                "operationId": "allMethodAllowed",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "delete": {
-                "tags": null,
-                "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
-                "operationId": "allMethodAllowed",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "options": {
-                "tags": null,
-                "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
-                "operationId": "allMethodAllowed",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "patch": {
-                "tags": null,
-                "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
-                "operationId": "allMethodAllowed",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "parameters": null
-        },
-        "/features/bare": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "getBare",
-                "description": "getBare",
-                "operationId": "getBare",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "example",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/Example"
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/features/bigDecimal": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "updateBigDecimal",
-                "description": "updateBigDecimal",
-                "operationId": "updateBigDecimal",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "input",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/double"
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/features/date": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "updateDate",
-                "description": "updateDate",
-                "operationId": "updateDate",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "localDate",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/LocalDate"
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/features/effective": {
-            "get": {
-                "tags": null,
-                "summary": "getEffective",
-                "description": "getEffective",
-                "operationId": "getEffective",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/features/effectives": {
-            "get": {
-                "tags": null,
-                "summary": "getEffectives",
-                "description": "getEffectives",
-                "operationId": "getEffectives",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/features/status": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "updateBaz",
-                "description": "updateBaz",
-                "operationId": "updateBaz",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "enumType",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/string"
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/features/statuses": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "updateBazes",
-                "description": "updateBazes",
-                "operationId": "updateBazes",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "enumType",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/Collection\u00abstring\u00bb"
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/features/{petId}": {
-            "get": {
-                "tags": null,
-                "summary": "Find pet by ID",
-                "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
-                "operationId": "getPetById",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "name": "petId",
-                        "in": "path",
-                        "description": "ID of pet that needs to be fetched",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/foo/create-t": {
-            "get": null,
-            "post": null,
-            "put": {
-                "tags": null,
-                "summary": "create",
-                "description": "create",
-                "operationId": "create",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "toCreate",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/Pet"
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/foo/get-t": {
-            "get": {
-                "tags": null,
-                "summary": "get",
-                "description": "get",
-                "operationId": "get",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/health": {
-            "get": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "delete": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "options": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "patch": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "parameters": null
-        },
-        "/info": {
-            "get": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/mappings": {
-            "get": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/metrics": {
-            "get": {
-                "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/metrics/{name}": {
-            "get": {
-                "tags": null,
-                "summary": "value",
-                "description": "value",
-                "operationId": "value",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "path",
-                        "description": "name",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/no-request-mapping": {
-            "get": {
-                "tags": null,
-                "summary": "exampleWithNoRequestMapping",
-                "description": "exampleWithNoRequestMapping",
-                "operationId": "exampleWithNoRequestMapping",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/petgrooming": {
-            "get": {
-                "tags": null,
-                "summary": "canGroom",
-                "description": "canGroom",
-                "operationId": "canGroom",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "name": "type",
-                        "in": "query",
-                        "description": "type",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/petgrooming/voidMethod/{input}": {
-            "get": null,
-            "post": null,
-            "put": null,
-            "delete": {
-                "tags": null,
-                "summary": "groomingFunctionThatReturnsVoid",
-                "description": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoid",
+                "summary": "Add a new pet to the store",
+                "description": "addPet",
+                "operationId": "addPet",
                 "consumes": [
                     "application/json"
                 ],
@@ -1803,137 +44,12 @@
                 ],
                 "parameters": [
                     {
-                        "name": "input",
-                        "in": "path",
-                        "description": "input",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets": {
-            "get": {
-                "tags": null,
-                "summary": "List all pets",
-                "description": "listPets",
-                "operationId": "listPets",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/byName/{name}": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "petEntities",
-                "description": "petEntities",
-                "operationId": "petEntities",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "path",
-                        "description": "name",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/echo": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "echo",
-                "description": "echo",
-                "operationId": "echo",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
                         "in": "body",
                         "name": "body",
-                        "description": "someInput",
-                        "required": false,
+                        "description": "Pet object that needs to be added to the store",
+                        "required": true,
                         "schema": {
-                            "externalDocs": null,
-                            "properties": null,
-                            "type": "array",
-                            "description": null,
-                            "items": {
-                                "format": null,
-                                "example": null,
-                                "xml": null,
-                                "position": null,
-                                "description": null,
-                                "title": "Entry\u00abstring,Pet\u00bb",
-                                "readOnly": null,
-                                "$ref": "#/definitions/Entry\u00abstring,Pet\u00bb"
-                            },
-                            "example": null
+                            "$ref": "#/definitions/Pet"
                         }
                     }
                 ],
@@ -1946,13 +62,44 @@
                 "externalDocs": null,
                 "deprecated": null
             },
-            "put": null,
+            "put": {
+                "tags": null,
+                "summary": "Update an existing pet",
+                "description": "updatePet",
+                "operationId": "updatePet",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Pet object that needs to be added to the store",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                ],
+                "responses": {
+
+                },
+                "security": [
+
+                ],
+                "externalDocs": null,
+                "deprecated": null
+            },
             "delete": null,
             "options": null,
             "patch": null,
             "parameters": null
         },
-        "/pets/findByStatus": {
+        "/api/pet/findByStatus": {
             "get": {
                 "tags": null,
                 "summary": "Finds Pets by status",
@@ -1962,7 +109,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                    "application/xml",
+                    "application/json"
                 ],
                 "parameters": [
                     {
@@ -1993,7 +141,7 @@
             "patch": null,
             "parameters": null
         },
-        "/pets/findByTags": {
+        "/api/pet/findByTags": {
             "get": {
                 "tags": null,
                 "summary": "Finds Pets by tags",
@@ -2003,7 +151,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                    "application/xml",
+                    "application/json"
                 ],
                 "parameters": [
                     {
@@ -2034,454 +183,7 @@
             "patch": null,
             "parameters": null
         },
-        "/pets/grooming": {
-            "get": {
-                "tags": null,
-                "summary": "canGroom",
-                "description": "canGroom",
-                "operationId": "canGroom",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "name": "type",
-                        "in": "query",
-                        "description": "type",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/grooming/voidMethod/{input}": {
-            "get": null,
-            "post": null,
-            "put": null,
-            "delete": {
-                "tags": null,
-                "summary": "groomingFunctionThatReturnsVoid",
-                "description": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoid",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/xml",
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "input",
-                        "in": "path",
-                        "description": "input",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/nameToNickNamesMap": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "nameToNickNamesMap",
-                "description": "nameToNickNamesMap",
-                "operationId": "nameToNickNamesMap",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/siblings": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "siblings",
-                "description": "siblings",
-                "operationId": "siblings",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "pet",
-                        "required": false,
-                        "schema": {
-                            "$ref": "#/definitions/Pet"
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/transformPetNameToPetMapToAny": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "transformPetNameToPetMapToAny",
-                "description": "transformPetNameToPetMapToAny",
-                "operationId": "transformPetNameToPetMapToAny",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "someInput",
-                        "required": false,
-                        "schema": {
-                            "externalDocs": null,
-                            "properties": null,
-                            "type": "array",
-                            "description": null,
-                            "items": {
-                                "format": null,
-                                "example": null,
-                                "xml": null,
-                                "position": null,
-                                "description": null,
-                                "title": "Entry\u00abstring,Pet\u00bb",
-                                "readOnly": null,
-                                "$ref": "#/definitions/Entry\u00abstring,Pet\u00bb"
-                            },
-                            "example": null
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/transformPetNameToPetMapToGenericOpenMap": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "transformPetNameToPetMapToGenericOpenMap",
-                "description": "transformPetNameToPetMapToGenericOpenMap",
-                "operationId": "transformPetNameToPetMapToGenericOpenMap",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "someInput",
-                        "required": false,
-                        "schema": {
-                            "externalDocs": null,
-                            "properties": null,
-                            "type": "array",
-                            "description": null,
-                            "items": {
-                                "format": null,
-                                "example": null,
-                                "xml": null,
-                                "position": null,
-                                "description": null,
-                                "title": "Entry\u00abstring,Pet\u00bb",
-                                "readOnly": null,
-                                "$ref": "#/definitions/Entry\u00abstring,Pet\u00bb"
-                            },
-                            "example": null
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/transformPetNameToPetMapToOpenMap": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "transformPetNameToPetMapToOpenMap",
-                "description": "transformPetNameToPetMapToOpenMap",
-                "operationId": "transformPetNameToPetMapToOpenMap",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "someInput",
-                        "required": false,
-                        "schema": {
-                            "externalDocs": null,
-                            "properties": null,
-                            "type": "array",
-                            "description": null,
-                            "items": {
-                                "format": null,
-                                "example": null,
-                                "xml": null,
-                                "position": null,
-                                "description": null,
-                                "title": "Entry\u00abstring,Pet\u00bb",
-                                "readOnly": null,
-                                "$ref": "#/definitions/Entry\u00abstring,Pet\u00bb"
-                            },
-                            "example": null
-                        }
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/voidMethod/{input}": {
-            "get": null,
-            "post": null,
-            "put": null,
-            "delete": {
-                "tags": null,
-                "summary": "groomingFunctionThatReturnsVoid",
-                "description": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoid",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/xml",
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "input",
-                        "in": "path",
-                        "description": "input",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/{a}/{b}": {
-            "get": {
-                "tags": null,
-                "summary": "method",
-                "description": "method",
-                "operationId": "method",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "name": "a",
-                        "in": "path",
-                        "description": "a",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    },
-                    {
-                        "name": "b",
-                        "in": "path",
-                        "description": "b",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/{name}": {
-            "get": null,
-            "post": {
-                "tags": null,
-                "summary": "petByName",
-                "description": "petByName",
-                "operationId": "petByName",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "*/*"
-                ],
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "path",
-                        "description": "name",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    }
-                ],
-                "responses": {
-
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
-        },
-        "/pets/{petId}": {
+        "/api/pet/{petId}": {
             "get": {
                 "tags": null,
                 "summary": "Find pet by ID",
@@ -2491,7 +193,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                    "application/xml",
+                    "application/json"
                 ],
                 "parameters": [
                     {
@@ -2522,41 +225,28 @@
             "patch": null,
             "parameters": null
         },
-        "/pets/{petId}/pic": {
+        "/api/store/order": {
             "get": null,
             "post": {
                 "tags": null,
-                "summary": "updatePic",
-                "description": "updatePic",
-                "operationId": "updatePic",
+                "summary": "Place an order for a pet",
+                "description": "placeOrder",
+                "operationId": "placeOrder",
                 "consumes": [
-                    "multipart/form-data"
+                    "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                    "application/json"
                 ],
                 "parameters": [
                     {
-                        "name": "petId",
-                        "in": "path",
-                        "description": "petId",
+                        "in": "body",
+                        "name": "body",
+                        "description": "order placed for purchasing the pet",
                         "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
-                    },
-                    {
-                        "name": "pic",
-                        "in": "formData",
-                        "description": "pic",
-                        "required": false,
-                        "type": "ref",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
+                        "schema": {
+                            "$ref": "#/definitions/Order"
+                        }
                     }
                 ],
                 "responses": {
@@ -2574,23 +264,241 @@
             "patch": null,
             "parameters": null
         },
-        "/pets/{petId}/pic/{picId}": {
+        "/api/store/order/{orderId}": {
             "get": {
                 "tags": null,
-                "summary": "updatePic",
-                "description": "updatePic",
-                "operationId": "updatePic",
+                "summary": "Find purchase order by ID",
+                "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions",
+                "operationId": "getOrderById",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                    "application/json"
                 ],
                 "parameters": [
                     {
-                        "name": "petId",
+                        "name": "orderId",
                         "in": "path",
-                        "description": "petId",
+                        "description": "ID of pet that needs to be fetched",
+                        "required": true,
+                        "type": "string",
+                        "items": null,
+                        "collectionFormat": null,
+                        "default": "",
+                        "format": null
+                    }
+                ],
+                "responses": {
+
+                },
+                "security": [
+
+                ],
+                "externalDocs": null,
+                "deprecated": null
+            },
+            "post": null,
+            "put": null,
+            "delete": {
+                "tags": null,
+                "summary": "Delete purchase order by ID",
+                "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors",
+                "operationId": "deleteOrder",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "description": "ID of the order that needs to be deleted",
+                        "required": true,
+                        "type": "string",
+                        "items": null,
+                        "collectionFormat": null,
+                        "default": "",
+                        "format": null
+                    }
+                ],
+                "responses": {
+
+                },
+                "security": [
+
+                ],
+                "externalDocs": null,
+                "deprecated": null
+            },
+            "options": null,
+            "patch": null,
+            "parameters": null
+        },
+        "/api/user": {
+            "get": null,
+            "post": {
+                "tags": null,
+                "summary": "Create user",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "createUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Created user object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+
+                },
+                "security": [
+
+                ],
+                "externalDocs": null,
+                "deprecated": null
+            },
+            "put": null,
+            "delete": null,
+            "options": null,
+            "patch": null,
+            "parameters": null
+        },
+        "/api/user/createWithArray": {
+            "get": null,
+            "post": {
+                "tags": null,
+                "summary": "Creates list of users with given input array",
+                "description": "createUsersWithArrayInput",
+                "operationId": "createUsersWithArrayInput",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "List of user object",
+                        "required": true,
+                        "schema": {
+                            "externalDocs": null,
+                            "properties": null,
+                            "type": "array",
+                            "description": null,
+                            "items": {
+                                "format": null,
+                                "example": null,
+                                "xml": null,
+                                "position": null,
+                                "description": null,
+                                "title": "User",
+                                "readOnly": null,
+                                "$ref": "#/definitions/User"
+                            },
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+
+                },
+                "security": [
+
+                ],
+                "externalDocs": null,
+                "deprecated": null
+            },
+            "put": null,
+            "delete": null,
+            "options": null,
+            "patch": null,
+            "parameters": null
+        },
+        "/api/user/createWithList": {
+            "get": null,
+            "post": {
+                "tags": null,
+                "summary": "Creates list of users with given input array",
+                "description": "createUsersWithListInput",
+                "operationId": "createUsersWithListInput",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "List of user object",
+                        "required": true,
+                        "schema": {
+                            "externalDocs": null,
+                            "properties": null,
+                            "type": "array",
+                            "description": null,
+                            "items": {
+                                "format": null,
+                                "example": null,
+                                "xml": null,
+                                "position": null,
+                                "description": null,
+                                "title": "User",
+                                "readOnly": null,
+                                "$ref": "#/definitions/User"
+                            },
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+
+                },
+                "security": [
+
+                ],
+                "externalDocs": null,
+                "deprecated": null
+            },
+            "put": null,
+            "delete": null,
+            "options": null,
+            "patch": null,
+            "parameters": null
+        },
+        "/api/user/login": {
+            "get": {
+                "tags": null,
+                "summary": "Logs user into the system",
+                "description": "loginUser",
+                "operationId": "loginUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "The user name for login",
                         "required": true,
                         "type": "string",
                         "items": null,
@@ -2599,9 +507,9 @@
                         "format": null
                     },
                     {
-                        "name": "picId",
-                        "in": "path",
-                        "description": "picId",
+                        "name": "password",
+                        "in": "query",
+                        "description": "The password for login in clear text",
                         "required": true,
                         "type": "string",
                         "items": null,
@@ -2626,17 +534,17 @@
             "patch": null,
             "parameters": null
         },
-        "/trace": {
+        "/api/user/logout": {
             "get": {
                 "tags": null,
-                "summary": "invoke",
-                "description": "invoke",
-                "operationId": "invoke",
+                "summary": "Logs out current logged in user session",
+                "description": "logoutUser",
+                "operationId": "logoutUser",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                    "application/json"
                 ],
                 "parameters": [
 
@@ -2653,6 +561,120 @@
             "post": null,
             "put": null,
             "delete": null,
+            "options": null,
+            "patch": null,
+            "parameters": null
+        },
+        "/api/user/{username}": {
+            "get": {
+                "tags": null,
+                "summary": "Get user by user name",
+                "description": "getUserByName",
+                "operationId": "getUserByName",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "The name that needs to be fetched. Use user1 for testing. ",
+                        "required": true,
+                        "type": "string",
+                        "items": null,
+                        "collectionFormat": null,
+                        "default": "",
+                        "format": null
+                    }
+                ],
+                "responses": {
+
+                },
+                "security": [
+
+                ],
+                "externalDocs": null,
+                "deprecated": null
+            },
+            "post": null,
+            "put": {
+                "tags": null,
+                "summary": "Updated user",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "updateUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "name that need to be deleted",
+                        "required": true,
+                        "type": "string",
+                        "items": null,
+                        "collectionFormat": null,
+                        "default": "",
+                        "format": null
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Updated user object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+
+                },
+                "security": [
+
+                ],
+                "externalDocs": null,
+                "deprecated": null
+            },
+            "delete": {
+                "tags": null,
+                "summary": "Delete user",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "deleteUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "The name that needs to be deleted",
+                        "required": true,
+                        "type": "string",
+                        "items": null,
+                        "collectionFormat": null,
+                        "default": "",
+                        "format": null
+                    }
+                ],
+                "responses": {
+
+                },
+                "security": [
+
+                ],
+                "externalDocs": null,
+                "deprecated": null
+            },
             "options": null,
             "patch": null,
             "parameters": null
@@ -2662,58 +684,24 @@
 
     },
     "definitions": {
-        "DateTimeField": {
+        "User": {
             "required": null,
             "properties": {
-                "leapDurationField": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "leapDurationField",
-                    "readOnly": null,
-                    "$ref": "#/definitions/DurationField"
-                },
-                "maximumValue": {
+                "id": {
                     "type": "integer",
-                    "format": "int32",
+                    "format": "int64",
                     "example": null,
                     "xml": null,
                     "position": null,
                     "description": null,
-                    "title": "maximumValue",
+                    "title": "id",
                     "readOnly": null,
                     "minimum": null,
                     "maximum": null,
                     "exclusiveMinimum": null,
                     "exclusiveMaximum": null
                 },
-                "durationField": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "durationField",
-                    "readOnly": null,
-                    "$ref": "#/definitions/DurationField"
-                },
-                "minimumValue": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "minimumValue",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "name": {
+                "lastName": {
                     "type": "string",
                     "format": null,
                     "example": null,
@@ -2727,45 +715,103 @@
                     "pattern": null,
                     "enum": null
                 },
-                "supported": {
-                    "type": "boolean",
+                "phone": {
+                    "type": "string",
                     "format": null,
                     "example": null,
                     "xml": null,
                     "position": null,
                     "description": null,
-                    "title": "supported",
-                    "readOnly": null
-                },
-                "rangeDurationField": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "rangeDurationField",
+                    "title": null,
                     "readOnly": null,
-                    "$ref": "#/definitions/DurationField"
+                    "minLength": null,
+                    "maxLength": null,
+                    "pattern": null,
+                    "enum": null
                 },
-                "type": {
+                "username": {
+                    "type": "string",
                     "format": null,
                     "example": null,
                     "xml": null,
                     "position": null,
                     "description": null,
-                    "title": "type",
+                    "title": null,
                     "readOnly": null,
-                    "$ref": "#/definitions/DateTimeFieldType"
+                    "minLength": null,
+                    "maxLength": null,
+                    "pattern": null,
+                    "enum": null
                 },
-                "lenient": {
-                    "type": "boolean",
+                "email": {
+                    "type": "string",
                     "format": null,
                     "example": null,
                     "xml": null,
                     "position": null,
                     "description": null,
-                    "title": "lenient",
-                    "readOnly": null
+                    "title": null,
+                    "readOnly": null,
+                    "minLength": null,
+                    "maxLength": null,
+                    "pattern": null,
+                    "enum": null
+                },
+                "userStatus": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": "userStatus",
+                    "readOnly": null,
+                    "minimum": null,
+                    "maximum": null,
+                    "exclusiveMinimum": null,
+                    "exclusiveMaximum": null
+                },
+                "firstName": {
+                    "type": "string",
+                    "format": null,
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": null,
+                    "readOnly": null,
+                    "minLength": null,
+                    "maxLength": null,
+                    "pattern": null,
+                    "enum": null
+                },
+                "identifier": {
+                    "type": "string",
+                    "format": null,
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": null,
+                    "readOnly": null,
+                    "minLength": null,
+                    "maxLength": null,
+                    "pattern": null,
+                    "enum": null
+                },
+                "password": {
+                    "type": "string",
+                    "format": null,
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": null,
+                    "readOnly": null,
+                    "minLength": null,
+                    "maxLength": null,
+                    "pattern": null,
+                    "enum": null
                 }
             },
             "externalDocs": null,
@@ -2776,12 +822,12 @@
             "discriminator": "",
             "xml": null
         },
-        "Biz": {
+        "Category": {
             "required": null,
             "properties": {
                 "id": {
                     "type": "integer",
-                    "format": "int32",
+                    "format": "int64",
                     "example": null,
                     "xml": null,
                     "position": null,
@@ -2806,54 +852,6 @@
                     "maxLength": null,
                     "pattern": null,
                     "enum": null
-                },
-                "taxDate": {
-                    "type": "string",
-                    "format": "date-time",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "taxDate",
-                    "readOnly": null
-                },
-                "inception": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "inception",
-                    "readOnly": null,
-                    "$ref": "#/definitions/LocalDate"
-                },
-                "owner": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "businessType": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
                 }
             },
             "externalDocs": null,
@@ -2864,18 +862,134 @@
             "discriminator": "",
             "xml": null
         },
-        "Entry\u00abstring,List\u00abstring\u00bb\u00bb": {
+        "Pet": {
             "required": null,
             "properties": {
-                "key": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": "id",
+                    "readOnly": null,
+                    "minimum": null,
+                    "maximum": null,
+                    "exclusiveMinimum": null,
+                    "exclusiveMaximum": null
+                },
+                "tags": {
                     "format": null,
                     "example": null,
                     "xml": null,
                     "position": null,
                     "description": null,
-                    "title": "key",
+                    "title": "tags",
                     "readOnly": null,
                     "$ref": "#/definitions/List"
+                },
+                "category": {
+                    "format": null,
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": "category",
+                    "readOnly": null,
+                    "$ref": "#/definitions/Category"
+                },
+                "status": {
+                    "type": "string",
+                    "format": null,
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": null,
+                    "readOnly": null,
+                    "minLength": null,
+                    "maxLength": null,
+                    "pattern": null,
+                    "enum": null
+                },
+                "name": {
+                    "type": "string",
+                    "format": null,
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": null,
+                    "readOnly": null,
+                    "minLength": null,
+                    "maxLength": null,
+                    "pattern": null,
+                    "enum": null
+                },
+                "photoUrls": {
+                    "format": null,
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": "photoUrls",
+                    "readOnly": null,
+                    "$ref": "#/definitions/List"
+                },
+                "identifier": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": "identifier",
+                    "readOnly": null,
+                    "minimum": null,
+                    "maximum": null,
+                    "exclusiveMinimum": null,
+                    "exclusiveMaximum": null
+                }
+            },
+            "externalDocs": null,
+            "type": null,
+            "description": "",
+            "example": "",
+            "additionalProperties": null,
+            "discriminator": "",
+            "xml": null
+        },
+        "Tag": {
+            "required": null,
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": "id",
+                    "readOnly": null,
+                    "minimum": null,
+                    "maximum": null,
+                    "exclusiveMinimum": null,
+                    "exclusiveMaximum": null
+                },
+                "name": {
+                    "type": "string",
+                    "format": null,
+                    "example": null,
+                    "xml": null,
+                    "position": null,
+                    "description": null,
+                    "title": null,
+                    "readOnly": null,
+                    "minLength": null,
+                    "maxLength": null,
+                    "pattern": null,
+                    "enum": null
                 }
             },
             "externalDocs": null,
@@ -2897,984 +1011,48 @@
             "discriminator": "",
             "xml": null
         },
-        "LocalDateTime": {
+        "Order": {
             "required": null,
             "properties": {
-                "centuryOfEra": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "centuryOfEra",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "era": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "era",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "hourOfDay": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "hourOfDay",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "dayOfYear": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "dayOfYear",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "yearOfEra": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "yearOfEra",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "values": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "values",
-                    "readOnly": null,
-                    "$ref": "#/definitions/Array"
-                },
-                "minuteOfHour": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "minuteOfHour",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "chronology": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "chronology",
-                    "readOnly": null,
-                    "$ref": "#/definitions/Chronology"
-                },
-                "dayOfMonth": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "dayOfMonth",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "monthOfYear": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "monthOfYear",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "weekyear": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "weekyear",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "year": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "year",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "yearOfCentury": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "yearOfCentury",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "fieldTypes": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "fieldTypes",
-                    "readOnly": null,
-                    "$ref": "#/definitions/Array"
-                },
-                "dayOfWeek": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "dayOfWeek",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "weekOfWeekyear": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "weekOfWeekyear",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "fields": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "fields",
-                    "readOnly": null,
-                    "$ref": "#/definitions/Array"
-                },
-                "millisOfDay": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "millisOfDay",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "millisOfSecond": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "millisOfSecond",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "secondOfMinute": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "secondOfMinute",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "DurationField": {
-            "required": null,
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "supported": {
-                    "type": "boolean",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "supported",
-                    "readOnly": null
-                },
-                "type": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "type",
-                    "readOnly": null,
-                    "$ref": "#/definitions/DurationFieldType"
-                },
-                "precise": {
-                    "type": "boolean",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "precise",
-                    "readOnly": null
-                },
-                "unitMillis": {
+                "id": {
                     "type": "integer",
                     "format": "int64",
                     "example": null,
                     "xml": null,
                     "position": null,
                     "description": null,
-                    "title": "unitMillis",
+                    "title": "id",
                     "readOnly": null,
                     "minimum": null,
                     "maximum": null,
                     "exclusiveMinimum": null,
                     "exclusiveMaximum": null
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "View": {
-            "required": null,
-            "properties": {
-                "contentType": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "Example": {
-            "required": null,
-            "properties": {
-                "nestedType": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "nestedType",
-                    "readOnly": null,
-                    "$ref": "#/definitions/NestedType"
                 },
-                "propertyWithNoSetterMethod": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "enumType": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "foo": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "bar": {
+                "petId": {
                     "type": "integer",
-                    "format": "int32",
+                    "format": "int64",
                     "example": null,
                     "xml": null,
                     "position": null,
                     "description": null,
-                    "title": "bar",
+                    "title": "petId",
                     "readOnly": null,
                     "minimum": null,
                     "maximum": null,
                     "exclusiveMinimum": null,
                     "exclusiveMaximum": null
                 },
-                "allCapsSet": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "allCapsSet",
-                    "readOnly": null,
-                    "$ref": "#/definitions/Set"
-                },
-                "annotatedEnumType": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "localDateTime": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "localDateTime",
-                    "readOnly": null,
-                    "$ref": "#/definitions/LocalDateTime"
-                },
-                "parentBeanProperty": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "DateTimeZone": {
-            "required": null,
-            "properties": {
-                "fixed": {
+                "complete": {
                     "type": "boolean",
                     "format": null,
                     "example": null,
                     "xml": null,
                     "position": null,
                     "description": null,
-                    "title": "fixed",
-                    "readOnly": null
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "Pet": {
-            "required": null,
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "age": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "age",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "name": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "DurationFieldType": {
-            "required": null,
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "LocalDate": {
-            "required": null,
-            "properties": {
-                "centuryOfEra": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "centuryOfEra",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "era": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "era",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "dayOfYear": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "dayOfYear",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "yearOfEra": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "yearOfEra",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "values": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "values",
-                    "readOnly": null,
-                    "$ref": "#/definitions/Array"
-                },
-                "chronology": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "chronology",
-                    "readOnly": null,
-                    "$ref": "#/definitions/Chronology"
-                },
-                "dayOfMonth": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "dayOfMonth",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "monthOfYear": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "monthOfYear",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "weekyear": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "weekyear",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "year": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "year",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "yearOfCentury": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "yearOfCentury",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "fieldTypes": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "fieldTypes",
-                    "readOnly": null,
-                    "$ref": "#/definitions/Array"
-                },
-                "dayOfWeek": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "dayOfWeek",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "weekOfWeekyear": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "weekOfWeekyear",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "fields": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "fields",
-                    "readOnly": null,
-                    "$ref": "#/definitions/Array"
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "Entry\u00abstring,Pet\u00bb": {
-            "required": null,
-            "properties": {
-                "key": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "key",
-                    "readOnly": null,
-                    "$ref": "#/definitions/Pet"
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "ModelAndView": {
-            "required": null,
-            "properties": {
-                "model": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "model",
-                    "readOnly": null,
-                    "$ref": "#/definitions/object"
-                },
-                "viewName": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "empty": {
-                    "type": "boolean",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "empty",
+                    "title": "complete",
                     "readOnly": null
                 },
-                "modelMap": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "modelMap",
-                    "readOnly": null,
-                    "$ref": "#/definitions/ModelMap"
-                },
-                "view": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "view",
-                    "readOnly": null,
-                    "$ref": "#/definitions/View"
-                },
-                "reference": {
-                    "type": "boolean",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "reference",
-                    "readOnly": null
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "NestedType": {
-            "required": null,
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "ModelMap": {
-            "required": null,
-            "properties": {
-                "empty": {
-                    "type": "boolean",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "empty",
-                    "readOnly": null
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "Chronology": {
-            "required": null,
-            "properties": {
-                "zone": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "zone",
-                    "readOnly": null,
-                    "$ref": "#/definitions/DateTimeZone"
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "FancyPet": {
-            "required": null,
-            "properties": {
-                "id": {
+                "status": {
                     "type": "string",
                     "format": null,
                     "example": null,
@@ -3888,79 +1066,43 @@
                     "pattern": null,
                     "enum": null
                 },
-                "age": {
+                "quantity": {
                     "type": "integer",
                     "format": "int32",
                     "example": null,
                     "xml": null,
                     "position": null,
                     "description": null,
-                    "title": "age",
+                    "title": "quantity",
                     "readOnly": null,
                     "minimum": null,
                     "maximum": null,
                     "exclusiveMinimum": null,
                     "exclusiveMaximum": null
                 },
-                "name": {
+                "shipDate": {
                     "type": "string",
-                    "format": null,
+                    "format": "date-time",
                     "example": null,
                     "xml": null,
                     "position": null,
                     "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                }
-            },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "DateTimeFieldType": {
-            "required": null,
-            "properties": {
-                "rangeDurationType": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "rangeDurationType",
-                    "readOnly": null,
-                    "$ref": "#/definitions/DurationFieldType"
+                    "title": "shipDate",
+                    "readOnly": null
                 },
-                "name": {
-                    "type": "string",
-                    "format": null,
+                "identifier": {
+                    "type": "integer",
+                    "format": "int64",
                     "example": null,
                     "xml": null,
                     "position": null,
                     "description": null,
-                    "title": null,
+                    "title": "identifier",
                     "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "durationType": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "durationType",
-                    "readOnly": null,
-                    "$ref": "#/definitions/DurationFieldType"
+                    "minimum": null,
+                    "maximum": null,
+                    "exclusiveMinimum": null,
+                    "exclusiveMaximum": null
                 }
             },
             "externalDocs": null,

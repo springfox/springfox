@@ -25,7 +25,7 @@ import static org.skyscreamer.jsonassert.JSONCompareMode.*
 
 @ContextConfiguration(
         loader = SpringApplicationContextLoader,
-        classes = Config)
+        classes = SwaggerV1_2Spec.Config)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])

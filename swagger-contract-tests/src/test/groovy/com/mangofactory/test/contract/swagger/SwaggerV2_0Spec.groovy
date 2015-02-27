@@ -4,6 +4,8 @@ import com.mangofactory.documentation.spring.web.plugins.DocumentationConfigurer
 import com.mangofactory.documentation.swagger2.annotations.EnableSwagger2
 import groovy.json.JsonOutput
 import groovyx.net.http.RESTClient
+import org.skyscreamer.jsonassert.JSONAssert
+import org.skyscreamer.jsonassert.JSONCompareMode
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
@@ -19,7 +21,8 @@ import spock.lang.Specification
 
 import static groovyx.net.http.ContentType.*
 
-@ContextConfiguration(loader = SpringApplicationContextLoader, classes = Config)
+@ContextConfiguration(loader = SpringApplicationContextLoader,
+        classes = SwaggerV2_0Spec.Config)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
@@ -36,7 +39,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     when:
       def response = http.get(
               path: '/v2/api-docs',
-//              query: [group: 'petstore'],
+              query: [group: 'petstore'],
               contentType: TEXT, //Allows to access the raw response body
               headers: [Accept: 'application/json']
       )
@@ -44,9 +47,8 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
       String raw = response.data.text
       String actual = JsonOutput.prettyPrint(raw)
       response.status == 200
-//      println(actual)
 
-//      JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
+      JSONAssert.assertEquals(contract, actual, JSONCompareMode.NON_EXTENSIBLE)
   }
 
   @Configuration
