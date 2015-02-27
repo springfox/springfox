@@ -1,6 +1,11 @@
 package com.mangofactory.petstore.repository;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MapBackedRepository<K, V extends Identifiable<K>> {
@@ -23,6 +28,12 @@ public class MapBackedRepository<K, V extends Identifiable<K>> {
   }
 
   public V first() {
-    return service.entrySet().iterator().next().getValue();
+    return Iterables.getFirst(service.values(), null);
+  }
+  
+  public List<V> where(Predicate<V> criteria) {
+    return FluentIterable
+            .from(service.values())
+            .filter(criteria).toList();
   }
 }

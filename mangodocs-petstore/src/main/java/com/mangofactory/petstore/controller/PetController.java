@@ -30,6 +30,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
+import static com.mangofactory.petstore.model.Pets.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -41,12 +44,12 @@ public class PetController {
   PetRepository petData = new PetRepository();
 
   static class PetRepository extends MapBackedRepository<Long, Pet> {
-    public Pet findPetByStatus(String status) {
-      return first();
+    public List<Pet> findPetByStatus(String status) {
+      return where(statusIs(status));
     }
 
-    public Pet findPetByTags(String tags) {
-      return first();
+    public List<Pet> findPetByTags(String tags) {
+      return where(tagsContain(tags));
     }
   }
 
@@ -98,7 +101,7 @@ public class PetController {
           response = Pet.class,
           responseContainer = "List")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid status value")})
-  public ResponseEntity<Pet> findPetsByStatus(
+  public ResponseEntity<List<Pet>> findPetsByStatus(
           @ApiParam(value = "Status values that need to be considered for filter",
                   required = true,
                   defaultValue = "available",
@@ -116,7 +119,7 @@ public class PetController {
           responseContainer = "List")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid tag value")})
   @Deprecated
-  public ResponseEntity<Pet> findPetsByTags(
+  public ResponseEntity<List<Pet>> findPetsByTags(
           @ApiParam(
                   value = "Tags to filter by",
                   required = true,

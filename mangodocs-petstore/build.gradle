@@ -1,4 +1,5 @@
 dependencies {
   compile libs.spring
   compile libs.swagger2Core
+  compile "com.google.guava:guava:${guava}"
 }
