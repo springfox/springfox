@@ -70,7 +70,7 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "consumes", source = "consumes"),
           @Mapping(target = "parameters", source = "parameters"),
           @Mapping(target = "security", source = "authorizations"),
-          @Mapping(target = "responses", source = "responseMessages"),
+          @Mapping(target = "responses", source= "responseMessages"),
           @Mapping(target = "tags", ignore = true),
           @Mapping(target = "vendorExtensions", ignore = true),
           @Mapping(target = "externalDocs", ignore = true)
@@ -120,6 +120,7 @@ public abstract class ServiceModelToSwagger2Mapper {
               .schema(responseProperty);
       response.setExamples(Maps.<String, String>newHashMap());
       response.setHeaders(Maps.<String, Property>newHashMap());
+      responses.put(String.valueOf(responseMessage.getCode()), response);
     }
     return responses;
   }
