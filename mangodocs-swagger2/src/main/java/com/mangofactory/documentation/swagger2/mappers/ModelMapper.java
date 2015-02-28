@@ -99,6 +99,7 @@ public abstract class ModelMapper {
   }
 
 
+  // CHECKSTYLE:OFF
   static Property property(String typeName) {
     if (isOfType(typeName, "int")) {
       return new IntegerProperty();
@@ -143,6 +144,7 @@ public abstract class ModelMapper {
     }
     return new RefProperty(typeName);
   }
+  // CHECKSTYLE:ON
 
   private static boolean isOfType(String initialType, String ofType) {
     return initialType.equalsIgnoreCase(ofType);
