@@ -6,32 +6,43 @@
         "title": "Api Documentation",
         "termsOfService": "urn:tos",
         "contact": {
-            "name": "Contact Email",
-            "url": null,
-            "email": null
+            "name": "Contact Email"
         },
         "license": {
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0"
         }
     },
-    "host": "/",
+    "host": "localhost:8080",
     "basePath": "/",
-    "schemes": [
-
+    "tags": [
+        {
+            "name": "user",
+            "description": "Operations about user"
+        },
+        {
+            "name": "store",
+            "description": "Access to Petstore orders",
+            "externalDocs": {
+                "description": "Find out more",
+                "url": "http://swagger.io"
+            }
+        },
+        {
+            "name": "pet",
+            "description": "Everything about your Pets",
+            "externalDocs": {
+                "description": "Find out more",
+                "url": "http://swagger.io"
+            }
+        }
     ],
-    "consumes": [
-
-    ],
-    "produces": [
-        "application/json",
-        "application/xml"
-    ],
+    "schemes": ["http"],
     "paths": {
         "/api/pet": {
             "get": null,
             "post": {
-                "tags": null,
+                "tags": ["pet"],
                 "summary": "Add a new pet to the store",
                 "description": "addPet",
                 "operationId": "addPet",
@@ -47,7 +58,7 @@
                         "in": "body",
                         "name": "body",
                         "description": "Pet object that needs to be added to the store",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "$ref": "#/definitions/Pet"
                         }
@@ -55,96 +66,20 @@
                 ],
                 "responses": {
                     "405": {
-                        "description": "Invalid input",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "minLength": null,
-                            "maxLength": null,
-                            "pattern": null,
-                            "enum": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "201": {
-                        "description": "Created",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Invalid input"
                     }
                 },
                 "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets"
+                        ]
+                    }
+                ]
             },
             "put": {
-                "tags": null,
+                "tags": ["pet"],
                 "summary": "Update an existing pet",
                 "description": "updatePet",
                 "operationId": "updatePet",
@@ -160,7 +95,7 @@
                         "in": "body",
                         "name": "body",
                         "description": "Pet object that needs to be added to the store",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "$ref": "#/definitions/Pet"
                         }
@@ -168,130 +103,28 @@
                 ],
                 "responses": {
                     "405": {
-                        "description": "Validation exception",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Validation exception"
                     },
                     "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "minLength": null,
-                            "maxLength": null,
-                            "pattern": null,
-                            "enum": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "201": {
-                        "description": "Created",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Pet not found"
                     },
                     "400": {
-                        "description": "Invalid ID supplied",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Invalid ID supplied"
                     }
                 },
                 "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets"
+                        ]
+                    }
+                ]
+            }
         },
         "/api/pet/findByStatus": {
             "get": {
-                "tags": null,
+                "tags": ["pet"],
                 "summary": "Finds Pets by status",
                 "description": "Multiple status values can be provided with comma seperated strings",
                 "operationId": "findPetsByStatus",
@@ -307,111 +140,40 @@
                         "name": "status",
                         "in": "query",
                         "description": "Status values that need to be considered for filter",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "available",
-                        "format": null
+                        "required": false,
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "collectionFormat": "multi",
+                        "default": "available"
                     }
                 ],
                 "responses": {
-                    "404": {
-                        "description": "Not Found",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "uniqueItems": null,
                             "items": {
-                                "format": null,
-                                "example": null,
-                                "xml": null,
-                                "position": null,
-                                "description": null,
-                                "title": "Pet",
-                                "readOnly": null,
                                 "$ref": "#/definitions/Pet"
                             }
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
                         }
                     },
                     "400": {
-                        "description": "Invalid status value",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Invalid status value"
                     }
                 },
                 "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets"
+                        ]
+                    }
+                ]
+            }
         },
         "/api/pet/findByTags": {
             "get": {
-                "tags": null,
+                "tags": ["pet"],
                 "summary": "Finds Pets by tags",
                 "description": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
                 "operationId": "findPetsByTags",
@@ -427,111 +189,39 @@
                         "name": "tags",
                         "in": "query",
                         "description": "Tags to filter by",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
+                        "required": false,
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "collectionFormat": "multi"
                     }
                 ],
                 "responses": {
-                    "404": {
-                        "description": "Not Found",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "uniqueItems": null,
                             "items": {
-                                "format": null,
-                                "example": null,
-                                "xml": null,
-                                "position": null,
-                                "description": null,
-                                "title": "Pet",
-                                "readOnly": null,
                                 "$ref": "#/definitions/Pet"
                             }
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
                         }
                     },
                     "400": {
-                        "description": "Invalid tag value",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Invalid tag value"
                     }
                 },
                 "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": true
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets"
+                        ]
+                    }
+                ]
+            }
         },
         "/api/pet/{petId}": {
             "get": {
-                "tags": null,
+                "tags": ["pet"],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
                 "operationId": "getPetById",
@@ -548,109 +238,37 @@
                         "in": "path",
                         "description": "ID of pet that needs to be fetched",
                         "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
+                        "type": "string"
                     }
                 ],
                 "responses": {
                     "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Pet not found"
                     },
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Pet",
-                            "readOnly": null,
                             "$ref": "#/definitions/Pet"
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
                         }
                     },
                     "400": {
-                        "description": "Invalid ID supplied",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Invalid ID supplied"
                     }
                 },
                 "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
+                    {"api_key": []},
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets"
+                        ]
+                    }
+                ]
+            }
         },
         "/api/store/order": {
-            "get": null,
             "post": {
-                "tags": null,
+                "tags": ["store"],
                 "summary": "Place an order for a pet",
                 "description": "placeOrder",
                 "operationId": "placeOrder",
@@ -665,111 +283,26 @@
                         "in": "body",
                         "name": "body",
                         "description": "order placed for purchasing the pet",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "$ref": "#/definitions/Order"
                         }
                     }
                 ],
                 "responses": {
-                    "404": {
-                        "description": "Not Found",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "minLength": null,
-                            "maxLength": null,
-                            "pattern": null,
-                            "enum": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
+                            "$ref": "#/definitions/Order"
                         }
                     },
-                    "201": {
-                        "description": "Created",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid Order",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    }
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
+                    "400": {"description": "Invalid Order"}
+                }
+            }
         },
         "/api/store/order/{orderId}": {
             "get": {
-                "tags": null,
+                "tags": ["store"],
                 "summary": "Find purchase order by ID",
                 "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions",
                 "operationId": "getOrderById",
@@ -785,102 +318,26 @@
                         "in": "path",
                         "description": "ID of pet that needs to be fetched",
                         "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
+                        "type": "string"
                     }
                 ],
                 "responses": {
                     "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Order not found"
                     },
                     "200": {
-                        "description": "OK",
+                        "description": "successful operation",
                         "schema": {
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Order",
-                            "readOnly": null,
                             "$ref": "#/definitions/Order"
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
                         }
                     },
                     "400": {
-                        "description": "Invalid ID supplied",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Invalid ID supplied"
                     }
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
+                }
             },
-            "post": null,
-            "put": null,
             "delete": {
-                "tags": null,
+                "tags": ["store"],
                 "summary": "Delete purchase order by ID",
                 "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors",
                 "operationId": "deleteOrder",
@@ -896,120 +353,23 @@
                         "in": "path",
                         "description": "ID of the order that needs to be deleted",
                         "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
+                        "type": "string"
                     }
                 ],
                 "responses": {
-                    "204": {
-                        "description": "No Content",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
                     "404": {
-                        "description": "Order not found",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "minLength": null,
-                            "maxLength": null,
-                            "pattern": null,
-                            "enum": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Order not found"
                     },
                     "400": {
-                        "description": "Invalid ID supplied",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Invalid ID supplied"
                     }
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "options": null,
-            "patch": null,
-            "parameters": null
+                }
+            }
         },
         "/api/user": {
             "get": null,
             "post": {
-                "tags": null,
+                "tags": ["user"],
                 "summary": "Create user",
                 "description": "This can only be done by the logged in user.",
                 "operationId": "createUser",
@@ -1024,89 +384,23 @@
                         "in": "body",
                         "name": "body",
                         "description": "Created user object",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "$ref": "#/definitions/User"
                         }
                     }
                 ],
                 "responses": {
-                    "404": {
-                        "description": "Not Found",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "User",
-                            "readOnly": null,
-                            "$ref": "#/definitions/User"
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "201": {
-                        "description": "Created",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                    "default": {
+                        "description": "successful operation"
                     }
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
+                }
+            }
         },
         "/api/user/createWithArray": {
             "get": null,
             "post": {
-                "tags": null,
+                "tags": ["user"],
                 "summary": "Creates list of users with given input array",
                 "description": "createUsersWithArrayInput",
                 "operationId": "createUsersWithArrayInput",
@@ -1121,103 +415,26 @@
                         "in": "body",
                         "name": "body",
                         "description": "List of user object",
-                        "required": true,
+                        "required": false,
                         "schema": {
-                            "externalDocs": null,
-                            "properties": null,
                             "type": "array",
-                            "description": null,
                             "items": {
-                                "format": null,
-                                "example": null,
-                                "xml": null,
-                                "position": null,
-                                "description": null,
-                                "title": "User",
-                                "readOnly": null,
                                 "$ref": "#/definitions/User"
-                            },
-                            "example": null
+                            }
                         }
                     }
                 ],
                 "responses": {
-                    "404": {
-                        "description": "Not Found",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "User",
-                            "readOnly": null,
-                            "$ref": "#/definitions/User"
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "201": {
-                        "description": "Created",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                    "default": {
+                        "description": "OK"
                     }
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
+                }
+            }
         },
         "/api/user/createWithList": {
             "get": null,
             "post": {
-                "tags": null,
+                "tags": ["user"],
                 "summary": "Creates list of users with given input array",
                 "description": "createUsersWithListInput",
                 "operationId": "createUsersWithListInput",
@@ -1232,106 +449,25 @@
                         "in": "body",
                         "name": "body",
                         "description": "List of user object",
-                        "required": true,
+                        "required": false,
                         "schema": {
-                            "externalDocs": null,
-                            "properties": null,
                             "type": "array",
-                            "description": null,
                             "items": {
-                                "format": null,
-                                "example": null,
-                                "xml": null,
-                                "position": null,
-                                "description": null,
-                                "title": "User",
-                                "readOnly": null,
                                 "$ref": "#/definitions/User"
-                            },
-                            "example": null
+                            }
                         }
                     }
                 ],
                 "responses": {
-                    "404": {
-                        "description": "Not Found",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "minLength": null,
-                            "maxLength": null,
-                            "pattern": null,
-                            "enum": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "201": {
-                        "description": "Created",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                    "default": {
+                        "description": "OK"
                     }
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
+                }
+            }
         },
         "/api/user/login": {
             "get": {
-                "tags": null,
+                "tags": ["user"],
                 "summary": "Logs user into the system",
                 "description": "loginUser",
                 "operationId": "loginUser",
@@ -1346,115 +482,33 @@
                         "name": "username",
                         "in": "query",
                         "description": "The user name for login",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
+                        "required": false,
+                        "type": "string"
                     },
                     {
                         "name": "password",
                         "in": "query",
                         "description": "The password for login in clear text",
-                        "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
+                        "required": false,
+                        "type": "string"
                     }
                 ],
                 "responses": {
-                    "404": {
-                        "description": "Not Found",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "minLength": null,
-                            "maxLength": null,
-                            "pattern": null,
-                            "enum": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
+                            "type": "string"
                         }
                     },
                     "400": {
-                        "description": "Invalid username/password supplied",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Invalid username/password supplied"
                     }
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
+                }
+            }
         },
         "/api/user/logout": {
             "get": {
-                "tags": null,
+                "tags": ["user"],
                 "summary": "Logs out current logged in user session",
                 "description": "logoutUser",
                 "operationId": "logoutUser",
@@ -1464,80 +518,16 @@
                 "produces": [
                     "application/json"
                 ],
-                "parameters": [
-
-                ],
                 "responses": {
-                    "404": {
-                        "description": "Not Found",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "minLength": null,
-                            "maxLength": null,
-                            "pattern": null,
-                            "enum": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                    "default": {
+                        "description": "successful operation"
                     }
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "post": null,
-            "put": null,
-            "delete": null,
-            "options": null,
-            "patch": null,
-            "parameters": null
+                }
+            }
         },
         "/api/user/{username}": {
             "get": {
-                "tags": null,
+                "tags": ["user"],
                 "summary": "Get user by user name",
                 "description": "getUserByName",
                 "operationId": "getUserByName",
@@ -1553,101 +543,26 @@
                         "in": "path",
                         "description": "The name that needs to be fetched. Use user1 for testing. ",
                         "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
+                        "type": "string"
                     }
                 ],
                 "responses": {
                     "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "User not found"
                     },
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "User",
-                            "readOnly": null,
                             "$ref": "#/definitions/User"
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
                         }
                     },
                     "400": {
-                        "description": "Invalid username supplied",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Invalid username supplied"
                     }
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
+                }
             },
-            "post": null,
             "put": {
-                "tags": null,
+                "tags": ["user"],
                 "summary": "Updated user",
                 "description": "This can only be done by the logged in user.",
                 "operationId": "updateUser",
@@ -1663,17 +578,13 @@
                         "in": "path",
                         "description": "name that need to be deleted",
                         "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
+                        "type": "string"
                     },
                     {
                         "in": "body",
                         "name": "body",
                         "description": "Updated user object",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "$ref": "#/definitions/User"
                         }
@@ -1681,105 +592,15 @@
                 ],
                 "responses": {
                     "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "minLength": null,
-                            "maxLength": null,
-                            "pattern": null,
-                            "enum": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "201": {
-                        "description": "Created",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "User not found"
                     },
                     "400": {
-                        "description": "Invalid user supplied",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Invalid user supplied"
                     }
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
+                }
             },
             "delete": {
-                "tags": null,
+                "tags": ["user"],
                 "summary": "Delete user",
                 "description": "This can only be done by the logged in user.",
                 "operationId": "deleteUser",
@@ -1795,553 +616,193 @@
                         "in": "path",
                         "description": "The name that needs to be deleted",
                         "required": true,
-                        "type": "string",
-                        "items": null,
-                        "collectionFormat": null,
-                        "default": "",
-                        "format": null
+                        "type": "string"
                     }
                 ],
                 "responses": {
-                    "204": {
-                        "description": "No Content",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
                     "404": {
-                        "description": "User not found",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": null,
-                            "readOnly": null,
-                            "minLength": null,
-                            "maxLength": null,
-                            "pattern": null,
-                            "enum": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "User not found"
                     },
                     "400": {
-                        "description": "Invalid username supplied",
-                        "schema": {
-                            "type": "object",
-                            "format": null,
-                            "example": null,
-                            "xml": null,
-                            "position": null,
-                            "description": null,
-                            "title": "Void",
-                            "readOnly": null
-                        },
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": null,
-                        "examples": {
-
-                        },
-                        "headers": {
-
-                        }
+                        "description": "Invalid username supplied"
                     }
-                },
-                "security": [
-
-                ],
-                "externalDocs": null,
-                "deprecated": null
-            },
-            "options": null,
-            "patch": null,
-            "parameters": null
+                }
+            }
         }
     },
     "securityDefinitions": {
-
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
+        }
     },
     "definitions": {
         "User": {
-            "required": null,
             "properties": {
                 "id": {
                     "type": "integer",
-                    "format": "int64",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "id",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "lastName": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "phone": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
+                    "format": "int64"
                 },
                 "username": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
                 },
                 "email": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
                 },
                 "userStatus": {
                     "type": "integer",
                     "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "userStatus",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "firstName": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "identifier": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "password": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
+                    "description": "User Status"
                 }
             },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
+            "xml": {
+                "name": "User"
+            }
+        },
+        "ApiResponse": {
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            },
+            "xml": {
+                "name": "##default"
+            }
         },
         "Category": {
-            "required": null,
             "properties": {
                 "id": {
                     "type": "integer",
-                    "format": "int64",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "id",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
+                    "format": "int64"
                 },
                 "name": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
+                    "type": "string"
                 }
             },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
+            "xml": {
+                "name": "Category"
+            }
         },
         "Pet": {
-            "required": null,
+            "required": [
+                "name",
+                "photoUrls"
+            ],
             "properties": {
                 "id": {
                     "type": "integer",
-                    "format": "int64",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "id",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
+                    "format": "int64"
+                },
+                "category": {"$ref": "#/definitions/Category"},
+                "name": {
+                    "type": "string",
+                    "example": "doggie"
+                },
+                "photoUrls": {
+                    "type": "array",
+                    "xml": {
+                        "name": "photoUrl",
+                        "wrapped": true
+                    },
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "tags": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "tags",
-                    "readOnly": null,
-                    "$ref": "#/definitions/List"
-                },
-                "category": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "category",
-                    "readOnly": null,
-                    "$ref": "#/definitions/Category"
+                    "type": "array",
+                    "xml": {
+                        "name": "tag",
+                        "wrapped": true
+                    },
+                    "items": {
+                        "$ref": "#/definitions/Tag"
+                    }
                 },
                 "status": {
                     "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "name": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                },
-                "photoUrls": {
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "photoUrls",
-                    "readOnly": null,
-                    "$ref": "#/definitions/List"
-                },
-                "identifier": {
-                    "type": "integer",
-                    "format": "int64",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "identifier",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
+                    "description": "pet status in the store",
+                    "enum": [
+                        "available",
+                        "pending",
+                        "sold"
+                    ]
                 }
             },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
+            "xml": {"name": "Pet"}
         },
         "Tag": {
-            "required": null,
             "properties": {
                 "id": {
                     "type": "integer",
-                    "format": "int64",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "id",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
+                    "format": "int64"
                 },
-                "name": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
-                }
+                "name": {"type": "string"}
             },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
-        },
-        "Void": {
-            "required": null,
-            "properties": null,
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
+            "xml": {"name": "Tag"}
         },
         "Order": {
-            "required": null,
             "properties": {
                 "id": {
                     "type": "integer",
-                    "format": "int64",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "id",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
+                    "format": "int64"
                 },
                 "petId": {
                     "type": "integer",
-                    "format": "int64",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "petId",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
-                },
-                "complete": {
-                    "type": "boolean",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "complete",
-                    "readOnly": null
-                },
-                "status": {
-                    "type": "string",
-                    "format": null,
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": null,
-                    "readOnly": null,
-                    "minLength": null,
-                    "maxLength": null,
-                    "pattern": null,
-                    "enum": null
+                    "format": "int64"
                 },
                 "quantity": {
                     "type": "integer",
-                    "format": "int32",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "quantity",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
+                    "format": "int32"
                 },
                 "shipDate": {
                     "type": "string",
-                    "format": "date-time",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "shipDate",
-                    "readOnly": null
+                    "format": "date-time"
                 },
-                "identifier": {
-                    "type": "integer",
-                    "format": "int64",
-                    "example": null,
-                    "xml": null,
-                    "position": null,
-                    "description": null,
-                    "title": "identifier",
-                    "readOnly": null,
-                    "minimum": null,
-                    "maximum": null,
-                    "exclusiveMinimum": null,
-                    "exclusiveMaximum": null
+                "status": {
+                    "type": "string",
+                    "description": "Order Status",
+                    "enum": [
+                        "placed",
+                        "approved",
+                        "delivered"
+                    ]
+                },
+                "complete": {
+                    "type": "boolean"
                 }
             },
-            "externalDocs": null,
-            "type": null,
-            "description": "",
-            "example": "",
-            "additionalProperties": null,
-            "discriminator": "",
-            "xml": null
+            "xml": {
+                "name": "Order"
+            }
         }
-    },
-    "parameters": {
-
-    },
-    "externalDocs": null
+    }
 }
