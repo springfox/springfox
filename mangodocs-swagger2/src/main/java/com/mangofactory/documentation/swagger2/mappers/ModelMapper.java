@@ -61,8 +61,7 @@ public abstract class ModelMapper {
 
   public Property mapProperty(ModelProperty source) {
     String typeName = source.getModelRef().getType();
-    String name = source.getName();
-    return property(name, typeName);
+    return property(typeName);
   }
 
   static Property modelRefToProperty(ModelRef modelRef) {
@@ -101,24 +100,17 @@ public abstract class ModelMapper {
 
 
   static Property property(String typeName) {
-    return property(typeName, typeName); 
-  }
-  
-  static Property property(String name, String typeName) {
-    if (isOfType(typeName, "void")) {
-      return new ObjectProperty().title(name);
-    }
     if (isOfType(typeName, "int")) {
-      return new IntegerProperty().title(name);
+      return new IntegerProperty();
     }
     if (isOfType(typeName, "long")) {
-      return new LongProperty().title(name);
+      return new LongProperty();
     }
     if (isOfType(typeName, "float")) {
-      return new FloatProperty().title(name);
+      return new FloatProperty();
     }
     if (isOfType(typeName, "double")) {
-      return new DoubleProperty().title(name);
+      return new DoubleProperty();
     }
     if (isOfType(typeName, "string")) {
       return new StringProperty();
@@ -126,24 +118,30 @@ public abstract class ModelMapper {
     if (isOfType(typeName, "byte")) {
       StringProperty byteArray = new StringProperty();
       byteArray.setFormat("byte");
-      return byteArray.title(name);
+      return byteArray;
     }
     if (isOfType(typeName, "boolean")) {
-      return new BooleanProperty().title(name);
+      return new BooleanProperty();
     }
     if (isOfType(typeName, "Date")) {
-      return new DateProperty().title(name);
+      return new DateProperty();
     }
     if (isOfType(typeName, "DateTime") || isOfType(typeName, "date-time")) {
-      return new DateTimeProperty().title(name);
+      return new DateTimeProperty();
     }
     if (isOfType(typeName, "BigDecimal") || isOfType(typeName, "BigInteger")) {
-      return new DecimalProperty().title(name);
+      return new DecimalProperty();
     }
     if (isOfType(typeName, "UUID")) {
-      return new UUIDProperty().title(name);
+      return new UUIDProperty();
     }
-    return new RefProperty(typeName).title(name);
+    if (isOfType(typeName, "Void")) {
+      return null;
+    } 
+    if (isOfType(typeName, "Object")) {
+      return new ObjectProperty();
+    }
+    return new RefProperty(typeName);
   }
 
   private static boolean isOfType(String initialType, String ofType) {

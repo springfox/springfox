@@ -47,7 +47,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
       String raw = response.data.text
       String actual = JsonOutput.prettyPrint(raw)
       response.status == 200
-//      println(actual)
+      println(actual)
 
       JSONAssert.assertEquals(contract, actual, JSONCompareMode.NON_EXTENSIBLE)
   }
@@ -71,6 +71,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     public DocumentationConfigurer petstore() {
       return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
               .groupName("petstore")
+              .useDefaultResponseMessages(false)
               .includePatterns("/api/.*");
     }
   }

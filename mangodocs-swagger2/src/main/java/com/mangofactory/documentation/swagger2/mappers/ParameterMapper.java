@@ -81,9 +81,9 @@ public class ParameterMapper {
     if (paramModel.isCollection()) {
       toReturn.setCollectionFormat("csv");
       toReturn.setType("array");
-      toReturn.setItems(property(source.getName(), paramModel.getItemType()));
+      toReturn.setItems(property(paramModel.getItemType()));
     } else {
-      Property property = property(source.getName(), paramModel.getType());
+      Property property = property(paramModel.getType());
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());
     }
