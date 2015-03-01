@@ -1,16 +1,22 @@
 package com.mangofactory.documentation.spring.web.scanners;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.mangofactory.documentation.service.ApiListing;
 import com.mangofactory.documentation.service.ApiListingReference;
 import com.mangofactory.documentation.service.Group;
 import com.mangofactory.documentation.service.ResourceListing;
 import com.mangofactory.documentation.builders.GroupBuilder;
 import com.mangofactory.documentation.builders.ResourceListingBuilder;
+import com.mangofactory.documentation.service.Tag;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Component
 public class ApiGroupScanner {
@@ -32,9 +38,11 @@ public class ApiGroupScanner {
     List<ApiListingReference> apiListingReferences = result.getApiListingReferences();
     ApiListingScanningContext listingContext = new ApiListingScanningContext(context, result.getResourceGroupRequestMappings());
 
+    Map<String, ApiListing> apiListings = apiListingScanner.scan(listingContext);
     GroupBuilder group = new GroupBuilder()
             .name(context.getGroupName())
-            .apiListingsByResourceGroupName(apiListingScanner.scan(listingContext));
+            .apiListingsByResourceGroupName(apiListings)
+            .tags(toTags(apiListings));
 
     Collections.sort(apiListingReferences, context.getListingReferenceOrdering());
 
@@ -44,16 +52,27 @@ public class ApiGroupScanner {
             .authorizations(context.getAuthorizationTypes())
             .info(context.getApiInfo())
             .build();
-// Removed this as this was purely for logging
-//    log.info("Added a resource listing with ({}) api resources: ", apiListingReferences.size());
-//    for (ApiListingReference apiListingReference : apiListingReferences) {
-//      String path = apiListingReference.getDescription();
-//
-//      String prefix = nullToEmpty(path).startsWith("http") ? path : DOCUMENTATION_BASE_PATH;
-//      log.info("  {} at location: {}{}", path, prefix, apiListingReference.getPath());
-//    }
     group.resourceListing(resourceListing);
     return group.build();
+  }
+
+  private Set<Tag> toTags(Map<String, ApiListing> apiListings) {
+    if (apiListings == null) {
+      return null;
+    }
+    return FluentIterable
+            .from(apiListings.entrySet())
+            .transform(fromEntry())
+            .toSet();
+  }
+
+  private Function<Map.Entry<String, ApiListing>, Tag> fromEntry() {
+    return new Function<Map.Entry<String, ApiListing>, Tag>() {
+      @Override
+      public Tag apply(Map.Entry<String, ApiListing> input) {
+        return new Tag(input.getKey(), input.getValue().getDescription());
+      }
+    };
   }
 
 }

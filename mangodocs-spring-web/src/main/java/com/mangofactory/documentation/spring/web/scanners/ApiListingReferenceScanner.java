@@ -44,14 +44,14 @@ public class ApiListingReferenceScanner {
         RequestMappingEvaluator requestMappingEvaluator = context.getRequestMappingEvaluator();
         ResourceGroupingStrategy resourceGroupingStrategy = context.getResourceGroupingStrategy();
         if (requestMappingEvaluator.shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
-          Set<ResourceGroup> resourceGroups = resourceGroupingStrategy.getResourceGroups(requestMappingInfo,
-                  handlerMethod);
+          Set<ResourceGroup> resourceGroups 
+                  = resourceGroupingStrategy.getResourceGroups(requestMappingInfo, handlerMethod);
           String handlerMethodName = handlerMethod.getMethod().getName();
 
-          String resourceDescription = resourceGroupingStrategy.getResourceDescription(requestMappingInfo,
-                  handlerMethod);
-          RequestMappingContext requestMappingContext = new RequestMappingContext(context, requestMappingInfo,
-                  handlerMethod);
+          String resourceDescription 
+                  = resourceGroupingStrategy.getResourceDescription(requestMappingInfo, handlerMethod);
+          RequestMappingContext requestMappingContext 
+                  = new RequestMappingContext(context, requestMappingInfo, handlerMethod);
 
           LOG.info("Request mapping: {} belongs to groups: [{}] ", handlerMethodName, resourceGroups);
           for (ResourceGroup group : resourceGroups) {

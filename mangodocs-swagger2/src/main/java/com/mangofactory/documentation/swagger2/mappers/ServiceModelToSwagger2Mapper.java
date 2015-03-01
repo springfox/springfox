@@ -20,6 +20,7 @@ import com.wordnik.swagger.models.Path;
 import com.wordnik.swagger.models.Response;
 import com.wordnik.swagger.models.Scheme;
 import com.wordnik.swagger.models.Swagger;
+import com.wordnik.swagger.models.Tag;
 import com.wordnik.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -42,6 +43,7 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "info", source = "resourceListing.info"),
           @Mapping(target = "paths", source = "apiListings"),
           @Mapping(target = "basePath", expression = "java(anyApi(from).getBasePath())"),
+          @Mapping(target = "tags", source="tags"),
           @Mapping(target = "host", expression = "java(anyApi(from).getBasePath())"),
           @Mapping(target = "schemes", expression = "java(toSchemes(anyApi(from)))"),
           @Mapping(target = "produces", expression = "java(anyApi(from).getProduces())"),
@@ -71,12 +73,19 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "parameters", source = "parameters"),
           @Mapping(target = "security", source = "authorizations"),
           @Mapping(target = "responses", source= "responseMessages"),
-          @Mapping(target = "tags", ignore = true),
+          @Mapping(target = "tags", source = "tags"),
           @Mapping(target = "vendorExtensions", ignore = true),
           @Mapping(target = "externalDocs", ignore = true)
   })
   protected abstract Operation map(com.mangofactory.documentation.service.Operation from);
-
+  
+  @Mappings({
+          @Mapping(target = "description", source = "description"),
+          @Mapping(target = "name", source = "name"),
+          @Mapping(target = "externalDocs", ignore = true)
+  })
+  protected abstract Tag map(com.mangofactory.documentation.service.Tag from); 
+  
   protected License toLicense(ApiInfo from) {
     return new License().name(from.getLicense()).url(from.getLicenseUrl());
   }

@@ -31,6 +31,7 @@ public class OperationBuilder {
   private List<Authorization> authorizations = newArrayList();
   private List<Parameter> parameters = newArrayList();
   private Set<ResponseMessage> responseMessages = newHashSet();
+  private Set<String> tags = newHashSet();
   private String deprecated;
   private boolean isHidden;
   private ModelRef responseModel;
@@ -109,9 +110,14 @@ public class OperationBuilder {
     this.responseModel = defaultIfAbsent(responseType, this.responseModel);
     return this;
   }
+  
+  public OperationBuilder tags(Set<String> tags) {
+    this.tags.addAll(nullToEmptySet(tags));
+    return this;
+  }
 
   public Operation build() {
-    return new Operation(method, summary, notes, responseModel, nickname, position, produces,
+    return new Operation(method, summary, notes, responseModel, nickname, position, tags, produces,
             consumes, protocol, authorizations, parameters, responseMessages, deprecated, isHidden);
   }
 

@@ -15,6 +15,7 @@ import com.wordnik.swagger.models.Response;
 import com.wordnik.swagger.models.Scheme;
 import com.wordnik.swagger.models.SecurityRequirement;
 import com.wordnik.swagger.models.Swagger;
+import com.wordnik.swagger.models.Tag;
 import com.wordnik.swagger.models.Xml;
 import com.wordnik.swagger.models.auth.SecuritySchemeDefinition;
 import com.wordnik.swagger.models.parameters.Parameter;
@@ -44,6 +45,7 @@ public class Swagger2JacksonModule extends SimpleModule {
     context.setMixInAnnotations(Parameter.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(ExternalDocs.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Xml.class, CustomizedSwaggerSerializer.class);
+    context.setMixInAnnotations(Tag.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Contact.class, CustomizedSwaggerSerializer.class);
   }
 
