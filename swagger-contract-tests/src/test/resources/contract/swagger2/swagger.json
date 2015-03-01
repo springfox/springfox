@@ -742,7 +742,8 @@
                 },
                 "userStatus": {
                     "type": "integer",
-                    "format": "int32"
+                    "format": "int32",
+                    "description": "User Status"
                 },
                 "username": {
                     "type": "string"
@@ -761,10 +762,6 @@
             }
         },
         "Pet": {
-            "required": [
-                "name",
-                "photoUrls"
-            ],
             "properties": {
                 "category": {
                     "$ref": "#/definitions/Category"

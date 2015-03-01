@@ -25,7 +25,10 @@ public final class ApiModelProperties {
       @Override
       public AllowableListValues apply(ApiModelProperty annotation) {
         List<String> allowableValues
-                = Splitter.on(',').omitEmptyStrings().splitToList(nullToEmpty(annotation.allowableValues()));
+                = Splitter.on(',')
+                .omitEmptyStrings()
+                .trimResults()
+                .splitToList(nullToEmpty(annotation.allowableValues()));
         return new AllowableListValues(allowableValues, "LIST");
       }
     };

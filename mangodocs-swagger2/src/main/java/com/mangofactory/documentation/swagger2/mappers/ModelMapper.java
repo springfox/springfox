@@ -5,6 +5,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.mangofactory.documentation.schema.ModelProperty;
 import com.mangofactory.documentation.schema.ModelRef;
+import com.mangofactory.documentation.service.AllowableListValues;
+import com.mangofactory.documentation.service.AllowableValues;
 import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.ModelImpl;
 import com.wordnik.swagger.models.properties.ArrayProperty;
@@ -65,7 +67,18 @@ public abstract class ModelMapper {
   }
 
   public Property mapProperty(ModelProperty source) {
-    return modelRefToProperty(source.getModelRef());
+    Property property = modelRefToProperty(source.getModelRef());
+    //TODO: more mapping needs to happen
+    if (property instanceof StringProperty) {
+      AllowableValues allowableValues = source.getAllowableValues();
+      if (allowableValues instanceof AllowableListValues) {
+        ((StringProperty) property).setEnum(((AllowableListValues) allowableValues).getValues());
+      }
+    }
+    property.setDescription(source.getDescription());
+    property.setName(source.getName());
+    property.setRequired(source.isRequired());
+    return property;
   }
 
   static Property modelRefToProperty(ModelRef modelRef) {
