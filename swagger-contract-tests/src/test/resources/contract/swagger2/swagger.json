@@ -220,7 +220,6 @@
                         "description": "Invalid tag value"
                     }
                 },
-                "deprecated": true,
                 "security": [
                     {
                         "petstore_auth": [
@@ -228,7 +227,8 @@
                             "read:pets"
                         ]
                     }
-                ]
+                ],
+                "deprecated": true
             }
         },
         "/api/pet/{petId}": {
@@ -270,7 +270,11 @@
                     }
                 },
                 "security": [
-                    {"api_key": []},
+                    {
+                        "api_key": [
+                            ""
+                        ]
+                    },
                     {
                         "petstore_auth": [
                             "write:pets",
@@ -696,12 +700,7 @@
         }
     },
     "securityDefinitions": {
-        "api_key": {
-            "type": "apiKey",
-            "name": "api_key",
-            "in": "header"
-        },
-        "petstore_auth": {
+        "oauth2": {
             "type": "oauth2",
             "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
             "flow": "implicit",
@@ -709,6 +708,11 @@
                 "write:pets": "modify pets in your account",
                 "read:pets": "read your pets"
             }
+        },
+        "apiKey": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
         }
     },
     "definitions": {

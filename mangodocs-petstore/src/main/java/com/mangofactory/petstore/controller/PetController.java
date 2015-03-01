@@ -24,6 +24,8 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import com.wordnik.swagger.annotations.Authorization;
+import com.wordnik.swagger.annotations.AuthorizationScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,21 +45,17 @@ public class PetController {
 
   PetRepository petData = new PetRepository();
 
-  static class PetRepository extends MapBackedRepository<Long, Pet> {
-    public List<Pet> findPetByStatus(String status) {
-      return where(statusIs(status));
-    }
-
-    public List<Pet> findPetByTags(String tags) {
-      return where(tagsContain(tags));
-    }
-  }
-
   @RequestMapping(value = "/{petId}", method = GET)
   @ApiOperation(
           value = "Find pet by ID", notes = "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API " +
           "error conditions",
-          response = Pet.class)
+          response = Pet.class,
+          authorizations = {
+                  @Authorization(type = "apiKey", value = "api_key"),
+                  @Authorization(type = "oauth2", value = "petstore_auth", scopes = {
+                          @AuthorizationScope(scope = "write:pets", description = ""),
+                          @AuthorizationScope(scope = "read:pets", description = "")
+                  })})
   @ApiResponses(value = {
           @ApiResponse(code = 400, message = "Invalid ID supplied"),
           @ApiResponse(code = 404, message = "Pet not found")}
@@ -75,7 +73,11 @@ public class PetController {
   }
 
   @RequestMapping(method = POST)
-  @ApiOperation(value = "Add a new pet to the store")
+  @ApiOperation(value = "Add a new pet to the store",
+          authorizations = @Authorization(type = "oauth2", value = "petstore_auth", scopes = {
+                  @AuthorizationScope(scope = "write:pets", description = ""),
+                  @AuthorizationScope(scope = "read:pets", description = "")
+          }))
   @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
   public ResponseEntity<String> addPet(
           @ApiParam(value = "Pet object that needs to be added to the store", required = true) Pet pet) {
@@ -84,7 +86,11 @@ public class PetController {
   }
 
   @RequestMapping(method = PUT)
-  @ApiOperation(value = "Update an existing pet")
+  @ApiOperation(value = "Update an existing pet",
+          authorizations = @Authorization(type = "oauth2", value = "petstore_auth", scopes = {
+                  @AuthorizationScope(scope = "write:pets", description = ""),
+                  @AuthorizationScope(scope = "read:pets", description = "")
+          }))
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid ID supplied"),
           @ApiResponse(code = 404, message = "Pet not found"),
           @ApiResponse(code = 405, message = "Validation exception")})
@@ -99,8 +105,23 @@ public class PetController {
           value = "Finds Pets by status",
           notes = "Multiple status values can be provided with comma seperated strings",
           response = Pet.class,
-          responseContainer = "List")
+          responseContainer = "List",
+          authorizations = @Authorization(type = "oauth2", value = "petstore_auth", scopes = {
+                  @AuthorizationScope(scope = "write:pets", description = ""),
+                  @AuthorizationScope(scope = "read:pets", description = "")
+          }))
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid status value")})
+  /** TODO: This renders paramter as 
+   *
+   "name": "status",
+   "in": "query",
+   "description": "Status values that need to be considered for filter",
+   "required": false,
+   "type": "array",
+   "items": {"type": "string"},
+   "collectionFormat": "multi",
+   "default": "available"
+   */
   public ResponseEntity<List<Pet>> findPetsByStatus(
           @ApiParam(value = "Status values that need to be considered for filter",
                   required = true,
@@ -116,9 +137,21 @@ public class PetController {
           value = "Finds Pets by tags",
           notes = "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
           response = Pet.class,
-          responseContainer = "List")
+          responseContainer = "List",
+          authorizations = @Authorization(type = "oauth2", value = "petstore_auth", scopes = {
+                  @AuthorizationScope(scope = "write:pets", description = ""),
+                  @AuthorizationScope(scope = "read:pets", description = "")
+          }))
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid tag value")})
   @Deprecated
+  /** TODO: This renders the parameter as 
+  "name": "tags",
+          "in": "query",
+          "description": "Tags to filter by",
+          "required": false,
+          "type": "array",
+          "items": {"type": "string"},
+          "collectionFormat": "multi" */
   public ResponseEntity<List<Pet>> findPetsByTags(
           @ApiParam(
                   value = "Tags to filter by",
@@ -126,5 +159,15 @@ public class PetController {
                   allowMultiple = true)
           @RequestParam("tags") String tags) {
     return Responses.ok(petData.findPetByTags(tags));
+  }
+
+  static class PetRepository extends MapBackedRepository<Long, Pet> {
+    public List<Pet> findPetByStatus(String status) {
+      return where(statusIs(status));
+    }
+
+    public List<Pet> findPetByTags(String tags) {
+      return where(tagsContain(tags));
+    }
   }
 }
