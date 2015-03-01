@@ -65,8 +65,7 @@ public abstract class ModelMapper {
   }
 
   public Property mapProperty(ModelProperty source) {
-    String typeName = source.getModelRef().getType();
-    return property(typeName);
+    return modelRefToProperty(source.getModelRef());
   }
 
   static Property modelRefToProperty(ModelRef modelRef) {
