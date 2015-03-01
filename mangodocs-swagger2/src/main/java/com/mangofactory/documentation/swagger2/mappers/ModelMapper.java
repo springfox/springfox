@@ -25,6 +25,9 @@ import org.mapstruct.Mapper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
+
+import static com.google.common.collect.Maps.*;
 
 @Mapper
 public abstract class ModelMapper {
@@ -50,7 +53,9 @@ public abstract class ModelMapper {
             .discriminator(source.getDiscriminator())
             .example("")
             .name(source.getName());
-    model.setProperties(mapProperties(source.getProperties()));
+    TreeMap<String, Property> sorted = newTreeMap();
+    sorted.putAll(mapProperties(source.getProperties()));
+    model.setProperties(sorted);
     FluentIterable<String> requiredFields = FluentIterable.from(source.getProperties().values())
             .filter(requiredProperties())
             .transform(propertyName());
