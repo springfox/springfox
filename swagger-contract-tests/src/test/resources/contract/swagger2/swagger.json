@@ -223,7 +223,7 @@
                         "description": "Invalid tag value"
                     }
                 },
-                "deprecated": true
+                "deprecated": true,
                 "security": [
                     {
                         "petstore_auth": [
@@ -825,7 +825,7 @@
                         "approved",
                         "delivered"
                     ]
-                },
+                }
             }
         }
     }
