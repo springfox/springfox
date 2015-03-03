@@ -2,7 +2,7 @@ package com.mangofactory.documentation.swagger2.web;
 
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.annotations.ApiIgnore;
-import com.mangofactory.documentation.service.Group;
+import com.mangofactory.documentation.service.Documentation;
 import com.mangofactory.documentation.spring.web.GroupCache;
 import com.mangofactory.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import com.wordnik.swagger.models.Swagger;
@@ -33,11 +33,11 @@ public class Swagger2Controller {
           @RequestParam(value = "group", required = false) String swaggerGroup) {
 
     String groupName = Optional.fromNullable(swaggerGroup).or("default");
-    Group group = groupCache.getGroup(groupName);
-    if (group == null) {
+    Documentation documentation = groupCache.getGroup(groupName);
+    if (documentation == null) {
       return new ResponseEntity<Swagger>(HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<Swagger>(mapper.map(group), HttpStatus.OK);
+    return new ResponseEntity<Swagger>(mapper.map(documentation), HttpStatus.OK);
   }
 
 }

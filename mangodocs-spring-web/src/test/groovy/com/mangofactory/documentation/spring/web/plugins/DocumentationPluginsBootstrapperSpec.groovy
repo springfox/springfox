@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web.plugins
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.documentation.service.Group
+import com.mangofactory.documentation.service.Documentation
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.DocumentationPlugin
 import com.mangofactory.documentation.spi.service.contexts.Defaults
@@ -16,7 +16,7 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
 
   ApplicationContext applicationContext = Mock(ApplicationContext)
   DocumentationPluginsManager pluginManager = Mock(DocumentationPluginsManager)
-  Group group = Mock(Group)
+  Documentation group = Mock(Documentation)
   ApiGroupScanner apiGroup = Mock(ApiGroupScanner)
 
   ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(applicationContext)

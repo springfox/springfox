@@ -3,7 +3,7 @@ package com.mangofactory.documentation.swagger.web;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.annotations.ApiIgnore;
-import com.mangofactory.documentation.service.Group;
+import com.mangofactory.documentation.service.Documentation;
 import com.mangofactory.documentation.spring.web.GroupCache;
 import com.mangofactory.documentation.swagger.dto.ApiListing;
 import com.mangofactory.documentation.swagger.dto.ResourceListing;
@@ -54,11 +54,11 @@ public class DefaultSwaggerController {
 
   private ResponseEntity<ApiListing> getSwaggerApiListing(String swaggerGroup, String apiDeclaration) {
     String groupName = Optional.fromNullable(swaggerGroup).or("default");
-    Group group = groupCache.getGroup(groupName);
-    if (group == null) {
+    Documentation documentation = groupCache.getGroup(groupName);
+    if (documentation == null) {
       return new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
     }
-    Map<String, com.mangofactory.documentation.service.ApiListing> apiListingMap = group.getApiListings();
+    Map<String, com.mangofactory.documentation.service.ApiListing> apiListingMap = documentation.getApiListings();
     Map<String, com.mangofactory.documentation.swagger.dto.ApiListing> dtoApiListing
             = transformEntries(apiListingMap, toApiListingDto(mapper));
 
@@ -70,11 +70,11 @@ public class DefaultSwaggerController {
 
   private ResponseEntity<ResourceListing> getSwaggerResourceListing(String swaggerGroup) {
     String groupName = Optional.fromNullable(swaggerGroup).or("default");
-    Group group = groupCache.getGroup(groupName);
-    if (group == null) {
+    Documentation documentation = groupCache.getGroup(groupName);
+    if (documentation == null) {
       return new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
     }
-    com.mangofactory.documentation.service.ResourceListing listing = group.getResourceListing();
+    com.mangofactory.documentation.service.ResourceListing listing = documentation.getResourceListing();
     ResourceListing resourceListing = mapper.toSwaggerResourceListing(listing);
     return Optional.fromNullable(resourceListing)
             .transform(toResponseEntity(ResourceListing.class))

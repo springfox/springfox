@@ -10,7 +10,7 @@ import com.mangofactory.documentation.service.ApiDescription;
 import com.mangofactory.documentation.service.ApiInfo;
 import com.mangofactory.documentation.service.ApiListing;
 import com.mangofactory.documentation.service.AuthorizationScope;
-import com.mangofactory.documentation.service.Group;
+import com.mangofactory.documentation.service.Documentation;
 import com.mangofactory.documentation.service.ResponseMessage;
 import com.wordnik.swagger.models.Contact;
 import com.wordnik.swagger.models.Info;
@@ -54,7 +54,7 @@ public abstract class ServiceModelToSwagger2Mapper {
                   expression = "java(securityMapper.toSecuritySchemeDefinitions(from.getResourceListing()))"),
           @Mapping(target = "externalDocs", ignore = true)
   })
-  public abstract Swagger map(com.mangofactory.documentation.service.Group from);
+  public abstract Swagger map(Documentation from);
 
   @Mappings({
           @Mapping(target = "license", expression = "java(toLicense(from))"),
@@ -153,16 +153,16 @@ public abstract class ServiceModelToSwagger2Mapper {
     return path;
   }
 
-  protected Map<String, com.mangofactory.documentation.schema.Model> allApiModels(Group group) {
+  protected Map<String, com.mangofactory.documentation.schema.Model> allApiModels(Documentation documentation) {
     Map<String, com.mangofactory.documentation.schema.Model> definitions = newHashMap();
-    for (ApiListing each : group.getApiListings().values()) {
+    for (ApiListing each : documentation.getApiListings().values()) {
       definitions.putAll(each.getModels());
     }
     return definitions;
   }
 
-  protected ApiListing anyApi(Group group) {
-    return Iterables.getFirst(group.getApiListings().values(), null);
+  protected ApiListing anyApi(Documentation documentation) {
+    return Iterables.getFirst(documentation.getApiListings().values(), null);
   }
 
   private Function<String, Scheme> toScheme() {

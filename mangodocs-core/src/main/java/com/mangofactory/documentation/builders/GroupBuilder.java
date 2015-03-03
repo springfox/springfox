@@ -1,7 +1,7 @@
 package com.mangofactory.documentation.builders;
 
 import com.mangofactory.documentation.service.ApiListing;
-import com.mangofactory.documentation.service.Group;
+import com.mangofactory.documentation.service.Documentation;
 import com.mangofactory.documentation.service.ResourceListing;
 import com.mangofactory.documentation.service.Tag;
 
@@ -40,7 +40,7 @@ public class GroupBuilder {
     return this;
   }
 
-  public Group build() {
-    return new Group(groupName, tags, apiListings, resourceListing);
+  public Documentation build() {
+    return new Documentation(groupName, tags, apiListings, resourceListing);
   }
 }

@@ -3,13 +3,16 @@ package com.mangofactory.documentation.service;
 import java.util.Map;
 import java.util.Set;
 
-public class Group {
+public class Documentation {
   private final String groupName;
   private final Map<String, ApiListing> apiListings;
   private final Set<Tag> tags;
   private final ResourceListing resourceListing;
 
-  public Group(String groupName, Set<Tag> tags, Map<String, ApiListing> apiListings, ResourceListing resourceListing) {
+  public Documentation(String groupName, 
+                       Set<Tag> tags, 
+                       Map<String, ApiListing> apiListings, 
+                       ResourceListing resourceListing) {
     this.groupName = groupName;
     this.tags = tags;
     this.apiListings = apiListings;

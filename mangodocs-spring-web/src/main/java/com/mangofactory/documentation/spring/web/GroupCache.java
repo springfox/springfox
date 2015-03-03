@@ -1,19 +1,19 @@
 package com.mangofactory.documentation.spring.web;
 
-import com.mangofactory.documentation.service.Group;
+import com.mangofactory.documentation.service.Documentation;
 
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
 
 public class GroupCache {
-  private Map<String, Group> groupLookup = newLinkedHashMap();
+  private Map<String, Documentation> groupLookup = newLinkedHashMap();
 
-  public void addGroup(Group group) {
-    groupLookup.put(group.getGroupName(), group);
+  public void addGroup(Documentation documentation) {
+    groupLookup.put(documentation.getGroupName(), documentation);
   }
 
-  public Group getGroup(String groupName) {
+  public Documentation getGroup(String groupName) {
     return groupLookup.get(groupName);
   }
 

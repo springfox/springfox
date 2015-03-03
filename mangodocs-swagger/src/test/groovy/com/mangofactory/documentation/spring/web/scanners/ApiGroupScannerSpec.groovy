@@ -3,7 +3,7 @@ import com.mangofactory.documentation.spring.web.AbstractPathProvider
 import com.mangofactory.documentation.service.ApiInfo
 import com.mangofactory.documentation.service.ApiKey
 import com.mangofactory.documentation.service.ApiListingReference
-import com.mangofactory.documentation.service.Group
+import com.mangofactory.documentation.service.Documentation
 import com.mangofactory.documentation.service.ResourceListing
 import com.mangofactory.documentation.spi.service.contexts.Defaults
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
@@ -24,7 +24,7 @@ class ApiGroupScannerSpec extends DocumentationContextSpec {
     when: "I create a swagger resource"
       listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     and:
-      Group scanned = swaggerApiResourceListing.scan(context())
+      Documentation scanned = swaggerApiResourceListing.scan(context())
 
     then: "I should should have the correct defaults"
       ResourceListing resourceListing = scanned.resourceListing
@@ -50,7 +50,7 @@ class ApiGroupScannerSpec extends DocumentationContextSpec {
               .configure(contextBuilder)
       listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     and:
-      Group scanned = swaggerApiResourceListing.scan(context())
+      Documentation scanned = swaggerApiResourceListing.scan(context())
     then:
       ApiInfo actual = scanned.getResourceListing().getInfo()
       actual.getTitle() == expected.getTitle()
@@ -73,7 +73,7 @@ class ApiGroupScannerSpec extends DocumentationContextSpec {
               .configure(contextBuilder)
       listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     and:
-      Group scanned = swaggerApiResourceListing.scan(context())
+      Documentation scanned = swaggerApiResourceListing.scan(context())
     then:
       ResourceListing resourceListing = scanned.resourceListing
       def authorizationTypes = resourceListing.getAuthorizations()
@@ -99,7 +99,7 @@ class ApiGroupScannerSpec extends DocumentationContextSpec {
       listingReferenceScanner.scan(_) >>
               new ApiListingReferenceScanResult([Mock(ApiListingReference)], [resourceGroup: [requestMappingContext]])
     and:
-      Group scanned = swaggerApiResourceListing.scan(context())
+      Documentation scanned = swaggerApiResourceListing.scan(context())
       scanned.resourceListing != null
 
     then:
@@ -126,7 +126,7 @@ class ApiGroupScannerSpec extends DocumentationContextSpec {
               new ApiListingReferenceScanResult(refs, newHashMap())
 
     when:
-      Group scanned = swaggerApiResourceListing.scan(context())
+      Documentation scanned = swaggerApiResourceListing.scan(context())
       def apis = scanned.resourceListing.getApis()
     then:
       apis[index].position == position

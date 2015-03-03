@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.mangofactory.documentation.service.ApiListing;
 import com.mangofactory.documentation.service.ApiListingReference;
-import com.mangofactory.documentation.service.Group;
+import com.mangofactory.documentation.service.Documentation;
 import com.mangofactory.documentation.service.ResourceListing;
 import com.mangofactory.documentation.builders.GroupBuilder;
 import com.mangofactory.documentation.builders.ResourceListingBuilder;
@@ -33,7 +33,7 @@ public class ApiGroupScanner {
     this.apiListingScanner = apiListingScanner;
   }
 
-  public Group scan(DocumentationContext context) {
+  public Documentation scan(DocumentationContext context) {
     ApiListingReferenceScanResult result = apiListingReferenceScanner.scan(context);
     List<ApiListingReference> apiListingReferences = result.getApiListingReferences();
     ApiListingScanningContext listingContext = new ApiListingScanningContext(context, result.getResourceGroupRequestMappings());
