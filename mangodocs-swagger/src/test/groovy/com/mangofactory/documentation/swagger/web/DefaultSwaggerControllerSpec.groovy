@@ -2,7 +2,7 @@ package com.mangofactory.documentation.swagger.web
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.documentation.service.AuthorizationType
 import com.mangofactory.documentation.service.Documentation
-import com.mangofactory.documentation.builders.GroupBuilder
+import com.mangofactory.documentation.builders.DocumentationBuilder
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.GroupCache
 import com.mangofactory.documentation.spring.web.mixins.ApiListingSupport
@@ -81,7 +81,7 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
 
   def "should respond with api listing for a given resource group"() {
     given:
-      Documentation group = new GroupBuilder()
+      Documentation group = new DocumentationBuilder()
               .name("groupName")
               .apiListingsByResourceGroupName(['businesses': apiListing()])
               .build()
@@ -98,7 +98,7 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
     given:
       def authTypes = new ArrayList<AuthorizationType>()
       authTypes.add(authorizationTypes());
-      Documentation group = new GroupBuilder()
+      Documentation group = new DocumentationBuilder()
               .name("groupName")
               .resourceListing(resourceListing(authTypes))
               .build()

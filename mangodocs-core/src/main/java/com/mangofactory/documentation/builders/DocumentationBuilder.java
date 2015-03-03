@@ -12,30 +12,30 @@ import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.builders.BuilderDefaults.*;
 
-public class GroupBuilder {
+public class DocumentationBuilder {
   private String groupName;
   private Map<String, ApiListing> apiListings = newTreeMap();
   private ResourceListing resourceListing;
   private Set<Tag> tags = newHashSet();
 
-  public GroupBuilder name(String groupName) {
+  public DocumentationBuilder name(String groupName) {
     this.groupName = defaultIfAbsent(groupName, this.groupName);
     return this;
   }
 
-  public GroupBuilder apiListingsByResourceGroupName(Map<String, ApiListing> apiListings) {
+  public DocumentationBuilder apiListingsByResourceGroupName(Map<String, ApiListing> apiListings) {
     if (apiListings != null) {
       this.apiListings.putAll(apiListings);
     }
     return this;
   }
 
-  public GroupBuilder resourceListing(ResourceListing resourceListing) {
+  public DocumentationBuilder resourceListing(ResourceListing resourceListing) {
     this.resourceListing = defaultIfAbsent(resourceListing, this.resourceListing);
     return this;
   }
   
-  public GroupBuilder tags(Set<Tag> tags) {
+  public DocumentationBuilder tags(Set<Tag> tags) {
     this.tags.addAll(nullToEmptySet(tags));
     return this;
   }

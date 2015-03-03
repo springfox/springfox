@@ -7,7 +7,7 @@ import spock.lang.Specification
 class GroupBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
     given:
-      def sut = new GroupBuilder()
+      def sut = new DocumentationBuilder()
     when:
       sut."$builderMethod"(value)
     and:
@@ -24,7 +24,7 @@ class GroupBuilderSpec extends Specification {
 
   def "Setting builder properties to null values preserves existing values"() {
     given:
-      def sut = new GroupBuilder()
+      def sut = new DocumentationBuilder()
     when:
       sut."$builderMethod"(value)
       sut."$builderMethod"(null)

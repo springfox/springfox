@@ -1,6 +1,6 @@
 package com.mangofactory.documentation.spring.web
 
-import com.mangofactory.documentation.builders.GroupBuilder
+import com.mangofactory.documentation.builders.DocumentationBuilder
 import spock.lang.Specification
 
 class GroupCacheSpec extends Specification {
@@ -8,7 +8,7 @@ class GroupCacheSpec extends Specification {
     given:
       def sut = new GroupCache()
     and:
-      sut.addGroup(new GroupBuilder().name("test").build())
+      sut.addGroup(new DocumentationBuilder().name("test").build())
 
     when:
       def group = sut.getGroup("test")

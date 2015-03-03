@@ -6,7 +6,7 @@ import com.mangofactory.documentation.service.ApiListing;
 import com.mangofactory.documentation.service.ApiListingReference;
 import com.mangofactory.documentation.service.Documentation;
 import com.mangofactory.documentation.service.ResourceListing;
-import com.mangofactory.documentation.builders.GroupBuilder;
+import com.mangofactory.documentation.builders.DocumentationBuilder;
 import com.mangofactory.documentation.builders.ResourceListingBuilder;
 import com.mangofactory.documentation.service.Tag;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
@@ -39,7 +39,7 @@ public class ApiGroupScanner {
     ApiListingScanningContext listingContext = new ApiListingScanningContext(context, result.getResourceGroupRequestMappings());
 
     Map<String, ApiListing> apiListings = apiListingScanner.scan(listingContext);
-    GroupBuilder group = new GroupBuilder()
+    DocumentationBuilder group = new DocumentationBuilder()
             .name(context.getGroupName())
             .apiListingsByResourceGroupName(apiListings)
             .tags(toTags(apiListings));
