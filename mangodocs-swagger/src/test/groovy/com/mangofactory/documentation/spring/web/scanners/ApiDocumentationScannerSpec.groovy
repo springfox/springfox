@@ -18,13 +18,13 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   ApiListingReferenceScanner listingReferenceScanner = Mock(ApiListingReferenceScanner)
   ApiListingScanner listingScanner = Mock(ApiListingScanner)
-  ApiDocumentationScanner  swaggerApiResourceListing = new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
+  ApiDocumentationScanner  docScanner = new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
 
   def "default swagger resource"() {
     when: "I create a swagger resource"
       listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     and:
-      Documentation scanned = swaggerApiResourceListing.scan(context())
+      Documentation scanned = docScanner.scan(context())
 
     then: "I should should have the correct defaults"
       ResourceListing resourceListing = scanned.resourceListing
@@ -50,7 +50,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
               .configure(contextBuilder)
       listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     and:
-      Documentation scanned = swaggerApiResourceListing.scan(context())
+      Documentation scanned = docScanner.scan(context())
     then:
       ApiInfo actual = scanned.getResourceListing().getInfo()
       actual.getTitle() == expected.getTitle()
@@ -73,7 +73,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
               .configure(contextBuilder)
       listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     and:
-      Documentation scanned = swaggerApiResourceListing.scan(context())
+      Documentation scanned = docScanner.scan(context())
     then:
       ResourceListing resourceListing = scanned.resourceListing
       def authorizationTypes = resourceListing.getAuthorizations()
@@ -99,7 +99,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
       listingReferenceScanner.scan(_) >>
               new ApiListingReferenceScanResult([Mock(ApiListingReference)], [resourceGroup: [requestMappingContext]])
     and:
-      Documentation scanned = swaggerApiResourceListing.scan(context())
+      Documentation scanned = docScanner.scan(context())
       scanned.resourceListing != null
 
     then:
@@ -126,7 +126,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
               new ApiListingReferenceScanResult(refs, newHashMap())
 
     when:
-      Documentation scanned = swaggerApiResourceListing.scan(context())
+      Documentation scanned = docScanner.scan(context())
       def apis = scanned.resourceListing.getApis()
     then:
       apis[index].position == position
