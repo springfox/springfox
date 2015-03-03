@@ -20,11 +20,6 @@ public class ApiKey extends AuthorizationType {
     this.passAs = "header";
   }
 
-  @Override
-  public String getName() {
-    return keyname;
-  }
-
   public String getKeyname() {
     return keyname;
   }

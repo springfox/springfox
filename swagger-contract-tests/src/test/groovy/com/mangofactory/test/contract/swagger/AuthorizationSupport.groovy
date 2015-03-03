@@ -14,10 +14,11 @@ trait AuthorizationSupport {
   List<AuthorizationType> authTypes() {
     List<AuthorizationType> authTypes = newArrayList();
     authTypes.add(new OAuthBuilder()
+            .name("petstore_auth")
             .grantTypes(grantTypes())
             .scopes(scopes())
             .build())
-    authTypes.add(new ApiKey("api_key", "header",))
+    authTypes.add(new ApiKey("api_key", "api_key", "header"))
     return authTypes
   }
 

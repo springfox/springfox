@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletRequest;
+
 @Controller
 public class Swagger2Controller {
   public static final String DOCUMENTATION_BASE_PATH = "/v2/api-docs";
@@ -30,14 +32,16 @@ public class Swagger2Controller {
   public
   @ResponseBody
   ResponseEntity<Swagger> getDocumentation(
-          @RequestParam(value = "group", required = false) String swaggerGroup) {
+          @RequestParam(value = "group", required = false) String swaggerGroup, ServletRequest request) {
 
     String groupName = Optional.fromNullable(swaggerGroup).or("default");
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       return new ResponseEntity<Swagger>(HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<Swagger>(mapper.map(documentation), HttpStatus.OK);
+    Swagger swagger = mapper.map(documentation);
+    swagger.host(String.format("%s:%s", request.getServerName(), request.getServerPort()));
+    return new ResponseEntity<Swagger>(swagger, HttpStatus.OK);
   }
 
 }

@@ -4,6 +4,8 @@ import com.mangofactory.documentation.spring.web.plugins.DocumentationConfigurer
 import com.mangofactory.documentation.swagger2.annotations.EnableSwagger2
 import groovy.json.JsonOutput
 import groovyx.net.http.RESTClient
+import org.skyscreamer.jsonassert.JSONAssert
+import org.skyscreamer.jsonassert.JSONCompareMode
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
@@ -22,7 +24,7 @@ import static groovyx.net.http.ContentType.*
 @ContextConfiguration(loader = SpringApplicationContextLoader,
         classes = SwaggerV2_0Spec.Config)
 @WebAppConfiguration
-@IntegrationTest("server.port:0")
+@IntegrationTest("server.port:8080")
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
 class SwaggerV2_0Spec extends Specification implements FileAccess {
 
@@ -47,7 +49,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
       response.status == 200
 //      println(actual)
 
-//      JSONAssert.assertEquals(contract, actual, JSONCompareMode.NON_EXTENSIBLE)
+      JSONAssert.assertEquals(contract, actual, JSONCompareMode.NON_EXTENSIBLE)
   }
 
   @Configuration
@@ -57,7 +59,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
           "com.mangofactory.test.contract.swagger",
           "com.mangofactory.petstore.controller"
   ])
-  static class Config {
+  static class Config implements AuthorizationSupport {
     @Bean
     public DocumentationConfigurer testCases() {
       return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
@@ -70,6 +72,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
       return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
               .groupName("petstore")
               .useDefaultResponseMessages(false)
+              .authorizationTypes(authTypes())
               .includePatterns("/api/.*");
     }
   }

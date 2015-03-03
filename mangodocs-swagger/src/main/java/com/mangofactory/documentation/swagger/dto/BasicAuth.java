@@ -5,8 +5,4 @@ public class BasicAuth extends AuthorizationType {
     super("basicAuth");
   }
 
-  @Override
-  public String getName() {
-    return super.type;
-  }
 }

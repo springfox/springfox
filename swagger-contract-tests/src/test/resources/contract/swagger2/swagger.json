@@ -149,10 +149,8 @@
                         "name": "status",
                         "in": "query",
                         "description": "Status values that need to be considered for filter",
-                        "required": false,
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "collectionFormat": "multi",
+                        "required": true,
+                        "type": "string",
                         "default": "available"
                     }
                 ],
@@ -200,10 +198,8 @@
                         "name": "tags",
                         "in": "query",
                         "description": "Tags to filter by",
-                        "required": false,
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "collectionFormat": "multi"
+                        "required": true,
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -700,7 +696,7 @@
         }
     },
     "securityDefinitions": {
-        "oauth2": {
+        "petstore_auth": {
             "type": "oauth2",
             "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
             "flow": "implicit",
@@ -709,7 +705,7 @@
                 "read:pets": "read your pets"
             }
         },
-        "apiKey": {
+        "api_key": {
             "type": "apiKey",
             "name": "api_key",
             "in": "header"

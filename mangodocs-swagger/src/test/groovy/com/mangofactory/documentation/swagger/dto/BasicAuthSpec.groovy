@@ -2,18 +2,26 @@ package com.mangofactory.documentation.swagger.dto
 
 class BasicAuthSpec extends InternalJsonSerializationSpec {
 
-  final AuthorizationType basicAuth = new BasicAuth()
 
   def "should serialize"() {
-    expect:
+    given:
+      AuthorizationType basicAuth = new BasicAuth()
+    when:
+      basicAuth.setName("basic")
+    then:
       writePretty(basicAuth) == """{
+  "name" : "basic",
   "type" : "basicAuth"
 }"""
   }
 
   def "should pass coverage"() {
-    expect:
-      basicAuth.getName() == 'basicAuth'
+    given:
+      AuthorizationType basicAuth = new BasicAuth()
+    when:
+      basicAuth.setName("basic")
+    then:
+      basicAuth.getName() == 'basic'
       basicAuth.getType() == 'basicAuth'
   }
 }

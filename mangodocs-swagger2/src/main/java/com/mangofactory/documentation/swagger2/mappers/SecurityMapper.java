@@ -30,14 +30,14 @@ public class SecurityMapper {
           .build();
 
   protected Map<String, SecuritySchemeDefinition> toSecuritySchemeDefinitions(ResourceListing from) {
-    return transformValues(uniqueIndex(from.getAuthorizations(), authorizationType()), toSecuritySchemeDefinition());
+    return transformValues(uniqueIndex(from.getAuthorizations(), schemeName()), toSecuritySchemeDefinition());
   }                                           
 
-  protected Function<AuthorizationType, String> authorizationType() {
+  protected Function<AuthorizationType, String> schemeName() {
     return new Function<AuthorizationType, String>() {
       @Override
       public String apply(AuthorizationType input) {
-        return input.getType();
+        return input.getName();
       }
     };
   }
