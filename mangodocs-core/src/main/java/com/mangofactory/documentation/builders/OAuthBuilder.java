@@ -7,10 +7,13 @@ import com.mangofactory.documentation.service.OAuth;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mangofactory.documentation.builders.BuilderDefaults.*;
+
 public class OAuthBuilder {
 
   private List<AuthorizationScope> scopes = new ArrayList<AuthorizationScope>();
   private List<GrantType> grantTypes = new ArrayList<GrantType>();
+  private String name;
 
 
   public OAuthBuilder scopes(List<AuthorizationScope> scopes) {
@@ -27,7 +30,12 @@ public class OAuthBuilder {
     return this;
   }
 
+  public OAuthBuilder name(String name) {
+    this.name = defaultIfAbsent(name, this.name);
+    return this;
+  }
+
   public OAuth build() {
-    return new OAuth(this.scopes, this.grantTypes);
+    return new OAuth(name, scopes, grantTypes);
   }
 }

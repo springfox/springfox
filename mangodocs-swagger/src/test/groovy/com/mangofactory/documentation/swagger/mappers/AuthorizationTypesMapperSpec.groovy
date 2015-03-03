@@ -34,8 +34,8 @@ class AuthorizationTypesMapperSpec extends Specification {
     when:
       def mapped = sut.toSwaggerOAuth(built)
     and:
-      ImplicitGrant mappedImplicitGrant = new ImplicitGrant(new com.mangofactory.documentation.swagger.dto.LoginEndpoint("uri:login"),
-              "oauth-implicit")
+      ImplicitGrant mappedImplicitGrant =
+              new ImplicitGrant(new com.mangofactory.documentation.swagger.dto.LoginEndpoint("uri:login"), "oauth-implicit")
       AuthorizationCodeGrant mappedAuthCodeGrant = new AuthorizationCodeGrant(
               new TokenRequestEndpoint("uri:tokenReqEndpoint", "oauthSpec", "superSecret"),
               new TokenEndpoint("uri:tokenEndpoint", "oauth-test-token"))
@@ -100,7 +100,7 @@ class AuthorizationTypesMapperSpec extends Specification {
 
   def "ApiKey gets mapped correctly"() {
     given:
-      ApiKey built = new ApiKey("key", "header")
+      ApiKey built = new ApiKey("api-key", "key", "header",)
     when:
       def mapped = sut.toSwaggerApiKey(built)
     then:
@@ -134,7 +134,7 @@ class AuthorizationTypesMapperSpec extends Specification {
   def "Polymorphic authorization types are handled"() {
     given:
       List<com.mangofactory.documentation.service.AuthorizationType> listAuthType =
-              newArrayList(createOAuth(), new BasicAuth(), new ApiKey("test", "header"))
+              newArrayList(createOAuth(), new BasicAuth("basic"), new ApiKey("api-key", "test", "header",))
 
     when:
       List<AuthorizationType> mapped = sut.toSwaggerAuthorizationTypes(listAuthType)
@@ -166,7 +166,8 @@ class AuthorizationTypesMapperSpec extends Specification {
     given:
       AuthorizationTypesMapper mapper = authMapper()
     when:
-      mapper.toSwaggerAuthorizationType(new com.mangofactory.documentation.service.AuthorizationType("unknown") {
+      mapper.toSwaggerAuthorizationType(new com.mangofactory.documentation.service.AuthorizationType("auth", 
+              "unknown") {
         @Override
         String getName() {
           throw new UnsupportedOperationException()

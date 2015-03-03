@@ -17,7 +17,7 @@ trait AuthorizationSupport {
             .grantTypes(grantTypes())
             .scopes(scopes())
             .build())
-    authTypes.add(new ApiKey("api_key", "header"))
+    authTypes.add(new ApiKey("api_key", "header",))
     return authTypes
   }
 

@@ -10,10 +10,10 @@ class AuthorizationTypeNamesSpec extends Specification {
     expect:
       authType.getName() == expectedName
     where:
-      authType                      | expectedName
-      new ApiKey("test", "header")  | "test"
-      new OAuth([], [])             | "oauth2"
-      new BasicAuth()               | "basicAuth"
+      authType                                | expectedName  |expectedType
+      new ApiKey("api-key", "test", "header") | "api-key"     |"test"
+      new OAuth("auth", [], [])               | "auth"        |"oauth2"
+      new BasicAuth("basic")                  | "basic"       |"basicAuth"
 
   }
 }

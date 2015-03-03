@@ -9,8 +9,8 @@ public class OAuth extends AuthorizationType {
   private final List<AuthorizationScope> scopes;
   private final LinkedHashMap<String, GrantType> grantTypes;
 
-  public OAuth(List<AuthorizationScope> scopes, List<GrantType> gTypes) {
-    super("oauth2");
+  public OAuth(String name, List<AuthorizationScope> scopes, List<GrantType> gTypes) {
+    super(name, "oauth2");
     this.scopes = scopes;
     this.grantTypes = initializeGrantTypes(gTypes);
 
@@ -25,11 +25,6 @@ public class OAuth extends AuthorizationType {
       return map;
     }
     return null;
-  }
-
-  @Override
-  public String getName() {
-    return super.type;
   }
 
   public List<AuthorizationScope> getScopes() {

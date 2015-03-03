@@ -1,15 +1,19 @@
 package com.mangofactory.documentation.service;
 
 public abstract class AuthorizationType {
+  protected final String name;
   protected final String type;
 
-  protected AuthorizationType(String type) {
+  protected AuthorizationType(String name, String type) {
     this.type = type;
+    this.name = name;
   }
 
   public String getType() {
     return type;
   }
 
-  public abstract String getName();
+  public String getName() {
+    return name;
+  }
 }

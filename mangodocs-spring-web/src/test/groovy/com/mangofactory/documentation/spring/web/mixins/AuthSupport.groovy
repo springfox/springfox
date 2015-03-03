@@ -45,14 +45,16 @@ class AuthSupport {
     grantTypes.add(new ImplicitGrant(loginEndpoint, "access_token"));
 
 
-    TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint("http://petstore.swagger.wordnik.com/oauth/requestToken", "client_id", "client_secret")
-    TokenEndpoint tokenEndpoint = new TokenEndpoint("http://petstore.swagger.wordnik.com/oauth/token", "auth_code")
+    TokenRequestEndpoint tokenRequestEndpoint = 
+            new TokenRequestEndpoint("http://petstore.swagger.wordnik.com/oauth/requestToken", "client_id", "client_secret")
+    TokenEndpoint tokenEndpoint = 
+            new TokenEndpoint("http://petstore.swagger.wordnik.com/oauth/token", "auth_code")
 
     AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint)
 
     grantTypes.add(authorizationCodeGrant)
 
-    OAuth oAuth = new OAuth(authorizationScopeList, grantTypes)
+    OAuth oAuth = new OAuth("oauth", authorizationScopeList, grantTypes)
     return oAuth
   }
 

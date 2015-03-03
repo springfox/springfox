@@ -65,7 +65,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   def "resource with authorization types"() {
     given:
-      ApiKey apiKey = new ApiKey("api_key", "header")
+      ApiKey apiKey = new ApiKey("mykey", "api_key", "header",)
     when:
       plugin
               .groupName("groupName")
@@ -80,6 +80,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
       def authorizationTypes = resourceListing.getAuthorizations()
       def apiKeyAuthType = authorizationTypes[0]
       apiKeyAuthType instanceof ApiKey
+      apiKeyAuthType.name == "mykey"
       apiKeyAuthType.keyname == "api_key"
       apiKeyAuthType.passAs == "header"
   }

@@ -13,7 +13,7 @@ import static com.google.common.collect.Maps.newHashMap
 class DocumenationSpec extends Specification {
   def "Groups are built correctly" () {
     given:
-      List<AuthorizationType> authorizations = [new ApiKey("test", "header")]
+      List<AuthorizationType> authorizations = [new ApiKey("api-key", "test", "header",)]
       Documentation built = new DocumentationBuilder()
               .resourceListing(new ResourceListingBuilder()
                 .authorizations(authorizations)
