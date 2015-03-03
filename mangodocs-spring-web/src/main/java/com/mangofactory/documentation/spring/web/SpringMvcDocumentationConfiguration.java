@@ -38,8 +38,8 @@ public class SpringMvcDocumentationConfiguration {
   }
 
   @Bean
-  public GroupCache resourceGroupCache() {
-    return new GroupCache();
+  public DocumentationCache resourceGroupCache() {
+    return new DocumentationCache();
   }
 
 }

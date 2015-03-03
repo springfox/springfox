@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.annotations.ApiIgnore;
 import com.mangofactory.documentation.service.Documentation;
-import com.mangofactory.documentation.spring.web.GroupCache;
+import com.mangofactory.documentation.spring.web.DocumentationCache;
 import com.mangofactory.documentation.swagger.dto.ApiListing;
 import com.mangofactory.documentation.swagger.dto.ResourceListing;
 import com.mangofactory.documentation.swagger.mappers.ServiceModelToSwaggerMapper;
@@ -29,7 +29,7 @@ public class DefaultSwaggerController {
 
 
   @Autowired
-  private GroupCache groupCache;
+  private DocumentationCache documentationCache;
 
   @Autowired
   private ServiceModelToSwaggerMapper mapper;
@@ -54,7 +54,7 @@ public class DefaultSwaggerController {
 
   private ResponseEntity<ApiListing> getSwaggerApiListing(String swaggerGroup, String apiDeclaration) {
     String groupName = Optional.fromNullable(swaggerGroup).or("default");
-    Documentation documentation = groupCache.getGroup(groupName);
+    Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       return new ResponseEntity<ApiListing>(HttpStatus.NOT_FOUND);
     }
@@ -70,7 +70,7 @@ public class DefaultSwaggerController {
 
   private ResponseEntity<ResourceListing> getSwaggerResourceListing(String swaggerGroup) {
     String groupName = Optional.fromNullable(swaggerGroup).or("default");
-    Documentation documentation = groupCache.getGroup(groupName);
+    Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       return new ResponseEntity<ResourceListing>(HttpStatus.NOT_FOUND);
     }

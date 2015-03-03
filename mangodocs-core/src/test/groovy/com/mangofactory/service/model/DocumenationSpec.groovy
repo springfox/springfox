@@ -10,7 +10,7 @@ import spock.lang.Specification
 
 import static com.google.common.collect.Maps.newHashMap
 
-class GroupSpec extends Specification {
+class DocumenationSpec extends Specification {
   def "Groups are built correctly" () {
     given:
       List<AuthorizationType> authorizations = [new ApiKey("test", "header")]

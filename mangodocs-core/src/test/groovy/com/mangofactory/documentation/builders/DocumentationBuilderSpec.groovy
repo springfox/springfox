@@ -4,7 +4,7 @@ import com.mangofactory.documentation.service.ApiListing
 import com.mangofactory.documentation.service.ResourceListing
 import spock.lang.Specification
 
-class GroupBuilderSpec extends Specification {
+class DocumentationBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
     given:
       def sut = new DocumentationBuilder()

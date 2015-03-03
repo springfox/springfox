@@ -7,8 +7,8 @@ import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;
 import com.mangofactory.documentation.spi.service.contexts.Defaults;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContextBuilder;
-import com.mangofactory.documentation.spring.web.GroupCache;
-import com.mangofactory.documentation.spring.web.scanners.ApiGroupScanner;
+import com.mangofactory.documentation.spring.web.DocumentationCache;
+import com.mangofactory.documentation.spring.web.scanners.ApiDocumentationScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +32,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DocumentationPluginsBootstrapper implements ApplicationListener<ContextRefreshedEvent> {
   private static final Logger log = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
   private final DocumentationPluginsManager documentationPluginsManager;
-  private final GroupCache scanned;
-  private final ApiGroupScanner resourceListing;
+  private final DocumentationCache scanned;
+  private final ApiDocumentationScanner resourceListing;
   private final DefaultConfiguration defaultConfigurer;
   private final List<RequestMappingHandlerMapping> handlerMappings;
 
@@ -42,8 +42,8 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
   @Autowired
   public DocumentationPluginsBootstrapper(DocumentationPluginsManager documentationPluginsManager,
         List<RequestMappingHandlerMapping> handlerMappings,
-        GroupCache scanned,
-        ApiGroupScanner resourceListing,
+        DocumentationCache scanned,
+        ApiDocumentationScanner resourceListing,
         TypeResolver typeResolver,
         Defaults defaults,
         ServletContext servletContext) {
@@ -80,7 +80,7 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
   }
 
   private void scanDocumentation(DocumentationContext context) {
-    scanned.addGroup(resourceListing.scan(context));
+    scanned.addDocumentation(resourceListing.scan(context));
   }
 
   private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin each) {

@@ -3,7 +3,7 @@ package com.mangofactory.documentation.swagger2.web;
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.annotations.ApiIgnore;
 import com.mangofactory.documentation.service.Documentation;
-import com.mangofactory.documentation.spring.web.GroupCache;
+import com.mangofactory.documentation.spring.web.DocumentationCache;
 import com.mangofactory.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import com.wordnik.swagger.models.Swagger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class Swagger2Controller {
   public static final String DOCUMENTATION_BASE_PATH = "/v2/api-docs";
 
   @Autowired
-  private GroupCache groupCache;
+  private DocumentationCache documentationCache;
 
   @Autowired
   private ServiceModelToSwagger2Mapper mapper;
@@ -33,7 +33,7 @@ public class Swagger2Controller {
           @RequestParam(value = "group", required = false) String swaggerGroup) {
 
     String groupName = Optional.fromNullable(swaggerGroup).or("default");
-    Documentation documentation = groupCache.getGroup(groupName);
+    Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       return new ResponseEntity<Swagger>(HttpStatus.NOT_FOUND);
     }

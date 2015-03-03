@@ -14,11 +14,11 @@ import com.mangofactory.documentation.swagger.web.AbsolutePathProvider
 import static com.google.common.collect.Maps.*
 
 @Mixin([RequestMappingSupport])
-class ApiGroupScannerSpec extends DocumentationContextSpec {
+class ApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   ApiListingReferenceScanner listingReferenceScanner = Mock(ApiListingReferenceScanner)
   ApiListingScanner listingScanner = Mock(ApiListingScanner)
-  ApiGroupScanner  swaggerApiResourceListing = new ApiGroupScanner(listingReferenceScanner, listingScanner)
+  ApiDocumentationScanner  swaggerApiResourceListing = new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
 
   def "default swagger resource"() {
     when: "I create a swagger resource"

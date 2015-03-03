@@ -4,11 +4,11 @@ import com.mangofactory.documentation.service.AuthorizationType
 import com.mangofactory.documentation.service.Documentation
 import com.mangofactory.documentation.builders.DocumentationBuilder
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
-import com.mangofactory.documentation.spring.web.GroupCache
+import com.mangofactory.documentation.spring.web.DocumentationCache
 import com.mangofactory.documentation.spring.web.mixins.ApiListingSupport
 import com.mangofactory.documentation.spring.web.mixins.AuthSupport
 import com.mangofactory.documentation.spring.web.mixins.JsonSupport
-import com.mangofactory.documentation.spring.web.scanners.ApiGroupScanner
+import com.mangofactory.documentation.spring.web.scanners.ApiDocumentationScanner
 import com.mangofactory.documentation.spring.web.scanners.ApiListingReferenceScanResult
 import com.mangofactory.documentation.spring.web.scanners.ApiListingReferenceScanner
 import com.mangofactory.documentation.spring.web.scanners.ApiListingScanner
@@ -39,7 +39,7 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
   ApiListingReferenceScanner listingReferenceScanner
 
   def setup() {
-    controller.groupCache = new GroupCache()
+    controller.documentationCache = new DocumentationCache()
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     controller.mapper = serviceMapper()
@@ -60,9 +60,9 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
   @Unroll("path: #path")
   def "should return the default or first swagger resource listing"() {
     given:
-      ApiGroupScanner swaggerApiResourceListing =
-              new ApiGroupScanner(listingReferenceScanner, Mock(ApiListingScanner))
-      controller.groupCache.addGroup(swaggerApiResourceListing.scan(context()))
+      ApiDocumentationScanner swaggerApiResourceListing =
+              new ApiDocumentationScanner(listingReferenceScanner, Mock(ApiListingScanner))
+      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
     when:
       MvcResult result = mockMvc
               .perform(get(path))
@@ -85,7 +85,7 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
               .name("groupName")
               .apiListingsByResourceGroupName(['businesses': apiListing()])
               .build()
-      controller.groupCache.addGroup(group)
+      controller.documentationCache.addDocumentation(group)
     when:
       MvcResult result = mockMvc.perform(get("/v1/api-docs/groupName/businesses")).andDo(print()).andReturn()
       jsonBodyResponse(result)
@@ -103,7 +103,7 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
               .resourceListing(resourceListing(authTypes))
               .build()
 
-      controller.groupCache.addGroup(group)
+      controller.documentationCache.addDocumentation(group)
     when:
       MvcResult result = mockMvc.perform(get("/v1/api-docs?group=groupName")).andDo(print()).andReturn()
       def json = jsonBodyResponse(result)

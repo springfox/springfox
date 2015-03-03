@@ -19,13 +19,13 @@ import java.util.Map;
 import java.util.Set;
 
 @Component
-public class ApiGroupScanner {
+public class ApiDocumentationScanner {
 
   private ApiListingReferenceScanner apiListingReferenceScanner;
   private ApiListingScanner apiListingScanner;
 
   @Autowired
-  public ApiGroupScanner(
+  public ApiDocumentationScanner(
           ApiListingReferenceScanner apiListingReferenceScanner,
           ApiListingScanner apiListingScanner) {
 

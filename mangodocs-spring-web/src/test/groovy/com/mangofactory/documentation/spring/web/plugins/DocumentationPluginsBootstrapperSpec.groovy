@@ -4,8 +4,8 @@ import com.mangofactory.documentation.service.Documentation
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.DocumentationPlugin
 import com.mangofactory.documentation.spi.service.contexts.Defaults
-import com.mangofactory.documentation.spring.web.GroupCache
-import com.mangofactory.documentation.spring.web.scanners.ApiGroupScanner
+import com.mangofactory.documentation.spring.web.DocumentationCache
+import com.mangofactory.documentation.spring.web.scanners.ApiDocumentationScanner
 import org.springframework.context.ApplicationContext
 import org.springframework.context.event.ContextRefreshedEvent
 import spock.lang.Specification
@@ -17,13 +17,13 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
   ApplicationContext applicationContext = Mock(ApplicationContext)
   DocumentationPluginsManager pluginManager = Mock(DocumentationPluginsManager)
   Documentation group = Mock(Documentation)
-  ApiGroupScanner apiGroup = Mock(ApiGroupScanner)
+  ApiDocumentationScanner apiGroup = Mock(ApiDocumentationScanner)
 
   ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(applicationContext)
   DocumentationPluginsBootstrapper bootstrapper =
           new DocumentationPluginsBootstrapper(pluginManager,
           [],
-          new GroupCache(),
+          new DocumentationCache(),
           apiGroup,
           new TypeResolver(),
           new Defaults(), Mock(ServletContext))
