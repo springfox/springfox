@@ -56,6 +56,9 @@ public class DocumentationContextBuilder {
   private Set<String> includePatterns = newHashSet();
   private List<AlternateTypeRule> rules = newArrayList();
   private Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
+  private Set<String> protocols = newHashSet();
+  private Set<String> produces = newHashSet();
+  private Set<String> consumes = newHashSet();
 
   public DocumentationContextBuilder handlerMappings(List<RequestMappingHandlerMapping> handlerMappings) {
     this.handlerMappings = handlerMappings;
@@ -189,6 +192,19 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+  public DocumentationContextBuilder produces(Set<String> produces) {
+    this.produces.addAll(produces);
+    return this;
+  }
+
+  public DocumentationContextBuilder consumes(Set<String> consumes) {
+    this.consumes.addAll(consumes);
+    return this;
+  }
+  public DocumentationContextBuilder protocols(Set<String> protocols) {
+    this.protocols.addAll(protocols);
+    return this;
+  }
   public DocumentationContext build() {
     requestMappingEvaluator.appendExcludeAnnotations(excludeAnnotations);
     requestMappingEvaluator.appendIncludePatterns(includePatterns);
@@ -204,7 +220,7 @@ public class DocumentationContextBuilder {
             resourceGroupingStrategy, pathProvider,
             authorizationContext, authorizationTypes, rules,
             listingReferenceOrdering, apiDescriptionOrdering,
-            operationOrdering);
+            operationOrdering, produces, consumes, protocols);
   }
 
 

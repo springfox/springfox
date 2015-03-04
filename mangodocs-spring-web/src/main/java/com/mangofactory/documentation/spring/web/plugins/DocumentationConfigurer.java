@@ -49,20 +49,22 @@ public class DocumentationConfigurer implements DocumentationPlugin {
   private PathProvider pathProvider;
   private AuthorizationContext authorizationContext;
   private List<AuthorizationType> authorizationTypes;
-
-  private AtomicBoolean initialized = new AtomicBoolean(false);
-  private boolean enabled = true;
-  private List<String> includePatterns = newArrayList(".*?");
-  private List<Class<? extends Annotation>> excludeAnnotations = newArrayList();
-  private boolean applyDefaultResponseMessages = true;
-  private Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
-  private Set<Class> ignorableParameterTypes = newHashSet();
-  private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
-  private List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
   private Ordering<ApiListingReference> apiListingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private Ordering<Operation> operationOrdering;
 
+  private AtomicBoolean initialized = new AtomicBoolean(false);
+  private boolean enabled = true;
+  private boolean applyDefaultResponseMessages = true;
+  private Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
+  private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
+  private List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
+  private List<String> includePatterns = newArrayList(".*?");
+  private List<Class<? extends Annotation>> excludeAnnotations = newArrayList();
+  private Set<Class> ignorableParameterTypes = newHashSet();
+  private Set<String> protocols = newHashSet();
+  private Set<String> produces = newHashSet();
+  private Set<String> consumes = newHashSet();
 
   public DocumentationConfigurer(DocumentationType documentationType) {
     this.documentationType = documentationType;
@@ -197,6 +199,21 @@ public class DocumentationConfigurer implements DocumentationPlugin {
     return this;
   }
 
+  public DocumentationConfigurer produces(Set<String> produces) {
+    this.produces.addAll(produces);
+    return this;
+  }
+  
+  public DocumentationConfigurer consumes(Set<String> consumes) {
+    this.consumes.addAll(consumes);
+    return this;
+  }
+  
+  public DocumentationConfigurer protocols(Set<String> protocols) {
+    this.protocols.addAll(protocols);
+    return this;
+  }
+  
   /**
    * Adds model substitution rules (alternateTypeRules)
    *
@@ -362,6 +379,9 @@ public class DocumentationConfigurer implements DocumentationPlugin {
             .apiListingReferenceOrdering(apiListingReferenceOrdering)
             .apiDescriptionOrdering(apiDescriptionOrdering)
             .operationOrdering(operationOrdering)
+            .produces(produces)
+            .consumes(consumes)
+            .protocols(protocols)
             .build();
   }
 

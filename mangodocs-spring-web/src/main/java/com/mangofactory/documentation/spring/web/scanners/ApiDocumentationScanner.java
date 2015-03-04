@@ -42,6 +42,10 @@ public class ApiDocumentationScanner {
     DocumentationBuilder group = new DocumentationBuilder()
             .name(context.getGroupName())
             .apiListingsByResourceGroupName(apiListings)
+            .produces(context.getProduces())
+            .consumes(context.getConsumes())
+            .schemes(context.getProtocols())
+            .basePath(context.getPathProvider().getApplicationBasePath())
             .tags(toTags(apiListings));
 
     Collections.sort(apiListingReferences, context.getListingReferenceOrdering());

@@ -75,8 +75,8 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                   .authorizations(null)
                   .basePath("/base-path")
                   .description("listing")
-                  .consumes([])
-                  .produces([])
+                  .consumes([] as Set)
+                  .produces([] as Set)
                   .models([
                     "m1" : new ModelBuilder()
                             .description("test")

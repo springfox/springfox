@@ -73,6 +73,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .groupName("petstore")
               .useDefaultResponseMessages(false)
               .authorizationTypes(authTypes())
+              .produces(['application/xml', 'application/json'] as Set)
               .includePatterns("/api/.*");
     }
   }

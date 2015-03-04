@@ -37,21 +37,27 @@ public class DocumentationContext {
   private final Ordering<ApiListingReference> listingReferenceOrdering;
   private final Ordering<ApiDescription> apiDescriptionOrdering;
   private final Ordering<Operation> operationOrdering;
+  private Set<String> produces;
+  private Set<String> consumes;
+  private Set<String> protocols;
 
   public DocumentationContext(DocumentationType documentationType,
-          List<RequestMappingHandlerMapping> handlerMappings,
-          ApiInfo apiInfo, String groupName,
-          RequestMappingEvaluator requestMappingEvaluator,
-          Set<Class> ignorableParameterTypes,
-          Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
-          ResourceGroupingStrategy resourceGroupingStrategy,
-          PathProvider pathProvider,
-          AuthorizationContext authorizationContext,
-          List<AuthorizationType> authorizationTypes,
-          List<AlternateTypeRule> alternateTypeRules,
-          Ordering<ApiListingReference> listingReferenceOrdering,
-          Ordering<ApiDescription> apiDescriptionOrdering,
-          Ordering<Operation> operationOrdering) {
+                              List<RequestMappingHandlerMapping> handlerMappings,
+                              ApiInfo apiInfo, String groupName,
+                              RequestMappingEvaluator requestMappingEvaluator,
+                              Set<Class> ignorableParameterTypes,
+                              Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
+                              ResourceGroupingStrategy resourceGroupingStrategy,
+                              PathProvider pathProvider,
+                              AuthorizationContext authorizationContext,
+                              List<AuthorizationType> authorizationTypes,
+                              List<AlternateTypeRule> alternateTypeRules,
+                              Ordering<ApiListingReference> listingReferenceOrdering,
+                              Ordering<ApiDescription> apiDescriptionOrdering,
+                              Ordering<Operation> operationOrdering, 
+                              Set<String> produces, 
+                              Set<String> consumes, 
+                              Set<String> protocols) {
 
     this.documentationType = documentationType;
     this.handlerMappings = handlerMappings;
@@ -67,6 +73,9 @@ public class DocumentationContext {
     this.listingReferenceOrdering = listingReferenceOrdering;
     this.apiDescriptionOrdering = apiDescriptionOrdering;
     this.operationOrdering = operationOrdering;
+    this.produces = produces;
+    this.consumes = consumes;
+    this.protocols = protocols;
     this.alternateTypeProvider = new AlternateTypeProvider(alternateTypeRules);
   }
 
@@ -128,5 +137,17 @@ public class DocumentationContext {
 
   public Ordering<Operation> operationOrdering() {
     return operationOrdering;
+  }
+
+  public Set<String> getProduces() {
+    return produces;
+  }
+
+  public Set<String> getConsumes() {
+    return consumes;
+  }
+
+  public Set<String> getProtocols() {
+    return protocols;
   }
 }

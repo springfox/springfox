@@ -66,8 +66,8 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     then:
       scanned.containsKey("businesses")
       ApiListing listing = scanned.get("businesses")
-      listing.consumes == [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE]
-      listing.produces == [APPLICATION_JSON_VALUE]
+      listing.consumes == [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE] as Set
+      listing.produces == [APPLICATION_JSON_VALUE] as Set
   }
 
   def "should assign global authorizations"() {

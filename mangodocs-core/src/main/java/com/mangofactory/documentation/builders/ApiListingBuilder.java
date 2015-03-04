@@ -8,9 +8,11 @@ import com.mangofactory.documentation.service.Authorization;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.builders.BuilderDefaults.*;
 
 public class ApiListingBuilder {
@@ -21,9 +23,9 @@ public class ApiListingBuilder {
   private String description;
   private int position;
 
-  private List<String> produces = newArrayList();
-  private List<String> consumes = newArrayList();
-  private List<String> protocol = newArrayList();
+  private Set<String> produces = newHashSet();
+  private Set<String> consumes = newHashSet();
+  private Set<String> protocol = newHashSet();
   private List<Authorization> authorizations = newArrayList();
   private List<ApiDescription> apis = newArrayList();
   private Map<String, Model> models = newHashMap();
@@ -47,16 +49,16 @@ public class ApiListingBuilder {
     return this;
   }
 
-  public ApiListingBuilder produces(List<String> produces) {
+  public ApiListingBuilder produces(Set<String> produces) {
     if (produces != null) {
-      this.produces = newArrayList(produces);
+      this.produces = newHashSet(produces);
     }
     return this;
   }
 
-  public ApiListingBuilder consumes(List<String> consumes) {
+  public ApiListingBuilder consumes(Set<String> consumes) {
     if (consumes != null) {
-      this.consumes = newArrayList(consumes);
+      this.consumes = newHashSet(consumes);
     }
     return this;
   }
@@ -71,7 +73,7 @@ public class ApiListingBuilder {
     return this;
   }
 
-  public ApiListingBuilder protocols(List<String> protocols) {
+  public ApiListingBuilder protocols(Set<String> protocols) {
     if (protocols != null) {
       this.protocol.addAll(protocols);
     }

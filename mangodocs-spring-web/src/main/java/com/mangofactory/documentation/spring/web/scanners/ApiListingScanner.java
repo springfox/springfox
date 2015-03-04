@@ -11,6 +11,7 @@ import com.mangofactory.documentation.service.ResourceGroup;
 import com.mangofactory.documentation.builders.ApiListingBuilder;
 import com.mangofactory.documentation.spi.service.contexts.ApiListingContext;
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext;
+import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext;
 import com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +55,14 @@ public class ApiListingScanner {
 
       ResourceGroup resourceGroup = entry.getKey();
 
-      Set<String> produces = new LinkedHashSet<String>(2);
-      Set<String> consumes = new LinkedHashSet<String>(2);
+      DocumentationContext documentationContext = context.getDocumentationContext();
+      Set<String> produces = new LinkedHashSet<String>(documentationContext.getProduces());
+      Set<String> consumes = new LinkedHashSet<String>(documentationContext.getConsumes());
+      Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
       Set<ApiDescription> apiDescriptions = newHashSet();
 
       Map<String, Model> models = new LinkedHashMap<String, Model>();
-      AuthorizationContext authorizationContext = context.getDocumentationContext().getAuthorizationContext();
+      AuthorizationContext authorizationContext = documentationContext.getAuthorizationContext();
       for (RequestMappingContext each : entry.getValue()) {
         models.putAll(apiModelReader.read(each));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
@@ -67,22 +70,21 @@ public class ApiListingScanner {
 
       List<Authorization> authorizations = authorizationContext.getScalaAuthorizations();
 
-      ArrayList sortedDescriptions = new ArrayList(apiDescriptions);
-      Collections.sort(sortedDescriptions, context.getDocumentationContext().getApiDescriptionOrdering());
+      ArrayList sortedApis = new ArrayList(apiDescriptions);
+      Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());
 
-      String resourcePath = longestCommonPath(sortedDescriptions);
+      String resourcePath = longestCommonPath(sortedApis);
 
-      String apiVersion = "1.0";
-      PathProvider pathProvider = context.getDocumentationContext().getPathProvider();
+      PathProvider pathProvider = documentationContext.getPathProvider();
       ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
-              .apiVersion(apiVersion)
+              .apiVersion(documentationContext.getApiInfo().getVersion())
               .basePath(pathProvider.getApplicationBasePath())
               .resourcePath(resourcePath)
-              .produces(newArrayList(produces))
-              .consumes(newArrayList(consumes))
-              .protocols(new ArrayList<String>())
+              .produces(produces)
+              .consumes(consumes)
+              .protocols(protocols)
               .authorizations(authorizations)
-              .apis(sortedDescriptions)
+              .apis(sortedApis)
               .models(models)
               .description(null)
               .position(position++);

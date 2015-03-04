@@ -3,7 +3,6 @@ package com.mangofactory.documentation.swagger2.mappers;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.service.ApiDescription;
@@ -39,19 +38,19 @@ import static com.mangofactory.documentation.swagger2.mappers.ModelMapper.*;
 @Mapper(uses = {ModelMapper.class, ParameterMapper.class, SecurityMapper.class})
 public abstract class ServiceModelToSwagger2Mapper {
   @Mappings({
-          @Mapping(target = "swagger", ignore = true),
           @Mapping(target = "info", source = "resourceListing.info"),
           @Mapping(target = "paths", source = "apiListings"),
-          @Mapping(target = "basePath", expression = "java(anyApi(from).getBasePath())"),
+          @Mapping(target = "basePath", source = "basePath"),
           @Mapping(target = "tags", source="tags"),
-          @Mapping(target = "host", expression = "java(anyApi(from).getBasePath())"),
-          @Mapping(target = "schemes", expression = "java(toSchemes(anyApi(from)))"),
-          @Mapping(target = "produces", expression = "java(anyApi(from).getProduces())"),
-          @Mapping(target = "consumes", expression = "java(anyApi(from).getConsumes())"),
-          @Mapping(target = "parameters", expression = "java(new java.util.HashMap())"),
+          @Mapping(target = "schemes", expression = "java(toSchemes(from.getSchemes()))"),
+          @Mapping(target = "produces", source = "produces"),
+          @Mapping(target = "consumes", source = "consumes"),
           @Mapping(target = "definitions", expression = "java(modelMapper.mapModels(allApiModels(from)))"),
           @Mapping(target = "securityDefinitions", 
                   expression = "java(securityMapper.toSecuritySchemeDefinitions(from.getResourceListing()))"),
+          @Mapping(target = "swagger", ignore = true),
+          @Mapping(target = "parameters", ignore = true),
+          @Mapping(target = "host", ignore = true),
           @Mapping(target = "externalDocs", ignore = true)
   })
   public abstract Swagger map(Documentation from);
@@ -90,8 +89,8 @@ public abstract class ServiceModelToSwagger2Mapper {
     return new License().name(from.getLicense()).url(from.getLicenseUrl());
   }
 
-  protected List<Scheme> toSchemes(ApiListing from) {
-    return FluentIterable.from(from.getProtocols()).transform(toScheme()).toList();
+  protected List<Scheme> toSchemes(List<String> from) {
+    return FluentIterable.from(from).transform(toScheme()).toList();
   }
 
   protected Contact toContact(ApiInfo from) {
@@ -159,10 +158,6 @@ public abstract class ServiceModelToSwagger2Mapper {
       definitions.putAll(each.getModels());
     }
     return definitions;
-  }
-
-  protected ApiListing anyApi(Documentation documentation) {
-    return Iterables.getFirst(documentation.getApiListings().values(), null);
   }
 
   private Function<String, Scheme> toScheme() {

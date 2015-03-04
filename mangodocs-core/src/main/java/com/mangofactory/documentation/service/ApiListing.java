@@ -4,22 +4,23 @@ import com.mangofactory.documentation.schema.Model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ApiListing {
   private final String apiVersion;
   private final String basePath;
   private final String resourcePath;
-  private final List<String> produces;
-  private final List<String> consumes;
-  private final List<String> protocol;
+  private final Set<String> produces;
+  private final Set<String> consumes;
+  private final Set<String> protocol;
   private final List<Authorization> authorizations;
   private final List<ApiDescription> apis;
   private final Map<String, Model> models;
   private final String description;
   private final int position;
 
-  public ApiListing(String apiVersion, String basePath, String resourcePath, List<String>
-          produces, List<String> consumes, List<String> protocol, List<Authorization> authorizations,
+  public ApiListing(String apiVersion, String basePath, String resourcePath, Set<String>
+          produces, Set<String> consumes, Set<String> protocol, List<Authorization> authorizations,
                     List<ApiDescription> apis, Map<String, Model> models, String description, int position) {
     this.apiVersion = apiVersion;
     this.basePath = basePath;
@@ -46,15 +47,15 @@ public class ApiListing {
     return resourcePath;
   }
 
-  public List<String> getProduces() {
+  public Set<String> getProduces() {
     return produces;
   }
 
-  public List<String> getConsumes() {
+  public Set<String> getConsumes() {
     return consumes;
   }
 
-  public List<String> getProtocols() {
+  public Set<String> getProtocols() {
     return protocol;
   }
 
