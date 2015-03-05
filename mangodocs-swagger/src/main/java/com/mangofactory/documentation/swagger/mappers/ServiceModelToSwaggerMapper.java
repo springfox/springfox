@@ -12,7 +12,6 @@ import com.mangofactory.documentation.swagger.dto.Operation;
 import com.mangofactory.documentation.swagger.dto.Parameter;
 import com.mangofactory.documentation.swagger.dto.ResourceListing;
 import com.mangofactory.documentation.swagger.dto.ResponseMessage;
-import com.mangofactory.documentation.swagger.mappers.DataTypeMapper.DataTypeTranslator;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -27,8 +26,7 @@ public interface ServiceModelToSwaggerMapper {
   ApiInfo toSwaggerApiInfo(com.mangofactory.documentation.service.ApiInfo from);
 
   @Mappings({
-          @Mapping(target = "responseModel", source = "responseModel", 
-              qualifiedBy = {DataTypeTranslator.class, ResponseTypeName.class})
+          @Mapping(target = "responseModel", source = "responseModel", qualifiedBy = ResponseTypeName.class)
   })
   ResponseMessage toSwaggerResponseMessage(com.mangofactory.documentation.service.ResponseMessage from);
 
@@ -43,22 +41,19 @@ public interface ServiceModelToSwaggerMapper {
   ApiListing toSwaggerApiListing(com.mangofactory.documentation.service.ApiListing from);
 
   @Mappings({
-          @Mapping(target = "type", source = "modelRef",
-                  qualifiedBy = {DataTypeTranslator.class, Type.class}),
-          @Mapping(target = "items", source = "modelRef",
-                  qualifiedBy = {DataTypeTranslator.class, ItemType.class})
+          @Mapping(target = "type", source = "modelRef", qualifiedBy = Type.class),
+          @Mapping(target = "items", source = "modelRef", qualifiedBy = ItemType.class)
   })
   ModelPropertyDto toSwaggerModelPropertyDto(ModelProperty from);
 
   @Mappings({
           @Mapping(target = "dataType", source = "responseModel",
-                  qualifiedBy = {DataTypeTranslator.class, OperationType.class})
+                  qualifiedBy = OperationType.class)
   })
   Operation toSwaggerOperation(com.mangofactory.documentation.service.Operation from);
 
   @Mappings({
-    @Mapping(target = "parameterType", source = "modelRef",
-            qualifiedBy = {DataTypeTranslator.class, OperationType.class})
+    @Mapping(target = "parameterType", source = "modelRef", qualifiedBy = OperationType.class)
   })
   Parameter toSwaggerParameter(com.mangofactory.documentation.service.Parameter from);
 

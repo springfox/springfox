@@ -13,10 +13,6 @@ import java.lang.annotation.Target;
 @Mapper
 public class DataTypeMapper {
 
-//  public com.mangofactory.documentation.swagger.dto.SwaggerDataType fromTypeName(String typeName) {
-//    return new DataType(typeName);
-//  }
-
   @ResponseTypeName
   public String responseTypeName(ModelRef modelRef) {
     if (modelRef == null) {
@@ -51,12 +47,6 @@ public class DataTypeMapper {
       return String.format("%s[%s]", modelRef.getType(), modelRef.getItemType());
     }
     return modelRef.getType();
-  }
-
-  @Qualifier
-  @Target(ElementType.TYPE)
-  @Retention(RetentionPolicy.SOURCE)
-  public @interface DataTypeTranslator {
   }
 
   @Qualifier
