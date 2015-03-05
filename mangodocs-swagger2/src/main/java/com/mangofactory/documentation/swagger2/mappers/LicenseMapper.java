@@ -11,9 +11,9 @@ import java.lang.annotation.Target;
 
 @Mapper
 public abstract class LicenseMapper {
-  
+
   @License
-  public com.wordnik.swagger.models.License fromLicenseUrl(ApiInfo from) {
+  public com.wordnik.swagger.models.License apiInfoToLicense(ApiInfo from) {
     return new com.wordnik.swagger.models.License().name(from.getLicense()).url(from.getLicenseUrl());
   }
 

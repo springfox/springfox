@@ -14,19 +14,15 @@ import com.wordnik.swagger.models.parameters.PathParameter;
 import com.wordnik.swagger.models.parameters.QueryParameter;
 import com.wordnik.swagger.models.parameters.SerializableParameter;
 import com.wordnik.swagger.models.properties.Property;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
 
 import static com.mangofactory.documentation.swagger2.mappers.ModelMapper.*;
 
 
-@Component
+@Mapper
 public class ParameterMapper {
 
-  @Autowired
-  protected ModelMapper modelMapper;
-
-  public Parameter toSwagger2Parameter(com.mangofactory.documentation.service.Parameter source) {
+  public Parameter mapParameter(com.mangofactory.documentation.service.Parameter source) {
     Parameter parameter = bodyParameter(source);
     return serializableParameter(source).or(parameter);
   }
@@ -39,13 +35,6 @@ public class ParameterMapper {
     parameter.setAccess(source.getParamAccess());
     parameter.setRequired(source.isRequired());
     return parameter;
-  }
-
-  private Model fromModelRef(ModelRef modelRef) {
-    if (modelRef.isCollection()) {
-      return new ArrayModel().items(property(modelRef.getItemType()));
-    }
-    return new RefModel(modelRef.getType());
   }
 
   private Optional<Parameter> serializableParameter(com.mangofactory.documentation.service.Parameter source) {
@@ -88,6 +77,13 @@ public class ParameterMapper {
       toReturn.setFormat(property.getFormat());
     }
     return Optional.<Parameter>of(toReturn);
+  }
+
+  private Model fromModelRef(ModelRef modelRef) {
+    if (modelRef.isCollection()) {
+      return new ArrayModel().items(property(modelRef.getItemType()));
+    }
+    return new RefModel(modelRef.getType());
   }
 
 }

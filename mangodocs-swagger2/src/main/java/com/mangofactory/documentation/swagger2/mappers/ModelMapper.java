@@ -148,7 +148,7 @@ public abstract class ModelMapper {
     return initialType.equalsIgnoreCase(ofType);
   }
 
-  protected Map<String, Model> fromApiListings(Map<String, ApiListing> apiListings) {
+  protected Map<String, Model> modelsFromApiListings(Map<String, ApiListing> apiListings) {
     Map<String, com.mangofactory.documentation.schema.Model> definitions = newHashMap();
     for (ApiListing each : apiListings.values()) {
       definitions.putAll(each.getModels());
