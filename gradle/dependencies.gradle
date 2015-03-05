@@ -1,15 +1,16 @@
 ext {
   swagger2Core = "1.5.2-M1"
   spring = "3.2.9.RELEASE"
-  groovy = "2.4.0"
-  spock = "0.7-groovy-2.0"
+  groovy = "2.4.1"
+  spock = "1.0-groovy-2.4"
   guava = "18.0"
   springHateoas = "0.10.0.RELEASE"
   slf4j = "1.7.10"
   mockito = "1.10.19"
   servlet = "2.5"
   classmate = "1.1.0"
-  jackson = '2.5.0'
+  jackson = '2.5.1'
+  snakeyaml = '1.15'
   libs = [
 
           test          : [
@@ -19,7 +20,7 @@ ext {
                   "org.mockito:mockito-all:${mockito}",
                   "com.jayway.jsonpath:json-path:1.2.0",
                   "org.slf4j:slf4j-simple:${slf4j}",
-                  "org.yaml:snakeyaml:1.14",
+                  "org.yaml:snakeyaml:${snakeyaml}",
                   "org.spockframework:spock-spring:${spock}",
                   "org.spockframework:spock-core:${spock}"
           ],

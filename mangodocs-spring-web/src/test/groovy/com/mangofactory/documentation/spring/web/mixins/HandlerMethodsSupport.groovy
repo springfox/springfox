@@ -1,5 +1,4 @@
 package com.mangofactory.documentation.spring.web.mixins
-
 import com.fasterxml.classmate.MemberResolver
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
@@ -7,7 +6,7 @@ import com.fasterxml.classmate.members.ResolvedMethod
 import com.mangofactory.documentation.spring.web.dummy.DummyClass
 import org.springframework.web.method.HandlerMethod
 
-class HandlerMethodsSupport {
+trait HandlerMethodsSupport {
   HandlerMethod methodWithChild() {
     def clazz = new DummyClass.MethodsWithSameName()
     Class c = clazz.getClass();

@@ -21,8 +21,7 @@ import java.lang.reflect.Type
 import static com.google.common.collect.Lists.*
 import static com.mangofactory.documentation.spring.web.readers.operation.HandlerMethodResolver.*
 
-@Mixin(HandlerMethodsSupport)
-class HandlerMethodResolverSpec extends Specification {
+class HandlerMethodResolverSpec extends Specification implements HandlerMethodsSupport{
   def "Methods with same name are distinguished based on variance of parameters and return types" () {
     given:
       def sut = new HandlerMethodResolver(new TypeResolver())
@@ -229,7 +228,7 @@ class HandlerMethodResolverSpec extends Specification {
       def sut = new HandlerMethodResolver(resolver)
     and:
       def resolvedType =  resolver.resolve(ResponseEntity, superClass)
-      def superClassParameterized = parameterizedType(subClass, parameterizedType)
+      ParameterizedType superClassParameterized = parameterizedType(subClass, parameterizedType)
     expect:
       sut.isGenericTypeSubclass(resolvedType, superClassParameterized) == isSubclass
     where:
@@ -267,7 +266,7 @@ class HandlerMethodResolverSpec extends Specification {
     }
   }
 
-  private ParameterizedType parameterizedType(Class typeArgument, Type parameterizedType) {
+  static ParameterizedType parameterizedType(typeArgument, parameterizedType) {
     new ParameterizedType() {
       @Override
       Type[] getActualTypeArguments() {
@@ -276,7 +275,7 @@ class HandlerMethodResolverSpec extends Specification {
 
       @Override
       Type getRawType() {
-       parameterizedType
+        parameterizedType
       }
 
       @Override
