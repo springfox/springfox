@@ -1,6 +1,6 @@
 ext {
   swagger2Core = "1.5.2-M1"
-  spring = "3.2.9.RELEASE"
+  spring = "4.0.9.RELEASE"
   groovy = "2.4.1"
   spock = "1.0-groovy-2.4"
   guava = "18.0"
@@ -37,7 +37,7 @@ ext {
           ],
 
           clientProvided: [
-                  "javax.servlet:servlet-api:${servlet}",
+                  "org.apache.geronimo.specs:geronimo-servlet_3.0_spec:1.0",
                   "com.fasterxml.jackson.core:jackson-core:${jackson}",
                   "com.fasterxml.jackson.core:jackson-databind:${jackson}"
 
