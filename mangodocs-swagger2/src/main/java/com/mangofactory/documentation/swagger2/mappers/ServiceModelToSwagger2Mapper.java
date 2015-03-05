@@ -40,7 +40,7 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "info", source = "resourceListing.info"),
           @Mapping(target = "paths", source = "apiListings"),
           @Mapping(target = "basePath", source = "basePath"),
-          @Mapping(target = "tags", source="tags"),
+          @Mapping(target = "tags", source = "tags"),
           @Mapping(target = "schemes", source = "from.schemes"),
           @Mapping(target = "produces", source = "produces"),
           @Mapping(target = "consumes", source = "consumes"),
@@ -70,13 +70,13 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "consumes", source = "consumes"),
           @Mapping(target = "parameters", source = "parameters"),
           @Mapping(target = "security", source = "authorizations"),
-          @Mapping(target = "responses", source= "responseMessages"),
+          @Mapping(target = "responses", source = "responseMessages"),
           @Mapping(target = "tags", source = "tags"),
           @Mapping(target = "vendorExtensions", ignore = true),
           @Mapping(target = "externalDocs", ignore = true)
   })
   protected abstract Operation mapOperation(com.mangofactory.documentation.service.Operation from);
-  
+
   @Mappings({
           @Mapping(target = "description", source = "description"),
           @Mapping(target = "name", source = "name"),
@@ -103,15 +103,6 @@ public abstract class ServiceModelToSwagger2Mapper {
     return security;
   }
 
-  private Function<AuthorizationScope, String> scopeToString() {
-    return new Function<AuthorizationScope, String>() {
-      @Override
-      public String apply(AuthorizationScope input) {
-        return input.getScope();
-      }
-    };
-  }
-
   protected Map<String, Response> mapResponseMessages(Set<ResponseMessage> from) {
     HashMap<String, Response> responses = newHashMap();
     for (ResponseMessage responseMessage : from) {
@@ -136,6 +127,15 @@ public abstract class ServiceModelToSwagger2Mapper {
       }
     }
     return paths;
+  }
+
+  private Function<AuthorizationScope, String> scopeToString() {
+    return new Function<AuthorizationScope, String>() {
+      @Override
+      public String apply(AuthorizationScope input) {
+        return input.getScope();
+      }
+    };
   }
 
   private Path mapOperations(ApiDescription api, Optional<Path> existingPath) {

@@ -35,14 +35,6 @@ import static com.google.common.collect.Maps.*;
 @Mapper
 public abstract class ModelMapper {
 
-  protected Map<String, Model> fromApiListings(Map<String, ApiListing> apiListings) {
-    Map<String, com.mangofactory.documentation.schema.Model> definitions = newHashMap();
-    for (ApiListing each : apiListings.values()) {
-      definitions.putAll(each.getModels());
-    }
-    return mapModels(definitions);
-  }
-  
   public Map<String, Model> mapModels(Map<String, com.mangofactory.documentation.schema.Model> from) {
     if (from == null) {
       return null;
@@ -105,27 +97,6 @@ public abstract class ModelMapper {
     return responseProperty;
   }
 
-  protected abstract Map<String, Property> mapProperties(Map<String, ModelProperty> properties);
-
-  private Function<ModelProperty, String> propertyName() {
-    return new Function<ModelProperty, String>() {
-      @Override
-      public String apply(ModelProperty input) {
-        return input.getName();
-      }
-    };
-  }
-
-  private Predicate<ModelProperty> requiredProperties() {
-    return new Predicate<ModelProperty>() {
-      @Override
-      public boolean apply(ModelProperty input) {
-        return input.isRequired();
-      }
-    };
-  }
-
-
   // CHECKSTYLE:OFF
   static Property property(String typeName) {
     if (isOfType(typeName, "int")) {
@@ -165,15 +136,43 @@ public abstract class ModelMapper {
     }
     if (isOfType(typeName, "Void")) {
       return null;
-    } 
+    }
     if (isOfType(typeName, "Object")) {
       return new ObjectProperty();
     }
     return new RefProperty(typeName);
   }
   // CHECKSTYLE:ON
-
+  
   private static boolean isOfType(String initialType, String ofType) {
     return initialType.equalsIgnoreCase(ofType);
+  }
+
+  protected Map<String, Model> fromApiListings(Map<String, ApiListing> apiListings) {
+    Map<String, com.mangofactory.documentation.schema.Model> definitions = newHashMap();
+    for (ApiListing each : apiListings.values()) {
+      definitions.putAll(each.getModels());
+    }
+    return mapModels(definitions);
+  }
+
+  protected abstract Map<String, Property> mapProperties(Map<String, ModelProperty> properties);
+
+  private Function<ModelProperty, String> propertyName() {
+    return new Function<ModelProperty, String>() {
+      @Override
+      public String apply(ModelProperty input) {
+        return input.getName();
+      }
+    };
+  }
+
+  private Predicate<ModelProperty> requiredProperties() {
+    return new Predicate<ModelProperty>() {
+      @Override
+      public boolean apply(ModelProperty input) {
+        return input.isRequired();
+      }
+    };
   }
 }
