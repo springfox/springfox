@@ -51,7 +51,7 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "host", ignore = true),
           @Mapping(target = "externalDocs", ignore = true)
   })
-  public abstract Swagger map(Documentation from);
+  public abstract Swagger mapDocumentation(Documentation from);
 
   @Mappings({
           @Mapping(target = "license", source = "from",
@@ -60,7 +60,7 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "termsOfService", source = "termsOfServiceUrl"),
           @Mapping(target = "vendorExtensions", ignore = true)
   })
-  protected abstract Info map(com.mangofactory.documentation.service.ApiInfo from);
+  protected abstract Info mapApiInfo(com.mangofactory.documentation.service.ApiInfo from);
 
   @Mappings({
           @Mapping(target = "description", source = "notes"),
@@ -75,24 +75,24 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "vendorExtensions", ignore = true),
           @Mapping(target = "externalDocs", ignore = true)
   })
-  protected abstract Operation map(com.mangofactory.documentation.service.Operation from);
+  protected abstract Operation mapOperation(com.mangofactory.documentation.service.Operation from);
   
   @Mappings({
           @Mapping(target = "description", source = "description"),
           @Mapping(target = "name", source = "name"),
           @Mapping(target = "externalDocs", ignore = true)
   })
-  protected abstract Tag map(com.mangofactory.documentation.service.Tag from); 
+  protected abstract Tag mapTag(com.mangofactory.documentation.service.Tag from);
 
-  protected List<Scheme> toSchemes(List<String> from) {
+  protected List<Scheme> mapSchemes(List<String> from) {
     return FluentIterable.from(from).transform(toScheme()).toList();
   }
 
-  protected Contact toContact(String contact) {
+  protected Contact mapContct(String contact) {
     return new Contact().name(contact);
   }
 
-  protected List<Map<String, List<String>>> map(
+  protected List<Map<String, List<String>>> mapAuthorizations(
           Map<String, List<com.mangofactory.documentation.service.AuthorizationScope>> from) {
     List<Map<String, List<String>>> security = newArrayList();
     for (Map.Entry<String, List<AuthorizationScope>> each : from.entrySet()) {
@@ -103,7 +103,7 @@ public abstract class ServiceModelToSwagger2Mapper {
     return security;
   }
 
-  protected Function<AuthorizationScope, String> scopeToString() {
+  private Function<AuthorizationScope, String> scopeToString() {
     return new Function<AuthorizationScope, String>() {
       @Override
       public String apply(AuthorizationScope input) {
@@ -112,7 +112,7 @@ public abstract class ServiceModelToSwagger2Mapper {
     };
   }
 
-  protected static Map<String, Response> map(Set<ResponseMessage> from) {
+  protected Map<String, Response> mapResponseMessages(Set<ResponseMessage> from) {
     HashMap<String, Response> responses = newHashMap();
     for (ResponseMessage responseMessage : from) {
       Property responseProperty;
@@ -128,20 +128,20 @@ public abstract class ServiceModelToSwagger2Mapper {
     return responses;
   }
 
-  protected Map<String, Path> mapPaths(Map<String, ApiListing> apiListings) {
+  protected Map<String, Path> mapApiListings(Map<String, ApiListing> apiListings) {
     Map<String, Path> paths = newHashMap();
     for (ApiListing each : apiListings.values()) {
       for (ApiDescription api : each.getApis()) {
-        paths.put(api.getPath(), map(api, Optional.fromNullable(paths.get(api.getPath()))));
+        paths.put(api.getPath(), mapOperations(api, Optional.fromNullable(paths.get(api.getPath()))));
       }
     }
     return paths;
   }
 
-  protected Path map(ApiDescription api, Optional<Path> existingPath) {
+  private Path mapOperations(ApiDescription api, Optional<Path> existingPath) {
     Path path = existingPath.or(new Path());
     for (com.mangofactory.documentation.service.Operation each : api.getOperations()) {
-      Operation operation = map(each);
+      Operation operation = mapOperation(each);
       path.set(each.getMethod().toLowerCase(), operation);
     }
     return path;

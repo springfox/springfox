@@ -39,7 +39,7 @@ public class Swagger2Controller {
     if (documentation == null) {
       return new ResponseEntity<Swagger>(HttpStatus.NOT_FOUND);
     }
-    Swagger swagger = mapper.map(documentation);
+    Swagger swagger = mapper.mapDocumentation(documentation);
     swagger.host(String.format("%s:%s", request.getServerName(), request.getServerPort()));
     return new ResponseEntity<Swagger>(swagger, HttpStatus.OK);
   }
