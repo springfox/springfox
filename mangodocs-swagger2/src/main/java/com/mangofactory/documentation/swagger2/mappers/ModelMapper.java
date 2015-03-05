@@ -7,6 +7,7 @@ import com.mangofactory.documentation.schema.ModelProperty;
 import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.service.AllowableListValues;
 import com.mangofactory.documentation.service.AllowableValues;
+import com.mangofactory.documentation.service.ApiListing;
 import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.ModelImpl;
 import com.wordnik.swagger.models.properties.ArrayProperty;
@@ -33,6 +34,15 @@ import static com.google.common.collect.Maps.*;
 
 @Mapper
 public abstract class ModelMapper {
+
+  protected Map<String, Model> fromApiListings(Map<String, ApiListing> apiListings) {
+    Map<String, com.mangofactory.documentation.schema.Model> definitions = newHashMap();
+    for (ApiListing each : apiListings.values()) {
+      definitions.putAll(each.getModels());
+    }
+    return mapModels(definitions);
+  }
+  
   public Map<String, Model> mapModels(Map<String, com.mangofactory.documentation.schema.Model> from) {
     if (from == null) {
       return null;

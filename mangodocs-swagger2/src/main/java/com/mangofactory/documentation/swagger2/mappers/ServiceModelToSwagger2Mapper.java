@@ -6,14 +6,12 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Maps;
 import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.service.ApiDescription;
-import com.mangofactory.documentation.service.ApiInfo;
 import com.mangofactory.documentation.service.ApiListing;
 import com.mangofactory.documentation.service.AuthorizationScope;
 import com.mangofactory.documentation.service.Documentation;
 import com.mangofactory.documentation.service.ResponseMessage;
 import com.wordnik.swagger.models.Contact;
 import com.wordnik.swagger.models.Info;
-import com.wordnik.swagger.models.License;
 import com.wordnik.swagger.models.Operation;
 import com.wordnik.swagger.models.Path;
 import com.wordnik.swagger.models.Response;
@@ -35,19 +33,19 @@ import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.documentation.swagger2.mappers.ModelMapper.*;
 
-@Mapper(uses = {ModelMapper.class, ParameterMapper.class, SecurityMapper.class})
+@Mapper(uses = {ModelMapper.class, ParameterMapper.class, SecurityMapper.class, LicenseMapper.class})
 public abstract class ServiceModelToSwagger2Mapper {
+
   @Mappings({
           @Mapping(target = "info", source = "resourceListing.info"),
           @Mapping(target = "paths", source = "apiListings"),
           @Mapping(target = "basePath", source = "basePath"),
           @Mapping(target = "tags", source="tags"),
-          @Mapping(target = "schemes", expression = "java(toSchemes(from.getSchemes()))"),
+          @Mapping(target = "schemes", source = "from.schemes"),
           @Mapping(target = "produces", source = "produces"),
           @Mapping(target = "consumes", source = "consumes"),
-          @Mapping(target = "definitions", expression = "java(modelMapper.mapModels(allApiModels(from)))"),
-          @Mapping(target = "securityDefinitions", 
-                  expression = "java(securityMapper.toSecuritySchemeDefinitions(from.getResourceListing()))"),
+          @Mapping(target = "definitions", source = "apiListings"),
+          @Mapping(target = "securityDefinitions", source = "resourceListing"),
           @Mapping(target = "swagger", ignore = true),
           @Mapping(target = "parameters", ignore = true),
           @Mapping(target = "host", ignore = true),
@@ -56,8 +54,9 @@ public abstract class ServiceModelToSwagger2Mapper {
   public abstract Swagger map(Documentation from);
 
   @Mappings({
-          @Mapping(target = "license", expression = "java(toLicense(from))"),
-          @Mapping(target = "contact", expression = "java(toContact(from))"),
+          @Mapping(target = "license", source = "from",
+                  qualifiedBy = {LicenseMapper.LicenseTranslator.class, LicenseMapper.License.class}),
+          @Mapping(target = "contact", source = "from.contact"),
           @Mapping(target = "termsOfService", source = "termsOfServiceUrl"),
           @Mapping(target = "vendorExtensions", ignore = true)
   })
@@ -84,17 +83,13 @@ public abstract class ServiceModelToSwagger2Mapper {
           @Mapping(target = "externalDocs", ignore = true)
   })
   protected abstract Tag map(com.mangofactory.documentation.service.Tag from); 
-  
-  protected License toLicense(ApiInfo from) {
-    return new License().name(from.getLicense()).url(from.getLicenseUrl());
-  }
 
   protected List<Scheme> toSchemes(List<String> from) {
     return FluentIterable.from(from).transform(toScheme()).toList();
   }
 
-  protected Contact toContact(ApiInfo from) {
-    return new Contact().name(from.getContact());
+  protected Contact toContact(String contact) {
+    return new Contact().name(contact);
   }
 
   protected List<Map<String, List<String>>> map(
@@ -152,13 +147,6 @@ public abstract class ServiceModelToSwagger2Mapper {
     return path;
   }
 
-  protected Map<String, com.mangofactory.documentation.schema.Model> allApiModels(Documentation documentation) {
-    Map<String, com.mangofactory.documentation.schema.Model> definitions = newHashMap();
-    for (ApiListing each : documentation.getApiListings().values()) {
-      definitions.putAll(each.getModels());
-    }
-    return definitions;
-  }
 
   private Function<String, Scheme> toScheme() {
     return new Function<String, Scheme>() {
