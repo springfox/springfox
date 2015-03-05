@@ -1,36 +1,49 @@
 package com.mangofactory.documentation.swagger.mappers;
 
 import com.mangofactory.documentation.schema.ModelRef;
-import com.mangofactory.documentation.schema.TypeNameExtractor;
 import com.mangofactory.documentation.swagger.dto.DataType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Qualifier;
 
-@Component
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Mapper
 public class DataTypeMapper {
-  private final TypeNameExtractor extractor;
 
-  @Autowired
-  public DataTypeMapper(TypeNameExtractor extractor) {
-    this.extractor = extractor;
-  }
+//  public com.mangofactory.documentation.swagger.dto.SwaggerDataType fromTypeName(String typeName) {
+//    return new DataType(typeName);
+//  }
 
-  public com.mangofactory.documentation.swagger.dto.SwaggerDataType fromTypeName(String typeName) {
-    return new DataType(typeName);
-  }
-  
+  @ResponseTypeName
   public String responseTypeName(ModelRef modelRef) {
     if (modelRef == null) {
       return null;
     }
-    //TODO: Verify this is not needed
-//    if (modelRef.isCollection()) {
-//      return String.format("%s[%s]", modelRef.getType(), modelRef.getItemType());
-//    }
     return modelRef.getType();
   }
 
-  public String operationTypeName(ModelRef modelRef) {
+  @OperationType
+  public com.mangofactory.documentation.swagger.dto.DataType operationTypeFromModelRef(ModelRef modelRef) {
+    return new DataType(operationTypeName(modelRef));
+  }
+
+  @Type
+  public com.mangofactory.documentation.swagger.dto.DataType typeFromModelRef(ModelRef modelRef) {
+    return new DataType(modelRef.getType());
+  }
+
+  @ItemType
+  public com.mangofactory.documentation.swagger.dto.DataType itemTypeFromModelRef(ModelRef modelRef) {
+    if (modelRef.isCollection()) {
+      return new DataType(modelRef.getItemType());
+    }
+    return null;
+  }
+
+  private String operationTypeName(ModelRef modelRef) {
     if (modelRef == null) {
       return null;
     }
@@ -39,19 +52,34 @@ public class DataTypeMapper {
     }
     return modelRef.getType();
   }
-  
-  public com.mangofactory.documentation.swagger.dto.DataType operationTypeFromModelRef(ModelRef modelRef) {
-    return new DataType(operationTypeName(modelRef));
+
+  @Qualifier
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface DataTypeTranslator {
   }
-  
-  public com.mangofactory.documentation.swagger.dto.DataType typeFromModelRef(ModelRef modelRef) {
-    return new DataType(modelRef.getType());
+
+  @Qualifier
+  @Target(ElementType.METHOD)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface OperationType {
   }
-  
-  public com.mangofactory.documentation.swagger.dto.DataType itemTypeFromModelRef(ModelRef modelRef) {
-    if (modelRef.isCollection()) {
-      return new DataType(modelRef.getItemType());
-    }
-    return null;
+
+  @Qualifier
+  @Target(ElementType.METHOD)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface Type {
+  }
+
+  @Qualifier
+  @Target(ElementType.METHOD)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface ResponseTypeName {
+  }
+
+  @Qualifier
+  @Target(ElementType.METHOD)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface ItemType {
   }
 }

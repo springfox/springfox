@@ -12,9 +12,12 @@ import com.mangofactory.documentation.swagger.dto.Operation;
 import com.mangofactory.documentation.swagger.dto.Parameter;
 import com.mangofactory.documentation.swagger.dto.ResourceListing;
 import com.mangofactory.documentation.swagger.dto.ResponseMessage;
+import com.mangofactory.documentation.swagger.mappers.DataTypeMapper.DataTypeTranslator;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+
+import static com.mangofactory.documentation.swagger.mappers.DataTypeMapper.*;
 
 @Mapper(uses = {AllowableValuesMapper.class, DataTypeMapper.class, AuthorizationTypesMapper.class})
 public interface ServiceModelToSwaggerMapper {
@@ -24,8 +27,8 @@ public interface ServiceModelToSwaggerMapper {
   ApiInfo toSwaggerApiInfo(com.mangofactory.documentation.service.ApiInfo from);
 
   @Mappings({
-          @Mapping(target = "responseModel",
-                  expression = "java(dataTypeMapper.responseTypeName(from.getResponseModel()))")
+          @Mapping(target = "responseModel", source = "responseModel", 
+              qualifiedBy = {DataTypeTranslator.class, ResponseTypeName.class})
   })
   ResponseMessage toSwaggerResponseMessage(com.mangofactory.documentation.service.ResponseMessage from);
 
@@ -40,22 +43,22 @@ public interface ServiceModelToSwaggerMapper {
   ApiListing toSwaggerApiListing(com.mangofactory.documentation.service.ApiListing from);
 
   @Mappings({
-          @Mapping(target = "type",
-                  expression = "java( dataTypeMapper.typeFromModelRef( from.getModelRef() ) )"),
-          @Mapping(target = "items",
-                  expression = "java( dataTypeMapper.itemTypeFromModelRef( from.getModelRef() ) )")
+          @Mapping(target = "type", source = "modelRef",
+                  qualifiedBy = {DataTypeTranslator.class, Type.class}),
+          @Mapping(target = "items", source = "modelRef",
+                  qualifiedBy = {DataTypeTranslator.class, ItemType.class})
   })
   ModelPropertyDto toSwaggerModelPropertyDto(ModelProperty from);
 
   @Mappings({
-          @Mapping(target = "dataType",
-                  expression = "java( dataTypeMapper.operationTypeFromModelRef(from.getResponseModel()))")
+          @Mapping(target = "dataType", source = "responseModel",
+                  qualifiedBy = {DataTypeTranslator.class, OperationType.class})
   })
   Operation toSwaggerOperation(com.mangofactory.documentation.service.Operation from);
 
   @Mappings({
-    @Mapping(target = "parameterType",
-      expression = "java( dataTypeMapper.operationTypeFromModelRef( from.getModelRef()))")
+    @Mapping(target = "parameterType", source = "modelRef",
+            qualifiedBy = {DataTypeTranslator.class, OperationType.class})
   })
   Parameter toSwaggerParameter(com.mangofactory.documentation.service.Parameter from);
 
