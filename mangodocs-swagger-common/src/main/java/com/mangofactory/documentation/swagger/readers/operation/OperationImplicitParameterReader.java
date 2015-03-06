@@ -50,7 +50,6 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
             .defaultValue(param.defaultValue())
             .required(param.required())
             .allowMultiple(param.allowMultiple())
-            .dataType(param.dataType())
             .modelRef(new ModelRef(param.dataType()))
             .allowableValues(allowableValueFromString(param.allowableValues()))
             .parameterType(param.paramType())

@@ -48,7 +48,6 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                         .parameters([new ParameterBuilder()
                           .allowableValues(new AllowableListValues(["FIRST", "SECOND"], "string"))
                           .allowMultiple(false)
-                          .dataType("string")
                           .defaultValue("FIRST")
                           .description("Chose first or second")
                           .name("order")

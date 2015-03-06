@@ -41,7 +41,6 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
             .required(Boolean.FALSE)
             .allowMultiple(Boolean.FALSE)
             .type(resolver.resolve(context.getField().getType()))
-            .dataType(context.getDataTypeName())
             .modelRef(new ModelRef(context.getDataTypeName()))
             .allowableValues(allowable)
             .parameterType("query")

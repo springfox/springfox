@@ -46,7 +46,6 @@ public class OperationParameterRequestConditionReader implements OperationBuilde
               .required(true)
               .allowMultiple(false)
               .type(resolver.resolve(String.class))
-              .dataType("string")
               .modelRef(new ModelRef("string"))
               .allowableValues(new AllowableListValues(newArrayList(expression.getValue()), "string"))
               .parameterType("query")

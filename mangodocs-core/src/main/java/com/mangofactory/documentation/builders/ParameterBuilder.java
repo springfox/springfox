@@ -15,7 +15,6 @@ public class ParameterBuilder {
   private String defaultValue;
   private boolean required;
   private boolean allowMultiple;
-  private String dataType;
   private AllowableValues allowableValues;
   private String paramType;
   private String paramAccess;
@@ -44,11 +43,6 @@ public class ParameterBuilder {
 
   public ParameterBuilder allowMultiple(boolean allowMultiple) {
     this.allowMultiple = allowMultiple;
-    return this;
-  }
-
-  public ParameterBuilder dataType(String dataType) {
-    this.dataType = defaultIfAbsent(dataType, this.dataType);
     return this;
   }
 

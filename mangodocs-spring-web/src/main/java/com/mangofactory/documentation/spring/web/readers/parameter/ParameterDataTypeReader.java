@@ -43,16 +43,13 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
       context.parameterBuilder()
               .type(resolver.resolve(File.class))
-              .dataType("File")
               .modelRef(new ModelRef("File"));
     } else {
       ModelContext modelContext = inputParam(parameterType, context.getDocumentationType(),
               context.getAlternateTypeProvider());
-      String typeName = nameExtractor.typeName(modelContext);
       context.parameterBuilder()
               .type(parameterType)
-              .modelRef(modelRef(parameterType, modelContext))
-              .dataType(typeName);
+              .modelRef(modelRef(parameterType, modelContext));
     }
     
   }
