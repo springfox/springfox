@@ -1,5 +1,6 @@
 package com.mangofactory.documentation.schema;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.google.common.collect.ImmutableMap;
 
 import java.lang.reflect.Type;
@@ -52,5 +53,7 @@ public class Types {
     return baseTypes.contains(typeName);
   }
 
-
+  public static boolean isVoid(ResolvedType returnType) {
+    return Void.class.equals(returnType.getErasedType()) || Void.TYPE.equals(returnType.getErasedType());
+  }
 }

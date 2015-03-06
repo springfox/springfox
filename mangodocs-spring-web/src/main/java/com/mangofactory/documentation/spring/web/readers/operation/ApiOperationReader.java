@@ -39,9 +39,7 @@ public class ApiOperationReader {
     List<Operation> operations = newArrayList();
 
     Set<RequestMethod> requestMethods = requestMethodsRequestCondition.getMethods();
-    Set<RequestMethod> supportedMethods = requestMethods == null || requestMethods.isEmpty()
-            ? allRequestMethods
-            : requestMethods;
+    Set<RequestMethod> supportedMethods = supportedMethods(requestMethods);
 
     //Setup response message list
     Integer currentCount = 0;
@@ -61,6 +59,12 @@ public class ApiOperationReader {
     }
     Collections.sort(operations, outerContext.operationOrdering());
     return operations;
+  }
+
+  private Set<RequestMethod> supportedMethods(Set<RequestMethod> requestMethods) {
+    return requestMethods == null || requestMethods.isEmpty()
+            ? allRequestMethods
+            : requestMethods;
   }
 
 }

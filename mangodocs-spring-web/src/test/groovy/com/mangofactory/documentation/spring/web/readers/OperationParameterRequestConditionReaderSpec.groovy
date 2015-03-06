@@ -33,6 +33,7 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
     then:
       sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
     and:
       Parameter parameter = operation.parameters[0]
       assert parameter."$property" == expectedValue

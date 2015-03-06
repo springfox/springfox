@@ -1,19 +1,18 @@
 package com.mangofactory.documentation.spring.web.readers
-
-import com.mangofactory.documentation.service.Operation
 import com.mangofactory.documentation.builders.OperationBuilder
+import com.mangofactory.documentation.service.Operation
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
-import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.mixins.AuthSupport
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.mixins.ServicePluginsSupport
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsManager
 import com.mangofactory.documentation.spring.web.readers.operation.ApiOperationReader
+import com.mangofactory.documentation.spring.web.readers.operation.DefaultOperationBuilder
 import com.mangofactory.documentation.spring.web.scanners.RegexRequestMappingPatternMatcher
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
-import spock.lang.Ignore
 
 import static com.google.common.collect.Sets.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
@@ -29,10 +28,9 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
             .withIncludePatterns(newHashSet(".*"))
             .build()
     plugin.authorizationContext(authorizationContext)
-    sut = new ApiOperationReader(defaultWebPlugins())
+    sut = new ApiOperationReader(customWebPlugins([],[],[new DefaultOperationBuilder()]))
   }
 
-  @Ignore("This is really an integration test")
   def "Should generate default operation on handler method without swagger annotations"() {
 
     given:
@@ -58,7 +56,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
       apiOperation.getNotes() == handlerMethod.method.name
       apiOperation.getNickname() == handlerMethod.method.name
       apiOperation.getPosition() == 0
-      apiOperation.getAuthorizations().size() == 1
+      apiOperation.getAuthorizations().size() == 0
 
       def secondApiOperation = operations[1]
       secondApiOperation.position == 1

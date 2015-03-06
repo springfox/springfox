@@ -46,6 +46,7 @@ class ParameterReaderSpec extends DocumentationContextSpec {
     expect:
       sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
   }
 
   def "ParameterDefaultReader should work with any documentationType"() {
@@ -54,6 +55,7 @@ class ParameterReaderSpec extends DocumentationContextSpec {
     expect:
       sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
   }
 
   def "ParameterTypeReader should work with any documentationType"() {
@@ -62,6 +64,7 @@ class ParameterReaderSpec extends DocumentationContextSpec {
     expect:
       sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
   }
 
   private ApiParam apiParam(Map closureMap) {

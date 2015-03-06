@@ -7,6 +7,8 @@ import com.mangofactory.documentation.service.Operation;
 
 import java.util.Comparator;
 
+import static com.google.common.base.Strings.*;
+
 public class Orderings {
   private Orderings() {
     throw new UnsupportedOperationException();
@@ -16,7 +18,7 @@ public class Orderings {
     return new Comparator<Operation>() {
       @Override
       public int compare(Operation first, Operation second) {
-        return first.getNickname().compareTo(second.getNickname());
+        return nullToEmpty(first.getNickname()).compareTo(nullToEmpty(second.getNickname()));
       }
     };
   }

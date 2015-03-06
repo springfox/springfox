@@ -78,6 +78,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec {
     expect:
       sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
   }
 }
 

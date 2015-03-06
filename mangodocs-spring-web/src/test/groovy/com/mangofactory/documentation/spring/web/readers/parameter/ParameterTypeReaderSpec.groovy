@@ -48,6 +48,7 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
     expect:
       sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
   }
 
   ResolvedType resolve(Class clazz) {

@@ -3,8 +3,6 @@ package com.mangofactory.documentation.swagger.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
-import static org.springframework.util.StringUtils.*;
-
 public class Parameter {
   @JsonProperty
   @JsonUnwrapped
@@ -37,7 +35,7 @@ public class Parameter {
   }
 
   private String maybeOverrideName(String aName) {
-    if (hasText(this.paramType) && paramType.equals("body")) {
+    if ("body".equals(paramType)) {
       return paramType;
     }
     return aName;

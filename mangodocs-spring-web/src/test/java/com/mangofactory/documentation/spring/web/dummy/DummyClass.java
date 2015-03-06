@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 import static com.mangofactory.documentation.spring.web.dummy.DummyModels.*;
 
@@ -233,6 +234,11 @@ public class DummyClass {
     return null;
   }
 
+  @ResponseBody
+  public List<DummyModels.BusinessModel> methodWithListOfBusinesses() {
+    return null;
+  }
+  
   @ResponseBody
   public DummyModels.CorporationModel methodWithConcreteCorporationModel() {
     return null;

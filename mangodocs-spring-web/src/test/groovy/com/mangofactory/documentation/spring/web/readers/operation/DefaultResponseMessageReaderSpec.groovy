@@ -78,6 +78,23 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
       responseMessage.getMessage() == "OK"
   }
 
+  def "Methods with return type containing a container model should override the success response code"() {
+    given:
+      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+              RequestMethod.GET, dummyHandlerMethod('methodWithListOfBusinesses'), 0, requestMappingInfo('/somePath'),
+              context(), "")
+    when:
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
+      def responseMessages = operation.responseMessages
+    then:
+      ResponseMessage responseMessage = responseMessages.find { it.code == 200 }
+      responseMessage.getCode() == 200
+      responseMessage.getResponseModel().type == 'List'
+      responseMessage.getResponseModel().itemType == 'BusinessModel'
+      responseMessage.getMessage() == "OK"
+  }
+
   def "Methods with return type containing ResponseStatus annotation"() {
     given:
       OperationContext operationContext = new OperationContext(new OperationBuilder(),

@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.mangofactory.documentation.builders.BuilderDefaults.*;
+
 @Component
 public class ApiDocumentationScanner {
 
@@ -61,11 +63,8 @@ public class ApiDocumentationScanner {
   }
 
   private Set<Tag> toTags(Map<String, ApiListing> apiListings) {
-    if (apiListings == null) {
-      return null;
-    }
     return FluentIterable
-            .from(apiListings.entrySet())
+            .from(nullToEmptyMap(apiListings).entrySet())
             .transform(fromEntry())
             .toSet();
   }

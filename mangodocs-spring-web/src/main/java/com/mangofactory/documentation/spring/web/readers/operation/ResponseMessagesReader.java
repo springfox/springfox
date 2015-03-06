@@ -24,6 +24,7 @@ import java.util.List;
 import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.schema.Collections.*;
+import static com.mangofactory.documentation.schema.Types.*;
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 import static com.mangofactory.documentation.spring.web.HandlerMethodReturnTypes.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
@@ -61,7 +62,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     int httpStatusCode = httpStatusCode(context.getHandlerMethod());
     String message = message(context.getHandlerMethod());
     ModelRef modelRef = null;
-    if (!Void.class.equals(returnType.getErasedType()) && !Void.TYPE.equals(returnType.getErasedType())) {
+    if (!isVoid(returnType)) {
       ModelContext modelContext = returnValue(returnType,
               context.getDocumentationType(), context.getAlternateTypeProvider());
       modelRef = modelRef(returnType, modelContext);
@@ -73,6 +74,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
             .build();
     context.operationBuilder().responseMessages(newHashSet(built));
   }
+
 
   private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
     if (!isContainerType(type)) {

@@ -1,19 +1,31 @@
 package com.mangofactory.documentation.spring.web.readers.parameter
+
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.builders.ParameterBuilder
+import com.mangofactory.documentation.service.ResolvedMethodParameter
+import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.contexts.ParameterContext
-import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyClass
 import com.mangofactory.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
-import com.mangofactory.documentation.service.ResolvedMethodParameter
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
-   def "param multiples for default reader"() {
+
+  def sut = new ParameterMultiplesReader();
+  
+  def "Should support all documentation types"() {
+    expect:
+      sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
+  }
+
+  def "param multiples for default reader"() {
     given:
       MethodParameter methodParameter = Stub(MethodParameter)
       methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
@@ -23,24 +35,23 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
 
     when:
-      def operationCommand = new ParameterMultiplesReader();
-      operationCommand.apply(parameterContext)
+      sut.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().isAllowMultiple() == expected
     where:
-      apiParamAnnotation                       | paramType        | expected
-      [allowMultiple: {-> true }] as ApiParam  | null             | false
-      [allowMultiple: {-> false }] as ApiParam | String[].class   | true
-      [allowMultiple: {-> false }] as ApiParam | DummyClass.BusinessType[].class     | true
-      null                                     | String[].class   | true
-      null                                     | List.class       | true
-      null                                     | Collection.class | true
-      null                                     | Set.class        | true
-      null                                     | Vector.class     | true
-      null                                     | Object[].class   | true
-      null                                     | Integer.class    | false
-      null                                     | Iterable.class   | true
-   }
+      apiParamAnnotation                        | paramType                       | expected
+      [allowMultiple: { -> true }] as ApiParam  | null                            | false
+      [allowMultiple: { -> false }] as ApiParam | String[].class                  | true
+      [allowMultiple: { -> false }] as ApiParam | DummyClass.BusinessType[].class | true
+      null                                      | String[].class                  | true
+      null                                      | List.class                      | true
+      null                                      | Collection.class                | true
+      null                                      | Set.class                       | true
+      null                                      | Vector.class                    | true
+      null                                      | Object[].class                  | true
+      null                                      | Integer.class                   | false
+      null                                      | Iterable.class                  | true
+  }
 
 
 }

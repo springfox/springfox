@@ -47,6 +47,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should support all documentation types"() {
     sut.supports(DocumentationType.SPRING_WEB)
     sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
   }
 
 

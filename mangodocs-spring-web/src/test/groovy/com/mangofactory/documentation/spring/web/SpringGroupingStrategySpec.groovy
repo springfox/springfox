@@ -35,9 +35,10 @@ class SpringGroupingStrategySpec extends Specification {
 
   def "Supports any documentation type" () {
     given:
-      def groupingStrategy = new SpringGroupingStrategy()
+      def sut = new SpringGroupingStrategy()
     expect:
-      groupingStrategy.supports(DocumentationType.SPRING_WEB)
-      groupingStrategy.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
   }
 }
