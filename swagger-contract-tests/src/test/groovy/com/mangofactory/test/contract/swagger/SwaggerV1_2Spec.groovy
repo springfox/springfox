@@ -103,14 +103,7 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
     public DocumentationConfigurer testCases() {
       return new DocumentationConfigurer(DocumentationType.SWAGGER_12)
               .groupName("default")
-              .includePatterns("^((?!\\/api).)*\$"); //Not beginning with /api
-    }
-
-    @Bean
-    public DocumentationConfigurer petstore() {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_12)
-              .groupName("petstore")
-              .includePatterns("/api/.*");
+              .includePatterns("^((?!/api).)*\$"); //Not beginning with /api
     }
   }
 }

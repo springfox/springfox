@@ -1,5 +1,4 @@
 package com.mangofactory.test.contract.swagger
-
 import com.mangofactory.documentation.builders.ImplicitGrantBuilder
 import com.mangofactory.documentation.builders.OAuthBuilder
 import com.mangofactory.documentation.service.ApiKey
@@ -7,19 +6,25 @@ import com.mangofactory.documentation.service.AuthorizationScope
 import com.mangofactory.documentation.service.AuthorizationType
 import com.mangofactory.documentation.service.GrantType
 import com.mangofactory.documentation.service.LoginEndpoint
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
 import static com.google.common.collect.Lists.*
 
-trait AuthorizationSupport {
-  List<AuthorizationType> authTypes() {
-    List<AuthorizationType> authTypes = newArrayList();
-    authTypes.add(new OAuthBuilder()
+@Configuration
+public class AuthorizationSupport {
+  @Bean
+  AuthorizationType oauth() {
+    new OAuthBuilder()
             .name("petstore_auth")
             .grantTypes(grantTypes())
             .scopes(scopes())
-            .build())
-    authTypes.add(new ApiKey("api_key", "api_key", "header"))
-    return authTypes
+            .build()
+  }
+
+  @Bean
+  AuthorizationType apiKey() {
+    new ApiKey("api_key", "api_key", "header")
   }
 
   List<AuthorizationScope> scopes() {

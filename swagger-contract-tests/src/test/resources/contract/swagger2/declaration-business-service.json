@@ -1,0 +1,450 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            "name": "Contact Email"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "business-service"
+        }
+    ],
+    "produces": [
+        "application/xml",
+        "application/json"
+    ],
+    "paths": {
+        "/businesses/aliased/{otherId}": {
+            "get": {
+                "tags": [
+                    "business-service"
+                ],
+                "summary": "Find a business by its id",
+                "description": "getAliasedPathVariable",
+                "operationId": "getAliasedPathVariable",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "otherId",
+                        "in": "path",
+                        "description": "ID of business",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/businesses/byTypes": {
+            "get": {
+                "tags": [
+                    "business-service"
+                ],
+                "summary": "businessesByCategories",
+                "description": "businessesByCategories",
+                "operationId": "businessesByCategories",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "types",
+                        "in": "query",
+                        "description": "types",
+                        "required": true,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Biz"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/businesses/non-aliased/{businessId}": {
+            "get": {
+                "tags": [
+                    "business-service"
+                ],
+                "summary": "Find a business by its id",
+                "description": "getNonAliasedPathVariable",
+                "operationId": "getNonAliasedPathVariable",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "businessId",
+                        "in": "path",
+                        "description": "ID of business",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "scope"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/businesses/responseEntity/{businessId}": {
+            "get": {
+                "tags": [
+                    "business-service"
+                ],
+                "summary": "getResponseEntity",
+                "description": "getResponseEntity",
+                "operationId": "getResponseEntity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "businessId",
+                        "in": "path",
+                        "description": "businessId",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/businesses/typeEcho": {
+            "post": {
+                "tags": [
+                    "business-service"
+                ],
+                "summary": "businessTypeEcho",
+                "description": "businessTypeEcho",
+                "operationId": "businessTypeEcho",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "business",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/businesses/vanilla/{businessId}": {
+            "get": {
+                "tags": [
+                    "business-service"
+                ],
+                "summary": "getVanillaPathVariable",
+                "description": "getVanillaPathVariable",
+                "operationId": "getVanillaPathVariable",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "businessId",
+                        "in": "path",
+                        "description": "businessId",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
+        },
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        }
+    },
+    "definitions": {
+        "DateTimeField": {
+            "properties": {
+                "durationField": {
+                    "$ref": "#/definitions/DurationField"
+                },
+                "leapDurationField": {
+                    "$ref": "#/definitions/DurationField"
+                },
+                "lenient": {
+                    "type": "boolean"
+                },
+                "maximumValue": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "minimumValue": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rangeDurationField": {
+                    "$ref": "#/definitions/DurationField"
+                },
+                "supported": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "$ref": "#/definitions/DateTimeFieldType"
+                }
+            }
+        },
+        "DateTimeZone": {
+            "properties": {
+                "fixed": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "Biz": {
+            "properties": {
+                "businessType": {
+                    "type": "string",
+                    "enum": [
+                        "PRODUCT",
+                        "SERVICE"
+                    ]
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "inception": {
+                    "$ref": "#/definitions/LocalDate"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owner": {
+                    "type": "string"
+                },
+                "taxDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "DurationFieldType": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "LocalDate": {
+            "properties": {
+                "centuryOfEra": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "chronology": {
+                    "$ref": "#/definitions/Chronology"
+                },
+                "dayOfMonth": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "dayOfWeek": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "dayOfYear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "era": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "fieldTypes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DateTimeFieldType"
+                    }
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DateTimeField"
+                    }
+                },
+                "monthOfYear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "values": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                },
+                "weekOfWeekyear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "weekyear": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "year": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "yearOfCentury": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "yearOfEra": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "DurationField": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "precise": {
+                    "type": "boolean"
+                },
+                "supported": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "$ref": "#/definitions/DurationFieldType"
+                },
+                "unitMillis": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "Chronology": {
+            "properties": {
+                "zone": {
+                    "$ref": "#/definitions/DateTimeZone"
+                }
+            }
+        },
+        "DateTimeFieldType": {
+            "properties": {
+                "durationType": {
+                    "$ref": "#/definitions/DurationFieldType"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rangeDurationType": {
+                    "$ref": "#/definitions/DurationFieldType"
+                }
+            }
+        }
+    }
+}

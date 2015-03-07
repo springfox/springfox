@@ -1,4 +1,5 @@
 package com.mangofactory.test.contract.swagger
+import com.mangofactory.documentation.service.AuthorizationType
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spring.web.plugins.DocumentationConfigurer
 import com.mangofactory.documentation.swagger2.annotations.EnableSwagger2
@@ -12,12 +13,14 @@ import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener
 import org.springframework.test.context.web.WebAppConfiguration
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static groovyx.net.http.ContentType.*
 
@@ -31,15 +34,16 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
   @Value('${local.server.port}')
   int port;
 
+  @Unroll("#groupName")
   def 'should honor swagger resource listing'() {
     given:
       RESTClient http = new RESTClient("http://localhost:$port")
-      String contract = fileContents('/contract/swagger2/swagger.json')
+      String contract = fileContents("/contract/swagger2/$contractFile")
 
     when:
       def response = http.get(
               path: '/v2/api-docs',
-              query: [group: 'petstore'],
+              query: [group: groupName],
               contentType: TEXT, //Allows to access the raw response body
               headers: [Accept: 'application/json']
       )
@@ -50,6 +54,19 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
 //      println(actual)
 
       JSONAssert.assertEquals(contract, actual, JSONCompareMode.NON_EXTENSIBLE)
+
+    where:
+      contractFile                                                  | groupName
+      'swagger.json'                                                | 'petstore'
+      'declaration-business-service.json'                           | 'businessService'
+      'declaration-concrete-controller.json'                        | 'concrete'
+      'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
+      'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
+      'declaration-feature-demonstration-service.json'              | 'featureService'
+      'declaration-inherited-service-impl.json'                     | 'inheritedService'
+      'declaration-pet-grooming-service.json'                       | 'petGroomingService'
+      'declaration-pet-service.json'                                | 'petService'
+      'declaration-root-controller.json'                            | 'root'
   }
 
   @Configuration
@@ -59,22 +76,106 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
           "com.mangofactory.test.contract.swagger",
           "com.mangofactory.petstore.controller"
   ])
-  static class Config implements AuthorizationSupport {
+  @Import(AuthorizationSupport)
+  static class Config {
     @Bean
-    public DocumentationConfigurer testCases() {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
-              .groupName("default")
-              .includePatterns("^((?!\\/api).)*\$"); //Not beginning with /api
-    }
-
-    @Bean
-    public DocumentationConfigurer petstore() {
+    public DocumentationConfigurer petstore(List<AuthorizationType> authorizationTypes) {
       return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
               .groupName("petstore")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authTypes())
+              .authorizationTypes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .includePatterns("/api/.*");
+    }
+
+    @Bean
+    public DocumentationConfigurer business(List<AuthorizationType> authorizationTypes) {
+      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+              .groupName("businessService")
+              .useDefaultResponseMessages(false)
+              .authorizationTypes(authorizationTypes)
+              .produces(['application/xml', 'application/json'] as Set)
+              .includePatterns("/business.*");
+    }
+
+    @Bean
+    public DocumentationConfigurer concrete(List<AuthorizationType> authorizationTypes) {
+      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+              .groupName("concrete")
+              .useDefaultResponseMessages(false)
+              .authorizationTypes(authorizationTypes)
+              .produces(['application/xml', 'application/json'] as Set)
+              .includePatterns("/foo/.*");
+    }
+
+    @Bean
+    public DocumentationConfigurer noRequestMapping(List<AuthorizationType> authorizationTypes) {
+      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+              .groupName("noRequestMapping")
+              .useDefaultResponseMessages(false)
+              .authorizationTypes(authorizationTypes)
+              .produces(['application/xml', 'application/json'] as Set)
+              .includePatterns("/no-request-mapping/.*");
+    }
+
+    @Bean
+    public DocumentationConfigurer fancyPetstore(List<AuthorizationType> authorizationTypes) {
+      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+              .groupName("fancyPetstore")
+              .useDefaultResponseMessages(false)
+              .authorizationTypes(authorizationTypes)
+              .produces(['application/xml', 'application/json'] as Set)
+              .includePatterns("/fancypets/.*");
+    }
+
+    @Bean
+    public DocumentationConfigurer featureService(List<AuthorizationType> authorizationTypes) {
+      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+              .groupName("featureService")
+              .useDefaultResponseMessages(false)
+              .authorizationTypes(authorizationTypes)
+              .produces(['application/xml', 'application/json'] as Set)
+              .includePatterns("/features/.*");
+    }
+
+    @Bean
+    public DocumentationConfigurer inheritedService(List<AuthorizationType> authorizationTypes) {
+      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+              .groupName("inheritedService")
+              .useDefaultResponseMessages(false)
+              .authorizationTypes(authorizationTypes)
+              .produces(['application/xml', 'application/json'] as Set)
+              .includePatterns("/child/.*");
+    }
+
+    @Bean
+    public DocumentationConfigurer pet(List<AuthorizationType> authorizationTypes) {
+      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+              .groupName("petService")
+              .useDefaultResponseMessages(false)
+              .authorizationTypes(authorizationTypes)
+              .produces(['application/xml', 'application/json'] as Set)
+              .includePatterns("/pets/.*");
+    }
+
+    @Bean
+    public DocumentationConfigurer petGrooming(List<AuthorizationType> authorizationTypes) {
+      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+              .groupName("petGroomingService")
+              .useDefaultResponseMessages(false)
+              .authorizationTypes(authorizationTypes)
+              .produces(['application/xml', 'application/json'] as Set)
+              .includePatterns("/petgrooming/.*");
+    }
+
+    @Bean
+    public DocumentationConfigurer root(List<AuthorizationType> authorizationTypes) {
+      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+              .groupName("root")
+              .useDefaultResponseMessages(false)
+              .authorizationTypes(authorizationTypes)
+              .produces(['application/xml', 'application/json'] as Set)
+              .includePatterns("/.*");
     }
   }
 }
