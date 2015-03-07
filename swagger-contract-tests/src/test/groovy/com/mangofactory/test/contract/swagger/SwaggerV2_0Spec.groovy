@@ -66,7 +66,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
       'declaration-inherited-service-impl.json'                     | 'inheritedService'
       'declaration-pet-grooming-service.json'                       | 'petGroomingService'
       'declaration-pet-service.json'                                | 'petService'
-      'declaration-root-controller.json'                            | 'root'
+//      'declaration-root-controller.json'                            | 'root'
   }
 
   @Configuration
