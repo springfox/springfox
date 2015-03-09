@@ -38,15 +38,7 @@ public class ResolvedTypes {
     return innerTypeName(type);
   }
 
-  //DK TODO: Eliminate this repetition
   public static String responseTypeName(ResolvedType type) {
-    if (isContainerType(type)) {
-      return String.format("%s%s", containerType(type), optionalContainerTypeQualifierForReturn(type));
-    }
-    return innerTypeName(type);
-  }
-
-  public static String parameterTypeName(ResolvedType type) {
     if (isContainerType(type)) {
       return String.format("%s%s", containerType(type), optionalContainerTypeQualifierForReturn(type));
     }

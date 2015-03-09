@@ -60,4 +60,13 @@ public final class ApiModelProperties {
       }
     };
   }
+
+  public static Function<ApiModelProperty, Boolean> toHidden() {
+    return new Function<ApiModelProperty, Boolean>() {
+      @Override
+      public Boolean apply(ApiModelProperty annotation) {
+        return annotation.hidden();
+      }
+    };
+  }
 }

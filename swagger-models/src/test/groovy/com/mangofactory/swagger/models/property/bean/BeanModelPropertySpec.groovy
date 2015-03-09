@@ -39,6 +39,7 @@ class BeanModelPropertySpec extends Specification {
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       sut.allowableValues() == null
+      !sut.isHidden()
 
 
     where:
@@ -67,6 +68,7 @@ class BeanModelPropertySpec extends Specification {
       sut.required == required
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
+      !sut.isHidden()
 
       if (sut.allowableValues()) {
         sut.allowableValues().getValues() == allowableValues.getValues()
@@ -83,6 +85,20 @@ class BeanModelPropertySpec extends Specification {
       "setEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(newArrayList("ONE", "TWO"), "LIST") | "string"  | "com.mangofactory.swagger.models.ExampleEnum"
   }
 
+  def "Detects properties annotated as hidden"() {
+    given:
+      Class typeToTest = typeForTestingAnnotatedGettersAndSetter()
+      def method = accessorMethod(typeToTest, "getHiddenProp")
+      def propertyDefinition = beanPropertyDefinition(typeToTest, "getHiddenProp")
+
+      ObjectMapper mapper = new ObjectMapper()
+      String propName = name(propertyDefinition, true, new ObjectMapperBeanPropertyNamingStrategy(mapper))
+      def sut = new BeanModelProperty(propName, propertyDefinition, method, isGetter(method.getRawMember()),
+              new TypeResolver(), new AlternateTypeProvider())
+
+    expect:
+      sut.isHidden()
+  }
 
   def "Respects JsonGetter annotations"() {
 
@@ -101,6 +117,7 @@ class BeanModelPropertySpec extends Specification {
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       sut.allowableValues() == null
+      !sut.isHidden()
 
 
     where:

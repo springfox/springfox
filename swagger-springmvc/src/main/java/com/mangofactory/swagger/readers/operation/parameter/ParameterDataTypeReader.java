@@ -2,11 +2,12 @@ package com.mangofactory.swagger.readers.operation.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.mangofactory.swagger.configuration.SwaggerGlobalSettings;
-import com.mangofactory.swagger.models.ResolvedTypes;
 import com.mangofactory.swagger.readers.Command;
 import com.mangofactory.swagger.readers.operation.ResolvedMethodParameter;
 import com.mangofactory.swagger.scanners.RequestMappingContext;
 import org.springframework.web.multipart.MultipartFile;
+
+import static com.mangofactory.swagger.models.ResolvedTypes.*;
 
 public class ParameterDataTypeReader implements Command<RequestMappingContext> {
 
@@ -20,7 +21,7 @@ public class ParameterDataTypeReader implements Command<RequestMappingContext> {
     if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
       context.put("dataType", "File");
     } else {
-      context.put("dataType", ResolvedTypes.parameterTypeName(parameterType));
+      context.put("dataType", responseTypeName(parameterType));
     }
   }
 

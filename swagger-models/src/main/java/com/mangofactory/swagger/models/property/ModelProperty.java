@@ -19,5 +19,7 @@ public interface ModelProperty {
 
   boolean isRequired();
 
+  boolean isHidden();
+
   int position();
 }
