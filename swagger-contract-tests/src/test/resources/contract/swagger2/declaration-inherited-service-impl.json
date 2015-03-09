@@ -46,7 +46,7 @@
                         "description": "parameter",
                         "required": false,
                         "schema": {
-                            "$ref": "#/definitions/string"
+                            "type": "string"
                         }
                     }
                 ],

@@ -195,7 +195,7 @@
                         "description": "business",
                         "required": false,
                         "schema": {
-                            "$ref": "#/definitions/string"
+                            "type": "string"
                         }
                     }
                 ],

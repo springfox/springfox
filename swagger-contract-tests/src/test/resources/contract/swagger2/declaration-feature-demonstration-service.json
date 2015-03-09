@@ -194,7 +194,7 @@
                         "description": "input",
                         "required": false,
                         "schema": {
-                            "$ref": "#/definitions/double"
+                            "type": "double"
                         }
                     }
                 ],
@@ -309,7 +309,7 @@
                         "description": "enumType",
                         "required": false,
                         "schema": {
-                            "$ref": "#/definitions/string"
+                            "type": "string"
                         }
                     }
                 ],

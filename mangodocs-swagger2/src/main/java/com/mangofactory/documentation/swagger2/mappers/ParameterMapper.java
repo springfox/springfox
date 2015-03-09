@@ -2,8 +2,10 @@ package com.mangofactory.documentation.swagger2.mappers;
 
 import com.google.common.base.Optional;
 import com.mangofactory.documentation.schema.ModelRef;
+import com.mangofactory.documentation.schema.Types;
 import com.wordnik.swagger.models.ArrayModel;
 import com.wordnik.swagger.models.Model;
+import com.wordnik.swagger.models.ModelImpl;
 import com.wordnik.swagger.models.RefModel;
 import com.wordnik.swagger.models.parameters.BodyParameter;
 import com.wordnik.swagger.models.parameters.CookieParameter;
@@ -82,6 +84,11 @@ public class ParameterMapper {
   private Model fromModelRef(ModelRef modelRef) {
     if (modelRef.isCollection()) {
       return new ArrayModel().items(property(modelRef.getItemType()));
+    }
+    if (Types.isBaseType(modelRef.getType())) {
+      ModelImpl baseModel = new ModelImpl();
+      baseModel.setType(modelRef.getType());
+      return baseModel;
     }
     return new RefModel(modelRef.getType());
   }
