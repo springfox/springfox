@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static com.google.common.collect.Maps.*;
+import static com.mangofactory.documentation.schema.Types.*;
 
 @Mapper
 public abstract class ModelMapper {
@@ -44,14 +45,17 @@ public abstract class ModelMapper {
 
     for (java.util.Map.Entry<String, com.mangofactory.documentation.schema.Model> entry : from.entrySet()) {
       String key = entry.getKey();
-      Model value = mapProperties(entry.getValue());
-      map.put(key, value);
+      if (!isVoid(entry.getValue().getType())) {
+        Model value = mapProperties(entry.getValue());
+        map.put(key, value);
+      }
     }
 
     return map;
   }
 
   public Model mapProperties(com.mangofactory.documentation.schema.Model source) {
+
     ModelImpl model = new ModelImpl()
             .description(source.getDescription())
             .discriminator(source.getDiscriminator())

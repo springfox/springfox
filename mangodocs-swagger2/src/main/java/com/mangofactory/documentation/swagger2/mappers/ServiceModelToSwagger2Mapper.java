@@ -88,7 +88,7 @@ public abstract class ServiceModelToSwagger2Mapper {
     return FluentIterable.from(from).transform(toScheme()).toList();
   }
 
-  protected Contact mapContct(String contact) {
+  protected Contact mapContact(String contact) {
     return new Contact().name(contact);
   }
 

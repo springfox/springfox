@@ -17,10 +17,10 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "pet-service"
+            "name": "pet-grooming-service"
         },
         {
-            "name": "pet-grooming-service"
+            "name": "pet-service"
         }
     ],
     "produces": [
@@ -678,9 +678,6 @@
                     "$ref": "#/definitions/Pet"
                 }
             }
-        },
-        "Void": {
-
         }
     }
 }

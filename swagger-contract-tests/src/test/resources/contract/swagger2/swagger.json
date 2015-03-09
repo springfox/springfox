@@ -20,15 +20,15 @@
             "name": "pet"
         },
         {
-            "name": "store"
+            "name": "user"
         },
         {
-            "name": "user"
+            "name": "store"
         }
     ],
     "produces": [
-        "application/json",
-        "application/xml"
+        "application/xml",
+        "application/json"
     ],
     "paths": {
         "/api/pet": {
@@ -806,9 +806,6 @@
                     "type": "string"
                 }
             }
-        },
-        "Void": {
-
         },
         "Order": {
             "properties": {

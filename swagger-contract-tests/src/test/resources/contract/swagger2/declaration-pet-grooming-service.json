@@ -72,10 +72,5 @@
             "name": "api_key",
             "in": "header"
         }
-    },
-    "definitions": {
-        "Void": {
-
-        }
     }
 }

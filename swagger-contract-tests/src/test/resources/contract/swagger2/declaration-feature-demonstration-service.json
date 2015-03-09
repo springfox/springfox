@@ -508,9 +508,6 @@
                 }
             }
         },
-        "Void": {
-
-        },
         "LocalDateTime": {
             "properties": {
                 "centuryOfEra": {
