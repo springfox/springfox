@@ -18,7 +18,7 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
           .models(
           ['someModel':
                    new Model('id', 'name', 'qtype',
-                           ['aprop': new ModelProperty('ptype', 'qtype', 0, false, 'pdesc', null, null)]
+                           ['aprop': new ModelProperty('ptype', 'qtype', 0, false, 'pdesc', null, null, null)]
                            , 'desc', null, null, null)
           ])
           .description('description')

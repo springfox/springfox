@@ -33,7 +33,7 @@ public class ResolvedTypes {
 
   public static String typeName(ResolvedType type) {
     if (isContainerType(type)) {
-      return containerType(type);
+      return propertyContainerType(type);
     }
     return innerTypeName(type);
   }

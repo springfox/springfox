@@ -185,6 +185,16 @@
         }
     ],
     "models": {
+        "Category": {
+            "description": "",
+            "id": "Category",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
         "FancyPet": {
             "description": "",
             "id": "FancyPet",
@@ -201,6 +211,13 @@
                 "id": {
                     "required": false,
                     "type": "string"
+                },
+                "categories": {
+                    "items": {
+                        "type": "Category"
+                    },
+                    "required": false,
+                    "type": "array"
                 }
             }
         },

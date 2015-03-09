@@ -99,7 +99,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 401,
@@ -499,7 +499,7 @@
                         "type": "DateTimeField"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "values": {
                     "items": {
@@ -507,14 +507,14 @@
                         "type": "integer"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "fieldTypes": {
                     "items": {
                         "type": "DateTimeFieldType"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 }
             }
         },

@@ -147,7 +147,8 @@
                         "type": "string"
                     },
                     "required": false,
-                    "type": "Set"
+                    "type": "array",
+                    "uniqueItems": true
                 },
                 "propertyWithNoSetterMethod": {
                     "required": false,
@@ -266,7 +267,7 @@
                         "type": "DateTimeField"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "values": {
                     "items": {
@@ -274,14 +275,14 @@
                         "type": "integer"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "fieldTypes": {
                     "items": {
                         "type": "DateTimeFieldType"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 }
             }
         },

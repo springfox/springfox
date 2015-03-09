@@ -48,4 +48,15 @@ public class Collections {
       throw new UnsupportedOperationException(String.format("Type is not collection type %s", type));
     }
   }
+
+  public static String propertyContainerType(ResolvedType type) {
+    if (List.class.isAssignableFrom(type.getErasedType())
+            || type.isArray()) {
+      return "array";
+    } else if (Set.class.isAssignableFrom(type.getErasedType())) {
+      return "set";
+    } else {
+      throw new UnsupportedOperationException(String.format("Type is not collection type %s", type));
+    }
+  }
 }

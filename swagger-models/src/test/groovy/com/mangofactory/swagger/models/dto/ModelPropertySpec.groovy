@@ -8,7 +8,7 @@ class ModelPropertySpec extends InternalJsonSerializationSpec {
           true,
           'decs',
           null,
-          new ModelRef('mtype')
+          new ModelRef('mtype'), true
   )
 
   def "should serialize"() {
@@ -19,7 +19,8 @@ class ModelPropertySpec extends InternalJsonSerializationSpec {
     "type" : "mtype"
   },
   "required" : true,
-  "type" : "atype"
+  "type" : "atype",
+  "uniqueItems" : true
 }'''
   }
 
@@ -33,6 +34,7 @@ class ModelPropertySpec extends InternalJsonSerializationSpec {
         getDescription()
         getAllowableValues()
         getItems()
+        isUniqueItems()
       }
   }
 

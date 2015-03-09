@@ -54,12 +54,12 @@ class ContainerTypesSpec extends Specification {
       retItem.getType().getAbsoluteType() == itemType
 
     where:
-      property          | name   | itemType      | itemQualifiedType
-      "complexTypes"    | "List" | 'ComplexType' | "com.mangofactory.swagger.models.ComplexType"
-      "enums"           | "List" | "string"      | "com.mangofactory.swagger.models.ExampleEnum"
-      "aliasOfIntegers" | "List" | "integer"     | "java.lang.Integer"
-      "strings"         | "List" | "string"      | "java.lang.String"
-      "objects"         | "List" | "object"      | "java.lang.Object"
+      property          | name    | itemType      | itemQualifiedType
+      "complexTypes"    | "array" | 'ComplexType' | "com.mangofactory.swagger.models.ComplexType"
+      "enums"           | "array" | "string"      | "com.mangofactory.swagger.models.ExampleEnum"
+      "aliasOfIntegers" | "array" | "integer"     | "java.lang.Integer"
+      "strings"         | "array" | "string"      | "java.lang.String"
+      "objects"         | "array" | "object"      | "java.lang.Object"
   }
 
   @Unroll
@@ -88,12 +88,12 @@ class ContainerTypesSpec extends Specification {
       retItem.getType().getAbsoluteType() == itemType
 
     where:
-      property          | type  | itemType      | itemQualifiedType
-      "complexTypes"    | "Set" | 'ComplexType' | "com.mangofactory.swagger.models.ComplexType"
-      "enums"           | "Set" | "string"      | "com.mangofactory.swagger.models.ExampleEnum"
-      "aliasOfIntegers" | "Set" | "integer"     | "java.lang.Integer"
-      "strings"         | "Set" | "string"      | "java.lang.String"
-      "objects"         | "Set" | "object"      | "java.lang.Object"
+      property          | type    | itemType      | itemQualifiedType
+      "complexTypes"    | "array" | 'ComplexType' | "com.mangofactory.swagger.models.ComplexType"
+      "enums"           | "array" | "string"      | "com.mangofactory.swagger.models.ExampleEnum"
+      "aliasOfIntegers" | "array" | "integer"     | "java.lang.Integer"
+      "strings"         | "array" | "string"      | "java.lang.String"
+      "objects"         | "array" | "object"      | "java.lang.Object"
   }
 
   @Unroll
@@ -123,12 +123,12 @@ class ContainerTypesSpec extends Specification {
 
     where:
       property          | type    | itemType      | itemQualifiedType
-      "complexTypes"    | "Array" | 'ComplexType' | "com.mangofactory.swagger.models.ComplexType"
-      "enums"           | "Array" | "string"      | "com.mangofactory.swagger.models.ExampleEnum"
-      "aliasOfIntegers" | "Array" | "integer"     | "java.lang.Integer"
-      "strings"         | "Array" | "string"      | "java.lang.String"
-      "objects"         | "Array" | "object"      | "java.lang.Object"
-      "bytes"           | "Array" | "string"      | "byte"
+      "complexTypes"    | "array" | 'ComplexType' | "com.mangofactory.swagger.models.ComplexType"
+      "enums"           | "array" | "string"      | "com.mangofactory.swagger.models.ExampleEnum"
+      "aliasOfIntegers" | "array" | "integer"     | "java.lang.Integer"
+      "strings"         | "array" | "string"      | "java.lang.String"
+      "objects"         | "array" | "object"      | "java.lang.Object"
+      "bytes"           | "array" | "string"      | "byte"
   }
 
   @Unroll
@@ -157,10 +157,10 @@ class ContainerTypesSpec extends Specification {
       retItem.getType().getAbsoluteType() == itemRef
 
     where:
-      property              | type   | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
-      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
-      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»" | "com.mangofactory.swagger.models.alternates.Entry"
+      property              | type    | itemRef                      | itemQualifiedType
+      "enumToSimpleType"    | "array" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
+      "stringToSimpleType"  | "array" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
+      "complexToSimpleType" | "array" | "Entry«Category,SimpleType»" | "com.mangofactory.swagger.models.alternates.Entry"
   }
 
   @Unroll
@@ -193,9 +193,9 @@ class ContainerTypesSpec extends Specification {
       retItem.getType().getAbsoluteType() == itemRef
 
     where:
-      property              | type   | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
-      "stringToSimpleType"  | "List" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
-      "complexToSimpleType" | "List" | "Entry«Category,SimpleType»" | "com.mangofactory.swagger.models.alternates.Entry"
+      property              | type    | itemRef                      | itemQualifiedType
+      "enumToSimpleType"    | "array" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
+      "stringToSimpleType"  | "array" | "Entry«string,SimpleType»"   | "com.mangofactory.swagger.models.alternates.Entry"
+      "complexToSimpleType" | "array" | "Entry«Category,SimpleType»" | "com.mangofactory.swagger.models.alternates.Entry"
   }
 }

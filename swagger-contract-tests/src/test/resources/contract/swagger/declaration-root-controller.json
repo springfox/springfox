@@ -32,7 +32,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 401,

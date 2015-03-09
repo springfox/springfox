@@ -41,7 +41,7 @@ class SwaggerV1_2Spec extends Specification {
       String raw = response.data.text
       String actual = JsonOutput.prettyPrint(raw)
       response.status == 200
-      println(actual)
+//      println(actual)
 
       JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
   }
@@ -63,6 +63,7 @@ class SwaggerV1_2Spec extends Specification {
       response.status == 200
       //Uncomment this to see a better json diff when tests fail
 //      actual == contract
+      println(actual)
 
       //Json comparison without considering ordering
       JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)

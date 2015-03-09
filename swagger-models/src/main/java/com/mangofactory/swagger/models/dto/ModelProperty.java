@@ -21,9 +21,12 @@ public class ModelProperty {
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private final ModelRef items;
+  //Boxed value to allow nulls
+  private final Boolean uniqueItems;
 
   public ModelProperty(String type, String qualifiedType, int position, Boolean required, String description,
-                       AllowableValues allowableValues, ModelRef items) {
+                       AllowableValues allowableValues, ModelRef items, Boolean uniqueItems) {
+    this.uniqueItems = uniqueItems;
     this.type = new DataType(type);
     this.qualifiedType = qualifiedType;
     this.position = position; //TODO Suspect unused
@@ -59,5 +62,9 @@ public class ModelProperty {
 
   public ModelRef getItems() {
     return items;
+  }
+
+  public Boolean isUniqueItems() {
+    return uniqueItems;
   }
 }

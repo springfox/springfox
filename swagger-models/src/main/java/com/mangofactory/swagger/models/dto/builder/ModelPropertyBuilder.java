@@ -12,10 +12,19 @@ public class ModelPropertyBuilder {
   private String description;
   private AllowableValues allowableValues;
   private ModelRef items;
+  private Boolean uniqueItems = null;
 
   public ModelPropertyBuilder type(String type) {
     this.type = type;
+    maybeTreatAsASet(type);
     return this;
+  }
+
+  private void maybeTreatAsASet(String type) {
+    if ("set".equalsIgnoreCase(type)) {
+      this.uniqueItems = true;
+      this.type = "array";
+    }
   }
 
   public ModelPropertyBuilder qualifiedType(String qualifiedType) {
@@ -43,12 +52,12 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelPropertyBuilder iItems(ModelRef items) {
+  public ModelPropertyBuilder items(ModelRef items) {
     this.items = items;
     return this;
   }
 
   public ModelProperty build() {
-    return new ModelProperty(type, qualifiedType, position, required, description, allowableValues, items);
+    return new ModelProperty(type, qualifiedType, position, required, description, allowableValues, items, uniqueItems);
   }
 }

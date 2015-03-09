@@ -97,7 +97,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 401,
@@ -209,7 +209,7 @@
                         {
                             "code": 200,
                             "message": null,
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -267,7 +267,7 @@
                         {
                             "code": 200,
                             "message": null,
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -428,7 +428,7 @@
                         {
                             "code": 200,
                             "message": null,
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -482,7 +482,7 @@
                         {
                             "code": 200,
                             "message": null,
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -1003,7 +1003,7 @@
                         "type": "string"
                     },
                     "required": false,
-                    "type": "List"
+                    "type": "array"
                 }
             }
         }

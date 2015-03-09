@@ -25,25 +25,25 @@ class GenericTypeSpec extends Specification {
       def modelProperty = asInput.getProperties().get("genericField")
       modelProperty.getType().dataType.reference == propertyType
       modelProperty.getQualifiedType() == qualifiedType
-      (modelProperty.getItems() == null) == (!"List".equals(propertyType) && !"Array".equals(propertyType))
+      (modelProperty.getItems() == null) == (!"array".equals(propertyType))
 
       asReturn.getName() == expectedModelName(modelNamePart)
       asReturn.getProperties().containsKey("genericField")
       def retModelProperty = asReturn.getProperties().get("genericField")
       retModelProperty.getType().dataType.reference == propertyType
       retModelProperty.getQualifiedType() == qualifiedType
-      (retModelProperty.getItems() == null) == (!"List".equals(propertyType) && !"Array".equals(propertyType))
+      (retModelProperty.getItems() == null) == (!"array".equals(propertyType))
 
     where:
       modelType                       | propertyType                                  | modelNamePart                                 | qualifiedType
       genericClass()                  | "SimpleType"                                  | "SimpleType"                                  | "com.mangofactory.swagger.models.SimpleType"
       genericClassWithTypeErased()    | "object"                                      | ""                                            | "java.lang.Object"
-      genericClassWithListField()     | "List"                                        | "List«SimpleType»"                            | "java.util.List<com.mangofactory.swagger.models.SimpleType>"
+      genericClassWithListField()     | "array"                                       | "List«SimpleType»"                           | "java.util.List<com.mangofactory.swagger.models.SimpleType>"
       genericClassWithGenericField()  | "ResponseEntityAlternative«SimpleType»"       | "ResponseEntityAlternative«SimpleType»"       | "com.mangofactory.swagger.generics.ResponseEntityAlternative<com.mangofactory.swagger.models.SimpleType>"
       genericClassWithDeepGenerics()  | "ResponseEntityAlternative«List«SimpleType»»" | "ResponseEntityAlternative«List«SimpleType»»" | "com.mangofactory.swagger.generics.ResponseEntityAlternative<java.util.List<com.mangofactory.swagger.models.SimpleType>>"
       genericCollectionWithEnum()     | "Collection«string»"                          | "Collection«string»"                          | "java.util.Collection<com.mangofactory.swagger.models.ExampleEnum>"
-      genericTypeWithPrimitiveArray() | "Array"                                       | "Array«byte»"                                 | "byte"
-      genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
+      genericTypeWithPrimitiveArray() | "array"                                       | "Array«byte»"                                 | "byte"
+      genericTypeWithComplexArray()   | "array"                                       | "Array«SimpleType»"                           | null
   }
 
 
@@ -67,12 +67,12 @@ class GenericTypeSpec extends Specification {
 
     where:
       modelType                      | propertyType | qualifiedType
-      genericClass()                 | "List"       | "java.util.List<java.lang.String>"
-      genericClassWithTypeErased()   | "List"       | "java.util.List<java.lang.String>"
-      genericClassWithListField()    | "List"       | "java.util.List<java.lang.String>"
-      genericClassWithGenericField() | "List"       | "java.util.List<java.lang.String>"
-      genericClassWithDeepGenerics() | "List"       | "java.util.List<java.lang.String>"
-      genericCollectionWithEnum()    | "List"       | "java.util.List<java.lang.String>"
+      genericClass()                 | "array"       | "java.util.List<java.lang.String>"
+      genericClassWithTypeErased()   | "array"       | "java.util.List<java.lang.String>"
+      genericClassWithListField()    | "array"       | "java.util.List<java.lang.String>"
+      genericClassWithGenericField() | "array"       | "java.util.List<java.lang.String>"
+      genericClassWithDeepGenerics() | "array"       | "java.util.List<java.lang.String>"
+      genericCollectionWithEnum()    | "array"       | "java.util.List<java.lang.String>"
   }
 
   def "Set a generic type naming strategy should succeed if null or populated"() {
