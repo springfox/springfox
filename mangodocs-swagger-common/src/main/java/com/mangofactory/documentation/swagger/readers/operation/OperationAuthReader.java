@@ -17,6 +17,7 @@ import org.springframework.web.method.HandlerMethod;
 
 import java.util.List;
 
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
 
@@ -53,8 +54,15 @@ public class OperationAuthReader implements OperationBuilderPlugin {
           for (AuthorizationScope authorizationScope : scopes) {
             String description = authorizationScope.description();
             String scope = authorizationScope.scope();
-            authorizationScopeList.add(new AuthorizationScopeBuilder().scope(scope).description(description)
-                    .build());
+            // @Authorization has a default blank authorization scope, which we need to
+            // ignore in the case of api keys.
+            if (!isNullOrEmpty(scope)) {
+              authorizationScopeList.add(
+                      new AuthorizationScopeBuilder()
+                              .scope(scope)
+                              .description(description)
+                              .build());
+            }
           }
           com.mangofactory.documentation.service.AuthorizationScope[] authorizationScopes = authorizationScopeList
                   .toArray(new com.mangofactory.documentation.service.AuthorizationScope[authorizationScopeList.size()]);

@@ -20,10 +20,10 @@
             "name": "pet"
         },
         {
-            "name": "user"
+            "name": "store"
         },
         {
-            "name": "store"
+            "name": "user"
         }
     ],
     "produces": [
@@ -268,7 +268,7 @@
                 "security": [
                     {
                         "api_key": [
-                            ""
+
                         ]
                     },
                     {
