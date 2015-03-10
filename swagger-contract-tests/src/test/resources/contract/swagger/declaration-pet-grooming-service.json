@@ -317,9 +317,7 @@
         "Void": {
             "description": "",
             "id": "Void",
-            "properties": {
-
-            }
+            "properties": {}
         }
     }
 }

@@ -25,9 +25,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -61,9 +59,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -97,9 +93,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -137,9 +131,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -177,9 +169,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -213,9 +203,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -249,9 +237,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -285,9 +271,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -327,9 +311,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -362,9 +344,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -397,9 +377,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -436,9 +414,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -475,9 +451,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -510,9 +484,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -545,9 +517,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -580,9 +550,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -781,9 +749,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -823,9 +789,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -933,7 +897,7 @@
                             "description": "enumType",
                             "name": "body",
                             "paramType": "body",
-                            "type": "Collection\u00abstring\u00bb",
+                            "type": "Collection«string»",
                             "required": false
                         }
                     ],
@@ -1018,29 +982,13 @@
         }
     ],
     "models": {
-        "Void": {
+        "Chronology": {
             "description": "",
-            "id": "Void",
+            "id": "Chronology",
             "properties": {
-
-            }
-        },
-        "Pet": {
-            "description": "",
-            "id": "Pet",
-            "properties": {
-                "id": {
+                "zone": {
                     "required": false,
-                    "type": "string"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
+                    "type": "DateTimeZone"
                 }
             }
         },
@@ -1048,43 +996,61 @@
             "description": "",
             "id": "DateTimeField",
             "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "type": {
-                    "required": false,
-                    "type": "DateTimeFieldType"
-                },
-                "supported": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "lenient": {
-                    "required": false,
-                    "type": "boolean"
-                },
                 "durationField": {
-                    "required": false,
-                    "type": "DurationField"
-                },
-                "minimumValue": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "maximumValue": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "rangeDurationField": {
                     "required": false,
                     "type": "DurationField"
                 },
                 "leapDurationField": {
                     "required": false,
                     "type": "DurationField"
+                },
+                "lenient": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "maximumValue": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "minimumValue": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                },
+                "rangeDurationField": {
+                    "required": false,
+                    "type": "DurationField"
+                },
+                "supported": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "type": {
+                    "required": false,
+                    "type": "DateTimeFieldType"
+                }
+            }
+        },
+        "DateTimeFieldType": {
+            "description": "",
+            "id": "DateTimeFieldType",
+            "properties": {
+                "durationType": {
+                    "required": false,
+                    "type": "DurationFieldType"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                },
+                "rangeDurationType": {
+                    "required": false,
+                    "type": "DurationFieldType"
                 }
             }
         },
@@ -1098,59 +1064,30 @@
                 }
             }
         },
-        "Example": {
+        "DurationField": {
             "description": "",
-            "id": "Example",
+            "id": "DurationField",
             "properties": {
-                "parentBeanProperty": {
+                "name": {
                     "required": false,
                     "type": "string"
                 },
-                "foo": {
+                "precise": {
                     "required": false,
-                    "type": "string"
+                    "type": "boolean"
                 },
-                "bar": {
-                    "description": "description of bar",
+                "supported": {
                     "required": false,
-                    "format": "int32",
+                    "type": "boolean"
+                },
+                "type": {
+                    "required": false,
+                    "type": "DurationFieldType"
+                },
+                "unitMillis": {
+                    "format": "int64",
+                    "required": false,
                     "type": "integer"
-                },
-                "enumType": {
-                    "enum": [
-                        "ONE",
-                        "TWO"
-                    ],
-                    "required": false,
-                    "type": "string"
-                },
-                "annotatedEnumType": {
-                    "enum": [
-                        "ONE",
-                        "TWO"
-                    ],
-                    "required": false,
-                    "type": "string"
-                },
-                "nestedType": {
-                    "required": false,
-                    "type": "NestedType"
-                },
-                "propertyWithNoSetterMethod": {
-                    "required": false,
-                    "type": "string"
-                },
-                "localDateTime": {
-                    "required": false,
-                    "type": "LocalDateTime"
-                },
-                "allCapsSet": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "required": false,
-                    "type": "array",
-                    "uniqueItems": true
                 }
             }
         },
@@ -1164,105 +1101,98 @@
                 }
             }
         },
+        "Example": {
+            "description": "",
+            "id": "Example",
+            "properties": {
+                "allCapsSet": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "required": false,
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "annotatedEnumType": {
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ],
+                    "required": false,
+                    "type": "string"
+                },
+                "bar": {
+                    "description": "description of bar",
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "enumType": {
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ],
+                    "required": false,
+                    "type": "string"
+                },
+                "foo": {
+                    "required": false,
+                    "type": "string"
+                },
+                "localDateTime": {
+                    "required": false,
+                    "type": "LocalDateTime"
+                },
+                "nestedType": {
+                    "required": false,
+                    "type": "NestedType"
+                },
+                "parentBeanProperty": {
+                    "required": false,
+                    "type": "string"
+                },
+                "propertyWithNoSetterMethod": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
         "LocalDateTime": {
             "description": "",
             "id": "LocalDateTime",
             "properties": {
-                "year": {
-                    "required": false,
+                "centuryOfEra": {
                     "format": "int32",
-                    "type": "integer"
-                },
-                "era": {
                     "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfYear": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfWeek": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfMonth": {
-                    "required": false,
-                    "format": "int32",
                     "type": "integer"
                 },
                 "chronology": {
                     "required": false,
                     "type": "Chronology"
                 },
-                "centuryOfEra": {
-                    "required": false,
+                "dayOfMonth": {
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
-                "yearOfEra": {
-                    "required": false,
+                "dayOfWeek": {
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
-                "yearOfCentury": {
-                    "required": false,
+                "dayOfYear": {
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
-                "weekyear": {
-                    "required": false,
+                "era": {
                     "format": "int32",
-                    "type": "integer"
-                },
-                "monthOfYear": {
                     "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "weekOfWeekyear": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "hourOfDay": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "minuteOfHour": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "secondOfMinute": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "millisOfSecond": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "millisOfDay": {
-                    "required": false,
-                    "format": "int32",
                     "type": "integer"
                 },
                 "fields": {
                     "items": {
                         "type": "DateTimeField"
-                    },
-                    "required": false,
-                    "type": "array"
-                },
-                "values": {
-                    "items": {
-                        "format": "int32",
-                        "type": "integer"
                     },
                     "required": false,
                     "type": "array"
@@ -1273,6 +1203,69 @@
                     },
                     "required": false,
                     "type": "array"
+                },
+                "hourOfDay": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "millisOfDay": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "millisOfSecond": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "minuteOfHour": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "monthOfYear": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "secondOfMinute": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "values": {
+                    "items": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "required": false,
+                    "type": "array"
+                },
+                "weekOfWeekyear": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "weekyear": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "year": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "yearOfCentury": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "yearOfEra": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
                 }
             }
         },
@@ -1286,60 +1279,29 @@
                 }
             }
         },
-        "DurationField": {
+        "Pet": {
             "description": "",
-            "id": "DurationField",
+            "id": "Pet",
             "properties": {
-                "name": {
+                "age": {
+                    "format": "int32",
                     "required": false,
-                    "type": "string"
-                },
-                "type": {
-                    "required": false,
-                    "type": "DurationFieldType"
-                },
-                "supported": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "unitMillis": {
-                    "required": false,
-                    "format": "int64",
                     "type": "integer"
                 },
-                "precise": {
-                    "required": false,
-                    "type": "boolean"
-                }
-            }
-        },
-        "Chronology": {
-            "description": "",
-            "id": "Chronology",
-            "properties": {
-                "zone": {
-                    "required": false,
-                    "type": "DateTimeZone"
-                }
-            }
-        },
-        "DateTimeFieldType": {
-            "description": "",
-            "id": "DateTimeFieldType",
-            "properties": {
-                "name": {
+                "id": {
                     "required": false,
                     "type": "string"
                 },
-                "durationType": {
+                "name": {
                     "required": false,
-                    "type": "DurationFieldType"
-                },
-                "rangeDurationType": {
-                    "required": false,
-                    "type": "DurationFieldType"
+                    "type": "string"
                 }
             }
+        },
+        "Void": {
+            "description": "",
+            "id": "Void",
+            "properties": {}
         }
     }
 }
