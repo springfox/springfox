@@ -4,10 +4,8 @@
     "basePath": "/",
     "resourcePath": "/fancypets",
     "produces": [
-
     ],
     "consumes": [
-
     ],
     "apis": [
         {
@@ -185,13 +183,32 @@
         }
     ],
     "models": {
+        "FancyPet": {
+            "description": "",
+            "id": "FancyPet",
+            "properties": {
+                "age": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
         "Pet": {
             "description": "",
             "id": "Pet",
             "properties": {
                 "age": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "id": {
@@ -207,28 +224,7 @@
         "Void": {
             "description": "",
             "id": "Void",
-            "properties": {
-
-            }
-        },
-        "FancyPet": {
-            "description": "",
-            "id": "FancyPet",
-            "properties": {
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "id": {
-                    "required": false,
-                    "type": "string"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
+            "properties": {}
         }
     }
 }

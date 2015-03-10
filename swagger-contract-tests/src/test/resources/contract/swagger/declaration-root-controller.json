@@ -4,10 +4,8 @@
     "basePath": "/",
     "resourcePath": "/",
     "produces": [
-
     ],
     "consumes": [
-
     ],
     "apis": [
         {
@@ -25,9 +23,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,

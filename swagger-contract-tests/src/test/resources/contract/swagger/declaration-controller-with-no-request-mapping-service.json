@@ -25,9 +25,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -54,6 +52,16 @@
         }
     ],
     "models": {
+        "Chronology": {
+            "description": "",
+            "id": "Chronology",
+            "properties": {
+                "zone": {
+                    "required": false,
+                    "type": "DateTimeZone"
+                }
+            }
+        },
         "DateTimeField": {
             "description": "",
             "id": "DateTimeField",
@@ -71,13 +79,13 @@
                     "type": "boolean"
                 },
                 "maximumValue": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "minimumValue": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "name": {
@@ -95,6 +103,71 @@
                 "type": {
                     "required": false,
                     "type": "DateTimeFieldType"
+                }
+            }
+        },
+        "DateTimeFieldType": {
+            "description": "",
+            "id": "DateTimeFieldType",
+            "properties": {
+                "durationType": {
+                    "required": false,
+                    "type": "DurationFieldType"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                },
+                "rangeDurationType": {
+                    "required": false,
+                    "type": "DurationFieldType"
+                }
+            }
+        },
+        "DateTimeZone": {
+            "description": "",
+            "id": "DateTimeZone",
+            "properties": {
+                "fixed": {
+                    "required": false,
+                    "type": "boolean"
+                }
+            }
+        },
+        "DurationField": {
+            "description": "",
+            "id": "DurationField",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                },
+                "precise": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "supported": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "type": {
+                    "required": false,
+                    "type": "DurationFieldType"
+                },
+                "unitMillis": {
+                    "format": "int64",
+                    "required": false,
+                    "type": "integer"
+                }
+            }
+        },
+        "DurationFieldType": {
+            "description": "",
+            "id": "DurationFieldType",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
                 }
             }
         },
@@ -119,8 +192,8 @@
                 },
                 "bar": {
                     "description": "description of bar",
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "enumType": {
@@ -153,33 +226,13 @@
                 }
             }
         },
-        "DateTimeZone": {
-            "description": "",
-            "id": "DateTimeZone",
-            "properties": {
-                "fixed": {
-                    "required": false,
-                    "type": "boolean"
-                }
-            }
-        },
-        "DurationFieldType": {
-            "description": "",
-            "id": "DurationFieldType",
-            "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
         "LocalDateTime": {
             "description": "",
             "id": "LocalDateTime",
             "properties": {
                 "centuryOfEra": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "chronology": {
@@ -187,31 +240,24 @@
                     "type": "Chronology"
                 },
                 "dayOfMonth": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "dayOfWeek": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "dayOfYear": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "era": {
-                    "required": false,
                     "format": "int32",
-                    "type": "integer"
-                },
-                "fieldTypes": {
-                    "items": {
-                        "type": "DateTimeFieldType"
-                    },
                     "required": false,
-                    "type": "Array"
+                    "type": "integer"
                 },
                 "fields": {
                     "items": {
@@ -220,34 +266,41 @@
                     "required": false,
                     "type": "Array"
                 },
-                "hourOfDay": {
+                "fieldTypes": {
+                    "items": {
+                        "type": "DateTimeFieldType"
+                    },
                     "required": false,
+                    "type": "Array"
+                },
+                "hourOfDay": {
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "millisOfDay": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "millisOfSecond": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "minuteOfHour": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "monthOfYear": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "secondOfMinute": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "values": {
@@ -259,28 +312,28 @@
                     "type": "Array"
                 },
                 "weekOfWeekyear": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "weekyear": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "year": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "yearOfCentury": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "yearOfEra": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 }
             }
@@ -292,61 +345,6 @@
                 "name": {
                     "required": false,
                     "type": "string"
-                }
-            }
-        },
-        "DurationField": {
-            "description": "",
-            "id": "DurationField",
-            "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "precise": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "supported": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "type": {
-                    "required": false,
-                    "type": "DurationFieldType"
-                },
-                "unitMillis": {
-                    "required": false,
-                    "format": "int64",
-                    "type": "integer"
-                }
-            }
-        },
-        "Chronology": {
-            "description": "",
-            "id": "Chronology",
-            "properties": {
-                "zone": {
-                    "required": false,
-                    "type": "DateTimeZone"
-                }
-            }
-        },
-        "DateTimeFieldType": {
-            "description": "",
-            "id": "DateTimeFieldType",
-            "properties": {
-                "durationType": {
-                    "required": false,
-                    "type": "DurationFieldType"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "rangeDurationType": {
-                    "required": false,
-                    "type": "DurationFieldType"
                 }
             }
         }

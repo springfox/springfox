@@ -4,10 +4,8 @@
     "basePath": "/",
     "resourcePath": "/",
     "produces": [
-
     ],
     "consumes": [
-
     ],
     "apis": [
         {
@@ -315,9 +313,7 @@
         "Void": {
             "description": "",
             "id": "Void",
-            "properties": {
-
-            }
+            "properties": {}
         }
     }
 }

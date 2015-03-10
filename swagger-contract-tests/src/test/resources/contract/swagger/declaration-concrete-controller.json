@@ -4,10 +4,8 @@
     "basePath": "/",
     "resourcePath": "/foo",
     "produces": [
-
     ],
     "consumes": [
-
     ],
     "apis": [
         {
@@ -78,9 +76,7 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -117,8 +113,8 @@
             "id": "Pet",
             "properties": {
                 "age": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "id": {
@@ -134,9 +130,7 @@
         "Void": {
             "description": "",
             "id": "Void",
-            "properties": {
-
-            }
+            "properties": {}
         }
     }
 }
