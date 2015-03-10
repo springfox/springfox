@@ -14,7 +14,9 @@ import com.mangofactory.swagger.models.alternates.WildcardType;
 import com.mangofactory.swagger.address.SwaggerAddressProvider;
 import com.mangofactory.swagger.readers.operation.RequestMappingReader;
 import com.mangofactory.swagger.scanners.ApiListingReferenceScanner;
-import com.wordnik.swagger.model.ApiInfo;
+import com.wordnik.swagger.models.Contact;
+import com.wordnik.swagger.models.Info;
+import com.wordnik.swagger.models.License;
 import org.springframework.util.Assert;
 
 import java.lang.annotation.Annotation;
@@ -46,7 +48,8 @@ public class SwaggerSpringMvcPlugin {
   private List<String> includePatterns;
   private SwaggerAddressProvider swaggerAddressProvider;
   //  private List<AuthorizationType> authorizationTypes;
-  private ApiInfo apiInfo;
+  private Info info;
+
   private AuthorizationContext authorizationContext;
   private List<Class<? extends Annotation>> excludeAnnotations = new ArrayList<Class<? extends Annotation>>();
   private ResourceGroupingStrategy resourceGroupingStrategy;
@@ -81,11 +84,11 @@ public class SwaggerSpringMvcPlugin {
   /**
    * Sets the api's meta information as included in the json ResourceListing response.
    *
-   * @param apiInfo
+   * @param info
    * @return this SwaggerSpringMvcPlugin
    */
-  public SwaggerSpringMvcPlugin apiInfo(ApiInfo apiInfo) {
-    this.apiInfo = apiInfo;
+  public SwaggerSpringMvcPlugin info(Info info) {
+    this.info = info;
     return this;
   }
 
@@ -337,15 +340,20 @@ public class SwaggerSpringMvcPlugin {
     return this;
   }
 
-  private ApiInfo defaultApiInfo() {
-    return new ApiInfo(
-            this.swaggerGroup + " Title",
-            "Api Description",
-            "Api terms of service",
-            "Contact Name",
-            "Licence Type",
-            "License URL"
-    );
+  private Info defaultInfo() {
+    Info info = new Info();
+    info.setVersion("1.0.0");
+    info.setTitle(this.swaggerGroup + "Title");
+    info.description("Api Description");
+    info.setTermsOfService("Api terms of service");
+    Contact contact = new Contact();
+    contact.setName("Contact Name");
+    info.setContact(contact);
+    License license = new License();
+    license.setName("Licence Type");
+    license.setUrl("License URL");
+    info.setLicense(license);
+    return info;
   }
 
   /**
@@ -378,8 +386,8 @@ public class SwaggerSpringMvcPlugin {
       this.swaggerGroup = "default";
     }
 
-    if (null == this.apiInfo) {
-      this.apiInfo = defaultApiInfo();
+    if (null == this.info) {
+      this.info = defaultInfo();
     }
 
     if (null == this.resourceGroupingStrategy) {
@@ -430,7 +438,7 @@ public class SwaggerSpringMvcPlugin {
     swaggerApiResourceListing = new SwaggerApiResourceListing(springSwaggerConfig.swaggerCache(), this.swaggerGroup);
     swaggerApiResourceListing.setSwaggerGlobalSettings(this.swaggerGlobalSettings);
     swaggerApiResourceListing.setSwaggerAddressProvider(this.swaggerAddressProvider);
-    swaggerApiResourceListing.setApiInfo(this.apiInfo);
+    swaggerApiResourceListing.setApiInfo(this.info);
 //    swaggerApiResourceListing.setAuthorizationTypes(this.authorizationTypes);
     swaggerApiResourceListing.setAuthorizationContext(this.authorizationContext);
     swaggerApiResourceListing.setModelProvider(this.modelProvider);
