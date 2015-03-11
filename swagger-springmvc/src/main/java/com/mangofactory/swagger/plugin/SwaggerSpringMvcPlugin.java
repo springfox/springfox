@@ -438,7 +438,7 @@ public class SwaggerSpringMvcPlugin {
     swaggerApiResourceListing = new SwaggerApiResourceListing(springSwaggerConfig.swaggerCache(), this.swaggerGroup);
     swaggerApiResourceListing.setSwaggerGlobalSettings(this.swaggerGlobalSettings);
     swaggerApiResourceListing.setSwaggerAddressProvider(this.swaggerAddressProvider);
-    swaggerApiResourceListing.setApiInfo(this.info);
+    swaggerApiResourceListing.setInfo(this.info);
 //    swaggerApiResourceListing.setAuthorizationTypes(this.authorizationTypes);
     swaggerApiResourceListing.setAuthorizationContext(this.authorizationContext);
     swaggerApiResourceListing.setModelProvider(this.modelProvider);

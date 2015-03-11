@@ -24,7 +24,7 @@ public class SwaggerApiResourceListing {
   private static final Logger log = LoggerFactory.getLogger(SwaggerApiResourceListing.class);
 
   private SwaggerCache swaggerCache;
-  private Info apiInfo;
+  private Info info;
   //  private List<AuthorizationType> authorizationTypes;
   private AuthorizationContext authorizationContext;
   private ApiListingReferenceScanner apiListingReferenceScanner;
@@ -59,7 +59,7 @@ public class SwaggerApiResourceListing {
     Map<String, Path> apiPaths = apiListingScanner.scan();
     apiListingScanner.getSwaggerModels();
     Swagger swagger = new Swagger();
-    swagger.setInfo(this.apiInfo);
+    swagger.setInfo(this.info);
     swagger.setPaths(apiPaths);
     swagger.setHost(swaggerAddressProvider.getHost());
     swagger.setBasePath(swaggerAddressProvider.getBasePath());
@@ -95,8 +95,8 @@ public class SwaggerApiResourceListing {
     return swaggerCache;
   }
 
-  public void setApiInfo(Info apiInfo) {
-    this.apiInfo = apiInfo;
+  public void setInfo(Info info) {
+    this.info = info;
   }
 
 //  public List<AuthorizationType> getAuthorizationTypes() {
