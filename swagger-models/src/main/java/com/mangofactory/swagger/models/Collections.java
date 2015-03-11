@@ -17,7 +17,7 @@ public class Collections {
   }
 
   public static ResolvedType collectionElementType(ResolvedType type) {
-    if (List.class.isAssignableFrom(type.getErasedType())) {
+    if (List.class.isAssignableFrom(type.getErasedType()) || Collection.class.isAssignableFrom(type.getErasedType())) {
       return Collections.elementType(type, List.class);
     } else if (Set.class.isAssignableFrom(type.getErasedType())) {
       return Collections.elementType(type, Set.class);
@@ -29,7 +29,7 @@ public class Collections {
   }
 
   public static boolean isContainerType(ResolvedType type) {
-    if (List.class.isAssignableFrom(type.getErasedType()) ||
+    if (Collection.class.isAssignableFrom(type.getErasedType()) || List.class.isAssignableFrom(type.getErasedType()) ||
             Set.class.isAssignableFrom(type.getErasedType()) ||
             type.isArray()) {
       return true;
@@ -38,7 +38,9 @@ public class Collections {
   }
 
   public static String containerType(ResolvedType type) {
-    if (List.class.isAssignableFrom(type.getErasedType())) {
+    if (Collection.class.isAssignableFrom(type.getErasedType())) {
+      return "Collection";
+    } else if (List.class.isAssignableFrom(type.getErasedType())) {
       return "List";
     } else if (Set.class.isAssignableFrom(type.getErasedType())) {
       return "Set";
@@ -50,7 +52,7 @@ public class Collections {
   }
 
   public static String propertyContainerType(ResolvedType type) {
-    if (List.class.isAssignableFrom(type.getErasedType())
+    if (Collection.class.isAssignableFrom(type.getErasedType()) || List.class.isAssignableFrom(type.getErasedType())
             || type.isArray()) {
       return "array";
     } else if (Set.class.isAssignableFrom(type.getErasedType())) {
