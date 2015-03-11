@@ -897,7 +897,7 @@
                             "description": "enumType",
                             "name": "body",
                             "paramType": "body",
-                            "type": "Collection«string»",
+                            "type": "Collection\u00abstring\u00bb",
                             "required": false
                         }
                     ],

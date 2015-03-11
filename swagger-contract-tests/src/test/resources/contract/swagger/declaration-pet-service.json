@@ -257,7 +257,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry\u00abstring,Pet\u00bb]",
                             "required": false
                         }
                     ],
@@ -285,7 +285,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "List[Entry«string,Pet»]"
+                    "type": "List[Entry\u00abstring,Pet\u00bb]"
                 }
             ]
         },
@@ -444,7 +444,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "List[Entry«string,List«string»»]"
+                    "type": "List[Entry\u00abstring,List\u00abstring\u00bb\u00bb]"
                 }
             ]
         },
@@ -528,7 +528,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry\u00abstring,Pet\u00bb]",
                             "required": false
                         }
                     ],
@@ -582,7 +582,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry\u00abstring,Pet\u00bb]",
                             "required": false
                         }
                     ],
@@ -636,7 +636,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry\u00abstring,Pet\u00bb]",
                             "required": false
                         }
                     ],
@@ -954,9 +954,9 @@
         }
     ],
     "models": {
-        "Entry«string,List«string»»": {
+        "Entry\u00abstring,List\u00abstring\u00bb\u00bb": {
             "description": "",
-            "id": "Entry«string,List«string»»",
+            "id": "Entry\u00abstring,List\u00abstring\u00bb\u00bb",
             "properties": {
                 "key": {
                     "items": {
@@ -967,9 +967,9 @@
                 }
             }
         },
-        "Entry«string,Pet»": {
+        "Entry\u00abstring,Pet\u00bb": {
             "description": "",
-            "id": "Entry«string,Pet»",
+            "id": "Entry\u00abstring,Pet\u00bb",
             "properties": {
                 "key": {
                     "required": false,
