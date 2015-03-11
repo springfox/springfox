@@ -1,4 +1,10 @@
 ## Change Logs
+[1.0.0](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A1.0.0)
+- [#593] Container types in model properties are now rendered as "arrays" 
+- [#589] Add support for @RequestPart annotation
+- [#560] Having a model property of type Class doesn't work as expected
+- [#554] @ApiModelProperty "hidden" attribute has no effect
+
 [0.9.5](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.9.5)
 ===========================================
 - [#552] Enable ApiResponses annotation on interface

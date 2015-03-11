@@ -123,6 +123,7 @@ public class Defaults {
   private void initIgnorableTypes() {
     ignored = newHashSet();
     ignored.add(ServletRequest.class);
+    ignored.add(Class.class);
     ignored.add(HttpHeaders.class);
     ignored.add(ServletResponse.class);
     ignored.add(HttpServletRequest.class);
