@@ -51,7 +51,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
       String raw = response.data.text
       String actual = JsonOutput.prettyPrint(raw)
       response.status == 200
-//      println(actual)
+      println(actual)
 
       JSONAssert.assertEquals(contract, actual, JSONCompareMode.NON_EXTENSIBLE)
 

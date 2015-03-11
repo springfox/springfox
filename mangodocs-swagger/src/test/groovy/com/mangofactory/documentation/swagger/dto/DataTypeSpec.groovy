@@ -30,7 +30,7 @@ class DataTypeSpec extends InternalJsonSerializationSpec {
       "date-time"  | { it.type == 'string' && it.format == 'date-time' }
       "pet"        | { it.'type' == 'pet' }
       "Set[Pet]"   | { it.type == 'array' && it.items.'type' == 'Pet' && it.uniqueItems == true }
-      "List[Pet]"  | { it.type == 'array' && it.items.'type' == 'Pet' && it.uniqueItems == false }
+      "List[Pet]"  | { it.type == 'array' && it.items.'type' == 'Pet' && it.uniqueItems == null }
       "List[int]"  | { it.type == 'array' && it.items.format == 'int32' && it.items.type == 'integer' }
   }
 }

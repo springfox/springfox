@@ -792,7 +792,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 401,
@@ -811,8 +811,7 @@
                     "type": "array",
                     "items": {
                         "type": "Example"
-                    },
-                    "uniqueItems": false
+                    }
                 }
             ]
         },
@@ -895,7 +894,7 @@
                             "description": "enumType",
                             "name": "body",
                             "paramType": "body",
-                            "type": "Collection«string»",
+                            "type": "Collection\u00abstring\u00bb",
                             "required": false
                         }
                     ],
@@ -1108,7 +1107,8 @@
                         "type": "string"
                     },
                     "required": false,
-                    "type": "Set"
+                    "type": "array",
+                    "uniqueItems": true
                 },
                 "annotatedEnumType": {
                     "enum": [
@@ -1192,14 +1192,14 @@
                         "type": "DateTimeField"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "fieldTypes": {
                     "items": {
                         "type": "DateTimeFieldType"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "hourOfDay": {
                     "format": "int32",
@@ -1237,7 +1237,7 @@
                         "type": "integer"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "weekOfWeekyear": {
                     "format": "int32",

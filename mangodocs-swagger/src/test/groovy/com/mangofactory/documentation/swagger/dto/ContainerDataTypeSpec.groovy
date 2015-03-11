@@ -9,8 +9,7 @@ class ContainerDataTypeSpec extends InternalJsonSerializationSpec {
   "items" : {
     "format" : "int32",
     "type" : "integer"
-  },
-  "uniqueItems" : false
+  }
 }'''
   }
 
@@ -20,8 +19,7 @@ class ContainerDataTypeSpec extends InternalJsonSerializationSpec {
   "type" : "array",
   "items" : {
     "type" : "pet"
-  },
-  "uniqueItems" : false
+  }
 }'''
   }
 

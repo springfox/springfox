@@ -20,13 +20,14 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
     apiListing.models =
             ['someModel':
                      new ModelDto('id', 'name', 'qtype',
-                             ['aprop': new ModelPropertyDto("aProp", 'ptype', 'qtype', 0, false, 'pdesc', null, null)]
+                             ['aprop': new ModelPropertyDto("aProp", 'ptype', 'qtype', 0, false, 'pdesc', null)]
                              , 'desc', null, null, null)
             ]
     apiListing.description = 'description'
     apiListing.position = 0
     apiListing
   }
+
 
   def "should serialize"() {
     expect:

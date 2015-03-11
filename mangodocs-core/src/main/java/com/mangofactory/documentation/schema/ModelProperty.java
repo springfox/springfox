@@ -9,18 +9,21 @@ public class ModelProperty {
   private final String qualifiedType;
   private final int position;
   private final Boolean required;
+  private final boolean isHidden;
   private final String description;
   private final AllowableValues allowableValues;
   private final ModelRef modelRef;
 
   public ModelProperty(String name, ResolvedType type, String qualifiedType,
-                       int position, Boolean required, String description, AllowableValues allowableValues,
+                       int position, Boolean required, boolean isHidden, String description,
+                       AllowableValues allowableValues,
                        ModelRef modelRef) {
     this.name = name;
     this.type = type;
     this.qualifiedType = qualifiedType;
     this.position = position;
     this.required = required;
+    this.isHidden = isHidden;
     this.description = description;
     this.allowableValues = allowableValues;
     this.modelRef = modelRef;
@@ -56,5 +59,9 @@ public class ModelProperty {
 
   public ModelRef getModelRef() {
     return modelRef;
+  }
+
+  public boolean isHidden() {
+    return isHidden;
   }
 }

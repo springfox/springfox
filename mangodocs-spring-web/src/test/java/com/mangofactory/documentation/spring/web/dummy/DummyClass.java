@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -251,6 +252,18 @@ public class DummyClass {
 
   public void methodParameterWithRequestBodyAnnotation(
           @RequestBody DummyModels.BusinessModel model,
+          HttpServletResponse response,
+          DummyModels.AnnotatedBusinessModel annotatedBusinessModel) {
+  }
+
+  public void methodParameterWithRequestPartAnnotation(
+          @RequestPart DummyModels.BusinessModel model,
+          HttpServletResponse response,
+          DummyModels.AnnotatedBusinessModel annotatedBusinessModel) {
+  }
+
+  public void methodParameterWithRequestPartAnnotationOnSimpleType(
+          @RequestPart String model,
           HttpServletResponse response,
           DummyModels.AnnotatedBusinessModel annotatedBusinessModel) {
   }

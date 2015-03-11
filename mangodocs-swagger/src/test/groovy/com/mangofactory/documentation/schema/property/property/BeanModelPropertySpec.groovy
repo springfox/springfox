@@ -85,7 +85,6 @@ class BeanModelPropertySpec extends SchemaSpecification {
       "setEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(newArrayList("ONE", "TWO"), "LIST") | "string"  | "com.mangofactory.documentation.schema.ExampleEnum"
   }
 
-
   def "Respects JsonGetter annotations"() {
 
     given:
@@ -103,7 +102,6 @@ class BeanModelPropertySpec extends SchemaSpecification {
       typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       sut.allowableValues() == null
-
 
     where:
       methodName || typeName | qualifiedTypeName

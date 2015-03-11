@@ -17,21 +17,7 @@ class DataTypeMapperSpec extends Specification {
     where:
       modelRef                        | typeName 
       new ModelRef("void")            | "void"
-      new ModelRef("List", "String")  | "List"
-      null                            | null
-  }
-
-  def "Maps item type name of model ref for itemTypeFromModelRef"() {
-    given:
-      def sut = dataTypeMapper()
-    when:
-      def mapped = sut.itemTypeFromModelRef(modelRef)
-    then:
-      mapped?.absoluteType == typeName
-    where:
-      modelRef                        | typeName
-      new ModelRef("void")            | null
-      new ModelRef("List", "String")  | "String"
+      new ModelRef("List", "String")  | "array"
       null                            | null
   }
 
@@ -46,7 +32,7 @@ class DataTypeMapperSpec extends Specification {
     where:
       modelRef                        | typeName
       new ModelRef("void")            | "void"
-      new ModelRef("List", "String")  | "List"
+      new ModelRef("List", "String")  | "array"
       null                            | null
   }
 

@@ -180,7 +180,8 @@
                         "type": "string"
                     },
                     "required": false,
-                    "type": "Set"
+                    "type": "array",
+                    "uniqueItems": true
                 },
                 "annotatedEnumType": {
                     "enum": [
@@ -264,14 +265,14 @@
                         "type": "DateTimeField"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "fieldTypes": {
                     "items": {
                         "type": "DateTimeFieldType"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "hourOfDay": {
                     "format": "int32",
@@ -309,7 +310,7 @@
                         "type": "integer"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "weekOfWeekyear": {
                     "format": "int32",

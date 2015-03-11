@@ -41,8 +41,7 @@ public interface ServiceModelToSwaggerMapper {
   ApiListing toSwaggerApiListing(com.mangofactory.documentation.service.ApiListing from);
 
   @Mappings({
-          @Mapping(target = "type", source = "modelRef", qualifiedBy = Type.class),
-          @Mapping(target = "items", source = "modelRef", qualifiedBy = ItemType.class)
+          @Mapping(target = "type", source = "modelRef", qualifiedBy = Type.class)
   })
   ModelPropertyDto toSwaggerModelPropertyDto(ModelProperty from);
 

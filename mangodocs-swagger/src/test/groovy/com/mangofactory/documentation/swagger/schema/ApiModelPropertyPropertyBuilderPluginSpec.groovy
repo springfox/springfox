@@ -32,6 +32,7 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       enriched.allowableValues?.values == allowableValues
       enriched.isRequired() == required
       enriched.description == description
+      !enriched.isHidden()
     where:
       property    | required | description              | allowableValues
       "intProp"   | true     | "int Property Field"     | null
@@ -54,12 +55,28 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       enriched.allowableValues?.values == allowableValues
       enriched.isRequired() == required
       enriched.description == description
+      !enriched.isHidden()
     where:
       property    | required | description              | allowableValues
       "intProp"   | null     | null                     | null
       "boolProp"  | false    | "bool Property Getter"   | null
       "enumProp"  | true     | "enum Prop Getter value" | ["ONE"]
   }
+
+//  def "Detects properties annotated as hidden"() {
+//    given:
+//      Class typeToTest = typeForTestingAnnotatedGettersAndSetter()
+//      def method = accessorMethod(typeToTest, "getHiddenProp")
+//      def propertyDefinition = beanPropertyDefinition(typeToTest, "getHiddenProp")
+//
+//      ObjectMapper mapper = new ObjectMapper()
+//      String propName = name(propertyDefinition, true, new ObjectMapperBeanPropertyNamingStrategy(mapper))
+//      def sut = new BeanModelProperty(propName, propertyDefinition, method, isGetter(method.getRawMember()),
+//              new TypeResolver(), new AlternateTypeProvider())
+//
+//    expect:
+//      sut.isHidden()
+//  }
 
   BeanDescription beanDescription(Class<TypeWithAnnotatedGettersAndSetters> clazz) {
     def objectMapper = new ObjectMapper()

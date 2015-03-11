@@ -4,8 +4,10 @@
     "basePath": "/",
     "resourcePath": "/pets",
     "produces": [
+
     ],
     "consumes": [
+
     ],
     "apis": [
         {
@@ -145,12 +147,14 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [],
+                    "parameters": [
+
+                    ],
                     "responseMessages": [
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 401,
@@ -169,8 +173,7 @@
                     "type": "array",
                     "items": {
                         "type": "Pet"
-                    },
-                    "uniqueItems": false
+                    }
                 }
             ]
         },
@@ -204,7 +207,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -227,8 +230,7 @@
                     "type": "array",
                     "items": {
                         "type": "Pet"
-                    },
-                    "uniqueItems": false
+                    }
                 }
             ]
         },
@@ -254,7 +256,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry\u00abstring,Pet\u00bb]",
                             "required": false
                         }
                     ],
@@ -262,7 +264,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -282,7 +284,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "List[Entry«string,Pet»]"
+                    "type": "List[Entry\u00abstring,Pet\u00bb]"
                 }
             ]
         },
@@ -416,12 +418,14 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [],
+                    "parameters": [
+
+                    ],
                     "responseMessages": [
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -441,7 +445,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "List[Entry«string,List«string»»]"
+                    "type": "List[Entry\u00abstring,List\u00abstring\u00bb\u00bb]"
                 }
             ]
         },
@@ -475,7 +479,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -498,8 +502,7 @@
                     "type": "array",
                     "items": {
                         "type": "Pet"
-                    },
-                    "uniqueItems": false
+                    }
                 }
             ]
         },
@@ -525,7 +528,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry\u00abstring,Pet\u00bb]",
                             "required": false
                         }
                     ],
@@ -579,7 +582,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry\u00abstring,Pet\u00bb]",
                             "required": false
                         }
                     ],
@@ -633,7 +636,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry\u00abstring,Pet\u00bb]",
                             "required": false
                         }
                     ],
@@ -951,36 +954,13 @@
         }
     ],
     "models": {
-        "Entry«string,List«string»»": {
-            "description": "",
-            "id": "Entry«string,List«string»»",
-            "properties": {
-                "key": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "required": false,
-                    "type": "List"
-                }
-            }
-        },
-        "Entry«string,Pet»": {
-            "description": "",
-            "id": "Entry«string,Pet»",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "type": "Pet"
-                }
-            }
-        },
         "Pet": {
             "description": "",
             "id": "Pet",
             "properties": {
                 "age": {
-                    "format": "int32",
                     "required": false,
+                    "format": "int32",
                     "type": "integer"
                 },
                 "id": {
@@ -993,10 +973,35 @@
                 }
             }
         },
+        "Entry\u00abstring,Pet\u00bb": {
+            "description": "",
+            "id": "Entry\u00abstring,Pet\u00bb",
+            "properties": {
+                "key": {
+                    "required": false,
+                    "type": "Pet"
+                }
+            }
+        },
+        "Entry\u00abstring,List\u00abstring\u00bb\u00bb": {
+            "description": "",
+            "id": "Entry\u00abstring,List\u00abstring\u00bb\u00bb",
+            "properties": {
+                "key": {
+                    "required": false,
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "Void": {
             "description": "",
             "id": "Void",
-            "properties": {}
+            "properties": {
+
+            }
         }
     }
 }

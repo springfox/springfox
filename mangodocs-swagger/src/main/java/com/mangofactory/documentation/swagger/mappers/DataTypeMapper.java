@@ -12,11 +12,13 @@ import java.lang.annotation.Target;
 
 @Mapper
 public class DataTypeMapper {
-
   @ResponseTypeName
   public String responseTypeName(ModelRef modelRef) {
     if (modelRef == null) {
       return null;
+    }
+    if (modelRef.isCollection()) {
+      return "array";
     }
     return modelRef.getType();
   }
@@ -32,15 +34,10 @@ public class DataTypeMapper {
   @Type
   public com.mangofactory.documentation.swagger.dto.DataType typeFromModelRef(ModelRef modelRef) {
     if (modelRef != null) {
+      if (modelRef.isCollection()) {
+        return new DataType(String.format("%s[%s]", modelRef.getType(), modelRef.getItemType()));
+      }
       return new DataType(modelRef.getType());
-    }
-    return null;
-  }
-
-  @ItemType
-  public com.mangofactory.documentation.swagger.dto.DataType itemTypeFromModelRef(ModelRef modelRef) {
-    if (modelRef != null && modelRef.isCollection()) {
-      return new DataType(modelRef.getItemType());
     }
     return null;
   }

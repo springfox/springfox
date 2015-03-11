@@ -28,7 +28,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 401,
@@ -47,8 +47,7 @@
                     "type": "array",
                     "items": {
                         "type": "string"
-                    },
-                    "uniqueItems": false
+                    }
                 }
             ]
         }

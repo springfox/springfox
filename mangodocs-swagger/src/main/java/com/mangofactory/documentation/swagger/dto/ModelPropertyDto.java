@@ -1,14 +1,13 @@
 package com.mangofactory.documentation.swagger.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 public class  ModelPropertyDto {
   @JsonProperty
   @JsonUnwrapped
-  private SwaggerDataType type;
+  private DataType type;
   @JsonIgnore
   private String qualifiedType;
   @JsonIgnore
@@ -19,8 +18,6 @@ public class  ModelPropertyDto {
   @JsonUnwrapped
   private AllowableValues allowableValues;
 
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private DataType items;
   @JsonIgnore
   private String name;
 
@@ -28,7 +25,7 @@ public class  ModelPropertyDto {
   }
 
   public ModelPropertyDto(String name, String type, String qualifiedType, int position, Boolean required, String
-          description, AllowableValues allowableValues, DataType items) {
+          description, AllowableValues allowableValues) {
     this.name = name;
     this.type = new DataType(type);
     this.qualifiedType = qualifiedType;
@@ -36,14 +33,13 @@ public class  ModelPropertyDto {
     this.required = required;
     this.description = description;
     this.allowableValues = allowableValues;
-    this.items = items;
   }
 
-  public SwaggerDataType getType() {
+  public DataType getType() {
     return type;
   }
 
-  public void setType(SwaggerDataType type) {
+  public void setType(DataType type) {
     this.type = type;
   }
 
@@ -81,14 +77,6 @@ public class  ModelPropertyDto {
 
   public void setAllowableValues(AllowableValues allowableValues) {
     this.allowableValues = allowableValues;
-  }
-
-  public DataType getItems() {
-    return items;
-  }
-
-  public void setItems(DataType items) {
-    this.items = items;
   }
 
   public String getName() {

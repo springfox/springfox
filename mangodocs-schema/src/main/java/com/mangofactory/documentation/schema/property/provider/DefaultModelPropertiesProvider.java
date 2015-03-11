@@ -2,6 +2,8 @@ package com.mangofactory.documentation.schema.property.provider;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.mangofactory.documentation.schema.ModelProperty;
 import com.mangofactory.documentation.schema.property.bean.BeanModelPropertyProvider;
 import com.mangofactory.documentation.schema.property.constructor.ConstructorModelPropertyProvider;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Iterables.*;
 
 @Component(value = "default")
 public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
@@ -32,11 +34,13 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
 
   @Override
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
-    List<ModelProperty> concat
-            = newArrayList(fieldModelPropertyProvider.propertiesFor(type, givenContext));
-    concat.addAll(beanModelPropertyProvider.propertiesFor(type, givenContext));
-    concat.addAll(constructorModelPropertyProvider.propertiesFor(type, givenContext));
-    return concat;
+    return FluentIterable
+            .from(concat(fieldModelPropertyProvider.propertiesFor(type, givenContext),
+                    beanModelPropertyProvider.propertiesFor(type, givenContext),
+                    constructorModelPropertyProvider.propertiesFor(type, givenContext)))
+            .filter(visibleProperties())
+            .toList();
+
   }
 
   @Override
@@ -44,6 +48,15 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
     fieldModelPropertyProvider.setObjectMapper(objectMapper);
     beanModelPropertyProvider.setObjectMapper(objectMapper);
     constructorModelPropertyProvider.setObjectMapper(objectMapper);
+  }
+
+  private Predicate<ModelProperty> visibleProperties() {
+    return new Predicate<ModelProperty>() {
+      @Override
+      public boolean apply(ModelProperty input) {
+        return !input.isHidden();
+      }
+    };
   }
 }
 

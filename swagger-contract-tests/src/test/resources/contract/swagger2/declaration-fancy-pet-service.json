@@ -87,11 +87,24 @@
         }
     },
     "definitions": {
+        "Category": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "FancyPet": {
             "properties": {
                 "age": {
                     "type": "integer",
                     "format": "int32"
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Category"
+                    }
                 },
                 "id": {
                     "type": "string"

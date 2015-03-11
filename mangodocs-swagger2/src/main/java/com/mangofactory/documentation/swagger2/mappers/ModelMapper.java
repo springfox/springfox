@@ -74,7 +74,7 @@ public abstract class ModelMapper {
 
   public Property mapProperty(ModelProperty source) {
     Property property = modelRefToProperty(source.getModelRef());
-    //TODO: more mapping needs to happen
+    //TODO: more mapping needs to happen for AllowableRange
     if (property instanceof StringProperty) {
       AllowableValues allowableValues = source.getAllowableValues();
       if (allowableValues instanceof AllowableListValues) {

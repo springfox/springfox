@@ -8,6 +8,7 @@ public class TypeWithAnnotatedGettersAndSetters {
   private boolean boolProp;
   private ExampleEnum enumProp;
   private GenericType<String> genericProp;
+  private int hiddenProp;
 
   public int getIntProp() {
     return intProp;
@@ -48,5 +49,10 @@ public class TypeWithAnnotatedGettersAndSetters {
 
   public void setEnumProp(ExampleEnum enumProp) {
     this.enumProp = enumProp;
+  }
+
+  @ApiModelProperty(hidden = true)
+  public int getHiddenProp() {
+    return hiddenProp;
   }
 }

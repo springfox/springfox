@@ -18,6 +18,7 @@ public class ModelPropertyBuilder {
   private AllowableValues allowableValues;
   private ModelRef modelRef;
   private String name;
+  private boolean isHidden;
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -65,9 +66,13 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelProperty build() {
-    return new ModelProperty(name, type, qualifiedType, position, required, description, allowableValues,
-            modelRef);
+  public ModelPropertyBuilder isHidden(boolean isHidden) {
+    this.isHidden = isHidden;
+    return this;
   }
 
+  public ModelProperty build() {
+    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, description, allowableValues,
+            modelRef);
+  }
 }

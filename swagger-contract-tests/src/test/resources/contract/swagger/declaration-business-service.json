@@ -92,7 +92,6 @@
                             "items": {
                                 "type": "string"
                             },
-                            "uniqueItems": false,
                             "required": true
                         }
                     ],
@@ -100,7 +99,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 401,
@@ -119,8 +118,7 @@
                     "type": "array",
                     "items": {
                         "type": "Biz"
-                    },
-                    "uniqueItems": false
+                    }
                 }
             ]
         },
@@ -538,14 +536,14 @@
                         "type": "DateTimeField"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "fieldTypes": {
                     "items": {
                         "type": "DateTimeFieldType"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "monthOfYear": {
                     "format": "int32",
@@ -558,7 +556,7 @@
                         "type": "integer"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
                 "weekOfWeekyear": {
                     "format": "int32",

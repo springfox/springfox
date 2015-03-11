@@ -163,6 +163,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
             .qualifiedType(beanModelProperty.qualifiedTypeName())
             .position(beanModelProperty.position())
             .required(beanModelProperty.isRequired())
+            .isHidden(false)
             .description(beanModelProperty.propertyDescription())
             .allowableValues(beanModelProperty.allowableValues())
             .modelRef(modelRef(beanModelProperty.getType(), fromParent(modelContext, beanModelProperty.getType())));
