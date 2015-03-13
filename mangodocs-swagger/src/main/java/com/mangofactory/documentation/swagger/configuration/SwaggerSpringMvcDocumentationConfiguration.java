@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({ SpringMvcDocumentationConfiguration.class })
+@Import({ SpringMvcDocumentationConfiguration.class, SwaggerCommonConfiguration.class })
 @ComponentScan(basePackages = {
         "com.mangofactory.documentation.swagger.schema",
         "com.mangofactory.documentation.swagger.web",

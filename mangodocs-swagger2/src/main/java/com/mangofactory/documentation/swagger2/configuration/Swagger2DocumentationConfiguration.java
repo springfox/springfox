@@ -2,6 +2,7 @@ package com.mangofactory.documentation.swagger2.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangofactory.documentation.spring.web.SpringMvcDocumentationConfiguration;
+import com.mangofactory.documentation.swagger.configuration.SwaggerCommonConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.util.List;
 
 @Configuration
-@Import({ SpringMvcDocumentationConfiguration.class })
+@Import({ SpringMvcDocumentationConfiguration.class, SwaggerCommonConfiguration.class})
 @ComponentScan(basePackages = {
         "com.mangofactory.documentation.swagger.schema",
         "com.mangofactory.documentation.swagger.readers.operation",

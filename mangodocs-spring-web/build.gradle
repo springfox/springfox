@@ -18,27 +18,6 @@ dependencies {
   }
 }
 
-publishing {
-  repositories {
-    configure(releaseRepos)
-  }
-  publications {
-    ssmvc(MavenPublication) {
-      from components.java
-
-      artifact packageSources {
-        classifier "sources"
-      }
-
-      artifact (javadocJar) {
-        classifier = 'javadoc'
-      }
-
-      pom.withXml mangodocsPomConfig
-    }
-  }
-}
-
 task testJar(type: Jar) {
   classifier "test"
   from sourceSets.test.output

@@ -20,7 +20,7 @@ ext {
   jdkVersion = 1.6
 }
 
-configure(subprojects.findAll { it.name != 'swagger-contract-tests'}) { subproject ->
+configure(publishable(subprojects)) { subproject ->
   apply plugin: 'groovy'
   apply plugin: 'java'
   apply plugin: "com.ofg.uptodate"
@@ -70,7 +70,7 @@ configure(subprojects.findAll { it.name != 'swagger-contract-tests'}) { subproje
   checkstyleMain.source = "src/main/java"
   apply plugin: 'maven-publish'
   apply from: "$rootDir/gradle/publishing.gradle"
-
+  apply from: "$rootDir/gradle/artifacts.gradle"
   apply from: "$rootDir/gradle/coverage.gradle"
   apply from: "$rootDir/gradle/code-quality.gradle"
 
@@ -78,6 +78,13 @@ configure(subprojects.findAll { it.name != 'swagger-contract-tests'}) { subproje
     jcenter()
   }
 
+}
+
+def publishable(subprojects) {
+  subprojects.findAll {
+    it.name != 'swagger-contract-tests' &&
+    it.name != 'mangodocs-petstore'
+  }
 }
 
 apply plugin: "com.github.adrianbk.tcitrigger"

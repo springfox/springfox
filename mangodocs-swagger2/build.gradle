@@ -27,25 +27,3 @@ dependencies {
   provided libs.clientProvided
   testCompile libs.test
 }
-
-publishing {
-  repositories {
-    configure(releaseRepos)
-  }
-  publications {
-    models(MavenPublication) {
-      from components.java
-
-
-      artifact packageSources {
-        classifier "sources"
-      }
-
-      artifact (javadocJar) {
-        classifier = 'javadoc'
-      }
-
-      pom.withXml mangodocsPomConfig
-    }
-  }
-}

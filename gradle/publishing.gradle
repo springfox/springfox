@@ -99,8 +99,10 @@ ext {
       it.scope*.value = 'compile'
     }
 
-    Node groovyDep = allDependencies.find { it.artifactId.text() == 'groovy-all' }
-    groovyDep.scope*.value = 'test'
+    allDependencies
+            .findAll { it.artifactId.text() == 'groovy-all' }
+            .each { it.scope*.value = 'test' }
+
 
     root.children().last() + pomMetaData
   }
