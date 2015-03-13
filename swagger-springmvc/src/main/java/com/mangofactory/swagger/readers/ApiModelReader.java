@@ -57,7 +57,11 @@ public class ApiModelReader implements Command<RequestMappingContext> {
     HandlerMethodResolver handlerMethodResolver
             = new HandlerMethodResolver(swaggerGlobalSettings.getTypeResolver());
     ResolvedType modelType = ModelUtils.handlerReturnType(swaggerGlobalSettings.getTypeResolver(), handlerMethod);
-    modelType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(modelType);
+    ResolvedType alternateModelType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(modelType);
+    while (!alternateModelType.equals(modelType)) {
+      modelType = alternateModelType;
+      alternateModelType = swaggerGlobalSettings.getAlternateTypeProvider().alternateFor(modelType);
+    }
 
     ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
     if (null != apiOperationAnnotation && Void.class != apiOperationAnnotation.response()) {
