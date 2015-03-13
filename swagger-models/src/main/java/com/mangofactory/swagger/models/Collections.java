@@ -17,10 +17,12 @@ public class Collections {
   }
 
   public static ResolvedType collectionElementType(ResolvedType type) {
-    if (List.class.isAssignableFrom(type.getErasedType()) || Collection.class.isAssignableFrom(type.getErasedType())) {
-      return Collections.elementType(type, List.class);
-    } else if (Set.class.isAssignableFrom(type.getErasedType())) {
+    if (Set.class.isAssignableFrom(type.getErasedType())) {
       return Collections.elementType(type, Set.class);
+    } else if (List.class.isAssignableFrom(type.getErasedType())) {
+      return Collections.elementType(type, List.class);
+    } else if (Collection.class.isAssignableFrom(type.getErasedType())) {
+      return Collections.elementType(type, Collection.class);
     } else if (type.isArray()) {
       return type.getArrayElementType();
     } else {
@@ -29,21 +31,20 @@ public class Collections {
   }
 
   public static boolean isContainerType(ResolvedType type) {
-    if (Collection.class.isAssignableFrom(type.getErasedType()) || List.class.isAssignableFrom(type.getErasedType()) ||
-            Set.class.isAssignableFrom(type.getErasedType()) ||
-            type.isArray()) {
+    if (List.class.isAssignableFrom(type.getErasedType()) || Set.class.isAssignableFrom(type.getErasedType()) ||
+            Collection.class.isAssignableFrom(type.getErasedType()) || type.isArray()) {
       return true;
     }
     return false;
   }
 
   public static String containerType(ResolvedType type) {
-    if (Collection.class.isAssignableFrom(type.getErasedType())) {
-      return "Collection";
-    } else if (List.class.isAssignableFrom(type.getErasedType())) {
+    if (List.class.isAssignableFrom(type.getErasedType())) {
       return "List";
     } else if (Set.class.isAssignableFrom(type.getErasedType())) {
       return "Set";
+    } else if (Collection.class.isAssignableFrom(type.getErasedType())) {
+      return "Collection";
     } else if (type.isArray()) {
       return "Array";
     } else {
@@ -52,11 +53,11 @@ public class Collections {
   }
 
   public static String propertyContainerType(ResolvedType type) {
-    if (Collection.class.isAssignableFrom(type.getErasedType()) || List.class.isAssignableFrom(type.getErasedType())
+    if (Set.class.isAssignableFrom(type.getErasedType())) {
+      return "set";
+    } else if (Collection.class.isAssignableFrom(type.getErasedType()) || List.class.isAssignableFrom(type.getErasedType())
             || type.isArray()) {
       return "array";
-    } else if (Set.class.isAssignableFrom(type.getErasedType())) {
-      return "set";
     } else {
       throw new UnsupportedOperationException(String.format("Type is not collection type %s", type));
     }
