@@ -1,60 +1,42 @@
 package com.mangofactory.documentation.swagger.configuration
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mangofactory.documentation.schema.property.provider.DefaultModelPropertiesProvider
-import com.mangofactory.documentation.spring.web.dummy.DummyRequestMappingHandlerAdapter
-import org.springframework.context.ApplicationContext
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter
 import spock.lang.Specification
-import spock.lang.Unroll
+
+import static com.google.common.collect.Lists.*
 
 class JacksonSwaggerSupportSpec extends Specification {
 
-  final static RequestMappingHandlerAdapter springsAdapter = new RequestMappingHandlerAdapter();
-  final static RequestMappingHandlerAdapter dummyAdapter = new DummyRequestMappingHandlerAdapter();
-  final static RequestMappingHandlerAdapter duplicateAdapter = new RequestMappingHandlerAdapter();
-
   def "Should register swagger module and obtain object mapper"() {
     given:
-      JacksonSwaggerSupport jacksonSwaggerSupport = new JacksonSwaggerSupport()
+      JacksonSwaggerSupport sut = new JacksonSwaggerSupport()
+      ApplicationEventPublisher eventPublisher = Mock(ApplicationEventPublisher)
+      sut.setApplicationEventPublisher(eventPublisher)
       ObjectMapper objectMapper = Mock(ObjectMapper)
       MappingJackson2HttpMessageConverter jacksonMessageConverter = Mock(MappingJackson2HttpMessageConverter)
       jacksonMessageConverter.getObjectMapper() >> objectMapper
 
-      ApplicationContext applicationContext = Mock(ApplicationContext)
-
-      DefaultModelPropertiesProvider defaultModelPropertiesProvider = Mock()
-      applicationContext.getBeansOfType(_) >> ['beanName': defaultModelPropertiesProvider]
-
-      RequestMappingHandlerAdapter requestMappingHandlerAdapter = Mock()
-      requestMappingHandlerAdapter.getMessageConverters() >> [jacksonMessageConverter]
-
-      jacksonSwaggerSupport.requestMappingHandlerAdapter = requestMappingHandlerAdapter
-      jacksonSwaggerSupport.applicationContext = applicationContext
-
     when:
-      jacksonSwaggerSupport.setup()
+      sut.configureMessageConverters(newArrayList(jacksonMessageConverter))
     then:
       1 * objectMapper.registerModule(_)
-      1 * defaultModelPropertiesProvider.setObjectMapper(objectMapper)
+      1 * eventPublisher.publishEvent(_)
   }
 
-  @Unroll
-  def "should set the correct request mapping handler adapter"() {
+  def "Should register swagger module when no message converter exists"() {
     given:
-      def jacksonSwaggerSupport = new JacksonSwaggerSupport()
+      JacksonSwaggerSupport sut = new JacksonSwaggerSupport()
+      ApplicationEventPublisher eventPublisher = Mock(ApplicationEventPublisher)
+      sut.setApplicationEventPublisher(eventPublisher)
+      ObjectMapper objectMapper = Mock(ObjectMapper)
+      MappingJackson2HttpMessageConverter jacksonMessageConverter = Mock(MappingJackson2HttpMessageConverter)
+      jacksonMessageConverter.getObjectMapper() >> objectMapper
+
     when:
-      jacksonSwaggerSupport.setRequestMappingHandlerAdapter(adapters as RequestMappingHandlerAdapter[])
-
+      sut.configureMessageConverters(newArrayList())
     then:
-      jacksonSwaggerSupport.requestMappingHandlerAdapter == expected
-
-    where:
-      adapters                           || expected
-      [springsAdapter, dummyAdapter]     || springsAdapter
-      [dummyAdapter, springsAdapter]     || springsAdapter
-      [springsAdapter]                   || springsAdapter
-      //Fails - how do we determine which one came from springmvc
-      // [springsAdapter, duplicateAdapter] || springsAdapter
+      0 * objectMapper.registerModule(_)
+      1 * eventPublisher.publishEvent(_)
   }
 }

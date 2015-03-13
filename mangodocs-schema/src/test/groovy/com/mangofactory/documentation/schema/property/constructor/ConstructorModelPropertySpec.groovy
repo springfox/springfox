@@ -3,6 +3,7 @@ package com.mangofactory.documentation.schema.property.constructor
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mangofactory.documentation.schema.AlternateTypesSupport
 import com.mangofactory.documentation.schema.SchemaSpecification
+import com.mangofactory.documentation.schema.configuration.ObjectMapperConfigured
 import com.mangofactory.documentation.schema.mixins.ModelPropertyLookupSupport
 import com.mangofactory.documentation.schema.mixins.TypesForTestingSupport
 import com.mangofactory.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
@@ -23,7 +24,9 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
       def modelContext = inputParam(typeToTest, documentationType, alternateTypeProvider())
       def field = field(typeToTest, fieldName)
       ObjectMapper mapper = new ObjectMapper()
-      String propName = name(beanPropertyDefinition, true,  new ObjectMapperBeanPropertyNamingStrategy(mapper))
+      def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+      namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
+      String propName = name(beanPropertyDefinition, true,  namingStrategy)
       def sut = new FieldModelProperty(propName, field, alternateTypeProvider())
 
     expect:

@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
+import com.mangofactory.documentation.schema.configuration.ObjectMapperConfigured;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import static com.mangofactory.documentation.schema.property.BeanPropertyDefinitions.*;
@@ -19,17 +20,13 @@ import static com.mangofactory.documentation.schema.property.BeanPropertyDefinit
  * In case it cannot get information from property's getter or field, it returns the same current name.
  */
 @Component
-public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamingStrategy {
+public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamingStrategy,
+        ApplicationListener<ObjectMapperConfigured> {
 
   private static final Logger LOG = LoggerFactory.getLogger(ObjectMapperBeanPropertyNamingStrategy.class);
   private ObjectMapper objectMapper;
 
   public ObjectMapperBeanPropertyNamingStrategy() {
-  }
-
-  @VisibleForTesting
-  ObjectMapperBeanPropertyNamingStrategy(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
   }
 
   @Override
@@ -64,7 +61,8 @@ public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamin
     return newName;
   }
 
-  public void setObjectMapper(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
+  @Override
+  public void onApplicationEvent(ObjectMapperConfigured event) {
+    this.objectMapper = event.getObjectMapper();
   }
 }

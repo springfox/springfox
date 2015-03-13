@@ -1,73 +1,62 @@
 package com.mangofactory.documentation.swagger.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mangofactory.documentation.schema.property.provider.DefaultModelPropertiesProvider;
+import com.mangofactory.documentation.schema.configuration.ObjectMapperConfigured;
 import com.mangofactory.documentation.swagger.jackson.SwaggerJacksonProvider;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Map;
 
 
-public class JacksonSwaggerSupport implements ApplicationContextAware {
-  private ObjectMapper springsMessageConverterObjectMapper;
-  private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
-  private ApplicationContext applicationContext;
-
-  public ObjectMapper getSpringsMessageConverterObjectMapper() {
-    return springsMessageConverterObjectMapper;
-  }
-
-//  private Module swaggerSerializationModule(ObjectMapper objectMapper) {
-//    InternalObjectMapperProvider internalObjectMapperProvider = new InternalObjectMapperProvider();
-//    return internalObjectMapperProvider.swaggerJacksonModule(objectMapper);
-//  }
+@Configuration
+@EnableWebMvc
+public class JacksonSwaggerSupport extends WebMvcConfigurerAdapter implements ApplicationEventPublisherAware {
+  private ApplicationEventPublisher applicationEventPublisher;
 
 
-  @Autowired
-  public void setRequestMappingHandlerAdapter(RequestMappingHandlerAdapter[] requestMappingHandlerAdapters) {
-    if (requestMappingHandlerAdapters.length > 1) {
-      for (RequestMappingHandlerAdapter adapter : requestMappingHandlerAdapters) {
-        if (adapter.getClass().getCanonicalName().equals(RequestMappingHandlerAdapter.class.getCanonicalName())) {
-          this.requestMappingHandlerAdapter = adapter;
-        }
+  @Override
+  public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    if (converters.size() > 0) {
+      for (HttpMessageConverter<?> each : converters) {
+        maybeConfigureObjectMapper(each, new SwaggerJacksonProvider());
       }
     } else {
-      requestMappingHandlerAdapter = requestMappingHandlerAdapters[0];
+      converters.add(configuredMessageConverter());
     }
   }
 
-  @PostConstruct
-  public void setup() {
-    List<HttpMessageConverter<?>> messageConverters = requestMappingHandlerAdapter.getMessageConverters();
-    for (HttpMessageConverter<?> messageConverter : messageConverters) {
+  private HttpMessageConverter<?> configuredMessageConverter() {
+    MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
+    ObjectMapper objectMapper = new ObjectMapper();
+    messageConverter.setObjectMapper(objectMapper);
+    maybeConfigureObjectMapper(messageConverter, new SwaggerJacksonProvider());
+    return messageConverter;
+  }
+
+  public void maybeConfigureObjectMapper(HttpMessageConverter<?> messageConverter,
+                                         SwaggerJacksonProvider swaggerJacksonProvider) {
       if (messageConverter instanceof MappingJackson2HttpMessageConverter) {
         MappingJackson2HttpMessageConverter m = (MappingJackson2HttpMessageConverter) messageConverter;
-        this.springsMessageConverterObjectMapper = m.getObjectMapper();
+        ObjectMapper objectMapper = m.getObjectMapper();
 
         //Consider not using the users object mapper to serialize swagger JSON - rewrite DefaultSwaggerController
-        SwaggerJacksonProvider swaggerJacksonProvider = new SwaggerJacksonProvider();
-        this.springsMessageConverterObjectMapper.registerModule(swaggerJacksonProvider.swaggerJacksonModule());
+        objectMapper.registerModule(swaggerJacksonProvider.swaggerJacksonModule());
+        fireObjectMapperConfiguredEvent(objectMapper);
       }
-    }
+  }
 
-    Map<String, DefaultModelPropertiesProvider> beans =
-            applicationContext.getBeansOfType(DefaultModelPropertiesProvider.class);
-
-    for (DefaultModelPropertiesProvider defaultModelPropertiesProvider : beans.values()) {
-      defaultModelPropertiesProvider.setObjectMapper(this.springsMessageConverterObjectMapper);
-    }
+  private void fireObjectMapperConfiguredEvent(ObjectMapper objectMapper) {
+    applicationEventPublisher.publishEvent(new ObjectMapperConfigured(this, objectMapper));
   }
 
   @Override
-  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-    this.applicationContext = applicationContext;
+  public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+    this.applicationEventPublisher = applicationEventPublisher;
   }
 }

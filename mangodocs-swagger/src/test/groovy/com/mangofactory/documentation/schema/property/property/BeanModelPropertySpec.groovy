@@ -5,6 +5,7 @@ import com.mangofactory.documentation.schema.AlternateTypesSupport
 import com.mangofactory.documentation.schema.SchemaSpecification
 import com.mangofactory.documentation.schema.TypeWithAnnotatedGettersAndSetters
 import com.mangofactory.documentation.schema.TypeWithGettersAndSetters
+import com.mangofactory.documentation.schema.configuration.ObjectMapperConfigured
 import com.mangofactory.documentation.schema.mixins.ModelPropertyLookupSupport
 import com.mangofactory.documentation.schema.mixins.TypesForTestingSupport
 import com.mangofactory.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
@@ -30,7 +31,9 @@ class BeanModelPropertySpec extends SchemaSpecification {
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
       ObjectMapper mapper = new ObjectMapper()
-      String propName = name(propertyDefinition, true, new ObjectMapperBeanPropertyNamingStrategy(mapper))
+      def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+      namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
+      String propName = name(propertyDefinition, true, namingStrategy)
       def sut = new BeanModelProperty(propName, method, isGetter(method.getRawMember()),
               new TypeResolver(), alternateTypeProvider())
 
@@ -60,7 +63,9 @@ class BeanModelPropertySpec extends SchemaSpecification {
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
       ObjectMapper mapper = new ObjectMapper()
-      String propName = name(propertyDefinition, true, new ObjectMapperBeanPropertyNamingStrategy(mapper))
+      def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+      namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
+      String propName = name(propertyDefinition, true, namingStrategy)
       def sut = new BeanModelProperty(propName, method, isGetter(method.getRawMember()),
               new TypeResolver(), alternateTypeProvider())
 
@@ -94,7 +99,9 @@ class BeanModelPropertySpec extends SchemaSpecification {
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
       ObjectMapper mapper = new ObjectMapper()
-      String propName = name(propertyDefinition, true, new ObjectMapperBeanPropertyNamingStrategy(mapper))
+      def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+      namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
+      String propName = name(propertyDefinition, true, namingStrategy)
       def sut = new BeanModelProperty(propName, method, isGetter(method.getRawMember()),
               new TypeResolver(), alternateTypeProvider())
 

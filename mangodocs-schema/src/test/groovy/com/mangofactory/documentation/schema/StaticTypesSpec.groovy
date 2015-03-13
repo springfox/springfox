@@ -10,6 +10,5 @@ class StaticTypesSpec extends Specification {
       thrown(UnsupportedOperationException)
     where:
       clazz << [ResolvedTypes, Types, Enums, Annotations, Collections]
-
   }
 }

@@ -1,6 +1,7 @@
 package com.mangofactory.documentation.schema
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.mangofactory.documentation.schema.configuration.ObjectMapperConfigured
 import com.mangofactory.documentation.schema.mixins.ModelPropertyLookupSupport
 import com.mangofactory.documentation.schema.mixins.TypesForTestingSupport
 import com.mangofactory.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
@@ -12,7 +13,9 @@ class ObjectMapperNamingStrategySpec extends Specification {
   def "rename without setting an strategy"() {
     given:
       ObjectMapper objectMapper = new ObjectMapper();
-      ObjectMapperBeanPropertyNamingStrategy sut = new ObjectMapperBeanPropertyNamingStrategy(objectMapper);
+      ObjectMapperBeanPropertyNamingStrategy sut = new ObjectMapperBeanPropertyNamingStrategy()
+      sut.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
+
       def beanPropertyDefinition = beanPropertyDefinition(simpleType(), beanAccessorMethod)
 
     expect:
@@ -31,7 +34,8 @@ class ObjectMapperNamingStrategySpec extends Specification {
     given:
       ObjectMapper objectMapper = new ObjectMapper();
       objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
-      ObjectMapperBeanPropertyNamingStrategy sut = new ObjectMapperBeanPropertyNamingStrategy(objectMapper);
+      ObjectMapperBeanPropertyNamingStrategy sut = new ObjectMapperBeanPropertyNamingStrategy()
+      sut.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
       def beanPropertyDefinition = beanPropertyDefinition(simpleType(), beanAccessorMethod)
 
     expect:
@@ -50,7 +54,9 @@ class ObjectMapperNamingStrategySpec extends Specification {
     given:
       ObjectMapper objectMapper = new ObjectMapper();
       objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE);
-      ObjectMapperBeanPropertyNamingStrategy sut = new ObjectMapperBeanPropertyNamingStrategy(objectMapper);
+      ObjectMapperBeanPropertyNamingStrategy sut = new ObjectMapperBeanPropertyNamingStrategy()
+      sut.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
+
       def beanPropertyDefinition = beanPropertyDefinition(simpleType(), beanAccessorMethod)
 
     expect:

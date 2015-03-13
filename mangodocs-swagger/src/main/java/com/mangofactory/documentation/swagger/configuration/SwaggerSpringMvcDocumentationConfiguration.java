@@ -1,13 +1,12 @@
 package com.mangofactory.documentation.swagger.configuration;
 
 import com.mangofactory.documentation.spring.web.SpringMvcDocumentationConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({ SpringMvcDocumentationConfiguration.class, SwaggerCommonConfiguration.class })
+@Import({ SpringMvcDocumentationConfiguration.class, SwaggerCommonConfiguration.class, JacksonSwaggerSupport.class })
 @ComponentScan(basePackages = {
         "com.mangofactory.documentation.swagger.schema",
         "com.mangofactory.documentation.swagger.web",
@@ -16,13 +15,5 @@ import org.springframework.context.annotation.Import;
         "com.mangofactory.documentation.swagger.mappers"
 })
 public class SwaggerSpringMvcDocumentationConfiguration {
-
-  /**
-   * Registers some custom serializers needed to transform swagger models to swagger-ui required json format.
-   */
-  @Bean
-  public JacksonSwaggerSupport jacksonSwaggerSupport() {
-    return new JacksonSwaggerSupport();
-  }
 
 }

@@ -1,15 +1,16 @@
 package com.mangofactory.documentation.schema.property.provider;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.mangofactory.documentation.schema.ModelProperty;
+import com.mangofactory.documentation.schema.configuration.ObjectMapperConfigured;
 import com.mangofactory.documentation.schema.property.bean.BeanModelPropertyProvider;
 import com.mangofactory.documentation.schema.property.constructor.ConstructorModelPropertyProvider;
 import com.mangofactory.documentation.schema.property.field.FieldModelPropertyProvider;
 import com.mangofactory.documentation.spi.schema.contexts.ModelContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,7 +18,8 @@ import java.util.List;
 import static com.google.common.collect.Iterables.*;
 
 @Component(value = "default")
-public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
+public class DefaultModelPropertiesProvider implements ModelPropertiesProvider,
+        ApplicationListener<ObjectMapperConfigured> {
 
   private final FieldModelPropertyProvider fieldModelPropertyProvider;
   private final BeanModelPropertyProvider beanModelPropertyProvider;
@@ -44,10 +46,7 @@ public class DefaultModelPropertiesProvider implements ModelPropertiesProvider {
   }
 
   @Override
-  public void setObjectMapper(ObjectMapper objectMapper) {
-    fieldModelPropertyProvider.setObjectMapper(objectMapper);
-    beanModelPropertyProvider.setObjectMapper(objectMapper);
-    constructorModelPropertyProvider.setObjectMapper(objectMapper);
+  public void onApplicationEvent(ObjectMapperConfigured event) {
   }
 
   private Predicate<ModelProperty> visibleProperties() {

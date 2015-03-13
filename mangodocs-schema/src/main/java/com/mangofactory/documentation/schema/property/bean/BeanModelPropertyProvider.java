@@ -18,6 +18,7 @@ import com.google.common.collect.Iterables;
 import com.mangofactory.documentation.schema.ModelProperty;
 import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.schema.TypeNameExtractor;
+import com.mangofactory.documentation.schema.configuration.ObjectMapperConfigured;
 import com.mangofactory.documentation.schema.plugins.SchemaPluginsManager;
 import com.mangofactory.documentation.schema.property.BeanPropertyDefinitions;
 import com.mangofactory.documentation.schema.property.BeanPropertyNamingStrategy;
@@ -66,6 +67,11 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     this.namingStrategy = namingStrategy;
     this.schemaPluginsManager = schemaPluginsManager;
     this.typeNameExtractor = typeNameExtractor;
+  }
+
+  @Override
+  public void onApplicationEvent(ObjectMapperConfigured event) {
+    this.objectMapper = event.getObjectMapper();
   }
 
   @VisibleForTesting
@@ -133,12 +139,6 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
                 && propertyName.equals(propertyName(accessorMethod.getRawMember()));
       }
     });
-  }
-
-  @Override
-  public void setObjectMapper(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
-    this.namingStrategy.setObjectMapper(objectMapper);
   }
 
   private String methodName(AnnotatedMember member) {

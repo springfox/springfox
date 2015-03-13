@@ -15,6 +15,7 @@ import com.google.common.collect.Maps;
 import com.mangofactory.documentation.schema.ModelProperty;
 import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.schema.TypeNameExtractor;
+import com.mangofactory.documentation.schema.configuration.ObjectMapperConfigured;
 import com.mangofactory.documentation.schema.plugins.SchemaPluginsManager;
 import com.mangofactory.documentation.schema.property.BeanPropertyDefinitions;
 import com.mangofactory.documentation.schema.property.BeanPropertyNamingStrategy;
@@ -40,9 +41,9 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
 
   private final FieldProvider fieldProvider;
   private final BeanPropertyNamingStrategy namingStrategy;
-  private ObjectMapper objectMapper;
   private final SchemaPluginsManager schemaPluginsManager;
   private final TypeNameExtractor typeNameExtractor;
+  protected ObjectMapper objectMapper;
 
   @Autowired
   public FieldModelPropertyProvider(
@@ -132,9 +133,8 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
     }
   }
 
-  @Override
-  public void setObjectMapper(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
+  public void onApplicationEvent(ObjectMapperConfigured event) {
+    this.objectMapper = event.getObjectMapper();
   }
 
   protected boolean memberIsAField(AnnotatedMember member) {

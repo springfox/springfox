@@ -110,4 +110,6 @@ class SimpleTypeSpec extends SchemaSpecification {
       property             | type     | qualifiedType
       "some_odd_ball_name" | String   | "java.lang.String"
   }
+
+
 }
