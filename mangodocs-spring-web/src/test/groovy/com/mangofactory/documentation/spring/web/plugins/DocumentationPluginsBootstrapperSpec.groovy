@@ -4,6 +4,7 @@ import com.mangofactory.documentation.service.Documentation
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.DocumentationPlugin
 import com.mangofactory.documentation.spi.service.contexts.Defaults
+import com.mangofactory.documentation.spi.service.contexts.DocumentationContextBuilder
 import com.mangofactory.documentation.spring.web.DocumentationCache
 import com.mangofactory.documentation.spring.web.scanners.ApiDocumentationScanner
 import org.springframework.context.ApplicationContext
@@ -29,6 +30,7 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
           new Defaults(), Mock(ServletContext))
 
   def setup() {
+    pluginManager.createContextBuilder(_, _) >> new DocumentationContextBuilder(DocumentationType.SWAGGER_12)
     apiGroup.scan(_) >> group
     group.getGroupName() >> "default"
   }

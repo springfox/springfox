@@ -1,4 +1,6 @@
 package com.mangofactory.documentation.swagger.integration
+
+import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.RequestMappingPatternMatcher
 import com.mangofactory.documentation.annotations.ApiIgnore
 import com.mangofactory.documentation.service.ApiInfo
@@ -6,11 +8,11 @@ import com.mangofactory.documentation.service.AuthorizationType
 import com.mangofactory.documentation.service.ResponseMessage
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.contexts.AuthorizationContext
-import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
+import com.mangofactory.documentation.spi.service.contexts.Defaults
 import com.mangofactory.documentation.spring.web.RelativePathProvider
-import com.mangofactory.documentation.spring.web.mixins.DocumentationContextSupport
 import com.mangofactory.documentation.spring.web.plugins.DocumentationConfigurer
-import com.mangofactory.documentation.swagger.mixins.SpringSwaggerConfigSupport
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
+import com.mangofactory.documentation.swagger.web.SwaggerDefaultConfiguration
 import com.wordnik.swagger.annotations.Api
 import com.wordnik.swagger.annotations.ApiOperation
 import org.joda.time.LocalDate
@@ -25,7 +27,6 @@ import static com.mangofactory.documentation.schema.AlternateTypeRules.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
-@Mixin([SpringSwaggerConfigSupport, DocumentationContextSupport])
 class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
 
   def "Should have sensible defaults when built with minimal configuration"() {
@@ -109,11 +110,15 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
 
   def "Model substitution registers new rules"() {
     when:
+      def swaggerDefault = new SwaggerDefaultConfiguration(new Defaults(), new TypeResolver(), Mock(ServletContext))
+              .create(DocumentationType.SWAGGER_12)
+
+    and:
       new DocumentationConfigurer(DocumentationType.SWAGGER_12)
               ."${method}"(*args)
-              .configure(contextBuilder)
+              .configure(swaggerDefault)
     then:
-      context().alternateTypeProvider.rules.size() == expectedSize
+      swaggerDefault.build().alternateTypeProvider.rules.size() == expectedSize
 
     where:
       method                    | args                               | expectedSize

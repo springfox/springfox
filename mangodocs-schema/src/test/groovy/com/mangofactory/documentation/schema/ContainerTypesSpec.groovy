@@ -1,5 +1,6 @@
 package com.mangofactory.documentation.schema
 import com.mangofactory.documentation.schema.mixins.TypesForTestingSupport
+import spock.lang.Ignore
 
 import static com.mangofactory.documentation.schema.Collections.*
 import static com.mangofactory.documentation.spi.DocumentationType.*
@@ -116,6 +117,7 @@ class ContainerTypesSpec extends SchemaSpecification {
       "bytes"           | byte[]        | "byte"        | "byte"
   }
 
+  @Ignore("Should move this to the swagger 1.2 module")
   def "Model properties of type Map are inferred correctly"() {
     given:
       def sut = mapsContainer()
@@ -150,6 +152,7 @@ class ContainerTypesSpec extends SchemaSpecification {
       "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "com.mangofactory.documentation.schema.Entry"
   }
 
+  @Ignore("Should move this to the swagger 1.2 module")
   def "Model properties of type Map are inferred correctly on generic host"() {
     given:
       def sut = genericTypeOfMapsContainer()

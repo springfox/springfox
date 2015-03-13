@@ -7,16 +7,17 @@ import com.mangofactory.documentation.spi.schema.ModelBuilderPlugin
 import com.mangofactory.documentation.spi.schema.ModelPropertyBuilderPlugin
 import com.mangofactory.documentation.spi.schema.TypeNameProviderPlugin
 import com.mangofactory.documentation.spi.service.ApiListingBuilderPlugin
+import com.mangofactory.documentation.spi.service.DefaultsProviderPlugin
 import com.mangofactory.documentation.spi.service.DocumentationPlugin
+import com.mangofactory.documentation.spi.service.ExpandedParameterBuilderPlugin
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin
 import com.mangofactory.documentation.spi.service.OperationModelsProviderPlugin
 import com.mangofactory.documentation.spi.service.ParameterBuilderPlugin
-import com.mangofactory.documentation.spi.service.ExpandedParameterBuilderPlugin
 import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy
 import com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsManager
-import com.mangofactory.documentation.spring.web.scanners.MediaTypeReader
 import com.mangofactory.documentation.spring.web.readers.operation.OperationModelsProvider
 import com.mangofactory.documentation.spring.web.readers.parameter.ExpandedParameterBuilder
+import com.mangofactory.documentation.spring.web.scanners.MediaTypeReader
 import com.mangofactory.documentation.swagger.readers.operation.SwaggerOperationModelsProvider
 import com.mangofactory.documentation.swagger.readers.parameter.SwaggerExpandedParameterBuilder
 import com.mangofactory.documentation.swagger.schema.ApiModelBuilder
@@ -42,7 +43,7 @@ class SwaggerPluginsSupport {
     new SchemaPluginsManager(propRegistry, modelRegistry, modelNameRegistry)
   }
 
-  DocumentationPluginsManager swaggerServicePlugins() {
+  DocumentationPluginsManager swaggerServicePlugins(List<DefaultsProviderPlugin> swaggerDefaultsPlugins) {
     def resolver = new TypeResolver()
     PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingRegistry =
             OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(resolver)))
@@ -60,7 +61,9 @@ class SwaggerPluginsSupport {
             OrderAwarePluginRegistry.create([
               new OperationModelsProvider(resolver),
               new SwaggerOperationModelsProvider(resolver)])
+    PluginRegistry<DefaultsProviderPlugin, DocumentationType> defaultsProviders =
+            OrderAwarePluginRegistry.create(swaggerDefaultsPlugins)
     new DocumentationPluginsManager(documentationPlugins, apiListingRegistry, parameterBuilderPlugins,
-            parameterExpanderPlugin, operationBuilderPlugins, resourceGroupingStrategies, modelProviders)
+            parameterExpanderPlugin, operationBuilderPlugins, resourceGroupingStrategies, modelProviders, defaultsProviders)
   }
 }

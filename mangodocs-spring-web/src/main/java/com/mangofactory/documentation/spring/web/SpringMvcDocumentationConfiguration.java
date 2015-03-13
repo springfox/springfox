@@ -2,6 +2,7 @@ package com.mangofactory.documentation.spring.web;
 
 import com.mangofactory.documentation.schema.configuration.ModelsConfiguration;
 import com.mangofactory.documentation.spi.service.ApiListingBuilderPlugin;
+import com.mangofactory.documentation.spi.service.DefaultsProviderPlugin;
 import com.mangofactory.documentation.spi.service.DocumentationPlugin;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
 import com.mangofactory.documentation.spi.service.OperationModelsProviderPlugin;
@@ -29,7 +30,8 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
         ParameterBuilderPlugin.class,
         ExpandedParameterBuilderPlugin.class,
         ResourceGroupingStrategy.class,
-        OperationModelsProviderPlugin.class})
+        OperationModelsProviderPlugin.class,
+        DefaultsProviderPlugin.class})
 public class SpringMvcDocumentationConfiguration {
 
   @Bean

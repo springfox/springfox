@@ -364,7 +364,6 @@ public class DocumentationConfigurer implements DocumentationPlugin {
     }
     return builder
             .apiInfo(apiInfo)
-            .documentationType(documentationType)
             .applyDefaultResponseMessages(applyDefaultResponseMessages)
             .additionalResponseMessages(responseMessages)
             .additionalIgnorableTypes(ignorableParameterTypes)

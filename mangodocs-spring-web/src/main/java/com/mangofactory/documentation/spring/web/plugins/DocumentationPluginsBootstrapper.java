@@ -3,7 +3,6 @@ package com.mangofactory.documentation.spring.web.plugins;
 import com.fasterxml.classmate.TypeResolver;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.service.DocumentationPlugin;
-import com.mangofactory.documentation.spi.service.ResourceGroupingStrategy;
 import com.mangofactory.documentation.spi.service.contexts.Defaults;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContext;
 import com.mangofactory.documentation.spi.service.contexts.DocumentationContextBuilder;
@@ -34,8 +33,8 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
   private final DocumentationPluginsManager documentationPluginsManager;
   private final DocumentationCache scanned;
   private final ApiDocumentationScanner resourceListing;
-  private final DefaultConfiguration defaultConfigurer;
   private final List<RequestMappingHandlerMapping> handlerMappings;
+  private final DefaultConfiguration defaultConfiguration;
 
   private AtomicBoolean initialized = new AtomicBoolean(false);
 
@@ -52,7 +51,7 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
     this.scanned = scanned;
     this.resourceListing = resourceListing;
     this.handlerMappings = handlerMappings;
-    this.defaultConfigurer
+    this.defaultConfiguration
             = new DefaultConfiguration(defaults, typeResolver, servletContext);
   }
 
@@ -75,8 +74,7 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
   }
 
   private DocumentationContext buildContext(DocumentationPlugin each) {
-    DocumentationContextBuilder contextBuilder = defaultContextBuilder(each);
-    return each.configure(contextBuilder);
+    return each.configure(defaultContextBuilder(each));
   }
 
   private void scanDocumentation(DocumentationContext context) {
@@ -86,14 +84,9 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
   private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin each) {
     DocumentationType documentationType = each.getDocumentationType();
 
-    ResourceGroupingStrategy resourceGroupingStrategy
-            = documentationPluginsManager.resourceGroupingStrategy(documentationType);
-    DocumentationContextBuilder contextBuilder = new DocumentationContextBuilder();
-    defaultConfigurer.configure(contextBuilder);
-    contextBuilder
-            .withResourceGroupingStrategy(resourceGroupingStrategy)
+    return documentationPluginsManager
+            .createContextBuilder(documentationType, defaultConfiguration)
             .handlerMappings(handlerMappings);
-    return contextBuilder;
   }
 
 }

@@ -2,6 +2,7 @@ package com.mangofactory.documentation.spring.web.mixins
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.spi.DocumentationType
 import com.mangofactory.documentation.spi.service.ApiListingBuilderPlugin
+import com.mangofactory.documentation.spi.service.DefaultsProviderPlugin
 import com.mangofactory.documentation.spi.service.DocumentationPlugin
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin
 import com.mangofactory.documentation.spi.service.OperationModelsProviderPlugin
@@ -36,14 +37,17 @@ class ServicePluginsSupport {
             OrderAwarePluginRegistry.create([])
     PluginRegistry<OperationModelsProviderPlugin, DocumentationType> modelProviders =
             OrderAwarePluginRegistry.create([new OperationModelsProvider(resolver)])
+    PluginRegistry<DefaultsProviderPlugin, DocumentationType> defaultsProviders =
+            OrderAwarePluginRegistry.create([])
     new DocumentationPluginsManager(documentationPlugins, apiListingRegistry, parameterBuilderPlugins,
-            parameterExpanderPlugin, operationBuilderPlugins, resourceGroupingStrategies, modelProviders)
+            parameterExpanderPlugin, operationBuilderPlugins, resourceGroupingStrategies, modelProviders, defaultsProviders)
   }
 
   DocumentationPluginsManager customWebPlugins(List<DocumentationPlugin> documentationPlugins = [],
       List<ResourceGroupingStrategy> groupingStrategyPlugins = [],
       List<OperationBuilderPlugin> operationPlugins = [],
-      List<ParameterBuilderPlugin> paramPlugins = []) {
+      List<ParameterBuilderPlugin> paramPlugins = [],
+      List<DefaultsProviderPlugin> defaultProviderPlugins = []) {
     def resolver = new TypeResolver()
     PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingRegistry =
             OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(resolver)))
@@ -59,8 +63,10 @@ class ServicePluginsSupport {
             OrderAwarePluginRegistry.create(groupingStrategyPlugins)
     PluginRegistry<OperationModelsProviderPlugin, DocumentationType> modelProviders =
             OrderAwarePluginRegistry.create([new OperationModelsProvider(resolver)])
+    PluginRegistry<DefaultsProviderPlugin, DocumentationType> defaultsProviders =
+            OrderAwarePluginRegistry.create(defaultProviderPlugins)
     new DocumentationPluginsManager(documentationPluginRegistry, apiListingRegistry, parameterBuilderPlugins,
-            parameterExpanderPlugin, operationBuilderPlugins, resourceGroupingStrategies, modelProviders)
+            parameterExpanderPlugin, operationBuilderPlugins, resourceGroupingStrategies, modelProviders, defaultsProviders)
   }
 
 }

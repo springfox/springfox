@@ -124,8 +124,8 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
 
     where:
       method                    | args                               | expectedSize
-      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 9
-      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 8
+      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 8
+      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 7
   }
 
 
@@ -177,6 +177,9 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
       'apiInfo'              | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
       'apiDescriptionOrdering'| apiDescriptionOrdering()                      | 'apiDescriptionOrdering'
       'operationOrdering'     | operationOrdering()                           | 'operationOrdering'
+      'produces'              | ['application/json'] as Set                   | 'produces'
+      'consumes'              | ['application/json'] as Set                   | 'consumes'
+      'protocols'             | ['application/json'] as Set                   | 'protocols'
   }
 
   Ordering<ApiDescription> apiDescriptionOrdering() {
@@ -210,6 +213,9 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
       null != pluginContext.ignorableParameterTypes
       null != pluginContext.listingReferenceOrdering
       null != pluginContext.apiDescriptionOrdering
+      null != pluginContext.produces
+      null != pluginContext.protocols
+      null != pluginContext.consumes
 
   }
 

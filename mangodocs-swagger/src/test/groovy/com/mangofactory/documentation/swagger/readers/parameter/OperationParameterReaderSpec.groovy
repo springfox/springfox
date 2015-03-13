@@ -1,16 +1,19 @@
 package com.mangofactory.documentation.swagger.readers.parameter
+
 import com.fasterxml.classmate.TypeResolver
-import com.mangofactory.documentation.service.Parameter
 import com.mangofactory.documentation.builders.OperationBuilder
+import com.mangofactory.documentation.service.Parameter
+import com.mangofactory.documentation.spi.service.contexts.Defaults
 import com.mangofactory.documentation.spi.service.contexts.OperationContext
-import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyModels
 import com.mangofactory.documentation.spring.web.dummy.models.Example
 import com.mangofactory.documentation.spring.web.dummy.models.Treeish
 import com.mangofactory.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
 import com.mangofactory.documentation.spring.web.readers.parameter.OperationParameterReader
+import com.mangofactory.documentation.swagger.web.SwaggerDefaultConfiguration
 import com.mangofactory.documentation.swagger.mixins.SwaggerPluginsSupport
 import org.joda.time.LocalDateTime
 import org.springframework.validation.BindingResult
@@ -29,10 +32,11 @@ import static com.mangofactory.documentation.schema.AlternateTypeRules.*
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport])
 class OperationParameterReaderSpec extends DocumentationContextSpec {
   OperationParameterReader sut
-  def pluginsManager = swaggerServicePlugins()
+  def pluginsManager
 
   def setup() {
     def typeResolver = new TypeResolver()
+    pluginsManager = swaggerServicePlugins([new SwaggerDefaultConfiguration(new Defaults(), typeResolver, Mock(ServletContext))])
     plugin
             .ignoredParameterTypes(ServletRequest, ServletResponse, HttpServletRequest,
             HttpServletResponse, BindingResult, ServletContext,

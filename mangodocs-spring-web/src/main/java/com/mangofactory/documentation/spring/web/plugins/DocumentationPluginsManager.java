@@ -6,9 +6,11 @@ import com.mangofactory.documentation.service.Parameter;
 import com.mangofactory.documentation.spi.DocumentationType;
 import com.mangofactory.documentation.spi.schema.contexts.ModelContext;
 import com.mangofactory.documentation.spi.service.ApiListingBuilderPlugin;
+import com.mangofactory.documentation.spi.service.DefaultsProviderPlugin;
 import com.mangofactory.documentation.spi.service.contexts.ApiListingContext;
 import com.mangofactory.documentation.spi.service.DocumentationPlugin;
 import com.mangofactory.documentation.spi.service.OperationBuilderPlugin;
+import com.mangofactory.documentation.spi.service.contexts.DocumentationContextBuilder;
 import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import com.mangofactory.documentation.spi.service.OperationModelsProviderPlugin;
 import com.mangofactory.documentation.spi.service.ParameterBuilderPlugin;
@@ -30,7 +32,6 @@ import static com.google.common.collect.Lists.*;
 
 @Component
 public class DocumentationPluginsManager {
-
   private final PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins;
   private final PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingPlugins;
   private final PluginRegistry<ParameterBuilderPlugin, DocumentationType> parameterPlugins;
@@ -38,6 +39,7 @@ public class DocumentationPluginsManager {
   private final PluginRegistry<OperationBuilderPlugin, DocumentationType> operationBuilderPlugins;
   private final PluginRegistry<ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies;
   private final PluginRegistry<OperationModelsProviderPlugin, DocumentationType> operationModelsProviders;
+  private final PluginRegistry<DefaultsProviderPlugin, DocumentationType> defaultsProviders;
 
   @Autowired
   public DocumentationPluginsManager(
@@ -52,9 +54,11 @@ public class DocumentationPluginsManager {
           @Qualifier("operationBuilderPluginRegistry")
           PluginRegistry<OperationBuilderPlugin, DocumentationType> operationBuilderPlugins,
           @Qualifier("resourceGroupingStrategyRegistry")
-          PluginRegistry <ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies,
+          PluginRegistry<ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies,
           @Qualifier("operationModelsProviderPluginRegistry")
-          PluginRegistry <OperationModelsProviderPlugin, DocumentationType> operationModelsProviders) {
+          PluginRegistry<OperationModelsProviderPlugin, DocumentationType> operationModelsProviders,
+          @Qualifier("defaultsProviderPluginRegistry")
+          PluginRegistry<DefaultsProviderPlugin, DocumentationType> defaultsProviders) {
     this.documentationPlugins = documentationPlugins;
     this.apiListingPlugins = apiListingPlugins;
     this.parameterPlugins = parameterPlugins;
@@ -62,6 +66,7 @@ public class DocumentationPluginsManager {
     this.operationBuilderPlugins = operationBuilderPlugins;
     this.resourceGroupingStrategies = resourceGroupingStrategies;
     this.operationModelsProviders = operationModelsProviders;
+    this.defaultsProviders = defaultsProviders;
   }
 
 
@@ -115,5 +120,12 @@ public class DocumentationPluginsManager {
 
   private DocumentationPlugin defaultDocumentationPlugin() {
     return new DocumentationConfigurer(DocumentationType.SWAGGER_12);
+  }
+
+  public DocumentationContextBuilder createContextBuilder(DocumentationType documentationType,
+          DefaultConfiguration defaultConfiguration) {
+    return defaultsProviders.getPluginFor(documentationType, defaultConfiguration)
+            .create(documentationType)
+            .withResourceGroupingStrategy(resourceGroupingStrategy(documentationType));
   }
 }

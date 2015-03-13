@@ -33,10 +33,9 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
       genericClassWithListField()     | ["List", "SimpleType"].sort()
       genericClassWithGenericField()  | ["Charset", "HttpHeaders", "List",
                                          "MediaType", "ResponseEntityAlternative«SimpleType»", "Set",
-                                         "SimpleType", "URI", "Entry«string,string»",
-                                         "Map«string,string»"].sort()
+                                         "SimpleType", "URI", "Map«string,string»"].sort()
       genericClassWithDeepGenerics()  | ["Charset", "HttpHeaders", "List", "MediaType",
-                                         "Entry«string,string»", "ResponseEntityAlternative«List«SimpleType»»",
+                                         "ResponseEntityAlternative«List«SimpleType»»",
                                          "Set", "SimpleType", "URI", "Map«string,string»"].sort()
       genericCollectionWithEnum()     | ["Collection«string»", "List"].sort()
       recursiveType()                 | ["SimpleType"]

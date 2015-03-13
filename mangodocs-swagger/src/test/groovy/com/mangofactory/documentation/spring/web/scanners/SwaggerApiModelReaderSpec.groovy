@@ -2,6 +2,7 @@ package com.mangofactory.documentation.spring.web.scanners
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.schema.Model
 import com.mangofactory.documentation.schema.ModelProperty
+import com.mangofactory.documentation.spi.service.contexts.Defaults
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
 import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyModels
@@ -11,12 +12,14 @@ import com.mangofactory.documentation.spring.web.dummy.models.FoobarDto
 import com.mangofactory.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
 import com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsManager
+import com.mangofactory.documentation.swagger.web.SwaggerDefaultConfiguration
 import com.mangofactory.documentation.swagger.mixins.SwaggerPluginsSupport
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Ignore
 
+import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletResponse
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport])
@@ -26,7 +29,8 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
   DocumentationPluginsManager pluginsManager
 
   def setup() {
-    pluginsManager = swaggerServicePlugins()
+    pluginsManager = swaggerServicePlugins([new SwaggerDefaultConfiguration(new Defaults(), new TypeResolver(),
+            Mock(ServletContext))])
     sut = new ApiModelReader(modelProvider(swaggerSchemaPlugins()), new TypeResolver(), pluginsManager)
   }
 
@@ -233,8 +237,10 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
       )
       RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
     and:
+      def resolver = new TypeResolver()
       def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(swaggerSchemaPlugins()),
-              new TypeResolver(), swaggerServicePlugins())
+              resolver, swaggerServicePlugins([new SwaggerDefaultConfiguration(new Defaults(),
+              resolver, Mock (ServletContext))]))
     when:
       def models = snakeCaseReader.read(context)
 

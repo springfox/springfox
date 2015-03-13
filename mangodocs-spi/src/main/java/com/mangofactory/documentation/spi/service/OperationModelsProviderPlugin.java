@@ -5,5 +5,5 @@ import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
 import org.springframework.plugin.core.Plugin;
 
 public interface OperationModelsProviderPlugin extends Plugin<DocumentationType> {
-  public void apply(RequestMappingContext context);
+  void apply(RequestMappingContext context);
 }

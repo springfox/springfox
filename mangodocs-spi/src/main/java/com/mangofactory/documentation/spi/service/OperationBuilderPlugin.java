@@ -5,5 +5,5 @@ import com.mangofactory.documentation.spi.service.contexts.OperationContext;
 import org.springframework.plugin.core.Plugin;
 
 public interface OperationBuilderPlugin extends Plugin<DocumentationType> {
-  public void apply(OperationContext context);
+  void apply(OperationContext context);
 }

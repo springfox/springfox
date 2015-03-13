@@ -1,21 +1,23 @@
 package com.mangofactory.documentation.spring.web.readers
+
 import com.fasterxml.classmate.TypeResolver
 import com.mangofactory.documentation.schema.Model
 import com.mangofactory.documentation.schema.ModelProperty
 import com.mangofactory.documentation.spi.service.contexts.RequestMappingContext
-import com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsManager
-import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
 import com.mangofactory.documentation.spring.web.dummy.DummyModels
 import com.mangofactory.documentation.spring.web.dummy.controllers.BusinessService
 import com.mangofactory.documentation.spring.web.dummy.controllers.PetService
 import com.mangofactory.documentation.spring.web.dummy.models.FoobarDto
 import com.mangofactory.documentation.spring.web.mixins.ModelProviderForServiceSupport
-import com.mangofactory.documentation.spring.web.mixins.ServicePluginsSupport
 import com.mangofactory.documentation.spring.web.mixins.RequestMappingSupport
+import com.mangofactory.documentation.spring.web.mixins.ServicePluginsSupport
+import com.mangofactory.documentation.spring.web.plugins.DocumentationContextSpec
+import com.mangofactory.documentation.spring.web.plugins.DocumentationPluginsManager
 import com.mangofactory.documentation.spring.web.scanners.ApiModelReader
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.method.HandlerMethod
+import spock.lang.Ignore
 
 import javax.servlet.http.HttpServletResponse
 
@@ -89,6 +91,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   }
 
+  @Ignore("This needs to move to a swagger 1.2 test")
   def "Generates the correct models when there is a Map object in the input parameter"() {
     given:
       HandlerMethod handlerMethod = handlerMethodIn(PetService, 'echo', Map)

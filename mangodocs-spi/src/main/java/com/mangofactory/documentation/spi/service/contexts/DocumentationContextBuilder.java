@@ -60,6 +60,10 @@ public class DocumentationContextBuilder {
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
 
+  public DocumentationContextBuilder(DocumentationType documentationType) {
+    this.documentationType = documentationType;
+  }
+
   public DocumentationContextBuilder handlerMappings(List<RequestMappingHandlerMapping> handlerMappings) {
     this.handlerMappings = handlerMappings;
     return this;
@@ -116,11 +120,6 @@ public class DocumentationContextBuilder {
 
   public DocumentationContextBuilder apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
     this.apiDescriptionOrdering = defaultIfAbsent(apiDescriptionOrdering, this.apiDescriptionOrdering);
-    return this;
-  }
-
-  public DocumentationContextBuilder documentationType(DocumentationType documentationType) {
-    this.documentationType = documentationType;
     return this;
   }
 
