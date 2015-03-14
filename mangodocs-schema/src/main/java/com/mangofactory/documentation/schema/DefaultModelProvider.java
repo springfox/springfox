@@ -17,6 +17,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.documentation.schema.Collections.*;
+import static com.mangofactory.documentation.schema.Maps.*;
 import static com.mangofactory.documentation.schema.ResolvedTypes.*;
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 
@@ -46,6 +47,7 @@ public class DefaultModelProvider implements ModelProvider {
   public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
     ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
     if (isContainerType(propertiesHost)
+            || isMapType(propertiesHost)
             || propertiesHost.getErasedType().isEnum()
             || Types.isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))) {
       return Optional.absent();

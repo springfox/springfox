@@ -85,9 +85,9 @@
                         "description": "someInput",
                         "required": false,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Entry\u00abstring,Pet\u00bb"
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Pet"
                             }
                         }
                     }
@@ -96,9 +96,9 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Entry\u00abstring,Pet\u00bb"
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Pet"
                             }
                         }
                     }
@@ -261,9 +261,9 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Entry\u00abstring,List\u00abstring\u00bb\u00bb"
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/List"
                             }
                         }
                     }
@@ -329,9 +329,9 @@
                         "description": "someInput",
                         "required": false,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Entry\u00abstring,Pet\u00bb"
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Pet"
                             }
                         }
                     }
@@ -367,9 +367,9 @@
                         "description": "someInput",
                         "required": false,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Entry\u00abstring,Pet\u00bb"
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Pet"
                             }
                         }
                     }
@@ -405,9 +405,9 @@
                         "description": "someInput",
                         "required": false,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Entry\u00abstring,Pet\u00bb"
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Pet"
                             }
                         }
                     }
@@ -659,23 +659,6 @@
                 },
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "Entry\u00abstring,List\u00abstring\u00bb\u00bb": {
-            "properties": {
-                "key": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "Entry\u00abstring,Pet\u00bb": {
-            "properties": {
-                "key": {
-                    "$ref": "#/definitions/Pet"
                 }
             }
         }

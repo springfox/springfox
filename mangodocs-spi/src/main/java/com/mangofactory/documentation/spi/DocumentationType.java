@@ -43,7 +43,7 @@ public class DocumentationType extends SimplePluginMetadata {
 
     DocumentationType that = (DocumentationType) o;
 
-    return mediaType.equals(that.mediaType);
+    return super.equals(that) && mediaType.equals(that.mediaType);
 
   }
 

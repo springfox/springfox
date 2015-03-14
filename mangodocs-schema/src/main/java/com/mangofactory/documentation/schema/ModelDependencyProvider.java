@@ -16,6 +16,7 @@ import java.util.Set;
 import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.Lists.*;
 import static com.mangofactory.documentation.schema.Collections.*;
+import static com.mangofactory.documentation.schema.Maps.*;
 import static com.mangofactory.documentation.schema.Types.*;
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 
@@ -101,20 +102,49 @@ public class ModelDependencyProvider {
         continue;
       }
       properties.add(property.getType());
-      if (isContainerType(property.getType())) {
-        ResolvedType collectionElementType = collectionElementType(property.getType());
-        //TODO: may not be required to check this because the very next step if this is true is to check this again
-        if (typeNameFor(collectionElementType.getErasedType()) == null) {
-          if (!isBaseType(fromParent(modelContext, collectionElementType))) {
-            properties.add(collectionElementType);
-          }
-          properties.addAll(resolvedDependencies(fromParent(modelContext, collectionElementType)));
-        }
-        continue;
-      }
-      properties.addAll(resolvedDependencies(fromParent(modelContext, property.getType())));
+      boolean handled = maybeHandleCollection(modelContext, properties, property)
+              || maybeHandleMapType(modelContext,  properties, property)
+              || handleRegularType(modelContext, properties, property);
     }
     return properties;
+  }
+
+  private boolean handleRegularType(ModelContext modelContext, List<ResolvedType> properties, ModelProperty property) {
+    return properties.addAll(resolvedDependencies(fromParent(modelContext, property.getType())));
+  }
+
+  private boolean maybeHandleCollection(ModelContext modelContext, List<ResolvedType> properties,
+                                        ModelProperty property) {
+    if (isContainerType(property.getType())) {
+      ResolvedType collectionElementType = collectionElementType(property.getType());
+      //This is required because of a bug in classmate that generates resolved types with type parameters even though
+      //the underlying type is a non-generic type
+      if (typeNameFor(collectionElementType.getErasedType()) == null) {
+        if (!isBaseType(fromParent(modelContext, collectionElementType))) {
+          properties.add(collectionElementType);
+        }
+        properties.addAll(resolvedDependencies(fromParent(modelContext, collectionElementType)));
+      }
+      return true;
+    }
+    return false;
+  }
+
+  private boolean maybeHandleMapType(ModelContext modelContext, List<ResolvedType> properties,
+                                     ModelProperty property) {
+    if (isMapType(property.getType())) {
+      ResolvedType valueType = mapValueType(property.getType());
+      //This is required because of a bug in classmate that generates resolved types with type parameters even though
+      //the underlying type is a non-generic type
+      if (typeNameFor(valueType.getErasedType()) == null) {
+        if (!isBaseType(fromParent(modelContext, valueType))) {
+          properties.add(valueType);
+        }
+        properties.addAll(resolvedDependencies(fromParent(modelContext, valueType)));
+      }
+      return true;
+    }
+    return false;
   }
 
   private List<ModelProperty> propertiesFor(ModelContext modelContext, ResolvedType resolvedType) {

@@ -87,7 +87,7 @@ public class ParameterMapper {
     }
     if (modelRef.isMap()) {
       ModelImpl baseModel = new ModelImpl();
-      baseModel.additionalProperties(property(modelRef.getType()));
+      baseModel.additionalProperties(property(modelRef.getItemType()));
       return baseModel;
     }
     if (Types.isBaseType(modelRef.getType())) {
