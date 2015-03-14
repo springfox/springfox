@@ -24,6 +24,7 @@ import java.util.List;
 import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Sets.*;
 import static com.mangofactory.documentation.schema.Collections.*;
+import static com.mangofactory.documentation.schema.Maps.*;
 import static com.mangofactory.documentation.schema.Types.*;
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 import static com.mangofactory.documentation.spring.web.HandlerMethodReturnTypes.*;
@@ -77,13 +78,17 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
 
 
   private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
-    if (!isContainerType(type)) {
-      String typeName = typeNameExtractor.typeName(fromParent(modelContext, type));
-      return new ModelRef(typeName);
+    if (isContainerType(type)) {
+      ResolvedType collectionElementType = collectionElementType(type);
+      String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, collectionElementType));
+      return new ModelRef(containerType(type), elementTypeName);
     }
-    ResolvedType collectionElementType = collectionElementType(type);
-    String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, collectionElementType));
-    return new ModelRef(containerType(type), elementTypeName);
+    if (isMapType(type)) {
+      String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, mapValueType(type)));
+      return new ModelRef("Map", elementTypeName, true);
+    }
+    String typeName = typeNameExtractor.typeName(fromParent(modelContext, type));
+    return new ModelRef(typeName);
   }
 
 

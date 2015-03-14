@@ -14,9 +14,9 @@ public class Collections {
 
   public static ResolvedType collectionElementType(ResolvedType type) {
     if (List.class.isAssignableFrom(type.getErasedType())) {
-      return Collections.elementType(type, List.class);
+      return elementType(type, List.class);
     } else if (Set.class.isAssignableFrom(type.getErasedType())) {
-      return Collections.elementType(type, Set.class);
+      return elementType(type, Set.class);
     } else if (type.isArray()) {
       return type.getArrayElementType();
     } else {

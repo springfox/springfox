@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 
 import static com.mangofactory.documentation.schema.Collections.*;
+import static com.mangofactory.documentation.schema.Maps.*;
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
@@ -54,12 +55,16 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     
   }
   private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
-    if (!isContainerType(type)) {
-      String typeName = nameExtractor.typeName(fromParent(modelContext, type));
-      return new ModelRef(typeName);
+    if (isContainerType(type)) {
+      ResolvedType collectionElementType = collectionElementType(type);
+      String elementTypeName = nameExtractor.typeName(fromParent(modelContext, collectionElementType));
+      return new ModelRef(containerType(type), elementTypeName);
     }
-    ResolvedType collectionElementType = collectionElementType(type);
-    String elementTypeName = nameExtractor.typeName(fromParent(modelContext, collectionElementType));
-    return new ModelRef(containerType(type), elementTypeName);
+    if (isMapType(type)) {
+      String elementTypeName = nameExtractor.typeName(fromParent(modelContext, mapValueType(type)));
+      return new ModelRef("Map", elementTypeName, true);
+    }
+    String typeName = nameExtractor.typeName(fromParent(modelContext, type));
+    return new ModelRef(typeName);
   }
 }

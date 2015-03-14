@@ -47,8 +47,8 @@ public class TypeNameExtractor {
 
   private String genericTypeName(ResolvedType resolvedType, DocumentationType documentationType) {
     Class<?> erasedType = resolvedType.getErasedType();
-    String simpleName = fromNullable(typeNameFor(erasedType))
-            .or(pluginsManager.typeName(new ModelNameContext(resolvedType.getErasedType(), documentationType)));
+    ModelNameContext nameContext = new ModelNameContext(resolvedType.getErasedType(), documentationType);
+    String simpleName = fromNullable(typeNameFor(erasedType)).or(pluginsManager.typeName(nameContext));
     StringBuilder sb = new StringBuilder(String.format("%s%s", simpleName, namingStrategy.getOpenGeneric()));
     boolean first = true;
     for (int index = 0; index < erasedType.getTypeParameters().length; index++) {

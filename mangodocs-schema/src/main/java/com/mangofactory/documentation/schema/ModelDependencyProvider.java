@@ -15,6 +15,8 @@ import java.util.Set;
 
 import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.Lists.*;
+import static com.mangofactory.documentation.schema.Collections.*;
+import static com.mangofactory.documentation.schema.Types.*;
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
@@ -92,17 +94,17 @@ public class ModelDependencyProvider {
     modelContext.seen(resolvedType);
     List<ResolvedType> properties = newArrayList();
     for (ModelProperty property : propertiesFor(modelContext, resolvedType)) {
-      if (Types.typeNameFor(property.getType().getErasedType()) != null) {
+      if (typeNameFor(property.getType().getErasedType()) != null) {
         continue;
       }
       if (isBaseType(fromParent(modelContext, resolvedType))) {
         continue;
       }
       properties.add(property.getType());
-      if (Collections.isContainerType(property.getType())) {
-        ResolvedType collectionElementType = Collections.collectionElementType(property.getType());
+      if (isContainerType(property.getType())) {
+        ResolvedType collectionElementType = collectionElementType(property.getType());
         //TODO: may not be required to check this because the very next step if this is true is to check this again
-        if (Types.typeNameFor(collectionElementType.getErasedType()) == null) {
+        if (typeNameFor(collectionElementType.getErasedType()) == null) {
           if (!isBaseType(fromParent(modelContext, collectionElementType))) {
             properties.add(collectionElementType);
           }

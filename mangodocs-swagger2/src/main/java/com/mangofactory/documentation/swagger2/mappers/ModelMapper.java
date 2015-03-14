@@ -19,6 +19,7 @@ import com.wordnik.swagger.models.properties.DoubleProperty;
 import com.wordnik.swagger.models.properties.FloatProperty;
 import com.wordnik.swagger.models.properties.IntegerProperty;
 import com.wordnik.swagger.models.properties.LongProperty;
+import com.wordnik.swagger.models.properties.MapProperty;
 import com.wordnik.swagger.models.properties.ObjectProperty;
 import com.wordnik.swagger.models.properties.Property;
 import com.wordnik.swagger.models.properties.RefProperty;
@@ -95,6 +96,9 @@ public abstract class ModelMapper {
     if (modelRef.isCollection()) {
       String itemType = modelRef.getItemType();
       responseProperty = new ArrayProperty(property(itemType));
+    } else if (modelRef.isMap()) {
+      String itemType = modelRef.getItemType();
+      responseProperty = new MapProperty(property(itemType));
     } else {
       responseProperty = property(modelRef.getType());
     }

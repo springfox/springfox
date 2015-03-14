@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
 import static com.mangofactory.documentation.schema.Collections.*;
+import static com.mangofactory.documentation.schema.Maps.*;
 import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 import static com.mangofactory.documentation.spring.web.HandlerMethodReturnTypes.*;
 import static com.mangofactory.documentation.swagger.common.SwaggerPluginSupport.*;
@@ -63,13 +64,17 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
   }
 
   private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
-    if (!isContainerType(type)) {
-      String typeName = nameExtractor.typeName(fromParent(modelContext, type));
-      return new ModelRef(typeName);
+    if (isContainerType(type)) {
+      ResolvedType collectionElementType = collectionElementType(type);
+      String elementTypeName = nameExtractor.typeName(fromParent(modelContext, collectionElementType));
+      return new ModelRef(containerType(type), elementTypeName);
     }
-    ResolvedType collectionElementType = collectionElementType(type);
-    String elementTypeName = nameExtractor.typeName(fromParent(modelContext, collectionElementType));
-    return new ModelRef(containerType(type), elementTypeName);
+    if (isMapType(type)) {
+      String elementTypeName = nameExtractor.typeName(fromParent(modelContext, mapValueType(type)));
+      return new ModelRef("Map", elementTypeName, true);
+    }
+    String typeName = nameExtractor.typeName(fromParent(modelContext, type));
+    return new ModelRef(typeName);
   }
 
   @Override

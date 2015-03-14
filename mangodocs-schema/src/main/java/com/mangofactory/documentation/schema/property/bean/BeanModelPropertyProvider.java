@@ -38,6 +38,7 @@ import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.mangofactory.documentation.schema.Annotations.*;
 import static com.mangofactory.documentation.schema.Collections.*;
+import static com.mangofactory.documentation.schema.Maps.*;
 import static com.mangofactory.documentation.schema.property.BeanPropertyDefinitions.*;
 import static com.mangofactory.documentation.schema.property.bean.Accessors.*;
 import static com.mangofactory.documentation.schema.property.bean.BeanModelProperty.*;
@@ -172,12 +173,16 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
   }
 
   private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
-    if (!isContainerType(type)) {
-      String typeName = typeNameExtractor.typeName(modelContext);
-      return new ModelRef(typeName);
+    if (isContainerType(type)) {
+      ResolvedType collectionElementType = collectionElementType(type);
+      String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, collectionElementType));
+      return new ModelRef(containerType(type), elementTypeName);
     }
-    ResolvedType collectionElementType = collectionElementType(type);
-    String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, collectionElementType));
-    return new ModelRef(containerType(type), elementTypeName);
+    if (isMapType(type)) {
+      String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, mapValueType(type)));
+      return new ModelRef("Map", elementTypeName, true);
+    }
+    String typeName = typeNameExtractor.typeName(modelContext);
+    return new ModelRef(typeName);
   }
 }

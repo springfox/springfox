@@ -85,6 +85,11 @@ public class ParameterMapper {
     if (modelRef.isCollection()) {
       return new ArrayModel().items(property(modelRef.getItemType()));
     }
+    if (modelRef.isMap()) {
+      ModelImpl baseModel = new ModelImpl();
+      baseModel.additionalProperties(property(modelRef.getType()));
+      return baseModel;
+    }
     if (Types.isBaseType(modelRef.getType())) {
       ModelImpl baseModel = new ModelImpl();
       baseModel.setType(modelRef.getType());
