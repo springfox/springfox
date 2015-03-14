@@ -19,7 +19,7 @@ public class Types {
   }
 
   private static final Set<String> baseTypes
-          = newHashSet("int", "date", "string", "double", "float", "boolean", "byte", "object", "long");
+          = newHashSet("int", "date", "string", "double", "float", "boolean", "byte", "object", "long", "date-time");
   private static final Map<Type, String> typeNameLookup = ImmutableMap.<Type, String>builder()
           .put(Long.TYPE, "long")
           .put(Short.TYPE, "int")

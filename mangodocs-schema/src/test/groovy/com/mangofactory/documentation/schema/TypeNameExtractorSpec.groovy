@@ -22,6 +22,8 @@ class TypeNameExtractorSpec extends SchemaSpecification {
       genericSetOfInteger()          | "Set"
       erasedSet()                    | "Set"
       genericClassWithGenericField() | "GenericType«ResponseEntityAlternative«SimpleType»»"
+      hashMap(String, SimpleType)    | "Map«string,SimpleType»"
+      hashMap(String, String)        | "Map«string,string»"
   }
   
   def "Input class for container types are inferred correctly"() {
@@ -39,6 +41,8 @@ class TypeNameExtractorSpec extends SchemaSpecification {
       genericSetOfInteger()          | "Set"
       erasedSet()                    | "Set"
       genericClassWithGenericField() | "GenericType«ResponseEntityAlternative«SimpleType»»"
+      hashMap(String, SimpleType)    | "Map«string,SimpleType»"
+      hashMap(String, String)        | "Map«string,string»"
   }
   //TODO: test cases for parent (withAndWithout)
 }

@@ -15,6 +15,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import com.mangofactory.documentation.builders.ModelPropertyBuilder;
 import com.mangofactory.documentation.schema.ModelProperty;
 import com.mangofactory.documentation.schema.ModelRef;
 import com.mangofactory.documentation.schema.TypeNameExtractor;
@@ -23,11 +24,8 @@ import com.mangofactory.documentation.schema.plugins.SchemaPluginsManager;
 import com.mangofactory.documentation.schema.property.BeanPropertyDefinitions;
 import com.mangofactory.documentation.schema.property.BeanPropertyNamingStrategy;
 import com.mangofactory.documentation.schema.property.provider.ModelPropertiesProvider;
-import com.mangofactory.documentation.builders.ModelPropertyBuilder;
 import com.mangofactory.documentation.spi.schema.contexts.ModelContext;
 import com.mangofactory.documentation.spi.schema.contexts.ModelPropertyContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -47,7 +45,6 @@ import static com.mangofactory.documentation.spi.schema.contexts.ModelContext.*;
 @Component
 public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
-  private static final Logger LOG = LoggerFactory.getLogger(BeanModelPropertyProvider.class);
   private final AccessorsProvider accessors;
   private final BeanPropertyNamingStrategy namingStrategy;
   private ObjectMapper objectMapper;
@@ -82,7 +79,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
       ModelContext givenContext) {
 
     if (member instanceof AnnotatedMethod && memberIsUnwrapped(member)) {
-      if (isGetter(((AnnotatedMethod)member).getMember())) {
+      if (isGetter(((AnnotatedMethod) member).getMember())) {
         return propertiesFor(childProperty.getReturnType(), fromParent(givenContext, childProperty.getReturnType()));
       } else {
         return propertiesFor(childProperty.getArgumentType(0),
@@ -114,19 +111,15 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
             BeanPropertyDefinitions.beanPropertyByInternalName());
     for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
 
-        BeanPropertyDefinition propertyDefinition = each.getValue();
-        Optional<BeanPropertyDefinition> jacksonProperty
-                = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
-        try {
-          AnnotatedMember member = propertyDefinition.getPrimaryMember();
-          Optional<ResolvedMethod> accessor = findAccessorMethod(type, each.getKey(), member);
-          if (accessor.isPresent()) {
-            serializationCandidates
-                    .addAll(addCandidateProperties(member, accessor.get(), jacksonProperty, givenContext));
-          }
-        } catch (Exception e) {
-          LOG.warn(e.getMessage());
-        }
+      BeanPropertyDefinition propertyDefinition = each.getValue();
+      Optional<BeanPropertyDefinition> jacksonProperty
+              = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+      AnnotatedMember member = propertyDefinition.getPrimaryMember();
+      Optional<ResolvedMethod> accessor = findAccessorMethod(type, each.getKey(), member);
+      if (accessor.isPresent()) {
+        serializationCandidates
+                .addAll(addCandidateProperties(member, accessor.get(), jacksonProperty, givenContext));
+      }
     }
     return serializationCandidates;
   }
@@ -136,19 +129,11 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
                                                       final AnnotatedMember member) {
     return Iterables.tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
       public boolean apply(ResolvedMethod accessorMethod) {
-        return accessorMemberIs(accessorMethod, methodName(member))
+        return accessorMemberIs(accessorMethod, memberName(member))
                 && propertyName.equals(propertyName(accessorMethod.getRawMember()));
       }
     });
   }
-
-  private String methodName(AnnotatedMember member) {
-    if (member == null || member.getMember() == null) {
-      return "";
-    }
-    return member.getMember().getName();
-  }
-
 
   private ModelProperty beanModelProperty(ResolvedMethod childProperty, Optional<BeanPropertyDefinition>
           jacksonProperty, ModelContext modelContext) {
@@ -156,7 +141,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     BeanPropertyDefinition beanPropertyDefinition = jacksonProperty.get();
     String propertyName = name(beanPropertyDefinition, modelContext.isReturnType(), namingStrategy);
     BeanModelProperty beanModelProperty
-            = new BeanModelProperty(propertyName,  childProperty, isGetter(childProperty.getRawMember()),
+            = new BeanModelProperty(propertyName, childProperty, isGetter(childProperty.getRawMember()),
             typeResolver, modelContext.getAlternateTypeProvider());
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
             .name(beanModelProperty.getName())

@@ -63,4 +63,10 @@ public class Annotations {
     return Optional.absent();
   }
 
+  public static String memberName(AnnotatedMember member) {
+    if (member == null || member.getMember() == null) {
+      return "";
+    }
+    return member.getMember().getName();
+  }
 }

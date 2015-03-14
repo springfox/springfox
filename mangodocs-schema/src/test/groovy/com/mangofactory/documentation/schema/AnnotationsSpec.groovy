@@ -3,6 +3,7 @@ package com.mangofactory.documentation.schema
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition
 import com.fasterxml.jackson.databind.type.TypeFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,17 +25,17 @@ class AnnotationsSpec extends Specification {
       ObjectMapper mapper = new ObjectMapper()
       BeanDescription beanDesc =
               mapper.deserializationConfig.introspect(TypeFactory.defaultInstance().constructType
-              (AnnotationType))
-      BeanPropertyDefinition property = beanDesc.findProperties().find {it -> it.name == fieldName}
+                      (AnnotationType))
+      BeanPropertyDefinition property = beanDesc.findProperties().find { it -> it.name == fieldName }
 
     expect:
       Annotations.findPropertyAnnotation(property, Autowired).isPresent() == isPresent
     where:
-      fieldName                 | isPresent
-      'field'                   | true
-      'fieldWithGetter'         | true
-      'fieldWithGetterAndSetter'| true
-      'fieldWithNoAnnotations'  | false
+      fieldName                  | isPresent
+      'field'                    | true
+      'fieldWithGetter'          | true
+      'fieldWithGetterAndSetter' | true
+      'fieldWithNoAnnotations'   | false
   }
 
   @Unroll
@@ -42,17 +43,49 @@ class AnnotationsSpec extends Specification {
     given:
       ObjectMapper mapper = new ObjectMapper()
       BeanDescription beanDesc =
-              mapper.serializationConfig.introspect(TypeFactory.defaultInstance().constructType
-                      (AnnotationType))
-      BeanPropertyDefinition property = beanDesc.findProperties().find {it -> it.name == fieldName}
+              mapper.serializationConfig.introspect(TypeFactory.defaultInstance()
+                      .constructType(AnnotationType))
+      BeanPropertyDefinition property = beanDesc.findProperties().find { it -> it.name == fieldName }
     expect:
       Annotations.findPropertyAnnotation(property, Autowired).isPresent() == isPresent
     where:
-      fieldName                 | isPresent
-      'field'                   | true
-      'fieldWithGetter'         | true
-      'fieldWithGetterAndSetter'| true
-      'fieldWithNoAnnotations'  | false
+      fieldName                  | isPresent
+      'field'                    | true
+      'fieldWithGetter'          | true
+      'fieldWithGetterAndSetter' | true
+      'fieldWithNoAnnotations'   | false
+  }
+
+  @Unroll
+  def "Introspects bean annotations and gets the member name"() {
+    given:
+      ObjectMapper mapper = new ObjectMapper()
+      BeanDescription beanDesc =
+              mapper.serializationConfig.introspect(TypeFactory.defaultInstance()
+                      .constructType(AnnotationType))
+      BeanPropertyDefinition property = beanDesc.findProperties().find { it -> it.name == fieldName }
+    expect:
+      Annotations.memberName(property.getPrimaryMember()) == memberName
+    where:
+      fieldName                  | memberName
+      'field'                    | 'field'
+      'fieldWithGetter'          | 'getFieldWithGetter'
+      'fieldWithGetterAndSetter' | 'getFieldWithGetterAndSetter'
+      'fieldWithNoAnnotations'   | 'fieldWithNoAnnotations'
+  }
+
+  def "when member is null"() {
+    expect:
+      Annotations.memberName(null) == ""
+  }
+
+  def "when member.getMember is null"() {
+    given:
+      def member = Mock(AnnotatedMember)
+    and:
+      member.getMember() >> null
+    expect:
+      Annotations.memberName(member) == ""
   }
 
   class AnnotationType {
