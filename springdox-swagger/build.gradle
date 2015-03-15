@@ -15,13 +15,13 @@ artifacts {
 
 dependencies {
   compile libs.swagger2Core
-  compile project(':mangodocs-spi')
-  compile project(':mangodocs-schema')
-  compile project(':mangodocs-spring-web')
-  compile project(':mangodocs-swagger-common')
-  testCompile project(':mangodocs-core')
-  testCompile(project(path: ':mangodocs-schema', configuration: 'testArtifacts'))
-  testCompile(project(path: ':mangodocs-spring-web', configuration: 'testArtifacts')) {
+  compile project(':springdox-spi')
+  compile project(':springdox-schema')
+  compile project(':springdox-spring-web')
+  compile project(':springdox-swagger-common')
+  testCompile project(':springdox-core')
+  testCompile(project(path: ':springdox-schema', configuration: 'testArtifacts'))
+  testCompile(project(path: ':springdox-spring-web', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
   compile libs.core

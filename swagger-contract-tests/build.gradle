@@ -31,7 +31,7 @@ dependencies {
 
   compile "org.ajar:swagger-spring-mvc-ui:0.4"
 
-  compile(project(':mangodocs-swagger')) {
+  compile(project(':springdox-swagger')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 
@@ -42,13 +42,13 @@ dependencies {
   testCompile 'org.skyscreamer:jsonassert:1.2.3'
   testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
 
-  compile(project(path: ':mangodocs-swagger', configuration: 'testArtifacts')) {
+  compile(project(path: ':springdox-swagger', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
-  compile(project(path: ':mangodocs-swagger2', configuration: 'testArtifacts')) {
+  compile(project(path: ':springdox-swagger2', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
-  compile(project(path: ':mangodocs-petstore')) {
+  compile(project(path: ':springdox-petstore')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 }

@@ -83,7 +83,7 @@ configure(publishable(subprojects)) { subproject ->
 def publishable(subprojects) {
   subprojects.findAll {
     it.name != 'swagger-contract-tests' &&
-    it.name != 'mangodocs-petstore'
+    it.name != 'springdox-petstore'
   }
 }
 

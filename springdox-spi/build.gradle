@@ -1,0 +1,7 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+
+dependencies {
+  compile project(':springdox-core')
+  compile project(':springdox-core')
+}

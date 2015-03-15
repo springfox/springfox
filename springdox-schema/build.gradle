@@ -15,10 +15,10 @@ artifacts {
 }
 
 dependencies {
-  compile project(':mangodocs-core')
-  compile project(':mangodocs-spi')
+  compile project(':springdox-core')
+  compile project(':springdox-spi')
   testCompile libs.test
-  testCompile(project(path: ':mangodocs-core', configuration: 'testArtifacts')) {
+  testCompile(project(path: ':springdox-core', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 }

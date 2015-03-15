@@ -1,7 +1,0 @@
-apply plugin: 'java'
-apply plugin: 'groovy'
-
-dependencies {
-  compile project(':mangodocs-core')
-  compile project(':mangodocs-core')
-}
