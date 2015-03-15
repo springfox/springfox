@@ -16,6 +16,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static springdox.documentation.builders.BuilderDefaults.*;
 
 public class OperationBuilder {
   private String method;
@@ -36,27 +37,27 @@ public class OperationBuilder {
   private ModelRef responseModel;
 
   public OperationBuilder method(String method) {
-    this.method = BuilderDefaults.defaultIfAbsent(method, this.method);
+    this.method = defaultIfAbsent(method, this.method);
     return this;
   }
 
   public OperationBuilder summary(String summary) {
-    this.summary = BuilderDefaults.defaultIfAbsent(summary, this.summary);
+    this.summary = defaultIfAbsent(summary, this.summary);
     return this;
   }
 
   public OperationBuilder notes(String notes) {
-    this.notes = BuilderDefaults.defaultIfAbsent(notes, this.notes);
+    this.notes = defaultIfAbsent(notes, this.notes);
     return this;
   }
 
   public OperationBuilder responseClass(String responseClass) {
-    this.responseClass = BuilderDefaults.defaultIfAbsent(responseClass, this.responseClass);
+    this.responseClass = defaultIfAbsent(responseClass, this.responseClass);
     return this;
   }
 
   public OperationBuilder nickname(String nickname) {
-    this.nickname = BuilderDefaults.defaultIfAbsent(nickname, this.nickname);
+    this.nickname = defaultIfAbsent(nickname, this.nickname);
     return this;
   }
 
@@ -96,7 +97,7 @@ public class OperationBuilder {
   }
 
   public OperationBuilder deprecated(String deprecated) {
-    this.deprecated = BuilderDefaults.defaultIfAbsent(deprecated, this.deprecated);
+    this.deprecated = defaultIfAbsent(deprecated, this.deprecated);
     return this;
   }
 
@@ -106,10 +107,10 @@ public class OperationBuilder {
   }
 
   public OperationBuilder responseModel(ModelRef responseType) {
-    this.responseModel = BuilderDefaults.defaultIfAbsent(responseType, this.responseModel);
+    this.responseModel = defaultIfAbsent(responseType, this.responseModel);
     return this;
   }
-  
+
   public OperationBuilder tags(Set<String> tags) {
     this.tags.addAll(BuilderDefaults.nullToEmptySet(tags));
     return this;
@@ -127,8 +128,8 @@ public class OperationBuilder {
     for (ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
-        String message = BuilderDefaults.defaultIfAbsent(Strings.emptyToNull(responseMessage.getMessage()), HttpStatus.OK.getReasonPhrase());
-        ModelRef responseWithModel = BuilderDefaults.defaultIfAbsent(responseMessage.getResponseModel(),
+        String message = defaultIfAbsent(Strings.emptyToNull(responseMessage.getMessage()), HttpStatus.OK.getReasonPhrase());
+        ModelRef responseWithModel = defaultIfAbsent(responseMessage.getResponseModel(),
                 each.getResponseModel());
         merged.remove(each);
         merged.add(new ResponseMessageBuilder()

@@ -2,7 +2,7 @@ package springdox.documentation.spring.web
 
 import spock.lang.Specification
 
-import static Paths.*
+import static springdox.documentation.spring.web.Paths.*
 
 class PathsSpec extends Specification {
   def "maybe chomping the leading slash works"() {

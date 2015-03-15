@@ -2,7 +2,6 @@ package springdox.documentation.schema.mixins
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import springdox.documentation.schema.*
 import org.springframework.http.ResponseEntity
 import springdox.documentation.schema.ArraysContainer
 import springdox.documentation.schema.ComplexType

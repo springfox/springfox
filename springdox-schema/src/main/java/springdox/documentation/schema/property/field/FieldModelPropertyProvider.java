@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
+import static springdox.documentation.schema.Maps.*;
+import static springdox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
 public class FieldModelPropertyProvider implements ModelPropertiesProvider {
@@ -61,7 +63,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
           childField, Optional<BeanPropertyDefinition> jacksonProperty, ModelContext givenContext) {
     if (memberIsAField(member)) {
       if (Annotations.memberIsUnwrapped(member)) {
-        return propertiesFor(childField.getType(), ModelContext.fromParent(givenContext, childField.getType()));
+        return propertiesFor(childField.getType(), fromParent(givenContext, childField.getType()));
       } else {
         String fieldName = BeanPropertyDefinitions.name(jacksonProperty.get(), true, namingStrategy);
         return newArrayList(modelPropertyFrom(childField, fieldName, givenContext));
@@ -82,7 +84,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
             .required(fieldModelProperty.isRequired())
             .description(fieldModelProperty.propertyDescription())
             .allowableValues(fieldModelProperty.allowableValues())
-            .modelRef(modelRef(fieldModelProperty.getType(), ModelContext.fromParent(modelContext, fieldModelProperty.getType())));
+            .modelRef(modelRef(fieldModelProperty.getType(), fromParent(modelContext, fieldModelProperty.getType())));
     return schemaPluginsManager.property(new ModelPropertyContext(propertyBuilder,
             childField.getRawMember(), modelContext.getDocumentationType()));
   }
@@ -112,11 +114,11 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
   private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
     if (Collections.isContainerType(type)) {
       ResolvedType collectionElementType = Collections.collectionElementType(type);
-      String elementTypeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, collectionElementType));
+      String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, collectionElementType));
       return new ModelRef(Collections.containerType(type), elementTypeName);
     }
     if (springdox.documentation.schema.Maps.isMapType(type)) {
-      String elementTypeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, springdox.documentation.schema.Maps.mapValueType(type)));
+      String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, mapValueType(type)));
       return new ModelRef("Map", elementTypeName, true);
     }
     String typeName = typeNameExtractor.typeName(modelContext);
@@ -144,5 +146,4 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
             && member.getMember() != null
             && Field.class.isAssignableFrom(member.getMember().getClass());
   }
-
 }

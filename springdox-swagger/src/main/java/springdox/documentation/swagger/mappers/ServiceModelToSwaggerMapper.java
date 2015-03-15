@@ -1,7 +1,11 @@
 package springdox.documentation.swagger.mappers;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import springdox.documentation.schema.Model;
 import springdox.documentation.schema.ModelProperty;
+import springdox.documentation.service.ResponseMessage;
 import springdox.documentation.swagger.dto.ApiDescription;
 import springdox.documentation.swagger.dto.ApiInfo;
 import springdox.documentation.swagger.dto.ApiListing;
@@ -11,10 +15,6 @@ import springdox.documentation.swagger.dto.ModelPropertyDto;
 import springdox.documentation.swagger.dto.Operation;
 import springdox.documentation.swagger.dto.Parameter;
 import springdox.documentation.swagger.dto.ResourceListing;
-import springdox.documentation.swagger.dto.ResponseMessage;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 import static springdox.documentation.swagger.mappers.DataTypeMapper.*;
 
@@ -29,7 +29,7 @@ public interface ServiceModelToSwaggerMapper {
   @Mappings({
           @Mapping(target = "responseModel", source = "responseModel", qualifiedBy = ResponseTypeName.class)
   })
-  springdox.documentation.swagger.dto.ResponseMessage toSwaggerResponseMessage(springdox.documentation.service.ResponseMessage from);
+  springdox.documentation.swagger.dto.ResponseMessage toSwaggerResponseMessage(ResponseMessage from);
 
   ApiListingReference toSwaggerApiListingReference(springdox.documentation.service.ApiListingReference from);
 

@@ -15,8 +15,8 @@ import springdox.documentation.schema.property.bean.BeanModelProperty
 import springdox.documentation.service.AllowableListValues
 
 import static com.google.common.collect.Lists.*
-import static springdox.documentation.schema.property.bean.Accessors.*
 import static springdox.documentation.schema.property.BeanPropertyDefinitions.*
+import static springdox.documentation.schema.property.bean.Accessors.*
 import static springdox.documentation.spi.DocumentationType.*
 import static springdox.documentation.spi.schema.contexts.ModelContext.*
 
