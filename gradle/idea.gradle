@@ -3,11 +3,10 @@ allprojects {
 }
 
 idea {
-  module {
-    excludeDirs += file('intTestHomeDir')
-    excludeDirs += file('buildSrc/build')
-    excludeDirs += file('buildSrc/.gradle')
-  }
+//  module {
+//    excludeDirs += file('buildSrc/build')
+//    excludeDirs += file('buildSrc/.gradle')
+//  }
 
   project {
     languageLevel = '1.6'

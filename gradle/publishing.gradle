@@ -16,14 +16,14 @@ ext {
   releaseRepos = {
     maven {
       name 'jcenter'
-      url "${artifactRepoBase}/${repoPrefix}-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
+      url "${artifactRepoBase}/${repoPrefix}-${project.version.toString().endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
       credentials {
         username = "$relUsername"
         password = "$relPassword"
       }
     }
 
-    if (!project.version.endsWith('-SNAPSHOT')) {
+    if (!project.version.toString().endsWith('-SNAPSHOT')) {
       maven {
         name 'bintray'
         url "https://api.bintray.com/maven/swaggerspringmvc/swaggerspringmvc/${project.name}"
@@ -76,7 +76,7 @@ ext {
     }
   }
 
-  //Gradle's maven-publish plugin does not yet handles pom generation correctly. Fix expected in 2.1
+  //Gradle's maven-publish plugin does not yet handle pom generation correctly. Fix expected in 2.1
   mangodocsPomConfig = {
     def root = asNode()
     def dependencies = root.dependencies
@@ -135,7 +135,7 @@ afterEvaluate { project ->
 }
 
 task ciPublish {
-  if (project.version.contains('SNAPSHOT')) {
+  if (project.version.toString().contains('SNAPSHOT')) {
     logger.quiet("Task :ciPublish configured to publish SNAPSHOT artifacts [${project.version}]")
     dependsOn publish
   } else {

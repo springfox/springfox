@@ -15,18 +15,21 @@ buildscript {
   }
 }
 
+def latestVersion = springdox.build.SemanticVersion.get(file('version.properties'))
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
-  projectVersion = '2.0.0-SNAPSHOT'
+
+  projectVersion = latestVersion.next()
   jdkVersion = 1.6
 }
 
+version = projectVersion
 configure(publishable(subprojects)) { subproject ->
   apply plugin: 'groovy'
   apply plugin: 'java'
   apply plugin: "com.ofg.uptodate"
   apply plugin: 'maven'
-//  apply plugin: 'idea'
+
   ext {
     jdkVersion = 1.6
   }
@@ -42,7 +45,9 @@ configure(publishable(subprojects)) { subproject ->
   }
 
   group = 'springdox'
-  version = projectVersion
+  version = latestVersion.next()
+
+
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
   jvmsrc {
@@ -83,8 +88,7 @@ configure(publishable(subprojects)) { subproject ->
 
 def publishable(subprojects) {
   subprojects.findAll {
-    it.name != 'swagger-contract-tests' &&
-    it.name != 'springdox-petstore'
+    !['swagger-contract-tests', 'springdox-petstore', 'buildSrc'].contains(it.name)
   }
 }
 
@@ -101,3 +105,7 @@ tciTrigger {
 }
 
 task wrapper(type: Wrapper) {}
+
+task release(type: springdox.build.ReleaseTask) {
+
+}
