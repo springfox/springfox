@@ -3,7 +3,7 @@
 
 | Unit  | Functional   | Coverage   |
 |---|---|---|
-|[![Build Status](https://travis-ci.org/springdox/springdox.svg?branch=master)](https://travis-ci.org/springdox/springdox)   |[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.svg?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo) |[![Coverage Status](https://coveralls.io/repos/martypitt/swagger-springmvc/badge.png?branch=master)](https://coveralls.io/r/martypitt/swagger-springmvc?branch=master) |
+|[![Build Status](https://travis-ci.org/springdox/springdox.svg?branch=master)](https://travis-ci.org/springdox/springdox)   |[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.svg?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo) |[![Coverage Status](https://coveralls.io/repos/springdox/springdox/badge.svg)](https://coveralls.io/r/springdox/springdox) |
 
 ### About
 
