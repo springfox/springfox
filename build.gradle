@@ -1,6 +1,5 @@
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
-import springdox.build.*
 
 buildscript {
   repositories {
@@ -107,6 +106,6 @@ tciTrigger {
 
 task wrapper(type: Wrapper) {}
 
-task release(type: springdox.build.ReleaseTask) {
+task release(type: ReleaseTask) {
 
 }
