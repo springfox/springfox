@@ -41,7 +41,7 @@ configure(publishable(subprojects)) { subproject ->
     compile.extendsFrom provided
   }
 
-  group = 'com.mangofactory.documentation'
+  group = 'springdox'
   version = projectVersion
 
   apply plugin: 'com.github.adrianbk.jvmsrc'

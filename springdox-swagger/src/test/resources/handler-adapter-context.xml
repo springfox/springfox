@@ -9,10 +9,10 @@
 
     <mvc:annotation-driven/>
     <!-- Standard spring component scanning -->
-    <context:component-scan base-package="com.mangofactory.documentation.spring.web.dummy"/>
+    <context:component-scan base-package="springdox.documentation.spring.web.dummy"/>
 
     <!-- A RequestMappingHandlerAdapter to simulate other libraries which may add to the spring context-->
-    <bean class="com.mangofactory.documentation.spring.web.dummy.DummyRequestMappingHandlerAdapter" autowire-candidate="true"/>
-    <bean class="com.mangofactory.documentation.swagger.configuration.MultipleRMHAConfig" />
+    <bean class="springdox.documentation.spring.web.dummy.DummyRequestMappingHandlerAdapter" autowire-candidate="true"/>
+    <bean class="springdox.documentation.swagger.configuration.MultipleRMHAConfig" />
 
 </beans>

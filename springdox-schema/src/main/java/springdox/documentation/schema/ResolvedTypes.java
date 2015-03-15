@@ -1,0 +1,33 @@
+package springdox.documentation.schema;
+
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.types.ResolvedArrayType;
+import com.fasterxml.classmate.types.ResolvedPrimitiveType;
+import springdox.documentation.service.AllowableValues;
+
+import java.lang.reflect.Type;
+
+import static springdox.documentation.schema.Types.*;
+
+public class ResolvedTypes {
+
+  private ResolvedTypes() {
+    throw new UnsupportedOperationException();
+  }
+
+  public static String simpleQualifiedTypeName(ResolvedType type) {
+    if (type instanceof ResolvedPrimitiveType) {
+      Type primitiveType = type.getErasedType();
+      return typeNameFor(primitiveType);
+    }
+    if (type instanceof ResolvedArrayType) {
+      return typeNameFor(type.getArrayElementType().getErasedType());
+    }
+
+    return type.getErasedType().getName();
+  }
+
+  public static AllowableValues allowableValues(ResolvedType resolvedType) {
+    return Enums.allowableValues(resolvedType.getErasedType());
+  }
+}

@@ -34,7 +34,7 @@ __Maven__
 </repositories>
 
 <dependency>
-    <groupId>com.mangofactory</groupId>
+    <groupId>springdox</groupId>
     <artifactId>swagger-springmvc</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -49,7 +49,7 @@ repositories {
     jcenter()
 }
 
-compile "com.mangofactory:swagger-springmvc:1.0.0"
+compile "springdox:swagger-springmvc:1.0.0"
 ```
 
 #### Snapshot version
@@ -65,7 +65,7 @@ __Maven__
 </repositories>
 
 <dependency>
-    <groupId>com.mangofactory</groupId>
+    <groupId>springdox</groupId>
     <artifactId>swagger-springmvc</artifactId>
     <version>2.0.0-SNAPSHOT</version>
 </dependency>
@@ -79,7 +79,7 @@ repositories {
    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
-compile "com.mangofactory:swagger-springmvc:2.0.0-SNAPSHOT"
+compile "springdox:swagger-springmvc:2.0.0-SNAPSHOT"
 ```
 
 ### Notable Dependencies
@@ -111,11 +111,11 @@ json Resource Listing is available at /api-docs
 
 
 #### Spring xml Configuration
-- To get the default implementation simply define a bean of type: `com.mangofactory.documentation.swagger.configuration.SpringSwaggerConfig`
+- To get the default implementation simply define a bean of type: `springdox.documentation.swagger.configuration.SpringSwaggerConfig`
 
 ```xml
 <mvc:annotation-driven/> <!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
-<bean class="com.mangofactory.documentation.swagger.configuration.SpringSwaggerConfig" />
+<bean class="springdox.documentation.swagger.configuration.SpringSwaggerConfig" />
 ```
 - The generated swagger
 json Resource Listing is available at /api-docs
@@ -412,7 +412,7 @@ To exclude controller method arguments form the generated swagger model JSON.
 ```java
 swaggerSpringMvcPlugin.ignoredParameterTypes(MyCustomType.class)
 ```
-By default, a number of Spring's handler method arguments are ignored. See: com.mangofactory.documentation.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
+By default, a number of Spring's handler method arguments are ignored. See: springdox.documentation.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
 
 
 ##Development

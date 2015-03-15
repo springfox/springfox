@@ -36,7 +36,7 @@ repositories {
 
 }
  
-compile(group: 'com.mangofactory', name: 'swagger-models', version: '0.7.80')
+compile(group: 'springdox', name: 'swagger-models', version: '0.7.80')
 
 ```
 
@@ -58,13 +58,13 @@ compile(group: 'com.mangofactory', name: 'swagger-models', version: '0.7.80')
 </distributionManagement>
 
 <dependency>
-    <groupId>com.mangofactory</groupId>
+    <groupId>springdox</groupId>
     <artifactId>swagger-models</artifactId>
     <version>version-RELEASE</version>
 </dependency>
 
 <dependency>
-    <groupId>com.mangofactory</groupId>
+    <groupId>springdox</groupId>
     <artifactId>swagger-models</artifactId>
     <version>version-SNAPSHOT</version>
 </dependency>
