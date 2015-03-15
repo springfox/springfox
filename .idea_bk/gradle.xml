@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../gradle-source-build" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/buildSrc" />
+            <option value="$PROJECT_DIR$/springdox-core" />
+            <option value="$PROJECT_DIR$/springdox-petstore" />
+            <option value="$PROJECT_DIR$/springdox-schema" />
+            <option value="$PROJECT_DIR$/springdox-spi" />
+            <option value="$PROJECT_DIR$/springdox-spring-web" />
+            <option value="$PROJECT_DIR$/springdox-swagger" />
+            <option value="$PROJECT_DIR$/springdox-swagger-common" />
+            <option value="$PROJECT_DIR$/springdox-swagger2" />
+            <option value="$PROJECT_DIR$/swagger-contract-tests" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

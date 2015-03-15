@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.ajar:swagger-spring-mvc-ui:0.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ajar/swagger-spring-mvc-ui/0.3/dfa6dc2c23a840d093e3528aa3166f683954590b/swagger-spring-mvc-ui-0.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ajar/swagger-spring-mvc-ui/0.3/34eada6eb48de5a088df14ce49ce09d53dac7a35/swagger-spring-mvc-ui-0.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

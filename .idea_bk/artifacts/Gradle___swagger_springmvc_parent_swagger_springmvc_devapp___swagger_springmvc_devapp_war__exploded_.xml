@@ -1,0 +1,83 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Gradle : swagger-springmvc-parent:swagger-springmvc-devapp : swagger-springmvc-devapp.war (exploded)">
+    <output-path>$PROJECT_DIR$/out/artifacts/swagger-springmvc-devapp/exploded/swagger-springmvc-devapp.war</output-path>
+    <properties id="gradle-properties">
+      <options external-project-path="$PROJECT_DIR$/swagger-springmvc-devapp" />
+    </properties>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="swagger-springmvc-devapp/web/Web Gradle : swagger-springmvc-devapp.war" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="swagger-springmvc-devapp" />
+          <element id="dir-copy" path="$PROJECT_DIR$/swagger-springmvc-devapp/build/resources/main" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="archive" name="com.mangofactory-swagger-springmvc-2.0.0-SNAPSHOT.jar">
+            <element id="module-output" name="swagger-springmvc" />
+            <element id="dir-copy" path="$PROJECT_DIR$/swagger-springmvc/build/resources/main" />
+          </element>
+          <element id="archive" name="com.mangofactory-swagger-models-2.0.0-SNAPSHOT.jar">
+            <element id="module-output" name="swagger-models" />
+            <element id="dir-copy" path="$PROJECT_DIR$/swagger-models/build/resources/main" />
+          </element>
+          <element id="library" level="project" name="Gradle: com.wordnik:swagger-core:1.5.0-SNAPSHOT" />
+          <element id="library" level="project" name="Gradle: com.wordnik:swagger-models:1.5.0-SNAPSHOT" />
+          <element id="library" level="project" name="Gradle: org.codehaus.groovy:groovy-all:2.3.7" />
+          <element id="library" level="project" name="Gradle: com.google.guava:guava:15.0" />
+          <element id="library" level="project" name="Gradle: com.fasterxml:classmate:1.1.0" />
+          <element id="library" level="project" name="Gradle: org.slf4j:slf4j-api:1.7.7" />
+          <element id="library" level="project" name="Gradle: org.scala-lang:scala-library:2.10.0" />
+          <element id="library" level="project" name="Gradle: commons-lang:commons-lang:2.4" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.module:jackson-module-swagger:0.5.1-SNAPSHOT" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.4.1" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-joda:2.4.1" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.4.1" />
+          <element id="library" level="project" name="Gradle: com.wordnik:swagger-annotations:1.5.0-SNAPSHOT" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.4.2" />
+          <element id="library" level="project" name="Gradle: joda-time:joda-time:2.2" />
+          <element id="library" level="project" name="Gradle: aopalliance:aopalliance:1.0" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.4.2" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-web:1.1.8.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-actuator:1.1.8.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter:1.1.8.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:1.1.8.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.hibernate:hibernate-validator:5.0.3.Final" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-core:4.0.7.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-web:4.0.7.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-webmvc:4.0.7.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-actuator:1.1.8.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot:1.1.8.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-autoconfigure:1.1.8.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-logging:1.1.8.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.yaml:snakeyaml:1.13" />
+          <element id="library" level="project" name="Gradle: org.apache.tomcat.embed:tomcat-embed-core:7.0.55" />
+          <element id="library" level="project" name="Gradle: org.apache.tomcat.embed:tomcat-embed-el:7.0.55" />
+          <element id="library" level="project" name="Gradle: org.apache.tomcat.embed:tomcat-embed-logging-juli:7.0.55" />
+          <element id="library" level="project" name="Gradle: javax.validation:validation-api:1.1.0.Final" />
+          <element id="library" level="project" name="Gradle: org.jboss.logging:jboss-logging:3.1.1.GA" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-aop:4.0.7.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-beans:4.0.7.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-context:4.0.7.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-expression:4.0.7.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.slf4j:jcl-over-slf4j:1.7.7" />
+          <element id="library" level="project" name="Gradle: org.slf4j:jul-to-slf4j:1.7.7" />
+          <element id="library" level="project" name="Gradle: org.slf4j:log4j-over-slf4j:1.7.7" />
+          <element id="library" level="project" name="Gradle: ch.qos.logback:logback-classic:1.1.2" />
+          <element id="library" level="project" name="Gradle: ch.qos.logback:logback-core:1.1.2" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-data-rest:1.1.8.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-tx:4.0.7.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.data:spring-data-rest-webmvc:2.1.4.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.data:spring-data-rest-core:2.1.4.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.hateoas:spring-hateoas:0.16.0.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.data:spring-data-commons:1.8.4.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.plugin:spring-plugin-core:1.1.0.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.atteo:evo-inflector:1.2" />
+          <element id="library" level="project" name="Gradle: org.objenesis:objenesis:2.1" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/swagger-springmvc-devapp/exploded/swagger-springmvc-devapp.war/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

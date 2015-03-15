@@ -1,4 +1,5 @@
 apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/idea.gradle"
 
 buildscript {
   repositories {
@@ -25,7 +26,7 @@ configure(publishable(subprojects)) { subproject ->
   apply plugin: 'java'
   apply plugin: "com.ofg.uptodate"
   apply plugin: 'maven'
-  apply plugin: 'idea'
+//  apply plugin: 'idea'
   ext {
     jdkVersion = 1.6
   }
