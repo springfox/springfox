@@ -15,7 +15,7 @@ buildscript {
   }
 }
 
-def latestVersion = springdox.build.SemanticVersion.get(file('version.properties'))
+def latestVersion = springdox.build.SemanticVersion.get(file("$rootDir/version.properties"))
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
 

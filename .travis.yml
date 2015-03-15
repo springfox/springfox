@@ -7,7 +7,7 @@ language: java
 install:
   - true
 script:
-- TERM=dumb ./gradlew clean check
+- TERM=dumb ./gradlew clean check --stacktrace
 
 jdk:
   - openjdk6
