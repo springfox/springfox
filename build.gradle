@@ -1,5 +1,6 @@
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
+import springdox.build.*
 
 buildscript {
   repositories {
@@ -15,7 +16,7 @@ buildscript {
   }
 }
 
-def latestVersion = springdox.build.SemanticVersion.get(file("$rootDir/version.properties"))
+def latestVersion = SemanticVersion.get(file("$rootDir/version.properties"))
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
 
