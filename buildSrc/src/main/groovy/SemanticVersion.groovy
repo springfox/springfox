@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 class SemanticVersion {
   int major, minor, patch
   boolean snapshot = true
