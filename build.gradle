@@ -1,5 +1,5 @@
-import springdox.build.ReleaseTask
-import springdox.build.SemanticVersion
+import springdox.gradlebuild.ReleaseTask
+import springdox.gradlebuild.SemanticVersion
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
