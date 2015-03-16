@@ -38,13 +38,13 @@ ext {
   pomMetaData = {
     resolveStrategy = Closure.DELEGATE_FIRST
     name "${project.name}"
-    url "https://github.com/martypitt/swagger-springmvc"
-    description "This project integrates swagger with the Spring Web MVC framework"
+    url "https://github.com/springdox/springdox"
+    description "JSON API documentation for spring based applications"
 
     scm {
-      url "scm:git:git@github.com:martypitt/swagger-springmvc.git"
-      connection 'scm:git:git@github.com:martypitt/swagger-springmvc.git'
-      developerConnection 'scm:git:git@github.com:martypitt/swagger-springmvc.git'
+      url "scm:git:git@github.com:springdox/springdox.git"
+      connection 'scm:git:git@github.com:springdox/springdox.git'
+      developerConnection 'scm:git:git@github.com:springdox/springdox.git'
     }
 
     licenses {

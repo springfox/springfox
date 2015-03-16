@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package springdox.gradlebuild
+package springdox.gradlebuild.version
+/**
+ * Used for testing release and publish stuff
+ */
+class DangerVersion extends VersionDecorator {
 
-class SnapshotVersion extends VersionDecorator {
-
-  SnapshotVersion(SoftwareVersion delegate) {
+  DangerVersion(SoftwareVersion delegate) {
     super(delegate)
   }
 
   @Override
   String asText() {
-    return super.asText() + '-SNAPSHOT'
+    return super.asText() + '-DANGEROUS'
   }
 }

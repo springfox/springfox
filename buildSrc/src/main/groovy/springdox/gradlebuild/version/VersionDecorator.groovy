@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package springdox.gradlebuild
+package springdox.gradlebuild.version
 
 abstract class VersionDecorator implements SoftwareVersion {
   protected SoftwareVersion delegate
@@ -36,5 +36,26 @@ abstract class VersionDecorator implements SoftwareVersion {
   @Override
   String asText() {
     return delegate.asText()
+  }
+
+  @Override
+  int getMajor() {
+    return delegate.major
+  }
+
+  @Override
+  int getMinor() {
+    return delegate.minor
+  }
+
+  @Override
+  int getPatch() {
+    return delegate.patch
+  }
+
+
+  @Override
+  public String toString() {
+    asText()
   }
 }

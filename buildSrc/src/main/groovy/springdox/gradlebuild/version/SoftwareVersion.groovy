@@ -13,8 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package springdox.gradlebuild
 
-enum ReleaseType {
-  MAJOR, MINOR, PATCH
+package springdox.gradlebuild.version
+
+interface SoftwareVersion {
+  void save(File propFile)
+
+  SoftwareVersion next(ReleaseType releaseType)
+
+  String asText()
+
+  int getMajor()
+
+  int getMinor()
+
+  int getPatch()
 }

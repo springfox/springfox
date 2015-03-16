@@ -13,13 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package springdox.gradlebuild.version
 
-package springdox.gradlebuild
-
-interface SoftwareVersion {
-  void save(File propFile)
-
-  SoftwareVersion next(ReleaseType releaseType)
-
-  String asText()
+enum ReleaseType {
+  MAJOR, MINOR, PATCH
 }

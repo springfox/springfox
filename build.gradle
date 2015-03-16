@@ -1,5 +1,9 @@
-import springdox.gradlebuild.ReleaseTask
-import springdox.gradlebuild.SemanticVersion
+import springdox.gradlebuild.tasks.CheckCleanWorkspaceTask
+import springdox.gradlebuild.tasks.GitTagTask
+import springdox.gradlebuild.tasks.PersistVersionTask
+import springdox.gradlebuild.tasks.ReleaseTask
+import springdox.gradlebuild.version.DangerVersion
+import springdox.gradlebuild.version.SemanticVersion
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
@@ -18,7 +22,8 @@ buildscript {
   }
 }
 
-def latestVersion = SemanticVersion.get(file("$rootDir/version.properties"))
+def latestVersion = new DangerVersion(SemanticVersion.get(file("$rootDir/version.properties")))
+
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
 
@@ -27,6 +32,8 @@ ext {
 }
 
 version = projectVersion
+
+
 configure(publishable(subprojects)) { subproject ->
   apply plugin: 'groovy'
   apply plugin: 'java'
@@ -47,10 +54,8 @@ configure(publishable(subprojects)) { subproject ->
     compile.extendsFrom provided
   }
 
-  group = 'springdox'
-  version = latestVersion.next()
-
-
+  group = 'com.github.springdox'
+  version = latestVersion
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
   jvmsrc {
@@ -109,6 +114,19 @@ tciTrigger {
 
 task wrapper(type: Wrapper) {}
 
-task release(type: ReleaseTask) {
-
+gradle.taskGraph.whenReady { graph ->
+  if (graph.hasTask(':release')) {
+    allprojects {
+      version = latestVersion.next(release.releaseType)
+    }
+  }
 }
+task release(type: ReleaseTask) {}
+task persistVersion(type: PersistVersionTask) {}
+task checkCleanWorkspace(type: CheckCleanWorkspaceTask)
+task gitTagTask(type: GitTagTask)
+
+release.dependsOn checkCleanWorkspace, persistVersion, gitTagTask
+
+//TODO - get the order right for all release related tasks
+gitTagTask.mustRunAfter persistVersion

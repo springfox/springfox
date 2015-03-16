@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package springdox.gradlebuild
+
+package springdox.gradlebuild.tasks
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.internal.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 
-// git status --porcelain
-class ReleaseTask extends DefaultTask {
-  @Option(option = 'releaseType', description = "Release type")
-  ReleaseType releaseType = ReleaseType.PATCH
+class CheckCleanWorkspaceTask extends DefaultTask {
 
   @TaskAction
-  void release() {
-    println "releasing ${releaseType} ${project.version}"
+  void check() {
+    def sout = new ByteArrayOutputStream()
+    project.exec {
+      commandLine "git", "status", "--porcelain"
+      standardOutput = sout
+    }
+    def gitStatus = sout.toString()
+    assert gitStatus == "": "Workspace is not clean ${gitStatus}"
   }
 }

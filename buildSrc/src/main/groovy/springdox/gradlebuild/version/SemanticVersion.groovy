@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package springdox.gradlebuild
+package springdox.gradlebuild.version
 
 class SemanticVersion implements SoftwareVersion {
   int major, minor, patch
@@ -34,9 +34,9 @@ class SemanticVersion implements SoftwareVersion {
 
   void save(File propFile) {
     def properties = new Properties()
-    properties.major = "${major}"
-    properties.minor = "${minor}"
-    properties.pathc = "${patch}"
+    properties.major = "${major}".toString()
+    properties.minor = "${minor}".toString()
+    properties.patch = "${patch}".toString()
     properties.store(propFile.newWriter(), null)
   }
 

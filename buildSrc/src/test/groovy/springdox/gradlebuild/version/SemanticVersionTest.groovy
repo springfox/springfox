@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package springdox.gradlebuild
+package springdox.gradlebuild.version
 
 import spock.lang.Specification
+import springdox.gradlebuild.DirectoryBacked
+import springdox.gradlebuild.version.ReleaseType
+import springdox.gradlebuild.version.SemanticVersion
 
-class SemanticVersionTest extends Specification {
+class SemanticVersionTest extends Specification implements DirectoryBacked {
 
   def "should calculate the next version number"() {
     def semVersion = new SemanticVersion(0, 0, 0)
@@ -34,8 +37,7 @@ class SemanticVersionTest extends Specification {
   }
 
   def "should load from a prop file"() {
-    File tempDir = new File('buildSrc/build/files')
-    tempDir.mkdirs()
+    File tempDir = directory(this)
     File propFile = new File("${tempDir.absolutePath}/p.properties")
     propFile.createNewFile()
     propFile << '''
