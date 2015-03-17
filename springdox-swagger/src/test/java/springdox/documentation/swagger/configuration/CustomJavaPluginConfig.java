@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springdox.documentation.builders.ApiInfoBuilder;
 import springdox.documentation.service.ApiInfo;
 import springdox.documentation.spi.DocumentationType;
-import springdox.documentation.spring.web.plugins.DocumentationConfigurer;
+import springdox.documentation.spring.web.plugins.Docket;
 import springdox.documentation.swagger.annotations.EnableSwagger;
 
 
@@ -23,15 +23,15 @@ public class CustomJavaPluginConfig {
    * swagger groups i.e. same code base multiple swagger resource listings
    */
   @Bean
-  public DocumentationConfigurer customImplementation() {
-    return new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+  public Docket customImplementation() {
+    return new Docket(DocumentationType.SWAGGER_12)
             .groupName("customPlugin")
             .includePatterns(".*pet.*");
   }
 
   @Bean
-  public DocumentationConfigurer secondCustomImplementation() {
-    return new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+  public Docket secondCustomImplementation() {
+    return new Docket(DocumentationType.SWAGGER_12)
             .groupName("secondCustomPlugin")
             .apiInfo(apiInfo())
             .includePatterns("/feature.*");

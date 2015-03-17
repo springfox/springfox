@@ -38,8 +38,8 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
 
   def "Custom plugins are sensitive to being enabled or disabled"() {
     given:
-      DocumentationConfigurer enabledPlugin = Mock(DocumentationConfigurer)
-      DocumentationConfigurer disabledPlugin = Mock(DocumentationConfigurer)
+      Docket enabledPlugin = Mock(Docket)
+      Docket disabledPlugin = Mock(Docket)
     and:
       enabledPlugin.documentationType >> DocumentationType.SWAGGER_12
       disabledPlugin.documentationType >> DocumentationType.SWAGGER_12

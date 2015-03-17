@@ -40,7 +40,7 @@ import static springdox.documentation.schema.AlternateTypeRules.*;
  * A builder which is intended to be the primary interface into the swagger-springmvc framework.
  * Provides sensible defaults and convenience methods for configuration.
  */
-public class DocumentationConfigurer implements DocumentationPlugin {
+public class Docket implements DocumentationPlugin {
 
   private static final String DEFAULT_GROUP_NAME = "default";
   private final DocumentationType documentationType;
@@ -66,7 +66,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
 
-  public DocumentationConfigurer(DocumentationType documentationType) {
+  public Docket(DocumentationType documentationType) {
     this.documentationType = documentationType;
   }
 
@@ -76,7 +76,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @param apiInfo Indicates the api information
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer apiInfo(ApiInfo apiInfo) {
+  public Docket apiInfo(ApiInfo apiInfo) {
     this.apiInfo = apiInfo;
     return this;
   }
@@ -89,7 +89,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @param authorizationTypes a list of global AuthorizationType's
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer authorizationTypes(List<AuthorizationType> authorizationTypes) {
+  public Docket authorizationTypes(List<AuthorizationType> authorizationTypes) {
     this.authorizationTypes = authorizationTypes;
     return this;
   }
@@ -100,7 +100,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @param authorizationContext
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer authorizationContext(AuthorizationContext authorizationContext) {
+  public Docket authorizationContext(AuthorizationContext authorizationContext) {
     this.authorizationContext = authorizationContext;
     return this;
   }
@@ -112,7 +112,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @param groupName - the unique identifier of this swagger group/configuration
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer groupName(String groupName) {
+  public Docket groupName(String groupName) {
     this.groupName = groupName;
     return this;
   }
@@ -127,7 +127,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @return this DocumentationConfigurer
    * @see springdox.documentation.spring.web.AbstractPathProvider
    */
-  public DocumentationConfigurer pathProvider(PathProvider pathProvider) {
+  public Docket pathProvider(PathProvider pathProvider) {
     this.pathProvider = pathProvider;
     return this;
   }
@@ -138,7 +138,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @param excludeAnnotations one or more java Annotation classes
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer excludeAnnotations(Class<? extends Annotation>... excludeAnnotations) {
+  public Docket excludeAnnotations(Class<? extends Annotation>... excludeAnnotations) {
     this.excludeAnnotations.addAll(asList(excludeAnnotations));
     return this;
   }
@@ -159,7 +159,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @param includePatterns - the regular expressions to determine which Spring RequestMappings to include.
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer includePatterns(String... includePatterns) {
+  public Docket includePatterns(String... includePatterns) {
     this.includePatterns = asList(includePatterns);
     return this;
   }
@@ -178,7 +178,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @see com.wordnik.swagger.annotations.ApiResponses
    * @see springdox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
    */
-  public DocumentationConfigurer globalResponseMessage(RequestMethod requestMethod,
+  public Docket globalResponseMessage(RequestMethod requestMethod,
                                                        List<ResponseMessage> responseMessages) {
 
     this.responseMessages.put(requestMethod, responseMessages);
@@ -194,22 +194,22 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @return this DocumentationConfigurer
    * @see springdox.documentation.spi.service.contexts.Defaults#defaultIgnorableParameterTypes()
    */
-  public DocumentationConfigurer ignoredParameterTypes(Class... classes) {
+  public Docket ignoredParameterTypes(Class... classes) {
     this.ignorableParameterTypes.addAll(Arrays.asList(classes));
     return this;
   }
 
-  public DocumentationConfigurer produces(Set<String> produces) {
+  public Docket produces(Set<String> produces) {
     this.produces.addAll(produces);
     return this;
   }
   
-  public DocumentationConfigurer consumes(Set<String> consumes) {
+  public Docket consumes(Set<String> consumes) {
     this.consumes.addAll(consumes);
     return this;
   }
   
-  public DocumentationConfigurer protocols(Set<String> protocols) {
+  public Docket protocols(Set<String> protocols) {
     this.protocols.addAll(protocols);
     return this;
   }
@@ -222,12 +222,12 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @see springdox.documentation.schema.AlternateTypeRules#newRule(java.lang.reflect.Type,
    * java.lang.reflect.Type)
    */
-  public DocumentationConfigurer alternateTypeRules(AlternateTypeRule... alternateTypeRules) {
+  public Docket alternateTypeRules(AlternateTypeRule... alternateTypeRules) {
     this.ruleBuilders.addAll(from(newArrayList(alternateTypeRules)).transform(identityRuleBuilder()).toList());
     return this;
   }
 
-  public DocumentationConfigurer operationOrdering(Ordering<Operation> operationOrdering) {
+  public Docket operationOrdering(Ordering<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;
     return this;
   }
@@ -260,7 +260,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @param with  the class which substitutes 'clazz'
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer directModelSubstitute(final Class clazz, final Class with) {
+  public Docket directModelSubstitute(final Class clazz, final Class with) {
     this.ruleBuilders.add(newSubstitutionFunction(clazz, with));
     return this;
   }
@@ -274,7 +274,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @param genericClasses - generic classes on which to apply generic model substitution.
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer genericModelSubstitutes(Class... genericClasses) {
+  public Docket genericModelSubstitutes(Class... genericClasses) {
     for (Class clz : genericClasses) {
       this.ruleBuilders.add(newGenericSubstitutionFunction(clz));
     }
@@ -289,7 +289,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    *              false  - the default response messages are added to the global response messages
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer useDefaultResponseMessages(boolean apply) {
+  public Docket useDefaultResponseMessages(boolean apply) {
     this.applyDefaultResponseMessages = apply;
     return this;
   }
@@ -302,7 +302,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @param apiListingReferenceOrdering
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer apiListingReferenceOrdering(Ordering<ApiListingReference>
+  public Docket apiListingReferenceOrdering(Ordering<ApiListingReference>
                                                                      apiListingReferenceOrdering) {
     this.apiListingReferenceOrdering = apiListingReferenceOrdering;
     return this;
@@ -316,7 +316,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @return this DocumentationConfigurer
    * @see springdox.documentation.spring.web.scanners.ApiListingScanner
    */
-  public DocumentationConfigurer apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
+  public Docket apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
     this.apiDescriptionOrdering = apiDescriptionOrdering;
     return this;
   }
@@ -333,7 +333,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    *                                     .AntRequestMappingPatternMatcher}
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer requestMappingPatternMatcher(RequestMappingPatternMatcher
+  public Docket requestMappingPatternMatcher(RequestMappingPatternMatcher
                                                                       requestMappingPatternMatcher) {
     this.requestMappingPatternMatcher = requestMappingPatternMatcher;
     return this;
@@ -346,7 +346,7 @@ public class DocumentationConfigurer implements DocumentationPlugin {
    * @param externallyConfiguredFlag - true to turn it on, false to turn it off
    * @return this DocumentationConfigurer
    */
-  public DocumentationConfigurer enable(boolean externallyConfiguredFlag) {
+  public Docket enable(boolean externallyConfiguredFlag) {
     this.enabled = externallyConfiguredFlag;
     return this;
   }

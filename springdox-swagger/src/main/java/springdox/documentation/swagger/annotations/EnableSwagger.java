@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  *
  * Loads all required beans defined in @see SpringSwaggerConfig
  *
- * @see springdox.documentation.spring.web.plugins.DocumentationConfigurer
+ * @see springdox.documentation.spring.web.plugins.Docket
  */
 @Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target(value = {java.lang.annotation.ElementType.TYPE})

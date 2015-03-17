@@ -20,7 +20,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import springdox.documentation.service.AuthorizationType
 import springdox.documentation.spi.DocumentationType
-import springdox.documentation.spring.web.plugins.DocumentationConfigurer
+import springdox.documentation.spring.web.plugins.Docket
 import springdox.documentation.swagger2.annotations.EnableSwagger2
 
 import static groovyx.net.http.ContentType.*
@@ -80,8 +80,8 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
   @Import(AuthorizationSupport)
   static class Config {
     @Bean
-    public DocumentationConfigurer petstore(List<AuthorizationType> authorizationTypes) {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+    public Docket petstore(List<AuthorizationType> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
               .groupName("petstore")
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
@@ -90,8 +90,8 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     }
 
     @Bean
-    public DocumentationConfigurer business(List<AuthorizationType> authorizationTypes) {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+    public Docket business(List<AuthorizationType> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
               .groupName("businessService")
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
@@ -100,8 +100,8 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     }
 
     @Bean
-    public DocumentationConfigurer concrete(List<AuthorizationType> authorizationTypes) {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+    public Docket concrete(List<AuthorizationType> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
               .groupName("concrete")
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
@@ -110,8 +110,8 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     }
 
     @Bean
-    public DocumentationConfigurer noRequestMapping(List<AuthorizationType> authorizationTypes) {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+    public Docket noRequestMapping(List<AuthorizationType> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
               .groupName("noRequestMapping")
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
@@ -120,8 +120,8 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     }
 
     @Bean
-    public DocumentationConfigurer fancyPetstore(List<AuthorizationType> authorizationTypes) {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+    public Docket fancyPetstore(List<AuthorizationType> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
               .groupName("fancyPetstore")
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
@@ -130,8 +130,8 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     }
 
     @Bean
-    public DocumentationConfigurer featureService(List<AuthorizationType> authorizationTypes) {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+    public Docket featureService(List<AuthorizationType> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
               .groupName("featureService")
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
@@ -140,8 +140,8 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     }
 
     @Bean
-    public DocumentationConfigurer inheritedService(List<AuthorizationType> authorizationTypes) {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+    public Docket inheritedService(List<AuthorizationType> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
               .groupName("inheritedService")
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
@@ -150,8 +150,8 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     }
 
     @Bean
-    public DocumentationConfigurer pet(List<AuthorizationType> authorizationTypes) {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+    public Docket pet(List<AuthorizationType> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
               .groupName("petService")
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
@@ -160,8 +160,8 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     }
 
     @Bean
-    public DocumentationConfigurer petGrooming(List<AuthorizationType> authorizationTypes) {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+    public Docket petGrooming(List<AuthorizationType> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
               .groupName("petGroomingService")
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
@@ -170,8 +170,8 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
     }
 
     @Bean
-    public DocumentationConfigurer root(List<AuthorizationType> authorizationTypes) {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_2)
+    public Docket root(List<AuthorizationType> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
               .groupName("root")
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)

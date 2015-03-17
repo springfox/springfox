@@ -75,7 +75,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
 
   def "Swagger global response messages should not be used for a particular RequestMethod"() {
     when:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
               .useDefaultResponseMessages(false)
               .configure(contextBuilder)
@@ -92,7 +92,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
 
   def "Swagger ignorableParameterTypes should append to the default ignorableParameterTypes"() {
     when:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .ignoredParameterTypes(AbstractSingletonProxyFactoryBean.class, ProxyFactoryBean.class)
               .configure(contextBuilder)
     and:
@@ -108,7 +108,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
   def "Sets alternative AlternateTypeProvider with a rule"() {
     given:
       def rule = newMapRule(String, String)
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .alternateTypeRules(rule)
               .configure(contextBuilder)
     expect:
@@ -117,7 +117,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
 
   def "Model substitution registers new rules"() {
     when:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               ."${method}"(*args)
               .configure(contextBuilder)
     then:
@@ -132,7 +132,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
 
   def "should contain both default and custom exclude annotations"() {
     when:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .excludeAnnotations(ApiOperation.class, Api.class)
               .configure(contextBuilder)
 
@@ -147,7 +147,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
 
   def "should preserve default exclude annotations"() {
     when:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .excludeAnnotations(Api.class, ApiOperation.class)
               .configure(contextBuilder)
 
@@ -200,7 +200,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
   def "non nullable swaggerApiResourceListing properties"() {
 
     when:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .configure(contextBuilder)
 
     and:

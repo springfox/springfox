@@ -119,7 +119,7 @@ public class DocumentationPluginsManager {
   }
 
   private DocumentationPlugin defaultDocumentationPlugin() {
-    return new DocumentationConfigurer(DocumentationType.SWAGGER_12);
+    return new Docket(DocumentationType.SWAGGER_12);
   }
 
   public DocumentationContextBuilder createContextBuilder(DocumentationType documentationType,

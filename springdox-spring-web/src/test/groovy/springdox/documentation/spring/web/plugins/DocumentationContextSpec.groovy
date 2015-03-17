@@ -14,7 +14,7 @@ import static springdox.documentation.spi.service.contexts.Orderings.*
 
 public class DocumentationContextSpec extends Specification {
   DocumentationContextBuilder contextBuilder
-  DocumentationConfigurer plugin
+  Docket plugin
   ApiOperationReader operationReader
   private defaultConfiguration
 
@@ -24,7 +24,7 @@ public class DocumentationContextSpec extends Specification {
     contextBuilder = this.defaultConfiguration.create(DocumentationType.SWAGGER_12)
             .handlerMappings([])
             .operationOrdering(Ordering.from(nickNameComparator()))
-    plugin = new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+    plugin = new Docket(DocumentationType.SWAGGER_12)
     operationReader = Mock(ApiOperationReader)
   }
 

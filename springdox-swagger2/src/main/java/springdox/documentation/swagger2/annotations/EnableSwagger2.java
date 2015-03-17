@@ -1,6 +1,7 @@
 package springdox.documentation.swagger2.annotations;
 
 import org.springframework.context.annotation.Import;
+import springdox.documentation.spring.web.plugins.Docket;
 import springdox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration;
 
 import java.lang.annotation.Documented;
@@ -14,7 +15,7 @@ import java.lang.annotation.Target;
  *
  * Loads all required beans defined in @see SpringSwaggerConfig
  *
- * @see springdox.documentation.spring.web.plugins.DocumentationConfigurer
+ * @see Docket
  */
 @Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target(value = {java.lang.annotation.ElementType.TYPE})

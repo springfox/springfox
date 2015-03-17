@@ -17,7 +17,7 @@ import org.springframework.test.context.web.WebAppConfiguration
 import spock.lang.Specification
 import spock.lang.Unroll
 import springdox.documentation.spi.DocumentationType
-import springdox.documentation.spring.web.plugins.DocumentationConfigurer
+import springdox.documentation.spring.web.plugins.Docket
 import springdox.documentation.swagger.annotations.EnableSwagger
 
 import static groovyx.net.http.ContentType.*
@@ -100,8 +100,8 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
   ])
   static class Config {
     @Bean
-    public DocumentationConfigurer testCases() {
-      return new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+    public Docket testCases() {
+      return new Docket(DocumentationType.SWAGGER_12)
               .groupName("default")
               .includePatterns("^((?!/api).)*\$"); //Not beginning with /api
     }

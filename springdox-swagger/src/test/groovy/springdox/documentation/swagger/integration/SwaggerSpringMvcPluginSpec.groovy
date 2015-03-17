@@ -16,7 +16,7 @@ import springdox.documentation.spi.DocumentationType
 import springdox.documentation.spi.service.contexts.AuthorizationContext
 import springdox.documentation.spi.service.contexts.Defaults
 import springdox.documentation.spring.web.RelativePathProvider
-import springdox.documentation.spring.web.plugins.DocumentationConfigurer
+import springdox.documentation.spring.web.plugins.Docket
 import springdox.documentation.spring.web.plugins.DocumentationContextSpec
 import springdox.documentation.swagger.web.SwaggerDefaultConfiguration
 
@@ -68,7 +68,7 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
 
   def "Swagger global response messages should not be used for a particular RequestMethod"() {
     when:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
               .useDefaultResponseMessages(false)
               .configure(contextBuilder)
@@ -85,7 +85,7 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
 
   def "Swagger ignorableParameterTypes should append to the default ignorableParameterTypes"() {
     when:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .ignoredParameterTypes(AbstractSingletonProxyFactoryBean.class, ProxyFactoryBean.class)
               .configure(contextBuilder)
     and:
@@ -101,7 +101,7 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
   def "Sets alternative AlternateTypeProvider with a rule"() {
     given:
       def rule = newMapRule(String, String)
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .alternateTypeRules(rule)
               .configure(contextBuilder)
     expect:
@@ -114,7 +114,7 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
               .create(DocumentationType.SWAGGER_12)
 
     and:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               ."${method}"(*args)
               .configure(swaggerDefault)
     then:
@@ -129,7 +129,7 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
 
   def "should contain both default and custom exclude annotations"() {
     when:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .excludeAnnotations(ApiOperation.class, Api.class)
               .configure(contextBuilder)
 
@@ -144,7 +144,7 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
 
   def "should preserve default exclude annotations"() {
     when:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .excludeAnnotations(Api.class, ApiOperation.class)
               .configure(contextBuilder)
 
@@ -184,7 +184,7 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
   def "non nullable swaggerApiResourceListing properties"() {
 
     when:
-      new DocumentationConfigurer(DocumentationType.SWAGGER_12)
+      new Docket(DocumentationType.SWAGGER_12)
               .configure(contextBuilder)
 
     and:
