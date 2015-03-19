@@ -13,6 +13,7 @@ import springdox.documentation.spring.web.plugins.DocumentationContextSpec
 import springdox.documentation.swagger.web.AbsolutePathProvider
 
 import static com.google.common.collect.Maps.*
+import static springdox.documentation.builders.PathSelectors.regex
 
 @Mixin([RequestMappingSupport])
 class ApiDocumentationScannerSpec extends DocumentationContextSpec {
@@ -46,7 +47,9 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
     when:
       plugin
               .groupName("groupName")
-              .includePatterns(".*")
+              .select()
+                .paths(regex(".*"))
+                .build()
               .apiInfo(expected)
               .configure(contextBuilder)
       listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
@@ -69,7 +72,9 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
     when:
       plugin
               .groupName("groupName")
-              .includePatterns(".*")
+              .select()
+                .paths(regex(".*"))
+                .build()
               .authorizationTypes([apiKey])
               .configure(contextBuilder)
       listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
@@ -90,7 +95,9 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
       AbstractPathProvider pathProvider = new AbsolutePathProvider(servletContext())
       plugin
               .groupName("groupName")
-              .includePatterns(".*")
+              .select()
+                .paths(regex(".*"))
+                .build()
               .pathProvider(pathProvider)
               .configure(contextBuilder)
 
@@ -115,7 +122,9 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
       def ordering = new Defaults().apiListingReferenceOrdering()
       plugin
               .groupName("groupName")
-              .includePatterns(".*")
+              .select()
+                .paths(regex(".*"))
+                .build()
               .apiListingReferenceOrdering(ordering)
               .configure(contextBuilder)
 

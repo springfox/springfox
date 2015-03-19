@@ -1,6 +1,8 @@
 package springdox.documentation.spring.web.scanners;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -8,10 +10,11 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springdox.documentation.PathProvider;
-import springdox.documentation.RequestMappingEvaluator;
+import springdox.documentation.RequestHandler;
 import springdox.documentation.service.ApiListingReference;
 import springdox.documentation.service.ResourceGroup;
 import springdox.documentation.spi.service.ResourceGroupingStrategy;
+import springdox.documentation.spi.service.contexts.ApiSelector;
 import springdox.documentation.spi.service.contexts.DocumentationContext;
 import springdox.documentation.spi.service.contexts.RequestMappingContext;
 
@@ -36,32 +39,29 @@ public class ApiListingReferenceScanner {
     ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
             = ArrayListMultimap.create();
     Map<ResourceGroup, String> resourceGroupDescriptions = new HashMap<ResourceGroup, String>();
+    ApiSelector selector = context.getApiSelector();
     for (RequestMappingHandlerMapping requestMappingHandlerMapping : context.getHandlerMappings()) {
-      for (Entry<RequestMappingInfo, HandlerMethod> handlerMethodEntry :
-              requestMappingHandlerMapping.getHandlerMethods().entrySet()) {
-        RequestMappingInfo requestMappingInfo = handlerMethodEntry.getKey();
-        HandlerMethod handlerMethod = handlerMethodEntry.getValue();
-        RequestMappingEvaluator requestMappingEvaluator = context.getRequestMappingEvaluator();
+      for (RequestHandler handler : matchingHandlers(requestMappingHandlerMapping, selector)) {
+        RequestMappingInfo requestMappingInfo = handler.getRequestMapping();
+        HandlerMethod handlerMethod = handler.getHandlerMethod();
         ResourceGroupingStrategy resourceGroupingStrategy = context.getResourceGroupingStrategy();
-        if (requestMappingEvaluator.shouldIncludeRequestMapping(requestMappingInfo, handlerMethod)) {
-          Set<ResourceGroup> resourceGroups 
+        Set<ResourceGroup> resourceGroups
                   = resourceGroupingStrategy.getResourceGroups(requestMappingInfo, handlerMethod);
-          String handlerMethodName = handlerMethod.getMethod().getName();
+        String handlerMethodName = handlerMethod.getMethod().getName();
 
-          String resourceDescription 
+        String resourceDescription
                   = resourceGroupingStrategy.getResourceDescription(requestMappingInfo, handlerMethod);
-          RequestMappingContext requestMappingContext 
+        RequestMappingContext requestMappingContext
                   = new RequestMappingContext(context, requestMappingInfo, handlerMethod);
 
-          LOG.info("Request mapping: {} belongs to groups: [{}] ", handlerMethodName, resourceGroups);
-          for (ResourceGroup group : resourceGroups) {
+        LOG.info("Request mapping: {} belongs to groups: [{}] ", handlerMethodName, resourceGroups);
+        for (ResourceGroup group : resourceGroups) {
             resourceGroupDescriptions.put(group, resourceDescription);
 
             LOG.info("Adding resource to group:{} with description:{} for handler method:{}",
                     group, resourceDescription, handlerMethodName);
 
             resourceGroupRequestMappings.put(group, requestMappingContext);
-          }
         }
       }
     }
@@ -78,5 +78,24 @@ public class ApiListingReferenceScanner {
     }
     List<ApiListingReference> sorted = context.getListingReferenceOrdering().sortedCopy(apiListingReferences);
     return new ApiListingReferenceScanResult(sorted,  asMap(resourceGroupRequestMappings));
+  }
+
+  private Set<RequestHandler> matchingHandlers(
+      RequestMappingHandlerMapping requestMappingHandlerMapping,
+      ApiSelector selector) {
+    return FluentIterable
+        .from(requestMappingHandlerMapping.getHandlerMethods().entrySet())
+            .transform(toRequestHandler())
+            .filter(selector.getRequestHandlerSelector())
+            .toSet();
+  }
+
+  private Function<Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
+    return new Function<Entry<RequestMappingInfo, HandlerMethod>, RequestHandler>() {
+      @Override
+      public RequestHandler apply(Entry<RequestMappingInfo, HandlerMethod> input) {
+        return new RequestHandler(input.getKey(), input.getValue());
+      }
+    };
   }
 }

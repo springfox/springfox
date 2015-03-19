@@ -1,24 +1,18 @@
 package springdox.documentation.spring.web.scanners
-
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
-import springdox.documentation.RequestMappingPatternMatcher
 import springdox.documentation.schema.mixins.SchemaPluginsSupport
 import springdox.documentation.service.ApiListing
 import springdox.documentation.service.ResourceGroup
 import springdox.documentation.spi.service.contexts.AuthorizationContext
 import springdox.documentation.spi.service.contexts.RequestMappingContext
 import springdox.documentation.spring.web.dummy.DummyClass
-import springdox.documentation.spring.web.mixins.ApiDescriptionSupport
-import springdox.documentation.spring.web.mixins.AuthSupport
-import springdox.documentation.spring.web.mixins.ModelProviderForServiceSupport
-import springdox.documentation.spring.web.mixins.RequestMappingSupport
-import springdox.documentation.spring.web.mixins.ServicePluginsSupport
+import springdox.documentation.spring.web.mixins.*
 import springdox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import static com.google.common.collect.Maps.*
-import static com.google.common.collect.Sets.*
 import static org.springframework.http.MediaType.*
+import static springdox.documentation.builders.PathSelectors.*
 import static springdox.documentation.spring.web.scanners.ApiListingScanner.*
 
 @Mixin([RequestMappingSupport, AuthSupport, ModelProviderForServiceSupport,
@@ -32,8 +26,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
   def setup() {
     AuthorizationContext authorizationContext = AuthorizationContext.builder()
             .withAuthorizations(defaultAuth())
-            .withIncludePatterns(newHashSet('/anyPath.*'))
-            .withRequestMappingPatternMatcher(Mock(RequestMappingPatternMatcher))
+            .forPaths(regex('/anyPath.*'))
             .build()
 
     plugin

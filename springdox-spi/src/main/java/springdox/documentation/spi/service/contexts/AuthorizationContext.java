@@ -1,16 +1,14 @@
 package springdox.documentation.spi.service.contexts;
 
-import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import org.springframework.util.CollectionUtils;
-import springdox.documentation.RequestMappingPatternMatcher;
 import springdox.documentation.service.Authorization;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
 
 /**
  * A class to represent a default set of authorizations to apply to each api operation
@@ -20,19 +18,16 @@ import static com.google.common.collect.Sets.*;
 public class AuthorizationContext {
 
   private final List<Authorization> authorizations;
-  private final RequestMappingPatternMatcher requestMappingPatternMatcher;
-  private final Set<String> includePatterns;
+  private final Predicate<String> selector;
 
-  public AuthorizationContext(List<Authorization> authorizations, RequestMappingPatternMatcher
-          requestMappingPatternMatcher, Set<String> includePatterns) {
+  public AuthorizationContext(List<Authorization> authorizations, Predicate<String> selector) {
 
     this.authorizations = authorizations;
-    this.requestMappingPatternMatcher = requestMappingPatternMatcher;
-    this.includePatterns = includePatterns;
+    this.selector = selector;
   }
 
   public List<Authorization> getAuthorizationsForPath(String path) {
-    if (requestMappingPatternMatcher.pathMatchesOneOfIncluded(path, includePatterns)) {
+    if (selector.apply(path)) {
       return authorizations;
     }
     return null;
@@ -53,33 +48,23 @@ public class AuthorizationContext {
   public static class AuthorizationContextBuilder {
 
     private List<Authorization> authorizations = newArrayList();
-    private RequestMappingPatternMatcher requestMappingPatternMatcher;
-    private Set<String> includePatterns = newHashSet(".*?");
+    private Predicate<String> pathSelector = Predicates.alwaysTrue();
 
     public AuthorizationContextBuilder withAuthorizations(List<Authorization> authorizations) {
       this.authorizations = authorizations;
       return this;
     }
 
-    public AuthorizationContextBuilder withRequestMappingPatternMatcher(RequestMappingPatternMatcher matcher) {
-      this.requestMappingPatternMatcher = matcher;
-      return this;
-    }
-
-    public AuthorizationContextBuilder withIncludePatterns(Set<String> includePatterns) {
-      this.includePatterns = includePatterns;
-      return this;
-    }
-
     public AuthorizationContext build() {
-      Preconditions.checkNotNull(requestMappingPatternMatcher, "requestMappingPatternMatcher");
-      if (includePatterns == null) {
-        includePatterns = newHashSet();
-      }
       if (authorizations == null) {
         authorizations = newArrayList();
       }
-      return new AuthorizationContext(authorizations, requestMappingPatternMatcher, includePatterns);
+      return new AuthorizationContext(authorizations, pathSelector);
+    }
+
+    public AuthorizationContextBuilder forPaths(Predicate<String> selector) {
+      this.pathSelector = selector;
+      return this;
     }
   }
 }

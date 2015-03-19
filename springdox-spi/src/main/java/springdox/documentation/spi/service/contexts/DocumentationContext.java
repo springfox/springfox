@@ -5,7 +5,6 @@ import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springdox.documentation.PathProvider;
-import springdox.documentation.RequestMappingEvaluator;
 import springdox.documentation.schema.AlternateTypeRule;
 import springdox.documentation.service.ApiDescription;
 import springdox.documentation.service.ApiInfo;
@@ -26,7 +25,7 @@ public class DocumentationContext {
   private final List<RequestMappingHandlerMapping> handlerMappings;
   private final ApiInfo apiInfo;
   private final String groupName;
-  private final RequestMappingEvaluator requestMappingEvaluator;
+  private final ApiSelector apiSelector;
   private final AlternateTypeProvider alternateTypeProvider;
   private final Set<Class> ignorableParameterTypes;
   private final Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
@@ -44,7 +43,7 @@ public class DocumentationContext {
   public DocumentationContext(DocumentationType documentationType,
                               List<RequestMappingHandlerMapping> handlerMappings,
                               ApiInfo apiInfo, String groupName,
-                              RequestMappingEvaluator requestMappingEvaluator,
+                              ApiSelector apiSelector,
                               Set<Class> ignorableParameterTypes,
                               Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
                               ResourceGroupingStrategy resourceGroupingStrategy,
@@ -63,7 +62,7 @@ public class DocumentationContext {
     this.handlerMappings = handlerMappings;
     this.apiInfo = apiInfo;
     this.groupName = groupName;
-    this.requestMappingEvaluator = requestMappingEvaluator;
+    this.apiSelector = apiSelector;
     this.ignorableParameterTypes = ignorableParameterTypes;
     this.globalResponseMessages = globalResponseMessages;
     this.resourceGroupingStrategy = resourceGroupingStrategy;
@@ -95,8 +94,8 @@ public class DocumentationContext {
     return groupName;
   }
 
-  public RequestMappingEvaluator getRequestMappingEvaluator() {
-    return requestMappingEvaluator;
+  public ApiSelector getApiSelector() {
+    return apiSelector;
   }
 
   public ImmutableSet<Class> getIgnorableParameterTypes() {

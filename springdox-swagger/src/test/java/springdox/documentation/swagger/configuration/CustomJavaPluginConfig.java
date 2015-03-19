@@ -11,6 +11,8 @@ import springdox.documentation.spi.DocumentationType;
 import springdox.documentation.spring.web.plugins.Docket;
 import springdox.documentation.swagger.annotations.EnableSwagger;
 
+import static springdox.documentation.builders.PathSelectors.regex;
+
 
 @Configuration
 @EnableWebMvc
@@ -26,7 +28,9 @@ public class CustomJavaPluginConfig {
   public Docket customImplementation() {
     return new Docket(DocumentationType.SWAGGER_12)
             .groupName("customPlugin")
-            .includePatterns(".*pet.*");
+            .select()
+              .paths(regex(".*pet.*"))
+              .build();
   }
 
   @Bean
@@ -34,7 +38,9 @@ public class CustomJavaPluginConfig {
     return new Docket(DocumentationType.SWAGGER_12)
             .groupName("secondCustomPlugin")
             .apiInfo(apiInfo())
-            .includePatterns("/feature.*");
+            .select()
+              .paths(regex("/feature.*"))
+              .build();
   }
 
   @Bean

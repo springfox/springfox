@@ -17,6 +17,10 @@ import springdox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 
 import javax.servlet.ServletContext
 
+import static com.google.common.base.Predicates.*
+import static springdox.documentation.builders.PathSelectors.*
+import static springdox.documentation.builders.RequestHandlerSelectors.*
+
 @Mixin([AccessorAssertions, RequestMappingSupport])
 class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
@@ -30,9 +34,10 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     plugin
             .pathProvider(new AbsolutePathProvider(servletContext()))
             .groupName("groupName")
-            .excludeAnnotations(ApiIgnore)
-            .requestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
-            .includePatterns(".*?")
+            .select()
+              .apis(not(withClassAnnotation(ApiIgnore)))
+              .paths(regex(".*?"))
+              .build()
   }
 
   def "should not get expected exceptions with invalid constructor params"() {

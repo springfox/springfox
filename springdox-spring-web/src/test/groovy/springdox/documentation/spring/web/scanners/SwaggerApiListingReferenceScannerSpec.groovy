@@ -15,6 +15,10 @@ import springdox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import javax.servlet.ServletContext
 
+import static com.google.common.base.Predicates.*
+import static springdox.documentation.builders.PathSelectors.regex
+import static springdox.documentation.builders.RequestHandlerSelectors.*
+
 @Mixin([AccessorAssertions, RequestMappingSupport])
 class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
@@ -28,9 +32,10 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
     plugin
             .pathProvider(new RelativePathProvider(servletContext()))
             .groupName("groupName")
-            .excludeAnnotations(ApiIgnore)
-            .requestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
-            .includePatterns(".*?")
+            .select()
+              .apis((not(withClassAnnotation(ApiIgnore))))
+              .paths(regex(".*?"))
+              .build()
   }
 
   def "should not get expected exceptions with invalid constructor params"() {

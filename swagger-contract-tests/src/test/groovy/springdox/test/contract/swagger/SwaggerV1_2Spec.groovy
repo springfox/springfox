@@ -1,5 +1,4 @@
 package springdox.test.contract.swagger
-
 import groovy.json.JsonOutput
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
@@ -22,6 +21,7 @@ import springdox.documentation.swagger.annotations.EnableSwagger
 
 import static groovyx.net.http.ContentType.*
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
+import static springdox.documentation.builders.PathSelectors.*
 
 @ContextConfiguration(
         loader = SpringApplicationContextLoader,
@@ -49,7 +49,6 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
       String raw = response.data.text
       String actual = JsonOutput.prettyPrint(raw)
       response.status == 200
-//      println(actual)
 
       JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
   }
@@ -103,7 +102,9 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
     public Docket testCases() {
       return new Docket(DocumentationType.SWAGGER_12)
               .groupName("default")
-              .includePatterns("^((?!/api).)*\$"); //Not beginning with /api
+              .select()
+                .paths(regex("^((?!/api).)*\$")) //Not beginning with /api
+                .build()
     }
   }
 }

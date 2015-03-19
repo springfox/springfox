@@ -1,14 +1,10 @@
 package springdox.documentation.spring.web.plugins
-
 import com.google.common.collect.Ordering
-import com.wordnik.swagger.annotations.Api
-import com.wordnik.swagger.annotations.ApiOperation
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.http.ResponseEntity
-import springdox.documentation.RequestMappingPatternMatcher
-import springdox.documentation.annotations.ApiIgnore
+import springdox.documentation.builders.PathSelectors
 import springdox.documentation.service.ApiDescription
 import springdox.documentation.service.ApiInfo
 import springdox.documentation.service.AuthorizationType
@@ -130,37 +126,41 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
   }
 
 
-  def "should contain both default and custom exclude annotations"() {
-    when:
-      new Docket(DocumentationType.SWAGGER_12)
-              .excludeAnnotations(ApiOperation.class, Api.class)
-              .configure(contextBuilder)
+  //TODO: these should be predicate tests for withClass/withMethod annotation
+//  def "should contain both default and custom exclude annotations"() {
+//    when:
+//      def docket = new Docket(DocumentationType.SWAGGER_12)
+//              .selector()
+//                  .apis(or(withMethodAnnoation(ApiOperation.class),
+//                      withClassAnnotation(Api.class)))
+//                  .build()
+//              .configure(contextBuilder)
+//
+//    and:
+//      def api
+//    then:
+//      pluginContext.apiSelector.excludeAnnotations.containsAll([
+//              ApiOperation.class,
+//              Api.class
+//      ])
+//  }
 
-    and:
-      def pluginContext = contextBuilder.build()
-    then:
-      pluginContext.requestMappingEvaluator.excludeAnnotations.containsAll([
-              ApiOperation.class,
-              Api.class
-      ])
-  }
-
-  def "should preserve default exclude annotations"() {
-    when:
-      new Docket(DocumentationType.SWAGGER_12)
-              .excludeAnnotations(Api.class, ApiOperation.class)
-              .configure(contextBuilder)
-
-    and:
-      def pluginContext = contextBuilder.build()
-    then:
-      pluginContext.requestMappingEvaluator.excludeAnnotations.containsAll([
-              Api.class,
-              ApiOperation.class,
-              ApiIgnore.class
-      ])
-
-  }
+//  def "should preserve default exclude annotations"() {
+//    when:
+//      new Docket(DocumentationType.SWAGGER_12)
+//              .excludeAnnotations(Api.class, ApiOperation.class)
+//              .configure(contextBuilder)
+//
+//    and:
+//      def pluginContext = contextBuilder.build()
+//    then:
+//      pluginContext.apiSelector.excludeAnnotations.containsAll([
+//              Api.class,
+//              ApiOperation.class,
+//              ApiIgnore.class
+//      ])
+//
+//  }
 
   def "Basic property checks"() {
     when:
@@ -193,7 +193,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
 
   private AuthorizationContext validContext() {
     new AuthorizationContext.AuthorizationContextBuilder()
-            .withRequestMappingPatternMatcher(Mock(RequestMappingPatternMatcher))
+            .forPaths(PathSelectors.any())
             .build()
   }
 
@@ -209,7 +209,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
       "default" == pluginContext.groupName
       null != pluginContext.pathProvider
       null != pluginContext.apiInfo
-      null != pluginContext.requestMappingEvaluator
+      null != pluginContext.apiSelector
       null != pluginContext.globalResponseMessages
       null != pluginContext.ignorableParameterTypes
       null != pluginContext.listingReferenceOrdering

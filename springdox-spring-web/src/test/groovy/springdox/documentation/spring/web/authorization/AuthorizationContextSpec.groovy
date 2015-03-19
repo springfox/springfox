@@ -1,7 +1,6 @@
 package springdox.documentation.spring.web.authorization
-
 import spock.lang.Specification
-import springdox.documentation.RequestMappingPatternMatcher
+import springdox.documentation.builders.PathSelectors
 import springdox.documentation.spi.service.contexts.AuthorizationContext
 import springdox.documentation.spring.web.mixins.AuthSupport
 
@@ -12,7 +11,7 @@ class AuthorizationContextSpec extends Specification {
     given:
       AuthorizationContext authorizationContext = AuthorizationContext.builder()
               .withAuthorizations(auth)
-              .withRequestMappingPatternMatcher(Mock(RequestMappingPatternMatcher))
+              .forPaths(PathSelectors.any())
               .build()
       authorizationContext.scalaAuthorizations
     expect:

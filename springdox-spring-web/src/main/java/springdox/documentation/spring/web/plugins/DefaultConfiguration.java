@@ -3,11 +3,10 @@ package springdox.documentation.spring.web.plugins;
 import com.fasterxml.classmate.TypeResolver;
 import springdox.documentation.spi.DocumentationType;
 import springdox.documentation.spi.service.DefaultsProviderPlugin;
+import springdox.documentation.spi.service.contexts.ApiSelector;
 import springdox.documentation.spi.service.contexts.Defaults;
 import springdox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springdox.documentation.spring.web.RelativePathProvider;
-import springdox.documentation.spring.web.SpringRequestMappingEvaluator;
-import springdox.documentation.spring.web.scanners.RegexRequestMappingPatternMatcher;
 
 import javax.servlet.ServletContext;
 
@@ -33,13 +32,11 @@ public class DefaultConfiguration implements DefaultsProviderPlugin {
             .apiDescriptionOrdering(defaults.apiDescriptionOrdering())
             .apiListingReferenceOrdering(defaults.apiListingReferenceOrdering())
             .additionalIgnorableTypes(defaults.defaultIgnorableParameterTypes())
-            .additionalExcludedAnnotations(defaults.defaultExcludeAnnotations())
             .rules(defaults.defaultRules(typeResolver))
             .defaultResponseMessages(defaults.defaultResponseMessages())
             .pathProvider(new RelativePathProvider(servletContext))
-            .requestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
             .typeResolver(typeResolver)
-            .requestMappingEvaluator(new SpringRequestMappingEvaluator(new RegexRequestMappingPatternMatcher()));
+            .selector(ApiSelector.DEFAULT);
   }
 
   @Override

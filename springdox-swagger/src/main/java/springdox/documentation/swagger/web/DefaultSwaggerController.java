@@ -24,6 +24,7 @@ import springdox.documentation.swagger.mappers.ServiceModelToSwaggerMapper;
 import java.util.Map;
 
 @Controller
+@ApiIgnore
 public class DefaultSwaggerController {
 
 

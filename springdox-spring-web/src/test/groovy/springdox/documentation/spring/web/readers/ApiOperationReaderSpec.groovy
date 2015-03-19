@@ -1,8 +1,8 @@
 package springdox.documentation.spring.web.readers
-
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springdox.documentation.builders.OperationBuilder
+import springdox.documentation.builders.PathSelectors
 import springdox.documentation.service.Operation
 import springdox.documentation.spi.service.contexts.AuthorizationContext
 import springdox.documentation.spi.service.contexts.RequestMappingContext
@@ -13,9 +13,7 @@ import springdox.documentation.spring.web.plugins.DocumentationContextSpec
 import springdox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springdox.documentation.spring.web.readers.operation.ApiOperationReader
 import springdox.documentation.spring.web.readers.operation.DefaultOperationBuilder
-import springdox.documentation.spring.web.scanners.RegexRequestMappingPatternMatcher
 
-import static com.google.common.collect.Sets.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Mixin([RequestMappingSupport, AuthSupport, ServicePluginsSupport])
@@ -25,8 +23,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
   def setup() {
     AuthorizationContext authorizationContext = AuthorizationContext.builder()
             .withAuthorizations(defaultAuth())
-            .withRequestMappingPatternMatcher(new RegexRequestMappingPatternMatcher())
-            .withIncludePatterns(newHashSet(".*"))
+            .forPaths(PathSelectors.regex(".*"))
             .build()
     plugin.authorizationContext(authorizationContext)
     sut = new ApiOperationReader(customWebPlugins([],[],[new DefaultOperationBuilder()]))

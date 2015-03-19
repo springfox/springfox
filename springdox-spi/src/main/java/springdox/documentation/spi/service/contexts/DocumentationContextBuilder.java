@@ -6,8 +6,6 @@ import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springdox.documentation.PathProvider;
-import springdox.documentation.RequestMappingEvaluator;
-import springdox.documentation.RequestMappingPatternMatcher;
 import springdox.documentation.builders.BuilderDefaults;
 import springdox.documentation.schema.AlternateTypeRule;
 import springdox.documentation.service.ApiDescription;
@@ -20,7 +18,6 @@ import springdox.documentation.service.ResponseMessage;
 import springdox.documentation.spi.DocumentationType;
 import springdox.documentation.spi.service.ResourceGroupingStrategy;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +28,7 @@ import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static springdox.documentation.builders.PathSelectors.*;
 
 public class DocumentationContextBuilder {
 
@@ -45,15 +43,12 @@ public class DocumentationContextBuilder {
   private Ordering<ApiListingReference> listingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private DocumentationType documentationType;
-  private RequestMappingPatternMatcher requestMappingPatternMatcher;
   private Ordering<Operation> operationOrdering;
-  private RequestMappingEvaluator requestMappingEvaluator;
 
   private boolean applyDefaultResponseMessages;
+  private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private Set<Class> ignorableParameterTypes = newHashSet();
   private Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
-  private Set<Class<? extends Annotation>> excludeAnnotations = newHashSet();
-  private Set<String> includePatterns = newHashSet();
   private List<AlternateTypeRule> rules = newArrayList();
   private Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
   private Set<String> protocols = newHashSet();
@@ -123,11 +118,6 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder requestMappingEvaluator(RequestMappingEvaluator requestMappingEvaluator) {
-    this.requestMappingEvaluator = requestMappingEvaluator;
-    return this;
-  }
-
   private Map<RequestMethod, List<ResponseMessage>> aggregateResponseMessages() {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
     if (applyDefaultResponseMessages) {
@@ -135,27 +125,6 @@ public class DocumentationContextBuilder {
     }
     responseMessages.putAll(responseMessageOverrides);
     return responseMessages;
-  }
-
-  public DocumentationContextBuilder additionalExcludedAnnotations(
-          List<Class<? extends Annotation>> excludeAnnotations) {
-
-    this.excludeAnnotations.addAll(excludeAnnotations);
-    return this;
-  }
-
-  public DocumentationContextBuilder includePatterns(List<String> includePatterns) {
-    this.includePatterns.addAll(includePatterns);
-    return this;
-  }
-
-  public DocumentationContextBuilder requestMappingPatternMatcher(
-          RequestMappingPatternMatcher requestMappingPatternMatcher) {
-
-    this.requestMappingPatternMatcher = fromNullable(requestMappingPatternMatcher)
-            .or(fromNullable(this.requestMappingPatternMatcher)).orNull();
-
-    return this;
   }
 
   public DocumentationContextBuilder applyDefaultResponseMessages(boolean applyDefaultResponseMessages) {
@@ -204,18 +173,16 @@ public class DocumentationContextBuilder {
     this.protocols.addAll(protocols);
     return this;
   }
+
   public DocumentationContext build() {
-    requestMappingEvaluator.appendExcludeAnnotations(excludeAnnotations);
-    requestMappingEvaluator.appendIncludePatterns(includePatterns);
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
     AuthorizationContext authorizationContext = fromNullable(this.authorizationContext)
             .or(new AuthorizationContext.AuthorizationContextBuilder()
-                    .withAuthorizations(new ArrayList<Authorization>())
-                    .withIncludePatterns(includePatterns)
-                    .withRequestMappingPatternMatcher(requestMappingPatternMatcher)
-                    .build());
+                .withAuthorizations(new ArrayList<Authorization>())
+                .forPaths(any())
+                .build());
     return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName,
-            requestMappingEvaluator, ignorableParameterTypes, responseMessages,
+            apiSelector, ignorableParameterTypes, responseMessages,
             resourceGroupingStrategy, pathProvider,
             authorizationContext, authorizationTypes, rules,
             listingReferenceOrdering, apiDescriptionOrdering,
@@ -234,5 +201,8 @@ public class DocumentationContextBuilder {
     };
   }
 
-
+  public DocumentationContextBuilder selector(ApiSelector apiSelector) {
+    this.apiSelector = apiSelector;
+    return this;
+  }
 }

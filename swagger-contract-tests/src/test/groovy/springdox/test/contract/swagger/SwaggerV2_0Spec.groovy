@@ -24,6 +24,7 @@ import springdox.documentation.spring.web.plugins.Docket
 import springdox.documentation.swagger2.annotations.EnableSwagger2
 
 import static groovyx.net.http.ContentType.*
+import static springdox.documentation.builders.PathSelectors.regex
 
 @ContextConfiguration(loader = SpringApplicationContextLoader,
         classes = SwaggerV2_0Spec.Config)
@@ -86,7 +87,9 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
-              .includePatterns("/api/.*");
+              .select()
+                .paths(regex("/api/.*"))
+                .build()
     }
 
     @Bean
@@ -96,7 +99,9 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
-              .includePatterns("/business.*");
+              .select()
+                .paths(regex("/business.*"))
+                .build()
     }
 
     @Bean
@@ -106,7 +111,9 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
-              .includePatterns("/foo/.*");
+              .select()
+                .paths(regex("/foo/.*"))
+                .build()
     }
 
     @Bean
@@ -116,7 +123,9 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
-              .includePatterns("/no-request-mapping/.*");
+              .select()
+                .paths(regex("/no-request-mapping/.*"))
+                .build()
     }
 
     @Bean
@@ -126,7 +135,9 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
-              .includePatterns("/fancypets/.*");
+              .select()
+                .paths(regex("/fancypets/.*"))
+                .build()
     }
 
     @Bean
@@ -136,7 +147,9 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
-              .includePatterns("/features/.*");
+              .select()
+                .paths(regex("/features/.*"))
+                .build()
     }
 
     @Bean
@@ -146,7 +159,9 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
-              .includePatterns("/child/.*");
+              .select()
+                .paths(regex("/child/.*"))
+                .build()
     }
 
     @Bean
@@ -156,7 +171,9 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
-              .includePatterns("/pets/.*");
+              .select()
+                .paths(regex("/pets/.*"))
+                .build()
     }
 
     @Bean
@@ -166,7 +183,9 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
-              .includePatterns("/petgrooming/.*");
+              .select()
+                .paths(regex("/petgrooming/.*"))
+                .build()
     }
 
     @Bean
@@ -176,7 +195,9 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .useDefaultResponseMessages(false)
               .authorizationTypes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
-              .includePatterns("/.*");
+              .select()
+                .paths(regex("/.*"))
+                .build()
     }
   }
 }

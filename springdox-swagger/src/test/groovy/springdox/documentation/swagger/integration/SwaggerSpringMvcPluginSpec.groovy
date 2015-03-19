@@ -1,14 +1,9 @@
 package springdox.documentation.swagger.integration
-
 import com.fasterxml.classmate.TypeResolver
-import com.wordnik.swagger.annotations.Api
-import com.wordnik.swagger.annotations.ApiOperation
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.http.ResponseEntity
-import springdox.documentation.RequestMappingPatternMatcher
-import springdox.documentation.annotations.ApiIgnore
 import springdox.documentation.service.ApiInfo
 import springdox.documentation.service.AuthorizationType
 import springdox.documentation.service.ResponseMessage
@@ -126,38 +121,44 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
       'directModelSubstitute'   | [LocalDate.class, Date.class]      | 8
   }
 
-
-  def "should contain both default and custom exclude annotations"() {
-    when:
-      new Docket(DocumentationType.SWAGGER_12)
-              .excludeAnnotations(ApiOperation.class, Api.class)
-              .configure(contextBuilder)
-
-    and:
-      def pluginContext = contextBuilder.build()
-    then:
-      pluginContext.requestMappingEvaluator.excludeAnnotations.containsAll([
-              ApiOperation.class,
-              Api.class
-      ])
-  }
-
-  def "should preserve default exclude annotations"() {
-    when:
-      new Docket(DocumentationType.SWAGGER_12)
-              .excludeAnnotations(Api.class, ApiOperation.class)
-              .configure(contextBuilder)
-
-    and:
-      def pluginContext = contextBuilder.build()
-    then:
-      pluginContext.requestMappingEvaluator.excludeAnnotations.containsAll([
-              Api.class,
-              ApiOperation.class,
-              ApiIgnore.class
-      ])
-
-  }
+  //TODO: Make this part of the selector tests
+//  def "should contain both default and custom exclude annotations"() {
+//    when:
+//      new Docket(DocumentationType.SWAGGER_12)
+//              .select()
+//                .apis(and(not(withClassAnnotation(ApiOperation)),
+//                      not(withClassAnnotation(Api))))
+//                .build()
+//              .configure(contextBuilder)
+//
+//    and:
+//      def pluginContext = contextBuilder.build()
+//    then:
+//      pluginContext.apiSelector.excludeAnnotations.containsAll([
+//              ApiOperation.class,
+//              Api.class
+//      ])
+//  }
+//
+//  def "should preserve default exclude annotations"() {
+//    when:
+//      new Docket(DocumentationType.SWAGGER_12)
+//              .select()
+//                .apis(and(not(withClassAnnotation(ApiOperation)),
+//                  not(withClassAnnotation(Api))))
+//              .build()
+//              .configure(contextBuilder)
+//
+//    and:
+//      def pluginContext = contextBuilder.build()
+//    then:
+//      pluginContext.apiSelector.excludeAnnotations.containsAll([
+//              Api.class,
+//              ApiOperation.class,
+//              ApiIgnore.class
+//      ])
+//
+//  }
 
   def "Basic property checks"() {
     when:
@@ -176,9 +177,7 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
   }
 
   private AuthorizationContext validContext() {
-    new AuthorizationContext.AuthorizationContextBuilder()
-            .withRequestMappingPatternMatcher(Mock(RequestMappingPatternMatcher))
-            .build()
+    new AuthorizationContext.AuthorizationContextBuilder().build()
   }
 
   def "non nullable swaggerApiResourceListing properties"() {
@@ -193,7 +192,7 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
       "default" == pluginContext.groupName
       null != pluginContext.pathProvider
       null != pluginContext.apiInfo
-      null != pluginContext.requestMappingEvaluator
+      null != pluginContext.apiSelector
       null != pluginContext.globalResponseMessages
       null != pluginContext.ignorableParameterTypes
       null != pluginContext.listingReferenceOrdering

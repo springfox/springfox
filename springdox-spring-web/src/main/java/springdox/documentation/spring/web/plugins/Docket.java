@@ -5,7 +5,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springdox.documentation.PathProvider;
-import springdox.documentation.RequestMappingPatternMatcher;
 import springdox.documentation.schema.AlternateTypeRule;
 import springdox.documentation.schema.WildcardType;
 import springdox.documentation.service.ApiDescription;
@@ -16,12 +15,11 @@ import springdox.documentation.service.Operation;
 import springdox.documentation.service.ResponseMessage;
 import springdox.documentation.spi.DocumentationType;
 import springdox.documentation.spi.service.DocumentationPlugin;
+import springdox.documentation.spi.service.contexts.ApiSelector;
 import springdox.documentation.spi.service.contexts.AuthorizationContext;
 import springdox.documentation.spi.service.contexts.DocumentationContext;
 import springdox.documentation.spi.service.contexts.DocumentationContextBuilder;
-import springdox.documentation.spring.web.scanners.RegexRequestMappingPatternMatcher;
 
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +30,6 @@ import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
-import static java.util.Arrays.asList;
 import static org.springframework.util.StringUtils.*;
 import static springdox.documentation.schema.AlternateTypeRules.*;
 
@@ -48,7 +45,7 @@ public class Docket implements DocumentationPlugin {
   private ApiInfo apiInfo;
   private PathProvider pathProvider;
   private AuthorizationContext authorizationContext;
-  private List<AuthorizationType> authorizationTypes;
+  private List<AuthorizationType> authorizationMethods;
   private Ordering<ApiListingReference> apiListingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private Ordering<Operation> operationOrdering;
@@ -57,14 +54,12 @@ public class Docket implements DocumentationPlugin {
   private boolean enabled = true;
   private boolean applyDefaultResponseMessages = true;
   private Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
-  private RequestMappingPatternMatcher requestMappingPatternMatcher = new RegexRequestMappingPatternMatcher();
   private List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
-  private List<String> includePatterns = newArrayList(".*?");
-  private List<Class<? extends Annotation>> excludeAnnotations = newArrayList();
   private Set<Class> ignorableParameterTypes = newHashSet();
   private Set<String> protocols = newHashSet();
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
+  private ApiSelector apiSelector = ApiSelector.DEFAULT;
 
   public Docket(DocumentationType documentationType) {
     this.documentationType = documentationType;
@@ -90,7 +85,7 @@ public class Docket implements DocumentationPlugin {
    * @return this DocumentationConfigurer
    */
   public Docket authorizationTypes(List<AuthorizationType> authorizationTypes) {
-    this.authorizationTypes = authorizationTypes;
+    this.authorizationMethods = authorizationTypes;
     return this;
   }
 
@@ -119,7 +114,7 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Determines the generated, swagger specific, urls.
-   *
+   * <p/>
    * By default, relative urls are generated. If absolute urls are required, supply an implementation of
    * AbsoluteSwaggerPathProvider
    *
@@ -133,40 +128,8 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
-   * Spring controllers or request mappings with these annotations will be excluded from the generated swagger JSON.
-   *
-   * @param excludeAnnotations one or more java Annotation classes
-   * @return this DocumentationConfigurer
-   */
-  public Docket excludeAnnotations(Class<? extends Annotation>... excludeAnnotations) {
-    this.excludeAnnotations.addAll(asList(excludeAnnotations));
-    return this;
-  }
-
-  /**
-   * Controls which controllers, more specifically, which Spring RequestMappings to include in the swagger Resource
-   * Listing.
-   *
-   * Under the hood, <code>springdox.documentation.RequestMappingPatternMatcher</code>is used to match a
-   * given <code>org.springframework.web.servlet.mvc.condition.PatternsRequestCondition</code> against the
-   * includePatterns supplied here.
-   *
-   * <code>RegexRequestMappingPatternMatcher</code> is the default implementation and requires these includePatterns
-   * are  valid regular expressions.
-   *
-   * If not supplied a single pattern ".*?" is used which matches anything and hence all RequestMappings.
-   *
-   * @param includePatterns - the regular expressions to determine which Spring RequestMappings to include.
-   * @return this DocumentationConfigurer
-   */
-  public Docket includePatterns(String... includePatterns) {
-    this.includePatterns = asList(includePatterns);
-    return this;
-  }
-
-  /**
    * Overrides the default http response messages at the http request method level.
-   *
+   * <p/>
    * To set specific response messages for specific api operations use the swagger core annotations on
    * the appropriate controller methods.
    *
@@ -179,7 +142,7 @@ public class Docket implements DocumentationPlugin {
    * @see springdox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
    */
   public Docket globalResponseMessage(RequestMethod requestMethod,
-                                                       List<ResponseMessage> responseMessages) {
+                                      List<ResponseMessage> responseMessages) {
 
     this.responseMessages.put(requestMethod, responseMessages);
     return this;
@@ -203,17 +166,17 @@ public class Docket implements DocumentationPlugin {
     this.produces.addAll(produces);
     return this;
   }
-  
+
   public Docket consumes(Set<String> consumes) {
     this.consumes.addAll(consumes);
     return this;
   }
-  
+
   public Docket protocols(Set<String> protocols) {
     this.protocols.addAll(protocols);
     return this;
   }
-  
+
   /**
    * Adds model substitution rules (alternateTypeRules)
    *
@@ -303,7 +266,7 @@ public class Docket implements DocumentationPlugin {
    * @return this DocumentationConfigurer
    */
   public Docket apiListingReferenceOrdering(Ordering<ApiListingReference>
-                                                                     apiListingReferenceOrdering) {
+                                                apiListingReferenceOrdering) {
     this.apiListingReferenceOrdering = apiListingReferenceOrdering;
     return this;
   }
@@ -322,24 +285,6 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
-   * Hook for adding custom annotations readers. Useful when you want to add your own annotation to be mapped to swagger
-   * model.
-   *
-   * @param requestMappingPatternMatcher an implementation of {@link springdox.documentation.spring.web.scanners
-   *                                     .RequestMappingPatternMatcher}. Out of the box the library comes with
-   *                                     {@link springdox.documentation.spring.web.scanners
-   *                                     .RegexRequestMappingPatternMatcher} and
-   *                                     {@link springdox.documentation.spring.web.scanners
-   *                                     .AntRequestMappingPatternMatcher}
-   * @return this DocumentationConfigurer
-   */
-  public Docket requestMappingPatternMatcher(RequestMappingPatternMatcher
-                                                                      requestMappingPatternMatcher) {
-    this.requestMappingPatternMatcher = requestMappingPatternMatcher;
-    return this;
-  }
-
-  /**
    * Hook to externally control auto initialization of this swagger plugin instance.
    * Typically used if defer initialization.
    *
@@ -349,6 +294,10 @@ public class Docket implements DocumentationPlugin {
   public Docket enable(boolean externallyConfiguredFlag) {
     this.enabled = externallyConfiguredFlag;
     return this;
+  }
+
+  public ApiSelectorBuilder select() {
+    return new ApiSelectorBuilder(this);
   }
 
   /**
@@ -363,25 +312,23 @@ public class Docket implements DocumentationPlugin {
       configureDefaults();
     }
     return builder
-            .apiInfo(apiInfo)
-            .applyDefaultResponseMessages(applyDefaultResponseMessages)
-            .additionalResponseMessages(responseMessages)
-            .additionalIgnorableTypes(ignorableParameterTypes)
-            .additionalExcludedAnnotations(excludeAnnotations)
-            .includePatterns(includePatterns)
-            .ruleBuilders(ruleBuilders)
-            .requestMappingPatternMatcher(requestMappingPatternMatcher)
-            .groupName(groupName)
-            .pathProvider(pathProvider)
-            .authorizationContext(authorizationContext)
-            .authorizationTypes(authorizationTypes)
-            .apiListingReferenceOrdering(apiListingReferenceOrdering)
-            .apiDescriptionOrdering(apiDescriptionOrdering)
-            .operationOrdering(operationOrdering)
-            .produces(produces)
-            .consumes(consumes)
-            .protocols(protocols)
-            .build();
+        .apiInfo(apiInfo)
+        .selector(apiSelector)
+        .applyDefaultResponseMessages(applyDefaultResponseMessages)
+        .additionalResponseMessages(responseMessages)
+        .additionalIgnorableTypes(ignorableParameterTypes)
+        .ruleBuilders(ruleBuilders)
+        .groupName(groupName)
+        .pathProvider(pathProvider)
+        .authorizationContext(authorizationContext)
+        .authorizationTypes(authorizationMethods)
+        .apiListingReferenceOrdering(apiListingReferenceOrdering)
+        .apiDescriptionOrdering(apiDescriptionOrdering)
+        .operationOrdering(operationOrdering)
+        .produces(produces)
+        .consumes(consumes)
+        .protocols(protocols)
+        .build();
   }
 
   public boolean isEnabled() {
@@ -425,6 +372,11 @@ public class Docket implements DocumentationPlugin {
     if (null == this.apiInfo) {
       this.apiInfo = ApiInfo.DEFAULT;
     }
+  }
+
+  Docket selector(ApiSelector apiSelector) {
+    this.apiSelector = apiSelector;
+    return this;
   }
 
 }

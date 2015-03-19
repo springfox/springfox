@@ -1,16 +1,13 @@
 package springdox.documentation.swagger.readers.operation
-
 import org.springframework.web.bind.annotation.RequestMethod
-import springdox.documentation.RequestMappingPatternMatcher
 import springdox.documentation.builders.OperationBuilder
+import springdox.documentation.builders.PathSelectors
 import springdox.documentation.service.AuthorizationScope
 import springdox.documentation.spi.service.contexts.AuthorizationContext
 import springdox.documentation.spi.service.contexts.OperationContext
 import springdox.documentation.spring.web.mixins.AuthSupport
 import springdox.documentation.spring.web.mixins.RequestMappingSupport
 import springdox.documentation.spring.web.plugins.DocumentationContextSpec
-
-import static com.google.common.collect.Sets.*
 
 @Mixin([RequestMappingSupport, AuthSupport])
 class OperationAuthReaderSpec extends DocumentationContextSpec {
@@ -36,20 +33,15 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
 
   def "should apply global auth"() {
     given:
-      def patternMatcher = Mock(RequestMappingPatternMatcher)
-
       AuthorizationContext authorizationContext = AuthorizationContext.builder()
               .withAuthorizations(defaultAuth())
-              .withIncludePatterns(newHashSet('/anyPath.*'))
-              .withRequestMappingPatternMatcher(patternMatcher)
+              .forPaths(PathSelectors.any())
               .build()
       plugin.authorizationContext(authorizationContext)
       OperationContext operationContext = new OperationContext(new OperationBuilder(),
               RequestMethod.GET, dummyHandlerMethod(), 0, requestMappingInfo("somePath"),
               context(), "/anyPath")
 
-    and:
-      patternMatcher.pathMatchesOneOfIncluded("/anyPath", _) >> true
     when:
       sut.apply(operationContext)
       def authorizations = operationContext.operationBuilder().build().authorizations
@@ -62,19 +54,15 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
   }
 
   def "should apply global auth when ApiOperationAnnotation exists without auth values"() {
-    def patternMatcher = Mock(RequestMappingPatternMatcher)
     given:
       AuthorizationContext authorizationContext = AuthorizationContext.builder()
               .withAuthorizations(defaultAuth())
-              .withIncludePatterns(newHashSet('/anyPath.*'))
-              .withRequestMappingPatternMatcher(patternMatcher)
+              .forPaths(PathSelectors.any())
               .build()
       plugin.authorizationContext(authorizationContext)
       OperationContext operationContext = new OperationContext(new OperationBuilder(),
               RequestMethod.GET, dummyHandlerMethod('methodWithHttpGETMethod'), 0, requestMappingInfo("somePath"),
               context(), "/anyPath")
-    and:
-      patternMatcher.pathMatchesOneOfIncluded("/anyPath", _) >> true
     when:
       sut.apply(operationContext)
       def authorizations = operationContext.operationBuilder().build().authorizations
