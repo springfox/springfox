@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package springdox.gradlebuild.tasks
+package springdox.gradlebuild.version
+/**
+ * Used for testing release and publish stuff
+ */
+class EarlyAccessVersion extends VersionDecorator {
 
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
+  EarlyAccessVersion(SoftwareVersion delegate) {
+    super(delegate)
+  }
 
-class CheckCleanWorkspaceTask extends DefaultTask {
+  @Override
+  String asText() {
+    return super.asText() + '-EARLYACCESS'
+  }
 
-
-  //Only master?
-  //git fetch
-//  git diff master origin/master
-  @TaskAction
-  void check() {
-    def sout = new ByteArrayOutputStream()
-    project.exec {
-      commandLine "git", "status", "--porcelain"
-      standardOutput = sout
-    }
-    def gitStatus = sout.toString()
-    assert gitStatus == "": "Workspace is not clean ${gitStatus}"
+  @Override
+  SoftwareVersion next(ReleaseType releaseType) {
+    return new EarlyAccessVersion(delegate.next(releaseType))
   }
 }

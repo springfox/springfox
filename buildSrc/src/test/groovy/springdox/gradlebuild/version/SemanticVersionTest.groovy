@@ -18,8 +18,6 @@ package springdox.gradlebuild.version
 
 import spock.lang.Specification
 import springdox.gradlebuild.DirectoryBacked
-import springdox.gradlebuild.version.ReleaseType
-import springdox.gradlebuild.version.SemanticVersion
 
 class SemanticVersionTest extends Specification implements DirectoryBacked {
 

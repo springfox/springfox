@@ -40,7 +40,7 @@ class SemanticVersion implements SoftwareVersion {
     properties.store(propFile.newWriter(), null)
   }
 
-  SemanticVersion next(ReleaseType releaseType = ReleaseType.PATCH) {
+  SemanticVersion next(ReleaseType releaseType) {
     if (releaseType == ReleaseType.MAJOR) {
       new SemanticVersion(major + 1, minor, patch)
     } else if (releaseType == ReleaseType.MINOR) {

@@ -1,12 +1,10 @@
-import springdox.gradlebuild.tasks.CheckCleanWorkspaceTask
-import springdox.gradlebuild.tasks.GitTagTask
-import springdox.gradlebuild.tasks.PersistVersionTask
-import springdox.gradlebuild.tasks.ReleaseTask
-import springdox.gradlebuild.version.DangerVersion
+import springdox.gradlebuild.version.BuildscriptVersionResolver
 import springdox.gradlebuild.version.SemanticVersion
+import springdox.gradlebuild.version.SoftwareVersion
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
+
 
 buildscript {
   repositories {
@@ -22,24 +20,24 @@ buildscript {
     classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1"
   }
 }
-
-def latestVersion = new DangerVersion(SemanticVersion.get(file("$rootDir/version.properties")))
+apply plugin: 'build-dashboard'
 
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
-
-  projectVersion = latestVersion.next()
   jdkVersion = 1.6
 }
 
-version = projectVersion
+apply plugin: 'springdox-multi-release'
 
+
+SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
+        project, SemanticVersion.get(file("$rootDir/version.properties"))
+)
+version = currentVersion
 
 configure(publishable(subprojects)) { subproject ->
   apply plugin: 'groovy'
-  apply plugin: 'java'
   apply plugin: "com.ofg.uptodate"
-  apply plugin: 'maven'
 
   ext {
     jdkVersion = 1.6
@@ -49,14 +47,14 @@ configure(publishable(subprojects)) { subproject ->
   sourceCompatibility = jdkVersion
   targetCompatibility = jdkVersion
 
-  //Adds provide dependency configuration
+  //TODO - Adds provided dependency configuration?
   configurations {
     provided
     compile.extendsFrom provided
   }
 
   group = 'com.github.springdox'
-  version = latestVersion
+  version = currentVersion
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
   jvmsrc {
@@ -81,14 +79,15 @@ configure(publishable(subprojects)) { subproject ->
   checkstyle {
     configFile = file("$rootDir/config/checkstyle.xml")
   }
-
   checkstyleMain.source = "src/main/java"
+
   apply plugin: 'maven-publish'
   apply from: "$rootDir/gradle/publishing.gradle"
   apply from: "$rootDir/gradle/artifacts.gradle"
   apply from: "$rootDir/gradle/bintray_publish.gradle"
   apply from: "$rootDir/gradle/coverage.gradle"
-  apply from: "$rootDir/gradle/code-quality.gradle"
+  //TODO - reinstate
+//  apply from: "$rootDir/gradle/code-quality.gradle"
 
   repositories {
     jcenter()
@@ -109,26 +108,8 @@ tciTrigger {
   gitHubApiKeyVarName = 'GIT_HUB_API_KEY'
   travisVariable {
     name = "LATEST_SSMVC_VERSION"
-    value = "${projectVersion}"
+    value = "${version}"
     visible = true
   }
 }
 
-task wrapper(type: Wrapper) {}
-
-gradle.taskGraph.whenReady { graph ->
-  if (graph.hasTask(':release')) {
-    allprojects {
-      version = latestVersion.next(release.releaseType)
-    }
-  }
-}
-task release(type: ReleaseTask) {}
-task persistVersion(type: PersistVersionTask) {}
-task checkCleanWorkspace(type: CheckCleanWorkspaceTask)
-task gitTagTask(type: GitTagTask)
-
-release.dependsOn checkCleanWorkspace, persistVersion, gitTagTask
-
-//TODO - get the order right for all release related tasks
-gitTagTask.mustRunAfter persistVersion

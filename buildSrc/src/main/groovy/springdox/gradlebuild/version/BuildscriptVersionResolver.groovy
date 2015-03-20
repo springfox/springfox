@@ -15,17 +15,16 @@
  */
 
 package springdox.gradlebuild.version
-/**
- * Used for testing release and publish stuff
- */
-class DangerVersion extends VersionDecorator {
 
-  DangerVersion(SoftwareVersion delegate) {
-    super(delegate)
-  }
+import org.gradle.api.Project
 
-  @Override
-  String asText() {
-    return super.asText() + '-DANGEROUS'
+class BuildscriptVersionResolver {
+
+  static SoftwareVersion projectVersion(Project project, SoftwareVersion currentVersion) {
+    if (project.gradle.startParameter.taskNames.contains('release')) {
+      return currentVersion.next(ReleaseType.valueOf(project.property('releaseType').toUpperCase()))
+    } else {
+      return currentVersion
+    }
   }
 }

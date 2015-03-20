@@ -18,8 +18,6 @@ package springdox.gradlebuild.version
 
 import spock.lang.Specification
 import springdox.gradlebuild.DirectoryBacked
-import springdox.gradlebuild.version.SemanticVersion
-
 
 class SnapshotVersionTest extends Specification implements DirectoryBacked {
 
@@ -46,5 +44,6 @@ patch=1
     def next = version.next(ReleaseType.MAJOR)
     expect:
       next.asText() == '0.0.0-SNAPSHOT'
+      next.toString() == '0.0.0-SNAPSHOT'
   }
 }

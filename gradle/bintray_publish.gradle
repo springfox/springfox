@@ -17,8 +17,8 @@
 apply plugin: 'com.jfrog.bintray'
 //apply plugin: 'maven-publish'
 
-relUsername = project.hasProperty('bintray_username') ? project.property('bintray_username') : 'admin'
-relPassword = project.hasProperty('bintray_password') ? project.property('bintray_password') : 'password'
+relUsername = project.hasProperty('bintrayUsername') ? project.property('bintrayUsername') : 'admin'
+relPassword = project.hasProperty('bintrayPassword') ? project.property('bintrayPassword') : 'password'
 
 bintray {
   user = relUsername

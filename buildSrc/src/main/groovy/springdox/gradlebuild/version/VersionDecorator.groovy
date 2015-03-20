@@ -35,6 +35,7 @@ abstract class VersionDecorator implements SoftwareVersion {
 
   @Override
   String asText() {
+
     return delegate.asText()
   }
 

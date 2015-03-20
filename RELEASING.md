@@ -1,17 +1,17 @@
 ### Releasing 
 
-- Follow the release process outlined here : https://github.com/martypitt/swagger-springmvc/issues/422  
+Set the projects semantic version as follows:
+```groovy
+SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
+        project, SemanticVersion.get(file("$rootDir/version.properties"))
+)
+```
 
-- Tag the newly created release
-
-```bash 
-
-git tag -a <version_number> -m "<version_number>."
-
-git push origin <version_number>
+```bash
+./gradlew release -PbintrayUsername=<bintrayUsername> -PbintrayPassword=<bintrayPassword> -PreleaseType=<MAJOR|MINOR|PATCH>
 
 ```
 
-- Re-run the demo app to verify the published release is available in jcenter:
+### Snapshot
+TBD
 
-https://travis-ci.org/adrianbk/swagger-springmvc-demo

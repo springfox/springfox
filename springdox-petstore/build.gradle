@@ -1,8 +1,5 @@
 apply plugin: 'groovy'
-apply plugin: 'java'
 apply plugin: "com.ofg.uptodate"
-apply plugin: 'maven'
-apply plugin: 'idea'
 ext {
   jdkVersion = 1.6
 }

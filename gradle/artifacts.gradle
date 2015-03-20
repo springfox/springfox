@@ -4,7 +4,6 @@ publishing {
       groupId 'com.github.springdox'
       from components.java
 
-
       artifact packageSources {
         classifier "sources"
       }
