@@ -1,39 +1,6 @@
 ext {
-  developerMachines = ['adrianxbk']
-
   relUsername = project.hasProperty('bintray_username') ? project.property('bintray_username') : 'admin'
   relPassword = project.hasProperty('bintray_password') ? project.property('bintray_password') : 'password'
-
-  if (developerMachines.contains(System.getenv('USER'))) {
-    artifactRepoBase = 'http://localhost:8081/artifactory'
-    repoPrefix = 'libs'
-  } else {
-    artifactRepoBase = 'http://oss.jfrog.org/artifactory'
-    repoPrefix = 'oss'
-  }
-
-
-  releaseRepos = {
-    maven {
-      name 'jcenter'
-      url "${artifactRepoBase}/${repoPrefix}-${project.version.toString().endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
-      credentials {
-        username = "$relUsername"
-        password = "$relPassword"
-      }
-    }
-
-    if (!project.version.toString().endsWith('-SNAPSHOT')) {
-      maven {
-        name 'bintray'
-        url "https://api.bintray.com/maven/swaggerspringmvc/swaggerspringmvc/${project.name}"
-        credentials {
-          username = relUsername
-          password = relPassword
-        }
-      }
-    }
-  }
 
   pomMetaData = {
     resolveStrategy = Closure.DELEGATE_FIRST
@@ -76,7 +43,8 @@ ext {
     }
   }
 
-  //Gradle's maven-publish plugin does not yet handle pom generation correctly. Fix expected in 2.1
+  // TODO - findout if this has been fixed in gradle and remove this hack if do
+  // Gradle's maven-publish plugin does not yet handle pom generation correctly. Fix expected in 2.1
   mangodocsPomConfig = {
     def root = asNode()
     def dependencies = root.dependencies
@@ -114,12 +82,13 @@ task packageSources(type: Jar) {
   from sourceSets.main.allSource
 }
 
-task javadocJar (type: Jar, dependsOn: javadoc) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
   classifier = 'javadoc'
   from javadoc.destinationDir
 }
 
 task preRelease << {
+  //May not be required
   def url = new URL("http://oss.jfrog.org/simple/oss-release-local/com/mangofactory/swagger-springmvc/${project.version}")
   logger.quiet("Checking release repo for duplicate versioning:${url}")
   final HttpURLConnection connection = url.openConnection()

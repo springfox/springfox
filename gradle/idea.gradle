@@ -3,11 +3,6 @@ allprojects {
 }
 
 idea {
-//  module {
-//    excludeDirs += file('buildSrc/build')
-//    excludeDirs += file('buildSrc/.gradle')
-//  }
-
   project {
     languageLevel = '1.6'
     vcs = 'Git'

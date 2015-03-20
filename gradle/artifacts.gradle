@@ -1,9 +1,7 @@
 publishing {
-  repositories {
-    configure(releaseRepos)
-  }
   publications {
     mavenJava(MavenPublication) {
+      groupId 'com.github.springdox'
       from components.java
 
 
@@ -11,10 +9,10 @@ publishing {
         classifier "sources"
       }
 
-      artifact (javadocJar) {
+      artifact(javadocJar) {
         classifier = 'javadoc'
       }
-
+      //TODO - not right that every artifact has the same (pom) dependencies
       pom.withXml mangodocsPomConfig
     }
   }
