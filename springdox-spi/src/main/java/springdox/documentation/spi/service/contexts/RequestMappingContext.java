@@ -35,7 +35,8 @@ public class RequestMappingContext  {
     this.handlerMethod = handlerMethod;
     this.requestMappingPattern = "";
     this.operationModelContextsBuilder = new OperationModelContextsBuilder(context.getDocumentationType(),
-            context.getAlternateTypeProvider());
+            context.getAlternateTypeProvider(),
+            context.getGenericsNamingStrategy());
   }
 
   public RequestMappingInfo getRequestMappingInfo() {

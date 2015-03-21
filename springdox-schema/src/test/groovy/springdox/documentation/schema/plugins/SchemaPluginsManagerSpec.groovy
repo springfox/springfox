@@ -4,6 +4,7 @@ import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springdox.documentation.builders.ModelPropertyBuilder
+import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.schema.ModelNameContext
 import springdox.documentation.schema.TypeForTestingPropertyNames
 import springdox.documentation.spi.DocumentationType
@@ -52,7 +53,8 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def "enriches model when plugins are found"() {
     given:
-      def context = ModelContext.inputParam(TypeForTestingPropertyNames, SPRING_WEB, new AlternateTypeProvider([]))
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      def context = ModelContext.inputParam(TypeForTestingPropertyNames, SPRING_WEB, new AlternateTypeProvider([]), namingStrategy)
     and:
       context.documentationType >> SPRING_WEB
     when:

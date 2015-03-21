@@ -1,4 +1,4 @@
-package springdox.documentation.schema;
+package springdox.documentation.spi.schema;
 
 /**
  * Strategy to provide the strings used while naming generic types in the swagger output

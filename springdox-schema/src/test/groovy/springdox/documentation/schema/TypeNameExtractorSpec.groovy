@@ -7,9 +7,10 @@ import static springdox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class TypeNameExtractorSpec extends SchemaSpecification {
+  def namingStrategy = new DefaultGenericTypeNamingStrategy()
   def "Response class for container types are inferred correctly"() {
     given:
-      def context = returnValue(containerType, SWAGGER_12, alternateTypeProvider())
+      def context = returnValue(containerType, SWAGGER_12, alternateTypeProvider(), namingStrategy)
     expect:
       typeNameExtractor.typeName(context) == name
 
@@ -28,7 +29,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
   
   def "Input class for container types are inferred correctly"() {
     given:
-      def context = returnValue(containerType, SWAGGER_12, alternateTypeProvider())
+      def context = returnValue(containerType, SWAGGER_12, alternateTypeProvider(), namingStrategy)
     expect:
       typeNameExtractor.typeName(context) == name
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import springdox.documentation.builders.ParameterBuilder
+import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.service.ResolvedMethodParameter
 import springdox.documentation.spi.service.contexts.ParameterContext
 import springdox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -29,7 +30,8 @@ class ParameterNameReaderSpec extends DocumentationContextSpec {
       methodParameter.getParameterIndex() >> 0
       ResolvedMethodParameter resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), genericNamingStrategy)
     when:
       def operationCommand = new springdox.documentation.spring.web.readers.parameter.ParameterNameReader();
       operationCommand.apply(parameterContext)

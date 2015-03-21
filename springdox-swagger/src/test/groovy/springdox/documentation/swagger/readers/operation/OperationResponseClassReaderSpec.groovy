@@ -1,10 +1,8 @@
 package springdox.documentation.swagger.readers.operation
-
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Unroll
 import springdox.documentation.builders.OperationBuilder
-import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.schema.TypeNameExtractor
 import springdox.documentation.spi.service.contexts.OperationContext
 import springdox.documentation.spring.web.mixins.RequestMappingSupport
@@ -17,7 +15,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
    def "should have correct response class"() {
     given:
       def typeNameExtractor =
-              new TypeNameExtractor(new TypeResolver(), new DefaultGenericTypeNamingStrategy(), swaggerSchemaPlugins())
+              new TypeNameExtractor(new TypeResolver(), swaggerSchemaPlugins())
       OperationContext operationContext = new OperationContext(new OperationBuilder(),
               RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")

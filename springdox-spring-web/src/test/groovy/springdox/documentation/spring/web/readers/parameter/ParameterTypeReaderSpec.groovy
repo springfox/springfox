@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile
 import springdox.documentation.builders.ParameterBuilder
 import springdox.documentation.service.ResolvedMethodParameter
 import springdox.documentation.spi.DocumentationType
+import springdox.documentation.spi.schema.GenericTypeNamingStrategy
 import springdox.documentation.spi.service.contexts.ParameterContext
 import springdox.documentation.spring.web.mixins.RequestMappingSupport
 import springdox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -27,7 +28,8 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
       resolvedMethodParameter.resolvedParameterType >> resolve(type)
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+              context(), Mock(GenericTypeNamingStrategy))
     when:
       def operationCommand = new ParameterTypeReader()
       operationCommand.apply(parameterContext)

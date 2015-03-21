@@ -2,7 +2,6 @@ package springdox.documentation.spring.web.mixins
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.schema.DefaultModelProvider
 import springdox.documentation.schema.ModelDependencyProvider
 import springdox.documentation.schema.ModelProvider
@@ -22,7 +21,7 @@ import springdox.documentation.schema.property.provider.DefaultModelPropertiesPr
 @Mixin([ServicePluginsSupport, SchemaPluginsSupport])
 class ModelProviderForServiceSupport {
   def typeNameExtractor() {
-    new TypeNameExtractor(new TypeResolver(), new DefaultGenericTypeNamingStrategy(), defaultSchemaPlugins())
+    new TypeNameExtractor(new TypeResolver(), defaultSchemaPlugins())
   }
 
   ModelProvider modelProvider(SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),

@@ -1,12 +1,8 @@
 package springdox.documentation.schema.alternates
-
 import org.joda.time.LocalDate
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
-import springdox.documentation.schema.AlternateTypeRule
-import springdox.documentation.schema.AlternateTypesSupport
-import springdox.documentation.schema.Model
-import springdox.documentation.schema.ModelProvider
+import springdox.documentation.schema.*
 import springdox.documentation.schema.mixins.ModelProviderSupport
 import springdox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -16,12 +12,13 @@ import static springdox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([ModelProviderSupport, TypesForTestingSupport, AlternateTypesSupport])
 class AlternatePropertiesSpec extends Specification {
+  def namingStrategy = new DefaultGenericTypeNamingStrategy()
   def "Nested properties that have alternate types defined are rendered correctly" () {
     given:
       def provider = alternateTypeProvider()
       provider.addRule(newRule(LocalDate, String))
       ModelProvider modelProvider = defaultModelProvider()
-      Model model = modelProvider.modelFor(inputParam(typeWithAlternateProperty(), SWAGGER_12, provider)).get()
+      Model model = modelProvider.modelFor(inputParam(typeWithAlternateProperty(), SWAGGER_12, provider, namingStrategy)).get()
     expect:
       model.getName() == "TypeWithAlternateProperty"
       model.getProperties().containsKey("localDate")
@@ -40,7 +37,7 @@ class AlternatePropertiesSpec extends Specification {
       provider.addRule(new AlternateTypeRule(resolver.resolve(ResponseEntity, Void), resolver.resolve(Void)))
       ModelProvider modelProvider = defaultModelProvider()
       Model model = modelProvider.modelFor(inputParam(typeWithResponseEntityOfVoid(), SWAGGER_12,
-              alternateTypeProvider())).get()
+              alternateTypeProvider(), namingStrategy)).get()
     expect:
       model.getName() == "GenericType«ResponseEntity«Void»»"
       model.getProperties().containsKey("genericField")

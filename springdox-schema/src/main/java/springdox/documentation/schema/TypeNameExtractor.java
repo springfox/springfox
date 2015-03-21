@@ -8,7 +8,7 @@ import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springdox.documentation.schema.plugins.SchemaPluginsManager;
-import springdox.documentation.spi.DocumentationType;
+import springdox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springdox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
@@ -19,17 +19,13 @@ import static springdox.documentation.schema.Types.*;
 @Component
 public class TypeNameExtractor {
   private final TypeResolver typeResolver;
-  private final GenericTypeNamingStrategy namingStrategy;
   private final SchemaPluginsManager pluginsManager;
 
   @Autowired
-  public TypeNameExtractor(TypeResolver typeResolver,
-                           GenericTypeNamingStrategy namingStrategy,
-                           SchemaPluginsManager pluginsManager) {
+  public TypeNameExtractor(TypeResolver typeResolver, SchemaPluginsManager pluginsManager) {
 
     this.typeResolver = typeResolver;
     this.pluginsManager = pluginsManager;
-    this.namingStrategy = fromNullable(namingStrategy).or(new DefaultGenericTypeNamingStrategy());
   }
 
   public String typeName(ModelContext context) {
@@ -37,55 +33,57 @@ public class TypeNameExtractor {
     if (Collections.isContainerType(type)) {
       return Collections.containerType(type);
     }
-    return innerTypeName(type, context.getDocumentationType());
+    return innerTypeName(type, context);
   }
 
   private ResolvedType asResolved(Type type) {
     return typeResolver.resolve(type);
   }
 
-  private String genericTypeName(ResolvedType resolvedType, DocumentationType documentationType) {
+  private String genericTypeName(ResolvedType resolvedType, ModelContext context) {
     Class<?> erasedType = resolvedType.getErasedType();
-    ModelNameContext nameContext = new ModelNameContext(resolvedType.getErasedType(), documentationType);
+    GenericTypeNamingStrategy namingStrategy = context.getGenericNamingStrategy();
+    ModelNameContext nameContext = new ModelNameContext(resolvedType.getErasedType(), context.getDocumentationType());
     String simpleName = fromNullable(typeNameFor(erasedType)).or(pluginsManager.typeName(nameContext));
     StringBuilder sb = new StringBuilder(String.format("%s%s", simpleName, namingStrategy.getOpenGeneric()));
     boolean first = true;
     for (int index = 0; index < erasedType.getTypeParameters().length; index++) {
       ResolvedType typeParam = resolvedType.getTypeParameters().get(index);
       if (first) {
-        sb.append(innerTypeName(typeParam, documentationType));
+        sb.append(innerTypeName(typeParam, context));
         first = false;
       } else {
         sb.append(String.format("%s%s", namingStrategy.getTypeListDelimiter(),
-                innerTypeName(typeParam, documentationType)));
+                innerTypeName(typeParam, context)));
       }
     }
     sb.append(namingStrategy.getCloseGeneric());
     return sb.toString();
   }
 
-  private String innerTypeName(ResolvedType type, DocumentationType documentationType) {
+  private String innerTypeName(ResolvedType type, ModelContext context) {
     if (type.getTypeParameters().size() > 0 && type.getErasedType().getTypeParameters().length > 0) {
-      return genericTypeName(type, documentationType);
+      return genericTypeName(type, context);
     }
-    return simpleTypeName(type, documentationType);
+    return simpleTypeName(type, context);
   }
 
-  private String simpleTypeName(ResolvedType type, DocumentationType documentationType) {
+  private String simpleTypeName(ResolvedType type, ModelContext context) {
     Class<?> erasedType = type.getErasedType();
     if (type instanceof ResolvedPrimitiveType) {
       return typeNameFor(erasedType);
     } else if (erasedType.isEnum()) {
       return "string";
     } else if (type instanceof ResolvedArrayType) {
+      GenericTypeNamingStrategy namingStrategy = context.getGenericNamingStrategy();
       return String.format("Array%s%s%s", namingStrategy.getOpenGeneric(),
-              simpleTypeName(type.getArrayElementType(), documentationType), namingStrategy.getCloseGeneric());
+              simpleTypeName(type.getArrayElementType(), context), namingStrategy.getCloseGeneric());
     } else if (type instanceof ResolvedObjectType) {
       String typeName = typeNameFor(erasedType);
       if (typeName != null) {
         return typeName;
       }
     }
-    return pluginsManager.typeName(new ModelNameContext(type.getErasedType(), documentationType));
+    return pluginsManager.typeName(new ModelNameContext(type.getErasedType(), context.getDocumentationType()));
   }
 }

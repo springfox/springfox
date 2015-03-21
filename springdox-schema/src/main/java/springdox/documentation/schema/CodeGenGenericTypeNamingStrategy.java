@@ -2,13 +2,10 @@ package springdox.documentation.schema;
 
 import springdox.documentation.spi.schema.GenericTypeNamingStrategy;
 
-/**
- * Strategy that uses \u00ab, \u00bb, and comma in generic type names
- */
-public class DefaultGenericTypeNamingStrategy implements GenericTypeNamingStrategy {
-  private static final String OPEN = "«";
-  private static final String CLOSE = "»";
-  private static final String DELIM = ",";
+public class CodeGenGenericTypeNamingStrategy implements GenericTypeNamingStrategy {
+  private static final String OPEN = "Of";
+  private static final String CLOSE = "";
+  private static final String DELIM = "And";
 
   @Override
   public String getOpenGeneric() {

@@ -6,18 +6,22 @@ import springdox.documentation.builders.ParameterBuilder;
 import springdox.documentation.service.ResolvedMethodParameter;
 import springdox.documentation.spi.DocumentationType;
 import springdox.documentation.spi.schema.AlternateTypeProvider;
+import springdox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 public class ParameterContext {
   private final ParameterBuilder parameterBuilder;
   private final ResolvedMethodParameter resolvedMethodParameter;
   private final DocumentationContext documentationContext;
+  private GenericTypeNamingStrategy genericNamingStrategy;
 
   public ParameterContext(ResolvedMethodParameter resolvedMethodParameter,
                           ParameterBuilder parameterBuilder,
-                          DocumentationContext documentationContext) {
+                          DocumentationContext documentationContext,
+                          GenericTypeNamingStrategy genericNamingStrategy) {
     this.parameterBuilder = parameterBuilder;
     this.resolvedMethodParameter = resolvedMethodParameter;
     this.documentationContext = documentationContext;
+    this.genericNamingStrategy = genericNamingStrategy;
   }
 
   public ResolvedMethodParameter resolvedMethodParameter() {
@@ -46,5 +50,9 @@ public class ParameterContext {
 
   public AlternateTypeProvider getAlternateTypeProvider() {
     return documentationContext.getAlternateTypeProvider();
+  }
+
+  public GenericTypeNamingStrategy getGenericNamingStrategy() {
+    return genericNamingStrategy;
   }
 }

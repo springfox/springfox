@@ -7,6 +7,7 @@ import spock.lang.Unroll
 import springdox.documentation.builders.ParameterBuilder
 import springdox.documentation.service.ResolvedMethodParameter
 import springdox.documentation.spi.DocumentationType
+import springdox.documentation.spi.schema.GenericTypeNamingStrategy
 import springdox.documentation.spi.service.contexts.ParameterContext
 import springdox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springdox.documentation.spring.web.mixins.RequestMappingSupport
@@ -24,7 +25,8 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       methodParameter."$springParameterMethod"() >> methodReturnValue
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+              context(), Mock(GenericTypeNamingStrategy))
     when:
       parameterPlugin.apply(parameterContext)
 

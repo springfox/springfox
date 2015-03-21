@@ -16,6 +16,7 @@ import springdox.documentation.service.AuthorizationType;
 import springdox.documentation.service.Operation;
 import springdox.documentation.service.ResponseMessage;
 import springdox.documentation.spi.DocumentationType;
+import springdox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springdox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class DocumentationContextBuilder {
   private Set<String> protocols = newHashSet();
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
+  private GenericTypeNamingStrategy genericsNamingStrategy;
 
   public DocumentationContextBuilder(DocumentationType documentationType) {
     this.documentationType = documentationType;
@@ -169,8 +171,18 @@ public class DocumentationContextBuilder {
     this.consumes.addAll(consumes);
     return this;
   }
+  public DocumentationContextBuilder genericsNaming(GenericTypeNamingStrategy genericsNamingStrategy) {
+    this.genericsNamingStrategy = genericsNamingStrategy;
+    return this;
+  }
+
   public DocumentationContextBuilder protocols(Set<String> protocols) {
     this.protocols.addAll(protocols);
+    return this;
+  }
+
+  public DocumentationContextBuilder selector(ApiSelector apiSelector) {
+    this.apiSelector = apiSelector;
     return this;
   }
 
@@ -186,9 +198,8 @@ public class DocumentationContextBuilder {
             resourceGroupingStrategy, pathProvider,
             authorizationContext, authorizationTypes, rules,
             listingReferenceOrdering, apiDescriptionOrdering,
-            operationOrdering, produces, consumes, protocols);
+            operationOrdering, produces, consumes, protocols, genericsNamingStrategy);
   }
-
 
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>
   evaluator(final TypeResolver typeResolver) {
@@ -199,10 +210,5 @@ public class DocumentationContextBuilder {
         return input.apply(typeResolver);
       }
     };
-  }
-
-  public DocumentationContextBuilder selector(ApiSelector apiSelector) {
-    this.apiSelector = apiSelector;
-    return this;
   }
 }

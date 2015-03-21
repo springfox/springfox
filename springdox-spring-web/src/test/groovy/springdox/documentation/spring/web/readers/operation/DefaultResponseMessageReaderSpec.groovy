@@ -1,10 +1,8 @@
 package springdox.documentation.spring.web.readers.operation
-
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.RequestMethod
 import springdox.documentation.builders.OperationBuilder
-import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.schema.TypeNameExtractor
 import springdox.documentation.schema.mixins.SchemaPluginsSupport
 import springdox.documentation.service.ResponseMessage
@@ -20,7 +18,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def setup() {
     def typeNameExtractor =
-            new TypeNameExtractor(new TypeResolver(), new DefaultGenericTypeNamingStrategy(),  defaultSchemaPlugins())
+            new TypeNameExtractor(new TypeResolver(),  defaultSchemaPlugins())
     sut = new ResponseMessagesReader(new TypeResolver(), typeNameExtractor)
   }
   def "Should add default response messages"() {

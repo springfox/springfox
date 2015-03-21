@@ -14,6 +14,7 @@ import springdox.documentation.service.Operation;
 import springdox.documentation.service.ResponseMessage;
 import springdox.documentation.spi.DocumentationType;
 import springdox.documentation.spi.schema.AlternateTypeProvider;
+import springdox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springdox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class DocumentationContext {
   private Set<String> produces;
   private Set<String> consumes;
   private Set<String> protocols;
+  private final GenericTypeNamingStrategy genericsNamingStrategy;
 
   public DocumentationContext(DocumentationType documentationType,
                               List<RequestMappingHandlerMapping> handlerMappings,
@@ -53,10 +55,11 @@ public class DocumentationContext {
                               List<AlternateTypeRule> alternateTypeRules,
                               Ordering<ApiListingReference> listingReferenceOrdering,
                               Ordering<ApiDescription> apiDescriptionOrdering,
-                              Ordering<Operation> operationOrdering, 
-                              Set<String> produces, 
-                              Set<String> consumes, 
-                              Set<String> protocols) {
+                              Ordering<Operation> operationOrdering,
+                              Set<String> produces,
+                              Set<String> consumes,
+                              Set<String> protocols,
+                              GenericTypeNamingStrategy genericsNamingStrategy) {
 
     this.documentationType = documentationType;
     this.handlerMappings = handlerMappings;
@@ -75,6 +78,7 @@ public class DocumentationContext {
     this.produces = produces;
     this.consumes = consumes;
     this.protocols = protocols;
+    this.genericsNamingStrategy = genericsNamingStrategy;
     this.alternateTypeProvider = new AlternateTypeProvider(alternateTypeRules);
   }
 
@@ -148,5 +152,9 @@ public class DocumentationContext {
 
   public Set<String> getProtocols() {
     return protocols;
+  }
+
+  public GenericTypeNamingStrategy getGenericsNamingStrategy() {
+    return genericsNamingStrategy;
   }
 }

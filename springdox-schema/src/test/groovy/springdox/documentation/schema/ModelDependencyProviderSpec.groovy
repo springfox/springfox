@@ -7,14 +7,15 @@ import static springdox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ModelDependencyProviderSpec extends SchemaSpecification {
+  def namingStrategy = new DefaultGenericTypeNamingStrategy()
 
   @Unroll
   def "dependencies are inferred correctly" () {
     given:
-      def context = inputParam(modelType, documentationType, alternateTypeProvider())
+      def context = inputParam(modelType, documentationType, alternateTypeProvider(), namingStrategy)
       def dependentTypes = modelDependencyProvider.dependentModels(context)
       def dependentTypeNames = dependentTypes.collect() {
-          typeNameExtractor.typeName(inputParam(it, documentationType, alternateTypeProvider()))
+          typeNameExtractor.typeName(inputParam(it, documentationType, alternateTypeProvider(), namingStrategy))
         }.unique()
         .sort()
 
@@ -41,10 +42,10 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
   @Unroll
   def "dependencies are inferred correctly for return parameters" () {
     given:
-      def context = returnValue(modelType, documentationType, alternateTypeProvider())
+      def context = returnValue(modelType, documentationType, alternateTypeProvider(), namingStrategy)
       def dependentTypes = modelDependencyProvider.dependentModels(context)
       def dependentTypeNames = dependentTypes.collect() {
-            typeNameExtractor.typeName(returnValue(it, documentationType, alternateTypeProvider()))
+            typeNameExtractor.typeName(returnValue(it, documentationType, alternateTypeProvider(), namingStrategy))
           }.unique()
           .sort()
     expect:

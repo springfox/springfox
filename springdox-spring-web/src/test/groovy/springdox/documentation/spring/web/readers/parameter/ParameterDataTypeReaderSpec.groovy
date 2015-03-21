@@ -1,5 +1,4 @@
 package springdox.documentation.spring.web.readers.parameter
-
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.core.MethodParameter
 import org.springframework.web.method.HandlerMethod
@@ -21,7 +20,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   HandlerMethod handlerMethod = Stub(HandlerMethod)
   MethodParameter methodParameter = Stub(MethodParameter)
   def typeNameExtractor =
-          new TypeNameExtractor(new TypeResolver(), new DefaultGenericTypeNamingStrategy(), defaultSchemaPlugins())
+          new TypeNameExtractor(new TypeResolver(), defaultSchemaPlugins())
   
   ParameterDataTypeReader sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
 
@@ -36,8 +35,9 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
     given:
       ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter,
               new TypeResolver().resolve(paramType))
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy)
       methodParameter.getParameterType() >> paramType
 
     when:
@@ -71,15 +71,16 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   def "Container Parameter types"() {
     given:
       ResolvedMethodParameter resolvedMethodParameter = Mock(ResolvedMethodParameter)
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy)
       resolvedMethodParameter.getResolvedParameterType() >> new TypeResolver().resolve(List, String)
       resolvedMethodParameter.getMethodParameter() >> methodParameter
       methodParameter.getParameterType() >> List
 
     when:
       def typeNameExtractor =
-              new TypeNameExtractor(new TypeResolver(), new DefaultGenericTypeNamingStrategy(), defaultSchemaPlugins())
+              new TypeNameExtractor(new TypeResolver(), defaultSchemaPlugins())
       def sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
       sut.apply(parameterContext)
     then:

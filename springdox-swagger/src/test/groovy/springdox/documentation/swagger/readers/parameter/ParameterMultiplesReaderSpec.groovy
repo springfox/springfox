@@ -5,6 +5,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import springdox.documentation.builders.ParameterBuilder
+import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.service.ResolvedMethodParameter
 import springdox.documentation.spi.service.contexts.ParameterContext
 import springdox.documentation.spring.web.dummy.DummyClass
@@ -21,7 +22,8 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
       methodParameter.getParameterType() >> paramType
       ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
       ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter, resolvedType)
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), genericNamingStrategy)
 
     when:
       def operationCommand = new ParameterMultiplesReader();

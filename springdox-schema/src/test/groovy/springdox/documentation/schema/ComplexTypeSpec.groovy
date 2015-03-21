@@ -1,5 +1,6 @@
 package springdox.documentation.schema
 
+import spock.lang.Shared
 import spock.lang.Specification
 import springdox.documentation.schema.mixins.ModelProviderSupport
 import springdox.documentation.schema.mixins.TypesForTestingSupport
@@ -9,11 +10,12 @@ import static springdox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
 class ComplexTypeSpec extends Specification {
+  @Shared def namingStrategy = new DefaultGenericTypeNamingStrategy()
   def "complex type properties are inferred correctly"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(complexType(), SWAGGER_12, alternateTypeProvider())).get()
-      Model asReturn = provider.modelFor(returnValue(complexType(), SWAGGER_12, alternateTypeProvider())).get()
+      Model asInput = provider.modelFor(inputParam(complexType(), SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asReturn = provider.modelFor(returnValue(complexType(), SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "ComplexType"
@@ -46,8 +48,8 @@ class ComplexTypeSpec extends Specification {
     given:
       def complexType = recursiveType()
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(complexType, SWAGGER_12, alternateTypeProvider())).get()
-      Model asReturn = provider.modelFor(returnValue(complexType, SWAGGER_12, alternateTypeProvider())).get()
+      Model asInput = provider.modelFor(inputParam(complexType, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asReturn = provider.modelFor(returnValue(complexType, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "RecursiveType"
@@ -77,8 +79,8 @@ class ComplexTypeSpec extends Specification {
     given:
       def complexType = inheritedComplexType()
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(complexType, SWAGGER_12, alternateTypeProvider())).get()
-      Model asReturn = provider.modelFor(returnValue(complexType, SWAGGER_12, alternateTypeProvider())).get()
+      Model asInput = provider.modelFor(inputParam(complexType, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asReturn = provider.modelFor(returnValue(complexType, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "InheritedComplexType"

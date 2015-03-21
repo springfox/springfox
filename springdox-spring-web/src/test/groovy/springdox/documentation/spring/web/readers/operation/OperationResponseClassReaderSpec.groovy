@@ -1,9 +1,7 @@
 package springdox.documentation.spring.web.readers.operation
-
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.bind.annotation.RequestMethod
 import springdox.documentation.builders.OperationBuilder
-import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.schema.TypeNameExtractor
 import springdox.documentation.schema.mixins.SchemaPluginsSupport
 import springdox.documentation.spi.DocumentationType
@@ -18,7 +16,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
   
   def setup() {
     def typeNameExtractor =
-            new TypeNameExtractor(new TypeResolver(), new DefaultGenericTypeNamingStrategy(), defaultSchemaPlugins())
+            new TypeNameExtractor(new TypeResolver(), defaultSchemaPlugins())
 
     sut = new OperationResponseClassReader(new TypeResolver(), typeNameExtractor)
   }

@@ -45,7 +45,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
               .modelRef(new ModelRef("File"));
     } else {
       ModelContext modelContext = ModelContext.inputParam(parameterType, context.getDocumentationType(),
-              context.getAlternateTypeProvider());
+              context.getAlternateTypeProvider(), context.getGenericNamingStrategy());
       context.parameterBuilder()
               .type(parameterType)
               .modelRef(modelRef(parameterType, modelContext));

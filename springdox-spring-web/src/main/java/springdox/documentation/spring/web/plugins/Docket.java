@@ -6,6 +6,9 @@ import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springdox.documentation.PathProvider;
 import springdox.documentation.schema.AlternateTypeRule;
+import springdox.documentation.schema.CodeGenGenericTypeNamingStrategy;
+import springdox.documentation.schema.DefaultGenericTypeNamingStrategy;
+import springdox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springdox.documentation.schema.WildcardType;
 import springdox.documentation.service.ApiDescription;
 import springdox.documentation.service.ApiInfo;
@@ -52,6 +55,7 @@ public class Docket implements DocumentationPlugin {
 
   private AtomicBoolean initialized = new AtomicBoolean(false);
   private boolean enabled = true;
+  private GenericTypeNamingStrategy genericsNamingStrategy = new DefaultGenericTypeNamingStrategy();
   private boolean applyDefaultResponseMessages = true;
   private Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
   private List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
@@ -296,6 +300,18 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
+  public Docket forCodeGeneration(boolean forCodeGen) {
+    if (forCodeGen) {
+      genericsNamingStrategy = new CodeGenGenericTypeNamingStrategy();
+    }
+    return this;
+  }
+
+  Docket selector(ApiSelector apiSelector) {
+    this.apiSelector = apiSelector;
+    return this;
+  }
+
   public ApiSelectorBuilder select() {
     return new ApiSelectorBuilder(this);
   }
@@ -328,6 +344,7 @@ public class Docket implements DocumentationPlugin {
         .produces(produces)
         .consumes(consumes)
         .protocols(protocols)
+        .genericsNaming(genericsNamingStrategy)
         .build();
   }
 
@@ -372,11 +389,6 @@ public class Docket implements DocumentationPlugin {
     if (null == this.apiInfo) {
       this.apiInfo = ApiInfo.DEFAULT;
     }
-  }
-
-  Docket selector(ApiSelector apiSelector) {
-    this.apiSelector = apiSelector;
-    return this;
   }
 
 }

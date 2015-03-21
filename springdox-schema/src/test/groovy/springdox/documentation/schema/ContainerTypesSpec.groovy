@@ -9,11 +9,12 @@ import static springdox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ContainerTypesSpec extends SchemaSpecification {
+  def namingStrategy = new DefaultGenericTypeNamingStrategy()
   def "Model properties of type List, are inferred correctly"() {
     given:
       def sut = typeWithLists()
-      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider())).get()
-      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider())).get()
+      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "ListsContainer"
@@ -48,8 +49,8 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties are inferred correctly"() {
     given:
       def sut = typeWithSets()
-      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider())).get()
-      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider())).get()
+      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "SetsContainer"
@@ -84,8 +85,8 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties of type Arrays are inferred correctly"() {
     given:
       def sut = typeWithArrays()
-      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider())).get()
-      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider())).get()
+      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "ArraysContainer"
@@ -122,8 +123,8 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties of type Map are inferred correctly"() {
     given:
       def sut = mapsContainer()
-      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider())).get()
-      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider())).get()
+      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "MapsContainer"
@@ -158,10 +159,10 @@ class ContainerTypesSpec extends SchemaSpecification {
     given:
       def sut = genericTypeOfMapsContainer()
 
-      def modelContext = inputParam(sut, SWAGGER_12, alternateTypeProvider())
+      def modelContext = inputParam(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)
       Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
 
-      def returnContext = returnValue(sut, SWAGGER_12, alternateTypeProvider())
+      def returnContext = returnValue(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)
       Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
 
     expect:

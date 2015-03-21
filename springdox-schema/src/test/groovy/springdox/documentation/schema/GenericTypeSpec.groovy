@@ -8,14 +8,15 @@ import static springdox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class GenericTypeSpec extends SchemaSpecification {
+  def namingStrategy = new DefaultGenericTypeNamingStrategy()
   @Unroll
   def "Generic property on a generic types is inferred correctly for inbound types"() {
     given:
 
-      def inputContext = inputParam(modelType, documentationType, alternateTypeProvider())
+      def inputContext = inputParam(modelType, documentationType, alternateTypeProvider(), namingStrategy)
       Model asInput = modelProvider.modelFor(inputContext).get()
 
-      def returnContext = returnValue(modelType, documentationType, alternateTypeProvider())
+      def returnContext = returnValue(modelType, documentationType, alternateTypeProvider(), namingStrategy)
       Model asReturn = modelProvider.modelFor(returnContext).get()
     expect:
       asInput.getName() == expectedModelName(modelNamePart)
@@ -65,10 +66,10 @@ class GenericTypeSpec extends SchemaSpecification {
   @Unroll
   def "Generic properties are inferred correctly even when they are not participating in the type bindings"() {
     given:
-      def inputContext = inputParam(modelType, documentationType, alternateTypeProvider())
+      def inputContext = inputParam(modelType, documentationType, alternateTypeProvider(), namingStrategy)
       Model asInput = modelProvider.modelFor(inputContext).get()
 
-      def returnContext = returnValue(modelType, documentationType, alternateTypeProvider())
+      def returnContext = returnValue(modelType, documentationType, alternateTypeProvider(), namingStrategy)
       Model asReturn = modelProvider.modelFor(returnContext).get()
 
     expect:

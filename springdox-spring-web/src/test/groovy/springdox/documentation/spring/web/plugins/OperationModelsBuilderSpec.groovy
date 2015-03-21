@@ -3,12 +3,13 @@ package springdox.documentation.spring.web.plugins
 import spock.lang.Specification
 import springdox.documentation.spi.DocumentationType
 import springdox.documentation.spi.schema.AlternateTypeProvider
+import springdox.documentation.spi.schema.GenericTypeNamingStrategy
 import springdox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springdox.documentation.spring.web.dummy.models.Example
 
 class OperationModelsBuilderSpec extends Specification {
   OperationModelContextsBuilder sut =
-          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider))
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy))
   def "Manages a unique set of model contexts" () {
     given:
       sut.addInputParam(Example)

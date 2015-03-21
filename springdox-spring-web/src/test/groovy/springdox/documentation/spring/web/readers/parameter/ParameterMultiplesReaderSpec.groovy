@@ -7,6 +7,7 @@ import org.springframework.core.MethodParameter
 import springdox.documentation.builders.ParameterBuilder
 import springdox.documentation.service.ResolvedMethodParameter
 import springdox.documentation.spi.DocumentationType
+import springdox.documentation.spi.schema.GenericTypeNamingStrategy
 import springdox.documentation.spi.service.contexts.ParameterContext
 import springdox.documentation.spring.web.dummy.DummyClass
 import springdox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -32,7 +33,8 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
       methodParameter.getParameterType() >> paramType
       ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
       ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter, resolvedType)
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+              context(), Mock(GenericTypeNamingStrategy))
 
     when:
       sut.apply(parameterContext)

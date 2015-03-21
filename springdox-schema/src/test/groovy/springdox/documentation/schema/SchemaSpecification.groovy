@@ -14,7 +14,7 @@ class SchemaSpecification extends Specification {
   DocumentationType documentationType = DocumentationType.SWAGGER_12
   def setup() {
     typeNameExtractor =
-            new TypeNameExtractor(new TypeResolver(), new DefaultGenericTypeNamingStrategy(), defaultSchemaPlugins())
+            new TypeNameExtractor(new TypeResolver(), defaultSchemaPlugins())
     modelProvider = defaultModelProvider()
     modelDependencyProvider = defaultModelDependencyProvider()
   }

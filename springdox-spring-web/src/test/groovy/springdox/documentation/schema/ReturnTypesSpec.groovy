@@ -18,7 +18,7 @@ class ReturnTypesSpec extends Specification {
   TypeNameExtractor sut
 
   def setup() {
-    sut = new TypeNameExtractor(new TypeResolver(), new DefaultGenericTypeNamingStrategy(), defaultSchemaPlugins())
+    sut = new TypeNameExtractor(new TypeResolver(), defaultSchemaPlugins())
   }
 
    def "model types"() {
@@ -35,8 +35,10 @@ class ReturnTypesSpec extends Specification {
 
   def "Get response class name from ResolvedType"(){
     expect:
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
       def modelResponseClass = sut.typeName(
-              returnValue(new TypeResolver().resolve(GenericType.class, clazz), SWAGGER_12, alternateTypeProvider()))
+              returnValue(new TypeResolver().resolve(GenericType.class, clazz), SWAGGER_12, alternateTypeProvider(),
+                      namingStrategy))
       modelResponseClass == expectedResponseClassName
 
     where:

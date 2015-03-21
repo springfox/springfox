@@ -59,7 +59,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
       if (!shouldIgnore(methodParameter, context.getDocumentationContext().getIgnorableParameterTypes())) {
 
         ParameterContext parameterContext = new ParameterContext(methodParameter, new ParameterBuilder(),
-                context.getDocumentationContext());
+                context.getDocumentationContext(), context.getDocumentationContext().getGenericsNamingStrategy());
 
         if (!shouldExpand(methodParameter)) {
           parameters.add(pluginsManager.parameter(parameterContext));

@@ -65,6 +65,7 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
       'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
       'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
       'declaration-feature-demonstration-service.json'              | 'featureService'
+      'declaration-feature-demonstration-service-codeGen.json'      | 'featureService-codeGen'
       'declaration-inherited-service-impl.json'                     | 'inheritedService'
       'declaration-pet-grooming-service.json'                       | 'petGroomingService'
       'declaration-pet-service.json'                                | 'petService'
@@ -198,6 +199,19 @@ class SwaggerV2_0Spec extends Specification implements FileAccess {
               .select()
                 .paths(regex("/.*"))
                 .build()
+    }
+
+    @Bean
+    public Docket featureServiceForCodeGen(List<AuthorizationType> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
+              .groupName("featureService-codeGen")
+              .useDefaultResponseMessages(false)
+              .authorizationTypes(authorizationTypes)
+              .forCodeGeneration(true)
+              .produces(['application/xml', 'application/json'] as Set)
+              .select()
+              .paths(regex("/features/.*"))
+              .build()
     }
   }
 }

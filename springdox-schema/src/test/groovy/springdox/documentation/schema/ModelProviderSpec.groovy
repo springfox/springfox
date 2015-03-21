@@ -13,10 +13,11 @@ import static springdox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
 class ModelProviderSpec extends Specification {
 
+  def namingStrategy = new DefaultGenericTypeNamingStrategy()
   def "dependencies provider respects ignorables"() {
     given:
       ModelProvider sut = defaultModelProvider()
-      def context = inputParam(modelType, SWAGGER_12, alternateTypeProvider())
+      def context = inputParam(modelType, SWAGGER_12, alternateTypeProvider(), namingStrategy)
       context.seen(new TypeResolver().resolve(HttpHeaders))
       def dependentTypeNames = sut.dependencies(context).keySet().sort()
 
@@ -33,7 +34,7 @@ class ModelProviderSpec extends Specification {
     given:
       ModelProvider provider = defaultModelProvider()
       def dependentTypeNames = provider.dependencies(inputParam(modelType, SWAGGER_12,
-              alternateTypeProvider())).keySet().sort()
+              alternateTypeProvider(), namingStrategy)).keySet().sort()
 
     expect:
       dependencies == dependentTypeNames

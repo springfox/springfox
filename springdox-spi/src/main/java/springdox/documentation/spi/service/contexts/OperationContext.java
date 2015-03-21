@@ -23,8 +23,8 @@ public class OperationContext {
   private final String requestMappingPattern;
 
   public OperationContext(OperationBuilder operationBuilder, RequestMethod requestMethod, HandlerMethod
-          handlerMethod, int operationIndex, RequestMappingInfo requestMappingInfo, DocumentationContext
-          documentationContext, String requestMappingPattern) {
+          handlerMethod, int operationIndex, RequestMappingInfo requestMappingInfo,
+                          DocumentationContext documentationContext, String requestMappingPattern) {
     this.operationBuilder = operationBuilder;
     this.requestMethod = requestMethod;
     this.handlerMethod = handlerMethod;

@@ -5,6 +5,7 @@ import org.springframework.core.MethodParameter
 import org.springframework.web.bind.annotation.RequestParam
 import spock.lang.Unroll
 import springdox.documentation.builders.ParameterBuilder
+import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.service.ResolvedMethodParameter
 import springdox.documentation.spi.service.contexts.ParameterContext
 import springdox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -23,7 +24,8 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       methodParameter."$springParameterMethod"() >> methodReturnValue
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), genericNamingStrategy)
     when:
       parameterPlugin.apply(parameterContext)
 

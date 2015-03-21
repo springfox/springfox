@@ -1,7 +1,6 @@
 package springdox.documentation.schema.mixins
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
-import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.schema.DefaultModelProvider
 import springdox.documentation.schema.ModelDependencyProvider
 import springdox.documentation.schema.ModelProvider
@@ -26,7 +25,7 @@ class ModelProviderSupport {
     def fields = new FieldProvider(typeResolver)
 
     def pluginsManager = defaultSchemaPlugins()
-    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, new DefaultGenericTypeNamingStrategy(), pluginsManager)
+    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, pluginsManager)
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
     namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
 
@@ -40,21 +39,24 @@ class ModelProviderSupport {
             pluginsManager, typeNameExtractor)
   }
 
-  def beanProperty(TypeResolver typeResolver, ObjectMapperBeanPropertyNamingStrategy namingStrategy, SchemaPluginsManager pluginsManager, TypeNameExtractor typeNameExtractor, ObjectMapper objectMapper) {
+  def beanProperty(TypeResolver typeResolver, ObjectMapperBeanPropertyNamingStrategy namingStrategy,
+                   SchemaPluginsManager pluginsManager, TypeNameExtractor typeNameExtractor, ObjectMapper objectMapper) {
     def modelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver
             , namingStrategy, pluginsManager, typeNameExtractor)
     modelPropertyProvider.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
     modelPropertyProvider
   }
 
-  def fieldProperty(FieldProvider fields, ObjectMapperBeanPropertyNamingStrategy namingStrategy, SchemaPluginsManager pluginsManager, TypeNameExtractor typeNameExtractor, ObjectMapper objectMapper) {
+  def fieldProperty(FieldProvider fields, ObjectMapperBeanPropertyNamingStrategy namingStrategy,
+                    SchemaPluginsManager pluginsManager, TypeNameExtractor typeNameExtractor, ObjectMapper objectMapper) {
     def modelPropertyProvider = new FieldModelPropertyProvider(fields, namingStrategy,
             pluginsManager, typeNameExtractor)
     modelPropertyProvider.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
     modelPropertyProvider
   }
 
-  def constructorProperty(FieldProvider fields, ObjectMapperBeanPropertyNamingStrategy namingStrategy, SchemaPluginsManager pluginsManager, TypeNameExtractor typeNameExtractor, ObjectMapper objectMapper) {
+  def constructorProperty(FieldProvider fields, ObjectMapperBeanPropertyNamingStrategy namingStrategy,
+                          SchemaPluginsManager pluginsManager, TypeNameExtractor typeNameExtractor, ObjectMapper objectMapper) {
     def modelPropertyProvider =
             new ConstructorModelPropertyProvider(fields, namingStrategy, pluginsManager, typeNameExtractor)
     modelPropertyProvider.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
@@ -72,8 +74,7 @@ class ModelProviderSupport {
     def fields = new FieldProvider(typeResolver)
 
     def pluginsManager = defaultSchemaPlugins()
-    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, new DefaultGenericTypeNamingStrategy(),
-            pluginsManager)
+    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver,  pluginsManager)
     def objectMapper = new ObjectMapper()
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
     namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))

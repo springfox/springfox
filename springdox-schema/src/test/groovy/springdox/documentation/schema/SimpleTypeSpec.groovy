@@ -9,11 +9,12 @@ import static springdox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class SimpleTypeSpec extends SchemaSpecification {
+  def namingStrategy = new CodeGenGenericTypeNamingStrategy()
   @Unroll
   def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:
-      Model asInput = modelProvider.modelFor(inputParam(simpleType(), SWAGGER_12, alternateTypeProvider())).get()
-      Model asReturn = modelProvider.modelFor(returnValue(simpleType(), SWAGGER_12, alternateTypeProvider())).get()
+      Model asInput = modelProvider.modelFor(inputParam(simpleType(), SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asReturn = modelProvider.modelFor(returnValue(simpleType(), SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "SimpleType"
@@ -59,8 +60,10 @@ class SimpleTypeSpec extends SchemaSpecification {
   @Ignore
   def "type with constructor all properties are inferred"() {
     given:
-      Model asInput = modelProvider.modelFor(inputParam(typeWithConstructor(), documentationType, alternateTypeProvider())).get()
-      Model asReturn = modelProvider.modelFor(returnValue(typeWithConstructor(), documentationType, alternateTypeProvider())).get()
+      Model asInput = modelProvider.modelFor(inputParam(typeWithConstructor(), documentationType,
+              alternateTypeProvider(), namingStrategy)).get()
+      Model asReturn = modelProvider.modelFor(returnValue(typeWithConstructor(), documentationType,
+              alternateTypeProvider(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "TypeWithConstructor"
@@ -83,8 +86,10 @@ class SimpleTypeSpec extends SchemaSpecification {
 
   def "Types with properties aliased using JsonProperty annotation"() {
     given:
-      Model asInput = modelProvider.modelFor(inputParam(typeWithJsonPropertyAnnotation(), documentationType, alternateTypeProvider())).get()
-      Model asReturn = modelProvider.modelFor(returnValue(typeWithJsonPropertyAnnotation(), documentationType, alternateTypeProvider())).get()
+      Model asInput = modelProvider.modelFor(inputParam(typeWithJsonPropertyAnnotation(), documentationType,
+              alternateTypeProvider(), namingStrategy)).get()
+      Model asReturn = modelProvider.modelFor(returnValue(typeWithJsonPropertyAnnotation(), documentationType,
+              alternateTypeProvider(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "TypeWithJsonProperty"

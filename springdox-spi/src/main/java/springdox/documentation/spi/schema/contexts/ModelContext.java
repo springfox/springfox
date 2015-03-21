@@ -6,6 +6,7 @@ import com.google.common.base.Objects;
 import springdox.documentation.builders.ModelBuilder;
 import springdox.documentation.spi.DocumentationType;
 import springdox.documentation.spi.schema.AlternateTypeProvider;
+import springdox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.reflect.Type;
 import java.util.Set;
@@ -21,11 +22,14 @@ public class ModelContext {
   private final Set<ResolvedType> seenTypes = newHashSet();
   private final ModelBuilder modelBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
+  private GenericTypeNamingStrategy genericNamingStrategy;
 
   ModelContext(Type type, boolean returnType, DocumentationType documentationType,
-               AlternateTypeProvider alternateTypeProvider) {
+               AlternateTypeProvider alternateTypeProvider,
+               GenericTypeNamingStrategy genericNamingStrategy) {
     this.documentationType = documentationType;
     this.alternateTypeProvider = alternateTypeProvider;
+    this.genericNamingStrategy = genericNamingStrategy;
     this.parentContext = null;
     this.type = type;
     this.returnType = returnType;
@@ -63,14 +67,18 @@ public class ModelContext {
 
   public static ModelContext inputParam(Type type,
       DocumentationType documentationType,
-      AlternateTypeProvider alternateTypeRules) {
-    return new ModelContext(type, false, documentationType, alternateTypeRules);
+      AlternateTypeProvider alternateTypeRules,
+      GenericTypeNamingStrategy genericNamingStrategy) {
+
+    return new ModelContext(type, false, documentationType, alternateTypeRules, genericNamingStrategy);
   }
 
   public static ModelContext returnValue(Type type,
       DocumentationType documentationType,
-      AlternateTypeProvider alternateTypeProvider) {
-    return new ModelContext(type, true, documentationType, alternateTypeProvider);
+      AlternateTypeProvider alternateTypeProvider,
+      GenericTypeNamingStrategy genericNamingStrategy) {
+
+    return new ModelContext(type, true, documentationType, alternateTypeProvider, genericNamingStrategy);
   }
 
   public static ModelContext fromParent(ModelContext context, ResolvedType input) {
@@ -92,6 +100,13 @@ public class ModelContext {
       return false;
     }
     return parentContext.hasSeenBefore(resolvedType);
+  }
+
+  public GenericTypeNamingStrategy getGenericNamingStrategy() {
+    if (parentContext == null) {
+      return genericNamingStrategy;
+    }
+    return parentContext.getGenericNamingStrategy();
   }
 
   public ModelBuilder getBuilder() {

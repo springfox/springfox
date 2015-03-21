@@ -14,10 +14,11 @@ class EnumTypeSpec extends Specification {
     given:
       def list = newArrayList("ONE", "TWO")
       def provider = defaultModelProvider()
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
       Model asInput = provider.modelFor(inputParam(enumType(), DocumentationType.SWAGGER_12,
-              alternateTypeProvider())).get()
+              alternateTypeProvider(), namingStrategy)).get()
       Model asReturn = provider.modelFor(returnValue(enumType(), DocumentationType.SWAGGER_12,
-              alternateTypeProvider())).get()
+              alternateTypeProvider(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "ExampleWithEnums"

@@ -64,7 +64,8 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     ModelRef modelRef = null;
     if (!isVoid(returnType)) {
       ModelContext modelContext = ModelContext.returnValue(returnType,
-              context.getDocumentationType(), context.getAlternateTypeProvider());
+              context.getDocumentationType(), context.getAlternateTypeProvider(),
+            context.getDocumentationContext().getGenericsNamingStrategy());
       modelRef = modelRef(returnType, modelContext);
     }
     ResponseMessage built = new ResponseMessageBuilder()

@@ -3,10 +3,7 @@ package springdox.documentation.schema.property.property
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Ignore
-import springdox.documentation.schema.AlternateTypesSupport
-import springdox.documentation.schema.SchemaSpecification
-import springdox.documentation.schema.TypeWithAnnotatedGettersAndSetters
-import springdox.documentation.schema.TypeWithGettersAndSetters
+import springdox.documentation.schema.*
 import springdox.documentation.schema.configuration.ObjectMapperConfigured
 import springdox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springdox.documentation.schema.mixins.TypesForTestingSupport
@@ -23,11 +20,11 @@ import static springdox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, AlternateTypesSupport])
 class BeanModelPropertySpec extends SchemaSpecification {
 
+  def namingStrategy = new DefaultGenericTypeNamingStrategy()
   def "Extracting information from resolved properties"() {
-
     given:
       Class typeToTest = TypeWithGettersAndSetters
-      def modelContext = inputParam(typeToTest, SWAGGER_12, alternateTypeProvider())
+      def modelContext = inputParam(typeToTest, SWAGGER_12, alternateTypeProvider(), namingStrategy)
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -59,7 +56,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
   def "Extracting information from ApiModelProperty annotation"() {
     given:
       Class typeToTest = TypeWithAnnotatedGettersAndSetters
-      def modelContext = inputParam(typeToTest, SWAGGER_12, alternateTypeProvider())
+      def modelContext = inputParam(typeToTest, SWAGGER_12, alternateTypeProvider(), namingStrategy)
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -95,7 +92,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
 
     given:
       Class typeToTest = typeForTestingJsonGetterAnnotation()
-      def modelContext = inputParam(typeToTest, SWAGGER_12, alternateTypeProvider())
+      def modelContext = inputParam(typeToTest, SWAGGER_12, alternateTypeProvider(), namingStrategy)
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 

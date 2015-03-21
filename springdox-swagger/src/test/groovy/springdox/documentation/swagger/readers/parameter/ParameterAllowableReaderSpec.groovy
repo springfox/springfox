@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import spock.lang.Unroll
 import springdox.documentation.builders.ParameterBuilder
+import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.service.AllowableListValues
 import springdox.documentation.service.AllowableRangeValues
 import springdox.documentation.service.ResolvedMethodParameter
@@ -21,7 +22,8 @@ class ParameterAllowableReaderSpec extends DocumentationContextSpec {
       MethodParameter methodParameter = new MethodParameter(handlerMethod.getMethod(), 0)
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), genericNamingStrategy)
 
     when:
       ParameterAllowableReader operationCommand = new ParameterAllowableReader();
@@ -44,7 +46,8 @@ class ParameterAllowableReaderSpec extends DocumentationContextSpec {
       methodParameter.getParameterAnnotations() >> [apiParamAnnotation]
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), genericNamingStrategy)
 
     when:
       ParameterAllowableReader operationCommand = new ParameterAllowableReader();
@@ -68,7 +71,8 @@ class ParameterAllowableReaderSpec extends DocumentationContextSpec {
       methodParameter.getParameterAnnotations() >> [apiParamAnnotation]
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context())
+      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), genericNamingStrategy)
 
     when:
       ParameterAllowableReader operationCommand = new ParameterAllowableReader();

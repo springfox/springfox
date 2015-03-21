@@ -5,6 +5,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 import springdox.documentation.schema.AlternateTypesSupport
+import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.schema.TypeNameExtractor
 import springdox.documentation.schema.configuration.ObjectMapperConfigured
 import springdox.documentation.schema.mixins.ModelPropertyLookupSupport
@@ -23,6 +24,7 @@ class BeanModelPropertyProviderSpec extends Specification {
   def "Respect property ordering" () {
 
     given:
+      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
       Class typeToTest = complexType()
       def typeResolver = new TypeResolver()
       ResolvedType resolvedType = typeResolver.resolve(typeToTest)
@@ -34,10 +36,11 @@ class BeanModelPropertyProviderSpec extends Specification {
               Mock(TypeNameExtractor))
       beanModelPropertyProvider.objectMapper = mapper
       def serializationPropNames = beanModelPropertyProvider.propertiesFor(resolvedType,
-              returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider()))
+              returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy))
               .collect({it.name})
       def deSerializationPropNames = beanModelPropertyProvider.propertiesFor(resolvedType,
-              inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider())).collect({it.name})
+              inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy))
+              .collect({it.name})
 
     expect:
       serializationPropNames == ['name', 'age', 'category', 'customType']

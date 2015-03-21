@@ -2,6 +2,7 @@ package springdox.documentation.schema.property.constructor
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import springdox.documentation.schema.AlternateTypesSupport
+import springdox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springdox.documentation.schema.SchemaSpecification
 import springdox.documentation.schema.configuration.ObjectMapperConfigured
 import springdox.documentation.schema.mixins.ModelPropertyLookupSupport
@@ -19,9 +20,10 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
 
   def "Extracting information from resolved constructor params" () {
     given:
+      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
       def typeToTest = typeWithConstructorProperty()
       def beanPropertyDefinition = beanPropertyDefinitionByField(typeToTest, fieldName)
-      def modelContext = inputParam(typeToTest, documentationType, alternateTypeProvider())
+      def modelContext = inputParam(typeToTest, documentationType, alternateTypeProvider(), genericNamingStrategy)
       def field = field(typeToTest, fieldName)
       ObjectMapper mapper = new ObjectMapper()
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()

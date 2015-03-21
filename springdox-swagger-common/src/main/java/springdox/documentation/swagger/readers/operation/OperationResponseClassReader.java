@@ -55,7 +55,7 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
       return;
     }
     ModelContext modelContext = returnValue(returnType, context.getDocumentationType(),
-            context.getAlternateTypeProvider());
+            context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting response class to:" + responseTypeName);
     context.operationBuilder()
