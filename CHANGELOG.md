@@ -1,12 +1,19 @@
 ## Change Logs
+[1.0.1](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A1.0.1)
+==================================================================================
+- [#618] Ranges are treated like enums bug
+- [#522] @Unwrapped types have problems sometimes... bug
+- [#482] Custom ObjectMapper not recognized by swagger-springmvc bug
+
 [1.0.0](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A1.0.0)
+==================================================================================
 - [#593] Container types in model properties are now rendered as "arrays" 
 - [#589] Add support for @RequestPart annotation
 - [#560] Having a model property of type Class doesn't work as expected
 - [#554] @ApiModelProperty "hidden" attribute has no effect
 
 [0.9.5](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A0.9.5)
-===========================================
+==================================================================================
 - [#552] Enable ApiResponses annotation on interface
 - [#541] Fix the rendering of enums in model properties. Attempt to clean up logic to handle bare enums in the response
 - [#539] Prevents excludeAnnotations from modifying the defaults in SpringSwaggerConfig
