@@ -16,7 +16,7 @@ import java.util.List;
 import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
-import static com.mangofactory.swagger.readers.operation.parameter.ParameterAllowableReader.*;
+import static com.mangofactory.swagger.models.property.ApiModelProperties.*;
 
 class ParameterBuilder {
 

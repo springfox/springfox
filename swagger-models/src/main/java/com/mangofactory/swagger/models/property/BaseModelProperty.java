@@ -53,7 +53,7 @@ public abstract class BaseModelProperty implements ModelProperty {
   @Override
   public AllowableValues allowableValues() {
     Optional<AllowableValues> allowableValues = Optional.fromNullable(ResolvedTypes.allowableValues(getType()));
-    Optional<AllowableListValues> listValues = apiModelProperty.transform(toAllowableList());
+    Optional<AllowableValues> listValues = apiModelProperty.transform(toAllowableValues());
     //Preference to inferred allowable values over list values via ApiModelProperty
     if (allowableValues.isPresent()) {
       return allowableValues.get();
@@ -64,8 +64,12 @@ public abstract class BaseModelProperty implements ModelProperty {
     return listValues.orNull();
   }
 
-  private boolean allowableValuesIsEmpty(Optional<AllowableListValues> listValues) {
-    return !listValues.isPresent() || listValues.get().getValues().size() == 0;
+  private boolean allowableValuesIsEmpty(Optional<AllowableValues> allowableValues) {
+    if (allowableValues.isPresent()) {
+      AllowableValues allowable = allowableValues.get();
+      return allowable instanceof AllowableListValues && ((AllowableListValues) allowable).getValues().size() == 0;
+    }
+    return true;
   }
 
   @Override
@@ -81,8 +85,7 @@ public abstract class BaseModelProperty implements ModelProperty {
 
   @Override
   public String propertyDescription() {
-    String description = getApiModelProperty().transform(toDescription()).orNull();
-    return description;
+    return getApiModelProperty().transform(toDescription()).orNull();
   }
 
   protected Optional<ApiModelProperty> getApiModelProperty() {

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/swagger-contract-tests/swagger-contract-tests.iml" filepath="$PROJECT_DIR$/swagger-contract-tests/swagger-contract-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/swagger-models/swagger-models.iml" filepath="$PROJECT_DIR$/swagger-models/swagger-models.iml" />
       <module fileurl="file://$PROJECT_DIR$/swagger-springmvc/swagger-springmvc.iml" filepath="$PROJECT_DIR$/swagger-springmvc/swagger-springmvc.iml" />
