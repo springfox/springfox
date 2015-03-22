@@ -20,11 +20,10 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 class CheckCleanWorkspaceTask extends DefaultTask {
+  public static final String TASK_NAME = "checkCleanWorkspace"
+  String description = "Checks workspace is in sync with remote"
+  String group = "release"
 
-
-  //Only master?
-  //git fetch
-//  git diff master origin/master
   @TaskAction
   void check() {
     def sout = new ByteArrayOutputStream()

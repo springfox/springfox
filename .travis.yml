@@ -1,8 +1,8 @@
-sudo: false
-cache:
-  directories:
-  - $HOME/.m2
-  - $HOME/.gradle/wrapper
+#sudo: false
+#cache:
+#  directories:
+#  - $HOME/.m2
+#  - $HOME/.gradle/wrapper
 language: java
 install:
   - true
@@ -11,9 +11,9 @@ script:
 
 jdk:
   - openjdk6
-  - oraclejdk7
-  - openjdk7
-  - oraclejdk8
+#  - oraclejdk7
+#  - openjdk7
+#  - oraclejdk8
 
 after_success:
   - '[[ $TRAVIS_BRANCH == "refactor/538/spike-to-seperate-models-and-dtos" ]]

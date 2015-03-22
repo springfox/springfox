@@ -54,7 +54,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   }
 
   def preReleaseTasks(Project project) {
-    checkCleanWorkspaceTask = project.task("checkCleanWorkspace", type: CheckCleanWorkspaceTask)
+    checkCleanWorkspaceTask = project.task(CheckCleanWorkspaceTask.TASK_NAME, type: CheckCleanWorkspaceTask)
   }
 
   def configureTaskDependencies(Project project) {
@@ -63,7 +63,6 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     def iSnapshotCheckTask = project.task('iSnapshotCheck', type: IntermediaryTask)
 
     project.afterEvaluate { evaluatedProject ->
-
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
       iCheckTask.dependsOn javaCheckTasks
       iSnapshotCheckTask.dependsOn javaCheckTasks
@@ -73,9 +72,9 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
         if (bintrayPublishTask) {
           iPublishTask.dependsOn(bintrayPublishTask)
         }
+
         def jcenterTasks = it.tasks.findAll { it.name.contains('ToJcenterRepository') }
         if (jcenterTasks) {
-//          iPublishTask.dependsOn(jcenterTasks)\
           snapshotTask.dependsOn jcenterTasks
         }
       }
@@ -87,7 +86,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
     releaseTask.dependsOn iPublishTask
 
-
+    //Snapshot dependency graph
     snapshotTask.dependsOn iSnapshotCheckTask
     snapshotTask.dependsOn checkCleanWorkspaceTask
     snapshotTask.dependsOn credentialCheck
@@ -114,7 +113,6 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
               password = "${bintrayCredentials.password}"
             }
           }
-
         }
       }
     }
