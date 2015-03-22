@@ -37,7 +37,6 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   void apply(Project project) {
     releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask)
     addTasks(project)
-    configureAllProjectVersions(project)
     configureTaskDependencies(project)
   }
 
@@ -49,32 +48,12 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     checkCleanWorkspaceTask = project.task("checkCleanWorkspace", type: CheckCleanWorkspaceTask)
   }
 
-  def configureAllProjectVersions(Project project) {
-//    if(project.gradle.startParameter.taskNames.contains(ReleaseTask.TASK_NAME)){
-//      softwareVersion = project.version.next(project.release.releaseType)
-//      project.version = softwareVersion
-//      project.allprojects {
-//        allprojects*.version = softwareVersion
-//      }
-//      throw new GradleException("Version is: ${project.version}")
-//    }
-//    project.gradle.taskGraph.whenReady { graph ->
-//      if (graph.hasTask(':release')) {
-//        def nextVersion = project.version.next(project.release.releaseType)
-//        project.allprojects {
-//          allprojects*.version = nextVersion
-//        }
-//      }
-//    }
-  }
-
   def configureTaskDependencies(Project project) {
     def iCheckTask = project.task('iCheckTask', type: IntermediaryTask)
     def iPublishTask = project.task('iPublishTask', type: IntermediaryTask)
 
     project.afterEvaluate { evaluatedProject ->
-//      iCheckTask.dependsOn evaluatedProject.getTasksByName('check', true)
-      iCheckTask.dependsOn evaluatedProject.getTasksByName('build', true)
+      iCheckTask.dependsOn evaluatedProject.getTasksByName('check', true)
 
       evaluatedProject.subprojects.each {
         def bintrayPublishTask = it.tasks.findByPath('bintrayUpload')
@@ -91,8 +70,3 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     releaseTask.dependsOn iPublishTask
   }
 }
-
-/**
- * gradle.addBuildListener
- * gut reset or git push
- */
