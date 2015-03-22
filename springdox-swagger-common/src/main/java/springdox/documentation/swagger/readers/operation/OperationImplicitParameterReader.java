@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import static springdox.documentation.swagger.common.SwaggerPluginSupport.*;
-import static springdox.documentation.swagger.readers.parameter.ParameterAllowableReader.*;
+import static springdox.documentation.swagger.schema.ApiModelProperties.*;
 
 
 @Component

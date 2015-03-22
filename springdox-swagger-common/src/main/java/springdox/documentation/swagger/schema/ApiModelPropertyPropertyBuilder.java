@@ -9,6 +9,7 @@ import springdox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springdox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import static springdox.documentation.swagger.common.SwaggerPluginSupport.*;
+import static springdox.documentation.swagger.schema.ApiModelProperties.*;
 
 @Component
 public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlugin {
@@ -25,7 +26,7 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
     }
     if (annotation.isPresent()) {
       context.getBuilder()
-        .allowableValues(annotation.transform(ApiModelProperties.toAllowableList()).orNull())
+        .allowableValues(annotation.transform(toAllowableValues()).orNull())
         .required(annotation.transform(ApiModelProperties.toIsRequired()).or(false))
         .description(annotation.transform(ApiModelProperties.toDescription()).orNull());
     }
