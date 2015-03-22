@@ -5,31 +5,31 @@ class ContainerDataTypeSpec extends InternalJsonSerializationSpec {
   def "should serialize a primitive"() {
     expect:
       writePretty(new ContainerDataType("int", false)) == '''{
-  "type" : "array",
   "items" : {
     "format" : "int32",
     "type" : "integer"
-  }
+  },
+  "type" : "array"
 }'''
   }
 
   def "should serialize a complex"() {
     expect:
       writePretty(new ContainerDataType("pet", false)) == '''{
-  "type" : "array",
   "items" : {
     "type" : "pet"
-  }
+  },
+  "type" : "array"
 }'''
   }
 
   def "should serialize a complex with uniqueItems"() {
     expect:
       writePretty(new ContainerDataType("pet", true)) == '''{
-  "type" : "array",
   "items" : {
     "type" : "pet"
   },
+  "type" : "array",
   "uniqueItems" : true
 }'''
   }

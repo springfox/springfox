@@ -104,10 +104,10 @@ class ParameterSpec extends InternalJsonSerializationSpec {
   "name" : "body",
   "paramAccess" : "all",
   "paramType" : "body",
-  "type" : "array",
   "items" : {
     "type" : "Pet"
   },
+  "type" : "array",
   "uniqueItems" : true,
   "required" : true
 }"""

@@ -4,16 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import groovy.json.JsonSlurper
 import spock.lang.Shared
 import spock.lang.Specification
-import springdox.documentation.swagger.jackson.SwaggerJacksonProvider
+import springdox.documentation.swagger.configuration.SwaggerJacksonModule
 
 class InternalJsonSerializationSpec extends Specification {
 
   @Shared ObjectMapper objectMapper
 
   def setupSpec() {
-    def provider = new SwaggerJacksonProvider()
-    objectMapper = provider.objectMapper
-//    objectMapper.registerModule(provider.swaggerJacksonModule())
+    def module = new SwaggerJacksonModule()
+    objectMapper = new ObjectMapper()
+    objectMapper.registerModule(module)
   }
 
   def writeAndParse(object, boolean print = true) {

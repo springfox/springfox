@@ -20,7 +20,7 @@ import springdox.documentation.spring.web.scanners.ApiDocumentationScanner
 import springdox.documentation.spring.web.scanners.ApiListingReferenceScanResult
 import springdox.documentation.spring.web.scanners.ApiListingReferenceScanner
 import springdox.documentation.spring.web.scanners.ApiListingScanner
-import springdox.documentation.swagger.jackson.SwaggerJacksonProvider
+import springdox.documentation.swagger.configuration.SwaggerJacksonModule
 import springdox.documentation.swagger.mixins.MapperSupport
 
 import static com.google.common.collect.Maps.*
@@ -49,7 +49,7 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
     jackson2.setSupportedMediaTypes([MediaType.ALL, MediaType.APPLICATION_JSON])
 
     def mapper = new ObjectMapper()
-    mapper.registerModule(new SwaggerJacksonProvider().swaggerJacksonModule())
+    SwaggerJacksonModule.maybeRegisterModule(mapper)
 
     jackson2.setObjectMapper(mapper)
     mockMvc = standaloneSetup(controller)

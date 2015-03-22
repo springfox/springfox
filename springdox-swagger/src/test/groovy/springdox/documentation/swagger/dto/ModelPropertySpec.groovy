@@ -27,10 +27,10 @@ class ModelPropertySpec extends InternalJsonSerializationSpec {
       writePretty(modelProperty) == '''{
   "description" : "decs",
   "required" : true,
-  "type" : "array",
   "items" : {
     "type" : "mtype"
-  }
+  },
+  "type" : "array"
 }'''
   }
 
@@ -39,10 +39,10 @@ class ModelPropertySpec extends InternalJsonSerializationSpec {
       writePretty(setProperty) == '''{
   "description" : "decs",
   "required" : true,
-  "type" : "array",
   "items" : {
     "type" : "mtype"
   },
+  "type" : "array",
   "uniqueItems" : true
 }'''
   }
