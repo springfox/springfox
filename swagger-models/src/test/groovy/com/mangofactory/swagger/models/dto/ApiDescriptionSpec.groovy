@@ -13,9 +13,9 @@ class ApiDescriptionSpec extends InternalJsonSerializationSpec {
   def "should serialize"() {
     expect:
       writePretty(description) == """{
-  "path" : "p",
   "description" : "d",
-  "operations" : [ ]
+  "operations" : [ ],
+  "path" : "p"
 }"""
   }
 

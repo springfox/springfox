@@ -7,7 +7,7 @@ import com.mangofactory.swagger.mixins.ApiListingSupport
 import com.mangofactory.swagger.mixins.AuthSupport
 import com.mangofactory.swagger.mixins.JsonSupport
 import com.mangofactory.swagger.models.dto.AuthorizationType
-import com.mangofactory.swagger.models.dto.jackson.SwaggerJacksonProvider
+import com.mangofactory.swagger.models.dto.jackson.SwaggerJacksonModule
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
@@ -37,7 +37,7 @@ class DefaultSwaggerControllerSpec extends Specification {
     jackson2.setSupportedMediaTypes([MediaType.ALL, MediaType.APPLICATION_JSON])
 
     def mapper = new ObjectMapper()
-    mapper.registerModule(new SwaggerJacksonProvider().swaggerJacksonModule())
+    mapper.registerModule(new SwaggerJacksonModule())
 
     jackson2.setObjectMapper(mapper)
     mockMvc = standaloneSetup(controller)

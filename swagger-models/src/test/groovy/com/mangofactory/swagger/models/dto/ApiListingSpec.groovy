@@ -31,12 +31,9 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
       writePretty(apiListing) ==
               '''{
   "apiVersion" : "1",
-  "swaggerVersion" : "1.2",
-  "basePath" : "/base",
-  "resourcePath" : "/resource",
-  "produces" : [ "application/json" ],
-  "consumes" : [ "application/json" ],
   "apis" : [ ],
+  "basePath" : "/base",
+  "consumes" : [ "application/json" ],
   "models" : {
     "someModel" : {
       "description" : "desc",
@@ -49,7 +46,10 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
         }
       }
     }
-  }
+  },
+  "produces" : [ "application/json" ],
+  "resourcePath" : "/resource",
+  "swaggerVersion" : "1.2"
 }'''
 
   }

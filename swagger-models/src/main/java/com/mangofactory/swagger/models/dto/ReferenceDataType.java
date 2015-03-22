@@ -1,5 +1,6 @@
 package com.mangofactory.swagger.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ReferenceDataType implements SwaggerDataType {
@@ -15,6 +16,7 @@ public class ReferenceDataType implements SwaggerDataType {
   }
 
   @Override
+  @JsonIgnore
   public String getAbsoluteType() {
     return reference;
   }

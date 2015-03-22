@@ -1,7 +1,7 @@
 package com.mangofactory.swagger.models.dto
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mangofactory.swagger.models.dto.jackson.SwaggerJacksonProvider
+import com.mangofactory.swagger.models.dto.jackson.SwaggerJacksonModule
 import groovy.json.JsonSlurper
 import spock.lang.Shared
 import spock.lang.Specification
@@ -11,9 +11,9 @@ class InternalJsonSerializationSpec extends Specification {
   @Shared ObjectMapper objectMapper
 
   def setupSpec() {
-    def provider = new SwaggerJacksonProvider()
-    objectMapper = provider.objectMapper
-//    objectMapper.registerModule(provider.swaggerJacksonModule())
+    def module = new SwaggerJacksonModule()
+    objectMapper = new ObjectMapper()
+    objectMapper.registerModule(module)
   }
 
   def writeAndParse(object, boolean print = true) {
