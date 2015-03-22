@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package springdox.gradlebuild.tasks
 
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
+package springdox.gradlebuild
 
-// git status --porcelain
-class ReleaseTask extends DefaultTask {
-  public static final String TASK_NAME = 'release'
-  String description = 'non snapshot release flow'
-  String group = 'release'
+import org.gradle.api.Project
 
-  @TaskAction
-  void release() {
+class BintrayCredentials {
+  private final Project project
+
+  BintrayCredentials(Project project) {
+    this.project = project
+  }
+
+  String getUsername() {
+    return project.hasProperty('bintrayUsername') ? project.property('bintrayUsername') : 'admin'
+  }
+
+  String getPassword() {
+    return project.hasProperty('bintrayPassword') ? project.property('bintrayPassword') : 'password'
   }
 }

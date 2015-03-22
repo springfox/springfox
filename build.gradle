@@ -1,5 +1,6 @@
 import springdox.gradlebuild.version.BuildscriptVersionResolver
 import springdox.gradlebuild.version.SemanticVersion
+import springdox.gradlebuild.version.SnapshotVersion
 import springdox.gradlebuild.version.SoftwareVersion
 
 apply from: "$rootDir/gradle/dependencies.gradle"
@@ -31,7 +32,7 @@ apply plugin: 'springdox-multi-release'
 
 
 SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
-        project, SemanticVersion.get(file("$rootDir/version.properties"))
+        project, new SnapshotVersion(SemanticVersion.get(file("$rootDir/version.properties")))
 )
 version = currentVersion
 

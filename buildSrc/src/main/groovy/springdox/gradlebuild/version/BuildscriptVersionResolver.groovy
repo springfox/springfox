@@ -27,4 +27,8 @@ class BuildscriptVersionResolver {
       return currentVersion
     }
   }
+
+  static boolean isSnapshot(Project project){
+    return project.version.toString().endsWith('-SNAPSHOT')
+  }
 }

@@ -18,24 +18,33 @@ package springdox.gradlebuild.plugins
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import springdox.gradlebuild.BintrayCredentials
+import springdox.gradlebuild.tasks.BintrayCredentialsCheckTask
 import springdox.gradlebuild.tasks.CheckCleanWorkspaceTask
 import springdox.gradlebuild.tasks.IntermediaryTask
 import springdox.gradlebuild.tasks.ReleaseTask
-import springdox.gradlebuild.version.SoftwareVersion
+import springdox.gradlebuild.tasks.SnapshotTask
+import springdox.gradlebuild.version.BuildscriptVersionResolver
 
 /**
- * Plugin inspired by https://www.youtube.com/watch?v=Y6SVoXFsw7I ( GradleSummit2014 - Releasing With Gradle - René Groeschke)
+ * Much of what this plugin does is inspired by:
+ * https://www.youtube.com/watch?v=Y6SVoXFsw7I ( GradleSummit2014 - Releasing With Gradle - René Groeschke)
  *
  */
 public class MultiProjectReleasePlugin implements Plugin<Project> {
 
   ReleaseTask releaseTask
   CheckCleanWorkspaceTask checkCleanWorkspaceTask
-  SoftwareVersion softwareVersion
+  SnapshotTask snapshotTask
+  BintrayCredentialsCheckTask credentialCheck
 
   @Override
   void apply(Project project) {
     releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask)
+    snapshotTask = project.task(SnapshotTask.TASK_NAME, type: SnapshotTask)
+    credentialCheck = project.task(BintrayCredentialsCheckTask.TASK_NAME, type: BintrayCredentialsCheckTask)
+
+    configurePublications(project)
     addTasks(project)
     configureTaskDependencies(project)
   }
@@ -51,14 +60,23 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   def configureTaskDependencies(Project project) {
     def iCheckTask = project.task('iCheckTask', type: IntermediaryTask)
     def iPublishTask = project.task('iPublishTask', type: IntermediaryTask)
+    def iSnapshotCheckTask = project.task('iSnapshotCheck', type: IntermediaryTask)
 
     project.afterEvaluate { evaluatedProject ->
-      iCheckTask.dependsOn evaluatedProject.getTasksByName('check', true)
+
+      def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
+      iCheckTask.dependsOn javaCheckTasks
+      iSnapshotCheckTask.dependsOn javaCheckTasks
 
       evaluatedProject.subprojects.each {
         def bintrayPublishTask = it.tasks.findByPath('bintrayUpload')
         if (bintrayPublishTask) {
           iPublishTask.dependsOn(bintrayPublishTask)
+        }
+        def jcenterTasks = it.tasks.findAll { it.name.contains('ToJcenterRepository') }
+        if (jcenterTasks) {
+//          iPublishTask.dependsOn(jcenterTasks)\
+          snapshotTask.dependsOn jcenterTasks
         }
       }
     }
@@ -68,5 +86,38 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     iCheckTask.mustRunAfter checkCleanWorkspaceTask
 
     releaseTask.dependsOn iPublishTask
+
+
+    snapshotTask.dependsOn iSnapshotCheckTask
+    snapshotTask.dependsOn checkCleanWorkspaceTask
+    snapshotTask.dependsOn credentialCheck
+    iSnapshotCheckTask.mustRunAfter checkCleanWorkspaceTask
+    iSnapshotCheckTask.mustRunAfter credentialCheck
+
   }
+
+
+  def configurePublications(Project project) {
+    project.ext {
+      bintrayCredentials = new BintrayCredentials(project)
+      artifactRepoBase = 'http://oss.jfrog.org/artifactory'
+      repoPrefix = 'oss'
+
+      releaseRepos = {
+        //Only snapshots - bintray plugin takes care of non-snapshot releases
+        if (BuildscriptVersionResolver.isSnapshot(project)) {
+          maven {
+            name 'jcenter'
+            url "${artifactRepoBase}/${repoPrefix}-${project.version.toString().endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
+            credentials {
+              username = "${bintrayCredentials.username}"
+              password = "${bintrayCredentials.password}"
+            }
+          }
+
+        }
+      }
+    }
+  }
+
 }

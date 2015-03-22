@@ -1,4 +1,11 @@
 publishing {
+
+
+  repositories {
+    configure(project.releaseRepos)
+  }
+
+
   publications {
     mavenJava(MavenPublication) {
       groupId 'com.github.springdox'

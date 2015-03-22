@@ -13,5 +13,12 @@ SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
 ```
 
 ### Snapshot
-TBD
+```groovy
+SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
+        project, new SnapshotVersion(SemanticVersion.get(file("$rootDir/version.properties")))
+)
+```
 
+```bash
+./gradlew snapshot -PbintrayUsername=<bintrayUsername> -PbintrayPassword=<bintrayPassword>
+```

@@ -13,18 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package springdox.gradlebuild.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-// git status --porcelain
-class ReleaseTask extends DefaultTask {
-  public static final String TASK_NAME = 'release'
-  String description = 'non snapshot release flow'
+class BintrayCredentialsCheckTask extends DefaultTask {
+  public static final TASK_NAME = "bintrayCredentialsCheck"
+  String description = 'verifies bintray credentials'
   String group = 'release'
 
   @TaskAction
-  void release() {
+  def action() {
+    requiredProperty('bintrayUsername')
+    requiredProperty('bintrayPassword')
+  }
+
+  String requiredProperty(String propName) {
+    if (project.hasProperty(propName)) {
+      assert project.property(propName): "Property ${propName} must not be blank!"
+      return project.property(propName)
+    } else {
+      throw new IllegalArgumentException("Property ${propName} is required!")
+    }
   }
 }

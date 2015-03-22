@@ -1,3 +1,5 @@
+import springdox.gradlebuild.version.BuildscriptVersionResolver
+
 /*
  * Copyright 2015 the original author or authors.
  *
@@ -14,33 +16,31 @@
  * limitations under the License.
  */
 
-apply plugin: 'com.jfrog.bintray'
-//apply plugin: 'maven-publish'
+if (!BuildscriptVersionResolver.isSnapshot(project)) {
 
-relUsername = project.hasProperty('bintrayUsername') ? project.property('bintrayUsername') : 'admin'
-relPassword = project.hasProperty('bintrayPassword') ? project.property('bintrayPassword') : 'password'
+  apply plugin: 'com.jfrog.bintray'
 
-bintray {
-  user = relUsername
-  key = relPassword
+  bintray {
+    user = project.bintrayCredentials.username
+    key = project.bintrayCredentials.password
 
 
-  publications = ['mavenJava']
-  dryRun = false //Whether to run this as dry-run, without deploying
-  publish = true //If version should be auto published after an upload
-  pkg {
-    repo = 'springdox'
-    userOrg = 'springdox' //An optional organization name when the repo belongs to one of the user's orgs
-    name = 'springdox'
-    desc = 'A suite of libraries for documenting spring based JSON APIs '
-    websiteUrl = 'https://github.com/springdox/springdox'
-    issueTrackerUrl = 'https://github.com/springdox/springdox/issues'
-    vcsUrl = 'https://github.com/springdox/springdox.git'
-    licenses = ['Apache-2.0']
-    labels = ['spring', 'swagger', 'apis']
-    publicDownloadNumbers = true
+    publications = ['mavenJava']
+    dryRun = false //Whether to run this as dry-run, without deploying
+    publish = true //If version should be auto published after an upload
+    pkg {
+      repo = 'springdox'
+      userOrg = 'springdox' //An optional organization name when the repo belongs to one of the user's orgs
+      name = 'springdox'
+      desc = 'A suite of libraries for documenting spring based JSON APIs '
+      websiteUrl = 'https://github.com/springdox/springdox'
+      issueTrackerUrl = 'https://github.com/springdox/springdox/issues'
+      vcsUrl = 'https://github.com/springdox/springdox.git'
+      licenses = ['Apache-2.0']
+      labels = ['spring', 'swagger', 'apis']
+      publicDownloadNumbers = true
 
-    //Optional version descriptor
+      //Optional version descriptor
 //    version {
 //      name = '1.3-Final' //Bintray logical version name
 //      desc = 'optional, version-specific description'
@@ -58,5 +58,6 @@ bintray {
 //        close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
 //      }
 //    }
+    }
   }
 }
