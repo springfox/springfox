@@ -86,8 +86,7 @@ configure(publishable(subprojects)) { subproject ->
   apply from: "$rootDir/gradle/artifacts.gradle"
   apply from: "$rootDir/gradle/bintray_publish.gradle"
   apply from: "$rootDir/gradle/coverage.gradle"
-  //TODO - reinstate
-//  apply from: "$rootDir/gradle/code-quality.gradle"
+  apply from: "$rootDir/gradle/code-quality.gradle"
 
   repositories {
     jcenter()
