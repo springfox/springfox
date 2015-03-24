@@ -73,7 +73,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
       typeNameExtractor.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
 
-      if (sut.allowableValues()) {
+      if (allowableValues) {
         sut.allowableValues().getValues() == allowableValues.getValues()
         sut.allowableValues().getValueType() == allowableValues.getValueType()
       }
