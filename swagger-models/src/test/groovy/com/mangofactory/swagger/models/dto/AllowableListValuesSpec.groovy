@@ -1,8 +1,6 @@
 package com.mangofactory.swagger.models.dto
 
-import spock.lang.Specification
-
-class AllowableListValuesSpec extends Specification {
+class AllowableListValuesSpec extends InternalJsonSerializationSpec {
 
   def "should pass coverage"() {
     expect:
@@ -10,5 +8,17 @@ class AllowableListValuesSpec extends Specification {
         getValues()
         getValueType()
       }
+  }
+
+  def "when list values is empty, the enum value is ignored" () {
+    expect:
+      writePretty(new AllowableListValues([], "List")) == """{ }"""
+  }
+
+  def "when list values is not empty, the enum value is rendered" () {
+    expect:
+      writePretty(new AllowableListValues(['ONE', 'TWO'], "List")) == """{
+  "enum" : [ "ONE", "TWO" ]
+}"""
   }
 }

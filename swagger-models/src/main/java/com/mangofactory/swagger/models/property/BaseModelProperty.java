@@ -5,9 +5,8 @@ import com.google.common.base.Optional;
 import com.mangofactory.swagger.models.ModelContext;
 import com.mangofactory.swagger.models.ResolvedTypes;
 import com.mangofactory.swagger.models.alternates.AlternateTypeProvider;
-import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.mangofactory.swagger.models.dto.AllowableListValues;
 import com.mangofactory.swagger.models.dto.AllowableValues;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 import static com.mangofactory.swagger.models.ResolvedTypes.*;
 import static com.mangofactory.swagger.models.property.ApiModelProperties.*;
@@ -58,18 +57,7 @@ public abstract class BaseModelProperty implements ModelProperty {
     if (allowableValues.isPresent()) {
       return allowableValues.get();
     }
-    if (allowableValuesIsEmpty(listValues)) {
-      return null;
-    }
     return listValues.orNull();
-  }
-
-  private boolean allowableValuesIsEmpty(Optional<AllowableValues> allowableValues) {
-    if (allowableValues.isPresent()) {
-      AllowableValues allowable = allowableValues.get();
-      return allowable instanceof AllowableListValues && ((AllowableListValues) allowable).getValues().size() == 0;
-    }
-    return true;
   }
 
   @Override

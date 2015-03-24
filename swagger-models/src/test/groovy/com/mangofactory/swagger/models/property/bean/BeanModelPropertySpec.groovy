@@ -38,7 +38,7 @@ class BeanModelPropertySpec extends Specification {
       sut.required == required
       sut.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
-      sut.allowableValues() == null
+      sut.allowableValues() != null
       !sut.isHidden()
 
 
@@ -70,7 +70,7 @@ class BeanModelPropertySpec extends Specification {
       sut.qualifiedTypeName() == qualifiedTypeName
       !sut.isHidden()
 
-      if (sut.allowableValues()) {
+      if (allowableValues) {
         sut.allowableValues().getValues() == allowableValues.getValues()
         sut.allowableValues().getValueType() == allowableValues.getValueType()
       }
