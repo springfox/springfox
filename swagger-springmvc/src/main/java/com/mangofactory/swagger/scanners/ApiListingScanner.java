@@ -40,8 +40,8 @@ import static com.google.common.collect.Sets.*;
 
 public class ApiListingScanner {
   private static final Logger log = LoggerFactory.getLogger(ApiListingScanner.class);
+  private static final String SWAGGER_VERSION = "1.2";
 
-  private String swaggerVersion = "1.2";
   private Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings;
   private SwaggerPathProvider swaggerPathProvider;
   private SwaggerGlobalSettings swaggerGlobalSettings;
@@ -50,13 +50,14 @@ public class ApiListingScanner {
   private Ordering<ApiDescription> apiDescriptionOrdering = new ApiDescriptionLexicographicalOrdering();
   private Collection<RequestMappingReader> customAnnotationReaders;
   private final RequestMappingEvaluator requestMappingEvaluator;
+  private final String apiVersion;
 
   public ApiListingScanner(Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings,
                            SwaggerPathProvider swaggerPathProvider,
                            ModelProvider modelProvider,
                            AuthorizationContext authorizationContext,
                            Collection<RequestMappingReader> customAnnotationReaders,
-                           RequestMappingEvaluator requestMappingEvaluator) {
+                           RequestMappingEvaluator requestMappingEvaluator, String apiVersion) {
 
     this.resourceGroupRequestMappings = resourceGroupRequestMappings;
     this.swaggerPathProvider = swaggerPathProvider;
@@ -64,6 +65,7 @@ public class ApiListingScanner {
     this.modelProvider = modelProvider;
     this.customAnnotationReaders = customAnnotationReaders;
     this.requestMappingEvaluator = requestMappingEvaluator;
+    this.apiVersion = apiVersion;
   }
 
   @SuppressWarnings("unchecked")
@@ -120,10 +122,9 @@ public class ApiListingScanner {
 
         String resourcePath = longestCommonPath(sortedDescriptions);
 
-        String apiVersion = "1.0";
         ApiListing apiListing = new ApiListingBuilder()
                 .apiVersion(apiVersion)
-                .swaggerVersion(swaggerVersion)
+                .swaggerVersion(SWAGGER_VERSION)
                 .basePath(swaggerPathProvider.getApplicationBasePath())
                 .resourcePath(resourcePath)
                 .produces(Lists.newArrayList(produces))

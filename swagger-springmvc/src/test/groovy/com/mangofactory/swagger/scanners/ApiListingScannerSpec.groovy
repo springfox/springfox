@@ -38,7 +38,7 @@ class ApiListingScannerSpec extends Specification {
       RequestMappingEvaluator evaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
               RegexRequestMappingPatternMatcher(), newArrayList(".*?"))
       ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
-              modelProvider(), null, [], evaluator)
+              modelProvider(), null, [], evaluator, "1.0")
 
       def settings = new SwaggerGlobalSettings()
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
@@ -76,7 +76,7 @@ class ApiListingScannerSpec extends Specification {
       RequestMappingEvaluator evaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
               RegexRequestMappingPatternMatcher(), newArrayList(".*?"))
       ApiListingScanner scanner = new ApiListingScanner(resourceGroupRequestMappings, absoluteSwaggerPathProvider(),
-              modelProvider(), null, [], evaluator)
+              modelProvider(), null, [], evaluator, "1.0")
       def settings = new SwaggerGlobalSettings()
       SpringSwaggerConfig springSwaggerConfig = new SpringSwaggerConfig()
       settings.ignorableParameterTypes = springSwaggerConfig.defaultIgnorableParameterTypes()
@@ -103,7 +103,7 @@ class ApiListingScannerSpec extends Specification {
     given:
       RequestMappingEvaluator evaluator = new RequestMappingEvaluator(newArrayList(ApiIgnore), new
               RegexRequestMappingPatternMatcher(), newArrayList(".*?"))
-      ApiListingScanner apiListingScanner = new ApiListingScanner(null, null, null, null, null, evaluator)
+      ApiListingScanner apiListingScanner = new ApiListingScanner(null, null, null, null, null, evaluator, "1.0")
 
     when:
       String result = apiListingScanner.longestCommonPath(apiDescriptions(paths))

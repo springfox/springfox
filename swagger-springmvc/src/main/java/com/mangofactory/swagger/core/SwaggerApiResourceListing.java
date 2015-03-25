@@ -63,7 +63,7 @@ public class SwaggerApiResourceListing {
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings =
               apiListingReferenceScanner.getResourceGroupRequestMappings();
       ApiListingScanner apiListingScanner = new ApiListingScanner(resourceGroupRequestMappings, swaggerPathProvider,
-              modelProvider, authorizationContext, customAnnotationReaders, requestMappingEvaluator);
+              modelProvider, authorizationContext, customAnnotationReaders, requestMappingEvaluator, this.apiVersion);
 
       apiListingScanner.setApiDescriptionOrdering(apiDescriptionOrdering);
       apiListingScanner.setSwaggerGlobalSettings(swaggerGlobalSettings);
