@@ -18,6 +18,7 @@ import springdox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import javax.servlet.ServletRequest;
 
 @Controller
+@ApiIgnore
 public class Swagger2Controller {
   public static final String DOCUMENTATION_BASE_PATH = "/v2/api-docs";
 
