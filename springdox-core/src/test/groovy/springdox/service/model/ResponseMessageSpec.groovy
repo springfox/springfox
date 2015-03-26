@@ -1,8 +1,8 @@
-package springdox.service.model
+package springfox.service.model
 
 import spock.lang.Specification
-import springdox.documentation.builders.ResponseMessageBuilder
-import springdox.documentation.schema.ModelRef
+import springfox.documentation.builders.ResponseMessageBuilder
+import springfox.documentation.schema.ModelRef
 
 class ResponseMessageSpec extends Specification {
   def "ResponseMessage equals only takes the code into account" () {

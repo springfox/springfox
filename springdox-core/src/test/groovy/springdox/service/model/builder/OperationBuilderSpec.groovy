@@ -1,12 +1,12 @@
-package springdox.service.model.builder
+package springfox.service.model.builder
 
 import spock.lang.Specification
-import springdox.documentation.builders.OperationBuilder
-import springdox.documentation.builders.ResponseMessageBuilder
-import springdox.documentation.schema.ModelRef
-import springdox.documentation.service.Authorization
-import springdox.documentation.service.Parameter
-import springdox.documentation.service.ResponseMessage
+import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.builders.ResponseMessageBuilder
+import springfox.documentation.schema.ModelRef
+import springfox.documentation.service.Authorization
+import springfox.documentation.service.Parameter
+import springfox.documentation.service.ResponseMessage
 
 import static com.google.common.collect.Sets.*
 

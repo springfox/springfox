@@ -9,8 +9,8 @@
 
     <mvc:annotation-driven/>
     <!-- Standard spring component scanning -->
-    <context:component-scan base-package="springdox.documentation.spring.web.dummy"/>
+    <context:component-scan base-package="springfox.documentation.spring.web.dummy"/>
 
-    <bean class="springdox.documentation.swagger.configuration.SwaggerSpringMvcDocumentationConfiguration" />
+    <bean class="springfox.documentation.swagger.configuration.SwaggerSpringMvcDocumentationConfiguration" />
 
 </beans>

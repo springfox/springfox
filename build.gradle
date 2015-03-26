@@ -1,7 +1,7 @@
-import springdox.gradlebuild.version.BuildscriptVersionResolver
-import springdox.gradlebuild.version.SemanticVersion
-import springdox.gradlebuild.version.SnapshotVersion
-import springdox.gradlebuild.version.SoftwareVersion
+import springfox.gradlebuild.version.BuildscriptVersionResolver
+import springfox.gradlebuild.version.SemanticVersion
+import springfox.gradlebuild.version.SnapshotVersion
+import springfox.gradlebuild.version.SoftwareVersion
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"

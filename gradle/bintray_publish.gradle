@@ -1,4 +1,4 @@
-import springdox.gradlebuild.version.BuildscriptVersionResolver
+import springfox.gradlebuild.version.BuildscriptVersionResolver
 
 /*
  * Copyright 2015 the original author or authors.
