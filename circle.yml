@@ -1,0 +1,18 @@
+machine:
+  java:
+    version: oraclejdk6
+
+dependencies:
+  cache_directories:
+    - ~/.m2
+test:
+  override:
+  - ./gradlew clean check
+
+deployment:
+ staging:
+    branch: master
+    owner: springfox
+    commands:
+      - ./gradlew snapshot -PbintrayUsername=${bintrayUsername} -PbintrayPassword=${bintrayPassword} -i
+
