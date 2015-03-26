@@ -7,13 +7,13 @@ dependencies {
   compile libs.spring
   provided libs.clientProvided
 
-  compile project(':springdox-spi')
-  compile project(':springdox-schema')
+  compile project(':springfox-spi')
+  compile project(':springfox-schema')
 
-  testCompile project(':springdox-core')
+  testCompile project(':springfox-core')
   testCompile libs.test
   testCompile libs.swagger2Core
-  testCompile(project(path: ':springdox-schema', configuration: 'testArtifacts')) {
+  testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 }

@@ -54,7 +54,7 @@ configure(publishable(subprojects)) { subproject ->
     compile.extendsFrom provided
   }
 
-  group = 'com.github.springdox'
+  group = 'io.springfox'
   version = currentVersion
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
@@ -97,7 +97,7 @@ configure(publishable(subprojects)) { subproject ->
 
 def publishable(subprojects) {
   subprojects.findAll {
-    !['swagger-contract-tests', 'springdox-petstore', 'buildSrc'].contains(it.name)
+    !['swagger-contract-tests', 'springfox-petstore', 'buildSrc'].contains(it.name)
   }
 }
 

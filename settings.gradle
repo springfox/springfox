@@ -1,13 +1,13 @@
-rootProject.name = 'springdox'
-include 'springdox-core'
-include 'springdox-spi'
-include 'springdox-schema'
-include 'springdox-spring-web'
-include 'springdox-swagger-common'
-include 'springdox-swagger'
-include 'springdox-swagger2'
+rootProject.name = 'springfox'
+include 'springfox-core'
+include 'springfox-spi'
+include 'springfox-schema'
+include 'springfox-spring-web'
+include 'springfox-swagger-common'
+include 'springfox-swagger'
+include 'springfox-swagger2'
 include 'swagger-contract-tests'
-include 'springdox-petstore'
+include 'springfox-petstore'
 
 
 //Commit check

@@ -15,10 +15,10 @@ artifacts {
 }
 
 dependencies {
-  compile project(':springdox-core')
-  compile project(':springdox-spi')
+  compile project(':springfox-core')
+  compile project(':springfox-spi')
   testCompile libs.test
-  testCompile(project(path: ':springdox-core', configuration: 'testArtifacts')) {
+  testCompile(project(path: ':springfox-core', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 }
