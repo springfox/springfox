@@ -8,7 +8,7 @@ publishing {
 
   publications {
     mavenJava(MavenPublication) {
-      groupId 'com.github.springfox'
+      groupId 'io.springfox'
       from components.java
 
       artifact packageSources {

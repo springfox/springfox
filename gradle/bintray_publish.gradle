@@ -29,7 +29,7 @@ if (!BuildscriptVersionResolver.isSnapshot(project)) {
     dryRun = false //Whether to run this as dry-run, without deploying
     publish = true //If version should be auto published after an upload
     pkg {
-      repo = 'springfox'
+      repo = 'maven-repo'
       userOrg = 'springfox' //An optional organization name when the repo belongs to one of the user's orgs
       name = 'springfox'
       desc = 'A suite of libraries for documenting spring based JSON APIs '
