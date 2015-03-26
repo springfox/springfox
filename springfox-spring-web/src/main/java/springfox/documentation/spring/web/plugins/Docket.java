@@ -102,7 +102,7 @@ public class Docket implements DocumentationPlugin {
   /**
    * Configures the global com.wordnik.swagger.model.AuthorizationType's applicable to all or some of the api
    * operations. The configuration of which operations have associated AuthorizationTypes is configured with
-   * springdox.swagger.plugins.DocumentationConfigurer#authorizationContext
+   * springfox.swagger.plugins.DocumentationConfigurer#authorizationContext
    *
    * @param authorizationTypes a list of global AuthorizationType's
    * @return this DocumentationConfigurer

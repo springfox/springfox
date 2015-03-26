@@ -3,7 +3,7 @@
 
 | Unit  | Functional   | Coverage   |
 |---|---|---|
-|[![Build Status](https://travis-ci.org/springdox/springdox.svg?branch=master)](https://travis-ci.org/springdox/springdox)   |[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.svg?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo) |[![Coverage Status](https://coveralls.io/repos/springdox/springdox/badge.svg)](https://coveralls.io/r/springdox/springdox) |
+|[![Build Status](https://travis-ci.org/springfox/springfox.svg?branch=master)](https://travis-ci.org/springfox/springfox)   |[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.svg?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo) |[![Coverage Status](https://coveralls.io/repos/springfox/springfox/badge.svg)](https://coveralls.io/r/springfox/springfox) |
 
 ### About
 
@@ -34,7 +34,7 @@ __Maven__
 </repositories>
 
 <dependency>
-    <groupId>springdox</groupId>
+    <groupId>springfox</groupId>
     <artifactId>swagger-springmvc</artifactId>
     <version>1.0.1</version>
 </dependency>
@@ -64,7 +64,7 @@ __Maven__
 </repositories>
 
 <dependency>
-    <groupId>springdox</groupId>
+    <groupId>springfox</groupId>
     <artifactId>swagger-springmvc</artifactId>
     <version>1.0.2-SNAPSHOT</version>
 </dependency>
@@ -110,11 +110,11 @@ json Resource Listing is available at /api-docs
 
 
 #### Spring xml Configuration
-- To get the default implementation simply define a bean of type: `springdox.documentation.swagger.configuration.SpringSwaggerConfig`
+- To get the default implementation simply define a bean of type: `springfox.documentation.swagger.configuration.SpringSwaggerConfig`
 
 ```xml
 <mvc:annotation-driven/> <!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
-<bean class="springdox.documentation.swagger.configuration.SpringSwaggerConfig" />
+<bean class="springfox.documentation.swagger.configuration.SpringSwaggerConfig" />
 ```
 - The generated swagger
 json Resource Listing is available at /api-docs
@@ -411,7 +411,7 @@ To exclude controller method arguments form the generated swagger model JSON.
 ```java
 swaggerSpringMvcPlugin.ignoredParameterTypes(MyCustomType.class)
 ```
-By default, a number of Spring's handler method arguments are ignored. See: springdox.documentation.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
+By default, a number of Spring's handler method arguments are ignored. See: springfox.documentation.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
 
 
 ##Development
