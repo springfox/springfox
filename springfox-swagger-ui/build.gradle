@@ -79,7 +79,7 @@ jar {
 
     manifest {
       attributes(
-              "Implementation-Title": name,
+              "Implementation-Title": project.name,
               "Implementation-Version": version,
               "SwaggerUi-Version": swaggerUiVersion,
       )
