@@ -22,3 +22,12 @@ SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
 ```bash
 ./gradlew snapshot -PbintrayUsername=<bintrayUsername> -PbintrayPassword=<bintrayPassword>
 ```
+
+
+### Override 
+To bypass the standard release flow and upload directly to bintray use the following task
+- manually set the version in version.properties
+```bash
+./gradlew clean build bintrayUpload -PbintrayUsername=<bintrayUsername> -PbintrayPassword=<bintrayPassword> -PreleaseType=MAJOR
+ --stacktrace
+```
