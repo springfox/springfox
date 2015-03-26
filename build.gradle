@@ -59,7 +59,7 @@ configure(publishable(subprojects)) { subproject ->
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
   jvmsrc {
-    packageName "${group}"
+    packageName "springdox"
   }
 
   jar {

@@ -6,10 +6,6 @@ include 'springfox-spring-web'
 include 'springfox-swagger-common'
 include 'springfox-swagger'
 include 'springfox-swagger2'
+include 'springfox-swagger-ui'
 include 'swagger-contract-tests'
 include 'springfox-petstore'
-
-
-//Commit check
-
-
