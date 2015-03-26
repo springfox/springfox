@@ -7,6 +7,8 @@
 
 ### About
 
+TODO Add credit to Marty Pitt
+
 This project integrates swagger with the Spring Web MVC framework. The complete swagger specification is available
 at https://github.com/wordnik/swagger-spec and it's worth being familiar with the main concepts of the specification and the documentation on the [Swagger Annotations] (https://github.com/swagger-api/swagger-core/wiki/Annotations)
 Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/wordnik/swagger-ui)
