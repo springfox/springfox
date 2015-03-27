@@ -16,7 +16,7 @@ buildscript {
 
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
-  projectVersion = '1.0.2'
+  projectVersion = '1.0.3-SNAPSHOT'
 }
 
 configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'swagger-models' }) { subproject ->
