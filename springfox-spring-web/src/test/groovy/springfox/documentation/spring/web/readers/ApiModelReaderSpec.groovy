@@ -104,9 +104,8 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       def models = sut.read(context)
 
     then:
-      models.size() == 2 // instead of 3
+      models.size() == 1 // instead of 3
       models.containsKey("BusinessModel")
-      models.containsKey("Void")
 
   }
 

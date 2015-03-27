@@ -140,6 +140,8 @@ public class Defaults {
     ignored = newHashSet();
     ignored.add(ServletRequest.class);
     ignored.add(Class.class);
+    ignored.add(Void.class);
+    ignored.add(Void.TYPE);
     ignored.add(HttpHeaders.class);
     ignored.add(ServletResponse.class);
     ignored.add(HttpServletRequest.class);

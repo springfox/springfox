@@ -45,7 +45,6 @@ import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
-import springfox.documentation.schema.Types;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,10 +64,8 @@ public abstract class ModelMapper {
 
     for (java.util.Map.Entry<String, springfox.documentation.schema.Model> entry : from.entrySet()) {
       String key = entry.getKey();
-      if (!Types.isVoid(entry.getValue().getType())) {
-        Model value = mapProperties(entry.getValue());
-        map.put(key, value);
-      }
+      Model value = mapProperties(entry.getValue());
+      map.put(key, value);
     }
 
     return map;

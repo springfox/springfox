@@ -132,9 +132,8 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
       def models = sut.read(context)
 
     then:
-      models.size() == 2
+      models.size() == 1
       models['RestError'].getQualifiedType() == 'springfox.documentation.spring.web.dummy.RestError'
-      models['Void'].getQualifiedType() == 'java.lang.Void'
   }
 
   def context(HandlerMethod handlerMethod) {
@@ -154,9 +153,8 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
       def models = sut.read(context)
 
     then:
-      models.size() == 2 // instead of 3
+      models.size() == 1 // instead of 3
       models.containsKey("BusinessModel")
-      models.containsKey("Void")
 
   }
 

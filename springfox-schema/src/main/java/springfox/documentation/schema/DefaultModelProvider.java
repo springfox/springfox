@@ -64,7 +64,8 @@ public class DefaultModelProvider implements ModelProvider {
     if (Collections.isContainerType(propertiesHost)
             || Maps.isMapType(propertiesHost)
             || propertiesHost.getErasedType().isEnum()
-            || Types.isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))) {
+            || Types.isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))
+            || modelContext.hasSeenBefore(propertiesHost)) {
       return Optional.absent();
     }
     Map<String, ModelProperty> properties = newTreeMap();

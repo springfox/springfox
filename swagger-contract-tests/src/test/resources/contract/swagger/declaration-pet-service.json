@@ -995,13 +995,6 @@
                     }
                 }
             }
-        },
-        "Void": {
-            "description": "",
-            "id": "Void",
-            "properties": {
-
-            }
         }
     }
 }
