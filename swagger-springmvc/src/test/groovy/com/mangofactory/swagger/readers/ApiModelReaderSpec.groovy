@@ -163,9 +163,8 @@ class ApiModelReaderSpec extends Specification {
       Map<String, Model> models = result.get("models")
     then:
       println models
-      models.size() == 2
+      models.size() == 1
       models['RestError'].getQualifiedType() == 'com.mangofactory.swagger.dummy.RestError'
-      models['Void'].getQualifiedType() == 'java.lang.Void'
   }
 
   def contextWithApiDescription(HandlerMethod handlerMethod, List<Operation> operationList = null) {
@@ -211,9 +210,8 @@ class ApiModelReaderSpec extends Specification {
       Map<String, Object> result = context.getResult()
     then:
       Map<String, Model> models = result.get("models")
-      models.size() == 2 // instead of 3
+      models.size() == 1 // instead of 3
       models.containsKey("BusinessModel")
-      models.containsKey("Void")
 
   }
 
@@ -240,9 +238,8 @@ class ApiModelReaderSpec extends Specification {
       Map<String, Object> result = context.getResult()
     then:
       Map<String, Model> models = result.get("models")
-      models.size() == 2 // instead of 3
+      models.size() == 1 // instead of 3
       models.containsKey("BusinessModel")
-      models.containsKey("Void")
 
   }
 
@@ -269,8 +266,7 @@ class ApiModelReaderSpec extends Specification {
       Map<String, Object> result = context.getResult()
     then:
       Map<String, Model> models = result.get("models")
-      models.size() == 1 // instead of 3
-      models.containsKey("Void")
+      models.size() == 0 // instead of 3
 
   }
 

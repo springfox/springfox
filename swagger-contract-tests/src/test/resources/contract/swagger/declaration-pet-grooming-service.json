@@ -312,12 +312,5 @@
                 }
             ]
         }
-    ],
-    "models": {
-        "Void": {
-            "description": "",
-            "id": "Void",
-            "properties": {}
-        }
-    }
+    ]
 }

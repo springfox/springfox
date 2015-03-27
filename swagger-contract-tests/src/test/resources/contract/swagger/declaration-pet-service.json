@@ -995,11 +995,6 @@
                     "type": "string"
                 }
             }
-        },
-        "Void": {
-            "description": "",
-            "id": "Void",
-            "properties": {}
         }
     }
 }
