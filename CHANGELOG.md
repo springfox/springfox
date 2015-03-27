@@ -1,4 +1,10 @@
 ## Change Logs
+[1.0.2](https://github.com/springfox/springfox/issues?q=milestone%3A1.0.2)
+==================================================================================
+- [#625] How do I specify api version? bug
+- [#623] @ApiImplicitParam always adds enums in json in version 1.0.1 bug
+- [#617] Java codegen - generates class name Void.java bug 
+
 [1.0.1](https://github.com/martypitt/swagger-springmvc/issues?q=milestone%3A1.0.1)
 ==================================================================================
 - [#618] Ranges are treated like enums bug
