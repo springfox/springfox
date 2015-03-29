@@ -7,10 +7,11 @@ ext {
   springHateoas = "0.10.0.RELEASE"
   slf4j = "1.7.10"
   mockito = "1.10.19"
-  servlet = "2.5"
+  servlet = "3.0.1"
   classmate = "1.1.0"
   jackson = '2.5.1'
   snakeyaml = '1.15'
+  springPluginVersion = "1.2.0.RELEASE"
   libs = [
 
           test          : [
@@ -29,15 +30,16 @@ ext {
                   "com.wordnik:swagger-models:${swagger2Core}"
           ],
           spring        : [
-                  "org.springframework:spring-core:$spring",
-                  "org.springframework:spring-web:$spring",
-                  "org.springframework:spring-webmvc:$spring",
-                  'org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE',
-                  "org.springframework.plugin:spring-plugin-metadata:1.2.0.RELEASE"
+                  'org.springframework.plugin:spring-plugin-core:${springPluginVersion}',
+                  "org.springframework.plugin:spring-plugin-metadata:${springPluginVersion}"
           ],
-
+          springProvided        : [
+              "org.springframework:spring-core:$spring",
+              "org.springframework:spring-web:$spring",
+              "org.springframework:spring-webmvc:$spring"
+          ],
           clientProvided: [
-                  "org.apache.geronimo.specs:geronimo-servlet_3.0_spec:1.0",
+                  "javax.servlet:javax.servlet-api:$servlet",
                   "com.fasterxml.jackson.core:jackson-core:${jackson}",
                   "com.fasterxml.jackson.core:jackson-databind:${jackson}"
 
