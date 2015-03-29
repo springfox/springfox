@@ -104,6 +104,16 @@ class WildcardTypeSpec extends Specification {
       replacables.size() == 1
   }
 
+  def "Collecting replaceables works on erased types" () {
+    given:
+    def wildcardtype = resolve(List, WildcardType)
+    def replacingType = resolve(List)
+    when:
+    def replacables = collectReplaceables(replacingType, wildcardtype)
+    then:
+    replacables.size() == 1
+  }
+
   def "Replacing wild cards throws an exception when the number of replaceables don't match the wildcards in the type being replaced" () {
     given:
       Iterable<ResolvedType> replaceables = [resolve(String)]

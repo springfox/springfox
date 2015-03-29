@@ -22,13 +22,15 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeBindings;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 
@@ -85,12 +87,6 @@ public class WildcardType {
     return WildcardType.class.equals(input.getErasedType());
   }
 
-  private static boolean typeBindingsAreOfSameSize(ResolvedType toMatch, ResolvedType wildcardType) {
-    TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
-    TypeBindings bindingsToMatch = toMatch.getTypeBindings();
-    return bindingsToMatch.size() == wildcardTypeBindings.size();
-  }
-
   private static ResolvedType breadthFirstReplace(Iterator<ResolvedType> replaceableIterator,
                                                   ResolvedType wildcardType) {
     if (isWildcardType(wildcardType)) {
@@ -118,18 +114,28 @@ public class WildcardType {
 
   private static List<ResolvedType> breadthFirstSearch(ResolvedType replacingType, ResolvedType wildcardType) {
     TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
-    TypeBindings bindingsToMatch = replacingType.getTypeBindings();
-    //TODO - this fails when a controller method return type is a non paramaterized ResponseEntity
-    Preconditions.checkArgument(typeBindingsAreOfSameSize(wildcardType, replacingType));
+    TypeBindings bindingsToMatch = adjustedTypeBindings(replacingType);
+
     List<ResolvedType> bindings = newArrayList();
     for (int index = 0; index < bindingsToMatch.size(); index++) {
       if (isWildcardType(wildcardTypeBindings.getBoundType(index))) {
         bindings.add(bindingsToMatch.getBoundType(index));
       } else {
         bindings.addAll(breadthFirstSearch(bindingsToMatch.getBoundType(index),
-                wildcardTypeBindings.getBoundType(index)));
+            wildcardTypeBindings.getBoundType(index)));
       }
     }
     return bindings;
+  }
+
+  private static TypeBindings adjustedTypeBindings(ResolvedType replacingType) {
+    TypeBindings typeBindings = replacingType.getTypeBindings();
+    TypeVariable[] typeVariables = replacingType.getErasedType().getTypeParameters();
+    FluentIterable<TypeVariable> remaining = from(newArrayList(typeVariables))
+        .skip(replacingType.getTypeBindings().size());
+    for (TypeVariable each : remaining) {
+      typeBindings = typeBindings.withAdditionalBinding(each.getName(), new TypeResolver().resolve(Object.class));
+    }
+    return typeBindings;
   }
 }
