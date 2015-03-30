@@ -30,7 +30,7 @@ ext {
                   "com.wordnik:swagger-models:${swagger2Core}"
           ],
           spring        : [
-                  'org.springframework.plugin:spring-plugin-core:${springPluginVersion}',
+                  "org.springframework.plugin:spring-plugin-core:${springPluginVersion}",
                   "org.springframework.plugin:spring-plugin-metadata:${springPluginVersion}"
           ],
           springProvided        : [
