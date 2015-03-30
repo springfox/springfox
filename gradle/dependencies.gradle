@@ -25,7 +25,7 @@ ext {
                   "org.spockframework:spock-spring:${spock}",
                   "org.spockframework:spock-core:${spock}"
           ],
-          swagger2Core   : [
+          swagger2Core  : [
                   "com.wordnik:swagger-annotations:${swagger2Core}",
                   "com.wordnik:swagger-models:${swagger2Core}"
           ],
@@ -33,10 +33,10 @@ ext {
                   "org.springframework.plugin:spring-plugin-core:${springPluginVersion}",
                   "org.springframework.plugin:spring-plugin-metadata:${springPluginVersion}"
           ],
-          springProvided        : [
-              "org.springframework:spring-core:$spring",
-              "org.springframework:spring-web:$spring",
-              "org.springframework:spring-webmvc:$spring"
+          springProvided: [
+                  "org.springframework:spring-core:$spring",
+                  "org.springframework:spring-web:$spring",
+                  "org.springframework:spring-webmvc:$spring"
           ],
           clientProvided: [
                   "javax.servlet:javax.servlet-api:$servlet",
