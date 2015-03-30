@@ -160,8 +160,8 @@ to provide an expressive predicate based for api selection.
         regex("/springsRestController.*"),
         regex("/test.*"));
   }
-    
-```            
+
+```
 
 For a list of handy predicates Look at [RequestHandlerSelectors](https://github.com/springfox/springfox/blob/refactor/538/spike-to-seperate-models-and-dtos/springfox-core/src/main/java/springfox/documentation/builders/RequestHandlerSelectors.java)
 and [PathSelectors](https://github.com/springfox/springfox/blob/refactor/538/spike-to-seperate-models-and-dtos/springfox-core/src/main/java/springfox/documentation/builders/PathSelectors.java).
