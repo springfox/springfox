@@ -25,7 +25,7 @@ public class Types {
           .put(Boolean.TYPE, "boolean")
           .put(Character.TYPE, "string")
 
-          .put(Date.class, "date-time")
+          .put(Date.class, "Date")
           .put(String.class, "string")
           .put(Object.class, "object")
           .put(Long.class, "long")
