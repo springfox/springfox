@@ -84,6 +84,10 @@ repositories {
 compile "com.mangofactory:swagger-springmvc:1.0.3-SNAPSHOT"
 ```
 
+### 2.0 Specific instructions
+The support for swagger 2.0 is still in the works. Here is [some preliminary documentation](transitioning-to-v2.md) to 
+help early adopters and people brave enough to try it out and provide us with feedback.
+
 ### Notable Dependencies
 - As of v0.9.5 all dependencies on __scala__ have been removed.
 - Spring 3.2.x or above
