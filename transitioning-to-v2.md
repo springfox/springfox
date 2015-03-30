@@ -1,14 +1,4 @@
-Firstly all the package names have changed
-
-```java
-
-package com.mangofactory.swagger.*;
-
-//is now
-
-package springfox.documentation.*;
-
-```
+### Module changes
 
 Also what used to be two modules ```swagger-springmvc``` and ```swagger-models``` 
 is now split into multiple modules. 
@@ -52,6 +42,8 @@ and responses                                 |
                                                                          of the specific formats.
 
 ```
+
+### Dependency Changes
 
 The build file/pom will require the following changes
 __Maven__
@@ -109,12 +101,31 @@ compile "io.springfox:springfox-swagger2:2.0.0-SNAPSHOT"
 compile "io.springfox:springfox-swagger:2.0.0-SNAPSHOT"
 ```
 
+### Configuration changes
+
+Firstly all the package names have changed
+
+```java
+
+package com.mangofactory.swagger.*;
+
+//is now
+
+package springfox.documentation.*;
+
+```
 
 To enable support for swagger specification 1.2 use the ```@EnableSwagger``` annotation
 
 To enable support for swagger specification 2.0 use the ```@EnableSwagger2``` annotation
 
-We no longer use ```SwaggerSpringMvcPlugin``` to configure the documentation subset. This has been replaced by a more generic ```Docket``` class. This is changed to be more inline with the fact that expressing the contents of the documentation is agnostic of the format the documentation is rendered. 
+We no longer use ```SwaggerSpringMvcPlugin``` to configure the documentation subset. This has been replaced by a more generic ```Docket``` class. This is changed to be more inline with the fact that expressing the contents of the documentation is agnostic of the format the documentation is rendered. Also we no longer need to following class ```SpringSwaggerConfig``` in order to configure the ```Docket```.
+
+```java
+  // This configuration is no longer used
+  @Autowired
+  private SpringSwaggerConfig swaggerConfig;
+```
 
 Docket [stands for](https://www.wordnik.com/words/docket) *A summary or other brief statement of the contents of a 
 document; an abstract.*
@@ -122,7 +133,6 @@ document; an abstract.*
 Having said that the ```Docket``` is very similar to ```SwaggerSpringMvcPlugin```, in that, it helps configure a 
 subset of the services to be documented and groups them by name. Significant changes to this is the ability
 to provide an expressive predicate based for api selection.
-
 
 ```java
 
@@ -156,6 +166,9 @@ to provide an expressive predicate based for api selection.
 For a list of handy predicates Look at [RequestHandlerSelectors](https://github
 .com/springfox/springfox/blob/refactor/538/spike-to-seperate-models-and-dtos/springfox-core/src/main/java/springfox/documentation/builders/RequestHandlerSelectors.java)
 and [PathSelectors](https://github.com/springfox/springfox/blob/refactor/538/spike-to-seperate-models-and-dtos
-/springfox-core/src/main/java/springfox/documentation/builders/PathSelectors.java)
+/springfox-core/src/main/java/springfox/documentation/builders/PathSelectors.java).
+
+### Example application
+For an example for porting a 1.0.2 application to a 2.0.x application (in progress) take a look [at this branch](https://github.com/adrianbk/swagger-springmvc-demo/tree/feature/2.0-showcase) in the demo application.
 
 
