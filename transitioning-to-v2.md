@@ -13,13 +13,7 @@ package springfox.documentation.*;
 Also what used to be two modules ```swagger-springmvc``` and ```swagger-models``` 
 is now split into multiple modules. 
 
-A little bit of background; when we started work on 2.0 swagger specification we
- realized that we're rewriting the logic to infer the service models and the schema.  
-So we decided to take a step back and break it out into a two step process. First infer 
-the service model into an internal representation. Second create a mapping layer that 
-can map the internal models to different specification formats. Out of the box we will 
-support swagger 1.2 and swagger 2.0, but this leads us to the possibility of supporting
- other formats and other scenarios as well; for e.g. RAML, ALPS and hypermedia formats.
+A little bit of background; when we started work on 2.0 swagger specification we realized that we're rewriting the logic to infer the service models and the schema. So we decided to take a step back and break it out into a two step process. First infer the service model into an internal representation. Second create a mapping layer that can map the internal models to different specification formats. Out of the box we will support swagger 1.2 and swagger 2.0, but this leads us to the possibility of supporting other formats and other scenarios as well; for e.g. RAML, ALPS and hypermedia formats.
  
 Accordingly the different modules are split up as shown below.
 
@@ -38,10 +32,10 @@ Accordingly the different modules are split up as shown below.
                                    +---+------+----+--+                                                                 
                                        ^      ^    ^                                                                    
                        +---------------+----+ | +--+------------------+                                                 
-Schema inference       |                    | | |                     |    spring web specific extensions that can build
-extensions that help   |  springfox-schema  | | |springfox-spring-web |    the service models based on RequestMapping   
-build up the schema for|                    | | |                     |    information. This is the heart library that  
-the parameters, models +--------------------+ | +---------------------+    infers the service model.                    
+Schema inference       |                    | | |                     | spring web specific extensions that can build
+extensions that help   |  springfox-schema  | | |springfox-spring-web | the service models based on RequestMapping   
+build up the schema for|                    | | |                     | information. This is the heart library that  
+the parameters, models +--------------------+ | +---------------------+ infers the service model.                    
 and responses                                 |                                                                         
                                  +------------+-------------+                                                           
                                  |                          |   Common swagger specific extensions                      
@@ -53,8 +47,9 @@ and responses                                 |
                          |                  |     |                   |  Configurations, and mapping layer              
                          |springfox-swagger |     |springfox-swagger2 |  that know how to convert the                   
                          |                  |     |                   |  service models to swagger 1.2 and              
-                         +------------------+     +-------------------+  swagger 2.0 specification documents.           
-
+                         +------------------+     +-------------------+  swagger 2.0 specification documents.  A
+                                                                         Also contains the controller for each
+                                                                         of the specific formats.
 
 ```
 
@@ -116,17 +111,17 @@ compile "io.springfox:springfox-swagger:2.0.0-SNAPSHOT"
 
 
 To enable support for swagger specification 1.2 use the ```@EnableSwagger``` annotation
+
 To enable support for swagger specification 2.0 use the ```@EnableSwagger2``` annotation
-                                                                                            
-We no longer use ```SwaggerSpringMvcPlugin``` to configuration the documentation subset. This has 
-been replaced by a more generic ```Docket```. class. 
+
+We no longer use ```SwaggerSpringMvcPlugin``` to configure the documentation subset. This has been replaced by a more generic ```Docket``` class. This is changed to be more inline with the fact that expressing the contents of the documentation is agnostic of the format the documentation is rendered. 
 
 Docket [stands for](https://www.wordnik.com/words/docket) *A summary or other brief statement of the contents of a 
 document; an abstract.*
 
-For the most part the ```Docket``` is very similar to ```SwaggerSpringMvcPlugin```, in that it helps configure a 
+Having said that the ```Docket``` is very similar to ```SwaggerSpringMvcPlugin```, in that, it helps configure a 
 subset of the services to be documented and groups them by name. Significant changes to this is the ability
-to provide a predicate for api selection.
+to provide an expressive predicate based for api selection.
 
 
 ```java
@@ -137,8 +132,8 @@ to provide a predicate for api selection.
             .groupName("business-api")
             .select() 
                //Ignores controllers annotated with @CustomIgnore
-              .apis(not(withClassAnnotation(CustomIgnore.class))
-              .paths(paths())
+              .apis(not(withClassAnnotation(CustomIgnore.class)) //Selection by RequestHandler
+              .paths(paths()) // and by paths
               .build()
             .apiInfo(apiInfo())
             .authorizationTypes(authorizationTypes())
