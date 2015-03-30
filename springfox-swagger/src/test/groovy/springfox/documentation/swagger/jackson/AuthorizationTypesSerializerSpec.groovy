@@ -37,11 +37,11 @@ class AuthorizationTypesSerializerSpec extends InternalJsonSerializationSpec {
       authorizationScopeList << new AuthorizationScope("email", "access all")
 
       List<GrantType> grantTypes = []
-      LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.wordnik.com/oauth/dialog");
+      LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.io/oauth/dialog");
       grantTypes.add(new ImplicitGrant(loginEndpoint, "access_token"));
 
-      TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint("http://petstore.swagger.wordnik.com/oauth/requestToken", "client_id", "client_secret");
-      TokenEndpoint tokenEndpoint = new TokenEndpoint("http://petstore.swagger.wordnik.com/oauth/token", "auth_code");
+      TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint("http://petstore.swagger.io/oauth/requestToken", "client_id", "client_secret");
+      TokenEndpoint tokenEndpoint = new TokenEndpoint("http://petstore.swagger.io/oauth/token", "auth_code");
 
       AuthorizationCodeGrant authorizationCodeGrant =  new AuthorizationCodeGrant()
       authorizationCodeGrant.tokenRequestEndpoint = tokenRequestEndpoint
@@ -61,10 +61,10 @@ class AuthorizationTypesSerializerSpec extends InternalJsonSerializationSpec {
       json.scopes[0].scope == 'email'
       json.scopes[0].description == 'access all'
 
-      json.grantTypes.implicit.loginEndpoint.url == 'http://petstore.swagger.wordnik.com/oauth/dialog'
+      json.grantTypes.implicit.loginEndpoint.url == 'http://petstore.swagger.io/oauth/dialog'
       json.grantTypes.implicit.tokenName == 'access_token'
 
-      json.grantTypes.authorization_code.tokenRequestEndpoint.url == "http://petstore.swagger.wordnik.com/oauth/requestToken"
+      json.grantTypes.authorization_code.tokenRequestEndpoint.url == "http://petstore.swagger.io/oauth/requestToken"
       json.grantTypes.authorization_code.tokenRequestEndpoint.clientIdName == "client_id"
       json.grantTypes.authorization_code.tokenRequestEndpoint.clientSecretName == "client_secret"
   }

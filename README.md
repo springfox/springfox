@@ -10,8 +10,8 @@
 TODO Add credit to Marty Pitt
 
 This project integrates swagger with the Spring Web MVC framework. The complete swagger specification is available
-at https://github.com/wordnik/swagger-spec and it's worth being familiar with the main concepts of the specification and the documentation on the [Swagger Annotations] (https://github.com/swagger-api/swagger-core/wiki/Annotations)
-Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/wordnik/swagger-ui)
+at https://github.com/swagger-api/swagger-spec and it's worth being familiar with the main concepts of the specification and the documentation on the [Swagger Annotations] (https://github.com/swagger-api/swagger-core/wiki/Annotations)
+Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/swagger-api/swagger-ui)
 to provide the user interface which visualises an applications JSON api's. The most common know use of this project has been
 Spring Web MVC applications using springs `MappingJackson2HttpMessageConverter` to produce JSON API endpoints.
 
@@ -234,7 +234,7 @@ dependencies {
 ```
 
 #### Option 2
-- Manually copy all of the static content swagger-ui's dist directory (https://github.com/wordnik/swagger-ui/tree/master/dist)
+- Manually copy all of the static content swagger-ui's dist directory (https://github.com/swagger-api/swagger-ui/tree/master/dist)
 - Provide the necessary view resolvers and resource handlers to serve the static content.
 - Consult the spring documentation on serving static resources.
 

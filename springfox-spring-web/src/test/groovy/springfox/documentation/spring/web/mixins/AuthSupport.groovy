@@ -60,14 +60,14 @@ class AuthSupport {
 
     List<GrantType> grantTypes = newArrayList();
 
-    LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.wordnik.com/oauth/dialog");
+    LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.io/oauth/dialog");
     grantTypes.add(new ImplicitGrant(loginEndpoint, "access_token"));
 
 
     TokenRequestEndpoint tokenRequestEndpoint =
-            new TokenRequestEndpoint("http://petstore.swagger.wordnik.com/oauth/requestToken", "client_id", "client_secret")
+            new TokenRequestEndpoint("http://petstore.swagger.io/oauth/requestToken", "client_id", "client_secret")
     TokenEndpoint tokenEndpoint =
-            new TokenEndpoint("http://petstore.swagger.wordnik.com/oauth/token", "auth_code")
+            new TokenEndpoint("http://petstore.swagger.io/oauth/token", "auth_code")
 
     AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint)
 
@@ -85,16 +85,16 @@ class AuthSupport {
     assert oauth2.scopes[0].description == "access all"
 
     def implicit = oauth2.grantTypes.implicit
-    assert implicit.loginEndpoint.url == "http://petstore.swagger.wordnik.com/oauth/dialog"
+    assert implicit.loginEndpoint.url == "http://petstore.swagger.io/oauth/dialog"
     assert implicit.tokenName == "access_token"
 
     def tokenRequestEndpoint = oauth2.grantTypes.authorization_code.tokenRequestEndpoint
-    assert tokenRequestEndpoint.url == 'http://petstore.swagger.wordnik.com/oauth/requestToken'
+    assert tokenRequestEndpoint.url == 'http://petstore.swagger.io/oauth/requestToken'
     assert tokenRequestEndpoint.clientIdName == 'client_id'
     assert tokenRequestEndpoint.clientSecretName == 'client_secret'
 
     def tokenEndpoint = oauth2.grantTypes.authorization_code.tokenEndpoint
-    assert tokenEndpoint.url == 'http://petstore.swagger.wordnik.com/oauth/token'
+    assert tokenEndpoint.url == 'http://petstore.swagger.io/oauth/token'
     assert tokenEndpoint.tokenName == 'auth_code'
     true
   }

@@ -37,7 +37,7 @@ class ResourceListingSpec extends InternalJsonSerializationSpec {
       "grantTypes" : {
         "implicit" : {
           "loginEndpoint" : {
-            "url" : "http://petstore.swagger.wordnik.com/oauth/dialog"
+            "url" : "http://petstore.swagger.io/oauth/dialog"
           },
           "tokenName" : "access_token",
           "type" : "implicit"
@@ -45,12 +45,12 @@ class ResourceListingSpec extends InternalJsonSerializationSpec {
         "authorization_code" : {
           "tokenEndpoint" : {
             "tokenName" : "auth_code",
-            "url" : "http://petstore.swagger.wordnik.com/oauth/token"
+            "url" : "http://petstore.swagger.io/oauth/token"
           },
           "tokenRequestEndpoint" : {
             "clientIdName" : "client_id",
             "clientSecretName" : "client_secret",
-            "url" : "http://petstore.swagger.wordnik.com/oauth/requestToken"
+            "url" : "http://petstore.swagger.io/oauth/requestToken"
           },
           "type" : "authorization_code"
         }
@@ -124,14 +124,14 @@ class ResourceListingSpec extends InternalJsonSerializationSpec {
 
     List<GrantType> grantTypes = newArrayList();
 
-    LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.wordnik.com/oauth/dialog")
+    LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.io/oauth/dialog")
     grantTypes.add(new ImplicitGrant(loginEndpoint, "access_token"))
 
-    TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint( "http://petstore.swagger.wordnik.com/oauth/requestToken"
+    TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint( "http://petstore.swagger.io/oauth/requestToken"
             , "client_id"
             , "client_secret")
 
-    TokenEndpoint tokenEndpoint = new TokenEndpoint("http://petstore.swagger.wordnik.com/oauth/token", "auth_code")
+    TokenEndpoint tokenEndpoint = new TokenEndpoint("http://petstore.swagger.io/oauth/token", "auth_code")
 
     AuthorizationCodeGrant authorizationCodeGrant = new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint)
 
