@@ -36,23 +36,40 @@ public class ApiDescriptionBuilder {
     this.operationOrdering = operationOrdering;
   }
 
+  /**
+   * Updates the path to the api operation
+   * @param path - operation path
+   * @return @see springfox.documentation.builders.ApiDescriptionBuilder
+   */
   public ApiDescriptionBuilder path(String path) {
     this.path = BuilderDefaults.defaultIfAbsent(path, this.path);
     return this;
   }
-
+  /**
+   * Updates the descriptions to the api operation
+   * @param description - operation description
+   * @return @see springfox.documentation.builders.ApiDescriptionBuilder
+   */
   public ApiDescriptionBuilder description(String description) {
     this.description = BuilderDefaults.defaultIfAbsent(description, this.description);
     return this;
   }
-
+  /**
+   * Updates the operations to the api operation
+   * @param operations - operations for each of the http methods for that path
+   * @return @see springfox.documentation.builders.ApiDescriptionBuilder
+   */
   public ApiDescriptionBuilder operations(List<Operation> operations) {
     if (operations != null) {
       this.operations = operationOrdering.sortedCopy(operations);
     }
     return this;
   }
-
+  /**
+   * Marks the operation as hidden
+   * @param hidden - operation path
+   * @return @see springfox.documentation.builders.ApiDescriptionBuilder
+   */
   public ApiDescriptionBuilder hidden(boolean hidden) {
     this.hidden = hidden;
     return this;
