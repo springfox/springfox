@@ -64,7 +64,6 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
 
       where:
         pathProvider                                      | prefix
-        absoluteSwaggerPathProvider()                     | "/api/v1"
         relativeSwaggerPathProvider(Mock(ServletContext)) | ""
    }
 

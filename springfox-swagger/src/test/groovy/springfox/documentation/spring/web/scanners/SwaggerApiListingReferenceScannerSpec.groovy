@@ -32,7 +32,6 @@ import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.web.AbsolutePathProvider
 
 import javax.servlet.ServletContext
 
@@ -51,7 +50,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     contextBuilder.handlerMappings([requestMappingHandlerMapping])
       .withResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
     plugin
-            .pathProvider(new AbsolutePathProvider(servletContext()))
+            .pathProvider(new RelativePathProvider(servletContext()))
             .groupName("groupName")
             .select()
               .apis(not(withClassAnnotation(ApiIgnore)))
@@ -96,7 +95,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
       result.getApiListingReferences().size() == 1
       ApiListingReference businessListingReference = result.getApiListingReferences()[0]
       businessListingReference.getPath() ==
-              'http://localhost:8080/context-path/api-docs/groupName/dummy-class'
+              '/groupName/dummy-class'
   }
 
   def "grouping of listing references using Spring grouping strategy"() {

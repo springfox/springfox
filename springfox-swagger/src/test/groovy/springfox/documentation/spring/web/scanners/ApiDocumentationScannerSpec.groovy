@@ -18,21 +18,17 @@
  */
 
 package springfox.documentation.spring.web.scanners
-
-import springfox.documentation.spring.web.AbstractPathProvider
 import springfox.documentation.service.ApiInfo
 import springfox.documentation.service.ApiKey
 import springfox.documentation.service.ApiListingReference
 import springfox.documentation.service.Documentation
 import springfox.documentation.service.ResourceListing
 import springfox.documentation.spi.service.contexts.Defaults
-import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.web.AbsolutePathProvider
 
 import static com.google.common.collect.Maps.*
-import static springfox.documentation.builders.PathSelectors.regex
+import static springfox.documentation.builders.PathSelectors.*
 
 @Mixin([RequestMappingSupport])
 class ApiDocumentationScannerSpec extends DocumentationContextSpec {
@@ -107,33 +103,6 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
       apiKeyAuthType.name == "my-key"
       apiKeyAuthType.keyname == "api_key"
       apiKeyAuthType.passAs == "header"
-  }
-
-  def "resource with mocked apis"() {
-    given:
-      AbstractPathProvider pathProvider = new AbsolutePathProvider(servletContext())
-      plugin
-              .groupName("groupName")
-              .select()
-                .paths(regex(".*"))
-                .build()
-              .pathProvider(pathProvider)
-              .configure(contextBuilder)
-
-      RequestMappingContext requestMappingContext = new RequestMappingContext(context(), (requestMappingInfo
-              ("somePath/")), dummyHandlerMethod())
-
-    when:
-      listingReferenceScanner.scan(_) >>
-              new ApiListingReferenceScanResult([Mock(ApiListingReference)], [resourceGroup: [requestMappingContext]])
-    and:
-      Documentation scanned = docScanner.scan(context())
-      scanned.resourceListing != null
-
-    then:
-      scanned.groupName == "groupName"
-      1 * listingReferenceScanner.scan(_) >>
-              new ApiListingReferenceScanResult([Mock(ApiListingReference)], [resourceGroup: [requestMappingContext]])
   }
 
   def "Should sort based on position"() {
