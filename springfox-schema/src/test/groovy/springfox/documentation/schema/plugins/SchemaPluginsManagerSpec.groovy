@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema.plugins
 
+import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
@@ -63,7 +64,8 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def "enriches model property when plugins are found"() {
     given:
-      def context = new ModelPropertyContext(Mock(ModelPropertyBuilder), Mock(AnnotatedElement), SPRING_WEB)
+      def context = new ModelPropertyContext(Mock(ModelPropertyBuilder), Mock(AnnotatedElement),
+              new TypeResolver(), SPRING_WEB)
     when:
       sut.property(context)
     then:

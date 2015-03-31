@@ -19,6 +19,8 @@
 
 package springfox.documentation.swagger.schema;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
@@ -90,6 +92,19 @@ public final class ApiModelProperties {
           description = annotation.notes();
         }
         return description;
+      }
+    };
+  }
+
+  public static Function<ApiModelProperty, ResolvedType> toType(final TypeResolver resolver) {
+    return new Function<ApiModelProperty, ResolvedType>() {
+      @Override
+      public ResolvedType apply(ApiModelProperty annotation) {
+        try {
+          return resolver.resolve(Class.forName(annotation.dataType()));
+        } catch (ClassNotFoundException e) {
+          return resolver.resolve(Object.class);
+        }
       }
     };
   }

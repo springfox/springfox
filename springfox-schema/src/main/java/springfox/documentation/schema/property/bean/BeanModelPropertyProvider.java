@@ -55,6 +55,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
 public class BeanModelPropertyProvider implements ModelPropertiesProvider {
@@ -94,10 +95,10 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
     if (member instanceof AnnotatedMethod && Annotations.memberIsUnwrapped(member)) {
       if (Accessors.isGetter(((AnnotatedMethod) member).getMember())) {
-        return propertiesFor(childProperty.getReturnType(), ModelContext.fromParent(givenContext, childProperty.getReturnType()));
+        return propertiesFor(childProperty.getReturnType(), fromParent(givenContext, childProperty.getReturnType()));
       } else {
         return propertiesFor(childProperty.getArgumentType(0),
-                ModelContext.fromParent(givenContext, childProperty.getArgumentType(0)));
+                fromParent(givenContext, childProperty.getArgumentType(0)));
       }
     } else {
       return newArrayList(beanModelProperty(childProperty, jacksonProperty, givenContext));
@@ -166,19 +167,22 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
             .isHidden(false)
             .description(beanModelProperty.propertyDescription())
             .allowableValues(beanModelProperty.allowableValues())
-            .modelRef(modelRef(beanModelProperty.getType(), ModelContext.fromParent(modelContext, beanModelProperty.getType())));
+            .modelRef(modelRef(beanModelProperty.getType(), fromParent(modelContext, beanModelProperty.getType())));
     return schemaPluginsManager.property(
-            new ModelPropertyContext(propertyBuilder, beanPropertyDefinition, modelContext.getDocumentationType()));
+            new ModelPropertyContext(propertyBuilder,
+                    beanPropertyDefinition,
+                    typeResolver,
+                    modelContext.getDocumentationType()));
   }
 
   private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
     if (Collections.isContainerType(type)) {
       ResolvedType collectionElementType = Collections.collectionElementType(type);
-      String elementTypeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, collectionElementType));
+      String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, collectionElementType));
       return new ModelRef(Collections.containerType(type), elementTypeName);
     }
     if (springfox.documentation.schema.Maps.isMapType(type)) {
-      String elementTypeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, springfox
+      String elementTypeName = typeNameExtractor.typeName(fromParent(modelContext, springfox
               .documentation.schema.Maps.mapValueType(type)));
       return new ModelRef("Map", elementTypeName, true);
     }

@@ -20,6 +20,7 @@
 package springfox.documentation.schema;
 
 import com.wordnik.swagger.annotations.ApiModelProperty;
+import org.joda.time.LocalDate;
 
 public class TypeWithAnnotatedGettersAndSetters {
   @ApiModelProperty(notes = "int Property Field", required = true)
@@ -28,6 +29,8 @@ public class TypeWithAnnotatedGettersAndSetters {
   private ExampleEnum enumProp;
   private GenericType<String> genericProp;
   private int hiddenProp;
+  private LocalDate validOverride;
+  private LocalDate invalidOverride;
 
   public int getIntProp() {
     return intProp;
@@ -73,5 +76,15 @@ public class TypeWithAnnotatedGettersAndSetters {
   @ApiModelProperty(hidden = true)
   public int getHiddenProp() {
     return hiddenProp;
+  }
+
+  @ApiModelProperty(dataType = "UnknownType")
+  public LocalDate getInvalidOverride() {
+    return invalidOverride;
+  }
+
+  @ApiModelProperty(dataType = "java.lang.String")
+  public LocalDate getValidOverride() {
+    return validOverride;
   }
 }

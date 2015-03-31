@@ -19,6 +19,7 @@
 
 package springfox.documentation.spi.schema.contexts;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
 import springfox.documentation.builders.ModelPropertyBuilder;
@@ -28,22 +29,25 @@ import java.lang.reflect.AnnotatedElement;
 
 public class ModelPropertyContext {
   private final ModelPropertyBuilder builder;
+  private final TypeResolver resolver;
   private final Optional<BeanPropertyDefinition> beanPropertyDefinition;
   private final Optional<AnnotatedElement> annotatedElement;
   private final DocumentationType documentationType;
 
   public ModelPropertyContext(ModelPropertyBuilder builder, AnnotatedElement annotatedElement,
-                              DocumentationType documentationType) {
+                              TypeResolver resolver, DocumentationType documentationType) {
     this.builder = builder;
+    this.resolver = resolver;
     this.annotatedElement = Optional.fromNullable(annotatedElement);
     this.beanPropertyDefinition = Optional.absent();
     this.documentationType = documentationType;
   }
 
   public ModelPropertyContext(ModelPropertyBuilder builder, BeanPropertyDefinition beanPropertyDefinition,
-                              DocumentationType documentationType) {
+                              TypeResolver resolver, DocumentationType documentationType) {
 
     this.builder = builder;
+    this.resolver = resolver;
     this.beanPropertyDefinition = Optional.fromNullable(beanPropertyDefinition);
     this.documentationType = documentationType;
     annotatedElement = Optional.absent();
@@ -64,5 +68,9 @@ public class ModelPropertyContext {
 
   public Optional<BeanPropertyDefinition> getBeanPropertyDefinition() {
     return beanPropertyDefinition;
+  }
+
+  public TypeResolver getResolver() {
+    return resolver;
   }
 }

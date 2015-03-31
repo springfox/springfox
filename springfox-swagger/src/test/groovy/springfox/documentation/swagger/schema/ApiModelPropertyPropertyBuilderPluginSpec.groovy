@@ -18,9 +18,12 @@
  */
 
 package springfox.documentation.swagger.schema
+
+import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
+import org.joda.time.LocalDate
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
 import springfox.documentation.spi.DocumentationType
@@ -41,7 +44,7 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
       def properties = beanDescription.findProperties()
       def context = new ModelPropertyContext(new ModelPropertyBuilder(),
-              properties.find { it.name == property },
+              properties.find { it.name == property }, new TypeResolver(),
               DocumentationType.SWAGGER_12)
     when:
       sut.apply(context)
@@ -64,7 +67,7 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
       def properties = beanDescription.findProperties()
       def context = new ModelPropertyContext(new ModelPropertyBuilder(),
-              properties.find { it.name == property }.getter.annotated,
+              properties.find { it.name == property }.getter.annotated, new TypeResolver(),
               DocumentationType.SWAGGER_12)
     when:
       sut.apply(context)
@@ -82,20 +85,78 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       "enumProp"  | true     | "enum Prop Getter value" | ["ONE"]
   }
 
-//  def "Detects properties annotated as hidden"() {
-//    given:
-//      Class typeToTest = typeForTestingAnnotatedGettersAndSetter()
-//      def method = accessorMethod(typeToTest, "getHiddenProp")
-//      def propertyDefinition = beanPropertyDefinition(typeToTest, "getHiddenProp")
-//
-//      ObjectMapper mapper = new ObjectMapper()
-//      String propName = name(propertyDefinition, true, new ObjectMapperBeanPropertyNamingStrategy(mapper))
-//      def sut = new BeanModelProperty(propName, propertyDefinition, method, isGetter(method.getRawMember()),
-//              new TypeResolver(), new AlternateTypeProvider())
-//
-//    expect:
-//      sut.isHidden()
-//  }
+  def "ApiModelProperties marked as hidden properties are respected" (){
+    given:
+      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
+      def properties = beanDescription.findProperties()
+      def context = new ModelPropertyContext(new ModelPropertyBuilder(),
+              properties.find { it.name == property }.getter.annotated, new TypeResolver(),
+              DocumentationType.SWAGGER_12)
+    when:
+      sut.apply(context)
+    and:
+      def enriched = context.getBuilder().build()
+    then:
+      enriched.allowableValues?.values == allowableValues
+      enriched.isRequired() == required
+      enriched.description == description
+      enriched.isHidden()
+    where:
+      property    | required | description              | allowableValues
+      "hiddenProp"| false    | ""                       | null
+  }
+
+  def "Supports ApiModelProperty annotated models with dataType overrides" (){
+    given:
+      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
+      def properties = beanDescription.findProperties()
+
+      def resolver = new TypeResolver()
+      def context = new ModelPropertyContext(new ModelPropertyBuilder(),
+              properties.find { it.name == property }.getter.annotated, resolver,
+              DocumentationType.SWAGGER_12)
+    when:
+      sut.apply(context)
+    and:
+      def enriched = context.getBuilder().build()
+    then:
+      enriched.allowableValues?.values == null
+      !enriched.isRequired()
+      enriched.description == ""
+      !enriched.isHidden()
+      enriched.type.getErasedType() == dataType
+    where:
+      property          | dataType
+      "validOverride"    | String
+      "invalidOverride"  | Object
+  }
+
+  def "Supports ApiModelProperty annotated models with dataType overrides but protects specific types" (){
+    given:
+      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
+      def properties = beanDescription.findProperties()
+
+      def resolver = new TypeResolver()
+      def context = new ModelPropertyContext(new ModelPropertyBuilder(),
+              properties.find { it.name == property }.getter.annotated, resolver,
+              DocumentationType.SWAGGER_12)
+    when:
+      context.builder.type(resolver.resolve(LocalDate))
+    and:
+      sut.apply(context)
+    and:
+      def enriched = context.getBuilder().build()
+    then:
+      enriched.allowableValues?.values == null
+      !enriched.isRequired()
+      enriched.description == ""
+      !enriched.isHidden()
+      enriched.type.getErasedType() == dataType
+    where:
+      property          | dataType
+      "validOverride"    | String
+      "invalidOverride"  | LocalDate
+  }
 
   BeanDescription beanDescription(Class<TypeWithAnnotatedGettersAndSetters> clazz) {
     def objectMapper = new ObjectMapper()

@@ -19,6 +19,7 @@
 
 package springfox.documentation.builders;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 
 import java.util.List;
@@ -59,5 +60,23 @@ public class BuilderDefaults {
       return newHashSet();
     }
     return newValue;
+  }
+
+  public static ResolvedType replaceIfMoreSpecific(ResolvedType replacement, ResolvedType defaultValue) {
+    replacement = defaultIfAbsent(replacement, defaultValue);
+    if (isObject(replacement) && isNotObject(defaultValue)) {
+      return defaultValue;
+    }
+    return replacement;
+  }
+
+  private static boolean isNotObject(ResolvedType defaultValue) {
+    return defaultValue != null &&
+            !Object.class.equals(defaultValue.getErasedType());
+  }
+
+  private static boolean isObject(ResolvedType replacement) {
+    return replacement != null &&
+            Object.class.equals(replacement.getErasedType());
   }
 }

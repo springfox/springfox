@@ -20,6 +20,7 @@
 package springfox.documentation.schema.property.field;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedField;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
@@ -103,7 +104,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
             .allowableValues(fieldModelProperty.allowableValues())
             .modelRef(modelRef(fieldModelProperty.getType(), ModelContext.fromParent(modelContext, fieldModelProperty.getType())));
     return schemaPluginsManager.property(new ModelPropertyContext(propertyBuilder,
-            childField.getRawMember(), modelContext.getDocumentationType()));
+            childField.getRawMember(), new TypeResolver(), modelContext.getDocumentationType()));
   }
 
   @Override

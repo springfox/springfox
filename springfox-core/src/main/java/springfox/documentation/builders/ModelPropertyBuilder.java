@@ -26,6 +26,8 @@ import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
+import static springfox.documentation.builders.BuilderDefaults.*;
+
 public class ModelPropertyBuilder {
   private ResolvedType type;
   private String qualifiedType;
@@ -38,17 +40,17 @@ public class ModelPropertyBuilder {
   private boolean isHidden;
 
   public ModelPropertyBuilder name(String name) {
-    this.name = BuilderDefaults.defaultIfAbsent(name, this.name);
+    this.name = defaultIfAbsent(name, this.name);
     return this;
   }
 
   public ModelPropertyBuilder type(ResolvedType type) {
-    this.type = BuilderDefaults.defaultIfAbsent(type, this.type);
+    this.type = replaceIfMoreSpecific(type, this.type);
     return this;
   }
 
   public ModelPropertyBuilder qualifiedType(String qualifiedType) {
-    this.qualifiedType = BuilderDefaults.defaultIfAbsent(qualifiedType, this.qualifiedType);
+    this.qualifiedType = defaultIfAbsent(qualifiedType, this.qualifiedType);
     return this;
   }
 
@@ -63,7 +65,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelPropertyBuilder description(String description) {
-    this.description = BuilderDefaults.defaultIfAbsent(description, this.description);
+    this.description = defaultIfAbsent(description, this.description);
     return this;
   }
 
@@ -79,7 +81,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelPropertyBuilder modelRef(ModelRef modelRef) {
-    this.modelRef = BuilderDefaults.defaultIfAbsent(modelRef, this.modelRef);
+    this.modelRef = defaultIfAbsent(modelRef, this.modelRef);
     return this;
   }
 

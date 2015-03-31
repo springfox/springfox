@@ -22,11 +22,13 @@ package springfox.documentation.swagger.schema;
 import com.google.common.base.Optional;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.springframework.stereotype.Component;
-import springfox.documentation.schema.Annotations;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
+
+import static springfox.documentation.schema.Annotations.*;
+import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
 @Component
 public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlugin {
@@ -35,17 +37,19 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
     Optional<ApiModelProperty> annotation = Optional.absent();
 
     if (context.getAnnotatedElement().isPresent()) {
-      annotation = annotation.or(ApiModelProperties.findApiModePropertyAnnotation(context.getAnnotatedElement().get()));
+      annotation = annotation.or(findApiModePropertyAnnotation(context.getAnnotatedElement().get()));
     }
     if (context.getBeanPropertyDefinition().isPresent()) {
-      annotation = annotation
-              .or(Annotations.findPropertyAnnotation(context.getBeanPropertyDefinition().get(), ApiModelProperty.class));
+      annotation = annotation.or(findPropertyAnnotation(
+              context.getBeanPropertyDefinition().get(), ApiModelProperty.class));
     }
     if (annotation.isPresent()) {
       context.getBuilder()
-        .allowableValues(annotation.transform(ApiModelProperties.toAllowableValues()).orNull())
-        .required(annotation.transform(ApiModelProperties.toIsRequired()).or(false))
-        .description(annotation.transform(ApiModelProperties.toDescription()).orNull());
+              .allowableValues(annotation.transform(toAllowableValues()).orNull())
+              .required(annotation.transform(toIsRequired()).or(false))
+              .description(annotation.transform(toDescription()).orNull())
+              .isHidden(annotation.transform(toHidden()).or(false))
+              .type(annotation.transform(toType(context.getResolver())).orNull());
     }
   }
 
