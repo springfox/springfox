@@ -7,6 +7,8 @@
 
 ### About
 
+TODO Add credit to Marty Pitt
+
 This project integrates swagger with the Spring Web MVC framework. The complete swagger specification is available
 at https://github.com/swagger-api/swagger-spec and it's worth being familiar with the main concepts of the specification and the documentation on the [Swagger Annotations] (https://github.com/swagger-api/swagger-core/wiki/Annotations)
 Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/swagger-api/swagger-ui)
@@ -34,7 +36,7 @@ __Maven__
 </repositories>
 
 <dependency>
-    <groupId>com.mangofactory</groupId>
+    <groupId>springfox</groupId>
     <artifactId>swagger-springmvc</artifactId>
     <version>1.0.2</version>
 </dependency>
@@ -65,7 +67,7 @@ __Maven__
 </repositories>
 
 <dependency>
-    <groupId>com.mangofactory</groupId>
+    <groupId>springfox</groupId>
     <artifactId>swagger-springmvc</artifactId>
     <version>1.0.3-SNAPSHOT</version>
 </dependency>
@@ -82,11 +84,15 @@ repositories {
 compile "com.mangofactory:swagger-springmvc:1.0.3-SNAPSHOT"
 ```
 
+### 2.0 Specific instructions
+The support for swagger 2.0 is still in the works. Here is [some preliminary documentation](transitioning-to-v2.md) to 
+help early adopters and people brave enough to try it out and provide us with feedback.
+
 ### Notable Dependencies
 - As of v0.9.5 all dependencies on __scala__ have been removed.
 - Spring 3.2.x or above
 - jackson 2.4.4
-- guava 15.0
+- guava 18.0
 
 ### Usage (Quick guide)
 This quick guide outlines how to get swagger-springmvc up and running with a default configuration.
@@ -111,11 +117,11 @@ json Resource Listing is available at /api-docs
 
 
 #### Spring xml Configuration
-- To get the default implementation simply define a bean of type: `com.mangofactory.swagger.configuration.SpringSwaggerConfig`
+- To get the default implementation simply define a bean of type: `springfox.documentation.swagger.configuration.SpringSwaggerConfig`
 
 ```xml
 <mvc:annotation-driven/> <!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
-<bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
+<bean class="springfox.documentation.swagger.configuration.SpringSwaggerConfig" />
 ```
 - The generated swagger
 json Resource Listing is available at /api-docs
@@ -412,7 +418,7 @@ To exclude controller method arguments form the generated swagger model JSON.
 ```java
 swaggerSpringMvcPlugin.ignoredParameterTypes(MyCustomType.class)
 ```
-By default, a number of Spring's handler method arguments are ignored. See: com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
+By default, a number of Spring's handler method arguments are ignored. See: springfox.documentation.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
 
 
 ##Development

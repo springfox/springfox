@@ -4,10 +4,8 @@
     "basePath": "/",
     "resourcePath": "/fancypets",
     "produces": [
-        "*/*"
     ],
     "consumes": [
-        "application/json"
     ],
     "apis": [
         {
@@ -39,7 +37,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -92,7 +90,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "int"
                         },
                         {
@@ -157,7 +155,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "int"
                         },
                         {

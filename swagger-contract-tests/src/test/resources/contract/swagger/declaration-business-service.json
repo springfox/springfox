@@ -21,7 +21,8 @@
                     "notes": "getAliasedPathVariable",
                     "nickname": "getAliasedPathVariable",
                     "produces": [
-                        "*/*"
+                        "*/*",
+                        "application/json"
                     ],
                     "consumes": [
                         "application/json"
@@ -91,7 +92,6 @@
                             "items": {
                                 "type": "string"
                             },
-                            "uniqueItems": false,
                             "required": true
                         }
                     ],
@@ -117,9 +117,8 @@
                     "deprecated": "false",
                     "type": "array",
                     "items": {
-                        "type": "Business"
-                    },
-                    "uniqueItems": false
+                        "type": "Biz"
+                    }
                 }
             ]
         },
@@ -133,7 +132,8 @@
                     "notes": "getNonAliasedPathVariable",
                     "nickname": "getNonAliasedPathVariable",
                     "produces": [
-                        "*/*"
+                        "*/*",
+                        "application/json"
                     ],
                     "consumes": [
                         "application/json"
@@ -191,7 +191,8 @@
                     "notes": "getResponseEntity",
                     "nickname": "getResponseEntity",
                     "produces": [
-                        "*/*"
+                        "*/*",
+                        "application/json"
                     ],
                     "consumes": [
                         "application/json"
@@ -264,7 +265,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "string"
                         },
                         {
@@ -299,7 +300,8 @@
                     "notes": "getVanillaPathVariable",
                     "nickname": "getVanillaPathVariable",
                     "produces": [
-                        "*/*"
+                        "*/*",
+                        "application/json"
                     ],
                     "consumes": [
                         "application/json"
@@ -341,9 +343,9 @@
         }
     ],
     "models": {
-        "Business": {
+        "Biz": {
             "description": "",
-            "id": "Business",
+            "id": "Biz",
             "properties": {
                 "businessType": {
                     "enum": [

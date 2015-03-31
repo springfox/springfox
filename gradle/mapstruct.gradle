@@ -1,0 +1,61 @@
+configurations {
+  mapstruct
+}
+ext {
+  generatedMapperSourcesDir = "${projectDir}/generated-src"
+  generatedMapperSourcesMainDir = "${generatedMapperSourcesDir}/main"
+}
+
+dependencies {
+  compile( 'org.mapstruct:mapstruct:1.0.0.Beta4' )
+  compile( "org.springframework:spring-context:$spring" )
+  mapstruct( 'org.mapstruct:mapstruct-processor:1.0.0.Beta4' )
+}
+
+sourceSets.main {
+  ext.originalJavaSrcDirs = java.srcDirs
+  java.srcDir "${generatedMapperSourcesMainDir}"
+}
+
+task generateMappers(type: JavaCompile) {
+  ext.aptDumpDir = file( "${buildDir}/tmp/apt/mapstruct" )
+  destinationDir = aptDumpDir
+
+  classpath = compileJava.classpath + configurations.mapstruct
+  source = sourceSets.main.originalJavaSrcDirs
+  ext.sourceDestDir = file ( "$generatedMapperSourcesMainDir" )
+
+  options.define(
+          compilerArgs: [
+                  "-nowarn",
+                  "-proc:only",
+                  "-encoding", "UTF-8",
+                  "-processor", "org.mapstruct.ap.MappingProcessor",
+                  "-s", sourceDestDir.absolutePath,
+                  "-source", jdkVersion,
+                  "-target", jdkVersion,
+                  "-Amapstruct.defaultComponentModel=spring",
+                  "-Amapstruct.unmappedTargetPolicy=ERROR"
+          ]
+  )
+
+  inputs.dir source
+  outputs.dir generatedMapperSourcesDir;
+  doFirst {
+    sourceDestDir.mkdirs()
+  }
+  doLast {
+    aptDumpDir.delete()
+  }
+}
+
+
+task cleanGenerateMappers() {
+  delete("${generatedMapperSourcesDir}")
+
+}
+compileJava.dependsOn generateMappers
+compileJava.options.define(compilerArgs: ["-proc:none", "-encoding", "UTF-8"])
+compileTestJava.options.define(compilerArgs: ["-proc:none", "-encoding", "UTF-8"])
+
+clean.dependsOn cleanGenerateMappers

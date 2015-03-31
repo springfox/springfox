@@ -4,10 +4,10 @@
     "basePath": "/",
     "resourcePath": "/no-request-mapping",
     "produces": [
-        "*/*"
+
     ],
     "consumes": [
-        "application/json"
+
     ],
     "apis": [
         {

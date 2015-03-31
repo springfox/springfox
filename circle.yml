@@ -1,0 +1,18 @@
+machine:
+  java:
+    version: oraclejdk6
+  environment:
+    TERM: dumb
+dependencies:
+  cache_directories:
+    - ~/.m2
+test:
+  override:
+  - ./gradlew clean check
+deployment:
+ staging:
+    branch: refactor/538/spike-to-seperate-models-and-dtos
+    owner: springfox
+    commands:
+      - ./gradlew snapshot -PbintrayUsername=${bintrayUsername} -PbintrayPassword=${bintrayPassword} -i -x check
+

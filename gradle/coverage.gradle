@@ -3,11 +3,11 @@ apply plugin: "com.github.kt3k.coveralls"
 
 ext {
   limits = [
-          'instruction': 95,
-          'branch'     : 88,
-          'line'       : 94.5,
-          'complexity' : 87.5,
-          'method'     : 93,
+          'instruction': 96,
+          'branch'     : 89,
+          'line'       : 96,
+          'complexity' : 91,
+          'method'     : 95,
           'class'      : 97.5
   ]
 }
@@ -20,7 +20,9 @@ jacocoTestReport {
 
   doLast {
     def report = file("${jacoco.reportsDir}/test/jacocoTestReport.xml")
+    def htmlReport = file("${jacoco.reportsDir}/test/html/index.html")
     logger.lifecycle("Checking coverage results: ${report}")
+    logger.lifecycle("Html report: ${htmlReport}")
 
     def parser = new XmlParser()
     parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);

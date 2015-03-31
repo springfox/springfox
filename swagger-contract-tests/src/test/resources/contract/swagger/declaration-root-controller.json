@@ -4,10 +4,8 @@
     "basePath": "/",
     "resourcePath": "/",
     "produces": [
-        "*/*"
     ],
     "consumes": [
-        "application/json"
     ],
     "apis": [
         {
@@ -49,8 +47,7 @@
                     "type": "array",
                     "items": {
                         "type": "string"
-                    },
-                    "uniqueItems": false
+                    }
                 }
             ]
         }

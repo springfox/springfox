@@ -1,4 +1,11 @@
+import springfox.gradlebuild.version.BuildscriptVersionResolver
+import springfox.gradlebuild.version.SemanticVersion
+import springfox.gradlebuild.version.SnapshotVersion
+import springfox.gradlebuild.version.SoftwareVersion
+
 apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/idea.gradle"
+
 
 buildscript {
   repositories {
@@ -11,37 +18,48 @@ buildscript {
     classpath "com.github.adrianbk:gradle-travisci-trigger-plugin:1.0.0"
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     classpath "com.ofg:uptodate-gradle-plugin:1.1.0"
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1"
   }
 }
+apply plugin: 'build-dashboard'
 
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
-  projectVersion = '1.0.3-SNAPSHOT'
+  jdkVersion = 1.6
 }
 
-configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'swagger-models' }) { subproject ->
+apply plugin: 'springfox-multi-release'
+
+
+SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(project,
+        new SnapshotVersion(SemanticVersion.get(file("$rootDir/version.properties")))
+)
+version = currentVersion
+
+configure(publishable(subprojects)) { subproject ->
   apply plugin: 'groovy'
-  apply plugin: 'java'
   apply plugin: "com.ofg.uptodate"
-  apply plugin: 'maven'
-  apply plugin: 'idea'
 
+  ext {
+    jdkVersion = 1.6
+  }
   compileJava.options.encoding = 'UTF-8'
-  sourceCompatibility = 1.6
-  targetCompatibility = 1.6
 
-  //Adds provide dependency configuration
+  sourceCompatibility = jdkVersion
+  targetCompatibility = jdkVersion
+
+  //TODO - Adds provided dependency configuration?
   configurations {
     provided
     compile.extendsFrom provided
   }
 
-  group = 'com.mangofactory'
-  version = projectVersion
+  group = 'io.springfox'
+  version = currentVersion
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
   jvmsrc {
-    packageName "${group}.swagger"
+    packageName "springdox"
   }
 
   jar {
@@ -62,10 +80,12 @@ configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'sw
   checkstyle {
     configFile = file("$rootDir/config/checkstyle.xml")
   }
+  checkstyleMain.source = "src/main/java"
 
   apply plugin: 'maven-publish'
   apply from: "$rootDir/gradle/publishing.gradle"
-
+  apply from: "$rootDir/gradle/artifacts.gradle"
+  apply from: "$rootDir/gradle/bintray_publish.gradle"
   apply from: "$rootDir/gradle/coverage.gradle"
   apply from: "$rootDir/gradle/code-quality.gradle"
 
@@ -75,6 +95,12 @@ configure(subprojects.findAll { it.name == 'swagger-springmvc' || it.name == 'sw
 
 }
 
+def publishable(subprojects) {
+  subprojects.findAll {
+    !['swagger-contract-tests', 'springfox-petstore', 'buildSrc'].contains(it.name)
+  }
+}
+
 apply plugin: "com.github.adrianbk.tcitrigger"
 
 tciTrigger {
@@ -82,9 +108,8 @@ tciTrigger {
   gitHubApiKeyVarName = 'GIT_HUB_API_KEY'
   travisVariable {
     name = "LATEST_SSMVC_VERSION"
-    value = "${projectVersion}"
+    value = "${version}"
     visible = true
   }
 }
 
-task wrapper(type: Wrapper) {}

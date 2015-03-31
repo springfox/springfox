@@ -1,0 +1,7 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+
+dependencies {
+  compile project(':springfox-core')
+  compile project(':springfox-core')
+}

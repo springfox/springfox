@@ -1,50 +1,17 @@
 ext {
-  developerMachines = ['adrianxbk']
-
   relUsername = project.hasProperty('bintray_username') ? project.property('bintray_username') : 'admin'
   relPassword = project.hasProperty('bintray_password') ? project.property('bintray_password') : 'password'
-
-  if (developerMachines.contains(System.getenv('USER'))) {
-    artifactRepoBase = 'http://localhost:8081/artifactory'
-    repoPrefix = 'libs'
-  } else {
-    artifactRepoBase = 'http://oss.jfrog.org/artifactory'
-    repoPrefix = 'oss'
-  }
-
-
-  releaseRepos = {
-    maven {
-      name 'jcenter'
-      url "${artifactRepoBase}/${repoPrefix}-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
-      credentials {
-        username = "$relUsername"
-        password = "$relPassword"
-      }
-    }
-
-    if (!project.version.endsWith('-SNAPSHOT')) {
-      maven {
-        name 'bintray'
-        url "https://api.bintray.com/maven/swaggerspringmvc/swaggerspringmvc/${project.name}"
-        credentials {
-          username = relUsername
-          password = relPassword
-        }
-      }
-    }
-  }
 
   pomMetaData = {
     resolveStrategy = Closure.DELEGATE_FIRST
     name "${project.name}"
-    url "https://github.com/martypitt/swagger-springmvc"
-    description "This project integrates swagger with the Spring Web MVC framework"
+    url "https://github.com/springfox/springfox"
+    description "JSON API documentation for spring based applications"
 
     scm {
-      url "scm:git:git@github.com:martypitt/swagger-springmvc.git"
-      connection 'scm:git:git@github.com:martypitt/swagger-springmvc.git'
-      developerConnection 'scm:git:git@github.com:martypitt/swagger-springmvc.git'
+      url "scm:git:git@github.com:springfox/springfox.git"
+      connection 'scm:git:git@github.com:springfox/springfox.git'
+      developerConnection 'scm:git:git@github.com:springfox/springfox.git'
     }
 
     licenses {
@@ -76,8 +43,9 @@ ext {
     }
   }
 
-  //Gralde's maven-publish plugin does not yet handles pom generation correctly. Fix expected in 2.1
-  swaggerMvcPomConfig = {
+  // TODO - findout if this has been fixed in gradle and remove this hack if do
+  // Gradle's maven-publish plugin does not yet handle pom generation correctly. Fix expected in 2.1
+  mangodocsPomConfig = {
     def root = asNode()
     def dependencies = root.dependencies
     def allDependencies = dependencies.'*'
@@ -99,8 +67,10 @@ ext {
       it.scope*.value = 'compile'
     }
 
-    Node groovyDep = allDependencies.find { it.artifactId.text() == 'groovy-all' }
-    groovyDep.scope*.value = 'test'
+    allDependencies
+            .findAll { it.artifactId.text() == 'groovy-all' }
+            .each { it.scope*.value = 'test' }
+
 
     root.children().last() + pomMetaData
   }
@@ -112,32 +82,33 @@ task packageSources(type: Jar) {
   from sourceSets.main.allSource
 }
 
-task javadocJar (type: Jar, dependsOn: javadoc) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
   classifier = 'javadoc'
   from javadoc.destinationDir
 }
 
-task preRelease << {
-  def url = new URL("http://oss.jfrog.org/simple/oss-release-local/com/mangofactory/swagger-springmvc/${project.version}")
-  logger.quiet("Checking release repo for duplicate versioning:${url}")
-  final HttpURLConnection connection = url.openConnection()
-  if (connection.responseCode != 404) {
-    throw new GradleException("Artifact ${project.name}:${project.version} already exists.")
-  }
-}
+//task preRelease << {
+//  //May not be required
+//  def url = new URL("http://oss.jfrog.org/simple/oss-release-local/com/mangofactory/swagger-springmvc/${project.version}")
+//  logger.quiet("Checking release repo for duplicate versioning:${url}")
+//  final HttpURLConnection connection = url.openConnection()
+//  if (connection.responseCode != 404) {
+//    throw new GradleException("Artifact ${project.name}:${project.version} already exists.")
+//  }
+//}
 
-afterEvaluate { project ->
-  project.tasks.findAll { it.name.contains('ToBintrayRepository') }.each {
-    it.dependsOn preRelease
-  }
-}
+//afterEvaluate { project ->
+//  project.tasks.findAll { it.name.contains('ToBintrayRepository') }.each {
+//    it.dependsOn preRelease
+//  }
+//}
 
-task ciPublish {
-  if (project.version.contains('SNAPSHOT')) {
-    logger.quiet("Task :ciPublish configured to publish SNAPSHOT artifacts [${project.version}]")
-    dependsOn publish
-  } else {
-    logger.quiet("Task :ciPublish will not publish artifacts [${project.version}] as this is not a SNAPSHOT version")
-  }
-}
+//task ciPublish {
+//  if (project.version.toString().contains('SNAPSHOT')) {
+//    logger.quiet("Task :ciPublish configured to publish SNAPSHOT artifacts [${project.version}]")
+//    dependsOn publish
+//  } else {
+//    logger.quiet("Task :ciPublish will not publish artifacts [${project.version}] as this is not a SNAPSHOT version")
+//  }
+//}
 

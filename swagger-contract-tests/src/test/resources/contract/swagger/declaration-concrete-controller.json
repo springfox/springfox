@@ -4,10 +4,8 @@
     "basePath": "/",
     "resourcePath": "/foo",
     "produces": [
-        "*/*"
     ],
     "consumes": [
-        "application/json"
     ],
     "apis": [
         {
@@ -39,7 +37,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -96,6 +94,11 @@
                         {
                             "code": 404,
                             "message": "Not Found"
+                        },
+                        {
+                            "code": 405,
+                            "message": "Invalid input",
+                            "responseModel": "Void"
                         }
                     ],
                     "deprecated": "false",

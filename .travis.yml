@@ -1,27 +1,27 @@
-sudo: false
-cache:
-  directories:
-  - $HOME/.m2
-  - $HOME/.gradle/wrapper
+#sudo: false
+#cache:
+#  directories:
+#  - $HOME/.m2
+#  - $HOME/.gradle/wrapper
 language: java
 install:
   - true
 script:
-- TERM=dumb ./gradlew clean check
+- TERM=dumb ./gradlew clean check --stacktrace
 
 jdk:
   - openjdk6
-  - oraclejdk7
-  - openjdk7
-  - oraclejdk8
+#  - oraclejdk7
+#  - openjdk7
+#  - oraclejdk8
 
 after_success:
-  - '[[ $TRAVIS_BRANCH == "master" ]]
+  - '[[ $TRAVIS_BRANCH == "refactor/538/spike-to-seperate-models-and-dtos" ]]
   && [[ $TRAVIS_PULL_REQUEST == "false" ]]
   && [[ $TRAVIS_JDK_VERSION == "openjdk6" ]]
   && TERM=dumb ./gradlew
   coveralls
-  -Pbintray_username=$bintray_username -Pbintray_password=$bintray_password ciPublish travisciTrigger -i'
+  -PbintrayUsername=$bintray_username -PbintrayPassword=$bintray_password snapshot -i'
 
 env:
   global:

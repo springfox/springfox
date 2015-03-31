@@ -1,0 +1,51 @@
+/*
+ *
+ *  Copyright 2015 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
+
+package springfox.documentation.swagger.mixins
+
+import org.mapstruct.factory.Mappers
+import springfox.documentation.schema.mixins.ModelProviderSupport
+import springfox.documentation.swagger.mappers.AuthorizationTypesMapper
+import springfox.documentation.swagger.mappers.AllowableValuesMapper
+import springfox.documentation.swagger.mappers.DataTypeMapper
+import springfox.documentation.swagger.mappers.ServiceModelToSwaggerMapper
+
+@SuppressWarnings("GrMethodMayBeStatic")
+@Mixin([ModelProviderSupport, SwaggerPluginsSupport])
+class MapperSupport {
+  DataTypeMapper dataTypeMapper() {
+    new DataTypeMapper()
+  }
+  AuthorizationTypesMapper authMapper() {
+    Mappers.getMapper(AuthorizationTypesMapper)
+  }
+  AllowableValuesMapper allowableValuesMapper() {
+    Mappers.getMapper(AllowableValuesMapper)
+  }
+  //TODO: make this an integration test with spring DI and beans autowired
+  ServiceModelToSwaggerMapper serviceMapper() {
+    def mapper = Mappers.getMapper(ServiceModelToSwaggerMapper)
+    mapper.authorizationTypesMapper = authMapper()
+    mapper.allowableValuesMapper = allowableValuesMapper()
+    mapper.dataTypeMapper = dataTypeMapper()
+    mapper
+
+  }
+
+}

@@ -77,11 +77,11 @@
     },
     "info": {
         "contact": "Contact Email",
-        "description": "Api Description",
-        "license": "Licence Type",
-        "licenseUrl": "License URL",
-        "termsOfServiceUrl": "Api terms of service",
-        "title": "default Title"
+        "description": "Api Documentation",
+        "license": "Apache 2.0",
+        "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+        "termsOfServiceUrl": "urn:tos",
+        "title": "Api Documentation"
     },
     "swaggerVersion": "1.2"
 }

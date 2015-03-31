@@ -4,12 +4,8 @@
     "basePath": "/",
     "resourcePath": "/",
     "produces": [
-        "application/xml",
-        "application/json",
-        "*/*"
     ],
     "consumes": [
-        "application/json"
     ],
     "apis": [
         {
@@ -92,7 +88,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "Just testing"
                         },
                         {
                             "code": 204,
@@ -242,7 +238,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "Just testing"
                         },
                         {
                             "code": 204,
@@ -292,7 +288,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "Just testing"
                         },
                         {
                             "code": 204,
