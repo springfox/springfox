@@ -11,7 +11,7 @@ test:
   - ./gradlew clean check
 deployment:
  staging:
-    branch: refactor/538/spike-to-seperate-models-and-dtos
+    branch: master
     owner: springfox
     commands:
       - ./gradlew snapshot -PbintrayUsername=${bintrayUsername} -PbintrayPassword=${bintrayPassword} -i -x check

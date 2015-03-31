@@ -36,9 +36,19 @@ __Maven__
 </repositories>
 
 <dependency>
-    <groupId>springfox</groupId>
-    <artifactId>swagger-springmvc</artifactId>
-    <version>1.0.2</version>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-core</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-spi</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-spring-web</artifactId>
+      <version>2.0.0</version>
 </dependency>
 
 ```
@@ -51,7 +61,7 @@ repositories {
     jcenter()
 }
 
-compile "com.mangofactory:swagger-springmvc:1.0.2"
+compile "io.springfox:springfox-core:2.0.0"
 ```
 
 #### Snapshot version
@@ -67,9 +77,19 @@ __Maven__
 </repositories>
 
 <dependency>
-    <groupId>springfox</groupId>
-    <artifactId>swagger-springmvc</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-core</artifactId>
+      <version>2.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-spi</artifactId>
+      <version>2.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-spring-web</artifactId>
+      <version>2.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -81,7 +101,7 @@ repositories {
    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
-compile "com.mangofactory:swagger-springmvc:1.0.3-SNAPSHOT"
+compile "io.springfox:springfox-core:2.0.0-SNAPSHOT"
 ```
 
 ### 2.0 Specific instructions
