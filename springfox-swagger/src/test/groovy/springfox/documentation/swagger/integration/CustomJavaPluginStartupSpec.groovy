@@ -42,9 +42,8 @@ class CustomJavaPluginStartupSpec extends Specification {
   def "Should start app with custom java config"() {
     when:
     MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
-    MvcResult petApi = mockMvc.perform(get('/v1/api-docs?group=customPlugin')).andReturn()
-    MvcResult demoApi = mockMvc.perform(get('/v1/api-docs?group=secondCustomPlugin'))
-            .andReturn()
+    MvcResult petApi = mockMvc.perform(get('/api-docs?group=customPlugin')).andReturn()
+    MvcResult demoApi = mockMvc.perform(get('/api-docs?group=secondCustomPlugin')).andReturn()
     then:
     jsonBodyResponse(petApi).apis.size() == 4
     jsonBodyResponse(demoApi).apis.size() == 1

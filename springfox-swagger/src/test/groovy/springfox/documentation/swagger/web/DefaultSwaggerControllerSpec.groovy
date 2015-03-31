@@ -94,9 +94,9 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
       result.getResponse().getStatus() == expectedStatus
     where:
       path                      | expectedStatus
-      "/v1/api-docs"               | 200
-      "/v1/api-docs?group=default" | 200
-      "/v1/api-docs?group=unknown" | 404
+      "/api-docs"               | 200
+      "/api-docs?group=default" | 200
+      "/api-docs?group=unknown" | 404
   }
 
   def "should respond with api listing for a given resource group"() {
@@ -107,7 +107,7 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
               .build()
       controller.documentationCache.addDocumentation(group)
     when:
-      MvcResult result = mockMvc.perform(get("/v1/api-docs/groupName/businesses")).andDo(print()).andReturn()
+      MvcResult result = mockMvc.perform(get("/api-docs/groupName/businesses")).andDo(print()).andReturn()
       jsonBodyResponse(result)
 
     then:
@@ -125,9 +125,9 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
 
       controller.documentationCache.addDocumentation(group)
     when:
-      MvcResult result = mockMvc.perform(get("/v1/api-docs?group=groupName")).andDo(print()).andReturn()
+      MvcResult result = mockMvc.perform(get("/api-docs?group=groupName")).andDo(print()).andReturn()
       def json = jsonBodyResponse(result)
-      println json
+//      println json
 
     then:
       result.getResponse().getStatus() == 200

@@ -46,11 +46,11 @@ import static springfox.documentation.builders.PathSelectors.*
         loader = SpringApplicationContextLoader,
         classes = SwaggerV1_2Spec.Config)
 @WebAppConfiguration
-@IntegrationTest("server.port:0")
+@IntegrationTest("server.port:8080")
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
 class SwaggerV1_2Spec extends Specification implements FileAccess {
 
-  @Value('${local.server.port}')
+  @Value('${local.server.port:8080}')
   int port;
 
   def 'should honor swagger resource listing'() {
@@ -60,7 +60,7 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
 
     when:
       def response = http.get(
-              path: '/v1/api-docs',
+              path: '/api-docs',
               contentType: TEXT, //Allows to access the raw response body
               headers: [Accept: 'application/json']
       )
@@ -79,7 +79,7 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
       String contract = fileContents("/contract/swagger/$contractFile")
     when:
       def response = http.get(
-              path: "/v1/api-docs${declarationPath}",
+              path: "/api-docs${declarationPath}",
               contentType: TEXT, //Allow access to the raw response body
               headers: [Accept: 'application/json']
       )

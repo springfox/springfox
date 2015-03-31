@@ -96,7 +96,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
       result.getApiListingReferences().size() == 1
       ApiListingReference businessListingReference = result.getApiListingReferences()[0]
       businessListingReference.getPath() ==
-              'http://localhost:8080/context-path/v1/api-docs/groupName/dummy-class'
+              'http://localhost:8080/context-path/api-docs/groupName/dummy-class'
   }
 
   def "grouping of listing references using Spring grouping strategy"() {

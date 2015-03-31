@@ -13,7 +13,7 @@
             "url": "http://www.apache.org/licenses/LICENSE-2.0"
         }
     },
-    "host": "localhost:8080",
+    "host": "localhost:8081",
     "basePath": "/",
     "produces": [
         "application/xml",

@@ -19,6 +19,8 @@
 
 package springfox.documentation.swagger.configuration;
 
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,4 +31,8 @@ import org.springframework.context.annotation.Configuration;
    "springfox.documentation.swagger.web"
 })
 public class SwaggerCommonConfiguration {
+   @Bean
+   public PropertyPlaceholderConfigurer propertiesSupport() {
+      return new PropertyPlaceholderConfigurer();
+   }
 }

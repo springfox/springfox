@@ -39,7 +39,6 @@ import javax.servlet.ServletRequest;
 @Controller
 @ApiIgnore
 public class Swagger2Controller {
-  public static final String DOCUMENTATION_BASE_PATH = "/v2/api-docs";
 
   @Autowired
   private DocumentationCache documentationCache;
@@ -48,7 +47,7 @@ public class Swagger2Controller {
   private ServiceModelToSwagger2Mapper mapper;
 
   @ApiIgnore
-  @RequestMapping(value = {DOCUMENTATION_BASE_PATH}, method = RequestMethod.GET)
+  @RequestMapping(value = "${springfox.documentatation.swagger.v2.path:/v2/api-docs}", method = RequestMethod.GET)
   public
   @ResponseBody
   ResponseEntity<Swagger> getDocumentation(

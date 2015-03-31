@@ -43,7 +43,6 @@ class ReturnTypesSpec extends Specification {
    def "model types"() {
     expect:
       def type = HandlerMethodReturnTypes.handlerReturnType(new TypeResolver(), handlerMethod)
-      println "TYPE: $type"
       type.getErasedType() == expectedType
 
     where:

@@ -34,7 +34,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger.dto.ApiListing;
 import springfox.documentation.swagger.dto.ResourceListing;
 import springfox.documentation.swagger.mappers.Mappers;
@@ -44,6 +43,7 @@ import java.util.Map;
 
 @Controller
 @ApiIgnore
+@RequestMapping("${springfox.documentatation.swagger.v1.path:/api-docs}")
 public class DefaultSwaggerController {
 
 
@@ -54,7 +54,7 @@ public class DefaultSwaggerController {
   private ServiceModelToSwaggerMapper mapper;
 
   @ApiIgnore
-  @RequestMapping(value = {SwaggerPluginSupport.DOCUMENTATION_BASE_PATH}, method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
   public
   @ResponseBody
   ResponseEntity<ResourceListing> getResourceListing(
@@ -64,7 +64,7 @@ public class DefaultSwaggerController {
   }
 
   @ApiIgnore
-  @RequestMapping(value = {SwaggerPluginSupport.DOCUMENTATION_BASE_PATH + "/{swaggerGroup}/{apiDeclaration}"}, method = RequestMethod.GET)
+  @RequestMapping(value = {"/{swaggerGroup}/{apiDeclaration}"}, method = RequestMethod.GET)
   public
   @ResponseBody
   ResponseEntity<ApiListing> getApiListing(@PathVariable String swaggerGroup, @PathVariable String apiDeclaration) {

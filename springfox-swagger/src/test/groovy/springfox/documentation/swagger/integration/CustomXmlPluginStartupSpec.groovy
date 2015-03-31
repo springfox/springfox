@@ -41,8 +41,8 @@ class CustomXmlPluginStartupSpec extends Specification {
   def "Should start app with custom xml config"() {
     when:
       MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
-      MvcResult petApi = mockMvc.perform(MockMvcRequestBuilders.get('/v1/api-docs?group=customPlugin')).andReturn()
-      MvcResult demoApi = mockMvc.perform(MockMvcRequestBuilders.get('/v1/api-docs?group=secondCustomPlugin'))
+      MvcResult petApi = mockMvc.perform(MockMvcRequestBuilders.get('/api-docs?group=customPlugin')).andReturn()
+      MvcResult demoApi = mockMvc.perform(MockMvcRequestBuilders.get('/api-docs?group=secondCustomPlugin'))
               .andReturn()
     then:
       jsonBodyResponse(petApi).apis.size() == 4

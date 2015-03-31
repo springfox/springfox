@@ -39,8 +39,8 @@ class AbsolutePathProviderSpec extends Specification {
 
       where:
         servletContext   | expectedAppPath                      | expectedDocPath
-        servletContext() | "http://localhost:8080/context-path" | "http://localhost:8080/context-path/v1/api-docs"
-        mockContext("")  | "http://localhost:8080"              | "http://localhost:8080/v1/api-docs"
+        servletContext() | "http://localhost:8080/context-path" | "http://localhost:8080/context-path/api-docs"
+        mockContext("")  | "http://localhost:8080"              | "http://localhost:8080/api-docs"
 
    }
 
@@ -55,8 +55,8 @@ class AbsolutePathProviderSpec extends Specification {
 
     where:
       groupName       | apiDeclaration     | expectedAppBase                      | expectedDoc
-      'default'       | 'api-declaration'  | "http://localhost:8080/context-path" |  "http://localhost:8080/context-path/v1/api-docs/default/api-declaration"
-      'somethingElse' | 'api-declaration2' | "http://localhost:8080/context-path" |  "http://localhost:8080/context-path/v1/api-docs/somethingElse/api-declaration2"
+      'default'       | 'api-declaration'  | "http://localhost:8080/context-path" |  "http://localhost:8080/context-path/api-docs/default/api-declaration"
+      'somethingElse' | 'api-declaration2' | "http://localhost:8080/context-path" |  "http://localhost:8080/context-path/api-docs/somethingElse/api-declaration2"
 
   }
 

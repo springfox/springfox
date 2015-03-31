@@ -20,14 +20,20 @@
 package springfox.documentation.swagger.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.spring.web.AbstractPathProvider;
-import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import javax.servlet.ServletContext;
 
-@Component
+import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
+
+/**
+ * This provider has quite a few hardcoded values that don't make sense if we try to use this
+ * generically across swagger 1.2 and swagger 2.0 the paths don't make sense. For e.g. getAppRoot
+ * has a hard coded host:port. Also the DOCUMENTATION_BASE_PATH is not the same across swagger 1.2
+ * and swagger 2.0. This is deprecated in favor or @see RelativePathProvider.
+ */
+@Deprecated
 public class AbsolutePathProvider extends AbstractPathProvider {
 
   private final ServletContext servletContext;
@@ -47,7 +53,7 @@ public class AbsolutePathProvider extends AbstractPathProvider {
   @Override
   protected String getDocumentationPath() {
     return getAppRoot()
-            .path(SwaggerPluginSupport.DOCUMENTATION_BASE_PATH)
+            .path(DOCUMENTATION_BASE_PATH)
             .build()
             .toString();
   }
