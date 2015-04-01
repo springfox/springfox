@@ -131,10 +131,10 @@ repositories {
    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
-compile "io.springfox:springfox-core:2.0.0-SNAPSHOT",
-compile "io.springfox:springfox-spi:2.0.0-SNAPSHOT",
-compile "io.springfox:springfox-schema:2.0.0-SNAPSHOT",
-compile "io.springfox:springfox-spring-web:2.0.0-SNAPSHOT",
+compile "io.springfox:springfox-core:2.0.0-SNAPSHOT"
+compile "io.springfox:springfox-spi:2.0.0-SNAPSHOT"
+compile "io.springfox:springfox-schema:2.0.0-SNAPSHOT"
+compile "io.springfox:springfox-spring-web:2.0.0-SNAPSHOT"
 compile "io.springfox:springfox-swagger2:2.0.0-SNAPSHOT"
 //Optional for swagger 1.2
 compile "io.springfox:springfox-swagger:2.0.0-SNAPSHOT"
