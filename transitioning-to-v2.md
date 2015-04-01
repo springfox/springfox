@@ -188,17 +188,19 @@ present](http://docs.spring.io/spring/docs/current/javadoc-api/org/springframewo
 ### Customizing the swagger endpoints.
 By default the swagger service descriptions are generated at the following urls
 
-|Swagger version|Documentation Url|
-|1.2|/api-docs|
-|2.0|/v2/api-docs|
+Swagger version  | Documentation Url
+---------------- | -----------------
+1.2              | /api-docs
+2.0              | /v2/api-docs
 
 To customize these endpoints, loading a [property source](http://docs.spring
 .io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html) with the following properties 
 allows the properties to be  overridden
 
-|Swagger version|Override property|
-|1.2|springfox.documentatation.swagger.v1.path|
-|2.0|springfox.documentatation.swagger.v2.path|
+Swagger version | Override property
+--------------- | -----------------
+1.2             | springfox.documentatation.swagger.v1.path
+2.0             | springfox.documentatation.swagger.v2.path
 
 ### Overriding property datatypes
 Using the ```ApiModelProperty#dataType``` we can override the inferred data types. However it is restricted
