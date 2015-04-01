@@ -46,11 +46,11 @@ import static springfox.documentation.builders.PathSelectors.*
         loader = SpringApplicationContextLoader,
         classes = SwaggerV1_2Spec.Config)
 @WebAppConfiguration
-@IntegrationTest("server.port:8080")
+@IntegrationTest("server.port:0")
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
 class SwaggerV1_2Spec extends Specification implements FileAccess {
 
-  @Value('${local.server.port:8080}')
+  @Value('${local.server.port}')
   int port;
 
   def 'should honor swagger resource listing'() {

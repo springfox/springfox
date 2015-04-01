@@ -48,11 +48,11 @@ import static springfox.documentation.builders.PathSelectors.*
 @ContextConfiguration(loader = SpringApplicationContextLoader,
         classes = SwaggerV2_0Spec.Config)
 @WebAppConfiguration
-@IntegrationTest("server.port:8081")
+@IntegrationTest("server.port:0")
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
 class SwaggerV2_0Spec extends Specification implements springfox.test.contract.swagger.FileAccess {
 
-  @Value('${local.server.port:8081}')
+  @Value('${local.server.port}')
   int port;
 
   @Unroll("#groupName")
@@ -74,7 +74,8 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
       response.status == 200
 //      println(actual)
 
-      JSONAssert.assertEquals(contract, actual, JSONCompareMode.NON_EXTENSIBLE)
+    def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+    JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
 
     where:
       contractFile                                                  | groupName
