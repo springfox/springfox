@@ -26,13 +26,20 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 @ComponentScan(basePackages = {
-   "springfox.documentation.swagger.schema",
-   "springfox.documentation.swagger.readers",
-   "springfox.documentation.swagger.web"
+        "springfox.documentation.swagger.schema",
+        "springfox.documentation.swagger.readers",
+        "springfox.documentation.swagger.web"
 })
 public class SwaggerCommonConfiguration {
-   @Bean
-   public PropertySourcesPlaceholderConfigurer swaggerProperties() {
-      return new PropertySourcesPlaceholderConfigurer();
-   }
+
+/*   TODO - this spits out an ominous warning
+ 2015-04-01 22:52:09.134  WARN 26137 --- [           main] o.s.c.a.ConfigurationClassEnhancer       : @Bean method
+ SwaggerCommonConfiguration.swaggerProperties is non-static and returns an object assignable to Spring's
+ BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and
+ @PostConstruct within the method's declaring @Conf
+*/
+  @Bean
+  public PropertySourcesPlaceholderConfigurer swaggerProperties() {
+    return new PropertySourcesPlaceholderConfigurer();
+  }
 }
