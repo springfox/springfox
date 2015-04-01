@@ -23,6 +23,10 @@ web mvc and spring-boot.
 ### Repositories
 
 #### Release version
+
+Version 2.x has not yet been released. 
+To use pre-2.x relesed version please browse to the pre-2.0 [tag](https://github.com/springfox/springfox/tree/pre-2.0)
+
 __Maven__
 
 ```xml
