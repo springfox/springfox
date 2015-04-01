@@ -1,34 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
+    <meta charset="UTF-8">
     <title>SpringFox by springfox</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
-    <header>
-      <div class="inner">
-        <h1>SpringFox</h1>
-        <h2>Spring MVC integration for Swagger</h2>
-        <a href="https://github.com/springfox/springfox" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
+    <section class="page-header">
+      <h1 class="project-name">SpringFox</h1>
+      <h2 class="project-tagline">Spring MVC integration for Swagger</h2>
+      <a href="https://github.com/springfox/springfox" class="btn">View on GitHub</a>
+      <a href="https://github.com/springfox/springfox/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/springfox/springfox/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h1>
+    <section class="main-content">
+      <h1>
 <a id="swagger-springmvc" class="anchor" href="#swagger-springmvc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Swagger-springmvc</h1>
 
 <p><a href="https://bintray.com/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/_latestVersion"><img src="https://api.bintray.com/packages/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/images/download.svg" alt="Download"> </a></p>
@@ -43,9 +34,9 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="https://travis-ci.org/springdox/springdox"><img src="https://travis-ci.org/springdox/springdox.svg?branch=master" alt="Build Status"></a></td>
+<td><a href="https://circleci.com/gh/springfox/springfox/tree/master"><img src="https://circleci.com/gh/springfox/springfox/tree/master.svg?style=svg" alt="Circle CI"></a></td>
 <td><a href="https://travis-ci.org/adrianbk/swagger-springmvc-demo"><img src="https://travis-ci.org/adrianbk/swagger-springmvc-demo.svg?branch=master" alt="Build Status"></a></td>
-<td><a href="https://coveralls.io/r/springdox/springdox"><img src="https://coveralls.io/repos/springdox/springdox/badge.svg" alt="Coverage Status"></a></td>
+<td><a href="https://coveralls.io/r/springfox/springfox"><img src="https://coveralls.io/repos/springfox/springfox/badge.svg" alt="Coverage Status"></a></td>
 </tr>
 </tbody>
 </table>
@@ -54,13 +45,18 @@
 <a id="about" class="anchor" href="#about" aria-hidden="true"><span class="octicon octicon-link"></span></a>About</h3>
 
 <p>This project integrates swagger with the Spring Web MVC framework. The complete swagger specification is available
-at <a href="https://github.com/wordnik/swagger-spec">https://github.com/wordnik/swagger-spec</a> and it's worth being familiar with the main concepts of the specification and the documentation on the <a href="https://github.com/swagger-api/swagger-core/wiki/Annotations">Swagger Annotations</a>
-Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (<a href="https://github.com/wordnik/swagger-ui">https://github.com/wordnik/swagger-ui</a>)
+at <a href="https://github.com/swagger-api/swagger-spec">https://github.com/swagger-api/swagger-spec</a> and it's worth being familiar with the main concepts of the specification and the documentation on the <a href="https://github.com/swagger-api/swagger-core/wiki/Annotations">Swagger Annotations</a>
+Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (<a href="https://github.com/swagger-api/swagger-ui">https://github.com/swagger-api/swagger-ui</a>)
 to provide the user interface which visualises an applications JSON api's. The most common know use of this project has been
 Spring Web MVC applications using springs <code>MappingJackson2HttpMessageConverter</code> to produce JSON API endpoints.</p>
 
 <p>The demo project (<a href="https://github.com/adrianbk/swagger-springmvc-demo">https://github.com/adrianbk/swagger-springmvc-demo</a>) contains a number of examples using both spring
 web mvc and spring-boot.</p>
+
+<h3>
+<a id="core-contributors" class="anchor" href="#core-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Core Contributors</h3>
+
+<p>More details on the core contributors is available <a href="contributors.html">here</a></p>
 
 <h3>
 <a id="development-and-contribution-guidelines-are-available-here" class="anchor" href="#development-and-contribution-guidelines-are-available-here" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development and contribution guidelines are available <a href="https://github.com/martypitt/swagger-springmvc/wiki/Development">here</a>
@@ -72,35 +68,8 @@ web mvc and spring-boot.</p>
 <h4>
 <a id="release-version" class="anchor" href="#release-version" aria-hidden="true"><span class="octicon octicon-link"></span></a>Release version</h4>
 
-<p><strong>Maven</strong></p>
-
-<div class="highlight highlight-xml"><pre>
-&lt;<span class="pl-ent">repositories</span>&gt;
-    &lt;<span class="pl-ent">repository</span>&gt;
-      &lt;<span class="pl-ent">id</span>&gt;jcenter-release&lt;/<span class="pl-ent">id</span>&gt;
-      &lt;<span class="pl-ent">name</span>&gt;jcenter&lt;/<span class="pl-ent">name</span>&gt;
-      &lt;<span class="pl-ent">url</span>&gt;http://oss.jfrog.org/artifactory/oss-release-local/&lt;/<span class="pl-ent">url</span>&gt;
-    &lt;/<span class="pl-ent">repository</span>&gt;
-&lt;/<span class="pl-ent">repositories</span>&gt;
-
-&lt;<span class="pl-ent">dependency</span>&gt;
-    &lt;<span class="pl-ent">groupId</span>&gt;com.mangofactory&lt;/<span class="pl-ent">groupId</span>&gt;
-    &lt;<span class="pl-ent">artifactId</span>&gt;swagger-springmvc&lt;/<span class="pl-ent">artifactId</span>&gt;
-    &lt;<span class="pl-ent">version</span>&gt;1.0.0&lt;/<span class="pl-ent">version</span>&gt;
-&lt;/<span class="pl-ent">dependency</span>&gt;
-</pre></div>
-
-<p><strong>Gradle</strong></p>
-
-<div class="highlight highlight-groovy"><pre>
-repositories {
-    jcenter()
-}
-
-compile <span class="pl-s"><span class="pl-pds">"</span>com.mangofactory:swagger-springmvc:1.0.0<span class="pl-pds">"</span></span></pre></div>
-
-<h4>
-<a id="snapshot-version" class="anchor" href="#snapshot-version" aria-hidden="true"><span class="octicon octicon-link"></span></a>Snapshot version</h4>
+<p><strong>NOTE:</strong> Version 2.x has not yet been released. 
+To use 1.0.2 released version please browse to the pre-2.0 <a href="https://github.com/springfox/springfox/tree/pre-2.0">tag</a></p>
 
 <p><strong>Maven</strong></p>
 
@@ -113,9 +82,30 @@ compile <span class="pl-s"><span class="pl-pds">"</span>com.mangofactory:swagger
 &lt;/<span class="pl-ent">repositories</span>&gt;
 
 &lt;<span class="pl-ent">dependency</span>&gt;
-    &lt;<span class="pl-ent">groupId</span>&gt;com.mangofactory&lt;/<span class="pl-ent">groupId</span>&gt;
-    &lt;<span class="pl-ent">artifactId</span>&gt;swagger-springmvc&lt;/<span class="pl-ent">artifactId</span>&gt;
-    &lt;<span class="pl-ent">version</span>&gt;1.0.1-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.springfox&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;springfox-core&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.springfox&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;springfox-spi&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.springfox&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;springfox-spring-web&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.springfox&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;springfox-swagger2&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+<span class="pl-c">&lt;!-- for swagger spec 1.2 optionally --&gt;</span>
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.springfox&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;springfox-swagger&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p><strong>Gradle</strong></p>
@@ -125,20 +115,88 @@ repositories {
    maven { url <span class="pl-s"><span class="pl-pds">'</span>http://oss.jfrog.org/artifactory/oss-snapshot-local/<span class="pl-pds">'</span></span> }
 }
 
-compile <span class="pl-s"><span class="pl-pds">"</span>com.mangofactory:swagger-springmvc:1.0.1-SNAPSHOT<span class="pl-pds">"</span></span></pre></div>
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-core:2.0.0<span class="pl-pds">"</span></span>,
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-spi:2.0.0<span class="pl-pds">"</span></span>,
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-schema:2.0.0<span class="pl-pds">"</span></span>,
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-spring-web:2.0.0<span class="pl-pds">"</span></span>,
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-swagger2:2.0.0<span class="pl-pds">"</span></span>
+<span class="pl-c">//Optional for swagger 1.2</span>
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-swagger:2.0.0<span class="pl-pds">"</span></span></pre></div>
+
+<h4>
+<a id="snapshot-version" class="anchor" href="#snapshot-version" aria-hidden="true"><span class="octicon octicon-link"></span></a>Snapshot version</h4>
+
+<p>The build file/pom will require the following changes
+<strong>Maven</strong></p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">repositories</span>&gt;
+    &lt;<span class="pl-ent">repository</span>&gt;
+      &lt;<span class="pl-ent">id</span>&gt;jcenter-snapshots&lt;/<span class="pl-ent">id</span>&gt;
+      &lt;<span class="pl-ent">name</span>&gt;jcenter&lt;/<span class="pl-ent">name</span>&gt;
+      &lt;<span class="pl-ent">url</span>&gt;http://oss.jfrog.org/artifactory/oss-snapshot-local/&lt;/<span class="pl-ent">url</span>&gt;
+    &lt;/<span class="pl-ent">repository</span>&gt;
+&lt;/<span class="pl-ent">repositories</span>&gt;
+
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.springfox&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;springfox-core&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.springfox&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;springfox-spi&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.springfox&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;springfox-spring-web&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.springfox&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;springfox-swagger2&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+<span class="pl-c">&lt;!-- for swagger 1.2 optionally --&gt;</span>
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.springfox&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;springfox-swagger&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<p><strong>Gradle</strong></p>
+
+<div class="highlight highlight-groovy"><pre>
+repositories {
+   maven { url <span class="pl-s"><span class="pl-pds">'</span>http://oss.jfrog.org/artifactory/oss-snapshot-local/<span class="pl-pds">'</span></span> }
+}
+
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-core:2.0.0-SNAPSHOT<span class="pl-pds">"</span></span>,
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-spi:2.0.0-SNAPSHOT<span class="pl-pds">"</span></span>,
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-schema:2.0.0-SNAPSHOT<span class="pl-pds">"</span></span>,
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-spring-web:2.0.0-SNAPSHOT<span class="pl-pds">"</span></span>,
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-swagger2:2.0.0-SNAPSHOT<span class="pl-pds">"</span></span>
+<span class="pl-c">//Optional for swagger 1.2</span>
+compile <span class="pl-s"><span class="pl-pds">"</span>io.springfox:springfox-swagger:2.0.0-SNAPSHOT<span class="pl-pds">"</span></span></pre></div>
 
 <h3>
-<a id="notable-dependencies" class="anchor" href="#notable-dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Notable Dependencies</h3>
+<a id="notable-dependencies-for-10x" class="anchor" href="#notable-dependencies-for-10x" aria-hidden="true"><span class="octicon octicon-link"></span></a>Notable Dependencies for 1.0.x</h3>
 
 <ul>
 <li>As of v0.9.5 all dependencies on <strong>scala</strong> have been removed.</li>
 <li>Spring 3.2.x or above</li>
 <li>jackson 2.4.4</li>
-<li>guava 15.0</li>
+<li>guava 18.0</li>
 </ul>
 
-<h3>
-<a id="usage-quick-guide" class="anchor" href="#usage-quick-guide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage (Quick guide)</h3>
+<h2>
+<a id="usage-guide-and-instructions-to-migrate-to-20x" class="anchor" href="#usage-guide-and-instructions-to-migrate-to-20x" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage guide and instructions to migrate to 2.0.x</h2>
+
+<p>The support for swagger 2.0 is still in the works. Here is <a href="transitioning-to-v2.md">some preliminary documentation</a> to 
+help early adopters and people brave enough to try it out and provide us with feedback.</p>
+
+<h2>
+<a id="usage-quick-guide-for-10x" class="anchor" href="#usage-quick-guide-for-10x" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage (Quick guide) for 1.0.x</h2>
 
 <p>This quick guide outlines how to get swagger-springmvc up and running with a default configuration.
 The recommended way to integrate swagger-springmvc with your application is to use the <code>SwaggerSpringMvcPlugin</code> as explained below.</p>
@@ -167,12 +225,12 @@ json Resource Listing is available at /api-docs</p>
 <a id="spring-xml-configuration" class="anchor" href="#spring-xml-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Spring xml Configuration</h4>
 
 <ul>
-<li>To get the default implementation simply define a bean of type: <code>com.mangofactory.swagger.configuration.SpringSwaggerConfig</code>
+<li>To get the default implementation simply define a bean of type: <code>springfox.documentation.swagger.configuration.SpringSwaggerConfig</code>
 </li>
 </ul>
 
 <div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">mvc</span><span class="pl-ent">:</span><span class="pl-ent">annotation-driven</span>/&gt; <span class="pl-c">&lt;!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  --&gt;</span>
-&lt;<span class="pl-ent">bean</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>com.mangofactory.swagger.configuration.SpringSwaggerConfig<span class="pl-pds">"</span></span> /&gt;</pre></div>
+&lt;<span class="pl-ent">bean</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>springfox.documentation.swagger.configuration.SpringSwaggerConfig<span class="pl-pds">"</span></span> /&gt;</pre></div>
 
 <ul>
 <li>The generated swagger
@@ -291,7 +349,7 @@ dependencies {
 <a id="option-2" class="anchor" href="#option-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 2</h4>
 
 <ul>
-<li>Manually copy all of the static content swagger-ui's dist directory (<a href="https://github.com/wordnik/swagger-ui/tree/master/dist">https://github.com/wordnik/swagger-ui/tree/master/dist</a>)</li>
+<li>Manually copy all of the static content swagger-ui's dist directory (<a href="https://github.com/swagger-api/swagger-ui/tree/master/dist">https://github.com/swagger-api/swagger-ui/tree/master/dist</a>)</li>
 <li>Provide the necessary view resolvers and resource handlers to serve the static content.</li>
 <li>Consult the spring documentation on serving static resources.</li>
 </ul>
@@ -515,7 +573,7 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 
 <div class="highlight highlight-java"><pre>swaggerSpringMvcPlugin<span class="pl-k">.</span>ignoredParameterTypes(<span class="pl-smi">MyCustomType</span><span class="pl-k">.</span>class)</pre></div>
 
-<p>By default, a number of Spring's handler method arguments are ignored. See: com.mangofactory.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes</p>
+<p>By default, a number of Spring's handler method arguments are ignored. See: springfox.documentation.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes</p>
 
 <h2>
 <a id="development" class="anchor" href="#development" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development</h2>
@@ -535,7 +593,7 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 <h2>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
 
-<p>Copyright 2012-2015 Marty Pitt - <a href="https://github.com/martypitt">@martypitt</a>, Dilip Krishnan - <a href="https://github.com/dilipkrish">@dilipkrish</a>,
+<p>Copyright 2015 Marty Pitt - <a href="https://github.com/martypitt">@martypitt</a>, Dilip Krishnan - <a href="https://github.com/dilipkrish">@dilipkrish</a>,
 Adrian Kelly -  <a href="https://github.com/adrianbk">@adrianbk</a>,</p>
 
 <p>Licensed under the Apache License, Version 2.0 (the "License");
@@ -547,25 +605,16 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.</p>
-        </section>
 
-        <aside id="sidebar">
-          <a href="https://github.com/springfox/springfox/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/springfox/springfox/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/springfox/springfox">SpringFox</a> is maintained by <a href="https://github.com/springfox">springfox</a>.</span>
 
-          <p class="repo-owner"><a href="https://github.com/springfox/springfox"></a> is maintained by <a href="https://github.com/springfox">springfox</a>.</p>
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
 
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
+    </section>
 
   
   </body>
 </html>
+
