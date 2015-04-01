@@ -7,8 +7,6 @@
 
 ### About
 
-TODO Add credit to Marty Pitt
-
 This project integrates swagger with the Spring Web MVC framework. The complete swagger specification is available
 at https://github.com/swagger-api/swagger-spec and it's worth being familiar with the main concepts of the specification and the documentation on the [Swagger Annotations] (https://github.com/swagger-api/swagger-core/wiki/Annotations)
 Typically a Spring Web MVC project will use this project in combination with the swagger-ui project (https://github.com/swagger-api/swagger-ui)
@@ -18,57 +16,16 @@ Spring Web MVC applications using springs `MappingJackson2HttpMessageConverter` 
 The demo project (https://github.com/adrianbk/swagger-springmvc-demo) contains a number of examples using both spring
 web mvc and spring-boot.
 
+### Core Contributors
+More details on the core contributors is available [here](contributors.html)
+
 ### Development and contribution guidelines are available [here](https://github.com/martypitt/swagger-springmvc/wiki/Development)
 
 ### Repositories
 
 #### Release version
-
-Version 2.x has not yet been released. 
-To use pre-2.x relesed version please browse to the pre-2.0 [tag](https://github.com/springfox/springfox/tree/pre-2.0)
-
-__Maven__
-
-```xml
-
-<repositories>
-    <repository>
-      <id>jcenter-release</id>
-      <name>jcenter</name>
-      <url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
-    </repository>
-</repositories>
-
-<dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-core</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-spi</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-spring-web</artifactId>
-      <version>2.0.0</version>
-</dependency>
-
-```
-
-__Gradle__
-
-```groovy
-
-repositories {
-    jcenter()
-}
-
-compile "io.springfox:springfox-core:2.0.0"
-```
-
-#### Snapshot version
+**NOTE:** Version 2.x has not yet been released. 
+To use 1.0.2 released version please browse to the pre-2.0 [tag](https://github.com/springfox/springfox/tree/pre-2.0)
 
 __Maven__
 ```xml
@@ -81,19 +38,30 @@ __Maven__
 </repositories>
 
 <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-core</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-spi</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-spring-web</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-core</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-spi</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-spring-web</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<!-- for swagger spec 1.2 optionally -->
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger</artifactId>
+    <version>2.0.0</version>
 </dependency>
 ```
 
@@ -105,20 +73,83 @@ repositories {
    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
-compile "io.springfox:springfox-core:2.0.0-SNAPSHOT"
+compile "io.springfox:springfox-core:2.0.0",
+compile "io.springfox:springfox-spi:2.0.0",
+compile "io.springfox:springfox-schema:2.0.0",
+compile "io.springfox:springfox-spring-web:2.0.0",
+compile "io.springfox:springfox-swagger2:2.0.0"
+//Optional for swagger 1.2
+compile "io.springfox:springfox-swagger:2.0.0"
 ```
 
-### 2.0 Specific instructions
-The support for swagger 2.0 is still in the works. Here is [some preliminary documentation](transitioning-to-v2.md) to 
-help early adopters and people brave enough to try it out and provide us with feedback.
+#### Snapshot version
 
-### Notable Dependencies
+The build file/pom will require the following changes
+__Maven__
+```xml
+<repositories>
+    <repository>
+      <id>jcenter-snapshots</id>
+      <name>jcenter</name>
+      <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-core</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-spi</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-spring-web</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+</dependency>
+<!-- for swagger 1.2 optionally -->
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+</dependency>
+```
+
+__Gradle__
+
+```groovy
+
+repositories {
+   maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+}
+
+compile "io.springfox:springfox-core:2.0.0-SNAPSHOT",
+compile "io.springfox:springfox-spi:2.0.0-SNAPSHOT",
+compile "io.springfox:springfox-schema:2.0.0-SNAPSHOT",
+compile "io.springfox:springfox-spring-web:2.0.0-SNAPSHOT",
+compile "io.springfox:springfox-swagger2:2.0.0-SNAPSHOT"
+//Optional for swagger 1.2
+compile "io.springfox:springfox-swagger:2.0.0-SNAPSHOT"
+```
+### Notable Dependencies for 1.0.x
 - As of v0.9.5 all dependencies on __scala__ have been removed.
 - Spring 3.2.x or above
 - jackson 2.4.4
 - guava 18.0
 
-### Usage (Quick guide)
+## Usage guide and instructions to migrate to 2.0.x 
+The support for swagger 2.0 is still in the works. Here is [some preliminary documentation](transitioning-to-v2.md) to 
+help early adopters and people brave enough to try it out and provide us with feedback.
+
+## Usage (Quick guide) for 1.0.x
 This quick guide outlines how to get swagger-springmvc up and running with a default configuration.
 The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin` as explained below.
 
@@ -458,7 +489,7 @@ If you find issues or bugs please use the github issue [tracker] (https://github
 License
 -------
 
-Copyright 2012 Marty Pitt - [@martypitt](https://github.com/martypitt), Dilip Krishnan - [@dilipkrish](https://github.com/dilipkrish),
+Copyright 2015 Marty Pitt - [@martypitt](https://github.com/martypitt), Dilip Krishnan - [@dilipkrish](https://github.com/dilipkrish),
 Adrian Kelly -  [@adrianbk](https://github.com/adrianbk),
 
 Licensed under the Apache License, Version 2.0 (the "License");
