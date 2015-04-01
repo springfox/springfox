@@ -36,6 +36,13 @@ ext {
   artifactRepoBase = 'http://oss.jfrog.org/artifactory'
 }
 
+dependencies {
+  compile "org.webjars:jquery:2.1.1"
+  compile libs.spring
+  provided libs.springProvided
+}
+
+
 task swaggerUiDownload << {
   if (!file(destinationZip)?.exists()) {
     download {
