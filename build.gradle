@@ -97,7 +97,7 @@ configure(publishable(subprojects)) { subproject ->
 
 def publishable(subprojects) {
   subprojects.findAll {
-    !['swagger-contract-tests', 'springfox-petstore', 'buildSrc'].contains(it.name)
+    !['swagger-contract-tests', 'buildSrc'].contains(it.name)
   }
 }
 
