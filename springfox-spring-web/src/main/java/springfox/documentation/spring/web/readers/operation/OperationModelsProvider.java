@@ -31,11 +31,12 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-import springfox.documentation.spring.web.HandlerMethodReturnTypes;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
+
+import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
 
 @Component
 public class OperationModelsProvider implements OperationModelsProviderPlugin {
@@ -60,7 +61,7 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
   }
 
   private void collectFromReturnType(RequestMappingContext context) {
-    ResolvedType modelType = HandlerMethodReturnTypes.handlerReturnType(typeResolver, context.getHandlerMethod());
+    ResolvedType modelType = handlerReturnType(typeResolver, context.getHandlerMethod());
     modelType = context.alternateFor(modelType);
     context.operationModelsBuilder().addReturn(modelType);
   }

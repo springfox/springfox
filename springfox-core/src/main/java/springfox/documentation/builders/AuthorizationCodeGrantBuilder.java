@@ -27,11 +27,23 @@ public class AuthorizationCodeGrantBuilder {
   private TokenRequestEndpoint tokenRequestEndpoint;
   private TokenEndpoint tokenEndpoint;
 
+  /**
+   * Updates token request endpoint
+   *
+   * @param tokenRequestEndpoint - represents the token request endpoint along with the client id and secret
+   * @return this
+   */
   public AuthorizationCodeGrantBuilder tokenRequestEndpoint(TokenRequestEndpoint tokenRequestEndpoint) {
     this.tokenRequestEndpoint = BuilderDefaults.defaultIfAbsent(tokenRequestEndpoint, this.tokenRequestEndpoint);
     return this;
   }
 
+  /**
+   * Updates token endpoint
+   *
+   * @param tokenEndpoint - represents the token endpoint along with the token name
+   * @return this
+   */
   public AuthorizationCodeGrantBuilder tokenEndpoint(TokenEndpoint tokenEndpoint) {
     this.tokenEndpoint = BuilderDefaults.defaultIfAbsent(tokenEndpoint, this.tokenEndpoint);
     return this;

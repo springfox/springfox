@@ -24,5 +24,12 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
 public interface OperationModelsProviderPlugin extends Plugin<DocumentationType> {
+  /**
+   * Implement this method to collect input parameters and return values
+   *
+   * @param context - context that can be used to override the parameter attributes
+   * @see springfox.documentation.service.Operation
+   * @see springfox.documentation.spi.service.contexts.RequestMappingContext
+   */
   void apply(RequestMappingContext context);
 }

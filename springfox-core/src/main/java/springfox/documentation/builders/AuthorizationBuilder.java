@@ -22,17 +22,31 @@ package springfox.documentation.builders;
 import springfox.documentation.service.Authorization;
 import springfox.documentation.service.AuthorizationScope;
 
+import static springfox.documentation.builders.BuilderDefaults.*;
+
 public class AuthorizationBuilder {
   private String type;
   private AuthorizationScope[] scopes;
 
+  /**
+   * Updates the authorization type for the api.
+   *
+   * @param type - Valid values for the authorization types are. rename this to reference TODO!!
+   * @return this
+   */
   public AuthorizationBuilder type(String type) {
-    this.type = BuilderDefaults.defaultIfAbsent(type, this.type);
+    this.type = defaultIfAbsent(type, this.type);
     return this;
   }
 
+  /**
+   * Updates the authorization scopes that this authorization applies to.
+   *
+   * @param scopes - Scopes that this authorization applies to.
+   * @return this
+   */
   public AuthorizationBuilder scopes(AuthorizationScope[] scopes) {
-    this.scopes = BuilderDefaults.defaultIfAbsent(scopes, this.scopes);
+    this.scopes = defaultIfAbsent(scopes, this.scopes);
     return this;
   }
 

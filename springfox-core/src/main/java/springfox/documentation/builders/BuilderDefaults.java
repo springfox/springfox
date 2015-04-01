@@ -35,12 +35,27 @@ public class BuilderDefaults {
     throw new UnsupportedOperationException();
   }
 
+  /**
+   * Returns this default value if the new value is null
+   *
+   * @param newValue     - new value
+   * @param defaultValue - default value
+   * @param <T>          - Represents any type that is nullable
+   * @return Coalesces the newValue and defaultValue to return a non-null value
+   */
   public static <T> T defaultIfAbsent(T newValue, T defaultValue) {
-      return Optional.fromNullable(newValue)
-            .or(Optional.fromNullable(defaultValue))
-            .orNull();
+    return Optional.fromNullable(newValue)
+        .or(Optional.fromNullable(defaultValue))
+        .orNull();
   }
 
+  /**
+   * Returns an empty list if the newValue is null
+   *
+   * @param newValue - a list
+   * @param <T>      - any type
+   * @return non-null list
+   */
   public static <T> List<T> nullToEmptyList(List<T> newValue) {
     if (newValue == null) {
       return newArrayList();
@@ -48,6 +63,14 @@ public class BuilderDefaults {
     return newValue;
   }
 
+  /**
+   * Returns an empty map if the input is null
+   *
+   * @param newValue - nullable map value
+   * @param <K>      - map key
+   * @param <V>      - map value
+   * @return non-null Map
+   */
   public static <K, V> Map<K, V> nullToEmptyMap(Map<K, V> newValue) {
     if (newValue == null) {
       return newHashMap();
@@ -55,6 +78,13 @@ public class BuilderDefaults {
     return newValue;
   }
 
+  /**
+   * Returns an empty set if the newValue is null
+   *
+   * @param newValue - a set
+   * @param <T>      - any type
+   * @return non-null set
+   */
   public static <T> Set<T> nullToEmptySet(Set<T> newValue) {
     if (newValue == null) {
       return newHashSet();
@@ -62,6 +92,16 @@ public class BuilderDefaults {
     return newValue;
   }
 
+  /**
+   * Coalesces the resolved type. Preservers the default value if the replacement is either null or represents
+   * a type that is less specific than the default value. For e.g. if default value represents a String then
+   * the replacement value has to be any value that is a subclass of Object. If it represents Object.class then
+   * the default value is preferred
+   *
+   * @param replacement  - replacement value
+   * @param defaultValue - default value
+   * @return most specific resolved type
+   */
   public static ResolvedType replaceIfMoreSpecific(ResolvedType replacement, ResolvedType defaultValue) {
     replacement = defaultIfAbsent(replacement, defaultValue);
     if (isObject(replacement) && isNotObject(defaultValue)) {
@@ -72,11 +112,11 @@ public class BuilderDefaults {
 
   private static boolean isNotObject(ResolvedType defaultValue) {
     return defaultValue != null &&
-            !Object.class.equals(defaultValue.getErasedType());
+        !Object.class.equals(defaultValue.getErasedType());
   }
 
   private static boolean isObject(ResolvedType replacement) {
     return replacement != null &&
-            Object.class.equals(replacement.getErasedType());
+        Object.class.equals(replacement.getErasedType());
   }
 }

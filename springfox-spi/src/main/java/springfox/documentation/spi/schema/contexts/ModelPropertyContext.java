@@ -53,23 +53,40 @@ public class ModelPropertyContext {
     annotatedElement = Optional.absent();
   }
 
+  /**
+   * Model property build. Use this to override model property attributes
+   * @return
+   */
   public ModelPropertyBuilder getBuilder() {
     return builder;
   }
 
+  /**
+   * Documentation type this context supports, swagger 1.2, 2.0 or vanilla spring mvc
+   * @return documentation type
+   */
   public DocumentationType getDocumentationType() {
     return documentationType;
   }
 
 
+  /**
+   * @return annotated element that this model property is annotated with
+   */
   public Optional<AnnotatedElement> getAnnotatedElement() {
     return annotatedElement;
   }
 
+  /**
+   * @return bean property definition for this model property
+   */
   public Optional<BeanPropertyDefinition> getBeanPropertyDefinition() {
     return beanPropertyDefinition;
   }
 
+  /**
+   * @return resolver used to resolve types
+   */
   public TypeResolver getResolver() {
     return resolver;
   }

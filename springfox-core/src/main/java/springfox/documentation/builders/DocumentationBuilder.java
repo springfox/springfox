@@ -29,6 +29,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationBuilder {
   private String groupName;
@@ -40,48 +41,94 @@ public class DocumentationBuilder {
   private Set<String> consumes = newHashSet();
   private Set<String> schemes = newHashSet();
 
+  /**
+   * Name of the documentation group
+   *
+   * @param groupName - group name
+   * @return
+   */
   public DocumentationBuilder name(String groupName) {
-    this.groupName = BuilderDefaults.defaultIfAbsent(groupName, this.groupName);
+    this.groupName = defaultIfAbsent(groupName, this.groupName);
     return this;
   }
 
+  /**
+   * Updates the map with new entries
+   *
+   * @param apiListings - entries to add to the existing documentation
+   * @return this
+   */
   public DocumentationBuilder apiListingsByResourceGroupName(Map<String, ApiListing> apiListings) {
-    if (apiListings != null) {
-      this.apiListings.putAll(apiListings);
-    }
+    this.apiListings.putAll(nullToEmptyMap(apiListings));
     return this;
   }
 
+  /**
+   * Updates the resource listing
+   *
+   * @param resourceListing - resource listing
+   * @return this
+   */
   public DocumentationBuilder resourceListing(ResourceListing resourceListing) {
-    this.resourceListing = BuilderDefaults.defaultIfAbsent(resourceListing, this.resourceListing);
+    this.resourceListing = defaultIfAbsent(resourceListing, this.resourceListing);
     return this;
   }
-  
+
+  /**
+   * Updates the tags with new entries
+   *
+   * @param tags - new tags
+   * @return this
+   */
   public DocumentationBuilder tags(Set<Tag> tags) {
-    this.tags.addAll(BuilderDefaults.nullToEmptySet(tags));
+    this.tags.addAll(nullToEmptySet(tags));
     return this;
   }
 
+  /**
+   * Updates the existing media types with new entries that this documentation produces
+   *
+   * @param mediaTypes - new media types
+   * @return this
+   */
   public DocumentationBuilder produces(Set<String> mediaTypes) {
-    this.produces.addAll(BuilderDefaults.nullToEmptySet(mediaTypes));
+    this.produces.addAll(nullToEmptySet(mediaTypes));
     return this;
   }
 
+  /**
+   * Updates the existing media types with new entries that this documentation consumes
+   *
+   * @param mediaTypes - new media types
+   * @return this
+   */
   public DocumentationBuilder consumes(Set<String> mediaTypes) {
-    this.consumes.addAll(BuilderDefaults.nullToEmptySet(mediaTypes));
+    this.consumes.addAll(nullToEmptySet(mediaTypes));
     return this;
   }
 
+  /**
+   * Updates the schemes this api supports
+   *
+   * @param schemes - new schemes
+   * @return this
+   */
   public DocumentationBuilder schemes(Set<String> schemes) {
-    this.schemes.addAll(BuilderDefaults.nullToEmptySet(schemes));
+    this.schemes.addAll(nullToEmptySet(schemes));
     return this;
   }
 
+  /**
+   * Base path for this API
+   *
+   * @param basePath - base path
+   * @return this
+   */
   public DocumentationBuilder basePath(String basePath) {
-    this.basePath = BuilderDefaults.defaultIfAbsent(basePath, this.basePath);
+    this.basePath = defaultIfAbsent(basePath, this.basePath);
     return this;
   }
-  
+
   public Documentation build() {
     return new Documentation(groupName, basePath, tags, apiListings, resourceListing, produces, consumes, schemes);
   }

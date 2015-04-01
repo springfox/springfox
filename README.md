@@ -3,7 +3,7 @@
 
 | Unit  | Functional   | Coverage   |
 |---|---|---|
-|[![Build Status](https://travis-ci.org/springfox/springfox.svg?branch=master)](https://travis-ci.org/springfox/springfox)   |[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.svg?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo) |[![Coverage Status](https://coveralls.io/repos/springfox/springfox/badge.svg)](https://coveralls.io/r/springfox/springfox) |
+|[![Circle CI](https://circleci.com/gh/springfox/springfox/tree/master.svg?style=svg)](https://circleci.com/gh/springfox/springfox/tree/master)|[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.svg?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo) |[![Coverage Status](https://coveralls.io/repos/springfox/springfox/badge.svg)](https://coveralls.io/r/springfox/springfox) |
 
 ### About
 

@@ -64,56 +64,109 @@ public class ModelContext {
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
   }
 
+  /**
+   * @return type behind this context
+   */
   public Type getType() {
     return type;
   }
 
+  /**
+   * @param resolver - type resolved
+   * @return resolved type
+   */
   public ResolvedType resolvedType(TypeResolver resolver) {
     return resolver.resolve(getType());
   }
 
+  /**
+   * @return is the context for a return type
+   */
   public boolean isReturnType() {
     return returnType;
   }
 
+  /**
+   * @return alternate type provider thats available to this context
+   */
   public AlternateTypeProvider getAlternateTypeProvider() {
     return alternateTypeProvider;
   }
 
+  /**
+   * @param resolved - type to find an alternate type for
+   * @return alternate type for given resolved type
+   */
   public ResolvedType alternateFor(ResolvedType resolved) {
     return alternateTypeProvider.alternateFor(resolved);
   }
 
+  /**
+   * Convenience method to provide an new context for an input parameter
+   *
+   * @param type                  - type
+   * @param documentationType     - for documenation type
+   * @param alternateTypeProvider - alternate type provider
+   * @param genericNamingStrategy - how generic types should be named
+   * @return new context
+   */
   public static ModelContext inputParam(Type type,
-      DocumentationType documentationType,
-      AlternateTypeProvider alternateTypeRules,
-      GenericTypeNamingStrategy genericNamingStrategy) {
+                                        DocumentationType documentationType,
+                                        AlternateTypeProvider alternateTypeProvider,
+                                        GenericTypeNamingStrategy genericNamingStrategy) {
 
-    return new ModelContext(type, false, documentationType, alternateTypeRules, genericNamingStrategy);
+    return new ModelContext(type, false, documentationType, alternateTypeProvider, genericNamingStrategy);
   }
 
+  /**
+   * Convenience method to provide an new context for an return parameter
+   *
+   * @param type                  - type
+   * @param documentationType     - for documenation type
+   * @param alternateTypeProvider - alternate type provider
+   * @param genericNamingStrategy - how generic types should be named
+   * @return new context
+   */
   public static ModelContext returnValue(Type type,
-      DocumentationType documentationType,
-      AlternateTypeProvider alternateTypeProvider,
-      GenericTypeNamingStrategy genericNamingStrategy) {
+                                         DocumentationType documentationType,
+                                         AlternateTypeProvider alternateTypeProvider,
+                                         GenericTypeNamingStrategy genericNamingStrategy) {
 
     return new ModelContext(type, true, documentationType, alternateTypeProvider, genericNamingStrategy);
   }
 
+  /**
+   * Convenience method to provide an new context for an input parameter
+   *
+   * @param input - context for given input
+   * @return new context based on parent context for a given input
+   */
   public static ModelContext fromParent(ModelContext context, ResolvedType input) {
     return new ModelContext(context, input);
   }
 
+  /**
+   * Answers the question, has the given type been processed?
+   *
+   * @param resolvedType - type to check
+   * @return true or false
+   */
   public boolean hasSeenBefore(ResolvedType resolvedType) {
     return seenTypes.contains(resolvedType)
-            || seenTypes.contains(new TypeResolver().resolve(resolvedType.getErasedType()))
-            || parentHasSeenBefore(resolvedType);
+        || seenTypes.contains(new TypeResolver().resolve(resolvedType.getErasedType()))
+        || parentHasSeenBefore(resolvedType);
   }
 
   public DocumentationType getDocumentationType() {
     return documentationType;
   }
 
+  /**
+   * Answers the question, has the given type been processed by its parent context?
+   *
+   * @param resolvedType - type to check
+   * @return true or false
+   */
   private boolean parentHasSeenBefore(ResolvedType resolvedType) {
     if (parentContext == null) {
       return false;
@@ -138,7 +191,7 @@ public class ModelContext {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)  {
+    if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
@@ -148,8 +201,8 @@ public class ModelContext {
     ModelContext that = (ModelContext) o;
 
     return Objects.equal(type, that.type) &&
-            Objects.equal(documentationType, that.documentationType) &&
-            Objects.equal(returnType, that.returnType);
+        Objects.equal(documentationType, that.documentationType) &&
+        Objects.equal(returnType, that.returnType);
 
   }
 

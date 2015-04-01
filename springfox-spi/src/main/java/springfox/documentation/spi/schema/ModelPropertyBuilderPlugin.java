@@ -24,5 +24,10 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 public interface ModelPropertyBuilderPlugin extends Plugin<DocumentationType> {
+  /**
+   * Implement this method to override the @see springfox.documentation.schema.ModelProperty using the @see springfox
+   * .documentation.builders.ModelPropertyBuilder
+   * @param context - context that can be used to override the model property attributes
+   */
   void apply(ModelPropertyContext context);
 }

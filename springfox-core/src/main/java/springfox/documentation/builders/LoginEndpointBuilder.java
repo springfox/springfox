@@ -24,6 +24,12 @@ import springfox.documentation.service.LoginEndpoint;
 public class LoginEndpointBuilder {
   private String url;
 
+  /**
+   * Updates the url for the login endpoint
+   *
+   * @param url - Url for the login endpoint
+   * @return this
+   */
   public LoginEndpointBuilder url(String url) {
     this.url = BuilderDefaults.defaultIfAbsent(url, this.url);
     return this;

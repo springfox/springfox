@@ -20,9 +20,25 @@
 package springfox.documentation;
 
 public interface PathProvider {
+
+  /**
+   * Gets the application base path
+   * @return
+   */
   String getApplicationBasePath();
 
+  /**
+   * Gets the sanitized and prepended with a "/" operation path
+   * @param operationPath - raw operation path
+   * @return sanitized and prepended with a "/" operation path
+   */
   String getOperationPath(String operationPath);
 
+  /**
+   * Gets the resource listing path given a group name and api
+   * @param groupName - group this resource listing belongs to
+   * @param apiDeclaration - declared api name
+   * @return this
+   */
   String getResourceListingPath(String groupName, String apiDeclaration);
 }

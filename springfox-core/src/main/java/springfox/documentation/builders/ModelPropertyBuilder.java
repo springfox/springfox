@@ -92,6 +92,6 @@ public class ModelPropertyBuilder {
 
   public ModelProperty build() {
     return new ModelProperty(name, type, qualifiedType, position, required, isHidden, description, allowableValues,
-            modelRef);
+        modelRef);
   }
 }

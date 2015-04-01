@@ -24,5 +24,12 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
 public interface ParameterBuilderPlugin extends Plugin<DocumentationType> {
-  public void apply(ParameterContext parameterContext);
+  /**
+   * Implement this method to collect input parameters and return values
+   *
+   * @param parameterContext - context that can be used to override the parameter attributes
+   * @see springfox.documentation.service.Parameter
+   * @see springfox.documentation.builders.ParameterBuilder
+   */
+  void apply(ParameterContext parameterContext);
 }

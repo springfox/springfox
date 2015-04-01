@@ -18,7 +18,6 @@
  */
 
 package springfox.documentation.builders
-
 import com.google.common.collect.Ordering
 import spock.lang.Specification
 import springfox.documentation.schema.Model

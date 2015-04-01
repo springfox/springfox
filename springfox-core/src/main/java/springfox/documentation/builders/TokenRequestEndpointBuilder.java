@@ -26,16 +26,34 @@ public class TokenRequestEndpointBuilder {
   private String clientIdName;
   private String clientSecretName;
 
+  /**
+   * Updates the url for the token request endpoint
+   *
+   * @param url - url
+   * @return this
+   */
   public TokenRequestEndpointBuilder url(String url) {
     this.url = BuilderDefaults.defaultIfAbsent(url, this.url);
     return this;
   }
 
+  /**
+   * Updates the client id name
+   *
+   * @param clientIdName - client id
+   * @return this
+   */
   public TokenRequestEndpointBuilder clientIdName(String clientIdName) {
     this.clientIdName = BuilderDefaults.defaultIfAbsent(clientIdName, this.clientIdName);
     return this;
   }
 
+  /**
+   * Updates the client secret name
+   *
+   * @param clientSecretName - client secret name
+   * @return this
+   */
   public TokenRequestEndpointBuilder clientSecretName(String clientSecretName) {
     this.clientSecretName = BuilderDefaults.defaultIfAbsent(clientSecretName, this.clientSecretName);
     return this;

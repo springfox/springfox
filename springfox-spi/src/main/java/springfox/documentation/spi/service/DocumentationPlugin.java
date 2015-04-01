@@ -25,10 +25,19 @@ import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 
 public interface DocumentationPlugin extends Plugin<DocumentationType> {
+  /**
+   * @return indicator to determine if the plugin is enabled
+   */
   boolean isEnabled();
 
   DocumentationType getDocumentationType();
 
+  /**
+   * Creates a documentation context based on a given DocumentationContextBuilder
+   *
+   * @param builder - @see springfox.documentation.spi.service.contexts.DocumentationContextBuilder
+   * @return context to use for building the documentation
+   */
   DocumentationContext configure(DocumentationContextBuilder builder);
 }
 

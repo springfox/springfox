@@ -35,21 +35,45 @@ public class ResourceListingBuilder {
   private List<AuthorizationType> authorizations = newArrayList();
   private ApiInfo info;
 
+  /**
+   * Updates the api version
+   *
+   * @param apiVersion - api version
+   * @return this
+   */
   public ResourceListingBuilder apiVersion(String apiVersion) {
     this.apiVersion = defaultIfAbsent(apiVersion, this.apiVersion);
     return this;
   }
 
+  /**
+   * Updates the api listed within this resource listing
+   *
+   * @param apis - apis
+   * @return this
+   */
   public ResourceListingBuilder apis(List<ApiListingReference> apis) {
     this.apis.addAll(nullToEmptyList(apis));
     return this;
   }
 
+  /**
+   * Updates the security definitions that protect this resource listing
+   *
+   * @param authorizations - security definitiosn
+   * @return this
+   */
   public ResourceListingBuilder authorizations(List<AuthorizationType> authorizations) {
     this.authorizations.addAll(nullToEmptyList(authorizations));
     return this;
   }
 
+  /**
+   * Updates the api information
+   *
+   * @param info - api info
+   * @return this
+   */
   public ResourceListingBuilder info(ApiInfo info) {
     this.info = defaultIfAbsent(info, this.info);
     return this;

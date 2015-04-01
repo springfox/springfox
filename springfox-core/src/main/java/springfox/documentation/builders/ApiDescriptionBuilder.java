@@ -38,6 +38,7 @@ public class ApiDescriptionBuilder {
 
   /**
    * Updates the path to the api operation
+   *
    * @param path - operation path
    * @return @see springfox.documentation.builders.ApiDescriptionBuilder
    */
@@ -45,8 +46,10 @@ public class ApiDescriptionBuilder {
     this.path = BuilderDefaults.defaultIfAbsent(path, this.path);
     return this;
   }
+
   /**
    * Updates the descriptions to the api operation
+   *
    * @param description - operation description
    * @return @see springfox.documentation.builders.ApiDescriptionBuilder
    */
@@ -54,8 +57,10 @@ public class ApiDescriptionBuilder {
     this.description = BuilderDefaults.defaultIfAbsent(description, this.description);
     return this;
   }
+
   /**
    * Updates the operations to the api operation
+   *
    * @param operations - operations for each of the http methods for that path
    * @return @see springfox.documentation.builders.ApiDescriptionBuilder
    */
@@ -65,8 +70,10 @@ public class ApiDescriptionBuilder {
     }
     return this;
   }
+
   /**
    * Marks the operation as hidden
+   *
    * @param hidden - operation path
    * @return @see springfox.documentation.builders.ApiDescriptionBuilder
    */

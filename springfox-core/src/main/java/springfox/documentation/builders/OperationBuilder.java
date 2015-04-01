@@ -55,89 +55,186 @@ public class OperationBuilder {
   private boolean isHidden;
   private ModelRef responseModel;
 
+  /**
+   * Updates the http method
+   *
+   * @param method - http method, one of GET, POST, PUT etc.
+   * @return this
+   */
   public OperationBuilder method(String method) {
     this.method = defaultIfAbsent(method, this.method);
     return this;
   }
 
+  /**
+   * Updates the operation summary
+   *
+   * @param summary - operation summary
+   * @return this
+   */
   public OperationBuilder summary(String summary) {
     this.summary = defaultIfAbsent(summary, this.summary);
     return this;
   }
 
+  /**
+   * Updates the operation notes
+   *
+   * @param notes - notes to describe the operaiton
+   * @return
+   */
   public OperationBuilder notes(String notes) {
     this.notes = defaultIfAbsent(notes, this.notes);
     return this;
   }
 
+  /**
+   * Updates the response class
+   *
+   * @param responseClass - string representation of the response class
+   * @return
+   */
+  @Deprecated
   public OperationBuilder responseClass(String responseClass) {
     this.responseClass = defaultIfAbsent(responseClass, this.responseClass);
     return this;
   }
 
+  /**
+   * Updates the nickname for the operation
+   *
+   * @param nickname - nickname for the operation
+   * @return this
+   */
   public OperationBuilder nickname(String nickname) {
     this.nickname = defaultIfAbsent(nickname, this.nickname);
     return this;
   }
 
+  /**
+   * Updates the index of the operation
+   *
+   * @param position - position is used to sort the operation in a particular order
+   * @return this
+   */
   public OperationBuilder position(int position) {
     this.position = position;
     return this;
   }
 
-  public OperationBuilder produces(Set<String> produces) {
-    this.produces.addAll(BuilderDefaults.nullToEmptySet(produces));
+  /**
+   * Updates the existing media types with new entries that this documentation produces
+   *
+   * @param mediaTypes - new media types
+   * @return this
+   */
+  public OperationBuilder produces(Set<String> mediaTypes) {
+    this.produces.addAll(nullToEmptySet(mediaTypes));
     return this;
   }
 
-  public OperationBuilder consumes(Set<String> consumes) {
-    this.consumes.addAll(BuilderDefaults.nullToEmptySet(consumes));
+  /**
+   * Updates the existing media types with new entries that this documentation consumes
+   *
+   * @param mediaTypes - new media types
+   * @return this
+   */
+  public OperationBuilder consumes(Set<String> mediaTypes) {
+    this.consumes.addAll(nullToEmptySet(mediaTypes));
     return this;
   }
 
+  /**
+   * Update the protocols this operation supports
+   *
+   * @param protocols - protocols
+   * @return this
+   */
   public OperationBuilder protocols(Set<String> protocols) {
-    this.protocol.addAll(BuilderDefaults.nullToEmptySet(protocols));
+    this.protocol.addAll(nullToEmptySet(protocols));
     return this;
   }
 
+  /**
+   * Updates the security checks that apply to this operation
+   *
+   * @param authorizations - authorization that reference security definitions
+   * @return this
+   */
   public OperationBuilder authorizations(List<Authorization> authorizations) {
-    this.authorizations.addAll(BuilderDefaults.nullToEmptyList(authorizations));
+    this.authorizations.addAll(nullToEmptyList(authorizations));
     return this;
   }
 
+  /**
+   * Updates the input parameters this operation needs
+   *
+   * @param parameters - input parameter definitiosn
+   * @return
+   */
   public OperationBuilder parameters(List<Parameter> parameters) {
-    this.parameters.addAll(BuilderDefaults.nullToEmptyList(parameters));
+    this.parameters.addAll(nullToEmptyList(parameters));
     return this;
   }
 
+  /**
+   * Updates the response messages
+   *
+   * @param responseMessages - new response messages to be merged with existing response messages
+   * @return this
+   */
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
     this.responseMessages = newHashSet(mergeResponseMessages(responseMessages));
     return this;
   }
 
+  /**
+   * Marks the listing as deprecated
+   *
+   * @param deprecated - surely this had to be a boolean!! TODO!!
+   * @return this
+   */
   public OperationBuilder deprecated(String deprecated) {
     this.deprecated = defaultIfAbsent(deprecated, this.deprecated);
     return this;
   }
 
+  /**
+   * Marks the operation as hidden
+   *
+   * @param isHidden - boolean flag to indicate that the operation is hidden
+   * @return this
+   */
   public OperationBuilder hidden(boolean isHidden) {
     this.isHidden = isHidden;
     return this;
   }
 
+  /**
+   * Updates the reference to the response model
+   *
+   * @param responseType = response type model reference
+   * @return this
+   */
   public OperationBuilder responseModel(ModelRef responseType) {
     this.responseModel = defaultIfAbsent(responseType, this.responseModel);
     return this;
   }
 
+  /**
+   * Updates the tags that identify this operaiton
+   *
+   * @param tags - new set of tags
+   * @return
+   */
   public OperationBuilder tags(Set<String> tags) {
-    this.tags.addAll(BuilderDefaults.nullToEmptySet(tags));
+    this.tags.addAll(nullToEmptySet(tags));
     return this;
   }
 
   public Operation build() {
     return new Operation(method, summary, notes, responseModel, nickname, position, tags, produces,
-            consumes, protocol, authorizations, parameters, responseMessages, deprecated, isHidden);
+        consumes, protocol, authorizations, parameters, responseMessages, deprecated, isHidden);
   }
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
@@ -147,15 +244,16 @@ public class OperationBuilder {
     for (ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
-        String message = defaultIfAbsent(Strings.emptyToNull(responseMessage.getMessage()), HttpStatus.OK.getReasonPhrase());
+        String message = defaultIfAbsent(Strings.emptyToNull(responseMessage.getMessage()), HttpStatus.OK
+            .getReasonPhrase());
         ModelRef responseWithModel = defaultIfAbsent(responseMessage.getResponseModel(),
-                each.getResponseModel());
+            each.getResponseModel());
         merged.remove(each);
         merged.add(new ResponseMessageBuilder()
-                .code(each.getCode())
-                .message(message)
-                .responseModel(responseWithModel)
-                .build());
+            .code(each.getCode())
+            .message(message)
+            .responseModel(responseWithModel)
+            .build());
       } else {
         merged.add(each);
       }

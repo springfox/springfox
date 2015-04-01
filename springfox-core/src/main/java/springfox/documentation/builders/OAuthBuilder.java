@@ -35,20 +35,34 @@ public class OAuthBuilder {
   private String name;
 
 
+  /**
+   * Updates the authorization scopes with the new scopes
+   *
+   * @param scopes - represents the oauth scopes
+   * @return this
+   */
   public OAuthBuilder scopes(List<AuthorizationScope> scopes) {
-    if (scopes != null) {
-      this.scopes.addAll(scopes);
-    }
+    this.scopes.addAll(nullToEmptyList(scopes));
     return this;
   }
 
+  /**
+   * Updates the grant types that this security definition represents
+   *
+   * @param grantTypes - grant types
+   * @return this
+   */
   public OAuthBuilder grantTypes(List<GrantType> grantTypes) {
-    if (grantTypes != null) {
-      this.grantTypes.addAll(grantTypes);
-    }
+    this.grantTypes.addAll(nullToEmptyList(grantTypes));
     return this;
   }
 
+  /**
+   * Updates the unique name to identify the security definition
+   *
+   * @param name - name
+   * @return this
+   */
   public OAuthBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
     return this;

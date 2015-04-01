@@ -22,33 +22,10 @@ package springfox.documentation.spring.web;
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.PathProvider;
 
+import static springfox.documentation.spring.web.Paths.sanitiseUrl;
+
 
 public abstract class AbstractPathProvider implements PathProvider {
-//  /**
-//   * e.g the api endpoint resides at  http://myapp.com:8080/<contextPath>/api/v1/businesses
-//   * Should return api/v1 - no leading or trailing slashes
-//   *
-//   * Typically needed when your web.xml has a mapping to dispatcher servlet like:
-//   * <url-pattern>/api/v1/*</url-pattern>
-//   *
-//   * and the actual spring request mappings looks like:
-//   * '@RequestMapping(value = "/businesses/{businessId}")'
-//   *
-//   * @return the resource prefix of the api endpoint
-//   */
-//  private String apiResourcePrefix = "";
-//
-//  public String getApiResourcePrefix() {
-//    return apiResourcePrefix;
-//  }
-//
-//  public void setApiResourcePrefix(String apiResourcePrefix) {
-//    Assert.notNull(apiResourcePrefix);
-//    Assert.isTrue(!apiResourcePrefix.startsWith("/"));
-//    Assert.isTrue(!apiResourcePrefix.endsWith("/"));
-//    this.apiResourcePrefix = apiResourcePrefix;
-//  }
-
   /**
    * For relative PathProviders this is typically '/' meaning relative to the swagger ui page serving the
    * documentation. The swagger specification recommends that this should be an absolute URL.
@@ -91,10 +68,7 @@ public abstract class AbstractPathProvider implements PathProvider {
   @Override
   public String getOperationPath(String operationPath) {
     UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath("/");
-//    if (StringUtils.hasText(apiResourcePrefix)) {
-//      uriComponentsBuilder.path(apiResourcePrefix);
-//    }
-    return Paths.sanitiseUrl(uriComponentsBuilder.path(operationPath).build().toString());
+    return sanitiseUrl(uriComponentsBuilder.path(operationPath).build().toString());
   }
 
   /**
@@ -114,7 +88,7 @@ public abstract class AbstractPathProvider implements PathProvider {
             .pathSegment(groupName, apiDeclaration)
             .build()
             .toString();
-    return Paths.sanitiseUrl(candidate);
+    return sanitiseUrl(candidate);
   }
 
   private UriComponentsBuilder agnosticUriComponentBuilder(String url) {

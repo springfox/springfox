@@ -25,11 +25,23 @@ public class AuthorizationScopeBuilder {
   private String scope;
   private String description;
 
+  /**
+   * Updates the scope
+   *
+   * @param scope - scope for the authorization
+   * @return this
+   */
   public AuthorizationScopeBuilder scope(String scope) {
     this.scope = BuilderDefaults.defaultIfAbsent(scope, this.scope);
     return this;
   }
 
+  /**
+   * Updates the description of the scope
+   *
+   * @param description - describes what this scope represents
+   * @return this
+   */
   public AuthorizationScopeBuilder description(String description) {
     this.description = BuilderDefaults.defaultIfAbsent(description, this.description);
     return this;

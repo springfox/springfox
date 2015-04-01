@@ -32,6 +32,7 @@ import java.util.Set;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ApiListingBuilder {
   private final Ordering<ApiDescription> descriptionOrdering;
@@ -48,56 +49,114 @@ public class ApiListingBuilder {
   private List<ApiDescription> apis = newArrayList();
   private Map<String, Model> models = newHashMap();
 
+  /**
+   * Update the sorting order for api descriptions
+   *
+   * @param descriptionOrdering - ordering for the api descriptions
+   */
   public ApiListingBuilder(Ordering<ApiDescription> descriptionOrdering) {
     this.descriptionOrdering = descriptionOrdering;
   }
 
+  /**
+   * Updates the api version
+   *
+   * @param apiVersion - api version
+   * @return this
+   */
   public ApiListingBuilder apiVersion(String apiVersion) {
     this.apiVersion = BuilderDefaults.defaultIfAbsent(apiVersion, this.apiVersion);
     return this;
   }
 
+  /**
+   * Updates base path for the api listing
+   *
+   * @param basePath - base path
+   * @return this
+   */
   public ApiListingBuilder basePath(String basePath) {
     this.basePath = BuilderDefaults.defaultIfAbsent(basePath, this.basePath);
     return this;
   }
 
+  /**
+   * Updates resource path for the api listing
+   *
+   * @param resourcePath - resource path
+   * @return this
+   */
   public ApiListingBuilder resourcePath(String resourcePath) {
     this.resourcePath = BuilderDefaults.defaultIfAbsent(resourcePath, this.resourcePath);
     return this;
   }
 
-  public ApiListingBuilder produces(Set<String> produces) {
-    if (produces != null) {
-      this.produces = newHashSet(produces);
+  /**
+   * Replaces the existing media types with new entries that this documentation produces
+   *
+   * @param mediaTypes - new media types
+   * @return this
+   */
+  public ApiListingBuilder produces(Set<String> mediaTypes) {
+    if (mediaTypes != null) {
+      this.produces = newHashSet(mediaTypes);
     }
     return this;
   }
 
-  public ApiListingBuilder consumes(Set<String> consumes) {
-    if (consumes != null) {
-      this.consumes = newHashSet(consumes);
+  /**
+   * Replaces the existing media types with new entries that this documentation consumes
+   *
+   * @param mediaTypes - new media types
+   * @return this
+   */
+  public ApiListingBuilder consumes(Set<String> mediaTypes) {
+    if (mediaTypes != null) {
+      this.consumes = newHashSet(mediaTypes);
     }
     return this;
   }
 
+  /**
+   * Appends to the exiting collection of supported media types this listing produces
+   *
+   * @param produces - new media types
+   * @return this
+   */
   public ApiListingBuilder appendProduces(List<String> produces) {
-    this.produces.addAll(BuilderDefaults.nullToEmptyList(produces));
+    this.produces.addAll(nullToEmptyList(produces));
     return this;
   }
 
+  /**
+   * Appends to the exiting collection of supported media types this listing consumes
+   *
+   * @param consumes - new media types
+   * @return this
+   */
   public ApiListingBuilder appendConsumes(List<String> consumes) {
-    this.consumes.addAll(consumes);
+    this.consumes.addAll(nullToEmptyList(consumes));
     return this;
   }
 
+
+  /**
+   * Appends to the exiting collection of supported protocols
+   *
+   * @param protocols - new protocols
+   * @return this
+   */
   public ApiListingBuilder protocols(Set<String> protocols) {
-    if (protocols != null) {
-      this.protocol.addAll(protocols);
-    }
+    this.protocol.addAll(nullToEmptySet(protocols));
     return this;
   }
 
+  /**
+   * Updates the references to the security definitiosn
+   *
+   * @param authorizations - security definition references
+   * @return this
+   */
   public ApiListingBuilder authorizations(List<Authorization> authorizations) {
     if (authorizations != null) {
       this.authorizations = newArrayList(authorizations);
@@ -105,6 +164,12 @@ public class ApiListingBuilder {
     return this;
   }
 
+  /**
+   * Updates the apis
+   *
+   * @param apis - apis
+   * @return
+   */
   public ApiListingBuilder apis(List<ApiDescription> apis) {
     if (apis != null) {
       this.apis = descriptionOrdering.sortedCopy(apis);
@@ -112,18 +177,34 @@ public class ApiListingBuilder {
     return this;
   }
 
+  /**
+   * Adds to the models collection
+   *
+   * @param models - model entries by name
+   * @return this
+   */
   public ApiListingBuilder models(Map<String, Model> models) {
-    if (models != null) {
-      this.models.putAll(models);
-    }
+    this.models.putAll(nullToEmptyMap(models));
     return this;
   }
 
+  /**
+   * Updates the description
+   *
+   * @param description - description of the api listing
+   * @return this
+   */
   public ApiListingBuilder description(String description) {
     this.description = BuilderDefaults.defaultIfAbsent(description, this.description);
     return this;
   }
 
+  /**
+   * Updates the position of the listing
+   *
+   * @param position - position used to for sorting the listings
+   * @return this
+   */
   public ApiListingBuilder position(int position) {
     this.position = position;
     return this;
@@ -131,6 +212,6 @@ public class ApiListingBuilder {
 
   public ApiListing build() {
     return new ApiListing(apiVersion, basePath,
-            resourcePath, produces, consumes, protocol, authorizations, apis, models, description, position);
+        resourcePath, produces, consumes, protocol, authorizations, apis, models, description, position);
   }
 }

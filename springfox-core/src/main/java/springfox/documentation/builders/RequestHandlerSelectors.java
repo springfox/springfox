@@ -31,14 +31,30 @@ public class RequestHandlerSelectors {
     throw new UnsupportedOperationException();
   }
 
+  /**
+   * Any RequestHandler satisfies this condition
+   *
+   * @return predicate that is always true
+   */
   public static Predicate<RequestHandler> any() {
     return Predicates.alwaysTrue();
   }
 
+  /**
+   * No RequestHandler satisfies this condition
+   *
+   * @return predicate that is always false
+   */
   public static Predicate<RequestHandler> none() {
     return Predicates.alwaysFalse();
   }
 
+  /**
+   * Predicate that matches RequestHandler with handlers methods annotated with given annotation
+   *
+   * @param annotation - annotation to check
+   * @return this
+   */
   public static Predicate<RequestHandler> withMethodAnnotation(final Class<? extends Annotation> annotation) {
     return new Predicate<RequestHandler>() {
       @Override
@@ -48,6 +64,12 @@ public class RequestHandlerSelectors {
     };
   }
 
+  /**
+   * Predicate that matches RequestHandler with given annotation on the declaring class of the handler method
+   *
+   * @param annotation - annotation to check
+   * @return this
+   */
   public static Predicate<RequestHandler> withClassAnnotation(final Class<? extends Annotation> annotation) {
     return new Predicate<RequestHandler>() {
       @Override
