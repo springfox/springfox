@@ -17,7 +17,7 @@ The demo project (https://github.com/adrianbk/swagger-springmvc-demo) contains a
 web mvc and spring-boot.
 
 ### Core Contributors
-More details on the core contributors is available [here](contributors.html)
+More details on the core contributors is available [here](http://springfox.github.io/springfox/contributors.html)
 
 ### Development and contribution guidelines are available [here](https://github.com/martypitt/swagger-springmvc/wiki/Development)
 
