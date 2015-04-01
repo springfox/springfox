@@ -119,7 +119,10 @@ To enable support for swagger specification 1.2 use the ```@EnableSwagger``` ann
 
 To enable support for swagger specification 2.0 use the ```@EnableSwagger2``` annotation
 
-We no longer use ```SwaggerSpringMvcPlugin``` to configure the documentation subset. This has been replaced by a more generic ```Docket``` class. This is changed to be more inline with the fact that expressing the contents of the documentation is agnostic of the format the documentation is rendered. Also we no longer need to following class ```SpringSwaggerConfig``` in order to configure the ```Docket```.
+We no longer use ```SwaggerSpringMvcPlugin``` to configure the documentation subset. This has been replaced by a 
+more generic ```Docket``` class. This is changed to be more inline with the fact that expressing the
+contents of the documentation is agnostic of the format the documentation is rendered. Also we no longer need the 
+following class ```SpringSwaggerConfig``` in order to configure the ```Docket```.
 
 ```java
   // This configuration is no longer used
@@ -130,7 +133,7 @@ We no longer use ```SwaggerSpringMvcPlugin``` to configure the documentation sub
 Docket [stands for](https://www.wordnik.com/words/docket) *A summary or other brief statement of the contents of a 
 document; an abstract.*
 
-Having said that the ```Docket``` is very similar to ```SwaggerSpringMvcPlugin```, in that, it helps configure a 
+```Docket``` is very similar to ```SwaggerSpringMvcPlugin```, in that, it helps configure a 
 subset of the services to be documented and groups them by name. Significant changes to this is the ability
 to provide an expressive predicate based for api selection.
 
@@ -177,7 +180,7 @@ In order to do this implement the ```ApplicationListener<ObjectMapperConfigured>
  ObjectMapper that is in play.
  
 If you encounter a NullPointerException during application startup like [this issue](https://github
-.com/springfox/springfox/issues/635). Its because most likely the web ```WebMvcConfigurerAdapter``` isn't working. 
+.com/springfox/springfox/issues/635). Its because most likely the ```WebMvcConfigurerAdapter``` isn't working. 
 These adapter especially in a non-spring-boot scenarios will only get loaded if the @EnableWebMvc [annotation is 
 present](http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation
 /WebMvcConfigurer.html).
@@ -185,20 +188,20 @@ present](http://docs.spring.io/spring/docs/current/javadoc-api/org/springframewo
 ### Customizing the swagger endpoints.
 By default the swagger service descriptions are generated at the following urls
 
-    |Swagger version|Documentation Url|
-    |1.2|/api-docs|
-    |2.0|/v2/api-docs|
+|Swagger version|Documentation Url|
+|1.2|/api-docs|
+|2.0|/v2/api-docs|
 
 To customize these endpoints, loading a [property source](http://docs.spring
 .io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html) with the following properties 
 allows the properties to be  overridden
 
-    |Swagger version|Override property|
-    |1.2|springfox.documentatation.swagger.v1.path|
-    |2.0|springfox.documentatation.swagger.v2.path|
+|Swagger version|Override property|
+|1.2|springfox.documentatation.swagger.v1.path|
+|2.0|springfox.documentatation.swagger.v2.path|
 
 ### Overriding property datatypes
-Using the ```ApiModelProperty#dataType``` we can override the inferred data types. However it is a  restrictive
+Using the ```ApiModelProperty#dataType``` we can override the inferred data types. However it is restricted
  to only allow data types to be specified with a fully qualified class name. For e.g. if we have the following 
  definition
  
@@ -213,6 +216,14 @@ Using the ```ApiModelProperty#dataType``` we can override the inferred data type
     @ApiModelProperty(dataType = "ReplaceWith")
     public Original getAnotherOriginal() { ... }
  ```
+
+### Extensibility 
+The library provides a variety of extensibility hooks to enrich/ augment the schema and service models
+
+- For enriching models and properties 
+####TODO
+- For enriching services models 
+####TODO
 
 ### Example application
 For an example for porting a 1.0.2 application to a 2.0.x application (in progress) take a look [at this branch](https://github.com/adrianbk/swagger-springmvc-demo/tree/feature/2.0-showcase) in the demo application.
