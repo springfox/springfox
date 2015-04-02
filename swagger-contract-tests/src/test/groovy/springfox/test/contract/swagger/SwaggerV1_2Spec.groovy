@@ -32,6 +32,7 @@ import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener
 import org.springframework.test.context.web.WebAppConfiguration
+import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.spi.DocumentationType
@@ -111,6 +112,7 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
   
   @Configuration
   @EnableSwagger
+  @EnableWebMvc
   @ComponentScan([
     "springfox.documentation.spring.web.dummy.controllers",
     "springfox.test.contract.swagger",

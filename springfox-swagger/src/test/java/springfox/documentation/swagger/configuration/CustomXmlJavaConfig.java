@@ -21,13 +21,15 @@ package springfox.documentation.swagger.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.annotations.EnableSwagger;
-import springfox.documentation.builders.PathSelectors;
 
 @Configuration
 @EnableSwagger
+@EnableWebMvc
 public class CustomXmlJavaConfig {
   @Bean
   public Docket customImplementation() {

@@ -18,7 +18,6 @@
  */
 
 package springfox.documentation.swagger.integration
-
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration

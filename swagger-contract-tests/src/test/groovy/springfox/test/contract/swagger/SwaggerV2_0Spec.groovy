@@ -35,6 +35,7 @@ import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener
 import org.springframework.test.context.web.WebAppConfiguration
+import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.service.AuthorizationType
@@ -94,6 +95,7 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
 
   @Configuration
   @EnableSwagger2
+  @EnableWebMvc
   @ComponentScan([
           "springfox.documentation.spring.web.dummy.controllers",
           "springfox.test.contract.swagger",
