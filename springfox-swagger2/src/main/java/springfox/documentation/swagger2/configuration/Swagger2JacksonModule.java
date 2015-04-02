@@ -21,8 +21,8 @@ package springfox.documentation.swagger2.configuration;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.wordnik.swagger.models.Contact;
 import com.wordnik.swagger.models.ExternalDocs;
@@ -44,8 +44,11 @@ import static com.fasterxml.jackson.annotation.JsonInclude.*;
 
 public class Swagger2JacksonModule extends SimpleModule {
 
-  public static boolean isRegistered(ObjectMapper objectMapper) {
-    return objectMapper.findMixInClassFor(Swagger.class) != null;
+  public static void maybeRegisterModule(ObjectMapper objectMapper) {
+    if (objectMapper.findMixInClassFor(Swagger.class) == null) {
+      objectMapper.registerModule(new Swagger2JacksonModule());
+      objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    }
   }
 
   @Override
@@ -73,10 +76,4 @@ public class Swagger2JacksonModule extends SimpleModule {
   private class CustomizedSwaggerSerializer {
   }
 
-  @JsonAutoDetect
-  @JsonInclude(value = Include.NON_EMPTY)
-  @JsonPropertyOrder(alphabetic = true)
-  private class OrderedSwaggerSerializer {
-  }
-  
 }

@@ -38,19 +38,19 @@ import springfox.documentation.spi.service.contexts.Defaults;
 @Configuration
 @Import({ ModelsConfiguration.class })
 @ComponentScan(basePackages = {
-        "springfox.documentation.spring.web.scanners",
-        "springfox.documentation.spring.web.readers.operation",
-        "springfox.documentation.spring.web.readers.parameter",
-        "springfox.documentation.spring.web.plugins"
+    "springfox.documentation.spring.web.scanners",
+    "springfox.documentation.spring.web.readers.operation",
+    "springfox.documentation.spring.web.readers.parameter",
+    "springfox.documentation.spring.web.plugins"
 })
-@EnablePluginRegistries({DocumentationPlugin.class,
-        ApiListingBuilderPlugin.class,
-        OperationBuilderPlugin.class,
-        ParameterBuilderPlugin.class,
-        ExpandedParameterBuilderPlugin.class,
-        ResourceGroupingStrategy.class,
-        OperationModelsProviderPlugin.class,
-        DefaultsProviderPlugin.class})
+@EnablePluginRegistries({ DocumentationPlugin.class,
+    ApiListingBuilderPlugin.class,
+    OperationBuilderPlugin.class,
+    ParameterBuilderPlugin.class,
+    ExpandedParameterBuilderPlugin.class,
+    ResourceGroupingStrategy.class,
+    OperationModelsProviderPlugin.class,
+    DefaultsProviderPlugin.class })
 public class SpringMvcDocumentationConfiguration {
 
   @Bean
@@ -61,6 +61,11 @@ public class SpringMvcDocumentationConfiguration {
   @Bean
   public DocumentationCache resourceGroupCache() {
     return new DocumentationCache();
+  }
+
+  @Bean
+  public static ObjectMapperConfigurer objectMapperConfigurer() {
+    return new ObjectMapperConfigurer();
   }
 
 }
