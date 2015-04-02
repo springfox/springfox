@@ -43,7 +43,7 @@ import java.util.Map;
 
 @Controller
 @ApiIgnore
-@RequestMapping("${springfox.documentatation.swagger.v1.path:/api-docs}")
+@RequestMapping("${springfox.documentation.swagger.v1.path:/api-docs}")
 public class DefaultSwaggerController {
 
 

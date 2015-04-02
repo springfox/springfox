@@ -47,7 +47,7 @@ public class Swagger2Controller {
   private ServiceModelToSwagger2Mapper mapper;
 
   @ApiIgnore
-  @RequestMapping(value = "${springfox.documentatation.swagger.v2.path:/v2/api-docs}", method = RequestMethod.GET)
+  @RequestMapping(value = "${springfox.documentation.swagger.v2.path:/v2/api-docs}", method = RequestMethod.GET)
   public
   @ResponseBody
   ResponseEntity<Swagger> getDocumentation(

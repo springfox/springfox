@@ -199,8 +199,8 @@ allows the properties to be  overridden
 
 Swagger version | Override property
 --------------- | -----------------
-1.2             | springfox.documentatation.swagger.v1.path
-2.0             | springfox.documentatation.swagger.v2.path
+1.2             | springfox.documentation.swagger.v1.path
+2.0             | springfox.documentation.swagger.v2.path
 
 ### Overriding property datatypes
 Using the ```ApiModelProperty#dataType``` we can override the inferred data types. However it is restricted
