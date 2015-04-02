@@ -38,8 +38,6 @@ ext {
 
 dependencies {
   compile "org.webjars:jquery:2.1.1"
-  compile libs.spring
-  provided libs.springProvided
 }
 
 
