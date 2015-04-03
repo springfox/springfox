@@ -23,7 +23,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.Operation
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.PathSelectors
-import springfox.documentation.spi.service.contexts.AuthorizationContext
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -40,11 +40,11 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
   ApiOperationReader sut
 
   def setup() {
-    AuthorizationContext authorizationContext = AuthorizationContext.builder()
+    SecurityContext authorizationContext = SecurityContext.builder()
             .withAuthorizations(defaultAuth())
             .forPaths(PathSelectors.regex(".*"))
             .build()
-    plugin.authorizationContext(authorizationContext)
+    plugin.securityContext(authorizationContext)
     sut = new ApiOperationReader(customWebPlugins([],[],[new DefaultOperationBuilder()]))
   }
 

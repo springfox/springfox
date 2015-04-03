@@ -23,14 +23,14 @@ import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.http.ResponseEntity
-import springfox.documentation.service.ApiDescription
-import springfox.documentation.spi.DocumentationType
 import springfox.documentation.builders.PathSelectors
+import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.ApiInfo
 import springfox.documentation.service.AuthorizationType
 import springfox.documentation.service.ResponseMessage
-import springfox.documentation.spi.service.contexts.AuthorizationContext
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.RelativePathProvider
 
 import javax.servlet.ServletContext
@@ -192,7 +192,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
       builderMethod          | object                                         | property
       'pathProvider'         | new RelativePathProvider(Mock(ServletContext)) | 'pathProvider'
       'authorizationTypes'   | new ArrayList<AuthorizationType>()             | 'authorizationTypes'
-      'authorizationContext' | validContext()                                 | 'authorizationContext'
+      'securityContext'       | validContext()                                 | 'securityContext'
       'groupName'            | 'someGroup'                                    | 'groupName'
       'apiInfo'              | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
       'apiDescriptionOrdering'| apiDescriptionOrdering()                      | 'apiDescriptionOrdering'
@@ -210,8 +210,8 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
     new Defaults().operationOrdering()
   }
 
-  private AuthorizationContext validContext() {
-    new AuthorizationContext.AuthorizationContextBuilder()
+  private SecurityContext validContext() {
+    SecurityContext.builder()
             .forPaths(PathSelectors.any())
             .build()
   }

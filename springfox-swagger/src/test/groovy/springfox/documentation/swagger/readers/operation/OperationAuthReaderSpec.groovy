@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.service.AuthorizationScope
-import springfox.documentation.spi.service.contexts.AuthorizationContext
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -52,11 +52,11 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
 
   def "should apply global auth"() {
     given:
-      AuthorizationContext authorizationContext = AuthorizationContext.builder()
+      SecurityContext authorizationContext = SecurityContext.builder()
               .withAuthorizations(defaultAuth())
               .forPaths(PathSelectors.any())
               .build()
-      plugin.authorizationContext(authorizationContext)
+      plugin.securityContext(authorizationContext)
       OperationContext operationContext = new OperationContext(new OperationBuilder(),
               RequestMethod.GET, dummyHandlerMethod(), 0, requestMappingInfo("somePath"),
               context(), "/anyPath")
@@ -74,11 +74,11 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
 
   def "should apply global auth when ApiOperationAnnotation exists without auth values"() {
     given:
-      AuthorizationContext authorizationContext = AuthorizationContext.builder()
+      SecurityContext authorizationContext = SecurityContext.builder()
               .withAuthorizations(defaultAuth())
               .forPaths(PathSelectors.any())
               .build()
-      plugin.authorizationContext(authorizationContext)
+      plugin.securityContext(authorizationContext)
       OperationContext operationContext = new OperationContext(new OperationBuilder(),
               RequestMethod.GET, dummyHandlerMethod('methodWithHttpGETMethod'), 0, requestMappingInfo("somePath"),
               context(), "/anyPath")

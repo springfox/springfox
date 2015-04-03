@@ -31,7 +31,7 @@ import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Authorization;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
-import springfox.documentation.spi.service.contexts.AuthorizationContext;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -81,13 +81,13 @@ public class ApiListingScanner {
       Set<ApiDescription> apiDescriptions = newHashSet();
 
       Map<String, Model> models = new LinkedHashMap<String, Model>();
-      AuthorizationContext authorizationContext = documentationContext.getAuthorizationContext();
+      SecurityContext securityContext = documentationContext.getSecurityContext();
       for (RequestMappingContext each : entry.getValue()) {
         models.putAll(apiModelReader.read(each));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
-      List<Authorization> authorizations = authorizationContext.getScalaAuthorizations();
+      List<Authorization> authorizations = securityContext.getAuthorizations();
 
       ArrayList sortedApis = new ArrayList(apiDescriptions);
       Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());

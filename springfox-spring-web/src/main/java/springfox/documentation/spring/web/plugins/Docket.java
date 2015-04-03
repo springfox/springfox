@@ -39,7 +39,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.DocumentationPlugin;
 import springfox.documentation.spi.service.contexts.ApiSelector;
-import springfox.documentation.spi.service.contexts.AuthorizationContext;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 
@@ -66,7 +66,7 @@ public class Docket implements DocumentationPlugin {
   private String groupName;
   private ApiInfo apiInfo;
   private PathProvider pathProvider;
-  private AuthorizationContext authorizationContext;
+  private SecurityContext securityContext;
   private List<? extends AuthorizationType> authorizationMethods;
   private Ordering<ApiListingReference> apiListingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
@@ -115,11 +115,11 @@ public class Docket implements DocumentationPlugin {
   /**
    * Configures which api operations (via regex patterns) and HTTP methods to apply swagger authorization to.
    *
-   * @param authorizationContext
+   * @param securityContext
    * @return this DocumentationConfigurer
    */
-  public Docket authorizationContext(AuthorizationContext authorizationContext) {
-    this.authorizationContext = authorizationContext;
+  public Docket securityContext(SecurityContext securityContext) {
+    this.securityContext = securityContext;
     return this;
   }
 
@@ -355,7 +355,7 @@ public class Docket implements DocumentationPlugin {
             .ruleBuilders(ruleBuilders)
             .groupName(groupName)
             .pathProvider(pathProvider)
-            .authorizationContext(authorizationContext)
+            .authorizationContext(securityContext)
             .authorizationTypes(authorizationMethods)
             .apiListingReferenceOrdering(apiListingReferenceOrdering)
             .apiDescriptionOrdering(apiDescriptionOrdering)

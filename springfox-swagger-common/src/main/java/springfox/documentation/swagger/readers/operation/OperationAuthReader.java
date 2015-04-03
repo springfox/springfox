@@ -32,7 +32,7 @@ import springfox.documentation.builders.AuthorizationBuilder;
 import springfox.documentation.builders.AuthorizationScopeBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
-import springfox.documentation.spi.service.contexts.AuthorizationContext;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
@@ -49,14 +49,14 @@ public class OperationAuthReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
 
-    AuthorizationContext authorizationContext = context.authorizationContext();
+    SecurityContext securityContext = context.authorizationContext();
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
     String requestMappingPattern = context.requestMappingPattern();
     List<springfox.documentation.service.Authorization> authorizations = newArrayList();
 
-    if (null != authorizationContext) {
-      authorizations = authorizationContext.getAuthorizationsForPath(requestMappingPattern);
+    if (null != securityContext) {
+      authorizations = securityContext.getAuthorizationsForPath(requestMappingPattern);
     }
 
     ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);

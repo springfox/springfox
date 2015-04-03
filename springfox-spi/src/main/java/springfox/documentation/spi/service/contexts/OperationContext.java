@@ -77,8 +77,8 @@ public class OperationContext {
     return newArrayList();
   }
 
-  public AuthorizationContext authorizationContext() {
-    return documentationContext.getAuthorizationContext();
+  public SecurityContext authorizationContext() {
+    return documentationContext.getSecurityContext();
   }
 
   public String requestMappingPattern() {

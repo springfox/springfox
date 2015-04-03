@@ -23,10 +23,9 @@ import spock.lang.Unroll
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ResourceGroup
-import springfox.documentation.spi.service.contexts.AuthorizationContext
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.dummy.DummyClass
-import springfox.documentation.spring.web.mixins.*
 import springfox.documentation.spring.web.mixins.ApiDescriptionSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -48,13 +47,13 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
   ApiListingScanner scanner
 
   def setup() {
-    AuthorizationContext authorizationContext = AuthorizationContext.builder()
+    SecurityContext authorizationContext = SecurityContext.builder()
             .withAuthorizations(defaultAuth())
             .forPaths(regex('/anyPath.*'))
             .build()
 
     plugin
-            .authorizationContext(authorizationContext)
+            .securityContext(authorizationContext)
             .configure(contextBuilder)
     apiDescriptionReader = Mock(ApiDescriptionReader)
     apiDescriptionReader.read(_) >> []

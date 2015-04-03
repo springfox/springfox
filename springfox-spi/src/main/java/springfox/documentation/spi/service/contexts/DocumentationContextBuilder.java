@@ -58,7 +58,7 @@ public class DocumentationContextBuilder {
   private String groupName;
   private ResourceGroupingStrategy resourceGroupingStrategy;
   private PathProvider pathProvider;
-  private AuthorizationContext authorizationContext;
+  private SecurityContext securityContext;
   private List<? extends AuthorizationType> authorizationTypes;
   private Ordering<ApiListingReference> listingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
@@ -116,8 +116,8 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder authorizationContext(AuthorizationContext authorizationContext) {
-    this.authorizationContext = BuilderDefaults.defaultIfAbsent(authorizationContext, this.authorizationContext);
+  public DocumentationContextBuilder authorizationContext(SecurityContext securityContext) {
+    this.securityContext = BuilderDefaults.defaultIfAbsent(securityContext, this.securityContext);
     return this;
   }
 
@@ -207,15 +207,15 @@ public class DocumentationContextBuilder {
 
   public DocumentationContext build() {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
-    AuthorizationContext authorizationContext = fromNullable(this.authorizationContext)
-            .or(new AuthorizationContext.AuthorizationContextBuilder()
+    SecurityContext securityContext = fromNullable(this.securityContext)
+            .or(new SecurityContextBuilder()
                 .withAuthorizations(new ArrayList<Authorization>())
                 .forPaths(PathSelectors.any())
                 .build());
     return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName,
             apiSelector, ignorableParameterTypes, responseMessages,
             resourceGroupingStrategy, pathProvider,
-            authorizationContext, authorizationTypes, rules,
+        securityContext, authorizationTypes, rules,
             listingReferenceOrdering, apiDescriptionOrdering,
             operationOrdering, produces, consumes, protocols, genericsNamingStrategy);
   }

@@ -21,20 +21,19 @@ package springfox.documentation.spring.web.authorization
 import spock.lang.Specification
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.builders.PathSelectors
-import springfox.documentation.spi.service.contexts.AuthorizationContext
+import springfox.documentation.spi.service.contexts.SecurityContext
 
 @Mixin(AuthSupport)
 class AuthorizationContextSpec extends Specification {
 
    def "scala authorizations"() {
     given:
-      AuthorizationContext authorizationContext = AuthorizationContext.builder()
+      SecurityContext authorizationContext = SecurityContext.builder()
               .withAuthorizations(auth)
               .forPaths(PathSelectors.any())
               .build()
-      authorizationContext.scalaAuthorizations
     expect:
-      authorizationContext.getScalaAuthorizations().size() == expected
+      authorizationContext.getAuthorizations().size() == expected
 
     where:
       auth          | expected

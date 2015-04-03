@@ -27,8 +27,9 @@ import springfox.documentation.service.ApiInfo
 import springfox.documentation.service.AuthorizationType
 import springfox.documentation.service.ResponseMessage
 import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spi.service.contexts.AuthorizationContext
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spi.service.contexts.Defaults
+import springfox.documentation.spi.service.contexts.SecurityContextBuilder
 import springfox.documentation.spring.web.RelativePathProvider
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -41,7 +42,7 @@ import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
-class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
+class DocketSpec extends DocumentationContextSpec {
 
   def "Should have sensible defaults when built with minimal configuration"() {
     when:
@@ -190,13 +191,13 @@ class SwaggerSpringMvcPluginSpec extends DocumentationContextSpec {
       builderMethod          | object                                         | property
       'pathProvider'         | new RelativePathProvider(Mock(ServletContext)) | 'pathProvider'
       'authorizationTypes'   | new ArrayList<AuthorizationType>()             | 'authorizationTypes'
-      'authorizationContext' | validContext()                                 | 'authorizationContext'
+      'securityContext'      | validContext()                                 | 'securityContext'
       'groupName'            | 'someGroup'                                    | 'groupName'
       'apiInfo'              | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
   }
 
-  private AuthorizationContext validContext() {
-    new AuthorizationContext.AuthorizationContextBuilder().build()
+  private SecurityContext validContext() {
+    new SecurityContextBuilder().build()
   }
 
   def "non nullable swaggerApiResourceListing properties"() {

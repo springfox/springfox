@@ -51,7 +51,7 @@ public class DocumentationContext {
   private final Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
   private final ResourceGroupingStrategy resourceGroupingStrategy;
   private final PathProvider pathProvider;
-  private final AuthorizationContext authorizationContext;
+  private final SecurityContext securityContext;
   private final List<? extends AuthorizationType> authorizationTypes;
   private final Ordering<ApiListingReference> listingReferenceOrdering;
   private final Ordering<ApiDescription> apiDescriptionOrdering;
@@ -69,7 +69,7 @@ public class DocumentationContext {
                               Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
                               ResourceGroupingStrategy resourceGroupingStrategy,
                               PathProvider pathProvider,
-                              AuthorizationContext authorizationContext,
+                              SecurityContext securityContext,
                               List<? extends AuthorizationType> authorizationTypes,
                               List<AlternateTypeRule> alternateTypeRules,
                               Ordering<ApiListingReference> listingReferenceOrdering,
@@ -89,7 +89,7 @@ public class DocumentationContext {
     this.globalResponseMessages = globalResponseMessages;
     this.resourceGroupingStrategy = resourceGroupingStrategy;
     this.pathProvider = pathProvider;
-    this.authorizationContext = authorizationContext;
+    this.securityContext = securityContext;
     this.authorizationTypes = authorizationTypes;
     this.listingReferenceOrdering = listingReferenceOrdering;
     this.apiDescriptionOrdering = apiDescriptionOrdering;
@@ -137,8 +137,8 @@ public class DocumentationContext {
     return pathProvider;
   }
 
-  public AuthorizationContext getAuthorizationContext() {
-    return authorizationContext;
+  public SecurityContext getSecurityContext() {
+    return securityContext;
   }
 
   public List<? extends AuthorizationType> getAuthorizationTypes() {
