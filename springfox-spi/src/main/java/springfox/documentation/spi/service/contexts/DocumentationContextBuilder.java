@@ -59,7 +59,7 @@ public class DocumentationContextBuilder {
   private ResourceGroupingStrategy resourceGroupingStrategy;
   private PathProvider pathProvider;
   private AuthorizationContext authorizationContext;
-  private List<AuthorizationType> authorizationTypes;
+  private List<? extends AuthorizationType> authorizationTypes;
   private Ordering<ApiListingReference> listingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private DocumentationType documentationType;
@@ -121,7 +121,7 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder authorizationTypes(List<AuthorizationType> authorizationTypes) {
+  public DocumentationContextBuilder authorizationTypes(List<? extends AuthorizationType> authorizationTypes) {
     this.authorizationTypes = authorizationTypes;
     return this;
   }

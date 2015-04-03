@@ -63,7 +63,7 @@ public class ResourceListingBuilder {
    * @param authorizations - security definitiosn
    * @return this
    */
-  public ResourceListingBuilder authorizations(List<AuthorizationType> authorizations) {
+  public ResourceListingBuilder authorizations(List<? extends AuthorizationType> authorizations) {
     this.authorizations.addAll(nullToEmptyList(authorizations));
     return this;
   }

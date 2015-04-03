@@ -52,7 +52,7 @@ public class DocumentationContext {
   private final ResourceGroupingStrategy resourceGroupingStrategy;
   private final PathProvider pathProvider;
   private final AuthorizationContext authorizationContext;
-  private final List<AuthorizationType> authorizationTypes;
+  private final List<? extends AuthorizationType> authorizationTypes;
   private final Ordering<ApiListingReference> listingReferenceOrdering;
   private final Ordering<ApiDescription> apiDescriptionOrdering;
   private final Ordering<Operation> operationOrdering;
@@ -70,7 +70,7 @@ public class DocumentationContext {
                               ResourceGroupingStrategy resourceGroupingStrategy,
                               PathProvider pathProvider,
                               AuthorizationContext authorizationContext,
-                              List<AuthorizationType> authorizationTypes,
+                              List<? extends AuthorizationType> authorizationTypes,
                               List<AlternateTypeRule> alternateTypeRules,
                               Ordering<ApiListingReference> listingReferenceOrdering,
                               Ordering<ApiDescription> apiDescriptionOrdering,
@@ -141,7 +141,7 @@ public class DocumentationContext {
     return authorizationContext;
   }
 
-  public List<AuthorizationType> getAuthorizationTypes() {
+  public List<? extends AuthorizationType> getAuthorizationTypes() {
     return authorizationTypes;
   }
 

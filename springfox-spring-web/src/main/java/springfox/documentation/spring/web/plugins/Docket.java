@@ -67,7 +67,7 @@ public class Docket implements DocumentationPlugin {
   private ApiInfo apiInfo;
   private PathProvider pathProvider;
   private AuthorizationContext authorizationContext;
-  private List<AuthorizationType> authorizationMethods;
+  private List<? extends AuthorizationType> authorizationMethods;
   private Ordering<ApiListingReference> apiListingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private Ordering<Operation> operationOrdering;
@@ -107,7 +107,7 @@ public class Docket implements DocumentationPlugin {
    * @param authorizationTypes a list of global AuthorizationType's
    * @return this DocumentationConfigurer
    */
-  public Docket authorizationTypes(List<AuthorizationType> authorizationTypes) {
+  public Docket authorizationTypes(List<? extends AuthorizationType> authorizationTypes) {
     this.authorizationMethods = authorizationTypes;
     return this;
   }
