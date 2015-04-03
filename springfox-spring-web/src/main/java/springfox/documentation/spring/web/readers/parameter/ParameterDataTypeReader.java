@@ -22,6 +22,8 @@ package springfox.documentation.spring.web.readers.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.schema.Collections;
@@ -37,6 +39,7 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import java.io.File;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private final TypeNameExtractor nameExtractor;
   private final TypeResolver resolver;

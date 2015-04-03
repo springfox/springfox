@@ -21,6 +21,8 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +38,7 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import java.lang.annotation.Annotation;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterTypeReader implements ParameterBuilderPlugin {
 
   @Override

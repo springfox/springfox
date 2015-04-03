@@ -24,6 +24,8 @@ import com.fasterxml.classmate.TypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.HandlerMethod;
@@ -39,6 +41,7 @@ import java.util.List;
 import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationModelsProvider implements OperationModelsProviderPlugin {
 
   private static final Logger log = LoggerFactory.getLogger(OperationModelsProvider.class);

@@ -22,6 +22,8 @@ package springfox.documentation.spring.web.readers.parameter;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableListValues;
@@ -38,6 +40,7 @@ import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin {
   private final TypeResolver resolver;
 

@@ -23,6 +23,8 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
@@ -40,6 +42,7 @@ import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationParameterRequestConditionReader implements OperationBuilderPlugin {
 
   private final TypeResolver resolver;

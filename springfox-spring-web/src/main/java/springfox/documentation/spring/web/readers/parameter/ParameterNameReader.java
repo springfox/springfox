@@ -22,6 +22,8 @@ package springfox.documentation.spring.web.readers.parameter;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +42,7 @@ import static com.google.common.collect.Lists.*;
 import static java.lang.String.*;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterNameReader implements ParameterBuilderPlugin {
 
   @Override

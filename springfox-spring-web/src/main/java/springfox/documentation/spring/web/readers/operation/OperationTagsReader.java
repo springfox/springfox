@@ -22,6 +22,8 @@ package springfox.documentation.spring.web.readers.operation;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
@@ -32,6 +34,7 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import java.util.Set;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationTagsReader implements OperationBuilderPlugin {
   private final ResourceGroupingStrategy groupingStrategy;
 

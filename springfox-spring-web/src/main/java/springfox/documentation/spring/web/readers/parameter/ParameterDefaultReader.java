@@ -20,6 +20,8 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +33,7 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import java.lang.annotation.Annotation;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterDefaultReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {

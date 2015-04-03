@@ -19,12 +19,15 @@
 
 package springfox.documentation.spring.web.readers.operation;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationDeprecatedReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {

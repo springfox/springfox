@@ -21,6 +21,8 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.method.HandlerMethod;
@@ -42,6 +44,7 @@ import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationParameterReader implements OperationBuilderPlugin {
   private final TypeResolver typeResolver;
   private final ModelAttributeParameterExpander expander;

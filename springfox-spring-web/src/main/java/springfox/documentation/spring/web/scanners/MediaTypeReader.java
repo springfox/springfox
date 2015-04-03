@@ -21,6 +21,8 @@ package springfox.documentation.spring.web.scanners;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +46,7 @@ import static com.google.common.collect.Sets.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilderPlugin {
 
   private final TypeResolver typeResolver;
