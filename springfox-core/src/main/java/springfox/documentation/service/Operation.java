@@ -50,7 +50,7 @@ public class Operation {
   public Operation(String method, String summary, String notes, ModelRef responseModel,
                    String nickname, int position,
                    Set<String> tags, Set<String> produces, Set<String> consumes, Set<String> protocol,
-                   List<Authorization> authorizations, List<Parameter> parameters,
+                   List<SecurityReference> securityReferences, List<Parameter> parameters,
                    Set<ResponseMessage> responseMessages, String deprecated, boolean isHidden) {
     this.method = method;
     this.summary = summary;
@@ -63,7 +63,7 @@ public class Operation {
     this.consumes = consumes;
     this.protocol = protocol;
     this.isHidden = isHidden;
-    this.authorizations = toAuthorizationsMap(authorizations);
+    this.authorizations = toAuthorizationsMap(securityReferences);
     this.parameters = parameters;
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
@@ -81,24 +81,24 @@ public class Operation {
     return tags;
   }
 
-  private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {
-    return Maps.transformEntries(Maps.uniqueIndex(authorizations, byType()), toScopes());
+  private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<SecurityReference> securityReferences) {
+    return Maps.transformEntries(Maps.uniqueIndex(securityReferences, byType()), toScopes());
   }
 
-  private EntryTransformer<? super String, ? super Authorization, List<AuthorizationScope>> toScopes() {
-    return new EntryTransformer<String, Authorization, List<AuthorizationScope>>() {
+  private EntryTransformer<? super String, ? super SecurityReference, List<AuthorizationScope>> toScopes() {
+    return new EntryTransformer<String, SecurityReference, List<AuthorizationScope>>() {
       @Override
-      public List<AuthorizationScope> transformEntry(String key, Authorization value) {
+      public List<AuthorizationScope> transformEntry(String key, SecurityReference value) {
         return Lists.newArrayList(value.getScopes());
       }
     };
   }
 
-  private Function<? super Authorization, String> byType() {
-    return new Function<Authorization, String>() {
+  private Function<? super SecurityReference, String> byType() {
+    return new Function<SecurityReference, String>() {
       @Override
-      public String apply(Authorization input) {
-        return input.getType();
+      public String apply(SecurityReference input) {
+        return input.getReference();
       }
     };
   }

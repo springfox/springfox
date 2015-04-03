@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.mixins
 
-import springfox.documentation.service.Authorization
+import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.AuthorizationCodeGrant
 import springfox.documentation.service.GrantType
 import springfox.documentation.service.ImplicitGrant
@@ -37,7 +37,7 @@ class AuthSupport {
     AuthorizationScope authorizationScope =
             new AuthorizationScope("global", "accessEverything")
     AuthorizationScope[] authorizationScopes = [authorizationScope] as AuthorizationScope[];
-    newArrayList(new Authorization("oauth2", authorizationScopes))
+    newArrayList(new SecurityReference("oauth2", authorizationScopes))
   }
 //
 //  def oAuth() {

@@ -23,9 +23,9 @@ import spock.lang.Specification
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ResponseMessageBuilder
 import springfox.documentation.schema.ModelRef
-import springfox.documentation.service.Authorization
 import springfox.documentation.service.Parameter
 import springfox.documentation.service.ResponseMessage
+import springfox.documentation.service.SecurityReference
 
 import static com.google.common.collect.Sets.*
 
@@ -126,12 +126,12 @@ class OperationBuilderSpec extends Specification {
   def "Operation authorizations are converted to a map by type"() {
     given:
       def sut = new OperationBuilder()
-      def mockAuth1 = Mock(Authorization)
-      def mockAuth2 = Mock(Authorization)
+      def mockAuth1 = Mock(SecurityReference)
+      def mockAuth2 = Mock(SecurityReference)
     and:
-      mockAuth1.type >> "auth1"
+      mockAuth1.reference >> "auth1"
       mockAuth1.scopes >> []
-      mockAuth2.type >> "auth2"
+      mockAuth2.reference >> "auth2"
       mockAuth2.scopes >> []
     and:
       def authorizations = [mockAuth1, mockAuth2]

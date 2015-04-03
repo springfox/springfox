@@ -32,14 +32,14 @@ public class ApiListing {
   private final Set<String> produces;
   private final Set<String> consumes;
   private final Set<String> protocol;
-  private final List<Authorization> authorizations;
+  private final List<SecurityReference> securityReferences;
   private final List<ApiDescription> apis;
   private final Map<String, Model> models;
   private final String description;
   private final int position;
 
   public ApiListing(String apiVersion, String basePath, String resourcePath, Set<String>
-          produces, Set<String> consumes, Set<String> protocol, List<Authorization> authorizations,
+          produces, Set<String> consumes, Set<String> protocol, List<SecurityReference> securityReferences,
                     List<ApiDescription> apis, Map<String, Model> models, String description, int position) {
     this.apiVersion = apiVersion;
     this.basePath = basePath;
@@ -47,7 +47,7 @@ public class ApiListing {
     this.produces = produces;
     this.consumes = consumes;
     this.protocol = protocol;
-    this.authorizations = authorizations;
+    this.securityReferences = securityReferences;
     this.apis = apis;
     this.models = models;
     this.description = description;
@@ -78,8 +78,8 @@ public class ApiListing {
     return protocol;
   }
 
-  public List<Authorization> getAuthorizations() {
-    return authorizations;
+  public List<SecurityReference> getSecurityReferences() {
+    return securityReferences;
   }
 
   public List<ApiDescription> getApis() {

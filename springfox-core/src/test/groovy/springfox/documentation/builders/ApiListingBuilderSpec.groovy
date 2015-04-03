@@ -22,7 +22,7 @@ import com.google.common.collect.Ordering
 import spock.lang.Specification
 import springfox.documentation.schema.Model
 import springfox.documentation.service.ApiDescription
-import springfox.documentation.service.Authorization
+import springfox.documentation.service.SecurityReference
 
 class ApiListingBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
@@ -39,18 +39,18 @@ class ApiListingBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod   | value                   | property
-      'apiVersion'    | '1.0'                   | 'apiVersion'
-      'basePath'      | 'urn:base-path'         | 'basePath'
-      'resourcePath'  | 'urn:resource-path'     | 'resourcePath'
-      'description'   | 'test'                  | 'description'
-      'position'      | 1                       | 'position'
-      'produces'      | ['app/json'] as Set     | 'produces'
-      'consumes'      | ['app/json'] as Set     | 'consumes'
-      'protocols'     | ['https']  as Set       | 'protocols'
-      'authorizations'| [Mock(Authorization)]   | 'authorizations'
-      'apis'          | [Mock(ApiDescription)]  | 'apis'
-      'models'        | [m1: Mock(Model)]       | 'models'
+      builderMethod       | value                   | property
+      'apiVersion'        | '1.0'                   | 'apiVersion'
+      'basePath'          | 'urn:base-path'         | 'basePath'
+      'resourcePath'      | 'urn:resource-path'     | 'resourcePath'
+      'description'       | 'test'                  | 'description'
+      'position'          | 1                       | 'position'
+      'produces'          | ['app/json'] as Set     | 'produces'
+      'consumes'          | ['app/json'] as Set     | 'consumes'
+      'protocols'         | ['https']  as Set       | 'protocols'
+      'securityReferences'| [Mock(SecurityReference)]   | 'securityReferences'
+      'apis'              | [Mock(ApiDescription)]  | 'apis'
+      'models'            | [m1: Mock(Model)]       | 'models'
   }
 
   def "Setting properties on the builder with null values preserves existing values"() {
@@ -77,7 +77,7 @@ class ApiListingBuilderSpec extends Specification {
       'produces'      | ['app/json'] as Set     | 'produces'
       'consumes'      | ['app/json'] as Set     | 'consumes'
       'protocols'     | ['https'] as Set        | 'protocols'
-      'authorizations'| [Mock(Authorization)]   | 'authorizations'
+      'securityReferences'| [Mock(SecurityReference)]   | 'securityReferences'
       'apis'          | [Mock(ApiDescription)]  | 'apis'
       'models'        | [m1: Mock(Model)]       | 'models'
   }

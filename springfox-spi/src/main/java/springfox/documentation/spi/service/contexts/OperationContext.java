@@ -77,7 +77,7 @@ public class OperationContext {
     return newArrayList();
   }
 
-  public SecurityContext authorizationContext() {
+  public SecurityContext securityContext() {
     return documentationContext.getSecurityContext();
   }
 

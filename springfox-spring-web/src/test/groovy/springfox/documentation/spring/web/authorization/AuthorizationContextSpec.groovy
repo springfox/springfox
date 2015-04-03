@@ -33,7 +33,7 @@ class AuthorizationContextSpec extends Specification {
               .forPaths(PathSelectors.any())
               .build()
     expect:
-      authorizationContext.getAuthorizations().size() == expected
+      authorizationContext.getSecurityReferences().size() == expected
 
     where:
       auth          | expected

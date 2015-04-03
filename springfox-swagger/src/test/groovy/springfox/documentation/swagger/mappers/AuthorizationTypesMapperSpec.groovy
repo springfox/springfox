@@ -20,7 +20,7 @@
 package springfox.documentation.swagger.mappers
 
 import spock.lang.Specification
-import springfox.documentation.builders.AuthorizationBuilder
+
 import springfox.documentation.builders.LoginEndpointBuilder
 import springfox.documentation.builders.OAuthBuilder
 import springfox.documentation.service.BasicAuth
@@ -34,6 +34,7 @@ import springfox.documentation.builders.TokenRequestEndpointBuilder
 import springfox.documentation.service.ApiKey
 import springfox.documentation.service.AuthorizationScope
 import springfox.documentation.service.AuthorizationType
+import springfox.documentation.service.SecurityReference
 import springfox.documentation.swagger.dto.Authorization
 import springfox.documentation.swagger.dto.AuthorizationCodeGrant
 import springfox.documentation.swagger.dto.ImplicitGrant
@@ -135,20 +136,20 @@ class AuthorizationTypesMapperSpec extends Specification {
               .description("test scope")
               .scope("oauth-spec")
               .build()] as AuthorizationScope []
-      springfox.documentation.service.Authorization built = new AuthorizationBuilder()
-                              .type("oauth")
+      SecurityReference built = new SecurityReference.SecurityReferenceBuilder()
+                              .reference("oauth")
                               .scopes(authScopes)
                               .build()
 
     when:
-      Authorization mapped = sut.toSwaggerAuthorization(built)
+      Authorization mapped = sut.toSwaggerSecurityReference(built)
     then:
-      mapped.type == built.type
+      mapped.type == built.reference
       mapped.scopes.size() == 1
       mapped.scopes.first().description == authScopes[0].description
       mapped.scopes.first().scope == authScopes[0].scope
 
-      mapped.type == built.type
+      mapped.type == built.reference
   }
 
   def "Polymorphic authorization types are handled"() {

@@ -30,7 +30,7 @@ import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.Authorization;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.AuthorizationType;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResponseMessage;
@@ -209,7 +209,7 @@ public class DocumentationContextBuilder {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
     SecurityContext securityContext = fromNullable(this.securityContext)
             .or(new SecurityContextBuilder()
-                .withAuthorizations(new ArrayList<Authorization>())
+                .withAuthorizations(new ArrayList<SecurityReference>())
                 .forPaths(PathSelectors.any())
                 .build());
     return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName,

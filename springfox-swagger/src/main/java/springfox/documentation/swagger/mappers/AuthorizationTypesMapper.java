@@ -20,7 +20,10 @@
 package springfox.documentation.swagger.mappers;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.swagger.dto.ApiKey;
 import springfox.documentation.swagger.dto.Authorization;
 import springfox.documentation.swagger.dto.AuthorizationCodeGrant;
@@ -54,7 +57,10 @@ public abstract class AuthorizationTypesMapper {
   public abstract springfox.documentation.swagger.dto.AuthorizationScope
   toSwaggerAuthorizationScope(AuthorizationScope from);
 
-  public abstract Authorization toSwaggerAuthorization(springfox.documentation.service.Authorization from);
+  @Mappings({
+      @Mapping(target = "type", source = "reference")
+  })
+  public abstract Authorization toSwaggerSecurityReference(SecurityReference from);
 
   public abstract LoginEndpoint toSwaggerLoginEndpoint(springfox.documentation.service.LoginEndpoint from);
 

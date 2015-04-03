@@ -28,8 +28,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.builders.AuthorizationBuilder;
 import springfox.documentation.builders.AuthorizationScopeBuilder;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -49,14 +49,14 @@ public class OperationAuthReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
 
-    SecurityContext securityContext = context.authorizationContext();
+    SecurityContext securityContext = context.securityContext();
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
     String requestMappingPattern = context.requestMappingPattern();
-    List<springfox.documentation.service.Authorization> authorizations = newArrayList();
+    List<SecurityReference> securityReferences = newArrayList();
 
     if (null != securityContext) {
-      authorizations = securityContext.getAuthorizationsForPath(requestMappingPattern);
+      securityReferences = securityContext.securityForPath(requestMappingPattern);
     }
 
     ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
@@ -67,7 +67,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
               && authorizationAnnotations.length > 0
               && StringUtils.hasText(authorizationAnnotations[0].value())) {
 
-        authorizations = newArrayList();
+        securityReferences = newArrayList();
         for (Authorization authorization : authorizationAnnotations) {
           String value = authorization.value();
           AuthorizationScope[] scopes = authorization.scopes();
@@ -87,18 +87,18 @@ public class OperationAuthReader implements OperationBuilderPlugin {
           }
           springfox.documentation.service.AuthorizationScope[] authorizationScopes = authorizationScopeList
                   .toArray(new springfox.documentation.service.AuthorizationScope[authorizationScopeList.size()]);
-          springfox.documentation.service.Authorization authorizationModel =
-                  new AuthorizationBuilder()
-                          .type(value)
+          SecurityReference securityReference =
+                  SecurityReference.builder()
+                          .reference(value)
                           .scopes(authorizationScopes)
                           .build();
-          authorizations.add(authorizationModel);
+          securityReferences.add(securityReference);
         }
       }
     }
-    if (authorizations != null) {
-      LOG.debug("Authorization count {} for method {}", authorizations.size(), handlerMethod.getMethod().getName());
-      context.operationBuilder().authorizations(authorizations);
+    if (securityReferences != null) {
+      LOG.debug("Authorization count {} for method {}", securityReferences.size(), handlerMethod.getMethod().getName());
+      context.operationBuilder().authorizations(securityReferences);
     }
   }
 

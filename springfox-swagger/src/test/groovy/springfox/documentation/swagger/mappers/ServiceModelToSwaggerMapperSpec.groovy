@@ -24,7 +24,7 @@ import spock.lang.Specification
 import springfox.documentation.builders.ApiDescriptionBuilder
 import springfox.documentation.builders.ApiInfoBuilder
 import springfox.documentation.builders.ApiListingBuilder
-import springfox.documentation.builders.AuthorizationBuilder
+
 import springfox.documentation.builders.AuthorizationScopeBuilder
 import springfox.documentation.builders.ModelBuilder
 import springfox.documentation.builders.ModelPropertyBuilder
@@ -34,6 +34,7 @@ import springfox.documentation.builders.ResourceListingBuilder
 import springfox.documentation.builders.ResponseMessageBuilder
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.AllowableListValues
+import springfox.documentation.service.SecurityReference
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.swagger.mixins.MapperSupport
 import springfox.documentation.service.ApiListingReference
@@ -55,8 +56,8 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
               .responseModel(new ModelRef("string"))
               .build()
       def operation1 = new OperationBuilder()
-                        .authorizations([new AuthorizationBuilder()
-                          .type("basic")
+                        .authorizations([new SecurityReference.SecurityReferenceBuilder()
+                          .reference("basic")
                           .scopes(scope)
                           .build()])
                         .consumes(newHashSet("application/json"))
@@ -91,7 +92,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       def built = new ApiListingBuilder(new Defaults().apiDescriptionOrdering())
                   .apis([description])
                   .apiVersion("1.0")
-                  .authorizations(null)
+                  .securityReferences(null)
                   .basePath("/base-path")
                   .description("listing")
                   .consumes([] as Set)

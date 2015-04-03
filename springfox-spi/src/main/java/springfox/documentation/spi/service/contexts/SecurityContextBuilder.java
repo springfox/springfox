@@ -21,7 +21,7 @@ package springfox.documentation.spi.service.contexts;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import springfox.documentation.service.Authorization;
+import springfox.documentation.service.SecurityReference;
 
 import java.util.List;
 
@@ -31,19 +31,19 @@ public class SecurityContextBuilder {
   SecurityContextBuilder() {
   }
 
-  private List<Authorization> authorizations = newArrayList();
+  private List<SecurityReference> securityReferences = newArrayList();
   private Predicate<String> pathSelector = Predicates.alwaysTrue();
 
-  public SecurityContextBuilder withAuthorizations(List<Authorization> authorizations) {
-    this.authorizations = authorizations;
+  public SecurityContextBuilder withAuthorizations(List<SecurityReference> securityReferences) {
+    this.securityReferences = securityReferences;
     return this;
   }
 
   public SecurityContext build() {
-    if (authorizations == null) {
-      authorizations = newArrayList();
+    if (securityReferences == null) {
+      securityReferences = newArrayList();
     }
-    return new SecurityContext(authorizations, pathSelector);
+    return new SecurityContext(securityReferences, pathSelector);
   }
 
   public SecurityContextBuilder forPaths(Predicate<String> selector) {

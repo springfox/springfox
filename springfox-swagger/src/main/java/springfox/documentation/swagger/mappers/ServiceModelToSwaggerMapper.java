@@ -54,7 +54,8 @@ public interface ServiceModelToSwaggerMapper {
   ModelDto toSwaggerModelDto(Model from);
 
   @Mappings({
-          @Mapping(target = "swaggerVersion", constant = "1.2")
+       @Mapping(target = "swaggerVersion", constant = "1.2"),
+       @Mapping(target = "authorizations", source = "securityReferences")
   })
   ApiListing toSwaggerApiListing(springfox.documentation.service.ApiListing from);
 

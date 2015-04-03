@@ -23,13 +23,13 @@ import spock.lang.Specification
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.ApiKey
-import springfox.documentation.service.Authorization
 import springfox.documentation.service.AuthorizationCodeGrant
 import springfox.documentation.service.AuthorizationScope
 import springfox.documentation.service.BasicAuth
 import springfox.documentation.service.ImplicitGrant
 import springfox.documentation.service.LoginEndpoint
 import springfox.documentation.service.OAuth
+import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.TokenRequestEndpoint
 import springfox.documentation.swagger.dto.ModelDto
 import springfox.documentation.swagger.dto.Operation
@@ -55,7 +55,7 @@ public class AllMappersSpec extends Specification {
       mapped == null
     where:
       typeToTest << [ApiKey, OAuth, BasicAuth, ImplicitGrant, AuthorizationCodeGrant, TokenEndpoint,
-                     TokenRequestEndpoint, AuthorizationScope, Authorization, LoginEndpoint]
+                     TokenRequestEndpoint, AuthorizationScope, SecurityReference, LoginEndpoint]
   }
 
   def "All AllowableValuesMapper null sources are mapped to null targets"() {

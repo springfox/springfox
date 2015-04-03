@@ -28,7 +28,7 @@ import springfox.documentation.builders.ApiListingBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
-import springfox.documentation.service.Authorization;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -87,7 +87,7 @@ public class ApiListingScanner {
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
-      List<Authorization> authorizations = securityContext.getAuthorizations();
+      List<SecurityReference> securityReferences = securityContext.getSecurityReferences();
 
       ArrayList sortedApis = new ArrayList(apiDescriptions);
       Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());
@@ -102,7 +102,7 @@ public class ApiListingScanner {
               .produces(produces)
               .consumes(consumes)
               .protocols(protocols)
-              .authorizations(authorizations)
+              .securityReferences(securityReferences)
               .apis(sortedApis)
               .models(models)
               .description(null)

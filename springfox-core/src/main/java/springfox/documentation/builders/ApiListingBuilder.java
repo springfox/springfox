@@ -23,7 +23,7 @@ import com.google.common.collect.Ordering;
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
-import springfox.documentation.service.Authorization;
+import springfox.documentation.service.SecurityReference;
 
 import java.util.List;
 import java.util.Map;
@@ -45,7 +45,7 @@ public class ApiListingBuilder {
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
   private Set<String> protocol = newHashSet();
-  private List<Authorization> authorizations = newArrayList();
+  private List<SecurityReference> securityReferences = newArrayList();
   private List<ApiDescription> apis = newArrayList();
   private Map<String, Model> models = newHashMap();
 
@@ -154,12 +154,12 @@ public class ApiListingBuilder {
   /**
    * Updates the references to the security definitiosn
    *
-   * @param authorizations - security definition references
+   * @param securityReferences - security definition references
    * @return this
    */
-  public ApiListingBuilder authorizations(List<Authorization> authorizations) {
-    if (authorizations != null) {
-      this.authorizations = newArrayList(authorizations);
+  public ApiListingBuilder securityReferences(List<SecurityReference> securityReferences) {
+    if (securityReferences != null) {
+      this.securityReferences = newArrayList(securityReferences);
     }
     return this;
   }
@@ -212,6 +212,6 @@ public class ApiListingBuilder {
 
   public ApiListing build() {
     return new ApiListing(apiVersion, basePath,
-        resourcePath, produces, consumes, protocol, authorizations, apis, models, description, position);
+        resourcePath, produces, consumes, protocol, securityReferences, apis, models, description, position);
   }
 }

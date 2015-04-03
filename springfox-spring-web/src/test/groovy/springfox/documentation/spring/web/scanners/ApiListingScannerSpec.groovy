@@ -101,7 +101,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       Map<String, ApiListing> apiListingMap = scanner.scan(listingContext)
     then:
       ApiListing listing = apiListingMap['businesses']
-      listing.getAuthorizations().size() == 1
+      listing.getSecurityReferences().size() == 1
   }
 
   @Unroll

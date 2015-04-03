@@ -25,7 +25,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.springframework.http.HttpStatus;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.Authorization;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
@@ -47,7 +47,7 @@ public class OperationBuilder {
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
   private Set<String> protocol = newHashSet();
-  private List<Authorization> authorizations = newArrayList();
+  private List<SecurityReference> securityReferences = newArrayList();
   private List<Parameter> parameters = newArrayList();
   private Set<ResponseMessage> responseMessages = newHashSet();
   private Set<String> tags = newHashSet();
@@ -158,11 +158,11 @@ public class OperationBuilder {
   /**
    * Updates the security checks that apply to this operation
    *
-   * @param authorizations - authorization that reference security definitions
+   * @param securityReferences - authorization that reference security definitions
    * @return this
    */
-  public OperationBuilder authorizations(List<Authorization> authorizations) {
-    this.authorizations.addAll(nullToEmptyList(authorizations));
+  public OperationBuilder authorizations(List<SecurityReference> securityReferences) {
+    this.securityReferences.addAll(nullToEmptyList(securityReferences));
     return this;
   }
 
@@ -234,7 +234,7 @@ public class OperationBuilder {
 
   public Operation build() {
     return new Operation(method, summary, notes, responseModel, nickname, position, tags, produces,
-        consumes, protocol, authorizations, parameters, responseMessages, deprecated, isHidden);
+        consumes, protocol, securityReferences, parameters, responseMessages, deprecated, isHidden);
   }
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
