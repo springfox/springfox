@@ -23,15 +23,15 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.sun.tools.javac.util.List;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponses;
 
 import java.lang.reflect.AnnotatedElement;
+import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Optional.fromNullable;
+import static com.google.common.base.Optional.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 public class Annotations {
@@ -54,7 +54,7 @@ public class Annotations {
 
 
   public static Function<ApiOperation, ResolvedType> resolvedTypeFromOperation(final TypeResolver typeResolver,
-      final ResolvedType defaultType) {
+                                                                               final ResolvedType defaultType) {
     return new Function<ApiOperation, ResolvedType>() {
       @Override
       public ResolvedType apply(ApiOperation annotation) {
