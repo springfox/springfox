@@ -48,7 +48,7 @@ public class  ModelPropertyDto {
     this.name = name;
     this.type = new DataType(type);
     this.qualifiedType = qualifiedType;
-    this.position = position; //TODO Suspect unused
+    this.position = position;
     this.required = required;
     this.description = description;
     this.allowableValues = allowableValues;

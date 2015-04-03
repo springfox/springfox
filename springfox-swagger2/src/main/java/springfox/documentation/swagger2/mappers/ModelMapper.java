@@ -24,6 +24,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.ModelImpl;
+import com.wordnik.swagger.models.properties.AbstractNumericProperty;
 import com.wordnik.swagger.models.properties.ArrayProperty;
 import com.wordnik.swagger.models.properties.BooleanProperty;
 import com.wordnik.swagger.models.properties.DateProperty;
@@ -43,6 +44,7 @@ import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableListValues;
+import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
@@ -91,11 +93,18 @@ public abstract class ModelMapper {
 
   public Property mapProperty(ModelProperty source) {
     Property property = modelRefToProperty(source.getModelRef());
-    //TODO: more mapping needs to happen for AllowableRange
     if (property instanceof StringProperty) {
       AllowableValues allowableValues = source.getAllowableValues();
       if (allowableValues instanceof AllowableListValues) {
         ((StringProperty) property).setEnum(((AllowableListValues) allowableValues).getValues());
+      }
+    }
+    if (property instanceof AbstractNumericProperty) {
+      AllowableValues allowableValues = source.getAllowableValues();
+      if (allowableValues instanceof AllowableRangeValues) {
+        AllowableRangeValues range = (AllowableRangeValues) allowableValues;
+        ((AbstractNumericProperty) property).maximum(Double.valueOf(range.getMax()));
+        ((AbstractNumericProperty) property).minimum(Double.valueOf(range.getMin()));
       }
     }
     property.setDescription(source.getDescription());

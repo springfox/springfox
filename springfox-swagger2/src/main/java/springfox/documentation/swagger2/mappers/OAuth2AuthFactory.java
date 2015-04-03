@@ -40,9 +40,9 @@ class OAuth2AuthFactory implements SecuritySchemeFactory {
       } else if ("implicit".equals(each.getType())) {
         definition.implicit(((ImplicitGrant) each).getLoginEndpoint().getUrl());
 //        } else if ("application".equals(each.getType())) {
-//          TODO: swagger 1 doesnt not support this
+//          NOTE: swagger 1 doesn't support this
 //        } else if ("password".equals(each.getType())) {
-//          TODO: swagger 1 doesnt support this
+//          NOTE: swagger 1 doesn't support this
       }
     }
     for (AuthorizationScope each : oAuth.getScopes()) {

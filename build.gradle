@@ -48,7 +48,6 @@ configure(publishable(subprojects)) { subproject ->
   sourceCompatibility = jdkVersion
   targetCompatibility = jdkVersion
 
-  //TODO - Adds provided dependency configuration?
   configurations {
     provided
     compile.extendsFrom provided

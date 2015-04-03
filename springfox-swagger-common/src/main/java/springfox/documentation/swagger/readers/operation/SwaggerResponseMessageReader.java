@@ -78,7 +78,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     if (apiResponse.response() != null) {
       return apiResponse.response().getSimpleName();
     }
-    return "";//TODO: May not be correct
+    return "";
   }
 
 }

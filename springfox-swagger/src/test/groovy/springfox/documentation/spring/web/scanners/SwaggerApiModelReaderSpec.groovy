@@ -78,17 +78,11 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
       nameProp.getPosition() == 0
       !nameProp.isRequired()
       nameProp.getDescription() == null
-//      "${nameProp.allowableValues().getClass()}".contains('com.wordnik.swagger.model.AnyAllowableValues')
       def item = nameProp.getModelRef()
       item.type == "string"
       !item.collection
       item.itemType == null
 
-      //TODO test these remaining
-//      println model.description()
-//      println model.baseModel()
-//      println model.discriminator()
-//      println model.subTypes()
   }
 
   def "Annotated model"() {

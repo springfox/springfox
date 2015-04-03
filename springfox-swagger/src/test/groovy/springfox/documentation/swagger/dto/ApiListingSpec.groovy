@@ -50,7 +50,6 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
 
   def "should serialize"() {
     expect:
-      //TODO - produce larger json by adding ApiDescriptions
       writePretty(apiListing) ==
               '''{
   "apiVersion" : "1",

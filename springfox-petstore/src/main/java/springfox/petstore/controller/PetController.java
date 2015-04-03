@@ -114,7 +114,7 @@ public class PetController {
                   @AuthorizationScope(scope = "read:pets", description = "")
           }))
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid status value")})
-  /** TODO: This renders paramter as 
+  /** TODO: This renders parameter as
    *
    "name": "status",
    "in": "query",
