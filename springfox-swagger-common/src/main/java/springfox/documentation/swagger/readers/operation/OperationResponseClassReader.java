@@ -24,6 +24,7 @@ import com.fasterxml.classmate.TypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.schema.ModelRef;
@@ -41,6 +42,7 @@ import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 
 @Component("swaggerOperationClassReader")
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class OperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
   private final TypeResolver typeResolver;

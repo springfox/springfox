@@ -24,6 +24,7 @@ import com.wordnik.swagger.annotations.Authorization;
 import com.wordnik.swagger.annotations.AuthorizationScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -41,6 +42,7 @@ import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 
 @Component
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class OperationAuthReader implements OperationBuilderPlugin {
 
   private static final Logger LOG = LoggerFactory.getLogger(OperationAuthReader.class);

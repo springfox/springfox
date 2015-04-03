@@ -23,6 +23,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableListValues;
@@ -43,6 +44,7 @@ import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 
 @Component
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilderPlugin {
 
   @Override

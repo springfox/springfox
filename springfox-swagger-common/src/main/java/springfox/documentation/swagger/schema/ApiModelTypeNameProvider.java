@@ -20,6 +20,7 @@
 package springfox.documentation.swagger.schema;
 
 import com.wordnik.swagger.annotations.ApiModel;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.DefaultTypeNameProvider;
 import springfox.documentation.spi.DocumentationType;
@@ -30,6 +31,7 @@ import static com.google.common.base.Strings.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class ApiModelTypeNameProvider extends DefaultTypeNameProvider {
   @Override
   public String nameFor(Class<?> type) {

@@ -21,6 +21,7 @@ package springfox.documentation.swagger.readers.parameter;
 
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -30,6 +31,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import static com.google.common.base.Strings.*;
 
 @Component("swaggerParameterAccessReader")
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class ParameterAccessReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {

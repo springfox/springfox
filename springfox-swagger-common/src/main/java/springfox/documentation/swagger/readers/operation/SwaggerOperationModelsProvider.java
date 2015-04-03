@@ -27,17 +27,20 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class SwaggerOperationModelsProvider implements OperationModelsProviderPlugin {
 
   private static final Logger log = LoggerFactory.getLogger(SwaggerOperationModelsProvider.class);

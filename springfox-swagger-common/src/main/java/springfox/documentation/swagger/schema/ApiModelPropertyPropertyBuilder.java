@@ -21,6 +21,7 @@ package springfox.documentation.swagger.schema;
 
 import com.google.common.base.Optional;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
@@ -31,6 +32,7 @@ import static springfox.documentation.schema.Annotations.*;
 import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
 @Component
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlugin {
   @Override
   public void apply(ModelPropertyContext context) {

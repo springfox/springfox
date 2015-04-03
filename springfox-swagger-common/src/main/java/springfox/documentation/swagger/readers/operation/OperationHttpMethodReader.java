@@ -22,6 +22,7 @@ package springfox.documentation.swagger.readers.operation;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +33,7 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 @Component
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class OperationHttpMethodReader implements OperationBuilderPlugin {
   private static final Logger log = LoggerFactory.getLogger(OperationHttpMethodReader.class);
 

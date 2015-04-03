@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.common;
 
+import org.springframework.core.Ordered;
 import springfox.documentation.spi.DocumentationType;
 
 public class SwaggerPluginSupport {
@@ -26,8 +27,7 @@ public class SwaggerPluginSupport {
     throw new UnsupportedOperationException();
   }
 
-  public static final String DOCUMENTATION_BASE_PATH = "/api-docs";
-
+  public final static int SWAGGER_PLUGIN_ORDER = Ordered.HIGHEST_PRECEDENCE + 50;
   public static boolean pluginDoesApply(DocumentationType documentationType) {
     return DocumentationType.SWAGGER_12.equals(documentationType) || DocumentationType.SWAGGER_2.equals(documentationType);
   }

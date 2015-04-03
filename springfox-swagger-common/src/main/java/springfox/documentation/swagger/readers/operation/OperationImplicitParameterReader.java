@@ -22,6 +22,7 @@ package springfox.documentation.swagger.readers.operation;
 import com.google.common.collect.Lists;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.builders.ParameterBuilder;
@@ -38,6 +39,7 @@ import java.util.List;
 
 
 @Component
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class OperationImplicitParameterReader implements OperationBuilderPlugin {
 
   @Override

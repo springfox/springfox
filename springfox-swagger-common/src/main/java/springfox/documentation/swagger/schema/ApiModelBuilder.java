@@ -23,14 +23,17 @@ import com.fasterxml.classmate.TypeResolver;
 import com.wordnik.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
+import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class ApiModelBuilder implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
 

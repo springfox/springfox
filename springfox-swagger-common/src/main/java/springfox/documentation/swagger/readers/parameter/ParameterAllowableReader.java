@@ -21,6 +21,7 @@ package springfox.documentation.swagger.readers.parameter;
 
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.service.AllowableValues;
@@ -35,6 +36,7 @@ import java.lang.annotation.Annotation;
 import static com.google.common.base.Strings.*;
 
 @Component("swaggerParameterAllowableReader")
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class ParameterAllowableReader implements ParameterBuilderPlugin {
 
   @Override
