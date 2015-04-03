@@ -39,11 +39,11 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
               RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 
-      OperationResponseClassReader operationResponseClassReader =
+      OperationResponseClassReader sut =
               new OperationResponseClassReader(new TypeResolver(), typeNameExtractor)
 
     when:
-      operationResponseClassReader.apply(operationContext)
+      sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
     then:
       if (operation.responseModel.collection) {

@@ -38,7 +38,7 @@ public class DataType implements SwaggerDataType {
 
   public SwaggerDataType typeFromDataType(String initialType) {
 
-    if (isOfType(initialType, "void")) {
+    if (isOfType(initialType.toLowerCase(), "void")) {
       return new PrimitiveDataType("void");
     }
     if (isOfType(initialType, "int")) {

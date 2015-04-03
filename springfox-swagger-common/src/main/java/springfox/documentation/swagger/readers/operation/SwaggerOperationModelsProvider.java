@@ -22,7 +22,6 @@ package springfox.documentation.swagger.readers.operation;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
-import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
@@ -33,8 +32,10 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-import springfox.documentation.swagger.annotations.Annotations;
-import springfox.documentation.swagger.common.SwaggerPluginSupport;
+
+import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
+import static springfox.documentation.swagger.annotations.Annotations.*;
+import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
 public class SwaggerOperationModelsProvider implements OperationModelsProviderPlugin {
@@ -55,23 +56,24 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return SwaggerPluginSupport.pluginDoesApply(delimiter);
+    return pluginDoesApply(delimiter);
   }
 
   private void collectFromApiOperation(RequestMappingContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
-    ResolvedType modelType;
-    if (null != apiOperationAnnotation && Void.class != apiOperationAnnotation.response()) {
-      modelType = typeResolver.resolve(apiOperationAnnotation.response());
-      context.operationModelsBuilder().addReturn(modelType);
+    ResolvedType returnType = handlerReturnType(typeResolver, handlerMethod);
+    returnType = context.alternateFor(returnType);
+    Optional<ResolvedType> optional = findApiOperationAnnotation(handlerMethod.getMethod())
+        .transform(resolvedTypeFromOperation(typeResolver, returnType));
+    if (optional.isPresent() && optional.get() != returnType) {
+      context.operationModelsBuilder().addReturn(optional.get());
     }
   }
 
   private void collectApiResponses(RequestMappingContext context) {
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    Optional<ApiResponses> apiResponses = Annotations.findApiResponsesAnnotations(handlerMethod.getMethod());
+    Optional<ApiResponses> apiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
 
     log.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
     if (!apiResponses.isPresent()) {
