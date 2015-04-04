@@ -58,7 +58,7 @@ configure(publishable(subprojects)) { subproject ->
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
   jvmsrc {
-    packageName "springdox"
+    packageName "springfox"
   }
 
   jar {
