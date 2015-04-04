@@ -1,17 +1,18 @@
 ext {
-  swagger2Core = "1.5.2-M1"
+  swagger2Core = "1.5.3-M1"
   spring = "4.0.9.RELEASE"
-  groovy = "2.4.1"
+  groovy = "2.4.3"
   spock = "1.0-groovy-2.4"
   guava = "18.0"
   springHateoas = "0.10.0.RELEASE"
-  slf4j = "1.7.10"
+  slf4j = "1.7.12"
   mockito = "1.10.19"
   servlet = "3.0.1"
   classmate = "1.1.0"
-  jackson = '2.5.1'
+  jackson = '2.5.2'
   snakeyaml = '1.15'
   springPluginVersion = "1.2.0.RELEASE"
+  jsonPath = "2.0.0"
   libs = [
 
           test          : [
@@ -19,7 +20,7 @@ ext {
                   "cglib:cglib-nodep:3.1",
                   "org.objenesis:objenesis:2.1",
                   "org.mockito:mockito-all:${mockito}",
-                  "com.jayway.jsonpath:json-path:1.2.0",
+                  "com.jayway.jsonpath:json-path:${jsonPath}",
                   "org.slf4j:slf4j-simple:${slf4j}",
                   "org.yaml:snakeyaml:${snakeyaml}",
                   "org.spockframework:spock-spring:${spock}",

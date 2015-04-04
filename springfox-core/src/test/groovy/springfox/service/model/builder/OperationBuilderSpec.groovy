@@ -140,10 +140,10 @@ class OperationBuilderSpec extends Specification {
     and:
       def built = sut.build()
     then:
-      built.authorizations.containsKey("auth1")
-      built.authorizations.get("auth1") == mockAuth1.scopes
-      built.authorizations.containsKey("auth2")
-      built.authorizations.get("auth2") == mockAuth2.scopes
+      built.securityReferences.containsKey("auth1")
+      built.securityReferences.get("auth1") == mockAuth1.scopes
+      built.securityReferences.containsKey("auth2")
+      built.securityReferences.get("auth2") == mockAuth2.scopes
 
   }
 }

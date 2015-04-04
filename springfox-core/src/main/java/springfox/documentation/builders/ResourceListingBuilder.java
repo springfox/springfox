@@ -32,7 +32,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 public class ResourceListingBuilder {
   private String apiVersion;
   private List<ApiListingReference> apis = newArrayList();
-  private List<SecurityScheme> authorizations = newArrayList();
+  private List<SecurityScheme> securitySchemes = newArrayList();
   private ApiInfo info;
 
   /**
@@ -63,15 +63,15 @@ public class ResourceListingBuilder {
    * @param authorizations - security definitiosn
    * @return this
    */
-  public ResourceListingBuilder authorizations(List<? extends SecurityScheme> authorizations) {
-    this.authorizations.addAll(nullToEmptyList(authorizations));
+  public ResourceListingBuilder securitySchemes(List<? extends SecurityScheme> authorizations) {
+    this.securitySchemes.addAll(nullToEmptyList(authorizations));
     return this;
   }
 
   /**
    * Updates the api information
    *
-   * @param info - api info
+   * @param info - api info~
    * @return this
    */
   public ResourceListingBuilder info(ApiInfo info) {
@@ -80,6 +80,6 @@ public class ResourceListingBuilder {
   }
 
   public ResourceListing build() {
-    return new ResourceListing(apiVersion, apis, authorizations, info);
+    return new ResourceListing(apiVersion, apis, securitySchemes, info);
   }
 }

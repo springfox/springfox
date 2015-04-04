@@ -73,7 +73,7 @@ public class ApiDocumentationScanner {
     ResourceListing resourceListing = new ResourceListingBuilder()
             .apiVersion(context.getApiInfo().getVersion())
             .apis(apiListingReferences)
-            .authorizations(context.getSecuritySchemes())
+            .securitySchemes(context.getSecuritySchemes())
             .info(context.getApiInfo())
             .build();
     group.resourceListing(resourceListing);

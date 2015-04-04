@@ -39,7 +39,7 @@ class ResourceListingBuilderSpec extends Specification {
       builderMethod       | value                                 | property
       'apiVersion'        | "1.0"                                 | 'apiVersion'
       'apis'              | [Mock(ApiListingReference)]           | 'apis'
-      'authorizations'    | [Mock(SecurityScheme)]             | 'authorizations'
+      'securitySchemes'   | [Mock(SecurityScheme)]                | 'securitySchemes'
       'info'              | ApiInfo.DEFAULT                       | 'info'
   }
 
@@ -55,10 +55,10 @@ class ResourceListingBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod   | value                                 | property
+      builderMethod       | value                                 | property
       'apiVersion'        | "1.0"                                 | 'apiVersion'
       'apis'              | [Mock(ApiListingReference)]           | 'apis'
-      'authorizations'    | [Mock(SecurityScheme)]             | 'authorizations'
+      'securitySchemes'   | [Mock(SecurityScheme)]                | 'securitySchemes'
       'info'              | ApiInfo.DEFAULT                       | 'info'
   }
 }

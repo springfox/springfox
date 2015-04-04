@@ -39,7 +39,7 @@ public class SecurityMapper {
           .build();
 
   public Map<String, SecuritySchemeDefinition> toSecuritySchemeDefinitions(ResourceListing from) {
-    return transformValues(uniqueIndex(from.getAuthorizations(), schemeName()), toSecuritySchemeDefinition());
+    return transformValues(uniqueIndex(from.getSecuritySchemes(), schemeName()), toSecuritySchemeDefinition());
   }
 
   private Function<SecurityScheme, String> schemeName() {

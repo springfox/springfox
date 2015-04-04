@@ -46,7 +46,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
     then: "I should should have the correct defaults"
       ResourceListing resourceListing = scanned.resourceListing
       def apiListingReferenceList = resourceListing.getApis()
-      def authorizationTypes = resourceListing.getAuthorizations()
+      def authorizationTypes = resourceListing.getSecuritySchemes()
 
       scanned.groupName == "default"
       resourceListing.getApiVersion() == "1.0"
@@ -97,7 +97,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
       Documentation scanned = docScanner.scan(context())
     then:
       ResourceListing resourceListing = scanned.resourceListing
-      def authorizationTypes = resourceListing.getAuthorizations()
+      def authorizationTypes = resourceListing.getSecuritySchemes()
       def apiKeyAuthType = authorizationTypes[0]
       apiKeyAuthType instanceof ApiKey
       apiKeyAuthType.name == "my-key"

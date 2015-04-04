@@ -42,7 +42,7 @@ public class Operation {
   private final Set<String> consumes;
   private final Set<String> protocol;
   private final boolean isHidden;
-  private final Map<String, List<AuthorizationScope>> authorizations;
+  private final Map<String, List<AuthorizationScope>> securityReferences;
   private final List<Parameter> parameters;
   private final Set<ResponseMessage> responseMessages;
   private final String deprecated;
@@ -63,7 +63,7 @@ public class Operation {
     this.consumes = consumes;
     this.protocol = protocol;
     this.isHidden = isHidden;
-    this.authorizations = toAuthorizationsMap(securityReferences);
+    this.securityReferences = toAuthorizationsMap(securityReferences);
     this.parameters = parameters;
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
@@ -135,8 +135,8 @@ public class Operation {
     return protocol;
   }
 
-  public Map<String, List<AuthorizationScope>> getAuthorizations() {
-    return authorizations;
+  public Map<String, List<AuthorizationScope>> getSecurityReferences() {
+    return securityReferences;
   }
 
   public List<Parameter> getParameters() {

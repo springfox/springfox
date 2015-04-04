@@ -19,34 +19,34 @@
 
 package springfox.documentation.service;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static com.google.common.base.Optional.*;
+import static com.google.common.collect.Lists.*;
+
 public class ResourceListing {
   private final String apiVersion;
   private final List<ApiListingReference> apis;
-  private final LinkedHashMap<String, SecurityScheme> authorizations;
+  private final LinkedHashMap<String, SecurityScheme> securitySchemes;
   private final ApiInfo info;
 
   public ResourceListing(String apiVersion,
                          List<ApiListingReference> apis,
-                         List<SecurityScheme> authorizations,
+                         List<SecurityScheme> securitySchemes,
                          ApiInfo info) {
 
     this.apiVersion = apiVersion;
     this.apis = apis;
-    this.authorizations = initializeAuthTypes(authorizations);
+    this.securitySchemes = initializeSecuritySchemes(securitySchemes);
     this.info = info;
   }
 
-  private LinkedHashMap<String, SecurityScheme> initializeAuthTypes(List<SecurityScheme> securitySchemes) {
+  private LinkedHashMap<String, SecurityScheme> initializeSecuritySchemes(List<SecurityScheme> securitySchemes) {
     LinkedHashMap<String, SecurityScheme> mapped = new LinkedHashMap<String, SecurityScheme>();
-    List<SecurityScheme> emptyList = Lists.newArrayList();
-    for (SecurityScheme securityScheme : Optional.fromNullable(securitySchemes).or(emptyList)) {
+    List<SecurityScheme> emptyList = newArrayList();
+    for (SecurityScheme securityScheme : fromNullable(securitySchemes).or(emptyList)) {
       mapped.put(securityScheme.getType(), securityScheme);
     }
     return mapped;
@@ -60,8 +60,8 @@ public class ResourceListing {
     return apis;
   }
 
-  public List<SecurityScheme> getAuthorizations() {
-    return new ArrayList<SecurityScheme>(authorizations.values());
+  public List<SecurityScheme> getSecuritySchemes() {
+    return new ArrayList<SecurityScheme>(securitySchemes.values());
   }
 
   public ApiInfo getInfo() {

@@ -35,13 +35,13 @@ class DocumentationSpec extends Specification {
       List<SecurityScheme> authorizations = [new ApiKey("api-key", "test", "header",)]
       Documentation built = new DocumentationBuilder()
               .resourceListing(new ResourceListingBuilder()
-                .authorizations(authorizations)
+                .securitySchemes(authorizations)
                 .apis([Mock(ApiListingReference)])
                 .build())
               .apiListingsByResourceGroupName(newHashMap())
               .build()
     expect:
       built.apiListings.size() == 0
-      built.resourceListing.authorizations.size() == 1
+      built.resourceListing.securitySchemes.size() == 1
   }
 }

@@ -134,7 +134,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mappedDescription.path == builtDescription.path
       mappedDescription.operations.size() == builtDescription.operations.size()
       mappedOperation.nickname == builtOperation.nickname
-      mappedOperation.authorizations.size() == builtOperation.authorizations.size()
+      mappedOperation.authorizations.size() == builtOperation.securityReferences.size()
       mappedOperation.authorizations.containsKey("basic")
       mappedOperation.consumes.first() == builtOperation.consumes.first()
       mappedOperation.produces.first() == builtOperation.produces.first()
@@ -157,7 +157,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       def built = new ResourceListingBuilder()
                   .apis([new ApiListingReference("test", "test description", 1)])
                   .apiVersion("1.0")
-                  .authorizations(null)
+                  .securitySchemes(null)
                   .info(new ApiInfoBuilder()
                     .contact("test@ssmvc.com")
                     .description("test api")
@@ -176,7 +176,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mapped.apis.first().description == built.apis.first().description
       mapped.apis.first().position == built.apis.first().position
       mapped.apiVersion == built.apiVersion
-      mapped.authorizations == built.authorizations
+      mapped.authorizations == built.securitySchemes
       mapped.swaggerVersion == "1.2"
       mapped.info.contact == built.info.contact
       mapped.info.description == built.info.description
@@ -191,7 +191,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       def built = new ResourceListingBuilder()
               .apis([new ApiListingReference("test", "test description", 1)])
               .apiVersion("1.0")
-              .authorizations([])
+              .securitySchemes([])
               .info(new ApiInfoBuilder()
               .contact("test@ssmvc.com")
               .description("test api")
@@ -210,7 +210,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mapped.apis.first().description == built.apis.first().description
       mapped.apis.first().position == built.apis.first().position
       mapped.apiVersion == built.apiVersion
-      mapped.authorizations == built.authorizations
+      mapped.authorizations == built.securitySchemes
       mapped.swaggerVersion == "1.2"
       mapped.info.contact == built.info.contact
       mapped.info.description == built.info.description

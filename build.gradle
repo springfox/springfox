@@ -17,7 +17,7 @@ buildscript {
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0"
     classpath "com.github.adrianbk:gradle-travisci-trigger-plugin:1.0.0"
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
-    classpath "com.ofg:uptodate-gradle-plugin:1.1.0"
+    classpath "com.ofg:uptodate-gradle-plugin:1.5.0"
     classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1"
   }
 }

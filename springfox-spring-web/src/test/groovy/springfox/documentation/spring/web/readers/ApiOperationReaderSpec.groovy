@@ -73,7 +73,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
       apiOperation.getNotes() == handlerMethod.method.name
       apiOperation.getNickname() == handlerMethod.method.name
       apiOperation.getPosition() == 0
-      apiOperation.getAuthorizations().size() == 0
+      apiOperation.getSecurityReferences().size() == 0
 
       def secondApiOperation = operations[1]
       secondApiOperation.position == 1

@@ -44,8 +44,8 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
       def operation = operationContext.operationBuilder().build()
 
     then:
-      operation.authorizations.containsKey("oauth2")
-      AuthorizationScope authorizationScope = operation.authorizations.get("oauth2")[0]
+      operation.securityReferences.containsKey("oauth2")
+      AuthorizationScope authorizationScope = operation.securityReferences.get("oauth2")[0]
       authorizationScope.getDescription() == "scope description"
       authorizationScope.getScope() == "scope"
   }
@@ -63,7 +63,7 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
 
     when:
       sut.apply(operationContext)
-      def authorizations = operationContext.operationBuilder().build().authorizations
+      def authorizations = operationContext.operationBuilder().build().securityReferences
 
     then:
       def scopes = authorizations.get('oauth2')
@@ -84,7 +84,7 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
               context(), "/anyPath")
     when:
       sut.apply(operationContext)
-      def authorizations = operationContext.operationBuilder().build().authorizations
+      def authorizations = operationContext.operationBuilder().build().securityReferences
 
     then:
       def scopes = authorizations.get("oauth2")

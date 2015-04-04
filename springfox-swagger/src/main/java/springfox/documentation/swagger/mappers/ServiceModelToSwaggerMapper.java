@@ -65,8 +65,8 @@ public interface ServiceModelToSwaggerMapper {
   ModelPropertyDto toSwaggerModelPropertyDto(ModelProperty from);
 
   @Mappings({
-          @Mapping(target = "dataType", source = "responseModel",
-                  qualifiedBy = DataTypeMapper.OperationType.class)
+      @Mapping(target = "dataType", source = "responseModel", qualifiedBy = DataTypeMapper.OperationType.class),
+      @Mapping(target = "authorizations", source = "securityReferences")
   })
   Operation toSwaggerOperation(springfox.documentation.service.Operation from);
 
@@ -76,7 +76,8 @@ public interface ServiceModelToSwaggerMapper {
   Parameter toSwaggerParameter(springfox.documentation.service.Parameter from);
 
   @Mappings({
-          @Mapping(target = "swaggerVersion", constant = "1.2")
+          @Mapping(target = "swaggerVersion", constant = "1.2"),
+          @Mapping(target = "authorizations", source = "securitySchemes")
   })
   ResourceListing toSwaggerResourceListing(springfox.documentation.service.ResourceListing from);
 }
