@@ -23,14 +23,14 @@ import com.wordnik.swagger.models.auth.OAuth2Definition;
 import com.wordnik.swagger.models.auth.SecuritySchemeDefinition;
 import springfox.documentation.service.AuthorizationCodeGrant;
 import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.AuthorizationType;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.GrantType;
 import springfox.documentation.service.ImplicitGrant;
 import springfox.documentation.service.OAuth;
 
 class OAuth2AuthFactory implements SecuritySchemeFactory {
   @Override
-  public SecuritySchemeDefinition create(AuthorizationType input) {
+  public SecuritySchemeDefinition create(SecurityScheme input) {
     OAuth oAuth = (OAuth) input;
     OAuth2Definition definition = new OAuth2Definition();
     for (GrantType each : oAuth.getGrantTypes()) {

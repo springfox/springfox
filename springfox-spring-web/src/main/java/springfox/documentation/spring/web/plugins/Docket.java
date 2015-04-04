@@ -32,7 +32,7 @@ import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.AuthorizationType;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
@@ -67,7 +67,7 @@ public class Docket implements DocumentationPlugin {
   private ApiInfo apiInfo;
   private PathProvider pathProvider;
   private SecurityContext securityContext;
-  private List<? extends AuthorizationType> authorizationMethods;
+  private List<? extends SecurityScheme> securitySchemes;
   private Ordering<ApiListingReference> apiListingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private Ordering<Operation> operationOrdering;
@@ -92,7 +92,7 @@ public class Docket implements DocumentationPlugin {
    * Sets the api's meta information as included in the json ResourceListing response.
    *
    * @param apiInfo Indicates the api information
-   * @return this DocumentationConfigurer
+   * @return this Docket
    */
   public Docket apiInfo(ApiInfo apiInfo) {
     this.apiInfo = apiInfo;
@@ -100,15 +100,15 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
-   * Configures the global com.wordnik.swagger.model.AuthorizationType's applicable to all or some of the api
-   * operations. The configuration of which operations have associated AuthorizationTypes is configured with
-   * springfox.swagger.plugins.DocumentationConfigurer#authorizationContext
+   * Configures the global com.wordnik.swagger.model.SecurityScheme's applicable to all or some of the api
+   * operations. The configuration of which operations have associated SecuritySchemes is configured with
+   * springfox.swagger.plugins.Docket#securityContext
    *
-   * @param authorizationTypes a list of global AuthorizationType's
-   * @return this DocumentationConfigurer
+   * @param securitySchemes a list of security schemes
+   * @return this Docket
    */
-  public Docket authorizationTypes(List<? extends AuthorizationType> authorizationTypes) {
-    this.authorizationMethods = authorizationTypes;
+  public Docket securitySchemes(List<? extends SecurityScheme> securitySchemes) {
+    this.securitySchemes = securitySchemes;
     return this;
   }
 
@@ -116,7 +116,7 @@ public class Docket implements DocumentationPlugin {
    * Configures which api operations (via regex patterns) and HTTP methods to apply swagger authorization to.
    *
    * @param securityContext
-   * @return this DocumentationConfigurer
+   * @return this Docket
    */
   public Docket securityContext(SecurityContext securityContext) {
     this.securityContext = securityContext;
@@ -124,11 +124,11 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
-   * If more than one instance of DocumentationConfigurer exists, each one must have a unique groupName as
+   * If more than one instance of Docket exists, each one must have a unique groupName as
    * supplied by this method. Defaults to "default".
    *
    * @param groupName - the unique identifier of this swagger group/configuration
-   * @return this DocumentationConfigurer
+   * @return this Docket
    */
   public Docket groupName(String groupName) {
     this.groupName = groupName;
@@ -142,7 +142,7 @@ public class Docket implements DocumentationPlugin {
    * AbsoluteSwaggerPathProvider
    *
    * @param pathProvider
-   * @return this DocumentationConfigurer
+   * @return this Docket
    * @see springfox.documentation.spring.web.AbstractPathProvider
    */
   public Docket pathProvider(PathProvider pathProvider) {
@@ -158,7 +158,7 @@ public class Docket implements DocumentationPlugin {
    *
    * @param requestMethod    - http request method for which to apply the message
    * @param responseMessages - the message
-   * @return this DocumentationConfigurer
+   * @return this Docket
    * @see com.wordnik.swagger.annotations.ApiResponse
    * and
    * @see com.wordnik.swagger.annotations.ApiResponses
@@ -177,7 +177,7 @@ public class Docket implements DocumentationPlugin {
    * e.g. HttpServletRequest/HttpServletResponse which are already included in the pre-configured ignored types.
    *
    * @param classes the classes to ignore
-   * @return this DocumentationConfigurer
+   * @return this Docket
    * @see springfox.documentation.spi.service.contexts.Defaults#defaultIgnorableParameterTypes()
    */
   public Docket ignoredParameterTypes(Class... classes) {
@@ -204,7 +204,7 @@ public class Docket implements DocumentationPlugin {
    * Adds model substitution rules (alternateTypeRules)
    *
    * @param alternateTypeRules
-   * @return this DocumentationConfigurer
+   * @return this Docket
    * @see AlternateTypeRules#newRule(java.lang.reflect.Type,
    * java.lang.reflect.Type)
    */
@@ -244,7 +244,7 @@ public class Docket implements DocumentationPlugin {
    *
    * @param clazz class to substitute
    * @param with  the class which substitutes 'clazz'
-   * @return this DocumentationConfigurer
+   * @return this Docket
    */
   public Docket directModelSubstitute(final Class clazz, final Class with) {
     this.ruleBuilders.add(newSubstitutionFunction(clazz, with));
@@ -258,7 +258,7 @@ public class Docket implements DocumentationPlugin {
    * would substitute ResponseEntity &lt;MyModel&gt; with MyModel
    *
    * @param genericClasses - generic classes on which to apply generic model substitution.
-   * @return this DocumentationConfigurer
+   * @return this Docket
    */
   public Docket genericModelSubstitutes(Class... genericClasses) {
     for (Class clz : genericClasses) {
@@ -273,7 +273,7 @@ public class Docket implements DocumentationPlugin {
    * @param apply flag to determine if the default response messages are used
    *              true   - the default response messages are added to the global response messages
    *              false  - the default response messages are added to the global response messages
-   * @return this DocumentationConfigurer
+   * @return this Docket
    */
   public Docket useDefaultResponseMessages(boolean apply) {
     this.applyDefaultResponseMessages = apply;
@@ -286,7 +286,7 @@ public class Docket implements DocumentationPlugin {
    * The default sort is Lexicographically by the ApiListingReference's path
    *
    * @param apiListingReferenceOrdering
-   * @return this DocumentationConfigurer
+   * @return this Docket
    */
   public Docket apiListingReferenceOrdering(Ordering<ApiListingReference>
                                                     apiListingReferenceOrdering) {
@@ -299,7 +299,7 @@ public class Docket implements DocumentationPlugin {
    * The default sort is Lexicographically by the ApiDescription's path.
    *
    * @param apiDescriptionOrdering
-   * @return this DocumentationConfigurer
+   * @return this Docket
    * @see ApiListingScanner
    */
   public Docket apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
@@ -312,7 +312,7 @@ public class Docket implements DocumentationPlugin {
    * Typically used if defer initialization.
    *
    * @param externallyConfiguredFlag - true to turn it on, false to turn it off
-   * @return this DocumentationConfigurer
+   * @return this Docket
    */
   public Docket enable(boolean externallyConfiguredFlag) {
     this.enabled = externallyConfiguredFlag;
@@ -336,7 +336,7 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
-   * Builds the DocumentationConfigurer by merging/overlaying user specified values.
+   * Builds the Docket by merging/overlaying user specified values.
    * It is not necessary to call this method when defined as a spring bean.
    * NOTE: Calling this method more than once has no effect.
    *
@@ -355,8 +355,8 @@ public class Docket implements DocumentationPlugin {
             .ruleBuilders(ruleBuilders)
             .groupName(groupName)
             .pathProvider(pathProvider)
-            .authorizationContext(securityContext)
-            .authorizationTypes(authorizationMethods)
+            .securityContext(securityContext)
+            .securitySchemes(securitySchemes)
             .apiListingReferenceOrdering(apiListingReferenceOrdering)
             .apiDescriptionOrdering(apiDescriptionOrdering)
             .operationOrdering(operationOrdering)

@@ -149,8 +149,8 @@ to provide an expressive predicate based for api selection.
               .paths(paths()) // and by paths
               .build()
             .apiInfo(apiInfo())
-            .authorizationTypes(authorizationTypes())
-            .authorizationContext(authorizationContext());
+            .securitySchemes(securitySchemes())
+            .securityContext(securityContext());
   }
 
   //Here is an example where we select any api that matches one of these paths

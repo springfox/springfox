@@ -19,7 +19,7 @@
 
 package springfox.documentation.service;
 
-public class ApiKey extends AuthorizationType {
+public class ApiKey extends SecurityScheme {
   private final String keyname;
   private final String passAs;
 

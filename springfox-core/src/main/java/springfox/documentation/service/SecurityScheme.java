@@ -19,11 +19,11 @@
 
 package springfox.documentation.service;
 
-public abstract class AuthorizationType {
+public abstract class SecurityScheme {
   protected final String name;
   protected final String type;
 
-  protected AuthorizationType(String name, String type) {
+  protected SecurityScheme(String name, String type) {
     this.type = type;
     this.name = name;
   }

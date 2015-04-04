@@ -28,7 +28,7 @@ import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.AuthorizationType;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
@@ -52,7 +52,7 @@ public class DocumentationContext {
   private final ResourceGroupingStrategy resourceGroupingStrategy;
   private final PathProvider pathProvider;
   private final SecurityContext securityContext;
-  private final List<? extends AuthorizationType> authorizationTypes;
+  private final List<? extends SecurityScheme> securitySchemes;
   private final Ordering<ApiListingReference> listingReferenceOrdering;
   private final Ordering<ApiDescription> apiDescriptionOrdering;
   private final Ordering<Operation> operationOrdering;
@@ -70,7 +70,7 @@ public class DocumentationContext {
                               ResourceGroupingStrategy resourceGroupingStrategy,
                               PathProvider pathProvider,
                               SecurityContext securityContext,
-                              List<? extends AuthorizationType> authorizationTypes,
+                              List<? extends SecurityScheme> securitySchemes,
                               List<AlternateTypeRule> alternateTypeRules,
                               Ordering<ApiListingReference> listingReferenceOrdering,
                               Ordering<ApiDescription> apiDescriptionOrdering,
@@ -90,7 +90,7 @@ public class DocumentationContext {
     this.resourceGroupingStrategy = resourceGroupingStrategy;
     this.pathProvider = pathProvider;
     this.securityContext = securityContext;
-    this.authorizationTypes = authorizationTypes;
+    this.securitySchemes = securitySchemes;
     this.listingReferenceOrdering = listingReferenceOrdering;
     this.apiDescriptionOrdering = apiDescriptionOrdering;
     this.operationOrdering = operationOrdering;
@@ -141,8 +141,8 @@ public class DocumentationContext {
     return securityContext;
   }
 
-  public List<? extends AuthorizationType> getAuthorizationTypes() {
-    return authorizationTypes;
+  public List<? extends SecurityScheme> getSecuritySchemes() {
+    return securitySchemes;
   }
 
   public Ordering<ApiListingReference> getListingReferenceOrdering() {

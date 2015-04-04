@@ -23,11 +23,11 @@ import com.wordnik.swagger.models.auth.ApiKeyAuthDefinition;
 import com.wordnik.swagger.models.auth.In;
 import com.wordnik.swagger.models.auth.SecuritySchemeDefinition;
 import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationType;
+import springfox.documentation.service.SecurityScheme;
 
 class ApiKeyAuthFactory implements SecuritySchemeFactory {
   @Override
-  public SecuritySchemeDefinition create(AuthorizationType input) {
+  public SecuritySchemeDefinition create(SecurityScheme input) {
     ApiKey apiKey = (ApiKey) input;
     ApiKeyAuthDefinition definition = new ApiKeyAuthDefinition();
     definition.name(apiKey.getName()).in(In.forValue(apiKey.getPassAs()));

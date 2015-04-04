@@ -19,7 +19,7 @@
 
 package springfox.documentation.service;
 
-public class BasicAuth extends AuthorizationType {
+public class BasicAuth extends SecurityScheme {
   public BasicAuth(String name) {
     super(name, "basicAuth");
   }

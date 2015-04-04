@@ -22,7 +22,7 @@ package springfox.documentation.builders
 import spock.lang.Specification
 import springfox.documentation.service.ApiInfo
 import springfox.documentation.service.ApiListingReference
-import springfox.documentation.service.AuthorizationType
+import springfox.documentation.service.SecurityScheme
 
 class ResourceListingBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
@@ -39,7 +39,7 @@ class ResourceListingBuilderSpec extends Specification {
       builderMethod       | value                                 | property
       'apiVersion'        | "1.0"                                 | 'apiVersion'
       'apis'              | [Mock(ApiListingReference)]           | 'apis'
-      'authorizations'    | [Mock(AuthorizationType)]             | 'authorizations'
+      'authorizations'    | [Mock(SecurityScheme)]             | 'authorizations'
       'info'              | ApiInfo.DEFAULT                       | 'info'
   }
 
@@ -58,7 +58,7 @@ class ResourceListingBuilderSpec extends Specification {
       builderMethod   | value                                 | property
       'apiVersion'        | "1.0"                                 | 'apiVersion'
       'apis'              | [Mock(ApiListingReference)]           | 'apis'
-      'authorizations'    | [Mock(AuthorizationType)]             | 'authorizations'
+      'authorizations'    | [Mock(SecurityScheme)]             | 'authorizations'
       'info'              | ApiInfo.DEFAULT                       | 'info'
   }
 }

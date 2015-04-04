@@ -28,7 +28,7 @@ import org.springframework.web.servlet.View
 import spock.lang.Shared
 import spock.lang.Unroll
 import springfox.documentation.builders.DocumentationBuilder
-import springfox.documentation.service.AuthorizationType
+import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.Documentation
 import springfox.documentation.spring.web.DocumentationCache
 import springfox.documentation.spring.web.mixins.ApiListingSupport
@@ -116,7 +116,7 @@ class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
 
   def "should respond with auth included"() {
     given:
-      def authTypes = new ArrayList<AuthorizationType>()
+      def authTypes = new ArrayList<SecurityScheme>()
       authTypes.add(authorizationTypes());
       Documentation group = new DocumentationBuilder()
               .name("groupName")

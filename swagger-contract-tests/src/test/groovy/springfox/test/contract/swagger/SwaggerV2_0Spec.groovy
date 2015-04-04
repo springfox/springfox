@@ -38,7 +38,7 @@ import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.documentation.service.AuthorizationType
+import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
@@ -104,11 +104,11 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
   @Import(AuthorizationSupport)
   static class Config {
     @Bean
-    public Docket petstore(List<AuthorizationType> authorizationTypes) {
+    public Docket petstore(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
               .groupName("petstore")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authorizationTypes)
+              .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
                 .paths(regex("/api/.*"))
@@ -116,11 +116,11 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
     }
 
     @Bean
-    public Docket business(List<AuthorizationType> authorizationTypes) {
+    public Docket business(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
               .groupName("businessService")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authorizationTypes)
+              .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
                 .paths(regex("/business.*"))
@@ -128,11 +128,11 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
     }
 
     @Bean
-    public Docket concrete(List<AuthorizationType> authorizationTypes) {
+    public Docket concrete(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
               .groupName("concrete")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authorizationTypes)
+              .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
                 .paths(regex("/foo/.*"))
@@ -140,11 +140,11 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
     }
 
     @Bean
-    public Docket noRequestMapping(List<AuthorizationType> authorizationTypes) {
+    public Docket noRequestMapping(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
               .groupName("noRequestMapping")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authorizationTypes)
+              .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
                 .paths(regex("/no-request-mapping/.*"))
@@ -152,11 +152,11 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
     }
 
     @Bean
-    public Docket fancyPetstore(List<AuthorizationType> authorizationTypes) {
+    public Docket fancyPetstore(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
               .groupName("fancyPetstore")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authorizationTypes)
+              .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
                 .paths(regex("/fancypets/.*"))
@@ -164,11 +164,11 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
     }
 
     @Bean
-    public Docket featureService(List<AuthorizationType> authorizationTypes) {
+    public Docket featureService(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
               .groupName("featureService")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authorizationTypes)
+              .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
                 .paths(regex("/features/.*"))
@@ -176,11 +176,11 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
     }
 
     @Bean
-    public Docket inheritedService(List<AuthorizationType> authorizationTypes) {
+    public Docket inheritedService(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
               .groupName("inheritedService")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authorizationTypes)
+              .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
                 .paths(regex("/child/.*"))
@@ -188,11 +188,11 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
     }
 
     @Bean
-    public Docket pet(List<AuthorizationType> authorizationTypes) {
+    public Docket pet(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
               .groupName("petService")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authorizationTypes)
+              .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
                 .paths(regex("/pets/.*"))
@@ -200,11 +200,11 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
     }
 
     @Bean
-    public Docket petGrooming(List<AuthorizationType> authorizationTypes) {
+    public Docket petGrooming(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
               .groupName("petGroomingService")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authorizationTypes)
+              .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
                 .paths(regex("/petgrooming/.*"))
@@ -212,11 +212,11 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
     }
 
     @Bean
-    public Docket root(List<AuthorizationType> authorizationTypes) {
+    public Docket root(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
               .groupName("root")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authorizationTypes)
+              .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
                 .paths(regex("/.*"))
@@ -224,11 +224,11 @@ class SwaggerV2_0Spec extends Specification implements springfox.test.contract.s
     }
 
     @Bean
-    public Docket featureServiceForCodeGen(List<AuthorizationType> authorizationTypes) {
+    public Docket featureServiceForCodeGen(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
               .groupName("featureService-codeGen")
               .useDefaultResponseMessages(false)
-              .authorizationTypes(authorizationTypes)
+              .securitySchemes(authorizationTypes)
               .forCodeGeneration(true)
               .produces(['application/xml', 'application/json'] as Set)
               .select()

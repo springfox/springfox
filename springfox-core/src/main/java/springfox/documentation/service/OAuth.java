@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class OAuth extends AuthorizationType {
+public class OAuth extends SecurityScheme {
 
   private final List<AuthorizationScope> scopes;
   private final LinkedHashMap<String, GrantType> grantTypes;

@@ -24,15 +24,15 @@ import springfox.documentation.builders.DocumentationBuilder
 import springfox.documentation.builders.ResourceListingBuilder
 import springfox.documentation.service.ApiKey
 import springfox.documentation.service.ApiListingReference
-import springfox.documentation.service.AuthorizationType
+import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.Documentation
 
 import static com.google.common.collect.Maps.*
 
-class DocumenationSpec extends Specification {
+class DocumentationSpec extends Specification {
   def "Groups are built correctly" () {
     given:
-      List<AuthorizationType> authorizations = [new ApiKey("api-key", "test", "header",)]
+      List<SecurityScheme> authorizations = [new ApiKey("api-key", "test", "header",)]
       Documentation built = new DocumentationBuilder()
               .resourceListing(new ResourceListingBuilder()
                 .authorizations(authorizations)

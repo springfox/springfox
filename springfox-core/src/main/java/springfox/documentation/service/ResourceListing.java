@@ -29,12 +29,12 @@ import java.util.List;
 public class ResourceListing {
   private final String apiVersion;
   private final List<ApiListingReference> apis;
-  private final LinkedHashMap<String, AuthorizationType> authorizations;
+  private final LinkedHashMap<String, SecurityScheme> authorizations;
   private final ApiInfo info;
 
   public ResourceListing(String apiVersion,
                          List<ApiListingReference> apis,
-                         List<AuthorizationType> authorizations,
+                         List<SecurityScheme> authorizations,
                          ApiInfo info) {
 
     this.apiVersion = apiVersion;
@@ -43,11 +43,11 @@ public class ResourceListing {
     this.info = info;
   }
 
-  private LinkedHashMap<String, AuthorizationType> initializeAuthTypes(List<AuthorizationType> authorizationTypes) {
-    LinkedHashMap<String, AuthorizationType> mapped = new LinkedHashMap<String, AuthorizationType>();
-    List<AuthorizationType> emptyList = Lists.newArrayList();
-    for (AuthorizationType authorizationType : Optional.fromNullable(authorizationTypes).or(emptyList)) {
-      mapped.put(authorizationType.getType(), authorizationType);
+  private LinkedHashMap<String, SecurityScheme> initializeAuthTypes(List<SecurityScheme> securitySchemes) {
+    LinkedHashMap<String, SecurityScheme> mapped = new LinkedHashMap<String, SecurityScheme>();
+    List<SecurityScheme> emptyList = Lists.newArrayList();
+    for (SecurityScheme securityScheme : Optional.fromNullable(securitySchemes).or(emptyList)) {
+      mapped.put(securityScheme.getType(), securityScheme);
     }
     return mapped;
   }
@@ -60,8 +60,8 @@ public class ResourceListing {
     return apis;
   }
 
-  public List<AuthorizationType> getAuthorizations() {
-    return new ArrayList<AuthorizationType>(authorizations.values());
+  public List<SecurityScheme> getAuthorizations() {
+    return new ArrayList<SecurityScheme>(authorizations.values());
   }
 
   public ApiInfo getInfo() {

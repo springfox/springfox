@@ -24,6 +24,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.swagger.dto.ApiKey;
 import springfox.documentation.swagger.dto.Authorization;
 import springfox.documentation.swagger.dto.AuthorizationCodeGrant;
@@ -78,7 +79,7 @@ public abstract class AuthorizationTypesMapper {
 
 
   public AuthorizationType toSwaggerAuthorizationType(
-          springfox.documentation.service.AuthorizationType from) {
+          SecurityScheme from) {
 
     if (from instanceof springfox.documentation.service.ApiKey) {
       return toSwaggerApiKey((springfox.documentation.service.ApiKey) from);
@@ -98,6 +99,6 @@ public abstract class AuthorizationTypesMapper {
           .documentation.service.GrantType> from);
 
   public abstract List<AuthorizationType> toSwaggerAuthorizationTypes(
-          List<springfox.documentation.service.AuthorizationType> from);
+          List<SecurityScheme> from);
 
 }

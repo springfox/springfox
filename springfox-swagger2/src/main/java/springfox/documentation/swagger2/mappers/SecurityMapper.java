@@ -23,7 +23,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.wordnik.swagger.models.auth.SecuritySchemeDefinition;
 import org.mapstruct.Mapper;
-import springfox.documentation.service.AuthorizationType;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.ResourceListing;
 
 import java.util.Map;
@@ -42,19 +42,19 @@ public class SecurityMapper {
     return transformValues(uniqueIndex(from.getAuthorizations(), schemeName()), toSecuritySchemeDefinition());
   }
 
-  private Function<AuthorizationType, String> schemeName() {
-    return new Function<AuthorizationType, String>() {
+  private Function<SecurityScheme, String> schemeName() {
+    return new Function<SecurityScheme, String>() {
       @Override
-      public String apply(AuthorizationType input) {
+      public String apply(SecurityScheme input) {
         return input.getName();
       }
     };
   }
 
-  private Function<AuthorizationType, SecuritySchemeDefinition> toSecuritySchemeDefinition() {
-    return new Function<AuthorizationType, SecuritySchemeDefinition>() {
+  private Function<SecurityScheme, SecuritySchemeDefinition> toSecuritySchemeDefinition() {
+    return new Function<SecurityScheme, SecuritySchemeDefinition>() {
       @Override
-      public SecuritySchemeDefinition apply(AuthorizationType input) {
+      public SecuritySchemeDefinition apply(SecurityScheme input) {
         return factories.get(input.getType()).create(input);
       }
     };

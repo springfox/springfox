@@ -26,7 +26,7 @@ import org.springframework.http.ResponseEntity
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.ApiInfo
-import springfox.documentation.service.AuthorizationType
+import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.ResponseMessage
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
@@ -47,7 +47,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
       def pluginContext = plugin.configure(contextBuilder)
     then:
       pluginContext.groupName == 'default'
-      pluginContext.authorizationTypes == null
+      pluginContext.securitySchemes == null
       pluginContext.apiInfo.getTitle() == "Api Documentation"
       pluginContext.apiInfo.getDescription() == "Api Documentation"
       pluginContext.apiInfo.getTermsOfServiceUrl() == 'urn:tos'
@@ -191,7 +191,7 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
     where:
       builderMethod          | object                                         | property
       'pathProvider'         | new RelativePathProvider(Mock(ServletContext)) | 'pathProvider'
-      'authorizationTypes'   | new ArrayList<AuthorizationType>()             | 'authorizationTypes'
+      'securitySchemes'   | new ArrayList<SecurityScheme>()             | 'securitySchemes'
       'securityContext'       | validContext()                                 | 'securityContext'
       'groupName'            | 'someGroup'                                    | 'groupName'
       'apiInfo'              | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'

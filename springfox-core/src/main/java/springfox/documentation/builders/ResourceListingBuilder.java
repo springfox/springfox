@@ -21,7 +21,7 @@ package springfox.documentation.builders;
 
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.AuthorizationType;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.ResourceListing;
 
 import java.util.List;
@@ -32,7 +32,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 public class ResourceListingBuilder {
   private String apiVersion;
   private List<ApiListingReference> apis = newArrayList();
-  private List<AuthorizationType> authorizations = newArrayList();
+  private List<SecurityScheme> authorizations = newArrayList();
   private ApiInfo info;
 
   /**
@@ -63,7 +63,7 @@ public class ResourceListingBuilder {
    * @param authorizations - security definitiosn
    * @return this
    */
-  public ResourceListingBuilder authorizations(List<? extends AuthorizationType> authorizations) {
+  public ResourceListingBuilder authorizations(List<? extends SecurityScheme> authorizations) {
     this.authorizations.addAll(nullToEmptyList(authorizations));
     return this;
   }

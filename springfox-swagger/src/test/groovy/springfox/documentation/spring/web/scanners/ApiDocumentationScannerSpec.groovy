@@ -90,7 +90,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
               .select()
                 .paths(regex(".*"))
                 .build()
-              .authorizationTypes([apiKey])
+              .securitySchemes([apiKey])
               .configure(contextBuilder)
       listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     and:

@@ -25,7 +25,7 @@ import springfox.documentation.builders.ImplicitGrantBuilder
 import springfox.documentation.builders.OAuthBuilder
 import springfox.documentation.service.ApiKey
 import springfox.documentation.service.AuthorizationScope
-import springfox.documentation.service.AuthorizationType
+import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.GrantType
 import springfox.documentation.service.LoginEndpoint
 
@@ -34,7 +34,7 @@ import static com.google.common.collect.Lists.*
 @Configuration
 public class AuthorizationSupport {
   @Bean
-  AuthorizationType oauth() {
+  SecurityScheme oauth() {
     new OAuthBuilder()
             .name("petstore_auth")
             .grantTypes(grantTypes())
@@ -43,7 +43,7 @@ public class AuthorizationSupport {
   }
 
   @Bean
-  AuthorizationType apiKey() {
+  SecurityScheme apiKey() {
     new ApiKey("api_key", "api_key", "header")
   }
 

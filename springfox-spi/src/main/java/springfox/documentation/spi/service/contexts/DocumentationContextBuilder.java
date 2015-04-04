@@ -25,19 +25,18 @@ import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springfox.documentation.PathProvider;
-import springfox.documentation.builders.BuilderDefaults;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.SecurityReference;
-import springfox.documentation.service.AuthorizationType;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
-import springfox.documentation.builders.PathSelectors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +48,7 @@ import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationContextBuilder {
 
@@ -59,7 +59,7 @@ public class DocumentationContextBuilder {
   private ResourceGroupingStrategy resourceGroupingStrategy;
   private PathProvider pathProvider;
   private SecurityContext securityContext;
-  private List<? extends AuthorizationType> authorizationTypes;
+  private List<? extends SecurityScheme> securitySchemes;
   private Ordering<ApiListingReference> listingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private DocumentationType documentationType;
@@ -86,12 +86,12 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder apiInfo(ApiInfo apiInfo) {
-    this.apiInfo = BuilderDefaults.defaultIfAbsent(apiInfo, this.apiInfo);
+    this.apiInfo = defaultIfAbsent(apiInfo, this.apiInfo);
     return this;
   }
 
   public DocumentationContextBuilder groupName(String groupName) {
-    this.groupName = BuilderDefaults.defaultIfAbsent(groupName, this.groupName);
+    this.groupName = defaultIfAbsent(groupName, this.groupName);
     return this;
   }
 
@@ -112,30 +112,29 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder pathProvider(PathProvider pathProvider) {
-    this.pathProvider = BuilderDefaults.defaultIfAbsent(pathProvider, this.pathProvider);
+    this.pathProvider = defaultIfAbsent(pathProvider, this.pathProvider);
     return this;
   }
 
-  public DocumentationContextBuilder authorizationContext(SecurityContext securityContext) {
-    this.securityContext = BuilderDefaults.defaultIfAbsent(securityContext, this.securityContext);
+  public DocumentationContextBuilder securityContext(SecurityContext securityContext) {
+    this.securityContext = defaultIfAbsent(securityContext, this.securityContext);
     return this;
   }
 
-  public DocumentationContextBuilder authorizationTypes(List<? extends AuthorizationType> authorizationTypes) {
-    this.authorizationTypes = authorizationTypes;
+  public DocumentationContextBuilder securitySchemes(List<? extends SecurityScheme> securitySchemes) {
+    this.securitySchemes = securitySchemes;
     return this;
   }
 
   public DocumentationContextBuilder apiListingReferenceOrdering(
           Ordering<ApiListingReference> listingReferenceOrdering) {
 
-    this.listingReferenceOrdering = BuilderDefaults.defaultIfAbsent(listingReferenceOrdering, this
-            .listingReferenceOrdering);
+    this.listingReferenceOrdering = defaultIfAbsent(listingReferenceOrdering, this.listingReferenceOrdering);
     return this;
   }
 
   public DocumentationContextBuilder apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
-    this.apiDescriptionOrdering = BuilderDefaults.defaultIfAbsent(apiDescriptionOrdering, this.apiDescriptionOrdering);
+    this.apiDescriptionOrdering = defaultIfAbsent(apiDescriptionOrdering, this.apiDescriptionOrdering);
     return this;
   }
 
@@ -166,7 +165,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder operationOrdering(Ordering<Operation> operationOrdering) {
-    this.operationOrdering = BuilderDefaults.defaultIfAbsent(operationOrdering, this.operationOrdering);
+    this.operationOrdering = defaultIfAbsent(operationOrdering, this.operationOrdering);
     return this;
   }
 
@@ -215,7 +214,7 @@ public class DocumentationContextBuilder {
     return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName,
             apiSelector, ignorableParameterTypes, responseMessages,
             resourceGroupingStrategy, pathProvider,
-        securityContext, authorizationTypes, rules,
+        securityContext, securitySchemes, rules,
             listingReferenceOrdering, apiDescriptionOrdering,
             operationOrdering, produces, consumes, protocols, genericsNamingStrategy);
   }

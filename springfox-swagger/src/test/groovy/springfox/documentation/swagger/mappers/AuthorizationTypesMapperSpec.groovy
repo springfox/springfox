@@ -33,7 +33,7 @@ import springfox.documentation.builders.TokenEndpointBuilder
 import springfox.documentation.builders.TokenRequestEndpointBuilder
 import springfox.documentation.service.ApiKey
 import springfox.documentation.service.AuthorizationScope
-import springfox.documentation.service.AuthorizationType
+import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.swagger.dto.Authorization
 import springfox.documentation.swagger.dto.AuthorizationCodeGrant
@@ -154,7 +154,7 @@ class AuthorizationTypesMapperSpec extends Specification {
 
   def "Polymorphic authorization types are handled"() {
     given:
-      List<AuthorizationType> listAuthType =
+      List<SecurityScheme> listAuthType =
               newArrayList(createOAuth(), new BasicAuth("basic"), new ApiKey("api-key", "test", "header",))
 
     when:
@@ -187,7 +187,7 @@ class AuthorizationTypesMapperSpec extends Specification {
     given:
       AuthorizationTypesMapper mapper = authMapper()
     when:
-      mapper.toSwaggerAuthorizationType(new AuthorizationType("auth",
+      mapper.toSwaggerAuthorizationType(new SecurityScheme("auth",
               "unknown") {
         @Override
         String getName() {

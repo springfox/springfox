@@ -26,7 +26,7 @@ import springfox.documentation.service.ImplicitGrant
 import springfox.documentation.service.LoginEndpoint
 import springfox.documentation.service.OAuth
 import springfox.documentation.service.AuthorizationScope
-import springfox.documentation.service.AuthorizationType
+import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.TokenEndpoint
 import springfox.documentation.service.TokenRequestEndpoint
 
@@ -52,7 +52,7 @@ class AuthSupport {
 //  }
 
   def authorizationTypes() {
-    def authorizationTypes = new ArrayList<AuthorizationType>()
+    def authorizationTypes = new ArrayList<SecurityScheme>()
 
     List<AuthorizationScope> authorizationScopeList = newArrayList();
     authorizationScopeList.add(new AuthorizationScope("global", "access all"));
