@@ -252,8 +252,8 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
-   * Substitutes each generic class with it's direct parameterized type.
-   * e.g.
+   * Substitutes each generic class with it's direct parameterized type. Use this method to
+   * only for types with a single parameterized type. e.g. <code>List&lt;T&gt; or ResponseEntity&lt;T&gt;</code>
    * <code>.genericModelSubstitutes(ResponseEntity.class)</code>
    * would substitute ResponseEntity &lt;MyModel&gt; with MyModel
    *
