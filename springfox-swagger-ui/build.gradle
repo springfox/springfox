@@ -38,7 +38,7 @@ ext {
 
 dependencies {
   compile project(':springfox-spring-web')
-  compile 'org.webjars:jquery:2.1.3'
+  testCompile libs.test
 }
 
 

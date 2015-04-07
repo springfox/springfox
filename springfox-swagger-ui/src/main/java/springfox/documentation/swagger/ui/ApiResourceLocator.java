@@ -42,6 +42,7 @@ public class ApiResourceLocator {
       SwaggerApi swaggerApi = new SwaggerApi();
       swaggerApi.setUri(documentation.getBasePath());
       swaggerApi.setTitle(documentation.getGroupName());
+      swaggerApis.add(swaggerApi);
     }
     return swaggerApis;
   }
