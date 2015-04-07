@@ -59,6 +59,7 @@ public class Swagger2Controller {
       return new ResponseEntity<Swagger>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
+    //TODO - this will be problematic when behind a proxy or w
     swagger.host(String.format("%s:%s", request.getServerName(), request.getServerPort()));
     return new ResponseEntity<Swagger>(swagger, HttpStatus.OK);
   }

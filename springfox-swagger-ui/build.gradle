@@ -37,7 +37,8 @@ ext {
 }
 
 dependencies {
-  compile "org.webjars:jquery:2.1.1"
+  compile project(':springfox-spring-web')
+  compile 'org.webjars:jquery:2.1.3'
 }
 
 
@@ -61,16 +62,9 @@ task unzip(type: Copy) {
  * Creates the jsp from index.html
  */
 task sdoc(type: Copy) {
-  from("${buildDir}/${swaggerUiExplodedDir}/index.html")
+  from("${projectDir}/src/jsps/sdoc.jsp")
+  from("${projectDir}/src/jsps/swaggerResources.jsp")
   into("${buildDir}/${swaggerUiExplodedDir}")
-
-  filter { String line ->
-    line.replaceAll("\"http://petstore.swagger.io/v2/swagger.json\"", replacePath)
-            .replaceAll('/\\*', '')
-            .replaceAll('\\*/', '')
-  }
-
-  rename('index.html', 'sdoc.jsp')
 }
 
 task removeHtmlIndex(type: Delete) {
@@ -80,7 +74,7 @@ task removeHtmlIndex(type: Delete) {
 
 jar {
   from("${buildDir}/${swaggerUiExplodedDir}") {
-    into "META-INF/resources"
+    into "META-INF/resources/webjars/${project.name}/${project.version}"
 
     manifest {
       attributes(

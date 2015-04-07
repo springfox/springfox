@@ -16,28 +16,25 @@
  *
  *
  */
+package springfox.documentation.swagger.ui;
 
-package springfox.documentation.spring.web;
+public class SwaggerApi {
+  private String uri;
+  private String title;
 
-import springfox.documentation.service.Documentation;
-
-import java.util.Collection;
-import java.util.Map;
-
-import static com.google.common.collect.Maps.*;
-
-public class DocumentationCache {
-  private Map<String, Documentation> documentationLookup = newLinkedHashMap();
-
-  public void addDocumentation(Documentation documentation) {
-    documentationLookup.put(documentation.getGroupName(), documentation);
+  public String getUri() {
+    return uri;
   }
 
-  public Documentation documentationByGroup(String groupName) {
-    return documentationLookup.get(groupName);
+  public void setUri(String uri) {
+    this.uri = uri;
   }
 
-  public Collection<Documentation> all() {
-    return documentationLookup.values();
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 }
