@@ -139,7 +139,7 @@ public class ParameterBuilder {
   }
 
   /**
-   * Represents the..... hmmm! Seems like we need to figure out which property wins. type vs. modelRef FIGHT! TODO!
+   * Represents the convenience method to infer the model reference
    * Consolidate or figure out whats can be rolled into the other.
    *
    * @param modelRef
