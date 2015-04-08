@@ -83,7 +83,7 @@ public class ApiListingScanner {
       Map<String, Model> models = new LinkedHashMap<String, Model>();
       SecurityContext securityContext = documentationContext.getSecurityContext();
       for (RequestMappingContext each : entry.getValue()) {
-        models.putAll(apiModelReader.read(each));
+        models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 

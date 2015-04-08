@@ -56,11 +56,11 @@ public class ApiModelReader  {
     this.pluginsManager = pluginsManager;
   }
 
-  public Map<String, Model> read(RequestMappingContext outerContext) {
+  public Map<String, Model> read(RequestMappingContext context) {
 
-    Set<Class> ignorableTypes = newHashSet(outerContext.getDocumentationContext().getIgnorableParameterTypes());
-    Set<ModelContext> modelContexts = pluginsManager.modelContexts(outerContext);
-    Map<String, Model> modelMap = newHashMap();
+    Set<Class> ignorableTypes = newHashSet(context.getDocumentationContext().getIgnorableParameterTypes());
+    Set<ModelContext> modelContexts = pluginsManager.modelContexts(context);
+    Map<String, Model> modelMap = newHashMap(context.getModelMap());
     for (ModelContext each : modelContexts) {
       markIgnorablesAsHasSeen(typeResolver, ignorableTypes, each);
       Optional<Model> pModel = modelProvider.modelFor(each);
