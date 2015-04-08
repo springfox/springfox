@@ -87,6 +87,13 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
   from javadoc.destinationDir
 }
 
+
+if (JavaVersion.current().isJava8Compatible()) {
+  tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+  }
+}
+
 //task preRelease << {
 //  //May not be required
 //  def url = new URL("http://oss.jfrog.org/simple/oss-release-local/com/mangofactory/swagger-springmvc/${project.version}")
