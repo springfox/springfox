@@ -19,10 +19,20 @@
 
 package springfox.petstore.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Category {
   private long id;
   private String name;
 
+  @JsonCreator
+  public Category(@JsonProperty("id") long id, @JsonProperty("name") String name) {
+    this.id = id;
+    this.name = name;
+  }
+
+  @JsonProperty
   public long getId() {
     return id;
   }
@@ -31,6 +41,7 @@ public class Category {
     this.id = id;
   }
 
+  @JsonProperty
   public String getName() {
     return name;
   }

@@ -29,6 +29,7 @@ import com.wordnik.swagger.annotations.AuthorizationScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import springfox.petstore.Responses;
@@ -83,7 +84,7 @@ public class PetController {
           }))
   @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
   public ResponseEntity<String> addPet(
-          @ApiParam(value = "Pet object that needs to be added to the store", required = true) Pet pet) {
+          @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
     petData.add(pet);
     return Responses.ok("SUCCESS");
   }
@@ -98,7 +99,7 @@ public class PetController {
           @ApiResponse(code = 404, message = "Pet not found"),
           @ApiResponse(code = 405, message = "Validation exception")})
   public ResponseEntity<String> updatePet(
-          @ApiParam(value = "Pet object that needs to be added to the store", required = true) Pet pet) {
+          @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
     petData.add(pet);
     return Responses.ok("SUCCESS");
   }
