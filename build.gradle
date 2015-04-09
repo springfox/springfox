@@ -37,8 +37,9 @@ SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(proje
 version = currentVersion
 
 configure(publishable(subprojects)) { subproject ->
-  apply plugin: 'groovy'
   apply plugin: "com.ofg.uptodate"
+  //Not strictly groovy projects but useful for the IDE to recognise groovy test sources
+  apply plugin: 'groovy' //gradle groovy plugin extends the java plugin
 
   ext {
     jdkVersion = 1.6

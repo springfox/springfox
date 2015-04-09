@@ -1,6 +1,3 @@
-apply plugin: 'java'
-apply plugin: 'groovy'
-
 configurations {
   testArtifacts.extendsFrom testRuntime
 }

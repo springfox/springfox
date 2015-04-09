@@ -1,7 +1,3 @@
-//TODO AK - these can be removed in all projects the top level build file already applies the lang plugins
-apply plugin: 'java'
-apply plugin: 'groovy'
-
 configurations {
   testArtifacts.extendsFrom testRuntime
 }

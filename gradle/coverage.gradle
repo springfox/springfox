@@ -30,6 +30,10 @@ jacocoTestReport {
     def results = parser.parse(report)
 
     def percentage = {
+      if (null == it) {
+        //if it does not exist assume 100% 
+        return 100
+      }
       def covered = it.'@covered' as Double
       def missed = it.'@missed' as Double
       ((covered / (covered + missed)) * 100).round(2)
