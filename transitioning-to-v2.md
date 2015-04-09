@@ -166,8 +166,8 @@ to provide an expressive predicate based for api selection.
 
 ```
 
-For a list of handy predicates Look at [RequestHandlerSelectors](https://github.com/springfox/springfox/blob/refactor/538/spike-to-seperate-models-and-dtos/springfox-core/src/main/java/springfox/documentation/builders/RequestHandlerSelectors.java)
-and [PathSelectors](https://github.com/springfox/springfox/blob/refactor/538/spike-to-seperate-models-and-dtos/springfox-core/src/main/java/springfox/documentation/builders/PathSelectors.java).
+For a list of handy predicates Look at [RequestHandlerSelectors](https://github.com/springfox/springfox/blob/master/springfox-core/src/main/java/springfox/documentation/builders/RequestHandlerSelectors.java)
+and [PathSelectors](https://github.com/springfox/springfox/blob/master/springfox-core/src/main/java/springfox/documentation/builders/PathSelectors.java).
 
 ### Configuring the ObjectMapper 
 A simple way to configure the object mapper is to listen for the ```ObjectMapperConfigured``` event. Regardless of 
@@ -228,6 +228,6 @@ The library provides a variety of extensibility hooks to enrich/ augment the sch
 ####TODO
 
 ### Example application
-For an example for porting a 1.0.2 application to a 2.0.x application (in progress) take a look [at this branch](https://github.com/adrianbk/swagger-springmvc-demo/tree/feature/2.0-showcase) in the demo application.
+For an example for porting a 1.0.2 application to a 2.0.x application (in progress) take a look [at this branch](https://github.com/adrianbk/swagger-springmvc-demo/tree/feature/2.0-showcase) or [the spring boot example](https://github.com/springfox/springfox-demos)  in the demo application.
 
 
