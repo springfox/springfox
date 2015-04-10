@@ -36,9 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.Annotations;
-import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
@@ -53,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
 public class FieldModelPropertyProvider implements ModelPropertiesProvider {
@@ -65,10 +64,10 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
 
   @Autowired
   public FieldModelPropertyProvider(
-          FieldProvider fieldProvider,
-          BeanPropertyNamingStrategy namingStrategy,
-          SchemaPluginsManager schemaPluginsManager,
-          TypeNameExtractor typeNameExtractor) {
+      FieldProvider fieldProvider,
+      BeanPropertyNamingStrategy namingStrategy,
+      SchemaPluginsManager schemaPluginsManager,
+      TypeNameExtractor typeNameExtractor) {
 
     this.fieldProvider = fieldProvider;
     this.namingStrategy = namingStrategy;
@@ -78,7 +77,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
 
   @VisibleForTesting
   List<ModelProperty> addSerializationCandidates(AnnotatedMember member, ResolvedField
-          childField, Optional<BeanPropertyDefinition> jacksonProperty, ModelContext givenContext) {
+      childField, Optional<BeanPropertyDefinition> jacksonProperty, ModelContext givenContext) {
     if (memberIsAField(member)) {
       if (Annotations.memberIsUnwrapped(member)) {
         return propertiesFor(childField.getType(), ModelContext.fromParent(givenContext, childField.getType()));
@@ -93,66 +92,54 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
   private ModelProperty modelPropertyFrom(ResolvedField childField, String fieldName,
       ModelContext modelContext) {
     FieldModelProperty fieldModelProperty = new FieldModelProperty(fieldName, childField, modelContext
-            .getAlternateTypeProvider());
+        .getAlternateTypeProvider());
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
-            .name(fieldModelProperty.getName())
-            .type(childField.getType())
-            .qualifiedType(fieldModelProperty.qualifiedTypeName())
-            .position(fieldModelProperty.position())
-            .required(fieldModelProperty.isRequired())
-            .description(fieldModelProperty.propertyDescription())
-            .allowableValues(fieldModelProperty.allowableValues())
-            .modelRef(modelRef(fieldModelProperty.getType(), ModelContext.fromParent(modelContext, fieldModelProperty.getType())));
-    return schemaPluginsManager.property(new ModelPropertyContext(propertyBuilder,
-            childField.getRawMember(), new TypeResolver(), modelContext.getDocumentationType()));
+        .name(fieldModelProperty.getName())
+        .type(fieldModelProperty.getType())
+        .qualifiedType(fieldModelProperty.qualifiedTypeName())
+        .position(fieldModelProperty.position())
+        .required(fieldModelProperty.isRequired())
+        .description(fieldModelProperty.propertyDescription())
+        .allowableValues(fieldModelProperty.allowableValues());
+    return schemaPluginsManager.property(
+        new ModelPropertyContext(propertyBuilder,
+            childField.getRawMember(),
+            new TypeResolver(),
+            modelContext.getDocumentationType()))
+        .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
   }
 
   @Override
   public List<ModelProperty> propertiesFor(ResolvedType type,
-      ModelContext givenContext) {
+                                           ModelContext givenContext) {
 
     List<ModelProperty> serializationCandidates = newArrayList();
     BeanDescription beanDescription = beanDescription(type, givenContext);
     Map<String, BeanPropertyDefinition> propertyLookup = Maps.uniqueIndex(beanDescription.findProperties(),
-            BeanPropertyDefinitions.beanPropertyByInternalName());
+        BeanPropertyDefinitions.beanPropertyByInternalName());
 
     for (ResolvedField childField : fieldProvider.in(type)) {
       if (propertyLookup.containsKey(childField.getName())) {
         BeanPropertyDefinition propertyDefinition = propertyLookup.get(childField.getName());
         Optional<BeanPropertyDefinition> jacksonProperty
-                = BeanPropertyDefinitions.jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+            = BeanPropertyDefinitions.jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
         serializationCandidates.addAll(newArrayList(addSerializationCandidates(member, childField, jacksonProperty,
-                givenContext)));
+            givenContext)));
       }
     }
     return serializationCandidates;
-  }
-  
-  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
-    if (Collections.isContainerType(type)) {
-      ResolvedType collectionElementType = Collections.collectionElementType(type);
-      String elementTypeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, collectionElementType));
-      return new ModelRef(Collections.containerType(type), elementTypeName);
-    }
-    if (springfox.documentation.schema.Maps.isMapType(type)) {
-      String elementTypeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, springfox
-              .documentation.schema.Maps.mapValueType(type)));
-      return new ModelRef("Map", elementTypeName, true);
-    }
-    String typeName = typeNameExtractor.typeName(modelContext);
-    return new ModelRef(typeName);
   }
 
   private BeanDescription beanDescription(ResolvedType type, ModelContext context) {
     if (context.isReturnType()) {
       SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
       return serializationConfig.introspect(TypeFactory.defaultInstance()
-              .constructType(type.getErasedType()));
+          .constructType(type.getErasedType()));
     } else {
       DeserializationConfig serializationConfig = objectMapper.getDeserializationConfig();
       return serializationConfig.introspect(TypeFactory.defaultInstance()
-              .constructType(type.getErasedType()));
+          .constructType(type.getErasedType()));
     }
   }
 
@@ -162,7 +149,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
 
   protected boolean memberIsAField(AnnotatedMember member) {
     return member != null
-            && member.getMember() != null
-            && Field.class.isAssignableFrom(member.getMember().getClass());
+        && member.getMember() != null
+        && Field.class.isAssignableFrom(member.getMember().getClass());
   }
 }

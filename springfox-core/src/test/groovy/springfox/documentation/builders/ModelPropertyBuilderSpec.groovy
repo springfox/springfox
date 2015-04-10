@@ -18,11 +18,9 @@
  */
 
 package springfox.documentation.builders
-
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
 import springfox.documentation.service.AllowableListValues
-import springfox.documentation.schema.ModelRef
 
 class ModelPropertyBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
@@ -44,7 +42,6 @@ class ModelPropertyBuilderSpec extends Specification {
       'description'       | 'model1 desc'                         | 'description'
       'required'          | true                                  | 'required'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
-      'modelRef'          | new ModelRef("test")                  | 'modelRef'
   }
 
   def "Setting builder properties to null values preserves existing values"() {
@@ -65,7 +62,6 @@ class ModelPropertyBuilderSpec extends Specification {
       'qualifiedType'     | 'com.Model1'                          | 'qualifiedType'
       'description'       | 'model1 desc'                         | 'description'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
-      'modelRef'          | Mock(ModelRef)                        | 'modelRef'
   }
 
   def "When allowable list value is empty builder sets the value to null"() {

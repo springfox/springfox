@@ -22,9 +22,13 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
+import com.google.common.base.Function;
 import springfox.documentation.service.AllowableValues;
+import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
+
+import static springfox.documentation.spi.schema.contexts.ModelContext.fromParent;
 
 public class ResolvedTypes {
 
@@ -46,5 +50,27 @@ public class ResolvedTypes {
 
   public static AllowableValues allowableValues(ResolvedType resolvedType) {
     return Enums.allowableValues(resolvedType.getErasedType());
+  }
+
+  public static Function<? super ResolvedType, ModelRef> modelRefFactory(final ModelContext parentContext,
+                                                                         final TypeNameExtractor typeNameExtractor) {
+
+    return new Function<ResolvedType, ModelRef>() {
+      @Override
+      public ModelRef apply(ResolvedType type) {
+        if (Collections.isContainerType(type)) {
+          ResolvedType collectionElementType = Collections.collectionElementType(type);
+          String elementTypeName = typeNameExtractor.typeName(fromParent(parentContext, collectionElementType));
+          return new ModelRef(Collections.containerType(type), elementTypeName);
+        }
+        if (springfox.documentation.schema.Maps.isMapType(type)) {
+          String elementTypeName = typeNameExtractor.typeName(fromParent(parentContext, springfox
+              .documentation.schema.Maps.mapValueType(type)));
+          return new ModelRef("Map", elementTypeName, true);
+        }
+        String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
+        return new ModelRef(typeName);
+      }
+    };
   }
 }

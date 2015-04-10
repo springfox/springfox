@@ -20,6 +20,7 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Function;
 import springfox.documentation.service.AllowableValues;
 
 public class ModelProperty {
@@ -31,12 +32,11 @@ public class ModelProperty {
   private final boolean isHidden;
   private final String description;
   private final AllowableValues allowableValues;
-  private final ModelRef modelRef;
+  private ModelRef modelRef;
 
   public ModelProperty(String name, ResolvedType type, String qualifiedType,
                        int position, Boolean required, boolean isHidden, String description,
-                       AllowableValues allowableValues,
-                       ModelRef modelRef) {
+                       AllowableValues allowableValues) {
     this.name = name;
     this.type = type;
     this.qualifiedType = qualifiedType;
@@ -45,7 +45,6 @@ public class ModelProperty {
     this.isHidden = isHidden;
     this.description = description;
     this.allowableValues = allowableValues;
-    this.modelRef = modelRef;
   }
 
   public String getName() {
@@ -82,5 +81,10 @@ public class ModelProperty {
 
   public boolean isHidden() {
     return isHidden;
+  }
+
+  public ModelProperty updateModelRef(Function<? super ResolvedType, ModelRef> modelRefFactory) {
+    modelRef = modelRefFactory.apply(type);
+    return this;
   }
 }

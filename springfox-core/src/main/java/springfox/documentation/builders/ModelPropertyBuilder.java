@@ -22,7 +22,6 @@ package springfox.documentation.builders;
 import com.fasterxml.classmate.ResolvedType;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
@@ -35,7 +34,6 @@ public class ModelPropertyBuilder {
   private Boolean required;
   private String description;
   private AllowableValues allowableValues;
-  private ModelRef modelRef;
   private String name;
   private boolean isHidden;
 
@@ -80,18 +78,12 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelPropertyBuilder modelRef(ModelRef modelRef) {
-    this.modelRef = defaultIfAbsent(modelRef, this.modelRef);
-    return this;
-  }
-
   public ModelPropertyBuilder isHidden(boolean isHidden) {
     this.isHidden = isHidden;
     return this;
   }
 
   public ModelProperty build() {
-    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, description, allowableValues,
-        modelRef);
+    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, description, allowableValues);
   }
 }

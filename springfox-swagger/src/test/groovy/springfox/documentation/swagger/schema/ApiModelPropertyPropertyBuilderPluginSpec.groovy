@@ -18,20 +18,28 @@
  */
 
 package springfox.documentation.swagger.schema
-
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
 import org.joda.time.LocalDate
 import spock.lang.Specification
-import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
-import springfox.documentation.spi.DocumentationType
 import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.schema.AlternateTypesSupport
+import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.TypeWithAnnotatedGettersAndSetters
+import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
+import springfox.documentation.schema.mixins.SchemaPluginsSupport
+import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
-@Mixin(ConfiguredObjectMapperSupport)
+import static springfox.documentation.schema.ResolvedTypes.*
+import static springfox.documentation.spi.DocumentationType.*
+import static springfox.documentation.spi.schema.contexts.ModelContext.*
+
+@Mixin([ConfiguredObjectMapperSupport, AlternateTypesSupport, SchemaPluginsSupport])
 class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
   BeanDescription beanDescription
 
@@ -112,6 +120,10 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       def properties = beanDescription.findProperties()
 
       def resolver = new TypeResolver()
+      ModelContext modelContext = inputParam(resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+        SWAGGER_12, alternateTypeProvider(), new DefaultGenericTypeNamingStrategy())
+      def typeNameExtractor =
+        new TypeNameExtractor(resolver,  defaultSchemaPlugins())
       def context = new ModelPropertyContext(new ModelPropertyBuilder(),
               properties.find { it.name == property }.getter.annotated, resolver,
               DocumentationType.SWAGGER_12)
@@ -119,16 +131,18 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       sut.apply(context)
     and:
       def enriched = context.getBuilder().build()
+      enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
     then:
       enriched.allowableValues?.values == null
       !enriched.isRequired()
       enriched.description == ""
       !enriched.isHidden()
       enriched.type.getErasedType() == dataType
+      enriched.modelRef.type == modelRef
     where:
-      property          | dataType
-      "validOverride"    | String
-      "invalidOverride"  | Object
+      property          | dataType  | modelRef
+      "validOverride"    | String   | "string"
+      "invalidOverride"  | Object   | "object"
   }
 
   def "Supports ApiModelProperty annotated models with dataType overrides but protects specific types" (){
@@ -137,6 +151,10 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       def properties = beanDescription.findProperties()
 
       def resolver = new TypeResolver()
+      ModelContext modelContext = inputParam(resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+          SWAGGER_12, alternateTypeProvider(), new DefaultGenericTypeNamingStrategy())
+      def typeNameExtractor =
+        new TypeNameExtractor(resolver,  defaultSchemaPlugins())
       def context = new ModelPropertyContext(new ModelPropertyBuilder(),
               properties.find { it.name == property }.getter.annotated, resolver,
               DocumentationType.SWAGGER_12)
@@ -146,16 +164,18 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       sut.apply(context)
     and:
       def enriched = context.getBuilder().build()
+      enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
     then:
       enriched.allowableValues?.values == null
       !enriched.isRequired()
       enriched.description == ""
       !enriched.isHidden()
       enriched.type.getErasedType() == dataType
+      enriched.modelRef.type == modelRef
     where:
-      property          | dataType
-      "validOverride"    | String
-      "invalidOverride"  | LocalDate
+      property          | dataType    | modelRef
+      "validOverride"    | String     | "string"
+      "invalidOverride"  | LocalDate  | "LocalDate"
   }
 
   BeanDescription beanDescription(Class<TypeWithAnnotatedGettersAndSetters> clazz) {

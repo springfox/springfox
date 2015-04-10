@@ -108,7 +108,6 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                               "p1" : new ModelPropertyBuilder()
                                       .allowableValues(null)
                                       .description("property 1")
-                                      .modelRef(new ModelRef("String"))
                                       .position(1)
                                       .qualifiedType("qualified.Test")
                                       .required(true)
