@@ -31,7 +31,7 @@ import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
-import springfox.documentation.spring.web.readers.operation.DefaultOperationBuilder
+import springfox.documentation.spring.web.readers.operation.DefaultOperationReader
 
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
@@ -45,7 +45,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
             .forPaths(PathSelectors.regex(".*"))
             .build()
     plugin.securityContext(authorizationContext)
-    sut = new ApiOperationReader(customWebPlugins([],[],[new DefaultOperationBuilder()]))
+    sut = new ApiOperationReader(customWebPlugins([],[],[new DefaultOperationReader()]))
   }
 
   def "Should generate default operation on handler method without swagger annotations"() {
@@ -71,7 +71,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
       apiOperation.getMethod() == PATCH.toString()
       apiOperation.getSummary() == handlerMethod.method.name
       apiOperation.getNotes() == handlerMethod.method.name
-      apiOperation.getNickname() == handlerMethod.method.name
+      apiOperation.getUniqueId() == handlerMethod.method.name + "Using" + PATCH.toString()
       apiOperation.getPosition() == 0
       apiOperation.getSecurityReferences().size() == 0
 

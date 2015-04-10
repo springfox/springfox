@@ -16,7 +16,7 @@
                     "method": "GET",
                     "summary": "all",
                     "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -50,7 +50,7 @@
                     "method": "HEAD",
                     "summary": "all",
                     "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingHEAD",
                     "produces": [
                         "*/*"
                     ],
@@ -84,7 +84,7 @@
                     "method": "POST",
                     "summary": "all",
                     "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -122,7 +122,7 @@
                     "method": "PUT",
                     "summary": "all",
                     "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingPUT",
                     "produces": [
                         "*/*"
                     ],
@@ -160,7 +160,7 @@
                     "method": "PATCH",
                     "summary": "all",
                     "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingPATCH",
                     "produces": [
                         "*/*"
                     ],
@@ -194,7 +194,7 @@
                     "method": "DELETE",
                     "summary": "all",
                     "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingDELETE",
                     "produces": [
                         "*/*"
                     ],
@@ -228,7 +228,7 @@
                     "method": "OPTIONS",
                     "summary": "all",
                     "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingOPTIONS",
                     "produces": [
                         "*/*"
                     ],
@@ -262,7 +262,7 @@
                     "method": "TRACE",
                     "summary": "all",
                     "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingTRACE",
                     "produces": [
                         "*/*"
                     ],
@@ -302,7 +302,7 @@
                     "method": "GET",
                     "summary": "allMethodAllowed",
                     "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -335,7 +335,7 @@
                     "method": "HEAD",
                     "summary": "allMethodAllowed",
                     "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingHEAD",
                     "produces": [
                         "*/*"
                     ],
@@ -368,7 +368,7 @@
                     "method": "POST",
                     "summary": "allMethodAllowed",
                     "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -405,7 +405,7 @@
                     "method": "PUT",
                     "summary": "allMethodAllowed",
                     "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingPUT",
                     "produces": [
                         "*/*"
                     ],
@@ -442,7 +442,7 @@
                     "method": "PATCH",
                     "summary": "allMethodAllowed",
                     "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingPATCH",
                     "produces": [
                         "*/*"
                     ],
@@ -475,7 +475,7 @@
                     "method": "DELETE",
                     "summary": "allMethodAllowed",
                     "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingDELETE",
                     "produces": [
                         "*/*"
                     ],
@@ -508,7 +508,7 @@
                     "method": "OPTIONS",
                     "summary": "allMethodAllowed",
                     "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingOPTIONS",
                     "produces": [
                         "*/*"
                     ],
@@ -541,7 +541,7 @@
                     "method": "TRACE",
                     "summary": "allMethodAllowed",
                     "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingTRACE",
                     "produces": [
                         "*/*"
                     ],
@@ -580,7 +580,7 @@
                     "method": "POST",
                     "summary": "getBare",
                     "notes": "getBare",
-                    "nickname": "getBare",
+                    "nickname": "getBareUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -633,7 +633,7 @@
                     "method": "POST",
                     "summary": "updateBigDecimal",
                     "notes": "updateBigDecimal",
-                    "nickname": "updateBigDecimal",
+                    "nickname": "updateBigDecimalUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -687,7 +687,7 @@
                     "method": "POST",
                     "summary": "updateDate",
                     "notes": "updateDate",
-                    "nickname": "updateDate",
+                    "nickname": "updateDateUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -740,7 +740,7 @@
                     "method": "GET",
                     "summary": "getEffective",
                     "notes": "getEffective",
-                    "nickname": "getEffective",
+                    "nickname": "getEffectiveUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -780,7 +780,7 @@
                     "method": "GET",
                     "summary": "getEffectives",
                     "notes": "getEffectives",
-                    "nickname": "getEffectives",
+                    "nickname": "getEffectivesUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -823,7 +823,7 @@
                     "method": "POST",
                     "summary": "updateBaz",
                     "notes": "updateBaz",
-                    "nickname": "updateBaz",
+                    "nickname": "updateBazUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -880,7 +880,7 @@
                     "method": "POST",
                     "summary": "updateBazes",
                     "notes": "updateBazes",
-                    "nickname": "updateBazes",
+                    "nickname": "updateBazesUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -933,7 +933,7 @@
                     "method": "GET",
                     "summary": "Find pet by ID",
                     "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
-                    "nickname": "getPetById",
+                    "nickname": "getPetByIdUsingGET",
                     "produces": [
                         "*/*"
                     ],

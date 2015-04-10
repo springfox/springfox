@@ -36,7 +36,7 @@ class OperationMethodReaderSpec extends DocumentationContextSpec {
               currentHttpMethod, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 
-      def operationMethodReader = new DefaultOperationBuilder();
+      def operationMethodReader = new DefaultOperationReader();
     when:
       operationMethodReader.apply(operationContext)
     and:

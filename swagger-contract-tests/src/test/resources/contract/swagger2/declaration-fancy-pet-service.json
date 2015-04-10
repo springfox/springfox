@@ -32,7 +32,7 @@
                 ],
                 "summary": "createObject",
                 "description": "createObject",
-                "operationId": "createObject",
+                "operationId": "createObjectUsingPOST",
                 "consumes": [
                     "application/json"
                 ],

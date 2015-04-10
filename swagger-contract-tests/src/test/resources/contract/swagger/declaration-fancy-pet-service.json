@@ -16,7 +16,7 @@
                     "method": "PUT",
                     "summary": "updatePet",
                     "notes": "updatePet",
-                    "nickname": "updatePet",
+                    "nickname": "updatePetUsingPUT",
                     "produces": [
                         "*/*"
                     ],
@@ -69,7 +69,7 @@
                     "method": "POST",
                     "summary": "createObject",
                     "notes": "createObject",
-                    "nickname": "createObject",
+                    "nickname": "createObjectUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -124,7 +124,7 @@
                     "method": "POST",
                     "summary": "createObject",
                     "notes": "createObject",
-                    "nickname": "createObject",
+                    "nickname": "createObjectUsingPOST",
                     "produces": [
                         "*/*"
                     ],

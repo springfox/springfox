@@ -28,13 +28,13 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class DefaultOperationBuilder implements OperationBuilderPlugin {
+public class DefaultOperationReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     String operationName = context.getHandlerMethod().getMethod().getName();
     context.operationBuilder()
             .method(context.httpMethod())
-            .nickname(operationName)
+            .uniqueId(String.format("%sUsing%s", operationName, context.httpMethod()))
             .notes(operationName)
             .position(context.operationIndex())
             .summary(operationName);

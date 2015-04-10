@@ -64,7 +64,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                         .produces(newHashSet("application/json"))
                         .deprecated("deprecated")
                         .method("operation1")
-                        .nickname("op1")
+                        .uniqueId("op1")
                         .notes("operation 1 notes")
                         .parameters([new ParameterBuilder()
                           .allowableValues(new AllowableListValues(["FIRST", "SECOND"], "string"))
@@ -132,7 +132,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mappedDescription.hidden == builtDescription.hidden
       mappedDescription.path == builtDescription.path
       mappedDescription.operations.size() == builtDescription.operations.size()
-      mappedOperation.nickname == builtOperation.nickname
+      mappedOperation.nickname == builtOperation.uniqueId
       mappedOperation.authorizations.size() == builtOperation.securityReferences.size()
       mappedOperation.authorizations.containsKey("basic")
       mappedOperation.consumes.first() == builtOperation.consumes.first()

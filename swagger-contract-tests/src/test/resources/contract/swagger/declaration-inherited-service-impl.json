@@ -18,7 +18,7 @@
                     "method": "GET",
                     "summary": "getSomething",
                     "notes": "getSomething",
-                    "nickname": "getSomething",
+                    "nickname": "getSomethingUsingGET",
                     "produces": [
                         "*/*"
                     ],

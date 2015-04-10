@@ -32,7 +32,7 @@
                 ],
                 "summary": "Find a business by its id",
                 "description": "getAliasedPathVariable",
-                "operationId": "getAliasedPathVariable",
+                "operationId": "getAliasedPathVariableUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -66,7 +66,7 @@
                 ],
                 "summary": "businessesByCategories",
                 "description": "businessesByCategories",
-                "operationId": "businessesByCategories",
+                "operationId": "businessesByCategoriesUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -106,7 +106,7 @@
                 ],
                 "summary": "Find a business by its id",
                 "description": "getNonAliasedPathVariable",
-                "operationId": "getNonAliasedPathVariable",
+                "operationId": "getNonAliasedPathVariableUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -147,7 +147,7 @@
                 ],
                 "summary": "getResponseEntity",
                 "description": "getResponseEntity",
-                "operationId": "getResponseEntity",
+                "operationId": "getResponseEntityUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -181,7 +181,7 @@
                 ],
                 "summary": "businessTypeEcho",
                 "description": "businessTypeEcho",
-                "operationId": "businessTypeEcho",
+                "operationId": "businessTypeEchoUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -216,7 +216,7 @@
                 ],
                 "summary": "getVanillaPathVariable",
                 "description": "getVanillaPathVariable",
-                "operationId": "getVanillaPathVariable",
+                "operationId": "getVanillaPathVariableUsingGET",
                 "consumes": [
                     "application/json"
                 ],

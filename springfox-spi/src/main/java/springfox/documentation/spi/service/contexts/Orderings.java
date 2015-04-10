@@ -37,7 +37,7 @@ public class Orderings {
     return new Comparator<Operation>() {
       @Override
       public int compare(Operation first, Operation second) {
-        return nullToEmpty(first.getNickname()).compareTo(nullToEmpty(second.getNickname()));
+        return nullToEmpty(first.getUniqueId()).compareTo(nullToEmpty(second.getUniqueId()));
       }
     };
   }

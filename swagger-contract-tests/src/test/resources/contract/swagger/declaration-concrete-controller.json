@@ -16,7 +16,7 @@
                     "method": "PUT",
                     "summary": "create",
                     "notes": "create",
-                    "nickname": "create",
+                    "nickname": "createUsingPUT",
                     "produces": [
                         "*/*"
                     ],
@@ -69,7 +69,7 @@
                     "method": "GET",
                     "summary": "get",
                     "notes": "get",
-                    "nickname": "get",
+                    "nickname": "getUsingGET",
                     "produces": [
                         "*/*"
                     ],

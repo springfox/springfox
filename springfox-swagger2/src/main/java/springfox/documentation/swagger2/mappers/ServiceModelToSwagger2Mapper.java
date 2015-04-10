@@ -59,11 +59,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   @Mappings({
       @Mapping(target = "info", source = "resourceListing.info"),
       @Mapping(target = "paths", source = "apiListings"),
-      @Mapping(target = "basePath", source = "basePath"),
-      @Mapping(target = "tags", source = "tags"),
       @Mapping(target = "schemes", source = "from.schemes"),
-      @Mapping(target = "produces", source = "produces"),
-      @Mapping(target = "consumes", source = "consumes"),
       @Mapping(target = "definitions", source = "apiListings"),
       @Mapping(target = "securityDefinitions", source = "resourceListing"),
       @Mapping(target = "securityRequirement", ignore = true),
@@ -85,22 +81,16 @@ public abstract class ServiceModelToSwagger2Mapper {
 
   @Mappings({
       @Mapping(target = "description", source = "notes"),
-      @Mapping(target = "operationId", source = "nickname"),
+      @Mapping(target = "operationId", source = "uniqueId"),
       @Mapping(target = "schemes", source = "protocol"),
-      @Mapping(target = "produces", source = "produces"),
-      @Mapping(target = "consumes", source = "consumes"),
-      @Mapping(target = "parameters", source = "parameters"),
       @Mapping(target = "security", source = "securityReferences"),
       @Mapping(target = "responses", source = "responseMessages"),
-      @Mapping(target = "tags", source = "tags"),
       @Mapping(target = "vendorExtensions", ignore = true),
       @Mapping(target = "externalDocs", ignore = true)
   })
   protected abstract Operation mapOperation(springfox.documentation.service.Operation from);
 
   @Mappings({
-      @Mapping(target = "description", source = "description"),
-      @Mapping(target = "name", source = "name"),
       @Mapping(target = "externalDocs", ignore = true)
   })
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);

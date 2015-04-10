@@ -16,7 +16,7 @@
                     "method": "GET",
                     "summary": "getAll",
                     "notes": "getAll",
-                    "nickname": "getAll",
+                    "nickname": "getAllUsingGET",
                     "produces": [
                         "*/*"
                     ],

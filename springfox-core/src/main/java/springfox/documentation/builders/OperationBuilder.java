@@ -42,7 +42,7 @@ public class OperationBuilder {
   private String summary;
   private String notes;
   private String responseClass;
-  private String nickname;
+  private String uniqueId;
   private int position;
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
@@ -101,13 +101,13 @@ public class OperationBuilder {
   }
 
   /**
-   * Updates the nickname for the operation
+   * Updates the uniqueId for the operation
    *
-   * @param nickname - nickname for the operation
+   * @param uniqueId - uniqueId for the operation
    * @return this
    */
-  public OperationBuilder nickname(String nickname) {
-    this.nickname = defaultIfAbsent(nickname, this.nickname);
+  public OperationBuilder uniqueId(String uniqueId) {
+    this.uniqueId = defaultIfAbsent(uniqueId, this.uniqueId);
     return this;
   }
 
@@ -233,7 +233,7 @@ public class OperationBuilder {
   }
 
   public Operation build() {
-    return new Operation(method, summary, notes, responseModel, nickname, position, tags, produces,
+    return new Operation(method, summary, notes, responseModel, uniqueId, position, tags, produces,
         consumes, protocol, securityReferences, parameters, responseMessages, deprecated, isHidden);
   }
 

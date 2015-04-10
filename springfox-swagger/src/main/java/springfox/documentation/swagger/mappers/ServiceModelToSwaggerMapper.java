@@ -66,6 +66,7 @@ public interface ServiceModelToSwaggerMapper {
 
   @Mappings({
       @Mapping(target = "dataType", source = "responseModel", qualifiedBy = DataTypeMapper.OperationType.class),
+      @Mapping(target = "nickname", source = "uniqueId"),
       @Mapping(target = "authorizations", source = "securityReferences")
   })
   Operation toSwaggerOperation(springfox.documentation.service.Operation from);

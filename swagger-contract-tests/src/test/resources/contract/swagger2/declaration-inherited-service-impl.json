@@ -32,7 +32,7 @@
                 ],
                 "summary": "getSomething",
                 "description": "getSomething",
-                "operationId": "getSomething",
+                "operationId": "getSomethingUsingGET",
                 "consumes": [
                     "application/json"
                 ],

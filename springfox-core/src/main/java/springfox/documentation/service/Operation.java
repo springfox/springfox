@@ -35,7 +35,7 @@ public class Operation {
   private final String summary;
   private final String notes;
   private final ModelRef responseModel;
-  private final String nickname;
+  private final String uniqueId;
   private final int position;
   private final Set<String> tags;
   private final Set<String> produces;
@@ -48,7 +48,7 @@ public class Operation {
   private final String deprecated;
 
   public Operation(String method, String summary, String notes, ModelRef responseModel,
-                   String nickname, int position,
+                   String uniqueId, int position,
                    Set<String> tags, Set<String> produces, Set<String> consumes, Set<String> protocol,
                    List<SecurityReference> securityReferences, List<Parameter> parameters,
                    Set<ResponseMessage> responseMessages, String deprecated, boolean isHidden) {
@@ -56,7 +56,7 @@ public class Operation {
     this.summary = summary;
     this.notes = notes;
     this.responseModel = responseModel;
-    this.nickname = nickname;
+    this.uniqueId = uniqueId;
     this.position = position;
     this.tags = tags;
     this.produces = produces;
@@ -115,8 +115,8 @@ public class Operation {
     return notes;
   }
 
-  public String getNickname() {
-    return nickname;
+  public String getUniqueId() {
+    return uniqueId;
   }
 
   public int getPosition() {

@@ -45,9 +45,9 @@ class OperationCommandReaderSpec extends DocumentationContextSpec {
       operation."$property" == expected
     where:
       command                         | property     | handlerMethod                              | expected
-      new DefaultOperationBuilder()   | 'notes'      | dummyHandlerMethod()                       | 'dummyMethod'
-      new DefaultOperationBuilder()   | 'nickname'   | dummyHandlerMethod()                       | 'dummyMethod'
-      new DefaultOperationBuilder()   | 'position'   | dummyHandlerMethod()                       | CURRENT_COUNT
+      new DefaultOperationReader()    | 'notes'      | dummyHandlerMethod()                       | 'dummyMethod'
+      new DefaultOperationReader()    | 'uniqueId'   | dummyHandlerMethod()                       | 'dummyMethodUsingGET'
+      new DefaultOperationReader()    | 'position'   | dummyHandlerMethod()                       | CURRENT_COUNT
       new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod('methodWithDeprecated') | 'true'
       new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod()                       | 'false'
   }
@@ -59,6 +59,6 @@ class OperationCommandReaderSpec extends DocumentationContextSpec {
       sut.supports(DocumentationType.SWAGGER_2)
 
     where:
-      sut << [new OperationDeprecatedReader(), new DefaultOperationBuilder()]
+      sut << [new OperationDeprecatedReader(), new DefaultOperationReader()]
   }
 }

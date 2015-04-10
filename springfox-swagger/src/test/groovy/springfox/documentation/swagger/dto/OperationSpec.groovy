@@ -25,7 +25,7 @@ class OperationSpec extends InternalJsonSerializationSpec {
           ,'updatePet'
           ,'updatePet'
           ,'void'
-          ,'updatePet'
+          ,'updatePetUsingPUT'
           ,0
           ,["*/*"]
           ,['application/json']
@@ -42,7 +42,7 @@ class OperationSpec extends InternalJsonSerializationSpec {
   "method" : "PUT",
   "summary" : "updatePet",
   "notes" : "updatePet",
-  "nickname" : "updatePet",
+  "nickname" : "updatePetUsingPUT",
   "produces" : [ "*/*" ],
   "consumes" : [ "application/json" ],
   "parameters" : [ {

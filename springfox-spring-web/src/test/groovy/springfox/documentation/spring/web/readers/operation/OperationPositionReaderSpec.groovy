@@ -34,7 +34,7 @@ class OperationPositionReaderSpec extends DocumentationContextSpec {
               RequestMethod.GET, handlerMethod, contextCount, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 
-      def operationPositionReader = new DefaultOperationBuilder();
+      def operationPositionReader = new DefaultOperationReader();
     when:
       operationPositionReader.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
