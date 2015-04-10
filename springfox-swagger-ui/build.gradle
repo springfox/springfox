@@ -69,8 +69,12 @@ task removeHtmlIndex(type: Delete) {
 }
 
 jar {
+  from("${projectDir}/src/web/swagger-ui.html") {
+    into "META-INF/resources"
+  }
+
   from("${buildDir}/${swaggerUiExplodedDir}") {
-    into "META-INF/resources/webjars/${project.name}/${project.version}"
+    into "META-INF/resources/webjars/${project.name}"
 
     manifest {
       attributes(
