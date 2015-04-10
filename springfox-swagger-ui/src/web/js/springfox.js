@@ -23,7 +23,7 @@ $(function () {
         var items = [];
         swaggerDropdown.empty();
         $.each(data, function (i, resource) {
-            var option = $('<option></option>').attr("value", relativeLocation + "/" + resource.location).text(resource.name + " (" + resource.location + ")");
+            var option = $('<option></option>').attr("value", relativeLocation + resource.location).text(resource.name + " (" + resource.location + ")");
             swaggerDropdown.append(option);
         });
         refresh();
