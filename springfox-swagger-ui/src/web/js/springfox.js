@@ -1,17 +1,12 @@
 $(function () {
 
-    /* Typically called from this depth:
-     perhapsContextPath/springfox-swagger-ui/2.0.0-SNAPSHOT/swagger-ui.html
-     */
     var relativeLocation = baseUrl();
 
     $('#input_baseUrl').hide();
     var swaggerDropdown = $('#select_baseUrl');
 
     function refresh() {
-        alert("Handler for .change() called.");
         window.swaggerUi.headerView.trigger('update-swagger-ui', {
-            //
             url: swaggerDropdown.val()
         });
     }
