@@ -26,10 +26,14 @@ public class Category {
   private long id;
   private String name;
 
-  @JsonCreator
-  public Category(@JsonProperty("id") long id, @JsonProperty("name") String name) {
+  public Category(long id, String name) {
     this.id = id;
     this.name = name;
+  }
+
+  @JsonCreator
+  public static Category create(@JsonProperty("id") long id, @JsonProperty("name") String name) {
+    return new Category(id, name);
   }
 
   @JsonProperty
