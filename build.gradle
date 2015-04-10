@@ -87,7 +87,8 @@ configure(publishable(subprojects)) { subproject ->
   apply from: "$rootDir/gradle/artifacts.gradle"
   apply from: "$rootDir/gradle/bintray_publish.gradle"
   apply from: "$rootDir/gradle/coverage.gradle"
-  apply from: "$rootDir/gradle/code-quality.gradle"
+  //Commented PMD and Findbugs as its taking too much time for very little value
+//  apply from: "$rootDir/gradle/code-quality.gradle"
 
   repositories {
     jcenter()
