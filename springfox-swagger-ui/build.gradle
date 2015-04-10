@@ -60,6 +60,7 @@ task unzip(type: Copy) {
 
 task sdoc(type: Copy) {
   from("${projectDir}/src/web/swagger-ui.html")
+  from("${projectDir}/src/web/js/springfox.js")
   into("${buildDir}/${swaggerUiExplodedDir}")
 }
 

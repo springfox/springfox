@@ -92,6 +92,7 @@ configure(publishable(subprojects)) { subproject ->
   apply from: "$rootDir/gradle/bintray_publish.gradle"
   apply from: "$rootDir/gradle/coverage.gradle"
   //Commented PMD and Findbugs as its taking too much time for very little value
+  //Perhaps run every 20 CI builds (mod of ci build number)
 //  apply from: "$rootDir/gradle/code-quality.gradle"
 
   repositories {
