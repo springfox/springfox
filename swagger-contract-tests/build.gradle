@@ -29,7 +29,8 @@ dependencies {
   compile 'taglibs:standard:1.1.2'
   compile 'javax.servlet:jstl:1.2'
 
-  compile "org.ajar:swagger-spring-mvc-ui:0.4"
+//  //TODO Replace this old webjar
+//  compile "org.ajar:swagger-spring-mvc-ui:0.4"
 
   compile(project(':springfox-swagger')) {
     exclude group: 'org.springframework', module: 'spring-web'
@@ -49,6 +50,10 @@ dependencies {
     exclude group: 'org.springframework', module: 'spring-web'
   }
   compile(project(path: ':springfox-petstore')) {
+    exclude group: 'org.springframework', module: 'spring-web'
+  }
+
+  compile(project(path: ':springfox-swagger-ui')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 }

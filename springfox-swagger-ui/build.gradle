@@ -58,19 +58,14 @@ task unzip(type: Copy) {
   into file("${buildDir}")
 }
 
-/**
- * Creates the jsp from index.html
- */
 task sdoc(type: Copy) {
-  from("${projectDir}/src/jsps/sdoc.jsp")
-  from("${projectDir}/src/jsps/swaggerResources.jsp")
+  from("${projectDir}/src/web/swagger-ui.html")
   into("${buildDir}/${swaggerUiExplodedDir}")
 }
 
 task removeHtmlIndex(type: Delete) {
   delete "${buildDir}/${swaggerUiExplodedDir}/index.html"
 }
-
 
 jar {
   from("${buildDir}/${swaggerUiExplodedDir}") {

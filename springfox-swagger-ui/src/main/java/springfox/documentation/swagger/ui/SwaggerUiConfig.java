@@ -16,25 +16,13 @@
  *
  *
  */
+
 package springfox.documentation.swagger.ui;
 
-public class SwaggerApi {
-  private String uri;
-  private String title;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
-  public String getUri() {
-    return uri;
-  }
-
-  public void setUri(String uri) {
-    this.uri = uri;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
+@Configuration
+@ComponentScan(basePackageClasses = {ApiResourceController.class})
+public class SwaggerUiConfig {
 }

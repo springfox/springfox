@@ -46,7 +46,6 @@ import java.util.Map;
 @RequestMapping("${springfox.documentation.swagger.v1.path:/api-docs}")
 public class DefaultSwaggerController {
 
-
   @Autowired
   private DocumentationCache documentationCache;
 

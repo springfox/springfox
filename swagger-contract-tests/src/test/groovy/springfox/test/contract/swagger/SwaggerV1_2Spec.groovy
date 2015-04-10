@@ -18,26 +18,21 @@
  */
 
 package springfox.test.contract.swagger
+
 import groovy.json.JsonOutput
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestExecutionListeners
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener
-import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
-import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger.annotations.EnableSwagger
+import springfox.documentation.swagger.ui.EnableSwaggerUi
 
 import static groovyx.net.http.ContentType.*
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
@@ -46,13 +41,7 @@ import static springfox.documentation.builders.PathSelectors.*
 @ContextConfiguration(
         loader = SpringApplicationContextLoader,
         classes = SwaggerV1_2Spec.Config)
-@WebAppConfiguration
-@IntegrationTest("server.port:0")
-@TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
-class SwaggerV1_2Spec extends Specification implements FileAccess {
-
-  @Value('${local.server.port}')
-  int port;
+class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
 
   def 'should honor swagger resource listing'() {
     given:
@@ -109,14 +98,15 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
       'declaration-pet-service.json'                                | '/default/pet-service'
       'declaration-root-controller.json'                            | '/default/root-controller'
   }
-  
+
   @Configuration
   @EnableSwagger
+  @EnableSwaggerUi
   @EnableWebMvc
   @ComponentScan([
-    "springfox.documentation.spring.web.dummy.controllers",
-    "springfox.test.contract.swagger",
-    "springfox.petstore.controller"
+          "springfox.documentation.spring.web.dummy.controllers",
+          "springfox.test.contract.swagger",
+          "springfox.petstore.controller"
   ])
   static class Config {
     @Bean
@@ -124,8 +114,8 @@ class SwaggerV1_2Spec extends Specification implements FileAccess {
       return new Docket(DocumentationType.SWAGGER_12)
               .groupName("default")
               .select()
-                .paths(regex("^((?!/api).)*\$")) //Not beginning with /api
-                .build()
+              .paths(regex("^((?!/api).)*\$")) //Not beginning with /api
+              .build()
     }
   }
 }

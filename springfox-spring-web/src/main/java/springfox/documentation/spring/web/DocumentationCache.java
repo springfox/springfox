@@ -21,7 +21,7 @@ package springfox.documentation.spring.web;
 
 import springfox.documentation.service.Documentation;
 
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
@@ -37,7 +37,7 @@ public class DocumentationCache {
     return documentationLookup.get(groupName);
   }
 
-  public Collection<Documentation> all() {
-    return documentationLookup.values();
+  public Map<String, Documentation> all() {
+    return Collections.unmodifiableMap(documentationLookup);
   }
 }

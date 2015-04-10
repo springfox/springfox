@@ -23,20 +23,13 @@ import groovy.json.JsonOutput
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestExecutionListeners
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener
-import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
-import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
@@ -46,15 +39,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 import static groovyx.net.http.ContentType.*
 import static springfox.documentation.builders.PathSelectors.*
 
-@ContextConfiguration(loader = SpringApplicationContextLoader,
-        classes = SwaggerV2_0Spec.Config)
-@WebAppConfiguration
-@IntegrationTest("server.port:0")
-@TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
-class SwaggerV2_0Spec extends Specification implements springfox.test.contract.swagger.FileAccess {
-
-  @Value('${local.server.port}')
-  int port;
+@ContextConfiguration(loader = SpringApplicationContextLoader, classes = SwaggerV2_0Spec.Config)
+class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
 
   @Unroll("#groupName")
   def 'should honor swagger resource listing'() {
