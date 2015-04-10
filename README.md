@@ -174,11 +174,11 @@ json Resource Listing is available at /api-docs
 
 
 #### Spring xml Configuration
-- To get the default implementation simply define a bean of type: `springfox.documentation.swagger.configuration.SpringSwaggerConfig`
+- To get the default implementation simply define a bean of type: `com.mangofactory.documentation.swagger.configuration.SpringSwaggerConfig`
 
 ```xml
 <mvc:annotation-driven/> <!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
-<bean class="springfox.documentation.swagger.configuration.SpringSwaggerConfig" />
+<bean class="com.mangofactory.documentation.swagger.configuration.SpringSwaggerConfig" />
 ```
 - The generated swagger
 json Resource Listing is available at /api-docs
@@ -475,7 +475,7 @@ To exclude controller method arguments form the generated swagger model JSON.
 ```java
 swaggerSpringMvcPlugin.ignoredParameterTypes(MyCustomType.class)
 ```
-By default, a number of Spring's handler method arguments are ignored. See: springfox.documentation.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
+By default, a number of Spring's handler method arguments are ignored. See: com.mangofactory.documentation.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes
 
 
 ##Development
