@@ -28,7 +28,9 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
 
-import static springfox.documentation.spi.schema.contexts.ModelContext.fromParent;
+import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 public class ResolvedTypes {
 
@@ -58,12 +60,12 @@ public class ResolvedTypes {
     return new Function<ResolvedType, ModelRef>() {
       @Override
       public ModelRef apply(ResolvedType type) {
-        if (Collections.isContainerType(type)) {
-          ResolvedType collectionElementType = Collections.collectionElementType(type);
+        if (isContainerType(type)) {
+          ResolvedType collectionElementType = collectionElementType(type);
           String elementTypeName = typeNameExtractor.typeName(fromParent(parentContext, collectionElementType));
           return new ModelRef(Collections.containerType(type), elementTypeName);
         }
-        if (springfox.documentation.schema.Maps.isMapType(type)) {
+        if (isMapType(type)) {
           String elementTypeName = typeNameExtractor.typeName(fromParent(parentContext, springfox
               .documentation.schema.Maps.mapValueType(type)));
           return new ModelRef("Map", elementTypeName, true);

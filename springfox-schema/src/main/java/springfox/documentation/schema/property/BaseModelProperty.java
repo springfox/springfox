@@ -25,6 +25,9 @@ import springfox.documentation.schema.ResolvedTypes;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
+import static com.google.common.base.Optional.fromNullable;
+import static springfox.documentation.schema.ResolvedTypes.simpleQualifiedTypeName;
+
 public abstract class BaseModelProperty implements ModelProperty {
 
   private final String name;
@@ -52,12 +55,12 @@ public abstract class BaseModelProperty implements ModelProperty {
     if (getType().getTypeParameters().size() > 0) {
       return getType().toString();
     }
-    return ResolvedTypes.simpleQualifiedTypeName(getType());
+    return simpleQualifiedTypeName(getType());
   }
 
   @Override
   public AllowableValues allowableValues() {
-    Optional<AllowableValues> allowableValues = Optional.fromNullable(ResolvedTypes.allowableValues(getType()));
+    Optional<AllowableValues> allowableValues = fromNullable(ResolvedTypes.allowableValues(getType()));
     //Preference to inferred allowable values over list values via ApiModelProperty
     if (allowableValues.isPresent()) {
       return allowableValues.get();

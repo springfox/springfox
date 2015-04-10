@@ -35,7 +35,8 @@ import com.wordnik.swagger.models.parameters.SerializableParameter;
 import com.wordnik.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.schema.Types;
+
+import static springfox.documentation.schema.Types.*;
 
 
 @Mapper
@@ -107,7 +108,7 @@ public class ParameterMapper {
       baseModel.additionalProperties(ModelMapper.property(modelRef.getItemType()));
       return baseModel;
     }
-    if (Types.isBaseType(modelRef.getType())) {
+    if (isBaseType(modelRef.getType())) {
       ModelImpl baseModel = new ModelImpl();
       baseModel.setType(modelRef.getType());
       return baseModel;

@@ -35,6 +35,9 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
+import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.schema.Types.*;
 
 
 @Component
@@ -61,11 +64,11 @@ public class DefaultModelProvider implements ModelProvider {
   @Override
   public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
     ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
-    if (Collections.isContainerType(propertiesHost)
-            || Maps.isMapType(propertiesHost)
-            || propertiesHost.getErasedType().isEnum()
-            || Types.isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))
-            || modelContext.hasSeenBefore(propertiesHost)) {
+    if (isContainerType(propertiesHost)
+        || isMapType(propertiesHost)
+        || propertiesHost.getErasedType().isEnum()
+        || isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))
+        || modelContext.hasSeenBefore(propertiesHost)) {
       return Optional.absent();
     }
     Map<String, ModelProperty> properties = newTreeMap();
@@ -75,19 +78,19 @@ public class DefaultModelProvider implements ModelProvider {
   }
 
   private Model modelBuilder(ResolvedType propertiesHost,
-                                    Map<String, ModelProperty> properties,
-                                    ModelContext modelContext) {
+                             Map<String, ModelProperty> properties,
+                             ModelContext modelContext) {
     String typeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, propertiesHost));
     modelContext.getBuilder()
-            .id(typeName)
-            .type(propertiesHost)
-            .name(typeName)
-            .qualifiedType(ResolvedTypes.simpleQualifiedTypeName(propertiesHost))
-            .properties(properties)
-            .description("")
-            .baseModel("")
-            .discriminator("")
-            .subTypes(new ArrayList<String>());
+        .id(typeName)
+        .type(propertiesHost)
+        .name(typeName)
+        .qualifiedType(ResolvedTypes.simpleQualifiedTypeName(propertiesHost))
+        .properties(properties)
+        .description("")
+        .baseModel("")
+        .discriminator("")
+        .subTypes(new ArrayList<String>());
     return schemaPluginsManager.model(modelContext);
   }
 

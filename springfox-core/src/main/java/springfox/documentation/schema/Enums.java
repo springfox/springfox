@@ -27,7 +27,6 @@ import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,8 +34,6 @@ import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 
 public class Enums {
-
-  public static final AllowableListValues EMPTY_LIST = new AllowableListValues(new ArrayList<String>(), "LIST");
 
   private Enums() {
     throw new UnsupportedOperationException();

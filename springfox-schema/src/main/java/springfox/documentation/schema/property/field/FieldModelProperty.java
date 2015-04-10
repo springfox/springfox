@@ -28,8 +28,7 @@ public class FieldModelProperty extends BaseModelProperty {
 
   private final ResolvedField childField;
 
-  public FieldModelProperty(String fieldName,
-                            ResolvedField childField, AlternateTypeProvider alternateTypeProvider) {
+  public FieldModelProperty(String fieldName, ResolvedField childField, AlternateTypeProvider alternateTypeProvider) {
 
     super(fieldName, alternateTypeProvider);
     this.childField = childField;

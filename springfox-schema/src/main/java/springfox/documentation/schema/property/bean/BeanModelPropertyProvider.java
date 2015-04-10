@@ -54,6 +54,7 @@ import java.util.Map;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
+import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
@@ -127,7 +128,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
       BeanPropertyDefinition propertyDefinition = each.getValue();
       Optional<BeanPropertyDefinition> jacksonProperty
-          = BeanPropertyDefinitions.jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+          = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
       AnnotatedMember member = propertyDefinition.getPrimaryMember();
       Optional<ResolvedMethod> accessor = findAccessorMethod(type, each.getKey(), member);
       if (accessor.isPresent()) {
@@ -174,7 +175,6 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
             modelContext.getDocumentationType()))
         .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
   }
-
 
 
 }

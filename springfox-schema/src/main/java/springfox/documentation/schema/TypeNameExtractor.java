@@ -33,6 +33,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import java.lang.reflect.Type;
 
 import static com.google.common.base.Optional.*;
+import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 
 @Component
@@ -49,8 +50,8 @@ public class TypeNameExtractor {
 
   public String typeName(ModelContext context) {
     ResolvedType type = asResolved(context.getType());
-    if (Collections.isContainerType(type)) {
-      return Collections.containerType(type);
+    if (isContainerType(type)) {
+      return containerType(type);
     }
     return innerTypeName(type, context);
   }
