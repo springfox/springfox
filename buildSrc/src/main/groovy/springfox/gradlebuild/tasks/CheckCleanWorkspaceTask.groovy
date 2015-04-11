@@ -24,7 +24,7 @@ import org.gradle.api.tasks.TaskAction
 
 class CheckCleanWorkspaceTask extends DefaultTask {
   public static final String TASK_NAME = "checkCleanWorkspace"
-  String description = "Checks workspace is in sync with remote"
+  String description = "Checks workspace is clean"
   String group = "release"
 
   @TaskAction

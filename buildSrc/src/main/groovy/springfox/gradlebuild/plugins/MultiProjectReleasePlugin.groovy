@@ -24,6 +24,7 @@ import org.gradle.api.Project
 import springfox.gradlebuild.BintrayCredentials
 import springfox.gradlebuild.tasks.BintrayCredentialsCheckTask
 import springfox.gradlebuild.tasks.CheckCleanWorkspaceTask
+import springfox.gradlebuild.tasks.CheckGitBranchTask
 import springfox.gradlebuild.tasks.IntermediaryTask
 import springfox.gradlebuild.tasks.ReleaseTask
 import springfox.gradlebuild.tasks.SnapshotTask
@@ -40,45 +41,57 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   CheckCleanWorkspaceTask checkCleanWorkspaceTask
   SnapshotTask snapshotTask
   BintrayCredentialsCheckTask credentialCheck
+  CheckGitBranchTask checkGitBranchTask
 
   @Override
   void apply(Project project) {
     releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask)
     snapshotTask = project.task(SnapshotTask.TASK_NAME, type: SnapshotTask)
     credentialCheck = project.task(BintrayCredentialsCheckTask.TASK_NAME, type: BintrayCredentialsCheckTask)
+    checkCleanWorkspaceTask = project.task(CheckCleanWorkspaceTask.TASK_NAME, type: CheckCleanWorkspaceTask)
+    checkGitBranchTask = project.task(CheckGitBranchTask.TASK_NAME, type: CheckGitBranchTask)
 
     configurePublications(project)
-    addTasks(project)
-    configureTaskDependencies(project)
+    configureSnapshotTaskGraph(project)
+    configureReleaseTaskGraph(project)
   }
 
-  def addTasks(Project project) {
-    preReleaseTasks(project)
-  }
 
-  def preReleaseTasks(Project project) {
-    checkCleanWorkspaceTask = project.task(CheckCleanWorkspaceTask.TASK_NAME, type: CheckCleanWorkspaceTask)
-  }
-
-  def configureTaskDependencies(Project project) {
-    def iCheckTask = project.task('iCheckTask', type: IntermediaryTask)
-    def iPublishTask = project.task('iPublishTask', type: IntermediaryTask)
+  def configureSnapshotTaskGraph(Project project) {
     def iSnapshotCheckTask = project.task('iSnapshotCheck', type: IntermediaryTask)
 
     project.afterEvaluate { evaluatedProject ->
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
-      iCheckTask.dependsOn javaCheckTasks
       iSnapshotCheckTask.dependsOn javaCheckTasks
+
+      evaluatedProject.subprojects.each {
+        def jcenterTasks = it.tasks.findAll { it.name.contains('ToJcenterRepository') }
+        if (jcenterTasks) {
+          snapshotTask.dependsOn jcenterTasks
+        }
+      }
+    }
+
+    snapshotTask.dependsOn iSnapshotCheckTask
+    snapshotTask.dependsOn checkCleanWorkspaceTask
+    snapshotTask.dependsOn credentialCheck
+    iSnapshotCheckTask.mustRunAfter checkCleanWorkspaceTask
+    iSnapshotCheckTask.mustRunAfter credentialCheck
+
+  }
+
+  def configureReleaseTaskGraph(Project project) {
+    def iPublishTask = project.task('iPublishTask', type: IntermediaryTask)
+    def iCheckTask = project.task('iCheckTask', type: IntermediaryTask)
+
+    project.afterEvaluate { evaluatedProject ->
+      def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
+      iCheckTask.dependsOn javaCheckTasks
 
       evaluatedProject.subprojects.each {
         def bintrayPublishTask = it.tasks.findByPath('bintrayUpload')
         if (bintrayPublishTask) {
           iPublishTask.dependsOn(bintrayPublishTask)
-        }
-
-        def jcenterTasks = it.tasks.findAll { it.name.contains('ToJcenterRepository') }
-        if (jcenterTasks) {
-          snapshotTask.dependsOn jcenterTasks
         }
       }
     }
@@ -88,14 +101,6 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     iCheckTask.mustRunAfter checkCleanWorkspaceTask
 
     releaseTask.dependsOn iPublishTask
-
-    //Snapshot dependency graph
-    snapshotTask.dependsOn iSnapshotCheckTask
-    snapshotTask.dependsOn checkCleanWorkspaceTask
-    snapshotTask.dependsOn credentialCheck
-    iSnapshotCheckTask.mustRunAfter checkCleanWorkspaceTask
-    iSnapshotCheckTask.mustRunAfter credentialCheck
-
   }
 
 

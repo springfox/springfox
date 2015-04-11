@@ -22,6 +22,7 @@ buildscript {
   }
 }
 apply plugin: 'build-dashboard'
+apply plugin: 'project-report'
 
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
