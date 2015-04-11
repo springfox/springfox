@@ -21,6 +21,7 @@ package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -75,6 +76,7 @@ public class DocumentationContextBuilder {
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
   private GenericTypeNamingStrategy genericsNamingStrategy;
+  private Optional<String> pathMapping;
 
   public DocumentationContextBuilder(DocumentationType documentationType) {
     this.documentationType = documentationType;
@@ -101,7 +103,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder additionalResponseMessages(
-          Map<RequestMethod, List<ResponseMessage>> additionalResponseMessages) {
+      Map<RequestMethod, List<ResponseMessage>> additionalResponseMessages) {
     this.responseMessageOverrides.putAll(additionalResponseMessages);
     return this;
   }
@@ -127,7 +129,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder apiListingReferenceOrdering(
-          Ordering<ApiListingReference> listingReferenceOrdering) {
+      Ordering<ApiListingReference> listingReferenceOrdering) {
 
     this.listingReferenceOrdering = defaultIfAbsent(listingReferenceOrdering, this.listingReferenceOrdering);
     return this;
@@ -154,8 +156,8 @@ public class DocumentationContextBuilder {
 
   public DocumentationContextBuilder ruleBuilders(List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders) {
     rules.addAll(from(ruleBuilders)
-            .transform(evaluator(typeResolver))
-            .toList());
+        .transform(evaluator(typeResolver))
+        .toList());
     return this;
   }
 
@@ -175,7 +177,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder defaultResponseMessages(
-          Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages) {
+      Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages) {
     this.defaultResponseMessages.putAll(defaultResponseMessages);
     return this;
   }
@@ -189,6 +191,7 @@ public class DocumentationContextBuilder {
     this.consumes.addAll(consumes);
     return this;
   }
+
   public DocumentationContextBuilder genericsNaming(GenericTypeNamingStrategy genericsNamingStrategy) {
     this.genericsNamingStrategy = genericsNamingStrategy;
     return this;
@@ -204,19 +207,38 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+  public DocumentationContextBuilder pathMapping(Optional<String> pathMapping) {
+    this.pathMapping = pathMapping;
+    return this;
+  }
+
   public DocumentationContext build() {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
     SecurityContext securityContext = fromNullable(this.securityContext)
-            .or(new SecurityContextBuilder()
-                .withAuthorizations(new ArrayList<SecurityReference>())
-                .forPaths(PathSelectors.any())
-                .build());
-    return new DocumentationContext(documentationType, handlerMappings, apiInfo, groupName,
-            apiSelector, ignorableParameterTypes, responseMessages,
-            resourceGroupingStrategy, pathProvider,
-        securityContext, securitySchemes, rules,
-            listingReferenceOrdering, apiDescriptionOrdering,
-            operationOrdering, produces, consumes, protocols, genericsNamingStrategy);
+        .or(new SecurityContextBuilder()
+            .withAuthorizations(new ArrayList<SecurityReference>())
+            .forPaths(PathSelectors.any())
+            .build());
+    return new DocumentationContext(documentationType,
+        handlerMappings,
+        apiInfo,
+        groupName,
+        apiSelector,
+        ignorableParameterTypes,
+        responseMessages,
+        resourceGroupingStrategy,
+        pathProvider,
+        securityContext,
+        securitySchemes,
+        rules,
+        listingReferenceOrdering,
+        apiDescriptionOrdering,
+        operationOrdering,
+        produces,
+        consumes,
+        protocols,
+        genericsNamingStrategy,
+        pathMapping);
   }
 
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>

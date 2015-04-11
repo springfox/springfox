@@ -18,46 +18,89 @@
  */
 package springfox.documentation.spring.web;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import java.util.List;
+
+import static com.google.common.collect.Lists.*;
+import static org.junit.Assert.*;
 
 public class ObjectMapperConfigurerIntegrationTest {
+  @Before
+  public void setup() {
+    TestObjectMapperListener.firedCount = 0;
+  }
+
   @Test
-  @SuppressWarnings("unchecked")
-  public void objectMapperSetupIsAppliedToAllTransitiveComponentsInRequestMappingHandlerAdapter() {
+  public void event_is_fired_when_default_rmh_is_loaded() {
 
-    AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TestConfig.class);
+    AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TestDefaultConfig.class);
 
-    context.getBean(RequestMappingHandlerAdapter.class);
+    context.getBean("defaultRmh", RequestMappingHandlerAdapter.class);
 
-    assertThat(TestObjectMapperListener.fired, is(true));
+    assertEquals(TestObjectMapperListener.firedCount, 1L);
+  }
+
+  @Test
+  public void event_is_fired_when_rmh_with_multiple_message_converters_is_loaded() {
+
+    AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TestMultipleConfig.class);
+
+    context.getBean("multipleMCRmh", RequestMappingHandlerAdapter.class);
+
+    assertEquals(TestObjectMapperListener.firedCount, 2L);
   }
 
   static class TestObjectMapperListener implements ApplicationListener<ObjectMapperConfigured> {
-    static boolean fired = false;
+    static long firedCount = 0;
+
     @Override
     public void onApplicationEvent(ObjectMapperConfigured event) {
-      fired = true;
+      firedCount++;
+    }
+  }
+
+
+  @Configuration
+  static class TestDefaultConfig {
+
+
+    @Bean
+    public RequestMappingHandlerAdapter defaultRmh() {
+      RequestMappingHandlerAdapter adapter = new RequestMappingHandlerAdapter();
+      return adapter;
+    }
+
+    @Bean
+    public static ObjectMapperConfigurer objectMapperConfigurer() {
+      return new ObjectMapperConfigurer();
+    }
+
+    @Bean
+    public static TestObjectMapperListener listener() {
+      return new TestObjectMapperListener();
     }
   }
 
   @Configuration
-  static class TestConfig {
-
-    static int numberOfMessageConverters = 0;
+  static class TestMultipleConfig {
 
     @Bean
-    public RequestMappingHandlerAdapter rmh() {
+    public RequestMappingHandlerAdapter multipleMCRmh() {
       RequestMappingHandlerAdapter adapter = new RequestMappingHandlerAdapter();
-      numberOfMessageConverters = adapter.getMessageConverters().size();
+      List<HttpMessageConverter<?>> messageConverters = newArrayList();
+      messageConverters.add(new MappingJackson2HttpMessageConverter());
+      messageConverters.add(new MappingJackson2HttpMessageConverter());
+      adapter.setMessageConverters(messageConverters);
       return adapter;
     }
 

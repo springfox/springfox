@@ -92,8 +92,9 @@ public class ApiListingReferenceScanner {
       PathProvider pathProvider = context.getPathProvider();
       String path = pathProvider.getResourceListingPath(context.getGroupName(), resourceGroupName);
       LOG.info("Created resource listing Path: {} Description: {} Position: {}",
-              path, resourceGroupName, position);
-      apiListingReferences.add(new ApiListingReference(path, listingDescription, position));
+          path, resourceGroupName, position);
+      PathMappingAdjuster adjuster = new PathMappingAdjuster(context);
+      apiListingReferences.add(new ApiListingReference(adjuster.adjustedPath(path), listingDescription, position));
     }
     List<ApiListingReference> sorted = context.getListingReferenceOrdering().sortedCopy(apiListingReferences);
     return new ApiListingReferenceScanResult(sorted,  asMap(resourceGroupRequestMappings));

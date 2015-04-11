@@ -19,6 +19,7 @@
 
 package springfox.documentation.builders;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.Operation;
@@ -31,6 +32,7 @@ public class ApiDescriptionBuilder {
   private List<Operation> operations;
   private Ordering<Operation> operationOrdering;
   private Boolean hidden;
+  private Optional<String> pathMapping;
 
   public ApiDescriptionBuilder(Ordering<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;

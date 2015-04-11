@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
@@ -32,16 +33,16 @@ import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.DocumentationPlugin;
 import springfox.documentation.spi.service.contexts.ApiSelector;
-import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -82,6 +83,7 @@ public class Docket implements DocumentationPlugin {
   private Set<String> protocols = newHashSet();
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
+  private Optional<String> pathMapping = Optional.absent();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
 
   public Docket(DocumentationType documentationType) {
@@ -319,10 +321,20 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
+  /**
+   * Set this to true in order to make the documentation code generation friendly
+   * @param forCodeGen - true|false determines the naming strategy used
+   * @return this Docket
+   */
   public Docket forCodeGeneration(boolean forCodeGen) {
     if (forCodeGen) {
       genericsNamingStrategy = new CodeGenGenericTypeNamingStrategy();
     }
+    return this;
+  }
+
+  public Docket pathMapping(String path) {
+    this.pathMapping = Optional.fromNullable(path);
     return this;
   }
 
@@ -364,6 +376,7 @@ public class Docket implements DocumentationPlugin {
             .consumes(consumes)
             .protocols(protocols)
             .genericsNaming(genericsNamingStrategy)
+            .pathMapping(pathMapping)
             .build();
   }
 

@@ -19,6 +19,7 @@
 
 package springfox.documentation.spi.service.contexts;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,9 +29,9 @@ import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
@@ -60,25 +61,27 @@ public class DocumentationContext {
   private Set<String> consumes;
   private Set<String> protocols;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
+  private final Optional<String> pathMapping;
 
   public DocumentationContext(DocumentationType documentationType,
-                              List<RequestMappingHandlerMapping> handlerMappings,
-                              ApiInfo apiInfo, String groupName,
-                              ApiSelector apiSelector,
-                              Set<Class> ignorableParameterTypes,
-                              Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
-                              ResourceGroupingStrategy resourceGroupingStrategy,
-                              PathProvider pathProvider,
-                              SecurityContext securityContext,
-                              List<? extends SecurityScheme> securitySchemes,
-                              List<AlternateTypeRule> alternateTypeRules,
-                              Ordering<ApiListingReference> listingReferenceOrdering,
-                              Ordering<ApiDescription> apiDescriptionOrdering,
-                              Ordering<Operation> operationOrdering,
-                              Set<String> produces,
-                              Set<String> consumes,
-                              Set<String> protocols,
-                              GenericTypeNamingStrategy genericsNamingStrategy) {
+        List<RequestMappingHandlerMapping> handlerMappings,
+        ApiInfo apiInfo, String groupName,
+        ApiSelector apiSelector,
+        Set<Class> ignorableParameterTypes,
+        Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
+        ResourceGroupingStrategy resourceGroupingStrategy,
+        PathProvider pathProvider,
+        SecurityContext securityContext,
+        List<? extends SecurityScheme> securitySchemes,
+        List<AlternateTypeRule> alternateTypeRules,
+        Ordering<ApiListingReference> listingReferenceOrdering,
+        Ordering<ApiDescription> apiDescriptionOrdering,
+        Ordering<Operation> operationOrdering,
+        Set<String> produces,
+        Set<String> consumes,
+        Set<String> protocols,
+        GenericTypeNamingStrategy genericsNamingStrategy,
+        Optional<String> pathMapping) {
 
     this.documentationType = documentationType;
     this.handlerMappings = handlerMappings;
@@ -98,6 +101,7 @@ public class DocumentationContext {
     this.consumes = consumes;
     this.protocols = protocols;
     this.genericsNamingStrategy = genericsNamingStrategy;
+    this.pathMapping = pathMapping;
     this.alternateTypeProvider = new AlternateTypeProvider(alternateTypeRules);
   }
 
@@ -175,5 +179,9 @@ public class DocumentationContext {
 
   public GenericTypeNamingStrategy getGenericsNamingStrategy() {
     return genericsNamingStrategy;
+  }
+
+  public Optional<String> getPathMapping() {
+    return pathMapping;
   }
 }

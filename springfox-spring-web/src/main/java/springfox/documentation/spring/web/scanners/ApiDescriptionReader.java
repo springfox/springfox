@@ -61,13 +61,14 @@ public class ApiDescriptionReader {
         String path = pathProvider.getOperationPath(cleanedRequestMappingPath);
         String methodName = handlerMethod.getMethod().getName();
         RequestMappingContext operationContext = outerContext.copyPatternUsing(cleanedRequestMappingPath);
+        PathMappingAdjuster adjuster = new PathMappingAdjuster(operationContext.getDocumentationContext());
         apiDescriptionList.add(
-                new ApiDescriptionBuilder(outerContext.operationOrdering())
-                        .path(path)
-                        .description(methodName)
-                        .operations(operationReader.read(operationContext))
-                        .hidden(false)
-                        .build());
+            new ApiDescriptionBuilder(outerContext.operationOrdering())
+                .path(adjuster.adjustedPath(path))
+                .description(methodName)
+                .operations(operationReader.read(operationContext))
+                .hidden(false)
+                .build());
     }
     return apiDescriptionList;
   }

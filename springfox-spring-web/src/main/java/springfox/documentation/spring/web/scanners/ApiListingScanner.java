@@ -28,12 +28,12 @@ import springfox.documentation.builders.ApiListingBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
-import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
-import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.ArrayList;
@@ -95,9 +95,11 @@ public class ApiListingScanner {
       String resourcePath = longestCommonPath(sortedApis);
 
       PathProvider pathProvider = documentationContext.getPathProvider();
+      String basePath = pathProvider.getApplicationBasePath();
+      PathMappingAdjuster adjuster = new PathMappingAdjuster(documentationContext);
       ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
               .apiVersion(documentationContext.getApiInfo().getVersion())
-              .basePath(pathProvider.getApplicationBasePath())
+              .basePath(adjuster.adjustedPath(basePath))
               .resourcePath(resourcePath)
               .produces(produces)
               .consumes(consumes)
