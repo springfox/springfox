@@ -28,6 +28,10 @@ class CheckGitBranchTask extends DefaultTask {
   @TaskAction
   void check() {
     String requiredBranch = "master"
+    project.exec {
+      commandLine "git", "fetch"
+    }
+
     def sout = new ByteArrayOutputStream()
     project.exec {
       commandLine "git", "rev-parse", "--abbrev-ref", "HEAD"
@@ -35,5 +39,13 @@ class CheckGitBranchTask extends DefaultTask {
     }
     def branch = sout.toString()
     assert branch.trim() == requiredBranch: "Incorrect release branch: ${branch}. You must be on ${requiredBranch} to release"
+
+    sout = new ByteArrayOutputStream()
+    project.exec {
+      commandLine "git", "status", "-sb"
+      standardOutput = sout
+    }
+    def gitStatus = sout.toString()
+    assert !gitStatus.contains('['): "The local branch is not in sync with remote"
   }
 }
