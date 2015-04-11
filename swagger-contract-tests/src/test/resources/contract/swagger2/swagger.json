@@ -38,7 +38,6 @@
                 ],
                 "summary": "Add a new pet to the store",
                 "description": "addPet",
-                "operationId": "addPetUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -83,7 +82,6 @@
                 ],
                 "summary": "Update an existing pet",
                 "description": "updatePet",
-                "operationId": "updatePetUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -136,7 +134,6 @@
                 ],
                 "summary": "Finds Pets by status",
                 "description": "Multiple status values can be provided with comma seperated strings",
-                "operationId": "findPetsByStatusUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -185,7 +182,6 @@
                 ],
                 "summary": "Finds Pets by tags",
                 "description": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
-                "operationId": "findPetsByTagsUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -234,7 +230,6 @@
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
-                "operationId": "getPetByIdUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -287,7 +282,6 @@
                 ],
                 "summary": "Place an order for a pet",
                 "description": "placeOrder",
-                "operationId": "placeOrderUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -325,7 +319,6 @@
                 ],
                 "summary": "Find purchase order by ID",
                 "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions",
-                "operationId": "getOrderByIdUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -362,7 +355,6 @@
                 ],
                 "summary": "Delete purchase order by ID",
                 "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors",
-                "operationId": "deleteOrderUsingDELETE",
                 "consumes": [
                     "application/json"
                 ],
@@ -401,7 +393,6 @@
                 ],
                 "summary": "Create user",
                 "description": "This can only be done by the logged in user.",
-                "operationId": "createUserUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -436,7 +427,6 @@
                 ],
                 "summary": "Creates list of users with given input array",
                 "description": "createUsersWithArrayInput",
-                "operationId": "createUsersWithArrayInputUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -474,7 +464,6 @@
                 ],
                 "summary": "Creates list of users with given input array",
                 "description": "createUsersWithListInput",
-                "operationId": "createUsersWithListInputUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -512,7 +501,6 @@
                 ],
                 "summary": "Logs user into the system",
                 "description": "loginUser",
-                "operationId": "loginUserUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -555,7 +543,6 @@
                 ],
                 "summary": "Logs out current logged in user session",
                 "description": "logoutUser",
-                "operationId": "logoutUserUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -579,7 +566,6 @@
                 ],
                 "summary": "Get user by user name",
                 "description": "getUserByName",
-                "operationId": "getUserByNameUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -616,7 +602,6 @@
                 ],
                 "summary": "Updated user",
                 "description": "This can only be done by the logged in user.",
-                "operationId": "updateUserUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -662,7 +647,6 @@
                 ],
                 "summary": "Delete user",
                 "description": "This can only be done by the logged in user.",
-                "operationId": "deleteUserUsingDELETE",
                 "consumes": [
                     "application/json"
                 ],

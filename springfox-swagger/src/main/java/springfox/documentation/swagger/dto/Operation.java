@@ -48,6 +48,7 @@ public class Operation {
   @JsonProperty
   @JsonUnwrapped
   private SwaggerDataType dataType;
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private String nickname;
   @JsonIgnore
   private int position;

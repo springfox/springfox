@@ -32,7 +32,6 @@
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
                 "description": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE",
                 "consumes": [
                     "application/json"
                 ],

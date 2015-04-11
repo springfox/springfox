@@ -32,7 +32,6 @@
                 ],
                 "summary": "create",
                 "description": "create",
-                "operationId": "createUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -64,7 +63,6 @@
                 ],
                 "summary": "get",
                 "description": "get",
-                "operationId": "getUsingGET",
                 "consumes": [
                     "application/json"
                 ],

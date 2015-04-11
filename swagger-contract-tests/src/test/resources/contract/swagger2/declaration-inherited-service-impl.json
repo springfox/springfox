@@ -32,7 +32,6 @@
                 ],
                 "summary": "getSomething",
                 "description": "getSomething",
-                "operationId": "getSomethingUsingGET",
                 "consumes": [
                     "application/json"
                 ],
