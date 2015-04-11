@@ -26,5 +26,5 @@ e.g:
 
 ```
 
-By default Spring Boot has sensible defaults for servings content from webjars. To congure vanilla spring web mvc apps to serve
+By default Spring Boot has sensible defaults for serving content from webjars. To configure vanilla spring web mvc apps to serve
  webjar content see the [webjar documentation] (http://www.webjars.org/documentation#springmvc) 
