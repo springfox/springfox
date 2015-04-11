@@ -39,5 +39,11 @@ public interface DocumentationPlugin extends Plugin<DocumentationType> {
    * @return context to use for building the documentation
    */
   DocumentationContext configure(DocumentationContextBuilder builder);
+
+  /**
+   * Gets the group name for the plugin. This is expected to be unique for each instance of the plugin
+   * @return group the plugin belongs to
+   */
+  String getGroupName();
 }
 

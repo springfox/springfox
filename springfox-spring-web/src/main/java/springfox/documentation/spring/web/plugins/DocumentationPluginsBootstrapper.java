@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,8 +79,8 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
   public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
     if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
-      List<DocumentationPlugin> plugins = documentationPluginsManager.documentationPlugins();
-      log.info("Found {0} custom documentation plugin(s)", plugins.size());
+      Iterable<DocumentationPlugin> plugins = documentationPluginsManager.documentationPlugins();
+      log.info("Found {0} custom documentation plugin(s)", Iterables.size(plugins));
       for (DocumentationPlugin each : plugins) {
         DocumentationType documentationType = each.getDocumentationType();
         if (each.isEnabled()) {

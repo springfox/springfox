@@ -380,6 +380,11 @@ public class Docket implements DocumentationPlugin {
             .build();
   }
 
+  @Override
+  public String getGroupName() {
+    return groupName;
+  }
+
   public boolean isEnabled() {
     return enabled;
   }

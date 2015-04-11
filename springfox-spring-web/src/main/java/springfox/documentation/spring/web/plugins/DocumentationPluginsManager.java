@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.ensureNoDuplicateGroups;
 
 @Component
 public class DocumentationPluginsManager {
@@ -89,13 +90,17 @@ public class DocumentationPluginsManager {
   }
 
 
-  public List<DocumentationPlugin> documentationPlugins() {
+  public Iterable<DocumentationPlugin> documentationPlugins() throws IllegalStateException  {
     List<DocumentationPlugin> plugins = documentationPlugins.getPlugins();
+    ensureNoDuplicateGroups(plugins);
     if (plugins.isEmpty()) {
       return newArrayList(defaultDocumentationPlugin());
     }
     return plugins;
   }
+
+
+
 
   public Parameter parameter(ParameterContext parameterContext) {
     for (ParameterBuilderPlugin each : parameterPlugins.getPluginsFor(parameterContext.getDocumentationType())) {

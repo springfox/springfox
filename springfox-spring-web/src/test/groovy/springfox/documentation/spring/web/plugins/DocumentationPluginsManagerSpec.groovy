@@ -56,6 +56,7 @@ class DocumentationPluginsManagerSpec extends Specification {
     given:
       def mockPlugin = Mock(DocumentationPlugin)
     and:
+      mockPlugin.groupName >> "default"
       def sut = customWebPlugins([mockPlugin])
     expect:
       sut.documentationPlugins.size() == 1
