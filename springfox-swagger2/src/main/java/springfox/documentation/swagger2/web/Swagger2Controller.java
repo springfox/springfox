@@ -34,7 +34,9 @@ import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
-import javax.servlet.ServletRequest;
+import java.net.URI;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 @Controller
 @ApiIgnore
@@ -52,7 +54,7 @@ public class Swagger2Controller {
   public
   @ResponseBody
   ResponseEntity<Swagger> getDocumentation(
-          @RequestParam(value = "group", required = false) String swaggerGroup, ServletRequest request) {
+          @RequestParam(value = "group", required = false) String swaggerGroup) {
 
     String groupName = Optional.fromNullable(swaggerGroup).or("default");
     Documentation documentation = documentationCache.documentationByGroup(groupName);
@@ -60,8 +62,8 @@ public class Swagger2Controller {
       return new ResponseEntity<Swagger>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
-    //TODO - this will be problematic when behind a proxy
-    swagger.host(String.format("%s:%s", request.getServerName(), request.getServerPort()));
+    URI uri = linkTo(Swagger2Controller.class).toUri();
+    swagger.host(String.format("%s:%s", uri.getHost(), uri.getPort()));
     return new ResponseEntity<Swagger>(swagger, HttpStatus.OK);
   }
 

@@ -4,7 +4,7 @@ ext {
   groovy = "2.4.3"
   spock = "1.0-groovy-2.4"
   guava = "18.0"
-  springHateoas = "0.10.0.RELEASE"
+  springHateoas = "0.17.0.RELEASE"
   slf4j = "1.7.12"
   mockito = "1.10.19"
   servlet = "3.0.1"
@@ -32,7 +32,8 @@ ext {
           ],
           spring        : [
                   "org.springframework.plugin:spring-plugin-core:${springPluginVersion}",
-                  "org.springframework.plugin:spring-plugin-metadata:${springPluginVersion}"
+                  "org.springframework.plugin:spring-plugin-metadata:${springPluginVersion}",
+                  "org.springframework.hateoas:spring-hateoas:${springHateoas}"
           ],
           springProvided: [
                   "org.springframework:spring-core:$spring",
