@@ -9,6 +9,8 @@ dependencies:
 test:
   override:
   - ./gradlew clean check
+  post:
+    - ./gradlew coveralls
 deployment:
  staging:
     branch: master
