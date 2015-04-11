@@ -20,12 +20,12 @@
 package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
-import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
 import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.schema.Enums.*;
 
 public class ModelPropertyBuilder {
   private ResolvedType type;
@@ -70,9 +70,10 @@ public class ModelPropertyBuilder {
   public ModelPropertyBuilder allowableValues(AllowableValues allowableValues) {
     if (allowableValues != null) {
       if (allowableValues instanceof AllowableListValues) {
-        this.allowableValues = Enums.emptyListValuesToNull((AllowableListValues) allowableValues);
+        this.allowableValues
+            = defaultIfAbsent(emptyListValuesToNull((AllowableListValues) allowableValues), this.allowableValues);
       } else {
-        this.allowableValues = allowableValues;
+        this.allowableValues = defaultIfAbsent(allowableValues, this.allowableValues);
       }
     }
     return this;
