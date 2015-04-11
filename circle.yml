@@ -10,10 +10,7 @@ test:
   override:
   - ./gradlew clean check
   post:
-    - '[[ $CI_NAME == "Circle CI" ]]
-          && [[ $CI_BRANCH == $CIRCLE_BRANCH ]]
-          && [[ $CI_BUILD_NUMBER == $CIRCLE_BUILD_NUM ]]
-          && TERM=dumb ./gradlew coveralls'
+    - CI_NAME=Circle-CI CI_BRANCH=$CIRCLE_BRANCH CI_BUILD_NUMBER=$CIRCLE_BUILD_NUM CI_BUILD_URL=$CIRCLE_COMPARE_URL TERM=dumb ./gradlew coveralls
 deployment:
  staging:
     branch: master
