@@ -32,7 +32,6 @@ import spock.lang.Unroll
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger.annotations.EnableSwagger
-import springfox.documentation.swagger.ui.EnableSwaggerUi
 
 import static groovyx.net.http.ContentType.*
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
@@ -101,7 +100,6 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
 
   @Configuration
   @EnableSwagger
-  @EnableSwaggerUi
   @EnableWebMvc
   @ComponentScan([
           "springfox.documentation.spring.web.dummy.controllers",

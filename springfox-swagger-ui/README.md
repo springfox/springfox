@@ -9,12 +9,6 @@ __This is a work in progeress!__
 Prior versions of this library included sdoc.jsp which caused all kinds of problems on 
 spring boot. This latest version now bundles a html (swagger-ui.html) instead.
 
-The `@EnableSwaggerUi` annotation is required
-```java
-//Use this annotation to enable the /swagger-resources endpoint
-@EnableSwaggerUi
-```
-
 The swagger ui version is specified in ./build.gradle where `swaggerUiVersion` is a git tag on the [swagger-ui repo]
 (https://github.com/wordnik/swagger-ui).
  

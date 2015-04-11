@@ -16,8 +16,7 @@
  *
  *
  */
-
-package springfox.documentation.swagger.ui;
+package springfox.documentation.swagger.web;
 
 import com.google.common.collect.ComparisonChain;
 

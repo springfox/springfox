@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.documentation.swagger.ui;
+package springfox.documentation.swagger.web;
 
 import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
