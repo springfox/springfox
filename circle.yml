@@ -3,6 +3,10 @@ machine:
     version: oraclejdk6
   environment:
     TERM: dumb
+    CI_NAME: Circle-CI
+    CI_BRANCH: $CIRCLE_BRANCH
+    CI_BUILD_NUMBER: $CIRCLE_BUILD_NUM
+    CI_BUILD_URL: $CIRCLE_COMPARE_URL
 dependencies:
   cache_directories:
     - ~/.m2
@@ -10,7 +14,7 @@ test:
   override:
   - ./gradlew clean check
   post:
-    - CI_NAME=Circle-CI CI_BRANCH=$CIRCLE_BRANCH CI_BUILD_NUMBER=$CIRCLE_BUILD_NUM CI_BUILD_URL=$CIRCLE_COMPARE_URL TERM=dumb ./gradlew coveralls
+    - ./gradlew coveralls
 deployment:
  staging:
     branch: master
