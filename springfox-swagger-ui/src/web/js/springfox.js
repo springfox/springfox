@@ -14,9 +14,7 @@ $(function () {
     function baseUrl() {
         var parts = window.location.href.split('/');
         //Walk up the url
-        for (i = 0; i < 1; i++) {
-            parts.pop();
-        }
+        parts.pop();
         return parts.join('/');
     }
 
