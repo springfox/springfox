@@ -323,6 +323,7 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Set this to true in order to make the documentation code generation friendly
+   *
    * @param forCodeGen - true|false determines the naming strategy used
    * @return this Docket
    */

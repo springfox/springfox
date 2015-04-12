@@ -19,6 +19,7 @@
 package springfox.documentation.spring.web.plugins
 
 import spock.lang.Specification
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.DocumentationPlugin
 
 import static com.google.common.collect.Lists.*
@@ -79,5 +80,11 @@ class DuplicateGroupsDetectorSpec extends Specification {
       ensureNoDuplicateGroups(plugins)
     then:
       thrown(IllegalStateException)
+  }
+
+  def "A plugin with a null groupName is not considered a duplicate"() {
+    def plugins = [new Docket(DocumentationType.SWAGGER_2)]
+    expect:
+      ensureNoDuplicateGroups(plugins)
   }
 }

@@ -50,8 +50,6 @@ class DocumentationPluginsManagerSpec extends Specification {
       sut.resourceGroupingStrategy(DocumentationType.SWAGGER_12) instanceof SpringGroupingStrategy
   }
 
-
-
   def "When documentation plugins are explicitly defined" () {
     given:
       def mockPlugin = Mock(DocumentationPlugin)

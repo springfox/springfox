@@ -18,17 +18,18 @@
  */
 
 package springfox.documentation.swagger.integration
+
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.http.ResponseEntity
 import springfox.documentation.service.ApiInfo
-import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.ResponseMessage
+import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spi.service.contexts.Defaults
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spi.service.contexts.SecurityContextBuilder
 import springfox.documentation.spring.web.RelativePathProvider
 import springfox.documentation.spring.web.plugins.Docket
@@ -56,7 +57,7 @@ class DocketSpec extends DocumentationContextSpec {
       pluginContext.apiInfo.getTermsOfServiceUrl() == 'urn:tos'
       pluginContext.apiInfo.getContact() == 'Contact Email'
       pluginContext.apiInfo.getLicense() == 'Apache 2.0'
-      pluginContext.apiInfo.getLicenseUrl() ==  "http://www.apache.org/licenses/LICENSE-2.0"
+      pluginContext.apiInfo.getLicenseUrl() == "http://www.apache.org/licenses/LICENSE-2.0"
       pluginContext.apiInfo.version == "1.0"
 
       pluginContext.pathProvider instanceof RelativePathProvider
@@ -188,12 +189,12 @@ class DocketSpec extends DocumentationContextSpec {
       context()."$property" == object
 
     where:
-      builderMethod          | object                                         | property
-      'pathProvider'         | new RelativePathProvider(Mock(ServletContext)) | 'pathProvider'
-      'securitySchemes'   | new ArrayList<SecurityScheme>()             | 'securitySchemes'
-      'securityContext'      | validContext()                                 | 'securityContext'
-      'groupName'            | 'someGroup'                                    | 'groupName'
-      'apiInfo'              | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
+      builderMethod     | object                                         | property
+      'pathProvider'    | new RelativePathProvider(Mock(ServletContext)) | 'pathProvider'
+      'securitySchemes' | new ArrayList<SecurityScheme>()                | 'securitySchemes'
+      'securityContext' | validContext()                                 | 'securityContext'
+      'groupName'       | 'someGroup'                                    | 'groupName'
+      'apiInfo'         | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
   }
 
   private SecurityContext validContext() {
@@ -219,6 +220,4 @@ class DocketSpec extends DocumentationContextSpec {
       null != pluginContext.apiDescriptionOrdering
 
   }
-
-
 }

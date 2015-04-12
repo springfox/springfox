@@ -20,6 +20,7 @@ package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
@@ -42,7 +43,7 @@ class DuplicateGroupsDetector {
     Iterable<String> duplicateGroups = from(plugins.asMap().entrySet()).filter(duplicates()).transform(toGroupNames());
     if (Iterables.size(duplicateGroups) > 0) {
       throw new IllegalStateException(String.format("Multiple Dockets with the same group name are not supported. "
-          + "The following duplicate groups were discovered. %s", Joiner.on(',').join(duplicateGroups)));
+              + "The following duplicate groups were discovered. %s", Joiner.on(',').join(duplicateGroups)));
     }
   }
 
@@ -69,7 +70,7 @@ class DuplicateGroupsDetector {
     return new Function<DocumentationPlugin, String>() {
       @Override
       public String apply(DocumentationPlugin input) {
-        return input.getGroupName();
+        return Optional.fromNullable(input.getGroupName()).or("default");
       }
     };
   }
