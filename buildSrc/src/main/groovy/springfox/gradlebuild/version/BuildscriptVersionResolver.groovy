@@ -23,6 +23,12 @@ import org.gradle.api.Project
 
 class BuildscriptVersionResolver {
 
+  /**
+   *
+   * @param project
+   * @param currentVersion
+   * @return the project version, bumps the version if the project is in the process of being released.
+   */
   static SoftwareVersion projectVersion(Project project, SoftwareVersion currentVersion) {
     if (project.gradle.startParameter.taskNames.contains('release')) {
       return currentVersion.next(ReleaseType.valueOf(project.property('releaseType').toUpperCase()))

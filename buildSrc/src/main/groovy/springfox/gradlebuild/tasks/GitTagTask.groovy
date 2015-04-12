@@ -26,8 +26,6 @@ class GitTagTask extends DefaultTask {
 
   @TaskAction
   void tag() {
-    project.exec {
-      commandLine 'git', 'tag', '-a', "${project.version}", '-m', "${project.version}"
-    }
+
   }
 }
