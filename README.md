@@ -62,7 +62,7 @@ __Maven__
 <!-- for swagger spec 1.2 optionally -->
 <dependency>
     <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger</artifactId>
+    <artifactId>springfox-swagger1</artifactId>
     <version>2.0.0</version>
 </dependency>
 ```
@@ -81,7 +81,7 @@ compile "io.springfox:springfox-schema:2.0.0"
 compile "io.springfox:springfox-spring-web:2.0.0"
 compile "io.springfox:springfox-swagger2:2.0.0"
 //Optional for swagger 1.2
-compile "io.springfox:springfox-swagger:2.0.0"
+compile "io.springfox:springfox-swagger1:2.0.0"
 ```
 
 #### Snapshot version
@@ -120,7 +120,7 @@ __Maven__
 <!-- for swagger 1.2 optionally -->
 <dependency>
     <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger</artifactId>
+    <artifactId>springfox-swagger1</artifactId>
     <version>2.0.0-SNAPSHOT</version>
 </dependency>
 ```

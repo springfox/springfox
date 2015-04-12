@@ -43,6 +43,10 @@ abstract class SwaggerAppSpec extends Specification {
       def response = http.get(path: '/swagger-resources', contentType: TEXT, headers: [Accept: 'application/json'])
       def slurper = new JsonSlurper()
       def result = slurper.parseText(response.data.text)
+      println "Results: "
+      result.each {
+        println it
+      }
     then:
       result.find { it.name == 'default' && it.location == '/api-docs?group=default' && it.swaggerVersion == '1.2' }
       result.find { it.name == 'default' && it.location == '/v2/api-docs?group=default' && it.swaggerVersion == '2.0' }

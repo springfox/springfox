@@ -35,7 +35,7 @@ and responses                                 |
                                        ^               ^                                                                
                          +-------------+----+     +----+--------------+                                                 
                          |                  |     |                   |  Configurations, and mapping layer              
-                         |springfox-swagger |     |springfox-swagger2 |  that know how to convert the                   
+                         |springfox-swagger1|     |springfox-swagger2 |  that know how to convert the                   
                          |                  |     |                   |  service models to swagger 1.2 and              
                          +------------------+     +-------------------+  swagger 2.0 specification documents.  A
                                                                          Also contains the controller for each
@@ -79,7 +79,7 @@ __Maven__
 <!-- for swagger 1.2 optionally -->
 <dependency>
     <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger</artifactId>
+    <artifactId>springfox-swagger1</artifactId>
     <version>2.0.0-SNAPSHOT</version>
 </dependency>
 ```
@@ -98,7 +98,7 @@ compile "io.springfox:springfox-schema:2.0.0-SNAPSHOT",
 compile "io.springfox:springfox-spring-web:2.0.0-SNAPSHOT",
 compile "io.springfox:springfox-swagger2:2.0.0-SNAPSHOT"
 //Optional for swagger 1.2
-compile "io.springfox:springfox-swagger:2.0.0-SNAPSHOT"
+compile "io.springfox:springfox-swagger1:2.0.0-SNAPSHOT"
 ```
 
 ### Configuration changes

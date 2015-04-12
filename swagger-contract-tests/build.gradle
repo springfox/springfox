@@ -29,10 +29,7 @@ dependencies {
   compile 'taglibs:standard:1.1.2'
   compile 'javax.servlet:jstl:1.2'
 
-//  //TODO Replace this old webjar
-//  compile "org.ajar:swagger-spring-mvc-ui:0.4"
-
-  compile(project(':springfox-swagger')) {
+  compile(project(':springfox-swagger1')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 
@@ -43,7 +40,7 @@ dependencies {
   testCompile 'org.skyscreamer:jsonassert:1.2.3'
   testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
 
-  compile(project(path: ':springfox-swagger', configuration: 'testArtifacts')) {
+  compile(project(path: ':springfox-swagger1', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
   compile(project(path: ':springfox-swagger2', configuration: 'testArtifacts')) {

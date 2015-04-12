@@ -36,7 +36,8 @@ import static springfox.documentation.swagger2.configuration.Swagger2JacksonModu
         "springfox.documentation.swagger.readers.operation",
         "springfox.documentation.swagger.readers.parameter",
         "springfox.documentation.swagger2.web",
-        "springfox.documentation.swagger2.mappers"
+        "springfox.documentation.swagger2.mappers",
+        "springfox.documentation.swagger.web"
 })
 public class Swagger2DocumentationConfiguration implements ApplicationListener<ObjectMapperConfigured> {
   @Override

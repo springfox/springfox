@@ -31,7 +31,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import spock.lang.Unroll
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
-import springfox.documentation.swagger.annotations.EnableSwagger
+import springfox.documentation.swagger1.annotations.EnableSwagger
 
 import static groovyx.net.http.ContentType.*
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
