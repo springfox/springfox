@@ -80,6 +80,13 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
   }
 
+//  Check that the local git repository is clean and in sync with remote
+//  :clean :check
+//  Append 1 to the current version number (version.properties) and save the file
+//  perform release to bintray
+//  create a github release tag
+//  push git tag and version.properties
+
   def configureReleaseTaskGraph(Project project) {
     def iPublishTask = project.task('iPublishTask', type: IntermediaryTask)
     def iCheckTask = project.task('iCheckTask', type: IntermediaryTask)
@@ -100,7 +107,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     iPublishTask.dependsOn checkCleanWorkspaceTask
     iCheckTask.mustRunAfter checkCleanWorkspaceTask
 
-    releaseTask.dependsOn iPublishTask
+//    releaseTask.dependsOn iPublishTask
   }
 
 
