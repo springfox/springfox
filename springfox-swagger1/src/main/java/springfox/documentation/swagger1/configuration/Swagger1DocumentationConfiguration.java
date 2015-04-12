@@ -32,13 +32,10 @@ import static springfox.documentation.swagger1.configuration.SwaggerJacksonModul
 @Configuration
 @Import({ SpringMvcDocumentationConfiguration.class, SwaggerCommonConfiguration.class})
 @ComponentScan(basePackages = {
-        "springfox.documentation.swagger1.schema",
         "springfox.documentation.swagger1.web",
-        "springfox.documentation.swagger1.readers.operation",
-        "springfox.documentation.swagger1.readers.parameter",
-        "springfox.documentation.swagger1.mappers",
+        "springfox.documentation.swagger1.mappers"
 })
-public class SwaggerSpringMvcDocumentationConfiguration implements ApplicationListener<ObjectMapperConfigured> {
+public class Swagger1DocumentationConfiguration implements ApplicationListener<ObjectMapperConfigured> {
   @Override
   public void onApplicationEvent(ObjectMapperConfigured event) {
     maybeRegisterModule(event.getObjectMapper());

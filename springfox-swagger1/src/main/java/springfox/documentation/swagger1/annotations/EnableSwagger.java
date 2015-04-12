@@ -20,7 +20,7 @@
 package springfox.documentation.swagger1.annotations;
 
 import org.springframework.context.annotation.Import;
-import springfox.documentation.swagger1.configuration.SwaggerSpringMvcDocumentationConfiguration;
+import springfox.documentation.swagger1.configuration.Swagger1DocumentationConfiguration;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -38,6 +38,6 @@ import java.lang.annotation.Target;
 @Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target(value = {java.lang.annotation.ElementType.TYPE})
 @Documented
-@Import(SwaggerSpringMvcDocumentationConfiguration.class)
+@Import(Swagger1DocumentationConfiguration.class)
 public @interface EnableSwagger {
 }
