@@ -18,6 +18,7 @@
                     "method": "POST",
                     "summary": "Add a new pet to the store",
                     "notes": "addPet",
+                    "nickname": "addPetUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -75,6 +76,7 @@
                     "method": "PUT",
                     "summary": "Update an existing pet",
                     "notes": "updatePet",
+                    "nickname": "updatePetUsingPUT",
                     "produces": [
                         "*/*"
                     ],
@@ -138,6 +140,7 @@
                     "method": "GET",
                     "summary": "List all pets",
                     "notes": "listPets",
+                    "nickname": "listPetsUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -182,6 +185,7 @@
                     "method": "POST",
                     "summary": "petEntities",
                     "notes": "petEntities",
+                    "nickname": "petEntitiesUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -238,6 +242,7 @@
                     "method": "POST",
                     "summary": "echo",
                     "notes": "echo",
+                    "nickname": "echoUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -291,6 +296,7 @@
                     "method": "GET",
                     "summary": "Finds Pets by status",
                     "notes": "Multiple status values can be provided with comma seperated strings",
+                    "nickname": "findPetsByStatusUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -350,6 +356,7 @@
                     "method": "GET",
                     "summary": "Finds Pets by tags",
                     "notes": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
+                    "nickname": "findPetsByTagsUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -404,6 +411,7 @@
                     "method": "POST",
                     "summary": "nameToNickNamesMap",
                     "notes": "nameToNickNamesMap",
+                    "nickname": "nameToNickNamesMapUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -449,6 +457,7 @@
                     "method": "POST",
                     "summary": "siblings",
                     "notes": "siblings",
+                    "nickname": "siblingsUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -505,6 +514,7 @@
                     "method": "POST",
                     "summary": "transformPetNameToPetMapToAny",
                     "notes": "transformPetNameToPetMapToAny",
+                    "nickname": "transformPetNameToPetMapToAnyUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -558,6 +568,7 @@
                     "method": "POST",
                     "summary": "transformPetNameToPetMapToGenericOpenMap",
                     "notes": "transformPetNameToPetMapToGenericOpenMap",
+                    "nickname": "transformPetNameToPetMapToGenericOpenMapUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -611,6 +622,7 @@
                     "method": "POST",
                     "summary": "transformPetNameToPetMapToOpenMap",
                     "notes": "transformPetNameToPetMapToOpenMap",
+                    "nickname": "transformPetNameToPetMapToOpenMapUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -664,6 +676,7 @@
                     "method": "GET",
                     "summary": "method",
                     "notes": "method",
+                    "nickname": "methodUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -721,6 +734,7 @@
                     "method": "POST",
                     "summary": "petByName",
                     "notes": "petByName",
+                    "nickname": "petByNameUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -774,6 +788,7 @@
                     "method": "GET",
                     "summary": "Find pet by ID",
                     "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+                    "nickname": "getPetByIdUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -825,6 +840,7 @@
                     "method": "POST",
                     "summary": "updatePic",
                     "notes": "updatePic",
+                    "nickname": "updatePicUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -886,6 +902,7 @@
                     "method": "GET",
                     "summary": "updatePic",
                     "notes": "updatePic",
+                    "nickname": "updatePicUsingGET",
                     "produces": [
                         "*/*"
                     ],

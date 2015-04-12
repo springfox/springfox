@@ -18,6 +18,7 @@
                     "method": "GET",
                     "summary": "exampleWithNoRequestMapping",
                     "notes": "exampleWithNoRequestMapping",
+                    "nickname": "exampleWithNoRequestMappingUsingGET",
                     "produces": [
                         "*/*"
                     ],

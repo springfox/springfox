@@ -16,6 +16,7 @@
                     "method": "GET",
                     "summary": "canGroom",
                     "notes": "canGroom",
+                    "nickname": "canGroomUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -65,6 +66,7 @@
                     "method": "DELETE",
                     "summary": "groomingFunctionThatReturnsVoid",
                     "notes": "groomingFunctionThatReturnsVoid",
+                    "nickname": "groomingFunctionThatReturnsVoidUsingDELETE",
                     "produces": [
                         "application/xml",
                         "application/json"
@@ -114,6 +116,7 @@
                     "method": "GET",
                     "summary": "canGroom",
                     "notes": "canGroom",
+                    "nickname": "canGroomUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -163,6 +166,7 @@
                     "method": "GET",
                     "summary": "canGroom",
                     "notes": "canGroom",
+                    "nickname": "canGroomUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -212,6 +216,7 @@
                     "method": "DELETE",
                     "summary": "groomingFunctionThatReturnsVoid",
                     "notes": "groomingFunctionThatReturnsVoid",
+                    "nickname": "groomingFunctionThatReturnsVoidUsingDELETE",
                     "produces": [
                         "application/xml",
                         "application/json"
@@ -261,6 +266,7 @@
                     "method": "DELETE",
                     "summary": "groomingFunctionThatReturnsVoid",
                     "notes": "groomingFunctionThatReturnsVoid",
+                    "nickname": "groomingFunctionThatReturnsVoidUsingDELETE",
                     "produces": [
                         "application/xml",
                         "application/json"

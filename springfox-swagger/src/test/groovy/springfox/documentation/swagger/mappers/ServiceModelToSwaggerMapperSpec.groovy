@@ -132,7 +132,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mappedDescription.hidden == builtDescription.hidden
       mappedDescription.path == builtDescription.path
       mappedDescription.operations.size() == builtDescription.operations.size()
-//      mappedOperation.nickname == builtOperation.uniqueId
+      mappedOperation.nickname == builtOperation.uniqueId
       mappedOperation.authorizations.size() == builtOperation.securityReferences.size()
       mappedOperation.authorizations.containsKey("basic")
       mappedOperation.consumes.first() == builtOperation.consumes.first()
