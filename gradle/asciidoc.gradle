@@ -46,3 +46,5 @@ task publishDocs(type: Exec) {
   git checkout master
 """
 }
+
+publishDocs.dependsOn asciidoctor
