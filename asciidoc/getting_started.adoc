@@ -1,1 +1,78 @@
 == Getting Started
+
+:releaseVersion: 2.0.0
+:snapshotVersion: 2.0.0-SNAPSHOT
+
+The Springfox libraries are hosted on https://bintray.com/springfox/maven-repo/springfox/view[bintray] and jcenter.
+The libraries can be viewed via artifactory at the following locations:
+
+* http://oss.jfrog.org/simple/oss-release-local/io/springfox/
+* http://oss.jfrog.org/simple/oss-snapshot-local/io/springfox/
+
+Springfox has multiple modules and the dependencies will vary depending on the desired API specification standard.
+Below outlines how to include the springfox-swagger2 module which produces Swagger 2.0 API documentation.
+
+=== Gradle
+==== Release
+[source,groovy]
+[subs="verbatim,attributes"]
+----
+repositories {
+  jcenter()
+}
+
+compile "io.springfox:springfox-swagger2:{releaseVersion}"
+----
+
+==== Snapshot
+
+[source,groovy]
+[subs="verbatim,attributes"]
+----
+repositories {
+   maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+}
+compile "io.springfox:springfox-swagger2:{releaseVersion}"
+----
+
+
+=== Maven
+==== Release
+
+[source,xml]
+[subs="verbatim,attributes"]
+----
+<repositories>
+    <repository>
+      <id>jcenter-snapshots</id>
+      <name>jcenter</name>
+      <url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>{releaseVersion}</version>
+</dependency>
+----
+
+==== Snapshot
+
+[source,xml]
+[subs="verbatim,attributes"]
+----
+<repositories>
+    <repository>
+      <id>jcenter-snapshots</id>
+      <name>jcenter</name>
+      <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>{snapshotVersion}</version>
+</dependency>
+----
