@@ -37,7 +37,8 @@ task publishDocs(type: Exec) {
     gitChanges += """rm -rf $destination
       mkdir -p $destination
       cp -r $source $destination
-      git add $destination"""
+      git add $destination
+"""
   }
 
   commandLine "sh", "-c",
