@@ -5,7 +5,6 @@ import springfox.gradlebuild.version.SoftwareVersion
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
-apply from: "$rootDir/gradle/asciidoc.gradle"
 
 buildscript {
   repositories {
@@ -120,3 +119,4 @@ tciTrigger {
     visible = true
   }
 }
+apply from: "$rootDir/gradle/asciidoc.gradle"
