@@ -37,11 +37,11 @@ task publishDocs(type: Exec) {
   git config user.name "Springfox Robot"
   git fetch origin +gh-pages:gh-pages
   git checkout gh-pages
-  rm -rf docs/$version
-  mkdir -p docs/$version
-  cp -r build/asciidoc/* docs/$version
+  rm -rf docs/${project.version}
+  mkdir -p docs/${project.version}
+  cp -r build/asciidoc/* docs/${project.version}
   git add docs
-  git commit -qm "Publish docs/$version"
+  git commit -qm "Publish docs/${project.version}"
   git push -q "https://${System.getenv("GITHUB_TOKEN")}@github.com/springfox/springfox.git" gh-pages > /dev/null 2>&1
   git checkout master
 """
