@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.wordnik.swagger.models.Contact;
 import com.wordnik.swagger.models.ExternalDocs;
 import com.wordnik.swagger.models.Info;
+import com.wordnik.swagger.models.License;
 import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.Operation;
 import com.wordnik.swagger.models.Path;
@@ -56,6 +57,7 @@ public class Swagger2JacksonModule extends SimpleModule {
     super.setupModule(context);
     context.setMixInAnnotations(Swagger.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Info.class, CustomizedSwaggerSerializer.class);
+    context.setMixInAnnotations(License.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Scheme.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(SecurityRequirement.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(SecuritySchemeDefinition.class, CustomizedSwaggerSerializer.class);
