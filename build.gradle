@@ -1,3 +1,4 @@
+import springfox.gradlebuild.utils.ProjectDefinitions
 import springfox.gradlebuild.version.BuildscriptVersionResolver
 import springfox.gradlebuild.version.SemanticVersion
 import springfox.gradlebuild.version.SnapshotVersion
@@ -37,7 +38,7 @@ SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(proje
 )
 version = currentVersion
 
-configure(publishable(subprojects)) { subproject ->
+configure(ProjectDefinitions.publishable(project)) { subproject ->
   apply plugin: "com.ofg.uptodate"
   //Not strictly groovy projects but useful for the IDE to recognise groovy test sources
   apply plugin: 'groovy' //gradle groovy plugin extends the java plugin
@@ -102,12 +103,6 @@ configure(publishable(subprojects)) { subproject ->
 
 }
 
-def publishable(subprojects) {
-  subprojects.findAll {
-    !['swagger-contract-tests', 'buildSrc'].contains(it.name)
-  }
-}
-
 apply plugin: "com.github.adrianbk.tcitrigger"
 
 tciTrigger {
@@ -119,4 +114,5 @@ tciTrigger {
     visible = true
   }
 }
-apply from: "$rootDir/gradle/asciidoc.gradle"
+
+apply from: "$rootDir/gradle/documentation.gradle"
