@@ -518,7 +518,12 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_what_it_s_not">1.3. What it&#8217;s not</a></li>
 </ul>
 </li>
-<li><a href="#_getting_started">2. Getting Started</a></li>
+<li><a href="#_getting_started">2. Getting Started</a>
+<ul class="sectlevel2">
+<li><a href="#_gradle">2.1. Gradle</a></li>
+<li><a href="#_maven">2.2. Maven</a></li>
+</ul>
+</li>
 <li><a href="#_architecture">3. Architecture</a></li>
 <li><a href="#_swagger">4. Swagger</a></li>
 </ul>
@@ -572,7 +577,93 @@ as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a
 <div class="sect1">
 <h2 id="_getting_started">2. Getting Started</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>The Springfox libraries are hosted on <a href="https://bintray.com/springfox/maven-repo/springfox/view">bintray</a> and jcenter.
+The libraries can be viewed via artifactory at the following locations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://oss.jfrog.org/simple/oss-release-local/io/springfox/" class="bare">http://oss.jfrog.org/simple/oss-release-local/io/springfox/</a></p>
+</li>
+<li>
+<p><a href="http://oss.jfrog.org/simple/oss-snapshot-local/io/springfox/" class="bare">http://oss.jfrog.org/simple/oss-snapshot-local/io/springfox/</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Springfox has multiple modules and the dependencies will vary depending on the desired API specification standard.
+Below outlines how to include the springfox-swagger2 module which produces Swagger 2.0 API documentation.</p>
+</div>
+<div class="sect2">
+<h3 id="_gradle">2.1. Gradle</h3>
+<div class="sect3">
+<h4 id="_release">2.1.1. Release</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">repositories {
+  jcenter()
+}
 
+compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0</span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_snapshot">2.1.2. Snapshot</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">repositories {
+   maven { url <span class="string"><span class="delimiter">'</span><span class="content">http://oss.jfrog.org/artifactory/oss-snapshot-local/</span><span class="delimiter">'</span></span> }
+}
+compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0</span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_maven">2.2. Maven</h3>
+<div class="sect3">
+<h4 id="_release_2">2.2.1. Release</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
+    <span class="tag">&lt;repository&gt;</span>
+      <span class="tag">&lt;id&gt;</span>jcenter-snapshots<span class="tag">&lt;/id&gt;</span>
+      <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
+      <span class="tag">&lt;url&gt;</span>http://oss.jfrog.org/artifactory/oss-release-local/<span class="tag">&lt;/url&gt;</span>
+    <span class="tag">&lt;/repository&gt;</span>
+<span class="tag">&lt;/repositories&gt;</span>
+
+<span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger2<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>2.0.0<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_snapshot_2">2.2.2. Snapshot</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
+    <span class="tag">&lt;repository&gt;</span>
+      <span class="tag">&lt;id&gt;</span>jcenter-snapshots<span class="tag">&lt;/id&gt;</span>
+      <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
+      <span class="tag">&lt;url&gt;</span>http://oss.jfrog.org/artifactory/oss-snapshot-local/<span class="tag">&lt;/url&gt;</span>
+    <span class="tag">&lt;/repository&gt;</span>
+<span class="tag">&lt;/repositories&gt;</span>
+
+<span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger2<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>2.0.0-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -590,7 +681,7 @@ as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-14 10:15:11 UTC
+Last updated 2015-04-14 13:20:09 UTC
 </div>
 </div>
 </body>
