@@ -39,10 +39,15 @@ class OAuth2AuthFactory implements SecuritySchemeFactory {
                 ((AuthorizationCodeGrant) each).getTokenEndpoint().getUrl());
       } else if ("implicit".equals(each.getType())) {
         definition.implicit(((ImplicitGrant) each).getLoginEndpoint().getUrl());
-//        } else if ("application".equals(each.getType())) {
+      } else if ("application".equals(each.getType())) {
 //          NOTE: swagger 1 doesn't support this
-//        } else if ("password".equals(each.getType())) {
+        definition.application(each.getType());
+      } else if ("password".equals(each.getType())) {
 //          NOTE: swagger 1 doesn't support this
+        definition.password(each.getType());
+      } else {
+        throw new IllegalArgumentException(String.format("Security scheme of type %s not supported",
+            input.getClass().getSimpleName()));
       }
     }
     for (AuthorizationScope each : oAuth.getScopes()) {

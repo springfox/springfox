@@ -32,10 +32,11 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
-import springfox.documentation.swagger.schema.ApiModelProperties;
 
 import java.lang.reflect.Method;
 import java.util.List;
+
+import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
 
 @Component
@@ -71,7 +72,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
             .required(param.required())
             .allowMultiple(param.allowMultiple())
             .modelRef(new ModelRef(param.dataType()))
-            .allowableValues(ApiModelProperties.allowableValueFromString(param.allowableValues()))
+            .allowableValues(allowableValueFromString(param.allowableValues()))
             .parameterType(param.paramType())
             .parameterAccess(param.access())
             .build();

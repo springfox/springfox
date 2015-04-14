@@ -55,7 +55,7 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
     return true;
   }
 
-  private String findParameterType(MethodParameter methodParameter, ResolvedType parameterType) {
+  public static String findParameterType(MethodParameter methodParameter, ResolvedType parameterType) {
     //Multi-part file trumps any other annotations
     if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
       return "form";

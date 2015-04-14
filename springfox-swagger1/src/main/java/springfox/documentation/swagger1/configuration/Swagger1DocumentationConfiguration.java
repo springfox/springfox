@@ -32,6 +32,7 @@ import static springfox.documentation.swagger1.configuration.SwaggerJacksonModul
 @Configuration
 @Import({ SpringMvcDocumentationConfiguration.class, SwaggerCommonConfiguration.class})
 @ComponentScan(basePackages = {
+        "springfox.documentation.swagger1.readers.parameter",
         "springfox.documentation.swagger1.web",
         "springfox.documentation.swagger1.mappers"
 })

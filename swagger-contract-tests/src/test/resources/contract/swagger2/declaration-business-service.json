@@ -191,7 +191,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "business",
                         "description": "business",
                         "required": false,
                         "schema": {

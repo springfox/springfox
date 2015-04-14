@@ -21,10 +21,11 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
-import org.springframework.util.StringUtils;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
+
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterBuilder {
   private String name;
@@ -45,7 +46,7 @@ public class ParameterBuilder {
    * @return this
    */
   public ParameterBuilder name(String name) {
-    this.name = BuilderDefaults.defaultIfAbsent(name, this.name);
+    this.name = defaultIfAbsent(name, this.name);
     return this;
   }
 
@@ -56,7 +57,7 @@ public class ParameterBuilder {
    * @return this
    */
   public ParameterBuilder description(String description) {
-    this.description = BuilderDefaults.defaultIfAbsent(description, this.description);
+    this.description = defaultIfAbsent(description, this.description);
     return this;
   }
 
@@ -67,7 +68,7 @@ public class ParameterBuilder {
    * @return this
    */
   public ParameterBuilder defaultValue(String defaultValue) {
-    this.defaultValue = BuilderDefaults.defaultIfAbsent(defaultValue, this.defaultValue);
+    this.defaultValue = defaultIfAbsent(defaultValue, this.defaultValue);
     return this;
   }
 
@@ -101,7 +102,7 @@ public class ParameterBuilder {
    * @return
    */
   public ParameterBuilder allowableValues(AllowableValues allowableValues) {
-    this.allowableValues = BuilderDefaults.defaultIfAbsent(allowableValues, this.allowableValues);
+    this.allowableValues = defaultIfAbsent(allowableValues, this.allowableValues);
     return this;
   }
 
@@ -112,7 +113,7 @@ public class ParameterBuilder {
    * @return this
    */
   public ParameterBuilder parameterType(String paramType) {
-    this.paramType = BuilderDefaults.defaultIfAbsent(paramType, this.paramType);
+    this.paramType = defaultIfAbsent(paramType, this.paramType);
     return this;
   }
 
@@ -123,7 +124,7 @@ public class ParameterBuilder {
    * @return this
    */
   public ParameterBuilder parameterAccess(String paramAccess) {
-    this.paramAccess = BuilderDefaults.defaultIfAbsent(paramAccess, this.paramAccess);
+    this.paramAccess = defaultIfAbsent(paramAccess, this.paramAccess);
     return this;
   }
 
@@ -134,7 +135,7 @@ public class ParameterBuilder {
    * @return this
    */
   public ParameterBuilder type(ResolvedType type) {
-    this.type = BuilderDefaults.defaultIfAbsent(type, this.type);
+    this.type = defaultIfAbsent(type, this.type);
     return this;
   }
 
@@ -146,20 +147,13 @@ public class ParameterBuilder {
    * @return
    */
   public ParameterBuilder modelRef(ModelRef modelRef) {
-    this.modelRef = BuilderDefaults.defaultIfAbsent(modelRef, this.modelRef);
+    this.modelRef = defaultIfAbsent(modelRef, this.modelRef);
     return this;
   }
 
-  //TODO: Whats the rule that needs this to be the case?
-  private String maybeOverrideName(String aName) {
-    if (StringUtils.hasText(this.paramType) && paramType.equals("body")) {
-      return paramType;
-    }
-    return aName;
-  }
 
   public Parameter build() {
-    return new Parameter(maybeOverrideName(name), description, defaultValue, required, allowMultiple,
+    return new Parameter(name, description, defaultValue, required, allowMultiple,
         modelRef, Optional.fromNullable(type), allowableValues, paramType, paramAccess);
   }
 }

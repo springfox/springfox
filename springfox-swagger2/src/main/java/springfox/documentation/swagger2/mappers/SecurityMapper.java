@@ -39,6 +39,9 @@ public class SecurityMapper {
           .build();
 
   public Map<String, SecuritySchemeDefinition> toSecuritySchemeDefinitions(ResourceListing from) {
+    if (from == null) {
+      return newHashMap();
+    }
     return transformValues(uniqueIndex(from.getSecuritySchemes(), schemeName()), toSecuritySchemeDefinition());
   }
 

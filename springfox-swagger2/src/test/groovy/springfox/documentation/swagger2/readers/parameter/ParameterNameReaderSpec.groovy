@@ -17,7 +17,8 @@
  *
  */
 
-package springfox.documentation.swagger1.readers.parameter
+package springfox.documentation.swagger2.readers.parameter
+
 import com.google.common.base.Optional
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
@@ -30,18 +31,18 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.base.Optional.fromNullable
+import static com.google.common.base.Optional.*
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterNameReaderSpec extends DocumentationContextSpec {
 
-  def "Should support only swagger 1 documentation types"() {
+  def "Should support only swagger 2 documentation types"() {
     given:
       def sut = new ParameterNameReader()
     expect:
       !sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      !sut.supports(DocumentationType.SWAGGER_2)
+      !sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
   }
 
   def "param required"() {
@@ -51,26 +52,21 @@ class ParameterNameReaderSpec extends DocumentationContextSpec {
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
           context(), genericNamingStrategy)
     when:
-      def sut = nameReader(apiParam, paramType)
+      def sut = nameReader(apiParam)
       sut.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().name == expectedName
     where:
-      apiParam                                                            | paramType | expectedName
-      [name: { -> "bodyParam" }, value: { -> "body Param"}] as ApiParam   | "body"    | "body"
-      null                                                                | "body"    | "body"
+      apiParam                                                           | paramType | expectedName
+      [name: { -> "bodyParam" }, value: { -> "body Param" }] as ApiParam | "body"    | "bodyParam"
+      null                                                               | "body"    | null
   }
 
-  def nameReader(annotation, paramType) {
+  def nameReader(annotation) {
     new ParameterNameReader() {
       @Override
       def Optional<ApiParam> apiParam(MethodParameter mp) {
         fromNullable(annotation)
-      }
-
-      @Override
-      def String parameterType(ParameterContext context, MethodParameter mp) {
-        return paramType;
       }
     }
   }

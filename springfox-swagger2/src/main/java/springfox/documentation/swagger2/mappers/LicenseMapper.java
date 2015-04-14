@@ -29,7 +29,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Mapper
-public abstract class LicenseMapper {
+public class LicenseMapper {
 
   @License
   public com.wordnik.swagger.models.License apiInfoToLicense(ApiInfo from) {

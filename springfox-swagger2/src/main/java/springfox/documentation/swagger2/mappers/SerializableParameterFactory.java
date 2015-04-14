@@ -16,21 +16,11 @@
  *
  *
  */
+package springfox.documentation.swagger2.mappers;
 
-package springfox.documentation.swagger1.jackson
+import com.wordnik.swagger.models.parameters.SerializableParameter;
+import springfox.documentation.service.Parameter;
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import spock.lang.Specification
-import springfox.documentation.swagger1.configuration.SwaggerJacksonModule
-import springfox.documentation.swagger1.dto.ApiListing
-
-class SwaggerJacksonModuleSpec extends Specification {
-
-  def "should create serialization module"() {
-    ObjectMapper objectMapper = new ObjectMapper()
-    SwaggerJacksonModule.maybeRegisterModule(objectMapper)
-
-    expect:
-    objectMapper.findMixInClassFor(ApiListing) != null
-  }
+interface SerializableParameterFactory {
+  SerializableParameter create(Parameter parameter);
 }

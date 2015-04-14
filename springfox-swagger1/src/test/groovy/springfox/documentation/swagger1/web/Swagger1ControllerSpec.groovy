@@ -48,14 +48,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*
 
 @Mixin([JsonSupport, ApiListingSupport, AuthSupport, MapperSupport])
-class DefaultSwaggerControllerSpec extends DocumentationContextSpec {
+class Swagger1ControllerSpec extends DocumentationContextSpec {
 
   @Shared
   MockMvc mockMvc
   @Shared
   View mockView
   @Shared
-  DefaultSwaggerController controller = new DefaultSwaggerController()
+  Swagger1Controller controller = new Swagger1Controller()
   ApiListingReferenceScanner listingReferenceScanner
 
   def setup() {

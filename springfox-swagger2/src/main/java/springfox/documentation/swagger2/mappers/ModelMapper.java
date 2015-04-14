@@ -26,20 +26,9 @@ import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.ModelImpl;
 import com.wordnik.swagger.models.properties.AbstractNumericProperty;
 import com.wordnik.swagger.models.properties.ArrayProperty;
-import com.wordnik.swagger.models.properties.BooleanProperty;
-import com.wordnik.swagger.models.properties.DateProperty;
-import com.wordnik.swagger.models.properties.DateTimeProperty;
-import com.wordnik.swagger.models.properties.DecimalProperty;
-import com.wordnik.swagger.models.properties.DoubleProperty;
-import com.wordnik.swagger.models.properties.FloatProperty;
-import com.wordnik.swagger.models.properties.IntegerProperty;
-import com.wordnik.swagger.models.properties.LongProperty;
 import com.wordnik.swagger.models.properties.MapProperty;
-import com.wordnik.swagger.models.properties.ObjectProperty;
 import com.wordnik.swagger.models.properties.Property;
-import com.wordnik.swagger.models.properties.RefProperty;
 import com.wordnik.swagger.models.properties.StringProperty;
-import com.wordnik.swagger.models.properties.UUIDProperty;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelRef;
@@ -53,10 +42,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static com.google.common.collect.Maps.*;
+import static springfox.documentation.swagger2.mappers.Properties.*;
 
 @Mapper
 public abstract class ModelMapper {
-
   public Map<String, Model> mapModels(Map<String, springfox.documentation.schema.Model> from) {
     if (from == null) {
       return null;
@@ -76,16 +65,16 @@ public abstract class ModelMapper {
   public Model mapProperties(springfox.documentation.schema.Model source) {
 
     ModelImpl model = new ModelImpl()
-            .description(source.getDescription())
-            .discriminator(source.getDiscriminator())
-            .example("")
-            .name(source.getName());
+        .description(source.getDescription())
+        .discriminator(source.getDiscriminator())
+        .example("")
+        .name(source.getName());
     TreeMap<String, Property> sorted = newTreeMap();
     sorted.putAll(mapProperties(source.getProperties()));
     model.setProperties(sorted);
     FluentIterable<String> requiredFields = FluentIterable.from(source.getProperties().values())
-            .filter(requiredProperties())
-            .transform(propertyName());
+        .filter(requiredProperty())
+        .transform(propertyName());
     model.setRequired(requiredFields.toList());
     model.setSimple(false);
     return model;
@@ -130,57 +119,6 @@ public abstract class ModelMapper {
     return responseProperty;
   }
 
-  // CHECKSTYLE:OFF
-  static Property property(String typeName) {
-    if (isOfType(typeName, "int")) {
-      return new IntegerProperty();
-    }
-    if (isOfType(typeName, "long")) {
-      return new LongProperty();
-    }
-    if (isOfType(typeName, "float")) {
-      return new FloatProperty();
-    }
-    if (isOfType(typeName, "double")) {
-      return new DoubleProperty();
-    }
-    if (isOfType(typeName, "string")) {
-      return new StringProperty();
-    }
-    if (isOfType(typeName, "byte")) {
-      StringProperty byteArray = new StringProperty();
-      byteArray.setFormat("byte");
-      return byteArray;
-    }
-    if (isOfType(typeName, "boolean")) {
-      return new BooleanProperty();
-    }
-    if (isOfType(typeName, "Date")) {
-      return new DateProperty();
-    }
-    if (isOfType(typeName, "DateTime") || isOfType(typeName, "date-time")) {
-      return new DateTimeProperty();
-    }
-    if (isOfType(typeName, "BigDecimal") || isOfType(typeName, "BigInteger")) {
-      return new DecimalProperty();
-    }
-    if (isOfType(typeName, "UUID")) {
-      return new UUIDProperty();
-    }
-    if (isOfType(typeName, "Void")) {
-      return null;
-    }
-    if (isOfType(typeName, "Object")) {
-      return new ObjectProperty();
-    }
-    return new RefProperty(typeName);
-  }
-  // CHECKSTYLE:ON
-  
-  private static boolean isOfType(String initialType, String ofType) {
-    return initialType.equalsIgnoreCase(ofType);
-  }
-
   protected Map<String, Model> modelsFromApiListings(Map<String, ApiListing> apiListings) {
     Map<String, springfox.documentation.schema.Model> definitions = newHashMap();
     for (ApiListing each : apiListings.values()) {
@@ -200,7 +138,7 @@ public abstract class ModelMapper {
     };
   }
 
-  private Predicate<ModelProperty> requiredProperties() {
+  private Predicate<ModelProperty> requiredProperty() {
     return new Predicate<ModelProperty>() {
       @Override
       public boolean apply(ModelProperty input) {

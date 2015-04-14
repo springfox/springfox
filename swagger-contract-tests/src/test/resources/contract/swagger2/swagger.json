@@ -49,7 +49,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "pet",
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
@@ -94,7 +94,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "pet",
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
@@ -295,7 +295,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "order",
                         "description": "order placed for purchasing the pet",
                         "required": true,
                         "schema": {
@@ -409,7 +409,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "user",
                         "description": "Created user object",
                         "required": true,
                         "schema": {
@@ -444,7 +444,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "users",
                         "description": "List of user object",
                         "required": true,
                         "schema": {
@@ -482,7 +482,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "users",
                         "description": "List of user object",
                         "required": true,
                         "schema": {
@@ -631,7 +631,7 @@
                     },
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "user",
                         "description": "Updated user object",
                         "required": true,
                         "schema": {

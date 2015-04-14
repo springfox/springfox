@@ -18,17 +18,7 @@
  */
 
 package springfox.documentation.spring.web.mixins
-
-import springfox.documentation.service.SecurityReference
-import springfox.documentation.service.AuthorizationCodeGrant
-import springfox.documentation.service.GrantType
-import springfox.documentation.service.ImplicitGrant
-import springfox.documentation.service.LoginEndpoint
-import springfox.documentation.service.OAuth
-import springfox.documentation.service.AuthorizationScope
-import springfox.documentation.service.SecurityScheme
-import springfox.documentation.service.TokenEndpoint
-import springfox.documentation.service.TokenRequestEndpoint
+import springfox.documentation.service.*
 
 import static com.google.common.collect.Lists.*
 
@@ -39,20 +29,8 @@ class AuthSupport {
     AuthorizationScope[] authorizationScopes = [authorizationScope] as AuthorizationScope[];
     newArrayList(new SecurityReference("oauth2", authorizationScopes))
   }
-//
-//  def oAuth() {
-//    AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything")
-//    List<AuthorizationScope> authorizationScopes = newArrayList(authorizationScope)
-//    GrantType grantType = new AuthorizationCodeGrant(new TokenRequestEndpoint("some:auth:uri", "test", "secret"),
-//            new TokenEndpoint("some:uri", "XX-TOKEN"))
-//    List<GrantType> grantTypes = newArrayList(grantType)
-//    OAuth oAuth = new OAuth(authorizationScopes, grantTypes)
-//    List<Authorization> authorizations = [oAuth];
-//    authorizations
-//  }
 
   def authorizationTypes() {
-    def authorizationTypes = new ArrayList<SecurityScheme>()
 
     List<AuthorizationScope> authorizationScopeList = newArrayList();
     authorizationScopeList.add(new AuthorizationScope("global", "access all"));

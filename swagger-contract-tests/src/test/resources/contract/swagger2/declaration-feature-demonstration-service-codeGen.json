@@ -158,7 +158,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "example",
                         "description": "example",
                         "required": false,
                         "schema": {
@@ -190,7 +190,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "input",
                         "description": "input",
                         "required": false,
                         "schema": {
@@ -222,7 +222,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "localDate",
                         "description": "localDate",
                         "required": false,
                         "schema": {
@@ -305,7 +305,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "enumType",
                         "description": "enumType",
                         "required": false,
                         "schema": {
@@ -337,7 +337,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "enumType",
                         "description": "enumType",
                         "required": false,
                         "schema": {

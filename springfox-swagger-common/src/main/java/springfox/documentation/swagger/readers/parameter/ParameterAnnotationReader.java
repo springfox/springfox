@@ -26,6 +26,7 @@ import org.springframework.core.MethodParameter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import static com.google.common.base.Optional.fromNullable;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 
@@ -48,7 +49,7 @@ public class ParameterAnnotationReader {
   }
 
   @SuppressWarnings("unchecked")
-  static <A extends Annotation> A searchOnInterfaces(Method method,
+  private static <A extends Annotation> A searchOnInterfaces(Method method,
                                               int parameterIndex,
                                               Class<A> annotationType,
                                               Class<?>[] interfaces) {
@@ -71,11 +72,11 @@ public class ParameterAnnotationReader {
     return annotation;
   }
 
-  <A extends Annotation> Optional<A> fromHierarchy(MethodParameter methodParameter, Class<A> annotationType) {
-    return Optional.fromNullable(searchOnInterfaces(methodParameter.getMethod(),
-            methodParameter.getParameterIndex(),
-            annotationType,
-            getParentInterfaces(methodParameter)));
+  public <A extends Annotation> Optional<A> fromHierarchy(MethodParameter methodParameter, Class<A> annotationType) {
+    return fromNullable(searchOnInterfaces(methodParameter.getMethod(),
+        methodParameter.getParameterIndex(),
+        annotationType,
+        getParentInterfaces(methodParameter)));
   }
 
   Class<?>[] getParentInterfaces(MethodParameter methodParameter) {

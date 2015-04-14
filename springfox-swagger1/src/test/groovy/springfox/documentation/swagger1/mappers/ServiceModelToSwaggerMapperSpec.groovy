@@ -55,7 +55,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
               .responseModel(new ModelRef("string"))
               .build()
       def operation1 = new OperationBuilder()
-                        .authorizations([new SecurityReference.SecurityReferenceBuilder()
+                        .authorizations([SecurityReference.builder()
                           .reference("basic")
                           .scopes(scope)
                           .build()])

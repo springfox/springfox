@@ -42,7 +42,7 @@
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "body",
+                        "name": "object",
                         "description": "object",
                         "required": false,
                         "schema": {
