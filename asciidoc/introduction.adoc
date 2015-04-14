@@ -1,0 +1,23 @@
+== Introduction
+
+The Springfox suite of java libraries are all about automating the generation of machine and human readable
+ specifications for JSON APIs written using the http://projects.spring.io/spring-framework[spring family of projects]. Springfox
+ works by examining an application, once, at runtime to infer API semantics based on spring configurations, class structure and
+ various compile time java Annotations.
+
+=== History
+Springfox has evolved from a project originally created by https://github.com/martypitt[Marty Pitt] and was named
+_swagger-springmvc_. Much kudos goes to Marty.
+
+=== Goals
+. To extend support for a number of the evolving standards targeted at JSON API specification and documentation
+such
+as: http://swagger.io/[swagger], http://raml.org/[RAML] and http://jsonapi.org/[jsonapi].
+
+. To extend support for spring technologies other than
+http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html[spring webmvc]
+
+
+=== What it's not
+. Endorsed or approved by the Spring Framework Contributors
+

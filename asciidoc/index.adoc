@@ -1,0 +1,9 @@
+= Springfox Reference Documentation
+Dilip Krishnan; Adrian Kelly;
+:numbered:
+
+include::introduction.adoc[]
+include::getting_started.adoc[]
+include::architecture.adoc[]
+include::swagger.adoc[]
+

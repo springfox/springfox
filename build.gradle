@@ -5,7 +5,7 @@ import springfox.gradlebuild.version.SoftwareVersion
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
-
+apply from: "$rootDir/gradle/asciidoc.gradle"
 
 buildscript {
   repositories {
@@ -19,6 +19,7 @@ buildscript {
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     classpath "com.ofg:uptodate-gradle-plugin:1.5.0"
     classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1"
+    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.2"
   }
 }
 apply plugin: 'build-dashboard'
@@ -119,4 +120,3 @@ tciTrigger {
     visible = true
   }
 }
-

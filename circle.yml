@@ -8,12 +8,15 @@ machine:
     CI_BUILD_NUMBER: $CIRCLE_BUILD_NUM
     CI_BUILD_URL: $CIRCLE_COMPARE_URL
 dependencies:
+  pre:
+    - gem install asciidoctor
   cache_directories:
     - ~/.m2
 test:
   override:
   - ./gradlew clean check
   post:
+    - ./gradlew asciidoctor
     - ./gradlew coveralls
 deployment:
  staging:
