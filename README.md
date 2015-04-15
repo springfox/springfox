@@ -178,7 +178,7 @@ json Resource Listing is available at /api-docs
 
 ```xml
 <mvc:annotation-driven/> <!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
-<bean class="com.mangofactory.documentation.swagger.configuration.SpringSwaggerConfig" />
+<bean class="springfox.documentation.swagger.configuration.SwaggerCommonConfiguration" />
 ```
 - The generated swagger
 json Resource Listing is available at /api-docs
