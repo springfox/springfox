@@ -34,8 +34,8 @@ public class SwaggerCommonConfiguration {
 
   @Bean
   public static PropertySourcesPlaceholderConfigurer swaggerProperties() {
-    PropertySourcesPlaceholderConfigurer p = new PropertySourcesPlaceholderConfigurer();
-    p.setIgnoreUnresolvablePlaceholders(true);
-    return p;
+    PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
+    propertySourcesPlaceholderConfigurer.setIgnoreUnresolvablePlaceholders(true);
+    return propertySourcesPlaceholderConfigurer;
   }
 }
