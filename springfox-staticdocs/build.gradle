@@ -1,19 +1,29 @@
-/*
- * Copyright 2015 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+apply from: "$rootDir/gradle/mapstruct.gradle"
+configurations {
+    testArtifacts.extendsFrom testRuntime
+}
+task testJar(type: Jar) {
+    classifier "test"
+    from sourceSets.test.output
+    exclude '**/*log4j.xml*', '**/*simplelogger.properties*'
+}
+artifacts {
+    testArtifacts testJar
+}
 
 dependencies {
-  testCompile libs.test
+    compile libs.swagger2Core
+    compile project(':springfox-swagger2')
+    compile "io.github.robwin:swagger2markup:0.2.4"
+    compile 'org.asciidoctor:asciidoctorj:1.5.2'
+    compile libs.core
+    compile libs.spring
+    provided libs.springProvided
+    provided libs.clientProvided
+    testCompile project(':springfox-core')
+    testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts'))
+    testCompile(project(path: ':springfox-spring-web', configuration: 'testArtifacts')) {
+        exclude group: 'org.springframework', module: 'spring-web'
+    }
+    testCompile libs.test
 }
