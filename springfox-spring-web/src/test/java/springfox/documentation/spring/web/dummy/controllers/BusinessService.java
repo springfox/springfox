@@ -51,14 +51,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class BusinessService {
 
   @RequestMapping(value = "/businesses/aliased/{otherId}", method = RequestMethod.GET)
-  @ApiOperation(value = "Find a business by its id")
+  @ApiOperation(value = "Find a business by its id", nickname = "findBusinessById")
   public String getAliasedPathVariable(
           @ApiParam(value = "ID of business", required = true) @PathVariable("otherId") String businessId) {
     return "This is only a test";
   }
 
   @RequestMapping(value = "/businesses/non-aliased/{businessId}", method = RequestMethod.GET)
-  @ApiOperation(value = "Find a business by its id",
+  @ApiOperation(value = "Find a business by its id", nickname = "findBusinessById",
           authorizations = @Authorization(value = "oauth2", type="",
                   scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
                   }))

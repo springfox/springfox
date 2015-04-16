@@ -30,6 +30,7 @@
                 "tags": [
                     "business-service"
                 ],
+                "operationId": "findBusinessById",
                 "summary": "Find a business by its id",
                 "description": "getAliasedPathVariable",
                 "consumes": [
@@ -102,6 +103,7 @@
                 "tags": [
                     "business-service"
                 ],
+                "operationId": "findBusinessById",
                 "summary": "Find a business by its id",
                 "description": "getNonAliasedPathVariable",
                 "consumes": [

@@ -54,6 +54,7 @@ public class OperationBuilder {
   private String deprecated;
   private boolean isHidden;
   private ModelRef responseModel;
+  private String nickname;
 
   /**
    * Updates the http method
@@ -232,9 +233,20 @@ public class OperationBuilder {
     return this;
   }
 
+  /**
+   * Sets the nickname for the operation
+   *
+   * @param nickname - a string for the nickname
+   * @return this
+   */
+  public OperationBuilder nickname(String nickname) {
+      this.nickname = defaultIfAbsent(nickname, this.nickname);
+      return this;
+  }
+
   public Operation build() {
     return new Operation(method, summary, notes, responseModel, uniqueId, position, tags, produces,
-        consumes, protocol, securityReferences, parameters, responseMessages, deprecated, isHidden);
+        consumes, protocol, securityReferences, parameters, responseMessages, deprecated, isHidden, nickname);
   }
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
