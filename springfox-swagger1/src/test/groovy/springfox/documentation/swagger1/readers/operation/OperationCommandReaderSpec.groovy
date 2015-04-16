@@ -25,7 +25,7 @@ import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.readers.operation.OperationNicknameReader
+import springfox.documentation.swagger.readers.operation.OperationNicknameIntoUniqueIdReader
 import springfox.documentation.swagger.readers.operation.OperationNotesReader
 import springfox.documentation.swagger.readers.operation.OperationPositionReader
 import springfox.documentation.swagger.readers.operation.OperationSummaryReader
@@ -50,7 +50,6 @@ class OperationCommandReaderSpec extends DocumentationContextSpec {
       command                         | property     | handlerMethod                              | expected
       new OperationSummaryReader()    | 'summary'    | dummyHandlerMethod('methodWithSummary')    | 'summary'
       new OperationNotesReader()      | 'notes'      | dummyHandlerMethod('methodWithNotes')      | 'some notes'
-      new OperationNicknameReader()   | 'nickname'   | dummyHandlerMethod('methodWithNickname')   | 'a nickname'
       new OperationPositionReader()   | 'position'   | dummyHandlerMethod('methodWithPosition')   | 5
   }
 }

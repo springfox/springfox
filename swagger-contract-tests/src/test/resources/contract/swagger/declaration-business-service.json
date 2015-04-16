@@ -19,7 +19,7 @@
                     "method": "GET",
                     "summary": "Find a business by its id",
                     "notes": "getAliasedPathVariable",
-                    "nickname": "getAliasedPathVariableUsingGET",
+                    "nickname": "findBusinessById",
                     "produces": [
                         "*/*",
                         "application/json"
@@ -130,7 +130,7 @@
                     "method": "GET",
                     "summary": "Find a business by its id",
                     "notes": "getNonAliasedPathVariable",
-                    "nickname": "getNonAliasedPathVariableUsingGET",
+                    "nickname": "findBusinessById",
                     "produces": [
                         "*/*",
                         "application/json"

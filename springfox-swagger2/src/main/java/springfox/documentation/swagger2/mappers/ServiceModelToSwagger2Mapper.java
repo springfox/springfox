@@ -81,7 +81,7 @@ public abstract class ServiceModelToSwagger2Mapper {
 
   @Mappings({
       @Mapping(target = "description", source = "notes"),
-      @Mapping(target = "operationId", source = "nickname"),
+      @Mapping(target = "operationId", source = "uniqueId"),
       @Mapping(target = "schemes", source = "protocol"),
       @Mapping(target = "security", source = "securityReferences"),
       @Mapping(target = "responses", source = "responseMessages"),

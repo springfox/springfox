@@ -31,14 +31,15 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
-public class OperationNicknameReader implements OperationBuilderPlugin {
+public class OperationNicknameIntoUniqueIdReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
     ApiOperation methodAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
     if (null != methodAnnotation && StringUtils.hasText(methodAnnotation.nickname())) {
-      context.operationBuilder().nickname(methodAnnotation.nickname());
+      // Populate the value of nickname annotation into uniqueId
+      context.operationBuilder().uniqueId(methodAnnotation.nickname());
     }
   }
 

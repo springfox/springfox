@@ -30,6 +30,7 @@
                 "tags": [
                     "pet-grooming-service"
                 ],
+                "operationId" : "groomingFunctionThatReturnsVoidUsingDELETE",
                 "summary": "groomingFunctionThatReturnsVoid",
                 "description": "groomingFunctionThatReturnsVoid",
                 "consumes": [

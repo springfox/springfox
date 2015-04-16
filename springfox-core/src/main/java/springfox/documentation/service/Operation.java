@@ -46,13 +46,12 @@ public class Operation {
   private final List<Parameter> parameters;
   private final Set<ResponseMessage> responseMessages;
   private final String deprecated;
-  private final String nickname;
 
   public Operation(String method, String summary, String notes, ModelRef responseModel,
                    String uniqueId, int position,
                    Set<String> tags, Set<String> produces, Set<String> consumes, Set<String> protocol,
                    List<SecurityReference> securityReferences, List<Parameter> parameters,
-                   Set<ResponseMessage> responseMessages, String deprecated, boolean isHidden, String nickname) {
+                   Set<ResponseMessage> responseMessages, String deprecated, boolean isHidden) {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
@@ -68,7 +67,6 @@ public class Operation {
     this.parameters = parameters;
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
-    this.nickname = nickname;
   }
 
   public boolean isHidden() {
@@ -153,7 +151,4 @@ public class Operation {
     return deprecated;
   }
 
-  public String getNickname() {
-        return nickname;
-    }
 }
