@@ -424,11 +424,70 @@ Use the swagger `ApiOperation` annotation.
 
  ```
 
-#### Ordering ApiDescriptions (withing ApiListing's)
+#### Ordering ApiDescriptions (within ApiListings)
 - Defaults to `ApiDescriptionLexicographicalOrdering`
 
 ```java
 swaggerSpringMvcPlugin.apiDescriptionOrdering(new MyCustomApiDescriptionOrdering());
+```
+
+#### Configuring the output of `operationId` in a Swagger 2.0 spec
+As [defined]([`operationId` was introduced](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-5)) in the Swagger 2.0 spec, the `operationId` parameter, which was referred to as `nickname` in pre-2.0 versions of the Swagger spec, provides the author a means by which to describe an API operation with a friendly name. This field is often used by consumers of a Swagger 2.0 spec in order to name functions in generated clients. An example of this can be seen in the [swagger-codegen project](https://github.com/swagger-api/swagger-codegen).
+
+##### The default value of `operationId` according to Springfox
+By default, when using Springfox in Swagger 2.0 mode, the value of `operationID` will be rendered using the following structure: "`[java_method_name_here]Using[HTTP_verb_here]`". For example, if one has a method `getPets()` connected to an HTTP GET verb, Springfox will render `getPetsUsingGET` for the operationId.
+
+###### Given this annotated method ...
+ ```java
+   @ApiOperation(value = "")
+   @RequestMapping(value = "/pets", method = RequestMethod.GET)
+   public Model getAllThePets() {
+        ...
+   }
+```
+###### ... the default `operationId` will render looking like this:
+
+```
+...
+"paths": {
+	"/pets": {
+		"get": {
+            ...
+			"operationId":"getAllThePetsUsingGET"
+			...
+		}
+	}
+}
+...
+```
+
+##### Customizing the value of `operationId`
+In the event you wish to overide the default `operationId` which Springfox renders, you may do so by providing the `nickname` element in an `@ApiOperation` annotation.
+
+###### Given this annotated method ... 
+
+ ```java
+   @ApiOperation(value = "", nickname = "getMeAllThePetsPlease")
+   @RequestMapping(value = "/pets", method = RequestMethod.GET)
+   public Model getAllThePets() {
+        ...
+   }
+```
+
+###### ... the customized `operationId` will render looking like this:
+
+```
+...
+"paths": {
+	"/pets": {
+		"get": {
+            ...
+			"operationId":"getMeAllThePetsPlease"
+			...
+		}
+	}
+}
+...
 ```
 
 #### Changing how Generic Types are Named
