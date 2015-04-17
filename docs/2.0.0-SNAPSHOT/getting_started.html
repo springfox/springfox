@@ -507,8 +507,9 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel1">
 <li><a href="#_getting_started">Getting Started</a>
 <ul class="sectlevel2">
-<li><a href="#_gradle">Gradle</a></li>
-<li><a href="#_maven">Maven</a></li>
+<li><a href="#_dependencies">Dependencies</a></li>
+<li><a href="#_springfox_swagger2_with_spring_boot">Springfox-swagger2 with Spring Boot</a></li>
+<li><a href="#_swagger_ui">Swagger UI</a></li>
 </ul>
 </li>
 </ul>
@@ -518,6 +519,8 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect1">
 <h2 id="_getting_started">Getting Started</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_dependencies">Dependencies</h3>
 <div class="paragraph">
 <p>The Springfox libraries are hosted on <a href="https://bintray.com/springfox/maven-repo/springfox/view">bintray</a> and jcenter.
 The libraries can be viewed via artifactory at the following locations:</p>
@@ -536,10 +539,10 @@ The libraries can be viewed via artifactory at the following locations:</p>
 <p>Springfox has multiple modules and the dependencies will vary depending on the desired API specification standard.
 Below outlines how to include the springfox-swagger2 module which produces Swagger 2.0 API documentation.</p>
 </div>
-<div class="sect2">
-<h3 id="_gradle">Gradle</h3>
 <div class="sect3">
-<h4 id="_release">Release</h4>
+<h4 id="_gradle">Gradle</h4>
+<div class="sect4">
+<h5 id="_release">Release</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">repositories {
@@ -550,22 +553,22 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_snapshot">Snapshot</h4>
+<div class="sect4">
+<h5 id="_snapshot">Snapshot</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">repositories {
    maven { url <span class="string"><span class="delimiter">'</span><span class="content">http://oss.jfrog.org/artifactory/oss-snapshot-local/</span><span class="delimiter">'</span></span> }
 }
-compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0</span><span class="delimiter">&quot;</span></span></code></pre>
+compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0-SNAPSHOT</span><span class="delimiter">&quot;</span></span></code></pre>
 </div>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_maven">Maven</h3>
 <div class="sect3">
-<h4 id="_release_2">Release</h4>
+<h4 id="_maven">Maven</h4>
+<div class="sect4">
+<h5 id="_release_2">Release</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
@@ -584,8 +587,8 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_snapshot_2">Snapshot</h4>
+<div class="sect4">
+<h5 id="_snapshot_2">Snapshot</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
@@ -606,11 +609,40 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_springfox_swagger2_with_spring_boot">Springfox-swagger2 with Spring Boot</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">springfox.springconfig</span>;
+
+<span class="keyword">import</span> <span class="include">org.springframework.boot.SpringApplication</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.autoconfigure.SpringBootApplication</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.context.ApplicationContext</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.context.annotation.ComponentScan</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger2.annotations.EnableSwagger2</span>;
+<span class="keyword">import</span> <span class="include">springfox.petstore.controller.PetController</span>;
+
+<span class="annotation">@SpringBootApplication</span>
+<span class="annotation">@EnableSwagger2</span> <span class="comment">//1</span>
+<span class="annotation">@ComponentScan</span>(basePackageClasses = {PetController.class})
+<span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2SpringBoot</span> {
+  <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
+    ApplicationContext ctx = SpringApplication.run(Swagger2SpringBoot.class, args);
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_swagger_ui">Swagger UI</h3>
+
+</div>
+</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-17 05:21:45 UTC
+Last updated 2015-04-17 12:12:41 UTC
 </div>
 </div>
 </body>
