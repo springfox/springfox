@@ -17,17 +17,21 @@ import springfox.gradlebuild.utils.ProjectDefinitions
  * limitations under the License.
  *
  */
-
 apply plugin: "org.asciidoctor.convert"
 asciidoctor {
   sourceDir = file('asciidoc')
-
+  logDocuments = true
   separateOutputDirs = false
-  backends = ['html']
-  attributes = ['springfox-version' : project.version.toString(),
-                'source-highlighter': 'coderay',
-                'imagesdir'         : './images',
-                'toc'               : 'left']
+  backends = ['html5']
+
+  attributes 'source-highlighter': 'coderay',
+          'springfox-version': project.version.toString(),
+          toc: 'left',
+          idprefix: '',
+          idseparator: '-',
+          icons: 'font',
+          encoding: 'utf-8'
+//          stylesheet: "assets/css/style.css" to add a custom stylesheet
 }
 
 task publishDocs(type: Exec) {

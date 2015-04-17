@@ -2,6 +2,7 @@
 Dilip Krishnan; Adrian Kelly;
 :numbered:
 :toclevels: 10
+:imagesdir: ./images
 
 include::introduction.adoc[]
 include::getting_started.adoc[]
