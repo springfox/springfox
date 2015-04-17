@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
@@ -409,6 +409,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 <style>
 /* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
 /*pre.CodeRay {background-color:#f7f7f8;}*/
@@ -511,43 +512,47 @@ table.CodeRay td.code>pre{padding:0}
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_introduction">1. Introduction</a>
+<li><a href="#introduction">1. Introduction</a>
 <ul class="sectlevel2">
-<li><a href="#_history">1.1. History</a></li>
-<li><a href="#_goals">1.2. Goals</a></li>
-<li><a href="#_what_it_s_not">1.3. What it&#8217;s not</a></li>
+<li><a href="#history">1.1. History</a></li>
+<li><a href="#goals">1.2. Goals</a></li>
+<li><a href="#what-it-s-not">1.3. What it&#8217;s not</a></li>
 </ul>
 </li>
-<li><a href="#_getting_started">2. Getting Started</a>
+<li><a href="#getting-started">2. Getting Started</a>
 <ul class="sectlevel2">
-<li><a href="#_dependencies">2.1. Dependencies</a>
+<li><a href="#dependencies">2.1. Dependencies</a>
 <ul class="sectlevel3">
-<li><a href="#_gradle">2.1.1. Gradle</a>
+<li><a href="#gradle">2.1.1. Gradle</a>
 <ul class="sectlevel4">
-<li><a href="#_release">Release</a></li>
-<li><a href="#_snapshot">Snapshot</a></li>
+<li><a href="#release">Release</a></li>
+<li><a href="#snapshot">Snapshot</a></li>
 </ul>
 </li>
-<li><a href="#_maven">2.1.2. Maven</a>
+<li><a href="#maven">2.1.2. Maven</a>
 <ul class="sectlevel4">
-<li><a href="#_release_2">Release</a></li>
-<li><a href="#_snapshot_2">Snapshot</a></li>
+<li><a href="#release-2">Release</a></li>
+<li><a href="#snapshot-2">Snapshot</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_springfox_swagger2_with_spring_boot">2.2. Springfox-swagger2 with Spring Boot</a></li>
-<li><a href="#_swagger_ui">2.3. Swagger UI</a></li>
+<li><a href="#springfox-swagger2-with-spring-boot">2.2. Springfox-swagger2 with Spring Boot</a></li>
+<li><a href="#swagger-ui">2.3. Swagger UI</a></li>
 </ul>
 </li>
-<li><a href="#_architecture">3. Architecture</a></li>
-<li><a href="#_swagger">4. Swagger</a></li>
+<li><a href="#architecture">3. Architecture</a></li>
+<li><a href="#swagger">4. Swagger</a>
+<ul class="sectlevel2">
+<li><a href="#swagger-ui-2">4.1. swagger ui</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_introduction">1. Introduction</h2>
+<h2 id="introduction">1. Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The Springfox suite of java libraries are all about automating the generation of machine and human readable
@@ -556,14 +561,14 @@ table.CodeRay td.code>pre{padding:0}
  various compile time java Annotations.</p>
 </div>
 <div class="sect2">
-<h3 id="_history">1.1. History</h3>
+<h3 id="history">1.1. History</h3>
 <div class="paragraph">
 <p>Springfox has evolved from a project originally created by <a href="https://github.com/martypitt">Marty Pitt</a> and was named
 <em>swagger-springmvc</em>. Much kudos goes to Marty.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_goals">1.2. Goals</h3>
+<h3 id="goals">1.2. Goals</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -579,7 +584,7 @@ as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_it_s_not">1.3. What it&#8217;s not</h3>
+<h3 id="what-it-s-not">1.3. What it&#8217;s not</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -591,10 +596,10 @@ as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a
 </div>
 </div>
 <div class="sect1">
-<h2 id="_getting_started">2. Getting Started</h2>
+<h2 id="getting-started">2. Getting Started</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_dependencies">2.1. Dependencies</h3>
+<h3 id="dependencies">2.1. Dependencies</h3>
 <div class="paragraph">
 <p>The Springfox libraries are hosted on <a href="https://bintray.com/springfox/maven-repo/springfox/view">bintray</a> and jcenter.
 The libraries can be viewed via artifactory at the following locations:</p>
@@ -614,9 +619,9 @@ The libraries can be viewed via artifactory at the following locations:</p>
 Below outlines how to include the springfox-swagger2 module which produces Swagger 2.0 API documentation.</p>
 </div>
 <div class="sect3">
-<h4 id="_gradle">2.1.1. Gradle</h4>
+<h4 id="gradle">2.1.1. Gradle</h4>
 <div class="sect4">
-<h5 id="_release">Release</h5>
+<h5 id="release">Release</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">repositories {
@@ -628,7 +633,7 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 </div>
 <div class="sect4">
-<h5 id="_snapshot">Snapshot</h5>
+<h5 id="snapshot">Snapshot</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">repositories {
@@ -640,9 +645,9 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 </div>
 <div class="sect3">
-<h4 id="_maven">2.1.2. Maven</h4>
+<h4 id="maven">2.1.2. Maven</h4>
 <div class="sect4">
-<h5 id="_release_2">Release</h5>
+<h5 id="release-2">Release</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
@@ -662,7 +667,7 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 </div>
 <div class="sect4">
-<h5 id="_snapshot_2">Snapshot</h5>
+<h5 id="snapshot-2">Snapshot</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
@@ -684,51 +689,136 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 </div>
 <div class="sect2">
-<h3 id="_springfox_swagger2_with_spring_boot">2.2. Springfox-swagger2 with Spring Boot</h3>
+<h3 id="springfox-swagger2-with-spring-boot">2.2. Springfox-swagger2 with Spring Boot</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">springfox.springconfig</span>;
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+<strong>10</strong>
+11
+12
+13
+14
+15
+16
+17
+18
+19
+<strong>20</strong>
+21
+22
+23
+24
+25
+26
+27
+28
+</pre></td>
+  <td class="code"><pre><span class="keyword">package</span> <span class="namespace">springfox.springconfig</span>;
 
 <span class="keyword">import</span> <span class="include">org.springframework.boot.SpringApplication</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.boot.autoconfigure.SpringBootApplication</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.context.ApplicationContext</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.context.annotation.Bean</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.context.annotation.ComponentScan</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.spi.DocumentationType</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.spring.web.plugins.Docket</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.swagger2.annotations.EnableSwagger2</span>;
 <span class="keyword">import</span> <span class="include">springfox.petstore.controller.PetController</span>;
 
 <span class="annotation">@SpringBootApplication</span>
-<span class="annotation">@EnableSwagger2</span> <span class="comment">//1</span>
-<span class="annotation">@ComponentScan</span>(basePackageClasses = {PetController.class})
+<span class="annotation">@EnableSwagger2</span>   <i class="conum" data-value="1"></i><b>(1)</b>
+<span class="annotation">@ComponentScan</span>(basePackageClasses = {PetController.class})    <i class="conum" data-value="2"></i><b>(2)</b>
 <span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2SpringBoot</span> {
+
   <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
     ApplicationContext ctx = SpringApplication.run(Swagger2SpringBoot.class, args);
   }
-}</code></pre>
+
+  <span class="annotation">@Bean</span>
+  <span class="directive">public</span> Docket petApi() {
+    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)    <i class="conum" data-value="3"></i><b>(3)</b>
+            .select()   <i class="conum" data-value="4"></i><b>(4)</b>
+            .build();   <i class="conum" data-value="5"></i><b>(5)</b>
+  }
+}</pre></td>
+</tr></table></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Enables Springfox swagger 2</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Instructs spring where to scan for API controllers</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>Docket</code>, Sringfox&#8217;s, primary api configuration mechanism is initialized for swagger specification 2.0</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>select()</code> returns an instance of <code>ApiSelectorBuilder</code> to give fine grained control over the endpoints exposed via swagger</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Builds the <code>Docket</code> instance.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_swagger_ui">2.3. Swagger UI</h3>
-
+<h3 id="swagger-ui">2.3. Swagger UI</h3>
+<div class="paragraph">
+<p>The <code>springfox-swagger-ui</code> <a href="http://www.webjars.org/">web jar</a> ships with <a href="https://github.com/swagger-api/swagger-ui">Swagger UI</a>. To include it in a standard
+Spring Boot application you can add the dependency as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>compile 'io.springfox:springfox-swagger-ui:2.0.0'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Swagger UI page should then be available at <a href="http://localhost:8080/swagger-ui.html" class="bare">http://localhost:8080/swagger-ui.html</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/springfox-swagger-ui.png" alt="Swagger UI">
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_architecture">3. Architecture</h2>
+<h2 id="architecture">3. Architecture</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_swagger">4. Swagger</h2>
+<h2 id="swagger">4. Swagger</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="swagger-ui-2">4.1. swagger ui</h3>
 
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-17 12:12:41 UTC
+Last updated 2015-04-17 14:36:18 UTC
 </div>
 </div>
 </body>
