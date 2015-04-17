@@ -18,15 +18,11 @@
  */
 
 package springfox.documentation.staticdocs
-
 import spock.lang.Specification
-import springfox.documentation.staticdocs.web.StaticDocsController
 
 class SampleTest extends Specification {
 
   def "should pass coverage"() {
-    expect:
-      StaticDocsController sample = new StaticDocsController()
-      sample.getDocumentation()
+
   }
 }

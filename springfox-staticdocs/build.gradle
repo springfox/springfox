@@ -1,4 +1,3 @@
-apply from: "$rootDir/gradle/mapstruct.gradle"
 configurations {
     testArtifacts.extendsFrom testRuntime
 }
@@ -12,18 +11,6 @@ artifacts {
 }
 
 dependencies {
-    compile libs.swagger2Core
-    compile project(':springfox-swagger2')
-    compile "io.github.robwin:swagger2markup:0.2.4"
-    compile 'org.asciidoctor:asciidoctorj:1.5.2'
-    compile libs.core
-    compile libs.spring
-    provided libs.springProvided
-    provided libs.clientProvided
-    testCompile project(':springfox-core')
-    testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts'))
-    testCompile(project(path: ':springfox-spring-web', configuration: 'testArtifacts')) {
-        exclude group: 'org.springframework', module: 'spring-web'
-    }
-    testCompile libs.test
+    compile "io.github.robwin:swagger2markup:0.3.0"
+    compile libs.test
 }
