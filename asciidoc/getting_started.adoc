@@ -3,6 +3,7 @@
 :releaseVersion: 2.0.0
 :snapshotVersion: 2.0.0-SNAPSHOT
 
+=== Dependencies
 The Springfox libraries are hosted on https://bintray.com/springfox/maven-repo/springfox/view[bintray] and jcenter.
 The libraries can be viewed via artifactory at the following locations:
 
@@ -12,8 +13,9 @@ The libraries can be viewed via artifactory at the following locations:
 Springfox has multiple modules and the dependencies will vary depending on the desired API specification standard.
 Below outlines how to include the springfox-swagger2 module which produces Swagger 2.0 API documentation.
 
-=== Gradle
-==== Release
+
+==== Gradle
+===== Release
 [source,groovy]
 [subs="verbatim,attributes"]
 ----
@@ -24,7 +26,7 @@ repositories {
 compile "io.springfox:springfox-swagger2:{releaseVersion}"
 ----
 
-==== Snapshot
+===== Snapshot
 
 [source,groovy]
 [subs="verbatim,attributes"]
@@ -32,12 +34,12 @@ compile "io.springfox:springfox-swagger2:{releaseVersion}"
 repositories {
    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
-compile "io.springfox:springfox-swagger2:{releaseVersion}"
+compile "io.springfox:springfox-swagger2:{snapshotVersion}"
 ----
 
 
-=== Maven
-==== Release
+==== Maven
+===== Release
 
 [source,xml]
 [subs="verbatim,attributes"]
@@ -57,7 +59,7 @@ compile "io.springfox:springfox-swagger2:{releaseVersion}"
 </dependency>
 ----
 
-==== Snapshot
+===== Snapshot
 
 [source,xml]
 [subs="verbatim,attributes"]
@@ -76,3 +78,12 @@ compile "io.springfox:springfox-swagger2:{releaseVersion}"
     <version>{snapshotVersion}</version>
 </dependency>
 ----
+
+=== Springfox-swagger2 with Spring Boot
+
+[source,java]
+----
+include::../springfox-spring-config/src/main/java/springfox/springconfig/Swagger2SpringBoot.java[]
+----
+
+=== Swagger UI

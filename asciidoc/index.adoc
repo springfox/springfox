@@ -1,6 +1,7 @@
 = Springfox Reference Documentation
 Dilip Krishnan; Adrian Kelly;
 :numbered:
+:toclevels: 10
 
 include::introduction.adoc[]
 include::getting_started.adoc[]
