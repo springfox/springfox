@@ -1,4 +1,0 @@
-language: java
-script: "mvn verify"
-jdk:
-  - openjdk6
