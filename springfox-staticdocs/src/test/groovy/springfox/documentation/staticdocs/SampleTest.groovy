@@ -17,11 +17,12 @@
  *
  */
 
-package springfox.staticdocs;
+package springfox.documentation.staticdocs
+import spock.lang.Specification
 
-public class Sample {
+class SampleTest extends Specification {
 
-  public String something() {
-    return "value";
+  def "should pass coverage"() {
+
   }
 }
