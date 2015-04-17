@@ -28,7 +28,7 @@ class ProjectDefinitions {
   static publishable(Project project) {
 
     return project.subprojects.findAll {
-      !['swagger-contract-tests', 'buildSrc', 'springfox-spring-config'].contains(it.name)
+      !['swagger-contract-tests', 'swagger-staticdocs', 'buildSrc', 'springfox-spring-config'].contains(it.name)
     }
   }
 }
