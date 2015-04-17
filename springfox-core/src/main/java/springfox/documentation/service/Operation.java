@@ -150,4 +150,5 @@ public class Operation {
   public String getDeprecated() {
     return deprecated;
   }
+
 }

@@ -35,6 +35,7 @@
                 ],
                 "summary": "petEntities",
                 "description": "petEntities",
+                "operationId": "petEntitiesUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -70,6 +71,7 @@
                 ],
                 "summary": "echo",
                 "description": "echo",
+                "operationId": "echoUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -110,6 +112,7 @@
                 ],
                 "summary": "Finds Pets by status",
                 "description": "Multiple status values can be provided with comma seperated strings",
+                "operationId": "findPetsByStatusUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -146,6 +149,7 @@
                 ],
                 "summary": "Finds Pets by tags",
                 "description": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
+                "operationId": "findPetsByTagsUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -182,6 +186,7 @@
                 ],
                 "summary": "canGroom",
                 "description": "canGroom",
+                "operationId": "canGroomUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -214,6 +219,7 @@
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
                 "description": "groomingFunctionThatReturnsVoid",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE",
                 "consumes": [
                     "application/json"
                 ],
@@ -244,6 +250,7 @@
                 ],
                 "summary": "nameToNickNamesMap",
                 "description": "nameToNickNamesMap",
+                "operationId": "nameToNickNamesMapUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -270,6 +277,7 @@
                 ],
                 "summary": "siblings",
                 "description": "siblings",
+                "operationId": "siblingsUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -307,6 +315,7 @@
                 ],
                 "summary": "transformPetNameToPetMapToAny",
                 "description": "transformPetNameToPetMapToAny",
+                "operationId": "transformPetNameToPetMapToAnyUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -344,6 +353,7 @@
                 ],
                 "summary": "transformPetNameToPetMapToGenericOpenMap",
                 "description": "transformPetNameToPetMapToGenericOpenMap",
+                "operationId": "transformPetNameToPetMapToGenericOpenMapUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -381,6 +391,7 @@
                 ],
                 "summary": "transformPetNameToPetMapToOpenMap",
                 "description": "transformPetNameToPetMapToOpenMap",
+                "operationId": "transformPetNameToPetMapToOpenMapUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -418,6 +429,7 @@
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
                 "description": "groomingFunctionThatReturnsVoid",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE",
                 "consumes": [
                     "application/json"
                 ],
@@ -448,6 +460,7 @@
                 ],
                 "summary": "method",
                 "description": "method",
+                "operationId": "methodUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -484,6 +497,7 @@
                 ],
                 "summary": "petByName",
                 "description": "petByName",
+                "operationId": "petByNameUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -516,6 +530,7 @@
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+                "operationId": "getPetByIdUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -548,6 +563,7 @@
                 ],
                 "summary": "updatePic",
                 "description": "updatePic",
+                "operationId": "updatePicUsingPOST",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -584,6 +600,7 @@
                 ],
                 "summary": "updatePic",
                 "description": "updatePic",
+                "operationId": "updatePicUsingGET",
                 "consumes": [
                     "application/json"
                 ],

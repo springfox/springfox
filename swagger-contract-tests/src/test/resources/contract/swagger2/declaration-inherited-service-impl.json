@@ -30,6 +30,7 @@
                 "tags": [
                     "inherited-service-impl"
                 ],
+                "operationId": "getSomethingUsingGET",
                 "summary": "getSomething",
                 "description": "getSomething",
                 "consumes": [

@@ -25,6 +25,7 @@ import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.swagger.readers.operation.OperationNicknameIntoUniqueIdReader
 import springfox.documentation.swagger.readers.operation.OperationNotesReader
 import springfox.documentation.swagger.readers.operation.OperationPositionReader
 import springfox.documentation.swagger.readers.operation.OperationSummaryReader

@@ -32,6 +32,7 @@
                 ],
                 "summary": "allMethodAllowed",
                 "description": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -50,6 +51,7 @@
                 ],
                 "summary": "allMethodAllowed",
                 "description": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -68,6 +70,7 @@
                 ],
                 "summary": "allMethodAllowed",
                 "description": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -86,6 +89,7 @@
                 ],
                 "summary": "allMethodAllowed",
                 "description": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingDELETE",
                 "consumes": [
                     "application/json"
                 ],
@@ -104,6 +108,7 @@
                 ],
                 "summary": "allMethodAllowed",
                 "description": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingOPTIONS",
                 "consumes": [
                     "application/json"
                 ],
@@ -122,6 +127,7 @@
                 ],
                 "summary": "allMethodAllowed",
                 "description": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingPATCH",
                 "consumes": [
                     "application/json"
                 ],
@@ -142,6 +148,7 @@
                 ],
                 "summary": "getBare",
                 "description": "getBare",
+                "operationId": "getBareUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -173,6 +180,7 @@
                 ],
                 "summary": "updateBigDecimal",
                 "description": "updateBigDecimal",
+                "operationId": "updateBigDecimalUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -204,6 +212,7 @@
                 ],
                 "summary": "updateDate",
                 "description": "updateDate",
+                "operationId": "updateDateUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -235,6 +244,7 @@
                 ],
                 "summary": "getEffective",
                 "description": "getEffective",
+                "operationId": "getEffectiveUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -258,6 +268,7 @@
                 ],
                 "summary": "getEffectives",
                 "description": "getEffectives",
+                "operationId": "getEffectivesUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -284,6 +295,7 @@
                 ],
                 "summary": "updateBaz",
                 "description": "updateBaz",
+                "operationId": "updateBazUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -315,6 +327,7 @@
                 ],
                 "summary": "updateBazes",
                 "description": "updateBazes",
+                "operationId": "updateBazesUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -346,6 +359,7 @@
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+                "operationId": "getPetByIdUsingGET",
                 "consumes": [
                     "application/json"
                 ],

@@ -83,6 +83,10 @@ public class DummyClass {
   public void methodWithNotes() {
   }
 
+  @ApiOperation(value = "", nickname = "a nickname")
+  public void methodWithNickname() {
+  }
+
   @ApiOperation(value = "", position = 5)
   public void methodWithPosition() {
   }
