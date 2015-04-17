@@ -243,3 +243,7 @@ a {
 @media screen and (max-width: 42em) {
   .site-footer {
     font-size: 0.9rem; } }
+
+.quick-links{
+  min-height: 10em;
+}
