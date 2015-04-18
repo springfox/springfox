@@ -44,6 +44,7 @@ public class ApiResourceController {
 
   @Value("${springfox.documentation.swagger.v2.path:/v2/api-docs}")
   private String swagger2Url;
+
   @Autowired
   private DocumentationCache documentationCache;
 

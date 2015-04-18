@@ -22,6 +22,7 @@ package springfox.documentation.swagger2.web;
 import com.google.common.base.Optional;
 import com.wordnik.swagger.models.Swagger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,9 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 public class Swagger2Controller {
 
   public static final String DEFAULT_URL = "/v2/api-docs";
+  @Value("${springfox.documentation.swagger.v2.host:DEFAULT}")
+  private String hostNameOverride;
+
   @Autowired
   private DocumentationCache documentationCache;
 
@@ -50,7 +54,8 @@ public class Swagger2Controller {
   private ServiceModelToSwagger2Mapper mapper;
 
   @ApiIgnore
-  @RequestMapping(value = "${springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}", method = RequestMethod.GET)
+  @RequestMapping(value = "${springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
+      method = RequestMethod.GET)
   public
   @ResponseBody
   ResponseEntity<Swagger> getDocumentation(
@@ -62,9 +67,16 @@ public class Swagger2Controller {
       return new ResponseEntity<Swagger>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
-    URI uri = linkTo(Swagger2Controller.class).toUri();
-    swagger.host(String.format("%s:%s", uri.getHost(), uri.getPort()));
+    swagger.host(hostName());
     return new ResponseEntity<Swagger>(swagger, HttpStatus.OK);
+  }
+
+  private String hostName() {
+    if ("DEFAULT".equals(hostNameOverride)) {
+      URI uri = linkTo(Swagger2Controller.class).toUri();
+      return String.format("%s:%s", uri.getHost(), uri.getPort());
+    }
+    return hostNameOverride;
   }
 
 }
