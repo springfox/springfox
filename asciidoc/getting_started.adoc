@@ -23,7 +23,9 @@ repositories {
   jcenter()
 }
 
-compile "io.springfox:springfox-swagger2:{releaseVersion}"
+dependencies {
+    compile "io.springfox:springfox-swagger2:{releaseVersion}"
+}
 ----
 
 ===== Snapshot
@@ -34,7 +36,10 @@ compile "io.springfox:springfox-swagger2:{releaseVersion}"
 repositories {
    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
-compile "io.springfox:springfox-swagger2:{snapshotVersion}"
+
+dependencies {
+    compile "io.springfox:springfox-swagger2:{snapshotVersion}"
+}
 ----
 
 
@@ -79,7 +84,7 @@ compile "io.springfox:springfox-swagger2:{snapshotVersion}"
 </dependency>
 ----
 
-=== Springfox-swagger2 with Spring Boot
+==== Springfox-swagger2 with Spring Boot
 
 [source,java,linenums]
 ----
@@ -91,15 +96,17 @@ include::../springfox-spring-config/src/main/java/springfox/springconfig/Swagger
 <4> `select()` returns an instance of `ApiSelectorBuilder` to give fine grained control over the endpoints exposed via swagger
 <5> Builds the `Docket` instance.
 
-=== Swagger UI
+===== Swagger UI
 The `springfox-swagger-ui` http://www.webjars.org/[web jar] ships with https://github.com/swagger-api/swagger-ui[Swagger UI]. To include it in a standard
 Spring Boot application you can add the dependency as follows:
 
 [source,groovy]
 [subs="verbatim,attributes"]
-```
-compile 'io.springfox:springfox-swagger-ui:{releaseVersion}'
-```
+----
+dependencies {
+    compile 'io.springfox:springfox-swagger-ui:{releaseVersion}'
+}
+----
 
 The Swagger UI page should then be available at http://localhost:8080/swagger-ui.html[]
 

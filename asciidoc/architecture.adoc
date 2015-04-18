@@ -1,1 +1,6 @@
 == Architecture
+TDB
+ . Modules
+ . How it works (runtime, etc.)
+ . Object mapper
+
