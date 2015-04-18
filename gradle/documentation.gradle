@@ -31,7 +31,6 @@ asciidoctor {
           idseparator: '-',
           icons: 'font',
           encoding: 'utf-8'
-//          stylesheet: "assets/css/style.css" to add a custom stylesheet
 }
 
 task publishDocs(type: Exec) {
