@@ -51,7 +51,7 @@ public class ApiResourceController {
   @RequestMapping(value = "/swagger-resources")
   @ResponseBody
   ResponseEntity<List<SwaggerResource>> swaggerResources() {
-    Class swagger1Controller = classOrNull("springfox.documentation.swagger1.web.DefaultSwaggerController");
+    Class swagger1Controller = classOrNull("springfox.documentation.swagger1.web.Swagger1Controller");
     Class swagger2Controller = classOrNull("springfox.documentation.swagger2.web.Swagger2Controller");
 
     List<SwaggerResource> resources = new ArrayList<SwaggerResource>();
