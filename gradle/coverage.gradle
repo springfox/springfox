@@ -69,7 +69,9 @@ jacocoTestReport {
         logger.quiet(it)
       }
       logger.quiet("---------------------------------------------------------------")
-//      throw new GradleException("Code coverage failed")
+      if (!report.getAbsolutePath().contains("springfox-swagger2")) {
+        throw new GradleException("Code coverage failed")
+      }
     }
     if (canIncrease) {
       logger.quiet("------------------ Code Coverage Improved! -----------------------")
