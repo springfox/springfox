@@ -1,3 +1,7 @@
+general:
+  branches:
+    ignore:
+      - gh-pages
 machine:
   java:
     version: oraclejdk6
@@ -7,10 +11,6 @@ machine:
     CI_BRANCH: $CIRCLE_BRANCH
     CI_BUILD_NUMBER: $CIRCLE_BUILD_NUM
     CI_BUILD_URL: $CIRCLE_COMPARE_URL
-general:
-  branches:
-    ignore:
-      - gh-pages # list of branches to ignore
 dependencies:
   pre:
     - gem install asciidoctor
