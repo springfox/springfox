@@ -19,6 +19,7 @@
 
 package springfox.service.model.builder
 
+import org.springframework.http.HttpMethod
 import spock.lang.Specification
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ResponseMessageBuilder
@@ -84,7 +85,7 @@ class OperationBuilderSpec extends Specification {
 
     where:
       builderMethod     | value                   | property
-      'method'          | 'method1'               | 'method'
+      'method'          | HttpMethod.GET          | 'method'
       'summary'         | 'method1 summary'       | 'summary'
       'notes'           | 'method1 notes'         | 'notes'
       'responseModel'    | new ModelRef('string')  | 'responseModel'
@@ -111,7 +112,7 @@ class OperationBuilderSpec extends Specification {
 
     where:
       builderMethod     | value                   | property
-      'method'          | 'method1'               | 'method'
+      'method'          | HttpMethod.PUT          | 'method'
       'summary'         | 'method1 summary'       | 'summary'
       'notes'           | 'method1 notes'         | 'notes'
       'responseModel'    | new ModelRef('string')  | 'responseModel'

@@ -21,6 +21,8 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 
+import static springfox.documentation.schema.WildcardType.*;
+
 public class AlternateTypeRule {
   private final ResolvedType original;
   private final ResolvedType alternate;
@@ -44,7 +46,7 @@ public class AlternateTypeRule {
    */
   public ResolvedType alternateFor(ResolvedType type) {
     if (appliesTo(type)) {
-      if (WildcardType.hasWildcards(original)) {
+      if (hasWildcards(original)) {
         return WildcardType.replaceWildcardsFrom(WildcardType.collectReplaceables(type, original), alternate);
       } else {
         return alternate;
@@ -60,9 +62,9 @@ public class AlternateTypeRule {
    * @return the boolean
    */
   public boolean appliesTo(ResolvedType type) {
-    return WildcardType.hasWildcards(original)
-            && WildcardType.wildcardMatch(type, original)
-            || WildcardType.exactMatch(original, type);
+    return hasWildcards(original)
+            && wildcardMatch(type, original)
+            || exactMatch(original, type);
   }
 
 }

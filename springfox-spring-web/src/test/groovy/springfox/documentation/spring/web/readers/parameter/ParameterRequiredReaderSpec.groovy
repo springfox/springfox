@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
+import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.service.contexts.ParameterContext
@@ -46,7 +47,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec {
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-              context(), Mock(GenericTypeNamingStrategy))
+          context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
     when:
       def operationCommand = new ParameterRequiredReader();
       operationCommand.apply(parameterContext)
@@ -78,7 +79,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec {
       fakeOptionalClass.name = "java.util.Optional"
       methodParameter.getParameterType() >> fakeOptionalClass
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-              context(), Mock(GenericTypeNamingStrategy))
+          context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
 
     when:
       def operationCommand = new ParameterRequiredReader();

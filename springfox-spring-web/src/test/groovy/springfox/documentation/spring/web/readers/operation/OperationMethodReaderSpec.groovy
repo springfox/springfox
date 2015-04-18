@@ -19,11 +19,12 @@
 
 package springfox.documentation.spring.web.readers.operation
 
+import org.springframework.http.HttpMethod
 import org.springframework.web.bind.annotation.RequestMethod
-import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 @Mixin([RequestMappingSupport])
 class OperationMethodReaderSpec extends DocumentationContextSpec {
@@ -46,10 +47,10 @@ class OperationMethodReaderSpec extends DocumentationContextSpec {
       operation.method == expected
     where:
       currentHttpMethod  | handlerMethod                                     | expected
-      RequestMethod.GET  | dummyHandlerMethod()                              | "GET"
-      RequestMethod.PUT  | dummyHandlerMethod()                              | "PUT"
-      RequestMethod.POST | dummyHandlerMethod('methodWithHttpGETMethod')     | 'POST'
-      RequestMethod.POST | dummyHandlerMethod('methodWithInvalidHttpMethod') | "POST"
+      RequestMethod.GET  | dummyHandlerMethod()                              | HttpMethod.GET
+      RequestMethod.PUT  | dummyHandlerMethod()                              | HttpMethod.PUT
+      RequestMethod.POST | dummyHandlerMethod('methodWithHttpGETMethod')     | HttpMethod.POST
+      RequestMethod.POST | dummyHandlerMethod('methodWithInvalidHttpMethod') | HttpMethod.POST
   }
 
 }

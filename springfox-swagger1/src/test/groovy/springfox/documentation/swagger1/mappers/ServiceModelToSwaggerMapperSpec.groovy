@@ -20,6 +20,7 @@
 package springfox.documentation.swagger1.mappers
 
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.http.HttpMethod
 import spock.lang.Specification
 import springfox.documentation.builders.ApiDescriptionBuilder
 import springfox.documentation.builders.ApiInfoBuilder
@@ -62,7 +63,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                         .consumes(newHashSet("application/json"))
                         .produces(newHashSet("application/json"))
                         .deprecated("deprecated")
-                        .method("operation1")
+                        .method(HttpMethod.GET)
                         .uniqueId("op1")
                         .notes("operation 1 notes")
                         .parameters([new ParameterBuilder()
@@ -78,7 +79,6 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                           .build()])
                         .position(1)
                         .protocols(newHashSet("https"))
-                        .responseClass("string")
                         .responseModel(new ModelRef("string"))
                         .responseMessages(newHashSet(response))
                       .build()

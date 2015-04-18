@@ -26,6 +26,7 @@ import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
+import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -45,7 +46,7 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-              context(), Mock(GenericTypeNamingStrategy))
+          context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
     when:
       parameterPlugin.apply(parameterContext)
 

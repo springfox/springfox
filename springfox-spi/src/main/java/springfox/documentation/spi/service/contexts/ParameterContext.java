@@ -31,16 +31,19 @@ public class ParameterContext {
   private final ParameterBuilder parameterBuilder;
   private final ResolvedMethodParameter resolvedMethodParameter;
   private final DocumentationContext documentationContext;
-  private GenericTypeNamingStrategy genericNamingStrategy;
+  private final GenericTypeNamingStrategy genericNamingStrategy;
+  private final OperationContext operationContext;
 
   public ParameterContext(ResolvedMethodParameter resolvedMethodParameter,
                           ParameterBuilder parameterBuilder,
                           DocumentationContext documentationContext,
-                          GenericTypeNamingStrategy genericNamingStrategy) {
+                          GenericTypeNamingStrategy genericNamingStrategy,
+                          OperationContext operationContext) {
     this.parameterBuilder = parameterBuilder;
     this.resolvedMethodParameter = resolvedMethodParameter;
     this.documentationContext = documentationContext;
     this.genericNamingStrategy = genericNamingStrategy;
+    this.operationContext = operationContext;
   }
 
   public ResolvedMethodParameter resolvedMethodParameter() {
@@ -73,5 +76,9 @@ public class ParameterContext {
 
   public GenericTypeNamingStrategy getGenericNamingStrategy() {
     return genericNamingStrategy;
+  }
+
+  public OperationContext getOperationContext() {
+    return operationContext;
   }
 }

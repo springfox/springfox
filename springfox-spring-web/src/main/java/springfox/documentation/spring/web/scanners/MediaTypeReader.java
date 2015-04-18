@@ -27,9 +27,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition;
-import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
@@ -59,15 +56,8 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
   @Override
   public void apply(OperationContext context) {
 
-    RequestMappingInfo requestMappingInfo = context.getRequestMappingInfo();
-    ConsumesRequestCondition consumesCondition = requestMappingInfo.getConsumesCondition();
-    ProducesRequestCondition producesRequestCondition = requestMappingInfo.getProducesCondition();
-
-    Set<MediaType> consumesMediaTypes = consumesCondition.getConsumableMediaTypes();
-    Set<MediaType> producesMediaTypes = producesRequestCondition.getProducibleMediaTypes();
-
-    Set<String> consumesList = toSet(consumesMediaTypes);
-    Set<String> producesList = toSet(producesMediaTypes);
+    Set<String> consumesList = toSet(context.consumes());
+    Set<String> producesList = toSet(context.produces());
 
     if (handlerMethodHasFileParameter(context)) {
       consumesList = newHashSet(MediaType.MULTIPART_FORM_DATA_VALUE);

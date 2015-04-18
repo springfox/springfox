@@ -22,6 +22,7 @@ package springfox.documentation.service;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.springframework.http.HttpMethod;
 import springfox.documentation.schema.ModelRef;
 
 import java.util.List;
@@ -31,7 +32,7 @@ import java.util.Set;
 import static com.google.common.collect.Maps.*;
 
 public class Operation {
-  private final String method;
+  private final HttpMethod method;
   private final String summary;
   private final String notes;
   private final ModelRef responseModel;
@@ -47,7 +48,7 @@ public class Operation {
   private final Set<ResponseMessage> responseMessages;
   private final String deprecated;
 
-  public Operation(String method, String summary, String notes, ModelRef responseModel,
+  public Operation(HttpMethod method, String summary, String notes, ModelRef responseModel,
                    String uniqueId, int position,
                    Set<String> tags, Set<String> produces, Set<String> consumes, Set<String> protocol,
                    List<SecurityReference> securityReferences, List<Parameter> parameters,
@@ -103,7 +104,7 @@ public class Operation {
     };
   }
 
-  public String getMethod() {
+  public HttpMethod getMethod() {
     return method;
   }
 

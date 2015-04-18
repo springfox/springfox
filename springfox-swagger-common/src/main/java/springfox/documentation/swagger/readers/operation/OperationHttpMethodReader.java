@@ -23,6 +23,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,7 +48,7 @@ public class OperationHttpMethodReader implements OperationBuilderPlugin {
       String apiMethod = apiOperationAnnotation.httpMethod();
       try {
         RequestMethod.valueOf(apiMethod);
-        context.operationBuilder().method(apiMethod);
+        context.operationBuilder().method(HttpMethod.valueOf(apiMethod));
       } catch (IllegalArgumentException e) {
         log.error("Invalid http method: " + apiMethod + "Valid ones are [" + RequestMethod.values() + "]", e);
       }

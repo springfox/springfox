@@ -18,19 +18,23 @@
  */
 
 package springfox.documentation.swagger1.readers.parameter
+
+import com.fasterxml.classmate.TypeResolver
 import com.google.common.base.Optional
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
+import org.springframework.http.HttpMethod
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.base.Optional.fromNullable
+import static com.google.common.base.Optional.*
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterNameReaderSpec extends DocumentationContextSpec {
@@ -46,12 +50,21 @@ class ParameterNameReaderSpec extends DocumentationContextSpec {
 
   def "param required"() {
     given:
-      ResolvedMethodParameter resolvedMethodParameter = Mock(ResolvedMethodParameter)
+      def operationContext = Mock(OperationContext)
+      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      def methodParameter = Mock(MethodParameter)
+    and: "mocks are setup"
+      operationContext.consumes() >> []
+      operationContext.handlerMethod >> HttpMethod.GET
+      resolvedMethodParameter.resolvedParameterType >> new TypeResolver().resolve(String)
+      resolvedMethodParameter.methodParameter >> methodParameter
+      methodParameter.getParameterAnnotations() >> [apiParam]
+    and: "context is setup"
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), genericNamingStrategy)
+          context(), genericNamingStrategy, operationContext)
     when:
-      def sut = nameReader(apiParam, paramType)
+      def sut = nameReader(apiParam)
       sut.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().name == expectedName
@@ -61,16 +74,11 @@ class ParameterNameReaderSpec extends DocumentationContextSpec {
       null                                                                | "body"    | "body"
   }
 
-  def nameReader(annotation, paramType) {
+  def nameReader(annotation) {
     new ParameterNameReader() {
       @Override
       def Optional<ApiParam> apiParam(MethodParameter mp) {
         fromNullable(annotation)
-      }
-
-      @Override
-      def String parameterType(ParameterContext context, MethodParameter mp) {
-        return paramType;
       }
     }
   }

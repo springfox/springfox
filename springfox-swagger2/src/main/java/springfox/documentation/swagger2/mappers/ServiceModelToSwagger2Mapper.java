@@ -153,7 +153,7 @@ public abstract class ServiceModelToSwagger2Mapper {
     Path path = existingPath.or(new Path());
     for (springfox.documentation.service.Operation each : api.getOperations()) {
       Operation operation = mapOperation(each);
-      path.set(each.getMethod().toLowerCase(), operation);
+      path.set(each.getMethod().toString().toLowerCase(), operation);
     }
     return path;
   }

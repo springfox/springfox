@@ -26,6 +26,7 @@ import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -50,7 +51,7 @@ class ParameterNameReaderSpec extends DocumentationContextSpec {
       ResolvedMethodParameter resolvedMethodParameter = Mock(ResolvedMethodParameter)
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), genericNamingStrategy)
+          context(), genericNamingStrategy, Mock(OperationContext))
     when:
       def sut = nameReader(apiParam)
       sut.apply(parameterContext)

@@ -18,6 +18,8 @@
  */
 
 package springfox.documentation.spring.web.readers
+
+import org.springframework.http.HttpMethod
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.Operation
@@ -68,7 +70,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
 
     then:
       Operation apiOperation = operations[0]
-      apiOperation.getMethod() == PATCH.toString()
+      apiOperation.getMethod() == HttpMethod.PATCH
       apiOperation.getSummary() == handlerMethod.method.name
       apiOperation.getNotes() == handlerMethod.method.name
       apiOperation.getUniqueId() == handlerMethod.method.name + "Using" + PATCH.toString()

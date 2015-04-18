@@ -27,6 +27,7 @@ import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
+import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -53,7 +54,7 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
       ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
       ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter, resolvedType)
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-              context(), Mock(GenericTypeNamingStrategy))
+          context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
 
     when:
       sut.apply(parameterContext)

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Shared
+import spock.lang.Unroll
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -40,6 +41,7 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
     sut = new MediaTypeReader(new TypeResolver())
   }
 
+  @Unroll
   def "should read media types"() {
 
     given:

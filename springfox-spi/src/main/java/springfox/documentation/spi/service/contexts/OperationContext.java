@@ -20,6 +20,8 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -29,6 +31,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 
@@ -57,8 +60,8 @@ public class OperationContext {
     return operationBuilder;
   }
 
-  public String httpMethod() {
-    return requestMethod.toString();
+  public HttpMethod httpMethod() {
+    return HttpMethod.valueOf(requestMethod.toString());
   }
 
   public HandlerMethod getHandlerMethod() {
@@ -103,5 +106,13 @@ public class OperationContext {
 
   public ResolvedType alternateFor(ResolvedType resolved) {
     return getAlternateTypeProvider().alternateFor(resolved);
+  }
+
+  public Set<MediaType> produces() {
+    return requestMappingInfo.getProducesCondition().getProducibleMediaTypes();
+  }
+
+  public Set<MediaType> consumes() {
+    return requestMappingInfo.getConsumesCondition().getConsumableMediaTypes();
   }
 }

@@ -64,7 +64,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {
-    List<ResponseMessage> responseMessages = context.getGlobalResponseMessages(context.httpMethod());
+    List<ResponseMessage> responseMessages = context.getGlobalResponseMessages(context.httpMethod().toString());
     context.operationBuilder().responseMessages(newHashSet(responseMessages));
     applyReturnTypeOverride(context);
   }

@@ -3,6 +3,7 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.base.Functions
 import com.google.common.base.Suppliers
+import org.springframework.http.HttpMethod
 import spock.lang.Specification
 import springfox.documentation.builders.*
 import springfox.documentation.schema.ModelRef
@@ -159,7 +160,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .consumes(newHashSet("application/json"))
         .produces(newHashSet("application/json"))
         .deprecated("true")
-        .method("get")
+        .method(HttpMethod.GET)
         .uniqueId("op1")
         .notes("operation 1 notes")
         .parameters([new ParameterBuilder()
@@ -175,7 +176,6 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                          .build()])
         .position(1)
         .protocols(newHashSet("HTTPS"))
-        .responseClass("string")
         .responseModel(new ModelRef("string"))
         .responseMessages(newHashSet(response))
         .build()

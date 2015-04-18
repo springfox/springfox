@@ -27,6 +27,7 @@ import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -43,7 +44,8 @@ class ParameterAllowableReaderSpec extends DocumentationContextSpec {
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), genericNamingStrategy)
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+          context(), genericNamingStrategy, Mock(OperationContext))
 
     when:
       ParameterAllowableReader operationCommand = new ParameterAllowableReader();
@@ -67,7 +69,8 @@ class ParameterAllowableReaderSpec extends DocumentationContextSpec {
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), genericNamingStrategy)
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+          context(), genericNamingStrategy, Mock(OperationContext))
 
     when:
       ParameterAllowableReader operationCommand = new ParameterAllowableReader();
@@ -92,7 +95,8 @@ class ParameterAllowableReaderSpec extends DocumentationContextSpec {
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), genericNamingStrategy)
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
+          new ParameterBuilder(), context(), genericNamingStrategy, Mock(OperationContext))
 
     when:
       ParameterAllowableReader operationCommand = new ParameterAllowableReader();

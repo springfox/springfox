@@ -23,6 +23,8 @@ import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
+import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
 import java.lang.annotation.Annotation;
@@ -43,11 +46,7 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
 
   @Override
   public void apply(ParameterContext context) {
-    MethodParameter methodParameter = context.methodParameter();
-    ResolvedMethodParameter resolvedMethodParameter = context.resolvedMethodParameter();
-    ResolvedType parameterType = resolvedMethodParameter.getResolvedParameterType();
-    parameterType = context.alternateFor(parameterType);
-    context.parameterBuilder().parameterType(findParameterType(methodParameter, parameterType));
+    context.parameterBuilder().parameterType(findParameterType(context));
   }
 
   @Override
@@ -55,7 +54,12 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
     return true;
   }
 
-  public static String findParameterType(MethodParameter methodParameter, ResolvedType parameterType) {
+  public static String findParameterType(ParameterContext parameterContext) {
+    MethodParameter methodParameter = parameterContext.methodParameter();
+    ResolvedMethodParameter resolvedMethodParameter = parameterContext.resolvedMethodParameter();
+    ResolvedType parameterType = resolvedMethodParameter.getResolvedParameterType();
+    parameterType = parameterContext.alternateFor(parameterType);
+
     //Multi-part file trumps any other annotations
     if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
       return "form";
@@ -69,11 +73,19 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
       } else if (annotation instanceof RequestBody) {
         return "body";
       } else if (annotation instanceof RequestParam) {
-        return "query";
+        return queryOrForm(parameterContext.getOperationContext());
       } else if (annotation instanceof RequestHeader) {
         return "header";
       }
     }
     return "body";
+  }
+
+  private static String queryOrForm(OperationContext context) {
+    if (context.consumes().contains(MediaType.APPLICATION_FORM_URLENCODED) && context.httpMethod() == HttpMethod
+        .POST) {
+      return "form";
+    }
+    return "query";
   }
 }

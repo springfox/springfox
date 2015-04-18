@@ -23,6 +23,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.SecurityReference;
@@ -38,10 +39,9 @@ import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationBuilder {
-  private String method;
+  private HttpMethod method = HttpMethod.GET;
   private String summary;
   private String notes;
-  private String responseClass;
   private String uniqueId;
   private int position;
   private Set<String> produces = newHashSet();
@@ -61,7 +61,7 @@ public class OperationBuilder {
    * @param method - http method, one of GET, POST, PUT etc.
    * @return this
    */
-  public OperationBuilder method(String method) {
+  public OperationBuilder method(HttpMethod method) {
     this.method = defaultIfAbsent(method, this.method);
     return this;
   }
@@ -85,18 +85,6 @@ public class OperationBuilder {
    */
   public OperationBuilder notes(String notes) {
     this.notes = defaultIfAbsent(notes, this.notes);
-    return this;
-  }
-
-  /**
-   * Updates the response class
-   *
-   * @param responseClass - string representation of the response class
-   * @return
-   */
-  @Deprecated
-  public OperationBuilder responseClass(String responseClass) {
-    this.responseClass = defaultIfAbsent(responseClass, this.responseClass);
     return this;
   }
 
@@ -169,7 +157,7 @@ public class OperationBuilder {
   /**
    * Updates the input parameters this operation needs
    *
-   * @param parameters - input parameter definitiosn
+   * @param parameters - input parameter definitions
    * @return
    */
   public OperationBuilder parameters(List<Parameter> parameters) {
@@ -222,7 +210,7 @@ public class OperationBuilder {
   }
 
   /**
-   * Updates the tags that identify this operaiton
+   * Updates the tags that identify this operation
    *
    * @param tags - new set of tags
    * @return

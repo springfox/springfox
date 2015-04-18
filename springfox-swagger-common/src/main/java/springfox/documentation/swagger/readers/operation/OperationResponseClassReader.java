@@ -75,7 +75,6 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting response class to:" + responseTypeName);
     context.operationBuilder()
-            .responseClass(responseTypeName)
             .responseModel(modelRef(returnType, modelContext));
   }
 

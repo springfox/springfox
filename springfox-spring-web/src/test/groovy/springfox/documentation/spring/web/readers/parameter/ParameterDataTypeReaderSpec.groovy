@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.schema.TypeNameExtractor
@@ -56,7 +57,8 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
               new TypeResolver().resolve(paramType))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy)
+              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
+                  Mock(OperationContext))
       methodParameter.getParameterType() >> paramType
 
     when:
@@ -92,7 +94,8 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       ResolvedMethodParameter resolvedMethodParameter = Mock(ResolvedMethodParameter)
     def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy)
+              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
+                  Mock(OperationContext))
       resolvedMethodParameter.getResolvedParameterType() >> new TypeResolver().resolve(List, String)
       resolvedMethodParameter.getMethodParameter() >> methodParameter
       methodParameter.getParameterType() >> List
