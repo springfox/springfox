@@ -509,8 +509,6 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#getting-started">Getting Started</a>
 <ul class="sectlevel2">
 <li><a href="#dependencies">Dependencies</a></li>
-<li><a href="#springfox-swagger2-with-spring-boot">Springfox-swagger2 with Spring Boot</a></li>
-<li><a href="#swagger-ui">Swagger UI</a></li>
 </ul>
 </li>
 </ul>
@@ -550,7 +548,9 @@ Below outlines how to include the springfox-swagger2 module which produces Swagg
   jcenter()
 }
 
-compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0</span><span class="delimiter">&quot;</span></span></code></pre>
+dependencies {
+    compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -561,7 +561,10 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 <pre class="CodeRay highlight"><code data-lang="groovy">repositories {
    maven { url <span class="string"><span class="delimiter">'</span><span class="content">http://oss.jfrog.org/artifactory/oss-snapshot-local/</span><span class="delimiter">'</span></span> }
 }
-compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0-SNAPSHOT</span><span class="delimiter">&quot;</span></span></code></pre>
+
+dependencies {
+    compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0-SNAPSHOT</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -609,9 +612,8 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="springfox-swagger2-with-spring-boot">Springfox-swagger2 with Spring Boot</h3>
+<div class="sect3">
+<h4 id="springfox-swagger2-with-spring-boot">Springfox-swagger2 with Spring Boot</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
@@ -699,16 +701,17 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 </tr>
 </table>
 </div>
-</div>
-<div class="sect2">
-<h3 id="swagger-ui">Swagger UI</h3>
+<div class="sect4">
+<h5 id="swagger-ui">Swagger UI</h5>
 <div class="paragraph">
 <p>The <code>springfox-swagger-ui</code> <a href="http://www.webjars.org/">web jar</a> ships with <a href="https://github.com/swagger-api/swagger-ui">Swagger UI</a>. To include it in a standard
 Spring Boot application you can add the dependency as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>compile 'io.springfox:springfox-swagger-ui:2.0.0'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox:springfox-swagger-ui:2.0.0</span><span class="delimiter">'</span></span>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -723,9 +726,11 @@ Spring Boot application you can add the dependency as follows:</p>
 </div>
 </div>
 </div>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-18 08:51:55 UTC
+Last updated 2015-04-18 13:11:57 UTC
 </div>
 </div>
 </body>

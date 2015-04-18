@@ -508,7 +508,10 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel1">
 <li><a href="#swagger">Swagger</a>
 <ul class="sectlevel2">
-<li><a href="#swagger-ui">swagger ui</a></li>
+<li><a href="#swagger-1-2-vs-swagger-2-0">Swagger 1.2 vs Swagger 2.0</a></li>
+<li><a href="#springfox-spring-web-configuration">Springfox Spring Web Configuration</a></li>
+<li><a href="#swagger-specification-version-2-0">Swagger Specification version 2.0</a></li>
+<li><a href="#swagger-ui">Swagger UI</a></li>
 </ul>
 </li>
 </ul>
@@ -518,8 +521,58 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect1">
 <h2 id="swagger">Swagger</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Springfox supports both version <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md">1.2</a> and version
+<a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">2.0</a> of the <a href="http://swagger.io/">Swagger</a> specification.
+Where possible, the Swagger 1.2 specification is preferable.</p>
+</div>
+<div class="paragraph">
+<p>The <a href="https://github.com/swagger-api/swagger-core/wiki/Annotations">Swagger-Core Annotations</a>, as provided by
+<a href="https://github.com/swagger-api/swagger-core">swagger-core</a>, are typically used to decorate the java source code of an API which is bing
+'swaggered'. Springfox is aware of the Swagger-Core Annotations and will favor those annotations over inferred defaults.</p>
+</div>
 <div class="sect2">
-<h3 id="swagger-ui">swagger ui</h3>
+<h3 id="swagger-1-2-vs-swagger-2-0">Swagger 1.2 vs Swagger 2.0</h3>
+<div class="paragraph">
+<p>One major difference between the two swagger specification is the composition of the generated swagger documentation.</p>
+</div>
+<div class="paragraph">
+<p>With Swagger 1.2 an applications API is represented as a <code>Resource Listing</code> and multiple <code>API Declarations</code> which has the
+implication of producing <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2" class="bare">https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2</a>
+.md#42-file-structure[multiple JSON files]</p>
+</div>
+<div class="paragraph">
+<p>With Swagger 2.0 things are much simpler and an Application&#8217;s API can be represented in a single JSON file.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="springfox-spring-web-configuration">Springfox Spring Web Configuration</h3>
+<div class="paragraph">
+<p>The following secton describes how to configure Springfox with Swagger for Spring Web MVC based applications.</p>
+</div>
+<div class="paragraph">
+<p>The <a href="https://github.com/springfox/springfox-demos">springfox-demos</a> repository contains a number of sample Spring application
+which can be used a reference.</p>
+</div>
+<div class="sect3">
+<h4 id="spring-xml-configuration">Spring XML Configuration</h4>
+
+</div>
+<div class="sect3">
+<h4 id="spring-java-configuration-javaconfig">Spring Java Configuration (javaconfig)</h4>
+
+</div>
+<div class="sect3">
+<h4 id="spring-boot">Spring Boot</h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="swagger-specification-version-2-0">Swagger Specification version 2.0</h3>
+
+</div>
+<div class="sect2">
+<h3 id="swagger-ui">Swagger UI</h3>
 
 </div>
 </div>
@@ -527,7 +580,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-18 08:51:55 UTC
+Last updated 2015-04-18 13:11:57 UTC
 </div>
 </div>
 </body>

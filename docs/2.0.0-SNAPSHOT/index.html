@@ -535,16 +535,28 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#snapshot-2">Snapshot</a></li>
 </ul>
 </li>
+<li><a href="#springfox-swagger2-with-spring-boot">2.1.3. Springfox-swagger2 with Spring Boot</a>
+<ul class="sectlevel4">
+<li><a href="#swagger-ui">Swagger UI</a></li>
 </ul>
 </li>
-<li><a href="#springfox-swagger2-with-spring-boot">2.2. Springfox-swagger2 with Spring Boot</a></li>
-<li><a href="#swagger-ui">2.3. Swagger UI</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#architecture">3. Architecture</a></li>
 <li><a href="#swagger">4. Swagger</a>
 <ul class="sectlevel2">
-<li><a href="#swagger-ui-2">4.1. swagger ui</a></li>
+<li><a href="#swagger-1-2-vs-swagger-2-0">4.1. Swagger 1.2 vs Swagger 2.0</a></li>
+<li><a href="#springfox-spring-web-configuration">4.2. Springfox Spring Web Configuration</a>
+<ul class="sectlevel3">
+<li><a href="#spring-xml-configuration">4.2.1. Spring XML Configuration</a></li>
+<li><a href="#spring-java-configuration-javaconfig">4.2.2. Spring Java Configuration (javaconfig)</a></li>
+<li><a href="#spring-boot">4.2.3. Spring Boot</a></li>
+</ul>
+</li>
+<li><a href="#swagger-specification-version-2-0">4.3. Swagger Specification version 2.0</a></li>
+<li><a href="#swagger-ui-2">4.4. Swagger UI</a></li>
 </ul>
 </li>
 </ul>
@@ -628,7 +640,9 @@ Below outlines how to include the springfox-swagger2 module which produces Swagg
   jcenter()
 }
 
-compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0</span><span class="delimiter">&quot;</span></span></code></pre>
+dependencies {
+    compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -639,7 +653,10 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 <pre class="CodeRay highlight"><code data-lang="groovy">repositories {
    maven { url <span class="string"><span class="delimiter">'</span><span class="content">http://oss.jfrog.org/artifactory/oss-snapshot-local/</span><span class="delimiter">'</span></span> }
 }
-compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0-SNAPSHOT</span><span class="delimiter">&quot;</span></span></code></pre>
+
+dependencies {
+    compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.0.0-SNAPSHOT</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -687,9 +704,8 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="springfox-swagger2-with-spring-boot">2.2. Springfox-swagger2 with Spring Boot</h3>
+<div class="sect3">
+<h4 id="springfox-swagger2-with-spring-boot">2.1.3. Springfox-swagger2 with Spring Boot</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
@@ -777,16 +793,17 @@ compile <span class="string"><span class="delimiter">&quot;</span><span class="c
 </tr>
 </table>
 </div>
-</div>
-<div class="sect2">
-<h3 id="swagger-ui">2.3. Swagger UI</h3>
+<div class="sect4">
+<h5 id="swagger-ui">Swagger UI</h5>
 <div class="paragraph">
 <p>The <code>springfox-swagger-ui</code> <a href="http://www.webjars.org/">web jar</a> ships with <a href="https://github.com/swagger-api/swagger-ui">Swagger UI</a>. To include it in a standard
 Spring Boot application you can add the dependency as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>compile 'io.springfox:springfox-swagger-ui:2.0.0'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox:springfox-swagger-ui:2.0.0</span><span class="delimiter">'</span></span>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -800,17 +817,74 @@ Spring Boot application you can add the dependency as follows:</p>
 </div>
 </div>
 </div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="architecture">3. Architecture</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>TDB
+ . Modules
+ . How it works (runtime, etc.)
+ . Object mapper</p>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="swagger">4. Swagger</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Springfox supports both version <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md">1.2</a> and version
+<a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">2.0</a> of the <a href="http://swagger.io/">Swagger</a> specification.
+Where possible, the Swagger 1.2 specification is preferable.</p>
+</div>
+<div class="paragraph">
+<p>The <a href="https://github.com/swagger-api/swagger-core/wiki/Annotations">Swagger-Core Annotations</a>, as provided by
+<a href="https://github.com/swagger-api/swagger-core">swagger-core</a>, are typically used to decorate the java source code of an API which is bing
+'swaggered'. Springfox is aware of the Swagger-Core Annotations and will favor those annotations over inferred defaults.</p>
+</div>
 <div class="sect2">
-<h3 id="swagger-ui-2">4.1. swagger ui</h3>
+<h3 id="swagger-1-2-vs-swagger-2-0">4.1. Swagger 1.2 vs Swagger 2.0</h3>
+<div class="paragraph">
+<p>One major difference between the two swagger specification is the composition of the generated swagger documentation.</p>
+</div>
+<div class="paragraph">
+<p>With Swagger 1.2 an applications API is represented as a <code>Resource Listing</code> and multiple <code>API Declarations</code> which has the
+implication of producing <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2" class="bare">https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2</a>
+.md#42-file-structure[multiple JSON files]</p>
+</div>
+<div class="paragraph">
+<p>With Swagger 2.0 things are much simpler and an Application&#8217;s API can be represented in a single JSON file.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="springfox-spring-web-configuration">4.2. Springfox Spring Web Configuration</h3>
+<div class="paragraph">
+<p>The following secton describes how to configure Springfox with Swagger for Spring Web MVC based applications.</p>
+</div>
+<div class="paragraph">
+<p>The <a href="https://github.com/springfox/springfox-demos">springfox-demos</a> repository contains a number of sample Spring application
+which can be used a reference.</p>
+</div>
+<div class="sect3">
+<h4 id="spring-xml-configuration">4.2.1. Spring XML Configuration</h4>
+
+</div>
+<div class="sect3">
+<h4 id="spring-java-configuration-javaconfig">4.2.2. Spring Java Configuration (javaconfig)</h4>
+
+</div>
+<div class="sect3">
+<h4 id="spring-boot">4.2.3. Spring Boot</h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="swagger-specification-version-2-0">4.3. Swagger Specification version 2.0</h3>
+
+</div>
+<div class="sect2">
+<h3 id="swagger-ui-2">4.4. Swagger UI</h3>
 
 </div>
 </div>
@@ -818,7 +892,7 @@ Spring Boot application you can add the dependency as follows:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-18 08:51:55 UTC
+Last updated 2015-04-18 13:11:57 UTC
 </div>
 </div>
 </body>
