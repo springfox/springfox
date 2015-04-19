@@ -22,11 +22,18 @@ Swagger 2.0
 
 ## Contributors
 We would like to thank the following community members for helping with this release:
+- [https://github.com/Aloren](Nastya Smirnova)
+    -  Very valuable testing, bug finding and suggestions 
+- [https://github.com/jfiala](https://github.com/jfiala)
+    - Very valuable testing and bug finding 
 - [Andrew B](https://github.com/who)
     - ability to optionally populate nickname
 - [sabyrzhan](https://github.com/sabyrzhan)
     - Bugfix for UnresolvablePlaceholders
 - [paulprogrammer](https://github.com/paulprogrammer)
     - Fixed reference to old class name
-- [John hestad](https://github.com/hestad)=
+- [John hestad](https://github.com/hestad)
 - [jordanjennings](https://github.com/jordanjennings)
+    - Updated documentation
+- [Tony Tam](https://github.com/fehguy)
+    - Updated Swagger Link and added springfox/swagger editor example
