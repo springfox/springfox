@@ -1,7 +1,5 @@
 import springfox.gradlebuild.utils.ProjectDefinitions
-import springfox.gradlebuild.version.BuildscriptVersionResolver
-import springfox.gradlebuild.version.SnapshotVersion
-import springfox.gradlebuild.version.SoftwareVersion
+import springfox.gradlebuild.version.*
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
