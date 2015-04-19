@@ -93,29 +93,3 @@ if (JavaVersion.current().isJava8Compatible()) {
     options.addStringOption('Xdoclint:none', '-quiet')
   }
 }
-
-//task preRelease << {
-//  //May not be required
-//  def url = new URL("http://oss.jfrog.org/simple/oss-release-local/com/mangofactory/swagger-springmvc/${project.version}")
-//  logger.quiet("Checking release repo for duplicate versioning:${url}")
-//  final HttpURLConnection connection = url.openConnection()
-//  if (connection.responseCode != 404) {
-//    throw new GradleException("Artifact ${project.name}:${project.version} already exists.")
-//  }
-//}
-
-//afterEvaluate { project ->
-//  project.tasks.findAll { it.name.contains('ToBintrayRepository') }.each {
-//    it.dependsOn preRelease
-//  }
-//}
-
-//task ciPublish {
-//  if (project.version.toString().contains('SNAPSHOT')) {
-//    logger.quiet("Task :ciPublish configured to publish SNAPSHOT artifacts [${project.version}]")
-//    dependsOn publish
-//  } else {
-//    logger.quiet("Task :ciPublish will not publish artifacts [${project.version}] as this is not a SNAPSHOT version")
-//  }
-//}
-

@@ -21,8 +21,10 @@ package springfox.gradlebuild.plugins
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 import springfox.gradlebuild.BintrayCredentials
 import springfox.gradlebuild.tasks.BintrayCredentialsCheckTask
+import springfox.gradlebuild.tasks.BumpAndTagTask
 import springfox.gradlebuild.tasks.CheckCleanWorkspaceTask
 import springfox.gradlebuild.tasks.CheckGitBranchTask
 import springfox.gradlebuild.tasks.IntermediaryTask
@@ -38,6 +40,7 @@ import springfox.gradlebuild.version.BuildscriptVersionResolver
 public class MultiProjectReleasePlugin implements Plugin<Project> {
 
   ReleaseTask releaseTask
+  BumpAndTagTask bumpAndTagTask
   CheckCleanWorkspaceTask checkCleanWorkspaceTask
   SnapshotTask snapshotTask
   BintrayCredentialsCheckTask credentialCheck
@@ -46,6 +49,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   @Override
   void apply(Project project) {
     releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask)
+    bumpAndTagTask = project.task(BumpAndTagTask.TASK_NAME, type: BumpAndTagTask)
     snapshotTask = project.task(SnapshotTask.TASK_NAME, type: SnapshotTask)
     credentialCheck = project.task(BintrayCredentialsCheckTask.TASK_NAME, type: BintrayCredentialsCheckTask)
     checkCleanWorkspaceTask = project.task(CheckCleanWorkspaceTask.TASK_NAME, type: CheckCleanWorkspaceTask)
@@ -90,6 +94,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   def configureReleaseTaskGraph(Project project) {
     def iPublishTask = project.task('iPublishTask', type: IntermediaryTask)
     def iCheckTask = project.task('iCheckTask', type: IntermediaryTask)
+    def iWorkspaceTask = project.task('iWorkspaceTask', type: IntermediaryTask)
 
     project.afterEvaluate { evaluatedProject ->
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
@@ -103,11 +108,17 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       }
     }
 
-    iPublishTask.dependsOn iCheckTask
-    iPublishTask.dependsOn checkCleanWorkspaceTask
-    iCheckTask.mustRunAfter checkCleanWorkspaceTask
+    iWorkspaceTask.dependsOn checkGitBranchTask
+    iWorkspaceTask.dependsOn checkCleanWorkspaceTask
 
-//    releaseTask.dependsOn iPublishTask
+    iCheckTask.dependsOn iWorkspaceTask
+
+    iPublishTask.dependsOn iCheckTask
+
+    bumpAndTagTask.dependsOn iPublishTask
+
+    releaseTask.dependsOn bumpAndTagTask
+//    releaseTask.dependsOn releaseRepoPushTask
   }
 
 

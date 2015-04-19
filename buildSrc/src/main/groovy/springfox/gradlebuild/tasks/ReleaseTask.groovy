@@ -20,10 +20,6 @@ package springfox.gradlebuild.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import springfox.gradlebuild.version.BuildscriptVersionResolver
-import springfox.gradlebuild.version.ReleaseType
-import springfox.gradlebuild.version.SemanticVersion
-import springfox.gradlebuild.version.SoftwareVersion
 
 // git status --porcelain
 class ReleaseTask extends DefaultTask {
@@ -32,30 +28,9 @@ class ReleaseTask extends DefaultTask {
   String group = 'release'
 
   @TaskAction
-  void release() {
-    def file = project.file("${project.rootDir}/version.properties")
-    ReleaseType releaseType = ReleaseType.valueOf(project.property('releaseType').toUpperCase())
-
-    SoftwareVersion releaseVersion = BuildscriptVersionResolver.projectVersion(project, SemanticVersion.get(file))
-    releaseVersion.save(file)
-
-    def xArgs = ['git',
-                 'commit',
-                 '-i',
-                 file.absolutePath,
-                 '-m',
-                 "Release(${releaseType}) bumping project version to ${releaseVersion}"]
-
+  void exec() {
     project.exec {
-      commandLine xArgs
+      commandLine 'git', 'push', '--follow-tags'
     }
-
-    project.exec {
-      commandLine 'git', 'tag', '-a', "${releaseVersion}", '-m', "${releaseVersion}"
-    }
-
-    //git push --tags
-
-
   }
 }

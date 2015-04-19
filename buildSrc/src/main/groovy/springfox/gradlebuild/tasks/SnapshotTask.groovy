@@ -29,7 +29,7 @@ class SnapshotTask extends DefaultTask {
   String group = 'release'
 
   @TaskAction
-  void release() {
+  void exec() {
   }
 
 }
