@@ -1,8 +1,7 @@
 import springfox.gradlebuild.utils.ProjectDefinitions
 import springfox.gradlebuild.version.BuildscriptVersionResolver
-import springfox.gradlebuild.version.EarlyAccessVersion
-import springfox.gradlebuild.version.SemanticVersion
-import springfox.gradlebuild.version.*
+import springfox.gradlebuild.version.SnapshotVersion
+import springfox.gradlebuild.version.SoftwareVersion
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
@@ -17,7 +16,7 @@ buildscript {
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.3.1"
     classpath "com.github.adrianbk:gradle-travisci-trigger-plugin:1.0.0"
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
-    classpath "com.ofg:uptodate-gradle-plugin:1.5.0"
+    classpath "com.ofg:uptodate-gradle-plugtin:1.5.1"
     classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1"
     classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.2"
   }
@@ -33,7 +32,7 @@ ext {
 apply plugin: 'springfox-multi-release'
 
 SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(project,
-        new SnapshotVersion(SemanticVersion.get(file("$rootDir/version.properties")))
+    new SnapshotVersion(SemanticVersion.get(file("$rootDir/version.properties")))
 )
 version = currentVersion
 
@@ -70,13 +69,13 @@ configure(ProjectDefinitions.publishable(project)) { subproject ->
   jar {
     manifest {
       attributes(
-              'Implementation-Title': "${project.name}",
-              'Implementation-Version': version.toString(),
-              'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')',
-              'Built-With': "gradle-${project.getGradle().getGradleVersion()}, groovy-${GroovySystem.getVersion()}",
-              'Build-Time': "${new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")}",
-              'Built-By': System.getProperty('user.name'),
-              'Built-On': "${InetAddress.localHost.hostName}/${InetAddress.localHost.hostAddress}"
+          'Implementation-Title': "${project.name}",
+          'Implementation-Version': version.toString(),
+          'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')',
+          'Built-With': "gradle-${project.getGradle().getGradleVersion()}, groovy-${GroovySystem.getVersion()}",
+          'Build-Time': "${new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")}",
+          'Built-By': System.getProperty('user.name'),
+          'Built-On': "${InetAddress.localHost.hostName}/${InetAddress.localHost.hostAddress}"
       )
     }
   }
