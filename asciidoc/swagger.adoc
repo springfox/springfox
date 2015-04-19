@@ -2,7 +2,7 @@
 
 Springfox supports both version https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md[1.2] and version
 https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md[2.0] of the http://swagger.io/[Swagger] specification.
-Where possible, the Swagger 1.2 specification is preferable.
+Where possible, the Swagger 2.0 specification is preferable.
 
 The https://github.com/swagger-api/swagger-core/wiki/Annotations[Swagger-Core Annotations], as provided by
 https://github.com/swagger-api/swagger-core[swagger-core], are typically used to decorate the java source code of an API which is bing

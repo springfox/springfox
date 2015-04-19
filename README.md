@@ -1,4 +1,4 @@
-# Swagger-springmvc
+# Springfox
 
 [![Join the chat at https://gitter.im/springfox/springfox](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/springfox/springfox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Download](https://api.bintray.com/packages/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/images/download.svg) ](https://bintray.com/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/_latestVersion)
@@ -8,8 +8,8 @@
 |[![Circle CI](https://circleci.com/gh/springfox/springfox/tree/master.svg?style=svg)](https://circleci.com/gh/springfox/springfox/tree/master)|[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.svg?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo) |[![Coverage Status](https://coveralls.io/repos/springfox/springfox/badge.svg)](https://coveralls.io/r/springfox/springfox) |
 
 ### About
-For more reference documentation visit the [Springfox Website] (http://springfox.io) or [http://springfox.github.io/springfox/]
- (http://springfox.github.io/springfox/)
+For more information on this project visit the [Springfox Website] (http://springfox.io) or 
+ [http://springfox.github.io/springfox/](http://springfox.github.io/springfox/)
 
 ### Useful links
 - [Reference Documentation](http://springfox.io)
