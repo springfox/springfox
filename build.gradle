@@ -1,8 +1,8 @@
 import springfox.gradlebuild.utils.ProjectDefinitions
 import springfox.gradlebuild.version.BuildscriptVersionResolver
+import springfox.gradlebuild.version.EarlyAccessVersion
 import springfox.gradlebuild.version.SemanticVersion
-import springfox.gradlebuild.version.SnapshotVersion
-import springfox.gradlebuild.version.SoftwareVersion
+import springfox.gradlebuild.version.*
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
@@ -33,7 +33,7 @@ ext {
 apply plugin: 'springfox-multi-release'
 
 SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(project,
-        new SnapshotVersion(SemanticVersion.get(file("$rootDir/version.properties")))
+        new EarlyAccessVersion(SemanticVersion.get(file("$rootDir/version.properties")))
 )
 version = currentVersion
 
