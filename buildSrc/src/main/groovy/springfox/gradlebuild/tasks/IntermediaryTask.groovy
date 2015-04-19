@@ -24,5 +24,6 @@ import org.gradle.api.DefaultTask
 /**
  * A task which does nothing but serves as an Intermediary between dependant tasks
  */
-class IntermediaryTask extends DefaultTask{
+class IntermediaryTask extends DefaultTask {
+  String group = 'release'
 }
