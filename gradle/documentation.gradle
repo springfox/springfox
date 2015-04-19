@@ -48,7 +48,7 @@ task publishDocs(type: Exec) {
     gitChanges += """rm -rf $dir
       mkdir -p $dir
       cp -r $source $dir
-      ln -sf ${symlink} ${dir}
+      ln -sf ${destination}/${symlink} ${dir}
       git add $dir ${destination}/${symlink}
 """
   }
