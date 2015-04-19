@@ -1,4 +1,5 @@
 import springfox.gradlebuild.utils.ProjectDefinitions
+import springfox.gradlebuild.version.BuildscriptVersionResolver
 
 /*
  *
@@ -34,13 +35,21 @@ asciidoctor {
 }
 
 task publishDocs(type: Exec) {
+
+  String symlink = "snapshot"
+  if (!BuildscriptVersionResolver.isSnapshot(project)) {
+    symlink = 'current'
+  }
+
   String gitChanges = ""
-  ['build/asciidoc/*'    : "docs/${project.version}",
-   'build/docs/javadoc/*': "javadoc/${project.version}"].each { source, destination ->
-    gitChanges += """rm -rf $destination
-      mkdir -p $destination
-      cp -r $source $destination
-      git add $destination
+  ['build/asciidoc/*'    : "docs",
+   'build/docs/javadoc/*': "javadoc"].each { source, destination ->
+    String dir = "${destination}/${project.version}"
+    gitChanges += """rm -rf $dir
+      mkdir -p $dir
+      cp -r $source $dir
+      ln -sf ${project.version} "${destination}/${symlink}"
+      git add $dir
 """
   }
 
