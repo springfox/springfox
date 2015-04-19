@@ -33,7 +33,7 @@ ext {
 apply plugin: 'springfox-multi-release'
 
 SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(project,
-        new EarlyAccessVersion(SemanticVersion.get(file("$rootDir/version.properties")))
+        new SnapshotVersion(SemanticVersion.get(file("$rootDir/version.properties")))
 )
 version = currentVersion
 
