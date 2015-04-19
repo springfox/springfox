@@ -52,7 +52,6 @@ task publishDocs(type: Exec) {
       git add $dir
 """
   }
-
   commandLine "sh", "-c",
           """
   git config user.email "bot@springfox.io"
