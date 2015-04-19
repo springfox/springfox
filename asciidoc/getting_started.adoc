@@ -5,10 +5,15 @@
 
 === Dependencies
 The Springfox libraries are hosted on https://bintray.com/springfox/maven-repo/springfox/view[bintray] and jcenter.
-The libraries can be viewed via artifactory at the following locations:
+The artifacts can be viewed accessed at the following locations:
 
-* http://oss.jfrog.org/simple/oss-release-local/io/springfox/
-* http://oss.jfrog.org/simple/oss-snapshot-local/io/springfox/
+* Release:
+   ** http://oss.jfrog.org/simple/oss-release-local/io/springfox/
+   ** http://oss.jfrog.org/oss-release-local/io/springfox/
+   ** https://jcenter.bintray.com/io/springfox/
+* Snapshot
+ ** http://oss.jfrog.org/simple/oss-snapshot-local/io/springfox/
+ ** http://oss.jfrog.org/oss-snapshot-local/io/springfox/
 
 Springfox has multiple modules and the dependencies will vary depending on the desired API specification standard.
 Below outlines how to include the springfox-swagger2 module which produces Swagger 2.0 API documentation.
