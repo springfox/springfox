@@ -77,9 +77,9 @@ public class Swagger2Controller {
       String host = uri.getHost();
       int port = uri.getPort();
       if (port > -1)
-        return String.format("%s:%s", host, port);
+        return String.format("%s:%d", host, port);
       else 
-        return String.format("%s", host);
+        return host;
     }
     return hostNameOverride;
   }
