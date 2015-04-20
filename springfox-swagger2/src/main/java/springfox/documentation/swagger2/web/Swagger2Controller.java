@@ -74,7 +74,12 @@ public class Swagger2Controller {
   private String hostName() {
     if ("DEFAULT".equals(hostNameOverride)) {
       URI uri = linkTo(Swagger2Controller.class).toUri();
-      return String.format("%s:%s", uri.getHost(), uri.getPort());
+      String host = uri.getHost();
+      int port = uri.getPort();
+      if (port > -1) {
+        return String.format("%s:%d", host, port);
+      } 
+      return host;
     }
     return hostNameOverride;
   }
