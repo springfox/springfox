@@ -76,10 +76,10 @@ public class Swagger2Controller {
       URI uri = linkTo(Swagger2Controller.class).toUri();
       String host = uri.getHost();
       int port = uri.getPort();
-      if (port > -1)
+      if (port > -1) {
         return String.format("%s:%d", host, port);
-      else 
-        return host;
+      } 
+      return host;
     }
     return hostNameOverride;
   }
