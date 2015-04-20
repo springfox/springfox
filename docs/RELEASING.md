@@ -54,3 +54,9 @@ To bypass the standard release flow and upload directly to bintray use the follo
 ./gradlew clean build bintrayUpload -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD -PreleaseType=<MAJOR|MINOR|PATCH>
  --stacktrace
 ```
+
+### Updating reference documantation.
+To update the docs for an existing release pass the `updateMode` switch
+```
+./gradlew publishDocs -PupdateMode
+```

@@ -18,21 +18,28 @@ asciidoctor {
 }
 
 task publishDocs(type: Exec) {
+  description = "Publishes reference documentation"
+  group = "release"
 
-  String symlink = "snapshot"
-  if (!BuildscriptVersionResolver.isSnapshot(project)) {
+  String symlink = 'snapshot'
+  String docVersion = project.version
+
+  if (project.hasProperty('updateMode')) {
     symlink = 'current'
+    docVersion = BuildscriptVersionResolver.currentSemanticVersion(project).toString()
+  } else {
+    symlink = BuildscriptVersionResolver.isSnapshot(project) ? 'snapshot' : 'current'
   }
 
   String gitChanges = ""
   ['build/asciidoc/*'    : "docs",
    'build/docs/javadoc/*': "javadoc"].each { source, destination ->
-    String dir = "${destination}/${project.version}/"
+    String dir = "${destination}/${docVersion}/"
     gitChanges += """rm -rf $dir
       mkdir -p $dir
       cp -r $source $dir
       rm -rf ${destination}/${symlink}
-      ln -sf ${project.version}/ ${destination}/${symlink}
+      ln -sf ${docVersion}/ ${destination}/${symlink}
       git add $dir ${destination}/${symlink}
 """
   }

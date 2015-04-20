@@ -37,7 +37,11 @@ class BuildscriptVersionResolver {
     }
   }
 
-  static boolean isSnapshot(Project project){
+  static boolean isSnapshot(Project project) {
     return project.version.toString().endsWith('-SNAPSHOT')
+  }
+
+  static SemanticVersion currentSemanticVersion(Project project) {
+    return SemanticVersion.get(project.file("${project.rootDir}/version.properties"))
   }
 }

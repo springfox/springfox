@@ -36,7 +36,7 @@ class BumpAndTagTask extends DefaultTask {
     def file = project.file("${project.rootDir}/version.properties")
     ReleaseType releaseType = ReleaseType.valueOf(project.property('releaseType').toUpperCase())
 
-    SoftwareVersion releaseVersion = BuildscriptVersionResolver.projectVersion(project, SemanticVersion.get(file))
+      SoftwareVersion releaseVersion = BuildscriptVersionResolver.projectVersion(project, SemanticVersion.get(file))
     releaseVersion.save(file)
 
     def xArgs = ['git',
