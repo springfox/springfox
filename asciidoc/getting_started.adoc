@@ -115,3 +115,6 @@ dependencies {
 The Swagger UI page should then be available at http://localhost:8080/swagger-ui.html[]
 
 image::springfox-swagger-ui.png[Swagger UI]
+
+=== Springfox samples
+The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of samples.

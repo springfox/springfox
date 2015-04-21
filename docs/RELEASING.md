@@ -1,12 +1,12 @@
 ### Releasing 
 
-To release a nonsnaphot version of Springfox:
+To release a non-snaphot version of Springfox:
 
 1. Set the projects semantic version and Git push:
-```groovy
-SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
-        project, SemanticVersion.get(file("$rootDir/version.properties"))
-)
+    ```groovy
+    SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
+            project, SemanticVersion.get(file("$rootDir/version.properties"))
+    )
 ```
 
 2. Execute the the release commands:
@@ -23,7 +23,7 @@ The below properties are required to run a release:
     -PreleaseType=<MAJOR|MINOR|PATCH> -i
     ```
 
-3. Change the projects version back to snapshot:
+3. Change the projects version back to snapshot and push:
 ```groovy
 SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
         project, new SnapshotVersion(SemanticVersion.get(file("$rootDir/version.properties")))

@@ -12,13 +12,12 @@ https://github.com/swagger-api/swagger-core[swagger-core], are typically used to
 One major difference between the two swagger specification is the composition of the generated swagger documentation.
 
 With Swagger 1.2 an applications API is represented as a `Resource Listing` and multiple `API Declarations` which has the
-implication of producing https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2
-.md#42-file-structure[multiple JSON files]
+implication of producing https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md#42-file-structure[multiple JSON files]
 
-With Swagger 2.0 things are much simpler and an Application's API can be represented in a single JSON file.
+With Swagger 2.0 things are much simpler and an application's API can be represented in a single JSON file.
 
 === Springfox Spring Web Configuration
-The following secton describes how to configure Springfox with Swagger for Spring Web MVC based applications.
+The following section describes how to configure Springfox with Swagger for Spring Web MVC based applications.
 
 The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of sample Spring application
 which can be used a reference.
