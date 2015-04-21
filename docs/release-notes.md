@@ -1,20 +1,23 @@
 # 2.0.0 Release notes
 This is a major release for springfox (formally swagger-springmvc). This release includes the long awaited support for Swagger 2.0 along 
-with some significant architectural changes aimed at improving extensibility and lays a foundation for sporting API 
+with some significant architectural changes aimed at improving extensibility and laying a foundation for sporting API 
 specifications other than Swagger.
-
-Automation
+ 
+Some other significant things are:
+- Moving to the Springfox Github organisation.
+- Moving to a new [Bintray organisation](https://bintray.com/springfox/).
+- A new Sonatype OSSRH Group, 'io.springfox'
+- Moved CI to CircleCi
+- Using [Asciidoctor](http://asciidoctor.org/) to generate reference documentation
+- Automating releases.
 
 ## Breaking changes
-### Package namespace
-All classes now have a toplevel namespace of 'springfox', 'com.mangofactory' no longer exists.
-
-### Module/Dependency changes
-Repo:
+- The jar artifacts now have the organisation 'io.springfox' not 'com.mangofactory' 
+- All classes now have a toplevel namespace of 'springfox', 'com.mangofactory' no longer exists.
 
 Modules:
-The Springfox codebase is now comprised of multiple modles which are not all required.
-
+The Springfox codebase is now comprised of multiple modules.
+TBD
 
 ## New Features
 
