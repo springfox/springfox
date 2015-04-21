@@ -3,7 +3,11 @@
 Also what used to be two modules ```swagger-springmvc``` and ```swagger-models``` 
 is now split into multiple modules. 
 
-A little bit of background; when we started work on 2.0 swagger specification we realized that we're rewriting the logic to infer the service models and the schema. So we decided to take a step back and break it out into a two step process. First infer the service model into an internal representation. Second create a mapping layer that can map the internal models to different specification formats. Out of the box we will support swagger 1.2 and swagger 2.0, but this leads us to the possibility of supporting other formats and other scenarios as well; for e.g. RAML, ALPS and hypermedia formats.
+A little bit of background; when we started work on 2.0 swagger specification we realized that we're rewriting the logic to infer the service
+ models and the schema. So we decided to take a step back and break it out into a two step process. First infer the service 
+ model into an internal representation. Second create a mapping layer that can map the internal models to different specification formats. 
+ Out of the box we will support swagger 1.2 and swagger 2.0, but this leads us to the possibility of supporting other formats and 
+ other scenarios as well; for e.g. RAML, ALPS and hypermedia formats.
  
 Accordingly the different modules are split up as shown below.
 
@@ -41,64 +45,6 @@ and responses                                 |
                                                                          Also contains the controller for each
                                                                          of the specific formats.
 
-```
-
-### Dependency Changes
-
-The build file/pom will require the following changes
-__Maven__
-```xml
-<repositories>
-    <repository>
-      <id>jcenter-snapshots</id>
-      <name>jcenter</name>
-      <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
-    </repository>
-</repositories>
-
-<dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-core</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
-</dependency>
-<dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-spi</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
-</dependency>
-<dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-spring-web</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
-</dependency>
-<dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger2</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
-</dependency>
-<!-- for swagger 1.2 optionally -->
-<dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger1</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
-</dependency>
-```
-
-__Gradle__
-
-```groovy
-
-repositories {
-   maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
-}
-
-compile "io.springfox:springfox-core:2.0.0-SNAPSHOT",
-compile "io.springfox:springfox-spi:2.0.0-SNAPSHOT",
-compile "io.springfox:springfox-schema:2.0.0-SNAPSHOT",
-compile "io.springfox:springfox-spring-web:2.0.0-SNAPSHOT",
-compile "io.springfox:springfox-swagger2:2.0.0-SNAPSHOT"
-//Optional for swagger 1.2
-compile "io.springfox:springfox-swagger1:2.0.0-SNAPSHOT"
 ```
 
 ### Configuration changes

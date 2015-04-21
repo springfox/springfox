@@ -3,25 +3,24 @@ This is a major release for springfox (formally swagger-springmvc). This release
 with some significant architectural changes aimed at improving extensibility and laying a foundation for sporting API 
 specifications other than Swagger.
  
-Some other significant things are:
+There has also been some less visible work going on:
 - Moving to the Springfox Github organisation.
 - Moving to a new [Bintray organisation](https://bintray.com/springfox/).
 - A new Sonatype OSSRH Group, 'io.springfox'
 - Moved CI to CircleCi
 - Using [Asciidoctor](http://asciidoctor.org/) to generate reference documentation
-- Automating releases.
+- Release automation.
 
 ## Breaking changes
-- The jar artifacts now have the organisation 'io.springfox' not 'com.mangofactory' 
+- All artifacts now have the organisation 'io.springfox' not 'com.mangofactory' 
 - All classes now have a toplevel namespace of 'springfox', 'com.mangofactory' no longer exists.
-
-Modules:
-The Springfox codebase is now comprised of multiple modules.
-TBD
+- `springfox.documentation.spring.web.plugins.Docket` replaces what was `com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin`
+- `com.mangofactory.swagger.configuration.SpringSwaggerConfig` has been removed.
 
 ## New Features
-
-Swagger 2.0 
+- Support for Swagger 2.0.
+- The swagger-ui webjar no longer requires a JSP engine.
+- Powerful ways to include or exclude API endpoints using `springfox.documentation.spring.web.plugins.ApiSelectorBuilder` 
 
 ## Contributors
 We would like to thank the following community members for helping with this release:
@@ -40,3 +39,5 @@ We would like to thank the following community members for helping with this rel
     - Updated documentation
 - [Tony Tam](https://github.com/fehguy)
     - Updated Swagger Link and added springfox/swagger editor example
+- [sashevsky](https://github.com/sashevsky)
+    - Fixed an issue with missing http port
