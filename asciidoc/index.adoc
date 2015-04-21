@@ -1,5 +1,7 @@
 = Springfox Reference Documentation
 Dilip Krishnan; Adrian Kelly;
+v{springfox-version}
+
 :numbered:
 :toclevels: 10
 :imagesdir: ./images
