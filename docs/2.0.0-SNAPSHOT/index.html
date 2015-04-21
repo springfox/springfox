@@ -508,6 +508,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Dilip Krishnan</span><br>
 <span id="author2" class="author">Adrian Kelly</span><br>
+<span id="revdate">v2.0.0-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -521,40 +522,14 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#getting-started">2. Getting Started</a>
 <ul class="sectlevel2">
-<li><a href="#dependencies">2.1. Dependencies</a>
-<ul class="sectlevel3">
-<li><a href="#gradle">2.1.1. Gradle</a>
-<ul class="sectlevel4">
-<li><a href="#release">Release</a></li>
-<li><a href="#snapshot">Snapshot</a></li>
-</ul>
-</li>
-<li><a href="#maven">2.1.2. Maven</a>
-<ul class="sectlevel4">
-<li><a href="#release-2">Release</a></li>
-<li><a href="#snapshot-2">Snapshot</a></li>
-</ul>
-</li>
-<li><a href="#springfox-swagger2-with-spring-boot">2.1.3. Springfox-swagger2 with Spring Boot</a>
-<ul class="sectlevel4">
-<li><a href="#swagger-ui">Swagger UI</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a href="#dependencies">2.1. Dependencies</a></li>
 </ul>
 </li>
 <li><a href="#architecture">3. Architecture</a></li>
 <li><a href="#swagger">4. Swagger</a>
 <ul class="sectlevel2">
 <li><a href="#swagger-1-2-vs-swagger-2-0">4.1. Swagger 1.2 vs Swagger 2.0</a></li>
-<li><a href="#springfox-spring-web-configuration">4.2. Springfox Spring Web Configuration</a>
-<ul class="sectlevel3">
-<li><a href="#spring-xml-configuration">4.2.1. Spring XML Configuration</a></li>
-<li><a href="#spring-java-configuration-javaconfig">4.2.2. Spring Java Configuration (javaconfig)</a></li>
-<li><a href="#spring-boot">4.2.3. Spring Boot</a></li>
-</ul>
-</li>
+<li><a href="#springfox-spring-web-configuration">4.2. Springfox Spring Web Configuration</a></li>
 <li><a href="#swagger-specification-version-2-0">4.3. Swagger Specification version 2.0</a></li>
 <li><a href="#swagger-ui-2">4.4. Swagger UI</a></li>
 </ul>
@@ -568,39 +543,10 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#swaggerspringmvcplugin-xml-configuration">6.4. SwaggerSpringMvcPlugin XML Configuration</a></li>
 <li><a href="#swaggerspringmvcplugin-spring-java-configuration">6.5. SwaggerSpringMvcPlugin Spring Java Configuration</a></li>
 <li><a href="#how-it-works">6.6. How It works</a></li>
-<li><a href="#core-concepts">6.7. Core Concepts</a>
-<ul class="sectlevel3">
-<li><a href="#swagger-group">6.7.1. Swagger group</a></li>
-<li><a href="#resource-listing">6.7.2. Resource Listing</a></li>
-<li><a href="#api-documentation-endpoints">6.7.3. API Documentation Endpoints</a></li>
-</ul>
-</li>
+<li><a href="#core-concepts">6.7. Core Concepts</a></li>
 <li><a href="#urls-swaggerpathprovider">6.8. Urls (SwaggerPathProvider)</a></li>
-<li><a href="#customization">6.9. Customization</a>
-<ul class="sectlevel3">
-<li><a href="#excluding-api-endpoints">6.9.1. Excluding api endpoints</a></li>
-<li><a href="#http-response-codes-and-messages">6.9.2. HTTP Response codes and messages</a></li>
-<li><a href="#ordering-the-api-s-within-a-resourcelisting">6.9.3. Ordering the api&#8217;s within a ResourceListing</a></li>
-<li><a href="#ordering-operations-in-api-declarations">6.9.4. Ordering operations in Api Declarations</a></li>
-<li><a href="#ordering-apidescriptions-within-apilistings">6.9.5. Ordering ApiDescriptions (within ApiListings)</a></li>
-<li><a href="#configuring-the-output-of-code-operationid-code-in-a-swagger-2-0-spec">6.9.6. Configuring the output of <code>operationId</code> in a Swagger 2.0 spec</a>
-<ul class="sectlevel4">
-<li><a href="#the-default-value-of-code-operationid-code-according-to-springfox">The default value of <code>operationId</code> according to Springfox</a>
-<ul class="sectlevel5">
-<li><a href="#given-this-annotated-method">Given this annotated method &#8230;&#8203;</a></li>
-<li><a href="#the-customized-code-operationid-code-will-render-looking-like-this">&#8230;&#8203; the customized <code>operationId</code> will render looking like this:</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#changing-how-generic-types-are-named">6.9.7. Changing how Generic Types are Named</a></li>
-</ul>
-</li>
-<li><a href="#model-customization">6.10. Model Customization</a>
-<ul class="sectlevel3">
-<li><a href="#excluding-spring-handler-method-arguments-or-custom-types">6.10.1. Excluding spring handler method arguments or custom types</a></li>
-</ul>
-</li>
+<li><a href="#customization">6.9. Customization</a></li>
+<li><a href="#model-customization">6.10. Model Customization</a></li>
 </ul>
 </li>
 <li><a href="#support">7. Support</a></li>
@@ -1473,7 +1419,7 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-21 08:25:04 UTC
+Last updated 2015-04-21 08:40:43 UTC
 </div>
 </div>
 </body>
