@@ -28,7 +28,7 @@ class Swagger2MarkupDocumentationTest extends Specification {
 
   def "should pass coverage"() {
     given:
-      Swagger2MarkupResultHandler resultHandler = Swagger2MarkupDocumentation.document("testDir")
+      Swagger2MarkupResultHandler resultHandler = Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc").build()
     when:
       resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(), new MockHttpServletResponse()))
     then:
