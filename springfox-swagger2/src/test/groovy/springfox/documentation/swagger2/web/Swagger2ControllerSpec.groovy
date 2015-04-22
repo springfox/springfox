@@ -1,5 +1,6 @@
 package springfox.documentation.swagger2.web
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.jayway.jsonpath.JsonPath
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
@@ -73,6 +74,27 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
       "/v2/api-docs"               | 200
       "/v2/api-docs?group=default" | 200
       "/v2/api-docs?group=unknown" | 404
+  }
+
+  def "Should omit port number if it is -1"() {
+    given:
+      ApiDocumentationScanner swaggerApiResourceListing =
+        new ApiDocumentationScanner(listingReferenceScanner, Mock(ApiListingScanner))
+      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
+    and:
+      controller.hostNameOverride = "DEFAULT"
+    when:
+      MvcResult result = mockMvc
+        .perform(get("/v2/api-docs"))
+        .andDo(print())
+        .andReturn()
+    and:
+      //Need to find out why jsonPath mvc result matcher doesn't work
+      String host = JsonPath.read(result.response.contentAsString, "\$.host")
+      jsonBodyResponse(result)
+    then:
+      host == "localhost"
+      result.getResponse().getStatus() == 200
   }
 
 }
