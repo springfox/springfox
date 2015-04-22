@@ -34,7 +34,7 @@ public class SecurityContextBuilder {
   private List<SecurityReference> securityReferences = newArrayList();
   private Predicate<String> pathSelector = Predicates.alwaysTrue();
 
-  public SecurityContextBuilder withAuthorizations(List<SecurityReference> securityReferences) {
+  public SecurityContextBuilder securityReferences(List<SecurityReference> securityReferences) {
     this.securityReferences = securityReferences;
     return this;
   }

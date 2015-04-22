@@ -30,6 +30,8 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.swagger.readers.operation.OperationAuthReader
 
+import static com.google.common.collect.Lists.newArrayList
+
 @Mixin([RequestMappingSupport, AuthSupport])
 class OperationAuthReaderSpec extends DocumentationContextSpec {
 
@@ -54,11 +56,11 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
 
   def "should apply global auth"() {
     given:
-      SecurityContext authorizationContext = SecurityContext.builder()
-              .withAuthorizations(defaultAuth())
+      SecurityContext securityContext = SecurityContext.builder()
+              .securityReferences(defaultAuth())
               .forPaths(PathSelectors.any())
               .build()
-      plugin.securityContext(authorizationContext)
+      plugin.securityContexts(newArrayList(securityContext))
       OperationContext operationContext = new OperationContext(new OperationBuilder(),
               RequestMethod.GET, dummyHandlerMethod(), 0, requestMappingInfo("somePath"),
               context(), "/anyPath")
@@ -76,11 +78,11 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
 
   def "should apply global auth when ApiOperationAnnotation exists without auth values"() {
     given:
-      SecurityContext authorizationContext = SecurityContext.builder()
-              .withAuthorizations(defaultAuth())
+      SecurityContext securityContext = SecurityContext.builder()
+              .securityReferences(defaultAuth())
               .forPaths(PathSelectors.any())
               .build()
-      plugin.securityContext(authorizationContext)
+      plugin.securityContexts(newArrayList(securityContext))
       OperationContext operationContext = new OperationContext(new OperationBuilder(),
               RequestMethod.GET, dummyHandlerMethod('methodWithHttpGETMethod'), 0, requestMappingInfo("somePath"),
               context(), "/anyPath")

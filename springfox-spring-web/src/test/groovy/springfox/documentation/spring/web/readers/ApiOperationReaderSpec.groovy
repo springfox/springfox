@@ -35,6 +35,7 @@ import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 import springfox.documentation.spring.web.readers.operation.DefaultOperationReader
 
+import static com.google.common.collect.Lists.newArrayList
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Mixin([RequestMappingSupport, AuthSupport, ServicePluginsSupport])
@@ -42,11 +43,11 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
   ApiOperationReader sut
 
   def setup() {
-    SecurityContext authorizationContext = SecurityContext.builder()
-            .withAuthorizations(defaultAuth())
+    SecurityContext securityContext = SecurityContext.builder()
+            .securityReferences(defaultAuth())
             .forPaths(PathSelectors.regex(".*"))
             .build()
-    plugin.securityContext(authorizationContext)
+    plugin.securityContexts(newArrayList(securityContext))
     sut = new ApiOperationReader(customWebPlugins([],[],[new DefaultOperationReader()]))
   }
 

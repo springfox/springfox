@@ -26,9 +26,11 @@ import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import spock.lang.Unroll
+import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger1.annotations.EnableSwagger
@@ -39,7 +41,7 @@ import static springfox.documentation.builders.PathSelectors.*
 
 @ContextConfiguration(
         loader = SpringApplicationContextLoader,
-        classes = SwaggerV1_2Spec.Config)
+        classes = Config)
 class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
 
   def 'should honor swagger resource listing'() {
@@ -57,7 +59,7 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
       String raw = response.data.text
       String actual = JsonOutput.prettyPrint(raw)
       response.status == 200
-
+      println(actual)
       JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
   }
 
@@ -106,14 +108,16 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
           "springfox.test.contract.swagger",
           "springfox.petstore.controller"
   ])
+  @Import(AuthorizationSupport)
   static class Config {
     @Bean
-    public Docket testCases() {
+    public Docket testCases(List<SecurityScheme> securitySchemes) {
       return new Docket(DocumentationType.SWAGGER_12)
               .groupName("default")
               .select()
-              .paths(regex("^((?!/api).)*\$")) //Not beginning with /api
-              .build()
+                .paths(regex("^((?!/api).)*\$")) //Not beginning with /api
+                .build()
+              .securitySchemes(securitySchemes)
     }
   }
 }

@@ -18,7 +18,6 @@
  */
 
 package springfox.documentation.swagger1.integration
-
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
@@ -30,7 +29,6 @@ import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
-import springfox.documentation.spi.service.contexts.SecurityContextBuilder
 import springfox.documentation.spring.web.RelativePathProvider
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -39,6 +37,7 @@ import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
+import static com.google.common.collect.Lists.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*
@@ -142,45 +141,6 @@ class DocketSpec extends DocumentationContextSpec {
       'directModelSubstitute'   | [LocalDate.class, Date.class]      | 8
   }
 
-  //TODO: Make this part of the selector tests
-//  def "should contain both default and custom exclude annotations"() {
-//    when:
-//      new Docket(DocumentationType.SWAGGER_12)
-//              .select()
-//                .apis(and(not(withClassAnnotation(ApiOperation)),
-//                      not(withClassAnnotation(Api))))
-//                .build()
-//              .configure(contextBuilder)
-//
-//    and:
-//      def pluginContext = contextBuilder.build()
-//    then:
-//      pluginContext.apiSelector.excludeAnnotations.containsAll([
-//              ApiOperation.class,
-//              Api.class
-//      ])
-//  }
-//
-//  def "should preserve default exclude annotations"() {
-//    when:
-//      new Docket(DocumentationType.SWAGGER_12)
-//              .select()
-//                .apis(and(not(withClassAnnotation(ApiOperation)),
-//                  not(withClassAnnotation(Api))))
-//              .build()
-//              .configure(contextBuilder)
-//
-//    and:
-//      def pluginContext = contextBuilder.build()
-//    then:
-//      pluginContext.apiSelector.excludeAnnotations.containsAll([
-//              Api.class,
-//              ApiOperation.class,
-//              ApiIgnore.class
-//      ])
-//
-//  }
-
   def "Basic property checks"() {
     when:
       plugin."$builderMethod"(object)
@@ -192,13 +152,13 @@ class DocketSpec extends DocumentationContextSpec {
       builderMethod     | object                                         | property
       'pathProvider'    | new RelativePathProvider(Mock(ServletContext)) | 'pathProvider'
       'securitySchemes' | new ArrayList<SecurityScheme>()                | 'securitySchemes'
-      'securityContext' | validContext()                                 | 'securityContext'
+      'securityContexts'| validContexts()                                 | 'securityContexts'
       'groupName'       | 'someGroup'                                    | 'groupName'
       'apiInfo'         | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
   }
 
-  private SecurityContext validContext() {
-    new SecurityContextBuilder().build()
+  def validContexts() {
+    newArrayList(SecurityContext.builder().build())
   }
 
   def "non nullable swaggerApiResourceListing properties"() {

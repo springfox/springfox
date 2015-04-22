@@ -73,7 +73,34 @@
         }
     ],
     "authorizations": {
-
+        "oauth2": {
+            "grantTypes": {
+                "implicit": {
+                    "loginEndpoint": {
+                        "url": "http://petstore.swagger.io/api/oauth/dialog"
+                    },
+                    "type": "implicit"
+                }
+            },
+            "name": "petstore_auth",
+            "scopes": [
+                {
+                    "description": "modify pets in your account",
+                    "scope": "write:pets"
+                },
+                {
+                    "description": "read your pets",
+                    "scope": "read:pets"
+                }
+            ],
+            "type": "oauth2"
+        },
+        "apiKey": {
+            "keyname": "api_key",
+            "name": "api_key",
+            "passAs": "header",
+            "type": "apiKey"
+        }
     },
     "info": {
         "contact": "Contact Email",

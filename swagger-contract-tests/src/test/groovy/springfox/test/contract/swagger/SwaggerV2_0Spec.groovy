@@ -39,7 +39,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 import static groovyx.net.http.ContentType.*
 import static springfox.documentation.builders.PathSelectors.*
 
-@ContextConfiguration(loader = SpringApplicationContextLoader, classes = SwaggerV2_0Spec.Config)
+@ContextConfiguration(loader = SpringApplicationContextLoader, classes = Config)
 class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
 
   @Unroll("#groupName")

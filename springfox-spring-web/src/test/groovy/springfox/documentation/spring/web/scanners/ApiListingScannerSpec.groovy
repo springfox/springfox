@@ -33,6 +33,7 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
+import static com.google.common.collect.Lists.newArrayList
 import static com.google.common.collect.Maps.*
 import static org.springframework.http.MediaType.*
 import static springfox.documentation.builders.PathSelectors.*
@@ -47,13 +48,13 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
   ApiListingScanner scanner
 
   def setup() {
-    SecurityContext authorizationContext = SecurityContext.builder()
-            .withAuthorizations(defaultAuth())
+    SecurityContext securityContext = SecurityContext.builder()
+            .securityReferences(defaultAuth())
             .forPaths(regex('/anyPath.*'))
             .build()
 
     plugin
-            .securityContext(authorizationContext)
+            .securityContexts(newArrayList(securityContext))
             .configure(contextBuilder)
     apiDescriptionReader = Mock(ApiDescriptionReader)
     apiDescriptionReader.read(_) >> []
@@ -91,9 +92,9 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
 
       def context = context()
-      RequestMappingContext requestMappingContext = new RequestMappingContext(context, requestMappingInfo,
+      def requestMappingContext = new RequestMappingContext(context, requestMappingInfo,
               dummyHandlerMethod("methodWithConcreteResponseBody"))
-      Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
+      def resourceGroupRequestMappings = newHashMap()
       resourceGroupRequestMappings.put(new ResourceGroup("businesses", DummyClass), [requestMappingContext])
 
       listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
@@ -101,7 +102,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       Map<String, ApiListing> apiListingMap = scanner.scan(listingContext)
     then:
       ApiListing listing = apiListingMap['businesses']
-      listing.getSecurityReferences().size() == 1
+      listing.getSecurityReferences().size() == 0
   }
 
   @Unroll

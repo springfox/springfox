@@ -33,7 +33,6 @@ import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.ArrayList;
@@ -70,6 +69,7 @@ public class ApiListingScanner {
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
             = context.getRequestMappingsByResourceGroup();
+    List<SecurityReference> securityReferences = newArrayList();
     for (Map.Entry<ResourceGroup, List<RequestMappingContext>> entry : requestMappingsByResourceGroup.entrySet()) {
 
       ResourceGroup resourceGroup = entry.getKey();
@@ -81,13 +81,11 @@ public class ApiListingScanner {
       Set<ApiDescription> apiDescriptions = newHashSet();
 
       Map<String, Model> models = new LinkedHashMap<String, Model>();
-      SecurityContext securityContext = documentationContext.getSecurityContext();
       for (RequestMappingContext each : entry.getValue()) {
         models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
-      List<SecurityReference> securityReferences = securityContext.getSecurityReferences();
 
       ArrayList sortedApis = new ArrayList(apiDescriptions);
       Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());

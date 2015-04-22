@@ -36,11 +36,12 @@ import springfox.documentation.spring.web.RelativePathProvider
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
+import static com.google.common.collect.Lists.newArrayList
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
-class DocumentationConfigurerSpec extends DocumentationContextSpec {
+class DocketSpec extends DocumentationContextSpec {
 
   def "Should have sensible defaults when built with minimal configuration"() {
     when:
@@ -145,42 +146,6 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
   }
 
 
-  //TODO: these should be predicate tests for withClass/withMethod annotation
-//  def "should contain both default and custom exclude annotations"() {
-//    when:
-//      def docket = new Docket(DocumentationType.SWAGGER_12)
-//              .selector()
-//                  .apis(or(withMethodAnnoation(ApiOperation.class),
-//                      withClassAnnotation(Api.class)))
-//                  .build()
-//              .configure(contextBuilder)
-//
-//    and:
-//      def api
-//    then:
-//      pluginContext.apiSelector.excludeAnnotations.containsAll([
-//              ApiOperation.class,
-//              Api.class
-//      ])
-//  }
-
-//  def "should preserve default exclude annotations"() {
-//    when:
-//      new Docket(DocumentationType.SWAGGER_12)
-//              .excludeAnnotations(Api.class, ApiOperation.class)
-//              .configure(contextBuilder)
-//
-//    and:
-//      def pluginContext = contextBuilder.build()
-//    then:
-//      pluginContext.apiSelector.excludeAnnotations.containsAll([
-//              Api.class,
-//              ApiOperation.class,
-//              ApiIgnore.class
-//      ])
-//
-//  }
-
   def "Basic property checks"() {
     when:
       plugin."$builderMethod"(object)
@@ -189,17 +154,17 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
       context()."$property" == object
 
     where:
-      builderMethod          | object                                         | property
-      'pathProvider'         | new RelativePathProvider(Mock(ServletContext)) | 'pathProvider'
-      'securitySchemes'   | new ArrayList<SecurityScheme>()             | 'securitySchemes'
-      'securityContext'       | validContext()                                 | 'securityContext'
-      'groupName'            | 'someGroup'                                    | 'groupName'
-      'apiInfo'              | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
-      'apiDescriptionOrdering'| apiDescriptionOrdering()                      | 'apiDescriptionOrdering'
-      'operationOrdering'     | operationOrdering()                           | 'operationOrdering'
-      'produces'              | ['application/json'] as Set                   | 'produces'
-      'consumes'              | ['application/json'] as Set                   | 'consumes'
-      'protocols'             | ['application/json'] as Set                   | 'protocols'
+      builderMethod           | object                                          | property
+      'pathProvider'          | new RelativePathProvider(Mock(ServletContext))  | 'pathProvider'
+      'securitySchemes'       | new ArrayList<SecurityScheme>()                 | 'securitySchemes'
+      'securityContexts'      | validContexts()                                 | 'securityContexts'
+      'groupName'             | 'someGroup'                                     | 'groupName'
+      'apiInfo'               | new ApiInfo('', '', "", '', '', '', '')         | 'apiInfo'
+      'apiDescriptionOrdering'| apiDescriptionOrdering()                        | 'apiDescriptionOrdering'
+      'operationOrdering'     | operationOrdering()                             | 'operationOrdering'
+      'produces'              | ['application/json'] as Set                     | 'produces'
+      'consumes'              | ['application/json'] as Set                     | 'consumes'
+      'protocols'             | ['application/json'] as Set                     | 'protocols'
   }
 
   Ordering<ApiDescription> apiDescriptionOrdering() {
@@ -210,10 +175,10 @@ class DocumentationConfigurerSpec extends DocumentationContextSpec {
     new Defaults().operationOrdering()
   }
 
-  private SecurityContext validContext() {
-    SecurityContext.builder()
+  private List<SecurityContext> validContexts() {
+    newArrayList(SecurityContext.builder()
             .forPaths(PathSelectors.any())
-            .build()
+            .build())
   }
 
   def "non nullable swaggerApiResourceListing properties"() {

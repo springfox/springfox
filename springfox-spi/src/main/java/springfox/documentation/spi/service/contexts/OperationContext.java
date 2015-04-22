@@ -20,6 +20,10 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +31,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
@@ -80,9 +85,28 @@ public class OperationContext {
     return newArrayList();
   }
 
-  public SecurityContext securityContext() {
-    return documentationContext.getSecurityContext();
+  public Optional<SecurityContext> securityContext() {
+    return Iterables.tryFind(documentationContext.getSecurityContexts(), pathMatches());
   }
+
+  private Predicate<SecurityContext> pathMatches() {
+    return new Predicate<SecurityContext>() {
+      @Override
+      public boolean apply(SecurityContext input) {
+        return input.securityForPath(requestMappingPattern) != null;
+      }
+    };
+  }
+
+  private Function<SecurityContext, List<SecurityReference>> toSecurityReferences() {
+    return new Function<SecurityContext, List<SecurityReference>>() {
+      @Override
+      public List<SecurityReference> apply(SecurityContext input) {
+        return input.securityForPath(requestMappingPattern);
+      }
+    };
+  }
+
 
   public String requestMappingPattern() {
     return requestMappingPattern;

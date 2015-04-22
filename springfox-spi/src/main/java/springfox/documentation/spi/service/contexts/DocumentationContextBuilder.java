@@ -26,25 +26,21 @@ import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springfox.documentation.PathProvider;
-import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResponseMessage;
-import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.base.Optional.*;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
@@ -59,7 +55,6 @@ public class DocumentationContextBuilder {
   private String groupName;
   private ResourceGroupingStrategy resourceGroupingStrategy;
   private PathProvider pathProvider;
-  private SecurityContext securityContext;
   private List<? extends SecurityScheme> securitySchemes;
   private Ordering<ApiListingReference> listingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
@@ -68,13 +63,14 @@ public class DocumentationContextBuilder {
 
   private boolean applyDefaultResponseMessages;
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
-  private Set<Class> ignorableParameterTypes = newHashSet();
-  private Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
-  private List<AlternateTypeRule> rules = newArrayList();
-  private Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
-  private Set<String> protocols = newHashSet();
-  private Set<String> produces = newHashSet();
-  private Set<String> consumes = newHashSet();
+  private final List<SecurityContext> securityContexts = newArrayList();
+  private final Set<Class> ignorableParameterTypes = newHashSet();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
+  private final List<AlternateTypeRule> rules = newArrayList();
+  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
+  private final Set<String> protocols = newHashSet();
+  private final Set<String> produces = newHashSet();
+  private final Set<String> consumes = newHashSet();
   private GenericTypeNamingStrategy genericsNamingStrategy;
   private Optional<String> pathMapping;
 
@@ -118,8 +114,8 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder securityContext(SecurityContext securityContext) {
-    this.securityContext = defaultIfAbsent(securityContext, this.securityContext);
+  public DocumentationContextBuilder securityContexts(List<SecurityContext> securityContext) {
+    this.securityContexts.addAll(nullToEmptyList(securityContext));
     return this;
   }
 
@@ -214,11 +210,6 @@ public class DocumentationContextBuilder {
 
   public DocumentationContext build() {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
-    SecurityContext securityContext = fromNullable(this.securityContext)
-        .or(new SecurityContextBuilder()
-            .withAuthorizations(new ArrayList<SecurityReference>())
-            .forPaths(PathSelectors.any())
-            .build());
     return new DocumentationContext(documentationType,
         handlerMappings,
         apiInfo,
@@ -228,7 +219,7 @@ public class DocumentationContextBuilder {
         responseMessages,
         resourceGroupingStrategy,
         pathProvider,
-        securityContext,
+        securityContexts,
         securitySchemes,
         rules,
         listingReferenceOrdering,

@@ -29,7 +29,7 @@ class AuthorizationContextSpec extends Specification {
    def "scala authorizations"() {
     given:
       SecurityContext authorizationContext = SecurityContext.builder()
-              .withAuthorizations(auth)
+              .securityReferences(auth)
               .forPaths(PathSelectors.any())
               .build()
     expect:

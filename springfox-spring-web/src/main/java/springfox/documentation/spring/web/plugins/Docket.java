@@ -67,7 +67,6 @@ public class Docket implements DocumentationPlugin {
   private String groupName;
   private ApiInfo apiInfo;
   private PathProvider pathProvider;
-  private SecurityContext securityContext;
   private List<? extends SecurityScheme> securitySchemes;
   private Ordering<ApiListingReference> apiListingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
@@ -77,12 +76,13 @@ public class Docket implements DocumentationPlugin {
   private boolean enabled = true;
   private GenericTypeNamingStrategy genericsNamingStrategy = new DefaultGenericTypeNamingStrategy();
   private boolean applyDefaultResponseMessages = true;
-  private Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
-  private List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
-  private Set<Class> ignorableParameterTypes = newHashSet();
-  private Set<String> protocols = newHashSet();
-  private Set<String> produces = newHashSet();
-  private Set<String> consumes = newHashSet();
+  private final List<SecurityContext> securityContexts = newArrayList();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
+  private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
+  private final Set<Class> ignorableParameterTypes = newHashSet();
+  private final Set<String> protocols = newHashSet();
+  private final Set<String> produces = newHashSet();
+  private final Set<String> consumes = newHashSet();
   private Optional<String> pathMapping = Optional.absent();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
 
@@ -104,7 +104,7 @@ public class Docket implements DocumentationPlugin {
   /**
    * Configures the global com.wordnik.swagger.model.SecurityScheme's applicable to all or some of the api
    * operations. The configuration of which operations have associated SecuritySchemes is configured with
-   * springfox.swagger.plugins.Docket#securityContext
+   * springfox.swagger.plugins.Docket#securityContexts
    *
    * @param securitySchemes a list of security schemes
    * @return this Docket
@@ -115,13 +115,13 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
-   * Configures which api operations (via regex patterns) and HTTP methods to apply swagger authorization to.
+   * Configures which api operations (via regex patterns) and HTTP methods to apply security contexts to apis.
    *
-   * @param securityContext
+   * @param securityContexts - defines security requirements for the apis
    * @return this Docket
    */
-  public Docket securityContext(SecurityContext securityContext) {
-    this.securityContext = securityContext;
+  public Docket securityContexts(List<SecurityContext> securityContexts) {
+    this.securityContexts.addAll(securityContexts);
     return this;
   }
 
@@ -302,7 +302,7 @@ public class Docket implements DocumentationPlugin {
    *
    * @param apiDescriptionOrdering
    * @return this Docket
-   * @see ApiListingScanner
+   * @see springfox.documentation.spring.web.scanners.ApiListingScanner
    */
   public Docket apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
     this.apiDescriptionOrdering = apiDescriptionOrdering;
@@ -334,6 +334,11 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
+  /**
+   * Extensibility mechanism to add a servlet path mapping, if there is one, to the apis base path.
+   * @param path - path that acts as a prefix to the api base path
+   * @return this Docket
+   */
   public Docket pathMapping(String path) {
     this.pathMapping = Optional.fromNullable(path);
     return this;
@@ -344,6 +349,11 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
+  /**
+   * Initiates a builder for api selection.
+   * @return api selection builder. To complete building the api selector, the build method of the api selector
+   * needs to be called, this will automatically fall back to building the docket when the build method is called.
+   */
   public ApiSelectorBuilder select() {
     return new ApiSelectorBuilder(this);
   }
@@ -368,7 +378,7 @@ public class Docket implements DocumentationPlugin {
             .ruleBuilders(ruleBuilders)
             .groupName(groupName)
             .pathProvider(pathProvider)
-            .securityContext(securityContext)
+            .securityContexts(securityContexts)
             .securitySchemes(securitySchemes)
             .apiListingReferenceOrdering(apiListingReferenceOrdering)
             .apiDescriptionOrdering(apiDescriptionOrdering)

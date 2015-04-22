@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.readers.operation;
 
+import com.google.common.base.Optional;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.Authorization;
 import com.wordnik.swagger.annotations.AuthorizationScope;
@@ -49,14 +50,14 @@ public class OperationAuthReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
 
-    SecurityContext securityContext = context.securityContext();
+    Optional<SecurityContext> securityContext = context.securityContext();
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
     String requestMappingPattern = context.requestMappingPattern();
     List<SecurityReference> securityReferences = newArrayList();
 
-    if (null != securityContext) {
-      securityReferences = securityContext.securityForPath(requestMappingPattern);
+    if (securityContext.isPresent()) {
+      securityReferences = securityContext.get().securityForPath(requestMappingPattern);
     }
 
     ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
