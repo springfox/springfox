@@ -404,5 +404,4 @@ By default, a number of Spring's handler method arguments are ignored. See: ```c
 
 ## Support
 
-If you find issues or bugs please use the github issue https://github
-.com/springfox/springfox/issues[sprinfox project]
+If you find issues or bugs please use the github issue https://github.com/springfox/springfox/issues[sprinfox project]
