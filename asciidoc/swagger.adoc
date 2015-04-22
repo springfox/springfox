@@ -4,7 +4,7 @@ Springfox supports both version https://github.com/swagger-api/swagger-spec/blob
 https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md[2.0] of the http://swagger.io/[Swagger] specification.
 Where possible, the Swagger 2.0 specification is preferable.
 
-The https://github.com/swagger-api/swagger-core/wiki/Annotations[Swagger-Core Annotations], as provided by
+The https://github.com/swagger-api/swagger-core/wiki/Annotations[swagger-core annotations], as provided by
 https://github.com/swagger-api/swagger-core[swagger-core], are typically used to decorate the java source code of an API which is bing
 'swaggered'. Springfox is aware of the Swagger-Core Annotations and will favor those annotations over inferred defaults.
 
@@ -22,7 +22,6 @@ The following section describes how to configure Springfox with Swagger for Spri
 The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of sample Spring application
 which can be used a reference.
 
-
 ==== Spring XML Configuration
 
 ==== Spring Java Configuration (javaconfig)
@@ -34,10 +33,7 @@ which can be used a reference.
 === Swagger UI
 
 
-== Older Swagger Documentation
-
-
-## Usage (Quick guide) for 1.0.x
+=== Usage (Quick guide) for 1.0.x
 This quick guide outlines how to get swagger-springmvc up and running with a default configuration.
 The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin` as explained below.
 
@@ -168,15 +164,15 @@ Swagger-springmvc stores the generated swagger documentation, in memory, and ser
 
 ### Core Concepts
 
-image:https://raw.githubusercontent.com/martypitt/swagger-springmvc/master/docs/swaggerSpringMvc.png[Core Concepts]
+image:images/swaggerSpringMvc.png[Core Concepts]
 
 #### Swagger group
 
 A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
 within your application. The reason this concept was introduced was to support applications which require more than one
 Resource Listing. Why would you need more than one Resource Listing?
- - A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
- - A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2
+- A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
+- A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2
 
 In most cases an application will not need more than one Resource Listing and the concept of swagger groups can be ignored.
 
@@ -196,11 +192,11 @@ __Note:__ The below paths are relative to your applications context path and/or 
 
 [options="header,footer"]
 |=======================
-| Path                    | Description                                                             |
-| /api-docs               | Returns the first _Resource Listing_ found in the cache                 |
-| /api-docs?group=default | Returns the _Resource Listing_ for the default swagger group            |
-| /api-docs?group=group1  | Returns the _Resource Listing_ for the swagger group 'group1'           |
-| /api-docs/group1/albums | Returns the album's _Api Declaration_ for the swagger group 'group1'    |
+| Path                    | Description
+| /api-docs               | Returns the first _Resource Listing_ found in the cache
+| /api-docs?group=default | Returns the _Resource Listing_ for the default swagger group
+| /api-docs?group=group1  | Returns the _Resource Listing_ for the swagger group 'group1'
+| /api-docs/group1/albums | Returns the album's _Api Declaration_ for the swagger group 'group1'
 |=======================
 
 
@@ -404,4 +400,4 @@ By default, a number of Spring's handler method arguments are ignored. See: ```c
 
 ## Support
 
-If you find issues or bugs please use the github issue https://github.com/springfox/springfox/issues[sprinfox project]
+If you find issues or bugs please use the github issue https://github.com/springfox/springfox/issues[springfox project]

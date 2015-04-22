@@ -79,6 +79,22 @@ public class RequestHandlerSelectors {
     };
   }
 
+  /**
+   * Predicate that matches RequestHandler with given base package name for the class of the handler method.
+   * This predicate includes all request handlers matching the provided basePackage
+   *
+   * @param basePackage - base package of the classes
+   * @return this
+   */
+  public static Predicate<RequestHandler> basePackage(final String basePackage) {
+    return new Predicate<RequestHandler>() {
+      @Override
+      public boolean apply(RequestHandler input) {
+        return declaringClass(input).getPackage().getName().startsWith(basePackage);
+      }
+    };
+  }
+
   private static Class<?> declaringClass(RequestHandler input) {
     return input.getHandlerMethod().getMethod().getDeclaringClass();
   }

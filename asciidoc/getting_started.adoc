@@ -118,3 +118,4 @@ image::springfox-swagger-ui.png[Swagger UI]
 
 === Springfox samples
 The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of samples.
+

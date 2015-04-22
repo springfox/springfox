@@ -24,8 +24,9 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 import springfox.documentation.RequestHandler
 import springfox.documentation.annotations.ApiIgnore
+import springfox.documentation.schema.JustAnotherClass
 
-import static RequestHandlerSelectors.*
+import static springfox.documentation.builders.RequestHandlerSelectors.*
 
 class RequestHandlerSelectorsSpec extends Specification {
   def "Static types cannot be instantiated" () {
@@ -69,6 +70,21 @@ class RequestHandlerSelectorsSpec extends Specification {
       clazz                   | methodName  | available
       new WithAnnotation()    | "test"      | true
       new WithoutAnnotation() | "test"      | false
+  }
+
+  def "basePackage predicate matches RequestHandlers with given Class Annotation" () {
+    given:
+      def reqMapping = new RequestMappingInfo(null,null,null,null,null,null, null)
+    when:
+      def handlerMethod = new HandlerMethod(clazz, methodName)
+    then:
+      basePackage("springfox.documentation.builders")
+        .apply(new RequestHandler(reqMapping, handlerMethod)) == available
+    where:
+      clazz                   | methodName  | available
+      new WithAnnotation()    | "test"      | true
+      new WithoutAnnotation() | "test"      | true
+      new JustAnotherClass()  | "name"      | false
   }
 
   @ApiIgnore

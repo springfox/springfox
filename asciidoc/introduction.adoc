@@ -19,5 +19,5 @@ http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.ht
 
 
 === What it's not
-. Endorsed or approved by the Spring Framework Contributors
+Endorsed or approved by the Spring Framework Contributors
 
