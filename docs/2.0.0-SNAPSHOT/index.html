@@ -546,45 +546,45 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#springfox-samples">2.2. Springfox samples</a></li>
 </ul>
 </li>
-<li><a href="#swagger">3. Swagger</a>
+<li><a href="#architecture">3. Architecture</a></li>
+<li><a href="#swagger">4. Swagger</a>
 <ul class="sectlevel2">
-<li><a href="#swagger-1-2-vs-swagger-2-0">3.1. Swagger 1.2 vs Swagger 2.0</a></li>
-<li><a href="#springfox-spring-web-configuration">3.2. Springfox Spring Web Configuration</a>
+<li><a href="#swagger-1-2-vs-swagger-2-0">4.1. Swagger 1.2 vs Swagger 2.0</a></li>
+<li><a href="#springfox-spring-web-configuration">4.2. Springfox Spring Web Configuration</a>
 <ul class="sectlevel3">
-<li><a href="#spring-xml-configuration">3.2.1. Spring XML Configuration</a></li>
-<li><a href="#spring-java-configuration-javaconfig">3.2.2. Spring Java Configuration (javaconfig)</a></li>
-<li><a href="#spring-boot">3.2.3. Spring Boot</a></li>
+<li><a href="#spring-xml-configuration">4.2.1. Spring XML Configuration</a></li>
+<li><a href="#spring-java-configuration-javaconfig">4.2.2. Spring Java Configuration (javaconfig)</a></li>
+<li><a href="#spring-boot">4.2.3. Spring Boot</a></li>
 </ul>
 </li>
-<li><a href="#swagger-specification-version-2-0">3.3. Swagger Specification version 2.0</a></li>
-<li><a href="#swagger-ui-2">3.4. Swagger UI</a></li>
+<li><a href="#swagger-specification-version-2-0">4.3. Swagger Specification version 2.0</a></li>
+<li><a href="#swagger-ui-2">4.4. Swagger UI</a></li>
+<li><a href="#usage-quick-guide-for-1-0-x">4.5. Usage (Quick guide) for 1.0.x</a>
+<ul class="sectlevel3">
+<li><a href="#spring-java-configuration">4.5.1. Spring Java Configuration</a></li>
+<li><a href="#spring-xml-configuration-2">4.5.2. Spring xml Configuration</a></li>
 </ul>
 </li>
-<li><a href="#older-swagger-documentation">4. Older Swagger Documentation</a></li>
-<li><a href="#usage-quick-guide-for-1-0-x">5. Usage (Quick guide) for 1.0.x</a>
+<li><a href="#usage-swaggerspringmvcplugin">4.6. Usage (SwaggerSpringMvcPlugin)</a></li>
+<li><a href="#swaggerspringmvcplugin-xml-configuration">4.7. SwaggerSpringMvcPlugin XML Configuration</a></li>
+<li><a href="#swaggerspringmvcplugin-spring-java-configuration">4.8. SwaggerSpringMvcPlugin Spring Java Configuration</a></li>
+<li><a href="#how-it-works">4.9. How It works</a></li>
+<li><a href="#core-concepts">4.10. Core Concepts</a>
 <ul class="sectlevel3">
-<li><a href="#spring-java-configuration">5.1. Spring Java Configuration</a></li>
-<li><a href="#spring-xml-configuration-2">5.2. Spring xml Configuration</a></li>
-<li><a href="#usage-swaggerspringmvcplugin">5.3. Usage (SwaggerSpringMvcPlugin)</a></li>
-<li><a href="#swaggerspringmvcplugin-xml-configuration">5.4. SwaggerSpringMvcPlugin XML Configuration</a></li>
-<li><a href="#swaggerspringmvcplugin-spring-java-configuration">5.5. SwaggerSpringMvcPlugin Spring Java Configuration</a></li>
-<li><a href="#how-it-works">5.6. How It works</a></li>
-<li><a href="#core-concepts">5.7. Core Concepts</a>
-<ul class="sectlevel3">
-<li><a href="#swagger-group">5.7.1. Swagger group</a></li>
-<li><a href="#resource-listing">5.7.2. Resource Listing</a></li>
-<li><a href="#api-documentation-endpoints">5.7.3. API Documentation Endpoints</a></li>
+<li><a href="#swagger-group">4.10.1. Swagger group</a></li>
+<li><a href="#resource-listing">4.10.2. Resource Listing</a></li>
+<li><a href="#api-documentation-endpoints">4.10.3. API Documentation Endpoints</a></li>
 </ul>
 </li>
-<li><a href="#urls-swaggerpathprovider">5.8. Urls (SwaggerPathProvider)</a></li>
-<li><a href="#customization">5.9. Customization</a>
+<li><a href="#urls-swaggerpathprovider">4.11. Urls (SwaggerPathProvider)</a></li>
+<li><a href="#customization">4.12. Customization</a>
 <ul class="sectlevel3">
-<li><a href="#excluding-api-endpoints">5.9.1. Excluding api endpoints</a></li>
-<li><a href="#http-response-codes-and-messages">5.9.2. HTTP Response codes and messages</a></li>
-<li><a href="#ordering-the-api-s-within-a-resourcelisting">5.9.3. Ordering the api&#8217;s within a ResourceListing</a></li>
-<li><a href="#ordering-operations-in-api-declarations">5.9.4. Ordering operations in Api Declarations</a></li>
-<li><a href="#ordering-apidescriptions-within-apilistings">5.9.5. Ordering ApiDescriptions (within ApiListings)</a></li>
-<li><a href="#configuring-the-output-of-code-operationid-code-in-a-swagger-2-0-spec">5.9.6. Configuring the output of <code>operationId</code> in a Swagger 2.0 spec</a>
+<li><a href="#excluding-api-endpoints">4.12.1. Excluding api endpoints</a></li>
+<li><a href="#http-response-codes-and-messages">4.12.2. HTTP Response codes and messages</a></li>
+<li><a href="#ordering-the-api-s-within-a-resourcelisting">4.12.3. Ordering the api&#8217;s within a ResourceListing</a></li>
+<li><a href="#ordering-operations-in-api-declarations">4.12.4. Ordering operations in Api Declarations</a></li>
+<li><a href="#ordering-apidescriptions-within-apilistings">4.12.5. Ordering ApiDescriptions (within ApiListings)</a></li>
+<li><a href="#configuring-the-output-of-code-operationid-code-in-a-swagger-2-0-spec">4.12.6. Configuring the output of <code>operationId</code> in a Swagger 2.0 spec</a>
 <ul class="sectlevel4">
 <li><a href="#the-default-value-of-code-operationid-code-according-to-springfox">The default value of <code>operationId</code> according to Springfox</a>
 <ul class="sectlevel5">
@@ -599,17 +599,17 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 </ul>
 </li>
-<li><a href="#changing-how-generic-types-are-named">5.9.7. Changing how Generic Types are Named</a></li>
+<li><a href="#changing-how-generic-types-are-named">4.12.7. Changing how Generic Types are Named</a></li>
 </ul>
 </li>
-<li><a href="#model-customization">5.10. Model Customization</a>
+<li><a href="#model-customization">4.13. Model Customization</a>
 <ul class="sectlevel3">
-<li><a href="#excluding-spring-handler-method-arguments-or-custom-types">5.10.1. Excluding spring handler method arguments or custom types</a></li>
+<li><a href="#excluding-spring-handler-method-arguments-or-custom-types">4.13.1. Excluding spring handler method arguments or custom types</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#support">6. Support</a></li>
+<li><a href="#support">5. Support</a></li>
 </ul>
 </div>
 </div>
@@ -648,12 +648,8 @@ as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a
 </div>
 <div class="sect2">
 <h3 id="what-it-s-not">1.3. What it&#8217;s not</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
+<div class="paragraph">
 <p>Endorsed or approved by the Spring Framework Contributors</p>
-</li>
-</ol>
 </div>
 </div>
 </div>
@@ -891,18 +887,24 @@ Spring Boot application you can add the dependency as follows:</p>
 <div class="sect2">
 <h3 id="springfox-samples">2.2. Springfox samples</h3>
 <div class="paragraph">
-<p>The <a href="https://github.com/springfox/springfox-demos">springfox-demos</a> repository contains a number of samples.
-== Architecture
-TDB
+<p>The <a href="https://github.com/springfox/springfox-demos">springfox-demos</a> repository contains a number of samples.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="architecture">3. Architecture</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>TDB
  . Modules
  . How it works (runtime, etc.)
  . Object mapper</p>
 </div>
 </div>
 </div>
-</div>
 <div class="sect1">
-<h2 id="swagger">3. Swagger</h2>
+<h2 id="swagger">4. Swagger</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Springfox supports both version <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md">1.2</a> and version
@@ -910,12 +912,12 @@ TDB
 Where possible, the Swagger 2.0 specification is preferable.</p>
 </div>
 <div class="paragraph">
-<p>The <a href="https://github.com/swagger-api/swagger-core/wiki/Annotations">Swagger-Core Annotations</a>, as provided by
+<p>The <a href="https://github.com/swagger-api/swagger-core/wiki/Annotations">swagger-core annotations</a>, as provided by
 <a href="https://github.com/swagger-api/swagger-core">swagger-core</a>, are typically used to decorate the java source code of an API which is bing
 'swaggered'. Springfox is aware of the Swagger-Core Annotations and will favor those annotations over inferred defaults.</p>
 </div>
 <div class="sect2">
-<h3 id="swagger-1-2-vs-swagger-2-0">3.1. Swagger 1.2 vs Swagger 2.0</h3>
+<h3 id="swagger-1-2-vs-swagger-2-0">4.1. Swagger 1.2 vs Swagger 2.0</h3>
 <div class="paragraph">
 <p>One major difference between the two swagger specification is the composition of the generated swagger documentation.</p>
 </div>
@@ -928,7 +930,7 @@ implication of producing <a href="https://github.com/swagger-api/swagger-spec/bl
 </div>
 </div>
 <div class="sect2">
-<h3 id="springfox-spring-web-configuration">3.2. Springfox Spring Web Configuration</h3>
+<h3 id="springfox-spring-web-configuration">4.2. Springfox Spring Web Configuration</h3>
 <div class="paragraph">
 <p>The following section describes how to configure Springfox with Swagger for Spring Web MVC based applications.</p>
 </div>
@@ -937,43 +939,34 @@ implication of producing <a href="https://github.com/swagger-api/swagger-spec/bl
 which can be used a reference.</p>
 </div>
 <div class="sect3">
-<h4 id="spring-xml-configuration">3.2.1. Spring XML Configuration</h4>
+<h4 id="spring-xml-configuration">4.2.1. Spring XML Configuration</h4>
 
 </div>
 <div class="sect3">
-<h4 id="spring-java-configuration-javaconfig">3.2.2. Spring Java Configuration (javaconfig)</h4>
+<h4 id="spring-java-configuration-javaconfig">4.2.2. Spring Java Configuration (javaconfig)</h4>
 
 </div>
 <div class="sect3">
-<h4 id="spring-boot">3.2.3. Spring Boot</h4>
+<h4 id="spring-boot">4.2.3. Spring Boot</h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="swagger-specification-version-2-0">3.3. Swagger Specification version 2.0</h3>
+<h3 id="swagger-specification-version-2-0">4.3. Swagger Specification version 2.0</h3>
 
 </div>
 <div class="sect2">
-<h3 id="swagger-ui-2">3.4. Swagger UI</h3>
+<h3 id="swagger-ui-2">4.4. Swagger UI</h3>
 
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="older-swagger-documentation">4. Older Swagger Documentation</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="usage-quick-guide-for-1-0-x">5. Usage (Quick guide) for 1.0.x</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="usage-quick-guide-for-1-0-x">4.5. Usage (Quick guide) for 1.0.x</h3>
 <div class="paragraph">
 <p>This quick guide outlines how to get swagger-springmvc up and running with a default configuration.
 The recommended way to integrate swagger-springmvc with your application is to use the <code>SwaggerSpringMvcPlugin</code> as explained below.</p>
 </div>
 <div class="sect3">
-<h4 id="spring-java-configuration">5.1. Spring Java Configuration</h4>
+<h4 id="spring-java-configuration">4.5.1. Spring Java Configuration</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1004,7 +997,7 @@ json Resource Listing is available at /api-docs</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="spring-xml-configuration-2">5.2. Spring xml Configuration</h4>
+<h4 id="spring-xml-configuration-2">4.5.2. Spring xml Configuration</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1027,8 +1020,9 @@ json Resource Listing is available at /api-docs</p>
 </ul>
 </div>
 </div>
+</div>
 <div class="sect2">
-<h3 id="usage-swaggerspringmvcplugin">5.3. Usage (SwaggerSpringMvcPlugin)</h3>
+<h3 id="usage-swaggerspringmvcplugin">4.6. Usage (SwaggerSpringMvcPlugin)</h3>
 <div class="paragraph">
 <p>The recommended way to integrate swagger-springmvc with your application is to use the <code>SwaggerSpringMvcPlugin</code>. If you are ever
 going to need to configure or customize how swagger-springmvc generates your application&#8217;s swagger api documentation
@@ -1036,7 +1030,7 @@ you are going to need to use the <code>SwaggerSpringMvcPlugin</code>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="swaggerspringmvcplugin-xml-configuration">5.4. SwaggerSpringMvcPlugin XML Configuration</h3>
+<h3 id="swaggerspringmvcplugin-xml-configuration">4.7. SwaggerSpringMvcPlugin XML Configuration</h3>
 <div class="paragraph">
 <p>To use the plugin you must create a spring java configuration class which uses spring&#8217;s <code>@Configuration</code>.
 This config class must then be defined in your xml application context.</p>
@@ -1080,7 +1074,7 @@ This config class must then be defined in your xml application context.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="swaggerspringmvcplugin-spring-java-configuration">5.5. SwaggerSpringMvcPlugin Spring Java Configuration</h3>
+<h3 id="swaggerspringmvcplugin-spring-java-configuration">4.8. SwaggerSpringMvcPlugin Spring Java Configuration</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -1132,7 +1126,7 @@ This config class must then be defined in your xml application context.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="how-it-works">5.6. How It works</h3>
+<h3 id="how-it-works">4.9. How It works</h3>
 <div class="paragraph">
 <p>Swagger-springmvc bootstraps your spring application and scans the <code>RequestMappingHandlerMapping&#8217;s</code> created
 by spring to generate the swagger documentation for your applications API&#8217;s.
@@ -1140,31 +1134,31 @@ Swagger-springmvc stores the generated swagger documentation, in memory, and ser
 </div>
 </div>
 <div class="sect2">
-<h3 id="core-concepts">5.7. Core Concepts</h3>
+<h3 id="core-concepts">4.10. Core Concepts</h3>
 <div class="paragraph">
-<p><span class="image"><img src="https://raw.githubusercontent.com/martypitt/swagger-springmvc/master/docs/swaggerSpringMvc.png" alt="Core Concepts"></span></p>
+<p><span class="image"><img src="./images/images/swaggerSpringMvc.png" alt="Core Concepts"></span></p>
 </div>
 <div class="sect3">
-<h4 id="swagger-group">5.7.1. Swagger group</h4>
+<h4 id="swagger-group">4.10.1. Swagger group</h4>
 <div class="paragraph">
 <p>A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
 within your application. The reason this concept was introduced was to support applications which require more than one
 Resource Listing. Why would you need more than one Resource Listing?
- - A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
- - A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2</p>
+- A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
+- A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2</p>
 </div>
 <div class="paragraph">
 <p>In most cases an application will not need more than one Resource Listing and the concept of swagger groups can be ignored.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="resource-listing">5.7.2. Resource Listing</h4>
+<h4 id="resource-listing">4.10.2. Resource Listing</h4>
 <div class="paragraph">
 <p>Please see the Swagger Specification for a detailed explanation.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="api-documentation-endpoints">5.7.3. API Documentation Endpoints</h4>
+<h4 id="api-documentation-endpoints">4.10.3. API Documentation Endpoints</h4>
 <div class="paragraph">
 <p>All swagger documentation (JSON responses) are served from DefaultSwaggerController. The controller maintains a cache
 of ResourcesListing&#8217;s which are uniquely identified by the <code>swaggerGroup</code>. There is a 1:1 relationship between
@@ -1176,46 +1170,40 @@ SwaggerSpringMvcPlugin which is given the unique identifier 'default'.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 33%;">
-<col style="width: 33%;">
-<col style="width: 33%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Path</th>
 <th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top"></th>
 </tr>
 </thead>
 <tfoot>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/api-docs/group1/albums</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Returns the album&#8217;s <em>Api Declaration</em> for the swagger group 'group1'</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tfoot>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/api-docs</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Returns the first <em>Resource Listing</em> found in the cache</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/api-docs?group=default</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Returns the <em>Resource Listing</em> for the default swagger group</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/api-docs?group=group1</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Returns the <em>Resource Listing</em> for the swagger group 'group1'</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="sect2">
-<h3 id="urls-swaggerpathprovider">5.8. Urls (SwaggerPathProvider)</h3>
+<h3 id="urls-swaggerpathprovider">4.11. Urls (SwaggerPathProvider)</h3>
 <div class="paragraph">
 <p>The swagger specification recommends the use of absolute URL&#8217;s where possible - specifically the the <code>path</code> attribute of
 api&#8217;s within the ResourceListing&#8217;s and the <code>basePath</code> attribute of Api Declarations. Most users of swagger-springmvc have expressed
@@ -1230,9 +1218,9 @@ to use absolute urls use <code>AbsoluteSwaggerPathProvider</code> as a guide and
 </div>
 </div>
 <div class="sect2">
-<h3 id="customization">5.9. Customization</h3>
+<h3 id="customization">4.12. Customization</h3>
 <div class="sect3">
-<h4 id="excluding-api-endpoints">5.9.1. Excluding api endpoints</h4>
+<h4 id="excluding-api-endpoints">4.12.1. Excluding api endpoints</h4>
 <div class="paragraph">
 <p>Annotate a controller class or controller methods with the <code>@ApiIgnore</code> annotation.</p>
 </div>
@@ -1254,7 +1242,7 @@ to use absolute urls use <code>AbsoluteSwaggerPathProvider</code> as a guide and
 </div>
 </div>
 <div class="sect3">
-<h4 id="http-response-codes-and-messages">5.9.2. HTTP Response codes and messages</h4>
+<h4 id="http-response-codes-and-messages">4.12.2. HTTP Response codes and messages</h4>
 <div class="paragraph">
 <p>Configuring global response messages for RequestMappings</p>
 </div>
@@ -1274,7 +1262,7 @@ to use absolute urls use <code>AbsoluteSwaggerPathProvider</code> as a guide and
 </div>
 </div>
 <div class="sect3">
-<h4 id="ordering-the-api-s-within-a-resourcelisting">5.9.3. Ordering the api&#8217;s within a ResourceListing</h4>
+<h4 id="ordering-the-api-s-within-a-resourcelisting">4.12.3. Ordering the api&#8217;s within a ResourceListing</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1305,7 +1293,7 @@ public class BusinessService {
 </div>
 </div>
 <div class="sect3">
-<h4 id="ordering-operations-in-api-declarations">5.9.4. Ordering operations in Api Declarations</h4>
+<h4 id="ordering-operations-in-api-declarations">4.12.4. Ordering operations in Api Declarations</h4>
 <div class="paragraph">
 <p>Use the swagger <code>ApiOperation</code> annotation.</p>
 </div>
@@ -1320,7 +1308,7 @@ public class BusinessService {
 </div>
 </div>
 <div class="sect3">
-<h4 id="ordering-apidescriptions-within-apilistings">5.9.5. Ordering ApiDescriptions (within ApiListings)</h4>
+<h4 id="ordering-apidescriptions-within-apilistings">4.12.5. Ordering ApiDescriptions (within ApiListings)</h4>
 <div class="paragraph">
 <p>Defaults to <code>ApiDescriptionLexicographicalOrdering</code></p>
 </div>
@@ -1331,7 +1319,7 @@ public class BusinessService {
 </div>
 </div>
 <div class="sect3">
-<h4 id="configuring-the-output-of-code-operationid-code-in-a-swagger-2-0-spec">5.9.6. Configuring the output of <code>operationId</code> in a Swagger 2.0 spec</h4>
+<h4 id="configuring-the-output-of-code-operationid-code-in-a-swagger-2-0-spec">4.12.6. Configuring the output of <code>operationId</code> in a Swagger 2.0 spec</h4>
 <div class="paragraph">
 <p>As defined <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-5"><code>operationId</code> was
 introduced</a> in the Swagger 2.0 spec, the <code>operationId</code> parameter, which was referred to as <code>nickname</code> in pre-2.0
@@ -1411,7 +1399,7 @@ example of this can be seen in the <a href="https://github.com/swagger-api/swagg
 </div>
 </div>
 <div class="sect3">
-<h4 id="changing-how-generic-types-are-named">5.9.7. Changing how Generic Types are Named</h4>
+<h4 id="changing-how-generic-types-are-named">4.12.7. Changing how Generic Types are Named</h4>
 <div class="paragraph">
 <p>By default, types with generics will be labeled with '\u00ab'(&lt;&lt;), '\u00bb'(&gt;&gt;), and commas. This can be problematic
 with things like swagger-codegen. You can override this behavior by implementing your own <code>GenericTypeNamingStrategy</code>.
@@ -1454,9 +1442,9 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="model-customization">5.10. Model Customization</h3>
+<h3 id="model-customization">4.13. Model Customization</h3>
 <div class="sect3">
-<h4 id="excluding-spring-handler-method-arguments-or-custom-types">5.10.1. Excluding spring handler method arguments or custom types</h4>
+<h4 id="excluding-spring-handler-method-arguments-or-custom-types">4.13.1. Excluding spring handler method arguments or custom types</h4>
 <div class="paragraph">
 <p>To exclude controller method arguments form the generated swagger model JSON.</p>
 </div>
@@ -1490,17 +1478,17 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="support">6. Support</h2>
+<h2 id="support">5. Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you find issues or bugs please use the github issue <a href="https://github.com/springfox/springfox/issues">sprinfox project</a></p>
+<p>If you find issues or bugs please use the github issue <a href="https://github.com/springfox/springfox/issues">springfox project</a></p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-22 03:24:53 UTC
+Last updated 2015-04-22 04:10:11 UTC
 </div>
 </div>
 </body>

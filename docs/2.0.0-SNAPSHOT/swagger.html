@@ -512,13 +512,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#springfox-spring-web-configuration">Springfox Spring Web Configuration</a></li>
 <li><a href="#swagger-specification-version-2-0">Swagger Specification version 2.0</a></li>
 <li><a href="#swagger-ui">Swagger UI</a></li>
-</ul>
-</li>
-<li><a href="#older-swagger-documentation">Older Swagger Documentation</a></li>
-<li><a href="#usage-quick-guide-for-1-0-x">Usage (Quick guide) for 1.0.x</a>
-<ul class="sectlevel3">
-<li><a href="#spring-java-configuration">Spring Java Configuration</a></li>
-<li><a href="#spring-xml-configuration-2">Spring xml Configuration</a></li>
+<li><a href="#usage-quick-guide-for-1-0-x">Usage (Quick guide) for 1.0.x</a></li>
 <li><a href="#usage-swaggerspringmvcplugin">Usage (SwaggerSpringMvcPlugin)</a></li>
 <li><a href="#swaggerspringmvcplugin-xml-configuration">SwaggerSpringMvcPlugin XML Configuration</a></li>
 <li><a href="#swaggerspringmvcplugin-spring-java-configuration">SwaggerSpringMvcPlugin Spring Java Configuration</a></li>
@@ -543,7 +537,7 @@ table.CodeRay td.code>pre{padding:0}
 Where possible, the Swagger 2.0 specification is preferable.</p>
 </div>
 <div class="paragraph">
-<p>The <a href="https://github.com/swagger-api/swagger-core/wiki/Annotations">Swagger-Core Annotations</a>, as provided by
+<p>The <a href="https://github.com/swagger-api/swagger-core/wiki/Annotations">swagger-core annotations</a>, as provided by
 <a href="https://github.com/swagger-api/swagger-core">swagger-core</a>, are typically used to decorate the java source code of an API which is bing
 'swaggered'. Springfox is aware of the Swagger-Core Annotations and will favor those annotations over inferred defaults.</p>
 </div>
@@ -590,17 +584,8 @@ which can be used a reference.</p>
 <h3 id="swagger-ui">Swagger UI</h3>
 
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="older-swagger-documentation">Older Swagger Documentation</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="usage-quick-guide-for-1-0-x">Usage (Quick guide) for 1.0.x</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="usage-quick-guide-for-1-0-x">Usage (Quick guide) for 1.0.x</h3>
 <div class="paragraph">
 <p>This quick guide outlines how to get swagger-springmvc up and running with a default configuration.
 The recommended way to integrate swagger-springmvc with your application is to use the <code>SwaggerSpringMvcPlugin</code> as explained below.</p>
@@ -658,6 +643,7 @@ json Resource Listing is available at /api-docs</p>
 json Resource Listing is available at /api-docs</p>
 </li>
 </ul>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -775,7 +761,7 @@ Swagger-springmvc stores the generated swagger documentation, in memory, and ser
 <div class="sect2">
 <h3 id="core-concepts">Core Concepts</h3>
 <div class="paragraph">
-<p><span class="image"><img src="https://raw.githubusercontent.com/martypitt/swagger-springmvc/master/docs/swaggerSpringMvc.png" alt="Core Concepts"></span></p>
+<p><span class="image"><img src="images/swaggerSpringMvc.png" alt="Core Concepts"></span></p>
 </div>
 <div class="sect3">
 <h4 id="swagger-group">Swagger group</h4>
@@ -783,8 +769,8 @@ Swagger-springmvc stores the generated swagger documentation, in memory, and ser
 <p>A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
 within your application. The reason this concept was introduced was to support applications which require more than one
 Resource Listing. Why would you need more than one Resource Listing?
- - A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
- - A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2</p>
+- A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
+- A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2</p>
 </div>
 <div class="paragraph">
 <p>In most cases an application will not need more than one Resource Listing and the concept of swagger groups can be ignored.</p>
@@ -809,39 +795,33 @@ SwaggerSpringMvcPlugin which is given the unique identifier 'default'.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 33%;">
-<col style="width: 33%;">
-<col style="width: 33%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Path</th>
 <th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top"></th>
 </tr>
 </thead>
 <tfoot>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/api-docs/group1/albums</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Returns the album&#8217;s <em>Api Declaration</em> for the swagger group 'group1'</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tfoot>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/api-docs</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Returns the first <em>Resource Listing</em> found in the cache</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/api-docs?group=default</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Returns the <em>Resource Listing</em> for the default swagger group</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">/api-docs?group=group1</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Returns the <em>Resource Listing</em> for the swagger group 'group1'</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
@@ -1126,14 +1106,14 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 <h2 id="support">Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you find issues or bugs please use the github issue <a href="https://github.com/springfox/springfox/issues">sprinfox project</a></p>
+<p>If you find issues or bugs please use the github issue <a href="https://github.com/springfox/springfox/issues">springfox project</a></p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-22 03:24:53 UTC
+Last updated 2015-04-22 04:10:11 UTC
 </div>
 </div>
 </body>
