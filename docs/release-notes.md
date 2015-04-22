@@ -35,9 +35,12 @@ We would like to thank the following community members for helping with this rel
 - [paulprogrammer](https://github.com/paulprogrammer)
     - Fixed reference to old class name
 - [John hestad](https://github.com/hestad)
+    - Updated documentation
 - [jordanjennings](https://github.com/jordanjennings)
     - Updated documentation
 - [Tony Tam](https://github.com/fehguy)
     - Updated Swagger Link and added springfox/swagger editor example
 - [sashevsky](https://github.com/sashevsky)
     - Fixed an issue with missing http port
+- [Robert Winkler](https://github.com/RobWin)
+   - Generate asciidocs from springfox swagger [687](https://github.com/springfox/springfox/pull/687)
