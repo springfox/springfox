@@ -4,10 +4,10 @@ configurations {
 
 ext {
   limits = [
-          'instruction': 71,
-          'branch'     : 100,
-          'line'       : 65,
-          'complexity' : 66,
+          'instruction': 60,
+          'branch'     : 33,
+          'line'       : 58,
+          'complexity' : 50,
           'method'     : 66,
           'class'      : 100
   ]
