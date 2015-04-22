@@ -17,15 +17,21 @@
  *
  */
 
-package springfox.staticdocs
+package springfox.documentation.staticdocs
 
+import org.springframework.mock.web.MockHttpServletRequest
+import org.springframework.mock.web.MockHttpServletResponse
+import org.springframework.test.web.servlet.DefaultMvcResult
 import spock.lang.Specification
 
-class SampleTest extends Specification {
+class Swagger2MarkupDocumentationTest extends Specification {
 
   def "should pass coverage"() {
-    expect:
-      Sample sample = new Sample()
-      sample.something()
+    given:
+      Swagger2MarkupResultHandler resultHandler = Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc").build()
+    when:
+      resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(), new MockHttpServletResponse()))
+    then:
+      thrown(IllegalArgumentException)
   }
 }
