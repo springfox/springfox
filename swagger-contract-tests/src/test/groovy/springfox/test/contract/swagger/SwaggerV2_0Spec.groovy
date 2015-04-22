@@ -87,7 +87,7 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
           "springfox.test.contract.swagger",
           "springfox.petstore.controller"
   ])
-  @Import(AuthorizationSupport)
+  @Import(SecuritySupport)
   static class Config {
     @Bean
     public Docket petstore(List<SecurityScheme> authorizationTypes) {

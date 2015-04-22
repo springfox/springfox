@@ -54,7 +54,15 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "authorizations": {
+                        "petstore_auth": [
+                            {
+                                "description": "read your pets",
+                                "scope": "read:pets"
+                            }
+                        ]
+                    }
                 }
             ]
         },
@@ -104,7 +112,15 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "void"
+                    "type": "void",
+                    "authorizations": {
+                        "petstore_auth": [
+                            {
+                                "description": "read your pets",
+                                "scope": "read:pets"
+                            }
+                        ]
+                    }
                 }
             ]
         },

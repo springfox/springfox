@@ -30,11 +30,15 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import spock.lang.Unroll
+import springfox.documentation.service.AuthorizationScope
+import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger1.annotations.EnableSwagger
 
+import static com.google.common.collect.Lists.*
 import static groovyx.net.http.ContentType.*
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static springfox.documentation.builders.PathSelectors.*
@@ -59,7 +63,7 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
       String raw = response.data.text
       String actual = JsonOutput.prettyPrint(raw)
       response.status == 200
-      println(actual)
+
       JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
   }
 
@@ -108,16 +112,33 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
           "springfox.test.contract.swagger",
           "springfox.petstore.controller"
   ])
-  @Import(AuthorizationSupport)
+  @Import(SecuritySupport)
   static class Config {
     @Bean
-    public Docket testCases(List<SecurityScheme> securitySchemes) {
+    SecurityContext securityContext() {
+      def readScope = new AuthorizationScope("read:pets", "read your pets")
+      def scopes = new AuthorizationScope[1]
+      scopes[0] = readScope
+      SecurityReference securityReference = SecurityReference.builder()
+          .reference("petstore_auth")
+          .scopes(scopes)
+          .build()
+
+      SecurityContext.builder()
+          .securityReferences(newArrayList(securityReference))
+          .forPaths(ant("/petgrooming/**"))
+          .build()
+    }
+
+    @Bean
+    public Docket testCases(List<SecurityScheme> securitySchemes, List<SecurityContext> securityContexts) {
       return new Docket(DocumentationType.SWAGGER_12)
               .groupName("default")
               .select()
                 .paths(regex("^((?!/api).)*\$")) //Not beginning with /api
                 .build()
               .securitySchemes(securitySchemes)
+              .securityContexts(securityContexts)
     }
   }
 }
