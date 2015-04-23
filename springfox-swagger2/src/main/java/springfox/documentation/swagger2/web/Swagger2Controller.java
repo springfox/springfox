@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger2.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.wordnik.swagger.models.Swagger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +34,12 @@ import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.json.Json;
+import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
-import javax.annotation.PostConstruct;
 import java.net.URI;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
-import static springfox.documentation.spring.web.json.JsonSerializer.*;
 
 @Controller
 @ApiIgnore
@@ -56,7 +54,9 @@ public class Swagger2Controller {
 
   @Autowired
   private ServiceModelToSwagger2Mapper mapper;
-  private ObjectMapper objectMapper;
+
+  @Autowired
+  private JsonSerializer jsonSerializer;
 
   @ApiIgnore
   @RequestMapping(value = "${springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
@@ -73,7 +73,7 @@ public class Swagger2Controller {
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     swagger.host(hostName());
-    return new ResponseEntity<Json>(toJson(objectMapper, swagger), HttpStatus.OK);
+    return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
   }
 
   private String hostName() {
@@ -87,16 +87,5 @@ public class Swagger2Controller {
       return host;
     }
     return hostNameOverride;
-  }
-
-  /**
-   * Intentionally not injecting the object mapper
-   * In newer versions of spring boot beans of type ObjectMapper get registered with spring
-   * Spring should not know about this mapper
-   */
-  @PostConstruct
-  private void initializeMapper() {
-    objectMapper = new ObjectMapper();
-    springfox.documentation.swagger2.configuration.Swagger2JacksonModule.maybeRegisterModule(objectMapper);
   }
 }

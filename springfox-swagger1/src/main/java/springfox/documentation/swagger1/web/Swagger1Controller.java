@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger1.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
@@ -36,15 +35,13 @@ import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.json.Json;
+import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.swagger1.dto.ApiListing;
 import springfox.documentation.swagger1.dto.ResourceListing;
 import springfox.documentation.swagger1.mappers.Mappers;
 import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper;
 
-import javax.annotation.PostConstruct;
 import java.util.Map;
-
-import static springfox.documentation.spring.web.json.JsonSerializer.*;
 
 @Controller
 @ApiIgnore
@@ -57,7 +54,8 @@ public class Swagger1Controller {
   @Autowired
   private ServiceModelToSwaggerMapper mapper;
 
-  private ObjectMapper objectMapper;
+  @Autowired
+  private JsonSerializer jsonSerializer;
 
   @ApiIgnore
   @RequestMapping(method = RequestMethod.GET)
@@ -86,7 +84,7 @@ public class Swagger1Controller {
             = Maps.transformEntries(apiListingMap, Mappers.toApiListingDto(mapper));
 
     ApiListing apiListing = dtoApiListing.get(apiDeclaration);
-    return Optional.fromNullable(toJson(objectMapper, apiListing))
+    return Optional.fromNullable(jsonSerializer.toJson(apiListing))
             .transform(toResponseEntity(Json.class))
             .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
   }
@@ -100,7 +98,7 @@ public class Swagger1Controller {
     springfox.documentation.service.ResourceListing listing = documentation.getResourceListing();
     ResourceListing resourceListing = mapper.toSwaggerResourceListing(listing);
 
-    return Optional.fromNullable(toJson(objectMapper, resourceListing))
+    return Optional.fromNullable(jsonSerializer.toJson(resourceListing))
             .transform(toResponseEntity(Json.class))
             .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
   }
@@ -112,22 +110,5 @@ public class Swagger1Controller {
         return new ResponseEntity<T>(input, HttpStatus.OK);
       }
     };
-  }
-
-  private ObjectMapper objectMapper() {
-    ObjectMapper objectMapper = new ObjectMapper();
-    springfox.documentation.swagger1.configuration.SwaggerJacksonModule.maybeRegisterModule(objectMapper);
-    return objectMapper;
-  }
-
-
-  /**
-   * Intentionally not injecting the object mapper
-   * In newer versions of spring boot beans of type ObjectMapper get registered with spring
-   * Spring should not know about this mapper
-   */
-  @PostConstruct
-  private void initializeMapper() {
-    this.objectMapper = objectMapper();
   }
 }

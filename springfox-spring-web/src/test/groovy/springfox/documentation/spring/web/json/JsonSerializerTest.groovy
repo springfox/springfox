@@ -24,11 +24,29 @@ import spock.lang.Specification
 
 class JsonSerializerTest extends Specification {
   def "should serialize"() {
-    ObjectMapper objectMapper = Mock()
-    String object = 'a string'
+    given:
+      JsonSerializer sut = new JsonSerializer([])
+      def objectMapper = Mock(ObjectMapper)
+      sut.objectMapper = objectMapper
+      String object = 'a string'
     when:
-      JsonSerializer.toJson(objectMapper, object)
+      sut.toJson(object)
     then:
       1 * objectMapper.writeValueAsString(object)
+  }
+
+  def "should serialize with custom registrars"() {
+    given: "mocks"
+      def registrar = Mock(JacksonModuleRegistrar)
+      def objectMapper = Mock(ObjectMapper)
+      def object = 'a string'
+    when:
+      JsonSerializer sut = new JsonSerializer([registrar])
+      sut.objectMapper = objectMapper
+    and:
+      sut.toJson(object)
+    then:
+      1 * objectMapper.writeValueAsString(object)
+      1 * registrar.maybeRegisterModule(_)
   }
 }

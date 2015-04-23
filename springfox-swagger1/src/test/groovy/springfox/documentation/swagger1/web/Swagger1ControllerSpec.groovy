@@ -18,7 +18,6 @@
  */
 
 package springfox.documentation.swagger1.web
-
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
@@ -31,6 +30,7 @@ import springfox.documentation.builders.DocumentationBuilder
 import springfox.documentation.service.Documentation
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spring.web.DocumentationCache
+import springfox.documentation.spring.web.json.JsonSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.JsonSupport
@@ -60,7 +60,8 @@ class Swagger1ControllerSpec extends DocumentationContextSpec {
 
   def setup() {
     controller.documentationCache = new DocumentationCache()
-    controller.initializeMapper()
+
+    controller.jsonSerializer = new JsonSerializer([new SwaggerJacksonModule()])
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     controller.mapper = serviceMapper()

@@ -40,12 +40,13 @@ import com.wordnik.swagger.models.Xml;
 import com.wordnik.swagger.models.auth.SecuritySchemeDefinition;
 import com.wordnik.swagger.models.parameters.Parameter;
 import com.wordnik.swagger.models.properties.Property;
+import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.*;
 
-public class Swagger2JacksonModule extends SimpleModule {
+public class Swagger2JacksonModule extends SimpleModule implements JacksonModuleRegistrar {
 
-  public static void maybeRegisterModule(ObjectMapper objectMapper) {
+  public void maybeRegisterModule(ObjectMapper objectMapper) {
     if (objectMapper.findMixInClassFor(Swagger.class) == null) {
       objectMapper.registerModule(new Swagger2JacksonModule());
       objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);

@@ -28,7 +28,16 @@ class SwaggerJacksonModuleSpec extends Specification {
 
   def "should create serialization module"() {
     ObjectMapper objectMapper = new ObjectMapper()
-    SwaggerJacksonModule.maybeRegisterModule(objectMapper)
+    new SwaggerJacksonModule().maybeRegisterModule(objectMapper)
+
+    expect:
+    objectMapper.findMixInClassFor(ApiListing) != null
+  }
+
+  def "should create serialization module only once"() {
+    ObjectMapper objectMapper = new ObjectMapper()
+    new SwaggerJacksonModule().maybeRegisterModule(objectMapper)
+    new SwaggerJacksonModule().maybeRegisterModule(objectMapper)
 
     expect:
     objectMapper.findMixInClassFor(ApiListing) != null

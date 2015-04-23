@@ -34,6 +34,10 @@ import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.Defaults;
+import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
+import springfox.documentation.spring.web.json.JsonSerializer;
+
+import java.util.List;
 
 @Configuration
 @Import({ ModelsConfiguration.class })
@@ -68,4 +72,8 @@ public class SpringMvcDocumentationConfiguration {
     return new ObjectMapperConfigurer();
   }
 
+  @Bean
+  public JsonSerializer jsonSerializer(List<JacksonModuleRegistrar> moduleRegistrars) {
+    return new JsonSerializer(moduleRegistrars);
+  }
 }

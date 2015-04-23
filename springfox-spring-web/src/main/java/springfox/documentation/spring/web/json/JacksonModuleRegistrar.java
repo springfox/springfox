@@ -19,25 +19,8 @@
 
 package springfox.documentation.spring.web.json;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.List;
-
-public class JsonSerializer {
-  private ObjectMapper objectMapper = new ObjectMapper();
-
-  public JsonSerializer(List<JacksonModuleRegistrar> modules) {
-    for (JacksonModuleRegistrar each : modules) {
-      each.maybeRegisterModule(objectMapper);
-    }
-  }
-
-  public Json toJson(Object resourceListing) {
-    try {
-      return new Json(objectMapper.writeValueAsString(resourceListing));
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException("Could not write JSON", e);
-    }
-  }
+public interface JacksonModuleRegistrar {
+  void maybeRegisterModule(ObjectMapper objectMapper);
 }

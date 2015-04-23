@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.swagger1.dto.AllowableListValues;
 import springfox.documentation.swagger1.dto.AllowableRangeValues;
 import springfox.documentation.swagger1.dto.ApiDescription;
@@ -52,13 +53,17 @@ import springfox.documentation.swagger1.dto.ResponseMessage;
 import springfox.documentation.swagger1.dto.TokenEndpoint;
 import springfox.documentation.swagger1.dto.TokenRequestEndpoint;
 
-public class SwaggerJacksonModule extends SimpleModule {
+public class SwaggerJacksonModule extends SimpleModule implements JacksonModuleRegistrar {
 
-  public static void maybeRegisterModule(ObjectMapper objectMapper) {
-    if (objectMapper.findMixInClassFor(ApiListing.class) == null) {
+  public void maybeRegisterModule(ObjectMapper objectMapper) {
+    if (isModuleSetup(objectMapper)) {
       objectMapper.registerModule(new SwaggerJacksonModule());
       objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
+  }
+
+  private static boolean isModuleSetup(ObjectMapper objectMapper) {
+    return objectMapper.findMixInClassFor(ApiListing.class) == null;
   }
 
   @Override

@@ -19,18 +19,24 @@
 
 package springfox.documentation.swagger1.configuration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import springfox.documentation.spring.web.SpringMvcDocumentationConfiguration;
+import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 
 @Configuration
-@Import({SpringMvcDocumentationConfiguration.class, SwaggerCommonConfiguration.class})
+@Import({ SpringMvcDocumentationConfiguration.class, SwaggerCommonConfiguration.class })
 @ComponentScan(basePackages = {
-        "springfox.documentation.swagger1.readers.parameter",
-        "springfox.documentation.swagger1.web",
-        "springfox.documentation.swagger1.mappers"
+    "springfox.documentation.swagger1.readers.parameter",
+    "springfox.documentation.swagger1.web",
+    "springfox.documentation.swagger1.mappers"
 })
 public class Swagger1DocumentationConfiguration {
+  @Bean
+  public JacksonModuleRegistrar swagger1Module() {
+    return new SwaggerJacksonModule();
+  }
 }
