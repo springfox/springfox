@@ -1,7 +1,7 @@
 # Springfox
 
 [![Join the chat at https://gitter.im/springfox/springfox](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/springfox/springfox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Download](https://api.bintray.com/packages/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/images/download.svg) ](https://bintray.com/swaggerspringmvc/swaggerspringmvc/swagger-springmvc/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/springfox/maven-repo/springfox/images/download.svg) ](https://bintray.com/springfox/maven-repo/springfox/_latestVersion)
 
 | Unit  | Functional   | Coverage   |
 |---|---|---|
