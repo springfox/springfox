@@ -17,9 +17,10 @@
  *
  */
 
-package springfox.test.contract.swagger
+package springfox.test.contract.swaggertests
 
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
@@ -61,8 +62,8 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
       response.status == 200
 //      println(actual)
 
-    def withPortReplaced = contract.replaceAll("__PORT__", "$port")
-    JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
+      def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+      JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
 
     where:
       contractFile                                                  | groupName
@@ -76,7 +77,25 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
       'declaration-inherited-service-impl.json'                     | 'inheritedService'
       'declaration-pet-grooming-service.json'                       | 'petGroomingService'
       'declaration-pet-service.json'                                | 'petService'
-//      'declaration-root-controller.json'                            | 'root'
+  }
+
+  def "should list swagger resources"() {
+    given:
+      RESTClient http = new RESTClient("http://localhost:$port")
+    when:
+      def response = http.get(path: '/swagger-resources', contentType: TEXT, headers: [Accept: 'application/json'])
+      def slurper = new JsonSlurper()
+      def result = slurper.parseText(response.data.text)
+      println "Results: "
+      result.each {
+        println it
+      }
+    then:
+      result.find { it.name == 'petstore' && it.location == '/v2/api-docs?group=petstore' && it.swaggerVersion == '2.0' }
+      result.find {
+        it.name == 'businessService' && it.location == '/v2/api-docs?group=businessService' && it.swaggerVersion == '2.0'
+      }
+      result.find { it.name == 'concrete' && it.location == '/v2/api-docs?group=concrete' && it.swaggerVersion == '2.0' }
   }
 
   @Configuration
@@ -97,8 +116,8 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
               .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
-                .paths(regex("/api/.*"))
-                .build()
+              .paths(regex("/api/.*"))
+              .build()
     }
 
     @Bean
@@ -109,8 +128,8 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
               .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
-                .paths(regex("/business.*"))
-                .build()
+              .paths(regex("/business.*"))
+              .build()
     }
 
     @Bean
@@ -121,8 +140,8 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
               .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
-                .paths(regex("/foo/.*"))
-                .build()
+              .paths(regex("/foo/.*"))
+              .build()
     }
 
     @Bean
@@ -133,8 +152,8 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
               .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
-                .paths(regex("/no-request-mapping/.*"))
-                .build()
+              .paths(regex("/no-request-mapping/.*"))
+              .build()
     }
 
     @Bean
@@ -145,8 +164,8 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
               .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
-                .paths(regex("/fancypets/.*"))
-                .build()
+              .paths(regex("/fancypets/.*"))
+              .build()
     }
 
     @Bean
@@ -157,8 +176,8 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
               .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
-                .paths(regex("/features/.*"))
-                .build()
+              .paths(regex("/features/.*"))
+              .build()
     }
 
     @Bean
@@ -169,8 +188,8 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
               .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
-                .paths(regex("/child/.*"))
-                .build()
+              .paths(regex("/child/.*"))
+              .build()
     }
 
     @Bean
@@ -181,8 +200,8 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
               .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
-                .paths(regex("/pets/.*"))
-                .build()
+              .paths(regex("/pets/.*"))
+              .build()
     }
 
     @Bean
@@ -193,8 +212,8 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
               .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
-                .paths(regex("/petgrooming/.*"))
-                .build()
+              .paths(regex("/petgrooming/.*"))
+              .build()
     }
 
     @Bean
@@ -205,8 +224,8 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
               .securitySchemes(authorizationTypes)
               .produces(['application/xml', 'application/json'] as Set)
               .select()
-                .paths(regex("/.*"))
-                .build()
+              .paths(regex("/.*"))
+              .build()
     }
 
     @Bean

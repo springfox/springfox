@@ -17,9 +17,10 @@
  *
  */
 
-package springfox.test.contract.swagger
+package springfox.test.contract.swaggertests
 
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.boot.test.SpringApplicationContextLoader
@@ -104,6 +105,22 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
       'declaration-root-controller.json'                            | '/default/root-controller'
   }
 
+
+  def "should list swagger resources"() {
+    given:
+      RESTClient http = new RESTClient("http://localhost:$port")
+    when:
+      def response = http.get(path: '/swagger-resources', contentType: TEXT, headers: [Accept: 'application/json'])
+      def slurper = new JsonSlurper()
+      def result = slurper.parseText(response.data.text)
+      println "Results: "
+      result.each {
+        println it
+      }
+    then:
+      result.find { it.name == 'default' && it.location == '/api-docs?group=default' && it.swaggerVersion == '1.2' }
+  }
+
   @Configuration
   @EnableSwagger
   @EnableWebMvc
@@ -120,14 +137,14 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
       def scopes = new AuthorizationScope[1]
       scopes[0] = readScope
       SecurityReference securityReference = SecurityReference.builder()
-          .reference("petstore_auth")
-          .scopes(scopes)
-          .build()
+              .reference("petstore_auth")
+              .scopes(scopes)
+              .build()
 
       SecurityContext.builder()
-          .securityReferences(newArrayList(securityReference))
-          .forPaths(ant("/petgrooming/**"))
-          .build()
+              .securityReferences(newArrayList(securityReference))
+              .forPaths(ant("/petgrooming/**"))
+              .build()
     }
 
     @Bean
@@ -135,8 +152,8 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
       return new Docket(DocumentationType.SWAGGER_12)
               .groupName("default")
               .select()
-                .paths(regex("^((?!/api).)*\$")) //Not beginning with /api
-                .build()
+              .paths(regex("^((?!/api).)*\$")) //Not beginning with /api
+              .build()
               .securitySchemes(securitySchemes)
               .securityContexts(securityContexts)
     }

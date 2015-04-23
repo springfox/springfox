@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package springfox.test.contract.swagger
+package springfox.test.contract.swaggertests
 
-import groovy.json.JsonSlurper
-import groovyx.net.http.RESTClient
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
 import org.springframework.test.context.TestExecutionListeners
@@ -26,8 +24,6 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.web.WebAppConfiguration
 import spock.lang.Specification
 
-import static groovyx.net.http.ContentType.*
-
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
@@ -35,20 +31,4 @@ abstract class SwaggerAppSpec extends Specification {
 
   @Value('${local.server.port}')
   int port;
-
-  def "should list swagger resources"() {
-    given:
-      RESTClient http = new RESTClient("http://localhost:$port")
-    when:
-      def response = http.get(path: '/swagger-resources', contentType: TEXT, headers: [Accept: 'application/json'])
-      def slurper = new JsonSlurper()
-      def result = slurper.parseText(response.data.text)
-      println "Results: "
-      result.each {
-        println it
-      }
-    then:
-      result.find { it.name == 'default' && it.location == '/api-docs?group=default' && it.swaggerVersion == '1.2' }
-      result.find { it.name == 'default' && it.location == '/v2/api-docs?group=default' && it.swaggerVersion == '2.0' }
-  }
 }

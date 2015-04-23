@@ -60,15 +60,14 @@ class Swagger1ControllerSpec extends DocumentationContextSpec {
 
   def setup() {
     controller.documentationCache = new DocumentationCache()
+    controller.initializeMapper()
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     controller.mapper = serviceMapper()
     def jackson2 = new MappingJackson2HttpMessageConverter()
-
     jackson2.setSupportedMediaTypes([MediaType.ALL, MediaType.APPLICATION_JSON])
 
     def mapper = new ObjectMapper()
-    SwaggerJacksonModule.maybeRegisterModule(mapper)
 
     jackson2.setObjectMapper(mapper)
     mockMvc = standaloneSetup(controller)
@@ -127,7 +126,6 @@ class Swagger1ControllerSpec extends DocumentationContextSpec {
     when:
       MvcResult result = mockMvc.perform(get("/api-docs?group=groupName")).andDo(print()).andReturn()
       def json = jsonBodyResponse(result)
-//      println json
 
     then:
       result.getResponse().getStatus() == 200

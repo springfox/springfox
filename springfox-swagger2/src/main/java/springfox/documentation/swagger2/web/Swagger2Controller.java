@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger2.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.wordnik.swagger.models.Swagger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
+import javax.annotation.PostConstruct;
 import java.net.URI;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static springfox.documentation.spring.web.json.JsonSerializer.*;
 
 @Controller
 @ApiIgnore
@@ -52,23 +56,24 @@ public class Swagger2Controller {
 
   @Autowired
   private ServiceModelToSwagger2Mapper mapper;
+  private ObjectMapper objectMapper;
 
   @ApiIgnore
   @RequestMapping(value = "${springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
-      method = RequestMethod.GET)
+          method = RequestMethod.GET)
   public
   @ResponseBody
-  ResponseEntity<Swagger> getDocumentation(
+  ResponseEntity<Json> getDocumentation(
           @RequestParam(value = "group", required = false) String swaggerGroup) {
 
     String groupName = Optional.fromNullable(swaggerGroup).or("default");
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
-      return new ResponseEntity<Swagger>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     swagger.host(hostName());
-    return new ResponseEntity<Swagger>(swagger, HttpStatus.OK);
+    return new ResponseEntity<Json>(toJson(objectMapper, swagger), HttpStatus.OK);
   }
 
   private String hostName() {
@@ -84,4 +89,14 @@ public class Swagger2Controller {
     return hostNameOverride;
   }
 
+  /**
+   * Intentionally not injecting the object mapper
+   * In newer versions of spring boot beans of type ObjectMapper get registered with spring
+   * Spring should not know about this mapper
+   */
+  @PostConstruct
+  private void initializeMapper() {
+    objectMapper = new ObjectMapper();
+    springfox.documentation.swagger2.configuration.Swagger2JacksonModule.maybeRegisterModule(objectMapper);
+  }
 }

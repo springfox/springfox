@@ -40,14 +40,14 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
     controller.mapper = swagger2Mapper()
+    controller.initializeMapper()
     def jackson2 = new MappingJackson2HttpMessageConverter()
 
     jackson2.setSupportedMediaTypes([MediaType.ALL, MediaType.APPLICATION_JSON])
 
     def mapper = new ObjectMapper()
-    Swagger2JacksonModule.maybeRegisterModule(mapper)
-
     jackson2.setObjectMapper(mapper)
+
     mockMvc = standaloneSetup(controller)
         .setSingleView(mockView)
         .setMessageConverters(jackson2)

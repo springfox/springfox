@@ -19,15 +19,11 @@
 
 package springfox.documentation.swagger2.configuration;
 
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.spring.web.SpringMvcDocumentationConfiguration;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
-
-import static springfox.documentation.swagger2.configuration.Swagger2JacksonModule.maybeRegisterModule;
 
 @Configuration
 @Import({ SpringMvcDocumentationConfiguration.class, SwaggerCommonConfiguration.class})
@@ -36,9 +32,6 @@ import static springfox.documentation.swagger2.configuration.Swagger2JacksonModu
         "springfox.documentation.swagger2.web",
         "springfox.documentation.swagger2.mappers"
 })
-public class Swagger2DocumentationConfiguration implements ApplicationListener<ObjectMapperConfigured> {
-  @Override
-  public void onApplicationEvent(ObjectMapperConfigured event) {
-    maybeRegisterModule(event.getObjectMapper());
-  }
+public class Swagger2DocumentationConfiguration {
+
 }

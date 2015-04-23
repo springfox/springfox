@@ -17,10 +17,14 @@
  *
  */
 
-package springfox.test.contract.swagger
+package springfox.documentation.spring.web.json
 
-trait FileAccess {
-  String fileContents(String fileName) {
-    this.getClass().getResource("$fileName").text
+import spock.lang.Specification
+
+class JsonTest extends Specification {
+
+  def "should pass coverage"() {
+    expect:
+      new Json("Something").value()
   }
 }
