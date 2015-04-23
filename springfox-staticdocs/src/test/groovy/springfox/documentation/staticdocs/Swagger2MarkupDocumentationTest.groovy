@@ -19,6 +19,7 @@
 
 package springfox.documentation.staticdocs
 
+import io.github.robwin.markup.builder.MarkupLanguage
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.web.servlet.DefaultMvcResult
@@ -28,7 +29,8 @@ class Swagger2MarkupDocumentationTest extends Specification {
 
   def "should pass coverage"() {
     given:
-      Swagger2MarkupResultHandler resultHandler = Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc").build()
+      Swagger2MarkupResultHandler resultHandler = Swagger2MarkupResultHandler.outputDirectory("swagger_adoc")
+              .withMarkupLanguage(MarkupLanguage.ASCIIDOC).build()
     when:
       resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(), new MockHttpServletResponse()))
     then:
