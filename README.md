@@ -21,15 +21,8 @@ For more information on this project visit the [Springfox Website] (http://sprin
 - [Development Environment](docs/development-environment.md)
 - [Release Instructions](docs/RELEASING.md)
 
-#### 2.0.0 Release
-**NOTE:** Version 2.0.0 has not yet been released. 
-The most recent stable release version is 1.0.2, browse to the pre-2.0 [tag](https://github.com/springfox/springfox/tree/pre-2.0)
- for documentation andusage guides
-
-## Usage guide and instructions to migrate to 2.0.x 
-The support for swagger 2.0 is still in the works. Here is [some preliminary documentation](docs/transitioning-to-v2.md) to 
-help early adopters and people brave enough to try it out and provide us with feedback.
-
+## Transitioning to migrate to 2.x 
+Here is [some preliminary documentation](docs/transitioning-to-v2.md) to help transition to 2.x
 
 License
 -------
