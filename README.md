@@ -21,7 +21,7 @@ For more information on this project visit the [Springfox Website] (http://sprin
 - [Development Environment](docs/development-environment.md)
 - [Release Instructions](docs/RELEASING.md)
 
-## Transitioning to migrate to 2.x 
+## Transitioning to 2.x 
 Here is [some preliminary documentation](docs/transitioning-to-v2.md) to help transition to 2.x
 
 License
