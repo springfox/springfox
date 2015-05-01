@@ -30,22 +30,25 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.Set;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationTagsReader implements OperationBuilderPlugin {
-  private final ResourceGroupingStrategy groupingStrategy;
+  private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public OperationTagsReader(ResourceGroupingStrategy groupingStrategy) {
-    this.groupingStrategy = groupingStrategy;
+  public OperationTagsReader(DocumentationPluginsManager pluginsManager) {
+    this.pluginsManager = pluginsManager;
   }
 
   @Override
   public void apply(OperationContext context) {
-    Set<ResourceGroup> resourceGroups 
+    ResourceGroupingStrategy groupingStrategy
+        = pluginsManager.resourceGroupingStrategy(context.getDocumentationType());
+    Set<ResourceGroup> resourceGroups
             = groupingStrategy.getResourceGroups(context.getRequestMappingInfo(), context.getHandlerMethod());
     FluentIterable<String> tags = FluentIterable
             .from(resourceGroups)
