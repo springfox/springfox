@@ -26,10 +26,6 @@ buildscript {
 apply plugin: 'build-dashboard'
 apply plugin: 'project-report'
 
-wrapper {
-  gradleVersion = "2.4-rc-2"
-}
-
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
   jdkVersion = 1.6
