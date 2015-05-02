@@ -41,16 +41,16 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 
-@Component("swaggerOperationClassReader")
+@Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
-public class OperationResponseClassReader implements OperationBuilderPlugin {
-  private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
+public class SwaggerOperationResponseClassReader implements OperationBuilderPlugin {
+  private static Logger log = LoggerFactory.getLogger(SwaggerOperationResponseClassReader.class);
   private final TypeResolver typeResolver;
   private final TypeNameExtractor nameExtractor;
 
   @Autowired
-  public OperationResponseClassReader(TypeResolver typeResolver,
-                                      TypeNameExtractor nameExtractor) {
+  public SwaggerOperationResponseClassReader(TypeResolver typeResolver,
+                                             TypeNameExtractor nameExtractor) {
     this.typeResolver = typeResolver;
     this.nameExtractor = nameExtractor;
   }

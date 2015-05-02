@@ -31,11 +31,11 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.readers.operation.OperationResponseClassReader
+import springfox.documentation.swagger.readers.operation.SwaggerOperationResponseClassReader
 import springfox.documentation.swagger1.mixins.SwaggerPluginsSupport
 
 @Mixin([RequestMappingSupport, SwaggerPluginsSupport])
-class OperationResponseClassReaderSpec extends DocumentationContextSpec {
+class SwaggerOperationResponseClassReaderSpec extends DocumentationContextSpec {
   @Unroll
    def "should have correct response class"() {
     given:
@@ -46,8 +46,8 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
               RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 
-      OperationResponseClassReader sut =
-              new OperationResponseClassReader(new TypeResolver(), typeNameExtractor)
+      SwaggerOperationResponseClassReader sut =
+              new SwaggerOperationResponseClassReader(new TypeResolver(), typeNameExtractor)
 
     when:
       sut.apply(operationContext)
