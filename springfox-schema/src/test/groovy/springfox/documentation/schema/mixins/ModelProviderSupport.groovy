@@ -18,21 +18,23 @@
  */
 
 package springfox.documentation.schema.mixins
+
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
-import springfox.documentation.schema.DefaultModelProvider
+import org.springframework.plugin.core.OrderAwarePluginRegistry
+import org.springframework.plugin.core.PluginRegistry
+import springfox.documentation.schema.*
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
-import springfox.documentation.schema.property.bean.AccessorsProvider
-import springfox.documentation.schema.property.bean.BeanModelPropertyProvider
-import springfox.documentation.schema.property.provider.DefaultModelPropertiesProvider
-import springfox.documentation.schema.ModelDependencyProvider
-import springfox.documentation.schema.ModelProvider
-import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
+import springfox.documentation.schema.property.bean.AccessorsProvider
+import springfox.documentation.schema.property.bean.BeanModelPropertyProvider
 import springfox.documentation.schema.property.constructor.ConstructorModelPropertyProvider
 import springfox.documentation.schema.property.field.FieldModelPropertyProvider
 import springfox.documentation.schema.property.field.FieldProvider
+import springfox.documentation.schema.property.provider.DefaultModelPropertiesProvider
+import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
 @SuppressWarnings("GrMethodMayBeStatic")
 @Mixin([SchemaPluginsSupport])
@@ -44,7 +46,9 @@ class ModelProviderSupport {
     def fields = new FieldProvider(typeResolver)
 
     def pluginsManager = defaultSchemaPlugins()
-    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, pluginsManager)
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+            OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, modelNameRegistry)
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
     namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
 
@@ -93,7 +97,9 @@ class ModelProviderSupport {
     def fields = new FieldProvider(typeResolver)
 
     def pluginsManager = defaultSchemaPlugins()
-    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver,  pluginsManager)
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver,  modelNameRegistry)
     def objectMapper = new ObjectMapper()
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
     namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))

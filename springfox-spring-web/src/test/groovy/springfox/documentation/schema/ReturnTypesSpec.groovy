@@ -22,12 +22,16 @@ package springfox.documentation.schema
 import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.type.SimpleType
+import org.springframework.plugin.core.OrderAwarePluginRegistry
+import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
+import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.TypeNameProviderPlugin
+import springfox.documentation.spring.web.HandlerMethodReturnTypes
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
-import springfox.documentation.spring.web.HandlerMethodReturnTypes
 
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
@@ -37,7 +41,9 @@ class ReturnTypesSpec extends Specification {
   TypeNameExtractor sut
 
   def setup() {
-    sut = new TypeNameExtractor(new TypeResolver(), defaultSchemaPlugins())
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    sut = new TypeNameExtractor(new TypeResolver(), modelNameRegistry)
   }
 
    def "model types"() {

@@ -60,7 +60,7 @@ class SwaggerPluginsSupport {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
             OrderAwarePluginRegistry.create(newArrayList(new DefaultTypeNameProvider()))
 
-    new SchemaPluginsManager(propRegistry, modelRegistry, modelNameRegistry)
+    new SchemaPluginsManager(propRegistry, modelRegistry)
   }
 
   DocumentationPluginsManager swaggerServicePlugins(List<DefaultsProviderPlugin> swaggerDefaultsPlugins) {

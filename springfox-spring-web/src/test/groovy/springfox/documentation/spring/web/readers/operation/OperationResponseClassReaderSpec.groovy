@@ -18,24 +18,30 @@
  */
 
 package springfox.documentation.spring.web.readers.operation
+
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.plugin.core.OrderAwarePluginRegistry
+import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.TypeNameProviderPlugin
+import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.spi.service.contexts.OperationContext
 
 @Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class OperationResponseClassReaderSpec extends DocumentationContextSpec {
   OperationResponseClassReader sut
   
   def setup() {
-    def typeNameExtractor =
-            new TypeNameExtractor(new TypeResolver(), defaultSchemaPlugins())
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
 
     sut = new OperationResponseClassReader(new TypeResolver(), typeNameExtractor)
   }

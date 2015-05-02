@@ -25,9 +25,12 @@ import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
-import springfox.documentation.schema.plugins.SchemaPluginsManager;
+import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
+import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
@@ -39,13 +42,15 @@ import static springfox.documentation.schema.Types.*;
 @Component
 public class TypeNameExtractor {
   private final TypeResolver typeResolver;
-  private final SchemaPluginsManager pluginsManager;
+  private final PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders;
 
   @Autowired
-  public TypeNameExtractor(TypeResolver typeResolver, SchemaPluginsManager pluginsManager) {
+  public TypeNameExtractor(TypeResolver typeResolver,
+                           @Qualifier("typeNameProviderPluginRegistry")
+                           PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders) {
 
     this.typeResolver = typeResolver;
-    this.pluginsManager = pluginsManager;
+    this.typeNameProviders = typeNameProviders;
   }
 
   public String typeName(ModelContext context) {
@@ -64,7 +69,7 @@ public class TypeNameExtractor {
     Class<?> erasedType = resolvedType.getErasedType();
     GenericTypeNamingStrategy namingStrategy = context.getGenericNamingStrategy();
     ModelNameContext nameContext = new ModelNameContext(resolvedType.getErasedType(), context.getDocumentationType());
-    String simpleName = fromNullable(typeNameFor(erasedType)).or(pluginsManager.typeName(nameContext));
+    String simpleName = fromNullable(typeNameFor(erasedType)).or(typeName(nameContext));
     StringBuilder sb = new StringBuilder(String.format("%s%s", simpleName, namingStrategy.getOpenGeneric()));
     boolean first = true;
     for (int index = 0; index < erasedType.getTypeParameters().length; index++) {
@@ -104,6 +109,12 @@ public class TypeNameExtractor {
         return typeName;
       }
     }
-    return pluginsManager.typeName(new ModelNameContext(type.getErasedType(), context.getDocumentationType()));
+    return typeName(new ModelNameContext(type.getErasedType(), context.getDocumentationType()));
+  }
+
+  private String typeName(ModelNameContext context) {
+    TypeNameProviderPlugin selected =
+        typeNameProviders.getPluginFor(context.getDocumentationType(), new DefaultTypeNameProvider());
+    return selected.nameFor(context.getType());
   }
 }

@@ -20,10 +20,13 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.plugin.core.OrderAwarePluginRegistry
+import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
 @Mixin([ModelProviderSupport, SchemaPluginsSupport])
 class SchemaSpecification extends Specification {
@@ -32,8 +35,10 @@ class SchemaSpecification extends Specification {
   ModelDependencyProvider modelDependencyProvider
   DocumentationType documentationType = DocumentationType.SWAGGER_12
   def setup() {
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
     typeNameExtractor =
-            new TypeNameExtractor(new TypeResolver(), defaultSchemaPlugins())
+            new TypeNameExtractor(new TypeResolver(), modelNameRegistry)
     modelProvider = defaultModelProvider()
     modelDependencyProvider = defaultModelDependencyProvider()
   }

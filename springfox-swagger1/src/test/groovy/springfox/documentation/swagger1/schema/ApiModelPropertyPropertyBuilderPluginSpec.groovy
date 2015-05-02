@@ -18,20 +18,21 @@
  */
 
 package springfox.documentation.swagger1.schema
+
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
 import org.joda.time.LocalDate
+import org.springframework.plugin.core.OrderAwarePluginRegistry
+import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
-import springfox.documentation.schema.AlternateTypesSupport
-import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.TypeWithAnnotatedGettersAndSetters
+import springfox.documentation.schema.*
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 import springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder
@@ -123,8 +124,9 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       def resolver = new TypeResolver()
       ModelContext modelContext = inputParam(resolver.resolve(TypeWithAnnotatedGettersAndSetters),
         SWAGGER_12, alternateTypeProvider(), new DefaultGenericTypeNamingStrategy())
-      def typeNameExtractor =
-        new TypeNameExtractor(resolver,  defaultSchemaPlugins())
+      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
       def context = new ModelPropertyContext(new ModelPropertyBuilder(),
               properties.find { it.name == property }.getter.annotated, resolver,
               DocumentationType.SWAGGER_12)
@@ -154,8 +156,9 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       def resolver = new TypeResolver()
       ModelContext modelContext = inputParam(resolver.resolve(TypeWithAnnotatedGettersAndSetters),
           SWAGGER_12, alternateTypeProvider(), new DefaultGenericTypeNamingStrategy())
-      def typeNameExtractor =
-        new TypeNameExtractor(resolver,  defaultSchemaPlugins())
+      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
       def context = new ModelPropertyContext(new ModelPropertyBuilder(),
               properties.find { it.name == property }.getter.annotated, resolver,
               DocumentationType.SWAGGER_12)

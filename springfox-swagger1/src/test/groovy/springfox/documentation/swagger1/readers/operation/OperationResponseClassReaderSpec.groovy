@@ -19,10 +19,15 @@
 
 package springfox.documentation.swagger1.readers.operation
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.plugin.core.OrderAwarePluginRegistry
+import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Unroll
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -34,8 +39,9 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
   @Unroll
    def "should have correct response class"() {
     given:
-      def typeNameExtractor =
-              new TypeNameExtractor(new TypeResolver(), swaggerSchemaPlugins())
+      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+      def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
       OperationContext operationContext = new OperationContext(new OperationBuilder(),
               RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")

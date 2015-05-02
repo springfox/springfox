@@ -18,30 +18,36 @@
  */
 
 package springfox.documentation.spring.web.readers.parameter
+
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.core.MethodParameter
+import org.springframework.plugin.core.OrderAwarePluginRegistry
+import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spi.service.contexts.OperationContext
-import springfox.documentation.spring.web.dummy.DummyModels
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
+import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.TypeNameProviderPlugin
+import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
+import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 @Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   HandlerMethod handlerMethod = Stub(HandlerMethod)
   MethodParameter methodParameter = Stub(MethodParameter)
-  def typeNameExtractor =
-          new TypeNameExtractor(new TypeResolver(), defaultSchemaPlugins())
-  
+  PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+      OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+  def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
+
   ParameterDataTypeReader sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
 
   def "Should support all documentation types"() {
@@ -101,8 +107,9 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       methodParameter.getParameterType() >> List
 
     when:
-      def typeNameExtractor =
-              new TypeNameExtractor(new TypeResolver(), defaultSchemaPlugins())
+      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+      def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
       def sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
       sut.apply(parameterContext)
     then:

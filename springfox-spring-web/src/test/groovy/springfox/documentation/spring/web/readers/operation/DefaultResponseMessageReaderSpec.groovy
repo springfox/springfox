@@ -20,12 +20,16 @@
 package springfox.documentation.spring.web.readers.operation
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.http.HttpStatus
+import org.springframework.plugin.core.OrderAwarePluginRegistry
+import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ResponseMessage
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
@@ -36,8 +40,9 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
   ResponseMessagesReader sut
 
   def setup() {
-    def typeNameExtractor =
-            new TypeNameExtractor(new TypeResolver(),  defaultSchemaPlugins())
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
     sut = new ResponseMessagesReader(new TypeResolver(), typeNameExtractor)
   }
   def "Should add default response messages"() {
