@@ -2,6 +2,17 @@ apply from: "$rootDir/gradle/mapstruct.gradle"
 configurations {
   testArtifacts.extendsFrom testRuntime
 }
+ext {
+  limits = [
+      'instruction': 95,
+      'branch'     : 85,
+      'line'       : 95,
+      'complexity' : 86,
+      'method'     : 94.5,
+      'class'      : 94
+  ]
+}
+
 task testJar(type: Jar) {
   classifier "test"
   from sourceSets.test.output
