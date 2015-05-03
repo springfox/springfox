@@ -37,12 +37,8 @@ import java.util.Set;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationTagsReader implements OperationBuilderPlugin {
-  private final DocumentationPluginsManager pluginsManager;
-
   @Autowired
-  public OperationTagsReader(DocumentationPluginsManager pluginsManager) {
-    this.pluginsManager = pluginsManager;
-  }
+  private DocumentationPluginsManager pluginsManager;
 
   @Override
   public void apply(OperationContext context) {

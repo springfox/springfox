@@ -63,9 +63,11 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
             .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
             .configure(contextBuilder)
 
+    def expander = new ModelAttributeParameterExpander(typeResolver)
+    expander.pluginsManager = pluginsManager
 
-    sut = new OperationParameterReader(typeResolver,
-            new ModelAttributeParameterExpander(typeResolver, pluginsManager), pluginsManager)
+    sut = new OperationParameterReader(typeResolver, expander)
+    sut.pluginsManager = pluginsManager
   }
 
   def "Should ignore ignorables"() {

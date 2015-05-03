@@ -22,20 +22,11 @@ package springfox.documentation.swagger1.mixins
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
-import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
-import springfox.documentation.spi.schema.TypeNameProviderPlugin
-import springfox.documentation.spi.service.ApiListingBuilderPlugin
 import springfox.documentation.spi.service.DefaultsProviderPlugin
-import springfox.documentation.spi.service.DocumentationPlugin
-import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin
-import springfox.documentation.spi.service.OperationBuilderPlugin
-import springfox.documentation.spi.service.OperationModelsProviderPlugin
-import springfox.documentation.spi.service.ParameterBuilderPlugin
-import springfox.documentation.spi.service.ResourceGroupingStrategy
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.OperationModelsProvider
 import springfox.documentation.spring.web.readers.parameter.ExpandedParameterBuilder
@@ -52,38 +43,28 @@ import static com.google.common.collect.Lists.*
 class SwaggerPluginsSupport {
   SchemaPluginsManager swaggerSchemaPlugins() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new ApiModelPropertyPropertyBuilder()))
+        OrderAwarePluginRegistry.create(newArrayList(new ApiModelPropertyPropertyBuilder()))
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new ApiModelBuilder(new TypeResolver())))
-
-    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new DefaultTypeNameProvider()))
+        OrderAwarePluginRegistry.create(newArrayList(new ApiModelBuilder(new TypeResolver())))
 
     new SchemaPluginsManager(propRegistry, modelRegistry)
   }
 
   DocumentationPluginsManager swaggerServicePlugins(List<DefaultsProviderPlugin> swaggerDefaultsPlugins) {
     def resolver = new TypeResolver()
-    PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(resolver)))
-    PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins =
-            OrderAwarePluginRegistry.create([])
-    PluginRegistry<ExpandedParameterBuilderPlugin, DocumentationType> parameterExpanderPlugin =
-            OrderAwarePluginRegistry.create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder()])
-    PluginRegistry<ParameterBuilderPlugin, DocumentationType>  parameterBuilderPlugins=
-            OrderAwarePluginRegistry.create([])
-    PluginRegistry<OperationBuilderPlugin, DocumentationType>  operationBuilderPlugins=
-            OrderAwarePluginRegistry.create([])
-    PluginRegistry<ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies =
-            OrderAwarePluginRegistry.create([new ClassOrApiAnnotationResourceGrouping()])
-    PluginRegistry<OperationModelsProviderPlugin, DocumentationType> modelProviders =
-            OrderAwarePluginRegistry.create([
-              new OperationModelsProvider(resolver),
-              new SwaggerOperationModelsProvider(resolver)])
-    PluginRegistry<DefaultsProviderPlugin, DocumentationType> defaultsProviders =
-            OrderAwarePluginRegistry.create(swaggerDefaultsPlugins)
-    new DocumentationPluginsManager(documentationPlugins, apiListingRegistry, parameterBuilderPlugins,
-            parameterExpanderPlugin, operationBuilderPlugins, resourceGroupingStrategies, modelProviders, defaultsProviders)
+    def plugins = new DocumentationPluginsManager()
+    plugins.apiListingPlugins = OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(resolver)))
+    plugins.documentationPlugins = OrderAwarePluginRegistry.create([])
+    plugins.parameterExpanderPlugins =
+        OrderAwarePluginRegistry.create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder()])
+    plugins.parameterPlugins = OrderAwarePluginRegistry.create([])
+    plugins.operationBuilderPlugins = OrderAwarePluginRegistry.create([])
+    plugins.resourceGroupingStrategies = OrderAwarePluginRegistry.create([new ClassOrApiAnnotationResourceGrouping()])
+    plugins.operationModelsProviders = OrderAwarePluginRegistry.create([
+        new OperationModelsProvider(resolver),
+        new SwaggerOperationModelsProvider(resolver)])
+    plugins.defaultsProviders = OrderAwarePluginRegistry.create(swaggerDefaultsPlugins)
+    return plugins
   }
 }

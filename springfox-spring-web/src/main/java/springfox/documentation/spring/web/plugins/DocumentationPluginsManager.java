@@ -48,49 +48,36 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
-import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.ensureNoDuplicateGroups;
+import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.*;
 
 @Component
 public class DocumentationPluginsManager {
-  private final PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins;
-  private final PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingPlugins;
-  private final PluginRegistry<ParameterBuilderPlugin, DocumentationType> parameterPlugins;
-  private final PluginRegistry<ExpandedParameterBuilderPlugin, DocumentationType> parameterExpanderPlugins;
-  private final PluginRegistry<OperationBuilderPlugin, DocumentationType> operationBuilderPlugins;
-  private final PluginRegistry<ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies;
-  private final PluginRegistry<OperationModelsProviderPlugin, DocumentationType> operationModelsProviders;
-  private final PluginRegistry<DefaultsProviderPlugin, DocumentationType> defaultsProviders;
-
   @Autowired
-  public DocumentationPluginsManager(
-          @Qualifier("documentationPluginRegistry")
-          PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins,
-          @Qualifier("apiListingBuilderPluginRegistry")
-          PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingPlugins,
-          @Qualifier("parameterBuilderPluginRegistry")
-          PluginRegistry<ParameterBuilderPlugin, DocumentationType> parameterPlugins,
-          @Qualifier("expandedParameterBuilderPluginRegistry")
-          PluginRegistry<ExpandedParameterBuilderPlugin, DocumentationType> parameterExpanderPlugins,
-          @Qualifier("operationBuilderPluginRegistry")
-          PluginRegistry<OperationBuilderPlugin, DocumentationType> operationBuilderPlugins,
-          @Qualifier("resourceGroupingStrategyRegistry")
-          PluginRegistry<ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies,
-          @Qualifier("operationModelsProviderPluginRegistry")
-          PluginRegistry<OperationModelsProviderPlugin, DocumentationType> operationModelsProviders,
-          @Qualifier("defaultsProviderPluginRegistry")
-          PluginRegistry<DefaultsProviderPlugin, DocumentationType> defaultsProviders) {
-    this.documentationPlugins = documentationPlugins;
-    this.apiListingPlugins = apiListingPlugins;
-    this.parameterPlugins = parameterPlugins;
-    this.parameterExpanderPlugins = parameterExpanderPlugins;
-    this.operationBuilderPlugins = operationBuilderPlugins;
-    this.resourceGroupingStrategies = resourceGroupingStrategies;
-    this.operationModelsProviders = operationModelsProviders;
-    this.defaultsProviders = defaultsProviders;
-  }
+  @Qualifier("documentationPluginRegistry")
+  private PluginRegistry<DocumentationPlugin, DocumentationType> documentationPlugins;
+  @Autowired
+  @Qualifier("apiListingBuilderPluginRegistry")
+  private PluginRegistry<ApiListingBuilderPlugin, DocumentationType> apiListingPlugins;
+  @Autowired
+  @Qualifier("parameterBuilderPluginRegistry")
+  private PluginRegistry<ParameterBuilderPlugin, DocumentationType> parameterPlugins;
+  @Autowired
+  @Qualifier("expandedParameterBuilderPluginRegistry")
+  private PluginRegistry<ExpandedParameterBuilderPlugin, DocumentationType> parameterExpanderPlugins;
+  @Autowired
+  @Qualifier("operationBuilderPluginRegistry")
+  private PluginRegistry<OperationBuilderPlugin, DocumentationType> operationBuilderPlugins;
+  @Autowired
+  @Qualifier("resourceGroupingStrategyRegistry")
+  private PluginRegistry<ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies;
+  @Autowired
+  @Qualifier("operationModelsProviderPluginRegistry")
+  private PluginRegistry<OperationModelsProviderPlugin, DocumentationType> operationModelsProviders;
+  @Autowired
+  @Qualifier("defaultsProviderPluginRegistry")
+  private PluginRegistry<DefaultsProviderPlugin, DocumentationType> defaultsProviders;
 
-
-  public Iterable<DocumentationPlugin> documentationPlugins() throws IllegalStateException  {
+  public Iterable<DocumentationPlugin> documentationPlugins() throws IllegalStateException {
     List<DocumentationPlugin> plugins = documentationPlugins.getPlugins();
     ensureNoDuplicateGroups(plugins);
     if (plugins.isEmpty()) {
@@ -98,9 +85,6 @@ public class DocumentationPluginsManager {
     }
     return plugins;
   }
-
-
-
 
   public Parameter parameter(ParameterContext parameterContext) {
     for (ParameterBuilderPlugin each : parameterPlugins.getPluginsFor(parameterContext.getDocumentationType())) {
@@ -147,9 +131,9 @@ public class DocumentationPluginsManager {
   }
 
   public DocumentationContextBuilder createContextBuilder(DocumentationType documentationType,
-          DefaultConfiguration defaultConfiguration) {
+                                                          DefaultConfiguration defaultConfiguration) {
     return defaultsProviders.getPluginFor(documentationType, defaultConfiguration)
-            .create(documentationType)
-            .withResourceGroupingStrategy(resourceGroupingStrategy(documentationType));
+        .create(documentationType)
+        .withResourceGroupingStrategy(resourceGroupingStrategy(documentationType));
   }
 }

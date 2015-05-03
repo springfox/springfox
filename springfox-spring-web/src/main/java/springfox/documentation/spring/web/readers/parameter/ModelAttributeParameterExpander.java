@@ -61,13 +61,12 @@ import static springfox.documentation.schema.Types.*;
 public class ModelAttributeParameterExpander {
   private static final Logger LOG = LoggerFactory.getLogger(ModelAttributeParameterExpander.class);
   private final TypeResolver resolver;
-  private final DocumentationPluginsManager pluginsManager;
+  @Autowired
+  protected DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ModelAttributeParameterExpander(TypeResolver resolver,
-                                         DocumentationPluginsManager pluginsManager) {
+  public ModelAttributeParameterExpander(TypeResolver resolver) {
     this.resolver = resolver;
-    this.pluginsManager = pluginsManager;
   }
 
   public void expand(final String parentName, final Class<?> paramType,

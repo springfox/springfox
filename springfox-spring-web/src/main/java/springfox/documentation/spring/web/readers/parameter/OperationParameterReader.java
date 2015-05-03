@@ -48,15 +48,15 @@ import static com.google.common.collect.Lists.*;
 public class OperationParameterReader implements OperationBuilderPlugin {
   private final TypeResolver typeResolver;
   private final ModelAttributeParameterExpander expander;
-  private final DocumentationPluginsManager pluginsManager;
+
+  @Autowired
+  private DocumentationPluginsManager pluginsManager;
 
   @Autowired
   public OperationParameterReader(TypeResolver typeResolver,
-                                  ModelAttributeParameterExpander expander,
-                                  DocumentationPluginsManager pluginsManager) {
+                                  ModelAttributeParameterExpander expander) {
     this.typeResolver = typeResolver;
     this.expander = expander;
-    this.pluginsManager = pluginsManager;
   }
 
   @Override

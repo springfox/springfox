@@ -36,7 +36,6 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.dummy.models.Treeish
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
@@ -61,9 +60,13 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
             .configure(contextBuilder)
 
 
-    sut = new OperationParameterReader(typeResolver,
-            new ModelAttributeParameterExpander(typeResolver, pluginsManager), pluginsManager)
+
+    def expander = new ModelAttributeParameterExpander(typeResolver)
+    expander.pluginsManager = pluginsManager
+    sut = new OperationParameterReader(typeResolver, expander)
+    sut.pluginsManager = pluginsManager
   }
+
   def "Should support all documentation types"() {
     sut.supports(DocumentationType.SPRING_WEB)
     sut.supports(DocumentationType.SWAGGER_12)
@@ -202,8 +205,9 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "OperationParameterReader supports all documentationTypes"() {
     given:
-      def sut = new OperationParameterReader(new TypeResolver(), Mock(ModelAttributeParameterExpander),
-              Mock(DocumentationPluginsManager))
+      def sut = new OperationParameterReader(new TypeResolver(), Mock(ModelAttributeParameterExpander)
+      )
+      sut.pluginsManager = defaultWebPlugins()
     expect:
       sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)

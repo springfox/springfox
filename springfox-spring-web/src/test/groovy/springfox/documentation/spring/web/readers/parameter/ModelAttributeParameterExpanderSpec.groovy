@@ -40,7 +40,8 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   def setup() {
     typeResolver = new TypeResolver()
     plugin.alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-    sut = new ModelAttributeParameterExpander(typeResolver, defaultWebPlugins())
+    sut = new ModelAttributeParameterExpander(typeResolver)
+    sut.pluginsManager = defaultWebPlugins()
   }
 
   def "should expand parameters"() {
@@ -76,12 +77,13 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   def "Should return empty set when there is an exception"() {
     given:
       ModelAttributeParameterExpander expander =
-              new ModelAttributeParameterExpander(typeResolver, defaultWebPlugins()) {
+              new ModelAttributeParameterExpander(typeResolver) {
         @Override
         def BeanInfo getBeanInfo(Class<?> clazz) throws IntrospectionException {
           throw new IntrospectionException("Fail");
         }
       }
+      expander.pluginsManager = defaultWebPlugins()
     when:
       expander.expand("", Example, parameters, context());
     then:

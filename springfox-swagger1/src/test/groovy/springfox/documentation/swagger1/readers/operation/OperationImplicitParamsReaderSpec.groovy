@@ -18,7 +18,6 @@
  */
 
 package springfox.documentation.swagger1.readers.operation
-
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.builders.OperationBuilder
@@ -42,9 +41,13 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
 
 
       def resolver = new TypeResolver()
+
+      def plugins = defaultWebPlugins()
+      def expander = new ModelAttributeParameterExpander(resolver)
+      expander.pluginsManager = plugins
       OperationParameterReader operationParameterReader = new OperationParameterReader(resolver,
-              new ModelAttributeParameterExpander(resolver, defaultWebPlugins()),
-              defaultWebPlugins())
+        expander)
+      operationParameterReader.pluginsManager = plugins
       OperationImplicitParametersReader operationImplicitParametersReader = new OperationImplicitParametersReader()
       OperationImplicitParameterReader operationImplicitParameterReader = new OperationImplicitParameterReader()
     when:
