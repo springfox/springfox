@@ -32,6 +32,8 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ModelPropertyBuilder;
@@ -55,6 +57,7 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
 public class FieldModelPropertyProvider implements ModelPropertiesProvider {
+  private static final Logger LOG = LoggerFactory.getLogger(FieldModelPropertyProvider.class);
 
   private final FieldProvider fieldProvider;
   private final BeanPropertyNamingStrategy namingStrategy;
@@ -80,6 +83,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
       childField, Optional<BeanPropertyDefinition> jacksonProperty, ModelContext givenContext) {
     if (memberIsAField(member)) {
       if (Annotations.memberIsUnwrapped(member)) {
+        LOG.debug("Evaluating unwrapped member");
         return propertiesFor(childField.getType(), ModelContext.fromParent(givenContext, childField.getType()));
       } else {
         String fieldName = BeanPropertyDefinitions.name(jacksonProperty.get(), true, namingStrategy);
@@ -91,8 +95,8 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
 
   private ModelProperty modelPropertyFrom(ResolvedField childField, String fieldName,
       ModelContext modelContext) {
-    FieldModelProperty fieldModelProperty = new FieldModelProperty(fieldName, childField, modelContext
-        .getAlternateTypeProvider());
+    FieldModelProperty fieldModelProperty = new FieldModelProperty(fieldName, childField,
+        modelContext.getAlternateTypeProvider());
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
         .name(fieldModelProperty.getName())
         .type(fieldModelProperty.getType())
@@ -119,6 +123,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
         BeanPropertyDefinitions.beanPropertyByInternalName());
 
     for (ResolvedField childField : fieldProvider.in(type)) {
+      LOG.debug("Reading property {}", childField.getName());
       if (propertyLookup.containsKey(childField.getName())) {
         BeanPropertyDefinition propertyDefinition = propertyLookup.get(childField.getName());
         Optional<BeanPropertyDefinition> jacksonProperty

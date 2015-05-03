@@ -22,7 +22,11 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -37,11 +41,13 @@ import java.util.Map;
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 
 
 @Component
 public class DefaultModelProvider implements ModelProvider {
+  private static final Logger LOG = LoggerFactory.getLogger(DefaultModelProvider.class);
   private final TypeResolver resolver;
   private final ModelPropertiesProvider propertiesProvider;
   private final ModelDependencyProvider dependencyProvider;
@@ -69,10 +75,16 @@ public class DefaultModelProvider implements ModelProvider {
         || propertiesHost.getErasedType().isEnum()
         || isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))
         || modelContext.hasSeenBefore(propertiesHost)) {
+      LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
+              + "been handled",  resolvedTypeSignature(propertiesHost).or("<null>"));
       return Optional.absent();
     }
     Map<String, ModelProperty> properties = newTreeMap();
-    properties.putAll(uniqueIndex(properties(modelContext, propertiesHost), byPropertyName()));
+    ImmutableMap<String, ModelProperty> propertiesIndex
+        = uniqueIndex(properties(modelContext, propertiesHost), byPropertyName());
+    LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
+        Joiner.on(", ").join(propertiesIndex.keySet()));
+    properties.putAll(propertiesIndex);
 
     return Optional.of(modelBuilder(propertiesHost, properties, modelContext));
   }

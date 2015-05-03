@@ -34,6 +34,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ModelPropertyBuilder;
@@ -59,6 +61,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
 public class BeanModelPropertyProvider implements ModelPropertiesProvider {
+  private static final Logger LOG = LoggerFactory.getLogger(BeanModelPropertyProvider.class);
 
   private final AccessorsProvider accessors;
   private final BeanPropertyNamingStrategy namingStrategy;
@@ -95,12 +98,15 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
 
     if (member instanceof AnnotatedMethod && Annotations.memberIsUnwrapped(member)) {
       if (Accessors.isGetter(((AnnotatedMethod) member).getMember())) {
+        LOG.debug("Evaluating unwrapped getter for member {}", ((AnnotatedMethod) member).getMember().getName());
         return propertiesFor(childProperty.getReturnType(), fromParent(givenContext, childProperty.getReturnType()));
       } else {
+        LOG.debug("Evaluating unwrapped setter for member {}", ((AnnotatedMethod) member).getMember().getName());
         return propertiesFor(childProperty.getArgumentType(0),
             fromParent(givenContext, childProperty.getArgumentType(0)));
       }
     } else {
+      LOG.debug("Evaluating property of {}", childProperty);
       return newArrayList(beanModelProperty(childProperty, jacksonProperty, givenContext));
     }
   }
@@ -125,13 +131,15 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
         BeanPropertyDefinitions.beanPropertyByInternalName());
     for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
-
+      LOG.debug("Reading property {}", each.getKey());
       BeanPropertyDefinition propertyDefinition = each.getValue();
       Optional<BeanPropertyDefinition> jacksonProperty
           = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
       AnnotatedMember member = propertyDefinition.getPrimaryMember();
+
       Optional<ResolvedMethod> accessor = findAccessorMethod(type, each.getKey(), member);
       if (accessor.isPresent()) {
+        LOG.debug("Accessor selected {}", accessor.get().getName());
         serializationCandidates
             .addAll(addCandidateProperties(member, accessor.get(), jacksonProperty, givenContext));
       }
@@ -159,6 +167,8 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     BeanModelProperty beanModelProperty
         = new BeanModelProperty(propertyName, childProperty, Accessors.isGetter(childProperty.getRawMember()),
         typeResolver, modelContext.getAlternateTypeProvider());
+
+    LOG.debug("Adding property {} to model", propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
         .name(beanModelProperty.getName())
         .type(beanModelProperty.getType())

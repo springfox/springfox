@@ -42,7 +42,7 @@ import static com.google.common.collect.Sets.*;
 
 @Component
 public class ApiModelReader  {
-  private static final Logger log = LoggerFactory.getLogger(ApiModelReader.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ApiModelReader.class);
   private final ModelProvider modelProvider;
   private final TypeResolver typeResolver;
   private final DocumentationPluginsManager pluginsManager;
@@ -65,12 +65,12 @@ public class ApiModelReader  {
       markIgnorablesAsHasSeen(typeResolver, ignorableTypes, each);
       Optional<Model> pModel = modelProvider.modelFor(each);
       if (pModel.isPresent()) {
-        log.debug("Generated parameter model id: {}, name: {}, schema: {} models",
-                pModel.get().getId(),
-                pModel.get().getName());
+        LOG.debug("Generated parameter model id: {}, name: {}, schema: {} models",
+            pModel.get().getId(),
+            pModel.get().getName());
         mergeModelMap(modelMap, pModel.get());
       } else {
-        log.debug("Did not find any parameter models for {}", each.getType());
+        LOG.debug("Did not find any parameter models for {}", each.getType());
       }
       populateDependencies(each, modelMap);
     }
@@ -83,6 +83,7 @@ public class ApiModelReader  {
 
       if (!target.containsKey(sourceModelKey)) {
         //if we encounter completely unknown model, just add it
+        LOG.debug("Adding a new model with key {}", sourceModelKey);
         target.put(sourceModelKey, source);
       } else {
         //we can encounter a known model with an unknown property
@@ -97,6 +98,7 @@ public class ApiModelReader  {
         newSourcePropKeys.removeAll(targetProperties.keySet());
         Map<String, ModelProperty> mergedTargetProperties = Maps.newHashMap(targetProperties);
         for (String newProperty : newSourcePropKeys) {
+          LOG.debug("Adding a missing property {} to model {}", newProperty, sourceModelKey);
           mergedTargetProperties.put(newProperty, sourceProperties.get(newProperty));
         }
 

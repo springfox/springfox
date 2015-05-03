@@ -23,6 +23,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
@@ -52,6 +53,15 @@ public class ResolvedTypes {
 
   public static AllowableValues allowableValues(ResolvedType resolvedType) {
     return Enums.allowableValues(resolvedType.getErasedType());
+  }
+
+  public static Optional<String> resolvedTypeSignature(ResolvedType resolvedType) {
+    return Optional.fromNullable(resolvedType).transform(new Function<ResolvedType, String>() {
+      @Override
+      public String apply(ResolvedType input) {
+        return input.getSignature();
+      }
+    });
   }
 
   public static Function<? super ResolvedType, ModelRef> modelRefFactory(final ModelContext parentContext,
