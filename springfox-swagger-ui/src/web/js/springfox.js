@@ -6,7 +6,7 @@ $(function() {
 
     $('#select_baseUrl').change(function () {
         window.swaggerUi.headerView.trigger('update-swagger-ui', {
-            url: swaggerDropdown.val()
+            url: $('#select_baseUrl').val()
         });
     });
 
