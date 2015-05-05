@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -43,8 +44,8 @@ class AnnotationsSpec extends Specification {
     given:
       ObjectMapper mapper = new ObjectMapper()
       BeanDescription beanDesc =
-              mapper.deserializationConfig.introspect(TypeFactory.defaultInstance().constructType
-                      (AnnotationType))
+              mapper.deserializationConfig.introspect(TypeFactory.defaultInstance()
+                  .constructType(AnnotationType))
       BeanPropertyDefinition property = beanDesc.findProperties().find { it -> it.name == fieldName }
 
     expect:
@@ -55,6 +56,7 @@ class AnnotationsSpec extends Specification {
       'fieldWithGetter'          | true
       'fieldWithGetterAndSetter' | true
       'fieldWithNoAnnotations'   | false
+      'fieldWith2Setters'        | true
   }
 
   @Unroll
@@ -73,6 +75,7 @@ class AnnotationsSpec extends Specification {
       'fieldWithGetter'          | true
       'fieldWithGetterAndSetter' | true
       'fieldWithNoAnnotations'   | false
+      'fieldWith2Setters'        | true
   }
 
   @Unroll
@@ -91,6 +94,7 @@ class AnnotationsSpec extends Specification {
       'fieldWithGetter'          | 'getFieldWithGetter'
       'fieldWithGetterAndSetter' | 'getFieldWithGetterAndSetter'
       'fieldWithNoAnnotations'   | 'fieldWithNoAnnotations'
+      'fieldWith2Setters'        | 'getFieldWith2Setters'
   }
 
   def "when member is null"() {
@@ -113,6 +117,7 @@ class AnnotationsSpec extends Specification {
     private String field
     private String fieldWithGetter
     private String fieldWithGetterAndSetter
+    private String fieldWith2Setters;
 
     @JsonProperty
     private String fieldWithNoAnnotations
@@ -125,6 +130,21 @@ class AnnotationsSpec extends Specification {
 
     String getFieldWithGetterAndSetter() {
       return fieldWithGetterAndSetter
+    }
+
+    public String getFieldWith2Setters() {
+      return fieldWith2Setters
+    }
+
+    @JsonIgnore
+    public void setFieldWith2Setters(UUID fieldWith2Setters) {
+      this.fieldWith2Setters = ownerId.toString();
+    }
+
+    @JsonProperty
+    @Autowired
+    public void setFieldWith2Setters(String fieldWith2Setters) {
+      this.fieldWith2Setters = fieldWith2Setters;
     }
 
     @Autowired
