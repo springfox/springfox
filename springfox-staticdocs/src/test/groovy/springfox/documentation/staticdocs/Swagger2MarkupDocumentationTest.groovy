@@ -29,57 +29,58 @@ import spock.lang.Specification
 
 class Swagger2MarkupDocumentationTest extends Specification {
 
-  @Shared MockHttpServletResponse response
+  @Shared
+  MockHttpServletResponse response
 
-  def setup(){
-      response = new MockHttpServletResponse()
-      PrintWriter writer = response.getWriter()
-      writer.write(Swagger2MarkupDocumentationTest.class.getResource('/swagger.json').text)
-      writer.flush()
+  def setup() {
+    response = new MockHttpServletResponse()
+    PrintWriter writer = response.getWriter()
+    writer.write(Swagger2MarkupDocumentationTest.class.getResource('/swagger.json').text)
+    writer.flush()
   }
 
   def "should convert swagger json into three asciidoc files"() {
     given:
-        Swagger2MarkupResultHandler resultHandler = Swagger2MarkupResultHandler.outputDirectory('build/docs/asciidoc')
+      Swagger2MarkupResultHandler resultHandler = Swagger2MarkupResultHandler.outputDirectory('build/docs/asciidoc')
               .withMarkupLanguage(MarkupLanguage.ASCIIDOC).build()
     when:
-      resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(),response))
+      resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(), response))
     then:
-        def list = []
-        def dir = new File(resultHandler.outputDir)
-        dir.eachFileRecurse(FileType.FILES) { file ->
-            list << file.name
-        }
-        list.sort() == ['definitions.adoc', 'overview.adoc', 'paths.adoc']
+      def list = []
+      def dir = new File(resultHandler.outputDir)
+      dir.eachFileRecurse(FileType.FILES) { file ->
+        list << file.name
+      }
+      list.sort() == ['definitions.adoc', 'overview.adoc', 'paths.adoc']
   }
 
 
   def "should create swagger json with custom file name"() {
     given:
-        SwaggerResultHandler resultHandler = SwaggerResultHandler.outputDirectory('build/docs/swagger/custom')
-            .withFileName("custom.json").build()
+      SwaggerResultHandler resultHandler = SwaggerResultHandler.outputDirectory('build/docs/swagger/custom')
+              .withFileName("custom.json").build()
     when:
-        resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(),response));
+      resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(), response));
     then:
-        def list = []
-        def dir = new File(resultHandler.outputDir)
-        dir.eachFileRecurse(FileType.FILES) { file ->
-            list << file.name
-        }
-        list == ['custom.json']
+      def list = []
+      def dir = new File(resultHandler.outputDir)
+      dir.eachFileRecurse(FileType.FILES) { file ->
+        list << file.name
+      }
+      list == ['custom.json']
   }
 
-    def "should create swagger json file with default file name"() {
-        given:
-            SwaggerResultHandler resultHandler = SwaggerResultHandler.outputDirectory('build/docs/swagger/default').build()
-        when:
-            resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(),response));
-        then:
-            def list = []
-            def dir = new File(resultHandler.outputDir)
-            dir.eachFileRecurse(FileType.FILES) { file ->
-                list << file.name
-            }
-            list == ['swagger.json']
-    }
+  def "should create swagger json file with default file name"() {
+    given:
+      SwaggerResultHandler resultHandler = SwaggerResultHandler.outputDirectory('build/docs/swagger/default').build()
+    when:
+      resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(), response));
+    then:
+      def list = []
+      def dir = new File(resultHandler.outputDir)
+      dir.eachFileRecurse(FileType.FILES) { file ->
+        list << file.name
+      }
+      list == ['swagger.json']
+  }
 }
