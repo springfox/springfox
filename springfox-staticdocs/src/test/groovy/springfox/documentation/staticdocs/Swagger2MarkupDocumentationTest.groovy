@@ -18,9 +18,7 @@
  */
 
 package springfox.documentation.staticdocs
-
 import groovy.io.FileType
-import io.github.robwin.markup.builder.MarkupLanguage
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.web.servlet.DefaultMvcResult
@@ -41,13 +39,16 @@ class Swagger2MarkupDocumentationTest extends Specification {
 
   def "should convert swagger json into three asciidoc files"() {
     given:
-      SpringfoxResultDispatcher resultHandler = SpringfoxResultDispatcher.outputDirectory('build/docs/asciidoc')
-              .withMarkupLanguage(MarkupLanguage.ASCIIDOC).build()
+      RenderOptions renderOptions = RenderOptions.builder()
+          .outputDir('build/docs/asciidoc')
+          .format(DocumentationFormat.ASCIIDOC)
+          .build()
+      def resultHandler = new SpringfoxResultDispatcher(renderOptions)
     when:
       resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(), response))
     then:
       def list = []
-      def dir = new File(resultHandler.outputDir)
+      def dir = new File(renderOptions.outputDir())
       dir.eachFileRecurse(FileType.FILES) { file ->
         list << file.name
       }
@@ -57,13 +58,17 @@ class Swagger2MarkupDocumentationTest extends Specification {
 
   def "should create swagger json with custom file name"() {
     given:
-      SwaggerResultHandler resultHandler = SwaggerResultHandler.outputDirectory('build/docs/swagger/custom')
-              .withFileName("custom.json").build()
+      RenderOptions renderOptions = RenderOptions.builder()
+          .outputDir('build/docs/swagger/custom')
+          .format(DocumentationFormat.JSON)
+          .fileName("custom.json")
+          .build()
+      def resultHandler = new SpringfoxResultDispatcher(renderOptions)
     when:
       resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(), response));
     then:
       def list = []
-      def dir = new File(resultHandler.outputDir)
+      def dir = new File(renderOptions.outputDir())
       dir.eachFileRecurse(FileType.FILES) { file ->
         list << file.name
       }
@@ -72,12 +77,16 @@ class Swagger2MarkupDocumentationTest extends Specification {
 
   def "should create swagger json file with default file name"() {
     given:
-      SwaggerResultHandler resultHandler = SwaggerResultHandler.outputDirectory('build/docs/swagger/default').build()
+      RenderOptions renderOptions = RenderOptions.builder()
+          .outputDir('build/docs/swagger/default')
+          .format(DocumentationFormat.JSON)
+          .build()
+      def resultHandler = new SpringfoxResultDispatcher(renderOptions)
     when:
       resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(), response));
     then:
       def list = []
-      def dir = new File(resultHandler.outputDir)
+      def dir = new File(renderOptions.outputDir())
       dir.eachFileRecurse(FileType.FILES) { file ->
         list << file.name
       }

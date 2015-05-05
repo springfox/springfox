@@ -18,10 +18,8 @@
  */
 package springfox.documentation.staticdocs;
 
-public enum DocumentationFormat {
-  MARKDOWN,
-  ASCIIDOC,
-  HTML,
-  PDF,
-  JSON
+import java.io.IOException;
+
+public interface DocumentationRenderer {
+  void render(RenderOptions options, String json) throws IOException;
 }
