@@ -41,7 +41,7 @@ class Swagger2MarkupDocumentationTest extends Specification {
 
   def "should convert swagger json into three asciidoc files"() {
     given:
-      Swagger2MarkupResultHandler resultHandler = Swagger2MarkupResultHandler.outputDirectory('build/docs/asciidoc')
+      SpringfoxResultDispatcher resultHandler = SpringfoxResultDispatcher.outputDirectory('build/docs/asciidoc')
               .withMarkupLanguage(MarkupLanguage.ASCIIDOC).build()
     when:
       resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(), response))

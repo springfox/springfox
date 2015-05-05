@@ -29,15 +29,15 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultHandler;
 
 
-public class Swagger2MarkupResultHandler implements ResultHandler {
+public class SpringfoxResultDispatcher implements ResultHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Swagger2MarkupResultHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SpringfoxResultDispatcher.class);
 
     private final String outputDir;
     private final MarkupLanguage markupLanguage;
     private final String examplesFolderPath;
 
-    Swagger2MarkupResultHandler(String outputDir, MarkupLanguage markupLanguage, String examplesFolderPath) {
+    SpringfoxResultDispatcher(String outputDir, MarkupLanguage markupLanguage, String examplesFolderPath) {
         this.outputDir = outputDir;
         this.markupLanguage = markupLanguage;
         this.examplesFolderPath = examplesFolderPath;
@@ -86,8 +86,8 @@ public class Swagger2MarkupResultHandler implements ResultHandler {
          * @see org.springframework.test.web.servlet.MockMvc#perform(org.springframework.test.web.servlet.RequestBuilder)
          * @see org.springframework.test.web.servlet.ResultActions#andDo(org.springframework.test.web.servlet.ResultHandler)
          */
-        public Swagger2MarkupResultHandler build() {
-              return new Swagger2MarkupResultHandler(outputDir, markupLanguage,
+        public SpringfoxResultDispatcher build() {
+              return new SpringfoxResultDispatcher(outputDir, markupLanguage,
                     examplesFolderPath);
         }
 
