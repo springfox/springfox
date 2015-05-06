@@ -33,9 +33,9 @@ public class JsonSerializer {
     }
   }
 
-  public Json toJson(Object resourceListing) {
+  public Json toJson(Object toSerialize) {
     try {
-      return new Json(objectMapper.writeValueAsString(resourceListing));
+      return new Json(objectMapper.writeValueAsString(toSerialize));
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Could not write JSON", e);
     }

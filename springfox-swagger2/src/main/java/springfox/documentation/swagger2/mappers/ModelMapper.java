@@ -22,6 +22,7 @@ package springfox.documentation.swagger2.mappers;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Multimap;
 import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.ModelImpl;
 import com.wordnik.swagger.models.properties.AbstractNumericProperty;
@@ -119,7 +120,7 @@ public abstract class ModelMapper {
     return responseProperty;
   }
 
-  protected Map<String, Model> modelsFromApiListings(Map<String, ApiListing> apiListings) {
+  protected Map<String, Model> modelsFromApiListings(Multimap<String, ApiListing> apiListings) {
     Map<String, springfox.documentation.schema.Model> definitions = newHashMap();
     for (ApiListing each : apiListings.values()) {
       definitions.putAll(each.getModels());

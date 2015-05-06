@@ -21,6 +21,8 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 
 import java.util.List;
 import java.util.Map;
@@ -74,6 +76,21 @@ public class BuilderDefaults {
   public static <K, V> Map<K, V> nullToEmptyMap(Map<K, V> newValue) {
     if (newValue == null) {
       return newHashMap();
+    }
+    return newValue;
+  }
+
+  /**
+   * Returns an empty map if the input is null
+   *
+   * @param newValue - nullable map value
+   * @param <K>      - map key
+   * @param <V>      - map value
+   * @return non-null Map
+   */
+  public static <K, V> Multimap<K, V> nullToEmptyMultimap(Multimap<K, V> newValue) {
+    if (newValue == null) {
+      return LinkedListMultimap.create();
     }
     return newValue;
   }

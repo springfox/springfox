@@ -23,6 +23,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.wordnik.swagger.models.Contact;
 import com.wordnik.swagger.models.Info;
 import com.wordnik.swagger.models.Operation;
@@ -130,7 +131,7 @@ public abstract class ServiceModelToSwagger2Mapper {
     return responses;
   }
 
-  protected Map<String, Path> mapApiListings(Map<String, ApiListing> apiListings) {
+  protected Map<String, Path> mapApiListings(Multimap<String, ApiListing> apiListings) {
     Map<String, Path> paths = newHashMap();
     for (ApiListing each : apiListings.values()) {
       for (ApiDescription api : each.getApis()) {

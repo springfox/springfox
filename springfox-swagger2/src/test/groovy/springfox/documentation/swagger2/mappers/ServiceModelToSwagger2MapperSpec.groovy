@@ -3,6 +3,7 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.base.Functions
 import com.google.common.base.Suppliers
+import com.google.common.collect.LinkedListMultimap
 import org.springframework.http.HttpMethod
 import spock.lang.Specification
 import springfox.documentation.builders.*
@@ -10,7 +11,6 @@ import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.*
 import springfox.documentation.spi.service.contexts.Defaults
 
-import static com.google.common.collect.Maps.*
 import static com.google.common.collect.Sets.*
 
 class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSupport {
@@ -19,7 +19,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
       def built = apiListing()
       def sut = swagger2Mapper()
     when:
-      def apiListings = newHashMap()
+      def apiListings = LinkedListMultimap.create()
       apiListings.put("new", built)
       def mappedListing = sut.mapApiListings(apiListings)
     and:
@@ -92,7 +92,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
 
   def "Maps documentation with api listing to swagger models"() {
     given:
-      def listingLookup = newHashMap()
+      def listingLookup = LinkedListMultimap.create()
       listingLookup.put("test", apiListing())
       Documentation documentation = new DocumentationBuilder()
           .basePath("base:uri")

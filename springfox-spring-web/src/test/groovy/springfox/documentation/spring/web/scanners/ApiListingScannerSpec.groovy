@@ -18,6 +18,8 @@
  */
 
 package springfox.documentation.spring.web.scanners
+
+import com.google.common.collect.Multimap
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
@@ -82,9 +84,9 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       def scanned = scanner.scan(listingContext)
     then:
       scanned.containsKey("businesses")
-      ApiListing listing = scanned.get("businesses")
-      listing.consumes == [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE] as Set
-      listing.produces == [APPLICATION_JSON_VALUE] as Set
+      Collection<ApiListing> listings = scanned.get("businesses")
+      listings.first().consumes == [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE] as Set
+      listings.first().produces == [APPLICATION_JSON_VALUE] as Set
   }
 
   def "should assign global authorizations"() {
@@ -99,10 +101,10 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
       listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
     when:
-      Map<String, ApiListing> apiListingMap = scanner.scan(listingContext)
+      Multimap<String, ApiListing> apiListingMap = scanner.scan(listingContext)
     then:
-      ApiListing listing = apiListingMap['businesses']
-      listing.getSecurityReferences().size() == 0
+      Collection<ApiListing> listings = apiListingMap.get('businesses')
+      listings.first().getSecurityReferences().size() == 0
   }
 
   @Unroll

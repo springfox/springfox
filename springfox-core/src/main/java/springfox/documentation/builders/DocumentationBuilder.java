@@ -19,21 +19,23 @@
 
 package springfox.documentation.builders;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Ordering;
+import com.google.common.collect.TreeMultimap;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.Tag;
 
-import java.util.Map;
+import java.util.Comparator;
 import java.util.Set;
 
-import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationBuilder {
   private String groupName;
-  private Map<String, ApiListing> apiListings = newTreeMap();
+  private Multimap<String, ApiListing> apiListings = TreeMultimap.create(Ordering.natural(), byListingPosition());
   private ResourceListing resourceListing;
   private Set<Tag> tags = newHashSet();
   private String basePath;
@@ -58,8 +60,8 @@ public class DocumentationBuilder {
    * @param apiListings - entries to add to the existing documentation
    * @return this
    */
-  public DocumentationBuilder apiListingsByResourceGroupName(Map<String, ApiListing> apiListings) {
-    this.apiListings.putAll(nullToEmptyMap(apiListings));
+  public DocumentationBuilder apiListingsByResourceGroupName(Multimap<String, ApiListing> apiListings) {
+    this.apiListings.putAll(nullToEmptyMultimap(apiListings));
     return this;
   }
 
@@ -127,6 +129,16 @@ public class DocumentationBuilder {
   public DocumentationBuilder basePath(String basePath) {
     this.basePath = defaultIfAbsent(basePath, this.basePath);
     return this;
+  }
+
+
+  public static Comparator<ApiListing> byListingPosition() {
+    return new Comparator<ApiListing>() {
+      @Override
+      public int compare(ApiListing first, ApiListing second) {
+        return first.getPosition() - second.getPosition();
+      }
+    };
   }
 
   public Documentation build() {

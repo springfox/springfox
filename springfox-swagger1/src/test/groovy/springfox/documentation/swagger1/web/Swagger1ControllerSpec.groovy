@@ -19,6 +19,8 @@
 
 package springfox.documentation.swagger1.web
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.collect.LinkedListMultimap
+import com.google.common.collect.Multimap
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
@@ -27,6 +29,7 @@ import org.springframework.web.servlet.View
 import spock.lang.Shared
 import spock.lang.Unroll
 import springfox.documentation.builders.DocumentationBuilder
+import springfox.documentation.service.ApiListing
 import springfox.documentation.service.Documentation
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spring.web.DocumentationCache
@@ -101,9 +104,12 @@ class Swagger1ControllerSpec extends DocumentationContextSpec {
 
   def "should respond with api listing for a given resource group"() {
     given:
+      Multimap<String, ApiListing> listings = LinkedListMultimap.<String, ApiListing>create()
+      listings.put('businesses', apiListing())
+    and:
       Documentation group = new DocumentationBuilder()
               .name("groupName")
-              .apiListingsByResourceGroupName(['businesses': apiListing()])
+              .apiListingsByResourceGroupName(listings)
               .build()
       controller.documentationCache.addDocumentation(group)
     when:

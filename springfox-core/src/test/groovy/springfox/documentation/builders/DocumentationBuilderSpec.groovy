@@ -18,7 +18,8 @@
  */
 
 package springfox.documentation.builders
-
+import com.google.common.collect.LinkedListMultimap
+import com.google.common.collect.Multimap
 import spock.lang.Specification
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ResourceListing
@@ -34,6 +35,8 @@ class DocumentationBuilderSpec extends Specification {
     then:
       if (value instanceof Set) {
         assert built."$property".containsAll(value)
+      } else if (value instanceof Multimap) {
+        assert built."$property".keySet().containsAll(value.keySet())
       } else {
         assert built."$property" == value
       }
@@ -41,13 +44,19 @@ class DocumentationBuilderSpec extends Specification {
     where:
       builderMethod                     | value                          | property
       'name'                            | 'group1'                       | 'groupName'
-      'apiListingsByResourceGroupName'  | [group1: [Mock(ApiListing)]]   | 'apiListings'
+      'apiListingsByResourceGroupName'  | multiMap()                     | 'apiListings'
       'resourceListing'                 | Mock(ResourceListing)          | 'resourceListing'
       'basePath'                        | 'urn:some-path'                | 'basePath'
       'produces'                        | ['application/json'] as Set    | 'produces'
       'consumes'                        | ['application/json'] as Set    | 'consumes'
       'schemes'                         | ['http']  as Set               | 'schemes'
       'tags'                            | ['pet'] as Set                 | 'tags'
+  }
+
+  Multimap<String, ApiListing> multiMap() {
+    Multimap<String, ApiListing> multiMap = LinkedListMultimap.create()
+    multiMap.put("group1", Mock(ApiListing))
+    return multiMap
   }
 
   def "Setting builder properties to null values preserves existing values"() {
@@ -61,6 +70,8 @@ class DocumentationBuilderSpec extends Specification {
     then:
       if (value instanceof Set) {
         assert built."$property".containsAll(value)
+      } else if (value instanceof Multimap) {
+        assert built."$property".keySet().containsAll(value.keySet())
       } else {
         assert built."$property" == value
       }
@@ -68,7 +79,7 @@ class DocumentationBuilderSpec extends Specification {
     where:
       builderMethod                     | value                           | property
       'name'                            | 'group1'                        | 'groupName'
-      'apiListingsByResourceGroupName'  | [group1: [Mock(ApiListing)]]    | 'apiListings'
+      'apiListingsByResourceGroupName'  | multiMap()                      | 'apiListings'
       'resourceListing'                 | Mock(ResourceListing)           | 'resourceListing'
       'basePath'                        | 'urn:some-path'                 | 'basePath'
       'produces'                        | ['application/json'] as Set     | 'produces'

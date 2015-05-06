@@ -21,7 +21,8 @@ package springfox.documentation.swagger1.web;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,9 @@ import springfox.documentation.swagger1.dto.ResourceListing;
 import springfox.documentation.swagger1.mappers.Mappers;
 import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper;
 
-import java.util.Map;
+import java.util.Collection;
+
+import static com.google.common.collect.FluentIterable.*;
 
 @Controller
 @ApiIgnore
@@ -79,14 +82,24 @@ public class Swagger1Controller {
     if (documentation == null) {
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
     }
-    Map<String, springfox.documentation.service.ApiListing> apiListingMap = documentation.getApiListings();
-    Map<String, ApiListing> dtoApiListing
-            = Maps.transformEntries(apiListingMap, Mappers.toApiListingDto(mapper));
+    Multimap<String, springfox.documentation.service.ApiListing> apiListingMap = documentation.getApiListings();
+    Multimap<String, ApiListing> dtoApiListing
+            = Multimaps.transformEntries(apiListingMap, Mappers.toApiListingDto(mapper));
 
-    ApiListing apiListing = dtoApiListing.get(apiDeclaration);
-    return Optional.fromNullable(jsonSerializer.toJson(apiListing))
-            .transform(toResponseEntity(Json.class))
-            .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
+    Collection<ApiListing> apiListings = dtoApiListing.get(apiDeclaration);
+    return from(apiListings).first() //NOTE: swagger 1.2 only supports one api-listing
+        .transform(toJson())
+        .transform(toResponseEntity(Json.class))
+        .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
+  }
+
+  private Function<ApiListing, Json> toJson() {
+    return new Function<ApiListing, Json>() {
+      @Override
+      public Json apply(ApiListing input) {
+        return jsonSerializer.toJson(input);
+      }
+    };
   }
 
   private ResponseEntity<Json> getSwaggerResourceListing(String swaggerGroup) {

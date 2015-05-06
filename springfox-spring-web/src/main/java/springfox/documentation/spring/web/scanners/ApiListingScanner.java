@@ -21,6 +21,8 @@ package springfox.documentation.spring.web.scanners;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
@@ -35,7 +37,6 @@ import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -44,7 +45,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 
 @Component
@@ -62,9 +62,8 @@ public class ApiListingScanner {
     this.pluginsManager = pluginsManager;
   }
 
-  @SuppressWarnings("unchecked")
-  public Map<String, ApiListing> scan(ApiListingScanningContext context) {
-    Map<String, ApiListing> apiListingMap = newHashMap();
+  public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {
+    Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
     int position = 0;
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
@@ -87,7 +86,7 @@ public class ApiListingScanner {
       }
 
 
-      ArrayList sortedApis = new ArrayList(apiDescriptions);
+      List<ApiDescription> sortedApis = newArrayList(apiDescriptions);
       Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());
 
       String resourcePath = longestCommonPath(sortedApis);
@@ -117,7 +116,7 @@ public class ApiListingScanner {
   }
 
 
-  static String longestCommonPath(ArrayList<ApiDescription> apiDescriptions) {
+  static String longestCommonPath(List<ApiDescription> apiDescriptions) {
     List<String> commons = newArrayList();
     if (null == apiDescriptions || apiDescriptions.isEmpty()) {
       return null;
