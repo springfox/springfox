@@ -21,30 +21,92 @@ package springfox.documentation.swagger1.dto
 
 import org.springframework.http.MediaType
 
+import static com.google.common.collect.Maps.newHashMap
+import static com.google.common.collect.Sets.newHashSet
+
 class ApiListingSpec extends InternalJsonSerializationSpec {
 
   ApiListing apiListing = newApiListing()
 
   def newApiListing() {
-    ApiListing apiListing = new ApiListing()
-    apiListing.apiVersion = '1'
-    apiListing.swaggerVersion = '1.2'
-    apiListing.basePath = '/base'
-    apiListing.resourcePath= '/resource'
-    apiListing.consumes= [MediaType.APPLICATION_JSON_VALUE]
-    apiListing.produces= [MediaType.APPLICATION_JSON_VALUE]
-    apiListing.protocols= []
-    apiListing.authorizations= []
-    apiListing.apis = []
-    apiListing.models =
-            ['someModel':
-                     new ModelDto('id', 'name', 'qtype',
-                             ['aprop': new ModelPropertyDto("aProp", 'ptype', 'qtype', 0, false, 'pdesc', null)]
-                             , 'desc', null, null, null)
-            ]
-    apiListing.description = 'description'
-    apiListing.position = 0
-    apiListing
+      ApiListing apiListing = new ApiListing()
+      apiListing.apiVersion = '1'
+      apiListing.swaggerVersion = '1.2'
+      apiListing.basePath = '/base'
+      apiListing.resourcePath= '/resource'
+      apiListing.consumes= [MediaType.APPLICATION_JSON_VALUE]
+      apiListing.produces= [MediaType.APPLICATION_JSON_VALUE]
+      apiListing.protocols= []
+      apiListing.authorizations= []
+      apiListing.apis = []
+      apiListing.models =
+              ['someModel':
+                       new ModelDto('id', 'name', 'qtype',
+                               ['aprop': new ModelPropertyDto("aProp", 'ptype', 'qtype', 0, false, 'pdesc', null)]
+                               , 'desc', null, null, null)
+              ]
+      apiListing.description = 'description'
+      apiListing.position = 0
+      apiListing
+  }
+
+  def appendApiListing() {
+    when:
+      ApiListing apiListing = new ApiListing()
+      apiListing.appendConsumes(newHashSet(MediaType.APPLICATION_JSON_VALUE))
+      apiListing.appendProduces(newHashSet(MediaType.APPLICATION_JSON_VALUE))
+      apiListing.appendProtocols(newHashSet("http"))
+      apiListing.appendAuthorizations([Mock(Authorization)])
+      apiListing.appendApis([Mock(ApiDescription)])
+      apiListing.appendModels(
+          ['someModel':
+               new ModelDto('id', 'name', 'qtype',
+                   ['aprop': new ModelPropertyDto("aProp", 'ptype', 'qtype', 0, false, 'pdesc', null)]
+                   , 'desc', null, null, null)
+          ])
+    then:
+      apiListing.consumes.size() > 0
+      apiListing.produces.size() > 0
+      apiListing.apis.size() > 0
+      apiListing.protocols.size() > 0
+      apiListing.models.size() > 0
+      apiListing.authorizations.size() > 0
+  }
+
+  def appendEmptyApiListingValues() {
+    when:
+      ApiListing apiListing = new ApiListing()
+      apiListing.appendConsumes(newHashSet())
+      apiListing.appendProduces(newHashSet())
+      apiListing.appendProtocols(newHashSet())
+      apiListing.appendAuthorizations([])
+      apiListing.appendApis([])
+      apiListing.appendModels(newHashMap())
+    then:
+      apiListing.consumes == null
+      apiListing.produces == null
+      apiListing.apis == null
+      apiListing.protocols == null
+      apiListing.models == null
+      apiListing.authorizations == null
+  }
+
+  def appendNullApiListingValues() {
+    when:
+      ApiListing apiListing = new ApiListing()
+      apiListing.appendConsumes(null)
+      apiListing.appendProduces(null)
+      apiListing.appendProtocols(null)
+      apiListing.appendAuthorizations(null)
+      apiListing.appendApis(null)
+      apiListing.appendModels(null)
+    then:
+      apiListing.consumes == null
+      apiListing.produces == null
+      apiListing.apis == null
+      apiListing.protocols == null
+      apiListing.models == null
+      apiListing.authorizations == null
   }
 
 

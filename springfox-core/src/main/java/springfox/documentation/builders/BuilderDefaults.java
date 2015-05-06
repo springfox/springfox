@@ -24,6 +24,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,11 +59,11 @@ public class BuilderDefaults {
    * @param <T>      - any type
    * @return non-null list
    */
-  public static <T> List<T> nullToEmptyList(List<T> newValue) {
+  public static <T> List<T> nullToEmptyList(Collection<T> newValue) {
     if (newValue == null) {
       return newArrayList();
     }
-    return newValue;
+    return newArrayList(newValue);
   }
 
   /**

@@ -24,8 +24,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 @JsonPropertyOrder({"apiVersion", "swaggerVersion", "basePath", "resourcePath", "produces", "consumes", "apis",
         "models"})
@@ -34,12 +38,12 @@ public class ApiListing {
   private String swaggerVersion;
   private String basePath;
   private String resourcePath;
-  private List<String> produces;
-  private List<String> consumes;
+  private Set<String> produces;
+  private Set<String> consumes;
   private List<ApiDescription> apis;
 
   @JsonIgnore
-  private List<String> protocols;
+  private Set<String> protocols;
   @JsonInclude(Include.NON_EMPTY)
   private List<Authorization> authorizations;
   @JsonInclude(Include.NON_EMPTY)
@@ -81,27 +85,27 @@ public class ApiListing {
     this.resourcePath = resourcePath;
   }
 
-  public List<String> getProduces() {
+  public Set<String> getProduces() {
     return produces;
   }
 
-  public void setProduces(List<String> produces) {
+  public void setProduces(Set<String> produces) {
     this.produces = produces;
   }
 
-  public List<String> getConsumes() {
+  public Set<String> getConsumes() {
     return consumes;
   }
 
-  public void setConsumes(List<String> consumes) {
+  public void setConsumes(Set<String> consumes) {
     this.consumes = consumes;
   }
 
-  public List<String> getProtocols() {
+  public Set<String> getProtocols() {
     return protocols;
   }
 
-  public void setProtocols(List<String> protocols) {
+  public void setProtocols(Set<String> protocols) {
     this.protocols = protocols;
   }
 
@@ -143,6 +147,48 @@ public class ApiListing {
 
   public void setPosition(int position) {
     this.position = position;
+  }
+
+  public void appendAuthorizations(List<Authorization> authorizations) {
+    if (!nullToEmptyList(authorizations).isEmpty()) {
+      this.authorizations = nullToEmptyList(this.authorizations);
+      this.authorizations.addAll(authorizations);
+    }
+  }
+
+  public void appendApis(List<ApiDescription> apis) {
+    if (!nullToEmptyList(apis).isEmpty()) {
+      this.apis = nullToEmptyList(this.apis);
+      this.apis.addAll(apis);
+    }
+  }
+
+  public void appendProtocols(HashSet<String> protocols) {
+    if (!nullToEmptySet(protocols).isEmpty()) {
+      this.protocols = nullToEmptySet(this.protocols);
+      this.protocols.addAll(protocols);
+    }
+  }
+
+  public void appendConsumes(HashSet<String> consumes) {
+    if (!nullToEmptySet(consumes).isEmpty()) {
+      this.consumes = nullToEmptySet(this.consumes);
+      this.consumes.addAll(consumes);
+    }
+  }
+
+  public void appendProduces(HashSet<String> produces) {
+    if (!nullToEmptySet(produces).isEmpty()) {
+      this.produces = nullToEmptySet(this.produces);
+      this.produces.addAll(produces);
+    }
+  }
+
+  public void appendModels(Map<String, ModelDto> models) {
+    if (!nullToEmptyMap(models).isEmpty()) {
+      this.models = nullToEmptyMap(this.models);
+      this.models.putAll(models);
+    }
   }
 }
 

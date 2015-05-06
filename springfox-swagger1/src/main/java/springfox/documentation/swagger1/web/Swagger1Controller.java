@@ -43,8 +43,9 @@ import springfox.documentation.swagger1.mappers.Mappers;
 import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper;
 
 import java.util.Collection;
+import java.util.Map;
 
-import static com.google.common.collect.FluentIterable.*;
+import static springfox.documentation.swagger1.web.ApiListingMerger.*;
 
 @Controller
 @ApiIgnore
@@ -83,15 +84,14 @@ public class Swagger1Controller {
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
     }
     Multimap<String, springfox.documentation.service.ApiListing> apiListingMap = documentation.getApiListings();
-    Multimap<String, ApiListing> dtoApiListing
-            = Multimaps.transformEntries(apiListingMap, Mappers.toApiListingDto(mapper));
+    Map<String, Collection<ApiListing>> dtoApiListings
+            = Multimaps.transformEntries(apiListingMap, Mappers.toApiListingDto(mapper)).asMap();
 
-    Collection<ApiListing> apiListings = dtoApiListing.get(apiDeclaration);
-    //TODO: swagger 1.2 only supports one api-listing, the collection needs to be  merged
-    return from(apiListings).first()
-        .transform(toJson())
-        .transform(toResponseEntity(Json.class))
-        .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
+    Collection<ApiListing> apiListings = dtoApiListings.get(apiDeclaration);
+      return mergedApiListing(apiListings)
+          .transform(toJson())
+          .transform(toResponseEntity(Json.class))
+          .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
   }
 
   private Function<ApiListing, Json> toJson() {
