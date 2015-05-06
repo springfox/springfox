@@ -25,6 +25,8 @@ import com.google.common.base.Optional;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
+import java.lang.reflect.Proxy;
+
 public final class HandlerMethodReturnTypes {
 
   private HandlerMethodReturnTypes() {
@@ -38,6 +40,9 @@ public final class HandlerMethodReturnTypes {
   }
 
   public static Optional<Class> useType(Class beanType) {
+    if (Proxy.class.isAssignableFrom(beanType)) {
+      return Optional.absent();
+    }
     if (Class.class.getName().equals(beanType.getName())) {
       return Optional.absent();
     }
