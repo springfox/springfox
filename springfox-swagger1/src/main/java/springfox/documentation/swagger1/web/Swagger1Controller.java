@@ -87,7 +87,8 @@ public class Swagger1Controller {
             = Multimaps.transformEntries(apiListingMap, Mappers.toApiListingDto(mapper));
 
     Collection<ApiListing> apiListings = dtoApiListing.get(apiDeclaration);
-    return from(apiListings).first() //NOTE: swagger 1.2 only supports one api-listing
+    //TODO: swagger 1.2 only supports one api-listing, the collection needs to be  merged
+    return from(apiListings).first()
         .transform(toJson())
         .transform(toResponseEntity(Json.class))
         .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
