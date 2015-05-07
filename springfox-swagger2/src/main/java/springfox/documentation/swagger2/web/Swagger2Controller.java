@@ -35,6 +35,7 @@ import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
+import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 import java.net.URI;
@@ -66,7 +67,7 @@ public class Swagger2Controller {
   ResponseEntity<Json> getDocumentation(
           @RequestParam(value = "group", required = false) String swaggerGroup) {
 
-    String groupName = Optional.fromNullable(swaggerGroup).or("default");
+    String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);

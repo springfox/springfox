@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -84,6 +85,9 @@ public class ApiResourceController {
 
   private String swaggerLocation(String swaggerUrl, String swaggerGroup) {
     String base = Optional.of(swaggerUrl).get();
+    if (Docket.DEFAULT_GROUP_NAME.equals(swaggerGroup)) {
+      return base;
+    }
     return base + "?group=" + swaggerGroup;
   }
 

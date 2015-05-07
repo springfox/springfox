@@ -62,7 +62,7 @@ import static org.springframework.util.StringUtils.*;
  */
 public class Docket implements DocumentationPlugin {
 
-  private static final String DEFAULT_GROUP_NAME = "default";
+  public static final String DEFAULT_GROUP_NAME = "default";
   private final DocumentationType documentationType;
   private String groupName;
   private ApiInfo apiInfo;

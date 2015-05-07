@@ -118,7 +118,7 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
         println it
       }
     then:
-      result.find { it.name == 'default' && it.location == '/api-docs?group=default' && it.swaggerVersion == '1.2' }
+      result.find { it.name == 'default' && it.location == '/api-docs' && it.swaggerVersion == '1.2' }
   }
 
   @Configuration
