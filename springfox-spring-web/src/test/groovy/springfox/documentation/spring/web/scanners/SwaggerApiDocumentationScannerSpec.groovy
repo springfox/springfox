@@ -120,12 +120,14 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
               .pathProvider(pathProvider)
               .configure(contextBuilder)
 
-      RequestMappingContext requestMappingContext = new RequestMappingContext(context(), (requestMappingInfo
-              ("somePath/")), dummyHandlerMethod())
-
+      RequestMappingContext requestMappingContext = new RequestMappingContext(context(),
+          requestMappingInfo("somePath/"), dummyHandlerMethod())
+    and:
+      def mockListingRef = Mock(ApiListingReference)
+      mockListingRef.path >> "/some/path"
     when:
       listingReferenceScanner.scan(_) >>
-              new ApiListingReferenceScanResult([Mock(ApiListingReference)], [resourceGroup: [requestMappingContext]])
+              new ApiListingReferenceScanResult([mockListingRef], [resourceGroup: [requestMappingContext]])
     and:
       Documentation scanned = swaggerApiResourceListing.scan(context())
       scanned.resourceListing != null
@@ -133,7 +135,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
     then:
       scanned.groupName == "groupName"
       1 * listingReferenceScanner.scan(_) >>
-              new ApiListingReferenceScanResult([Mock(ApiListingReference)], [resourceGroup: [requestMappingContext]])
+              new ApiListingReferenceScanResult([mockListingRef], [resourceGroup: [requestMappingContext]])
   }
 
   def "Should sort based on position"() {

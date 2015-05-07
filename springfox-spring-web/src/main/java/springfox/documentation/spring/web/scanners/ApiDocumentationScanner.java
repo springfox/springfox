@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,12 +32,14 @@ import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.FluentIterable.*;
+import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 @Component
 public class ApiDocumentationScanner {
@@ -71,11 +72,12 @@ public class ApiDocumentationScanner {
         .basePath(context.getPathProvider().getApplicationBasePath())
         .tags(toTags(apiListings));
 
-    Collections.sort(apiListingReferences, context.getListingReferenceOrdering());
+    Set<ApiListingReference> apiReferenceSet = newTreeSet(listingReferencePathComparator());
+    apiReferenceSet.addAll(apiListingReferences);
 
     ResourceListing resourceListing = new ResourceListingBuilder()
         .apiVersion(context.getApiInfo().getVersion())
-        .apis(apiListingReferences)
+        .apis(from(apiReferenceSet).toSortedList(context.getListingReferenceOrdering()))
         .securitySchemes(context.getSecuritySchemes())
         .info(context.getApiInfo())
         .build();
@@ -84,8 +86,7 @@ public class ApiDocumentationScanner {
   }
 
   private Set<Tag> toTags(Multimap<String, ApiListing> apiListings) {
-    return FluentIterable
-        .from(nullToEmptyMultimap(apiListings).entries())
+    return from(nullToEmptyMultimap(apiListings).entries())
         .transform(fromEntry())
         .toSet();
   }
