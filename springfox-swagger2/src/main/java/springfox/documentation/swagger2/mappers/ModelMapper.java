@@ -97,14 +97,16 @@ public abstract class ModelMapper {
         ((AbstractNumericProperty) property).minimum(Double.valueOf(range.getMin()));
       }
     }
-    property.setDescription(source.getDescription());
-    property.setName(source.getName());
-    property.setRequired(source.isRequired());
+    if (property != null) {
+      property.setDescription(source.getDescription());
+      property.setName(source.getName());
+      property.setRequired(source.isRequired());
+    }
     return property;
   }
 
   static Property modelRefToProperty(ModelRef modelRef) {
-    if (modelRef == null) {
+    if (modelRef == null || "void".equalsIgnoreCase(modelRef.getType())) {
       return null;
     }
     Property responseProperty;

@@ -34,6 +34,23 @@ class ModelMapperSpec extends SchemaSpecification {
       typeToTest  << [simpleType(), mapsContainer(), enumType(), typeWithLists()]
   }
 
+  def "when the source models contain a property that has a generic type with one of the type bindings as Void" (){
+    given:
+      Model model = modelProvider.modelFor(inputParam(genericClassOfType(Void),
+          DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy)).get()
+      def modelMap = newHashMap()
+    and:
+      modelMap.put("test", model)
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    then:
+      mapped.containsKey("test")
+    and:
+      def mappedModel = mapped.get("test")
+      mappedModel.properties.size() == (model.properties.size() - 1)
+      !mappedModel.properties.containsKey("genericField")
+  }
+
   def "when the source models map is null" (){
     given:
       def modelMap = null
