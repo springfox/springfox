@@ -83,7 +83,11 @@
                         "items": {
                             "type": "string"
                         },
-                        "collectionFormat": "csv"
+                        "collectionFormat": "csv",
+                        "enum": [
+                            "PRODUCT",
+                            "SERVICE"
+                        ],
                     }
                 ],
                 "responses": {

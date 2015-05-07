@@ -126,7 +126,12 @@
                         "description": "Status values that need to be considered for filter",
                         "required": true,
                         "type": "string",
-                        "default": "available"
+                        "default": "available",
+                        "enum": [
+                            "available",
+                            "pending",
+                            "sold"
+                        ]
                     }
                 ],
                 "responses": {

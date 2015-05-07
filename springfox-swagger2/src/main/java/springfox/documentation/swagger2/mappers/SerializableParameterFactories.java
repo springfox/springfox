@@ -29,6 +29,7 @@ import com.wordnik.swagger.models.parameters.QueryParameter;
 import com.wordnik.swagger.models.parameters.SerializableParameter;
 import com.wordnik.swagger.models.properties.Property;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.Parameter;
 
 import java.util.Map;
@@ -70,7 +71,15 @@ public class SerializableParameterFactories {
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());
     }
+    maybeAddAlllowableValues(source, toReturn);
     return Optional.of((com.wordnik.swagger.models.parameters.Parameter)toReturn);
+  }
+
+  private static void maybeAddAlllowableValues(Parameter source, SerializableParameter toReturn) {
+    if (source.getAllowableValues() instanceof AllowableListValues) {
+      AllowableListValues allowableValues = (AllowableListValues) source.getAllowableValues();
+      toReturn.setEnum(allowableValues.getValues());
+    }
   }
 
   static class CookieSerializableParameterFactory implements SerializableParameterFactory {
