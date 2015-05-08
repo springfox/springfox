@@ -215,6 +215,14 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
+  /**
+   * Provide an ordering schema for operations
+   *
+   * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
+   * specifying position might not work.
+   * @param operationOrdering
+   * @return
+   */
   public Docket operationOrdering(Ordering<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;
     return this;
@@ -287,11 +295,13 @@ public class Docket implements DocumentationPlugin {
    * i.e the ordering of the api's within the swagger Resource Listing.
    * The default sort is Lexicographically by the ApiListingReference's path
    *
+   * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
+   * specifying position might not work.
+   *
    * @param apiListingReferenceOrdering
    * @return this Docket
    */
-  public Docket apiListingReferenceOrdering(Ordering<ApiListingReference>
-                                                    apiListingReferenceOrdering) {
+  public Docket apiListingReferenceOrdering(Ordering<ApiListingReference> apiListingReferenceOrdering) {
     this.apiListingReferenceOrdering = apiListingReferenceOrdering;
     return this;
   }
@@ -299,6 +309,9 @@ public class Docket implements DocumentationPlugin {
   /**
    * Controls how <code>com.wordnik.swagger.model.ApiDescription</code>'s are ordered.
    * The default sort is Lexicographically by the ApiDescription's path.
+   *
+   * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
+   * specifying position might not work.
    *
    * @param apiDescriptionOrdering
    * @return this Docket
