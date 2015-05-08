@@ -197,7 +197,7 @@
                         "in": "body",
                         "name": "business",
                         "description": "business",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }

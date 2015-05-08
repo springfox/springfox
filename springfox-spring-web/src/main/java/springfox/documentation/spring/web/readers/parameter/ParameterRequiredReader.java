@@ -24,6 +24,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import springfox.documentation.spi.DocumentationType;
@@ -63,6 +64,8 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
         requiredSet.add(!optional && ((RequestHeader) annotation).required());
       } else if (annotation instanceof PathVariable) {
         requiredSet.add(true);
+      } else if (annotation instanceof RequestBody) {
+        requiredSet.add(!optional && ((RequestBody) annotation).required());
       }
     }
     return requiredSet.contains(true);

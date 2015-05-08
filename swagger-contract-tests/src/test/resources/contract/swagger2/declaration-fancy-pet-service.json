@@ -44,7 +44,7 @@
                         "in": "body",
                         "name": "object",
                         "description": "object",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/FancyPet"
                         }

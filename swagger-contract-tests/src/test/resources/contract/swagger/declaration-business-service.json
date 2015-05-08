@@ -259,7 +259,7 @@
                             "name": "body",
                             "paramType": "body",
                             "type": "string",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "responseMessages": [

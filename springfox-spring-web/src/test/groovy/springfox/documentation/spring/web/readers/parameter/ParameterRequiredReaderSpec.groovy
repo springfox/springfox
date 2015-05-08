@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.readers.parameter
 import com.wordnik.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import springfox.documentation.builders.ParameterBuilder
@@ -64,6 +65,9 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec {
       [[required: { -> true }] as RequestParam]                                         | true
       [[required: { -> false }] as RequestParam]                                        | false
       [[required: { -> true }] as ApiParam, [required: { -> false }] as RequestParam]   | false
+      [[required: { -> false }] as ApiParam, [required: { -> true }] as RequestParam]   | true
+      [[required: { -> false }] as RequestBody]                                         | false
+      [[required: { -> true }] as RequestBody]                                          | true
       [[required: { -> false }] as ApiParam, [required: { -> true }] as RequestParam]   | true
       []                                                                                | false
       [null]                                                                            | false

@@ -31,7 +31,7 @@
                             "name": "body",
                             "paramType": "body",
                             "type": "Pet",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "responseMessages": [
@@ -84,7 +84,7 @@
                             "name": "body",
                             "paramType": "body",
                             "type": "FancyPet",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "responseMessages": [
@@ -139,7 +139,7 @@
                             "name": "body",
                             "paramType": "body",
                             "type": "FancyPet",
-                            "required": false
+                            "required": true
                         },
                         {
                             "allowMultiple": false,

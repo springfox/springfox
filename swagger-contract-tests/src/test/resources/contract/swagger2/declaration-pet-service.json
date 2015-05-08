@@ -83,7 +83,7 @@
                         "in": "body",
                         "name": "someInput",
                         "description": "someInput",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "object",
                             "additionalProperties": {

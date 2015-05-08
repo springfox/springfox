@@ -257,7 +257,7 @@
                             "name": "body",
                             "paramType": "body",
                             "type": "List[Entry\u00abstring,Pet\u00bb]",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "responseMessages": [
