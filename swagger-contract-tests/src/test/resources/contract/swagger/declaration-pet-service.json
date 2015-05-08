@@ -118,7 +118,7 @@
                         },
                         {
                             "code": 404,
-                            "message": "Not Found",
+                            "message": "Pet not found",
                             "responseModel": "Void"
                         },
                         {

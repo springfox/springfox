@@ -20,20 +20,19 @@
 package springfox.documentation.builders;
 
 import com.google.common.base.Function;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityReference;
 
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -232,11 +231,9 @@ public class OperationBuilder {
     for (ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
-        String message = defaultIfAbsent(Strings.emptyToNull(responseMessage.getMessage()), HttpStatus.OK
-            .getReasonPhrase());
-        ModelRef responseWithModel = defaultIfAbsent(responseMessage.getResponseModel(),
-            each.getResponseModel());
-        merged.remove(each);
+        String message = defaultIfAbsent(emptyToNull(each.getMessage()), responseMessage.getMessage());
+        ModelRef responseWithModel = defaultIfAbsent(each.getResponseModel(), responseMessage.getResponseModel());
+        merged.remove(responseMessage);
         merged.add(new ResponseMessageBuilder()
             .code(each.getCode())
             .message(message)

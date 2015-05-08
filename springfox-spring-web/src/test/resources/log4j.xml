@@ -7,15 +7,15 @@
 		</layout>
 	</appender>
     <logger name="springfox" additivity="false">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
         <appender-ref ref="CONSOLE_LOG"/>
     </logger>
     <logger name="org.springframework" additivity="false">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
         <appender-ref ref="CONSOLE_LOG"/>
     </logger>
     <root>
-        <level value="DEBUG"/>
+        <level value="INFO"/>
         <appender-ref ref="CONSOLE_LOG"/>
     </root>
 </log4j:configuration>
