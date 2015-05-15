@@ -511,6 +511,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#history">History</a></li>
 <li><a href="#goals">Goals</a></li>
 <li><a href="#what-it-s-not">What it&#8217;s not</a></li>
+<li><a href="#development-environment">Development Environment</a></li>
+<li><a href="#releasing">Releasing</a></li>
+<li><a href="#support">Support</a></li>
 </ul>
 </li>
 </ul>
@@ -555,12 +558,193 @@ as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a
 <p>Endorsed or approved by the Spring Framework Contributors</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="development-environment">Development Environment</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>File &gt;&gt; open &gt;&gt; build.gradle</p>
+</li>
+<li>
+<p>Make sure to check the 'use the default gradle wrapper' option.</p>
+</li>
+<li>
+<p>First time build</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">./gradlew cleanIdea idea</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>To get more output from any gralde commands/tasks append a <code>-i</code> (info) or <code>-d</code> (debug) e.g.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">./gradlew build -i</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="pre-commit-build">Pre-Commit Build</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Code quality (code coverage, checkstyle)</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">./gradlew check</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="building-reference-documentation">Building reference documentation</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"> .<span class="regexp"><span class="delimiter">/</span><span class="content">gradlew asciidoc --daemon </span><span class="delimiter">/</span></span>/Using the gradle daemon here makes sense <span class="keyword">if</span> <span class="local-variable">this</span> is being executed a lot</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ci-enviroment">CI Enviroment</h4>
+<div class="paragraph">
+<p><a href="https://circleci.com/gh/springfox/springfox">Circle CI</a></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="releasing">Releasing</h3>
+<div class="paragraph">
+<p>To release a non-snaphot version of Springfox:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Set the projects semantic version and Git push:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">    SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
+            project, SemanticVersion.get(file(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>rootDir</span><span class="content">/version.properties</span><span class="delimiter">&quot;</span></span>))
+    )</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Execute the the release commands:
+The below properties are required to run a release:</p>
+</li>
+<li>
+<p><code>GITHUB_TOKEN</code></p>
+</li>
+<li>
+<p><code>BINTRAY_USERNAME</code></p>
+</li>
+<li>
+<p><code>BINTRAY_PASSWORD</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Recommend using [autoenv](<a href="https://github.com/kennethreitz/autoenv" class="bare">https://github.com/kennethreitz/autoenv</a>) with a <code>.env</code> file at the root of the repo.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">    ./gradlew release publishDocs -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD
+    -PreleaseType=&lt;MAJOR|MINOR|PATCH&gt; -i</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Change the projects version back to snapshot and push:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
+        project, <span class="keyword">new</span> SnapshotVersion(SemanticVersion.get(file(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>rootDir</span><span class="content">/version.properties</span><span class="delimiter">&quot;</span></span>)))
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The release steps are as follows:
+- check that the git workspace is clean
+- check that the local git branch is master
+- check that the local git branch is the same as origin
+- gradle test
+- gradle check
+- upload (publish) all artifacts to Bintray
+- Bumps the project version in <code>version.properties</code>
+- Git tag the release
+- Git push</p>
+</div>
+<div class="sect3">
+<h4 id="snapshot">Snapshot</h4>
+<div class="paragraph">
+<p>This is normally done by the CI server</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">./gradlew snapshot -PbintrayUsername=&lt;bintrayUsername&gt; -PbintrayPassword=&lt;bintrayPassword&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="override-deploy">Override deploy</h4>
+<div class="paragraph">
+<p>To bypass the standard release flow and upload directly to bintray use the following task
+- manually set the version in version.properties</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">./gradlew clean build bintrayUpload -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD -PreleaseType=&lt;MAJOR|MINOR|PATCH&gt;
+ --stacktrace</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="updating-documentation">Updating documentation</h4>
+<div class="paragraph">
+<p>To update the docs for an existing release pass the <code>updateMode</code> switch</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>./gradlew publishDocs -PupdateMode</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="contributing">Contributing</h4>
+<div class="paragraph">
+<p>Please see the <a href="https://github.com/springfox/springfox/wiki">wiki</a> for some guidelines</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="support">Support</h3>
+<div class="paragraph">
+<p>If you find issues or bugs please use the github issue <a href="https://github.com/springfox/springfox/issues">springfox project</a></p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-05-15 04:15:02 UTC
+Last updated 2015-05-15 05:56:50 UTC
 </div>
 </div>
 </body>

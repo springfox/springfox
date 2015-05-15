@@ -511,8 +511,17 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#swagger-1-2-vs-swagger-2-0">Swagger 1.2 vs Swagger 2.0</a></li>
 <li><a href="#moving-from-swagger-springmvc">Moving from swagger-springmvc?</a></li>
 <li><a href="#springfox-configuration-and-demo-applications">Springfox configuration and demo applications</a></li>
-<li><a href="#development">Development</a></li>
-<li><a href="#support">Support</a></li>
+</ul>
+</li>
+<li><a href="#configuring-springfox">Configuring Springfox</a>
+<ul class="sectlevel2">
+<li><a href="#configuring-the-objectmapper">Configuring the ObjectMapper</a></li>
+<li><a href="#customizing-the-swagger-endpoints">Customizing the swagger endpoints.</a></li>
+<li><a href="#overriding-property-datatypes">Overriding property datatypes</a></li>
+<li><a href="#docket-xml-configuration">Docket XML Configuration</a></li>
+<li><a href="#docket-spring-java-configuration">Docket Spring Java Configuration</a></li>
+<li><a href="#extensibility">Extensibility</a></li>
+<li><a href="#example-application">Example application</a></li>
 </ul>
 </li>
 </ul>
@@ -549,37 +558,392 @@ implication of producing <a href="https://github.com/swagger-api/swagger-spec/bl
 <h3 id="moving-from-swagger-springmvc">Moving from swagger-springmvc?</h3>
 <div class="paragraph">
 <p>Here is <a href="https://github.com/springfox/springfox/blob/master/docs/transitioning-to-v2.md">a guide</a> to help with the
-transition from 1.0.2 to 2.0. If you&#8217;re looking for old documentation you can <a href="legacy-documentation.adoc">find it
-here</a>.</p>
+transition from 1.0.2 to 2.0.</p>
+</div>
+<div class="paragraph">
+<p>Legacy documentation is <a href="https://github.com/springfox/springfox/blob/v1.0.2/README.md">available here</a>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="springfox-configuration-and-demo-applications">Springfox configuration and demo applications</h3>
 <div class="paragraph">
 <p>The <a href="https://github.com/springfox/springfox-demos">springfox-demos</a> repository contains a number of sample Spring application
-which can be used a reference. <a href=":current-documentation.adoc">See here</a> for more detailed documentation.</p>
+which can be used a reference.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-springfox">Configuring Springfox</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To enable support for swagger specification 1.2 use the <code><code>@EnableSwagger</code></code> annotation</p>
+</div>
+<div class="paragraph">
+<p>To enable support for swagger specification 2.0 use the <code><code>@EnableSwagger2</code></code> annotation</p>
+</div>
+<div class="paragraph">
+<p>To document the service we use a <code><code>Docket</code></code>. This is changed to be more inline with the fact that expressing the
+contents of the documentation is agnostic of the format the documentation is rendered.</p>
+</div>
+<div class="paragraph">
+<p>Docket <a href="https://www.wordnik.com/words/docket">stands for</a> <strong>A summary or other brief statement of the contents of a
+document; an abstract.</strong></p>
+</div>
+<div class="paragraph">
+<p><code>Docket</code> helps configure a  subset of the services to be documented and groups them by name. Significant changes
+to this is the ability to provide an expressive predicate based for api selection.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">  <span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.builders.PathSelectors.regex</span>;
+  <span class="keyword">import</span> <span class="include">static</span> <span class="include">com.google.cgiommon.base.Predicates.or</span>;
+
+  <span class="annotation">@Bean</span>
+  <span class="directive">public</span> Docket swaggerSpringMvcPlugin() {
+    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)
+            .groupName(<span class="string"><span class="delimiter">&quot;</span><span class="content">business-api</span><span class="delimiter">&quot;</span></span>)
+            .select()
+               <span class="comment">//Ignores controllers annotated with @CustomIgnore</span>
+              .apis(not(withClassAnnotation(CustomIgnore.class)) <span class="comment">//Selection by RequestHandler</span>
+              .paths(paths()) <span class="comment">// and by paths</span>
+              .build()
+            .apiInfo(apiInfo())
+            .securitySchemes(securitySchemes())
+            .securityContext(securityContext());
+  }
+
+  <span class="comment">//Here is an example where we select any api that matches one of these paths</span>
+  <span class="directive">private</span> <span class="predefined-type">Predicate</span>&lt;<span class="predefined-type">String</span>&gt; paths() {
+    <span class="keyword">return</span> or(
+        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/business.*</span><span class="delimiter">&quot;</span></span>),
+        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some.*</span><span class="delimiter">&quot;</span></span>),
+        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/contacts.*</span><span class="delimiter">&quot;</span></span>),
+        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/pet.*</span><span class="delimiter">&quot;</span></span>),
+        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/springsRestController.*</span><span class="delimiter">&quot;</span></span>),
+        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/test.*</span><span class="delimiter">&quot;</span></span>));
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For a list of handy predicates Look at <a href="https://github.com/springfox/springfox/blob/master/springfox-core/src/main/java/springfox/documentation/builders/RequestHandlerSelectors.java">RequestHandlerSelectors</a>
+and <a href="https://github.com/springfox/springfox/blob/master/springfox-core/src/main/java/springfox/documentation/builders/PathSelectors.java">PathSelectors</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="configuring-the-objectmapper">Configuring the ObjectMapper</h3>
+<div class="paragraph">
+<p>A simple way to configure the object mapper is to listen for the <code><code>ObjectMapperConfigured</code></code> event. Regardless of
+whether there is a customized ObjectMapper in play with a corresponding MappingJackson2HttpMessageConverter, the
+library always has a configured ObjectMapper that is customized to serialize swagger 1.2 and swagger 2.0 types.</p>
+</div>
+<div class="paragraph">
+<p>In order to do this implement the <code><code>ApplicationListener&lt;ObjectMapperConfigured&gt;</code></code> interface. The event has a handle
+ to the ObjectMapper that was configured. Configuring application specific ObjectMapper customizations in this
+ applicaiton event handler guarantees that application specific  customizations will be applied to each and every
+ ObjectMapper that is in play.</p>
+</div>
+<div class="paragraph">
+<p>If you encounter a NullPointerException during application startup like <a href="https://github" class="bare">https://github</a>
+.com/springfox/springfox/issues/635[this issue]. Its because most likely the <code><code>WebMvcConfigurerAdapter</code></code> isn&#8217;t working.
+These adapter especially in a non-spring-boot scenarios will only get loaded if the @EnableWebMvc
+<a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurer.html">annotation is present</a>.</p>
+</div>
+<div class="paragraph">
+<p>Caveat to using the library is that it depends on Jackson for serialization, more importantly the <code>ObjectMapper</code>. A
+good example of where this breaks down is the following <a href="http://stackoverflow.com/a/30220562/19219">issue when using Gson serialization</a></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="development">Development</h3>
+<h3 id="customizing-the-swagger-endpoints">Customizing the swagger endpoints.</h3>
+<div class="paragraph">
+<p>By default the swagger service descriptions are generated at the following urls</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Swagger version</th>
+<th class="tableblock halign-left valign-top">Documentation Url</th>
+<th class="tableblock halign-left valign-top">Group</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/v2/api-docs?group=external</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>external</strong> group via docket.groupName()</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/api-docs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">implicit <strong>default</strong> group</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/api-docs?group=external</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>external</strong> group via docket.groupName()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/v2/api-docs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">implicit <strong>default</strong> group</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>To customize these endpoints, loading a <a href="http://docs.spring" class="bare">http://docs.spring</a>
+.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html[property source] with the following properties
+allows the properties to be  overridden</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Swagger version</th>
+<th class="tableblock halign-left valign-top">Override property</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">springfox.documentation.swagger.v2.path</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">springfox.documentation.swagger.v1.path</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="overriding-property-datatypes">Overriding property datatypes</h3>
+<div class="paragraph">
+<p>Using the <code><code>ApiModelProperty#dataType</code></code> we can override the inferred data types. However it is restricted
+ to only allow data types to be specified with a fully qualified class name. For e.g. if we have the following
+ definition</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">    <span class="comment">// if com.qualified.ReplaceWith is not a Class that can be created using Class.forName(...)</span>
+    <span class="comment">// Original will be replaced with the new class</span>
+    <span class="annotation">@ApiModelProperty</span>(dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">com.qualified.ReplacedWith</span><span class="delimiter">&quot;</span></span>)
+    <span class="directive">public</span> Original getOriginal() { ... }
+
+    <span class="comment">// if ReplaceWith is not a Class that can be created using Class.forName(...) Original will be preserved</span>
+    <span class="annotation">@ApiModelProperty</span>(dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">ReplaceWith</span><span class="delimiter">&quot;</span></span>)
+    <span class="directive">public</span> Original getAnotherOriginal() { ... }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="docket-xml-configuration">Docket XML Configuration</h3>
+<div class="paragraph">
+<p>To use the plugin you must create a spring java configuration class which uses spring&#8217;s <code>@Configuration</code>.
+This config class must then be defined in your xml application context.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="comment">&lt;!-- Required so springfox can access spring's RequestMappingHandlerMapping  --&gt;</span>
+<span class="tag">&lt;mvc:annotation-driven</span><span class="tag">/&gt;</span>
+
+<span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.yourapp.configuration.MySwaggerConfig</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="annotation">@EnableSwagger</span> <span class="comment">//Loads the spring beans required by the framework</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">MySwaggerConfig</span> {
+
+   <span class="comment">/**
+    * Every Docket bean is picked up by the swagger-mvc framework - allowing for multiple
+    * swagger groups i.e. same code base multiple swagger resource listings.
+    */</span>
+   <span class="annotation">@Bean</span>
+   <span class="directive">public</span> Docket customDocket(){
+      <span class="keyword">return</span> <span class="keyword">new</span> Docket(); <span class="comment">//some customization goes here</span>
+   }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="docket-spring-java-configuration">Docket Spring Java Configuration</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Development environment and build tasks See: <a href="https://github.com/martypitt/swagger-springmvc/blob/master/build.md">build.md</a></p>
+<p>Use the <code>@EnableSwagger</code> or <code>@EnableSwagger2</code> annotation.</p>
 </li>
 <li>
-<p><a href="https://github.com/springfox/sprinfox/issues/422">Release process</a></p>
+<p>Define one or more Docket instances using springs <code>@Bean</code> annotation.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="annotation">@EnableWebMvc</span>
+<span class="annotation">@EnableSwagger2</span>
+<span class="annotation">@ComponentScan</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.myapp.controllers</span><span class="delimiter">&quot;</span></span>)
+<span class="directive">public</span> <span class="type">class</span> <span class="class">CustomJavaPluginConfig</span> {
+
+
+   <span class="annotation">@Bean</span> <span class="comment">//Don't forget the @Bean annotation</span>
+   <span class="directive">public</span> Docket customImplementation(){
+      <span class="keyword">return</span> <span class="keyword">new</span> Docket()
+            .apiInfo(apiInfo())
+            .includePatterns(<span class="string"><span class="delimiter">&quot;</span><span class="content">.*pet.*</span><span class="delimiter">&quot;</span></span>);
+   }
+
+   <span class="comment">//...</span>
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="swagger-group">Swagger group</h4>
+<div class="paragraph">
+<p>A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
+within your application. The reason this concept was introduced was to support applications which require more than one
+Resource Listing. Why would you need more than one Resource Listing?
+- A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
+- A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2</p>
+</div>
+<div class="paragraph">
+<p>In most cases an application will not need more than one Resource Listing and the concept of swagger groups can be ignored.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="configuring-the-output-of-em-operationid-em-in-a-swagger-2-0-spec">Configuring the output of <em>operationId</em> in a Swagger 2.0 spec</h4>
+<div class="paragraph">
+<p>As defined <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-5"><code>operationId</code> was
+introduced</a> in the Swagger 2.0 spec, the <code>operationId</code> parameter, which was referred to as <code>nickname</code> in pre-2.0
+versions of the Swagger spec, provides the author a means by which to describe an API operation with a friendly name
+. This field is often used by consumers of a Swagger 2.0 spec in order to name functions in generated clients. An
+example of this can be seen in the <a href="https://github.com/swagger-api/swagger-codegen">swagger-codegen project</a>.</p>
+</div>
+<div class="sect4">
+<h5 id="the-default-value-of-code-operationid-code-according-to-springfox">The default value of <code>operationId</code> according to Springfox</h5>
+<div class="paragraph">
+<p>By default, when using Springfox in Swagger 2.0 mode, the value of <code>operationID</code> will be rendered using the
+following structure: &#8220;[java_method_name_here]Using[HTTP_verb_here]&#8221;. For example, if one has a method <code>getPets()</code>
+connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code> for the operationId.</p>
+</div>
+<div class="sect5">
+<h6 id="given-this-annotated-method">Given this annotated method &#8230;&#8203;</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">   <span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
+   <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
+   <span class="directive">public</span> Model getAllThePets() {
+        ...
+   }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="the-default-code-operationid-code-will-render-looking-like-this">the default <code>operationId</code> will render looking like this:</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">get</span><span class="delimiter">&quot;</span></span>: {
+            <span class="error">.</span><span class="error">.</span><span class="error">.</span>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">operationId</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">getAllThePetsUsingGET</span><span class="delimiter">&quot;</span></span>
+      <span class="error">.</span><span class="error">.</span><span class="error">.</span>
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="customizing-the-value-of-em-operationid-em">Customizing the value of <em>operationId</em></h5>
+<div class="paragraph">
+<p>In the event you wish to overide the default <code>operationId</code> which Springfox renders, you may do so by providing the
+<code>nickname</code> element in an <code>@ApiOperation</code> annotation.</p>
+</div>
+<div class="sect5">
+<h6 id="given-this-annotated-method-2">Given this annotated method &#8230;&#8203;</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">   <span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, nickname = <span class="string"><span class="delimiter">&quot;</span><span class="content">getMeAllThePetsPlease</span><span class="delimiter">&quot;</span></span>)
+   <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
+   <span class="directive">public</span> Model getAllThePets() {
+        ...
+   }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="the-customized-strong-operationid-strong-will-render-looking-like-this">&#8230;&#8203; the customized <strong>operationId</strong> will render looking like this:</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">get</span><span class="delimiter">&quot;</span></span>: {
+            <span class="error">.</span><span class="error">.</span><span class="error">.</span>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">operationId</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">getMeAllThePetsPlease</span><span class="delimiter">&quot;</span></span>
+      <span class="error">.</span><span class="error">.</span><span class="error">.</span>
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="changing-how-generic-types-are-named">Changing how Generic Types are Named</h4>
+<div class="paragraph">
+<p>By default, types with generics will be labeled with '\u00ab'(&lt;&lt;), '\u00bb'(&gt;&gt;), and commas. This can be problematic
+with things like swagger-codegen. You can override this behavior by implementing your own <code>GenericTypeNamingStrategy</code>.
+For example, if you wanted <code>List&lt;String&gt;</code> to be encoded as 'ListOfString' and <code>Map&lt;String, Object&gt;</code>
+to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
+</div>
+<div class="paragraph">
+<p>then during plugin customization:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"> docket.forCodeGeneration(<span class="predefined-constant">true</span>|<span class="predefined-constant">false</span>);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="extensibility">Extensibility</h3>
+<div class="paragraph">
+<p>The library provides a variety of extensibility hooks to enrich/ augment the schema and service models</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>For enriching models and properties (TODO)</p>
 </li>
 <li>
-<p>Contributing - please see the <a href="https://github.com/springfox/springfox/wiki">wiki</a> for some guidelines</p>
+<p>For enriching services models (TODO)</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="support">Support</h3>
+<h3 id="example-application">Example application</h3>
 <div class="paragraph">
-<p>If you find issues or bugs please use the github issue <a href="https://github.com/springfox/springfox/issues">springfox project</a></p>
+<p>For an examples for spring-boot, vanilla spring applications take a look <a href="https://github.com/springfox/springfox-demos">examples</a>
+in the demo application.</p>
 </div>
 </div>
 </div>
@@ -587,7 +951,7 @@ which can be used a reference. <a href=":current-documentation.adoc">See here</a
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-05-15 04:15:02 UTC
+Last updated 2015-05-15 05:56:50 UTC
 </div>
 </div>
 </body>
