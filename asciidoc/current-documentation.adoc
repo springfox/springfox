@@ -14,8 +14,8 @@ document; an abstract.*
 to this is the ability to provide an expressive predicate based for api selection.
 
 ```java
-  import static springfox.documentation.builders.PathSelectors.regex;
-  import static com.google.cgiommon.base.Predicates.or;
+  import static springfox.documentation.builders.PathSelectors.*;
+  import static com.google.common.base.Predicates.*;
 
   @Bean
   public Docket swaggerSpringMvcPlugin() {
