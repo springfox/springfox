@@ -19,20 +19,15 @@ With Swagger 2.0 things are much simpler and an application's API can be represe
 === Moving from swagger-springmvc?
 
 Here is https://github.com/springfox/springfox/blob/master/docs/transitioning-to-v2.md[a guide] to help with the
-transition from 1.0.2 to 2.0. If you're looking for old documentation you can link:legacy-documentation.adoc[find it
-here].
+transition from 1.0.2 to 2.0.
+
+Legacy documentation is https://github.com/springfox/springfox/blob/v1.0.2/README.md[available here].
 
 === Springfox configuration and demo applications
 
 The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of sample Spring application
-which can be used a reference. link::current-documentation.adoc[See here] for more detailed documentation.
+which can be used a reference.
 
-=== Development
+include::current-documentation.adoc[]
 
-- Development environment and build tasks See: https://github.com/martypitt/swagger-springmvc/blob/master/build.md[build.md]
-- https://github.com/springfox/sprinfox/issues/422[Release process]
-- Contributing - please see the https://github.com/springfox/springfox/wiki[wiki] for some guidelines
 
-=== Support
-
-If you find issues or bugs please use the github issue https://github.com/springfox/springfox/issues[springfox project]

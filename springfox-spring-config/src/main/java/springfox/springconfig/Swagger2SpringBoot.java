@@ -31,10 +31,10 @@ import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 @SpringBootApplication
-@EnableSwagger2                                                              //<1>
+@EnableSwagger2                                                          //<1>
 @ComponentScan(basePackageClasses = {
     PetController.class
-})                                                                           //<2>
+})                                                                       //<2>
 public class Swagger2SpringBoot {
 
   public static void main(String[] args) {
@@ -42,31 +42,30 @@ public class Swagger2SpringBoot {
   }
 
 
-
   @Bean
   public Docket petApi() {
-    return new Docket(DocumentationType.SWAGGER_2)                           //<3>
-            .select()                                                        //<4>
-              .apis(RequestHandlerSelectors.any())                           //<5>
-              .paths(PathSelectors.any())                                    //<6>
-              .build()                                                       //<7>
-            .pathMapping("/")                                                //<8>
-            .directModelSubstitute(LocalDate.class,
-                String.class)                                                //<9>
-            .genericModelSubstitutes(ResponseEntity.class)                   //<10>
-            .alternateTypeRules(
-                newRule(typeResolver.resolve(DeferredResult.class,
-                        typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
-                  typeResolver.resolve(WildcardType.class)))                //<10a>
-            .useDefaultResponseMessages(false)                               //<11>
-            .globalResponseMessage(RequestMethod.GET,                        //<12>
-                newArrayList(new ResponseMessageBuilder()
-                    .code(500)
-                    .message("500 message")
-                    .responseModel(new ModelRef("Error"))                    //<13>
-                    .build()))
-            .securitySchemes(newArrayList(apiKey()))                         //<14>
-            .securityContexts(newArrayList(securityContext()))               //<15>
+    return new Docket(DocumentationType.SWAGGER_2)                       //<3>
+        .select()                                                        //<4>
+          .apis(RequestHandlerSelectors.any())                           //<5>
+          .paths(PathSelectors.any())                                    //<6>
+          .build()                                                       //<7>
+        .pathMapping("/")                                                //<8>
+        .directModelSubstitute(LocalDate.class,
+            String.class)                                                //<9>
+        .genericModelSubstitutes(ResponseEntity.class)
+        .alternateTypeRules(
+            newRule(typeResolver.resolve(DeferredResult.class,
+                    typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
+                typeResolver.resolve(WildcardType.class)))               //<10>
+        .useDefaultResponseMessages(false)                               //<11>
+        .globalResponseMessage(RequestMethod.GET,                        //<12>
+            newArrayList(new ResponseMessageBuilder()
+                .code(500)
+                .message("500 message")
+                .responseModel(new ModelRef("Error"))                    //<13>
+                .build()))
+        .securitySchemes(newArrayList(apiKey()))                         //<14>
+        .securityContexts(newArrayList(securityContext()))               //<15>
         ;
   }
 
@@ -74,14 +73,14 @@ public class Swagger2SpringBoot {
   private TypeResolver typeResolver;
 
   private ApiKey apiKey() {
-    return new ApiKey("mykey", "api_key", "header");                         //<16>
+    return new ApiKey("mykey", "api_key", "header");                     //<16>
   }
 
   private SecurityContext securityContext() {
     return SecurityContext.builder()
         .securityReferences(defaultAuth())
-        .forPaths(PathSelectors.regex("/anyPath.*"))                         //<17>
-        .build();
+        .forPaths(PathSelectors.regex("/anyPath.*"))                     //<17>
+        .build()
   }
 
   List<SecurityReference> defaultAuth() {
@@ -89,6 +88,7 @@ public class Swagger2SpringBoot {
         = new AuthorizationScope("global", "accessEverything");
     AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
     authorizationScopes[0] = authorizationScope;
-    return newArrayList(new SecurityReference("mykey", authorizationScopes));       //<18>
+    return newArrayList(
+        new SecurityReference("mykey", authorizationScopes));            //<18>
   }
 }

@@ -109,8 +109,8 @@ predicates for `regex`, `ant`, `any`, `none`
 mapping
 <9> Convenience rule builder substitutes `LocalDate` with `String` when rendering model properties
 <10> Convenience rule builder that substitutes a generic type with one type parameter with the type
-parameter. In this example `ResponseEntity<T>` with `T`
-<10a> Rule that substitutes `DeferredResult<ResponseEntity<T>>` with `T` generically
+parameter. In this example `ResponseEntity<T>` with `T`. `alternateTypeRules` allows custom rules that are a bit more
+ involved. The example substitutes  `DeferredResult<ResponseEntity<T>>`  with `T` generically
 <11> Flag to indicate if default http response codes need to be used or not
 <12> Allows globally overriding response messages for different http methods. In this example we override the 500
 error code for all `GET`s ...
