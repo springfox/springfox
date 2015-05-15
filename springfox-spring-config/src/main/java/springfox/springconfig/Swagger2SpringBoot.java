@@ -89,6 +89,6 @@ public class Swagger2SpringBoot {
         = new AuthorizationScope("global", "accessEverything");
     AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
     authorizationScopes[0] = authorizationScope;
-    newArrayList(new SecurityReference("mykey", authorizationScopes));       //<18>
+    return newArrayList(new SecurityReference("mykey", authorizationScopes));       //<18>
   }
 }
