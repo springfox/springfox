@@ -68,7 +68,7 @@ contents of the documentation is agnostic of the format the documentation is ren
 Docket [stands for](https://www.wordnik.com/words/docket) *A summary or other brief statement of the contents of a
 document; an abstract.*
 
-```Docket``` helps configure a  subset of the services to be documented and groups them by name. Significant changes
+`Docket` helps configure a  subset of the services to be documented and groups them by name. Significant changes
 to this is the ability to provide an expressive predicate based for api selection.
 
 ```java
