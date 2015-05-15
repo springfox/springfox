@@ -596,8 +596,8 @@ to this is the ability to provide an expressive predicate based for api selectio
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">  <span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.builders.PathSelectors.regex</span>;
-  <span class="keyword">import</span> <span class="include">static</span> <span class="include">com.google.cgiommon.base.Predicates.or</span>;
+<pre class="CodeRay highlight"><code data-lang="java">  <span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.builders.PathSelectors</span>.*;
+  <span class="keyword">import</span> <span class="include">static</span> <span class="include">com.google.common.base.Predicates</span>.*;
 
   <span class="annotation">@Bean</span>
   <span class="directive">public</span> Docket swaggerSpringMvcPlugin() {
@@ -951,7 +951,7 @@ in the demo application.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-05-15 05:56:50 UTC
+Last updated 2015-05-15 06:21:05 UTC
 </div>
 </div>
 </body>
