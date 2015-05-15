@@ -8,20 +8,20 @@
 |[![Circle CI](https://circleci.com/gh/springfox/springfox/tree/master.svg?style=svg)](https://circleci.com/gh/springfox/springfox/tree/master)|[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.svg?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo) |[![Coverage Status](https://coveralls.io/repos/springfox/springfox/badge.svg)](https://coveralls.io/r/springfox/springfox) |
 
 ### About
-For more information on this project visit the [Springfox Website] (http://springfox.io) or 
+For more information on this project visit the [Springfox Website] (http://springfox.io) or
  [http://springfox.github.io/springfox/](http://springfox.github.io/springfox/)
 
 ### Useful links
 - [Reference Documentation](http://springfox.io)
 - [Examples repository](https://github.com/springfox/springfox-demos)
-- [Contributing](docs/CONTRIBUTING.md)
+- [Contributing](CONTRIBUTING.md)
 - [Core contributors](http://springfox.github.io/springfox/contributors.html)
 - [Development and contribution guidelines](https://github.com/martypitt/swagger-springmvc/wiki/Development)
 - [Change log](docs/CHANGELOG.md)
 - [Development Environment](docs/development-environment.md)
 - [Release Instructions](docs/RELEASING.md)
 
-## Transitioning to 2.x 
+## Transitioning to 2.x
 Here is [some preliminary documentation](docs/transitioning-to-v2.md) to help transition to 2.x
 
 License
@@ -39,4 +39,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
