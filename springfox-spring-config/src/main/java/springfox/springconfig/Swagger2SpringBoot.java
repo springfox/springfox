@@ -80,7 +80,7 @@ public class Swagger2SpringBoot {
     return SecurityContext.builder()
         .securityReferences(defaultAuth())
         .forPaths(PathSelectors.regex("/anyPath.*"))                     //<17>
-        .build()
+        .build();
   }
 
   List<SecurityReference> defaultAuth() {
