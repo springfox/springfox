@@ -97,8 +97,32 @@ include::../springfox-spring-config/src/main/java/springfox/springconfig/Swagger
 <1> Enables Springfox swagger 2
 <2> Instructs spring where to scan for API controllers
 <3> `Docket`, Sringfox's, primary api configuration mechanism is initialized for swagger specification 2.0
-<4> `select()` returns an instance of `ApiSelectorBuilder` to give fine grained control over the endpoints exposed via swagger
-<5> Builds the `Docket` instance.
+<4> `select()` returns an instance of `ApiSelectorBuilder` to give fine grained control over the endpoints exposed
+via swagger.
+<5> `apis()` allows selection of `RequestHandler`'s using a predicate. The example here uses an `any` predicate
+(default). Out of the box predicates provided are `any`, `none`, `withClassAnnotation`, `withMethodAnnotation` and
+`basPackage`.
+<6> `paths()` allows selection of `Path`'s using a predicate. The example here uses an `any` predicate (default)
+<7> The selector requires to be built after configuring the api and path selectors. Out of the box we provide
+predicates for `regex`, `ant`, `any`, `none`
+<8> Adds a servlet path mapping, when the servlet has a path mapping. this prefixes paths with the provided path
+mapping
+<9> Convenience rule builder substitutes `LocalDate` with `String` when rendering model properties
+<10> Convenience rule builder that substitutes a generic type with one type parameter with the type
+parameter. In this example `ResponseEntity<T>` with `T`
+<10a> Rule that substitutes `DeferredResult<ResponseEntity<T>>` with `T` generically
+<11> Flag to indicate if default http response codes need to be used or not
+<12> Allows globally overriding response messages for different http methods. In this example we override the 500
+error code for all `GET`s ...
+<13> ...and indicate that it will use the response model `Error` (which will be defined elsewhere)
+<14> Sets up the security schemes used to protect the apis. Supported schemes are ApiKey, BasicAuth and OAuth
+<15> Provides a way to globally set up security contexts for operation. The idea here is that we provide a way to
+select operations to be protected by one of the specified security schemes.
+<16> Here we use ApiKey as the security schema that is identified by the name `mykey`
+<17> Selector for the paths this security context applies to.
+<18> Here we same key defined in the security scheme `mykey`
+
+There are plenty of more options to configure the `Docket`. This should provide a good start.
 
 ===== Swagger UI
 The `springfox-swagger-ui` http://www.webjars.org/[web jar] ships with https://github.com/swagger-api/swagger-ui[Swagger UI]. To include it in a standard

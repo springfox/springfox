@@ -164,7 +164,7 @@ Swagger-springmvc stores the generated swagger documentation, in memory, and ser
 
 ### Core Concepts
 
-image:images/swaggerSpringMvc.png[Core Concepts]
+image::swaggerSpringMvc.png[Core Concepts]
 
 #### Swagger group
 
