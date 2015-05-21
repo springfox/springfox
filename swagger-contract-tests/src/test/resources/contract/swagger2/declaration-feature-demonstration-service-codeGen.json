@@ -288,6 +288,30 @@
                 }
             }
         },
+        "/features/mapProperty": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "modelWithMapProperty",
+                "description": "modelWithMapProperty",
+                "operationId": "modelWithMapPropertyUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ModelWithMapProperty"
+                        }
+                    }
+                }
+            }
+        },
         "/features/status": {
             "post": {
                 "tags": [
@@ -597,6 +621,18 @@
                     "format": "int32"
                 }
             }
+        },
+        "ModelWithMapProperty": {
+            "properties": {
+                "params": {
+                    "type": "object",
+                    "description": "Map of params to be sent",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            },
+            "description": "Describes model with map property"
         },
         "NestedType": {
             "properties": {

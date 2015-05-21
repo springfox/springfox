@@ -816,6 +816,48 @@
             ]
         },
         {
+            "description": "modelWithMapProperty",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "modelWithMapProperty",
+                    "notes": "modelWithMapProperty",
+                    "nickname": "modelWithMapPropertyUsingGET",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "ModelWithMapProperty"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "ModelWithMapProperty"
+                }
+            ],
+            "path": "/features/mapProperty"
+        },
+        {
             "path": "/features/status",
             "description": "updateBaz",
             "operations": [
@@ -1058,6 +1100,17 @@
                 "fixed": {
                     "required": false,
                     "type": "boolean"
+                }
+            }
+        },
+        "ModelWithMapProperty": {
+            "description": "Describes model with map property",
+            "id": "ModelWithMapProperty",
+            "properties": {
+                "params": {
+                    "description": "Map of params to be sent",
+                    "required": false,
+                    "type": "object"
                 }
             }
         },

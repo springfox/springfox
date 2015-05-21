@@ -22,6 +22,7 @@ package springfox.documentation.swagger1.web;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.WildcardType;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.DefaultsProviderPlugin;
@@ -30,6 +31,8 @@ import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springfox.documentation.spring.web.plugins.DefaultConfiguration;
 
 import javax.servlet.ServletContext;
+import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
@@ -38,16 +41,22 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
 public class SwaggerDefaultConfiguration implements DefaultsProviderPlugin {
 
   private final DefaultConfiguration defaultConfiguration;
+  private TypeResolver typeResolver;
 
   @Autowired
   public SwaggerDefaultConfiguration(Defaults defaults, TypeResolver typeResolver, ServletContext servletContext) {
+    this.typeResolver = typeResolver;
     defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, servletContext);
   }
 
   @Override
   public DocumentationContextBuilder create(DocumentationType documentationType) {
+    List<AlternateTypeRule> rules = newArrayList();
+    rules.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
+        typeResolver.resolve(Object.class)));
+    rules.add(newMapRule(WildcardType.class, WildcardType.class));
     return defaultConfiguration.create(documentationType)
-            .rules(newArrayList(newMapRule(WildcardType.class, WildcardType.class)));
+        .rules(rules);
   }
 
   @Override

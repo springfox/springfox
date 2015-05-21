@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
+import springfox.documentation.spring.web.dummy.models.ModelWithMapProperty;
 import springfox.documentation.spring.web.dummy.models.NestedType;
 import springfox.documentation.spring.web.dummy.models.Pet;
 
@@ -113,6 +114,11 @@ public class FeatureDemonstrationService {
   @RequestMapping
   @ApiOperation(value = "all")
   public HttpEntity<String> all() {
+    throw new UnsupportedOperationException();
+  }
+
+  @RequestMapping(value = "mapProperty", method = RequestMethod.GET)
+  public ModelWithMapProperty modelWithMapProperty() {
     throw new UnsupportedOperationException();
   }
 }
