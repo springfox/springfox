@@ -20,6 +20,7 @@
 package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Multimap;
@@ -28,6 +29,7 @@ import com.wordnik.swagger.models.ModelImpl;
 import com.wordnik.swagger.models.properties.AbstractNumericProperty;
 import com.wordnik.swagger.models.properties.ArrayProperty;
 import com.wordnik.swagger.models.properties.MapProperty;
+import com.wordnik.swagger.models.properties.ObjectProperty;
 import com.wordnik.swagger.models.properties.Property;
 import com.wordnik.swagger.models.properties.StringProperty;
 import org.mapstruct.Mapper;
@@ -43,6 +45,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static com.google.common.collect.Maps.*;
+import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
 @Mapper
@@ -78,7 +81,22 @@ public abstract class ModelMapper {
         .transform(propertyName());
     model.setRequired(requiredFields.toList());
     model.setSimple(false);
+    if (isMapType(source.getType())) {
+      Optional<Class> clazz = typeOfValue(source);
+      if (clazz.isPresent()) {
+        model.additionalProperties(property(clazz.get().getSimpleName()));
+      } else {
+        model.additionalProperties(new ObjectProperty());
+      }
+    }
     return model;
+  }
+
+  private Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {
+    if (source.getType().getTypeParameters() != null && source.getType().getTypeParameters().size() > 0) {
+      return Optional.of((Class)source.getType().getTypeParameters().get(1).getErasedType());
+    }
+    return Optional.absent();
   }
 
   public Property mapProperty(ModelProperty source) {

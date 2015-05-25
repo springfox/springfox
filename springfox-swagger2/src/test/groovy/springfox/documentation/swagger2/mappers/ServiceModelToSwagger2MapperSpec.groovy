@@ -210,6 +210,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
             .description("test")
             .id("test")
             .name("test")
+            .type(new TypeResolver().resolve(String))
             .qualifiedType("qualified.name")
             .subTypes(null)
             .properties([

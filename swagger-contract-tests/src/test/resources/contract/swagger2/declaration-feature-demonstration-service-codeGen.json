@@ -288,6 +288,33 @@
                 }
             }
         },
+        "/features/listOfMaps": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "listOfMaps",
+                "description": "listOfMaps",
+                "operationId": "listOfMapsUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/MapOfstringAndstring"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/features/mapProperty": {
             "get": {
                 "tags": [
@@ -620,6 +647,12 @@
                     "type": "integer",
                     "format": "int32"
                 }
+            }
+        },
+        "MapOfstringAndstring": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
             }
         },
         "ModelWithMapProperty": {

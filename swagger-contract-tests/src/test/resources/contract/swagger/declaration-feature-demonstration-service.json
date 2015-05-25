@@ -816,6 +816,48 @@
             ]
         },
         {
+            "description": "listOfMaps",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "listOfMaps",
+                    "notes": "listOfMaps",
+                    "nickname": "listOfMapsUsingGET",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "array"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "List[Map\u00abstring,string\u00bb]"
+                }
+            ],
+            "path": "/features/listOfMaps"
+        },
+        {
             "description": "modelWithMapProperty",
             "operations": [
                 {

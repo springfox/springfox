@@ -56,6 +56,10 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
                                          "SimpleType"].sort()
       genericCollectionWithEnum()     | ["Collection«string»", "List"].sort()
       recursiveType()                 | ["SimpleType"]
+      listOfMapOfStringToString()     | ["Map«string,string»"]
+      listOfMapOfStringToSimpleType() | ["Map«string,SimpleType»", "SimpleType"]
+      listOfErasedMap()               | []
+
   }
 
   @Unroll
@@ -86,6 +90,9 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
                                          "SimpleType"].sort()
       genericCollectionWithEnum()     | ["Collection«string»", "List"].sort()
       recursiveType()                 | ["SimpleType"]
+      listOfMapOfStringToString()     | ["Map«string,string»"]
+      listOfMapOfStringToSimpleType() | ["Map«string,SimpleType»", "SimpleType"]
+      listOfErasedMap()               | []
   }
 
 

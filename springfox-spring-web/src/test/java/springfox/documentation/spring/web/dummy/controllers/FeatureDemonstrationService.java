@@ -40,6 +40,7 @@ import springfox.documentation.spring.web.dummy.models.Pet;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
 
@@ -119,6 +120,11 @@ public class FeatureDemonstrationService {
 
   @RequestMapping(value = "mapProperty", method = RequestMethod.GET)
   public ModelWithMapProperty modelWithMapProperty() {
+    throw new UnsupportedOperationException();
+  }
+
+  @RequestMapping(value = "listOfMaps", method = RequestMethod.GET)
+  public List<Map<String, String>> listOfMaps() {
     throw new UnsupportedOperationException();
   }
 }

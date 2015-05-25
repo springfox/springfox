@@ -1,8 +1,10 @@
 package springfox.documentation.swagger2.mappers
-
 import com.fasterxml.classmate.ResolvedType
 import com.google.common.base.Function
 import com.wordnik.swagger.models.properties.AbstractNumericProperty
+import com.wordnik.swagger.models.properties.ObjectProperty
+import com.wordnik.swagger.models.properties.RefProperty
+import com.wordnik.swagger.models.properties.StringProperty
 import org.mapstruct.factory.Mappers
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.schema.*
@@ -32,6 +34,56 @@ class ModelMapperSpec extends SchemaSpecification {
       mappedModel.properties.size() == model.properties.size()
     where:
       typeToTest  << [simpleType(), mapsContainer(), enumType(), typeWithLists()]
+  }
+
+  def "model dependences are inferred correctly for list of map of string to string" (){
+    given:
+      Map<String, Model> modelMap = modelProvider.dependencies(inputParam(listOfMapOfStringToString(),
+        DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy))
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    then:
+      mapped.containsKey("MapOfstringAndstring")
+    and:
+      def mappedModel = mapped.get("MapOfstringAndstring")
+      mappedModel.additionalProperties instanceof StringProperty
+  }
+
+  def "model dependencies are inferred correctly for list of ModelMap" (){
+    given:
+      Map<String, Model> modelMap = modelProvider.dependencies(inputParam(listOfModelMap(),
+        DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy))
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    then:
+      mapped.containsKey("ModelMap")
+    and:
+      def mappedModel = mapped.get("ModelMap")
+      mappedModel.additionalProperties instanceof ObjectProperty
+  }
+
+  def "model dependencies are inferred correctly for list of map of string to Simpletype" (){
+    given:
+      Map<String, Model> modelMap = modelProvider.dependencies(inputParam(listOfMapOfStringToSimpleType(),
+        DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy))
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    then:
+      mapped.containsKey("MapOfstringAndSimpleType")
+      mapped.containsKey("SimpleType")
+    and:
+      def mappedModel = mapped.get("MapOfstringAndSimpleType")
+      mappedModel.additionalProperties instanceof RefProperty
+  }
+
+  def "model dependencies are inferred correctly for list of erased map" (){
+    given:
+      Map<String, Model> modelMap = modelProvider.dependencies(inputParam(listOfErasedMap(),
+        DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy))
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    then:
+      mapped.size() == 0
   }
 
   def "when the source models contain a property that has a generic type with one of the type bindings as Void" (){

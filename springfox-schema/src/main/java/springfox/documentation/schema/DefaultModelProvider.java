@@ -35,6 +35,7 @@ import springfox.documentation.schema.property.provider.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +77,7 @@ public class DefaultModelProvider implements ModelProvider {
         || isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))
         || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
-              + "been handled",  resolvedTypeSignature(propertiesHost).or("<null>"));
+          + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
       return Optional.absent();
     }
     Map<String, ModelProperty> properties = newTreeMap();
@@ -110,12 +111,31 @@ public class DefaultModelProvider implements ModelProvider {
   public Map<String, Model> dependencies(ModelContext modelContext) {
     Map<String, Model> models = newHashMap();
     for (ResolvedType resolvedType : dependencyProvider.dependentModels(modelContext)) {
-      Optional<Model> model = modelFor(ModelContext.fromParent(modelContext, resolvedType));
+      ModelContext parentContext = ModelContext.fromParent(modelContext, resolvedType);
+      Optional<Model> model = modelFor(parentContext).or(mapModel(parentContext, resolvedType));
       if (model.isPresent()) {
         models.put(model.get().getName(), model.get());
       }
     }
     return models;
+  }
+
+  private Optional<Model> mapModel(ModelContext parentContext, ResolvedType resolvedType) {
+    if (isMapType(resolvedType) && !parentContext.hasSeenBefore(resolvedType)) {
+      String typeName = typeNameExtractor.typeName(parentContext);
+      return Optional.of(parentContext.getBuilder()
+          .id(typeName)
+          .type(resolvedType)
+          .name(typeName)
+          .qualifiedType(ResolvedTypes.simpleQualifiedTypeName(resolvedType))
+          .properties(new HashMap<String, ModelProperty>())
+          .description("")
+          .baseModel("")
+          .discriminator("")
+          .subTypes(new ArrayList<String>())
+          .build());
+    }
+    return Optional.absent();
   }
 
   private Function<ModelProperty, String> byPropertyName() {

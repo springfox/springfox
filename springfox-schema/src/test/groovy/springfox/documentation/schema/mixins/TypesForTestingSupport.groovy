@@ -22,26 +22,8 @@ package springfox.documentation.schema.mixins
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.http.ResponseEntity
-import springfox.documentation.schema.ArraysContainer
-import springfox.documentation.schema.Entry
-import springfox.documentation.schema.ExampleWithEnums
-import springfox.documentation.schema.GenericType
-import springfox.documentation.schema.ListsContainer
-import springfox.documentation.schema.MapsContainer
-import springfox.documentation.schema.RecursiveType
-import springfox.documentation.schema.TypeForTestingPropertyNames
-import springfox.documentation.schema.TypeWithAlternateProperty
-import springfox.documentation.schema.TypeWithConstructor
-import springfox.documentation.schema.TypeWithConstructorProperty
-import springfox.documentation.schema.TypeWithJsonGetterAnnotation
-import springfox.documentation.schema.TypeWithJsonProperty
-import springfox.documentation.schema.UnwrappedType
-import springfox.documentation.schema.ComplexType
-import springfox.documentation.schema.ExampleEnum
-import springfox.documentation.schema.InheritedComplexType
-import springfox.documentation.schema.ResponseEntityAlternative
-import springfox.documentation.schema.SetsContainer
-import springfox.documentation.schema.SimpleType
+import org.springframework.ui.ModelMap
+import springfox.documentation.schema.*
 
 class TypesForTestingSupport {
 
@@ -171,5 +153,21 @@ class TypesForTestingSupport {
 
   static ResolvedType nestedGenericType(def clazz) {
     resolver.resolve(GenericType, resolver.resolve(ResponseEntity, clazz))
+  }
+
+  static ResolvedType listOfMapOfStringToString() {
+    resolver.resolve(List, resolver.resolve(Map, String, String))
+  }
+
+  static ResolvedType listOfMapOfStringToSimpleType() {
+    resolver.resolve(List, resolver.resolve(Map, String, SimpleType))
+  }
+
+  static ResolvedType listOfErasedMap() {
+    resolver.resolve(List, Map)
+  }
+
+  static ResolvedType listOfModelMap() {
+    resolver.resolve(List, ModelMap)
   }
 }
