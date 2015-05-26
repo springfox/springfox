@@ -3,19 +3,18 @@ package springfox.gradlebuild.version
 import org.gradle.api.Project
 
 class FileVersionStrategy implements VersioningStrategy {
-  private final Project project
+  private final File versionFile
 
-  FileVersionStrategy(Project project) {
-    this.project = project
+  FileVersionStrategy(File versionFile) {
+    this.versionFile = versionFile
   }
 
   @Override
   SemanticVersion current() {
-    def versionFile = project.file("${project.rootDir}/version.properties")
     def props = new Properties()
     versionFile.withInputStream() { stream ->
       props.load(stream)
     }
-    new SemanticVersion(toInt(props.major), toInt(props.minor), toInt(props.patch))
+    new SemanticVersion(props.major.toInteger(), props.minor.toInteger(), props.patch.toInteger())
   }
 }
