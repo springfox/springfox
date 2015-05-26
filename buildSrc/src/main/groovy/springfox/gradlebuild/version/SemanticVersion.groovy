@@ -37,9 +37,9 @@ class SemanticVersion implements SoftwareVersion {
 
   SemanticVersion next(ReleaseType releaseType) {
     if (releaseType == ReleaseType.MAJOR) {
-      new SemanticVersion(major + 1, minor, patch)
+      new SemanticVersion(major + 1, 0, 0)
     } else if (releaseType == ReleaseType.MINOR) {
-      new SemanticVersion(major, minor + 1, patch)
+      new SemanticVersion(major, minor + 1, 0)
     } else if (releaseType == ReleaseType.PATCH) {
       new SemanticVersion(major, minor, patch + 1)
     }
