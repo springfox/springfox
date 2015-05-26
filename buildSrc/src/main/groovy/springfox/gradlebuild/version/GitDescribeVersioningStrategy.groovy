@@ -1,10 +1,11 @@
 package springfox.gradlebuild.version
 
-class GitDescribeVersioningStrategy implements VersioningStrategy  {
-  private String buildNumberSuffix
+class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionParser  {
 
-  private GitDescribeVersioningStrategy(String buildNumberSuffix) {
-    this.buildNumberSuffix = buildNumberSuffix
+  private final String buildNumberFormat
+
+  GitDescribeVersioningStrategy(String buildNumberFormat) {
+    this.buildNumberFormat = buildNumberFormat
   }
 
   @Override
@@ -12,18 +13,24 @@ class GitDescribeVersioningStrategy implements VersioningStrategy  {
     def proc = "git describe --exact-match".execute();
     proc.waitFor();
     if (proc.exitValue() == 0) {
-      parseTransform(proc.text.trim(), buildNumberSuffix)
+      parseTransform(proc.text.trim(), buildNumberFormat)
     }
     proc = "git describe".execute();
     proc.waitFor();
     if (proc.exitValue() == 0) {
-      return parseTransform(proc.text.trim(), buildNumberSuffix)
+      return parseTransform(proc.text.trim(), buildNumberFormat)
     }
-    return new SemanticVersion(0, 0, 0)
+    return new SemanticVersion(0, 0, 0, "")
   }
 
-  static VersioningStrategy create(String buildSuffix) {
-    return new GitDescribeVersioningStrategy(buildSuffix)
+
+
+  static VersioningStrategy create(buildNumberFormat) {
+    return new GitDescribeVersioningStrategy(buildNumberFormat)
   }
 
+  @Override
+  String buildNumber() {
+    throw new UnsupportedOperationException()
+  }
 }

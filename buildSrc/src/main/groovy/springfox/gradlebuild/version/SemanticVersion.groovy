@@ -48,11 +48,11 @@ class SemanticVersion implements SoftwareVersion {
   }
 
   public String asText() {
-    "${major}.${minor}.${patch}${buildSuffix}"
+    "${major}.${minor}.${patch}"
   }
 
   @Override
-  String buildSuffix() {
+  String getBuildSuffix() {
     buildSuffix
   }
 
@@ -61,7 +61,4 @@ class SemanticVersion implements SoftwareVersion {
     return asText()
   }
 
-  private static toInt(String s) {
-    Integer.parseInt(s)
-  }
 }

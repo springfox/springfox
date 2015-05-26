@@ -19,39 +19,29 @@
 package springfox.gradlebuild.tasks
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.logging.Logger
+import org.gradle.api.logging.Logging
 import org.gradle.api.tasks.TaskAction
-import springfox.gradlebuild.version.BuildscriptVersionResolver
-import springfox.gradlebuild.version.ReleaseType
-import springfox.gradlebuild.version.SemanticVersion
-import springfox.gradlebuild.version.SoftwareVersion
+import springfox.gradlebuild.BuildInfo
 
 // git status --porcelain
 class BumpAndTagTask extends DefaultTask {
+  private static Logger LOG = Logging.getLogger(BumpAndTagTask.class);
   public static final String TASK_NAME = 'bumpAndTag'
   String description = 'Bumps the version file and tags the release'
   String group = 'release'
+  BuildInfo buildInfo
 
   @TaskAction
   void exec() {
-    def file = project.file("${project.rootDir}/version.properties")
-    ReleaseType releaseType = ReleaseType.valueOf(project.property('releaseType').toUpperCase())
-
-      SoftwareVersion releaseVersion = BuildscriptVersionResolver.projectVersion(project, SemanticVersion.get(file))
-    releaseVersion.save(file)
-
-    def xArgs = ['git',
-                 'commit',
-                 '-i',
-                 file.absolutePath,
-                 '-m',
-                 "Release(${releaseType}) bumping project version to ${releaseVersion}"]
-
-    project.exec {
-      commandLine xArgs
+    if (buildInfo.dryRun) {
+      LOG.info("Would have executed: git tag -a, ${buildInfo.releaseTag} -m Release(${buildInfo.nextVersion}) tagging" +
+          " project with tag ${buildInfo.releaseTag}")
+      return
     }
-
     project.exec {
-      commandLine 'git', 'tag', '-a', "${releaseVersion}", '-m', "${releaseVersion}"
+      commandLine 'git', 'tag', '-a', "${buildInfo.releaseTag}", '-m',
+          "Release(${buildInfo.nextVersion}) tagging project with tag ${buildInfo.releaseTag}"
     }
   }
 }

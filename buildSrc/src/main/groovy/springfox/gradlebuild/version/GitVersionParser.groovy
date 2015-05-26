@@ -39,7 +39,7 @@ trait GitVersionParser {
     Integer major = versions.next().toInteger()
     Integer minor = versions.next().toInteger()
     def (Integer patch, String build, Integer count, String sha) = patchComponents(versions.next())
-    SemanticVersion parsedVersion = new SemanticVersion(major, minor, patch, build)
+    SemanticVersion parsedVersion = new SemanticVersion(major, minor, patch, "")
     String suffix = buildSuffix;
     if (count == 0) {
       suffix = ""

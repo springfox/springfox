@@ -1,9 +1,6 @@
+import springfox.gradlebuild.plugins.MultiProjectReleasePlugin
 import springfox.gradlebuild.utils.ProjectDefinitions
-import springfox.gradlebuild.version.BuildscriptVersionResolver
-import springfox.gradlebuild.version.ReleaseType
-import springfox.gradlebuild.version.SemanticVersion
-import springfox.gradlebuild.version.SnapshotVersion
-import springfox.gradlebuild.version.SoftwareVersion
+import springfox.gradlebuild.version.GitDescribeVersioningStrategy
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
@@ -19,7 +16,7 @@ buildscript {
     classpath "com.github.adrianbk:gradle-travisci-trigger-plugin:1.0.0"
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     classpath "com.ofg:uptodate-gradle-plugin:1.5.1"
-    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1"
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2"
     classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.2"
   }
 }
@@ -33,11 +30,12 @@ ext {
 
 apply plugin: 'springfox-multi-release'
 
-SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(project,
-        new SnapshotVersion(SemanticVersion.get(file("$rootDir/version.properties")).next(ReleaseType.PATCH))
-)
-
-version = currentVersion
+release {
+  buildNumberFormat = MultiProjectReleasePlugin.buildNumberFormat(project)
+  releaseType = MultiProjectReleasePlugin.releaseType(project)
+  dryRun = MultiProjectReleasePlugin.dryRun(project)
+  versionedUsing = GitDescribeVersioningStrategy.create(project.release.buildNumberFormat)
+}
 
 configure(ProjectDefinitions.publishable(project)) { subproject ->
   apply plugin: "com.ofg.uptodate"
@@ -48,9 +46,6 @@ configure(ProjectDefinitions.publishable(project)) { subproject ->
     maxParallelForks = 2
   }
 
-  ext {
-    jdkVersion = 1.6
-  }
   compileJava.options.encoding = 'UTF-8'
 
   sourceCompatibility = jdkVersion
@@ -62,7 +57,6 @@ configure(ProjectDefinitions.publishable(project)) { subproject ->
   }
 
   group = 'io.springfox'
-  version = currentVersion
 
   apply plugin: 'com.github.adrianbk.jvmsrc'
   jvmsrc {
