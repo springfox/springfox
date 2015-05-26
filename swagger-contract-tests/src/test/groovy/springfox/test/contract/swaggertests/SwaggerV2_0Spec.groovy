@@ -46,199 +46,214 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   @Unroll("#groupName")
   def 'should honor swagger resource listing'() {
     given:
-      RESTClient http = new RESTClient("http://localhost:$port")
-      String contract = fileContents("/contract/swagger2/$contractFile")
+    RESTClient http = new RESTClient("http://localhost:$port")
+    String contract = fileContents("/contract/swagger2/$contractFile")
 
     when:
-      def response = http.get(
-              path: '/v2/api-docs',
-              query: [group: groupName],
-              contentType: TEXT, //Allows to access the raw response body
-              headers: [Accept: 'application/json']
-      )
+    def response = http.get(
+        path: '/v2/api-docs',
+        query: [group: groupName],
+        contentType: TEXT, //Allows to access the raw response body
+        headers: [Accept: 'application/json']
+    )
     then:
-      String raw = response.data.text
-      String actual = JsonOutput.prettyPrint(raw)
-      response.status == 200
-      println(actual)
+    String raw = response.data.text
+    String actual = JsonOutput.prettyPrint(raw)
+    response.status == 200
+    println(actual)
 
-      def withPortReplaced = contract.replaceAll("__PORT__", "$port")
-      JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
+    def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+    JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
 
     where:
-      contractFile                                                  | groupName
-      'swagger.json'                                                | 'petstore'
-      'declaration-business-service.json'                           | 'businessService'
-      'declaration-concrete-controller.json'                        | 'concrete'
-      'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
-      'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
-      'declaration-feature-demonstration-service.json'              | 'featureService'
-      'declaration-feature-demonstration-service-codeGen.json'      | 'featureService-codeGen'
-      'declaration-inherited-service-impl.json'                     | 'inheritedService'
-      'declaration-pet-grooming-service.json'                       | 'petGroomingService'
-      'declaration-pet-service.json'                                | 'petService'
+    contractFile                                                  | groupName
+    'swagger.json'                                                | 'petstore'
+    'declaration-business-service.json'                           | 'businessService'
+    'declaration-concrete-controller.json'                        | 'concrete'
+    'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
+    'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
+    'declaration-feature-demonstration-service.json'              | 'featureService'
+    'declaration-feature-demonstration-service-codeGen.json'      | 'featureService-codeGen'
+    'declaration-inherited-service-impl.json'                     | 'inheritedService'
+    'declaration-pet-grooming-service.json'                       | 'petGroomingService'
+    'declaration-pet-service.json'                                | 'petService'
+    'declaration-groovy-service.json'                             | 'groovyService'
   }
 
   def "should list swagger resources"() {
     given:
-      RESTClient http = new RESTClient("http://localhost:$port")
+    RESTClient http = new RESTClient("http://localhost:$port")
     when:
-      def response = http.get(path: '/swagger-resources', contentType: TEXT, headers: [Accept: 'application/json'])
-      def slurper = new JsonSlurper()
-      def result = slurper.parseText(response.data.text)
-      println "Results: "
-      result.each {
-        println it
-      }
+    def response = http.get(path: '/swagger-resources', contentType: TEXT, headers: [Accept: 'application/json'])
+    def slurper = new JsonSlurper()
+    def result = slurper.parseText(response.data.text)
+    println "Results: "
+    result.each {
+      println it
+    }
     then:
-      result.find { it.name == 'petstore' && it.location == '/v2/api-docs?group=petstore' && it.swaggerVersion == '2.0' }
-      result.find {
-        it.name == 'businessService' && it.location == '/v2/api-docs?group=businessService' && it.swaggerVersion == '2.0'
-      }
-      result.find { it.name == 'concrete' && it.location == '/v2/api-docs?group=concrete' && it.swaggerVersion == '2.0' }
+    result.find { it.name == 'petstore' && it.location == '/v2/api-docs?group=petstore' && it.swaggerVersion == '2.0' }
+    result.find {
+      it.name == 'businessService' && it.location == '/v2/api-docs?group=businessService' && it.swaggerVersion == '2.0'
+    }
+    result.find { it.name == 'concrete' && it.location == '/v2/api-docs?group=concrete' && it.swaggerVersion == '2.0' }
   }
 
   @Configuration
   @EnableSwagger2
   @EnableWebMvc
   @ComponentScan([
-          "springfox.documentation.spring.web.dummy.controllers",
-          "springfox.test.contract.swagger",
-          "springfox.petstore.controller"
+      "springfox.documentation.spring.web.dummy.controllers",
+      "springfox.test.contract.swagger",
+      "springfox.petstore.controller"
   ])
   @Import(SecuritySupport)
   static class Config {
+
     @Bean
     public Docket petstore(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
-              .groupName("petstore")
-              .useDefaultResponseMessages(false)
-              .securitySchemes(authorizationTypes)
-              .produces(['application/xml', 'application/json'] as Set)
-              .select()
-              .paths(regex("/api/.*"))
-              .build()
+          .groupName("petstore")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/api/.*"))
+          .build()
     }
 
     @Bean
     public Docket business(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
-              .groupName("businessService")
-              .useDefaultResponseMessages(false)
-              .securitySchemes(authorizationTypes)
-              .produces(['application/xml', 'application/json'] as Set)
-              .select()
-              .paths(regex("/business.*"))
-              .build()
+          .groupName("businessService")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/business.*"))
+          .build()
     }
 
     @Bean
     public Docket concrete(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
-              .groupName("concrete")
-              .useDefaultResponseMessages(false)
-              .securitySchemes(authorizationTypes)
-              .produces(['application/xml', 'application/json'] as Set)
-              .select()
-              .paths(regex("/foo/.*"))
-              .build()
+          .groupName("concrete")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/foo/.*"))
+          .build()
     }
 
     @Bean
     public Docket noRequestMapping(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
-              .groupName("noRequestMapping")
-              .useDefaultResponseMessages(false)
-              .securitySchemes(authorizationTypes)
-              .produces(['application/xml', 'application/json'] as Set)
-              .select()
-              .paths(regex("/no-request-mapping/.*"))
-              .build()
+          .groupName("noRequestMapping")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/no-request-mapping/.*"))
+          .build()
     }
 
     @Bean
     public Docket fancyPetstore(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
-              .groupName("fancyPetstore")
-              .useDefaultResponseMessages(false)
-              .securitySchemes(authorizationTypes)
-              .produces(['application/xml', 'application/json'] as Set)
-              .select()
-              .paths(regex("/fancypets/.*"))
-              .build()
+          .groupName("fancyPetstore")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/fancypets/.*"))
+          .build()
     }
 
     @Bean
     public Docket featureService(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
-              .groupName("featureService")
-              .useDefaultResponseMessages(false)
-              .securitySchemes(authorizationTypes)
-              .produces(['application/xml', 'application/json'] as Set)
-              .select()
-              .paths(regex("/features/.*"))
-              .build()
+          .groupName("featureService")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/features/.*"))
+          .build()
     }
 
     @Bean
     public Docket inheritedService(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
-              .groupName("inheritedService")
-              .useDefaultResponseMessages(false)
-              .securitySchemes(authorizationTypes)
-              .produces(['application/xml', 'application/json'] as Set)
-              .select()
-              .paths(regex("/child/.*"))
-              .build()
+          .groupName("inheritedService")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/child/.*"))
+          .build()
     }
 
     @Bean
     public Docket pet(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
-              .groupName("petService")
-              .useDefaultResponseMessages(false)
-              .securitySchemes(authorizationTypes)
-              .produces(['application/xml', 'application/json'] as Set)
-              .select()
-              .paths(regex("/pets/.*"))
-              .build()
+          .groupName("petService")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/pets/.*"))
+          .build()
     }
 
     @Bean
     public Docket petGrooming(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
-              .groupName("petGroomingService")
-              .useDefaultResponseMessages(false)
-              .securitySchemes(authorizationTypes)
-              .produces(['application/xml', 'application/json'] as Set)
-              .select()
-              .paths(regex("/petgrooming/.*"))
-              .build()
+          .groupName("petGroomingService")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/petgrooming/.*"))
+          .build()
     }
 
     @Bean
     public Docket root(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
-              .groupName("root")
-              .useDefaultResponseMessages(false)
-              .securitySchemes(authorizationTypes)
-              .produces(['application/xml', 'application/json'] as Set)
-              .select()
-              .paths(regex("/.*"))
-              .build()
+          .groupName("root")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/.*"))
+          .build()
+    }
+
+    @Bean
+    public Docket groovyServiceBean(List<SecurityScheme> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
+          .groupName("groovyService")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .forCodeGeneration(true)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/groovy/.*"))
+          .build()
     }
 
     @Bean
     public Docket featureServiceForCodeGen(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
-              .groupName("featureService-codeGen")
-              .useDefaultResponseMessages(false)
-              .securitySchemes(authorizationTypes)
-              .forCodeGeneration(true)
-              .produces(['application/xml', 'application/json'] as Set)
-              .select()
-              .paths(regex("/features/.*"))
-              .build()
+          .groupName("featureService-codeGen")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .forCodeGeneration(true)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/features/.*"))
+          .build()
     }
   }
 }

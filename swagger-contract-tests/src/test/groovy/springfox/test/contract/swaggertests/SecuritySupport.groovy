@@ -42,9 +42,6 @@ public class SecuritySupport {
     new ApiKey("api_key", "api_key", "header")
   }
 
-
-
-
   List<AuthorizationScope> scopes() {
     newArrayList(
       new AuthorizationScope("write:pets", "modify pets in your account"),

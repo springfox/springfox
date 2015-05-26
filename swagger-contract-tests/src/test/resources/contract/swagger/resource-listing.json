@@ -70,6 +70,11 @@
             "description": "Root Controller",
             "path": "/default/root-controller",
             "position": 0
+        },
+        {
+            "description": "Groovy Service",
+            "path": "/default/groovy-service",
+            "position": 0
         }
     ],
     "authorizations": {

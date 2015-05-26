@@ -103,6 +103,7 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
       'declaration-pet-grooming-service.json'                       | '/default/pet-grooming-service'
       'declaration-pet-service.json'                                | '/default/pet-service'
       'declaration-root-controller.json'                            | '/default/root-controller'
+      'declaration-groovy-service.json'                             | '/default/groovy-service'
   }
 
 
