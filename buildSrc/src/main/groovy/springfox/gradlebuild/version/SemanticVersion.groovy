@@ -27,14 +27,6 @@ class SemanticVersion implements SoftwareVersion {
     this.patch = patch
   }
 
-  static SemanticVersion get(File propFile) {
-    def props = new Properties()
-    propFile.withInputStream() { stream ->
-      props.load(stream)
-    }
-    new SemanticVersion(toInt(props.major), toInt(props.minor), toInt(props.patch))
-  }
-
   void save(File propFile) {
     def properties = new Properties()
     properties.major = "${major}".toString()
