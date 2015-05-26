@@ -1,5 +1,5 @@
 package springfox.gradlebuild.version
 
-trait VersioningStrategy  {
+trait VersioningStrategy extends GitVersionParser {
   abstract SemanticVersion current()
 }

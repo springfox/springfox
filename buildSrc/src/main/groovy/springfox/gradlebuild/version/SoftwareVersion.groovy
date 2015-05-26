@@ -31,4 +31,6 @@ interface SoftwareVersion {
   int getMinor()
 
   int getPatch()
+
+  String buildSuffix()
 }

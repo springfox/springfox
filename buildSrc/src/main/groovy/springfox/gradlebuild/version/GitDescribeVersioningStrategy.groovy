@@ -1,6 +1,6 @@
 package springfox.gradlebuild.version
 
-class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionParser {
+class GitDescribeVersioningStrategy implements VersioningStrategy  {
   private String buildNumberSuffix
 
   private GitDescribeVersioningStrategy(String buildNumberSuffix) {

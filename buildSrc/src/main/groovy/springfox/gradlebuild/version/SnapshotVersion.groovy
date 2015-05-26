@@ -26,7 +26,12 @@ class SnapshotVersion extends VersionDecorator {
 
   @Override
   String asText() {
-    return super.asText() + '-SNAPSHOT'
+    return super.asText() + buildSuffix()
+  }
+
+  @Override
+  String buildSuffix() {
+    '-SNAPSHOT'
   }
 
   @Override

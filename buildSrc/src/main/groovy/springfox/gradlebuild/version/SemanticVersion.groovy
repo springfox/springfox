@@ -20,8 +20,10 @@ package springfox.gradlebuild.version
 
 class SemanticVersion implements SoftwareVersion {
   int major, minor, patch
+  private final String buildSuffix
 
-  SemanticVersion(int major, int minor, int patch) {
+  SemanticVersion(int major, int minor, int patch, String buildSuffix) {
+    this.buildSuffix = buildSuffix
     this.major = major
     this.minor = minor
     this.patch = patch
@@ -37,16 +39,21 @@ class SemanticVersion implements SoftwareVersion {
 
   SemanticVersion next(ReleaseType releaseType) {
     if (releaseType == ReleaseType.MAJOR) {
-      new SemanticVersion(major + 1, 0, 0)
+      new SemanticVersion(major + 1, 0, 0, buildSuffix)
     } else if (releaseType == ReleaseType.MINOR) {
-      new SemanticVersion(major, minor + 1, 0)
+      new SemanticVersion(major, minor + 1, 0, buildSuffix)
     } else if (releaseType == ReleaseType.PATCH) {
-      new SemanticVersion(major, minor, patch + 1)
+      new SemanticVersion(major, minor, patch + 1, buildSuffix)
     }
   }
 
   public String asText() {
-    "${major}.${minor}.${patch}"
+    "${major}.${minor}.${patch}${buildSuffix}"
+  }
+
+  @Override
+  String buildSuffix() {
+    buildSuffix
   }
 
   @Override

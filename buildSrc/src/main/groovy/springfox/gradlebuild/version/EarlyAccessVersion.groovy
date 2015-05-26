@@ -29,7 +29,12 @@ class EarlyAccessVersion extends VersionDecorator {
 
   @Override
   String asText() {
-    return super.asText() + '-EARLYACCESS'
+    return super.asText() + buildSuffix()
+  }
+
+  @Override
+  String buildSuffix() {
+    '-EARLYACCESS'
   }
 
   @Override
