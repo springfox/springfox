@@ -21,15 +21,15 @@ package springfox.gradlebuild.plugins
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.logging.Logger
+import org.gradle.api.logging.Logging
 import springfox.gradlebuild.BintrayCredentials
-import springfox.gradlebuild.tasks.BintrayCredentialsCheckTask
-import springfox.gradlebuild.tasks.BumpAndTagTask
-import springfox.gradlebuild.tasks.CheckCleanWorkspaceTask
-import springfox.gradlebuild.tasks.CheckGitBranchTask
-import springfox.gradlebuild.tasks.IntermediaryTask
-import springfox.gradlebuild.tasks.ReleaseTask
-import springfox.gradlebuild.tasks.SnapshotTask
-import springfox.gradlebuild.version.BuildscriptVersionResolver
+import springfox.gradlebuild.BuildInfo
+import springfox.gradlebuild.BuildInfoFactory
+import springfox.gradlebuild.tasks.*
+import springfox.gradlebuild.version.GitDescribeVersioningStrategy
+import springfox.gradlebuild.version.VersioningStrategy
 
 /**
  * Much of what this plugin does is inspired by:
@@ -38,31 +38,47 @@ import springfox.gradlebuild.version.BuildscriptVersionResolver
  */
 public class MultiProjectReleasePlugin implements Plugin<Project> {
 
+  private static Logger LOG = Logging.getLogger(MultiProjectReleasePlugin.class);
   ReleaseTask releaseTask
   BumpAndTagTask bumpAndTagTask
   CheckCleanWorkspaceTask checkCleanWorkspaceTask
   SnapshotTask snapshotTask
   BintrayCredentialsCheckTask credentialCheck
   CheckGitBranchTask checkGitBranchTask
+  Task showPublishInfo
+  VersioningStrategy versioningStrategy
 
   @Override
   void apply(Project project) {
-    releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask)
-    bumpAndTagTask = project.task(BumpAndTagTask.TASK_NAME, type: BumpAndTagTask)
+    versioningStrategy = GitDescribeVersioningStrategy.create(buildNumberFormat(project))
+    BuildInfo versioningInfo = createBuildInfo(project, versioningStrategy)
+    releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask) {
+      buildInfo = versioningInfo
+    }
+    bumpAndTagTask = project.task(BumpAndTagTask.TASK_NAME, type: BumpAndTagTask) {
+      buildInfo = versioningInfo
+      versioningStrategy = this.versioningStrategy
+    }
     snapshotTask = project.task(SnapshotTask.TASK_NAME, type: SnapshotTask)
     credentialCheck = project.task(BintrayCredentialsCheckTask.TASK_NAME, type: BintrayCredentialsCheckTask)
     checkCleanWorkspaceTask = project.task(CheckCleanWorkspaceTask.TASK_NAME, type: CheckCleanWorkspaceTask)
     checkGitBranchTask = project.task(CheckGitBranchTask.TASK_NAME, type: CheckGitBranchTask)
+    showPublishInfo = project.task('showPublishInfo') {
+      group = 'Help'
+      description = 'Show project publishing information'
+    }
+    project.tasks.showPublishInfo << {
+      LOG.info "================== Project version: $project.version, $versioningInfo"
+    }
 
-    configurePublications(project)
     configureSnapshotTaskGraph(project)
     configureReleaseTaskGraph(project)
+    configureVersionAndPublications(project, versioningInfo)
   }
-
 
   def configureSnapshotTaskGraph(Project project) {
     def iSnapshotCheckTask = project.task('iSnapshotCheck', type: IntermediaryTask)
-
+    iSnapshotCheckTask.dependsOn showPublishInfo
     project.afterEvaluate { evaluatedProject ->
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
       iSnapshotCheckTask.dependsOn javaCheckTasks
@@ -104,6 +120,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     iWorkspaceTask.dependsOn checkCleanWorkspaceTask
 
     iCheckTask.dependsOn iWorkspaceTask
+    iCheckTask.dependsOn showPublishInfo
 
     iPublishTask.dependsOn iCheckTask
 
@@ -112,27 +129,48 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     releaseTask.dependsOn bumpAndTagTask
   }
 
+  def configureVersionAndPublications(Project project, BuildInfo buildInfo) {
+    project.version = "${buildInfo.nextVersion.asText()}${buildInfo.buildSuffix}"
+    project.ext.currentVersion = "${buildInfo.currentVersion.asText()}"
 
-  def configurePublications(Project project) {
+    configurePublications(project, buildInfo)
+  }
+
+  def configurePublications(Project project, BuildInfo buildInfo) {
+    def type = buildInfo.isReleaseBuild ? 'snapshot' : 'release'
     project.ext {
       bintrayCredentials = new BintrayCredentials(project)
       artifactRepoBase = 'http://oss.jfrog.org/artifactory'
       repoPrefix = 'oss'
-
       releaseRepos = {
         //Only snapshots - bintray plugin takes care of non-snapshot releases
-        if (BuildscriptVersionResolver.isSnapshot(project)) {
-          maven {
-            name 'jcenter'
-            url "${artifactRepoBase}/${repoPrefix}-${project.version.toString().endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
-            credentials {
-              username = "${bintrayCredentials.username}"
-              password = "${bintrayCredentials.password}"
-            }
+        maven {
+          name 'jcenter'
+          url "${artifactRepoBase}/${repoPrefix}-${type}-local"
+          credentials {
+            username = "${bintrayCredentials.username}"
+            password = "${bintrayCredentials.password}"
           }
         }
       }
     }
   }
 
+
+  static def createBuildInfo(Project project, VersioningStrategy versioningStrategy) {
+    BuildInfoFactory buildInfoFactory = new BuildInfoFactory(versioningStrategy)
+    buildInfoFactory.create(project)
+  }
+
+  static String releaseType(Project project) {
+    project.hasProperty('releaseType') ? project.property('releaseType') : 'PATCH'
+  }
+
+  static String buildNumberFormat(Project project) {
+    project.hasProperty('buildNumberFormat') ? project.property('buildNumberFormat') : '-SNAPSHOT'
+  }
+
+  static boolean dryRun(Project project) {
+    project.hasProperty('dryRun') ? Boolean.valueOf(project.property('dryRun')) : false
+  }
 }

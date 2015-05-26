@@ -45,7 +45,7 @@ ext {
 
   // TODO - findout if this has been fixed in gradle and remove this hack if do
   // Gradle's maven-publish plugin does not yet handle pom generation correctly. Fix expected in 2.1
-  mangodocsPomConfig = {
+  springfoxPomConfig = {
     def root = asNode()
     def dependencies = root.dependencies
     def allDependencies = dependencies.'*'

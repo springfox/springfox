@@ -1,5 +1,4 @@
-import springfox.gradlebuild.version.BuildscriptVersionResolver
-
+import springfox.gradlebuild.plugins.MultiProjectReleasePlugin
 /*
  * Copyright 2015 the original author or authors.
  *
@@ -16,7 +15,7 @@ import springfox.gradlebuild.version.BuildscriptVersionResolver
  * limitations under the License.
  */
 
-if (!BuildscriptVersionResolver.isSnapshot(project)) {
+if (!isSnapshot()) {
 
   apply plugin: 'com.jfrog.bintray'
 
@@ -26,7 +25,7 @@ if (!BuildscriptVersionResolver.isSnapshot(project)) {
 
 
     publications = ['mavenJava']
-    dryRun = false //Whether to run this as dry-run, without deploying
+    dryRun = MultiProjectReleasePlugin.dryRun(project) //Whether to run this as dry-run, without deploying
     publish = true //If version should be auto published after an upload
     pkg {
       repo = 'maven-repo'
@@ -60,4 +59,8 @@ if (!BuildscriptVersionResolver.isSnapshot(project)) {
 //    }
     }
   }
+}
+
+def isSnapshot() {
+  String.valueOf(project.version).endsWith("-SNAPSHOT")
 }

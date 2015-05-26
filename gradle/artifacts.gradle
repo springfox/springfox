@@ -19,7 +19,7 @@ publishing {
         classifier = 'javadoc'
       }
       //TODO - not right that every artifact has the same (pom) dependencies
-      pom.withXml mangodocsPomConfig
+      pom.withXml springfoxPomConfig
     }
   }
 }
