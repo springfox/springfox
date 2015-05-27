@@ -1,6 +1,5 @@
 import springfox.gradlebuild.plugins.MultiProjectReleasePlugin
 import springfox.gradlebuild.utils.ProjectDefinitions
-import springfox.gradlebuild.version.GitDescribeVersioningStrategy
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/idea.gradle"
@@ -34,7 +33,6 @@ release {
   buildNumberFormat = MultiProjectReleasePlugin.buildNumberFormat(project)
   releaseType = MultiProjectReleasePlugin.releaseType(project)
   dryRun = MultiProjectReleasePlugin.dryRun(project)
-  versionedUsing = GitDescribeVersioningStrategy.create(project.release.buildNumberFormat)
 }
 
 configure(ProjectDefinitions.publishable(project)) { subproject ->

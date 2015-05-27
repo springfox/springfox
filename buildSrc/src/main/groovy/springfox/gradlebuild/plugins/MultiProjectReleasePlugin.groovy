@@ -21,6 +21,9 @@ package springfox.gradlebuild.plugins
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.logging.Logger
+import org.gradle.api.logging.Logging
 import springfox.gradlebuild.BintrayCredentials
 import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.BuildInfoFactory
@@ -35,20 +38,20 @@ import springfox.gradlebuild.version.GitDescribeVersioningStrategy
  */
 public class MultiProjectReleasePlugin implements Plugin<Project> {
 
-//  private static Logger LOG = Logging.getLogger(MultiProjectReleasePlugin.class);
+  private static Logger LOG = Logging.getLogger(MultiProjectReleasePlugin.class);
   ReleaseTask releaseTask
   BumpAndTagTask bumpAndTagTask
   CheckCleanWorkspaceTask checkCleanWorkspaceTask
   SnapshotTask snapshotTask
   BintrayCredentialsCheckTask credentialCheck
   CheckGitBranchTask checkGitBranchTask
+  Task showPublishInfo
 
   @Override
   void apply(Project project) {
     project.extensions.create("release", ReleasePluginExtension)
 
     BuildInfo versioningInfo = createBuildInfo(project)
-
     releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask) {
       buildInfo = versioningInfo
     }
@@ -59,23 +62,22 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     credentialCheck = project.task(BintrayCredentialsCheckTask.TASK_NAME, type: BintrayCredentialsCheckTask)
     checkCleanWorkspaceTask = project.task(CheckCleanWorkspaceTask.TASK_NAME, type: CheckCleanWorkspaceTask)
     checkGitBranchTask = project.task(CheckGitBranchTask.TASK_NAME, type: CheckGitBranchTask)
-
+    showPublishInfo = project.task('showPublishInfo') {
+      group = 'Help'
+      description = 'Show project publishing information'
+    }
+    project.tasks.showPublishInfo << {
+      LOG.info versioningInfo.toString()
+    }
 
     configureSnapshotTaskGraph(project)
-    configureReleaseTaskGraph(project, versioningInfo)
+    configureReleaseTaskGraph(project)
     configureVersionAndPublications(project, versioningInfo)
-  }
-
-  def createBuildInfo(Project project) {
-    def versioningStrategy =
-        project.release.versionedUsing ?: GitDescribeVersioningStrategy.create(project.release.buildNumberFormat)
-    BuildInfoFactory buildInfoFactory = new BuildInfoFactory(versioningStrategy)
-    buildInfoFactory.create(project)
   }
 
   def configureSnapshotTaskGraph(Project project) {
     def iSnapshotCheckTask = project.task('iSnapshotCheck', type: IntermediaryTask)
-
+    iSnapshotCheckTask.dependsOn showPublishInfo
     project.afterEvaluate { evaluatedProject ->
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
       iSnapshotCheckTask.dependsOn javaCheckTasks
@@ -96,10 +98,11 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
   }
 
-  def configureReleaseTaskGraph(Project project, BuildInfo buildInfo) {
+  def configureReleaseTaskGraph(Project project) {
     def iPublishTask = project.task('iPublishTask', type: IntermediaryTask)
     def iCheckTask = project.task('iCheckTask', type: IntermediaryTask)
     def iWorkspaceTask = project.task('iWorkspaceTask', type: IntermediaryTask)
+    iCheckTask.dependsOn showPublishInfo
 
     project.afterEvaluate { evaluatedProject ->
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
@@ -117,6 +120,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     iWorkspaceTask.dependsOn checkCleanWorkspaceTask
 
     iCheckTask.dependsOn iWorkspaceTask
+    iCheckTask.dependsOn showPublishInfo
 
     iPublishTask.dependsOn iCheckTask
 
@@ -129,7 +133,6 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     project.version = "${buildInfo.nextVersion.asText()}${buildInfo.buildSuffix}"
     configurePublications(project, buildInfo)
   }
-
 
   def configurePublications(Project project, BuildInfo buildInfo) {
     def type = buildInfo.isReleaseBuild ? 'snapshot' : 'release'
@@ -151,6 +154,13 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     }
   }
 
+
+  static def createBuildInfo(Project project) {
+    def versioningStrategy = GitDescribeVersioningStrategy.create(buildNumberFormat(project))
+    BuildInfoFactory buildInfoFactory = new BuildInfoFactory(versioningStrategy)
+    buildInfoFactory.create(project)
+  }
+
   static String releaseType(Project project) {
     project.hasProperty('releaseType') ? project.property('releaseType') : 'PATCH'
   }
@@ -160,6 +170,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   }
 
   static boolean dryRun(Project project) {
+    LOG.info("------------------------- dryRun = ${project.property('dryRun')}")
     project.hasProperty('dryRun') ? Boolean.valueOf(project.property('dryRun')) : false
   }
 }

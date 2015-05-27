@@ -7,6 +7,8 @@ import springfox.gradlebuild.version.ReleaseType
 import springfox.gradlebuild.version.SemanticVersion
 import springfox.gradlebuild.version.VersioningStrategy
 
+import static springfox.gradlebuild.plugins.MultiProjectReleasePlugin.*
+
 class BuildInfoFactory {
   private static Logger LOG = Logging.getLogger(BuildInfoFactory.class);
   VersioningStrategy versioningStrategy
@@ -16,13 +18,13 @@ class BuildInfoFactory {
   }
 
   BuildInfo create(Project project) {
-    String releaseType = project.release.releaseType
-    boolean dryRun = project.release.dryRun
+    String releaseType = releaseType(project)
+    boolean dryRun = dryRun(project)
     def isReleaseBuild = project.gradle.startParameter.taskNames.contains("release")
     SemanticVersion currentVersion = versioningStrategy.current()
     SemanticVersion nextVersion = currentVersion.next(ReleaseType.valueOf(releaseType.toUpperCase()))
     String releaseTag = nextVersion.asText()
-    LOG.info("Current version: $currentVersion, Next version: $nextVersion")
+    LOG.info("Current version: $currentVersion, Next version: $nextVersion, dryRun: $dryRun")
     def buildSuffix = isReleaseBuild ? "" : currentVersion.buildSuffix
     new BuildInfo(currentVersion, nextVersion, releaseType, releaseTag, dryRun, buildSuffix)
   }
