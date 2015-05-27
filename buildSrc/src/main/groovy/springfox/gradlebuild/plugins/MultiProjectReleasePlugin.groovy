@@ -67,7 +67,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       description = 'Show project publishing information'
     }
     project.tasks.showPublishInfo << {
-      LOG.info versioningInfo.toString()
+      LOG.info "================== Project version: $project.version, $versioningInfo"
     }
 
     configureSnapshotTaskGraph(project)
@@ -102,7 +102,6 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     def iPublishTask = project.task('iPublishTask', type: IntermediaryTask)
     def iCheckTask = project.task('iCheckTask', type: IntermediaryTask)
     def iWorkspaceTask = project.task('iWorkspaceTask', type: IntermediaryTask)
-    iCheckTask.dependsOn showPublishInfo
 
     project.afterEvaluate { evaluatedProject ->
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
@@ -170,7 +169,6 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   }
 
   static boolean dryRun(Project project) {
-    LOG.info("------------------------- dryRun = ${project.property('dryRun')}")
     project.hasProperty('dryRun') ? Boolean.valueOf(project.property('dryRun')) : false
   }
 }

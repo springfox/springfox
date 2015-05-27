@@ -24,7 +24,7 @@ class BuildInfoFactory {
     SemanticVersion currentVersion = versioningStrategy.current()
     SemanticVersion nextVersion = currentVersion.next(ReleaseType.valueOf(releaseType.toUpperCase()))
     String releaseTag = nextVersion.asText()
-    LOG.info("Current version: $currentVersion, Next version: $nextVersion, dryRun: $dryRun")
+    LOG.debug("Current version: $currentVersion, Next version: $nextVersion, dryRun: $dryRun")
     def buildSuffix = isReleaseBuild ? "" : currentVersion.buildSuffix
     new BuildInfo(currentVersion, nextVersion, releaseType, releaseTag, dryRun, buildSuffix)
   }

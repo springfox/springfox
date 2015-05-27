@@ -29,8 +29,4 @@ class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionPar
     return new GitDescribeVersioningStrategy(buildNumberFormat)
   }
 
-  @Override
-  String buildNumber() {
-    throw new UnsupportedOperationException()
-  }
 }

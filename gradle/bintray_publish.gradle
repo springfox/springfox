@@ -1,3 +1,4 @@
+import springfox.gradlebuild.plugins.MultiProjectReleasePlugin
 import springfox.gradlebuild.version.BuildscriptVersionResolver
 
 /*
@@ -26,7 +27,7 @@ if (!BuildscriptVersionResolver.isSnapshot(project)) {
 
 
     publications = ['mavenJava']
-    dryRun = project.release.dryRun //Whether to run this as dry-run, without deploying
+    dryRun = MultiProjectReleasePlugin.dryRun(project) //Whether to run this as dry-run, without deploying
     publish = true //If version should be auto published after an upload
     pkg {
       repo = 'maven-repo'

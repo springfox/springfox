@@ -18,8 +18,4 @@ class FileVersionStrategy implements VersioningStrategy {
     new SemanticVersion(props.major.toInteger(), props.minor.toInteger(), props.patch.toInteger(), buildNumberSuffix)
   }
 
-  @Override
-  String buildNumber() {
-    buildNumberSuffix
-  }
 }
