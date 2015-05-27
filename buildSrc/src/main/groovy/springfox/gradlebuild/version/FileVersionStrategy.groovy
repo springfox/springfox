@@ -1,8 +1,11 @@
 package springfox.gradlebuild.version
 
+import org.gradle.api.logging.Logger
+import org.gradle.api.logging.Logging
 import springfox.gradlebuild.BuildInfo
 
 class FileVersionStrategy implements VersioningStrategy {
+  private static Logger LOG = Logging.getLogger(FileVersionStrategy.class);
   private final File versionFile
   private final String buildNumberSuffix
 
@@ -27,5 +30,11 @@ class FileVersionStrategy implements VersioningStrategy {
     properties.minor = "${buildInfo.nextVersion.minor}".toString()
     properties.patch = "${buildInfo.nextVersion.patch}".toString()
     properties.store(versionFile.newWriter(), null)
+    def proc = """git commit -i '${versionFile.absolutePath}' -m 'Release(${buildInfo.nextVersion}) tagging project with tag
+${buildInfo.releaseTag}'""".execute();
+    proc.waitFor();
+    if (proc.exitValue() != 0) {
+      LOG.error("Unable to save the file and commit changes to repo!")
+    }
   }
 }
