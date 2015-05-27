@@ -29,14 +29,6 @@ class SemanticVersion implements SoftwareVersion {
     this.patch = patch
   }
 
-  void save(File propFile) {
-    def properties = new Properties()
-    properties.major = "${major}".toString()
-    properties.minor = "${minor}".toString()
-    properties.patch = "${patch}".toString()
-    properties.store(propFile.newWriter(), null)
-  }
-
   SemanticVersion next(ReleaseType releaseType) {
     if (releaseType == ReleaseType.MAJOR) {
       new SemanticVersion(major + 1, 0, 0, buildSuffix)

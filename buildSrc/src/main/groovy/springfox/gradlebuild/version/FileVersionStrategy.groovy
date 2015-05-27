@@ -1,5 +1,7 @@
 package springfox.gradlebuild.version
 
+import springfox.gradlebuild.BuildInfo
+
 class FileVersionStrategy implements VersioningStrategy {
   private final File versionFile
   private final String buildNumberSuffix
@@ -18,4 +20,12 @@ class FileVersionStrategy implements VersioningStrategy {
     new SemanticVersion(props.major.toInteger(), props.minor.toInteger(), props.patch.toInteger(), buildNumberSuffix)
   }
 
+  @Override
+  void persist(BuildInfo buildInfo) {
+    def properties = new Properties()
+    properties.major = "${buildInfo.nextVersion.major}".toString()
+    properties.minor = "${buildInfo.nextVersion.minor}".toString()
+    properties.patch = "${buildInfo.nextVersion.patch}".toString()
+    properties.store(versionFile.newWriter(), null)
+  }
 }

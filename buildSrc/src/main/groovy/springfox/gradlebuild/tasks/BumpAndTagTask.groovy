@@ -23,6 +23,7 @@ import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import org.gradle.api.tasks.TaskAction
 import springfox.gradlebuild.BuildInfo
+import springfox.gradlebuild.version.VersioningStrategy
 
 // git status --porcelain
 class BumpAndTagTask extends DefaultTask {
@@ -31,17 +32,10 @@ class BumpAndTagTask extends DefaultTask {
   String description = 'Bumps the version file and tags the release'
   String group = 'release'
   BuildInfo buildInfo
+  VersioningStrategy versioningStrategy
 
   @TaskAction
   void exec() {
-    if (buildInfo.dryRun) {
-      LOG.info("Would have executed: git tag -a, ${buildInfo.releaseTag} -m Release(${buildInfo.nextVersion}) tagging" +
-          " project with tag ${buildInfo.releaseTag}")
-      return
-    }
-    project.exec {
-      commandLine 'git', 'tag', '-a', "${buildInfo.releaseTag}", '-m',
-          "Release(${buildInfo.nextVersion}) tagging project with tag ${buildInfo.releaseTag}"
-    }
+    versioningStrategy.persist(buildInfo)
   }
 }
