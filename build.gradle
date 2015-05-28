@@ -1,4 +1,3 @@
-import springfox.gradlebuild.plugins.MultiProjectReleasePlugin
 import springfox.gradlebuild.utils.ProjectDefinitions
 
 apply from: "$rootDir/gradle/dependencies.gradle"
@@ -28,12 +27,6 @@ ext {
 }
 
 apply plugin: 'springfox-multi-release'
-
-release {
-  buildNumberFormat = MultiProjectReleasePlugin.buildNumberFormat(project)
-  releaseType = MultiProjectReleasePlugin.releaseType(project)
-  dryRun = MultiProjectReleasePlugin.dryRun(project)
-}
 
 configure(ProjectDefinitions.publishable(project)) { subproject ->
   apply plugin: "com.ofg.uptodate"
