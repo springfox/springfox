@@ -20,8 +20,6 @@
 package springfox.gradlebuild.version
 
 interface SoftwareVersion {
-  void save(File propFile)
-
   SoftwareVersion next(ReleaseType releaseType)
 
   String asText()
@@ -33,5 +31,4 @@ interface SoftwareVersion {
   int getPatch()
 
   String getBuildSuffix()
-
 }
