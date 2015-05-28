@@ -1,5 +1,4 @@
 import springfox.gradlebuild.utils.ProjectDefinitions
-import springfox.gradlebuild.version.BuildscriptVersionResolver
 
 apply plugin: "org.asciidoctor.convert"
 asciidoctor {
@@ -26,9 +25,9 @@ task publishDocs(type: Exec) {
 
   if (project.hasProperty('updateMode')) {
     symlink = 'current'
-    docVersion = BuildscriptVersionResolver.currentSemanticVersion(project).toString()
+    docVersion = project.ext.currentVersion
   } else {
-    symlink = BuildscriptVersionResolver.isSnapshot(project) ? 'snapshot' : 'current'
+    symlink = isSnapshot(project) ? 'snapshot' : 'current'
   }
 
   String gitChanges = ""
@@ -54,6 +53,10 @@ task publishDocs(type: Exec) {
   git push -q "https://${System.getenv("GITHUB_TOKEN")}@github.com/springfox/springfox.git" gh-pages > /dev/null 2>&1
   git checkout master
 """
+}
+
+def isSnapshot(project) {
+  String.valueOf(project.version).endsWith("-SNAPSHOT")
 }
 
 task allJavadoc(type: Javadoc) {

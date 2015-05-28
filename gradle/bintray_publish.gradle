@@ -1,6 +1,4 @@
 import springfox.gradlebuild.plugins.MultiProjectReleasePlugin
-import springfox.gradlebuild.version.BuildscriptVersionResolver
-
 /*
  * Copyright 2015 the original author or authors.
  *
@@ -17,7 +15,7 @@ import springfox.gradlebuild.version.BuildscriptVersionResolver
  * limitations under the License.
  */
 
-if (!BuildscriptVersionResolver.isSnapshot(project)) {
+if (!isSnapshot()) {
 
   apply plugin: 'com.jfrog.bintray'
 
@@ -61,4 +59,8 @@ if (!BuildscriptVersionResolver.isSnapshot(project)) {
 //    }
     }
   }
+}
+
+def isSnapshot() {
+  String.valueOf(project.version).endsWith("-SNAPSHOT")
 }

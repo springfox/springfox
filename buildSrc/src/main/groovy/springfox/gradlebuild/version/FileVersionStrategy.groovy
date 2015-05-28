@@ -25,13 +25,20 @@ class FileVersionStrategy implements VersioningStrategy {
 
   @Override
   void persist(BuildInfo buildInfo) {
+    def commitChangesCommand = """git commit -i '${versionFile.absolutePath}' -m 'Release(${buildInfo.nextVersion}) tagging project with tag
+${buildInfo.releaseTag}'"""
+    LOG.info("Saving $buildInfo.nextVersion.asText() to the version file ($versionFile.absolutePath)")
+    if (buildInfo.dryRun) {
+      LOG.info("Will execute command: $commitChangesCommand")
+      return
+    }
     def properties = new Properties()
     properties.major = "${buildInfo.nextVersion.major}".toString()
     properties.minor = "${buildInfo.nextVersion.minor}".toString()
     properties.patch = "${buildInfo.nextVersion.patch}".toString()
     properties.store(versionFile.newWriter(), null)
-    def proc = """git commit -i '${versionFile.absolutePath}' -m 'Release(${buildInfo.nextVersion}) tagging project with tag
-${buildInfo.releaseTag}'""".execute();
+
+    def proc = commitChangesCommand.execute();
     proc.waitFor();
     if (proc.exitValue() != 0) {
       LOG.error("Unable to save the file and commit changes to repo!")
