@@ -35,8 +35,8 @@ class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionPar
           " project with tag ${buildInfo.releaseTag}")
       return
     }
-    def proc = """git tag -a ${buildInfo.releaseTag} -m 'Release(${buildInfo.nextVersion}) tagging project with tag
-${buildInfo.releaseTag}'""".execute();
+    def proc = "git tag -a ${buildInfo.releaseTag} -m 'Release(${buildInfo.nextVersion}) tagging project with tag " +
+      "${buildInfo.releaseTag}'".execute();
     proc.waitFor();
     if (proc.exitValue() == 0) {
       parseTransform(proc.text.trim(), buildNumberFormat)

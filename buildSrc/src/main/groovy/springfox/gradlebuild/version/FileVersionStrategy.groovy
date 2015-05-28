@@ -25,8 +25,8 @@ class FileVersionStrategy implements VersioningStrategy {
 
   @Override
   void persist(BuildInfo buildInfo) {
-    def commitChangesCommand = """git commit -i '${versionFile.absolutePath}' -m 'Release(${buildInfo.nextVersion}) tagging project with tag
-${buildInfo.releaseTag}'"""
+    def commitChangesCommand = "git commit -i '${versionFile.absolutePath}' -m 'Release(${buildInfo.nextVersion}) " +
+      "tagging project with tag ${buildInfo.releaseTag}'"
     LOG.info("Saving $buildInfo.nextVersion.asText() to the version file ($versionFile.absolutePath)")
     if (buildInfo.dryRun) {
       LOG.info("Will execute command: $commitChangesCommand")
