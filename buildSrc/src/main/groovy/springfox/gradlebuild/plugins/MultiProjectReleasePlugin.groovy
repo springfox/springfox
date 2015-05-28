@@ -27,7 +27,6 @@ import org.gradle.api.logging.Logging
 import springfox.gradlebuild.BintrayCredentials
 import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.BuildInfoFactory
-import springfox.gradlebuild.extensions.ReleasePluginExtension
 import springfox.gradlebuild.tasks.*
 import springfox.gradlebuild.version.GitDescribeVersioningStrategy
 
@@ -49,8 +48,6 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
   @Override
   void apply(Project project) {
-    project.extensions.create("release", ReleasePluginExtension)
-
     BuildInfo versioningInfo = createBuildInfo(project)
     releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask) {
       buildInfo = versioningInfo
