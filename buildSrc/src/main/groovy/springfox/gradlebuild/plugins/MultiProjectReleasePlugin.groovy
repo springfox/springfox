@@ -24,6 +24,8 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
+import org.gradle.api.publish.maven.tasks.PublishToMavenLocal
+import org.gradle.api.publish.maven.tasks.PublishToMavenRepository
 import springfox.gradlebuild.BintrayCredentials
 import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.BuildInfoFactory
@@ -67,13 +69,13 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       group = 'Help'
       description = 'Show project publishing information'
     }
-    project.tasks.showPublishInfo << {
-      LOG.info "================== Project version: $project.version, $versioningInfo"
-    }
 
     configureSnapshotTaskGraph(project)
     configureReleaseTaskGraph(project)
     configureVersionAndPublications(project, versioningInfo)
+    project.tasks.showPublishInfo {
+      LOG.info "================== Project version: $project.version, $versioningInfo"
+    }
   }
 
   def configureSnapshotTaskGraph(Project project) {
@@ -84,9 +86,9 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       iSnapshotCheckTask.dependsOn javaCheckTasks
 
       evaluatedProject.subprojects.each {
-        def jcenterTasks = it.tasks.findAll { it.name.contains('ToJcenterRepository') }
-        if (jcenterTasks) {
-          snapshotTask.dependsOn jcenterTasks
+        it.tasks.findAll { it.name.contains('ToJcenterRepository') }.each {
+          it.publication.version = project.version
+          snapshotTask.dependsOn it
         }
       }
     }
@@ -109,9 +111,11 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       iCheckTask.dependsOn javaCheckTasks
 
       evaluatedProject.subprojects.each {
-        def bintrayPublishTask = it.tasks.findByPath('bintrayUpload')
-        if (bintrayPublishTask) {
-          iPublishTask.dependsOn(bintrayPublishTask)
+        it.tasks.findByPath('bintrayUpload').each {
+          it.with {
+            versionName = project.version
+          }
+          iPublishTask.dependsOn(it)
         }
       }
     }
@@ -137,19 +141,22 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   }
 
   def configurePublications(Project project, BuildInfo buildInfo) {
-    def type = buildInfo.isReleaseBuild ? 'snapshot' : 'release'
+    def type = buildInfo.isReleaseBuild ? 'release' : 'snapshot'
     project.ext {
       bintrayCredentials = new BintrayCredentials(project)
       artifactRepoBase = 'http://oss.jfrog.org/artifactory'
       repoPrefix = 'oss'
       releaseRepos = {
+
         //Only snapshots - bintray plugin takes care of non-snapshot releases
-        maven {
-          name 'jcenter'
-          url "${artifactRepoBase}/${repoPrefix}-${type}-local"
-          credentials {
-            username = "${bintrayCredentials.username}"
-            password = "${bintrayCredentials.password}"
+        if (!buildInfo.isReleaseBuild) {
+          maven {
+            name 'jcenter'
+            url "${artifactRepoBase}/${repoPrefix}-${type}-local"
+            credentials {
+              username = "${bintrayCredentials.username}"
+              password = "${bintrayCredentials.password}"
+            }
           }
         }
       }

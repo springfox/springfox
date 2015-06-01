@@ -25,9 +25,12 @@ package springfox.gradlebuild.utils
 import org.gradle.api.Project
 
 class ProjectDefinitions {
-  static publishable(Project project) {
+  static publishables(Project project) {
     return project.subprojects.findAll {
       !['swagger-contract-tests', 'buildSrc', 'springfox-spring-config'].contains(it.name)
     }
+  }
+  static publishable(Project project) {
+    !['swagger-contract-tests', 'buildSrc', 'springfox-spring-config'].contains(project.name)
   }
 }

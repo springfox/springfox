@@ -20,6 +20,16 @@ configurations {
   //Logback causing spring boot errors
   all*.exclude group: 'ch.qos.logback'
 }
+ext {
+  limits = [
+      'instruction': 89.5,
+      'line'       : 85,
+      'complexity' : 80,
+      'method'     : 80,
+      'branch'     : 85,
+      'class'      : 94
+  ]
+}
 
 dependencies {
   compile("org.springframework.boot:spring-boot-starter-web")

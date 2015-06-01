@@ -60,9 +60,9 @@ def isSnapshot(project) {
 }
 
 task allJavadoc(type: Javadoc) {
-  final def publishable = ProjectDefinitions.publishable(project)
-  source publishable.collect { it.sourceSets.main.allJava }
-  classpath = files(publishable.collect { it.sourceSets.main.compileClasspath })
+  final def publishables = ProjectDefinitions.publishables(project)
+  source publishables.collect { it.sourceSets.main.allJava }
+  classpath = files(publishables.collect { it.sourceSets.main.compileClasspath })
   destinationDir = file("${buildDir}/docs/javadoc")
 }
 

@@ -62,5 +62,6 @@ if (!isSnapshot()) {
 }
 
 def isSnapshot() {
-  String.valueOf(project.version).endsWith("-SNAPSHOT")
+  def isSnapshot = project.gradle.startParameter.taskNames.contains("snapshot")
+  println "================== Project: $project.name, isSnapshot: $isSnapshot"
 }
