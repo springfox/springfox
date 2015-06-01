@@ -20,7 +20,6 @@ buildscript {
 }
 apply plugin: 'build-dashboard'
 apply plugin: 'project-report'
-apply plugin: "com.github.adrianbk.tcitrigger"
 apply plugin: 'springfox-multi-release'
 
 ext {
@@ -39,10 +38,7 @@ subprojects {
   //Perhaps run every 20 CI builds (mod of ci build number)
 //  apply from: "$rootDir/gradle/code-quality.gradle"
   if (ProjectDefinitions.publishable(it)) {
-    apply plugin: 'maven-publish'
     apply from: "$rootDir/gradle/publishing.gradle"
-    apply from: "$rootDir/gradle/artifacts.gradle"
-    apply from: "$rootDir/gradle/bintray_publish.gradle"
   }
   repositories {
     jcenter()
@@ -89,16 +85,6 @@ subprojects {
   }
 }
 
-apply plugin: "com.github.adrianbk.tcitrigger"
 apply from: "$rootDir/gradle/documentation.gradle"
 
-tciTrigger {
-  gitHubRepo 'adrianbk/swagger-springmvc-demo'
-  gitHubApiKeyVarName = 'GIT_HUB_API_KEY'
-  travisVariable {
-    name = "LATEST_SSMVC_VERSION"
-    value = "${version}"
-    visible = true
-  }
-}
 
