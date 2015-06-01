@@ -628,20 +628,6 @@ as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a
 <div class="ulist">
 <ul>
 <li>
-<p>Set the projects semantic version and Git push:</p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">    SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
-            project, SemanticVersion.get(file(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>rootDir</span><span class="content">/version.properties</span><span class="delimiter">&quot;</span></span>))
-    )</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
 <p>Execute the the release commands:
 The below properties are required to run a release:</p>
 </li>
@@ -663,20 +649,6 @@ The below properties are required to run a release:</p>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">    ./gradlew release publishDocs -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD
     -PreleaseType=&lt;MAJOR|MINOR|PATCH&gt; -i</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Change the projects version back to snapshot and push:</p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
-        project, <span class="keyword">new</span> SnapshotVersion(SemanticVersion.get(file(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>rootDir</span><span class="content">/version.properties</span><span class="delimiter">&quot;</span></span>)))
-)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -744,7 +716,7 @@ The below properties are required to run a release:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-06-01 01:04:13 UTC
+Last updated 2015-06-01 01:08:25 UTC
 </div>
 </div>
 </body>
