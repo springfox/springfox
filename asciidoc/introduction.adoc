@@ -62,13 +62,6 @@ https://circleci.com/gh/springfox/springfox[Circle CI]
 
 To release a non-snaphot version of Springfox:
 
-- Set the projects semantic version and Git push:
-```groovy
-    SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
-            project, SemanticVersion.get(file("$rootDir/version.properties"))
-    )
-```
-
 - Execute the the release commands:
 The below properties are required to run a release:
     - `GITHUB_TOKEN`
@@ -81,13 +74,6 @@ Recommend using [autoenv](https://github.com/kennethreitz/autoenv) with a `.env`
 ```bash
     ./gradlew release publishDocs -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD
     -PreleaseType=<MAJOR|MINOR|PATCH> -i
-```
-
-- Change the projects version back to snapshot and push:
-```groovy
-SoftwareVersion currentVersion = BuildscriptVersionResolver.projectVersion(
-        project, new SnapshotVersion(SemanticVersion.get(file("$rootDir/version.properties")))
-)
 ```
 
 The release steps are as follows:
