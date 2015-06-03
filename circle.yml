@@ -16,6 +16,7 @@ dependencies:
     - gem install asciidoctor
   cache_directories:
     - ~/.m2
+    - ~/.gradle
 test:
   override:
   - ./gradlew clean check --daemon
