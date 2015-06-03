@@ -68,7 +68,7 @@ subprojects {
   sourceCompatibility = jdkVersion
   targetCompatibility = jdkVersion
   group = 'io.springfox'
-  version = project.version
+  version = project.rootProject.version
 
   jar {
     manifest {
