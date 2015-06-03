@@ -1,7 +1,7 @@
 == Getting Started
 
-:releaseVersion: 2.0.0
-:snapshotVersion: 2.0.1-SNAPSHOT
+:releaseVersion: {springfox-released-version}
+:snapshotVersion: {springfox-current-version}
 
 === Dependencies
 The Springfox libraries are hosted on https://bintray.com/springfox/maven-repo/springfox/view[bintray] and jcenter.

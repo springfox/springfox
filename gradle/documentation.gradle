@@ -8,7 +8,8 @@ asciidoctor {
   backends = ['html5']
 
   attributes 'source-highlighter': 'coderay',
-          'springfox-version': project.version.toString(),
+          'springfox-current-version': project.version.toString(),
+          'springfox-released-version': project.ext.currentVersion,
           toc: 'left',
           idprefix: '',
           idseparator: '-',
