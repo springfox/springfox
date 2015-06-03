@@ -39,7 +39,7 @@ class ReleaseTask extends DefaultTask {
       return
     }
     project.exec {
-      commandLine 'git', 'push', '--follow-tags'
+      commandLine 'git', 'push', 'origin', "${buildInfo.releaseTag}"
     }
   }
 }
