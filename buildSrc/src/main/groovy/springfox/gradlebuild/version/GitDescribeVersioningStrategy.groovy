@@ -30,17 +30,15 @@ class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionPar
 
   @Override
   void persist(BuildInfo buildInfo) {
+    def command = "git tag -a ${buildInfo.releaseTag} -m 'Release(${buildInfo.nextVersion}) tagging project with tag ${buildInfo.releaseTag}'"
     if (buildInfo.dryRun) {
-      LOG.info("Would have executed: git tag -a, ${buildInfo.releaseTag} -m Release(${buildInfo.nextVersion}) tagging" +
-          " project with tag ${buildInfo.releaseTag}")
+      LOG.info("Would have executed: $command")
       return
     }
-    def proc = "git tag -a ${buildInfo.releaseTag} -m 'Release(${buildInfo.nextVersion}) tagging project with tag " +
-      "${buildInfo.releaseTag}'".execute();
+    def proc = command.execute();
     proc.waitFor();
     if (proc.exitValue() == 0) {
-      LOG.info("Successfully executed: git tag -a, ${buildInfo.releaseTag} -m Release(${buildInfo.nextVersion}) " +
-          "tagging project with tag ${buildInfo.releaseTag}")
+      LOG.info("Successfully executed: $command")
     }
   }
 
