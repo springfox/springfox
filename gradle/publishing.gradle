@@ -125,7 +125,8 @@ publishing {
 if (!isSnapshot()) {
 
   apply plugin: 'com.jfrog.bintray'
-  println "=========== ${MultiProjectReleasePlugin.dryRun(project.rootProject)}"
+  println "=========== Publish version: ${project.rootProject.version} dryRun: " +
+      "${MultiProjectReleasePlugin.dryRun(project.rootProject)}"
   bintray {
     user = project.bintrayCredentials.username
     key = project.bintrayCredentials.password
@@ -147,11 +148,12 @@ if (!isSnapshot()) {
       publicDownloadNumbers = true
 
       //Optional version descriptor
-//    version {
-//      name = '1.3-Final' //Bintray logical version name
-//      desc = 'optional, version-specific description'
-//      released  = 'optional, date of the version release' //2 possible values: date in the format of 'yyyy-MM-dd'T'HH:mm:ss.SSSZZ' OR a java.util.Date instance
-//      vcsTag = '1.3.0'
+      version {
+        name = '${project.rootProject.version}' //Bintray logical version name
+        desc = 'Version: ${project.rootProject.version}'
+        released = '${new java.util.Date()}' //2 possible values: date in the format of 'yyyy-MM-dd'T'HH:mm:ss.SSSZZ'
+        // OR a // java // .util.Date // instance
+        vcsTag = '${project.rootProject.version}'
 //      attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin'] //Optional version-level attributes
 //      gpg {
 //        sign = true //Determines whether to GPG sign the files. The default is false
@@ -163,7 +165,7 @@ if (!isSnapshot()) {
 //        password = 'paasword' //OSS user password
 //        close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
 //      }
-//    }
+      }
     }
   }
 }
@@ -172,3 +174,4 @@ def isSnapshot() {
   def isSnapshot = project.gradle.startParameter.taskNames.contains("snapshot")
   println "================== Project: $project.name, isSnapshot: $isSnapshot"
 }
+
