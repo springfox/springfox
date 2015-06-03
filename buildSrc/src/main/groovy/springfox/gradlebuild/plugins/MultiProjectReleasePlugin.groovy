@@ -110,12 +110,13 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
       iCheckTask.dependsOn javaCheckTasks
 
-      evaluatedProject.subprojects.each {
-        it.tasks.findByPath('bintrayUpload').each {
-          it.with {
+      evaluatedProject.subprojects.each { p ->
+        p.tasks.findByPath('bintrayUpload').each { t ->
+          LOG.info("======= Project Version: $project.version for task $t.name")
+          t.with {
             versionName = project.version
           }
-          iPublishTask.dependsOn(it)
+          iPublishTask.dependsOn(t)
         }
       }
     }
