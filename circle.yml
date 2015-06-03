@@ -18,7 +18,7 @@ dependencies:
     - ~/.m2
 test:
   override:
-  - ./gradlew clean check
+  - ./gradlew clean check --daemon
 
 deployment:
  staging:
