@@ -44,14 +44,16 @@ task publishDocs(type: Exec) {
   }
   commandLine "sh", "-c",
           """
-  git config user.email "bot@springfox.io"
-  git config user.name "Springfox Robot"
+  git config --local user.email "bot@springfox.io"
+  git config --local user.name "Springfox Robot"
   git fetch origin +gh-pages:gh-pages
   git checkout gh-pages
   $gitChanges
   git commit -qm "Publish docs/${project.version}"
   git push -q "https://${System.getenv("GITHUB_TOKEN")}@github.com/springfox/springfox.git" gh-pages > /dev/null 2>&1
   git checkout master
+  git config --local --unset user.email
+  git config --local --unset user.name
 """
 }
 
