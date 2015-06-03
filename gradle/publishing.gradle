@@ -125,7 +125,7 @@ publishing {
 if (!isSnapshot()) {
 
   apply plugin: 'com.jfrog.bintray'
-
+  println "=========== ${MultiProjectReleasePlugin.dryRun(project.rootProject)}"
   bintray {
     user = project.bintrayCredentials.username
     key = project.bintrayCredentials.password

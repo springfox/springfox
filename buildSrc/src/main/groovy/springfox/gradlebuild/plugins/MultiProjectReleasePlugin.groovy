@@ -113,7 +113,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       evaluatedProject.subprojects.each { p ->
         p.tasks.findByPath('bintrayUpload').each { t ->
           LOG.info("======= Project Version: $project.version for task $t.name")
-          t.with {
+          t.configure {
             versionName = project.version
           }
           iPublishTask.dependsOn(t)
