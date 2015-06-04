@@ -588,7 +588,7 @@
                         "in": "formData",
                         "description": "pic",
                         "required": false,
-                        "type": "ref"
+                        "type": "file"
                     }
                 ],
                 "responses": {

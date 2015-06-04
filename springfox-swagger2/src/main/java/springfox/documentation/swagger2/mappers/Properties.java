@@ -26,6 +26,7 @@ import com.wordnik.swagger.models.properties.DateProperty;
 import com.wordnik.swagger.models.properties.DateTimeProperty;
 import com.wordnik.swagger.models.properties.DecimalProperty;
 import com.wordnik.swagger.models.properties.DoubleProperty;
+import com.wordnik.swagger.models.properties.FileProperty;
 import com.wordnik.swagger.models.properties.FloatProperty;
 import com.wordnik.swagger.models.properties.IntegerProperty;
 import com.wordnik.swagger.models.properties.LongProperty;
@@ -56,6 +57,7 @@ class Properties {
           .put("uuid", newInstanceOf(UUIDProperty.class))
           .put("object", newInstanceOf(ObjectProperty.class))
           .put("byte", bytePropertyFactory())
+          .put("file", filePropertyFactory())
         .build();
 
   private Properties() {
@@ -102,6 +104,15 @@ class Properties {
         StringProperty byteArray = new StringProperty();
         byteArray.setFormat("byte");
         return byteArray;
+      }
+    };
+  }
+
+  private static Function<String, ? extends Property> filePropertyFactory() {
+    return new Function<String, Property>() {
+      @Override
+      public Property apply(String input) {
+        return new FileProperty();
       }
     };
   }

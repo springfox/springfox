@@ -60,7 +60,7 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
     String raw = response.data.text
     String actual = JsonOutput.prettyPrint(raw)
     response.status == 200
-//    println(actual)
+    println(actual)
 
     def withPortReplaced = contract.replaceAll("__PORT__", "$port")
     JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
