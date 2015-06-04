@@ -52,8 +52,11 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Predicates.not;
+import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
+import static springfox.documentation.schema.property.BeanPropertyDefinitions.ignorable;
 
 @Component
 public class FieldModelPropertyProvider implements ModelPropertiesProvider {
@@ -79,7 +82,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
   }
 
   @VisibleForTesting
-  List<ModelProperty> addSerializationCandidates(AnnotatedMember member, ResolvedField
+  List<ModelProperty> serializationCandidates(AnnotatedMember member, ResolvedField
       childField, Optional<BeanPropertyDefinition> jacksonProperty, ModelContext givenContext) {
     if (memberIsAField(member)) {
       if (Annotations.memberIsUnwrapped(member)) {
@@ -87,7 +90,9 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
         return propertiesFor(childField.getType(), ModelContext.fromParent(givenContext, childField.getType()));
       } else {
         String fieldName = BeanPropertyDefinitions.name(jacksonProperty.get(), true, namingStrategy);
-        return newArrayList(modelPropertyFrom(childField, fieldName, givenContext));
+        return from(newArrayList(modelPropertyFrom(childField, fieldName, givenContext)))
+            .filter(not(ignorable(givenContext)))
+            .toList();
       }
     }
     return newArrayList();
@@ -129,7 +134,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
         Optional<BeanPropertyDefinition> jacksonProperty
             = BeanPropertyDefinitions.jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
         AnnotatedMember member = propertyDefinition.getPrimaryMember();
-        serializationCandidates.addAll(newArrayList(addSerializationCandidates(member, childField, jacksonProperty,
+        serializationCandidates.addAll(newArrayList(serializationCandidates(member, childField, jacksonProperty,
             givenContext)));
       }
     }

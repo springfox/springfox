@@ -241,6 +241,7 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
           .select()
           .paths(regex("/groovy/.*"))
           .build()
+          .ignoredParameterTypes(MetaClass)
     }
 
     @Bean

@@ -53,6 +53,8 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Predicates.*;
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -91,10 +93,10 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
   }
 
   @VisibleForTesting
-  List<ModelProperty> addCandidateProperties(AnnotatedMember member,
-      ResolvedMethod childProperty,
-      Optional<BeanPropertyDefinition> jacksonProperty,
-      ModelContext givenContext) {
+  List<ModelProperty> candidateProperties(AnnotatedMember member,
+        ResolvedMethod childProperty,
+        Optional<BeanPropertyDefinition> jacksonProperty,
+        ModelContext givenContext) {
 
     if (member instanceof AnnotatedMethod && Annotations.memberIsUnwrapped(member)) {
       if (Accessors.isGetter(((AnnotatedMethod) member).getMember())) {
@@ -107,7 +109,9 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
       }
     } else {
       LOG.debug("Evaluating property of {}", childProperty);
-      return newArrayList(beanModelProperty(childProperty, jacksonProperty, givenContext));
+      return from(newArrayList(beanModelProperty(childProperty, jacksonProperty, givenContext)))
+          .filter(not(ignorable(givenContext)))
+          .toList();
     }
   }
 
@@ -141,7 +145,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
       if (accessor.isPresent()) {
         LOG.debug("Accessor selected {}", accessor.get().getName());
         serializationCandidates
-            .addAll(addCandidateProperties(member, accessor.get(), jacksonProperty, givenContext));
+            .addAll(candidateProperties(member, accessor.get(), jacksonProperty, givenContext));
       }
     }
     return serializationCandidates;

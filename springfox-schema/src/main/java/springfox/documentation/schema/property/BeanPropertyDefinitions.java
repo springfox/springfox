@@ -30,6 +30,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import springfox.documentation.spi.schema.contexts.ModelContext;
 
 public class BeanPropertyDefinitions {
   private BeanPropertyDefinitions() {
@@ -60,13 +61,11 @@ public class BeanPropertyDefinitions {
             .firstMatch(withSameInternalName(propertyDefinition));
   }
 
-  private static Predicate<BeanPropertyDefinition> withSameInternalName(
-      final BeanPropertyDefinition propertyDefinition) {
-
-    return new Predicate<BeanPropertyDefinition>() {
+  public static Predicate<springfox.documentation.schema.ModelProperty> ignorable(final ModelContext givenContext) {
+    return new Predicate<springfox.documentation.schema.ModelProperty>() {
       @Override
-      public boolean apply(BeanPropertyDefinition input) {
-        return input.getInternalName().equals(propertyDefinition.getInternalName());
+      public boolean apply(springfox.documentation.schema.ModelProperty input) {
+        return givenContext.hasSeenBefore(input.getType());
       }
     };
   }
@@ -82,6 +81,17 @@ public class BeanPropertyDefinitions {
     };
   }
 
+  private static Predicate<BeanPropertyDefinition> withSameInternalName(
+      final BeanPropertyDefinition propertyDefinition) {
+
+    return new Predicate<BeanPropertyDefinition>() {
+      @Override
+      public boolean apply(BeanPropertyDefinition input) {
+        return input.getInternalName().equals(propertyDefinition.getInternalName());
+      }
+    };
+  }
+
   private static String getName(PropertyNamingStrategy naming, BeanPropertyDefinition beanProperty,
                                 MapperConfig<?> config) {
 
@@ -92,5 +102,4 @@ public class BeanPropertyDefinitions {
             = new POJOPropertyBuilder(new PropertyName(beanProperty.getName()),  annotationIntrospector,  true);
     return naming.nameForField(config, prop.getField(), beanProperty.getName());
   }
-
 }

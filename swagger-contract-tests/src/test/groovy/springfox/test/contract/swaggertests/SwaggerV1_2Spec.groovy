@@ -157,6 +157,7 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
               .build()
               .securitySchemes(securitySchemes)
               .securityContexts(securityContexts)
+              .ignoredParameterTypes(MetaClass)
     }
   }
 }

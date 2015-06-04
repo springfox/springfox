@@ -47,6 +47,36 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "groovy-service"
+        ],
+        "summary": "updateGroovyModel",
+        "description": "updateGroovyModel",
+        "operationId": "updateGroovyModelUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "model",
+            "description": "model",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GroovyModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     }
   },

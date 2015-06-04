@@ -42,6 +42,59 @@
         }
       ],
       "path": "/groovy/groovyModel"
+    },
+    {
+      "description": "updateGroovyModel",
+      "operations": [
+        {
+          "method": "PUT",
+          "summary": "updateGroovyModel",
+          "notes": "updateGroovyModel",
+          "nickname": "updateGroovyModelUsingPUT",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "defaultValue": "",
+              "description": "model",
+              "name": "body",
+              "paramType": "body",
+              "type": "GroovyModel",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "void"
+        }
+      ],
+      "path": "/groovy/groovyModel"
     }
   ],
   "basePath": "/",
