@@ -22,6 +22,7 @@ package springfox.documentation.schema;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 public class UnwrappedType {
+  @JsonUnwrapped
   private Category category;
 
   @JsonUnwrapped
