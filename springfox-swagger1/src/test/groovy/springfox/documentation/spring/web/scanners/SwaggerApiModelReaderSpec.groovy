@@ -18,20 +18,16 @@
  */
 
 package springfox.documentation.spring.web.scanners
-
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.method.HandlerMethod
-import spock.lang.Ignore
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.controllers.BusinessService
-import springfox.documentation.spring.web.dummy.controllers.PetService
-import springfox.documentation.spring.web.dummy.models.FoobarDto
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -52,37 +48,6 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
     pluginsManager = swaggerServicePlugins([new SwaggerDefaultConfiguration(new Defaults(), new TypeResolver(),
             Mock(ServletContext))])
     sut = new ApiModelReader(modelProvider(swaggerSchemaPlugins()), new TypeResolver(), pluginsManager)
-  }
-
-
-  @Ignore
-  def "Method return type model"() {
-    given:
-      RequestMappingContext context = context(dummyHandlerMethod('methodWithConcreteResponseBody'))
-
-    when:
-      def models = sut.read(context)
-
-    then:
-      Model model = models['BusinessModel']
-      model.id == 'BusinessModel'
-      model.getName() == 'BusinessModel'
-      model.getQualifiedType() == 'springfox.documentation.spring.web.dummy.DummyModels$BusinessModel'
-
-      Map<String, ModelProperty> modelProperties = model.getProperties()
-      modelProperties.size() == 2
-
-      ModelProperty nameProp = modelProperties['name']
-      nameProp.type.erasedType == String
-      nameProp.getQualifiedType() == 'java.lang.String'
-      nameProp.getPosition() == 0
-      !nameProp.isRequired()
-      nameProp.getDescription() == null
-      def item = nameProp.getModelRef()
-      item.type == "string"
-      !item.collection
-      item.itemType == null
-
   }
 
   def "Annotated model"() {
@@ -152,22 +117,6 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
   }
 
-  @Ignore
-  def "Generates the correct models when there is a Map object in the input parameter"() {
-    given:
-      HandlerMethod handlerMethod = handlerMethodIn(PetService, 'echo', Map)
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/echo'), handlerMethod)
-
-    when:
-      def models = sut.read(context)
-
-    then:
-      models.size() == 2
-      models.containsKey("Entry«string,Pet»")
-      models.containsKey("Pet")
-
-  }
-
   def "Generates the correct models when alternateTypeProvider returns an ignoreable or base parameter type"() {
     given:
       plugin
@@ -214,80 +163,4 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
   }
 
-  @Ignore
-  def "model should include property that is only visible during serialization"() {
-    given:
-      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
-              DummyModels.ModelWithSerializeOnlyProperty
-      )
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-              handlerMethod)
-
-    when:
-      def models = sut.read(context)
-
-    then:
-      models.size() == 1
-
-      String modelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
-      models.containsKey(modelName)
-
-      Model model = models[modelName]
-      Map modelProperties = model.getProperties()
-      modelProperties.size() == 2
-      modelProperties.containsKey('visibleForSerialize')
-      modelProperties.containsKey('alwaysVisible')
-
-  }
-
-
-  @Ignore
-  def "model should include snake_case property that is only visible during serialization when objectMapper has CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES"() {
-    given:
-      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
-              DummyModels.ModelWithSerializeOnlyProperty
-      )
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
-    and:
-      def resolver = new TypeResolver()
-      def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(swaggerSchemaPlugins()),
-              resolver, swaggerServicePlugins([new SwaggerDefaultConfiguration(new Defaults(),
-              resolver, Mock (ServletContext))]))
-    when:
-      def models = snakeCaseReader.read(context)
-
-    then:
-      models.size() == 1
-
-      String modelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
-      models.containsKey(modelName)
-
-      Model model = models[modelName]
-      Map modelProperties = model.getProperties()
-      modelProperties.size() == 2
-      modelProperties.containsKey('visible_for_serialize')
-      modelProperties.containsKey('always_visible')
-
-  }
-
-  @Ignore
-  def "Test to verify issue #283"() {
-    given:
-      HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestFoobarDto', FoobarDto)
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
-
-    when:
-      def models = sut.read(context)
-
-    then:
-      models.size() == 1
-
-      String modelName = FoobarDto.simpleName
-      models.containsKey(modelName)
-
-      Model model = models[modelName]
-      Map modelProperties = model.getProperties()
-      modelProperties.containsKey('visibleForSerialize')
-
-  }
 }

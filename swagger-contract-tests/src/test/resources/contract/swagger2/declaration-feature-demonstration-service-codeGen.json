@@ -528,6 +528,9 @@
                 },
                 "propertyWithNoSetterMethod": {
                     "type": "string"
+                },
+                "propertyWithNoGetterMethod": {
+                    "type": "string"
                 }
             }
         },

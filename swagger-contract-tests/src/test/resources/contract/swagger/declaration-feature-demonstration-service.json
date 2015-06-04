@@ -1246,6 +1246,10 @@
                 "propertyWithNoSetterMethod": {
                     "required": false,
                     "type": "string"
+                },
+                "propertyWithNoGetterMethod": {
+                    "required": false,
+                    "type": "string"
                 }
             }
         },

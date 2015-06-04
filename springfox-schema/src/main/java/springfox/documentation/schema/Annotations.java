@@ -50,6 +50,9 @@ public class Annotations {
   }
 
   public static boolean memberIsUnwrapped(AnnotatedMember member) {
+    if (member == null) {
+      return false;
+    }
     return Optional.fromNullable(member.getAnnotation(JsonUnwrapped.class)).isPresent();
   }
 

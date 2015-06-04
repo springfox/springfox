@@ -48,15 +48,14 @@ import springfox.documentation.schema.property.provider.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Predicates.not;
-import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.base.Predicates.*;
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.property.BeanPropertyDefinitions.ignorable;
+import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
 
 @Component
 public class FieldModelPropertyProvider implements ModelPropertiesProvider {
@@ -84,18 +83,15 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
   @VisibleForTesting
   List<ModelProperty> serializationCandidates(AnnotatedMember member, ResolvedField
       childField, Optional<BeanPropertyDefinition> jacksonProperty, ModelContext givenContext) {
-    if (memberIsAField(member)) {
-      if (Annotations.memberIsUnwrapped(member)) {
-        LOG.debug("Evaluating unwrapped member");
-        return propertiesFor(childField.getType(), ModelContext.fromParent(givenContext, childField.getType()));
-      } else {
-        String fieldName = BeanPropertyDefinitions.name(jacksonProperty.get(), true, namingStrategy);
-        return from(newArrayList(modelPropertyFrom(childField, fieldName, givenContext)))
-            .filter(not(ignorable(givenContext)))
-            .toList();
-      }
+    if (Annotations.memberIsUnwrapped(member)) {
+      LOG.debug("Evaluating unwrapped member");
+      return propertiesFor(childField.getType(), ModelContext.fromParent(givenContext, childField.getType()));
+    } else {
+      String fieldName = BeanPropertyDefinitions.name(jacksonProperty.get(), true, namingStrategy);
+      return from(newArrayList(modelPropertyFrom(childField, fieldName, givenContext)))
+          .filter(not(ignorable(givenContext)))
+          .toList();
     }
-    return newArrayList();
   }
 
   private ModelProperty modelPropertyFrom(ResolvedField childField, String fieldName,
@@ -119,8 +115,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
   }
 
   @Override
-  public List<ModelProperty> propertiesFor(ResolvedType type,
-                                           ModelContext givenContext) {
+  public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
 
     List<ModelProperty> serializationCandidates = newArrayList();
     BeanDescription beanDescription = beanDescription(type, givenContext);
@@ -133,9 +128,9 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
         BeanPropertyDefinition propertyDefinition = propertyLookup.get(childField.getName());
         Optional<BeanPropertyDefinition> jacksonProperty
             = BeanPropertyDefinitions.jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
-        AnnotatedMember member = propertyDefinition.getPrimaryMember();
-        serializationCandidates.addAll(newArrayList(serializationCandidates(member, childField, jacksonProperty,
-            givenContext)));
+        AnnotatedMember member = propertyDefinition.getField();
+        serializationCandidates.addAll(
+              newArrayList(serializationCandidates(member, childField, jacksonProperty, givenContext)));
       }
     }
     return serializationCandidates;
@@ -155,11 +150,5 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
 
   public void onApplicationEvent(ObjectMapperConfigured event) {
     this.objectMapper = event.getObjectMapper();
-  }
-
-  protected boolean memberIsAField(AnnotatedMember member) {
-    return member != null
-        && member.getMember() != null
-        && Field.class.isAssignableFrom(member.getMember().getClass());
   }
 }

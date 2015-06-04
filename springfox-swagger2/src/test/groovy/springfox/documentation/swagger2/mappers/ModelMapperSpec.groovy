@@ -1,6 +1,5 @@
 package springfox.documentation.swagger2.mappers
-import com.fasterxml.classmate.ResolvedType
-import com.google.common.base.Function
+
 import com.wordnik.swagger.models.properties.AbstractNumericProperty
 import com.wordnik.swagger.models.properties.ObjectProperty
 import com.wordnik.swagger.models.properties.RefProperty
@@ -12,6 +11,8 @@ import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 
+import static com.google.common.base.Functions.*
+import static com.google.common.base.Suppliers.*
 import static com.google.common.collect.Maps.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -148,15 +149,7 @@ class ModelMapperSpec extends SchemaSpecification {
         .position(modelProperty.position)
         .type(modelProperty.type)
       .build()
-    newModel.updateModelRef(copyExisting(modelProperty.modelRef))
+    newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
   }
 
-  Function<ResolvedType, ModelRef> copyExisting(ModelRef modelRef) {
-    return new Function<ResolvedType, ModelRef>() {
-      @Override
-      ModelRef apply(ResolvedType input) {
-        return modelRef;
-      }
-    }
-  }
 }

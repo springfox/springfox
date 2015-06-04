@@ -48,6 +48,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping(produces = {"application/json"}, consumes = {"application/json", "application/xml"})
 public class DummyClass {
@@ -239,6 +240,11 @@ public class DummyClass {
 
   @ResponseBody
   public DummyModels.BusinessModel methodWithConcreteResponseBody() {
+    return null;
+  }
+
+  @ResponseBody
+  public Map<String, DummyModels.BusinessModel> methodWithMapReturn() {
     return null;
   }
 

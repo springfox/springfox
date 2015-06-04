@@ -34,6 +34,8 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
+import static com.google.common.base.Strings.isNullOrEmpty
+
 @Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class OperationResponseClassReaderSpec extends DocumentationContextSpec {
   OperationResponseClassReader sut
@@ -47,10 +49,12 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
   }
   
   def "Should support all documentation types"() {
-    sut.supports(DocumentationType.SPRING_WEB)
-    sut.supports(DocumentationType.SWAGGER_12)
-    sut.supports(DocumentationType.SWAGGER_2)
+    expect:
+      sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
   }
+
   def "should have correct response class"() {
     given:
       OperationContext operationContext = new OperationContext(new OperationBuilder(),
@@ -65,6 +69,10 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
         assert expectedClass == String.format("%s[%s]", operation.responseModel.type, operation.responseModel.itemType)
       } else {
         assert expectedClass == operation.responseModel.type
+        if ("Map".equals(operation.responseModel.type)) {
+          assert operation.responseModel.isMap()
+          assert !isNullOrEmpty(operation.responseModel.itemType)
+        }
       }
 
     where:
@@ -73,6 +81,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
       dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'FunkyBusiness'
       dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»'
       dummyHandlerMethod('methodWithListOfBusinesses')                     | 'List[BusinessModel]'
+      dummyHandlerMethod('methodWithMapReturn')                            | 'Map'
   }
 
 }
