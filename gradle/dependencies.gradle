@@ -8,8 +8,8 @@ ext {
   slf4j = "1.7.12"
   mockito = "1.10.19"
   servlet = "3.0.1"
-  classmate = "1.1.0"
-  jackson = '2.5.2'
+  classmate = "1.2.0"
+  jackson = '2.5.3'
   snakeyaml = '1.15'
   springPluginVersion = "1.2.0.RELEASE"
   jsonPath = "2.0.0"
@@ -52,7 +52,7 @@ ext {
                   "com.google.guava:guava:${guava}",
                   "com.fasterxml:classmate:${classmate}",
                   "org.slf4j:slf4j-api:${slf4j}",
-                  'joda-time:joda-time:2.7'
+                  'joda-time:joda-time:2.8'
 
           ]
   ]

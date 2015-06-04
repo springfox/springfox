@@ -125,8 +125,6 @@ publishing {
 if (!isSnapshot()) {
 
   apply plugin: 'com.jfrog.bintray'
-  println "=========== Publish version: ${project.rootProject.version} dryRun: " +
-      "${MultiProjectReleasePlugin.dryRun(project.rootProject)}"
   bintray {
     user = project.bintrayCredentials.username
     key = project.bintrayCredentials.password
@@ -172,6 +170,5 @@ if (!isSnapshot()) {
 
 def isSnapshot() {
   def isSnapshot = project.gradle.startParameter.taskNames.contains("snapshot")
-  println "================== Project: $project.name, isSnapshot: $isSnapshot"
 }
 

@@ -74,7 +74,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     configureReleaseTaskGraph(project)
     configureVersionAndPublications(project, versioningInfo)
     project.tasks.showPublishInfo {
-      LOG.info "================== Project version: $project.version, $versioningInfo"
+      LOG.info "Project version: $project.version, $versioningInfo"
     }
   }
 
@@ -112,7 +112,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
       evaluatedProject.subprojects.each { p ->
         p.tasks.findByPath('bintrayUpload').each { t ->
-          LOG.info("======= Project Version: $project.version for task $t.name")
+          LOG.info("Releasing version: $project.version for task $t.name")
           t.configure {
             versionName = project.version
           }
