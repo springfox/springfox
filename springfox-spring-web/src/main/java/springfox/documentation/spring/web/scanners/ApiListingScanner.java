@@ -32,6 +32,7 @@ import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.service.SecurityReference;
+import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
@@ -91,6 +92,9 @@ public class ApiListingScanner {
 
       String resourcePath = longestCommonPath(sortedApis);
 
+      ResourceGroupingStrategy resourceGroupingStrategy = documentationContext.getResourceGroupingStrategy();
+      String listingDescription = resourceGroupingStrategy.getResourceDescription(resourceGroup);
+
       PathProvider pathProvider = documentationContext.getPathProvider();
       String basePath = pathProvider.getApplicationBasePath();
       PathMappingAdjuster adjuster = new PathMappingAdjuster(documentationContext);
@@ -104,7 +108,7 @@ public class ApiListingScanner {
               .securityReferences(securityReferences)
               .apis(sortedApis)
               .models(models)
-              .description(null)
+              .description(listingDescription)
               .position(position++);
 
       ApiListingContext apiListingContext = new ApiListingContext(context.getDocumentationType(), resourceGroup,

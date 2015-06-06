@@ -17,7 +17,8 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "business-service"
+            "name": "business-service",
+            "description": "Services to demonstrate path variable resolution"
         }
     ],
     "produces": [

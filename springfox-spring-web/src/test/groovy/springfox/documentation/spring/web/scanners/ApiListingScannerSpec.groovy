@@ -27,6 +27,7 @@ import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.mixins.ApiDescriptionSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
@@ -55,6 +56,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
             .forPaths(regex('/anyPath.*'))
             .build()
 
+    contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
             .securityContexts(newArrayList(securityContext))
             .configure(contextBuilder)
@@ -87,6 +89,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       Collection<ApiListing> listings = scanned.get("businesses")
       listings.first().consumes == [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE] as Set
       listings.first().produces == [APPLICATION_JSON_VALUE] as Set
+      listings.first().description == 'Dummy Class'
   }
 
   def "should assign global authorizations"() {

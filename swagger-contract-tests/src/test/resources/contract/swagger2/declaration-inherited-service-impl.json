@@ -17,7 +17,8 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "inherited-service-impl"
+            "name": "inherited-service-impl",
+            "description": "Inherited Service Impl"
         }
     ],
     "produces": [

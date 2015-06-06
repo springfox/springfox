@@ -17,7 +17,8 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "fancy-pet-service"
+            "name": "fancy-pet-service",
+            "description": "Operations about fancy pets"
         }
     ],
     "produces": [

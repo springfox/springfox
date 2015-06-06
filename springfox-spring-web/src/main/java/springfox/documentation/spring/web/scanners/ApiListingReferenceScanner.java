@@ -37,14 +37,12 @@ import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Multimaps.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Multimaps.asMap;
 
 @Component
 public class ApiListingReferenceScanner {
@@ -57,7 +55,6 @@ public class ApiListingReferenceScanner {
     List<ApiListingReference> apiListingReferences = newArrayList();
     ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
             = ArrayListMultimap.create();
-    Map<ResourceGroup, String> resourceGroupDescriptions = new HashMap<ResourceGroup, String>();
     ApiSelector selector = context.getApiSelector();
     for (RequestMappingHandlerMapping requestMappingHandlerMapping : context.getHandlerMappings()) {
       for (RequestHandler handler : matchingHandlers(requestMappingHandlerMapping, selector)) {
@@ -68,26 +65,21 @@ public class ApiListingReferenceScanner {
                   = resourceGroupingStrategy.getResourceGroups(requestMappingInfo, handlerMethod);
         String handlerMethodName = handlerMethod.getMethod().getName();
 
-        String resourceDescription
-                  = resourceGroupingStrategy.getResourceDescription(requestMappingInfo, handlerMethod);
         RequestMappingContext requestMappingContext
                   = new RequestMappingContext(context, requestMappingInfo, handlerMethod);
 
         LOG.info("Request mapping: {} belongs to groups: [{}] ", handlerMethodName, resourceGroups);
         for (ResourceGroup group : resourceGroups) {
-            resourceGroupDescriptions.put(group, resourceDescription);
-
-            LOG.info("Adding resource to group:{} with description:{} for handler method:{}",
-                    group, resourceDescription, handlerMethodName);
-
             resourceGroupRequestMappings.put(group, requestMappingContext);
         }
       }
     }
 
-    for (ResourceGroup resourceGroup : resourceGroupDescriptions.keySet()) {
+    ResourceGroupingStrategy resourceGroupingStrategy = context.getResourceGroupingStrategy();
+
+    for (ResourceGroup resourceGroup : resourceGroupRequestMappings.keySet()) {
       String resourceGroupName = resourceGroup.getGroupName();
-      String listingDescription = resourceGroupDescriptions.get(resourceGroup);
+      String listingDescription = resourceGroupingStrategy.getResourceDescription(resourceGroup);
       Integer position = resourceGroup.getPosition();
       PathProvider pathProvider = context.getPathProvider();
       String path = pathProvider.getResourceListingPath(context.getGroupName(), resourceGroupName);
