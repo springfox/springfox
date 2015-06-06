@@ -17,7 +17,8 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "groovy-service"
+      "name": "groovy-service",
+      "description": "Groovy Service"
     }
   ],
   "produces": [

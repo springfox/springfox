@@ -17,13 +17,16 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "pet"
+            "name": "pet",
+            "description": "Operations about pets"
         },
         {
-            "name": "store"
+            "name": "store",
+            "description": "Operations about store"
         },
         {
-            "name": "user"
+            "name": "user",
+            "description": "Operations about user"
         }
     ],
     "produces": [

@@ -45,11 +45,10 @@ public interface ResourceGroupingStrategy extends Plugin<DocumentationType> {
    * This is typically the class name of the spring controller or value() attribute of any @Api annotations on that
    * controller class
    *
-   * @param requestMappingInfo request mapping info
-   * @param handlerMethod      handler method
+   * @param resourceGroup Resource group
    * @return description of the resource
    */
-  public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);
+  public String getResourceDescription(ResourceGroup resourceGroup);
 
   /**
    * Gets the position of the resource.

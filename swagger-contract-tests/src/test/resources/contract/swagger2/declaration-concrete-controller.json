@@ -17,7 +17,8 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "concrete-controller"
+            "name": "concrete-controller",
+            "description": "Concrete Controller"
         }
     ],
     "produces": [
