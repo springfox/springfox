@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger1.readers.parameter
 
-import com.wordnik.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader

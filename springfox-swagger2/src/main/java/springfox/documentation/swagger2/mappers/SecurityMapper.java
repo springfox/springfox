@@ -21,7 +21,7 @@ package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-import com.wordnik.swagger.models.auth.SecuritySchemeDefinition;
+import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.mapstruct.Mapper;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.ResourceListing;

@@ -1,5 +1,5 @@
 ext {
-  swagger2Core = "1.5.3-M1"
+  swagger2Core = "1.5.0"
   spring = "4.0.9.RELEASE"
   groovy = "2.4.3"
   spock = "1.0-groovy-2.4"
@@ -27,8 +27,8 @@ ext {
                   "org.spockframework:spock-core:${spock}"
           ],
           swagger2Core  : [
-                  "com.wordnik:swagger-annotations:${swagger2Core}",
-                  "com.wordnik:swagger-models:${swagger2Core}"
+                  "io.swagger:swagger-annotations:${swagger2Core}",
+                  "io.swagger:swagger-models:${swagger2Core}"
           ],
           spring        : [
                   "org.springframework.plugin:spring-plugin-core:${springPluginVersion}",

@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger2.mappers;
 
-import com.wordnik.swagger.models.parameters.SerializableParameter;
+import io.swagger.models.parameters.SerializableParameter;
 import springfox.documentation.service.Parameter;
 
 interface SerializableParameterFactory {

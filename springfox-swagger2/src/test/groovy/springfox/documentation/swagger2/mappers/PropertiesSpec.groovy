@@ -1,6 +1,6 @@
 package springfox.documentation.swagger2.mappers
 
-import com.wordnik.swagger.models.properties.*
+import io.swagger.models.properties.*
 
 import static springfox.documentation.swagger2.mappers.Properties.*
 

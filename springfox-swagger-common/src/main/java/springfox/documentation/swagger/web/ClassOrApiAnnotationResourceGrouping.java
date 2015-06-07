@@ -21,7 +21,7 @@ package springfox.documentation.swagger.web;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.wordnik.swagger.annotations.Api;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;

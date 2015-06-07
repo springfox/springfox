@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger.schema;
 
-import com.wordnik.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModel;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.DefaultTypeNameProvider;

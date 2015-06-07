@@ -19,13 +19,13 @@
 
 package springfox.petstore.controller;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.wordnik.swagger.annotations.ApiResponse;
-import com.wordnik.swagger.annotations.ApiResponses;
-import com.wordnik.swagger.annotations.Authorization;
-import com.wordnik.swagger.annotations.AuthorizationScope;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Authorization;
+import io.swagger.annotations.AuthorizationScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,8 +55,8 @@ public class PetController {
           "error conditions",
           response = Pet.class,
           authorizations = {
-                  @Authorization(type = "apiKey", value = "api_key"),
-                  @Authorization(type = "oauth2", value = "petstore_auth", scopes = {
+                  @Authorization(value = "api_key"),
+                  @Authorization(value = "petstore_auth", scopes = {
                           @AuthorizationScope(scope = "write:pets", description = ""),
                           @AuthorizationScope(scope = "read:pets", description = "")
                   })})
@@ -78,7 +78,7 @@ public class PetController {
 
   @RequestMapping(method = POST)
   @ApiOperation(value = "Add a new pet to the store",
-          authorizations = @Authorization(type = "oauth2", value = "petstore_auth", scopes = {
+          authorizations = @Authorization(value = "petstore_auth", scopes = {
                   @AuthorizationScope(scope = "write:pets", description = ""),
                   @AuthorizationScope(scope = "read:pets", description = "")
           }))
@@ -91,7 +91,7 @@ public class PetController {
 
   @RequestMapping(method = PUT)
   @ApiOperation(value = "Update an existing pet",
-          authorizations = @Authorization(type = "oauth2", value = "petstore_auth", scopes = {
+          authorizations = @Authorization(value = "petstore_auth", scopes = {
                   @AuthorizationScope(scope = "write:pets", description = ""),
                   @AuthorizationScope(scope = "read:pets", description = "")
           }))
@@ -110,7 +110,7 @@ public class PetController {
           notes = "Multiple status values can be provided with comma seperated strings",
           response = Pet.class,
           responseContainer = "List",
-          authorizations = @Authorization(type = "oauth2", value = "petstore_auth", scopes = {
+          authorizations = @Authorization(value = "petstore_auth", scopes = {
                   @AuthorizationScope(scope = "write:pets", description = ""),
                   @AuthorizationScope(scope = "read:pets", description = "")
           }))
@@ -142,7 +142,7 @@ public class PetController {
           notes = "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
           response = Pet.class,
           responseContainer = "List",
-          authorizations = @Authorization(type = "oauth2", value = "petstore_auth", scopes = {
+          authorizations = @Authorization(value = "petstore_auth", scopes = {
                   @AuthorizationScope(scope = "write:pets", description = ""),
                   @AuthorizationScope(scope = "read:pets", description = "")
           }))

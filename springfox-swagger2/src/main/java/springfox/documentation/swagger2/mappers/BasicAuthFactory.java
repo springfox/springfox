@@ -19,8 +19,8 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.wordnik.swagger.models.auth.BasicAuthDefinition;
-import com.wordnik.swagger.models.auth.SecuritySchemeDefinition;
+import io.swagger.models.auth.BasicAuthDefinition;
+import io.swagger.models.auth.SecuritySchemeDefinition;
 import springfox.documentation.service.SecurityScheme;
 
 class BasicAuthFactory implements SecuritySchemeFactory {

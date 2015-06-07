@@ -19,7 +19,7 @@
 
 package springfox.documentation.schema;
 
-import com.wordnik.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 public class TypeWithGettersAndSetters {
   @ApiModelProperty(notes = "int Property Field", required = true)

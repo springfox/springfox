@@ -19,7 +19,7 @@
 
 package springfox.petstore.model;
 
-import com.wordnik.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty;
 import springfox.petstore.repository.Identifiable;
 
 import java.util.Date;

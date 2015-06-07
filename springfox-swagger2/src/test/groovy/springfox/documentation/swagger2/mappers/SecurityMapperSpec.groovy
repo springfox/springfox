@@ -1,7 +1,7 @@
 package springfox.documentation.swagger2.mappers
-import com.wordnik.swagger.models.auth.ApiKeyAuthDefinition
-import com.wordnik.swagger.models.auth.BasicAuthDefinition
-import com.wordnik.swagger.models.auth.OAuth2Definition
+import io.swagger.models.auth.ApiKeyAuthDefinition
+import io.swagger.models.auth.BasicAuthDefinition
+import io.swagger.models.auth.OAuth2Definition
 import spock.lang.Specification
 import springfox.documentation.builders.ImplicitGrantBuilder
 import springfox.documentation.builders.OAuthBuilder

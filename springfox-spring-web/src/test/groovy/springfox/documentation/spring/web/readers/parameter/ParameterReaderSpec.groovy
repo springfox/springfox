@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.readers.parameter
 
-import com.wordnik.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.annotation.RequestParam
 import spock.lang.Unroll

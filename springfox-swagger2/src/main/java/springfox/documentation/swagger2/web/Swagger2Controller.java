@@ -20,7 +20,7 @@
 package springfox.documentation.swagger2.web;
 
 import com.google.common.base.Optional;
-import com.wordnik.swagger.models.Swagger;
+import io.swagger.models.Swagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.wordnik.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.http.HttpMethod
 import org.springframework.web.bind.annotation.ModelAttribute

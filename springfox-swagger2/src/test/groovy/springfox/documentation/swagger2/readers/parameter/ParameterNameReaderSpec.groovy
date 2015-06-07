@@ -20,7 +20,7 @@
 package springfox.documentation.swagger2.readers.parameter
 
 import com.google.common.base.Optional
-import com.wordnik.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy

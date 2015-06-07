@@ -20,7 +20,7 @@
 package springfox.documentation.swagger.schema;
 
 import com.google.common.base.Optional;
-import com.wordnik.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;

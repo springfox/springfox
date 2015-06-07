@@ -19,7 +19,7 @@
 
 package springfox.documentation.schema;
 
-import com.wordnik.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModel;
 
 @ApiModel
 public class TypeWithEmptyApiModelAnnotation {

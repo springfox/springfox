@@ -1,7 +1,7 @@
 package springfox.documentation.swagger2.mappers
 import com.fasterxml.classmate.ResolvedType
-import com.wordnik.swagger.models.parameters.BodyParameter
-import com.wordnik.swagger.models.parameters.SerializableParameter
+import io.swagger.models.parameters.BodyParameter
+import io.swagger.models.parameters.SerializableParameter
 import spock.lang.Specification
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.ModelRef

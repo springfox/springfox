@@ -32,8 +32,8 @@ import java.lang.annotation.Target;
 public class LicenseMapper {
 
   @License
-  public com.wordnik.swagger.models.License apiInfoToLicense(ApiInfo from) {
-    return new com.wordnik.swagger.models.License().name(from.getLicense()).url(from.getLicenseUrl());
+  public io.swagger.models.License apiInfoToLicense(ApiInfo from) {
+    return new io.swagger.models.License().name(from.getLicense()).url(from.getLicenseUrl());
   }
 
 
