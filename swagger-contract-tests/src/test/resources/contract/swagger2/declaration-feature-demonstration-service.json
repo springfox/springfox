@@ -17,7 +17,8 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "feature-demonstration-service"
+            "name": "feature-demonstration-service",
+            "description": "Demonstration of features"
         }
     ],
     "produces": [
