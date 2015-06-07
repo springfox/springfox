@@ -39,7 +39,7 @@ class ClassOrApiAnnotationResourceGroupingSpec extends Specification {
     expect:
       group.groupName == groupName
       group.position == position
-      strategy.getResourceDescription(group) == description
+      strategy.getResourceDescription(requestMappingInfo, handlerMethod) == description
 
     where:
       handlerMethod                                    | groupName              | description                    | position

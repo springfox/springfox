@@ -50,8 +50,8 @@ public class SpringGroupingStrategy implements ResourceGroupingStrategy {
   }
 
   @Override
-  public String getResourceDescription(ResourceGroup resourceGroup) {
-    return getDescription(resourceGroup.getControllerClass());
+  public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+    return getDescription(handlerMethod.getBeanType());
   }
 
   @Override
