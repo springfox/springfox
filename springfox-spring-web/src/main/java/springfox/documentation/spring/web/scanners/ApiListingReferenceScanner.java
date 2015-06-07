@@ -37,6 +37,7 @@ import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -75,11 +76,9 @@ public class ApiListingReferenceScanner {
       }
     }
 
-    ResourceGroupingStrategy resourceGroupingStrategy = context.getResourceGroupingStrategy();
-
     for (ResourceGroup resourceGroup : resourceGroupRequestMappings.keySet()) {
       String resourceGroupName = resourceGroup.getGroupName();
-      String listingDescription = resourceGroupingStrategy.getResourceDescription(resourceGroup);
+      String listingDescription = getResourceDescription(resourceGroupRequestMappings.get(resourceGroup), context);
       Integer position = resourceGroup.getPosition();
       PathProvider pathProvider = context.getPathProvider();
       String path = pathProvider.getResourceListingPath(context.getGroupName(), resourceGroupName);
@@ -90,6 +89,19 @@ public class ApiListingReferenceScanner {
     }
     List<ApiListingReference> sorted = context.getListingReferenceOrdering().sortedCopy(apiListingReferences);
     return new ApiListingReferenceScanResult(sorted,  asMap(resourceGroupRequestMappings));
+  }
+
+  private String getResourceDescription(List<RequestMappingContext> requestMappings, DocumentationContext context) {
+    Iterator<RequestMappingContext> iterator = requestMappings.iterator();
+    if (!iterator.hasNext()) {
+      return null;
+    }
+
+    RequestMappingContext requestMapping = iterator.next();
+    ResourceGroupingStrategy resourceGroupingStrategy = context.getResourceGroupingStrategy();
+
+    return resourceGroupingStrategy
+            .getResourceDescription(requestMapping.getRequestMappingInfo(), requestMapping.getHandlerMethod());
   }
 
   private Set<RequestHandler> matchingHandlers(

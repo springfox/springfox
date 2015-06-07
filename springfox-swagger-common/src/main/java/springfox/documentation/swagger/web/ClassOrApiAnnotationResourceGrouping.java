@@ -45,8 +45,8 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
   private static final Logger LOG = LoggerFactory.getLogger(ClassOrApiAnnotationResourceGrouping.class);
 
   @Override
-  public String getResourceDescription(ResourceGroup resourceGroup) {
-    Class<?> controllerClass = resourceGroup.getControllerClass();
+  public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
+    Class<?> controllerClass = handlerMethod.getBeanType();
     String group = Paths.splitCamelCase(controllerClass.getSimpleName(), " ");
     return extractAnnotation(controllerClass, descriptionOrValueExtractor()).or(group);
   }
