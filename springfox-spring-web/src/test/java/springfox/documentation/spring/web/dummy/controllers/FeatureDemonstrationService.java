@@ -19,9 +19,9 @@
 
 package springfox.documentation.spring.web.dummy.controllers;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.joda.time.LocalDate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;

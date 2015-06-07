@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.dummy.models;
 
-import com.wordnik.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModel;
 import org.joda.time.LocalDate;
 
 import java.util.Date;

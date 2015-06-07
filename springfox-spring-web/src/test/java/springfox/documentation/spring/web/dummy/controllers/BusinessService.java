@@ -19,11 +19,11 @@
 
 package springfox.documentation.spring.web.dummy.controllers;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.wordnik.swagger.annotations.Authorization;
-import com.wordnik.swagger.annotations.AuthorizationScope;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Authorization;
+import io.swagger.annotations.AuthorizationScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +59,7 @@ public class BusinessService {
 
   @RequestMapping(value = "/businesses/non-aliased/{businessId}", method = RequestMethod.GET)
   @ApiOperation(value = "Find a business by its id", nickname = "findBusinessById",
-          authorizations = @Authorization(value = "oauth2", type="",
+          authorizations = @Authorization(value = "oauth2",
                   scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
                   }))
   public String getNonAliasedPathVariable(

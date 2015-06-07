@@ -20,7 +20,7 @@
 package springfox.documentation.swagger.schema;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.wordnik.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;

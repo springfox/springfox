@@ -1,9 +1,9 @@
 package springfox.documentation.swagger2.mappers
 
-import com.wordnik.swagger.models.properties.AbstractNumericProperty
-import com.wordnik.swagger.models.properties.ObjectProperty
-import com.wordnik.swagger.models.properties.RefProperty
-import com.wordnik.swagger.models.properties.StringProperty
+import io.swagger.models.properties.AbstractNumericProperty
+import io.swagger.models.properties.ObjectProperty
+import io.swagger.models.properties.RefProperty
+import io.swagger.models.properties.StringProperty
 import org.mapstruct.factory.Mappers
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.schema.*

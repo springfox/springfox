@@ -19,8 +19,8 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.wordnik.swagger.models.auth.OAuth2Definition;
-import com.wordnik.swagger.models.auth.SecuritySchemeDefinition;
+import io.swagger.models.auth.OAuth2Definition;
+import io.swagger.models.auth.SecuritySchemeDefinition;
 import springfox.documentation.service.AuthorizationCodeGrant;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.SecurityScheme;

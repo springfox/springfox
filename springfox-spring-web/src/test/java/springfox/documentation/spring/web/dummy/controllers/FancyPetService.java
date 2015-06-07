@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.dummy.controllers;
 
-import com.wordnik.swagger.annotations.Api;
+import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;

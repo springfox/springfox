@@ -19,12 +19,12 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.wordnik.swagger.models.ArrayModel;
-import com.wordnik.swagger.models.Model;
-import com.wordnik.swagger.models.ModelImpl;
-import com.wordnik.swagger.models.RefModel;
-import com.wordnik.swagger.models.parameters.BodyParameter;
-import com.wordnik.swagger.models.parameters.Parameter;
+import io.swagger.models.ArrayModel;
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.RefModel;
+import io.swagger.models.parameters.BodyParameter;
+import io.swagger.models.parameters.Parameter;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelRef;
 

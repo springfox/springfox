@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger1.readers.parameter
 import com.google.common.base.Optional
-import com.wordnik.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import spock.lang.Specification
 import springfox.documentation.swagger.readers.parameter.ParameterAnnotationReader

@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.dummy.controllers;
 
-import com.wordnik.swagger.annotations.Api;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

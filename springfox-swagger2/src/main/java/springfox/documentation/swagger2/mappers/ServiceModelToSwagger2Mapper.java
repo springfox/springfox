@@ -24,15 +24,15 @@ import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.wordnik.swagger.models.Contact;
-import com.wordnik.swagger.models.Info;
-import com.wordnik.swagger.models.Operation;
-import com.wordnik.swagger.models.Path;
-import com.wordnik.swagger.models.Response;
-import com.wordnik.swagger.models.Scheme;
-import com.wordnik.swagger.models.Swagger;
-import com.wordnik.swagger.models.Tag;
-import com.wordnik.swagger.models.properties.Property;
+import io.swagger.models.Contact;
+import io.swagger.models.Info;
+import io.swagger.models.Operation;
+import io.swagger.models.Path;
+import io.swagger.models.Response;
+import io.swagger.models.Scheme;
+import io.swagger.models.Swagger;
+import io.swagger.models.Tag;
+import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -92,7 +92,8 @@ public abstract class ServiceModelToSwagger2Mapper {
   protected abstract Operation mapOperation(springfox.documentation.service.Operation from);
 
   @Mappings({
-      @Mapping(target = "externalDocs", ignore = true)
+      @Mapping(target = "externalDocs", ignore = true),
+      @Mapping(target = "vendorExtensions", ignore = true)
   })
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
@@ -124,7 +125,7 @@ public abstract class ServiceModelToSwagger2Mapper {
       Response response = new Response()
           .description(responseMessage.getMessage())
           .schema(responseProperty);
-      response.setExamples(Maps.<String, String>newHashMap());
+      response.setExamples(Maps.<String, Object>newHashMap());
       response.setHeaders(Maps.<String, Property>newHashMap());
       responses.put(String.valueOf(responseMessage.getCode()), response);
     }

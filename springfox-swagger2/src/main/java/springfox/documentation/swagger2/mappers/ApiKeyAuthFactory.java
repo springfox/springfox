@@ -19,9 +19,9 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.wordnik.swagger.models.auth.ApiKeyAuthDefinition;
-import com.wordnik.swagger.models.auth.In;
-import com.wordnik.swagger.models.auth.SecuritySchemeDefinition;
+import io.swagger.models.auth.ApiKeyAuthDefinition;
+import io.swagger.models.auth.In;
+import io.swagger.models.auth.SecuritySchemeDefinition;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.SecurityScheme;
 

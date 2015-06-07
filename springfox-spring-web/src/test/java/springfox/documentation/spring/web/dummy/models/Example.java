@@ -19,8 +19,8 @@
 
 package springfox.documentation.spring.web.dummy.models;
 
-import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.wordnik.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import org.joda.time.LocalDateTime;
 
 import java.io.Serializable;

@@ -20,7 +20,7 @@
 package springfox.documentation.swagger.readers.operation;
 
 import com.google.common.collect.Lists;
-import com.wordnik.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParam;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;

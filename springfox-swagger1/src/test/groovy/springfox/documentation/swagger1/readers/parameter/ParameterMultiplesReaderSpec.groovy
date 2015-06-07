@@ -21,7 +21,7 @@ package springfox.documentation.swagger1.readers.parameter
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.wordnik.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder

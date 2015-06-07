@@ -21,8 +21,8 @@ package springfox.documentation.swagger.readers.parameter;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.wordnik.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.ModelRef;
