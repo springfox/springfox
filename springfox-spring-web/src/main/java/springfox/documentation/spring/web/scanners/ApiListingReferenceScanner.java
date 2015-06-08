@@ -42,8 +42,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Multimaps.asMap;
+import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Multimaps.*;
 
 @Component
 public class ApiListingReferenceScanner {
@@ -55,7 +55,7 @@ public class ApiListingReferenceScanner {
 
     List<ApiListingReference> apiListingReferences = newArrayList();
     ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
-            = ArrayListMultimap.create();
+        = ArrayListMultimap.create();
     ApiSelector selector = context.getApiSelector();
     for (RequestMappingHandlerMapping requestMappingHandlerMapping : context.getHandlerMappings()) {
       for (RequestHandler handler : matchingHandlers(requestMappingHandlerMapping, selector)) {
@@ -63,15 +63,15 @@ public class ApiListingReferenceScanner {
         HandlerMethod handlerMethod = handler.getHandlerMethod();
         ResourceGroupingStrategy resourceGroupingStrategy = context.getResourceGroupingStrategy();
         Set<ResourceGroup> resourceGroups
-                  = resourceGroupingStrategy.getResourceGroups(requestMappingInfo, handlerMethod);
+            = resourceGroupingStrategy.getResourceGroups(requestMappingInfo, handlerMethod);
         String handlerMethodName = handlerMethod.getMethod().getName();
 
         RequestMappingContext requestMappingContext
-                  = new RequestMappingContext(context, requestMappingInfo, handlerMethod);
+            = new RequestMappingContext(context, requestMappingInfo, handlerMethod);
 
         LOG.info("Request mapping: {} belongs to groups: [{}] ", handlerMethodName, resourceGroups);
         for (ResourceGroup group : resourceGroups) {
-            resourceGroupRequestMappings.put(group, requestMappingContext);
+          resourceGroupRequestMappings.put(group, requestMappingContext);
         }
       }
     }
@@ -88,7 +88,7 @@ public class ApiListingReferenceScanner {
       apiListingReferences.add(new ApiListingReference(adjuster.adjustedPath(path), listingDescription, position));
     }
     List<ApiListingReference> sorted = context.getListingReferenceOrdering().sortedCopy(apiListingReferences);
-    return new ApiListingReferenceScanResult(sorted,  asMap(resourceGroupRequestMappings));
+    return new ApiListingReferenceScanResult(sorted, asMap(resourceGroupRequestMappings));
   }
 
   private String getResourceDescription(List<RequestMappingContext> requestMappings, DocumentationContext context) {
@@ -101,7 +101,7 @@ public class ApiListingReferenceScanner {
     ResourceGroupingStrategy resourceGroupingStrategy = context.getResourceGroupingStrategy();
 
     return resourceGroupingStrategy
-            .getResourceDescription(requestMapping.getRequestMappingInfo(), requestMapping.getHandlerMethod());
+        .getResourceDescription(requestMapping.getRequestMappingInfo(), requestMapping.getHandlerMethod());
   }
 
   private Set<RequestHandler> matchingHandlers(
@@ -109,9 +109,9 @@ public class ApiListingReferenceScanner {
       ApiSelector selector) {
     return FluentIterable
         .from(requestMappingHandlerMapping.getHandlerMethods().entrySet())
-            .transform(toRequestHandler())
-            .filter(selector.getRequestHandlerSelector())
-            .toSet();
+        .transform(toRequestHandler())
+        .filter(selector.getRequestHandlerSelector())
+        .toSet();
   }
 
   private Function<Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
