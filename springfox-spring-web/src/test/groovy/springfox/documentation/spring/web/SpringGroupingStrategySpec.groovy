@@ -38,6 +38,7 @@ class SpringGroupingStrategySpec extends Specification {
     expect:
       groups.eachWithIndex { group, index ->
         group.groupName == groupNames[index]
+
       }
       strategy.getResourceDescription(requestMappingInfo, handlerMethod) == description
       strategy.getResourcePosition(requestMappingInfo, handlerMethod) == 0

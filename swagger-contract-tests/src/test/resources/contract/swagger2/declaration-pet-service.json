@@ -17,10 +17,12 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "pet-grooming-service"
+            "name": "pet-grooming-service",
+            "description": "Grooming operations for pets"
         },
         {
-            "name": "pet-service"
+            "name": "pet-service",
+            "description": "Operations about pets"
         }
     ],
     "produces": [

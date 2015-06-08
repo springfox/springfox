@@ -32,6 +32,7 @@ import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.service.SecurityReference;
+import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
@@ -79,10 +80,16 @@ public class ApiListingScanner {
       Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
       Set<ApiDescription> apiDescriptions = newHashSet();
 
+      ResourceGroupingStrategy resourceGroupingStrategy = documentationContext.getResourceGroupingStrategy();
+      String listingDescription = null;
+
       Map<String, Model> models = new LinkedHashMap<String, Model>();
       for (RequestMappingContext each : entry.getValue()) {
         models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
+        // Resource description will be the same for all handler methods
+        listingDescription =
+                resourceGroupingStrategy.getResourceDescription(each.getRequestMappingInfo(), each.getHandlerMethod());
       }
 
 
@@ -104,7 +111,7 @@ public class ApiListingScanner {
               .securityReferences(securityReferences)
               .apis(sortedApis)
               .models(models)
-              .description(null)
+              .description(listingDescription)
               .position(position++);
 
       ApiListingContext apiListingContext = new ApiListingContext(context.getDocumentationType(), resourceGroup,

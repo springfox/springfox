@@ -51,7 +51,7 @@ public class SpringGroupingStrategy implements ResourceGroupingStrategy {
 
   @Override
   public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-    return getDescription(handlerMethod);
+    return getDescription(handlerMethod.getBeanType());
   }
 
   @Override
@@ -95,8 +95,7 @@ public class SpringGroupingStrategy implements ResourceGroupingStrategy {
     };
   }
 
-  private String getDescription(HandlerMethod handlerMethod) {
-    Class<?> controllerClass = handlerMethod.getBeanType();
+  private String getDescription(Class<?> controllerClass) {
     return Paths.splitCamelCase(controllerClass.getSimpleName(), " ");
   }
 }

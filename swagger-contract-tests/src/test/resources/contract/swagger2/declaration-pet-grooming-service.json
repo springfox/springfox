@@ -17,7 +17,8 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "pet-grooming-service"
+            "name": "pet-grooming-service",
+            "description": "Grooming operations for pets"
         }
     ],
     "produces": [
