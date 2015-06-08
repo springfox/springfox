@@ -149,7 +149,7 @@ All content is served from a webjar convention, relative url taking the followin
 `webjars/${project.name}/${project.version}` e.g: `/webjars/springfox-swagger-ui/2.0.2-SNAPSHOT/swagger-ui.html`
 
 By default Spring Boot has sensible defaults for serving content from webjars. To configure vanilla spring web mvc
-apps to serve webjar content see the [webjar documentation] (http://www.webjars.org/documentation#springmvc)
+apps to serve webjar content see the http://www.webjars.org/documentation#springmvc[webjar documentation]
 
 === Springfox samples
 The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of samples.
