@@ -1199,12 +1199,26 @@ Spring Boot application you can add the dependency as follows:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The Swagger UI page should then be available at <a href="http://localhost:8080/swagger-ui.html" class="bare">http://localhost:8080/swagger-ui.html</a></p>
+<p>Pulling in the dependency creates a webjar containing the swagger-ui static content. It adds a JSON endpoint
+<code>/swagger-resources</code> which lists all of the swagger resources and versions configured for a given
+application. The Swagger UI page should then be available at <a href="http://localhost:8080/swagger-ui.html" class="bare">http://localhost:8080/swagger-ui.html</a></p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="./images/springfox-swagger-ui.png" alt="Swagger UI">
 </div>
+</div>
+<div class="paragraph">
+<p>The swagger ui version is specified in ./build.gradle where <code>swaggerUiVersion</code> is a git tag on the [swagger-ui repo]
+(<a href="https://github.com/wordnik/swagger-ui" class="bare">https://github.com/wordnik/swagger-ui</a>).</p>
+</div>
+<div class="paragraph">
+<p>All content is served from a webjar convention, relative url taking the following form:
+<code>webjars/${project.name}/${project.version}</code> e.g: <code>/webjars/springfox-swagger-ui/2.0.2-SNAPSHOT/swagger-ui.html</code></p>
+</div>
+<div class="paragraph">
+<p>By default Spring Boot has sensible defaults for serving content from webjars. To configure vanilla spring web mvc
+apps to serve webjar content see the [webjar documentation] (<a href="http://www.webjars.org/documentation#springmvc" class="bare">http://www.webjars.org/documentation#springmvc</a>)</p>
 </div>
 </div>
 </div>
@@ -1697,7 +1711,7 @@ in the demo application.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-06-08 04:00:03 UTC
+Last updated 2015-06-08 04:25:12 UTC
 </div>
 </div>
 </body>
