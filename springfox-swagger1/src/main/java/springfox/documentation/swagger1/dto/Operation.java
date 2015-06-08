@@ -44,6 +44,7 @@ import static com.google.common.collect.Maps.*;
 public class Operation {
   private String method;
   private String summary;
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private String notes;
   @JsonProperty
   @JsonUnwrapped

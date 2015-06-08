@@ -18,7 +18,6 @@
                 {
                     "method": "GET",
                     "summary": "Find a business by its id",
-                    "notes": "getAliasedPathVariable",
                     "nickname": "findBusinessById",
                     "produces": [
                         "*/*",
@@ -69,7 +68,6 @@
                 {
                     "method": "GET",
                     "summary": "businessesByCategories",
-                    "notes": "businessesByCategories",
                     "nickname": "businessesByCategoriesUsingGET",
                     "produces": [
                         "application/json"
@@ -129,7 +127,6 @@
                 {
                     "method": "GET",
                     "summary": "Find a business by its id",
-                    "notes": "getNonAliasedPathVariable",
                     "nickname": "findBusinessById",
                     "produces": [
                         "*/*",
@@ -188,7 +185,6 @@
                 {
                     "method": "GET",
                     "summary": "getResponseEntity",
-                    "notes": "getResponseEntity",
                     "nickname": "getResponseEntityUsingGET",
                     "produces": [
                         "*/*",
@@ -239,7 +235,6 @@
                 {
                     "method": "POST",
                     "summary": "businessTypeEcho",
-                    "notes": "businessTypeEcho",
                     "nickname": "businessTypeEchoUsingPOST",
                     "produces": [
                         "application/json"
@@ -297,7 +292,6 @@
                 {
                     "method": "GET",
                     "summary": "getVanillaPathVariable",
-                    "notes": "getVanillaPathVariable",
                     "nickname": "getVanillaPathVariableUsingGET",
                     "produces": [
                         "*/*",

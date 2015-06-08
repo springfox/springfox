@@ -32,7 +32,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingGET",
                 "consumes": [
                     "application/json"
@@ -51,7 +50,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingPOST",
                 "consumes": [
                     "application/json"
@@ -70,7 +68,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingPUT",
                 "consumes": [
                     "application/json"
@@ -89,7 +86,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingDELETE",
                 "consumes": [
                     "application/json"
@@ -108,7 +104,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingOPTIONS",
                 "consumes": [
                     "application/json"
@@ -127,7 +122,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingPATCH",
                 "consumes": [
                     "application/json"
@@ -148,7 +142,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getBare",
-                "description": "getBare",
                 "operationId": "getBareUsingPOST",
                 "consumes": [
                     "application/json"
@@ -180,7 +173,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBigDecimal",
-                "description": "updateBigDecimal",
                 "operationId": "updateBigDecimalUsingPOST",
                 "consumes": [
                     "application/json"
@@ -212,7 +204,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateDate",
-                "description": "updateDate",
                 "operationId": "updateDateUsingPOST",
                 "consumes": [
                     "application/json"
@@ -244,7 +235,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEffective",
-                "description": "getEffective",
                 "operationId": "getEffectiveUsingGET",
                 "consumes": [
                     "application/json"
@@ -268,7 +258,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEffectives",
-                "description": "getEffectives",
                 "operationId": "getEffectivesUsingGET",
                 "consumes": [
                     "application/json"
@@ -295,7 +284,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "listOfMaps",
-                "description": "listOfMaps",
                 "operationId": "listOfMapsUsingGET",
                 "consumes": [
                     "application/json"
@@ -322,7 +310,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "modelWithMapProperty",
-                "description": "modelWithMapProperty",
                 "operationId": "modelWithMapPropertyUsingGET",
                 "consumes": [
                     "application/json"
@@ -346,7 +333,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBaz",
-                "description": "updateBaz",
                 "operationId": "updateBazUsingPOST",
                 "consumes": [
                     "application/json"
@@ -378,7 +364,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBazes",
-                "description": "updateBazes",
                 "operationId": "updateBazesUsingPOST",
                 "consumes": [
                     "application/json"

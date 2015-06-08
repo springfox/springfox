@@ -7,7 +7,6 @@
         {
           "method": "GET",
           "summary": "groovyModel",
-          "notes": "groovyModel",
           "nickname": "groovyModelUsingGET",
           "produces": [
             "*/*"
@@ -49,7 +48,6 @@
         {
           "method": "PUT",
           "summary": "updateGroovyModel",
-          "notes": "updateGroovyModel",
           "nickname": "updateGroovyModelUsingPUT",
           "produces": [
             "*/*"

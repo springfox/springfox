@@ -35,7 +35,6 @@ public class DefaultOperationReader implements OperationBuilderPlugin {
     context.operationBuilder()
             .method(context.httpMethod())
             .uniqueId(String.format("%sUsing%s", operationName, context.httpMethod()))
-            .notes(operationName)
             .position(context.operationIndex())
             .summary(operationName);
   }

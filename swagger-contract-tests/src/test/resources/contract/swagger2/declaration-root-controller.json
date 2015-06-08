@@ -79,7 +79,6 @@
                     "root-controller"
                 ],
                 "summary": "getAll",
-                "description": "getAll",
                 "operationId": "getAllUsingGET",
                 "consumes": [
                     "application/json"
@@ -106,7 +105,6 @@
                     "pet"
                 ],
                 "summary": "Add a new pet to the store",
-                "description": "addPet",
                 "operationId": "addPetUsingPOST",
                 "consumes": [
                     "application/json"
@@ -151,7 +149,6 @@
                     "pet"
                 ],
                 "summary": "Update an existing pet",
-                "description": "updatePet",
                 "operationId": "updatePetUsingPUT",
                 "consumes": [
                     "application/json"
@@ -355,7 +352,6 @@
                     "store"
                 ],
                 "summary": "Place an order for a pet",
-                "description": "placeOrder",
                 "operationId": "placeOrderUsingPOST",
                 "consumes": [
                     "application/json"
@@ -504,7 +500,6 @@
                     "user"
                 ],
                 "summary": "Creates list of users with given input array",
-                "description": "createUsersWithArrayInput",
                 "operationId": "createUsersWithArrayInputUsingPOST",
                 "consumes": [
                     "application/json"
@@ -542,7 +537,6 @@
                     "user"
                 ],
                 "summary": "Creates list of users with given input array",
-                "description": "createUsersWithListInput",
                 "operationId": "createUsersWithListInputUsingPOST",
                 "consumes": [
                     "application/json"
@@ -580,7 +574,6 @@
                     "user"
                 ],
                 "summary": "Logs user into the system",
-                "description": "loginUser",
                 "operationId": "loginUserUsingPOST",
                 "consumes": [
                     "application/json"
@@ -623,7 +616,6 @@
                     "user"
                 ],
                 "summary": "Logs out current logged in user session",
-                "description": "logoutUser",
                 "operationId": "logoutUserUsingGET",
                 "consumes": [
                     "application/json"
@@ -647,7 +639,6 @@
                     "user"
                 ],
                 "summary": "Get user by user name",
-                "description": "getUserByName",
                 "operationId": "getUserByNameUsingGET",
                 "consumes": [
                     "application/json"
@@ -769,7 +760,6 @@
                     "endpoint-mvc-adapter"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingGET",
                 "consumes": [
                     "application/json"
@@ -793,7 +783,6 @@
                     "endpoint-mvc-adapter"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingGET",
                 "consumes": [
                     "application/json"
@@ -817,7 +806,6 @@
                     "business-service"
                 ],
                 "summary": "Find a business by its id",
-                "description": "getAliasedPathVariable",
                 "operationId": "getAliasedPathVariableUsinGET",
                 "consumes": [
                     "application/json"
@@ -851,7 +839,6 @@
                     "business-service"
                 ],
                 "summary": "businessesByCategories",
-                "description": "businessesByCategories",
                 "operationId": "businessesByCategoriesUsingGET",
                 "consumes": [
                     "application/json"
@@ -891,7 +878,6 @@
                     "business-service"
                 ],
                 "summary": "Find a business by its id",
-                "description": "getNonAliasedPathVariable",
                 "operationId": "getNonAliasedPathVariableUsingGET",
                 "consumes": [
                     "application/json"
@@ -932,7 +918,6 @@
                     "business-service"
                 ],
                 "summary": "getResponseEntity",
-                "description": "getResponseEntity",
                 "operationId": "getResponseEntityUsingGET",
                 "consumes": [
                     "application/json"
@@ -966,7 +951,6 @@
                     "business-service"
                 ],
                 "summary": "businessTypeEcho",
-                "description": "businessTypeEcho",
                 "operationId": "businessTypeEchoUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1001,7 +985,6 @@
                     "business-service"
                 ],
                 "summary": "getVanillaPathVariable",
-                "description": "getVanillaPathVariable",
                 "operationId": "getVanillaPathVariableUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1035,7 +1018,6 @@
                     "inherited-service-impl"
                 ],
                 "summary": "getSomething",
-                "description": "getSomething",
                 "operationId": "getSomethingUsingGET",
                 "consumes": [
                     "application/json"
@@ -1070,7 +1052,6 @@
                     "endpoint-mvc-adapter"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingGET",
                 "consumes": [
                     "application/json"
@@ -1094,7 +1075,6 @@
                     "endpoint-mvc-adapter"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingGET",
                 "consumes": [
                     "application/json"
@@ -1118,7 +1098,6 @@
                     "environment-mvc-endpoint"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingGET",
                 "consumes": [
                     "application/json"
@@ -1142,7 +1121,6 @@
                     "environment-mvc-endpoint"
                 ],
                 "summary": "value",
-                "description": "value",
                 "operationId": "valueUsingGET",
                 "consumes": [
                     "application/json"
@@ -1175,7 +1153,6 @@
                     "basic-error-controller"
                 ],
                 "summary": "errorHtml",
-                "description": "errorHtml",
                 "operationId": "errorHtmlUsingGET",
                 "consumes": [
                     "application/json"
@@ -1197,7 +1174,6 @@
                     "basic-error-controller"
                 ],
                 "summary": "errorHtml",
-                "description": "errorHtml",
                 "operationId": "errorHtmlUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1219,7 +1195,6 @@
                     "basic-error-controller"
                 ],
                 "summary": "errorHtml",
-                "description": "errorHtml",
                 "operationId": "errorHtmlUsingPUT",
                 "consumes": [
                     "application/json"
@@ -1241,7 +1216,6 @@
                     "basic-error-controller"
                 ],
                 "summary": "errorHtml",
-                "description": "errorHtml",
                 "operationId": "errorHtmlUsingDELETE",
                 "consumes": [
                     "application/json"
@@ -1263,7 +1237,6 @@
                     "basic-error-controller"
                 ],
                 "summary": "errorHtml",
-                "description": "errorHtml",
                 "operationId": "errorHtmlUsingOPTIONS",
                 "consumes": [
                     "application/json"
@@ -1285,7 +1258,6 @@
                     "basic-error-controller"
                 ],
                 "summary": "errorHtml",
-                "description": "errorHtml",
                 "operationId": "errorHtmlUsingPATCH",
                 "consumes": [
                     "application/json"
@@ -1309,7 +1281,6 @@
                     "fancy-pet-service"
                 ],
                 "summary": "createObject",
-                "description": "createObject",
                 "operationId": "createObjectUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1343,7 +1314,6 @@
                     "fancy-pet-service"
                 ],
                 "summary": "updatePet",
-                "description": "updatePet",
                 "operationId": "updatePetUsingPUT",
                 "consumes": [
                     "application/json"
@@ -1375,7 +1345,6 @@
                     "fancy-pet-service"
                 ],
                 "summary": "createObject",
-                "description": "createObject",
                 "operationId": "createObjectUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1419,7 +1388,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "all",
-                "description": "all",
                 "operationId": "allUsingGET",
                 "consumes": [
                     "application/json"
@@ -1441,7 +1409,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "all",
-                "description": "all",
                 "operationId": "allUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1463,7 +1430,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "all",
-                "description": "all",
                 "operationId": "allUsingPUT",
                 "consumes": [
                     "application/json"
@@ -1485,7 +1451,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "all",
-                "description": "all",
                 "operationId": "allUsingDELETE",
                 "consumes": [
                     "application/json"
@@ -1507,7 +1472,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "all",
-                "description": "all",
                 "operationId": "allUsingOPTIONS",
                 "consumes": [
                     "application/json"
@@ -1529,7 +1493,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "all",
-                "description": "all",
                 "operationId": "allUsingPATCH",
                 "consumes": [
                     "application/json"
@@ -1553,7 +1516,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingGET",
                 "consumes": [
                     "application/json"
@@ -1572,7 +1534,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1591,7 +1552,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingPUT",
                 "consumes": [
                     "application/json"
@@ -1610,7 +1570,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingDELETE",
                 "consumes": [
                     "application/json"
@@ -1629,7 +1588,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingOPTIONS",
                 "consumes": [
                     "application/json"
@@ -1648,7 +1606,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "description": "allMethodAllowed",
                 "operationId": "allMethodAllowedUsingPATCH",
                 "consumes": [
                     "application/json"
@@ -1669,7 +1626,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getBare",
-                "description": "getBare",
                 "operationId": "getBareUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1701,7 +1657,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBigDecimal",
-                "description": "updateBigDecimal",
                 "operationId": "updateBigDecimalUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1733,7 +1688,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateDate",
-                "description": "updateDate",
                 "operationId": "updateDateUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1765,7 +1719,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEffective",
-                "description": "getEffective",
                 "operationId": "getEffectiveUsingGET",
                 "consumes": [
                     "application/json"
@@ -1789,7 +1742,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEffectives",
-                "description": "getEffectives",
                 "operationId": "getEffectivesUsingGET",
                 "consumes": [
                     "application/json"
@@ -1816,7 +1768,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBaz",
-                "description": "updateBaz",
                 "operationId": "updateBazUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1848,7 +1799,6 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBazes",
-                "description": "updateBazes",
                 "operationId": "updateBazesUsingPOST",
                 "consumes": [
                     "application/json"
@@ -1913,7 +1863,6 @@
                     "concrete-controller"
                 ],
                 "summary": "create",
-                "description": "create",
                 "operationId": "createUsingPUT",
                 "consumes": [
                     "application/json"
@@ -1945,7 +1894,6 @@
                     "concrete-controller"
                 ],
                 "summary": "get",
-                "description": "get",
                 "operationId": "getUsingPUT",
                 "consumes": [
                     "application/json"
@@ -1972,7 +1920,6 @@
                     "health-mvc-endpoint"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingGET",
                 "consumes": [
                     "application/json"
@@ -1994,7 +1941,6 @@
                     "health-mvc-endpoint"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingPOST",
                 "consumes": [
                     "application/json"
@@ -2016,7 +1962,6 @@
                     "health-mvc-endpoint"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingPUT",
                 "consumes": [
                     "application/json"
@@ -2038,7 +1983,6 @@
                     "health-mvc-endpoint"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingDELETE",
                 "consumes": [
                     "application/json"
@@ -2060,7 +2004,6 @@
                     "health-mvc-endpoint"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingOPTIONS",
                 "consumes": [
                     "application/json"
@@ -2082,7 +2025,6 @@
                     "health-mvc-endpoint"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingPATCH",
                 "consumes": [
                     "application/json"
@@ -2106,7 +2048,6 @@
                     "endpoint-mvc-adapter"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingGET",
                 "consumes": [
                     "application/json"
@@ -2130,7 +2071,6 @@
                     "endpoint-mvc-adapter"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingGET",
                 "consumes": [
                     "application/json"
@@ -2154,7 +2094,6 @@
                     "metrics-mvc-endpoint"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingGET",
                 "consumes": [
                     "application/json"
@@ -2178,7 +2117,6 @@
                     "metrics-mvc-endpoint"
                 ],
                 "summary": "value",
-                "description": "value",
                 "operationId": "valueUsingGET",
                 "consumes": [
                     "application/json"
@@ -2211,7 +2149,6 @@
                     "controller-with-no-request-mapping-service"
                 ],
                 "summary": "exampleWithNoRequestMapping",
-                "description": "exampleWithNoRequestMapping",
                 "operationId": "exampleWithNoRequestMappingUsingGET",
                 "consumes": [
                     "application/json"
@@ -2235,7 +2172,6 @@
                     "pet-grooming-service"
                 ],
                 "summary": "canGroom",
-                "description": "canGroom",
                 "operationId": "canGroomUsingGET",
                 "consumes": [
                     "application/json"
@@ -2268,7 +2204,6 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "description": "groomingFunctionThatReturnsVoid",
                 "operationId": "groomingFunctionThatReturnsVoidUsingDELETE",
                 "consumes": [
                     "application/json"
@@ -2299,7 +2234,6 @@
                     "pet-service"
                 ],
                 "summary": "List all pets",
-                "description": "listPets",
                 "operationId": "listPetsUsingGET",
                 "consumes": [
                     "application/json"
@@ -2324,7 +2258,6 @@
                     "pet-service"
                 ],
                 "summary": "Add a new pet to the store",
-                "description": "addPet",
                 "operationId": "addPetUsingPOST",
                 "consumes": [
                     "application/json"
@@ -2357,7 +2290,6 @@
                     "pet-service"
                 ],
                 "summary": "Update an existing pet",
-                "description": "updatePet",
                 "operationId": "updatePetUsingPUT",
                 "consumes": [
                     "application/json"
@@ -2398,7 +2330,6 @@
                     "pet-service"
                 ],
                 "summary": "petEntities",
-                "description": "petEntities",
                 "operationId": "petEntitiesUsingPOST",
                 "consumes": [
                     "application/json"
@@ -2434,7 +2365,6 @@
                     "pet-service"
                 ],
                 "summary": "echo",
-                "description": "echo",
                 "operationId": "echoUsingPOST",
                 "consumes": [
                     "application/json"
@@ -2549,7 +2479,6 @@
                     "pet-grooming-service"
                 ],
                 "summary": "canGroom",
-                "description": "canGroom",
                 "operationId": "canGroomUsingGET",
                 "consumes": [
                     "application/json"
@@ -2582,7 +2511,6 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "description": "groomingFunctionThatReturnsVoid",
                 "operationId": "groomingFunctionThatReturnsVoidUsingGET",
                 "consumes": [
                     "application/json"
@@ -2613,7 +2541,6 @@
                     "pet-service"
                 ],
                 "summary": "nameToNickNamesMap",
-                "description": "nameToNickNamesMap",
                 "operationId": "nameToNickNamesMapUsingPOST",
                 "consumes": [
                     "application/json"
@@ -2640,7 +2567,6 @@
                     "pet-service"
                 ],
                 "summary": "siblings",
-                "description": "siblings",
                 "operationId": "siblingsUsingPOST",
                 "consumes": [
                     "application/json"
@@ -2678,7 +2604,6 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToAny",
-                "description": "transformPetNameToPetMapToAny",
                 "operationId": "transformPetNameToPetMapToAnyUsingPOST",
                 "consumes": [
                     "application/json"
@@ -2716,7 +2641,6 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToGenericOpenMap",
-                "description": "transformPetNameToPetMapToGenericOpenMap",
                 "operationId": "transformPetNameToPetMapToGenericOpenMapUsingPOST",
                 "consumes": [
                     "application/json"
@@ -2754,7 +2678,6 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToOpenMap",
-                "description": "transformPetNameToPetMapToOpenMap",
                 "operationId": "transformPetNameToPetMapToOpenMapUsingPOST",
                 "consumes": [
                     "application/json"
@@ -2792,7 +2715,6 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "description": "groomingFunctionThatReturnsVoid",
                 "operationId": "groomingFunctionThatReturnsVoidUsingDELETE",
                 "consumes": [
                     "application/json"
@@ -2823,7 +2745,6 @@
                     "pet-service"
                 ],
                 "summary": "method",
-                "description": "method",
                 "operationId": "methodUsingGET",
                 "consumes": [
                     "application/json"
@@ -2860,7 +2781,6 @@
                     "pet-service"
                 ],
                 "summary": "petByName",
-                "description": "petByName",
                 "operationId": "petByNameUsingPOST",
                 "consumes": [
                     "application/json"
@@ -2926,7 +2846,6 @@
                     "pet-service"
                 ],
                 "summary": "updatePic",
-                "description": "updatePic",
                 "operationId": "updatePicUsingPOST",
                 "consumes": [
                     "multipart/form-data"
@@ -2963,7 +2882,6 @@
                     "pet-service"
                 ],
                 "summary": "updatePic",
-                "description": "updatePic",
                 "operationId": "updatePicUsingGET",
                 "consumes": [
                     "application/json"
@@ -3000,7 +2918,6 @@
                     "endpoint-mvc-adapter"
                 ],
                 "summary": "invoke",
-                "description": "invoke",
                 "operationId": "invokeUsingGET",
                 "consumes": [
                     "application/json"
