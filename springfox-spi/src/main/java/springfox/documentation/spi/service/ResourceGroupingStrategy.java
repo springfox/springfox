@@ -37,7 +37,7 @@ public interface ResourceGroupingStrategy extends Plugin<DocumentationType> {
    * @return Resource group uris.
    * @see <code>ApiListingReferenceScanner</code>
    */
-  public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);
+  Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);
 
 
   /**
@@ -45,19 +45,25 @@ public interface ResourceGroupingStrategy extends Plugin<DocumentationType> {
    * This is typically the class name of the spring controller or value() attribute of any @Api annotations on that
    * controller class
    *
+   * This method is deprecated since this functionality will likely be changed as we rework some of the internals
+   * @deprecated @since 2.0.2
    * @param requestMappingInfo request mapping info
    * @param handlerMethod      handler method
    * @return description of the resource
    */
-  public String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);
+  @Deprecated
+  String getResourceDescription(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);
 
   /**
    * Gets the position of the resource.
    *
+   * This method is deprecated since this functionality will likely be changed as we rework some of the internals
+   * @deprecated @since 2.0.2
    * @param requestMappingInfo mapping information
    * @param handlerMethod handler method
    * @return The numeric position
    */
-  public Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);
+  @Deprecated
+  Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod);
 
 }
