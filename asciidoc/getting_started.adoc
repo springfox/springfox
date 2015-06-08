@@ -136,9 +136,20 @@ dependencies {
 }
 ----
 
-The Swagger UI page should then be available at http://localhost:8080/swagger-ui.html[]
+Pulling in the dependency creates a webjar containing the swagger-ui static content. It adds a JSON endpoint
+`/swagger-resources` which lists all of the swagger resources and versions configured for a given
+application. The Swagger UI page should then be available at http://localhost:8080/swagger-ui.html[]
 
 image::springfox-swagger-ui.png[Swagger UI]
+
+The swagger ui version is specified in ./build.gradle where `swaggerUiVersion` is a git tag on the [swagger-ui repo]
+(https://github.com/wordnik/swagger-ui).
+
+All content is served from a webjar convention, relative url taking the following form:
+`webjars/${project.name}/${project.version}` e.g: `/webjars/springfox-swagger-ui/2.0.2-SNAPSHOT/swagger-ui.html`
+
+By default Spring Boot has sensible defaults for serving content from webjars. To configure vanilla spring web mvc
+apps to serve webjar content see the [webjar documentation] (http://www.webjars.org/documentation#springmvc)
 
 === Springfox samples
 The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of samples.
