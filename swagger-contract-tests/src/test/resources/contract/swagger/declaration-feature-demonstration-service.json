@@ -15,7 +15,6 @@
                 {
                     "method": "GET",
                     "summary": "all",
-                    "notes": "all",
                     "nickname": "allUsingGET",
                     "produces": [
                         "*/*"
@@ -49,7 +48,6 @@
                 {
                     "method": "HEAD",
                     "summary": "all",
-                    "notes": "all",
                     "nickname": "allUsingHEAD",
                     "produces": [
                         "*/*"
@@ -83,7 +81,6 @@
                 {
                     "method": "POST",
                     "summary": "all",
-                    "notes": "all",
                     "nickname": "allUsingPOST",
                     "produces": [
                         "*/*"
@@ -121,7 +118,6 @@
                 {
                     "method": "PUT",
                     "summary": "all",
-                    "notes": "all",
                     "nickname": "allUsingPUT",
                     "produces": [
                         "*/*"
@@ -159,7 +155,6 @@
                 {
                     "method": "PATCH",
                     "summary": "all",
-                    "notes": "all",
                     "nickname": "allUsingPATCH",
                     "produces": [
                         "*/*"
@@ -193,7 +188,6 @@
                 {
                     "method": "DELETE",
                     "summary": "all",
-                    "notes": "all",
                     "nickname": "allUsingDELETE",
                     "produces": [
                         "*/*"
@@ -227,7 +221,6 @@
                 {
                     "method": "OPTIONS",
                     "summary": "all",
-                    "notes": "all",
                     "nickname": "allUsingOPTIONS",
                     "produces": [
                         "*/*"
@@ -261,7 +254,6 @@
                 {
                     "method": "TRACE",
                     "summary": "all",
-                    "notes": "all",
                     "nickname": "allUsingTRACE",
                     "produces": [
                         "*/*"
@@ -301,7 +293,6 @@
                 {
                     "method": "GET",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
                     "nickname": "allMethodAllowedUsingGET",
                     "produces": [
                         "*/*"
@@ -334,7 +325,6 @@
                 {
                     "method": "HEAD",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
                     "nickname": "allMethodAllowedUsingHEAD",
                     "produces": [
                         "*/*"
@@ -367,7 +357,6 @@
                 {
                     "method": "POST",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
                     "nickname": "allMethodAllowedUsingPOST",
                     "produces": [
                         "*/*"
@@ -404,7 +393,6 @@
                 {
                     "method": "PUT",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
                     "nickname": "allMethodAllowedUsingPUT",
                     "produces": [
                         "*/*"
@@ -441,7 +429,6 @@
                 {
                     "method": "PATCH",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
                     "nickname": "allMethodAllowedUsingPATCH",
                     "produces": [
                         "*/*"
@@ -474,7 +461,6 @@
                 {
                     "method": "DELETE",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
                     "nickname": "allMethodAllowedUsingDELETE",
                     "produces": [
                         "*/*"
@@ -507,7 +493,6 @@
                 {
                     "method": "OPTIONS",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
                     "nickname": "allMethodAllowedUsingOPTIONS",
                     "produces": [
                         "*/*"
@@ -540,7 +525,6 @@
                 {
                     "method": "TRACE",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
                     "nickname": "allMethodAllowedUsingTRACE",
                     "produces": [
                         "*/*"
@@ -579,7 +563,6 @@
                 {
                     "method": "POST",
                     "summary": "getBare",
-                    "notes": "getBare",
                     "nickname": "getBareUsingPOST",
                     "produces": [
                         "*/*"
@@ -632,7 +615,6 @@
                 {
                     "method": "POST",
                     "summary": "updateBigDecimal",
-                    "notes": "updateBigDecimal",
                     "nickname": "updateBigDecimalUsingPOST",
                     "produces": [
                         "*/*"
@@ -686,7 +668,6 @@
                 {
                     "method": "POST",
                     "summary": "updateDate",
-                    "notes": "updateDate",
                     "nickname": "updateDateUsingPOST",
                     "produces": [
                         "*/*"
@@ -739,7 +720,6 @@
                 {
                     "method": "GET",
                     "summary": "getEffective",
-                    "notes": "getEffective",
                     "nickname": "getEffectiveUsingGET",
                     "produces": [
                         "*/*"
@@ -779,7 +759,6 @@
                 {
                     "method": "GET",
                     "summary": "getEffectives",
-                    "notes": "getEffectives",
                     "nickname": "getEffectivesUsingGET",
                     "produces": [
                         "*/*"
@@ -821,7 +800,6 @@
                 {
                     "method": "GET",
                     "summary": "listOfMaps",
-                    "notes": "listOfMaps",
                     "nickname": "listOfMapsUsingGET",
                     "produces": [
                         "*/*"
@@ -863,7 +841,6 @@
                 {
                     "method": "GET",
                     "summary": "modelWithMapProperty",
-                    "notes": "modelWithMapProperty",
                     "nickname": "modelWithMapPropertyUsingGET",
                     "produces": [
                         "*/*"
@@ -906,7 +883,6 @@
                 {
                     "method": "POST",
                     "summary": "updateBaz",
-                    "notes": "updateBaz",
                     "nickname": "updateBazUsingPOST",
                     "produces": [
                         "*/*"
@@ -963,7 +939,6 @@
                 {
                     "method": "POST",
                     "summary": "updateBazes",
-                    "notes": "updateBazes",
                     "nickname": "updateBazesUsingPOST",
                     "produces": [
                         "*/*"

@@ -36,7 +36,6 @@
                     "pet-service"
                 ],
                 "summary": "petEntities",
-                "description": "petEntities",
                 "operationId": "petEntitiesUsingPOST",
                 "consumes": [
                     "application/json"
@@ -72,7 +71,6 @@
                     "pet-service"
                 ],
                 "summary": "echo",
-                "description": "echo",
                 "operationId": "echoUsingPOST",
                 "consumes": [
                     "application/json"
@@ -192,7 +190,6 @@
                     "pet-grooming-service"
                 ],
                 "summary": "canGroom",
-                "description": "canGroom",
                 "operationId": "canGroomUsingGET",
                 "consumes": [
                     "application/json"
@@ -225,7 +222,6 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "description": "groomingFunctionThatReturnsVoid",
                 "operationId": "groomingFunctionThatReturnsVoidUsingDELETE",
                 "consumes": [
                     "application/json"
@@ -256,7 +252,6 @@
                     "pet-service"
                 ],
                 "summary": "nameToNickNamesMap",
-                "description": "nameToNickNamesMap",
                 "operationId": "nameToNickNamesMapUsingPOST",
                 "consumes": [
                     "application/json"
@@ -283,7 +278,6 @@
                     "pet-service"
                 ],
                 "summary": "siblings",
-                "description": "siblings",
                 "operationId": "siblingsUsingPOST",
                 "consumes": [
                     "application/json"
@@ -321,7 +315,6 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToAny",
-                "description": "transformPetNameToPetMapToAny",
                 "operationId": "transformPetNameToPetMapToAnyUsingPOST",
                 "consumes": [
                     "application/json"
@@ -359,7 +352,6 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToGenericOpenMap",
-                "description": "transformPetNameToPetMapToGenericOpenMap",
                 "operationId": "transformPetNameToPetMapToGenericOpenMapUsingPOST",
                 "consumes": [
                     "application/json"
@@ -397,7 +389,6 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToOpenMap",
-                "description": "transformPetNameToPetMapToOpenMap",
                 "operationId": "transformPetNameToPetMapToOpenMapUsingPOST",
                 "consumes": [
                     "application/json"
@@ -435,7 +426,6 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "description": "groomingFunctionThatReturnsVoid",
                 "operationId": "groomingFunctionThatReturnsVoidUsingDELETE",
                 "consumes": [
                     "application/json"
@@ -466,7 +456,6 @@
                     "pet-service"
                 ],
                 "summary": "method",
-                "description": "method",
                 "operationId": "methodUsingGET",
                 "consumes": [
                     "application/json"
@@ -503,7 +492,6 @@
                     "pet-service"
                 ],
                 "summary": "petByName",
-                "description": "petByName",
                 "operationId": "petByNameUsingPOST",
                 "consumes": [
                     "application/json"
@@ -569,7 +557,6 @@
                     "pet-service"
                 ],
                 "summary": "updatePic",
-                "description": "updatePic",
                 "operationId": "updatePicUsingPOST",
                 "consumes": [
                     "multipart/form-data"
@@ -606,7 +593,6 @@
                     "pet-service"
                 ],
                 "summary": "updatePic",
-                "description": "updatePic",
                 "operationId": "updatePicUsingGET",
                 "consumes": [
                     "application/json"

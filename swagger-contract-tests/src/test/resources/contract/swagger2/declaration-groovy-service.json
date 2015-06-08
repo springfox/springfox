@@ -32,7 +32,6 @@
           "groovy-service"
         ],
         "summary": "groovyModel",
-        "description": "groovyModel",
         "operationId": "groovyModelUsingGET",
         "consumes": [
           "application/json"
@@ -54,7 +53,6 @@
           "groovy-service"
         ],
         "summary": "updateGroovyModel",
-        "description": "updateGroovyModel",
         "operationId": "updateGroovyModelUsingPUT",
         "consumes": [
           "application/json"

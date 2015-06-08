@@ -40,7 +40,6 @@
                     "pet"
                 ],
                 "summary": "Add a new pet to the store",
-                "description": "addPet",
                 "operationId": "addPetUsingPOST",
                 "consumes": [
                     "application/json"
@@ -85,7 +84,6 @@
                     "pet"
                 ],
                 "summary": "Update an existing pet",
-                "description": "updatePet",
                 "operationId": "updatePetUsingPUT",
                 "consumes": [
                     "application/json"
@@ -292,7 +290,6 @@
                     "store"
                 ],
                 "summary": "Place an order for a pet",
-                "description": "placeOrder",
                 "operationId": "placeOrderUsingPOST",
                 "consumes": [
                     "application/json"
@@ -441,7 +438,6 @@
                     "user"
                 ],
                 "summary": "Creates list of users with given input array",
-                "description": "createUsersWithArrayInput",
                 "operationId": "createUsersWithArrayInputUsingPOST",
                 "consumes": [
                     "application/json"
@@ -479,7 +475,6 @@
                     "user"
                 ],
                 "summary": "Creates list of users with given input array",
-                "description": "createUsersWithListInput",
                 "operationId": "createUsersWithListInputUsingPOST",
                 "consumes": [
                     "application/json"
@@ -517,7 +512,6 @@
                     "user"
                 ],
                 "summary": "Logs user into the system",
-                "description": "loginUser",
                 "operationId": "loginUserUsingGET",
                 "consumes": [
                     "application/json"
@@ -560,7 +554,6 @@
                     "user"
                 ],
                 "summary": "Logs out current logged in user session",
-                "description": "logoutUser",
                 "operationId": "logoutUserUsingGET",
                 "consumes": [
                     "application/json"
@@ -584,7 +577,6 @@
                     "user"
                 ],
                 "summary": "Get user by user name",
-                "description": "getUserByName",
                 "operationId": "getUserByNameUsingGET",
                 "consumes": [
                     "application/json"

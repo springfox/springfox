@@ -73,7 +73,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
       Operation apiOperation = operations[0]
       apiOperation.getMethod() == HttpMethod.PATCH
       apiOperation.getSummary() == handlerMethod.method.name
-      apiOperation.getNotes() == handlerMethod.method.name
+      apiOperation.getNotes() == null
       apiOperation.getUniqueId() == handlerMethod.method.name + "Using" + PATCH.toString()
       apiOperation.getPosition() == 0
       apiOperation.getSecurityReferences().size() == 0

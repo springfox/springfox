@@ -45,7 +45,7 @@ class OperationCommandReaderSpec extends DocumentationContextSpec {
       operation."$property" == expected
     where:
       command                         | property     | handlerMethod                              | expected
-      new DefaultOperationReader()    | 'notes'      | dummyHandlerMethod()                       | 'dummyMethod'
+      new DefaultOperationReader()    | 'notes'      | dummyHandlerMethod()                       | null
       new DefaultOperationReader()    | 'uniqueId'   | dummyHandlerMethod()                       | 'dummyMethodUsingGET'
       new DefaultOperationReader()    | 'position'   | dummyHandlerMethod()                       | CURRENT_COUNT
       new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod('methodWithDeprecated') | 'true'

@@ -17,7 +17,6 @@
                 {
                     "method": "GET",
                     "summary": "getSomething",
-                    "notes": "getSomething",
                     "nickname": "getSomethingUsingGET",
                     "produces": [
                         "*/*"
