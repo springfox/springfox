@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ValueConstants
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -62,13 +63,27 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec {
       [[required: { -> false }] as RequestHeader]                                       | false
       [[required: { -> true }] as ApiParam]                                             | false
       [[required: { -> false }] as ApiParam]                                            | false
-      [[required: { -> true }] as RequestParam]                                         | true
-      [[required: { -> false }] as RequestParam]                                        | false
-      [[required: { -> true }] as ApiParam, [required: { -> false }] as RequestParam]   | false
-      [[required: { -> false }] as ApiParam, [required: { -> true }] as RequestParam]   | true
+      [[required: { -> true },
+        defaultValue: { -> ValueConstants.DEFAULT_NONE}] as RequestParam]               | true
+      [[required: { -> true },
+        defaultValue: { -> ""}] as RequestParam]                                        | true
+      [[required: { -> true },
+        defaultValue: { -> null}] as RequestParam]                                      | true
+      [[required: { -> true },
+        defaultValue: { -> "default value"}] as RequestParam]                           | false
+      [[required: { -> false },
+        defaultValue: { -> ValueConstants.DEFAULT_NONE}] as RequestParam]               | false
+      [[required: { -> true }] as ApiParam,
+       [required: { -> false },
+      defaultValue: { -> ValueConstants.DEFAULT_NONE}] as RequestParam]                 | false
+      [[required: { -> false }] as ApiParam,
+       [required: { -> true },
+        defaultValue: { -> ValueConstants.DEFAULT_NONE}] as RequestParam]               | true
       [[required: { -> false }] as RequestBody]                                         | false
       [[required: { -> true }] as RequestBody]                                          | true
-      [[required: { -> false }] as ApiParam, [required: { -> true }] as RequestParam]   | true
+      [[required: { -> false }] as ApiParam,
+       [required: { -> true },
+        defaultValue: { -> ValueConstants.DEFAULT_NONE}] as RequestParam]               | true
       []                                                                                | false
       [null]                                                                            | false
   }
