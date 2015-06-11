@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.ValueConstants
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.spi.DocumentationType
@@ -81,6 +82,8 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec {
         defaultValue: { -> ValueConstants.DEFAULT_NONE}] as RequestParam]               | true
       [[required: { -> false }] as RequestBody]                                         | false
       [[required: { -> true }] as RequestBody]                                          | true
+      [[required: { -> false }] as RequestPart]                                         | false
+      [[required: { -> true }] as RequestPart]                                          | true
       [[required: { -> false }] as ApiParam,
        [required: { -> true },
         defaultValue: { -> ValueConstants.DEFAULT_NONE}] as RequestParam]               | true
