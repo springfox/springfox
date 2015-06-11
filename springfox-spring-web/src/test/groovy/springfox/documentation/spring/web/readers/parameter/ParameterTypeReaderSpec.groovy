@@ -18,6 +18,7 @@
  */
 
 package springfox.documentation.spring.web.readers.parameter
+
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.multipart.MultipartFile
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
@@ -71,6 +73,7 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
       [:] as RequestParam   | Integer       | [APPLICATION_JSON]                    | HttpMethod.GET    |"query"
       [:] as RequestParam   | Integer       | [APPLICATION_JSON]                    | HttpMethod.POST   |"query"
       [:] as RequestParam   | Integer       | [APPLICATION_FORM_URLENCODED]         | HttpMethod.POST   |"form"
+      [:] as RequestPart    | Integer       | [MULTIPART_FORM_DATA]                 | HttpMethod.POST   |"form"
       null                  | Integer       | []                                    | HttpMethod.GET    |"body"
       null                  | MultipartFile | []                                    | HttpMethod.GET    |"form"
   }
