@@ -1,0 +1,156 @@
+== Getting Started
+
+:releaseVersion: {springfox-released-version}
+:snapshotVersion: {springfox-current-version}
+
+=== Dependencies
+The Springfox libraries are hosted on https://bintray.com/springfox/maven-repo/springfox/view[bintray] and jcenter.
+The artifacts can be viewed accessed at the following locations:
+
+* Release:
+   ** https://jcenter.bintray.com/io/springfox/
+   ** http://jcenter.bintray.com/io/springfox/
+* Snapshot
+ ** http://oss.jfrog.org/simple/oss-snapshot-local/io/springfox/
+ ** http://oss.jfrog.org/oss-snapshot-local/io/springfox/
+
+Springfox has multiple modules and the dependencies will vary depending on the desired API specification standard.
+Below outlines how to include the springfox-swagger2 module which produces Swagger 2.0 API documentation.
+
+
+==== Gradle
+===== Release
+[source,groovy]
+[subs="verbatim,attributes"]
+----
+repositories {
+  jcenter()
+}
+
+dependencies {
+    compile "io.springfox:springfox-swagger2:{releaseVersion}"
+}
+----
+
+===== Snapshot
+
+[source,groovy]
+[subs="verbatim,attributes"]
+----
+repositories {
+   maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+}
+
+dependencies {
+    compile "io.springfox:springfox-swagger2:{snapshotVersion}"
+}
+----
+
+
+==== Maven
+===== Release
+
+[source,xml]
+[subs="verbatim,attributes"]
+----
+<repositories>
+    <repository>
+      <id>jcenter-snapshots</id>
+      <name>jcenter</name>
+      <url>https://jcenter.bintray.com/</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>{releaseVersion}</version>
+</dependency>
+----
+
+===== Snapshot
+
+[source,xml]
+[subs="verbatim,attributes"]
+----
+<repositories>
+    <repository>
+      <id>jcenter-snapshots</id>
+      <name>jcenter</name>
+      <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>{snapshotVersion}</version>
+</dependency>
+----
+
+==== Springfox-swagger2 with Spring Boot
+
+[source,java,linenums]
+----
+include::../springfox-spring-config/src/main/java/springfox/springconfig/Swagger2SpringBoot.java[indent=0]
+----
+<1> Enables Springfox swagger 2
+<2> Instructs spring where to scan for API controllers
+<3> `Docket`, Sringfox's, primary api configuration mechanism is initialized for swagger specification 2.0
+<4> `select()` returns an instance of `ApiSelectorBuilder` to give fine grained control over the endpoints exposed
+via swagger.
+<5> `apis()` allows selection of `RequestHandler`'s using a predicate. The example here uses an `any` predicate
+(default). Out of the box predicates provided are `any`, `none`, `withClassAnnotation`, `withMethodAnnotation` and
+`basPackage`.
+<6> `paths()` allows selection of `Path`'s using a predicate. The example here uses an `any` predicate (default)
+<7> The selector requires to be built after configuring the api and path selectors. Out of the box we provide
+predicates for `regex`, `ant`, `any`, `none`
+<8> Adds a servlet path mapping, when the servlet has a path mapping. this prefixes paths with the provided path
+mapping
+<9> Convenience rule builder substitutes `LocalDate` with `String` when rendering model properties
+<10> Convenience rule builder that substitutes a generic type with one type parameter with the type
+parameter. In this example `ResponseEntity<T>` with `T`. `alternateTypeRules` allows custom rules that are a bit more
+ involved. The example substitutes  `DeferredResult<ResponseEntity<T>>`  with `T` generically
+<11> Flag to indicate if default http response codes need to be used or not
+<12> Allows globally overriding response messages for different http methods. In this example we override the 500
+error code for all `GET`s ...
+<13> ...and indicate that it will use the response model `Error` (which will be defined elsewhere)
+<14> Sets up the security schemes used to protect the apis. Supported schemes are ApiKey, BasicAuth and OAuth
+<15> Provides a way to globally set up security contexts for operation. The idea here is that we provide a way to
+select operations to be protected by one of the specified security schemes.
+<16> Here we use ApiKey as the security schema that is identified by the name `mykey`
+<17> Selector for the paths this security context applies to.
+<18> Here we same key defined in the security scheme `mykey`
+
+There are plenty of more options to configure the `Docket`. This should provide a good start.
+
+===== Swagger UI
+The `springfox-swagger-ui` http://www.webjars.org/[web jar] ships with https://github.com/swagger-api/swagger-ui[Swagger UI]. To include it in a standard
+Spring Boot application you can add the dependency as follows:
+
+[source,groovy]
+[subs="verbatim,attributes"]
+----
+dependencies {
+    compile 'io.springfox:springfox-swagger-ui:{releaseVersion}'
+}
+----
+
+Pulling in the dependency creates a webjar containing the swagger-ui static content. It adds a JSON endpoint
+`/swagger-resources` which lists all of the swagger resources and versions configured for a given
+application. The Swagger UI page should then be available at http://localhost:8080/swagger-ui.html[]
+
+image::springfox-swagger-ui.png[Swagger UI]
+
+The swagger ui version is specified in ./build.gradle where `swaggerUiVersion` is a git tag on the [swagger-ui repo]
+(https://github.com/wordnik/swagger-ui).
+
+All content is served from a webjar convention, relative url taking the following form:
+`webjars/${project.name}/${project.version}` e.g: `/webjars/springfox-swagger-ui/2.0.2-SNAPSHOT/swagger-ui.html`
+
+By default Spring Boot has sensible defaults for serving content from webjars. To configure vanilla spring web mvc
+apps to serve webjar content see the http://www.webjars.org/documentation#springmvc[webjar documentation]
+
+=== Springfox samples
+The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of samples.
+

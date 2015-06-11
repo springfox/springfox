@@ -18,10 +18,10 @@
                 {
                     "method": "GET",
                     "summary": "Find a business by its id",
-                    "notes": "getAliasedPathVariable",
-                    "nickname": "getAliasedPathVariable",
+                    "nickname": "findBusinessById",
                     "produces": [
-                        "*/*"
+                        "*/*",
+                        "application/json"
                     ],
                     "consumes": [
                         "application/json"
@@ -68,8 +68,7 @@
                 {
                     "method": "GET",
                     "summary": "businessesByCategories",
-                    "notes": "businessesByCategories",
-                    "nickname": "businessesByCategories",
+                    "nickname": "businessesByCategoriesUsingGET",
                     "produces": [
                         "application/json"
                     ],
@@ -91,7 +90,6 @@
                             "items": {
                                 "type": "string"
                             },
-                            "uniqueItems": false,
                             "required": true
                         }
                     ],
@@ -99,7 +97,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 401,
@@ -117,9 +115,8 @@
                     "deprecated": "false",
                     "type": "array",
                     "items": {
-                        "type": "Business"
-                    },
-                    "uniqueItems": false
+                        "type": "Biz"
+                    }
                 }
             ]
         },
@@ -130,10 +127,10 @@
                 {
                     "method": "GET",
                     "summary": "Find a business by its id",
-                    "notes": "getNonAliasedPathVariable",
-                    "nickname": "getNonAliasedPathVariable",
+                    "nickname": "findBusinessById",
                     "produces": [
-                        "*/*"
+                        "*/*",
+                        "application/json"
                     ],
                     "consumes": [
                         "application/json"
@@ -188,10 +185,10 @@
                 {
                     "method": "GET",
                     "summary": "getResponseEntity",
-                    "notes": "getResponseEntity",
-                    "nickname": "getResponseEntity",
+                    "nickname": "getResponseEntityUsingGET",
                     "produces": [
-                        "*/*"
+                        "*/*",
+                        "application/json"
                     ],
                     "consumes": [
                         "application/json"
@@ -238,8 +235,7 @@
                 {
                     "method": "POST",
                     "summary": "businessTypeEcho",
-                    "notes": "businessTypeEcho",
-                    "nickname": "businessTypeEcho",
+                    "nickname": "businessTypeEchoUsingPOST",
                     "produces": [
                         "application/json"
                     ],
@@ -258,13 +254,13 @@
                             "name": "body",
                             "paramType": "body",
                             "type": "string",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "string"
                         },
                         {
@@ -296,10 +292,10 @@
                 {
                     "method": "GET",
                     "summary": "getVanillaPathVariable",
-                    "notes": "getVanillaPathVariable",
-                    "nickname": "getVanillaPathVariable",
+                    "nickname": "getVanillaPathVariableUsingGET",
                     "produces": [
-                        "*/*"
+                        "*/*",
+                        "application/json"
                     ],
                     "consumes": [
                         "application/json"
@@ -341,68 +337,26 @@
         }
     ],
     "models": {
-        "DateTimeField": {
+        "Biz": {
             "description": "",
-            "id": "DateTimeField",
+            "id": "Biz",
             "properties": {
-                "name": {
+                "businessType": {
+                    "enum": [
+                        "PRODUCT",
+                        "SERVICE"
+                    ],
                     "required": false,
                     "type": "string"
                 },
-                "type": {
-                    "required": false,
-                    "type": "DateTimeFieldType"
-                },
-                "supported": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "lenient": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "durationField": {
-                    "required": false,
-                    "type": "DurationField"
-                },
-                "minimumValue": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "maximumValue": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "rangeDurationField": {
-                    "required": false,
-                    "type": "DurationField"
-                },
-                "leapDurationField": {
-                    "required": false,
-                    "type": "DurationField"
-                }
-            }
-        },
-        "DateTimeZone": {
-            "description": "",
-            "id": "DateTimeZone",
-            "properties": {
-                "fixed": {
-                    "required": false,
-                    "type": "boolean"
-                }
-            }
-        },
-        "Business": {
-            "description": "",
-            "id": "Business",
-            "properties": {
                 "id": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
+                },
+                "inception": {
+                    "required": false,
+                    "type": "LocalDate"
                 },
                 "name": {
                     "required": false,
@@ -412,146 +366,10 @@
                     "required": false,
                     "type": "string"
                 },
-                "inception": {
-                    "required": false,
-                    "type": "LocalDate"
-                },
-                "businessType": {
-                    "enum": [
-                        "PRODUCT",
-                        "SERVICE"
-                    ],
-                    "required": false,
-                    "type": "string"
-                },
                 "taxDate": {
-                    "required": false,
                     "format": "date-time",
-                    "type": "string"
-                }
-            }
-        },
-        "LocalDate": {
-            "description": "",
-            "id": "LocalDate",
-            "properties": {
-                "year": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "era": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfYear": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfWeek": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfMonth": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "chronology": {
-                    "required": false,
-                    "type": "Chronology"
-                },
-                "centuryOfEra": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "yearOfEra": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "yearOfCentury": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "weekyear": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "monthOfYear": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "weekOfWeekyear": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "fields": {
-                    "items": {
-                        "type": "DateTimeField"
-                    },
-                    "required": false,
-                    "type": "Array"
-                },
-                "values": {
-                    "items": {
-                        "format": "int32",
-                        "type": "integer"
-                    },
-                    "required": false,
-                    "type": "Array"
-                },
-                "fieldTypes": {
-                    "items": {
-                        "type": "DateTimeFieldType"
-                    },
-                    "required": false,
-                    "type": "Array"
-                }
-            }
-        },
-        "DurationFieldType": {
-            "description": "",
-            "id": "DurationFieldType",
-            "properties": {
-                "name": {
                     "required": false,
                     "type": "string"
-                }
-            }
-        },
-        "DurationField": {
-            "description": "",
-            "id": "DurationField",
-            "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "type": {
-                    "required": false,
-                    "type": "DurationFieldType"
-                },
-                "supported": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "unitMillis": {
-                    "required": false,
-                    "format": "int64",
-                    "type": "integer"
-                },
-                "precise": {
-                    "required": false,
-                    "type": "boolean"
                 }
             }
         },
@@ -565,21 +383,199 @@
                 }
             }
         },
+        "DateTimeField": {
+            "description": "",
+            "id": "DateTimeField",
+            "properties": {
+                "durationField": {
+                    "required": false,
+                    "type": "DurationField"
+                },
+                "leapDurationField": {
+                    "required": false,
+                    "type": "DurationField"
+                },
+                "lenient": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "maximumValue": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "minimumValue": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                },
+                "rangeDurationField": {
+                    "required": false,
+                    "type": "DurationField"
+                },
+                "supported": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "type": {
+                    "required": false,
+                    "type": "DateTimeFieldType"
+                }
+            }
+        },
         "DateTimeFieldType": {
             "description": "",
             "id": "DateTimeFieldType",
+            "properties": {
+                "durationType": {
+                    "required": false,
+                    "type": "DurationFieldType"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                },
+                "rangeDurationType": {
+                    "required": false,
+                    "type": "DurationFieldType"
+                }
+            }
+        },
+        "DateTimeZone": {
+            "description": "",
+            "id": "DateTimeZone",
+            "properties": {
+                "fixed": {
+                    "required": false,
+                    "type": "boolean"
+                }
+            }
+        },
+        "DurationField": {
+            "description": "",
+            "id": "DurationField",
             "properties": {
                 "name": {
                     "required": false,
                     "type": "string"
                 },
-                "durationType": {
+                "precise": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "supported": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "type": {
                     "required": false,
                     "type": "DurationFieldType"
                 },
-                "rangeDurationType": {
+                "unitMillis": {
+                    "format": "int64",
                     "required": false,
-                    "type": "DurationFieldType"
+                    "type": "integer"
+                }
+            }
+        },
+        "DurationFieldType": {
+            "description": "",
+            "id": "DurationFieldType",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "LocalDate": {
+            "description": "",
+            "id": "LocalDate",
+            "properties": {
+                "centuryOfEra": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "chronology": {
+                    "required": false,
+                    "type": "Chronology"
+                },
+                "dayOfMonth": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "dayOfWeek": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "dayOfYear": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "era": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "fields": {
+                    "items": {
+                        "type": "DateTimeField"
+                    },
+                    "required": false,
+                    "type": "array"
+                },
+                "fieldTypes": {
+                    "items": {
+                        "type": "DateTimeFieldType"
+                    },
+                    "required": false,
+                    "type": "array"
+                },
+                "monthOfYear": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "values": {
+                    "items": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "required": false,
+                    "type": "array"
+                },
+                "weekOfWeekyear": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "weekyear": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "year": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "yearOfCentury": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "yearOfEra": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
                 }
             }
         }

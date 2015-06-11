@@ -1,0 +1,52 @@
+== Architecture
+
+A little bit of background; when we started work on 2.0 swagger specification we realized that we're rewriting the logic to infer the service
+ models and the schema. So we decided to take a step back and break it out into a two step process. First infer the service
+ model into an internal representation. Second create a mapping layer that can map the internal models to different specification formats.
+ Out of the box we will support swagger 1.2 and swagger 2.0, but this leads us to the possibility of supporting other formats and
+ other scenarios as well; for e.g. RAML, ALPS and hypermedia formats.
+
+Accordingly the different modules are split up as shown below.
+
+```ascii
+                                                                                                                               
+               +------------------+
+               |                  |  Contains the internal service and
+               |  springfox-core  |  schema description models along with
+               |                  |  their builders.
+               +---------+--------+
+                         ^
+               +---------+--------+
+               |                  |  Contains the service provider interfaces that
+               |  springfox-spi   |  can be used to extend and enrich the service
+               |                  |  models. For e.g. swagger specific annotation
+               +---+------+----+--+  processors.
+                          |
+                          |
+ Schema inference         |   spring web specific extensions that can build
+ extensions that help     |   the service models based on RequestMapping
+ build up the schema for  |   information. This is the heart library that
+ the parameters, models   |   infers the service model.
+ and responses     |------|----|
+   +---------------+----+ | +--+------------------+
+   |                    | | |                     |
+   |  springfox-schema  | | |springfox-spring-web |
+   |                    | | |                     |
+   +--------------------+ | +---------------------+
+                          |
+              +-----------------------+--+
+              |                          |   Common swagger specific extensions
+              | springfox-swagger-common |   that are aware of the different
+              |                          |   swagger annotations.
+              +-----+---------------+----+
+                    ^               ^
+      +-------------+----+     +----+--------------+
+      |                  |     |                   |  Configurations, and mapping layer
+      |springfox-swagger1|     |springfox-swagger2 |  that know how to convert the
+      |                  |     |                   |  service models to swagger 1.2 and
+      +------------------+     +-------------------+  swagger 2.0 specification documents.
+                                                      Also contains the controller for each
+                                                      of the specific formats.
+
+```
+

@@ -1,8 +1,13 @@
-rootProject.name = 'swagger-springmvc-parent'
-include ':swagger-models'
-include ':swagger-springmvc'
-include ':swagger-contract-tests'
-
-project(':swagger-models').projectDir = "$rootDir/swagger-models" as File
-project(':swagger-springmvc').projectDir = "$rootDir/swagger-springmvc" as File
-project(':swagger-contract-tests').projectDir = "$rootDir/swagger-contract-tests" as File
+rootProject.name = 'springfox'
+include 'springfox-core'
+include 'springfox-spi'
+include 'springfox-schema'
+include 'springfox-spring-web'
+include 'springfox-swagger-common'
+include 'springfox-swagger1'
+include 'springfox-swagger2'
+include 'springfox-swagger-ui'
+include 'swagger-contract-tests'
+include 'springfox-petstore'
+include 'springfox-staticdocs'
+include 'springfox-spring-config'

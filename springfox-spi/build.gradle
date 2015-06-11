@@ -1,0 +1,4 @@
+dependencies {
+  compile project(':springfox-core')
+  compile project(':springfox-core')
+}

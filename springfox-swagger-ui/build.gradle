@@ -1,0 +1,101 @@
+/*
+ * Copyright 2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'de.undercouch:gradle-download-task:1.2'
+  }
+}
+
+apply plugin: 'de.undercouch.download'
+
+ext {
+  swaggerUiVersion = '2.1.0'
+  swaggerUiDist = "build/libs/swagger-ui-dist.zip"
+  swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
+  downloadUrl = "https://github.com/wordnik/swagger-ui/archive/v${swaggerUiVersion}.zip"
+  destinationZip = "$buildDir/zip/${swaggerUiVersion}.zip"
+  replacePath = 'window.location.origin + "\\${pageContext.request.contextPath}/api-docs"'
+  artifactRepoBase = 'http://oss.jfrog.org/artifactory'
+}
+
+dependencies {
+  compile project(':springfox-spring-web')
+  testCompile libs.test
+}
+
+
+task swaggerUiDownload << {
+  if (!file(destinationZip)?.exists()) {
+    download {
+      src downloadUrl
+      dest destinationZip
+      onlyIfNewer true
+    }
+  }
+}
+
+task unzip(type: Copy) {
+  from zipTree(file(destinationZip))
+  include "*/dist/**"
+  into file("${buildDir}")
+}
+
+task sdoc(type: Copy) {
+  from("${projectDir}/src/web/swagger-ui.html")
+  from("${projectDir}/src/web/js/springfox.js")
+  into("${buildDir}/${swaggerUiExplodedDir}")
+}
+
+task removeHtmlIndex(type: Delete) {
+  delete "${buildDir}/${swaggerUiExplodedDir}/index.html"
+}
+
+jar {
+  from("${projectDir}/src/web/swagger-ui.html") {
+    into "META-INF/resources"
+  }
+
+  from("${buildDir}/${swaggerUiExplodedDir}") {
+    into "META-INF/resources/webjars/${project.name}"
+
+    manifest {
+      attributes(
+              "Implementation-Title": project.name,
+              "Implementation-Version": project.version,
+              "SwaggerUi-Version": swaggerUiVersion,
+      )
+    }
+  }
+}
+
+task sourceJar(type: Jar) {
+  from sourceSets.main.allJava
+}
+
+task cleanup(type: Delete) {
+  delete "${buildDir}/${swaggerUiExplodedDir}"
+}
+
+clean.dependsOn(cleanup)
+compileJava.dependsOn(removeHtmlIndex)
+removeHtmlIndex.dependsOn(sdoc)
+sdoc.dependsOn(unzip)
+unzip.dependsOn(swaggerUiDownload)

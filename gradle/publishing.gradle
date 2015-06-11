@@ -1,50 +1,21 @@
+import springfox.gradlebuild.plugins.MultiProjectReleasePlugin
+
+apply plugin: 'maven-publish'
+
 ext {
-  developerMachines = ['adrianxbk']
-
-  relUsername = project.hasProperty('bintray_username') ? project.property('bintray_username') : 'admin'
-  relPassword = project.hasProperty('bintray_password') ? project.property('bintray_password') : 'password'
-
-  if (developerMachines.contains(System.getenv('USER'))) {
-    artifactRepoBase = 'http://localhost:8081/artifactory'
-    repoPrefix = 'libs'
-  } else {
-    artifactRepoBase = 'http://oss.jfrog.org/artifactory'
-    repoPrefix = 'oss'
-  }
-
-
-  releaseRepos = {
-    maven {
-      name 'jcenter'
-      url "${artifactRepoBase}/${repoPrefix}-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
-      credentials {
-        username = "$relUsername"
-        password = "$relPassword"
-      }
-    }
-
-    if (!project.version.endsWith('-SNAPSHOT')) {
-      maven {
-        name 'bintray'
-        url "https://api.bintray.com/maven/swaggerspringmvc/swaggerspringmvc/${project.name}"
-        credentials {
-          username = relUsername
-          password = relPassword
-        }
-      }
-    }
-  }
+  relUsername = project.hasProperty('bintrayUsername') ? project.property('bintrayUsername') : 'admin'
+  relPassword = project.hasProperty('bintrayPassword') ? project.property('bintrayPassword') : 'password'
 
   pomMetaData = {
     resolveStrategy = Closure.DELEGATE_FIRST
     name "${project.name}"
-    url "https://github.com/martypitt/swagger-springmvc"
-    description "This project integrates swagger with the Spring Web MVC framework"
+    url "https://github.com/springfox/springfox"
+    description "JSON API documentation for spring based applications"
 
     scm {
-      url "scm:git:git@github.com:martypitt/swagger-springmvc.git"
-      connection 'scm:git:git@github.com:martypitt/swagger-springmvc.git'
-      developerConnection 'scm:git:git@github.com:martypitt/swagger-springmvc.git'
+      url "scm:git:git@github.com:springfox/springfox.git"
+      connection 'scm:git:git@github.com:springfox/springfox.git'
+      developerConnection 'scm:git:git@github.com:springfox/springfox.git'
     }
 
     licenses {
@@ -76,8 +47,9 @@ ext {
     }
   }
 
-  //Gralde's maven-publish plugin does not yet handles pom generation correctly. Fix expected in 2.1
-  swaggerMvcPomConfig = {
+  // TODO - findout if this has been fixed in gradle and remove this hack if do
+  // Gradle's maven-publish plugin does not yet handle pom generation correctly. Fix expected in 2.1
+  springfoxPomConfig = {
     def root = asNode()
     def dependencies = root.dependencies
     def allDependencies = dependencies.'*'
@@ -99,45 +71,104 @@ ext {
       it.scope*.value = 'compile'
     }
 
-    Node groovyDep = allDependencies.find { it.artifactId.text() == 'groovy-all' }
-    groovyDep.scope*.value = 'test'
+    allDependencies
+        .findAll { it.artifactId.text() == 'groovy-all' }
+        .each { it.scope*.value = 'test' }
+
 
     root.children().last() + pomMetaData
   }
 }
-
 
 task packageSources(type: Jar) {
   classifier = 'sources'
   from sourceSets.main.allSource
 }
 
-task javadocJar (type: Jar, dependsOn: javadoc) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
   classifier = 'javadoc'
   from javadoc.destinationDir
 }
 
-task preRelease << {
-  def url = new URL("http://oss.jfrog.org/simple/oss-release-local/com/mangofactory/swagger-springmvc/${project.version}")
-  logger.quiet("Checking release repo for duplicate versioning:${url}")
-  final HttpURLConnection connection = url.openConnection()
-  if (connection.responseCode != 404) {
-    throw new GradleException("Artifact ${project.name}:${project.version} already exists.")
+
+if (JavaVersion.current().isJava8Compatible()) {
+  tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
   }
 }
 
-afterEvaluate { project ->
-  project.tasks.findAll { it.name.contains('ToBintrayRepository') }.each {
-    it.dependsOn preRelease
+publishing {
+
+  repositories {
+    configure(project.releaseRepos)
+  }
+
+
+  publications {
+    mavenJava(MavenPublication) {
+      groupId 'io.springfox'
+      from components.java
+
+      artifact packageSources {
+        classifier "sources"
+      }
+
+      artifact(javadocJar) {
+        classifier = 'javadoc'
+      }
+      //TODO - not right that every artifact has the same (pom) dependencies
+      pom.withXml springfoxPomConfig
+    }
   }
 }
 
-task ciPublish {
-  if (project.version.contains('SNAPSHOT')) {
-    logger.quiet("Task :ciPublish configured to publish SNAPSHOT artifacts [${project.version}]")
-    dependsOn publish
-  } else {
-    logger.quiet("Task :ciPublish will not publish artifacts [${project.version}] as this is not a SNAPSHOT version")
+if (!isSnapshot()) {
+
+  apply plugin: 'com.jfrog.bintray'
+  bintray {
+    user = project.bintrayCredentials.username
+    key = project.bintrayCredentials.password
+
+
+    publications = ['mavenJava']
+    dryRun = MultiProjectReleasePlugin.dryRun(project) //Whether to run this as dry-run, without deploying
+    publish = true //If version should be auto published after an upload
+    pkg {
+      repo = 'maven-repo'
+      userOrg = 'springfox' //An optional organization name when the repo belongs to one of the user's orgs
+      name = 'springfox'
+      desc = 'A suite of libraries for documenting spring based JSON APIs '
+      websiteUrl = 'https://github.com/springfox/springfox'
+      issueTrackerUrl = 'https://github.com/springfox/springfox/issues'
+      vcsUrl = 'https://github.com/springfox/springfox.git'
+      licenses = ['Apache-2.0']
+      labels = ['spring', 'swagger', 'apis']
+      publicDownloadNumbers = true
+
+      //Optional version descriptor
+//      version {
+//        name = '${project.rootProject.version}' //Bintray logical version name
+//        desc = 'Version: ${project.rootProject.version}'
+//        released = '${new java.util.Date()}' //2 possible values: date in the format of 'yyyy-MM-dd'T'HH:mm:ss.SSSZZ'
+//         OR a java.util.Date instance
+//        vcsTag = '${project.rootProject.version}'
+//      attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin'] //Optional version-level attributes
+//      gpg {
+//        sign = true //Determines whether to GPG sign the files. The default is false
+//        passphrase = 'passphrase' //Optional. The passphrase for GPG signing'
+//      }
+//      mavenCentralSync {
+//        sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+//        user = 'userToken' //OSS user token
+//        password = 'paasword' //OSS user password
+//        close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+//      }
+//      }
+    }
   }
+}
+
+def isSnapshot() {
+  def isSnapshot = project.gradle.startParameter.taskNames.contains("snapshot")
 }
 

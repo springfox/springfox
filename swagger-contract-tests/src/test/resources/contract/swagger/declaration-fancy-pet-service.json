@@ -4,10 +4,8 @@
     "basePath": "/",
     "resourcePath": "/fancypets",
     "produces": [
-        "*/*"
     ],
     "consumes": [
-        "application/json"
     ],
     "apis": [
         {
@@ -17,8 +15,7 @@
                 {
                     "method": "PUT",
                     "summary": "updatePet",
-                    "notes": "updatePet",
-                    "nickname": "updatePet",
+                    "nickname": "updatePetUsingPUT",
                     "produces": [
                         "*/*"
                     ],
@@ -33,13 +30,13 @@
                             "name": "body",
                             "paramType": "body",
                             "type": "Pet",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -70,8 +67,7 @@
                 {
                     "method": "POST",
                     "summary": "createObject",
-                    "notes": "createObject",
-                    "nickname": "createObject",
+                    "nickname": "createObjectUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -86,13 +82,13 @@
                             "name": "body",
                             "paramType": "body",
                             "type": "FancyPet",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "int"
                         },
                         {
@@ -125,8 +121,7 @@
                 {
                     "method": "POST",
                     "summary": "createObject",
-                    "notes": "createObject",
-                    "nickname": "createObject",
+                    "nickname": "createObjectUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -141,7 +136,7 @@
                             "name": "body",
                             "paramType": "body",
                             "type": "FancyPet",
-                            "required": false
+                            "required": true
                         },
                         {
                             "allowMultiple": false,
@@ -157,7 +152,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "int"
                         },
                         {
@@ -185,20 +180,37 @@
         }
     ],
     "models": {
-        "FancyPet": {
+        "Category": {
             "description": "",
-            "id": "FancyPet",
+            "id": "Category",
             "properties": {
                 "name": {
                     "required": false,
                     "type": "string"
-                },
+                }
+            }
+        },
+        "FancyPet": {
+            "description": "",
+            "id": "FancyPet",
+            "properties": {
                 "age": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
+                "categories": {
+                    "items": {
+                        "type": "Category"
+                    },
+                    "required": false,
+                    "type": "array"
+                },
                 "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
                     "required": false,
                     "type": "string"
                 }
@@ -208,26 +220,19 @@
             "description": "",
             "id": "Pet",
             "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
                 "age": {
-                    "required": false,
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
                 "id": {
                     "required": false,
                     "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
                 }
-            }
-        },
-        "Void": {
-            "description": "",
-            "id": "Void",
-            "properties": {
-
             }
         }
     }

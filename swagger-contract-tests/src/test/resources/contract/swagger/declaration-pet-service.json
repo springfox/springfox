@@ -4,22 +4,20 @@
     "basePath": "/",
     "resourcePath": "/pets",
     "produces": [
-        "*/*"
+
     ],
     "consumes": [
-        "application/json",
-        "multipart/form-data"
+
     ],
     "apis": [
         {
             "path": "/pets",
-            "description": "updatePet",
+            "description": "addPet",
             "operations": [
                 {
-                    "method": "PUT",
-                    "summary": "Update an existing pet",
-                    "notes": "updatePet",
-                    "nickname": "updatePet",
+                    "method": "POST",
+                    "summary": "Add a new pet to the store",
+                    "nickname": "addPetUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -40,7 +38,64 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        },
+                        {
+                            "code": 405,
+                            "message": "Invalid input",
+                            "responseModel": "Void"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
+                }
+            ]
+        },
+        {
+            "path": "/pets",
+            "description": "updatePet",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Update an existing pet",
+                    "nickname": "updatePetUsingPUT",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "defaultValue": "",
+                            "description": "Pet object that needs to be added to the store",
+                            "name": "body",
+                            "paramType": "body",
+                            "type": "Pet",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -82,8 +137,7 @@
                 {
                     "method": "GET",
                     "summary": "List all pets",
-                    "notes": "listPets",
-                    "nickname": "listPets",
+                    "nickname": "listPetsUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -97,7 +151,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 401,
@@ -116,66 +170,7 @@
                     "type": "array",
                     "items": {
                         "type": "Pet"
-                    },
-                    "uniqueItems": false
-                }
-            ]
-        },
-        {
-            "path": "/pets",
-            "description": "addPet",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "Add a new pet to the store",
-                    "notes": "addPet",
-                    "nickname": "addPet",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "Pet object that needs to be added to the store",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "Pet",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": null
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        },
-                        {
-                            "code": 405,
-                            "message": "Invalid input",
-                            "responseModel": "Void"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "void"
+                    }
                 }
             ]
         },
@@ -186,8 +181,7 @@
                 {
                     "method": "POST",
                     "summary": "petEntities",
-                    "notes": "petEntities",
-                    "nickname": "petEntities",
+                    "nickname": "petEntitiesUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -208,8 +202,8 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
-                            "responseModel": "List"
+                            "message": "OK",
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -232,8 +226,7 @@
                     "type": "array",
                     "items": {
                         "type": "Pet"
-                    },
-                    "uniqueItems": false
+                    }
                 }
             ]
         },
@@ -244,8 +237,7 @@
                 {
                     "method": "POST",
                     "summary": "echo",
-                    "notes": "echo",
-                    "nickname": "echo",
+                    "nickname": "echoUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -260,14 +252,14 @@
                             "name": "body",
                             "paramType": "body",
                             "type": "List[Entry\u00abstring,Pet\u00bb]",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
-                            "responseModel": "List"
+                            "message": "OK",
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -299,7 +291,7 @@
                     "method": "GET",
                     "summary": "Finds Pets by status",
                     "notes": "Multiple status values can be provided with comma seperated strings",
-                    "nickname": "findPetsByStatus",
+                    "nickname": "findPetsByStatusUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -359,7 +351,7 @@
                     "method": "GET",
                     "summary": "Finds Pets by tags",
                     "notes": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
-                    "nickname": "findPetsByTags",
+                    "nickname": "findPetsByTagsUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -413,8 +405,7 @@
                 {
                     "method": "POST",
                     "summary": "nameToNickNamesMap",
-                    "notes": "nameToNickNamesMap",
-                    "nickname": "nameToNickNamesMap",
+                    "nickname": "nameToNickNamesMapUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -427,8 +418,8 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
-                            "responseModel": "List"
+                            "message": "OK",
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -459,8 +450,7 @@
                 {
                     "method": "POST",
                     "summary": "siblings",
-                    "notes": "siblings",
-                    "nickname": "siblings",
+                    "nickname": "siblingsUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -481,8 +471,8 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
-                            "responseModel": "List"
+                            "message": "OK",
+                            "responseModel": "array"
                         },
                         {
                             "code": 201,
@@ -505,8 +495,7 @@
                     "type": "array",
                     "items": {
                         "type": "Pet"
-                    },
-                    "uniqueItems": false
+                    }
                 }
             ]
         },
@@ -517,8 +506,7 @@
                 {
                     "method": "POST",
                     "summary": "transformPetNameToPetMapToAny",
-                    "notes": "transformPetNameToPetMapToAny",
-                    "nickname": "transformPetNameToPetMapToAny",
+                    "nickname": "transformPetNameToPetMapToAnyUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -539,7 +527,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "object"
                         },
                         {
@@ -571,8 +559,7 @@
                 {
                     "method": "POST",
                     "summary": "transformPetNameToPetMapToGenericOpenMap",
-                    "notes": "transformPetNameToPetMapToGenericOpenMap",
-                    "nickname": "transformPetNameToPetMapToGenericOpenMap",
+                    "nickname": "transformPetNameToPetMapToGenericOpenMapUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -593,7 +580,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "object"
                         },
                         {
@@ -625,8 +612,7 @@
                 {
                     "method": "POST",
                     "summary": "transformPetNameToPetMapToOpenMap",
-                    "notes": "transformPetNameToPetMapToOpenMap",
-                    "nickname": "transformPetNameToPetMapToOpenMap",
+                    "nickname": "transformPetNameToPetMapToOpenMapUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -647,7 +633,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "object"
                         },
                         {
@@ -679,8 +665,7 @@
                 {
                     "method": "GET",
                     "summary": "method",
-                    "notes": "method",
-                    "nickname": "method",
+                    "nickname": "methodUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -737,8 +722,7 @@
                 {
                     "method": "POST",
                     "summary": "petByName",
-                    "notes": "petByName",
-                    "nickname": "petByName",
+                    "nickname": "petByNameUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -759,7 +743,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "Pet"
                         },
                         {
@@ -792,7 +776,7 @@
                     "method": "GET",
                     "summary": "Find pet by ID",
                     "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
-                    "nickname": "getPetById",
+                    "nickname": "getPetByIdUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -843,8 +827,7 @@
                 {
                     "method": "POST",
                     "summary": "updatePic",
-                    "notes": "updatePic",
-                    "nickname": "updatePic",
+                    "nickname": "updatePicUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -874,7 +857,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -905,8 +888,7 @@
                 {
                     "method": "GET",
                     "summary": "updatePic",
-                    "notes": "updatePic",
-                    "nickname": "updatePic",
+                    "nickname": "updatePicUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -958,29 +940,22 @@
         }
     ],
     "models": {
-        "Void": {
-            "description": "",
-            "id": "Void",
-            "properties": {
-
-            }
-        },
         "Pet": {
             "description": "",
             "id": "Pet",
             "properties": {
-                "name": {
+                "age": {
                     "required": false,
-                    "type": "string"
+                    "format": "int32",
+                    "type": "integer"
                 },
                 "id": {
                     "required": false,
                     "type": "string"
                 },
-                "age": {
+                "name": {
                     "required": false,
-                    "format": "int32",
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
@@ -999,11 +974,11 @@
             "id": "Entry\u00abstring,List\u00abstring\u00bb\u00bb",
             "properties": {
                 "key": {
+                    "required": false,
+                    "type": "array",
                     "items": {
                         "type": "string"
-                    },
-                    "required": false,
-                    "type": "List"
+                    }
                 }
             }
         }

@@ -70,18 +70,50 @@
             "description": "Root Controller",
             "path": "/default/root-controller",
             "position": 0
+        },
+        {
+            "description": "Groovy Service",
+            "path": "/default/groovy-service",
+            "position": 0
         }
     ],
     "authorizations": {
-
+        "oauth2": {
+            "grantTypes": {
+                "implicit": {
+                    "loginEndpoint": {
+                        "url": "http://petstore.swagger.io/api/oauth/dialog"
+                    },
+                    "type": "implicit"
+                }
+            },
+            "name": "petstore_auth",
+            "scopes": [
+                {
+                    "description": "modify pets in your account",
+                    "scope": "write:pets"
+                },
+                {
+                    "description": "read your pets",
+                    "scope": "read:pets"
+                }
+            ],
+            "type": "oauth2"
+        },
+        "apiKey": {
+            "keyname": "api_key",
+            "name": "api_key",
+            "passAs": "header",
+            "type": "apiKey"
+        }
     },
     "info": {
         "contact": "Contact Email",
-        "description": "Api Description",
-        "license": "Licence Type",
-        "licenseUrl": "License URL",
-        "termsOfServiceUrl": "Api terms of service",
-        "title": "default Title"
+        "description": "Api Documentation",
+        "license": "Apache 2.0",
+        "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+        "termsOfServiceUrl": "urn:tos",
+        "title": "Api Documentation"
     },
     "swaggerVersion": "1.2"
 }

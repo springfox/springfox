@@ -1,0 +1,73 @@
+import springfox.gradlebuild.utils.ProjectDefinitions
+
+apply plugin: "org.asciidoctor.convert"
+asciidoctor {
+  sourceDir = file('asciidoc')
+  logDocuments = true
+  separateOutputDirs = false
+  backends = ['html5']
+
+  attributes 'source-highlighter': 'coderay',
+          'springfox-current-version': project.version.toString(),
+          'springfox-released-version': project.ext.currentVersion,
+          toc: 'left',
+          idprefix: '',
+          idseparator: '-',
+          icons: 'font',
+          encoding: 'utf-8'
+}
+
+task publishDocs(type: Exec) {
+  description = "Publishes reference documentation"
+  group = "release"
+
+  String symlink = 'snapshot'
+  String docVersion = project.version
+
+  if (project.hasProperty('updateMode')) {
+    symlink = 'current'
+    docVersion = project.ext.currentVersion
+  } else {
+    symlink = isSnapshot(project) ? 'snapshot' : 'current'
+  }
+
+  String gitChanges = ""
+  ['build/asciidoc/*'    : "docs",
+   'build/docs/javadoc/*': "javadoc"].each { source, destination ->
+    String dir = "${destination}/${docVersion}/"
+    gitChanges += """rm -rf $dir
+      mkdir -p $dir
+      cp -r $source $dir
+      rm -rf ${destination}/${symlink}
+      ln -sf ${docVersion}/ ${destination}/${symlink}
+      git add $dir ${destination}/${symlink}
+"""
+  }
+  commandLine "sh", "-c",
+          """
+  git config --local user.email "bot@springfox.io"
+  git config --local user.name "Springfox Robot"
+  git fetch origin +gh-pages:gh-pages
+  git checkout gh-pages
+  $gitChanges
+  git commit -qm "Publish docs/${project.version}"
+  git push -q "https://${System.getenv("GITHUB_TOKEN")}@github.com/springfox/springfox.git" gh-pages > /dev/null 2>&1
+  git checkout master
+  git config --local --unset user.email
+  git config --local --unset user.name
+"""
+}
+
+def isSnapshot(project) {
+  String.valueOf(project.version).endsWith("-SNAPSHOT")
+}
+
+task allJavadoc(type: Javadoc) {
+  final def publishables = ProjectDefinitions.publishables(project)
+  source publishables.collect { it.sourceSets.main.allJava }
+  classpath = files(publishables.collect { it.sourceSets.main.compileClasspath })
+  destinationDir = file("${buildDir}/docs/javadoc")
+}
+
+publishDocs.dependsOn asciidoctor
+publishDocs.dependsOn allJavadoc

@@ -4,10 +4,8 @@
     "basePath": "/",
     "resourcePath": "/features",
     "produces": [
-        "*/*"
     ],
     "consumes": [
-        "application/json"
     ],
     "apis": [
         {
@@ -17,16 +15,14 @@
                 {
                     "method": "GET",
                     "summary": "all",
-                    "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingGET",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -52,20 +48,18 @@
                 {
                     "method": "HEAD",
                     "summary": "all",
-                    "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingHEAD",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "string"
                         },
                         {
@@ -87,20 +81,18 @@
                 {
                     "method": "POST",
                     "summary": "all",
-                    "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingPOST",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "string"
                         },
                         {
@@ -126,20 +118,18 @@
                 {
                     "method": "PUT",
                     "summary": "all",
-                    "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingPUT",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "string"
                         },
                         {
@@ -165,20 +155,18 @@
                 {
                     "method": "PATCH",
                     "summary": "all",
-                    "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingPATCH",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "string"
                         },
                         {
@@ -200,20 +188,18 @@
                 {
                     "method": "DELETE",
                     "summary": "all",
-                    "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingDELETE",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "string"
                         },
                         {
@@ -235,20 +221,18 @@
                 {
                     "method": "OPTIONS",
                     "summary": "all",
-                    "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingOPTIONS",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "string"
                         },
                         {
@@ -270,20 +254,18 @@
                 {
                     "method": "TRACE",
                     "summary": "all",
-                    "notes": "all",
-                    "nickname": "all",
+                    "nickname": "allUsingTRACE",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null,
+                            "message": "OK",
                             "responseModel": "string"
                         },
                         {
@@ -311,16 +293,14 @@
                 {
                     "method": "GET",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingGET",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -345,20 +325,18 @@
                 {
                     "method": "HEAD",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingHEAD",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 204,
@@ -379,20 +357,18 @@
                 {
                     "method": "POST",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingPOST",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -417,20 +393,18 @@
                 {
                     "method": "PUT",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingPUT",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -455,20 +429,18 @@
                 {
                     "method": "PATCH",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingPATCH",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 204,
@@ -489,20 +461,18 @@
                 {
                     "method": "DELETE",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingDELETE",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 204,
@@ -523,20 +493,18 @@
                 {
                     "method": "OPTIONS",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingOPTIONS",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 204,
@@ -557,20 +525,18 @@
                 {
                     "method": "TRACE",
                     "summary": "allMethodAllowed",
-                    "notes": "allMethodAllowed",
-                    "nickname": "allMethodAllowed",
+                    "nickname": "allMethodAllowedUsingTRACE",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 204,
@@ -597,8 +563,7 @@
                 {
                     "method": "POST",
                     "summary": "getBare",
-                    "notes": "getBare",
-                    "nickname": "getBare",
+                    "nickname": "getBareUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -619,7 +584,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -650,8 +615,7 @@
                 {
                     "method": "POST",
                     "summary": "updateBigDecimal",
-                    "notes": "updateBigDecimal",
-                    "nickname": "updateBigDecimal",
+                    "nickname": "updateBigDecimalUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -673,7 +637,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -704,8 +668,7 @@
                 {
                     "method": "POST",
                     "summary": "updateDate",
-                    "notes": "updateDate",
-                    "nickname": "updateDate",
+                    "nickname": "updateDateUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -726,7 +689,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -757,16 +720,14 @@
                 {
                     "method": "GET",
                     "summary": "getEffective",
-                    "notes": "getEffective",
-                    "nickname": "getEffective",
+                    "nickname": "getEffectiveUsingGET",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -798,21 +759,19 @@
                 {
                     "method": "GET",
                     "summary": "getEffectives",
-                    "notes": "getEffectives",
-                    "nickname": "getEffectives",
+                    "nickname": "getEffectivesUsingGET",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 401,
@@ -831,10 +790,91 @@
                     "type": "array",
                     "items": {
                         "type": "Example"
-                    },
-                    "uniqueItems": false
+                    }
                 }
             ]
+        },
+        {
+            "description": "listOfMaps",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "listOfMaps",
+                    "nickname": "listOfMapsUsingGET",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "array"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "List[Map\u00abstring,string\u00bb]"
+                }
+            ],
+            "path": "/features/listOfMaps"
+        },
+        {
+            "description": "modelWithMapProperty",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "modelWithMapProperty",
+                    "nickname": "modelWithMapPropertyUsingGET",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "ModelWithMapProperty"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "ModelWithMapProperty"
+                }
+            ],
+            "path": "/features/mapProperty"
         },
         {
             "path": "/features/status",
@@ -843,8 +883,7 @@
                 {
                     "method": "POST",
                     "summary": "updateBaz",
-                    "notes": "updateBaz",
-                    "nickname": "updateBaz",
+                    "nickname": "updateBazUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -869,7 +908,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -900,8 +939,7 @@
                 {
                     "method": "POST",
                     "summary": "updateBazes",
-                    "notes": "updateBazes",
-                    "nickname": "updateBazes",
+                    "nickname": "updateBazesUsingPOST",
                     "produces": [
                         "*/*"
                     ],
@@ -922,7 +960,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -954,7 +992,7 @@
                     "method": "GET",
                     "summary": "Find pet by ID",
                     "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
-                    "nickname": "getPetById",
+                    "nickname": "getPetByIdUsingGET",
                     "produces": [
                         "*/*"
                     ],
@@ -1000,28 +1038,13 @@
         }
     ],
     "models": {
-        "Void": {
+        "Chronology": {
             "description": "",
-            "id": "Void",
+            "id": "Chronology",
             "properties": {
-            }
-        },
-        "Pet": {
-            "description": "",
-            "id": "Pet",
-            "properties": {
-                "id": {
+                "zone": {
                     "required": false,
-                    "type": "string"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
+                    "type": "DateTimeZone"
                 }
             }
         },
@@ -1029,43 +1052,61 @@
             "description": "",
             "id": "DateTimeField",
             "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "type": {
-                    "required": false,
-                    "type": "DateTimeFieldType"
-                },
-                "supported": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "lenient": {
-                    "required": false,
-                    "type": "boolean"
-                },
                 "durationField": {
-                    "required": false,
-                    "type": "DurationField"
-                },
-                "minimumValue": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "maximumValue": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "rangeDurationField": {
                     "required": false,
                     "type": "DurationField"
                 },
                 "leapDurationField": {
                     "required": false,
                     "type": "DurationField"
+                },
+                "lenient": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "maximumValue": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "minimumValue": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                },
+                "rangeDurationField": {
+                    "required": false,
+                    "type": "DurationField"
+                },
+                "supported": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "type": {
+                    "required": false,
+                    "type": "DateTimeFieldType"
+                }
+            }
+        },
+        "DateTimeFieldType": {
+            "description": "",
+            "id": "DateTimeFieldType",
+            "properties": {
+                "durationType": {
+                    "required": false,
+                    "type": "DurationFieldType"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                },
+                "rangeDurationType": {
+                    "required": false,
+                    "type": "DurationFieldType"
                 }
             }
         },
@@ -1079,58 +1120,41 @@
                 }
             }
         },
-        "Example": {
-            "description": "",
-            "id": "Example",
+        "ModelWithMapProperty": {
+            "description": "Describes model with map property",
+            "id": "ModelWithMapProperty",
             "properties": {
-                "parentBeanProperty": {
+                "params": {
+                    "description": "Map of params to be sent",
+                    "required": false,
+                    "type": "object"
+                }
+            }
+        },
+        "DurationField": {
+            "description": "",
+            "id": "DurationField",
+            "properties": {
+                "name": {
                     "required": false,
                     "type": "string"
                 },
-                "foo": {
+                "precise": {
                     "required": false,
-                    "type": "string"
+                    "type": "boolean"
                 },
-                "bar": {
-                    "description": "description of bar",
+                "supported": {
                     "required": false,
-                    "format": "int32",
+                    "type": "boolean"
+                },
+                "type": {
+                    "required": false,
+                    "type": "DurationFieldType"
+                },
+                "unitMillis": {
+                    "format": "int64",
+                    "required": false,
                     "type": "integer"
-                },
-                "enumType": {
-                    "enum": [
-                        "ONE",
-                        "TWO"
-                    ],
-                    "required": false,
-                    "type": "string"
-                },
-                "annotatedEnumType": {
-                    "enum": [
-                        "ONE",
-                        "TWO"
-                    ],
-                    "required": false,
-                    "type": "string"
-                },
-                "nestedType": {
-                    "required": false,
-                    "type": "NestedType"
-                },
-                "propertyWithNoSetterMethod": {
-                    "required": false,
-                    "type": "string"
-                },
-                "localDateTime": {
-                    "required": false,
-                    "type": "LocalDateTime"
-                },
-                "allCapsSet": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "required": false,
-                    "type": "Set"
                 }
             }
         },
@@ -1144,92 +1168,97 @@
                 }
             }
         },
+        "Example": {
+            "description": "",
+            "id": "Example",
+            "properties": {
+                "allCapsSet": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "required": false,
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "annotatedEnumType": {
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ],
+                    "required": false,
+                    "type": "string"
+                },
+                "bar": {
+                    "description": "description of bar",
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "enumType": {
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ],
+                    "required": false,
+                    "type": "string"
+                },
+                "foo": {
+                    "required": false,
+                    "type": "string"
+                },
+                "localDateTime": {
+                    "required": false,
+                    "type": "LocalDateTime"
+                },
+                "nestedType": {
+                    "required": false,
+                    "type": "NestedType"
+                },
+                "parentBeanProperty": {
+                    "required": false,
+                    "type": "string"
+                },
+                "propertyWithNoSetterMethod": {
+                    "required": false,
+                    "type": "string"
+                },
+                "propertyWithNoGetterMethod": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
         "LocalDateTime": {
             "description": "",
             "id": "LocalDateTime",
             "properties": {
-                "year": {
-                    "required": false,
+                "centuryOfEra": {
                     "format": "int32",
-                    "type": "integer"
-                },
-                "era": {
                     "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfYear": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfWeek": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "dayOfMonth": {
-                    "required": false,
-                    "format": "int32",
                     "type": "integer"
                 },
                 "chronology": {
                     "required": false,
                     "type": "Chronology"
                 },
-                "centuryOfEra": {
-                    "required": false,
+                "dayOfMonth": {
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
-                "yearOfEra": {
-                    "required": false,
+                "dayOfWeek": {
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
-                "yearOfCentury": {
-                    "required": false,
+                "dayOfYear": {
                     "format": "int32",
+                    "required": false,
                     "type": "integer"
                 },
-                "weekyear": {
-                    "required": false,
+                "era": {
                     "format": "int32",
-                    "type": "integer"
-                },
-                "monthOfYear": {
                     "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "weekOfWeekyear": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "hourOfDay": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "minuteOfHour": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "secondOfMinute": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "millisOfSecond": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "millisOfDay": {
-                    "required": false,
-                    "format": "int32",
                     "type": "integer"
                 },
                 "fields": {
@@ -1237,7 +1266,44 @@
                         "type": "DateTimeField"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
+                },
+                "fieldTypes": {
+                    "items": {
+                        "type": "DateTimeFieldType"
+                    },
+                    "required": false,
+                    "type": "array"
+                },
+                "hourOfDay": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "millisOfDay": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "millisOfSecond": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "minuteOfHour": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "monthOfYear": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "secondOfMinute": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
                 },
                 "values": {
                     "items": {
@@ -1245,14 +1311,32 @@
                         "type": "integer"
                     },
                     "required": false,
-                    "type": "Array"
+                    "type": "array"
                 },
-                "fieldTypes": {
-                    "items": {
-                        "type": "DateTimeFieldType"
-                    },
+                "weekOfWeekyear": {
+                    "format": "int32",
                     "required": false,
-                    "type": "Array"
+                    "type": "integer"
+                },
+                "weekyear": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "year": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "yearOfCentury": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
+                },
+                "yearOfEra": {
+                    "format": "int32",
+                    "required": false,
+                    "type": "integer"
                 }
             }
         },
@@ -1266,58 +1350,22 @@
                 }
             }
         },
-        "DurationField": {
+        "Pet": {
             "description": "",
-            "id": "DurationField",
+            "id": "Pet",
             "properties": {
-                "name": {
+                "age": {
+                    "format": "int32",
                     "required": false,
-                    "type": "string"
-                },
-                "type": {
-                    "required": false,
-                    "type": "DurationFieldType"
-                },
-                "supported": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "unitMillis": {
-                    "required": false,
-                    "format": "int64",
                     "type": "integer"
                 },
-                "precise": {
-                    "required": false,
-                    "type": "boolean"
-                }
-            }
-        },
-        "Chronology": {
-            "description": "",
-            "id": "Chronology",
-            "properties": {
-                "zone": {
-                    "required": false,
-                    "type": "DateTimeZone"
-                }
-            }
-        },
-        "DateTimeFieldType": {
-            "description": "",
-            "id": "DateTimeFieldType",
-            "properties": {
-                "name": {
+                "id": {
                     "required": false,
                     "type": "string"
                 },
-                "durationType": {
+                "name": {
                     "required": false,
-                    "type": "DurationFieldType"
-                },
-                "rangeDurationType": {
-                    "required": false,
-                    "type": "DurationFieldType"
+                    "type": "string"
                 }
             }
         }

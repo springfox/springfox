@@ -1,0 +1,34 @@
+configurations {
+  testArtifacts.extendsFrom testRuntime
+}
+
+ext {
+  limits = [
+          'instruction': 68,
+          'branch'     : 40,
+          'line'       : 71,
+          'complexity' : 75,
+          'method'     : 75,
+          'class'      : 100
+  ]
+}
+
+task testJar(type: Jar) {
+  classifier "test"
+  from sourceSets.test.output
+  exclude '**/*log4j.xml*', '**/*simplelogger.properties*'
+}
+artifacts {
+  testArtifacts testJar
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+  compile "io.github.robwin:swagger2markup:0.6.2"
+  provided "org.springframework:spring-test:${spring}"
+  provided libs.clientProvided
+  provided libs.springProvided
+  testCompile libs.test
+}

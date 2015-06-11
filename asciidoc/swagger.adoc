@@ -1,0 +1,33 @@
+== Swagger
+
+Springfox supports both version https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md[1.2] and version
+https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md[2.0] of the http://swagger.io/[Swagger] specification.
+Where possible, the Swagger 2.0 specification is preferable.
+
+The https://github.com/swagger-api/swagger-core/wiki/Annotations[swagger-core annotations], as provided by
+https://github.com/swagger-api/swagger-core[swagger-core], are typically used to decorate the java source code of an API which is bing
+'swaggered'. Springfox is aware of the Swagger-Core Annotations and will favor those annotations over inferred defaults.
+
+=== Swagger 1.2 vs Swagger 2.0
+One major difference between the two swagger specification is the composition of the generated swagger documentation.
+
+With Swagger 1.2 an applications API is represented as a `Resource Listing` and multiple `API Declarations` which has the
+implication of producing https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md#42-file-structure[multiple JSON files]
+
+With Swagger 2.0 things are much simpler and an application's API can be represented in a single JSON file.
+
+=== Moving from swagger-springmvc?
+
+Here is https://github.com/springfox/springfox/blob/master/docs/transitioning-to-v2.md[a guide] to help with the
+transition from 1.0.2 to 2.0.
+
+Legacy documentation is https://github.com/springfox/springfox/blob/v1.0.2/README.md[available here].
+
+=== Springfox configuration and demo applications
+
+The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of sample Spring application
+which can be used a reference.
+
+include::current-documentation.adoc[]
+
+

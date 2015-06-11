@@ -4,10 +4,10 @@
     "basePath": "/",
     "resourcePath": "/child/child-method",
     "produces": [
-        "*/*"
+
     ],
     "consumes": [
-        "application/json"
+
     ],
     "apis": [
         {
@@ -17,8 +17,7 @@
                 {
                     "method": "GET",
                     "summary": "getSomething",
-                    "notes": "getSomething",
-                    "nickname": "getSomething",
+                    "nickname": "getSomethingUsingGET",
                     "produces": [
                         "*/*"
                     ],

@@ -4,10 +4,8 @@
     "basePath": "/",
     "resourcePath": "/",
     "produces": [
-        "*/*"
     ],
     "consumes": [
-        "application/json"
     ],
     "apis": [
         {
@@ -17,22 +15,19 @@
                 {
                     "method": "GET",
                     "summary": "getAll",
-                    "notes": "getAll",
-                    "nickname": "getAll",
+                    "nickname": "getAllUsingGET",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "List"
+                            "responseModel": "array"
                         },
                         {
                             "code": 401,
@@ -51,8 +46,7 @@
                     "type": "array",
                     "items": {
                         "type": "string"
-                    },
-                    "uniqueItems": false
+                    }
                 }
             ]
         }

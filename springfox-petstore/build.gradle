@@ -1,0 +1,20 @@
+ext {
+  jdkVersion = 1.6
+}
+compileJava.options.encoding = 'UTF-8'
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+}
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile libs.spring
+  compile libs.springProvided
+  compile libs.swagger2Core
+  compile "com.google.guava:guava:${guava}"
+}

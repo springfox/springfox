@@ -1,0 +1,358 @@
+== Usage (Quick guide) for 1.0.x
+This quick guide outlines how to get swagger-springmvc up and running with a default configuration.
+The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin` as explained below.
+
+=== Spring Java Configuration
+- By far, the easiest way to enable swagger
+- Assuming you have configured Spring MVC without an xml based servlet application context.
+- A typical minimal configuration looks as follows:
+
+```java
+@Configuration
+@EnableWebMvc
+@EnableSwagger
+@ComponentScan("com.myapp.packages")
+public class WebAppConfig {
+ ...
+}
+```
+The `@EnableSwagger` annotation, in this example, enables swagger-springmvc out of the box. The generated swagger
+json Resource Listing is available at /api-docs
+
+
+=== Spring xml Configuration
+- To get the default implementation simply define a bean of type: `com.mangofactory.documentation.swagger.configuration.SpringSwaggerConfig`
+
+```xml
+<mvc:annotation-driven/> <!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
+<bean class="springfox.documentation.swagger.configuration.SwaggerCommonConfiguration" />
+```
+- The generated swagger
+json Resource Listing is available at /api-docs
+
+
+=== Usage (SwaggerSpringMvcPlugin)
+
+The recommended way to integrate swagger-springmvc with your application is to use the `SwaggerSpringMvcPlugin`. If you are ever
+going to need to configure or customize how swagger-springmvc generates your application's swagger api documentation
+you are going to need to use the `SwaggerSpringMvcPlugin`.
+
+
+=== SwaggerSpringMvcPlugin XML Configuration
+To use the plugin you must create a spring java configuration class which uses spring's `@Configuration`.
+This config class must then be defined in your xml application context.
+
+
+```xml
+<!-- Required so swagger-springmvc can access spring's RequestMappingHandlerMapping  -->
+<mvc:annotation-driven/>
+
+<bean class="com.yourapp.configuration.MySwaggerConfig"/>
+```
+
+```java
+
+@Configuration
+@EnableSwagger //Loads the spring beans required by the framework
+public class MySwaggerConfig {
+
+   private SpringSwaggerConfig springSwaggerConfig;
+
+   /**
+    * Required to autowire SpringSwaggerConfig
+    */
+   @Autowired
+   public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
+      this.springSwaggerConfig = springSwaggerConfig;
+   }
+
+   /**
+    * Every SwaggerSpringMvcPlugin bean is picked up by the swagger-mvc framework - allowing for multiple
+    * swagger groups i.e. same code base multiple swagger resource listings.
+    */
+   @Bean
+   public SwaggerSpringMvcPlugin customImplementation(){
+      return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
+              .includePatterns(".*pet.*");
+   }
+
+}
+```
+
+
+=== SwaggerSpringMvcPlugin Spring Java Configuration
+- Use the `@EnableSwagger` annotation.
+- Autowire `SpringSwaggerConfig`.
+- Define one or more SwaggerSpringMvcPlugin instances using springs `@Bean` annotation.
+
+```java
+@Configuration
+@EnableWebMvc
+@EnableSwagger
+@ComponentScan("com.myapp.controllers")
+public class CustomJavaPluginConfig {
+
+   private SpringSwaggerConfig springSwaggerConfig;
+
+   @Autowired
+   public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
+      this.springSwaggerConfig = springSwaggerConfig;
+   }
+
+   @Bean //Don't forget the @Bean annotation
+   public SwaggerSpringMvcPlugin customImplementation(){
+      return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
+            .apiInfo(apiInfo())
+            .includePatterns(".*pet.*");
+   }
+
+    private ApiInfo apiInfo() {
+      ApiInfo apiInfo = new ApiInfo(
+              "My Apps API Title",
+              "My Apps API Description",
+              "My Apps API terms of service",
+              "My Apps API Contact Email",
+              "My Apps API Licence Type",
+              "My Apps API License URL"
+        );
+      return apiInfo;
+    }
+}
+```
+
+=== How It works
+
+Swagger-springmvc bootstraps your spring application and scans the `RequestMappingHandlerMapping's` created
+by spring to generate the swagger documentation for your applications API's.
+Swagger-springmvc stores the generated swagger documentation, in memory, and serves it as JSON using a spring controller.
+
+
+=== Core Concepts
+
+image::swaggerSpringMvc.png[Core Concepts]
+
+==== Swagger group
+
+A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
+within your application. The reason this concept was introduced was to support applications which require more than one
+Resource Listing. Why would you need more than one Resource Listing?
+- A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
+- A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2
+
+In most cases an application will not need more than one Resource Listing and the concept of swagger groups can be ignored.
+
+==== Resource Listing
+
+Please see the Swagger Specification for a detailed explanation.
+
+
+==== API Documentation Endpoints
+
+All swagger documentation (JSON responses) are served from DefaultSwaggerController. The controller maintains a cache
+of ResourcesListing's which are uniquely identified by the `swaggerGroup`. There is a 1:1 relationship between
+ResourceListings and swagger groups (`SwaggerSpringMvcPlugin` instances). A typical application will have a single
+SwaggerSpringMvcPlugin which is given the unique identifier 'default'.
+
+__Note:__ The below paths are relative to your applications context path and/or DispatcherServlet `url-pattern`
+
+[options="header,footer"]
+|=======================
+| Path                    | Description
+| /api-docs               | Returns the first _Resource Listing_ found in the cache
+| /api-docs?group=default | Returns the _Resource Listing_ for the default swagger group
+| /api-docs?group=group1  | Returns the _Resource Listing_ for the swagger group 'group1'
+| /api-docs/group1/albums | Returns the album's _Api Declaration_ for the swagger group 'group1'
+|=======================
+
+
+=== Urls (SwaggerPathProvider)
+
+The swagger specification recommends the use of absolute URL's where possible - specifically the the `path` attribute of
+api's within the ResourceListing's and the `basePath` attribute of Api Declarations. Most users of swagger-springmvc have expressed
+a preference for relative urls hence `RelativeSwaggerPathProvider` is the default `SwaggerPathProvider`. `AbsoluteSwaggerPathProvider`
+can be used to provide absolute urls. `AbsoluteSwaggerPathProvider` has a hardcoded appRoot but demonstrates the concept. If you wish
+to use absolute urls use `AbsoluteSwaggerPathProvider` as a guide and configure your `SwaggerSpringMvcPlugin` with:
+
+```java
+    .pathProvider(myPathProvider)
+```
+
+=== Customization
+
+==== Excluding api endpoints
+Annotate a controller class or controller methods with the `@ApiIgnore` annotation.
+
+For more powerful control, specify regular expressions:
+
+```java
+swaggerSpringMvcPlugin.includePatterns(...)
+```
+
+Exclude all controllers or controller handler methods with specific annotations .
+```java
+swaggerSpringMvcPlugin.excludeAnnotations(MyCustomApiExclusion.class)
+
+```
+
+==== HTTP Response codes and messages
+Configuring global response messages for RequestMappings
+```java
+swaggerSpringMvcPlugin.globalResponseMessage(new ResponseMessage(OK.value(), "200 means all good \o/", toOption(null)))
+```
+
+Configuring per-RequestMappings method response messages
+```java
+@ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
+public .... createSomething(..)
+
+```
+
+==== Ordering the api's within a ResourceListing
+- Defaults to `ResourceListingLexicographicalOrdering`
+
+```java
+swaggerSpringMvcPlugin.apiListingReferenceOrdering(new ResourceListingPositionalOrdering())
+```
+
+- Use the position attribute of the `@Api` annotation
+```
+@Controller
+@Api(value="", description="Operations on Businesses", position = 2)
+public class BusinessService {
+    ...
+}
+```
+
+==== Ordering operations in Api Declarations
+Use the swagger `ApiOperation` annotation.
+
+```java
+
+   @ApiOperation(value = "", position = 5)
+   @RequestMapping("/somewhere")
+   public Model methodWithPosition() {
+        ...
+   }
+
+```
+
+==== Ordering ApiDescriptions (within ApiListings)
+Defaults to `ApiDescriptionLexicographicalOrdering`
+
+```java
+swaggerSpringMvcPlugin.apiDescriptionOrdering(new MyCustomApiDescriptionOrdering());
+```
+
+==== Configuring the output of `operationId` in a Swagger 2.0 spec
+As defined https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-5[`operationId` was
+introduced] in the Swagger 2.0 spec, the `operationId` parameter, which was referred to as `nickname` in pre-2.0
+versions of the Swagger spec, provides the author a means by which to describe an API operation with a friendly name
+. This field is often used by consumers of a Swagger 2.0 spec in order to name functions in generated clients. An
+example of this can be seen in the https://github.com/swagger-api/swagger-codegen[swagger-codegen project].
+
+===## The default value of `operationId` according to Springfox
+By default, when using Springfox in Swagger 2.0 mode, the value of `operationID` will be rendered using the following structure: "`[java_method_name_here]Using[HTTP_verb_here]`". For example, if one has a method `getPets()` connected to an HTTP GET verb, Springfox will render `getPetsUsingGET` for the operationId.
+
+====== Given this annotated method ...
+
+ ```java
+   @ApiOperation(value = "")
+   @RequestMapping(value = "/pets", method = RequestMethod.GET)
+   public Model getAllThePets() {
+        ...
+   }
+```
+
+====== the default `operationId` will render looking like this:
+
+```json
+
+"paths": {
+	"/pets": {
+		"get": {
+            ...
+			"operationId":"getAllThePetsUsingGET"
+			...
+		}
+	}
+}
+
+```
+
+===== Customizing the value of `operationId`
+In the event you wish to overide the default `operationId` which Springfox renders, you may do so by providing the `nickname` element in an `@ApiOperation` annotation.
+
+====== Given this annotated method ...
+
+```java
+   @ApiOperation(value = "", nickname = "getMeAllThePetsPlease")
+   @RequestMapping(value = "/pets", method = RequestMethod.GET)
+   public Model getAllThePets() {
+        ...
+   }
+```
+
+====== ... the customized `operationId` will render looking like this:
+
+```json
+
+"paths": {
+	"/pets": {
+		"get": {
+            ...
+			"operationId":"getMeAllThePetsPlease"
+			...
+		}
+	}
+}
+
+```
+
+==== Changing how Generic Types are Named
+
+By default, types with generics will be labeled with '\u00ab'(<<), '\u00bb'(>>), and commas. This can be problematic
+with things like swagger-codegen. You can override this behavior by implementing your own `GenericTypeNamingStrategy`.
+For example, if you wanted `List<String>` to be encoded as 'ListOfString' and `Map<String, Object>`
+to be encoded as 'MapOfStringAndObject' you could implement the following:
+
+```java
+
+public class SimpleGenericNamingStrategy implements GenericTypeNamingStrategy {
+    private final static String OPEN = "Of";
+    private final static String CLOSE = "";
+    private final static String DELIM = "And";
+
+    @Override
+    public String getOpenGeneric() {
+        return OPEN;
+    }
+
+    @Override
+    public String getCloseGeneric() {
+        return CLOSE;
+    }
+
+    @Override
+    public String getTypeListDelimiter() {
+        return DELIM;
+    }
+
+}
+```
+
+then during plugin customization:
+
+```java
+swaggerSpringMvcPlugin.setGenericTypeNamingStrategy(new SimpleGenericTypeNamingStrategy());
+```
+
+=== Model Customization
+==== Excluding spring handler method arguments or custom types
+To exclude controller method arguments form the generated swagger model JSON.
+
+```java
+swaggerSpringMvcPlugin.ignoredParameterTypes(MyCustomType.class)
+```
+
+By default, a number of Spring's handler method arguments are ignored. See: ```com.mangofactory.documentation.swagger
+.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes```

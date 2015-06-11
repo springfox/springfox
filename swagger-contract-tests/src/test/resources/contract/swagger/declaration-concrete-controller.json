@@ -4,10 +4,8 @@
     "basePath": "/",
     "resourcePath": "/foo",
     "produces": [
-        "*/*"
     ],
     "consumes": [
-        "application/json"
     ],
     "apis": [
         {
@@ -17,8 +15,7 @@
                 {
                     "method": "PUT",
                     "summary": "create",
-                    "notes": "create",
-                    "nickname": "create",
+                    "nickname": "createUsingPUT",
                     "produces": [
                         "*/*"
                     ],
@@ -39,7 +36,7 @@
                     "responseMessages": [
                         {
                             "code": 200,
-                            "message": null
+                            "message": "OK"
                         },
                         {
                             "code": 201,
@@ -70,17 +67,14 @@
                 {
                     "method": "GET",
                     "summary": "get",
-                    "notes": "get",
-                    "nickname": "get",
+                    "nickname": "getUsingGET",
                     "produces": [
                         "*/*"
                     ],
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [
-
-                    ],
+                    "parameters": [],
                     "responseMessages": [
                         {
                             "code": 200,
@@ -98,6 +92,11 @@
                         {
                             "code": 404,
                             "message": "Not Found"
+                        },
+                        {
+                            "code": 405,
+                            "message": "Invalid input",
+                            "responseModel": "Void"
                         }
                     ],
                     "deprecated": "false",
@@ -111,26 +110,19 @@
             "description": "",
             "id": "Pet",
             "properties": {
-                "name": {
+                "age": {
+                    "format": "int32",
                     "required": false,
-                    "type": "string"
+                    "type": "integer"
                 },
                 "id": {
                     "required": false,
                     "type": "string"
                 },
-                "age": {
+                "name": {
                     "required": false,
-                    "format": "int32",
-                    "type": "integer"
+                    "type": "string"
                 }
-            }
-        },
-        "Void": {
-            "description": "",
-            "id": "Void",
-            "properties": {
-
             }
         }
     }
