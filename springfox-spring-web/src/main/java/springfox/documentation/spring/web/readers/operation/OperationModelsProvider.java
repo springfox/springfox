@@ -28,6 +28,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
@@ -85,7 +86,7 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
     for (int i = 0; i < annotations.length; i++) {
       Annotation[] pAnnotations = annotations[i];
       for (Annotation annotation : pAnnotations) {
-        if (annotation instanceof RequestBody) {
+        if (annotation instanceof RequestBody || annotation instanceof RequestPart) {
           ResolvedMethodParameter pType = parameterTypes.get(i);
           ResolvedType modelType = context.alternateFor(pType.getResolvedParameterType());
           LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
