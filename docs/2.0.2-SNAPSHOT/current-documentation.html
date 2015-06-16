@@ -517,6 +517,11 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#example-application">Example application</a></li>
 </ul>
 </li>
+<li><a href="#configuring-springfox-staticdocs">Configuring springfox-staticdocs</a>
+<ul class="sectlevel2">
+<li><a href="#usage-guide">Usage guide</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -591,8 +596,7 @@ library always has a configured ObjectMapper that is customized to serialize swa
  ObjectMapper that is in play.</p>
 </div>
 <div class="paragraph">
-<p>If you encounter a NullPointerException during application startup like <a href="https://github" class="bare">https://github</a>
-.com/springfox/springfox/issues/635[this issue]. Its because most likely the <code><code>WebMvcConfigurerAdapter</code></code> isn&#8217;t working.
+<p>If you encounter a NullPointerException during application startup like <a href="https://github.com/springfox/springfox/issues/635">this issue</a>. Its because most likely the <code><code>WebMvcConfigurerAdapter</code></code> isn&#8217;t working.
 These adapter especially in a non-spring-boot scenarios will only get loaded if the @EnableWebMvc
 <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurer.html">annotation is present</a>.</p>
 </div>
@@ -645,8 +649,7 @@ good example of where this breaks down is the following <a href="http://stackove
 </tbody>
 </table>
 <div class="paragraph">
-<p>To customize these endpoints, loading a <a href="http://docs.spring" class="bare">http://docs.spring</a>
-.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html[property source] with the following properties
+<p>To customize these endpoints, loading a <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html">property source</a> with the following properties
 allows the properties to be  overridden</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
@@ -683,14 +686,14 @@ allows the properties to be  overridden</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">    <span class="comment">// if com.qualified.ReplaceWith is not a Class that can be created using Class.forName(...)</span>
-    <span class="comment">// Original will be replaced with the new class</span>
-    <span class="annotation">@ApiModelProperty</span>(dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">com.qualified.ReplacedWith</span><span class="delimiter">&quot;</span></span>)
-    <span class="directive">public</span> Original getOriginal() { ... }
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// if com.qualified.ReplaceWith is not a Class that can be created using Class.forName(...)</span>
+<span class="comment">// Original will be replaced with the new class</span>
+<span class="annotation">@ApiModelProperty</span>(dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">com.qualified.ReplacedWith</span><span class="delimiter">&quot;</span></span>)
+<span class="directive">public</span> Original getOriginal() { ... }
 
-    <span class="comment">// if ReplaceWith is not a Class that can be created using Class.forName(...) Original will be preserved</span>
-    <span class="annotation">@ApiModelProperty</span>(dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">ReplaceWith</span><span class="delimiter">&quot;</span></span>)
-    <span class="directive">public</span> Original getAnotherOriginal() { ... }</code></pre>
+<span class="comment">// if ReplaceWith is not a Class that can be created using Class.forName(...) Original will be preserved</span>
+<span class="annotation">@ApiModelProperty</span>(dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">ReplaceWith</span><span class="delimiter">&quot;</span></span>)
+<span class="directive">public</span> Original getAnotherOriginal() { ... }</code></pre>
 </div>
 </div>
 </div>
@@ -792,11 +795,11 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 <h6 id="given-this-annotated-method">Given this annotated method &#8230;&#8203;</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">   <span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
-   <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
-   <span class="directive">public</span> Model getAllThePets() {
-        ...
-   }</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
+<span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
+<span class="directive">public</span> Model getAllThePets() {
+    ...
+}</code></pre>
 </div>
 </div>
 </div>
@@ -827,11 +830,11 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 <h6 id="given-this-annotated-method-2">Given this annotated method &#8230;&#8203;</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">   <span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, nickname = <span class="string"><span class="delimiter">&quot;</span><span class="content">getMeAllThePetsPlease</span><span class="delimiter">&quot;</span></span>)
-   <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
-   <span class="directive">public</span> Model getAllThePets() {
-        ...
-   }</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, nickname = <span class="string"><span class="delimiter">&quot;</span><span class="content">getMeAllThePetsPlease</span><span class="delimiter">&quot;</span></span>)
+<span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
+<span class="directive">public</span> Model getAllThePets() {
+    ...
+}</code></pre>
 </div>
 </div>
 </div>
@@ -896,10 +899,108 @@ in the demo application.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="configuring-springfox-staticdocs">Configuring springfox-staticdocs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Springfox-staticdocs is a module which brings together springfox and <a href="https://github.com/RobWin/swagger2markup">swagger2markup</a>. Swagger2Markup is a library which simplifies the generation of an up-to-date RESTful API documentation by combining documentation that’s been hand-written with auto-generated API documentation produced by Springfox. The result is intended to be an up-to-date, easy-to-read, on- and offline user guide. Swagger2Markup converts a Swagger JSON or YAML file into several AsciiDoc or GitHub Flavored Markdown documents which can be converted to HTML, PDF and EPUB. The output of Swagger2Markup can be used as an alternative to swagger-ui and can be served as static content.</p>
+</div>
+<div class="sect2">
+<h3 id="usage-guide">Usage guide</h3>
+<div class="paragraph">
+<p>Adding springfox-staticdocs to your project</p>
+</div>
+<div class="sect3">
+<h4 id="maven">Maven</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger2<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>2.0.0<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span>
+<span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>springfox-staticdocs<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>2.0.0<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;scope&gt;</span>test<span class="tag">&lt;/scope&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="gradle">Gradle</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+    ...
+    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox:springfox-swagger2:2.0.0</span><span class="delimiter">'</span></span>
+    testCompile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox:springfox-staticdocs:2.0.0</span><span class="delimiter">'</span></span>
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="generate-markup-during-an-unit-test">Generate Markup during an unit test</h4>
+<div class="paragraph">
+<p>Spring&#8217;s MVC Test framework can be used to make a request to a <a href="https://github.com/springfox/springfox">springfox</a> Swagger endpoint during an unit test. The ResultHandler <code>Swagger2MarkupResultHandler</code> can be used to convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is part of <code>springfox-staticdocs</code>. That way you also verify that your Swagger endpoint is working. The following is an example with Spring Boot:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@WebAppConfiguration</span>
+<span class="annotation">@RunWith</span>(SpringJUnit4ClassRunner.class)
+<span class="annotation">@ContextConfiguration</span>(classes = Application.class, loader = SpringApplicationContextLoader.class)
+<span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2MarkupTest</span> {
+
+    <span class="annotation">@Autowired</span>
+    <span class="directive">private</span> WebApplicationContext context;
+
+    <span class="directive">private</span> MockMvc mockMvc;
+
+    <span class="annotation">@Before</span>
+    <span class="directive">public</span> <span class="type">void</span> setUp() {
+        <span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.context).build();
+    }
+
+    <span class="annotation">@Test</span>
+    <span class="directive">public</span> <span class="type">void</span> convertSwaggerToAsciiDoc() <span class="directive">throws</span> <span class="exception">Exception</span> {
+        <span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/api-docs</span><span class="delimiter">&quot;</span></span>)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(Swagger2MarkupResultHandler.outputDirectory(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/asciidoc/generated</span><span class="delimiter">&quot;</span></span>).build())
+                .andExpect(status().isOk());
+    }
+
+    <span class="annotation">@Test</span>
+    <span class="directive">public</span> <span class="type">void</span> convertSwaggerToMarkdown() <span class="directive">throws</span> <span class="exception">Exception</span> {
+        <span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/api-docs</span><span class="delimiter">&quot;</span></span>)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(Swagger2MarkupResultHandler.outputDirectory(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/markdown/generated</span><span class="delimiter">&quot;</span></span>)
+                    .withMarkupLanguage(MarkupLanguage.MARKDOWN).build())
+                .andExpect(status().isOk());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to combine the generated documentation with your hand-written documentation, then have a look at the user guide of <a href="https://github.com/RobWin/swagger2markup#combine-generated-documentation-with-your-hand-written-documentation">swagger2Markup</a>. You can also include generated CURL request, HTTP request and HTTP response example snippets from <a href="https://github.com/spring-projects/spring-restdocs">spring-restdocs</a> into the generated documentation.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="generated-html-using-swagger2markup-and-asciidoctorj">Generated HTML using Swagger2Markup and AsciidoctorJ</h4>
+<div class="imageblock">
+<div class="content">
+<img src="asciidoc/images/asciidoc_html.PNG" alt="asciidoc_html">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-06-12 04:08:10 UTC
+Last updated 2015-06-16 14:46:52 UTC
 </div>
 </div>
 </body>
