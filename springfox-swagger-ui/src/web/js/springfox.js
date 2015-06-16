@@ -8,6 +8,11 @@ $(function() {
             $.getJSON(this.baseUrl() + "/configuration/security", function(data) {
                 cb(data);
             });
+        },
+        "uiConfig": function(cb) {
+            $.getJSON(this.baseUrl() + "/configuration/ui", function(data) {
+                cb(data);
+            });
         }
     };
     window.springfox = springfox;
