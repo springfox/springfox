@@ -58,8 +58,7 @@ In order to do this implement the ```ApplicationListener<ObjectMapperConfigured>
  applicaiton event handler guarantees that application specific  customizations will be applied to each and every
  ObjectMapper that is in play.
 
-If you encounter a NullPointerException during application startup like https://github
-.com/springfox/springfox/issues/635[this issue]. Its because most likely the ```WebMvcConfigurerAdapter``` isn't working.
+If you encounter a NullPointerException during application startup like https://github.com/springfox/springfox/issues/635[this issue]. Its because most likely the ```WebMvcConfigurerAdapter``` isn't working.
 These adapter especially in a non-spring-boot scenarios will only get loaded if the @EnableWebMvc
 http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurer.html[annotation is present].
 
@@ -79,8 +78,7 @@ By default the swagger service descriptions are generated at the following urls
 |2.0              | /v2/api-docs?group=external | *external* group via docket.groupName()
 |=======================
 
-To customize these endpoints, loading a http://docs.spring
-.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html[property source] with the following properties
+To customize these endpoints, loading a http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html[property source] with the following properties
 allows the properties to be  overridden
 
 [options="header,footer"]
@@ -98,14 +96,14 @@ Using the ```ApiModelProperty#dataType``` we can override the inferred data type
 
 ```java
 
-    // if com.qualified.ReplaceWith is not a Class that can be created using Class.forName(...)
-    // Original will be replaced with the new class
-    @ApiModelProperty(dataType = "com.qualified.ReplacedWith")
-    public Original getOriginal() { ... }
+// if com.qualified.ReplaceWith is not a Class that can be created using Class.forName(...)
+// Original will be replaced with the new class
+@ApiModelProperty(dataType = "com.qualified.ReplacedWith")
+public Original getOriginal() { ... }
 
-    // if ReplaceWith is not a Class that can be created using Class.forName(...) Original will be preserved
-    @ApiModelProperty(dataType = "ReplaceWith")
-    public Original getAnotherOriginal() { ... }
+// if ReplaceWith is not a Class that can be created using Class.forName(...) Original will be preserved
+@ApiModelProperty(dataType = "ReplaceWith")
+public Original getAnotherOriginal() { ... }
 ```
 
 === Docket XML Configuration
@@ -191,11 +189,11 @@ connected to an HTTP GET verb, Springfox will render `getPetsUsingGET` for the o
 ====== Given this annotated method ...
 
 ```java
-   @ApiOperation(value = "")
-   @RequestMapping(value = "/pets", method = RequestMethod.GET)
-   public Model getAllThePets() {
-        ...
-   }
+@ApiOperation(value = "")
+@RequestMapping(value = "/pets", method = RequestMethod.GET)
+public Model getAllThePets() {
+    ...
+}
 ```
 
 ====== the default `operationId` will render looking like this:
@@ -222,11 +220,11 @@ In the event you wish to overide the default `operationId` which Springfox rende
 ====== Given this annotated method ...
 
 ```java
-   @ApiOperation(value = "", nickname = "getMeAllThePetsPlease")
-   @RequestMapping(value = "/pets", method = RequestMethod.GET)
-   public Model getAllThePets() {
-        ...
-   }
+@ApiOperation(value = "", nickname = "getMeAllThePetsPlease")
+@RequestMapping(value = "/pets", method = RequestMethod.GET)
+public Model getAllThePets() {
+    ...
+}
 ```
 
 ====== ... the customized *operationId* will render looking like this:
@@ -270,3 +268,84 @@ The library provides a variety of extensibility hooks to enrich/ augment the sch
 For an examples for spring-boot, vanilla spring applications take a look https://github.com/springfox/springfox-demos[examples]
 in the demo application.
 
+== Configuring springfox-staticdocs
+
+Springfox-staticdocs is a module which brings together springfox and https://github.com/RobWin/swagger2markup[swagger2markup]. Swagger2Markup is a library which simplifies the generation of an up-to-date RESTful API documentation by combining documentation that’s been hand-written with auto-generated API documentation produced by Springfox. The result is intended to be an up-to-date, easy-to-read, on- and offline user guide. Swagger2Markup converts a Swagger JSON or YAML file into several AsciiDoc or GitHub Flavored Markdown documents which can be converted to HTML, PDF and EPUB. The output of Swagger2Markup can be used as an alternative to swagger-ui and can be served as static content.
+
+=== Usage guide
+
+Adding springfox-staticdocs to your project
+
+==== Maven
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-staticdocs</artifactId>
+    <version>2.0.0</version>
+    <scope>test</scope>
+</dependency>
+----
+
+==== Gradle
+
+[source,groovy]
+----
+dependencies {
+    ...
+    compile 'io.springfox:springfox-swagger2:2.0.0'
+    testCompile 'io.springfox:springfox-staticdocs:2.0.0'
+    ...
+}
+----
+
+==== Generate Markup during an unit test
+
+Spring's MVC Test framework can be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. The ResultHandler `Swagger2MarkupResultHandler` can be used to convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is part of `springfox-staticdocs`. That way you also verify that your Swagger endpoint is working. The following is an example with Spring Boot:
+
+[source,java]
+----
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
+public class Swagger2MarkupTest {
+
+    @Autowired
+    private WebApplicationContext context;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+    }
+
+    @Test
+    public void convertSwaggerToAsciiDoc() throws Exception {
+        this.mockMvc.perform(get("/v2/api-docs")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/asciidoc/generated").build())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void convertSwaggerToMarkdown() throws Exception {
+        this.mockMvc.perform(get("/v2/api-docs")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/markdown/generated")
+                    .withMarkupLanguage(MarkupLanguage.MARKDOWN).build())
+                .andExpect(status().isOk());
+    }
+}
+----
+
+If you want to combine the generated documentation with your hand-written documentation, then have a look at the user guide of https://github.com/RobWin/swagger2markup#combine-generated-documentation-with-your-hand-written-documentation[swagger2Markup]. You can also include generated CURL request, HTTP request and HTTP response example snippets from https://github.com/spring-projects/spring-restdocs[spring-restdocs] into the generated documentation. 
+
+==== Generated HTML using Swagger2Markup and AsciidoctorJ
+image::asciidoc/images/asciidoc_html.PNG[asciidoc_html]
