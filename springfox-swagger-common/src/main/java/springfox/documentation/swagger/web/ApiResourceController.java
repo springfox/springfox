@@ -49,6 +49,15 @@ public class ApiResourceController {
   @Autowired
   private DocumentationCache documentationCache;
 
+  @Autowired(required = false)
+  private SecurityConfiguration securityConfiguration;
+
+  @RequestMapping(value = "/configuration/security")
+  @ResponseBody
+  ResponseEntity<SecurityConfiguration> securityConfiguration() {
+    return new ResponseEntity<SecurityConfiguration>(
+        Optional.fromNullable(securityConfiguration).or(SecurityConfiguration.DEFAULT), HttpStatus.OK);
+  }
 
   @RequestMapping(value = "/swagger-resources")
   @ResponseBody

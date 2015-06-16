@@ -1,17 +1,25 @@
 $(function() {
-    function baseUrl() {
-        var urlMatches =  /(.*)\/swagger-ui.html.*/.exec(window.location.href);
-        return urlMatches[1];
-    }
+    var springfox = {
+        "baseUrl": function() {
+            var urlMatches = /(.*)\/swagger-ui.html.*/.exec(window.location.href);
+            return urlMatches[1];
+        },
+        "securityConfig": function(cb) {
+            $.getJSON(this.baseUrl() + "/configuration/security", function(data) {
+                cb(data);
+            });
+        }
+    };
+    window.springfox = springfox;
 
-    $('#select_baseUrl').change(function () {
+    $('#select_baseUrl').change(function() {
         window.swaggerUi.headerView.trigger('update-swagger-ui', {
             url: $('#select_baseUrl').val()
         });
     });
 
     $(document).ready(function() {
-        var relativeLocation = baseUrl();
+        var relativeLocation = springfox.baseUrl();
 
         $('#input_baseUrl').hide();
 
@@ -27,6 +35,7 @@ $(function() {
             });
             $urlDropdown.change();
         });
+
     });
 
 });
