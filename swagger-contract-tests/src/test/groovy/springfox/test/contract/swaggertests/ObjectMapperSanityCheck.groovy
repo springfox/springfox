@@ -21,7 +21,6 @@
  */
 
 package springfox.test.contract.swaggertests
-
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import groovy.json.JsonSlurper
@@ -38,7 +37,6 @@ import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener
 import org.springframework.test.context.web.WebAppConfiguration
-import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
@@ -80,7 +78,6 @@ class ObjectMapperSanityCheck extends Specification {
 
   @Configuration
   @EnableSwagger2
-  @EnableWebMvc
   @ComponentScan(basePackageClasses = [SwaggerApplication.class])
   static class Config {
     @Bean

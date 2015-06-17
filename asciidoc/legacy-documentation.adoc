@@ -9,7 +9,7 @@ The recommended way to integrate swagger-springmvc with your application is to u
 
 ```java
 @Configuration
-@EnableWebMvc
+@EnableWebMvc  //NOTE: Only needed in a non-springboot application
 @EnableSwagger
 @ComponentScan("com.myapp.packages")
 public class WebAppConfig {
@@ -87,7 +87,7 @@ public class MySwaggerConfig {
 
 ```java
 @Configuration
-@EnableWebMvc
+@EnableWebMvc  //NOTE: Only needed in a non-springboot application
 @EnableSwagger
 @ComponentScan("com.myapp.controllers")
 public class CustomJavaPluginConfig {

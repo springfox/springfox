@@ -30,7 +30,6 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import spock.lang.Unroll
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
@@ -46,62 +45,61 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   @Unroll("#groupName")
   def 'should honor swagger resource listing'() {
     given:
-    RESTClient http = new RESTClient("http://localhost:$port")
-    String contract = fileContents("/contract/swagger2/$contractFile")
+      RESTClient http = new RESTClient("http://localhost:$port")
+      String contract = fileContents("/contract/swagger2/$contractFile")
 
     when:
-    def response = http.get(
-        path: '/v2/api-docs',
-        query: [group: groupName],
-        contentType: TEXT, //Allows to access the raw response body
-        headers: [Accept: 'application/json']
-    )
+      def response = http.get(
+          path: '/v2/api-docs',
+          query: [group: groupName],
+          contentType: TEXT, //Allows to access the raw response body
+          headers: [Accept: 'application/json']
+      )
     then:
-    String raw = response.data.text
-    String actual = JsonOutput.prettyPrint(raw)
-    response.status == 200
-//    println(actual)
+      String raw = response.data.text
+      String actual = JsonOutput.prettyPrint(raw)
+      response.status == 200
+  //    println(actual)
 
-    def withPortReplaced = contract.replaceAll("__PORT__", "$port")
-    JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
+      def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+      JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
 
     where:
-    contractFile                                                  | groupName
-    'swagger.json'                                                | 'petstore'
-    'declaration-business-service.json'                           | 'businessService'
-    'declaration-concrete-controller.json'                        | 'concrete'
-    'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
-    'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
-    'declaration-feature-demonstration-service.json'              | 'featureService'
-    'declaration-feature-demonstration-service-codeGen.json'      | 'featureService-codeGen'
-    'declaration-inherited-service-impl.json'                     | 'inheritedService'
-    'declaration-pet-grooming-service.json'                       | 'petGroomingService'
-    'declaration-pet-service.json'                                | 'petService'
-    'declaration-groovy-service.json'                             | 'groovyService'
+      contractFile                                                  | groupName
+      'swagger.json'                                                | 'petstore'
+      'declaration-business-service.json'                           | 'businessService'
+      'declaration-concrete-controller.json'                        | 'concrete'
+      'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
+      'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
+      'declaration-feature-demonstration-service.json'              | 'featureService'
+      'declaration-feature-demonstration-service-codeGen.json'      | 'featureService-codeGen'
+      'declaration-inherited-service-impl.json'                     | 'inheritedService'
+      'declaration-pet-grooming-service.json'                       | 'petGroomingService'
+      'declaration-pet-service.json'                                | 'petService'
+      'declaration-groovy-service.json'                             | 'groovyService'
   }
 
   def "should list swagger resources"() {
     given:
-    RESTClient http = new RESTClient("http://localhost:$port")
+      RESTClient http = new RESTClient("http://localhost:$port")
     when:
-    def response = http.get(path: '/swagger-resources', contentType: TEXT, headers: [Accept: 'application/json'])
-    def slurper = new JsonSlurper()
-    def result = slurper.parseText(response.data.text)
-    println "Results: "
-    result.each {
-      println it
-    }
+      def response = http.get(path: '/swagger-resources', contentType: TEXT, headers: [Accept: 'application/json'])
+      def slurper = new JsonSlurper()
+      def result = slurper.parseText(response.data.text)
+      println "Results: "
+      result.each {
+        println it
+      }
     then:
-    result.find { it.name == 'petstore' && it.location == '/v2/api-docs?group=petstore' && it.swaggerVersion == '2.0' }
-    result.find {
-      it.name == 'businessService' && it.location == '/v2/api-docs?group=businessService' && it.swaggerVersion == '2.0'
-    }
-    result.find { it.name == 'concrete' && it.location == '/v2/api-docs?group=concrete' && it.swaggerVersion == '2.0' }
+      result.find { it.name == 'petstore' && it.location == '/v2/api-docs?group=petstore' && it.swaggerVersion == '2.0' }
+      result.find {
+        it.name == 'businessService' && it.location == '/v2/api-docs?group=businessService' && it.swaggerVersion == '2.0'
+      }
+      result.find { it.name == 'concrete' && it.location == '/v2/api-docs?group=concrete' && it.swaggerVersion == '2.0' }
   }
 
   @Configuration
   @EnableSwagger2
-  @EnableWebMvc
   @ComponentScan([
       "springfox.documentation.spring.web.dummy.controllers",
       "springfox.test.contract.swagger",

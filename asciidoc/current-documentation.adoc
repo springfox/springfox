@@ -145,7 +145,7 @@ public class MySwaggerConfig {
 
 ```java
 @Configuration
-@EnableWebMvc
+@EnableWebMvc //NOTE: Only needed in a non-springboot application
 @EnableSwagger2
 @ComponentScan("com.myapp.controllers")
 public class CustomJavaPluginConfig {

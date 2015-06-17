@@ -29,7 +29,6 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import spock.lang.Unroll
 import springfox.documentation.service.AuthorizationScope
 import springfox.documentation.service.SecurityReference
@@ -45,8 +44,8 @@ import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static springfox.documentation.builders.PathSelectors.*
 
 @ContextConfiguration(
-        loader = SpringApplicationContextLoader,
-        classes = Config)
+    loader = SpringApplicationContextLoader,
+    classes = Config)
 class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
 
   def 'should honor swagger resource listing'() {
@@ -124,11 +123,10 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
 
   @Configuration
   @EnableSwagger
-  @EnableWebMvc
   @ComponentScan([
-          "springfox.documentation.spring.web.dummy.controllers",
-          "springfox.test.contract.swagger",
-          "springfox.petstore.controller"
+      "springfox.documentation.spring.web.dummy.controllers",
+      "springfox.test.contract.swagger",
+      "springfox.petstore.controller"
   ])
   @Import(SecuritySupport)
   static class Config {
@@ -138,26 +136,26 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
       def scopes = new AuthorizationScope[1]
       scopes[0] = readScope
       SecurityReference securityReference = SecurityReference.builder()
-              .reference("petstore_auth")
-              .scopes(scopes)
-              .build()
+          .reference("petstore_auth")
+          .scopes(scopes)
+          .build()
 
       SecurityContext.builder()
-              .securityReferences(newArrayList(securityReference))
-              .forPaths(ant("/petgrooming/**"))
-              .build()
+          .securityReferences(newArrayList(securityReference))
+          .forPaths(ant("/petgrooming/**"))
+          .build()
     }
 
     @Bean
     public Docket testCases(List<SecurityScheme> securitySchemes, List<SecurityContext> securityContexts) {
       return new Docket(DocumentationType.SWAGGER_12)
-              .groupName("default")
-              .select()
-              .paths(regex("^((?!/api).)*\$")) //Not beginning with /api
-              .build()
-              .securitySchemes(securitySchemes)
-              .securityContexts(securityContexts)
-              .ignoredParameterTypes(MetaClass)
+          .groupName("default")
+          .select()
+          .paths(regex("^((?!/api).)*\$")) //Not beginning with /api
+          .build()
+          .securitySchemes(securitySchemes)
+          .securityContexts(securityContexts)
+          .ignoredParameterTypes(MetaClass)
     }
   }
 }
