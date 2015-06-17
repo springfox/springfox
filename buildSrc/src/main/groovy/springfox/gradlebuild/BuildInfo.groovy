@@ -1,6 +1,5 @@
 package springfox.gradlebuild
-
-import com.google.common.base.Objects
+import com.google.common.base.MoreObjects
 import com.google.common.base.Strings
 import springfox.gradlebuild.version.SemanticVersion
 
@@ -52,7 +51,7 @@ class BuildInfo {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this)
+    return MoreObjects.toStringHelper(this)
         .add("currentVersion", currentVersion)
         .add("nextVersion", nextVersion)
         .add("releaseType", releaseType)
