@@ -22,13 +22,16 @@ package springfox.documentation.swagger.readers.operation;
 import com.google.common.base.Optional;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.annotations.Annotations;
@@ -42,11 +45,19 @@ import static com.google.common.collect.Sets.*;
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
+
+  private TypeNameExtractor typeNameExtractor;
+
+  @Autowired
+  public SwaggerResponseMessageReader(TypeNameExtractor typeNameExtractor) {
+    this.typeNameExtractor = typeNameExtractor;
+  }
+
   @Override
   public void apply(OperationContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     context.operationBuilder()
-            .responseMessages(read(handlerMethod));
+            .responseMessages(read(handlerMethod, context));
 
   }
 
@@ -55,13 +66,13 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     return SwaggerPluginSupport.pluginDoesApply(delimiter);
   }
 
-  protected Set<ResponseMessage> read(HandlerMethod handlerMethod) {
+  protected Set<ResponseMessage> read(HandlerMethod handlerMethod, OperationContext context) {
     Optional<ApiResponses> apiResponsesOptional = Annotations.findApiResponsesAnnotations(handlerMethod.getMethod());
     Set<ResponseMessage> responseMessages = newHashSet();
     if (apiResponsesOptional.isPresent()) {
       ApiResponse[] apiResponseAnnotations = apiResponsesOptional.get().value();
       for (ApiResponse apiResponse : apiResponseAnnotations) {
-        String overrideTypeName = overrideTypeName(apiResponse);
+        String overrideTypeName = overrideTypeName(apiResponse, context);
 
         responseMessages.add(new ResponseMessageBuilder()
                 .code(apiResponse.code())
@@ -74,9 +85,11 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   }
 
 
-  private String overrideTypeName(ApiResponse apiResponse) {
+  private String overrideTypeName(ApiResponse apiResponse, OperationContext context) {
     if (apiResponse.response() != null) {
-      return apiResponse.response().getSimpleName();
+      ModelContext modelContext = ModelContext.returnValue(apiResponse.response(), context.getDocumentationType(),
+          context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
+      return typeNameExtractor.typeName(modelContext);
     }
     return "";
   }

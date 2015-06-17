@@ -22,6 +22,8 @@ package springfox.documentation.spring.web.dummy.controllers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import io.swagger.annotations.AuthorizationScope;
 import org.springframework.http.HttpStatus;
@@ -82,6 +84,14 @@ public class BusinessService {
   @ResponseBody
   public ResponseEntity<Business.BusinessType> businessTypeEcho(@RequestBody Business.BusinessType business) {
     return new ResponseEntity<Business.BusinessType>(Business.BusinessType.PRODUCT, OK);
+  }
+
+  @RequestMapping(value = { "/businesses/demonstratesApiModelName" }, method = POST, consumes = APPLICATION_JSON_VALUE,
+      produces = APPLICATION_JSON_VALUE)
+  @ResponseBody
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Business", response = Business.class)})
+  public String businessAsString() {
+    return "";
   }
 
   @RequestMapping(value = {"/businesses/byTypes"}, method = GET, produces = APPLICATION_JSON_VALUE)

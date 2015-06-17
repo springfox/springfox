@@ -121,6 +121,51 @@
             ]
         },
         {
+          "description": "businessAsString",
+          "operations": [
+            {
+              "method": "POST",
+              "summary": "businessAsString",
+              "nickname": "businessAsStringUsingPOST",
+              "produces": [
+                "application/json"
+              ],
+              "consumes": [
+                "application/json"
+              ],
+              "parameters": [
+
+              ],
+              "responseMessages": [
+                {
+                  "code": 200,
+                  "message": "Business",
+                  "responseModel": "Biz"
+                },
+                {
+                  "code": 201,
+                  "message": "Created"
+                },
+                {
+                  "code": 401,
+                  "message": "Unauthorized"
+                },
+                {
+                  "code": 403,
+                  "message": "Forbidden"
+                },
+                {
+                  "code": 404,
+                  "message": "Not Found"
+                }
+              ],
+              "deprecated": "false",
+              "type": "string"
+            }
+          ],
+          "path": "/businesses/demonstratesApiModelName"
+        },
+        {
             "path": "/businesses/non-aliased/{businessId}",
             "description": "getNonAliasedPathVariable",
             "operations": [

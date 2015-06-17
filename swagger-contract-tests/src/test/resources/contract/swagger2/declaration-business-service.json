@@ -102,6 +102,29 @@
                 }
             }
         },
+        "/businesses/demonstratesApiModelName": {
+          "post": {
+            "tags": [
+              "business-service"
+            ],
+            "summary": "businessAsString",
+            "operationId": "businessAsStringUsingPOST",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                "description": "Business",
+                "schema": {
+                  "$ref": "#/definitions/Biz"
+                }
+              }
+            }
+          }
+        },
         "/businesses/non-aliased/{businessId}": {
             "get": {
                 "tags": [
