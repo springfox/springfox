@@ -26,7 +26,7 @@ import springfox.gradlebuild.BuildInfo
 
 // git status --porcelain
 class ReleaseTask extends DefaultTask {
-  private static Logger LOG = Logging.getLogger(BumpAndTagTask.class);
+  private static Logger LOG = Logging.getLogger(ReleaseTask.class);
   public static final String TASK_NAME = 'release'
   String description = 'non snapshot release flow'
   String group = 'release'
@@ -34,12 +34,15 @@ class ReleaseTask extends DefaultTask {
 
   @TaskAction
   void exec() {
+    def command = "git push origin \"${buildInfo.releaseTag}\""
     if (buildInfo.dryRun) {
-       LOG.info('Would have executed: git push --follow-tags')
+       LOG.info("Would have run: $command")
       return
     }
-    project.exec {
-      commandLine 'git', 'push', 'origin', "${buildInfo.releaseTag}"
+    def proc = command.execute();
+    proc.waitFor();
+    if (proc.exitValue() == 0) {
+      LOG.info("Successfully executed: $command")
     }
   }
 }
