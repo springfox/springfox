@@ -69,7 +69,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     configureSnapshotTaskGraph(project)
     configureReleaseTaskGraph(project)
     configureVersionAndPublications(project, versioningInfo)
-    project.tasks.showPublishInfo {
+    project.tasks.showPublishInfo << {
       LOG.info "======= Project version: $project.version, $versioningInfo"
     }
   }
@@ -82,11 +82,11 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       iSnapshotCheckTask.dependsOn javaCheckTasks
 
       evaluatedProject.subprojects.each {
-        it.tasks.findAll {
-          t -> t.name.contains('ToJcenterRepository')
-        }.each { t ->
-          LOG.info("Releasing version: $evaluatedProject.version for task $t.name")
-          snapshotTask.dependsOn it
+        def jcenterTasks = it.tasks.findAll { it.name.contains('ToJcenterRepository') }
+        if (jcenterTasks) {
+          LOG.debug("========== Releasing version: $evaluatedProject.version for task $jcenterTask.name")
+          LOG.info("========== Snapshot task depends on jcenterTasks")
+          snapshotTask.dependsOn jcenterTasks
         }
       }
     }
@@ -146,7 +146,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       releaseRepos = {
         //Only snapshots - bintray plugin takes care of non-snapshot releases
         if (!buildInfo.isReleaseBuild) {
-          LOG.info("Setting up maven repo for snapshot build: $buildInfo.toString()")
+          LOG.debug("Setting up maven repo for snapshot build: $buildInfo")
           maven {
             name 'jcenter'
             url "${artifactRepoBase}/${repoPrefix}-${type}-local"
