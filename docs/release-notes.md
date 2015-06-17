@@ -1,3 +1,26 @@
+# 2.0.2 Release notes
+Significant changes include:
+- Adjust namespaces due to a change in package names in swagger-core maintenance. Swagger-Core 1.5 release changed the package names from `com.wordnik.swagger.*` to `io.swagger.*`
+- Improved the swagger-ui integration 
+
+# Contributions
+Thank you for all your contributions!
+
+- #796 Property to disable Schema-Validator (Swagger-UI) *feature* - @GitVhaos
+- #793 @ApiResponse maps to wrong ApiModel-definition name *bug* - @GitVhaos
+- #788 Why is the initOAuth function commented? *bug* - @rmarpozo
+- #787 Bring in @RequestPart annotation support  *bug* - @ammmze
+- #786 @RequestPart with @ApiParam not rendering a definition in 2.0.0 *bug* - @mrisney
+- #785 Updated swagger2markup version  *maintenance* - @RobWin
+- #781 CORS error message displayed at top of the page *bug* - @gmarziou
+- #778 @RequestParam Field With Default Value Marked Required *bug* - @kevinconaway
+- #776 swagger-ui endpoint doesn't seem to work can-use-for-docs *question* - @igilham
+- #775 Swagger 2 - MultipartFile not detect/mapped correctly *bug* - @RizziCR
+- #774 Newest version of swagger2markup  *maintenance* - @RobWin
+- #773 Swagger 2.0 - Cannot Have Blank Notes / Implementation Details has-workaround *maintenance* - @kevinconaway
+- #768 MultiPartFile Request Parameters are being incorrectly typed as type "ref" *bug* - @rince1013
+- #752 Groovy metaClass not ignored when model is built for deserialization *bug can-use-for-docs* -  @aleksz
+
 # 2.0.1 Release Notes
 - #759 [maintenance] Improve the build workflow 
 - #754 [maintenance] Provide necessary jars in maven central 
