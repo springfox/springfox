@@ -121,6 +121,8 @@ select operations to be protected by one of the specified security schemes.
 <16> Here we use ApiKey as the security schema that is identified by the name `mykey`
 <17> Selector for the paths this security context applies to.
 <18> Here we same key defined in the security scheme `mykey`
+<19> Optional swagger-ui security configuration for oauth and apiKey settings
+<20> Optional swagger-ui ui configuration currently only supports the validation url
 
 There are plenty of more options to configure the `Docket`. This should provide a good start.
 

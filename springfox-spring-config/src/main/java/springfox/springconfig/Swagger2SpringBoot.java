@@ -41,6 +41,8 @@ import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.SecurityConfiguration;
+import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import springfox.petstore.controller.PetController;
 
@@ -50,10 +52,10 @@ import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 @SpringBootApplication
-@EnableSwagger2                                                          //<1>
+@EnableSwagger2//<1>
 @ComponentScan(basePackageClasses = {
     PetController.class
-})                                                                       //<2>
+})//<2>
 public class Swagger2SpringBoot {
 
   public static void main(String[] args) {
@@ -63,28 +65,28 @@ public class Swagger2SpringBoot {
 
   @Bean
   public Docket petApi() {
-    return new Docket(DocumentationType.SWAGGER_2)                       //<3>
-        .select()                                                        //<4>
-          .apis(RequestHandlerSelectors.any())                           //<5>
-          .paths(PathSelectors.any())                                    //<6>
-          .build()                                                       //<7>
-        .pathMapping("/")                                                //<8>
+    return new Docket(DocumentationType.SWAGGER_2)//<3>
+        .select()//<4>
+          .apis(RequestHandlerSelectors.any())//<5>
+          .paths(PathSelectors.any())//<6>
+          .build()//<7>
+        .pathMapping("/")//<8>
         .directModelSubstitute(LocalDate.class,
-            String.class)                                                //<9>
+            String.class)//<9>
         .genericModelSubstitutes(ResponseEntity.class)
         .alternateTypeRules(
             newRule(typeResolver.resolve(DeferredResult.class,
                     typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
-                typeResolver.resolve(WildcardType.class)))               //<10>
-        .useDefaultResponseMessages(false)                               //<11>
-        .globalResponseMessage(RequestMethod.GET,                        //<12>
+                typeResolver.resolve(WildcardType.class)))//<10>
+        .useDefaultResponseMessages(false)//<11>
+        .globalResponseMessage(RequestMethod.GET,//<12>
             newArrayList(new ResponseMessageBuilder()
                 .code(500)
                 .message("500 message")
-                .responseModel(new ModelRef("Error"))                    //<13>
+                .responseModel(new ModelRef("Error"))//<13>
                 .build()))
-        .securitySchemes(newArrayList(apiKey()))                         //<14>
-        .securityContexts(newArrayList(securityContext()))               //<15>
+        .securitySchemes(newArrayList(apiKey()))//<14>
+        .securityContexts(newArrayList(securityContext()))//<15>
         ;
   }
 
@@ -92,13 +94,13 @@ public class Swagger2SpringBoot {
   private TypeResolver typeResolver;
 
   private ApiKey apiKey() {
-    return new ApiKey("mykey", "api_key", "header");                     //<16>
+    return new ApiKey("mykey", "api_key", "header");//<16>
   }
 
   private SecurityContext securityContext() {
     return SecurityContext.builder()
         .securityReferences(defaultAuth())
-        .forPaths(PathSelectors.regex("/anyPath.*"))                     //<17>
+        .forPaths(PathSelectors.regex("/anyPath.*"))//<17>
         .build();
   }
 
@@ -108,6 +110,21 @@ public class Swagger2SpringBoot {
     AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
     authorizationScopes[0] = authorizationScope;
     return newArrayList(
-        new SecurityReference("mykey", authorizationScopes));            //<18>
+        new SecurityReference("mykey", authorizationScopes));//<18>
+  }
+
+  @Bean
+  SecurityConfiguration security() {
+    return new SecurityConfiguration(//<19>
+        "test-app-client-id",
+        "test-app-realm",
+        "test-app",
+        "apiKey");
+  }
+
+  @Bean
+  UiConfiguration uiConfig() {
+    return new UiConfiguration(//<20>
+        "validatorUrl");
   }
 }
