@@ -751,6 +751,23 @@ dependencies {
 111
 112
 113
+114
+115
+116
+117
+118
+119
+<strong>120</strong>
+121
+122
+123
+124
+125
+126
+127
+128
+129
+<strong>130</strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
@@ -795,6 +812,8 @@ dependencies {
 <span class="keyword">import</span> <span class="include">springfox.documentation.spi.DocumentationType</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.spi.service.contexts.SecurityContext</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.spring.web.plugins.Docket</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.SecurityConfiguration</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.UiConfiguration</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.swagger2.annotations.EnableSwagger2</span>;
 <span class="keyword">import</span> <span class="include">springfox.petstore.controller.PetController</span>;
 
@@ -804,10 +823,10 @@ dependencies {
 <span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.schema.AlternateTypeRules</span>.*;
 
 <span class="annotation">@SpringBootApplication</span>
-<span class="annotation">@EnableSwagger2</span>                                                          <i class="conum" data-value="1"></i><b>(1)</b>
+<span class="annotation">@EnableSwagger2</span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="annotation">@ComponentScan</span>(basePackageClasses = {
     PetController.class
-})                                                                       <i class="conum" data-value="2"></i><b>(2)</b>
+})<i class="conum" data-value="2"></i><b>(2)</b>
 <span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2SpringBoot</span> {
 
   <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
@@ -817,28 +836,28 @@ dependencies {
 
   <span class="annotation">@Bean</span>
   <span class="directive">public</span> Docket petApi() {
-    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)                       <i class="conum" data-value="3"></i><b>(3)</b>
-        .select()                                                        <i class="conum" data-value="4"></i><b>(4)</b>
-          .apis(RequestHandlerSelectors.any())                           <i class="conum" data-value="5"></i><b>(5)</b>
-          .paths(PathSelectors.any())                                    <i class="conum" data-value="6"></i><b>(6)</b>
-          .build()                                                       <i class="conum" data-value="7"></i><b>(7)</b>
-        .pathMapping(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)                                                <i class="conum" data-value="8"></i><b>(8)</b>
+    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)<i class="conum" data-value="3"></i><b>(3)</b>
+        .select()<i class="conum" data-value="4"></i><b>(4)</b>
+          .apis(RequestHandlerSelectors.any())<i class="conum" data-value="5"></i><b>(5)</b>
+          .paths(PathSelectors.any())<i class="conum" data-value="6"></i><b>(6)</b>
+          .build()<i class="conum" data-value="7"></i><b>(7)</b>
+        .pathMapping(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)<i class="conum" data-value="8"></i><b>(8)</b>
         .directModelSubstitute(LocalDate.class,
-            <span class="predefined-type">String</span>.class)                                                <i class="conum" data-value="9"></i><b>(9)</b>
+            <span class="predefined-type">String</span>.class)<i class="conum" data-value="9"></i><b>(9)</b>
         .genericModelSubstitutes(ResponseEntity.class)
         .alternateTypeRules(
             newRule(typeResolver.resolve(DeferredResult.class,
                     typeResolver.resolve(ResponseEntity.class, <span class="predefined-type">WildcardType</span>.class)),
-                typeResolver.resolve(<span class="predefined-type">WildcardType</span>.class)))               <i class="conum" data-value="10"></i><b>(10)</b>
-        .useDefaultResponseMessages(<span class="predefined-constant">false</span>)                               <i class="conum" data-value="11"></i><b>(11)</b>
-        .globalResponseMessage(RequestMethod.GET,                        <i class="conum" data-value="12"></i><b>(12)</b>
+                typeResolver.resolve(<span class="predefined-type">WildcardType</span>.class)))<i class="conum" data-value="10"></i><b>(10)</b>
+        .useDefaultResponseMessages(<span class="predefined-constant">false</span>)<i class="conum" data-value="11"></i><b>(11)</b>
+        .globalResponseMessage(RequestMethod.GET,<i class="conum" data-value="12"></i><b>(12)</b>
             newArrayList(<span class="keyword">new</span> ResponseMessageBuilder()
                 .code(<span class="integer">500</span>)
                 .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">500 message</span><span class="delimiter">&quot;</span></span>)
-                .responseModel(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error</span><span class="delimiter">&quot;</span></span>))                    <i class="conum" data-value="13"></i><b>(13)</b>
+                .responseModel(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error</span><span class="delimiter">&quot;</span></span>))<i class="conum" data-value="13"></i><b>(13)</b>
                 .build()))
-        .securitySchemes(newArrayList(apiKey()))                         <i class="conum" data-value="14"></i><b>(14)</b>
-        .securityContexts(newArrayList(securityContext()))               <i class="conum" data-value="15"></i><b>(15)</b>
+        .securitySchemes(newArrayList(apiKey()))<i class="conum" data-value="14"></i><b>(14)</b>
+        .securityContexts(newArrayList(securityContext()))<i class="conum" data-value="15"></i><b>(15)</b>
         ;
   }
 
@@ -846,13 +865,13 @@ dependencies {
   <span class="directive">private</span> TypeResolver typeResolver;
 
   <span class="directive">private</span> ApiKey apiKey() {
-    <span class="keyword">return</span> <span class="keyword">new</span> ApiKey(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">api_key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>);                     <i class="conum" data-value="16"></i><b>(16)</b>
+    <span class="keyword">return</span> <span class="keyword">new</span> ApiKey(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">api_key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>);<i class="conum" data-value="16"></i><b>(16)</b>
   }
 
   <span class="directive">private</span> SecurityContext securityContext() {
     <span class="keyword">return</span> SecurityContext.builder()
         .securityReferences(defaultAuth())
-        .forPaths(PathSelectors.regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/anyPath.*</span><span class="delimiter">&quot;</span></span>))                     <i class="conum" data-value="17"></i><b>(17)</b>
+        .forPaths(PathSelectors.regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/anyPath.*</span><span class="delimiter">&quot;</span></span>))<i class="conum" data-value="17"></i><b>(17)</b>
         .build();
   }
 
@@ -862,7 +881,22 @@ dependencies {
     AuthorizationScope<span class="type">[]</span> authorizationScopes = <span class="keyword">new</span> AuthorizationScope[<span class="integer">1</span>];
     authorizationScopes[<span class="integer">0</span>] = authorizationScope;
     <span class="keyword">return</span> newArrayList(
-        <span class="keyword">new</span> SecurityReference(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>, authorizationScopes));            <i class="conum" data-value="18"></i><b>(18)</b>
+        <span class="keyword">new</span> SecurityReference(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>, authorizationScopes));<i class="conum" data-value="18"></i><b>(18)</b>
+  }
+
+  <span class="annotation">@Bean</span>
+  SecurityConfiguration security() {
+    <span class="keyword">return</span> <span class="keyword">new</span> SecurityConfiguration(<i class="conum" data-value="19"></i><b>(19)</b>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-client-id</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-realm</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">apiKey</span><span class="delimiter">&quot;</span></span>);
+  }
+
+  <span class="annotation">@Bean</span>
+  UiConfiguration uiConfig() {
+    <span class="keyword">return</span> <span class="keyword">new</span> UiConfiguration(<i class="conum" data-value="20"></i><b>(20)</b>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">validatorUrl</span><span class="delimiter">&quot;</span></span>);
   }
 }</pre></td>
 </tr></table></code></pre>
@@ -951,6 +985,14 @@ select operations to be protected by one of the specified security schemes.</td>
 <td><i class="conum" data-value="18"></i><b>18</b></td>
 <td>Here we same key defined in the security scheme <code>mykey</code></td>
 </tr>
+<tr>
+<td><i class="conum" data-value="19"></i><b>19</b></td>
+<td>Optional swagger-ui security configuration for oauth and apiKey settings</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="20"></i><b>20</b></td>
+<td>Optional swagger-ui ui configuration currently only supports the validation url</td>
+</tr>
 </table>
 </div>
 <div class="paragraph">
@@ -1005,7 +1047,7 @@ apps to serve webjar content see the <a href="http://www.webjars.org/documentati
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-06-17 03:08:09 UTC
+Last updated 2015-06-17 03:36:55 UTC
 </div>
 </div>
 </body>

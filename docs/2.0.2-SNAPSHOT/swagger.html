@@ -797,7 +797,7 @@ This config class must then be defined in your xml application context.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
-<span class="annotation">@EnableWebMvc</span>
+<span class="annotation">@EnableWebMvc</span> <span class="comment">//NOTE: Only needed in a non-springboot application</span>
 <span class="annotation">@EnableSwagger2</span>
 <span class="annotation">@ComponentScan</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.myapp.controllers</span><span class="delimiter">&quot;</span></span>)
 <span class="directive">public</span> <span class="type">class</span> <span class="class">CustomJavaPluginConfig</span> {
@@ -1052,7 +1052,7 @@ in the demo application.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-06-17 03:08:09 UTC
+Last updated 2015-06-17 03:36:55 UTC
 </div>
 </div>
 </body>
