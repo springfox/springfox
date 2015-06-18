@@ -100,9 +100,8 @@ if (JavaVersion.current().isJava8Compatible()) {
 publishing {
 
   repositories {
-    configure(project.releaseRepos)
+    configure(rootProject.ext.releaseRepos)
   }
-
 
   publications {
     mavenJava(MavenPublication) {
@@ -126,8 +125,8 @@ if (!isSnapshot()) {
 
   apply plugin: 'com.jfrog.bintray'
   bintray {
-    user = project.bintrayCredentials.username
-    key = project.bintrayCredentials.password
+    user = rootProject.ext.bintrayCredentials.username
+    key = rootProject.ext.bintrayCredentials.password
 
 
     publications = ['mavenJava']
@@ -169,6 +168,6 @@ if (!isSnapshot()) {
 }
 
 def isSnapshot() {
-  def isSnapshot = project.gradle.startParameter.taskNames.contains("snapshot")
+  project.gradle.startParameter.taskNames.contains("snapshot")
 }
 

@@ -18,6 +18,7 @@
  */
 
 package springfox.gradlebuild.plugins
+
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -29,6 +30,7 @@ import springfox.gradlebuild.BuildInfoFactory
 import springfox.gradlebuild.tasks.*
 import springfox.gradlebuild.version.GitDescribeVersioningStrategy
 import springfox.gradlebuild.version.VersioningStrategy
+
 /**
  * Much of what this plugin does is inspired by:
  * https://www.youtube.com/watch?v=Y6SVoXFsw7I ( GradleSummit2014 - Releasing With Gradle - René Groeschke)
@@ -66,9 +68,9 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       description = 'Show project publishing information'
     }
 
+    configureVersionAndPublications(project, versioningInfo)
     configureSnapshotTaskGraph(project)
     configureReleaseTaskGraph(project)
-    configureVersionAndPublications(project, versioningInfo)
     project.tasks.showPublishInfo << {
       LOG.info "======= Project version: $project.version, $versioningInfo"
     }
@@ -81,12 +83,10 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
       iSnapshotCheckTask.dependsOn javaCheckTasks
 
-      evaluatedProject.subprojects.each {
-        def jcenterTasks = it.tasks.findAll { it.name.contains('ToJcenterRepository') }
-        if (jcenterTasks) {
-          LOG.debug("========== Releasing version: $evaluatedProject.version for task $jcenterTask.name")
-          LOG.info("========== Snapshot task depends on jcenterTasks")
-          snapshotTask.dependsOn jcenterTasks
+      evaluatedProject.subprojects.each { p ->
+        p.tasks.findByPath('publish').each { t ->
+          LOG.info("Releasing version: $p.version for task $t.name")
+          snapshotTask.dependsOn(t)
         }
       }
     }
@@ -125,7 +125,6 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     iPublishTask.dependsOn iCheckTask
 
     bumpAndTagTask.dependsOn iPublishTask
-
     releaseTask.dependsOn bumpAndTagTask
   }
 
@@ -137,22 +136,23 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   }
 
   def configurePublications(Project project, BuildInfo buildInfo) {
-    def type = buildInfo.isReleaseBuild ? 'release' : 'snapshot'
+    def isSnapshotBuild = isSnapshotBuild(project)
+    def type = isSnapshotBuild ? 'snapshot' : 'release'
+    def login = new BintrayCredentials(project)
+    def artifactRepoBase = 'http://oss.jfrog.org/artifactory'
+    def repoPrefix = 'oss'
     project.ext {
-      bintrayCredentials = new BintrayCredentials(project)
-      artifactRepoBase = 'http://oss.jfrog.org/artifactory'
-      repoPrefix = 'oss'
-
+      bintrayCredentials = login
       releaseRepos = {
         //Only snapshots - bintray plugin takes care of non-snapshot releases
-        if (!buildInfo.isReleaseBuild) {
-          LOG.debug("Setting up maven repo for snapshot build: $buildInfo")
+        if (isSnapshotBuild) {
+          LOG.info("Setting up maven repo for snapshot build: $buildInfo")
           maven {
-            name 'jcenter'
+            name 'jfrogOss'
             url "${artifactRepoBase}/${repoPrefix}-${type}-local"
             credentials {
-              username = "${bintrayCredentials.username}"
-              password = "${bintrayCredentials.password}"
+              username = "${login.username}"
+              password = "${login.password}"
             }
           }
         }
@@ -160,6 +160,9 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     }
   }
 
+  static boolean isSnapshotBuild(Project project) {
+    project.gradle.startParameter.taskNames.contains("snapshot")
+  }
 
   static def createBuildInfo(Project project, VersioningStrategy versioningStrategy) {
     BuildInfoFactory buildInfoFactory = new BuildInfoFactory(versioningStrategy)
@@ -177,4 +180,5 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   static boolean dryRun(Project project) {
     project.hasProperty('dryRun') ? Boolean.valueOf(project.property('dryRun')) : false
   }
+
 }
