@@ -92,6 +92,30 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     this.objectMapper = event.getObjectMapper();
   }
 
+  @Override
+  public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
+
+    List<ModelProperty> serializationCandidates = newArrayList();
+    BeanDescription beanDescription = beanDescription(type, givenContext);
+    Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
+        BeanPropertyDefinitions.beanPropertyByInternalName());
+    for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
+      LOG.debug("Reading property {}", each.getKey());
+      BeanPropertyDefinition propertyDefinition = each.getValue();
+      Optional<BeanPropertyDefinition> jacksonProperty
+          = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
+      AnnotatedMember member = propertyDefinition.getPrimaryMember();
+
+      Optional<ResolvedMethod> accessor = findAccessorMethod(type, each.getKey(), member);
+      if (accessor.isPresent()) {
+        LOG.debug("Accessor selected {}", accessor.get().getName());
+        serializationCandidates
+            .addAll(candidateProperties(member, accessor.get(), jacksonProperty, givenContext));
+      }
+    }
+    return serializationCandidates;
+  }
+
   @VisibleForTesting
   List<ModelProperty> candidateProperties(AnnotatedMember member,
         ResolvedMethod childProperty,
@@ -125,30 +149,6 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
       return serializationConfig.introspect(TypeFactory.defaultInstance()
           .constructType(type.getErasedType()));
     }
-  }
-
-  @Override
-  public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
-
-    List<ModelProperty> serializationCandidates = newArrayList();
-    BeanDescription beanDescription = beanDescription(type, givenContext);
-    Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
-        BeanPropertyDefinitions.beanPropertyByInternalName());
-    for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
-      LOG.debug("Reading property {}", each.getKey());
-      BeanPropertyDefinition propertyDefinition = each.getValue();
-      Optional<BeanPropertyDefinition> jacksonProperty
-          = jacksonPropertyWithSameInternalName(beanDescription, propertyDefinition);
-      AnnotatedMember member = propertyDefinition.getPrimaryMember();
-
-      Optional<ResolvedMethod> accessor = findAccessorMethod(type, each.getKey(), member);
-      if (accessor.isPresent()) {
-        LOG.debug("Accessor selected {}", accessor.get().getName());
-        serializationCandidates
-            .addAll(candidateProperties(member, accessor.get(), jacksonProperty, givenContext));
-      }
-    }
-    return serializationCandidates;
   }
 
   private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType,
