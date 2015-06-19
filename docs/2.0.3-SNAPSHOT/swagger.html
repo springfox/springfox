@@ -653,6 +653,10 @@ These adapter especially in a non-spring-boot scenarios will only get loaded if 
 <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurer.html">annotation is present</a>.</p>
 </div>
 <div class="paragraph">
+<p>If using Spring Boot Web MVC, there is no need to use the @EnableWebMvc annotation, as the framework automatically detects Web MVC usage and configures itself as appropriate.
+In this scenario, Springfox will not correctly generate and expose the Swagger UI endpoint (<code>/swagger-ui.html</code>) if @EnableWebMvc is present in the application.</p>
+</div>
+<div class="paragraph">
 <p>Caveat to using the library is that it depends on Jackson for serialization, more importantly the <code>ObjectMapper</code>. A
 good example of where this breaks down is the following <a href="http://stackoverflow.com/a/30220562/19219">issue when using Gson serialization</a></p>
 </div>
@@ -1052,7 +1056,7 @@ in the demo application.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-06-18 14:35:32 UTC
+Last updated 2015-06-19 14:38:21 UTC
 </div>
 </div>
 </body>
