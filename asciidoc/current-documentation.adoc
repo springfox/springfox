@@ -65,6 +65,9 @@ If you encounter a NullPointerException during application startup like https://
 These adapter especially in a non-spring-boot scenarios will only get loaded if the @EnableWebMvc
 http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurer.html[annotation is present].
 
+If using Spring Boot Web MVC, there is no need to use the @EnableWebMvc annotation, as the framework automatically detects Web MVC usage and configures itself as appropriate.
+In this scenario, Springfox will not correctly generate and expose the Swagger UI endpoint (`/swagger-ui.html`) if @EnableWebMvc is present in the application.
+
 Caveat to using the library is that it depends on Jackson for serialization, more importantly the `ObjectMapper`. A
 good example of where this breaks down is the following http://stackoverflow.com/a/30220562/19219[issue when using Gson serialization]
 
@@ -348,7 +351,7 @@ public class Swagger2MarkupTest {
 }
 ----
 
-If you want to combine the generated documentation with your hand-written documentation, then have a look at the user guide of https://github.com/RobWin/swagger2markup#combine-generated-documentation-with-your-hand-written-documentation[swagger2Markup]. You can also include generated CURL request, HTTP request and HTTP response example snippets from https://github.com/spring-projects/spring-restdocs[spring-restdocs] into the generated documentation. 
+If you want to combine the generated documentation with your hand-written documentation, then have a look at the user guide of https://github.com/RobWin/swagger2markup#combine-generated-documentation-with-your-hand-written-documentation[swagger2Markup]. You can also include generated CURL request, HTTP request and HTTP response example snippets from https://github.com/spring-projects/spring-restdocs[spring-restdocs] into the generated documentation.
 
 ==== Generated HTML using Swagger2Markup and AsciidoctorJ
 image::asciidoc_html.PNG[asciidoc_html]
