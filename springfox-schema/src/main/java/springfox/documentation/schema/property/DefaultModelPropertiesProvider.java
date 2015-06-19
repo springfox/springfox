@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.schema.property.provider;
+package springfox.documentation.schema.property;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Predicate;

@@ -46,7 +46,7 @@ import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.BeanPropertyDefinitions;
 import springfox.documentation.schema.property.BeanPropertyNamingStrategy;
-import springfox.documentation.schema.property.provider.ModelPropertiesProvider;
+import springfox.documentation.schema.property.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 

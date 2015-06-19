@@ -26,7 +26,7 @@ import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.BeanPropertyNamingStrategy;
 import springfox.documentation.schema.property.field.FieldModelPropertyProvider;
 import springfox.documentation.schema.property.field.FieldProvider;
-import springfox.documentation.schema.property.provider.ModelPropertiesProvider;
+import springfox.documentation.schema.property.ModelPropertiesProvider;
 
 @Component
 public class ConstructorModelPropertyProvider extends FieldModelPropertyProvider implements ModelPropertiesProvider {

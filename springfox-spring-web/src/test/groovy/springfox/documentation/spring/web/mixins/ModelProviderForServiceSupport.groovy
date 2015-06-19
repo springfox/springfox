@@ -34,7 +34,7 @@ import springfox.documentation.schema.property.bean.BeanModelPropertyProvider
 import springfox.documentation.schema.property.constructor.ConstructorModelPropertyProvider
 import springfox.documentation.schema.property.field.FieldModelPropertyProvider
 import springfox.documentation.schema.property.field.FieldProvider
-import springfox.documentation.schema.property.provider.DefaultModelPropertiesProvider
+import springfox.documentation.schema.property.DefaultModelPropertiesProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
