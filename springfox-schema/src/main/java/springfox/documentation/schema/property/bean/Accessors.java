@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 
 import static com.google.common.base.Strings.*;
 
-class Accessors {
+public class Accessors {
   private static Pattern getter = Pattern.compile("^get([a-zA-Z_0-9].*)");
   private static Pattern isGetter = Pattern.compile("^is([a-zA-Z_0_9].*)");
   private static Pattern setter = Pattern.compile("^set([a-zA-Z_0-9].*)");

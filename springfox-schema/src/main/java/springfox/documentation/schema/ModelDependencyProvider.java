@@ -26,7 +26,6 @@ import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.property.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -50,7 +49,7 @@ public class ModelDependencyProvider {
 
   @Autowired
   public ModelDependencyProvider(TypeResolver typeResolver,
-                                 @Qualifier("default") ModelPropertiesProvider propertiesProvider,
+                                 ModelPropertiesProvider propertiesProvider,
                                  TypeNameExtractor nameExtractor) {
     this.typeResolver = typeResolver;
     this.propertiesProvider = propertiesProvider;

@@ -30,7 +30,6 @@ import com.google.common.collect.Multimaps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.ModelPropertiesProvider;
@@ -64,7 +63,7 @@ public class DefaultModelProvider implements ModelProvider {
 
   @Autowired
   public DefaultModelProvider(TypeResolver resolver,
-                              @Qualifier("default") ModelPropertiesProvider propertiesProvider,
+                              ModelPropertiesProvider propertiesProvider,
                               ModelDependencyProvider dependencyProvider,
                               SchemaPluginsManager schemaPluginsManager,
                               TypeNameExtractor typeNameExtractor) {

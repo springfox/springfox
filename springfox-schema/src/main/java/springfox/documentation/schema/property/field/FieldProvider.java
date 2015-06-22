@@ -38,7 +38,7 @@ public class FieldProvider {
     this.typeResolver = typeResolver;
   }
 
-  public Iterable<? extends ResolvedField> in(ResolvedType resolvedType) {
+  public Iterable<ResolvedField> in(ResolvedType resolvedType) {
     MemberResolver memberResolver = new MemberResolver(typeResolver);
     if (resolvedType.getErasedType() == Object.class) {
       return newArrayList();

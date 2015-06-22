@@ -16,22 +16,21 @@
  *
  *
  */
-
 package springfox.documentation.schema;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UnwrappedType {
-  @JsonUnwrapped
-  private Category category;
+public class TypeWithSetterButNoGetter {
+  @JsonProperty("property")
+  private String property;
 
-  @JsonUnwrapped
-  public Category getCategory() {
-    return category;
+  private String unAnnotated;
+
+  public void setProperty(String property) {
+    this.property = property;
   }
 
-  @JsonUnwrapped
-  public void setCategory(Category category) {
-    this.category = category;
+  public void setUnAnnotated(String unAnnotated) {
+    this.unAnnotated = unAnnotated;
   }
 }

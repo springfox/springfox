@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.dummy.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import org.joda.time.LocalDateTime;
@@ -42,6 +43,7 @@ public class Example extends Parent implements Serializable {
 
   private NestedType nestedType;
 
+  @JsonProperty("propertyWithNoGetterMethod")
   private String propertyWithNoGetterMethod;
   private String propertyWithNoSetterMethod;
 
