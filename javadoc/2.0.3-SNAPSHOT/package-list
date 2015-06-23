@@ -8,7 +8,6 @@ springfox.documentation.schema.property
 springfox.documentation.schema.property.bean
 springfox.documentation.schema.property.constructor
 springfox.documentation.schema.property.field
-springfox.documentation.schema.property.provider
 springfox.documentation.service
 springfox.documentation.spi
 springfox.documentation.spi.schema
