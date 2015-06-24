@@ -25,17 +25,17 @@ import org.gradle.api.tasks.TaskAction
 import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.version.VersioningStrategy
 
-// git status --porcelain
 class BumpAndTagTask extends DefaultTask {
   private static Logger LOG = Logging.getLogger(BumpAndTagTask.class);
   public static final String TASK_NAME = 'bumpAndTag'
   String description = 'Bumps the version file and tags the release'
   String group = 'release'
   BuildInfo buildInfo
-  VersioningStrategy versioningStrategy
+  VersioningStrategy versioning
 
   @TaskAction
   void exec() {
-    versioningStrategy.persist(buildInfo)
+    LOG.info("Bumping the version and tagging after release using ($versioning.class.simpleName)")
+    versioning.persist(buildInfo)
   }
 }

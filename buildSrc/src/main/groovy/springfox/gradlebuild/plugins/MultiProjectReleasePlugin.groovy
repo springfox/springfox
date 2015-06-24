@@ -52,13 +52,14 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   void apply(Project project) {
     versioningStrategy = GitDescribeVersioningStrategy.create(buildNumberFormat(project))
     BuildInfo versioningInfo = createBuildInfo(project, versioningStrategy)
-    releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask) {
-      buildInfo = versioningInfo
-    }
-    bumpAndTagTask = project.task(BumpAndTagTask.TASK_NAME, type: BumpAndTagTask) {
-      buildInfo = versioningInfo
-      versioningStrategy = this.versioningStrategy
-    }
+    releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask)
+    releaseTask.buildInfo = versioningInfo
+
+    bumpAndTagTask = project.task(BumpAndTagTask.TASK_NAME, type: BumpAndTagTask)
+
+    bumpAndTagTask.buildInfo  = versioningInfo
+    bumpAndTagTask.versioning = this.versioningStrategy
+
     snapshotTask = project.task(SnapshotTask.TASK_NAME, type: SnapshotTask)
     credentialCheck = project.task(BintrayCredentialsCheckTask.TASK_NAME, type: BintrayCredentialsCheckTask)
     checkCleanWorkspaceTask = project.task(CheckCleanWorkspaceTask.TASK_NAME, type: CheckCleanWorkspaceTask)
