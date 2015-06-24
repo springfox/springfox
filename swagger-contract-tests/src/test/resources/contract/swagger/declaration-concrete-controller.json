@@ -95,8 +95,7 @@
                         },
                         {
                             "code": 405,
-                            "message": "Invalid input",
-                            "responseModel": "Void"
+                            "message": "Invalid input"
                         }
                     ],
                     "deprecated": "false",

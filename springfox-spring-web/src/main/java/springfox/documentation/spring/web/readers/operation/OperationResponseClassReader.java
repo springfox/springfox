@@ -61,9 +61,7 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
             context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting spring response class to:" + responseTypeName);
-    context.operationBuilder()
-            .responseModel(modelRef(returnType, modelContext))
-    ;
+    context.operationBuilder().responseModel(modelRef(returnType, modelContext));
   }
 
   private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {

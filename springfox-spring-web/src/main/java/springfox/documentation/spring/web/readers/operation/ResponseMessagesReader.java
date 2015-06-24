@@ -112,7 +112,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   }
 
 
-  private int httpStatusCode(HandlerMethod handlerMethod) {
+  public static int httpStatusCode(HandlerMethod handlerMethod) {
     Optional<ResponseStatus> responseStatus
             = fromNullable(getAnnotation(handlerMethod.getMethod(), ResponseStatus.class));
     int httpStatusCode = HttpStatus.OK.value();
@@ -122,7 +122,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     return httpStatusCode;
   }
 
-  private String message(HandlerMethod handlerMethod) {
+  public static String message(HandlerMethod handlerMethod) {
     Optional<ResponseStatus> responseStatus
             = fromNullable(getAnnotation(handlerMethod.getMethod(), ResponseStatus.class));
     String reasonPhrase = HttpStatus.OK.getReasonPhrase();

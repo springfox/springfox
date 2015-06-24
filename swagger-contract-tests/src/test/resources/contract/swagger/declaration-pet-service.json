@@ -58,8 +58,7 @@
                         },
                         {
                             "code": 405,
-                            "message": "Invalid input",
-                            "responseModel": "Void"
+                            "message": "Invalid input"
                         }
                     ],
                     "deprecated": "false",
@@ -103,8 +102,7 @@
                         },
                         {
                             "code": 400,
-                            "message": "Invalid ID supplied",
-                            "responseModel": "Void"
+                            "message": "Invalid ID supplied"
                         },
                         {
                             "code": 401,
@@ -116,13 +114,11 @@
                         },
                         {
                             "code": 404,
-                            "message": "Pet not found",
-                            "responseModel": "Void"
+                            "message": "Pet not found"
                         },
                         {
                             "code": 405,
-                            "message": "Validation exception",
-                            "responseModel": "Void"
+                            "message": "Validation exception"
                         }
                     ],
                     "deprecated": "false",
@@ -322,8 +318,7 @@
                         },
                         {
                             "code": 400,
-                            "message": "Invalid status value",
-                            "responseModel": "Void"
+                            "message": "Invalid status value"
                         },
                         {
                             "code": 401,
@@ -377,8 +372,7 @@
                         },
                         {
                             "code": 400,
-                            "message": "Invalid tag value",
-                            "responseModel": "Void"
+                            "message": "Invalid tag value"
                         },
                         {
                             "code": 401,

@@ -21,13 +21,13 @@ package springfox.documentation.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -35,10 +35,9 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
+import static springfox.documentation.spring.web.readers.operation.ModelRefs.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 
 @Component
@@ -75,29 +74,14 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting response class to:" + responseTypeName);
     context.operationBuilder()
-            .responseModel(modelRef(returnType, modelContext));
+            .responseModel(modelRef(Optional.of(returnType), modelContext, nameExtractor).orNull());
   }
 
   private boolean canSkip(OperationContext context, ResolvedType returnType) {
     return context.getDocumentationContext().getIgnorableParameterTypes().contains(returnType);
   }
 
-  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
-    if (isContainerType(type)) {
-      ResolvedType collectionElementType = collectionElementType(type);
-      String elementTypeName = nameExtractor.typeName(fromParent(modelContext, collectionElementType));
-      return new ModelRef(containerType(type), elementTypeName);
-    }
-    if (isMapType(type)) {
-      String elementTypeName = nameExtractor.typeName(fromParent(modelContext, mapValueType(type)));
-      return new ModelRef("Map", elementTypeName, true);
-    }
-    if (Void.class.equals(type.getErasedType()) || Void.TYPE.equals(type.getErasedType())) {
-      new ModelRef("void");
-    }
-    String typeName = nameExtractor.typeName(fromParent(modelContext, type));
-    return new ModelRef(typeName);
-  }
+
 
   @Override
   public boolean supports(DocumentationType delimiter) {

@@ -19,11 +19,14 @@
 
 package springfox.documentation.swagger.readers.operation;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.builders.ResponseMessageBuilder;
@@ -34,30 +37,36 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.swagger.annotations.Annotations;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.spi.schema.contexts.ModelContext.*;
+import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
+import static springfox.documentation.spring.web.readers.operation.ModelRefs.*;
+import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.*;
+import static springfox.documentation.swagger.annotations.Annotations.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
 
-  private TypeNameExtractor typeNameExtractor;
+  private final TypeNameExtractor typeNameExtractor;
+  private final TypeResolver typeResolver;
 
   @Autowired
-  public SwaggerResponseMessageReader(TypeNameExtractor typeNameExtractor) {
+  public SwaggerResponseMessageReader(TypeNameExtractor typeNameExtractor, TypeResolver typeResolver) {
     this.typeNameExtractor = typeNameExtractor;
+    this.typeResolver = typeResolver;
   }
 
   @Override
   public void apply(OperationContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     context.operationBuilder()
-            .responseMessages(read(handlerMethod, context));
+        .responseMessages(read(handlerMethod, context));
 
   }
 
@@ -67,31 +76,54 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   }
 
   protected Set<ResponseMessage> read(HandlerMethod handlerMethod, OperationContext context) {
-    Optional<ApiResponses> apiResponsesOptional = Annotations.findApiResponsesAnnotations(handlerMethod.getMethod());
+    ResolvedType defaultResponse = handlerReturnType(typeResolver, handlerMethod);
+    Optional<ResolvedType> operationResponse = findApiOperationAnnotation(handlerMethod.getMethod())
+        .transform(resolvedTypeFromOperation(typeResolver, defaultResponse));
+    Optional<ApiResponses> apiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
     Set<ResponseMessage> responseMessages = newHashSet();
-    if (apiResponsesOptional.isPresent()) {
-      ApiResponse[] apiResponseAnnotations = apiResponsesOptional.get().value();
+    if (apiResponses.isPresent()) {
+      ApiResponse[] apiResponseAnnotations = apiResponses.get().value();
       for (ApiResponse apiResponse : apiResponseAnnotations) {
-        String overrideTypeName = overrideTypeName(apiResponse, context);
-
+        ModelContext modelContext = returnValue(apiResponse.response(), context.getDocumentationType(),
+            context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
+        Optional<ModelRef> responseModel = Optional.absent();
+        Optional<ResolvedType> type = resolvedType(null, apiResponse);
+        if (HttpStatus.valueOf(apiResponse.code()).is2xxSuccessful()) {
+          type = type.or(operationResponse);
+        }
+        if (type.isPresent()) {
+          responseModel = Optional.of(modelRef(context.alternateFor(type.get()), modelContext, typeNameExtractor));
+        }
         responseMessages.add(new ResponseMessageBuilder()
-                .code(apiResponse.code())
-                .message(apiResponse.message())
-                .responseModel(new ModelRef(overrideTypeName))
-                .build());
+            .code(apiResponse.code())
+            .message(apiResponse.message())
+            .responseModel(responseModel.orNull())
+            .build());
+      }
+
+    }
+    if (operationResponse.isPresent()) {
+      ModelContext modelContext = returnValue(operationResponse.get(),
+          context.getDocumentationType(),
+          context.getAlternateTypeProvider(),
+          context.getDocumentationContext().getGenericsNamingStrategy());
+      ResolvedType resolvedType = context.alternateFor(operationResponse.get());
+      ModelRef responseModel = modelRef(resolvedType, modelContext, typeNameExtractor);
+      context.operationBuilder().responseModel(responseModel);
+      ResponseMessage defaultMessage = new ResponseMessageBuilder()
+          .code(httpStatusCode(handlerMethod))
+          .message(message(handlerMethod))
+          .responseModel(responseModel)
+          .build();
+      if (!responseMessages.contains(defaultMessage) && !"void".equals(responseModel.getType())) {
+        responseMessages.add(defaultMessage);
       }
     }
     return responseMessages;
   }
 
-
-  private String overrideTypeName(ApiResponse apiResponse, OperationContext context) {
-    if (apiResponse.response() != null) {
-      ModelContext modelContext = ModelContext.returnValue(apiResponse.response(), context.getDocumentationType(),
-          context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
-      return typeNameExtractor.typeName(modelContext);
-    }
-    return "";
+  private Optional<ResolvedType> resolvedType(ResolvedType resolvedType, ApiResponse apiResponse) {
+    return Optional.fromNullable(resolvedTypeFromResponse(typeResolver, resolvedType).apply(apiResponse));
   }
 
 }

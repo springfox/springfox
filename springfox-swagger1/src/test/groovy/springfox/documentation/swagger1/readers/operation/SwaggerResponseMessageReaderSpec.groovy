@@ -42,11 +42,16 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
       OperationContext operationContext = new OperationContext(new OperationBuilder(),
               RequestMethod.GET, dummyHandlerMethod('methodWithApiResponses'), 0, requestMappingInfo('/somePath'),
               context(), "")
+
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-      def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
+
+      def resolver = new TypeResolver()
+      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
+
     when:
-      new SwaggerResponseMessageReader(typeNameExtractor).apply(operationContext)
+      new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+
     and:
       def operation = operationContext.operationBuilder().build()
       def responseMessages = operation.responseMessages
