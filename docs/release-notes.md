@@ -1,3 +1,14 @@
+# 2.0.3 Release notes
+Includes major bug fix that caused degraded performance and a few minor bug fixes
+
+- #806 Improve performance of model processing maintenance (Thanks @RizziCR and @RobWin for reporting)
+    - #811 Slow Startup - Spring Boot @bryantp
+    - #812 swagger springfox unable to initialize when moving from 2.0.1 to >2.0.2 @roya2 
+- #805 ApiOperation response doesn't work Thanks! @EdwardsBean
+- #813 Duplicate Params - Swagger Spec and in Generated Code Thanks! @rajeshkamal  2.0.3
+- #803 [Documentation] Added note on @EnableWebMvvc conflict when using Spring Boot Thanks! @igilham
+- #804 CircleCI no longer publishes the snapshot builds bug maintenance
+
 # 2.0.2 Release notes
 Significant changes include:
 - Adjust namespaces due to a change in package names in swagger-core maintenance. Swagger-Core 1.5 release changed the package names from `com.wordnik.swagger.*` to `io.swagger.*`
