@@ -83,11 +83,13 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private ObjectMapper objectMapper;
 
   @Autowired
-  public OptimizedModelPropertiesProvider(AccessorsProvider accessors, FieldProvider fields,
-                                          TypeResolver typeResolver,
-                                          BeanPropertyNamingStrategy namingStrategy,
-                                          SchemaPluginsManager schemaPluginsManager,
-                                          TypeNameExtractor typeNameExtractor) {
+  public OptimizedModelPropertiesProvider(AccessorsProvider accessors,
+        FieldProvider fields,
+        TypeResolver typeResolver,
+        BeanPropertyNamingStrategy namingStrategy,
+        SchemaPluginsManager schemaPluginsManager,
+        TypeNameExtractor typeNameExtractor) {
+
     this.accessors = accessors;
     this.fields = fields;
     this.typeResolver = typeResolver;

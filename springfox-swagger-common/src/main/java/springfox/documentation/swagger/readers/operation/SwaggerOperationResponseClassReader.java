@@ -81,8 +81,6 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
     return context.getDocumentationContext().getIgnorableParameterTypes().contains(returnType);
   }
 
-
-
   @Override
   public boolean supports(DocumentationType delimiter) {
     return SwaggerPluginSupport.pluginDoesApply(delimiter);
