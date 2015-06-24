@@ -159,10 +159,14 @@ public class OperationBuilder {
    * @param parameters - input parameter definitions
    * @return
    */
-  public OperationBuilder parameters(List<Parameter> parameters) {
-    this.parameters.addAll(nullToEmptyList(parameters));
+  public OperationBuilder parameters(final List<Parameter> parameters) {
+    List<Parameter> source = nullToEmptyList(parameters);
+    List<Parameter> destination = newArrayList(this.parameters);
+    ParameterMerger merger = new ParameterMerger(destination, source);
+    this.parameters = newArrayList(merger.merged());
     return this;
   }
+
 
   /**
    * Updates the response messages

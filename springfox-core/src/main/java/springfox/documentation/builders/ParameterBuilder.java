@@ -39,6 +39,25 @@ public class ParameterBuilder {
   private ResolvedType type;
   private ModelRef modelRef;
 
+
+  /**
+   * Copy builder
+   * @param other parameter to copy from
+   * @return this
+   */
+  ParameterBuilder from(Parameter other) {
+    return name(other.getName())
+        .allowableValues(other.getAllowableValues())
+        .allowMultiple(other.isAllowMultiple())
+        .defaultValue(other.getDefaultValue())
+        .description(other.getDescription())
+        .modelRef(other.getModelRef())
+        .parameterAccess(other.getParamAccess())
+        .parameterType(other.getParamType())
+        .required(other.isRequired())
+        .type(other.getType().orNull());
+  }
+
   /**
    * Updates the parameter name
    *

@@ -20,8 +20,6 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -38,11 +36,13 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 
 import java.util.List;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.builders.Parameters.*;
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.HIGHEST_PRECEDENCE + 10)
 public class OperationParameterRequestConditionReader implements OperationBuilderPlugin {
 
   private final TypeResolver resolver;
@@ -60,18 +60,22 @@ public class OperationParameterRequestConditionReader implements OperationBuilde
       if (skipParameter(parameters, expression)) {
         continue;
       }
-      
+
+      String paramValue = expression.getValue();
+      AllowableListValues allowableValues = null;
+      if (!isNullOrEmpty(paramValue)) {
+        allowableValues = new AllowableListValues(newArrayList(paramValue), "string");
+      }
       Parameter parameter = new ParameterBuilder()
               .name(expression.getName())
               .description(null)
-              .defaultValue(expression.getValue())
+              .defaultValue(paramValue)
               .required(true)
               .allowMultiple(false)
               .type(resolver.resolve(String.class))
               .modelRef(new ModelRef("string"))
-              .allowableValues(new AllowableListValues(newArrayList(expression.getValue()), "string"))
+              .allowableValues(allowableValues)
               .parameterType("query")
-              .parameterAccess("")
               .build();
       parameters.add(parameter);
     }
@@ -89,14 +93,5 @@ public class OperationParameterRequestConditionReader implements OperationBuilde
   @Override
   public boolean supports(DocumentationType delimiter) {
     return true;
-  }
-
-  private Predicate<? super Parameter> withName(final String name) {
-    return new Predicate<Parameter>() {
-      @Override
-      public boolean apply(Parameter input) {
-        return Objects.equal(input.getName(), name);
-      }
-    };
   }
 }

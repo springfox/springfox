@@ -26,7 +26,7 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
-import springfox.documentation.spring.web.readers.parameter.OperationParameterReader
+import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 import springfox.documentation.swagger.readers.operation.OperationImplicitParameterReader
 import springfox.documentation.swagger.readers.operation.OperationImplicitParametersReader
 

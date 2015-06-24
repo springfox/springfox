@@ -18,13 +18,12 @@
  */
 
 package springfox.service.model.builder
-
 import org.springframework.http.HttpMethod
 import spock.lang.Specification
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.builders.ResponseMessageBuilder
 import springfox.documentation.schema.ModelRef
-import springfox.documentation.service.Parameter
 import springfox.documentation.service.ResponseMessage
 import springfox.documentation.service.SecurityReference
 
@@ -94,9 +93,9 @@ class OperationBuilderSpec extends Specification {
       'produces'        | newHashSet('app/json')  | 'produces'
       'consumes'        | newHashSet('app/json')  | 'consumes'
       'protocols'       | newHashSet('https')     | 'protocol'
-      'parameters'      | [Mock(Parameter)]       | 'parameters'
       'position'        | 1                       | 'position'
       'hidden'          | true                    | 'hidden'
+      'parameters'      | [new ParameterBuilder().name("p").build()]       | 'parameters'
   }
 
   def "Setting builder properties to null values preserves existing values"() {
@@ -121,7 +120,7 @@ class OperationBuilderSpec extends Specification {
       'produces'        | newHashSet('app/json')  | 'produces'
       'consumes'        | newHashSet('app/json')  | 'consumes'
       'protocols'       | newHashSet('https')     | 'protocol'
-      'parameters'      | [Mock(Parameter)]       | 'parameters'
+      'parameters'      | [new ParameterBuilder().name("p").build()]       | 'parameters'
   }
 
   def "Operation authorizations are converted to a map by type"() {

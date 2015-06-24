@@ -18,13 +18,13 @@
  */
 
 package springfox.documentation.spring.web.mixins
-
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import springfox.documentation.spi.service.*
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.OperationModelsProvider
 import springfox.documentation.spring.web.readers.parameter.ExpandedParameterBuilder
+import springfox.documentation.spring.web.readers.parameter.ParameterNameReader
 import springfox.documentation.spring.web.scanners.MediaTypeReader
 
 import static com.google.common.collect.Lists.*
@@ -38,7 +38,7 @@ class ServicePluginsSupport {
     plugins.apiListingPlugins = OrderAwarePluginRegistry.create(newArrayList(new MediaTypeReader(resolver)))
     plugins.documentationPlugins = OrderAwarePluginRegistry.create([])
     plugins.parameterExpanderPlugins = OrderAwarePluginRegistry.create([new ExpandedParameterBuilder(resolver)])
-    plugins.parameterPlugins = OrderAwarePluginRegistry.create([])
+    plugins.parameterPlugins = OrderAwarePluginRegistry.create([new ParameterNameReader()])
     plugins.operationBuilderPlugins = OrderAwarePluginRegistry.create([])
     plugins.resourceGroupingStrategies = OrderAwarePluginRegistry.create([])
     plugins.operationModelsProviders = OrderAwarePluginRegistry.create([new OperationModelsProvider(resolver)])

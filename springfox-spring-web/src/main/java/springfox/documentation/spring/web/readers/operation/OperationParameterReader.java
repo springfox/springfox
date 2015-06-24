@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.spring.web.readers.parameter;
+package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
-import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
+import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -86,11 +86,11 @@ public class OperationParameterReader implements OperationBuilderPlugin {
             context.getDocumentationContext().getGenericsNamingStrategy(),
             context);
 
-        if (!shouldExpand(methodParameter)) {
-          parameters.add(pluginsManager.parameter(parameterContext));
-        } else {
+        if (shouldExpand(methodParameter)) {
           expander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters,
                   context.getDocumentationContext());
+        } else {
+          parameters.add(pluginsManager.parameter(parameterContext));
         }
       }
     }

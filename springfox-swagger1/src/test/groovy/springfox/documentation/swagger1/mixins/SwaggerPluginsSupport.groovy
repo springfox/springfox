@@ -30,6 +30,7 @@ import springfox.documentation.spi.service.DefaultsProviderPlugin
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.OperationModelsProvider
 import springfox.documentation.spring.web.readers.parameter.ExpandedParameterBuilder
+import springfox.documentation.spring.web.readers.parameter.ParameterNameReader
 import springfox.documentation.spring.web.scanners.MediaTypeReader
 import springfox.documentation.swagger.readers.operation.SwaggerOperationModelsProvider
 import springfox.documentation.swagger.readers.parameter.SwaggerExpandedParameterBuilder
@@ -58,7 +59,8 @@ class SwaggerPluginsSupport {
     plugins.documentationPlugins = OrderAwarePluginRegistry.create([])
     plugins.parameterExpanderPlugins =
         OrderAwarePluginRegistry.create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder()])
-    plugins.parameterPlugins = OrderAwarePluginRegistry.create([])
+    plugins.parameterPlugins = OrderAwarePluginRegistry.create([new ParameterNameReader(),
+        new springfox.documentation.swagger1.readers.parameter.ParameterNameReader()])
     plugins.operationBuilderPlugins = OrderAwarePluginRegistry.create([])
     plugins.resourceGroupingStrategies = OrderAwarePluginRegistry.create([new ClassOrApiAnnotationResourceGrouping()])
     plugins.operationModelsProviders = OrderAwarePluginRegistry.create([

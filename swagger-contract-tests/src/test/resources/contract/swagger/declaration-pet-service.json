@@ -296,7 +296,7 @@
                     ],
                     "parameters": [
                         {
-                            "allowMultiple": true,
+                            "allowMultiple": false,
                             "enum": [
                                 "available",
                                 "pending",

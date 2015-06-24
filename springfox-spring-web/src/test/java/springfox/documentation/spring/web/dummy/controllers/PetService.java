@@ -77,7 +77,7 @@ public class PetService {
     throw new RuntimeException("NotImplementedException");
   }
 
-  @RequestMapping(value = "/findByStatus", method = RequestMethod.GET)
+  @RequestMapping(value = "/findByStatus", method = RequestMethod.GET, params = {"status"})
   @ApiOperation(value = "Finds Pets by status",
       notes = "Multiple status values can be provided with comma seperated strings",
       response = Pet.class)
