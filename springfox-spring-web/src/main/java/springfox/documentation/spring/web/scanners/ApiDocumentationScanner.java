@@ -32,9 +32,11 @@ import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Sets.*;
@@ -86,9 +88,20 @@ public class ApiDocumentationScanner {
   }
 
   private Set<Tag> toTags(Multimap<String, ApiListing> apiListings) {
-    return from(nullToEmptyMultimap(apiListings).entries())
-        .transform(fromEntry())
-        .toSet();
+    List<Tag> tags = from(nullToEmptyMultimap(apiListings).entries())
+        .transform(fromEntry()).toList();
+    TreeSet<Tag> tagSet = newTreeSet(byTagName());
+    tagSet.addAll(tags);
+    return tagSet;
+  }
+
+  private Comparator<Tag> byTagName() {
+    return new Comparator<Tag>() {
+      @Override
+      public int compare(Tag first, Tag second) {
+        return first.getName().compareTo(second.getName());
+      }
+    };
   }
 
   private Function<Map.Entry<String, ApiListing>, Tag> fromEntry() {

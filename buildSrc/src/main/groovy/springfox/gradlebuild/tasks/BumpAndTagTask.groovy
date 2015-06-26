@@ -35,7 +35,7 @@ class BumpAndTagTask extends DefaultTask {
 
   @TaskAction
   void exec() {
-    LOG.info("Bumping the version and tagging after release using ($versioning.class.simpleName)")
+    LOG.info("Bumping the version and tagging after release using (${versioning.class.simpleName})")
     versioning.persist(buildInfo)
   }
 }
