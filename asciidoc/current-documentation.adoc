@@ -262,6 +262,33 @@ then during plugin customization:
  docket.forCodeGeneration(true|false);
 ```
 
+=== Caching
+
+By default caches have been defined for operations, models, model properties and model dependencies. To enable
+caching for performance:
+
+If the caching has not been implemented in the target application
+
+```java
+// In the application configuration add @EnableCaching
+
+   @EnableCaching
+   @EnableSwagger2
+   class YourApplicationConfig {
+
+    @Bean
+    @Autowired //<-- autowire all the caches that are available
+    public CacheManager cacheManager(List<Cache> caches) {
+      CacheManager cacheManager = new SimpleCacheManager(); //<-- create a cache manager
+      cacheManager.setCaches(caches); //<-- set the autowired caches
+      return cacheManager;
+    }
+  }
+```
+
+If the caching _HAS_ been implemented in the target application, make sure you pull in the caches int your applications
+ predefined `CacheManager`.
+
 === Extensibility
 
 The library provides a variety of extensibility hooks to enrich/ augment the schema and service models
