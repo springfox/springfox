@@ -20,10 +20,12 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.OperationContext;
@@ -44,12 +46,15 @@ public class ApiOperationReader {
   private static final Set<RequestMethod> allRequestMethods
           = new LinkedHashSet<RequestMethod>(asList(RequestMethod.values()));
   private final DocumentationPluginsManager pluginsManager;
+  private final OperationNameGenerator nameGenerator;
 
   @Autowired
-  public ApiOperationReader(DocumentationPluginsManager pluginsManager) {
+  public ApiOperationReader(DocumentationPluginsManager pluginsManager, OperationNameGenerator nameGenerator) {
     this.pluginsManager = pluginsManager;
+    this.nameGenerator = nameGenerator;
   }
 
+  @Cacheable(value = "operations", keyGenerator = "operationsKeyGenerator")
   public List<Operation> read(RequestMappingContext outerContext) {
 
     RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
@@ -63,7 +68,7 @@ public class ApiOperationReader {
     //Setup response message list
     Integer currentCount = 0;
     for (RequestMethod httpRequestMethod : supportedMethods) {
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(nameGenerator),
               httpRequestMethod,
               outerContext.getHandlerMethod(),
               currentCount,

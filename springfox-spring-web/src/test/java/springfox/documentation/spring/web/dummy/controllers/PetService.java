@@ -49,7 +49,7 @@ import static com.google.common.collect.Lists.*;
 public class PetService {
 
   @RequestMapping(value = "/{petId}", method = RequestMethod.GET)
-  @ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. "
+  @ApiOperation(value = "petById", notes = "Returns a pet when ID < 10. "
       + "ID > 10 or nonintegers will simulate API error conditions",
       response = Pet.class
   )
@@ -60,7 +60,7 @@ public class PetService {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  @ApiOperation(value = "Add a new pet to the store")
+  @ApiOperation(value = "addPet", notes = "Add a new pet to the store")
   @ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input") })
   public void addPet(
       @ApiParam(value = "Pet object that needs to be added to the store", required = true) Pet pet) {
@@ -68,7 +68,7 @@ public class PetService {
   }
 
   @RequestMapping(method = RequestMethod.PUT)
-  @ApiOperation(value = "Update an existing pet")
+  @ApiOperation(value = "updatePet")
   @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid ID supplied"),
       @ApiResponse(code = 404, message = "Pet not found"),
       @ApiResponse(code = 405, message = "Validation exception") })
@@ -78,7 +78,7 @@ public class PetService {
   }
 
   @RequestMapping(value = "/findByStatus", method = RequestMethod.GET, params = {"status"})
-  @ApiOperation(value = "Finds Pets by status",
+  @ApiOperation(value = "petsByStatus",
       notes = "Multiple status values can be provided with comma seperated strings",
       response = Pet.class)
   @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid status value") })
@@ -90,7 +90,7 @@ public class PetService {
   }
 
   @RequestMapping(value = "/findByTags", method = RequestMethod.GET)
-  @ApiOperation(value = "Finds Pets by tags",
+  @ApiOperation(value = "petsByTags",
       notes = "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
       response = Pet.class)
   @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid tag value") })
@@ -108,7 +108,6 @@ public class PetService {
   }
 
   @RequestMapping(method = RequestMethod.GET)
-  @ApiOperation(value = "List all pets")
   //@ApiModel(type = Pet.class, collection = true)
   public
   @ResponseBody

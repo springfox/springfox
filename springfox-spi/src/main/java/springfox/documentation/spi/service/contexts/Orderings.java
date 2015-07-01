@@ -77,4 +77,14 @@ public class Orderings {
       }
     };
   }
+
+  public static Comparator<RequestMappingContext> controllerComparator() {
+    return new Comparator<RequestMappingContext>() {
+      @Override
+      public int compare(RequestMappingContext first, RequestMappingContext second) {
+        return Ints.compare(first.getHandlerMethod().getBeanType().hashCode(),
+            second.getHandlerMethod().getBeanType().hashCode());
+      }
+    };
+  }
 }

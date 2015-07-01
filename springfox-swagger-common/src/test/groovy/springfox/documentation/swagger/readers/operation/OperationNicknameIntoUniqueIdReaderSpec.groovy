@@ -5,12 +5,13 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 @Mixin([RequestMappingSupport])
 class OperationNicknameIntoUniqueIdReaderSpec extends DocumentationContextSpec {
   def "should set various unique operation id based on swagger annotation"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
         RequestMethod.GET, handlerMethod, 0, requestMappingInfo("somePath"),
         context(), "/anyPath")
     and:
@@ -27,7 +28,7 @@ class OperationNicknameIntoUniqueIdReaderSpec extends DocumentationContextSpec {
       sut.supports(DocumentationType.SWAGGER_2)
     where:
       handlerMethod                                 | expected
-      dummyHandlerMethod('methodWithHttpGETMethod') | null
-      dummyHandlerMethod('methodWithNickName')      | 'unique'
+      dummyHandlerMethod('methodWithHttpGETMethod') | 'nullUsingGET'
+      dummyHandlerMethod('methodWithNickName')      | 'uniqueUsingGET'
   }
 }

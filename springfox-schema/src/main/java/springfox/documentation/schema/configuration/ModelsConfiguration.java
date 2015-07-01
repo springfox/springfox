@@ -20,6 +20,8 @@
 package springfox.documentation.schema.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
+import org.springframework.cache.Cache;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +43,21 @@ public class ModelsConfiguration {
   @Bean
   public TypeResolver typeResolver() {
     return new TypeResolver();
+  }
+
+  @Bean
+  Cache modelsCache() {
+    return new ConcurrentMapCache("models");
+  }
+
+  @Bean
+  Cache modelDependenciesCache() {
+    return new ConcurrentMapCache("modelDependencies");
+  }
+
+  @Bean
+  Cache modelPropertiesCache() {
+    return new ConcurrentMapCache("modelProperties");
   }
 
 }

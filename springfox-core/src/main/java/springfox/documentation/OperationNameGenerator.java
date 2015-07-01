@@ -16,20 +16,8 @@
  *
  *
  */
+package springfox.documentation;
 
-package springfox.documentation.schema.configuration
-
-import spock.lang.Specification
-
-class ModelsConfigurationSpec extends Specification {
-  def "test to include this class in the converage report" () {
-    when:
-      def config = new ModelsConfiguration()
-    then:
-      config.typeResolver() != null
-      config.modelsCache() != null
-      config.modelPropertiesCache() != null
-      config.modelDependenciesCache() != null
-
-  }
+public interface OperationNameGenerator {
+  String startingWith(String prefix);
 }

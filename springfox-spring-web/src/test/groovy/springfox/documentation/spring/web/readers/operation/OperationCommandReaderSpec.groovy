@@ -34,7 +34,7 @@ class OperationCommandReaderSpec extends DocumentationContextSpec {
   @Unroll("property #property expected: #expected")
   def "should set various properties based on method name or swagger annotation"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, CURRENT_COUNT, requestMappingInfo("somePath"),
               context(), "/anyPath")
     when:

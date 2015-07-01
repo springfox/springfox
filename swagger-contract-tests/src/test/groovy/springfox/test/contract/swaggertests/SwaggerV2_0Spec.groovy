@@ -18,19 +18,25 @@
  */
 
 package springfox.test.contract.swaggertests
-
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.cache.Cache
+import org.springframework.cache.CacheManager
+import org.springframework.cache.annotation.EnableCaching
+import org.springframework.cache.support.SimpleCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.Primary
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Unroll
+import springfox.documentation.OperationNameGenerator
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
@@ -59,7 +65,7 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
       String raw = response.data.text
       String actual = JsonOutput.prettyPrint(raw)
       response.status == 200
-//      println(actual)
+      println(actual)
 
       def withPortReplaced = contract.replaceAll("__PORT__", "$port")
       JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
@@ -99,6 +105,7 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   }
 
   @Configuration
+  @EnableCaching
   @EnableSwagger2
   @ComponentScan([
       "springfox.documentation.spring.web.dummy.controllers",
@@ -108,6 +115,25 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   @Import(SecuritySupport)
   static class Config {
 
+    //This is so as to predictably generate the same names
+    @Bean
+    @Primary
+    OperationNameGenerator nameGenerator() {
+      new OperationNameGenerator() {
+        @Override
+        String startingWith(String prefix) {
+          return prefix;
+        }
+      }
+    }
+
+    @Bean
+    @Autowired
+    public CacheManager cacheManager(List<Cache> caches) {
+      def cacheManager = new SimpleCacheManager()
+      cacheManager.caches = caches
+      return cacheManager;
+    }
     @Bean
     public Docket petstore(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
@@ -223,8 +249,9 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
           .useDefaultResponseMessages(false)
           .securitySchemes(authorizationTypes)
           .produces(['application/xml', 'application/json'] as Set)
+          .ignoredParameterTypes(MetaClass)
           .select()
-          .paths(regex("/.*"))
+            .paths(regex("/.*"))
           .build()
     }
 

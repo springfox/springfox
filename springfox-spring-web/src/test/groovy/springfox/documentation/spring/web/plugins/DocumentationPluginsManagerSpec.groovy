@@ -20,17 +20,18 @@
 package springfox.documentation.spring.web.plugins
 
 import spock.lang.Specification
+import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spi.service.OperationBuilderPlugin
-import springfox.documentation.spi.service.ResourceGroupingStrategy
-import springfox.documentation.spring.web.SpringGroupingStrategy
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
-import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.service.DocumentationPlugin
+import springfox.documentation.spi.service.OperationBuilderPlugin
 import springfox.documentation.spi.service.ParameterBuilderPlugin
+import springfox.documentation.spi.service.ResourceGroupingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
+import springfox.documentation.spring.web.SpringGroupingStrategy
+import springfox.documentation.spring.web.mixins.ServicePluginsSupport
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 @Mixin(ServicePluginsSupport)
 class DocumentationPluginsManagerSpec extends Specification {
@@ -76,7 +77,7 @@ class DocumentationPluginsManagerSpec extends Specification {
     given:
       def operationContext = Mock(OperationContext)
     and:
-      operationContext.operationBuilder() >> new OperationBuilder()
+      operationContext.operationBuilder() >> new OperationBuilder(new CachingOperationNameGenerator())
     when:
       def sut = customWebPlugins()
       def operation = sut.operation(operationContext)
@@ -89,7 +90,7 @@ class DocumentationPluginsManagerSpec extends Specification {
       def operationPlugin = Mock(OperationBuilderPlugin)
       def operationContext = Mock(OperationContext)
     and:
-      operationContext.operationBuilder() >> new OperationBuilder()
+      operationContext.operationBuilder() >> new OperationBuilder(new CachingOperationNameGenerator())
       operationPlugin.supports(_) >> true
     when:
       def sut = customWebPlugins([], [], [operationPlugin])

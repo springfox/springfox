@@ -7,12 +7,13 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 @Mixin([RequestMappingSupport])
 class VendorExtensionsReaderSpec extends DocumentationContextSpec {
   def "should read from annotations"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
         RequestMethod.GET, dummyHandlerMethod('methodWithExtensions'), 0, requestMappingInfo("somePath"),
         context(), "/anyPath")
       VendorExtensionsReader sut = new VendorExtensionsReader()

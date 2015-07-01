@@ -33,8 +33,8 @@ public class DefaultOperationReader implements OperationBuilderPlugin {
   public void apply(OperationContext context) {
     String operationName = context.getHandlerMethod().getMethod().getName();
     context.operationBuilder()
+            .uniqueId(operationName)
             .method(context.httpMethod())
-            .uniqueId(String.format("%sUsing%s", operationName, context.httpMethod()))
             .position(context.operationIndex())
             .summary(operationName);
   }

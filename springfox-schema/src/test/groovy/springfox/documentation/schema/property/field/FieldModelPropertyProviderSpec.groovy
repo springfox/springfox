@@ -53,11 +53,11 @@ class FieldModelPropertyProviderSpec extends Specification {
       def propertyProvider = new FieldModelPropertyProvider(new FieldProvider(typeResolver),
               namingStrategy, defaultSchemaPlugins(), Mock(TypeNameExtractor))
       propertyProvider.objectMapper = mapper
-      def serializationPropNames = propertyProvider.propertiesFor(resolvedType,
-              returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy))
+      def serializationPropNames = propertyProvider.propertiesFor(resolvedType, returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
+      )
               .collect({it.name})
-      def deSerializationPropNames = propertyProvider.propertiesFor(resolvedType,
-              inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy))
+      def deSerializationPropNames = propertyProvider.propertiesFor(resolvedType, inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
+      )
               .collect({it.name})
 
     expect:
@@ -79,11 +79,11 @@ class FieldModelPropertyProviderSpec extends Specification {
       def propertyProvider = new FieldModelPropertyProvider(new FieldProvider(typeResolver),
           namingStrategy, defaultSchemaPlugins(), Mock(TypeNameExtractor))
       propertyProvider.objectMapper = mapper
-      def serializationPropNames = propertyProvider.propertiesFor(resolvedType,
-          returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy))
+      def serializationPropNames = propertyProvider.propertiesFor(resolvedType, returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
+      )
           .collect({it.name})
-      def deSerializationPropNames = propertyProvider.propertiesFor(resolvedType,
-          inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy))
+      def deSerializationPropNames = propertyProvider.propertiesFor(resolvedType, inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
+      )
           .collect({it.name})
 
     expect:

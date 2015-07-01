@@ -23,13 +23,16 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Import
+import org.springframework.cache.Cache
+import org.springframework.cache.CacheManager
+import org.springframework.cache.annotation.EnableCaching
+import org.springframework.cache.support.SimpleCacheManager
+import org.springframework.context.annotation.*
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Unroll
+import springfox.documentation.OperationNameGenerator
 import springfox.documentation.service.AuthorizationScope
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.SecurityScheme
@@ -122,6 +125,7 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
   }
 
   @Configuration
+  @EnableCaching
   @EnableSwagger
   @ComponentScan([
       "springfox.documentation.spring.web.dummy.controllers",
@@ -130,6 +134,26 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
   ])
   @Import(SecuritySupport)
   static class Config {
+
+    @Bean
+    @Primary
+    OperationNameGenerator nameGenerator() {
+      new OperationNameGenerator() {
+        @Override
+        String startingWith(String prefix) {
+          return prefix;
+        }
+      }
+    }
+
+    @Bean
+    @Autowired
+    public CacheManager cacheManager(List<Cache> caches) {
+      def cacheManager = new SimpleCacheManager()
+      cacheManager.caches = caches
+      return cacheManager;
+    }
+
     @Bean
     SecurityContext securityContext() {
       def readScope = new AuthorizationScope("read:pets", "read your pets")
@@ -157,5 +181,7 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
           .securityContexts(securityContexts)
           .ignoredParameterTypes(MetaClass)
     }
+
+
   }
 }

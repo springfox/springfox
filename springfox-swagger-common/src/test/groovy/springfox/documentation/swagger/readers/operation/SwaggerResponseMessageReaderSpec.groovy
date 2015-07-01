@@ -31,13 +31,14 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 @Mixin([RequestMappingSupport, ServicePluginsSupport])
 class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "ApiResponse annotation should override when using swagger reader"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, dummyHandlerMethod('methodWithApiResponses'), 0, requestMappingInfo('/somePath'),
               context(), "")
 
@@ -63,7 +64,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "ApiOperation annotation should provide response"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
           RequestMethod.GET, dummyHandlerMethod('methodApiResponseClass'), 0, requestMappingInfo('/somePath'),
           context(), "")
 

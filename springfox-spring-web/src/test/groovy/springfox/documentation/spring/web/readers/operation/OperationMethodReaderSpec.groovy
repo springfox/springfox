@@ -33,7 +33,7 @@ class OperationMethodReaderSpec extends DocumentationContextSpec {
   def "should return api method when using default reader"() {
 
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               currentHttpMethod, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 

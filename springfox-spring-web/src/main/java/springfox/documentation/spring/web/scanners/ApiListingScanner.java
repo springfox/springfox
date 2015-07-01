@@ -45,8 +45,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 @Component
 public class ApiListingScanner {
@@ -84,7 +86,7 @@ public class ApiListingScanner {
       String listingDescription = null;
 
       Map<String, Model> models = new LinkedHashMap<String, Model>();
-      for (RequestMappingContext each : entry.getValue()) {
+      for (RequestMappingContext each : sortedByController(entry.getValue())) {
         models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
         // Resource description will be the same for all handler methods
@@ -122,6 +124,9 @@ public class ApiListingScanner {
     return apiListingMap;
   }
 
+  private Iterable<RequestMappingContext> sortedByController(List<RequestMappingContext> contexts) {
+    return from(contexts).toSortedList(controllerComparator());
+  }
 
   static String longestCommonPath(List<ApiDescription> apiDescriptions) {
     List<String> commons = newArrayList();

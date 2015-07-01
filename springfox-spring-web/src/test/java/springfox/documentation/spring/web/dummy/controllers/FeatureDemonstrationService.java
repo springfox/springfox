@@ -55,7 +55,7 @@ public class FeatureDemonstrationService {
 
   //Uses alternate listing path
   @RequestMapping(value = "/{petId}", method = RequestMethod.GET)
-  @ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. "
+  @ApiOperation(value = "findPetById", notes = "Returns a pet when ID < 10. "
           + "ID > 10 or nonintegers will simulate API error conditions",
           response = Pet.class,
           extensions = {

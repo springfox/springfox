@@ -1045,7 +1045,7 @@
             "operations": [
                 {
                     "method": "GET",
-                    "summary": "Find pet by ID",
+                    "summary": "findPetById",
                     "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
                     "nickname": "getPetByIdUsingGET",
                     "produces": [

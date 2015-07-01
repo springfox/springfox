@@ -33,6 +33,7 @@ import springfox.documentation.spring.web.dummy.models.Treeish
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
 import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
@@ -70,7 +71,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should ignore ignorables"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 
@@ -92,7 +93,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSinglePathVariable', String.class)
 
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 
@@ -113,7 +114,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should expand ModelAttribute request params"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, dummyHandlerMethod('methodWithModelAttribute', Example.class), 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 
@@ -162,7 +163,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should expand ModelAttribute request param if param has treeish field"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class), 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 
@@ -179,7 +180,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should not expand unannotated request params"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 

@@ -37,6 +37,7 @@ import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ApiListingReference
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.spi.service.contexts.Defaults
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.swagger1.mixins.MapperSupport
 
 import static com.google.common.collect.Sets.*
@@ -55,7 +56,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
               .message("Success")
               .responseModel(new ModelRef("string"))
               .build()
-      def operation1 = new OperationBuilder()
+      def operation1 = new OperationBuilder(new CachingOperationNameGenerator())
                         .authorizations([SecurityReference.builder()
                           .reference("basic")
                           .scopes(scope)

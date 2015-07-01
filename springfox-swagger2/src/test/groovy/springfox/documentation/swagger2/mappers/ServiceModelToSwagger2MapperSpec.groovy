@@ -10,6 +10,7 @@ import springfox.documentation.builders.*
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.*
 import springfox.documentation.spi.service.contexts.Defaults
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 import static com.google.common.collect.Sets.*
 
@@ -162,7 +163,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
     def second = new ObjectVendorExtension("x-test2")
     second.with { addProperty(new StringVendorExtension("name2", "test2"))}
 
-    def operation1 = new OperationBuilder()
+    def operation1 = new OperationBuilder(new CachingOperationNameGenerator())
         .authorizations([SecurityReference.builder()
                              .reference("basic")
                              .scopes(scope)

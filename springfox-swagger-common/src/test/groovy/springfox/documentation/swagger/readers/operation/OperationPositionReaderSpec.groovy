@@ -24,6 +24,7 @@ import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.swagger.readers.operation.OperationPositionReader
 
 @Mixin([RequestMappingSupport])
@@ -31,7 +32,7 @@ class OperationPositionReaderSpec extends DocumentationContextSpec {
 
   def "should have correct api position using swagger reader"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, contextCount, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 

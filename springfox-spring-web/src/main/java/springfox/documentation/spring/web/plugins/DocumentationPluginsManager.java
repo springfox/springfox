@@ -107,6 +107,7 @@ public class DocumentationPluginsManager {
     return operationContext.operationBuilder().build();
   }
 
+
   public ApiListing apiListing(ApiListingContext context) {
     for (ApiListingBuilderPlugin each : apiListingPlugins.getPluginsFor(context.getDocumentationType())) {
       each.apply(context);

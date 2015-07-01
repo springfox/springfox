@@ -16,7 +16,8 @@
             "operations": [
                 {
                     "method": "POST",
-                    "summary": "Add a new pet to the store",
+                    "summary": "addPet",
+                    "notes": "Add a new pet to the store",
                     "nickname": "addPetUsingPOST",
                     "produces": [
                         "*/*"
@@ -72,7 +73,7 @@
             "operations": [
                 {
                     "method": "PUT",
-                    "summary": "Update an existing pet",
+                    "summary": "updatePet",
                     "nickname": "updatePetUsingPUT",
                     "produces": [
                         "*/*"
@@ -132,7 +133,7 @@
             "operations": [
                 {
                     "method": "GET",
-                    "summary": "List all pets",
+                    "summary": "listPets",
                     "nickname": "listPetsUsingGET",
                     "produces": [
                         "*/*"
@@ -285,7 +286,7 @@
             "operations": [
                 {
                     "method": "GET",
-                    "summary": "Finds Pets by status",
+                    "summary": "petsByStatus",
                     "notes": "Multiple status values can be provided with comma seperated strings",
                     "nickname": "findPetsByStatusUsingGET",
                     "produces": [
@@ -344,7 +345,7 @@
             "operations": [
                 {
                     "method": "GET",
-                    "summary": "Finds Pets by tags",
+                    "summary": "petsByTags",
                     "notes": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
                     "nickname": "findPetsByTagsUsingGET",
                     "produces": [
@@ -768,7 +769,7 @@
             "operations": [
                 {
                     "method": "GET",
-                    "summary": "Find pet by ID",
+                    "summary": "petById",
                     "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
                     "nickname": "getPetByIdUsingGET",
                     "produces": [
