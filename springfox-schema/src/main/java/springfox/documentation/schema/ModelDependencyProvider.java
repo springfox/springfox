@@ -57,7 +57,7 @@ public class ModelDependencyProvider {
     this.nameExtractor = nameExtractor;
   }
 
-  @Cacheable(value = "modelDependencies", key = "#modelContext.hashCode()")
+  @Cacheable(value = "modelDependencies", key = ModelCacheKeys.MODEL_CONTEXT_SPEL)
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
     return
             from(resolvedDependencies(modelContext))

@@ -19,6 +19,7 @@
 package springfox.documentation.schema.property
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
+import springfox.documentation.schema.ModelCacheKeys
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.schema.contexts.ModelContext
 
@@ -34,6 +35,15 @@ class ModelPropertiesKeyGeneratorSpec extends Specification {
       thrown(Exception)
     where:
       args << [[], [null], ["hello"], null, returnType(simpleType()), [simpleType()]]
+  }
+
+  def "Exception when param isnt of type ModelContext" () {
+    when:
+      ModelCacheKeys.modelPropertiesKey(args)
+    then:
+      thrown(Exception)
+    where:
+      args << [[], [null], [""], null]
   }
 
   def "Generates key when param is of type ResolvedType and ModelContext" () {

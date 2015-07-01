@@ -45,6 +45,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.Annotations;
+import springfox.documentation.schema.ModelCacheKeys;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
@@ -104,8 +105,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     objectMapper = event.getObjectMapper();
   }
 
+
   @Override
-  @Cacheable(value = "modelProperties", keyGenerator = "modelPropertiesKeyGenerator")
+  @Cacheable(value = "modelProperties", key = ModelCacheKeys.MODEL_PROPERTIES_SPEL)
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
     List<ModelProperty> properties = newArrayList();
     BeanDescription beanDescription = beanDescription(type, givenContext);

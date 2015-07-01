@@ -27,11 +27,20 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.dummy.models.Example
 
 class OperationsKeyGeneratorSpec extends Specification {
-  def "Illegal argument when param isnt of type RequestMappingContext" () {
+  def "Exception when param isnt of type RequestMappingContext" () {
     given:
       OperationsKeyGenerator sut = new OperationsKeyGenerator()
     when:
       sut.generate(null, null, args)
+    then:
+      thrown(Exception)
+    where:
+      args << [[], [null], [Mock(Example)], null]
+  }
+
+  def "Exception when param isnt of type RequestMappingContext using the static helper" () {
+    when:
+      OperationsKeyGenerator.operationKey(args)
     then:
       thrown(Exception)
     where:

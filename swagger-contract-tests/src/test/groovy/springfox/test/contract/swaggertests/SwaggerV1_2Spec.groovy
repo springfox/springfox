@@ -135,6 +135,7 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
   @Import(SecuritySupport)
   static class Config {
 
+    //This is so as to predictably generate the same names
     @Bean
     @Primary
     OperationNameGenerator nameGenerator() {

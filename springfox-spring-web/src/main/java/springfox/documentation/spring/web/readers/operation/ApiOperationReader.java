@@ -30,6 +30,7 @@ import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.spring.web.OperationsKeyGenerator;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.Collections;
@@ -54,7 +55,7 @@ public class ApiOperationReader {
     this.nameGenerator = nameGenerator;
   }
 
-  @Cacheable(value = "operations", keyGenerator = "operationsKeyGenerator")
+  @Cacheable(value = "operations", key = OperationsKeyGenerator.OPERATION_KEY_SPEL)
   public List<Operation> read(RequestMappingContext outerContext) {
 
     RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();

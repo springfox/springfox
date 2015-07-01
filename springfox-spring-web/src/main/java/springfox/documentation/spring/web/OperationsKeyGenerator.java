@@ -22,12 +22,19 @@ import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import org.springframework.cache.interceptor.KeyGenerator;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
 
 import java.lang.reflect.Method;
 
 import static com.google.common.collect.Lists.*;
 
-class OperationsKeyGenerator implements KeyGenerator {
+public class OperationsKeyGenerator implements KeyGenerator {
+
+  public static final String OPERATION_KEY_SPEL
+      = "T(springfox.documentation.spring.web.OperationsKeyGenerator).operationKey(#outerContext)";
+  public static String operationKey(RequestMappingContext context) {
+    return new OperationsKeyGenerator().generate(ApiOperationReader.class, null, context).toString();
+  }
 
   @Override
   public Object generate(Object target, Method method, Object... params) {

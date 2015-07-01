@@ -6,11 +6,20 @@ import springfox.documentation.spi.schema.contexts.ModelContext
 
 @Mixin(TypesForTestingSupport)
 class ModelContextKeyGeneratorSpec extends Specification {
-  def "Illegal argument when param isnt of type ModelContext" () {
+  def "Exception when when param isnt of type ModelContext" () {
     given:
       ModelContextKeyGenerator sut = new ModelContextKeyGenerator()
     when:
       sut.generate(null, null, args)
+    then:
+      thrown(Exception)
+    where:
+      args << [[], [null], [""], null]
+  }
+
+  def "Exception when param isnt of type ModelContext" () {
+    when:
+      ModelCacheKeys.modelContextKey(args)
     then:
       thrown(Exception)
     where:

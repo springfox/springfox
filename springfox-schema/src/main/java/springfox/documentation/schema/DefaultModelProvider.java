@@ -76,7 +76,7 @@ public class DefaultModelProvider implements ModelProvider {
   }
 
   @Override
-  @Cacheable(value = "models", keyGenerator = "modelContextKeyGenerator")
+  @Cacheable(value = "models", key = ModelCacheKeys.MODEL_CONTEXT_SPEL)
   public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
     ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
     if (isContainerType(propertiesHost)
