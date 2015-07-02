@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ApiListingReference;
@@ -57,7 +57,7 @@ public class ApiListingReferenceScanner {
     ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
         = ArrayListMultimap.create();
     ApiSelector selector = context.getApiSelector();
-    for (RequestMappingHandlerMapping requestMappingHandlerMapping : context.getHandlerMappings()) {
+    for (RequestMappingInfoHandlerMapping requestMappingHandlerMapping : context.getHandlerMappings()) {
       for (RequestHandler handler : matchingHandlers(requestMappingHandlerMapping, selector)) {
         RequestMappingInfo requestMappingInfo = handler.getRequestMapping();
         HandlerMethod handlerMethod = handler.getHandlerMethod();
@@ -105,7 +105,7 @@ public class ApiListingReferenceScanner {
   }
 
   private Set<RequestHandler> matchingHandlers(
-      RequestMappingHandlerMapping requestMappingHandlerMapping,
+      RequestMappingInfoHandlerMapping requestMappingHandlerMapping,
       ApiSelector selector) {
     return FluentIterable
         .from(requestMappingHandlerMapping.getHandlerMethods().entrySet())
