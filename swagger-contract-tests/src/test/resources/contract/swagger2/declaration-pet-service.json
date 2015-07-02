@@ -110,7 +110,7 @@
                 "tags": [
                     "pet-service"
                 ],
-                "summary": "petsByStatus",
+                "summary": "Find Pet by status",
                 "description": "Multiple status values can be provided with comma seperated strings",
                 "operationId": "findPetsByStatusUsingGET",
                 "consumes": [
@@ -152,7 +152,7 @@
                 "tags": [
                     "pet-service"
                 ],
-                "summary": "petsByTags",
+                "summary": "Find Pet by tags",
                 "description": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
                 "operationId": "findPetsByTagsUsingGET",
                 "consumes": [
@@ -523,7 +523,7 @@
                 "tags": [
                     "pet-service"
                 ],
-                "summary": "petById",
+                "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
                 "operationId": "getPetByIdUsingGET",
                 "consumes": [
