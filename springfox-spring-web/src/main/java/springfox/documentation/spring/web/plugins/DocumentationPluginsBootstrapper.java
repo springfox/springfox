@@ -81,8 +81,8 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
   public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
     if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
-      List<DocumentationPlugin> plugins = from(documentationPluginsManager.documentationPlugins())
-          .toSortedList(pluginOrdering());
+      List<DocumentationPlugin> plugins = pluginOrdering()
+          .sortedCopy(documentationPluginsManager.documentationPlugins());
       log.info("Found {0} custom documentation plugin(s)", plugins.size());
       for (DocumentationPlugin each : plugins) {
         DocumentationType documentationType = each.getDocumentationType();

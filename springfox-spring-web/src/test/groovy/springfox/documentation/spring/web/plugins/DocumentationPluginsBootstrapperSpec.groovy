@@ -60,6 +60,8 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
       Docket enabledPlugin = Mock(Docket)
       Docket disabledPlugin = Mock(Docket)
     and:
+      enabledPlugin.groupName >> "enabled"
+      disabledPlugin.groupName >> "disabled"
       enabledPlugin.documentationType >> DocumentationType.SWAGGER_12
       disabledPlugin.documentationType >> DocumentationType.SWAGGER_12
     when:

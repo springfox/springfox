@@ -90,7 +90,7 @@ public class Orderings {
     };
   }
 
-  public static Comparator<? super DocumentationPlugin> pluginOrdering() {
+  public static Ordering<? super DocumentationPlugin> pluginOrdering() {
     return Ordering.from(byPluginType()).compound(byPluginName());
   }
 
