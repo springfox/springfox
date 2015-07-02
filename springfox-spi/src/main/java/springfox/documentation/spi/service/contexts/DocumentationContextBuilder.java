@@ -24,8 +24,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 import springfox.documentation.PathProvider;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
@@ -50,7 +50,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 public class DocumentationContextBuilder {
 
   private TypeResolver typeResolver;
-  private List<RequestMappingInfoHandlerMapping> handlerMappings;
+  private List<RequestHandler> handlerMappings;
   private ApiInfo apiInfo;
   private String groupName;
   private ResourceGroupingStrategy resourceGroupingStrategy;
@@ -78,7 +78,7 @@ public class DocumentationContextBuilder {
     this.documentationType = documentationType;
   }
 
-  public DocumentationContextBuilder requestHandlers(List<RequestMappingInfoHandlerMapping> handlerMappings) {
+  public DocumentationContextBuilder requestHandlers(List<RequestHandler> handlerMappings) {
     this.handlerMappings = handlerMappings;
     return this;
   }

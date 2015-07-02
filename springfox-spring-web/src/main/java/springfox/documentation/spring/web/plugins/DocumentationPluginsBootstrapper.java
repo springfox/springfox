@@ -26,9 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.DocumentationPlugin;
+import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
@@ -52,16 +52,16 @@ import static springfox.documentation.spi.service.contexts.Orderings.*;
 public class DocumentationPluginsBootstrapper implements ApplicationListener<ContextRefreshedEvent> {
   private static final Logger log = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
   private final DocumentationPluginsManager documentationPluginsManager;
+  private final RequestHandlerProvider handlerProvider;
   private final DocumentationCache scanned;
   private final ApiDocumentationScanner resourceListing;
-  private final List<RequestMappingInfoHandlerMapping> handlerMappings;
   private final DefaultConfiguration defaultConfiguration;
 
   private AtomicBoolean initialized = new AtomicBoolean(false);
 
   @Autowired
   public DocumentationPluginsBootstrapper(DocumentationPluginsManager documentationPluginsManager,
-                                          List<RequestMappingInfoHandlerMapping> handlerMappings,
+                                          RequestHandlerProvider handlerProvider,
                                           DocumentationCache scanned,
                                           ApiDocumentationScanner resourceListing,
                                           TypeResolver typeResolver,
@@ -69,11 +69,10 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
                                           ServletContext servletContext) {
 
     this.documentationPluginsManager = documentationPluginsManager;
+    this.handlerProvider = handlerProvider;
     this.scanned = scanned;
     this.resourceListing = resourceListing;
-    this.handlerMappings = handlerMappings;
-    this.defaultConfiguration
-        = new DefaultConfiguration(defaults, typeResolver, servletContext);
+    this.defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, servletContext);
   }
 
   @Override
@@ -105,10 +104,9 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
 
   private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin each) {
     DocumentationType documentationType = each.getDocumentationType();
-
     return documentationPluginsManager
         .createContextBuilder(documentationType, defaultConfiguration)
-        .requestHandlers(handlerMappings);
+        .requestHandlers(handlerProvider.requestHandlers());
   }
 
 }
