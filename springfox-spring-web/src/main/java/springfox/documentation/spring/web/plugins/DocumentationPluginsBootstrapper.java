@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.DocumentationPlugin;
 import springfox.documentation.spi.service.contexts.Defaults;
@@ -39,7 +39,6 @@ import javax.servlet.ServletContext;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.google.common.collect.FluentIterable.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 /**
@@ -55,14 +54,14 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
   private final DocumentationPluginsManager documentationPluginsManager;
   private final DocumentationCache scanned;
   private final ApiDocumentationScanner resourceListing;
-  private final List<RequestMappingHandlerMapping> handlerMappings;
+  private final List<RequestMappingInfoHandlerMapping> handlerMappings;
   private final DefaultConfiguration defaultConfiguration;
 
   private AtomicBoolean initialized = new AtomicBoolean(false);
 
   @Autowired
   public DocumentationPluginsBootstrapper(DocumentationPluginsManager documentationPluginsManager,
-                                          List<RequestMappingHandlerMapping> handlerMappings,
+                                          List<RequestMappingInfoHandlerMapping> handlerMappings,
                                           DocumentationCache scanned,
                                           ApiDocumentationScanner resourceListing,
                                           TypeResolver typeResolver,
@@ -109,7 +108,7 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
 
     return documentationPluginsManager
         .createContextBuilder(documentationType, defaultConfiguration)
-        .handlerMappings(handlerMappings);
+        .requestHandlers(handlerMappings);
   }
 
 }

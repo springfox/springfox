@@ -46,7 +46,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
   def setup() {
     requestMappingHandlerMapping = Mock(RequestMappingHandlerMapping)
-    contextBuilder.handlerMappings([requestMappingHandlerMapping])
+    contextBuilder.requestHandlers([requestMappingHandlerMapping])
             .withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
             .pathProvider(new RelativePathProvider(servletContext()))
@@ -59,7 +59,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
   def "should not get expected exceptions with invalid constructor params"() {
     given:
-      contextBuilder.handlerMappings(handlerMappings)
+      contextBuilder.requestHandlers(handlerMappings)
 
     when:
       plugin
@@ -85,7 +85,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
                       (accountsRequestMappingInfo): dummyHandlerMethod()
               ]
 
-      contextBuilder.handlerMappings([requestMappingHandlerMapping])
+      contextBuilder.requestHandlers([requestMappingHandlerMapping])
       plugin.configure(contextBuilder)
 
       ApiListingReferenceScanResult result = sut.scan(context())
@@ -110,7 +110,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       ]
 
     when:
-      contextBuilder.handlerMappings([requestMappingHandlerMapping])
+      contextBuilder.requestHandlers([requestMappingHandlerMapping])
       contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
       plugin.configure(contextBuilder)
     and:
@@ -140,7 +140,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       ]
 
     when:
-      contextBuilder.handlerMappings([requestMappingHandlerMapping])
+      contextBuilder.requestHandlers([requestMappingHandlerMapping])
       plugin.configure(contextBuilder)
     and:
       ApiListingReferenceScanResult result = sut.scan(context())
@@ -163,7 +163,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       ]
 
     when:
-      contextBuilder.handlerMappings([requestMappingHandlerMapping])
+      contextBuilder.requestHandlers([requestMappingHandlerMapping])
       plugin.pathProvider(new RelativePathProvider(Mock(ServletContext)))
       List<ApiListingReference> apiListingReferences = sut.scan(context()).apiListingReferences
 

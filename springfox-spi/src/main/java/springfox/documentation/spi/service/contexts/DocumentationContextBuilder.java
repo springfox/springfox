@@ -78,7 +78,7 @@ public class DocumentationContextBuilder {
     this.documentationType = documentationType;
   }
 
-  public DocumentationContextBuilder handlerMappings(List<RequestMappingHandlerMapping> handlerMappings) {
+  public DocumentationContextBuilder requestHandlers(List<RequestMappingHandlerMapping> handlerMappings) {
     this.handlerMappings = handlerMappings;
     return this;
   }
