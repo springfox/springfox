@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +39,14 @@ import javax.servlet.ServletContext;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.google.common.collect.FluentIterable.*;
+import static springfox.documentation.spi.service.contexts.Orderings.*;
+
 /**
  * After an application context refresh, builds and executes all DocumentationConfigurer instances found in the
  * application
  * context.
- *
+ * <p/>
  * If no instances DocumentationConfigurer are found a default one is created and executed.
  */
 @Component
@@ -60,34 +62,35 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
 
   @Autowired
   public DocumentationPluginsBootstrapper(DocumentationPluginsManager documentationPluginsManager,
-        List<RequestMappingHandlerMapping> handlerMappings,
-        DocumentationCache scanned,
-        ApiDocumentationScanner resourceListing,
-        TypeResolver typeResolver,
-        Defaults defaults,
-        ServletContext servletContext) {
+                                          List<RequestMappingHandlerMapping> handlerMappings,
+                                          DocumentationCache scanned,
+                                          ApiDocumentationScanner resourceListing,
+                                          TypeResolver typeResolver,
+                                          Defaults defaults,
+                                          ServletContext servletContext) {
 
     this.documentationPluginsManager = documentationPluginsManager;
     this.scanned = scanned;
     this.resourceListing = resourceListing;
     this.handlerMappings = handlerMappings;
     this.defaultConfiguration
-            = new DefaultConfiguration(defaults, typeResolver, servletContext);
+        = new DefaultConfiguration(defaults, typeResolver, servletContext);
   }
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
     if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
-      Iterable<DocumentationPlugin> plugins = documentationPluginsManager.documentationPlugins();
-      log.info("Found {0} custom documentation plugin(s)", Iterables.size(plugins));
+      List<DocumentationPlugin> plugins = from(documentationPluginsManager.documentationPlugins())
+          .toSortedList(pluginOrdering());
+      log.info("Found {0} custom documentation plugin(s)", plugins.size());
       for (DocumentationPlugin each : plugins) {
         DocumentationType documentationType = each.getDocumentationType();
         if (each.isEnabled()) {
           scanDocumentation(buildContext(each));
         } else {
           log.info("Skipping initializing disabled plugin bean {} v{}",
-                  documentationType.getName(), documentationType.getVersion());
+              documentationType.getName(), documentationType.getVersion());
         }
       }
     }
@@ -105,8 +108,8 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
     DocumentationType documentationType = each.getDocumentationType();
 
     return documentationPluginsManager
-            .createContextBuilder(documentationType, defaultConfiguration)
-            .handlerMappings(handlerMappings);
+        .createContextBuilder(documentationType, defaultConfiguration)
+        .handlerMappings(handlerMappings);
   }
 
 }

@@ -19,10 +19,12 @@
 
 package springfox.documentation.spi.service.contexts;
 
+import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
+import springfox.documentation.spi.service.DocumentationPlugin;
 
 import java.util.Comparator;
 
@@ -84,6 +86,28 @@ public class Orderings {
       public int compare(RequestMappingContext first, RequestMappingContext second) {
         return Ints.compare(first.getHandlerMethod().getBeanType().hashCode(),
             second.getHandlerMethod().getBeanType().hashCode());
+      }
+    };
+  }
+
+  public static Comparator<? super DocumentationPlugin> pluginOrdering() {
+    return Ordering.from(byPluginType()).compound(byPluginName());
+  }
+
+  public static Comparator<? super DocumentationPlugin> byPluginType() {
+    return new Comparator<DocumentationPlugin>() {
+      @Override
+      public int compare(DocumentationPlugin first, DocumentationPlugin second) {
+        return Ints.compare(first.getDocumentationType().hashCode(), second.getDocumentationType().hashCode());
+      }
+    };
+  }
+
+  public static Comparator<? super DocumentationPlugin> byPluginName() {
+    return new Comparator<DocumentationPlugin>() {
+      @Override
+      public int compare(DocumentationPlugin first, DocumentationPlugin second) {
+        return first.getGroupName().compareTo(second.getGroupName());
       }
     };
   }
