@@ -86,7 +86,7 @@ public abstract class ServiceModelToSwagger2Mapper {
       @Mapping(target = "schemes", source = "protocol"),
       @Mapping(target = "security", source = "securityReferences"),
       @Mapping(target = "responses", source = "responseMessages"),
-      @Mapping(target = "vendorExtensions", ignore = true),
+      @Mapping(target = "vendorExtensions", source = "vendorExtensions"),
       @Mapping(target = "externalDocs", ignore = true)
   })
   protected abstract Operation mapOperation(springfox.documentation.service.Operation from);

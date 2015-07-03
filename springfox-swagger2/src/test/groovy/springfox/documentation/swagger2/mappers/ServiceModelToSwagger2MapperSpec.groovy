@@ -42,6 +42,8 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
       mappedOperation.responses.size() == builtOperation.responseMessages.size()
       mappedOperation.responses.get("200").description == builtOperation.responseMessages.first().message
       mappedOperation.responses.get("200").schema.type == "string"
+      mappedOperation.vendorExtensions.size() == builtOperation.vendorExtensions.size()
+      mappedOperation.vendorExtensions.containsKey("x-test")
   }
 
   def "Maps documentation to swagger models"() {
@@ -178,6 +180,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .protocols(newHashSet("HTTPS"))
         .responseModel(new ModelRef("string"))
         .responseMessages(newHashSet(response))
+        .extensions(["x-test":"test1"])
         .build()
     def description = new ApiDescriptionBuilder(defaults.operationOrdering())
         .description("test")
