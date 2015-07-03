@@ -103,6 +103,7 @@ public class FieldModelPropertyProvider implements ModelPropertiesProvider {
         .type(fieldModelProperty.getType())
         .qualifiedType(fieldModelProperty.qualifiedTypeName())
         .position(fieldModelProperty.position())
+        .readOnly(fieldModelProperty.isReadOnly())
         .required(fieldModelProperty.isRequired())
         .description(fieldModelProperty.propertyDescription())
         .allowableValues(fieldModelProperty.allowableValues());

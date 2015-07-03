@@ -81,6 +81,15 @@ public final class ApiModelProperties {
     };
   }
 
+  public static Function<ApiModelProperty, Boolean> toIsReadOnly() {
+    return new Function<ApiModelProperty, Boolean>() {
+      @Override
+      public Boolean apply(ApiModelProperty annotation) {
+        return annotation.readOnly();
+      }
+    };
+  }
+
   public static Function<ApiModelProperty, String> toDescription() {
     return new Function<ApiModelProperty, String>() {
       @Override

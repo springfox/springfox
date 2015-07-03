@@ -49,6 +49,7 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
       context.getBuilder()
               .allowableValues(annotation.transform(toAllowableValues()).orNull())
               .required(annotation.transform(toIsRequired()).or(false))
+              .readOnly(annotation.transform(toIsReadOnly()).or(false))
               .description(annotation.transform(toDescription()).orNull())
               .isHidden(annotation.transform(toHidden()).or(false))
               .type(annotation.transform(toType(context.getResolver())).orNull());

@@ -73,6 +73,10 @@ public abstract class BaseModelProperty implements ModelProperty {
     return false;
   }
 
+  @Override
+  public boolean isReadOnly() {
+    return false;
+  }
 
   @Override
   public String propertyDescription() {

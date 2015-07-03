@@ -102,12 +102,15 @@ public class DefaultModelProvider implements ModelProvider {
     ModelProperty merged = Iterables.getFirst(propertyVariants, null);
     for (ModelProperty each : Iterables.skip(propertyVariants, 1)) {
       boolean required = Optional.fromNullable(each.isRequired()).or(false) | merged.isRequired();
-      merged = new ModelProperty(defaultIfAbsent(each.getName(), merged.getName()),
+      boolean readOnly = Optional.fromNullable(each.isReadOnly()).or(false) | merged.isReadOnly();
+
+        merged = new ModelProperty(defaultIfAbsent(each.getName(), merged.getName()),
           defaultIfAbsent(each.getType(), merged.getType()),
           defaultIfAbsent(emptyToNull(each.getQualifiedType()), merged.getQualifiedType()),
           each.getPosition() > 0 ? each.getPosition() : merged.getPosition(),
           required,
           each.isHidden() | merged.isHidden(),
+          readOnly,
           defaultIfAbsent(emptyToNull(each.getDescription()), merged.getDescription()),
           defaultIfAbsent(each.getAllowableValues(), merged.getAllowableValues()));
       merged.updateModelRef(forSupplier(ofInstance(defaultIfAbsent(each.getModelRef(), merged.getModelRef()))));

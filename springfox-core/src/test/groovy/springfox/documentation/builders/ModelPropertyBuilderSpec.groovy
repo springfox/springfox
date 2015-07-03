@@ -41,6 +41,7 @@ class ModelPropertyBuilderSpec extends Specification {
       'qualifiedType'     | 'com.Model1'                          | 'qualifiedType'
       'description'       | 'model1 desc'                         | 'description'
       'required'          | true                                  | 'required'
+      'readOnly'          | true                                  | 'readOnly'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
   }
 
