@@ -25,6 +25,7 @@ import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
+import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.DocumentationPlugin;
 
 import java.util.Comparator;
@@ -81,14 +82,27 @@ public class Orderings {
     };
   }
 
-  public static Comparator<RequestMappingContext> controllerComparator() {
+  public static Comparator<ResourceGroup> resourceGroupComparator() {
+    return new Comparator<ResourceGroup>() {
+      @Override
+      public int compare(ResourceGroup first, ResourceGroup second) {
+        return first.getGroupName().compareTo(second.getGroupName());
+      }
+    };
+  }
+
+  public static Comparator<RequestMappingContext> methodComparator() {
     return new Comparator<RequestMappingContext>() {
       @Override
       public int compare(RequestMappingContext first, RequestMappingContext second) {
-        return Ints.compare(first.getHandlerMethod().getBeanType().hashCode(),
-            second.getHandlerMethod().getBeanType().hashCode());
+        return qualifiedMethodName(first).compareTo(qualifiedMethodName(second));
       }
     };
+  }
+
+  private static String qualifiedMethodName(RequestMappingContext context) {
+    return String.format("%s.%s", context.getHandlerMethod().getBeanType().getName(),
+        context.getHandlerMethod().getMethod().getName());
   }
 
 

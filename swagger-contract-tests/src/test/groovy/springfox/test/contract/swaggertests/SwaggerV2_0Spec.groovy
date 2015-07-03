@@ -33,10 +33,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
-import org.springframework.context.annotation.Primary
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Unroll
-import springfox.documentation.OperationNameGenerator
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
@@ -65,7 +63,7 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
       String raw = response.data.text
       String actual = JsonOutput.prettyPrint(raw)
       response.status == 200
-//      println(actual)
+      println(actual)
 
       def withPortReplaced = contract.replaceAll("__PORT__", "$port")
       JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
@@ -114,18 +112,6 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   ])
   @Import(SecuritySupport)
   static class Config {
-
-    //This is so as to predictably generate the same names
-    @Bean
-    @Primary
-    OperationNameGenerator nameGenerator() {
-      new OperationNameGenerator() {
-        @Override
-        String startingWith(String prefix) {
-          return prefix;
-        }
-      }
-    }
 
     @Bean
     @Autowired

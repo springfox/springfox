@@ -74,7 +74,7 @@
                 {
                     "method": "PUT",
                     "summary": "Update an existing pet",
-                    "nickname": "updatePetUsingPUT",
+                    "nickname": "updatePetUsingPUT_1",
                     "produces": [
                         "*/*"
                     ],
@@ -771,7 +771,7 @@
                     "method": "GET",
                     "summary": "Find pet by ID",
                     "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
-                    "nickname": "getPetByIdUsingGET",
+                    "nickname": "getPetByIdUsingGET_1",
                     "produces": [
                         "*/*"
                     ],

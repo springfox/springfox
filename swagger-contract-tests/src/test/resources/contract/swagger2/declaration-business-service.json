@@ -131,7 +131,7 @@
                     "business-service"
                 ],
                 "summary": "Find a business by its id",
-                "operationId": "findBusinessByIdUsingGET",
+                "operationId": "findBusinessByIdUsingGET_1",
                 "consumes": [
                     "application/json"
                 ],

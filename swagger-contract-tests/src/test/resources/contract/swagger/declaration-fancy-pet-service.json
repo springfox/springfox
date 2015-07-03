@@ -67,7 +67,7 @@
                 {
                     "method": "POST",
                     "summary": "createObject",
-                    "nickname": "createObjectUsingPOST",
+                    "nickname": "createObjectUsingPOST_1",
                     "produces": [
                         "*/*"
                     ],

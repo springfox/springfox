@@ -222,7 +222,7 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -426,7 +426,7 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -525,7 +525,7 @@
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
-                "operationId": "getPetByIdUsingGET",
+                "operationId": "getPetByIdUsingGET_2",
                 "consumes": [
                     "application/json"
                 ],

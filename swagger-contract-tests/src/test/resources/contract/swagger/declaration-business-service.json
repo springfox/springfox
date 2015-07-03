@@ -172,7 +172,7 @@
                 {
                     "method": "GET",
                     "summary": "Find a business by its id",
-                    "nickname": "findBusinessByIdUsingGET",
+                    "nickname": "findBusinessByIdUsingGET_1",
                     "produces": [
                         "*/*",
                         "application/json"
