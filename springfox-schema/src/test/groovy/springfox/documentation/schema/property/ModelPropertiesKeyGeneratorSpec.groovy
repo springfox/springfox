@@ -17,7 +17,7 @@
  *
  */
 package springfox.documentation.schema.property
-import com.fasterxml.classmate.TypeResolver
+
 import spock.lang.Specification
 import springfox.documentation.schema.ModelCacheKeys
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -48,7 +48,7 @@ class ModelPropertiesKeyGeneratorSpec extends Specification {
 
   def "Generates key when param is of type ResolvedType and ModelContext" () {
     given:
-      ModelPropertiesKeyGenerator sut = new ModelPropertiesKeyGenerator(new TypeResolver())
+      ModelPropertiesKeyGenerator sut = new ModelPropertiesKeyGenerator()
     and:
 
     when:
@@ -57,9 +57,9 @@ class ModelPropertiesKeyGeneratorSpec extends Specification {
       key == expectedKey
     where:
       context                                   | expectedKey
-      returnType(genericListOfSimpleType())     | "Ljava/util/List<Lspringfox/documentation/schema/SimpleType;>;(true)"
-      input(genericListOfSimpleType())          | "Ljava/util/List<Lspringfox/documentation/schema/SimpleType;>;(false)"
-      genericListOfSimpleType()                 | "Ljava/util/List<Lspringfox/documentation/schema/SimpleType;>;"
+      returnType(genericListOfSimpleType())     | "java.util.List<springfox.documentation.schema.SimpleType>(true)"
+      input(genericListOfSimpleType())          | "java.util.List<springfox.documentation.schema.SimpleType>(false)"
+      genericListOfSimpleType()                 | "java.util.List<springfox.documentation.schema.SimpleType>"
   }
 
   def Object[] returnType(type) {

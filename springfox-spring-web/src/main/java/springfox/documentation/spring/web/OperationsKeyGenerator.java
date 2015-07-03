@@ -20,6 +20,7 @@ package springfox.documentation.spring.web;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
+import org.slf4j.Logger;
 import org.springframework.cache.interceptor.KeyGenerator;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
@@ -27,8 +28,10 @@ import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
 import java.lang.reflect.Method;
 
 import static com.google.common.collect.Lists.*;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class OperationsKeyGenerator implements KeyGenerator {
+  private static final Logger LOG = getLogger(OperationsKeyGenerator.class);
 
   public static final String OPERATION_KEY_SPEL
       = "T(springfox.documentation.spring.web.OperationsKeyGenerator).operationKey(#outerContext)";
@@ -41,9 +44,11 @@ public class OperationsKeyGenerator implements KeyGenerator {
     Optional<RequestMappingContext> context = FluentIterable.from(newArrayList(params))
         .filter(RequestMappingContext.class).first();
     if (context.isPresent()) {
-      return String.format("%s.%s.%s", context.get().getRequestMappingPattern(),
+      String key = String.format("%s.%s.%s", context.get().getRequestMappingPattern(),
           context.get().getHandlerMethod().getMethod().getName(),
           context.get().getDocumentationContext().getGenericsNamingStrategy().getClass().getSimpleName());
+      LOG.info("Cache key generated: {}", key);
+      return key;
     }
     throw new IllegalArgumentException("Key generator can only be used where the first Parameter is of type "
         + "RequestMappingContext");

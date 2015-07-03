@@ -54,8 +54,8 @@ public class ApiListingReferenceScanner {
     ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
         = ArrayListMultimap.create();
     ApiSelector selector = context.getApiSelector();
-    Iterable<RequestHandler> matchingHandlers = FluentIterable.from(context.getRequestHandlers()).filter(selector
-        .getRequestHandlerSelector());
+    Iterable<RequestHandler> matchingHandlers = FluentIterable.from(context.getRequestHandlers())
+        .filter(selector.getRequestHandlerSelector());
     for (RequestHandler handler : matchingHandlers) {
       RequestMappingInfo requestMappingInfo = handler.getRequestMapping();
       HandlerMethod handlerMethod = handler.getHandlerMethod();

@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -33,7 +32,9 @@ import springfox.documentation.spi.service.RequestHandlerProvider;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.FluentIterable.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -47,10 +48,9 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
 
   @Override
   public List<RequestHandler> requestHandlers() {
-    return FluentIterable.from(nullToEmptyList(handlerMappings))
+    return byPatternsCondition().sortedCopy(from(nullToEmptyList(handlerMappings))
         .transformAndConcat(toMappingEntries())
-        .transform(toRequestHandler())
-        .toList();
+        .transform(toRequestHandler()));
   }
 
   private Function<? super RequestMappingInfoHandlerMapping,

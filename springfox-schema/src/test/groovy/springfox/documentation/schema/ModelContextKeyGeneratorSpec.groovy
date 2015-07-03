@@ -36,6 +36,6 @@ class ModelContextKeyGeneratorSpec extends Specification {
     when:
       def key = sut.generate(null, null, context)
     then:
-      key == "Lspringfox/documentation/schema/GenericType<Ljava/lang/String;>;(true)"
+      key == "springfox.documentation.schema.GenericType<java.lang.String>(true)"
   }
 }

@@ -21,6 +21,7 @@ package springfox.documentation.spi.service.contexts;
 
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
@@ -88,6 +89,17 @@ public class Orderings {
             second.getHandlerMethod().getBeanType().hashCode());
       }
     };
+  }
+
+
+  public static Ordering<RequestHandler> byPatternsCondition() {
+    return Ordering.from(new Comparator<RequestHandler>() {
+      @Override
+      public int compare(RequestHandler first, RequestHandler second) {
+        return first.getRequestMapping().getPatternsCondition().toString()
+            .compareTo(second.getRequestMapping().getPatternsCondition().toString());
+      }
+    });
   }
 
   public static Ordering<? super DocumentationPlugin> pluginOrdering() {

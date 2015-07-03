@@ -39,7 +39,7 @@ public class ModelCacheKeys {
   public static final String MODEL_PROPERTIES_SPEL
       = "T(springfox.documentation.schema.ModelCacheKeys).modelPropertiesKey(#type, #givenContext)";
   public static String modelPropertiesKey(ResolvedType type, ModelContext givenContext) {
-    return new ModelPropertiesKeyGenerator(new TypeResolver())
+    return new ModelPropertiesKeyGenerator()
         .generate(OptimizedModelPropertiesProvider.class, null, type, givenContext).toString();
   }
 }

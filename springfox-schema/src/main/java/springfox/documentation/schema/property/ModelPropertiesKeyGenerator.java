@@ -19,27 +19,22 @@
 package springfox.documentation.schema.property;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Method;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.*;
+import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
 public class ModelPropertiesKeyGenerator implements KeyGenerator {
-  private final TypeResolver resolver;
-
-  @Autowired
-  public ModelPropertiesKeyGenerator(TypeResolver resolver) {
-    this.resolver = resolver;
-  }
+  private static final Logger LOG = getLogger(ModelPropertiesKeyGenerator.class);
 
   @Override
   public Object generate(Object target, Method method, Object... params) {
@@ -50,8 +45,9 @@ public class ModelPropertiesKeyGenerator implements KeyGenerator {
           + "ResolvedType");
     }
     StringBuilder sb = new StringBuilder();
-    sb.append(type.get().getSignature());
+    sb.append(type.get().toString());
     sb.append(context.transform(returnTypeComponent()).or(""));
+    LOG.info("Cache key generated: {}", sb.toString());
     return sb.toString();
   }
 
