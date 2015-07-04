@@ -30,13 +30,13 @@ import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
-import java.util.HashMap;
-import java.util.Map;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationBuilder {
@@ -55,7 +55,7 @@ public class OperationBuilder {
   private String deprecated;
   private boolean isHidden;
   private ModelRef responseModel;
-  private Map<String, Object> vendorExtensions = new HashMap<String, Object>();
+  private Map<String, Object> vendorExtensions = newHashMap();
 
   /**
    * Updates the http method
@@ -233,7 +233,7 @@ public class OperationBuilder {
    * @return this
    */
   public OperationBuilder extensions(Map<String, Object> extensions) {
-    this.vendorExtensions = defaultIfAbsent(extensions, this.vendorExtensions);
+    this.vendorExtensions.putAll(nullToEmptyMap(extensions));
     return this;
   }
 

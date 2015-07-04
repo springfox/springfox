@@ -58,34 +58,28 @@ public class ExtensionsReader implements OperationBuilderPlugin {
   }
   
   private void addExtensionProperties(Extension[] extensions, Map<String, Object> map) {
-        for (Extension extension : extensions) {
-            String name = extension.name();
-            if (name.length() > 0) {
-
-                if (!name.startsWith("x-")) {
-                    name = "x-" + name;
-                }
-
-                if (!map.containsKey(name)) {
-                    map.put(name, new HashMap<String, Object>());
-                }
-
-                map = (Map<String, Object>) map.get(name);
-            }
-
-            for (ExtensionProperty property : extension.properties()) {
-                if (!property.name().isEmpty() && !property.value().isEmpty()) {
-
-                    String propertyName = property.name();
-                    if (name.isEmpty() && !propertyName.startsWith("x-")) {
-                        propertyName = "x-" + propertyName;
-                    }
-
-                    map.put(propertyName, property.value());
-                }
-            }
+    for (Extension extension : extensions) {
+      String name = extension.name();
+      if (name.length() > 0) {
+        if (!name.startsWith("x-")) {
+          name = "x-" + name;
         }
+        if (!map.containsKey(name)) {
+          map.put(name, new HashMap<String, Object>());
+        }
+        map = (Map<String, Object>) map.get(name);
+      }
+      for (ExtensionProperty property : extension.properties()) {
+        if (!property.name().isEmpty() && !property.value().isEmpty()) {
+          String propertyName = property.name();
+          if (name.isEmpty() && !propertyName.startsWith("x-")) {
+            propertyName = "x-" + propertyName;
+          }
+          map.put(propertyName, property.value());
+        }
+      }
     }
+  }
 
   @Override
   public boolean supports(DocumentationType delimiter) {
