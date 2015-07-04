@@ -47,12 +47,13 @@ public class Operation {
   private final List<Parameter> parameters;
   private final Set<ResponseMessage> responseMessages;
   private final String deprecated;
+  private Map<String, Object> vendorExtensions;
 
   public Operation(HttpMethod method, String summary, String notes, ModelRef responseModel,
                    String uniqueId, int position,
                    Set<String> tags, Set<String> produces, Set<String> consumes, Set<String> protocol,
                    List<SecurityReference> securityReferences, List<Parameter> parameters,
-                   Set<ResponseMessage> responseMessages, String deprecated, boolean isHidden) {
+                   Set<ResponseMessage> responseMessages, String deprecated, boolean isHidden, Map<String, Object> vendorExtensions) {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
@@ -68,6 +69,7 @@ public class Operation {
     this.parameters = parameters;
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
+    this.vendorExtensions = vendorExtensions;
   }
 
   public boolean isHidden() {
@@ -150,6 +152,11 @@ public class Operation {
 
   public String getDeprecated() {
     return deprecated;
+  }
+
+
+  public Map<String, Object> getVendorExtensions() {
+    return vendorExtensions;
   }
 
 }

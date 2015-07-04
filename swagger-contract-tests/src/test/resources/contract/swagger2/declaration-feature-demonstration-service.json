@@ -419,6 +419,10 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
+                },
+                "x-test1": "value1",
+                "x-test2": {
+                    "name2": "value2"
                 }
             }
         }

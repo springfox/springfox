@@ -30,10 +30,12 @@ import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -53,6 +55,7 @@ public class OperationBuilder {
   private String deprecated;
   private boolean isHidden;
   private ModelRef responseModel;
+  private Map<String, Object> vendorExtensions = newHashMap();
 
   /**
    * Updates the http method
@@ -222,10 +225,21 @@ public class OperationBuilder {
     this.tags.addAll(nullToEmptySet(tags));
     return this;
   }
+  
+  /**
+   * Updates the operation extensions
+   *
+   * @param extensions - operation extensions
+   * @return this
+   */
+  public OperationBuilder extensions(Map<String, Object> extensions) {
+    this.vendorExtensions.putAll(nullToEmptyMap(extensions));
+    return this;
+  }
 
   public Operation build() {
     return new Operation(method, summary, notes, responseModel, uniqueId, position, tags, produces,
-        consumes, protocol, securityReferences, parameters, responseMessages, deprecated, isHidden);
+        consumes, protocol, securityReferences, parameters, responseMessages, deprecated, isHidden, vendorExtensions);
   }
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
