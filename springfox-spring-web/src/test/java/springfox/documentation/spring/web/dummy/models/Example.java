@@ -38,6 +38,9 @@ public class Example extends Parent implements Serializable {
 
   private EnumType enumType;
 
+  @ApiModelProperty(value = "A read only string", readOnly = true)
+  private String readOnlyString;
+
   @ApiParam(value = "description of annotatedEnumType", required = false)
   private EnumType annotatedEnumType;
 
@@ -124,6 +127,14 @@ public class Example extends Parent implements Serializable {
 
   public void setLocalDateTime(LocalDateTime localDateTime) {
     this.localDateTime = localDateTime;
+  }
+
+  public String getReadOnlyString() {
+    return readOnlyString;
+  }
+
+  public void setReadOnlyString(String readOnlyString) {
+    this.readOnlyString = readOnlyString;
   }
 }
 

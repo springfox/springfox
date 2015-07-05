@@ -107,7 +107,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
       def operation = operationContext.operationBuilder().build()
 
     then:
-      operation.parameters.size() == 8
+      operation.parameters.size() == 9
 
       Parameter annotatedFooParam = operation.parameters.find { it.name == "foo" }
       annotatedFooParam != null

@@ -102,7 +102,7 @@ public class DefaultModelProvider implements ModelProvider {
     ModelProperty merged = Iterables.getFirst(propertyVariants, null);
     for (ModelProperty each : Iterables.skip(propertyVariants, 1)) {
       boolean required = Optional.fromNullable(each.isRequired()).or(false) | merged.isRequired();
-      boolean readOnly = Optional.fromNullable(each.isReadOnly()).or(false) | merged.isReadOnly();
+      boolean readOnly = Optional.fromNullable(each.isReadOnly()).orNull() | merged.isReadOnly();
 
         merged = new ModelProperty(defaultIfAbsent(each.getName(), merged.getName()),
           defaultIfAbsent(each.getType(), merged.getType()),
