@@ -30,6 +30,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
@@ -126,5 +128,11 @@ public class FeatureDemonstrationService {
   @RequestMapping(value = "listOfMaps", method = RequestMethod.GET)
   public List<Map<String, String>> listOfMaps() {
     throw new UnsupportedOperationException();
+  }
+
+  @RequestMapping(value = "addFiles", method = RequestMethod.POST)
+  @ApiOperation(value = "Add a new contact with file attachment")
+  public ResponseEntity<Void> addFiles( @RequestPart("files") MultipartFile[] files) {
+    return new ResponseEntity<Void>(HttpStatus.OK);
   }
 }

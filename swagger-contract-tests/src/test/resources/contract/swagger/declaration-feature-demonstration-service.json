@@ -557,6 +557,61 @@
             ]
         },
         {
+          "description": "addFiles",
+          "operations": [
+            {
+              "method": "POST",
+              "summary": "Add a new contact with file attachment",
+              "nickname": "addFilesUsingPOST",
+              "produces": [
+                "*/*"
+              ],
+              "consumes": [
+                "application/json"
+              ],
+              "parameters": [
+                {
+                  "allowMultiple": true,
+                  "defaultValue": "",
+                  "description": "files",
+                  "name": "files",
+                  "paramType": "form",
+                  "items": {
+                    "type": "File"
+                  },
+                  "type": "array",
+                  "required": true
+                }
+              ],
+              "responseMessages": [
+                {
+                  "code": 200,
+                  "message": "OK"
+                },
+                {
+                  "code": 201,
+                  "message": "Created"
+                },
+                {
+                  "code": 401,
+                  "message": "Unauthorized"
+                },
+                {
+                  "code": 403,
+                  "message": "Forbidden"
+                },
+                {
+                  "code": 404,
+                  "message": "Not Found"
+                }
+              ],
+              "deprecated": "false",
+              "type": "void"
+            }
+          ],
+          "path": "/features/addFiles"
+        },
+        {
             "path": "/features/bare",
             "description": "getBare",
             "operations": [

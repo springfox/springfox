@@ -421,6 +421,39 @@
                     }
                 }
             }
+        },
+        "/features/addFiles": {
+          "post": {
+            "tags": [
+              "feature-demonstration-service"
+            ],
+            "summary": "Add a new contact with file attachment",
+            "operationId": "addFilesUsingPOST",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "*/*"
+            ],
+            "parameters": [
+              {
+                "name": "files",
+                "in": "formData",
+                "description": "files",
+                "required": true,
+                "type": "array",
+                "items": {
+                  "type": "file"
+                },
+                "collectionFormat": "csv"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
         }
     },
     "securityDefinitions": {
