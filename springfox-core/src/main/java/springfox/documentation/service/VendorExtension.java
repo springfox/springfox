@@ -16,20 +16,10 @@
  *
  *
  */
+package springfox.documentation.service;
 
-package springfox.documentation.swagger.common;
+public interface VendorExtension<T> {
+  String getName();
 
-import org.springframework.core.Ordered;
-import springfox.documentation.spi.DocumentationType;
-
-public class SwaggerPluginSupport {
-  private SwaggerPluginSupport() {
-    throw new UnsupportedOperationException();
-  }
-
-  public final static int SWAGGER_PLUGIN_ORDER = Ordered.HIGHEST_PRECEDENCE + 1000;
-  public static boolean pluginDoesApply(DocumentationType documentationType) {
-    return DocumentationType.SWAGGER_12.equals(documentationType)
-        || DocumentationType.SWAGGER_2.equals(documentationType);
-  }
+  T getValue();
 }

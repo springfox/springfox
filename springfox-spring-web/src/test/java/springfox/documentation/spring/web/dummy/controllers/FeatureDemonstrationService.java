@@ -22,6 +22,8 @@ package springfox.documentation.spring.web.dummy.controllers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Extension;
+import io.swagger.annotations.ExtensionProperty;
 import org.joda.time.LocalDate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -43,8 +45,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Lists.*;
-import io.swagger.annotations.Extension;
-import io.swagger.annotations.ExtensionProperty;
 
 @Controller
 @RequestMapping("/features")
@@ -55,7 +55,7 @@ public class FeatureDemonstrationService {
   @RequestMapping(value = "/{petId}", method = RequestMethod.GET)
   @ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. "
           + "ID > 10 or nonintegers will simulate API error conditions",
-          response = Pet.class, 
+          response = Pet.class,
           extensions = {
             @Extension(properties = @ExtensionProperty(name="x-test1", value="value1")),
             @Extension(name="test2", properties = @ExtensionProperty(name="name2", value="value2"))
