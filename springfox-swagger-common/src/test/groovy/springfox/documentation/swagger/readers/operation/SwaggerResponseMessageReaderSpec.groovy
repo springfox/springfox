@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger1.readers.operation
+package springfox.documentation.swagger.readers.operation
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry

@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger1.readers.operation
+package springfox.documentation.swagger.readers.operation
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.builders.OperationBuilder

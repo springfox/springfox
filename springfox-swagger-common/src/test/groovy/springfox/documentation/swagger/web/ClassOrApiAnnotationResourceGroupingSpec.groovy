@@ -17,13 +17,11 @@
  *
  */
 
-package springfox.documentation.swagger1.web
-
+package springfox.documentation.swagger.web
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 
 @Mixin(RequestMappingSupport)
 class ClassOrApiAnnotationResourceGroupingSpec extends Specification {

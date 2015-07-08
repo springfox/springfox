@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger1.readers.parameter
+package springfox.documentation.swagger.readers.parameter
 
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
@@ -31,7 +31,6 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.readers.parameter.ParameterRequiredReader
 
 import java.lang.annotation.Annotation
 

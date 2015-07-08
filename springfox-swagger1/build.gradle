@@ -21,6 +21,7 @@ dependencies {
   compile project(':springfox-swagger-common')
   testCompile project(':springfox-core')
   testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts'))
+  testCompile(project(path: ':springfox-swagger-common', configuration: 'testArtifacts'))
   testCompile(project(path: ':springfox-spring-web', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }

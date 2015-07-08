@@ -29,6 +29,9 @@ class VendorExtensionsMapperSpec extends Specification {
       def mapped = sut.mapExtensions([first(), second()])
     then:
       mapped.containsKey("x-test1")
+      mapped["x-test1"] == "value1"
+    and:
       mapped.containsKey("x-test2")
+      mapped["x-test2"] == ["x-name2": "value2"]
   }
 }

@@ -20,5 +20,6 @@ class StringVendorExtensionSpec extends Specification {
       sut.equals(other)
       !sut.equals(new ObjectVendorExtension())
       sut.hashCode() == other.hashCode()
+      sut.toString() == other.toString()
   }
 }

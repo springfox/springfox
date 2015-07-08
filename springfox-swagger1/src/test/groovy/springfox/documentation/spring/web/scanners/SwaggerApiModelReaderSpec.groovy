@@ -32,7 +32,7 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
-import springfox.documentation.swagger1.mixins.SwaggerPluginsSupport
+import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 
 import javax.servlet.ServletContext

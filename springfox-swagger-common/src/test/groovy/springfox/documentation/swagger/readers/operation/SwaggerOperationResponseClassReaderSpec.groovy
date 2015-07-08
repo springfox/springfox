@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger1.readers.operation
+package springfox.documentation.swagger.readers.operation
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
@@ -31,8 +31,7 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.readers.operation.SwaggerOperationResponseClassReader
-import springfox.documentation.swagger1.mixins.SwaggerPluginsSupport
+import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 
 @Mixin([RequestMappingSupport, SwaggerPluginsSupport])
 class SwaggerOperationResponseClassReaderSpec extends DocumentationContextSpec {

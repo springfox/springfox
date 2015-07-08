@@ -18,6 +18,7 @@
  */
 package springfox.documentation.service;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -82,5 +83,13 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
   @Override
   public int hashCode() {
     return Objects.hashCode(properties);
+  }
+
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+        .add("properties", properties)
+        .add("name", name)
+        .toString();
   }
 }

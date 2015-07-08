@@ -21,6 +21,7 @@ package springfox.documentation.swagger1.mixins
 
 import org.mapstruct.factory.Mappers
 import springfox.documentation.schema.mixins.ModelProviderSupport
+import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 import springfox.documentation.swagger1.mappers.AllowableValuesMapper
 import springfox.documentation.swagger1.mappers.AuthorizationTypesMapper
 import springfox.documentation.swagger1.mappers.DataTypeMapper

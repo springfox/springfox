@@ -28,7 +28,7 @@ class VendorExtensionsReaderSpec extends DocumentationContextSpec {
   def second() {
     def second = new ObjectVendorExtension("x-test2")
     second.with {
-      addProperty(new StringVendorExtension("x-name2", "value2"))
+      addProperty(new StringVendorExtension("name2", "value2"))
     }
     second
   }

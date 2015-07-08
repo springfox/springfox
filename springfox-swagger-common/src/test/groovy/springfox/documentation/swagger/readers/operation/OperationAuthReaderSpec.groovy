@@ -17,8 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger1.readers.operation
-
+package springfox.documentation.swagger.readers.operation
 import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.PathSelectors
@@ -28,9 +27,8 @@ import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.readers.operation.OperationAuthReader
 
-import static com.google.common.collect.Lists.newArrayList
+import static com.google.common.collect.Lists.*
 
 @Mixin([RequestMappingSupport, AuthSupport])
 class OperationAuthReaderSpec extends DocumentationContextSpec {

@@ -32,6 +32,7 @@ class ObjectVendorExtensionSpec extends Specification {
       sut.equals(sut)
       sut.equals(other)
       sut.hashCode() == other.hashCode()
+      sut.toString() == other.toString()
   }
 
 }

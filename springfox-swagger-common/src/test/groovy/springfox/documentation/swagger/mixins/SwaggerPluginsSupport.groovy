@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger1.mixins
+package springfox.documentation.swagger.mixins
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
@@ -60,7 +60,7 @@ class SwaggerPluginsSupport {
     plugins.parameterExpanderPlugins =
         OrderAwarePluginRegistry.create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder()])
     plugins.parameterPlugins = OrderAwarePluginRegistry.create([new ParameterNameReader(),
-        new springfox.documentation.swagger1.readers.parameter.ParameterNameReader()])
+        new ParameterNameReader()])
     plugins.operationBuilderPlugins = OrderAwarePluginRegistry.create([])
     plugins.resourceGroupingStrategies = OrderAwarePluginRegistry.create([new ClassOrApiAnnotationResourceGrouping()])
     plugins.operationModelsProviders = OrderAwarePluginRegistry.create([
