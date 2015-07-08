@@ -21,7 +21,6 @@ package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import io.swagger.models.Contact;
@@ -54,7 +53,8 @@ import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.swagger2.mappers.ModelMapper.*;
 
-@Mapper(uses = { ModelMapper.class, ParameterMapper.class, SecurityMapper.class, LicenseMapper.class })
+@Mapper(uses = { ModelMapper.class, ParameterMapper.class, SecurityMapper.class, LicenseMapper.class,
+    VendorExtensionsMapper.class })
 public abstract class ServiceModelToSwagger2Mapper {
 
   @Mappings({
@@ -86,7 +86,7 @@ public abstract class ServiceModelToSwagger2Mapper {
       @Mapping(target = "schemes", source = "protocol"),
       @Mapping(target = "security", source = "securityReferences"),
       @Mapping(target = "responses", source = "responseMessages"),
-      @Mapping(target = "vendorExtensions", ignore = true),
+      @Mapping(target = "vendorExtensions", source = "vendorExtensions"),
       @Mapping(target = "externalDocs", ignore = true)
   })
   protected abstract Operation mapOperation(springfox.documentation.service.Operation from);
@@ -98,7 +98,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
   protected List<Scheme> mapSchemes(List<String> from) {
-    return FluentIterable.from(from).transform(toScheme()).toList();
+    return from(from).transform(toScheme()).toList();
   }
 
   protected Contact mapContact(String contact) {
@@ -115,6 +115,8 @@ public abstract class ServiceModelToSwagger2Mapper {
     }
     return security;
   }
+
+
 
   protected Map<String, Response> mapResponseMessages(Set<ResponseMessage> from) {
     HashMap<String, Response> responses = newHashMap();

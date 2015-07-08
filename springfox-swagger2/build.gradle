@@ -5,9 +5,9 @@ configurations {
 ext {
   limits = [
       'instruction': 94,
-      'branch'     : 85,
+      'branch'     : 84,
       'line'       : 95,
-      'complexity' : 85,
+      'complexity' : 84,
       'method'     : 94,
       'class'      : 94
   ]
@@ -30,6 +30,7 @@ dependencies {
   compile project(':springfox-spring-web')
   testCompile project(':springfox-core')
   testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts'))
+  testCompile(project(path: ':springfox-swagger-common', configuration: 'testArtifacts'))
   testCompile(project(path: ':springfox-spring-web', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }

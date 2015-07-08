@@ -35,7 +35,7 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
-import springfox.documentation.swagger1.mixins.SwaggerPluginsSupport
+import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 
 import javax.servlet.ServletContext

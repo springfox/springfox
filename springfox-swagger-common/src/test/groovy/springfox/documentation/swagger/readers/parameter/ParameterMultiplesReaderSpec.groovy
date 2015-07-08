@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger1.readers.parameter
+package springfox.documentation.swagger.readers.parameter
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver

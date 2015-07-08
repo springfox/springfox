@@ -26,6 +26,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import io.swagger.annotations.AuthorizationScope;
+import io.swagger.annotations.Extension;
+import io.swagger.annotations.ExtensionProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -124,10 +126,19 @@ public class DummyClass {
   public void methodAnnotatedWithApiResponse() {
   }
 
+  @ApiOperation(value = "methodWithExtensions",
+      extensions = {
+          @Extension(properties = @ExtensionProperty(name="x-test1", value="value1")),
+          @Extension(name="test2", properties = @ExtensionProperty(name="name2", value="value2"))
+      }
+  )
+  public void methodWithExtensions() {
+  }
+
   @ApiOperation(value = "SomeVal",
-          authorizations = @Authorization(value = "oauth2",
-                  scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
-                  }))
+      authorizations = @Authorization(value = "oauth2",
+          scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
+          }))
   public void methodWithAuth() {
   }
 

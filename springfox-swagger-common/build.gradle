@@ -10,6 +10,17 @@ artifacts {
   testArtifacts testJar
 }
 
+//TODO: Improve this!
+ext {
+  limits = [
+      'instruction': 59,
+      'branch'     : 52,
+      'line'       : 57,
+      'complexity' : 43,
+      'method'     : 48,
+      'class'      : 60
+  ]
+}
 
 dependencies {
   compile libs.swagger2Core

@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger1.readers.parameter
+package springfox.documentation.swagger.readers.parameter
 import com.google.common.base.Optional
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
