@@ -32,6 +32,7 @@ public class ModelPropertyBuilder {
   private String qualifiedType;
   private int position;
   private Boolean required;
+  private Boolean readOnly;
   private String description;
   private AllowableValues allowableValues;
   private String name;
@@ -62,6 +63,11 @@ public class ModelPropertyBuilder {
     return this;
   }
 
+  public ModelPropertyBuilder readOnly(boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
   public ModelPropertyBuilder description(String description) {
     this.description = defaultIfAbsent(description, this.description);
     return this;
@@ -85,6 +91,6 @@ public class ModelPropertyBuilder {
   }
 
   public ModelProperty build() {
-    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, description, allowableValues);
+    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, readOnly, description, allowableValues);
   }
 }

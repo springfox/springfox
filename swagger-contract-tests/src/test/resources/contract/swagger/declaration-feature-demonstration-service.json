@@ -1280,6 +1280,11 @@
                 "propertyWithNoGetterMethod": {
                     "required": false,
                     "type": "string"
+                },
+                "readOnlyString":{
+                    "description": "A read only string",
+                    "required": false,
+                    "type": "string"
                 }
             }
         },

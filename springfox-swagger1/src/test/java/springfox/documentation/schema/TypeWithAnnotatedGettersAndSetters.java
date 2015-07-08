@@ -31,6 +31,7 @@ public class TypeWithAnnotatedGettersAndSetters {
   private int hiddenProp;
   private LocalDate validOverride;
   private LocalDate invalidOverride;
+  private int readOnlyProp;
 
   public int getIntProp() {
     return intProp;
@@ -64,7 +65,7 @@ public class TypeWithAnnotatedGettersAndSetters {
     return 0;
   }
 
-  @ApiModelProperty(value = "enum Prop Getter value", notes = "enum note", allowableValues = "ONE", required = true)
+  @ApiModelProperty(value = "enum Prop Getter value", notes = "enum note", allowableValues = "ONE", required = true, readOnly = false)
   public ExampleEnum getEnumProp() {
     return enumProp;
   }
@@ -76,6 +77,11 @@ public class TypeWithAnnotatedGettersAndSetters {
   @ApiModelProperty(hidden = true)
   public int getHiddenProp() {
     return hiddenProp;
+  }
+
+  @ApiModelProperty(value = "readOnly property getter", readOnly = true)
+  public int getReadOnlyProp() {
+    return readOnlyProp;
   }
 
   @ApiModelProperty(dataType = "UnknownType")

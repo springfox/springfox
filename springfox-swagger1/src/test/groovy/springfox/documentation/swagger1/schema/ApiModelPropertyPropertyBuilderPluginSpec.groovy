@@ -64,12 +64,14 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       enriched.allowableValues?.values == allowableValues
       enriched.isRequired() == required
       enriched.description == description
+      enriched.readOnly == readOnly
       !enriched.isHidden()
     where:
-      property    | required | description              | allowableValues
-      "intProp"   | true     | "int Property Field"     | null
-      "boolProp"  | false    | "bool Property Getter"   | null
-      "enumProp"  | true     | "enum Prop Getter value" | ["ONE"]
+      property    | required | description              | allowableValues | readOnly
+      "intProp"   | true     | "int Property Field"     | null            | false
+      "boolProp"  | false    | "bool Property Getter"   | null            | false
+      "enumProp"  | true     | "enum Prop Getter value" | ["ONE"]         | false
+      "readOnlyProp" | false    | "readOnly property getter" | null          | true
   }
 
   def "ApiModelProperty annotated models get enriched with additional info given an annotated element" (){
@@ -87,12 +89,15 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       enriched.allowableValues?.values == allowableValues
       enriched.isRequired() == required
       enriched.description == description
+      enriched.readOnly == readOnly
       !enriched.isHidden()
     where:
-      property    | required | description              | allowableValues
-      "intProp"   | null     | null                     | null
-      "boolProp"  | false    | "bool Property Getter"   | null
-      "enumProp"  | true     | "enum Prop Getter value" | ["ONE"]
+      property    | required | description              | allowableValues | readOnly
+      "intProp"   | null     | null                     | null            | null
+      "boolProp"  | false    | "bool Property Getter"   | null            | false
+      "enumProp"  | true     | "enum Prop Getter value" | ["ONE"]         | false
+      "readOnlyProp" | false    | "readOnly property getter" | null          | true
+
   }
 
   def "ApiModelProperties marked as hidden properties are respected" (){

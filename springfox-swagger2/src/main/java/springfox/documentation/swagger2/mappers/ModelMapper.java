@@ -119,6 +119,7 @@ public abstract class ModelMapper {
       property.setDescription(source.getDescription());
       property.setName(source.getName());
       property.setRequired(source.isRequired());
+      property.setReadOnly(source.isReadOnly());
     }
     return property;
   }

@@ -35,5 +35,7 @@ public interface ModelProperty {
 
   boolean isRequired();
 
+  boolean isReadOnly();
+
   int position();
 }

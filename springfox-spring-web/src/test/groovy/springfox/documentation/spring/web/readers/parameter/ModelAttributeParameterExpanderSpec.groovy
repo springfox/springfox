@@ -48,7 +48,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     when:
       sut.expand("", Example, parameters, context());
     then:
-      parameters.size() == 8
+      parameters.size() == 9
       parameters.find { it.name == 'parentBeanProperty' }
       parameters.find { it.name == 'foo' }
       parameters.find { it.name == 'bar' }
@@ -63,7 +63,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     when:
       sut.expand("parent", Example, parameters, context());
     then:
-      parameters.size() == 8
+      parameters.size() == 9
       parameters.find { it.name == 'parent.parentBeanProperty' }
       parameters.find { it.name == 'parent.foo' }
       parameters.find { it.name == 'parent.bar' }

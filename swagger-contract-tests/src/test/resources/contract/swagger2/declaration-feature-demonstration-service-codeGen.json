@@ -554,6 +554,11 @@
                 },
                 "propertyWithNoGetterMethod": {
                     "type": "string"
+                },
+                "readOnlyString": {
+                    "type": "string",
+                    "description": "A read only string",
+                    "readOnly": true
                 }
             }
         },

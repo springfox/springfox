@@ -179,6 +179,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
         .qualifiedType(beanModelProperty.qualifiedTypeName())
         .position(beanModelProperty.position())
         .required(beanModelProperty.isRequired())
+        .readOnly(beanModelProperty.isReadOnly())
         .isHidden(false)
         .description(beanModelProperty.propertyDescription())
         .allowableValues(beanModelProperty.allowableValues());
