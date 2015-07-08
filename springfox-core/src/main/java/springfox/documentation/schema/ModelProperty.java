@@ -36,8 +36,8 @@ public class ModelProperty {
   private ModelRef modelRef;
 
   public ModelProperty(String name, ResolvedType type, String qualifiedType,
-                       int position, Boolean required, boolean isHidden, Boolean readOnly, String description,
-                       AllowableValues allowableValues) {
+                       int position, Boolean required, Boolean isHidden, Boolean readOnly,
+                       String description, AllowableValues allowableValues) {
     this.name = name;
     this.type = type;
     this.qualifiedType = qualifiedType;

@@ -58,12 +58,12 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelPropertyBuilder required(boolean required) {
+  public ModelPropertyBuilder required(Boolean required) {
     this.required = required;
     return this;
   }
 
-  public ModelPropertyBuilder readOnly(boolean readOnly) {
+  public ModelPropertyBuilder readOnly(Boolean readOnly) {
     this.readOnly = readOnly;
     return this;
   }
@@ -85,7 +85,7 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelPropertyBuilder isHidden(boolean isHidden) {
+  public ModelPropertyBuilder isHidden(Boolean isHidden) {
     this.isHidden = isHidden;
     return this;
   }
