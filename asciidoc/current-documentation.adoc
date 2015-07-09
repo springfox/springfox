@@ -254,9 +254,8 @@ public Model getAllThePets() {
 By default, types with generics will be labeled with '\u00ab'(<<), '\u00bb'(>>), and commas. This can be problematic
 with things like swagger-codegen. You can override this behavior by implementing your own `GenericTypeNamingStrategy`.
 For example, if you wanted `List<String>` to be encoded as 'ListOfString' and `Map<String, Object>`
-to be encoded as 'MapOfStringAndObject' you could implement the following:
-
-then during plugin customization:
+to be encoded as 'MapOfStringAndObject' you could set the `forCodeGeneration` customization option to `true` during
+plugin customization:
 
 ```java
  docket.forCodeGeneration(true|false);
