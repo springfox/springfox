@@ -16,6 +16,7 @@ $(function() {
         }
     };
     window.springfox = springfox;
+    window.oAuthRedirectUrl = springfox.baseUrl() + '/o2c.html'
 
     $('#select_baseUrl').change(function() {
         window.swaggerUi.headerView.trigger('update-swagger-ui', {
