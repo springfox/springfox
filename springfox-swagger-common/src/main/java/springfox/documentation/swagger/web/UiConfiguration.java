@@ -18,6 +18,8 @@
  */
 package springfox.documentation.swagger.web;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UiConfiguration {
   public static final UiConfiguration DEFAULT = new UiConfiguration(null);
   private String validatorUrl;
@@ -26,6 +28,7 @@ public class UiConfiguration {
     this.validatorUrl = validatorUrl;
   }
 
+  @JsonProperty("validatorUrl")
   public String getValidatorUrl() {
     return validatorUrl;
   }

@@ -18,6 +18,7 @@
  */
 package springfox.documentation.swagger.web;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ComparisonChain;
 
 public class SwaggerResource implements Comparable<SwaggerResource> {
@@ -25,6 +26,7 @@ public class SwaggerResource implements Comparable<SwaggerResource> {
   private String location;
   private String swaggerVersion;
 
+  @JsonProperty("name")
   public String getName() {
     return name;
   }
@@ -33,6 +35,7 @@ public class SwaggerResource implements Comparable<SwaggerResource> {
     this.name = name;
   }
 
+  @JsonProperty("location")
   public String getLocation() {
     return location;
   }
@@ -41,6 +44,7 @@ public class SwaggerResource implements Comparable<SwaggerResource> {
     this.location = location;
   }
 
+  @JsonProperty("swaggerVersion")
   public String getSwaggerVersion() {
     return swaggerVersion;
   }

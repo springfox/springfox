@@ -19,6 +19,7 @@
 package springfox.documentation.swagger.web;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class SecurityConfiguration {
@@ -40,18 +41,22 @@ public class SecurityConfiguration {
     this.apiKey = apiKey;
   }
 
+  @JsonProperty("clientId")
   public String getClientId() {
     return clientId;
   }
 
+  @JsonProperty("realm")
   public String getRealm() {
     return realm;
   }
 
+  @JsonProperty("appName")
   public String getAppName() {
     return appName;
   }
 
+  @JsonProperty("apiKey")
   public String getApiKey() {
     return apiKey;
   }

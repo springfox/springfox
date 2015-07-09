@@ -1,4 +1,7 @@
 package springfox.documentation.swagger.web
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import spock.lang.Specification
@@ -62,5 +65,17 @@ class ApiResourceControllerSpec extends Specification {
       mockMvc.perform(get("/swagger-resources")
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(content().string("[]"))
+  }
+
+  def "Verify that the property naming strategy does not affect output" () {
+    given:
+      ObjectMapper mapper = new ObjectMapper()
+    when:
+      mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES)
+    then:
+      mapper.writer().writeValueAsString(sut.securityConfiguration) == "{\"clientId\":\"client\",\"realm\":\"real\",\"appName\":\"test\",\"apiKey\":\"key\"}"
+      mapper.writer().writeValueAsString(sut.uiConfiguration) == "{\"validatorUrl\":\"/validate\"}"
+      mapper.writer().writeValueAsString(sut.swaggerResources().body) == "[{\"name\":\"test\"," +
+          "\"location\":\"/v1?group=test\",\"swaggerVersion\":\"1.2\"},{\"name\":\"test\",\"location\":\"/v2?group=test\",\"swaggerVersion\":\"2.0\"}]"
   }
 }
