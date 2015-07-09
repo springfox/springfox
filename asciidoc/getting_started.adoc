@@ -89,6 +89,7 @@ dependencies {
 ----
 
 ==== Springfox-swagger2 with Spring Boot
+[[getting-started]]
 
 [source,java,linenums]
 ----
