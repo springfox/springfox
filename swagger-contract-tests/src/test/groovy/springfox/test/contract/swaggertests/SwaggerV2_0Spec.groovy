@@ -18,13 +18,17 @@
  */
 
 package springfox.test.contract.swaggertests
-
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.cache.Cache
+import org.springframework.cache.CacheManager
+import org.springframework.cache.annotation.EnableCaching
+import org.springframework.cache.support.SimpleCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -99,6 +103,7 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   }
 
   @Configuration
+  @EnableCaching
   @EnableSwagger2
   @ComponentScan([
       "springfox.documentation.spring.web.dummy.controllers",
@@ -108,6 +113,13 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   @Import(SecuritySupport)
   static class Config {
 
+    @Bean
+    @Autowired
+    public CacheManager cacheManager(List<Cache> caches) {
+      def cacheManager = new SimpleCacheManager()
+      cacheManager.caches = caches
+      return cacheManager;
+    }
     @Bean
     public Docket petstore(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
@@ -223,8 +235,9 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
           .useDefaultResponseMessages(false)
           .securitySchemes(authorizationTypes)
           .produces(['application/xml', 'application/json'] as Set)
+          .ignoredParameterTypes(MetaClass)
           .select()
-          .paths(regex("/.*"))
+            .paths(regex("/.*"))
           .build()
     }
 

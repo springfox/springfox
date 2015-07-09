@@ -40,10 +40,12 @@ import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.Annotations;
+import springfox.documentation.schema.ModelCacheKeys;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
@@ -67,7 +69,7 @@ import static com.google.common.collect.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
 import static springfox.documentation.schema.property.bean.Accessors.*;
-import static springfox.documentation.schema.property.bean.BeanModelProperty.paramOrReturnType;
+import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Primary
@@ -103,7 +105,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     objectMapper = event.getObjectMapper();
   }
 
+
   @Override
+  @Cacheable(value = "modelProperties", key = ModelCacheKeys.MODEL_PROPERTIES_SPEL)
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
     List<ModelProperty> properties = newArrayList();
     BeanDescription beanDescription = beanDescription(type, givenContext);

@@ -16,20 +16,12 @@
  *
  *
  */
+package springfox.documentation.spi.service;
 
-package springfox.documentation.schema.configuration
+import springfox.documentation.RequestHandler;
 
-import spock.lang.Specification
+import java.util.List;
 
-class ModelsConfigurationSpec extends Specification {
-  def "test to include this class in the converage report" () {
-    when:
-      def config = new ModelsConfiguration()
-    then:
-      config.typeResolver() != null
-      config.modelsCache() != null
-      config.modelPropertiesCache() != null
-      config.modelDependenciesCache() != null
-
-  }
+public interface RequestHandlerProvider {
+  List<RequestHandler> requestHandlers();
 }

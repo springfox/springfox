@@ -55,14 +55,14 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
       namingStrategy.onApplicationEvent(objectMapperConfigured)
       sut.onApplicationEvent(objectMapperConfigured)
     when:
-      def inputValue = sut.propertiesFor(type,
-        inputParam(type, SPRING_WEB,
-              new AlternateTypeProvider(newArrayList()),
-              new DefaultGenericTypeNamingStrategy()))
-      def returnValue = sut.propertiesFor(type,
-        returnValue(type, SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
-            new DefaultGenericTypeNamingStrategy()))
+      def inputValue = sut.propertiesFor(type, inputParam(type, SPRING_WEB,
+          new AlternateTypeProvider(newArrayList()),
+          new DefaultGenericTypeNamingStrategy())
+      )
+      def returnValue = sut.propertiesFor(type, returnValue(type, SPRING_WEB,
+          new AlternateTypeProvider(newArrayList()),
+          new DefaultGenericTypeNamingStrategy())
+      )
     then:
       inputValue.collect{ it.name }.containsAll(['property'])
       returnValue.collect{ it.name }.containsAll(['property'])
@@ -84,14 +84,14 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
       namingStrategy.onApplicationEvent(objectMapperConfigured)
       sut.onApplicationEvent(objectMapperConfigured)
     when:
-      def inputValue = sut.propertiesFor(type,
-          inputParam(type, SPRING_WEB,
-              new AlternateTypeProvider(newArrayList()),
-              new DefaultGenericTypeNamingStrategy()))
-      def returnValue = sut.propertiesFor(type,
-          returnValue(type, SPRING_WEB,
-              new AlternateTypeProvider(newArrayList()),
-              new DefaultGenericTypeNamingStrategy()))
+      def inputValue = sut.propertiesFor(type, inputParam(type, SPRING_WEB,
+          new AlternateTypeProvider(newArrayList()),
+          new DefaultGenericTypeNamingStrategy())
+      )
+      def returnValue = sut.propertiesFor(type, returnValue(type, SPRING_WEB,
+          new AlternateTypeProvider(newArrayList()),
+          new DefaultGenericTypeNamingStrategy())
+      )
     then:
       inputValue.collect{ it.name }.containsAll(['name'])
       returnValue.collect{ it.name }.containsAll(['name'])

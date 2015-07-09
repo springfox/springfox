@@ -23,6 +23,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.springframework.http.HttpMethod;
+import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
@@ -39,6 +40,7 @@ import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationBuilder {
+  private final OperationNameGenerator nameGenerator;
   private HttpMethod method = HttpMethod.GET;
   private String summary;
   private String notes;
@@ -55,6 +57,10 @@ public class OperationBuilder {
   private boolean isHidden;
   private ModelRef responseModel;
   private List<VendorExtension> vendorExtensions = newArrayList();
+
+  public OperationBuilder(OperationNameGenerator nameGenerator) {
+    this.nameGenerator = nameGenerator;
+  }
 
   /**
    * Updates the http method
@@ -90,7 +96,7 @@ public class OperationBuilder {
   }
 
   /**
-   * Updates the uniqueId for the operation
+   * Updates the uniqueId for the operation. This will be used to seed the unique id
    *
    * @param uniqueId - uniqueId for the operation
    * @return this
@@ -237,7 +243,8 @@ public class OperationBuilder {
   }
 
   public Operation build() {
-    return new Operation(method, summary, notes, responseModel, uniqueId, position, tags, produces,
+    String uniqueOperationId = nameGenerator.startingWith(String.format("%sUsing%s", uniqueId, method));
+    return new Operation(method, summary, notes, responseModel, uniqueOperationId, position, tags, produces,
         consumes, protocol, securityReferences, parameters, responseMessages, deprecated, isHidden,
         vendorExtensions);
   }

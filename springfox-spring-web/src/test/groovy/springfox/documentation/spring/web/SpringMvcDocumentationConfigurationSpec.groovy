@@ -9,6 +9,8 @@ class SpringMvcDocumentationConfigurationSpec extends Specification {
         defaults()
         resourceGroupCache()
         objectMapperConfigurer()
+        operationsCache()
+        operationsKeyGenerator()
       }
   }
 }

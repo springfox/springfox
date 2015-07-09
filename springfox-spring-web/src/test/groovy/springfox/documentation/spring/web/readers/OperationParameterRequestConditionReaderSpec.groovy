@@ -30,6 +30,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.spring.web.readers.operation.OperationParameterRequestConditionReader
 
 @Mixin([RequestMappingSupport])
@@ -42,7 +43,7 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
       ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=testValue")
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
               ["paramsCondition": paramCondition])
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
               context(), "")
     when:
@@ -73,7 +74,7 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
       ParamsRequestCondition paramCondition = new ParamsRequestCondition("!test")
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
               ["paramsCondition": paramCondition])
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
               context(), "")
 
@@ -90,7 +91,7 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
       ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=3")
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, 0,  requestMappingInfo('/parameter-conditions',
                       ["paramsCondition": paramCondition]),
               context(), "/anyPath")

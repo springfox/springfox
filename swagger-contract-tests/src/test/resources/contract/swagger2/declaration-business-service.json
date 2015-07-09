@@ -32,7 +32,7 @@
                     "business-service"
                 ],
                 "summary": "Find a business by its id",
-                "operationId": "findBusinessById",
+                "operationId": "findBusinessByIdUsingGET",
                 "consumes": [
                     "application/json"
                 ],
@@ -131,7 +131,7 @@
                     "business-service"
                 ],
                 "summary": "Find a business by its id",
-                "operationId": "findBusinessById",
+                "operationId": "findBusinessByIdUsingGET_1",
                 "consumes": [
                     "application/json"
                 ],

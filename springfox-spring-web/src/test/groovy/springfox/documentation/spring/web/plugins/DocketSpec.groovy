@@ -18,16 +18,19 @@
  */
 
 package springfox.documentation.spring.web.plugins
+import com.google.common.base.Optional
 import com.google.common.collect.Ordering
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.http.ResponseEntity
 import springfox.documentation.builders.PathSelectors
+import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
+import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.ApiInfo
-import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.ResponseMessage
+import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
@@ -36,7 +39,7 @@ import springfox.documentation.spring.web.RelativePathProvider
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
-import static com.google.common.collect.Lists.newArrayList
+import static com.google.common.collect.Lists.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*
@@ -165,6 +168,32 @@ class DocketSpec extends DocumentationContextSpec {
       'produces'              | ['application/json'] as Set                     | 'produces'
       'consumes'              | ['application/json'] as Set                     | 'consumes'
       'protocols'             | ['application/json'] as Set                     | 'protocols'
+  }
+
+  def "Code generation strategy property is set"() {
+    when:
+      plugin."$builderMethod"(object)
+
+    then:
+      context().genericsNamingStrategy.getClass() == strategy
+
+    where:
+      builderMethod           | object  | strategy
+      'forCodeGeneration'     | false   | DefaultGenericTypeNamingStrategy
+      'forCodeGeneration'     | true    | CodeGenGenericTypeNamingStrategy
+  }
+
+  def "Path mapping property is set"() {
+    when:
+    plugin."$builderMethod"(object)
+
+    then:
+    context().pathMapping == path
+
+    where:
+    builderMethod     | object  | path
+    'pathMapping'     | "/test" | Optional.of("/test")
+    'pathMapping'     | null    | Optional.absent()
   }
 
   Ordering<ApiDescription> apiDescriptionOrdering() {

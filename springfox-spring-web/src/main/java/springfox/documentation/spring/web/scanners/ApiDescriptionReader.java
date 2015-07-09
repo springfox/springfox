@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Ordering;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -30,13 +30,13 @@ import springfox.documentation.builders.ApiDescriptionBuilder;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-import springfox.documentation.spring.web.Paths;
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
 
 import java.util.List;
 
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.spring.web.Paths.*;
 
 @Component
 public class ApiDescriptionReader {
@@ -57,7 +57,7 @@ public class ApiDescriptionReader {
 
     List<ApiDescription> apiDescriptionList = newArrayList();
     for (String pattern : matchingPaths(selector, patternsCondition)) {
-        String cleanedRequestMappingPath = Paths.sanitizeRequestMappingPattern(pattern);
+        String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
         String path = pathProvider.getOperationPath(cleanedRequestMappingPath);
         String methodName = handlerMethod.getMethod().getName();
         RequestMappingContext operationContext = outerContext.copyPatternUsing(cleanedRequestMappingPath);
@@ -73,10 +73,10 @@ public class ApiDescriptionReader {
     return apiDescriptionList;
   }
 
-    private FluentIterable<String> matchingPaths(ApiSelector selector,
-      PatternsRequestCondition patternsCondition) {
+    private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
         return from(patternsCondition.getPatterns())
-                .filter(selector.getPathSelector());
+                .filter(selector.getPathSelector())
+            .toSortedList(Ordering.<String>natural());
     }
 
 }

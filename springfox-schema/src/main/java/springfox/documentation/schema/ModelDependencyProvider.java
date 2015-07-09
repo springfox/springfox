@@ -26,6 +26,7 @@ import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.property.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -56,6 +57,7 @@ public class ModelDependencyProvider {
     this.nameExtractor = nameExtractor;
   }
 
+  @Cacheable(value = "modelDependencies", key = ModelCacheKeys.MODEL_CONTEXT_SPEL)
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
     return
             from(resolvedDependencies(modelContext))

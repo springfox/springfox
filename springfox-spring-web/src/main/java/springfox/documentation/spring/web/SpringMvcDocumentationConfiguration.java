@@ -19,6 +19,9 @@
 
 package springfox.documentation.spring.web;
 
+import org.springframework.cache.Cache;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -76,4 +79,15 @@ public class SpringMvcDocumentationConfiguration {
   public JsonSerializer jsonSerializer(List<JacksonModuleRegistrar> moduleRegistrars) {
     return new JsonSerializer(moduleRegistrars);
   }
+
+  @Bean
+  public KeyGenerator operationsKeyGenerator() {
+    return new OperationsKeyGenerator();
+  }
+
+  @Bean
+  public Cache operationsCache() {
+    return new ConcurrentMapCache("operations");
+  }
+
 }

@@ -30,7 +30,7 @@ class OperationPositionReaderSpec extends DocumentationContextSpec {
 
    def "should have correct api position using default reader"() {
     given:
-          OperationContext operationContext = new OperationContext(new OperationBuilder(),
+          OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, contextCount, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 

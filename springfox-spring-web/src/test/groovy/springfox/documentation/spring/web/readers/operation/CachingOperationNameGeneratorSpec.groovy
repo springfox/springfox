@@ -16,20 +16,21 @@
  *
  *
  */
-
-package springfox.documentation.schema.configuration
+package springfox.documentation.spring.web.readers.operation
 
 import spock.lang.Specification
 
-class ModelsConfigurationSpec extends Specification {
-  def "test to include this class in the converage report" () {
+class CachingOperationNameGeneratorSpec extends Specification {
+  def "Generates unique name when called twice" (){
+    given:
+      CachingOperationNameGenerator sut = new CachingOperationNameGenerator()
     when:
-      def config = new ModelsConfiguration()
+      def first = sut.startingWith("first")
+    and:
+      def second = sut.startingWith("first")
     then:
-      config.typeResolver() != null
-      config.modelsCache() != null
-      config.modelPropertiesCache() != null
-      config.modelDependenciesCache() != null
-
+      first.equals("first")
+    and:
+      second.equals("first_1")
   }
 }

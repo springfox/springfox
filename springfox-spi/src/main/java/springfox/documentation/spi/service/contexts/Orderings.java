@@ -19,10 +19,14 @@
 
 package springfox.documentation.spi.service.contexts;
 
+import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
+import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.spi.service.DocumentationPlugin;
 
 import java.util.Comparator;
 
@@ -74,6 +78,62 @@ public class Orderings {
       @Override
       public int compare(ApiDescription first, ApiDescription second) {
         return first.getPath().compareTo(second.getPath());
+      }
+    };
+  }
+
+  public static Comparator<ResourceGroup> resourceGroupComparator() {
+    return new Comparator<ResourceGroup>() {
+      @Override
+      public int compare(ResourceGroup first, ResourceGroup second) {
+        return first.getGroupName().compareTo(second.getGroupName());
+      }
+    };
+  }
+
+  public static Comparator<RequestMappingContext> methodComparator() {
+    return new Comparator<RequestMappingContext>() {
+      @Override
+      public int compare(RequestMappingContext first, RequestMappingContext second) {
+        return qualifiedMethodName(first).compareTo(qualifiedMethodName(second));
+      }
+    };
+  }
+
+  private static String qualifiedMethodName(RequestMappingContext context) {
+    return String.format("%s.%s", context.getHandlerMethod().getBeanType().getName(),
+        context.getHandlerMethod().getMethod().getName());
+  }
+
+
+  public static Ordering<RequestHandler> byPatternsCondition() {
+    return Ordering.from(new Comparator<RequestHandler>() {
+      @Override
+      public int compare(RequestHandler first, RequestHandler second) {
+        return first.getRequestMapping().getPatternsCondition().toString()
+            .compareTo(second.getRequestMapping().getPatternsCondition().toString());
+      }
+    });
+  }
+
+  public static Ordering<? super DocumentationPlugin> pluginOrdering() {
+    return Ordering.from(byPluginType()).compound(byPluginName());
+  }
+
+  public static Comparator<? super DocumentationPlugin> byPluginType() {
+    return new Comparator<DocumentationPlugin>() {
+      @Override
+      public int compare(DocumentationPlugin first, DocumentationPlugin second) {
+        return Ints.compare(first.getDocumentationType().hashCode(), second.getDocumentationType().hashCode());
+      }
+    };
+  }
+
+  public static Comparator<? super DocumentationPlugin> byPluginName() {
+    return new Comparator<DocumentationPlugin>() {
+      @Override
+      public int compare(DocumentationPlugin first, DocumentationPlugin second) {
+        return first.getGroupName().compareTo(second.getGroupName());
       }
     };
   }

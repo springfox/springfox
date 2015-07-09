@@ -20,6 +20,7 @@
 package springfox.service.model.builder
 import org.springframework.http.HttpMethod
 import spock.lang.Specification
+import springfox.documentation.OperationNameGenerator
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.builders.ResponseMessageBuilder
@@ -30,7 +31,8 @@ import springfox.documentation.service.SecurityReference
 import static com.google.common.collect.Sets.*
 
 class OperationBuilderSpec extends Specification {
-  OperationBuilder sut = new OperationBuilder()
+  def nameGenerator = Mock(OperationNameGenerator)
+  OperationBuilder sut = new OperationBuilder(nameGenerator)
   ResponseMessage partialOk = new ResponseMessageBuilder()
           .code(200)
           .message(null)
@@ -46,6 +48,7 @@ class OperationBuilderSpec extends Specification {
     given:
       sut.responseMessages(newHashSet(partialOk))
     when:
+      nameGenerator.startingWith(_) >> _
       sut.responseMessages(newHashSet(fullOk))
     and:
       def operation = sut.build()
@@ -74,8 +77,9 @@ class OperationBuilderSpec extends Specification {
 
   def "Setting properties on the builder with non-null values"() {
     given:
-      def sut = new OperationBuilder()
+      def sut = new OperationBuilder(nameGenerator)
     when:
+      nameGenerator.startingWith(_) >> "method1"
       sut."$builderMethod"(value)
     and:
       def built = sut.build()
@@ -100,8 +104,9 @@ class OperationBuilderSpec extends Specification {
 
   def "Setting builder properties to null values preserves existing values"() {
     given:
-      def sut = new OperationBuilder()
+      def sut = new OperationBuilder(nameGenerator)
     when:
+      nameGenerator.startingWith(_) >> "method1"
       sut."$builderMethod"(value)
       sut."$builderMethod"(null)
     and:
@@ -125,7 +130,7 @@ class OperationBuilderSpec extends Specification {
 
   def "Operation authorizations are converted to a map by type"() {
     given:
-      def sut = new OperationBuilder()
+      def sut = new OperationBuilder(nameGenerator)
       def mockAuth1 = Mock(SecurityReference)
       def mockAuth2 = Mock(SecurityReference)
     and:

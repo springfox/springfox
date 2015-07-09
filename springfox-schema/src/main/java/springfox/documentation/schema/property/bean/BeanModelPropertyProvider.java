@@ -128,8 +128,8 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
         return propertiesFor(childProperty.getReturnType(), fromParent(givenContext, childProperty.getReturnType()));
       } else {
         LOG.debug("Evaluating unwrapped setter for member {}", ((AnnotatedMethod) member).getMember().getName());
-        return propertiesFor(childProperty.getArgumentType(0),
-            fromParent(givenContext, childProperty.getArgumentType(0)));
+        return propertiesFor(childProperty.getArgumentType(0), fromParent(givenContext, childProperty.getArgumentType(0))
+        );
       }
     } else {
       LOG.debug("Evaluating property of {}", childProperty);

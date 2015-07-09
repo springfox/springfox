@@ -26,6 +26,7 @@ import spock.lang.Specification
 import springfox.documentation.service.Documentation
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.DocumentationPlugin
+import springfox.documentation.spi.service.RequestHandlerProvider
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spring.web.DocumentationCache
@@ -39,11 +40,12 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
   DocumentationPluginsManager pluginManager = Mock(DocumentationPluginsManager)
   Documentation group = Mock(Documentation)
   ApiDocumentationScanner apiGroup = Mock(ApiDocumentationScanner)
+  RequestHandlerProvider handlerProvider = Mock(RequestHandlerProvider)
 
   ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(applicationContext)
   DocumentationPluginsBootstrapper bootstrapper =
           new DocumentationPluginsBootstrapper(pluginManager,
-          [],
+          handlerProvider,
           new DocumentationCache(),
           apiGroup,
           new TypeResolver(),
@@ -51,6 +53,7 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
 
   def setup() {
     pluginManager.createContextBuilder(_, _) >> new DocumentationContextBuilder(DocumentationType.SWAGGER_12)
+    handlerProvider.requestHandlers() >> []
     apiGroup.scan(_) >> group
     group.getGroupName() >> "default"
   }
@@ -60,6 +63,8 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
       Docket enabledPlugin = Mock(Docket)
       Docket disabledPlugin = Mock(Docket)
     and:
+      enabledPlugin.groupName >> "enabled"
+      disabledPlugin.groupName >> "disabled"
       enabledPlugin.documentationType >> DocumentationType.SWAGGER_12
       disabledPlugin.documentationType >> DocumentationType.SWAGGER_12
     when:

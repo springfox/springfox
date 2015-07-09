@@ -25,13 +25,14 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 @Mixin([RequestMappingSupport])
 class OperationHttpMethodReaderSpec extends DocumentationContextSpec {
   def "should return api method annotation when present"() {
 
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               currentHttpMethod, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 

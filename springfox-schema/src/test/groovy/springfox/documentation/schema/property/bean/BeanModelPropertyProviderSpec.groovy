@@ -49,11 +49,11 @@ class BeanModelPropertyProviderSpec extends Specification {
       def beanModelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver,
           namingStrategy, defaultSchemaPlugins(), Mock(TypeNameExtractor))
       beanModelPropertyProvider.objectMapper = mapper
-      def serializationPropNames = beanModelPropertyProvider.propertiesFor(resolvedType,
-              returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy))
+      def serializationPropNames = beanModelPropertyProvider.propertiesFor(resolvedType, returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
+      )
               .collect({it.name})
-      def deSerializationPropNames = beanModelPropertyProvider.propertiesFor(resolvedType,
-              inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy))
+      def deSerializationPropNames = beanModelPropertyProvider.propertiesFor(resolvedType, inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
+      )
               .collect({it.name})
 
     expect:
@@ -76,10 +76,10 @@ class BeanModelPropertyProviderSpec extends Specification {
       def propertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver
           , namingStrategy, defaultSchemaPlugins(), Mock(TypeNameExtractor))
       propertyProvider.objectMapper = mapper
-      def serializationPropNames = propertyProvider.propertiesFor(resolvedType,
-          returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)).collect({it.name})
-      def deSerializationPropNames = propertyProvider.propertiesFor(resolvedType,
-          inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)).collect({it.name})
+      def serializationPropNames = propertyProvider.propertiesFor(resolvedType, returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
+      ).collect({it.name})
+      def deSerializationPropNames = propertyProvider.propertiesFor(resolvedType, inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
+      ).collect({it.name})
 
     expect:
       serializationPropNames == ['name']

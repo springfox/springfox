@@ -23,8 +23,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springfox.documentation.PathProvider;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
@@ -43,7 +43,7 @@ import java.util.Set;
 
 public class DocumentationContext {
   private final DocumentationType documentationType;
-  private final List<RequestMappingHandlerMapping> handlerMappings;
+  private final List<RequestHandler> handlerMappings;
   private final ApiInfo apiInfo;
   private final String groupName;
   private final ApiSelector apiSelector;
@@ -64,7 +64,7 @@ public class DocumentationContext {
   private final Optional<String> pathMapping;
 
   public DocumentationContext(DocumentationType documentationType,
-        List<RequestMappingHandlerMapping> handlerMappings,
+        List<RequestHandler> handlerMappings,
         ApiInfo apiInfo, String groupName,
         ApiSelector apiSelector,
         Set<Class> ignorableParameterTypes,
@@ -109,7 +109,7 @@ public class DocumentationContext {
     return documentationType;
   }
 
-  public List<RequestMappingHandlerMapping> getHandlerMappings() {
+  public List<RequestHandler> getRequestHandlers() {
     return handlerMappings;
   }
 

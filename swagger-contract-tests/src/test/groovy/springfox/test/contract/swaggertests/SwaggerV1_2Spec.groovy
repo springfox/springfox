@@ -18,12 +18,16 @@
  */
 
 package springfox.test.contract.swaggertests
-
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.cache.Cache
+import org.springframework.cache.CacheManager
+import org.springframework.cache.annotation.EnableCaching
+import org.springframework.cache.support.SimpleCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -122,6 +126,7 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
   }
 
   @Configuration
+  @EnableCaching
   @EnableSwagger
   @ComponentScan([
       "springfox.documentation.spring.web.dummy.controllers",
@@ -130,6 +135,15 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
   ])
   @Import(SecuritySupport)
   static class Config {
+
+    @Bean
+    @Autowired
+    public CacheManager cacheManager(List<Cache> caches) {
+      def cacheManager = new SimpleCacheManager()
+      cacheManager.caches = caches
+      return cacheManager;
+    }
+
     @Bean
     SecurityContext securityContext() {
       def readScope = new AuthorizationScope("read:pets", "read your pets")
@@ -157,5 +171,7 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
           .securityContexts(securityContexts)
           .ignoredParameterTypes(MetaClass)
     }
+
+
   }
 }

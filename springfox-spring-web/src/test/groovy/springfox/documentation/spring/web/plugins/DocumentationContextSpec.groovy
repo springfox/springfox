@@ -41,7 +41,7 @@ public class DocumentationContextSpec extends Specification {
     defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(), Mock(ServletContext))
 
     contextBuilder = this.defaultConfiguration.create(DocumentationType.SWAGGER_12)
-            .handlerMappings([])
+            .requestHandlers([])
             .operationOrdering(Ordering.from(nickNameComparator()))
     plugin = new Docket(DocumentationType.SWAGGER_12)
     operationReader = Mock(ApiOperationReader)
