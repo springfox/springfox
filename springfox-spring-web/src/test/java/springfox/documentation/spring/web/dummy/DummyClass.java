@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.dummy;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
@@ -54,6 +55,12 @@ import java.util.Map;
 
 @RequestMapping(produces = {"application/json"}, consumes = {"application/json", "application/xml"})
 public class DummyClass {
+
+
+  @ApiParam
+  public void annotatedWithApiParam() {
+  }
+
   public void dummyMethod() {
   }
 
@@ -68,6 +75,10 @@ public class DummyClass {
 
   @ApiOperation(value = "description", httpMethod = "GET")
   public void methodWithHttpGETMethod() {
+  }
+
+  @ApiOperation(value = "description", nickname = "unique")
+  public void methodWithNickName() {
   }
 
   @ApiOperation(value = "description", httpMethod = "GET", hidden = true)

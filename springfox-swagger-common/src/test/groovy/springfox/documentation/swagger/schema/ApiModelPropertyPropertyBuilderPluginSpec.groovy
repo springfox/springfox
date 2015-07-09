@@ -17,8 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger1.schema
-
+package springfox.documentation.swagger.schema
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -35,7 +34,6 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
-import springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder
 
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.DocumentationType.*

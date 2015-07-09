@@ -21,14 +21,13 @@ package springfox.documentation.swagger.readers.operation
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
-import springfox.documentation.swagger.readers.operation.OperationImplicitParameterReader
-import springfox.documentation.swagger.readers.operation.OperationImplicitParametersReader
+import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
 
 @Mixin([RequestMappingSupport, ServicePluginsSupport])
 class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
@@ -45,20 +44,27 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
       def plugins = defaultWebPlugins()
       def expander = new ModelAttributeParameterExpander(resolver)
       expander.pluginsManager = plugins
-      OperationParameterReader operationParameterReader = new OperationParameterReader(resolver,
-        expander)
-      operationParameterReader.pluginsManager = plugins
+      OperationParameterReader sut = new OperationParameterReader(resolver, expander)
+      sut.pluginsManager = plugins
       OperationImplicitParametersReader operationImplicitParametersReader = new OperationImplicitParametersReader()
       OperationImplicitParameterReader operationImplicitParameterReader = new OperationImplicitParameterReader()
     when:
-      operationParameterReader.apply(operationContext)
+      sut.apply(operationContext)
       operationImplicitParametersReader.apply(operationContext)
       operationImplicitParameterReader.apply(operationContext)
     and:
       def operation = operationContext.operationBuilder().build()
     then:
       operation.parameters.size() == expectedSize
+    and:
+      !operationImplicitParametersReader.supports(DocumentationType.SPRING_WEB)
+      operationImplicitParametersReader.supports(DocumentationType.SWAGGER_12)
+      operationImplicitParametersReader.supports(DocumentationType.SWAGGER_2)
 
+    and:
+      !operationImplicitParameterReader.supports(DocumentationType.SPRING_WEB)
+      operationImplicitParameterReader.supports(DocumentationType.SWAGGER_12)
+      operationImplicitParameterReader.supports(DocumentationType.SWAGGER_2)
     where:
       handlerMethod                                                             | expectedSize
       dummyHandlerMethod('dummyMethod')                                         | 0

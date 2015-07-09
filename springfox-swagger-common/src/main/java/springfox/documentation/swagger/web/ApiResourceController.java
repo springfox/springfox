@@ -54,6 +54,14 @@ public class ApiResourceController {
   @Autowired(required = false)
   private UiConfiguration uiConfiguration;
 
+  private boolean swagger1Available;
+  private boolean swagger2Available;
+
+  public ApiResourceController() {
+    swagger1Available = classByName("springfox.documentation.swagger1.web.Swagger1Controller").isPresent();
+    swagger2Available = classByName("springfox.documentation.swagger2.web.Swagger2Controller").isPresent();
+  }
+
   @RequestMapping(value = "/configuration/security")
   @ResponseBody
   ResponseEntity<SecurityConfiguration> securityConfiguration() {
@@ -71,20 +79,19 @@ public class ApiResourceController {
   @RequestMapping(value = "/swagger-resources")
   @ResponseBody
   ResponseEntity<List<SwaggerResource>> swaggerResources() {
-    Class swagger1Controller = classOrNull("springfox.documentation.swagger1.web.Swagger1Controller");
-    Class swagger2Controller = classOrNull("springfox.documentation.swagger2.web.Swagger2Controller");
+
 
     List<SwaggerResource> resources = new ArrayList<SwaggerResource>();
 
     for (Map.Entry<String, Documentation> entry : documentationCache.all().entrySet()) {
       String swaggerGroup = entry.getKey();
-      if (swagger1Controller != null) {
+      if (swagger1Available) {
         SwaggerResource swaggerResource = resource(swaggerGroup, swagger1Url);
         swaggerResource.setSwaggerVersion("1.2");
         resources.add(swaggerResource);
       }
 
-      if (swagger2Controller != null) {
+      if (swagger2Available) {
         SwaggerResource swaggerResource = resource(swaggerGroup, swagger2Url);
         swaggerResource.setSwaggerVersion("2.0");
         resources.add(swaggerResource);
@@ -109,11 +116,11 @@ public class ApiResourceController {
     return base + "?group=" + swaggerGroup;
   }
 
-  private Class classOrNull(String className) {
+  private Optional<? extends Class> classByName(String className) {
     try {
-      return Class.forName(className);
+      return Optional.of(Class.forName(className));
     } catch (ClassNotFoundException e) {
-      return null;
+      return Optional.absent();
     }
   }
 }

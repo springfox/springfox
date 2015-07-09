@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.service.AuthorizationScope
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.mixins.AuthSupport
@@ -44,6 +45,10 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
+    and:
+      !sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
 
     then:
       operation.securityReferences.containsKey("oauth2")

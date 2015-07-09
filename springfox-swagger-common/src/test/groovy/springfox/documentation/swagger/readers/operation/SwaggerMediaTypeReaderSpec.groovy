@@ -18,15 +18,14 @@
  */
 
 package springfox.documentation.swagger.readers.operation
-
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.readers.operation.SwaggerMediaTypeReader
 
 import static com.google.common.collect.Sets.*
 
@@ -43,14 +42,19 @@ class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec {
     OperationContext operationContext = new OperationContext(new OperationBuilder(),
             RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
             context(), "")
+
     when:
-      new SwaggerMediaTypeReader().apply(operationContext)
+      def sut = new SwaggerMediaTypeReader()
+      sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
 
     then:
       operation.consumes == expectedConsumes
       operation.produces == expectedProduces
-
+    and:
+      !sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
     where:
       expectedConsumes                                  | expectedProduces                                  | handlerMethod
       newHashSet('application/xml')                     | newHashSet()                                      | dummyHandlerMethod('methodWithXmlConsumes')

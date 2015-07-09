@@ -21,6 +21,7 @@ package springfox.documentation.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -35,7 +36,11 @@ import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import static springfox.documentation.schema.ResolvedTypes.resolvedTypeSignature;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.common.collect.Lists.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
@@ -81,15 +86,26 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
     Optional<ApiResponses> apiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
 
     LOG.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
-    if (!apiResponses.isPresent()) {
-      return;
-    }
-
-    for (ApiResponse response : apiResponses.get().value()) {
-      ResolvedType modelType = context.alternateFor(typeResolver.resolve(response.response()));
-      LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
+    List<ResolvedType> modelTypes = apiResponses.transform(toResolvedTypes(context))
+        .or(new ArrayList<ResolvedType>());
+    for (ResolvedType modelType : modelTypes) {
       context.operationModelsBuilder().addReturn(modelType);
     }
-    LOG.debug("Finished reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
   }
+
+  private Function<ApiResponses, List<ResolvedType>> toResolvedTypes(final RequestMappingContext context) {
+    return new Function<ApiResponses, List<ResolvedType>>() {
+      @Override
+      public List<ResolvedType> apply(ApiResponses input) {
+        List<ResolvedType> resolvedTypes = newArrayList();
+        for (ApiResponse response : input.value()) {
+          ResolvedType modelType = context.alternateFor(typeResolver.resolve(response.response()));
+          LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
+          resolvedTypes.add(modelType);
+        }
+        return resolvedTypes;
+      }
+    };
+  }
+
 }

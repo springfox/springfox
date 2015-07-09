@@ -45,6 +45,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
     def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
     sut = new ResponseMessagesReader(new TypeResolver(), typeNameExtractor)
   }
+
   def "Should add default response messages"() {
     given:
       OperationContext operationContext = new OperationContext(new OperationBuilder(),

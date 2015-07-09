@@ -3,6 +3,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.service.ObjectVendorExtension
 import springfox.documentation.service.StringVendorExtension
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -18,7 +19,10 @@ class VendorExtensionsReaderSpec extends DocumentationContextSpec {
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
-
+    and:
+      !sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
     then:
       operation.vendorExtensions.size() == 2
       operation.vendorExtensions.first().equals(first())

@@ -57,7 +57,10 @@ class SwaggerOperationResponseClassReaderSpec extends DocumentationContextSpec {
       } else {
         assert expectedClass == operation.responseModel.type
       }
-
+    and:
+      !sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
     where:
       handlerMethod                                                        | expectedClass
       dummyHandlerMethod('methodWithConcreteResponseBody')                 | 'BusinessModel'

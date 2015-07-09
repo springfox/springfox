@@ -10,15 +10,15 @@ artifacts {
   testArtifacts testJar
 }
 
-//TODO: Improve this!
+//TODO: Improve branch and complexity coverage
 ext {
   limits = [
-      'instruction': 59,
-      'branch'     : 52,
-      'line'       : 57,
-      'complexity' : 43,
-      'method'     : 48,
-      'class'      : 60
+      'instruction': 96,
+      'branch'     : 82,
+      'line'       : 96,
+      'complexity' : 84,
+      'method'     : 95,
+      'class'      : 97.5
   ]
 }
 
@@ -37,4 +37,5 @@ dependencies {
   provided libs.springProvided
   provided libs.clientProvided
   testCompile libs.test
+  testCompile 'org.skyscreamer:jsonassert:1.2.3'
 }

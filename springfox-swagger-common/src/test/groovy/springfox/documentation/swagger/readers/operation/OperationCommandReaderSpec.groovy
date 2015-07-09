@@ -22,12 +22,10 @@ package springfox.documentation.swagger.readers.operation
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Unroll
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.readers.operation.OperationNotesReader
-import springfox.documentation.swagger.readers.operation.OperationPositionReader
-import springfox.documentation.swagger.readers.operation.OperationSummaryReader
 
 @Mixin([RequestMappingSupport])
 class OperationCommandReaderSpec extends DocumentationContextSpec {
@@ -40,14 +38,20 @@ class OperationCommandReaderSpec extends DocumentationContextSpec {
               RequestMethod.GET, handlerMethod, CURRENT_COUNT, requestMappingInfo("somePath"),
               context(), "/anyPath")
     when:
-      command.apply(operationContext)
+      sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
 
     then:
       operation."$property" == expected
+    and:
+      !sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
     where:
-      command                         | property     | handlerMethod                              | expected
+      sut                             | property     | handlerMethod                              | expected
       new OperationSummaryReader()    | 'summary'    | dummyHandlerMethod('methodWithSummary')    | 'summary'
+      new OperationHiddenReader()     | 'hidden'     | dummyHandlerMethod('methodThatIsHidden')   | true
+      new OperationHiddenReader()     | 'hidden'     | dummyHandlerMethod('dummyMethod')          | false
       new OperationNotesReader()      | 'notes'      | dummyHandlerMethod('methodWithNotes')      | 'some notes'
       new OperationPositionReader()   | 'position'   | dummyHandlerMethod('methodWithPosition')   | 5
   }

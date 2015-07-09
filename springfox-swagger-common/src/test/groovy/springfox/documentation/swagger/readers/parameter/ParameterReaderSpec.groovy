@@ -18,7 +18,6 @@
  */
 
 package springfox.documentation.swagger.readers.parameter
-
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.annotation.RequestParam
@@ -26,14 +25,12 @@ import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.readers.parameter.ParameterAccessReader
-import springfox.documentation.swagger.readers.parameter.ParameterDefaultReader
-import springfox.documentation.swagger.readers.parameter.ParameterDescriptionReader
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterReaderSpec extends DocumentationContextSpec {
@@ -51,12 +48,16 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
           context(), genericNamingStrategy, Mock(OperationContext))
     when:
-      parameterPlugin.apply(parameterContext)
+      sut.apply(parameterContext)
 
     then:
       parameterContext.parameterBuilder().build()."$resultProperty" == expected
+    and:
+      !sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
     where:
-      parameterPlugin                  | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation                      | reqParamAnnot | expected
+      sut                              | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation                      | reqParamAnnot | expected
       new ParameterDescriptionReader() | 'description'  | 'getParameterName'    | 'someName'        | null                                    | null          | 'someName'
       new ParameterDescriptionReader() | 'description'  | 'none'                | 'any'             | apiParam([value: { -> 'AnDesc' }])      | null          | 'AnDesc'
       swaggerDefaultReader()           | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: { -> 'defl' }]) | null          | 'defl'

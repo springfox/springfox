@@ -18,14 +18,13 @@
  */
 
 package springfox.documentation.swagger.readers.operation
-
 import org.springframework.http.HttpMethod
 import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.readers.operation.OperationHttpMethodReader
 
 @Mixin([RequestMappingSupport])
 class OperationHttpMethodReaderSpec extends DocumentationContextSpec {
@@ -36,14 +35,18 @@ class OperationHttpMethodReaderSpec extends DocumentationContextSpec {
               currentHttpMethod, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 
-      OperationHttpMethodReader operationMethodReader = new OperationHttpMethodReader();
+      OperationHttpMethodReader sut = new OperationHttpMethodReader();
     when:
-      operationMethodReader.apply(operationContext)
+      sut.apply(operationContext)
     and:
       def operation = operationContext.operationBuilder().build()
 
     then:
       operation.method == expected
+    and:
+      !sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
     where:
       currentHttpMethod  | handlerMethod                                     | expected
       RequestMethod.GET  | dummyHandlerMethod()                              | HttpMethod.GET

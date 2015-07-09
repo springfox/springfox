@@ -21,6 +21,7 @@ package springfox.documentation.swagger.annotations;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
@@ -76,7 +77,8 @@ public class Annotations {
     };
   }
 
-  private static ResolvedType getResolvedType(ApiOperation annotation,
+  @VisibleForTesting
+  static ResolvedType getResolvedType(ApiOperation annotation,
         TypeResolver typeResolver, ResolvedType defaultType) {
 
     if (null != annotation && Void.class != annotation.response()) {
@@ -91,7 +93,8 @@ public class Annotations {
     return defaultType;
   }
 
-  private static ResolvedType getResolvedType(ApiResponse annotation,
+  @VisibleForTesting
+  static ResolvedType getResolvedType(ApiResponse annotation,
         TypeResolver typeResolver, ResolvedType defaultType) {
 
     if (null != annotation && Void.class != annotation.response()) {

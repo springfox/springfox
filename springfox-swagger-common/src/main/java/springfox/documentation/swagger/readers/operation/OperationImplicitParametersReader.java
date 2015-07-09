@@ -35,6 +35,8 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
+
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class OperationImplicitParametersReader implements OperationBuilderPlugin {
@@ -46,7 +48,7 @@ public class OperationImplicitParametersReader implements OperationBuilderPlugin
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return SwaggerPluginSupport.pluginDoesApply(delimiter);
+    return pluginDoesApply(delimiter);
   }
 
   protected List<Parameter> readParameters(OperationContext context) {
