@@ -304,6 +304,32 @@
                 }
             }
         },
+        "/features/mapOfMapOfExample": {
+          "get": {
+            "tags": [
+              "feature-demonstration-service"
+            ],
+            "summary": "mapOfMapOfExample",
+            "operationId": "mapOfMapOfExampleUsingGET_1",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "*/*"
+            ],
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/definitions/MapOfstringAndExample"
+                  }
+                }
+              }
+            }
+          }
+        },
         "/features/mapProperty": {
             "get": {
                 "tags": [
@@ -477,6 +503,12 @@
         }
     },
     "definitions": {
+        "MapOfstringAndExample": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Example"
+          }
+        },
         "DateTimeField": {
             "properties": {
                 "durationField": {

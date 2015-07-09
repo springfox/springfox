@@ -891,6 +891,47 @@
             "path": "/features/listOfMaps"
         },
         {
+          "description": "mapOfMapOfExample",
+          "operations": [
+            {
+              "method": "GET",
+              "summary": "mapOfMapOfExample",
+              "nickname": "mapOfMapOfExampleUsingGET",
+              "produces": [
+                "*/*"
+              ],
+              "consumes": [
+                "application/json"
+              ],
+              "parameters": [
+
+              ],
+              "responseMessages": [
+                {
+                  "code": 200,
+                  "message": "OK",
+                  "responseModel": "array"
+                },
+                {
+                  "code": 401,
+                  "message": "Unauthorized"
+                },
+                {
+                  "code": 403,
+                  "message": "Forbidden"
+                },
+                {
+                  "code": 404,
+                  "message": "Not Found"
+                }
+              ],
+              "deprecated": "false",
+              "type": "List[Entry\u00abstring,Map\u00abstring,Example\u00bb\u00bb]"
+            }
+          ],
+          "path": "/features/mapOfMapOfExample"
+        },
+        {
             "description": "modelWithMapProperty",
             "operations": [
                 {
@@ -1222,6 +1263,26 @@
                     "type": "string"
                 }
             }
+        },
+        "Entry\u00abstring,Map\u00abstring,Example\u00bb\u00bb": {
+          "description": "",
+          "id": "Entry\u00abstring,Map\u00abstring,Example\u00bb\u00bb",
+          "properties": {
+            "key": {
+              "required": false,
+              "type": "List[Entry\u00abstring,Example\u00bb]"
+            }
+          }
+        },
+        "Entry\u00abstring,Example\u00bb": {
+          "description": "",
+          "id": "Entry\u00abstring,Example\u00bb",
+          "properties": {
+            "key": {
+              "required": false,
+              "type": "Example"
+            }
+          }
         },
         "Example": {
             "description": "",

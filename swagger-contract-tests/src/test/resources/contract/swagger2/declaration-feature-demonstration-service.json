@@ -304,6 +304,32 @@
                 }
             }
         },
+        "/features/mapOfMapOfExample": {
+          "get": {
+            "tags": [
+              "feature-demonstration-service"
+            ],
+            "summary": "mapOfMapOfExample",
+            "operationId": "mapOfMapOfExampleUsingGET",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "*/*"
+            ],
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/definitions/Map\u00abstring,Example\u00bb"
+                  }
+                }
+              }
+            }
+          }
+        },
         "/features/mapProperty": {
             "get": {
                 "tags": [
@@ -685,6 +711,12 @@
             "additionalProperties": {
                 "type": "string"
             }
+        },
+        "Map\u00abstring,Example\u00bb": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Example"
+          }
         },
         "ModelWithMapProperty": {
             "properties": {

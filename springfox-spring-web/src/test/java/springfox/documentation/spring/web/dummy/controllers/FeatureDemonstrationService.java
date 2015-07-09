@@ -136,6 +136,11 @@ public class FeatureDemonstrationService {
     throw new UnsupportedOperationException();
   }
 
+  @RequestMapping(value = "mapOfMapOfExample", method = RequestMethod.GET)
+  public Map<String, Map<String, Example>> mapOfMapOfExample() {
+    throw new UnsupportedOperationException();
+  }
+
   @RequestMapping(value = "addFiles", method = RequestMethod.POST)
   @ApiOperation(value = "Add a new contact with file attachment")
   public ResponseEntity<Void> addFiles( @RequestPart("files") MultipartFile[] files) {
