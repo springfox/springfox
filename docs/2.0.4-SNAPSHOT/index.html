@@ -545,8 +545,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#docket-xml-configuration">5.4. Docket XML Configuration</a></li>
 <li><a href="#docket-spring-java-configuration">5.5. Docket Spring Java Configuration</a></li>
 <li><a href="#caching">5.6. Caching</a></li>
-<li><a href="#extensibility">5.7. Extensibility</a></li>
-<li><a href="#example-application">5.8. Example application</a></li>
+<li><a href="#configuring-security-schemes-and-contexts-an-overview">5.7. Configuring Security Schemes and Contexts an Overview</a></li>
+<li><a href="#extensibility">5.8. Extensibility</a></li>
+<li><a href="#example-application">5.9. Example application</a></li>
 </ul>
 </li>
 <li><a href="#configuring-springfox-staticdocs">6. Configuring springfox-staticdocs</a>
@@ -870,7 +871,7 @@ dependencies {
 </div>
 <div class="sect3">
 <h4 id="springfox-swagger2-with-spring-boot">2.1.3. Springfox-swagger2 with Spring Boot</h4>
-<div class="listingblock">
+<div id="getting-started" class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
   <td class="line-numbers"><pre>1
@@ -1721,10 +1722,8 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 <p>By default, types with generics will be labeled with '\u00ab'(&lt;&lt;), '\u00bb'(&gt;&gt;), and commas. This can be problematic
 with things like swagger-codegen. You can override this behavior by implementing your own <code>GenericTypeNamingStrategy</code>.
 For example, if you wanted <code>List&lt;String&gt;</code> to be encoded as 'ListOfString' and <code>Map&lt;String, Object&gt;</code>
-to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
-</div>
-<div class="paragraph">
-<p>then during plugin customization:</p>
+to be encoded as 'MapOfStringAndObject' you could set the <code>forCodeGeneration</code> customization option to <code>true</code> during
+plugin customization:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1766,7 +1765,30 @@ caching for performance:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="extensibility">5.7. Extensibility</h3>
+<h3 id="configuring-security-schemes-and-contexts-an-overview">5.7. Configuring Security Schemes and Contexts an Overview</h3>
+<div class="paragraph">
+<p>The security provisions in SpringFox at a high level, without getting into the code, has different pieces
+that all work together in concert</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The API itself needs to be protected. This is achieved by using, for simplicity sake, spring security and may also
+use a combination of servlet container and tomcat/jersey etc.</p>
+</li>
+<li>
+<p>The security scheme which describes the techniques you&#8217;ve used to protect the api. Spring fox supports whatever
+schemes swagger specification supports (ApiKey, BasicAuth and OAuth2 (certain profiles))</p>
+</li>
+<li>
+<p>Finally the security contexts which actually provides information on which api&#8217;s are protected by which schemes. I
+think in your example, you&#8217;re missing the last piece of the puzzle, the security context see  <a href="#getting-started">15</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="extensibility">5.8. Extensibility</h3>
 <div class="paragraph">
 <p>The library provides a variety of extensibility hooks to enrich/ augment the schema and service models</p>
 </div>
@@ -1782,7 +1804,7 @@ caching for performance:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="example-application">5.8. Example application</h3>
+<h3 id="example-application">5.9. Example application</h3>
 <div class="paragraph">
 <p>For an examples for spring-boot, vanilla spring applications take a look <a href="https://github.com/springfox/springfox-demos">examples</a>
 in the demo application.</p>
@@ -1891,7 +1913,7 @@ in the demo application.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-09 04:27:30 UTC
+Last updated 2015-07-09 04:50:27 UTC
 </div>
 </div>
 </body>

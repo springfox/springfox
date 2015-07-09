@@ -521,6 +521,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#docket-xml-configuration">Docket XML Configuration</a></li>
 <li><a href="#docket-spring-java-configuration">Docket Spring Java Configuration</a></li>
 <li><a href="#caching">Caching</a></li>
+<li><a href="#configuring-security-schemes-and-contexts-an-overview">Configuring Security Schemes and Contexts an Overview</a></li>
 <li><a href="#extensibility">Extensibility</a></li>
 <li><a href="#example-application">Example application</a></li>
 </ul>
@@ -919,10 +920,8 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 <p>By default, types with generics will be labeled with '\u00ab'(&lt;&lt;), '\u00bb'(&gt;&gt;), and commas. This can be problematic
 with things like swagger-codegen. You can override this behavior by implementing your own <code>GenericTypeNamingStrategy</code>.
 For example, if you wanted <code>List&lt;String&gt;</code> to be encoded as 'ListOfString' and <code>Map&lt;String, Object&gt;</code>
-to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
-</div>
-<div class="paragraph">
-<p>then during plugin customization:</p>
+to be encoded as 'MapOfStringAndObject' you could set the <code>forCodeGeneration</code> customization option to <code>true</code> during
+plugin customization:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -961,6 +960,29 @@ caching for performance:</p>
 <div class="paragraph">
 <p>If the caching <em>HAS</em> been implemented in the target application, make sure you pull in the caches int your applications
  predefined <code>CacheManager</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuring-security-schemes-and-contexts-an-overview">Configuring Security Schemes and Contexts an Overview</h3>
+<div class="paragraph">
+<p>The security provisions in SpringFox at a high level, without getting into the code, has different pieces
+that all work together in concert</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The API itself needs to be protected. This is achieved by using, for simplicity sake, spring security and may also
+use a combination of servlet container and tomcat/jersey etc.</p>
+</li>
+<li>
+<p>The security scheme which describes the techniques you&#8217;ve used to protect the api. Spring fox supports whatever
+schemes swagger specification supports (ApiKey, BasicAuth and OAuth2 (certain profiles))</p>
+</li>
+<li>
+<p>Finally the security contexts which actually provides information on which api&#8217;s are protected by which schemes. I
+think in your example, you&#8217;re missing the last piece of the puzzle, the security context see  <a href="#getting-started">15</a>.</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -1089,7 +1111,7 @@ in the demo application.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-09 04:27:30 UTC
+Last updated 2015-07-09 04:50:27 UTC
 </div>
 </div>
 </body>
