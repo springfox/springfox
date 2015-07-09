@@ -544,8 +544,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#overriding-property-datatypes">5.3. Overriding property datatypes</a></li>
 <li><a href="#docket-xml-configuration">5.4. Docket XML Configuration</a></li>
 <li><a href="#docket-spring-java-configuration">5.5. Docket Spring Java Configuration</a></li>
-<li><a href="#extensibility">5.6. Extensibility</a></li>
-<li><a href="#example-application">5.7. Example application</a></li>
+<li><a href="#caching">5.6. Caching</a></li>
+<li><a href="#extensibility">5.7. Extensibility</a></li>
+<li><a href="#example-application">5.8. Example application</a></li>
 </ul>
 </li>
 <li><a href="#configuring-springfox-staticdocs">6. Configuring springfox-staticdocs</a>
@@ -1733,7 +1734,39 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="extensibility">5.6. Extensibility</h3>
+<h3 id="caching">5.6. Caching</h3>
+<div class="paragraph">
+<p>By default caches have been defined for operations, models, model properties and model dependencies. To enable
+caching for performance:</p>
+</div>
+<div class="paragraph">
+<p>If the caching has not been implemented in the target application</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// In the application configuration add @EnableCaching</span>
+
+   <span class="annotation">@EnableCaching</span>
+   <span class="annotation">@EnableSwagger2</span>
+   <span class="type">class</span> <span class="class">YourApplicationConfig</span> {
+
+    <span class="annotation">@Bean</span>
+    <span class="annotation">@Autowired</span> <span class="comment">//&lt;-- autowire all the caches that are available</span>
+    <span class="directive">public</span> CacheManager cacheManager(<span class="predefined-type">List</span>&lt;Cache&gt; caches) {
+      CacheManager cacheManager = <span class="keyword">new</span> SimpleCacheManager(); <span class="comment">//&lt;-- create a cache manager</span>
+      cacheManager.setCaches(caches); <span class="comment">//&lt;-- set the autowired caches</span>
+      <span class="keyword">return</span> cacheManager;
+    }
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the caching <em>HAS</em> been implemented in the target application, make sure you pull in the caches int your applications
+ predefined <code>CacheManager</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="extensibility">5.7. Extensibility</h3>
 <div class="paragraph">
 <p>The library provides a variety of extensibility hooks to enrich/ augment the schema and service models</p>
 </div>
@@ -1749,7 +1782,7 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="example-application">5.7. Example application</h3>
+<h3 id="example-application">5.8. Example application</h3>
 <div class="paragraph">
 <p>For an examples for spring-boot, vanilla spring applications take a look <a href="https://github.com/springfox/springfox-demos">examples</a>
 in the demo application.</p>
@@ -1858,7 +1891,7 @@ in the demo application.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-09 03:17:57 UTC
+Last updated 2015-07-09 03:48:00 UTC
 </div>
 </div>
 </body>
