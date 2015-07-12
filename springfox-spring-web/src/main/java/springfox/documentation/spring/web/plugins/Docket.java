@@ -25,6 +25,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
+import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy;
@@ -85,6 +86,7 @@ public class Docket implements DocumentationPlugin {
   private final Set<String> consumes = newHashSet();
   private Optional<String> pathMapping = Optional.absent();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
+  private boolean enableUrlTemplating = false;
 
   public Docket(DocumentationType documentationType) {
     this.documentationType = documentationType;
@@ -357,6 +359,22 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
+
+  /**
+   * Decides whether to use url templating for paths. This is especially useful when you have search api's that
+   * might have multiple request mappings for each search use case.
+   *
+   * This is an incubating feature that may not continue to be supported after the swagger specification is modified
+   * to accomodate the usecase as described in issue #711
+   * @param enabled
+   * @return
+   */
+  @Incubating("2.0.3")
+  public Docket enableUrlTemplating(boolean enabled) {
+    this.enableUrlTemplating = enabled;
+    return this;
+  }
+
   Docket selector(ApiSelector apiSelector) {
     this.apiSelector = apiSelector;
     return this;
@@ -401,6 +419,7 @@ public class Docket implements DocumentationPlugin {
             .protocols(protocols)
             .genericsNaming(genericsNamingStrategy)
             .pathMapping(pathMapping)
+            .enableUrlTemplating(enableUrlTemplating)
             .build();
   }
 

@@ -51,6 +51,7 @@ import springfox.documentation.spring.web.SpringGroupingStrategy;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.*;
 
@@ -146,7 +147,8 @@ public class DocumentationPluginsManager {
   }
 
   public String decoratePath(RequestMappingContext context, String path) {
-    Iterable<Function<String, String>> decorators = FluentIterable.from(pathDecorators)
+    Iterable<Function<String, String>> decorators
+        = from(pathDecorators.getPluginsFor(context.getDocumentationContext()))
         .transform(toDecorator(context));
     for (Function<String, String> decorator : decorators) {
       path = decorator.apply(path);
