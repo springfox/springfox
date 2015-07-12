@@ -16,27 +16,19 @@
  *
  *
  */
+package springfox.documentation.service;
 
-package springfox.documentation.spring.web.scanners;
-
-import org.springframework.web.util.UriComponentsBuilder;
-import springfox.documentation.service.PathAdjuster;
+import com.google.common.base.Function;
+import org.springframework.plugin.core.Plugin;
+import springfox.documentation.annotations.Incubating;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
+import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
-
-class PathMappingAdjuster implements PathAdjuster {
-  private final DocumentationContext context;
-
-  public PathMappingAdjuster(DocumentationContext context) {
-    this.context = context;
-  }
-
-  @Override
-  public String adjustedPath(String path) {
-    return UriComponentsBuilder
-        .fromPath(this.context.getPathMapping().or("/"))
-        .path(path)
-        .build()
-        .toUriString();
-  }
+/**
+ * Path decorator is useful to create transformations from a given path based on
+ * the RequestMappingContext. This is an experimental feature
+ */
+@Incubating("2.0.3")
+public interface PathDecorator extends Plugin<DocumentationContext> {
+  Function<String, String> decorator(RequestMappingContext context);
 }

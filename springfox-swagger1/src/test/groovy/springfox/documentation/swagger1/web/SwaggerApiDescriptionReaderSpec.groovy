@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 import springfox.documentation.spring.web.scanners.ApiDescriptionReader
@@ -32,13 +33,13 @@ import javax.servlet.ServletContext
 
 import static springfox.documentation.spring.web.Paths.*
 
-@Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
+@Mixin([RequestMappingSupport, SwaggerPathProviderSupport, ServicePluginsSupport])
 class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
 
    def "should generate an api description for each request mapping pattern"() {
       given:
         def operationReader = Mock(ApiOperationReader)
-        ApiDescriptionReader sut = new ApiDescriptionReader(operationReader)
+        ApiDescriptionReader sut = new ApiDescriptionReader(operationReader, defaultWebPlugins())
       and:
         plugin.pathProvider(pathProvider)
         RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",

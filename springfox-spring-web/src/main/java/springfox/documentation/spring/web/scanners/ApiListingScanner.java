@@ -31,6 +31,7 @@ import springfox.documentation.builders.ApiListingBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
+import springfox.documentation.service.PathAdjuster;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
@@ -101,7 +102,7 @@ public class ApiListingScanner {
 
       PathProvider pathProvider = documentationContext.getPathProvider();
       String basePath = pathProvider.getApplicationBasePath();
-      PathMappingAdjuster adjuster = new PathMappingAdjuster(documentationContext);
+      PathAdjuster adjuster = new PathMappingAdjuster(documentationContext);
       ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
               .apiVersion(documentationContext.getApiInfo().getVersion())
               .basePath(adjuster.adjustedPath(basePath))

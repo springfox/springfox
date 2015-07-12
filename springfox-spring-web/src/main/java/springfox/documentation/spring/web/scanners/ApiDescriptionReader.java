@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.collect.Ordering;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -28,24 +27,31 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.PathProvider;
 import springfox.documentation.builders.ApiDescriptionBuilder;
 import springfox.documentation.service.ApiDescription;
+import springfox.documentation.service.PathAdjuster;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
 
 import java.util.List;
 
-import static com.google.common.collect.FluentIterable.*;
+import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Ordering.*;
 import static springfox.documentation.spring.web.Paths.*;
 
 @Component
 public class ApiDescriptionReader {
 
   private final ApiOperationReader operationReader;
+  private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ApiDescriptionReader(ApiOperationReader operationReader) {
+  public ApiDescriptionReader(ApiOperationReader operationReader,
+      DocumentationPluginsManager pluginsManager) {
+
     this.operationReader = operationReader;
+    this.pluginsManager = pluginsManager;
   }
 
   public List<ApiDescription> read(RequestMappingContext outerContext) {
@@ -60,11 +66,12 @@ public class ApiDescriptionReader {
         String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
         String path = pathProvider.getOperationPath(cleanedRequestMappingPath);
         String methodName = handlerMethod.getMethod().getName();
-        RequestMappingContext operationContext = outerContext.copyPatternUsing(cleanedRequestMappingPath);
-        PathMappingAdjuster adjuster = new PathMappingAdjuster(operationContext.getDocumentationContext());
+        RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
+        PathAdjuster adjuster = new PathMappingAdjuster(operationContext.getDocumentationContext());
+
         apiDescriptionList.add(
             new ApiDescriptionBuilder(outerContext.operationOrdering())
-                .path(adjuster.adjustedPath(path))
+                .path(pluginsManager.decoratePath(outerContext, adjuster.adjustedPath(path)))
                 .description(methodName)
                 .operations(operationReader.read(operationContext))
                 .hidden(false)
@@ -74,9 +81,8 @@ public class ApiDescriptionReader {
   }
 
     private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
-        return from(patternsCondition.getPatterns())
-                .filter(selector.getPathSelector())
-            .toSortedList(Ordering.<String>natural());
+        return natural().sortedCopy(from(patternsCondition.getPatterns())
+            .filter(selector.getPathSelector()));
     }
 
 }

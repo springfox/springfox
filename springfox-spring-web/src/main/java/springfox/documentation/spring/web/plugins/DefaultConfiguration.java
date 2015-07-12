@@ -55,6 +55,7 @@ public class DefaultConfiguration implements DefaultsProviderPlugin {
             .defaultResponseMessages(defaults.defaultResponseMessages())
             .pathProvider(new RelativePathProvider(servletContext))
             .typeResolver(typeResolver)
+            .enableUrlTemplating(false)
             .selector(ApiSelector.DEFAULT);
   }
 

@@ -19,6 +19,8 @@
 
 package springfox.documentation.spring.web.plugins;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
@@ -37,6 +40,7 @@ import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
+import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
@@ -76,6 +80,9 @@ public class DocumentationPluginsManager {
   @Autowired
   @Qualifier("defaultsProviderPluginRegistry")
   private PluginRegistry<DefaultsProviderPlugin, DocumentationType> defaultsProviders;
+  @Autowired
+  @Qualifier("pathDecoratorRegistry")
+  private PluginRegistry<PathDecorator, DocumentationContext> pathDecorators;
 
   public Iterable<DocumentationPlugin> documentationPlugins() throws IllegalStateException {
     List<DocumentationPlugin> plugins = documentationPlugins.getPlugins();
@@ -136,5 +143,23 @@ public class DocumentationPluginsManager {
     return defaultsProviders.getPluginFor(documentationType, defaultConfiguration)
         .create(documentationType)
         .withResourceGroupingStrategy(resourceGroupingStrategy(documentationType));
+  }
+
+  public String decoratePath(RequestMappingContext context, String path) {
+    Iterable<Function<String, String>> decorators = FluentIterable.from(pathDecorators)
+        .transform(toDecorator(context));
+    for (Function<String, String> decorator : decorators) {
+      path = decorator.apply(path);
+    }
+    return path;
+  }
+
+  private Function<? super PathDecorator, Function<String, String>> toDecorator(final RequestMappingContext context) {
+    return new Function<PathDecorator, Function<String, String>>() {
+      @Override
+      public Function<String, String> apply(PathDecorator input) {
+        return input.decorator(context);
+      }
+    };
   }
 }

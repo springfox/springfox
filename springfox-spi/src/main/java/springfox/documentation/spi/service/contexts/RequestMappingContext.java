@@ -115,8 +115,7 @@ public class RequestMappingContext {
 
   public RequestMappingContext copyPatternUsing(String requestMappingPattern) {
     return new RequestMappingContext(documentationContext, requestMappingInfo, handlerMethod,
-            operationModelContextsBuilder,
-            requestMappingPattern);
+            operationModelContextsBuilder, requestMappingPattern);
   }
 
   public RequestMappingContext withKnownModels(Map<String, Model> knownModels) {

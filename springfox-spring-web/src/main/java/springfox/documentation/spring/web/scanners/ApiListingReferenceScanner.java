@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ApiListingReference;
+import springfox.documentation.service.PathAdjuster;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.ApiSelector;
@@ -81,7 +82,7 @@ public class ApiListingReferenceScanner {
       String path = pathProvider.getResourceListingPath(context.getGroupName(), resourceGroupName);
       LOG.info("Created resource listing Path: {} Description: {} Position: {}",
           path, resourceGroupName, position);
-      PathMappingAdjuster adjuster = new PathMappingAdjuster(context);
+      PathAdjuster adjuster = new PathMappingAdjuster(context);
       apiListingReferences.add(new ApiListingReference(adjuster.adjustedPath(path), listingDescription, position));
     }
     List<ApiListingReference> sorted = context.getListingReferenceOrdering().sortedCopy(apiListingReferences);

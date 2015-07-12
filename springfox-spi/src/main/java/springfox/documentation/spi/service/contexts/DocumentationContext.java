@@ -25,6 +25,7 @@ import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
+import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
@@ -62,26 +63,28 @@ public class DocumentationContext {
   private Set<String> protocols;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final Optional<String> pathMapping;
+  private boolean isUrlTemplatesEnabled;
 
   public DocumentationContext(DocumentationType documentationType,
-        List<RequestHandler> handlerMappings,
-        ApiInfo apiInfo, String groupName,
-        ApiSelector apiSelector,
-        Set<Class> ignorableParameterTypes,
-        Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
-        ResourceGroupingStrategy resourceGroupingStrategy,
-        PathProvider pathProvider,
-        List<SecurityContext> securityContexts,
-        List<? extends SecurityScheme> securitySchemes,
-        List<AlternateTypeRule> alternateTypeRules,
-        Ordering<ApiListingReference> listingReferenceOrdering,
-        Ordering<ApiDescription> apiDescriptionOrdering,
-        Ordering<Operation> operationOrdering,
-        Set<String> produces,
-        Set<String> consumes,
-        Set<String> protocols,
-        GenericTypeNamingStrategy genericsNamingStrategy,
-        Optional<String> pathMapping) {
+      List<RequestHandler> handlerMappings,
+      ApiInfo apiInfo, String groupName,
+      ApiSelector apiSelector,
+      Set<Class> ignorableParameterTypes,
+      Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
+      ResourceGroupingStrategy resourceGroupingStrategy,
+      PathProvider pathProvider,
+      List<SecurityContext> securityContexts,
+      List<? extends SecurityScheme> securitySchemes,
+      List<AlternateTypeRule> alternateTypeRules,
+      Ordering<ApiListingReference> listingReferenceOrdering,
+      Ordering<ApiDescription> apiDescriptionOrdering,
+      Ordering<Operation> operationOrdering,
+      Set<String> produces,
+      Set<String> consumes,
+      Set<String> protocols,
+      GenericTypeNamingStrategy genericsNamingStrategy,
+      Optional<String> pathMapping,
+      boolean isUrlTemplatesEnabled) {
 
     this.documentationType = documentationType;
     this.handlerMappings = handlerMappings;
@@ -102,6 +105,7 @@ public class DocumentationContext {
     this.protocols = protocols;
     this.genericsNamingStrategy = genericsNamingStrategy;
     this.pathMapping = pathMapping;
+    this.isUrlTemplatesEnabled = isUrlTemplatesEnabled;
     this.alternateTypeProvider = new AlternateTypeProvider(alternateTypeRules);
   }
 
@@ -183,5 +187,10 @@ public class DocumentationContext {
 
   public Optional<String> getPathMapping() {
     return pathMapping;
+  }
+
+  @Incubating(value = "2.0.3")
+  public boolean isUriTemplatesEnabled() {
+    return isUrlTemplatesEnabled;
   }
 }

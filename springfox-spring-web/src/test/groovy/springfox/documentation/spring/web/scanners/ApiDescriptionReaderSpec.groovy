@@ -24,19 +24,20 @@ import springfox.documentation.service.ApiDescription
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.RelativePathProvider
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 import springfox.documentation.spring.web.Paths
 
 import javax.servlet.ServletContext
 
-@Mixin([RequestMappingSupport])
+@Mixin([RequestMappingSupport, ServicePluginsSupport])
 class ApiDescriptionReaderSpec extends DocumentationContextSpec {
 
    def "should generate an api description for each request mapping pattern"() {
       given:
         def operationReader = Mock(ApiOperationReader)
-        ApiDescriptionReader sut = new ApiDescriptionReader(operationReader)
+        ApiDescriptionReader sut = new ApiDescriptionReader(operationReader, defaultWebPlugins())
       and:
         plugin.pathProvider(pathProvider)
         RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
