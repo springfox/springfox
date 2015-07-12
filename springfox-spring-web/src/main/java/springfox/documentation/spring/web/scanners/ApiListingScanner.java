@@ -38,6 +38,7 @@ import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.Collections;

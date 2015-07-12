@@ -17,14 +17,14 @@
  *
  */
 
-package springfox.documentation.spring.web.scanners;
+package springfox.documentation.spring.web.paths;
 
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.service.PathAdjuster;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 
 
-class PathMappingAdjuster implements PathAdjuster {
+public class PathMappingAdjuster implements PathAdjuster {
   private final DocumentationContext context;
 
   public PathMappingAdjuster(DocumentationContext context) {

@@ -49,7 +49,8 @@ import java.util.List;
     "springfox.documentation.spring.web.scanners",
     "springfox.documentation.spring.web.readers.operation",
     "springfox.documentation.spring.web.readers.parameter",
-    "springfox.documentation.spring.web.plugins"
+    "springfox.documentation.spring.web.plugins",
+    "springfox.documentation.spring.web.paths"
 })
 @EnablePluginRegistries({ DocumentationPlugin.class,
     ApiListingBuilderPlugin.class,

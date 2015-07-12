@@ -27,7 +27,6 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.PathProvider;
 import springfox.documentation.builders.ApiDescriptionBuilder;
 import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.PathAdjuster;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -67,11 +66,10 @@ public class ApiDescriptionReader {
         String path = pathProvider.getOperationPath(cleanedRequestMappingPath);
         String methodName = handlerMethod.getMethod().getName();
         RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
-        PathAdjuster adjuster = new PathMappingAdjuster(operationContext.getDocumentationContext());
 
         apiDescriptionList.add(
             new ApiDescriptionBuilder(outerContext.operationOrdering())
-                .path(pluginsManager.decoratePath(outerContext, adjuster.adjustedPath(path)))
+                .path(pluginsManager.decoratePath(outerContext, path))
                 .description(methodName)
                 .operations(operationReader.read(operationContext))
                 .hidden(false)

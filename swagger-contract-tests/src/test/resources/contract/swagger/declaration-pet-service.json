@@ -281,7 +281,7 @@
             ]
         },
         {
-            "path": "/pets/findByStatus",
+            "path": "/pets/findByStatus{?status}",
             "description": "findPetsByStatus",
             "operations": [
                 {
