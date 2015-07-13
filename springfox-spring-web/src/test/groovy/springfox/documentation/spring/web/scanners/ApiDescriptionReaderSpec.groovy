@@ -37,7 +37,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
    def "should generate an api description for each request mapping pattern"() {
       given:
         def operationReader = Mock(ApiOperationReader)
-        ApiDescriptionReader sut = new ApiDescriptionReader(operationReader, defaultWebPlugins())
+        ApiDescriptionReader sut = new ApiDescriptionReader(operationReader)
       and:
         plugin.pathProvider(pathProvider)
         RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",

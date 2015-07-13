@@ -22,7 +22,7 @@ import com.google.common.base.Function;
 import org.springframework.plugin.core.Plugin;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
-import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.spi.service.contexts.PathContext;
 
 /**
  * Path decorator is useful to create transformations from a given path based on
@@ -30,5 +30,5 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
  */
 @Incubating("2.0.3")
 public interface PathDecorator extends Plugin<DocumentationContext> {
-  Function<String, String> decorator(RequestMappingContext context);
+  Function<String, String> decorator(PathContext context);
 }

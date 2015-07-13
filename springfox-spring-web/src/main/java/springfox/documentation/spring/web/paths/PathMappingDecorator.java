@@ -24,18 +24,18 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
-import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.spi.service.contexts.PathContext;
 
 @Component
 @Order
 public class PathMappingDecorator implements PathDecorator {
 
   @Override
-  public Function<String, String> decorator(final RequestMappingContext context) {
+  public Function<String, String> decorator(final PathContext context) {
     return new Function<String, String>() {
       @Override
       public String apply(String input) {
-        return new PathMappingAdjuster(context.getDocumentationContext()).adjustedPath(input);
+        return new PathMappingAdjuster(context.documentationContext()).adjustedPath(input);
       }
     };
   }

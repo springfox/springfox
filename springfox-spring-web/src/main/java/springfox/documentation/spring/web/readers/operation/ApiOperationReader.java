@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.readers.operation;
 
+import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.OperationsKeyGenerator;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -83,6 +85,9 @@ public class ApiOperationReader {
       }
     }
     Collections.sort(operations, outerContext.operationOrdering());
+    outerContext.apiDescriptionBuilder().operations(operations);
+    outerContext.apiDescriptionBuilder().pathDecorator(
+        pluginsManager.decorator(new PathContext(outerContext, FluentIterable.from(operations).first())));
     return operations;
   }
 

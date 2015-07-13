@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
@@ -45,13 +44,14 @@ import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
+import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.SpringGroupingStrategy;
 
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.*;
 
@@ -146,17 +146,22 @@ public class DocumentationPluginsManager {
         .withResourceGroupingStrategy(resourceGroupingStrategy(documentationType));
   }
 
-  public String decoratePath(RequestMappingContext context, String path) {
-    Iterable<Function<String, String>> decorators
-        = from(pathDecorators.getPluginsFor(context.getDocumentationContext()))
-        .transform(toDecorator(context));
-    for (Function<String, String> decorator : decorators) {
-      path = decorator.apply(path);
-    }
-    return path;
+  public Function<String, String> decorator(final PathContext context) {
+    return new Function<String, String>() {
+      @Override
+      public String apply(String input) {
+        Iterable<Function<String, String>> decorators
+            = from(pathDecorators.getPluginsFor(context.documentationContext()))
+            .transform(toDecorator(context));
+        for (Function<String, String> decorator : decorators) {
+          input = decorator.apply(input);
+        }
+        return input;
+      }
+    };
   }
 
-  private Function<? super PathDecorator, Function<String, String>> toDecorator(final RequestMappingContext context) {
+  private Function<? super PathDecorator, Function<String, String>> toDecorator(final PathContext context) {
     return new Function<PathDecorator, Function<String, String>>() {
       @Override
       public Function<String, String> apply(PathDecorator input) {

@@ -25,11 +25,9 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.PathProvider;
-import springfox.documentation.builders.ApiDescriptionBuilder;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
 
 import java.util.List;
@@ -43,14 +41,10 @@ import static springfox.documentation.spring.web.Paths.*;
 public class ApiDescriptionReader {
 
   private final ApiOperationReader operationReader;
-  private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ApiDescriptionReader(ApiOperationReader operationReader,
-      DocumentationPluginsManager pluginsManager) {
-
+  public ApiDescriptionReader(ApiOperationReader operationReader) {
     this.operationReader = operationReader;
-    this.pluginsManager = pluginsManager;
   }
 
   public List<ApiDescription> read(RequestMappingContext outerContext) {
@@ -67,13 +61,11 @@ public class ApiDescriptionReader {
         String methodName = handlerMethod.getMethod().getName();
         RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
 
-        apiDescriptionList.add(
-            new ApiDescriptionBuilder(outerContext.operationOrdering())
-                .path(pluginsManager.decoratePath(outerContext, path))
-                .description(methodName)
-                .operations(operationReader.read(operationContext))
-                .hidden(false)
-                .build());
+        operationReader.read(operationContext);
+        operationContext.apiDescriptionBuilder().path(path);
+        operationContext.apiDescriptionBuilder().description(methodName);
+        operationContext.apiDescriptionBuilder().hidden(false);
+        apiDescriptionList.add(operationContext.apiDescriptionBuilder().build());
     }
     return apiDescriptionList;
   }

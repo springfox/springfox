@@ -22,6 +22,8 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import springfox.documentation.service.PathDecorator
 import springfox.documentation.spi.service.*
+import springfox.documentation.spring.web.paths.PathMappingDecorator
+import springfox.documentation.spring.web.paths.QueryStringUriTemplateDecorator
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.OperationModelsProvider
 import springfox.documentation.spring.web.readers.parameter.ExpandedParameterBuilder
@@ -44,7 +46,7 @@ class ServicePluginsSupport {
     plugins.resourceGroupingStrategies = OrderAwarePluginRegistry.create([])
     plugins.operationModelsProviders = OrderAwarePluginRegistry.create([new OperationModelsProvider(resolver)])
     plugins.defaultsProviders = OrderAwarePluginRegistry.create([])
-    plugins.pathDecorators = OrderAwarePluginRegistry.create([])
+    plugins.pathDecorators = OrderAwarePluginRegistry.create([new PathMappingDecorator(), new QueryStringUriTemplateDecorator()])
     return plugins
   }
 

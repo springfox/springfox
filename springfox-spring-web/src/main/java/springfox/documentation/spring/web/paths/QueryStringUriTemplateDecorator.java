@@ -24,10 +24,10 @@ import com.google.common.base.Predicate;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
-import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.spi.service.contexts.PathContext;
 
 import java.util.Set;
 
@@ -37,11 +37,11 @@ import static com.google.common.collect.FluentIterable.*;
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 10)
 public class QueryStringUriTemplateDecorator implements PathDecorator {
   @Override
-  public Function<String, String> decorator(final RequestMappingContext context) {
+  public Function<String, String> decorator(final PathContext context) {
     return new Function<String, String>() {
       @Override
       public String apply(String input) {
-        Set<String> expressions = positiveQueryParamNames(context);
+        Set<String> expressions = queryParamNames(context);
         String prefix = requiresContinuation(input) ? "{&" : "{?";
         String queryTemplate = Joiner.on(',').join(expressions);
         if (queryTemplate.length() == 0) {
@@ -56,30 +56,31 @@ public class QueryStringUriTemplateDecorator implements PathDecorator {
     return url.contains("?");
   }
 
-  private Set<String> positiveQueryParamNames(RequestMappingContext context) {
-    return from(context.getRequestMappingInfo().getParamsCondition().getExpressions())
-        .filter(positiveExpressionsOnly())
+  private Set<String> queryParamNames(PathContext context) {
+    return from(context.getParameters())
+        .filter(queryStringParams())
         .transform(paramName())
         .toSet();
   }
 
-  private Function<? super NameValueExpression<String>, String> paramName() {
-    return new Function<NameValueExpression<String>, String>() {
+  private Predicate<Parameter> queryStringParams() {
+    return new Predicate<Parameter>() {
       @Override
-      public String apply(NameValueExpression<String> input) {
+      public boolean apply(Parameter input) {
+        return "query".equals(input.getParamType());
+      }
+    };
+  }
+
+  private Function<Parameter, String> paramName() {
+    return new Function<Parameter, String>() {
+      @Override
+      public String apply(Parameter input) {
         return input.getName();
       }
     };
   }
 
-  private Predicate<? super NameValueExpression<String>> positiveExpressionsOnly() {
-    return new Predicate<NameValueExpression<String>>() {
-      @Override
-      public boolean apply(NameValueExpression<String> input) {
-        return !input.isNegated();
-      }
-    };
-  }
 
   @Override
   public boolean supports(DocumentationContext delimiter) {
