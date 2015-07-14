@@ -16,16 +16,22 @@
  *
  *
  */
+package springfox.documentation.annotations;
 
-package springfox.documentation.swagger1.mixins
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import springfox.documentation.spring.web.paths.RelativePathProvider
-
-import javax.servlet.ServletContext
-
-@SuppressWarnings("GrMethodMayBeStatic")
-class SwaggerPathProviderSupport {
-  RelativePathProvider relativeSwaggerPathProvider(ServletContext servletContext) {
-    new RelativePathProvider(servletContext)
-  }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.METHOD, ElementType.TYPE})
+/**
+ * Annotation to keep track of which interfaces/methods/apis are less stable and may change
+ */
+public @interface Incubating {
+  /**
+   * To keep track of which version this incubating feature was introduced
+   * @return version the annotation was introduced
+   */
+  String value() default "2.0.0";
 }

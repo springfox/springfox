@@ -16,24 +16,8 @@
  *
  *
  */
+package springfox.documentation.service;
 
-package springfox.documentation.spring.web.scanners;
-
-import org.springframework.web.util.UriComponentsBuilder;
-import springfox.documentation.spi.service.contexts.DocumentationContext;
-
-class PathMappingAdjuster {
-  private final DocumentationContext context;
-
-  public PathMappingAdjuster(DocumentationContext context) {
-    this.context = context;
-  }
-
-  public String adjustedPath(String path) {
-    return UriComponentsBuilder
-        .fromPath(context.getPathMapping().or("/"))
-        .path(path)
-        .build()
-        .toUriString();
-  }
+public interface PathAdjuster {
+  String adjustedPath(String path);
 }

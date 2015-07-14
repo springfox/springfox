@@ -17,15 +17,25 @@
  *
  */
 
-package springfox.documentation.swagger1.mixins
+package springfox.documentation.spring.web.paths;
 
-import springfox.documentation.spring.web.paths.RelativePathProvider
+import org.springframework.web.util.UriComponentsBuilder;
+import springfox.documentation.service.PathAdjuster;
+import springfox.documentation.spi.service.contexts.DocumentationContext;
 
-import javax.servlet.ServletContext
+public class PathMappingAdjuster implements PathAdjuster {
+  private final DocumentationContext context;
 
-@SuppressWarnings("GrMethodMayBeStatic")
-class SwaggerPathProviderSupport {
-  RelativePathProvider relativeSwaggerPathProvider(ServletContext servletContext) {
-    new RelativePathProvider(servletContext)
+  public PathMappingAdjuster(DocumentationContext context) {
+    this.context = context;
+  }
+
+  @Override
+  public String adjustedPath(String path) {
+    return UriComponentsBuilder
+        .fromPath(this.context.getPathMapping().or("/"))
+        .path(path)
+        .build()
+        .toUriString();
   }
 }

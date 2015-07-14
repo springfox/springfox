@@ -17,10 +17,13 @@
  *
  */
 
-package springfox.documentation.spring.web
+package springfox.documentation.spring.web.paths
 
 import spock.lang.Specification
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.paths.AbstractPathProvider
+import springfox.documentation.spring.web.paths.Paths
+import springfox.documentation.spring.web.paths.RelativePathProvider
 
 import javax.servlet.ServletContext
 
@@ -85,7 +88,7 @@ class RelativePathProviderSpec extends Specification {
 
   def "should replace slashes"() {
     expect:
-      Paths.sanitiseUrl(input) == expected
+      Paths.removeAdjacentForwardSlashes(input) == expected
     where:
       input             | expected
       '//a/b'           | '/a/b'

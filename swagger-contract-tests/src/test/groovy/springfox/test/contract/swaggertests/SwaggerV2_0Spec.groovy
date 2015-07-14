@@ -211,8 +211,9 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
           .useDefaultResponseMessages(false)
           .securitySchemes(authorizationTypes)
           .produces(['application/xml', 'application/json'] as Set)
+          .enableUrlTemplating(true)
           .select()
-          .paths(regex("/pets/.*"))
+            .paths(regex("/pets/.*"))
           .build()
     }
 

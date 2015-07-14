@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 import springfox.documentation.spring.web.scanners.ApiDescriptionReader
@@ -30,9 +31,9 @@ import springfox.documentation.swagger1.mixins.SwaggerPathProviderSupport
 
 import javax.servlet.ServletContext
 
-import static springfox.documentation.spring.web.Paths.*
+import static springfox.documentation.spring.web.paths.Paths.*
 
-@Mixin([RequestMappingSupport, SwaggerPathProviderSupport])
+@Mixin([RequestMappingSupport, SwaggerPathProviderSupport, ServicePluginsSupport])
 class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
 
    def "should generate an api description for each request mapping pattern"() {
@@ -56,7 +57,7 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
         ApiDescription apiDescription = descriptionList[0]
         ApiDescription secondApiDescription = descriptionList[1]
 
-        apiDescription.getPath() == '/somePath/{businessId}'
+        apiDescription.getPath() == '/somePath/{businessId:\\d+}'
         apiDescription.getDescription() == dummyHandlerMethod().method.name
 
         secondApiDescription.getPath() == '/somePath/{businessId}'

@@ -17,11 +17,10 @@
  *
  */
 
-package springfox.documentation.spring.web
-
+package springfox.documentation.spring.web.paths
 import spock.lang.Specification
 
-import static Paths.*
+import static springfox.documentation.spring.web.paths.Paths.*
 
 class PathsSpec extends Specification {
   def "maybe chomping the leading slash works"() {

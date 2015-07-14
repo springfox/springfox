@@ -16,16 +16,19 @@
  *
  *
  */
+package springfox.documentation.service;
 
-package springfox.documentation.swagger1.mixins
+import com.google.common.base.Function;
+import org.springframework.plugin.core.Plugin;
+import springfox.documentation.annotations.Incubating;
+import springfox.documentation.spi.service.contexts.DocumentationContext;
+import springfox.documentation.spi.service.contexts.PathContext;
 
-import springfox.documentation.spring.web.paths.RelativePathProvider
-
-import javax.servlet.ServletContext
-
-@SuppressWarnings("GrMethodMayBeStatic")
-class SwaggerPathProviderSupport {
-  RelativePathProvider relativeSwaggerPathProvider(ServletContext servletContext) {
-    new RelativePathProvider(servletContext)
-  }
+/**
+ * Path decorator is useful to create transformations from a given path based on
+ * the RequestMappingContext. This is an experimental feature
+ */
+@Incubating("2.1.0")
+public interface PathDecorator extends Plugin<DocumentationContext> {
+  Function<String, String> decorator(PathContext context);
 }

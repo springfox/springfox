@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.spring.web;
+package springfox.documentation.spring.web.paths;
 
 import javax.servlet.ServletContext;
 

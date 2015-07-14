@@ -18,9 +18,15 @@
  */
 
 package springfox.documentation.spring.web.mixins
+
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
+import springfox.documentation.service.PathDecorator
 import springfox.documentation.spi.service.*
+import springfox.documentation.spring.web.paths.OperationPathDecorator
+import springfox.documentation.spring.web.paths.PathMappingDecorator
+import springfox.documentation.spring.web.paths.PathSanitizer
+import springfox.documentation.spring.web.paths.QueryStringUriTemplateDecorator
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.OperationModelsProvider
 import springfox.documentation.spring.web.readers.parameter.ExpandedParameterBuilder
@@ -43,6 +49,11 @@ class ServicePluginsSupport {
     plugins.resourceGroupingStrategies = OrderAwarePluginRegistry.create([])
     plugins.operationModelsProviders = OrderAwarePluginRegistry.create([new OperationModelsProvider(resolver)])
     plugins.defaultsProviders = OrderAwarePluginRegistry.create([])
+    plugins.pathDecorators = OrderAwarePluginRegistry.create([
+        new OperationPathDecorator(),
+        new PathSanitizer(),
+        new PathMappingDecorator(),
+        new QueryStringUriTemplateDecorator()])
     return plugins
   }
 
@@ -50,7 +61,11 @@ class ServicePluginsSupport {
        List<ResourceGroupingStrategy> groupingStrategyPlugins = [],
        List<OperationBuilderPlugin> operationPlugins = [],
        List<ParameterBuilderPlugin> paramPlugins = [],
-       List<DefaultsProviderPlugin> defaultProviderPlugins = []) {
+       List<DefaultsProviderPlugin> defaultProviderPlugins = [],
+       List<PathDecorator> pathDecorators = [new OperationPathDecorator(),
+                                             new PathSanitizer(),
+                                             new PathMappingDecorator(),
+                                             new QueryStringUriTemplateDecorator()]) {
 
     def resolver = new TypeResolver()
     def plugins = new DocumentationPluginsManager()
@@ -62,6 +77,7 @@ class ServicePluginsSupport {
     plugins.resourceGroupingStrategies = OrderAwarePluginRegistry.create(groupingStrategyPlugins)
     plugins.operationModelsProviders = OrderAwarePluginRegistry.create([new OperationModelsProvider(resolver)])
     plugins.defaultsProviders = OrderAwarePluginRegistry.create(defaultProviderPlugins)
+    plugins.pathDecorators = OrderAwarePluginRegistry.create(pathDecorators)
     return plugins
   }
 

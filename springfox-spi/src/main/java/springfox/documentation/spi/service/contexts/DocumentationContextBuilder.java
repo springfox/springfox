@@ -73,6 +73,7 @@ public class DocumentationContextBuilder {
   private final Set<String> consumes = newHashSet();
   private GenericTypeNamingStrategy genericsNamingStrategy;
   private Optional<String> pathMapping;
+  private boolean isUrlTemplatesEnabled;
 
   public DocumentationContextBuilder(DocumentationType documentationType) {
     this.documentationType = documentationType;
@@ -208,6 +209,11 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+  public DocumentationContextBuilder enableUrlTemplating(boolean isUrlTemplatesEnabled) {
+    this.isUrlTemplatesEnabled = isUrlTemplatesEnabled;
+    return this;
+  }
+
   public DocumentationContext build() {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
     return new DocumentationContext(documentationType,
@@ -229,11 +235,11 @@ public class DocumentationContextBuilder {
         consumes,
         protocols,
         genericsNamingStrategy,
-        pathMapping);
+        pathMapping, isUrlTemplatesEnabled);
   }
 
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>
-  evaluator(final TypeResolver typeResolver) {
+      evaluator(final TypeResolver typeResolver) {
 
     return new Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>() {
       @Override

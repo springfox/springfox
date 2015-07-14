@@ -23,7 +23,7 @@ import springfox.documentation.RequestHandler
 import springfox.documentation.annotations.ApiIgnore
 import springfox.documentation.service.ApiListingReference
 import springfox.documentation.service.ResourceGroup
-import springfox.documentation.spring.web.RelativePathProvider
+import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController

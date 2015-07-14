@@ -19,12 +19,15 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.base.Optional;
+import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.collect.Ordering;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.Operation;
 
 import java.util.List;
+
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ApiDescriptionBuilder {
   private String path;
@@ -32,7 +35,7 @@ public class ApiDescriptionBuilder {
   private List<Operation> operations;
   private Ordering<Operation> operationOrdering;
   private Boolean hidden;
-  private Optional<String> pathMapping;
+  private Function<String, String> pathDecorator = Functions.identity();
 
   public ApiDescriptionBuilder(Ordering<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;
@@ -45,7 +48,7 @@ public class ApiDescriptionBuilder {
    * @return @see springfox.documentation.builders.ApiDescriptionBuilder
    */
   public ApiDescriptionBuilder path(String path) {
-    this.path = BuilderDefaults.defaultIfAbsent(path, this.path);
+    this.path = defaultIfAbsent(path, this.path);
     return this;
   }
 
@@ -56,7 +59,7 @@ public class ApiDescriptionBuilder {
    * @return @see springfox.documentation.builders.ApiDescriptionBuilder
    */
   public ApiDescriptionBuilder description(String description) {
-    this.description = BuilderDefaults.defaultIfAbsent(description, this.description);
+    this.description = defaultIfAbsent(description, this.description);
     return this;
   }
 
@@ -84,7 +87,12 @@ public class ApiDescriptionBuilder {
     return this;
   }
 
+  public ApiDescriptionBuilder pathDecorator(Function<String, String> pathDecorator) {
+    this.pathDecorator = defaultIfAbsent(pathDecorator, this.pathDecorator);
+    return this;
+  }
+
   public ApiDescription build() {
-    return new ApiDescription(path, description, operations, hidden);
+    return new ApiDescription(pathDecorator.apply(path), description, operations, hidden);
   }
 }

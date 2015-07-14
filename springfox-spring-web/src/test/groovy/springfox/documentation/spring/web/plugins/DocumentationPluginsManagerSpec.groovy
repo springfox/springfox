@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.plugins
 
+import com.google.common.base.Optional
 import spock.lang.Specification
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ParameterBuilder
@@ -27,11 +28,16 @@ import springfox.documentation.spi.service.DocumentationPlugin
 import springfox.documentation.spi.service.OperationBuilderPlugin
 import springfox.documentation.spi.service.ParameterBuilderPlugin
 import springfox.documentation.spi.service.ResourceGroupingStrategy
+import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
+import springfox.documentation.spi.service.contexts.PathContext
+import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
+
+import javax.servlet.ServletContext
 
 @Mixin(ServicePluginsSupport)
 class DocumentationPluginsManagerSpec extends Specification {
@@ -125,5 +131,22 @@ class DocumentationPluginsManagerSpec extends Specification {
     then:
       parameter != null
       paramPlugin.apply(paramContext)
+  }
+
+  def "Path decorator plugins are applied" () {
+    given:
+      def pathContext = Mock(PathContext)
+      def context = Mock(DocumentationContext)
+    and:
+      pathContext.pathProvider() >> new RelativePathProvider(Mock(ServletContext))
+      pathContext.documentationContext() >> context
+      context.getPathMapping() >> Optional.absent()
+      pathContext.parameters >> []
+    when:
+      def sut = defaultWebPlugins()
+      def decorator = sut.decorator(pathContext)
+    then:
+      decorator != null
+      decorator.apply("") == "/"
   }
 }

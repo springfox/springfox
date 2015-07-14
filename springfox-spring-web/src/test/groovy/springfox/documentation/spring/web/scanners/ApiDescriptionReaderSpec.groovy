@@ -22,15 +22,16 @@ package springfox.documentation.spring.web.scanners
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.spi.service.contexts.RequestMappingContext
-import springfox.documentation.spring.web.RelativePathProvider
+import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
-import springfox.documentation.spring.web.Paths
+import springfox.documentation.spring.web.paths.Paths
 
 import javax.servlet.ServletContext
 
-@Mixin([RequestMappingSupport])
+@Mixin([RequestMappingSupport, ServicePluginsSupport])
 class ApiDescriptionReaderSpec extends DocumentationContextSpec {
 
    def "should generate an api description for each request mapping pattern"() {
@@ -54,11 +55,13 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         ApiDescription apiDescription = descriptionList[0]
         ApiDescription secondApiDescription = descriptionList[1]
 
-        apiDescription.getPath() == prefix + '/somePath/{businessId}'
+        apiDescription.getPath() == prefix + '/somePath/{businessId:\\d+}'
         apiDescription.getDescription() == dummyHandlerMethod().method.name
+        !apiDescription.isHidden()
 
         secondApiDescription.getPath() == prefix + '/somePath/{businessId}'
         secondApiDescription.getDescription() == dummyHandlerMethod().method.name
+        !secondApiDescription.isHidden()
 
       where:
         pathProvider                                    | prefix

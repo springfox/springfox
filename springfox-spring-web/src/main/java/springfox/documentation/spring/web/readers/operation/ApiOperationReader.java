@@ -29,6 +29,7 @@ import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.OperationsKeyGenerator;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -38,6 +39,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static java.util.Arrays.asList;
 
@@ -83,6 +85,9 @@ public class ApiOperationReader {
       }
     }
     Collections.sort(operations, outerContext.operationOrdering());
+    outerContext.apiDescriptionBuilder().operations(operations);
+    outerContext.apiDescriptionBuilder().pathDecorator(
+        pluginsManager.decorator(new PathContext(outerContext, from(operations).first())));
     return operations;
   }
 

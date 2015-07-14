@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.plugin.core.config.EnablePluginRegistries;
 import springfox.documentation.schema.configuration.ModelsConfiguration;
+import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
 import springfox.documentation.spi.service.DefaultsProviderPlugin;
 import springfox.documentation.spi.service.DocumentationPlugin;
@@ -48,7 +49,8 @@ import java.util.List;
     "springfox.documentation.spring.web.scanners",
     "springfox.documentation.spring.web.readers.operation",
     "springfox.documentation.spring.web.readers.parameter",
-    "springfox.documentation.spring.web.plugins"
+    "springfox.documentation.spring.web.plugins",
+    "springfox.documentation.spring.web.paths"
 })
 @EnablePluginRegistries({ DocumentationPlugin.class,
     ApiListingBuilderPlugin.class,
@@ -57,7 +59,9 @@ import java.util.List;
     ExpandedParameterBuilderPlugin.class,
     ResourceGroupingStrategy.class,
     OperationModelsProviderPlugin.class,
-    DefaultsProviderPlugin.class })
+    DefaultsProviderPlugin.class,
+    PathDecorator.class
+})
 public class SpringMvcDocumentationConfiguration {
 
   @Bean

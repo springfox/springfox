@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.spring.web;
+package springfox.documentation.spring.web.paths;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,7 +88,7 @@ public class Paths {
     return result.isEmpty() ? "/" : result;
   }
 
-  public static String sanitiseUrl(String candidate) {
+  public static String removeAdjacentForwardSlashes(String candidate) {
     return candidate.replaceAll("(?<!(http:|https:))//", "/");
   }
 }

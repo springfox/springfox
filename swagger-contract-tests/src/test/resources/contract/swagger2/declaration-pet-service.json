@@ -105,7 +105,7 @@
                 }
             }
         },
-        "/pets/findByStatus": {
+        "/pets/findByStatus{?status}": {
             "get": {
                 "tags": [
                     "pet-service"
@@ -147,7 +147,7 @@
                 }
             }
         },
-        "/pets/findByTags": {
+        "/pets/findByTags{?tags}": {
             "get": {
                 "tags": [
                     "pet-service"
@@ -184,7 +184,7 @@
                 "deprecated": true
             }
         },
-        "/pets/grooming": {
+        "/pets/grooming{?type}": {
             "get": {
                 "tags": [
                     "pet-grooming-service"
