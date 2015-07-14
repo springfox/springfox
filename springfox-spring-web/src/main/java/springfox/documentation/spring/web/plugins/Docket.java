@@ -372,7 +372,7 @@ public class Docket implements DocumentationPlugin {
    * @param enabled
    * @return
    */
-  @Incubating("2.0.3")
+  @Incubating("2.1.0")
   public Docket enableUrlTemplating(boolean enabled) {
     this.enableUrlTemplating = enabled;
     return this;

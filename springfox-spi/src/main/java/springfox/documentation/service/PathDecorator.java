@@ -28,7 +28,7 @@ import springfox.documentation.spi.service.contexts.PathContext;
  * Path decorator is useful to create transformations from a given path based on
  * the RequestMappingContext. This is an experimental feature
  */
-@Incubating("2.0.3")
+@Incubating("2.1.0")
 public interface PathDecorator extends Plugin<DocumentationContext> {
   Function<String, String> decorator(PathContext context);
 }

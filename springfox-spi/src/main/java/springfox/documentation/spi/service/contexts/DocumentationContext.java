@@ -189,7 +189,7 @@ public class DocumentationContext {
     return pathMapping;
   }
 
-  @Incubating(value = "2.0.3")
+  @Incubating(value = "2.1.0")
   public boolean isUriTemplatesEnabled() {
     return isUrlTemplatesEnabled;
   }
