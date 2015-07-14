@@ -147,7 +147,7 @@ public class Docket implements DocumentationPlugin {
    *
    * @param pathProvider
    * @return this Docket
-   * @see springfox.documentation.spring.web.AbstractPathProvider
+   * @see AbstractPathProvider
    */
   public Docket pathProvider(PathProvider pathProvider) {
     this.pathProvider = pathProvider;
@@ -163,9 +163,9 @@ public class Docket implements DocumentationPlugin {
    * @param requestMethod    - http request method for which to apply the message
    * @param responseMessages - the message
    * @return this Docket
-   * @see com.wordnik.swagger.annotations.ApiResponse
+   * @see io.swagger.annotations.ApiResponse
    * and
-   * @see com.wordnik.swagger.annotations.ApiResponses
+   * @see io.swagger.annotations.ApiResponses
    * @see springfox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
    */
   public Docket globalResponseMessage(RequestMethod requestMethod,
@@ -219,9 +219,10 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Provide an ordering schema for operations
-   *
+   * <p/>
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
+   *
    * @param operationOrdering
    * @return
    */
@@ -296,7 +297,7 @@ public class Docket implements DocumentationPlugin {
    * Controls how ApiListingReference's are sorted.
    * i.e the ordering of the api's within the swagger Resource Listing.
    * The default sort is Lexicographically by the ApiListingReference's path
-   *
+   * <p/>
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
    *
@@ -311,7 +312,7 @@ public class Docket implements DocumentationPlugin {
   /**
    * Controls how <code>com.wordnik.swagger.model.ApiDescription</code>'s are ordered.
    * The default sort is Lexicographically by the ApiDescription's path.
-   *
+   * <p/>
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
    *
@@ -351,6 +352,7 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Extensibility mechanism to add a servlet path mapping, if there is one, to the apis base path.
+   *
    * @param path - path that acts as a prefix to the api base path
    * @return this Docket
    */
@@ -363,9 +365,10 @@ public class Docket implements DocumentationPlugin {
   /**
    * Decides whether to use url templating for paths. This is especially useful when you have search api's that
    * might have multiple request mappings for each search use case.
-   *
+   * <p/>
    * This is an incubating feature that may not continue to be supported after the swagger specification is modified
    * to accomodate the usecase as described in issue #711
+   *
    * @param enabled
    * @return
    */
@@ -382,6 +385,7 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Initiates a builder for api selection.
+   *
    * @return api selection builder. To complete building the api selector, the build method of the api selector
    * needs to be called, this will automatically fall back to building the docket when the build method is called.
    */
@@ -401,26 +405,26 @@ public class Docket implements DocumentationPlugin {
       configureDefaults();
     }
     return builder
-            .apiInfo(apiInfo)
-            .selector(apiSelector)
-            .applyDefaultResponseMessages(applyDefaultResponseMessages)
-            .additionalResponseMessages(responseMessages)
-            .additionalIgnorableTypes(ignorableParameterTypes)
-            .ruleBuilders(ruleBuilders)
-            .groupName(groupName)
-            .pathProvider(pathProvider)
-            .securityContexts(securityContexts)
-            .securitySchemes(securitySchemes)
-            .apiListingReferenceOrdering(apiListingReferenceOrdering)
-            .apiDescriptionOrdering(apiDescriptionOrdering)
-            .operationOrdering(operationOrdering)
-            .produces(produces)
-            .consumes(consumes)
-            .protocols(protocols)
-            .genericsNaming(genericsNamingStrategy)
-            .pathMapping(pathMapping)
-            .enableUrlTemplating(enableUrlTemplating)
-            .build();
+        .apiInfo(apiInfo)
+        .selector(apiSelector)
+        .applyDefaultResponseMessages(applyDefaultResponseMessages)
+        .additionalResponseMessages(responseMessages)
+        .additionalIgnorableTypes(ignorableParameterTypes)
+        .ruleBuilders(ruleBuilders)
+        .groupName(groupName)
+        .pathProvider(pathProvider)
+        .securityContexts(securityContexts)
+        .securitySchemes(securitySchemes)
+        .apiListingReferenceOrdering(apiListingReferenceOrdering)
+        .apiDescriptionOrdering(apiDescriptionOrdering)
+        .operationOrdering(operationOrdering)
+        .produces(produces)
+        .consumes(consumes)
+        .protocols(protocols)
+        .genericsNaming(genericsNamingStrategy)
+        .pathMapping(pathMapping)
+        .enableUrlTemplating(enableUrlTemplating)
+        .build();
   }
 
   @Override
@@ -457,7 +461,7 @@ public class Docket implements DocumentationPlugin {
       @Override
       public AlternateTypeRule apply(TypeResolver typeResolver) {
         return AlternateTypeRules.newRule(typeResolver.resolve(clz, WildcardType.class), typeResolver.resolve
-                (WildcardType.class));
+            (WildcardType.class));
       }
     };
   }

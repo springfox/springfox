@@ -17,19 +17,19 @@
  *
  */
 
-package springfox.documentation.spring.web;
+package springfox.documentation.spring.web.paths;
 
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.PathProvider;
 
-import static springfox.documentation.spring.web.Paths.removeAdjacentForwardSlashes;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 
 public abstract class AbstractPathProvider implements PathProvider {
   /**
    * For relative PathProviders this is typically '/' meaning relative to the swagger ui page serving the
    * documentation. The swagger specification recommends that this should be an absolute URL.
-   * 
+   * <p/>
    * Corresponds to the base path attribute of a swagger api declaration.
    * This is the actual base path serving the api (not the swagger documentation)
    *
@@ -39,7 +39,7 @@ public abstract class AbstractPathProvider implements PathProvider {
 
   /**
    * The base path to the swagger api documentation.
-   * 
+   * <p/>
    * Typically docs are served from &lt;yourApp&gt;/api-docs so a relative resourceListing path will omit the api-docs
    * segment.
    * E.g.
@@ -58,7 +58,7 @@ public abstract class AbstractPathProvider implements PathProvider {
   /**
    * The relative path to the operation, from the basePath, which this operation describes.
    * The value SHOULD be in a relative (URL) path format.
-   * 
+   * <p/>
    * Includes the apiResourcePrefix
    *
    * @param operationPath
@@ -73,21 +73,21 @@ public abstract class AbstractPathProvider implements PathProvider {
 
   /**
    * Corresponds to the path attribute of a swagger Resource Object (within a Resource  Listing).
-   * 
+   * <p/>
    * This method builds a URL based off of
-   * @see AbstractPathProvider#getDocumentationPath()
-   * by appending the swagger group and apiDeclaration
    *
-   * @param groupName   the group name for this Resource Object e.g. 'default'
+   * @param groupName      the group name for this Resource Object e.g. 'default'
    * @param apiDeclaration the identifier for the api declaration e.g 'business-controller'
    * @return the resource listing path
+   * @see AbstractPathProvider#getDocumentationPath()
+   * by appending the swagger group and apiDeclaration
    */
   @Override
   public String getResourceListingPath(String groupName, String apiDeclaration) {
     String candidate = agnosticUriComponentBuilder(getDocumentationPath())
-            .pathSegment(groupName, apiDeclaration)
-            .build()
-            .toString();
+        .pathSegment(groupName, apiDeclaration)
+        .build()
+        .toString();
     return removeAdjacentForwardSlashes(candidate);
   }
 

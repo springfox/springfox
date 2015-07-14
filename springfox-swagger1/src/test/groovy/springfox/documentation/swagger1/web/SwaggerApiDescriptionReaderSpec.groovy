@@ -31,7 +31,7 @@ import springfox.documentation.swagger1.mixins.SwaggerPathProviderSupport
 
 import javax.servlet.ServletContext
 
-import static springfox.documentation.spring.web.Paths.*
+import static springfox.documentation.spring.web.paths.Paths.*
 
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport, ServicePluginsSupport])
 class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {

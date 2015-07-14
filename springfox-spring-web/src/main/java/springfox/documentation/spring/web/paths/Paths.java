@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.spring.web;
+package springfox.documentation.spring.web.paths;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

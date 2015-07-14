@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.scanners
 
-import springfox.documentation.spring.web.AbstractPathProvider
+import springfox.documentation.spring.web.paths.AbstractPathProvider
 import springfox.documentation.service.ApiInfo
 import springfox.documentation.service.ApiKey
 import springfox.documentation.service.ApiListingReference
@@ -27,7 +27,7 @@ import springfox.documentation.service.Documentation
 import springfox.documentation.service.ResourceListing
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.RequestMappingContext
-import springfox.documentation.spring.web.RelativePathProvider
+import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 

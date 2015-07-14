@@ -25,7 +25,7 @@ import springfox.documentation.spi.service.DefaultsProviderPlugin;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
-import springfox.documentation.spring.web.RelativePathProvider;
+import springfox.documentation.spring.web.paths.RelativePathProvider;
 
 import javax.servlet.ServletContext;
 

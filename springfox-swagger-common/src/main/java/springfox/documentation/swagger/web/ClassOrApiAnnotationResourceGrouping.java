@@ -31,7 +31,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
-import springfox.documentation.spring.web.Paths;
+import springfox.documentation.spring.web.paths.Paths;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Set;

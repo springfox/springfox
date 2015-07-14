@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger1.mixins
 
-import springfox.documentation.spring.web.RelativePathProvider
+import springfox.documentation.spring.web.paths.RelativePathProvider
 
 import javax.servlet.ServletContext
 

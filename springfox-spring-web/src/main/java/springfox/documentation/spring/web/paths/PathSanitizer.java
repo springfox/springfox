@@ -26,7 +26,7 @@ import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
 
-import static springfox.documentation.spring.web.Paths.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 20)
