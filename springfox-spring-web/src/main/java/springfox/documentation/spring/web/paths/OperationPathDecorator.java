@@ -27,7 +27,7 @@ import springfox.documentation.spi.service.contexts.PathContext;
 
 @Component
 @Order
-public class OperationPathDecorator implements PathDecorator {
+class OperationPathDecorator implements PathDecorator {
   @Override
   public Function<String, String> decorator(final PathContext context) {
     return new Function<String, String>() {

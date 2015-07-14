@@ -35,7 +35,7 @@ import static com.google.common.collect.FluentIterable.*;
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 60)
-public class QueryStringUriTemplateDecorator implements PathDecorator {
+class QueryStringUriTemplateDecorator implements PathDecorator {
   @Override
   public Function<String, String> decorator(final PathContext context) {
     return new Function<String, String>() {

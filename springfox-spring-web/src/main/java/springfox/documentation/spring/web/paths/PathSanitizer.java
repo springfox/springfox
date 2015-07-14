@@ -30,7 +30,7 @@ import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 20)
-public class PathSanitizer implements PathDecorator {
+class PathSanitizer implements PathDecorator {
   @Override
   public Function<String, String> decorator(PathContext context) {
     return new Function<String, String>() {
