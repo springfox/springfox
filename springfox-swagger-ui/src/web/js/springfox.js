@@ -24,6 +24,14 @@ $(function() {
         });
     });
 
+    function maybePrefix(location, withRelativePath) {
+        var pat = /^https?:\/\//i;
+        if (pat.test(location)) {
+            return location;
+        }
+        return withRelativePath + location;
+    }
+
     $(document).ready(function() {
         var relativeLocation = springfox.baseUrl();
 
@@ -35,7 +43,7 @@ $(function() {
             $urlDropdown.empty();
             $.each(data, function(i, resource) {
                 var option = $('<option></option>')
-                        .attr("value", relativeLocation + resource.location)
+                        .attr("value", maybePrefix(resource.location, relativeLocation))
                         .text(resource.name + " (" + resource.location + ")");
                 $urlDropdown.append(option);
             });
