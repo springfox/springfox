@@ -20,6 +20,7 @@ package springfox.documentation.spi.service.contexts;
 
 import com.google.common.base.Optional;
 import springfox.documentation.PathProvider;
+import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
 
@@ -27,6 +28,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 
+@Incubating("2.1.0")
 public class PathContext {
 
   private final RequestMappingContext parent;
