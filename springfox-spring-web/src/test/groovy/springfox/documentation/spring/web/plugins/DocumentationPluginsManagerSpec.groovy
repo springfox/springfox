@@ -32,9 +32,12 @@ import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spi.service.contexts.PathContext
+import springfox.documentation.spring.web.RelativePathProvider
 import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
+
+import javax.servlet.ServletContext
 
 @Mixin(ServicePluginsSupport)
 class DocumentationPluginsManagerSpec extends Specification {
@@ -135,6 +138,7 @@ class DocumentationPluginsManagerSpec extends Specification {
       def pathContext = Mock(PathContext)
       def context = Mock(DocumentationContext)
     and:
+      pathContext.pathProvider() >> new RelativePathProvider(Mock(ServletContext))
       pathContext.documentationContext() >> context
       context.getPathMapping() >> Optional.absent()
       pathContext.parameters >> []

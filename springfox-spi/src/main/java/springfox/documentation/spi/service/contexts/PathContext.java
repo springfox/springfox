@@ -19,6 +19,7 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.google.common.base.Optional;
+import springfox.documentation.PathProvider;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
 
@@ -38,6 +39,10 @@ public class PathContext {
 
   public DocumentationContext documentationContext() {
     return parent.getDocumentationContext();
+  }
+
+  public PathProvider pathProvider() {
+    return parent.getDocumentationContext().getPathProvider();
   }
 
   public List<Parameter> getParameters() {

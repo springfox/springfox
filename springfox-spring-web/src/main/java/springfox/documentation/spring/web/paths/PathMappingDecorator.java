@@ -28,7 +28,7 @@ import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
 
 @Component
-@Order(value = Ordered.HIGHEST_PRECEDENCE + 20)
+@Order(value = Ordered.HIGHEST_PRECEDENCE + 40)
 public class PathMappingDecorator implements PathDecorator {
 
   @Override

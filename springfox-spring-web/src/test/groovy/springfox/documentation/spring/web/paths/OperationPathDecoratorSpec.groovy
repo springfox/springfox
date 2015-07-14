@@ -1,10 +1,11 @@
 package springfox.documentation.spring.web.paths
+
 import com.google.common.base.Optional
 import springfox.documentation.spi.service.contexts.PathContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-class PathSanitizerSpec extends DocumentationContextSpec {
+class OperationPathDecoratorSpec extends DocumentationContextSpec {
   def "Creates path adjustment in relation to servlet mapping" () {
     given:
       def requestMappingContext = Mock(RequestMappingContext)
@@ -12,7 +13,7 @@ class PathSanitizerSpec extends DocumentationContextSpec {
     and:
       requestMappingContext.getDocumentationContext() >> context()
     and:
-      def sut = new PathSanitizer()
+      def sut = new OperationPathDecorator()
     when:
       def decorator = sut.decorator(ctx)
     and:
@@ -24,11 +25,11 @@ class PathSanitizerSpec extends DocumentationContextSpec {
       ""                         | "/"
       "/"                        | "/"
       "/businesses"              | "/businesses"
-      "/{businessId:\\w+}"       | "/{businessId}"
+      "businesses"               | "/businesses"
       "/businesses/{businessId}" | "/businesses/{businessId}"
       "/foo/bar:{baz}"           | "/foo/bar:{baz}"
       "/foo:{foo}/bar:{baz}"     | "/foo:{foo}/bar:{baz}"
-      "/foo/bar:{baz:\\w+}"      | "/foo/bar:{baz}"
-      "/foo//bar:{baz:\\w+}"      | "/foo/bar:{baz}"
-    }
+      "/foo/bar:{baz}"           | "/foo/bar:{baz}"
+      "/foo//bar:{baz}"          | "/foo/bar:{baz}"
+  }
 }

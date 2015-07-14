@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import springfox.documentation.PathProvider;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
@@ -51,11 +50,9 @@ public class ApiDescriptionReader {
     HandlerMethod handlerMethod = outerContext.getHandlerMethod();
     PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
     ApiSelector selector = outerContext.getDocumentationContext().getApiSelector();
-    PathProvider pathProvider = outerContext.getDocumentationContext().getPathProvider();
 
     List<ApiDescription> apiDescriptionList = newArrayList();
-    for (String pattern : matchingPaths(selector, patternsCondition)) {
-        String path = pathProvider.getOperationPath(pattern);
+    for (String path : matchingPaths(selector, patternsCondition)) {
         String methodName = handlerMethod.getMethod().getName();
         RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
 
