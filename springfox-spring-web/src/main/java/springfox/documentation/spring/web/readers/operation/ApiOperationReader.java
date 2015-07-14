@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.readers.operation;
 
-import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -40,6 +39,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static java.util.Arrays.asList;
 
@@ -87,7 +87,7 @@ public class ApiOperationReader {
     Collections.sort(operations, outerContext.operationOrdering());
     outerContext.apiDescriptionBuilder().operations(operations);
     outerContext.apiDescriptionBuilder().pathDecorator(
-        pluginsManager.decorator(new PathContext(outerContext, FluentIterable.from(operations).first())));
+        pluginsManager.decorator(new PathContext(outerContext, from(operations).first())));
     return operations;
   }
 

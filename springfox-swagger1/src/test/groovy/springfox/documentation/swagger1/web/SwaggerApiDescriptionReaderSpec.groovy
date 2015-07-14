@@ -57,7 +57,7 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
         ApiDescription apiDescription = descriptionList[0]
         ApiDescription secondApiDescription = descriptionList[1]
 
-        apiDescription.getPath() == '/somePath/{businessId}'
+        apiDescription.getPath() == '/somePath/{businessId:\\d+}'
         apiDescription.getDescription() == dummyHandlerMethod().method.name
 
         secondApiDescription.getPath() == '/somePath/{businessId}'

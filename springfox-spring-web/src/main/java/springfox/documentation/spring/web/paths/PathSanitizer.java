@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.spring.web.paths;
 
 import com.google.common.base.Function;
@@ -27,16 +26,17 @@ import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
 
-@Component
-@Order(value = Ordered.HIGHEST_PRECEDENCE + 20)
-public class PathMappingDecorator implements PathDecorator {
+import static springfox.documentation.spring.web.Paths.*;
 
+@Component
+@Order(value = Ordered.HIGHEST_PRECEDENCE)
+public class PathSanitizer implements PathDecorator {
   @Override
-  public Function<String, String> decorator(final PathContext context) {
+  public Function<String, String> decorator(PathContext context) {
     return new Function<String, String>() {
       @Override
       public String apply(String input) {
-        return new PathMappingAdjuster(context.documentationContext()).adjustedPath(input);
+        return sanitizeRequestMappingPattern(input);
       }
     };
   }

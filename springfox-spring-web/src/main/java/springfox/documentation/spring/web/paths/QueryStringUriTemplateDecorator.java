@@ -34,7 +34,7 @@ import java.util.Set;
 import static com.google.common.collect.FluentIterable.*;
 
 @Component
-@Order(value = Ordered.HIGHEST_PRECEDENCE + 10)
+@Order(value = Ordered.HIGHEST_PRECEDENCE + 40)
 public class QueryStringUriTemplateDecorator implements PathDecorator {
   @Override
   public Function<String, String> decorator(final PathContext context) {

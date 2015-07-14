@@ -35,7 +35,6 @@ import java.util.List;
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Ordering.*;
-import static springfox.documentation.spring.web.Paths.*;
 
 @Component
 public class ApiDescriptionReader {
@@ -56,8 +55,7 @@ public class ApiDescriptionReader {
 
     List<ApiDescription> apiDescriptionList = newArrayList();
     for (String pattern : matchingPaths(selector, patternsCondition)) {
-        String cleanedRequestMappingPath = sanitizeRequestMappingPattern(pattern);
-        String path = pathProvider.getOperationPath(cleanedRequestMappingPath);
+        String path = pathProvider.getOperationPath(pattern);
         String methodName = handlerMethod.getMethod().getName();
         RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
 

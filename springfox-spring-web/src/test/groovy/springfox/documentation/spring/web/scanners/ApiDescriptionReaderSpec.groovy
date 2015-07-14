@@ -55,11 +55,13 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         ApiDescription apiDescription = descriptionList[0]
         ApiDescription secondApiDescription = descriptionList[1]
 
-        apiDescription.getPath() == prefix + '/somePath/{businessId}'
+        apiDescription.getPath() == prefix + '/somePath/{businessId:\\d+}'
         apiDescription.getDescription() == dummyHandlerMethod().method.name
+        !apiDescription.isHidden()
 
         secondApiDescription.getPath() == prefix + '/somePath/{businessId}'
         secondApiDescription.getDescription() == dummyHandlerMethod().method.name
+        !secondApiDescription.isHidden()
 
       where:
         pathProvider                                    | prefix
