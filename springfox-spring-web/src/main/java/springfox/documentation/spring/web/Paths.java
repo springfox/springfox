@@ -88,7 +88,7 @@ public class Paths {
     return result.isEmpty() ? "/" : result;
   }
 
-  public static String sanitiseUrl(String candidate) {
+  public static String removeAdjacentForwardSlashes(String candidate) {
     return candidate.replaceAll("(?<!(http:|https:))//", "/");
   }
 }

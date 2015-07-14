@@ -85,7 +85,7 @@ class RelativePathProviderSpec extends Specification {
 
   def "should replace slashes"() {
     expect:
-      Paths.sanitiseUrl(input) == expected
+      Paths.removeAdjacentForwardSlashes(input) == expected
     where:
       input             | expected
       '//a/b'           | '/a/b'

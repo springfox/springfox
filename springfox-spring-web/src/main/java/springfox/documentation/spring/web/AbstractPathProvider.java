@@ -22,7 +22,7 @@ package springfox.documentation.spring.web;
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.PathProvider;
 
-import static springfox.documentation.spring.web.Paths.sanitiseUrl;
+import static springfox.documentation.spring.web.Paths.removeAdjacentForwardSlashes;
 
 
 public abstract class AbstractPathProvider implements PathProvider {
@@ -68,7 +68,7 @@ public abstract class AbstractPathProvider implements PathProvider {
   @Override
   public String getOperationPath(String operationPath) {
     UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath("/");
-    return sanitiseUrl(uriComponentsBuilder.path(operationPath).build().toString());
+    return removeAdjacentForwardSlashes(uriComponentsBuilder.path(operationPath).build().toString());
   }
 
   /**
@@ -88,7 +88,7 @@ public abstract class AbstractPathProvider implements PathProvider {
             .pathSegment(groupName, apiDeclaration)
             .build()
             .toString();
-    return sanitiseUrl(candidate);
+    return removeAdjacentForwardSlashes(candidate);
   }
 
   private UriComponentsBuilder agnosticUriComponentBuilder(String url) {

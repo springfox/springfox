@@ -36,7 +36,7 @@ public class PathSanitizer implements PathDecorator {
     return new Function<String, String>() {
       @Override
       public String apply(String input) {
-        return sanitizeRequestMappingPattern(input);
+        return removeAdjacentForwardSlashes(sanitizeRequestMappingPattern(input));
       }
     };
   }
