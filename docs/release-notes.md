@@ -1,3 +1,42 @@
+# 2.1.0 Release Notes
+
+## Significant changes
+- Caching and performance improvements. Details [available here](http://springfox.github.io/springfox/docs/snapshot/#caching)
+- Added support for [RFC #6570](https://tools.ietf.org/html/rfc6570)
+- Added new apis annotated with `@Incubation` and `@Deprecated` certain apis.
+
+### Deprecations
+[ResourceGroupingStrategy](https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/service/ResourceGroupingStrategy.java) has following deprecations [getResourceDescription](https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/service/ResourceGroupingStrategy.java#L54-L55) and [getResourcePosition](https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/service/ResourceGroupingStrategy.java#L66-L67)
+
+### Incubating features
+- [Docket#enableUrlTemplating](https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/main/java/springfox/documentation/spring/web/plugins/Docket.java#L365-L379)
+- [PathDecorator](https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/service/PathDecorator.java) interface that takes in a [PathContext](https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/service/contexts/PathContext.java)
+
+## Enhancements
+- #831 Changes to allow for readOnly property in swagger 2  **feature** @jfearon
+- #832 Add support for vendor extensions in operations  **feature** @cbornet
+- #843 Swagger Resources with different base paths **feature** @samillm
+
+## Bug fixes and maintenance
+- #682 operationId is not guaranteed to be unique **bug**
+- #711 Support for multiple request/response models based on different query string parameters and also accept headers **bug**
+- #771 Duplicate Tags when multiple @Api have same value. **bug** @rkaltreider
+- #817 Maps of maps are not correctly handled **bug** @cbornet
+- #825 Generated spec is non-deterministic - different runs different outputs **bug** @rajeshkamal
+- #829 o2c.html not found **bug** @yukinami
+- #830 Newest version of swagger2markup  **maintenance** @RobWin
+- #833 initOAuth in swagger-ui.html is not invoked. **bug** @yukinami
+- #837 Array of multipart file parameters are not rendered correctly **bug** 
+
+## Questions and Documentation
+- #821 Configuring authorization **can-use-for-docs question** @poliveiraTDsis
+- #827 missing documentation **can-use-for-docs** @rcruzper
+- #828 Using Maps **question** @rcruzper
+- #835 @ApiResponses is suppressing "Response Content Type" drop down **can-use-for-docs question ** @dpatra1
+- #839 Swagger Spring MVC missing controller names **question won't fix** @samillm 
+- #822 Response code in Response Entity ignored **can-use-for-docs question** @jfearon
+- #840 overflow-y **can-use-for-docs question** @wind57
+
 # 2.0.3 Release notes
 Includes major bug fix that caused degraded performance and a few minor bug fixes
 
@@ -6,7 +45,7 @@ Includes major bug fix that caused degraded performance and a few minor bug fixe
     - #812 swagger springfox unable to initialize when moving from 2.0.1 to >2.0.2 @roya2 
 - #805 ApiOperation response doesn't work Thanks! @EdwardsBean
 - #813 Duplicate Params - Swagger Spec and in Generated Code Thanks! @rajeshkamal  2.0.3
-- #803 [Documentation] Added note on @EnableWebMvvc conflict when using Spring Boot Thanks! @igilham
+- #803 [Documentation] Added note on @EnableWebMvc conflict when using Spring Boot Thanks! @igilham
 - #804 CircleCI no longer publishes the snapshot builds bug maintenance
 
 # 2.0.2 Release notes
