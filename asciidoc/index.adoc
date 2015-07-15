@@ -10,4 +10,4 @@ include::introduction.adoc[]
 include::getting_started.adoc[]
 include::architecture.adoc[]
 include::swagger.adoc[]
-
+include::common-problems.adoc[]

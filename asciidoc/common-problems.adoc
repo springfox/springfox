@@ -1,0 +1,16 @@
+== Answers to common questions and problems
+
+*Q. Why does springfox ignore the http status code in the return value of a controller method?*
+
+A. https://github.com/springfox/springfox/issues/822[Reference #822]
+
+*Q. What is the relationship between swagger-ui and springfox-swagger-ui?*
+
+A. It can be a little confusing :open_mouth:
+
+- Swagger Spec is a specification
+- Swagger Api - an implementation of that specification that supports jax-rs, restlet, jersey etc.
+- Springfox libraries in general - is another implementation of the specification focused on the spring based ecosystem
+- Swagger.js and Swagger-ui - Are client libraries in javascript that can consume swagger specification
+- springfox-swagger-ui - the one that you're referring to, is just packaging swagger-ui in a convenient way so that
+spring services can serve it up.
