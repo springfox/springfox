@@ -18,6 +18,7 @@
 - #843 Swagger Resources with different base paths **feature** @samillm
 
 ## Bug fixes and maintenance
+- #847 Link to minified swagger-ui @ejain
 - #682 operationId is not guaranteed to be unique **bug**
 - #711 Support for multiple request/response models based on different query string parameters and also accept headers **bug**
 - #771 Duplicate Tags when multiple @Api have same value. **bug** @rkaltreider
