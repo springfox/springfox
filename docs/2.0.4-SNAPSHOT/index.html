@@ -555,6 +555,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#usage-guide">6.1. Usage guide</a></li>
 </ul>
 </li>
+<li><a href="#answers-to-common-questions-and-problems">7. Answers to common questions and problems</a></li>
 </ul>
 </div>
 </div>
@@ -1004,6 +1005,7 @@ dependencies {
 128
 129
 <strong>130</strong>
+131
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
@@ -1094,6 +1096,7 @@ dependencies {
                 .build()))
         .securitySchemes(newArrayList(apiKey()))<i class="conum" data-value="14"></i><b>(14)</b>
         .securityContexts(newArrayList(securityContext()))<i class="conum" data-value="15"></i><b>(15)</b>
+        .enableUrlTemplating(<span class="predefined-constant">true</span>)<i class="conum" data-value="21"></i><b>(21)</b>
         ;
   }
 
@@ -1228,6 +1231,12 @@ select operations to be protected by one of the specified security schemes.</td>
 <tr>
 <td><i class="conum" data-value="20"></i><b>20</b></td>
 <td>Optional swagger-ui ui configuration currently only supports the validation url</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="21"></i><b>21</b></td>
+<td>* <em>Incubating</em> * setting this flag signals to the processor that the paths generated should try and use
+<a href="https://tools.ietf.org/html/rfc6570#section-3.2.8">form style query expansion</a>. As a result we could distinguish paths
+ that have the same path stem but different query string combinations. An example of this would be two apis:</td>
 </tr>
 </table>
 </div>
@@ -1910,10 +1919,55 @@ in the demo application.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="answers-to-common-questions-and-problems">7. Answers to common questions and problems</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Q. Why does springfox ignore the http status code in the return value of a controller method?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p><a href="https://github.com/springfox/springfox/issues/822">Reference #822</a></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Q. What is the relationship between swagger-ui and springfox-swagger-ui?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>It can be a little confusing :open_mouth:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Swagger Spec is a specification</p>
+</li>
+<li>
+<p>Swagger Api - an implementation of that specification that supports jax-rs, restlet, jersey etc.</p>
+</li>
+<li>
+<p>Springfox libraries in general - is another implementation of the specification focused on the spring based ecosystem</p>
+</li>
+<li>
+<p>Swagger.js and Swagger-ui - Are client libraries in javascript that can consume swagger specification</p>
+</li>
+<li>
+<p>springfox-swagger-ui - the one that you&#8217;re referring to, is just packaging swagger-ui in a convenient way so that
+spring services can serve it up.</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-14 05:15:40 UTC
+Last updated 2015-07-15 05:12:57 UTC
 </div>
 </div>
 </body>
