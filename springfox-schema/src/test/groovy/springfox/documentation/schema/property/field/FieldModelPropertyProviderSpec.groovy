@@ -91,4 +91,30 @@ class FieldModelPropertyProviderSpec extends Specification {
       deSerializationPropNames == ['name']
 
   }
+
+  def "Handles enum collections" () {
+
+    given:
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    Class typeToTest = collectionEnumType()
+    def typeResolver = new TypeResolver()
+    ResolvedType resolvedType = typeResolver.resolve(typeToTest)
+    ObjectMapper mapper = objectMapperThatUsesFields()
+    def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+    namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
+    def propertyProvider = new FieldModelPropertyProvider(new FieldProvider(typeResolver),
+            namingStrategy, defaultSchemaPlugins(), Mock(TypeNameExtractor))
+    propertyProvider.objectMapper = mapper
+    def serializationPropNames = propertyProvider.propertiesFor(resolvedType, returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
+    )
+            .collect({it.name})
+    def deSerializationPropNames = propertyProvider.propertiesFor(resolvedType, inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
+    )
+            .collect({it.name})
+
+    expect:
+    serializationPropNames == ['exampleEnums']
+    deSerializationPropNames == ['exampleEnums']
+
+  }
 }

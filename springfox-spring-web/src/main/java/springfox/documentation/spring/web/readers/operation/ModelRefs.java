@@ -21,7 +21,9 @@ package springfox.documentation.spring.web.readers.operation;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ResolvedTypes;
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import static springfox.documentation.schema.Collections.*;
@@ -49,7 +51,8 @@ public class ModelRefs {
     if (isContainerType(resolved)) {
       ResolvedType collectionElementType = collectionElementType(resolved);
       String elementTypeName = nameExtractor.typeName(fromParent(modelContext, collectionElementType));
-      return new ModelRef(containerType(resolved), elementTypeName);
+      AllowableValues allowableValues = ResolvedTypes.allowableValues(resolved);
+      return new ModelRef(containerType(resolved), elementTypeName, allowableValues);
     }
     if (isMapType(resolved)) {
       String elementTypeName = nameExtractor.typeName(fromParent(modelContext, mapValueType(resolved)));
@@ -58,7 +61,8 @@ public class ModelRefs {
     if (Void.class.equals(resolved.getErasedType()) || Void.TYPE.equals(resolved.getErasedType())) {
       return new ModelRef("void");
     }
+    AllowableValues allowableValues = ResolvedTypes.allowableValues(resolved);
     String typeName = nameExtractor.typeName(fromParent(modelContext, resolved));
-    return new ModelRef(typeName);
+    return new ModelRef(typeName, null, allowableValues);
   }
 }

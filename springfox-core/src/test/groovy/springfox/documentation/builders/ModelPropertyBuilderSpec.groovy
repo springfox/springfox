@@ -42,6 +42,7 @@ class ModelPropertyBuilderSpec extends Specification {
       'description'       | 'model1 desc'                         | 'description'
       'required'          | true                                  | 'required'
       'readOnly'          | true                                  | 'readOnly'
+      'isHidden'          | true                                  | 'hidden'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
   }
 

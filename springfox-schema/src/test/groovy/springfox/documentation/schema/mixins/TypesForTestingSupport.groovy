@@ -53,6 +53,9 @@ class TypesForTestingSupport {
   static Class enumType() {
     ExampleWithEnums
   }
+  static Class collectionEnumType() {
+    ExampleWithEnumCollection
+  }
   static Class typeWithLists() {
     ListsContainer
   }

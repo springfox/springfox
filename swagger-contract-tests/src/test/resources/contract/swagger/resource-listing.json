@@ -27,6 +27,11 @@
             "position": 0
         },
         {
+            "description": "Service that return enums",
+            "path": "/default/enum-service",
+            "position": 0
+        },
+        {
             "description": "Environment Mvc Endpoint",
             "path": "/default/environment-mvc-endpoint",
             "position": 0
