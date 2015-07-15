@@ -39,7 +39,9 @@ class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionPar
     def proc = command.execute();
     proc.waitFor();
     if (proc.exitValue() == 0) {
-      LOG.info("Successfully executed: $command")
+      LOG.info("Successfully executed: $command\r\n${proc.text}")
+    } else {
+      LOG.error(proc.err.text)
     }
   }
 
