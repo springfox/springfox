@@ -124,6 +124,13 @@ select operations to be protected by one of the specified security schemes.
 <18> Here we same key defined in the security scheme `mykey`
 <19> Optional swagger-ui security configuration for oauth and apiKey settings
 <20> Optional swagger-ui ui configuration currently only supports the validation url
+<21> * _Incubating_ * setting this flag signals to the processor that the paths generated should try and use
+https://tools.ietf.org/html/rfc6570#section-3.2.8[form style query expansion]. As a result we could distinguish paths
+ that have the same path stem but different query string combinations. An example of this would be two apis:
+* http://example.org/findCustomersBy?name=Test to find customers by name. Per https://tools.ietf.org/html/rfc6570[RFC
+ 6570] This would be represented as http://example.org/findCustomersBy{?name}
+* http://example.org/findCustomersBy?zip=76051 to find customers by zip. Per https://tools.ietf.org/html/rfc6570[RFC
+  6570] This would be represented as http://example.org/findCustomersBy{?zip}
 
 There are plenty of more options to configure the `Docket`. This should provide a good start.
 

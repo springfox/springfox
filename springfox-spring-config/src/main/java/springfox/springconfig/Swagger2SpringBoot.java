@@ -87,6 +87,7 @@ public class Swagger2SpringBoot {
                 .build()))
         .securitySchemes(newArrayList(apiKey()))//<14>
         .securityContexts(newArrayList(securityContext()))//<15>
+        .enableUrlTemplating(true)//<21>
         ;
   }
 
