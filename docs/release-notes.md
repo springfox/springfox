@@ -13,6 +13,7 @@
 - [PathDecorator](https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/service/PathDecorator.java) interface that takes in a [PathContext](https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/service/contexts/PathContext.java)
 
 ## Enhancements
+- #849 #801 #810 Support for enums in response values and in schema objects **feature** @kevinconaway
 - #831 Changes to allow for readOnly property in swagger 2  **feature** @jfearon
 - #832 Add support for vendor extensions in operations  **feature** @cbornet
 - #843 Swagger Resources with different base paths **feature** @samillm
