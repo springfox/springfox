@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.ExampleEnum
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
@@ -105,16 +106,27 @@ class FieldModelPropertyProviderSpec extends Specification {
     def propertyProvider = new FieldModelPropertyProvider(new FieldProvider(typeResolver),
             namingStrategy, defaultSchemaPlugins(), Mock(TypeNameExtractor))
     propertyProvider.objectMapper = mapper
-    def serializationPropNames = propertyProvider.propertiesFor(resolvedType, returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
-    )
-            .collect({it.name})
-    def deSerializationPropNames = propertyProvider.propertiesFor(resolvedType, inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy)
-    )
-            .collect({it.name})
+
+    def serializationProps =
+            propertyProvider.propertiesFor(resolvedType, returnValue(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy))
+
+    def deSerializationProps =
+            propertyProvider.propertiesFor(resolvedType, inputParam(resolvedType, DocumentationType.SWAGGER_12, alternateTypeProvider(), genericNamingStrategy))
+
 
     expect:
-    serializationPropNames == ['exampleEnums']
-    deSerializationPropNames == ['exampleEnums']
+    def assertModelProperties = { props ->
+      assert props.size() == 1
+      assert props.first().name == 'exampleEnums'
+      assert props.first().type.erasedType == List
+      assert props.first().type.typeParameters.size() == 1
+      assert props.first().type.typeParameters.first().erasedType == ExampleEnum
+      assert props.first().allowableValues.values == ['ONE', 'TWO']
+      true
+    }
 
+    assertModelProperties(serializationProps)
+    assertModelProperties(deSerializationProps)
   }
+
 }
