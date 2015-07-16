@@ -36,6 +36,10 @@ public class ModelRef {
     this(type, itemType, allowableValues, false);
   }
 
+  public ModelRef(String type, AllowableValues allowableValues) {
+    this(type, null, allowableValues);
+  }
+
   public ModelRef(String type, String itemType, boolean isMap) {
     this(type, itemType, null, isMap);
   }
@@ -48,7 +52,7 @@ public class ModelRef {
   }
 
   public ModelRef(String type) {
-    this(type, null);
+    this(type, null, null);
   }
 
   public String getType() {

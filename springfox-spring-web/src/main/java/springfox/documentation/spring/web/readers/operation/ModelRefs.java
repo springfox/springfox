@@ -63,6 +63,6 @@ public class ModelRefs {
     }
     AllowableValues allowableValues = ResolvedTypes.allowableValues(resolved);
     String typeName = nameExtractor.typeName(fromParent(modelContext, resolved));
-    return new ModelRef(typeName, null, allowableValues);
+    return new ModelRef(typeName, allowableValues);
   }
 }
