@@ -81,6 +81,7 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
       'declaration-pet-grooming-service.json'                       | 'petGroomingService'
       'declaration-pet-service.json'                                | 'petService'
       'declaration-groovy-service.json'                             | 'groovyService'
+      'declaration-enum-service.json'                               | 'enumService'
   }
 
   def "should list swagger resources"() {
@@ -120,6 +121,7 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
       cacheManager.caches = caches
       return cacheManager;
     }
+
     @Bean
     public Docket petstore(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
@@ -254,6 +256,18 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
           .paths(regex("/groovy/.*"))
           .build()
           .ignoredParameterTypes(MetaClass)
+    }
+
+    @Bean
+    public Docket enumServiceBean(List<SecurityScheme> authorizationTypes) {
+      return new Docket(DocumentationType.SWAGGER_2)
+          .groupName("enumService")
+          .useDefaultResponseMessages(false)
+          .securitySchemes(authorizationTypes)
+          .produces(['application/xml', 'application/json'] as Set)
+          .select()
+          .paths(regex("/enums/.*"))
+          .build()
     }
 
     @Bean

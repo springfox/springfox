@@ -28,9 +28,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.schema.Collections;
-import springfox.documentation.schema.Maps;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -61,21 +58,7 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
             context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting spring response class to:" + responseTypeName);
-    context.operationBuilder().responseModel(modelRef(returnType, modelContext));
-  }
-
-  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
-    if (Collections.isContainerType(type)) {
-      ResolvedType collectionElementType = Collections.collectionElementType(type);
-      String elementTypeName = nameExtractor.typeName(ModelContext.fromParent(modelContext, collectionElementType));
-      return new ModelRef(Collections.containerType(type), elementTypeName);
-    }
-    if (Maps.isMapType(type)) {
-      String elementTypeName = nameExtractor.typeName(ModelContext.fromParent(modelContext, Maps.mapValueType(type)));
-      return new ModelRef("Map", elementTypeName, true);
-    }
-    String typeName = nameExtractor.typeName(ModelContext.fromParent(modelContext, type));
-    return new ModelRef(typeName);
+    context.operationBuilder().responseModel(ModelRefs.modelRef(returnType, modelContext, nameExtractor));
   }
 
   @Override

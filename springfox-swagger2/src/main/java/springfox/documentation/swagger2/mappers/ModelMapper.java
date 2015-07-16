@@ -101,12 +101,14 @@ public abstract class ModelMapper {
 
   public Property mapProperty(ModelProperty source) {
     Property property = modelRefToProperty(source.getModelRef());
-    if (property instanceof StringProperty) {
-      AllowableValues allowableValues = source.getAllowableValues();
-      if (allowableValues instanceof AllowableListValues) {
-        ((StringProperty) property).setEnum(((AllowableListValues) allowableValues).getValues());
-      }
+
+    addEnumValues(property, source.getAllowableValues());
+
+    if (property instanceof ArrayProperty) {
+      ArrayProperty arrayProperty = (ArrayProperty) property;
+      addEnumValues(arrayProperty.getItems(), source.getAllowableValues());
     }
+
     if (property instanceof AbstractNumericProperty) {
       AllowableValues allowableValues = source.getAllowableValues();
       if (allowableValues instanceof AllowableRangeValues) {
@@ -124,6 +126,15 @@ public abstract class ModelMapper {
     return property;
   }
 
+  private static Property addEnumValues(Property property, AllowableValues allowableValues) {
+    if (property instanceof StringProperty && allowableValues instanceof AllowableListValues) {
+      StringProperty stringProperty = (StringProperty) property;
+      AllowableListValues listValues = (AllowableListValues) allowableValues;
+      stringProperty.setEnum(listValues.getValues());
+    }
+    return property;
+  }
+
   static Property modelRefToProperty(ModelRef modelRef) {
     if (modelRef == null || "void".equalsIgnoreCase(modelRef.getType())) {
       return null;
@@ -131,13 +142,16 @@ public abstract class ModelMapper {
     Property responseProperty;
     if (modelRef.isCollection()) {
       String itemType = modelRef.getItemType();
-      responseProperty = new ArrayProperty(property(itemType));
+      responseProperty = new ArrayProperty(addEnumValues(property(itemType), modelRef.getAllowableValues()));
     } else if (modelRef.isMap()) {
       String itemType = modelRef.getItemType();
       responseProperty = new MapProperty(property(itemType));
     } else {
       responseProperty = property(modelRef.getType());
     }
+
+    addEnumValues(responseProperty, modelRef.getAllowableValues());
+
     return responseProperty;
   }
 

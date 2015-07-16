@@ -28,6 +28,7 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
@@ -52,6 +53,12 @@ public class ResolvedTypes {
   }
 
   public static AllowableValues allowableValues(ResolvedType resolvedType) {
+    if (isContainerType(resolvedType)) {
+      List<ResolvedType> typeParameters = resolvedType.getTypeParameters();
+      if (typeParameters != null && typeParameters.size() == 1) {
+        return Enums.allowableValues(typeParameters.get(0).getErasedType());
+      }
+    }
     return Enums.allowableValues(resolvedType.getErasedType());
   }
 

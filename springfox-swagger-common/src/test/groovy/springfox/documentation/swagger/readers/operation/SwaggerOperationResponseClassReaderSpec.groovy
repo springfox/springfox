@@ -58,19 +58,25 @@ class SwaggerOperationResponseClassReaderSpec extends DocumentationContextSpec {
       } else {
         assert expectedClass == operation.responseModel.type
       }
+
+      if (allowableValues == null) {
+        assert operation.responseModel.allowableValues == null
+      } else {
+        assert allowableValues == operation.responseModel.allowableValues.values
+      }
     and:
       !sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)
       sut.supports(DocumentationType.SWAGGER_2)
     where:
-      handlerMethod                                                        | expectedClass
-      dummyHandlerMethod('methodWithConcreteResponseBody')                 | 'BusinessModel'
-      dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'FunkyBusiness'
-      dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»'
-      dummyHandlerMethod('methodApiResponseClass')                         | 'FunkyBusiness'
-      dummyHandlerMethod('methodWithGenericPrimitiveArray')                | 'Array[byte]'
-      dummyHandlerMethod('methodWithGenericComplexArray')                  | 'Array[DummyClass]'
-      dummyHandlerMethod('methodWithEnumResponse')                         | 'string'
+      handlerMethod                                                        | expectedClass          | allowableValues
+      dummyHandlerMethod('methodWithConcreteResponseBody')                 | 'BusinessModel'        | null
+      dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'FunkyBusiness'        | null
+      dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»'    | null
+      dummyHandlerMethod('methodApiResponseClass')                         | 'FunkyBusiness'        | null
+      dummyHandlerMethod('methodWithGenericPrimitiveArray')                | 'Array[byte]'          | null
+      dummyHandlerMethod('methodWithGenericComplexArray')                  | 'Array[DummyClass]'    | null
+      dummyHandlerMethod('methodWithEnumResponse')                         | 'string'               | ['ONE', 'TWO']
    }
 
 }
