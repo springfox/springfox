@@ -1,3 +1,9 @@
+# 2.1.1 Release notes
+
+## Bugfixes
+- #855 and #856 - Fixes regression causing problems when loading dockets with group name not specified. Thanks 
+@rkaltreider @cabbonizio @kevinconaway @cbornet for reporting it!
+
 # 2.1.0 Release Notes
 
 ## Significant changes
