@@ -34,7 +34,7 @@ class ReleaseTask extends DefaultTask {
 
   @TaskAction
   void exec() {
-    def command = "git push origin \"${buildInfo.releaseTag}\""
+    def command = "git push origin ${buildInfo.releaseTag}"
     if (buildInfo.dryRun) {
        LOG.info("Would have run: $command")
       return
