@@ -56,6 +56,7 @@ import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 import static org.springframework.util.StringUtils.*;
+import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
 
 /**
  * A builder which is intended to be the primary interface into the swagger-springmvc framework.
@@ -65,15 +66,14 @@ public class Docket implements DocumentationPlugin {
 
   public static final String DEFAULT_GROUP_NAME = "default";
   private final DocumentationType documentationType;
-  private String groupName;
-  private ApiInfo apiInfo;
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
   private Ordering<ApiListingReference> apiListingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private Ordering<Operation> operationOrdering;
 
-  private AtomicBoolean initialized = new AtomicBoolean(false);
+  private ApiInfo apiInfo = ApiInfo.DEFAULT;
+  private String groupName = DEFAULT_GROUP_NAME;
   private boolean enabled = true;
   private GenericTypeNamingStrategy genericsNamingStrategy = new DefaultGenericTypeNamingStrategy();
   private boolean applyDefaultResponseMessages = true;
@@ -99,7 +99,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    */
   public Docket apiInfo(ApiInfo apiInfo) {
-    this.apiInfo = apiInfo;
+    this.apiInfo = defaultIfAbsent(apiInfo, apiInfo);
     return this;
   }
 
@@ -135,7 +135,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    */
   public Docket groupName(String groupName) {
-    this.groupName = groupName;
+    this.groupName = defaultIfAbsent(groupName, this.groupName);
     return this;
   }
 
@@ -147,7 +147,7 @@ public class Docket implements DocumentationPlugin {
    *
    * @param pathProvider
    * @return this Docket
-   * @see AbstractPathProvider
+   * @see springfox.documentation.spring.web.paths.AbstractPathProvider
    */
   public Docket pathProvider(PathProvider pathProvider) {
     this.pathProvider = pathProvider;
@@ -401,9 +401,6 @@ public class Docket implements DocumentationPlugin {
    * @see DocumentationPluginsBootstrapper
    */
   public DocumentationContext configure(DocumentationContextBuilder builder) {
-    if (initialized.compareAndSet(false, true)) {
-      configureDefaults();
-    }
     return builder
         .apiInfo(apiInfo)
         .selector(apiSelector)
@@ -465,15 +462,4 @@ public class Docket implements DocumentationPlugin {
       }
     };
   }
-
-  private void configureDefaults() {
-    if (!hasText(this.groupName)) {
-      this.groupName = DEFAULT_GROUP_NAME;
-    }
-
-    if (null == this.apiInfo) {
-      this.apiInfo = ApiInfo.DEFAULT;
-    }
-  }
-
 }
