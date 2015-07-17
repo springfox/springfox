@@ -50,7 +50,6 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
       .withResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
     plugin
             .pathProvider(new RelativePathProvider(servletContext()))
-            .groupName("groupName")
             .select()
               .apis(not(withClassAnnotation(ApiIgnore)))
               .paths(regex(".*?"))
@@ -86,7 +85,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
               ]
 
       contextBuilder.requestHandlers(requestHandlers)
-      plugin.configure(contextBuilder)
+      plugin.groupName('groupName').configure(contextBuilder)
 
       ApiListingReferenceScanResult result = sut.scan(context())
 
@@ -163,7 +162,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
     when:
       contextBuilder.requestHandlers(requestHandlers)
-      plugin.pathProvider(new RelativePathProvider(Mock(ServletContext)))
+      plugin.groupName('groupName').pathProvider(new RelativePathProvider(Mock(ServletContext)))
       List<ApiListingReference> apiListingReferences = sut.scan(context()).apiListingReferences
 
     then: "api-docs should not appear in the path"

@@ -70,7 +70,7 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
 
     where:
       contractFile                                                  | groupName
-      'swagger.json'                                                | 'petstore'
+      'swagger.json'                                                | 'default'
       'declaration-business-service.json'                           | 'businessService'
       'declaration-concrete-controller.json'                        | 'concrete'
       'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
