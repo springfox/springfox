@@ -30,6 +30,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
@@ -46,12 +47,12 @@ public class Annotations {
     return fromNullable(getAnnotation(annotated, ApiParam.class));
   }
 
-  public static Optional<ApiOperation> findApiOperationAnnotation(AnnotatedElement annotated) {
-    return fromNullable(getAnnotation(annotated, ApiOperation.class));
+  public static Optional<ApiOperation> findApiOperationAnnotation(Method annotated) {
+    return fromNullable(findAnnotation(annotated, ApiOperation.class));
   }
 
-  public static Optional<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
-    return fromNullable(getAnnotation(annotated, ApiResponses.class));
+  public static Optional<ApiResponses> findApiResponsesAnnotations(Method annotated) {
+    return fromNullable(findAnnotation(annotated, ApiResponses.class));
   }
 
 
@@ -79,7 +80,7 @@ public class Annotations {
 
   @VisibleForTesting
   static ResolvedType getResolvedType(ApiOperation annotation,
-        TypeResolver typeResolver, ResolvedType defaultType) {
+      TypeResolver typeResolver, ResolvedType defaultType) {
 
     if (null != annotation && Void.class != annotation.response()) {
       if ("List".compareToIgnoreCase(annotation.responseContainer()) == 0) {
@@ -95,7 +96,7 @@ public class Annotations {
 
   @VisibleForTesting
   static ResolvedType getResolvedType(ApiResponse annotation,
-        TypeResolver typeResolver, ResolvedType defaultType) {
+      TypeResolver typeResolver, ResolvedType defaultType) {
 
     if (null != annotation && Void.class != annotation.response()) {
       if ("List".compareToIgnoreCase(annotation.responseContainer()) == 0) {
