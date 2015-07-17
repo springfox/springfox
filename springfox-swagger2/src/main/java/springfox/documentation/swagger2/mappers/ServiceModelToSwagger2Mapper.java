@@ -51,6 +51,7 @@ import java.util.Set;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.swagger2.mappers.ModelMapper.*;
 
 @Mapper(uses = { ModelMapper.class, ParameterMapper.class, SecurityMapper.class, LicenseMapper.class,
@@ -117,7 +118,6 @@ public abstract class ServiceModelToSwagger2Mapper {
   }
 
 
-
   protected Map<String, Response> mapResponseMessages(Set<ResponseMessage> from) {
     HashMap<String, Response> responses = newHashMap();
     for (ResponseMessage responseMessage : from) {
@@ -155,7 +155,7 @@ public abstract class ServiceModelToSwagger2Mapper {
 
   private Path mapOperations(ApiDescription api, Optional<Path> existingPath) {
     Path path = existingPath.or(new Path());
-    for (springfox.documentation.service.Operation each : api.getOperations()) {
+    for (springfox.documentation.service.Operation each : nullToEmptyList(api.getOperations())) {
       Operation operation = mapOperation(each);
       path.set(each.getMethod().toString().toLowerCase(), operation);
     }

@@ -18,16 +18,15 @@
  */
 
 package springfox.test.contract.swaggertests
+import com.google.common.base.Supplier
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
 import org.springframework.cache.annotation.EnableCaching
-import org.springframework.cache.support.SimpleCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -136,12 +135,13 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
   @Import(SecuritySupport)
   static class Config {
 
+    @Autowired
+    private Supplier<? extends CacheManager> springfoxCacheManager
+
     @Bean
     @Autowired
-    public CacheManager cacheManager(List<Cache> caches) {
-      def cacheManager = new SimpleCacheManager()
-      cacheManager.caches = caches
-      return cacheManager;
+    public CacheManager springfoxCacheManager() {
+      return springfoxCacheManager.get();
     }
 
     @Bean

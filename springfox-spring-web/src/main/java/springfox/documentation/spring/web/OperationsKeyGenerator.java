@@ -44,7 +44,8 @@ public class OperationsKeyGenerator implements KeyGenerator {
     Optional<RequestMappingContext> context = FluentIterable.from(newArrayList(params))
         .filter(RequestMappingContext.class).first();
     if (context.isPresent()) {
-      String key = String.format("%s.%s.%s", context.get().getRequestMappingPattern(),
+      String key = String.format("%s.%s.%s.%s", context.get().getRequestMappingPattern(),
+          context.get().getHandlerMethod().getMethod().getDeclaringClass().getName(),
           context.get().getHandlerMethod().getMethod().getName(),
           context.get().getDocumentationContext().getGenericsNamingStrategy().getClass().getSimpleName());
       LOG.info("Cache key generated: {}", key);
