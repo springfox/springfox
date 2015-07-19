@@ -39,9 +39,6 @@ dependencies {
   compile 'taglibs:standard:1.1.2'
   compile 'javax.servlet:jstl:1.2'
 
-  compile(project(':springfox-swagger1')) {
-    exclude group: 'org.springframework', module: 'spring-web'
-  }
 
   providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
   providedCompile 'org.apache.tomcat.embed:tomcat-embed-jasper'
@@ -52,12 +49,15 @@ dependencies {
 
   compile(project(path: ':springfox-swagger1', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
+    exclude group: 'org.aspectj'
   }
   compile(project(path: ':springfox-swagger2', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
+    exclude group: 'org.aspectj'
   }
   compile(project(path: ':springfox-petstore')) {
     exclude group: 'org.springframework', module: 'spring-web'
+    exclude group: 'org.aspectj'
   }
 
   compile(project(path: ':springfox-swagger-ui')) {

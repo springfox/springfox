@@ -16,28 +16,31 @@
  *
  *
  */
+package springfox.documentation.annotations;
 
-package springfox.documentation.swagger2.annotations;
-
-import org.springframework.context.annotation.Import;
-import springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration;
+import org.springframework.cache.interceptor.KeyGenerator;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 /**
- * Indicates that Swagger support should be enabled.
- * <p/>
- * This should be applied to a Spring java config and should have an accompanying '@Configuration' annotation.
- * <p/>
- * Loads all required beans defined in @see SpringSwaggerConfig
+ * Annotation indicating that a method (or all the methods on a class) can be cached.
  *
- * @see springfox.documentation.spring.web.plugins.Docket
+ * <p>The method arguments and signature are used for computing the key while the
+ * returned instance is used as the cache value.
+ *
+ * @since 2.1.1
  */
-@Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
-@Target(value = { java.lang.annotation.ElementType.TYPE })
+@Target({ ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
 @Documented
-@Import({Swagger2DocumentationConfiguration.class})
-public @interface EnableSwagger2 {
+@Incubating("2.1.1")
+public @interface Cacheable {
+  String value();
+
+  Class<? extends KeyGenerator> keyGenerator();
 }

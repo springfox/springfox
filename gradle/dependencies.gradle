@@ -13,6 +13,7 @@ ext {
   snakeyaml = '1.15'
   springPluginVersion = "1.2.0.RELEASE"
   jsonPath = "2.0.0"
+  aspectj = "1.8.6"
   libs = [
 
           test          : [
@@ -33,20 +34,22 @@ ext {
           spring        : [
                   "org.springframework.plugin:spring-plugin-core:${springPluginVersion}",
                   "org.springframework.plugin:spring-plugin-metadata:${springPluginVersion}",
-                  "org.springframework.hateoas:spring-hateoas:${springHateoas}"
+                  "org.springframework.hateoas:spring-hateoas:${springHateoas}",
+                  "org.aspectj:aspectjrt:$aspectj",
+                  "org.aspectj:aspectjweaver:$aspectj"
           ],
           springProvided: [
                   "org.springframework:spring-core:$spring",
                   "org.springframework:spring-web:$spring",
-                  "org.springframework:spring-webmvc:$spring"
+                  "org.springframework:spring-webmvc:$spring",
+                  "org.springframework:spring-context:$spring",
+                  "org.springframework:spring-aop:${spring}"
           ],
           clientProvided: [
                   "javax.servlet:javax.servlet-api:$servlet",
                   "com.fasterxml.jackson.core:jackson-core:${jackson}",
                   "com.fasterxml.jackson.core:jackson-databind:${jackson}"
-
           ],
-
           core          : [
                   "org.codehaus.groovy:groovy-all:${groovy}",
                   "com.google.guava:guava:${guava}",

@@ -41,7 +41,7 @@ public class OperationsKeyGenerator implements KeyGenerator {
 
   @Override
   public Object generate(Object target, Method method, Object... params) {
-    Optional<RequestMappingContext> context = FluentIterable.from(newArrayList(params))
+    Optional<RequestMappingContext> context = FluentIterable.from(newArrayList(nullToEmptyArray(params)))
         .filter(RequestMappingContext.class).first();
     if (context.isPresent()) {
       String key = String.format("%s.%s.%s.%s", context.get().getRequestMappingPattern(),
@@ -53,5 +53,12 @@ public class OperationsKeyGenerator implements KeyGenerator {
     }
     throw new IllegalArgumentException("Key generator can only be used where the first Parameter is of type "
         + "RequestMappingContext");
+  }
+
+  private Object[] nullToEmptyArray(Object[] params) {
+    if (params == null) {
+      return new Object[0];
+    }
+    return params;
   }
 }

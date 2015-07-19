@@ -18,17 +18,13 @@
  */
 
 package springfox.test.contract.swaggertests
-import com.google.common.base.Supplier
+
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.cache.CacheManager
-import org.springframework.cache.annotation.EnableCaching
-import org.springframework.cache.support.CompositeCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -39,7 +35,6 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
-import static com.google.common.collect.Lists.*
 import static groovyx.net.http.ContentType.*
 import static springfox.documentation.builders.PathSelectors.*
 
@@ -102,7 +97,6 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   }
 
   @Configuration
-  @EnableCaching
   @EnableSwagger2
   @ComponentScan([
       "springfox.documentation.spring.web.dummy.controllers",
@@ -111,18 +105,6 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   ])
   @Import(SecuritySupport)
   static class Config {
-    @Autowired
-    private Supplier<? extends CacheManager> springfoxCacheManager
-
-    @Bean
-    @Autowired
-    public CacheManager cacheManager() {
-      def cacheManager = new CompositeCacheManager()
-      cacheManager.setCacheManagers(newArrayList(springfoxCacheManager.get()))
-      cacheManager.fallbackToNoOpCache = true;
-      cacheManager.afterPropertiesSet()
-      return cacheManager;
-    }
 
     @Bean
     public Docket petstore(List<SecurityScheme> authorizationTypes) {

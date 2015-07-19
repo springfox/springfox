@@ -19,16 +19,19 @@ dependencies {
   compile project(':springfox-schema')
   compile project(':springfox-spring-web')
   compile project(':springfox-swagger-common')
+  compile libs.core
+  compile libs.spring
+
+
+  provided libs.springProvided
+  provided libs.clientProvided
+
   testCompile project(':springfox-core')
   testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts'))
   testCompile(project(path: ':springfox-swagger-common', configuration: 'testArtifacts'))
   testCompile(project(path: ':springfox-spring-web', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
-  compile libs.core
-  compile libs.spring
-  provided libs.springProvided
-  provided libs.springProvided
-  provided libs.clientProvided
   testCompile libs.test
+
 }

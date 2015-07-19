@@ -40,12 +40,11 @@ import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
+import springfox.documentation.annotations.Cacheable;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.Annotations;
-import springfox.documentation.schema.ModelCacheKeys;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
@@ -107,7 +106,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
 
   @Override
-  @Cacheable(value = "modelProperties", key = ModelCacheKeys.MODEL_PROPERTIES_SPEL)
+  @Cacheable(value = "modelProperties", keyGenerator = ModelPropertiesKeyGenerator.class)
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
     List<ModelProperty> properties = newArrayList();
     BeanDescription beanDescription = beanDescription(type, givenContext);

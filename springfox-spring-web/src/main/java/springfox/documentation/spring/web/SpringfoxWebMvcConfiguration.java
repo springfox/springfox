@@ -19,17 +19,10 @@
 
 package springfox.documentation.spring.web;
 
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.plugin.core.config.EnablePluginRegistries;
 import springfox.documentation.schema.configuration.ModelsConfiguration;
@@ -46,10 +39,7 @@ import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.json.JsonSerializer;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.common.collect.Lists.*;
 
 @Configuration
 @Import({ ModelsConfiguration.class })
@@ -58,7 +48,8 @@ import static com.google.common.collect.Lists.*;
     "springfox.documentation.spring.web.readers.operation",
     "springfox.documentation.spring.web.readers.parameter",
     "springfox.documentation.spring.web.plugins",
-    "springfox.documentation.spring.web.paths"
+    "springfox.documentation.spring.web.paths",
+    "springfox.documentation.spring.web.caching"
 })
 @EnablePluginRegistries({ DocumentationPlugin.class,
     ApiListingBuilderPlugin.class,
@@ -70,10 +61,8 @@ import static com.google.common.collect.Lists.*;
     DefaultsProviderPlugin.class,
     PathDecorator.class
 })
+@EnableAspectJAutoProxy
 public class SpringfoxWebMvcConfiguration {
-
-  @Autowired
-  private Supplier<ArrayList<Cache>> modelCaches;
 
   @Bean
   public Defaults defaults() {
@@ -93,27 +82,6 @@ public class SpringfoxWebMvcConfiguration {
   @Bean
   public JsonSerializer jsonSerializer(List<JacksonModuleRegistrar> moduleRegistrars) {
     return new JsonSerializer(moduleRegistrars);
-  }
-
-  @Bean
-  public KeyGenerator operationsKeyGenerator() {
-    return new OperationsKeyGenerator();
-  }
-
-  @Bean
-  @Autowired
-  public Supplier<? extends CacheManager> springfoxCacheManagerSupplier() {
-    SimpleCacheManager cacheManager = new SimpleCacheManager();
-    List<Cache> caches = newArrayList();
-    caches.addAll(modelCaches.get());
-    caches.add(operationsCache());
-    cacheManager.setCaches(caches);
-    cacheManager.afterPropertiesSet();
-    return Suppliers.ofInstance(cacheManager);
-  }
-
-  private Cache operationsCache() {
-    return new ConcurrentMapCache("operations");
   }
 
 }

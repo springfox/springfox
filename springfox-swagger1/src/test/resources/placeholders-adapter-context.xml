@@ -27,8 +27,6 @@
 
 
     <mvc:annotation-driven/>
-    <!-- Standard spring component scanning -->
-    <context:component-scan base-package="springfox.documentation.spring.web.dummy"/>
     <!-- An apps existing prop placeholder thingamajigger -->
     <context:property-placeholder location="classpath:avalue.properties" ignore-unresolvable="true"/>
 

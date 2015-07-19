@@ -20,10 +20,6 @@
 package springfox.documentation.schema.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
-import org.springframework.cache.Cache;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -31,10 +27,6 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.TypeNameProviderPlugin;
-
-import java.util.ArrayList;
-
-import static com.google.common.collect.Lists.*;
 
 @Configuration
 @ComponentScan(basePackages = {
@@ -49,22 +41,5 @@ public class ModelsConfiguration {
   @Bean
   public TypeResolver typeResolver() {
     return new TypeResolver();
-  }
-
-  @Bean
-  Supplier<ArrayList<Cache>> modelCachesSupplier() {
-    return Suppliers.ofInstance(newArrayList(modelsCache(), modelPropertiesCache(), modelDependenciesCache()));
-  }
-
-  private Cache modelsCache() {
-    return new ConcurrentMapCache("models");
-  }
-
-  private Cache modelDependenciesCache() {
-    return new ConcurrentMapCache("modelDependencies");
-  }
-
-  private Cache modelPropertiesCache() {
-    return new ConcurrentMapCache("modelProperties");
   }
 }

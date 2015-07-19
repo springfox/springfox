@@ -22,22 +22,18 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.stereotype.Component;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Method;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static org.slf4j.LoggerFactory.getLogger;
+import static com.google.common.collect.Lists.*;
+import static org.slf4j.LoggerFactory.*;
 
-@Component
 public class ModelContextKeyGenerator implements KeyGenerator {
   private static final Logger LOG = getLogger(ModelContextKeyGenerator.class);
   private final TypeResolver resolver;
 
-  @Autowired
   public ModelContextKeyGenerator(TypeResolver resolver) {
     this.resolver = resolver;
   }
