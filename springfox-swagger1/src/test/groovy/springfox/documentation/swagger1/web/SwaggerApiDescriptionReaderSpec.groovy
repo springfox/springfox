@@ -39,7 +39,7 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
    def "should generate an api description for each request mapping pattern"() {
       given:
         def operationReader = Mock(ApiOperationReader)
-        ApiDescriptionReader sut = new ApiDescriptionReader(operationReader)
+        ApiDescriptionReader sut = new ApiDescriptionReader(operationReader, defaultWebPlugins())
       and:
         plugin.pathProvider(pathProvider)
         RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
@@ -57,7 +57,7 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
         ApiDescription apiDescription = descriptionList[0]
         ApiDescription secondApiDescription = descriptionList[1]
 
-        apiDescription.getPath() == '/somePath/{businessId:\\d+}'
+        apiDescription.getPath() == '/somePath/{businessId}'
         apiDescription.getDescription() == dummyHandlerMethod().method.name
 
         secondApiDescription.getPath() == '/somePath/{businessId}'

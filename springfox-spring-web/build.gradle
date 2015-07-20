@@ -14,9 +14,7 @@ dependencies {
   testCompile project(':springfox-core')
   testCompile libs.test
   testCompile libs.swagger2Core
-  testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts')) {
-    exclude group: 'org.springframework', module: 'spring-web'
-  }
+  testCompile project(path: ':springfox-schema', configuration: 'testArtifacts')
 }
 
 task testJar(type: Jar) {

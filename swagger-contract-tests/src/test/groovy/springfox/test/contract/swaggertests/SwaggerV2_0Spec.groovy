@@ -18,23 +18,18 @@
  */
 
 package springfox.test.contract.swaggertests
+
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.cache.Cache
-import org.springframework.cache.CacheManager
-import org.springframework.cache.annotation.EnableCaching
-import org.springframework.cache.support.SimpleCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ContextConfiguration
-import spock.lang.Unroll
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
@@ -46,42 +41,40 @@ import static springfox.documentation.builders.PathSelectors.*
 @ContextConfiguration(loader = SpringApplicationContextLoader, classes = Config)
 class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
 
-  @Unroll("#groupName")
   def 'should honor swagger resource listing'() {
     given:
       RESTClient http = new RESTClient("http://localhost:$port")
-      String contract = fileContents("/contract/swagger2/$contractFile")
 
-    when:
-      def response = http.get(
-          path: '/v2/api-docs',
-          query: [group: groupName],
-          contentType: TEXT, //Allows to access the raw response body
-          headers: [Accept: 'application/json']
-      )
-    then:
-      String raw = response.data.text
-      String actual = JsonOutput.prettyPrint(raw)
-      response.status == 200
-//      println(actual)
+    expect:
+      testCases().each {
+        String contract = fileContents("/contract/swagger2/$it.contract").replaceAll("__PORT__", "$port")
+        def response = http.get(
+            path: '/v2/api-docs',
+            query: [group: it.group],
+            contentType: TEXT, //Allows to access the raw response body
+            headers: [Accept: 'application/json']
+        )
+        response.status == 200
+        //Uncomment this to see a better json diff when tests fail
+        //println(actual)
+        JSONAssert.assertEquals(contract, JsonOutput.prettyPrint(response.data.text), JSONCompareMode.NON_EXTENSIBLE)
+        true
+      }
+  }
 
-      def withPortReplaced = contract.replaceAll("__PORT__", "$port")
-      JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
-
-    where:
-      contractFile                                                  | groupName
-      'swagger.json'                                                | 'petstore'
-      'declaration-business-service.json'                           | 'businessService'
-      'declaration-concrete-controller.json'                        | 'concrete'
-      'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
-      'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
-      'declaration-feature-demonstration-service.json'              | 'featureService'
-      'declaration-feature-demonstration-service-codeGen.json'      | 'featureService-codeGen'
-      'declaration-inherited-service-impl.json'                     | 'inheritedService'
-      'declaration-pet-grooming-service.json'                       | 'petGroomingService'
-      'declaration-pet-service.json'                                | 'petService'
-      'declaration-groovy-service.json'                             | 'groovyService'
-      'declaration-enum-service.json'                               | 'enumService'
+  def testCases() {
+    [[contract: 'swagger.json'                                               , group: 'petstore'],
+    [contract: 'declaration-business-service.json'                           , group: 'businessService'],
+    [contract: 'declaration-concrete-controller.json'                        , group: 'concrete'],
+    [contract: 'declaration-controller-with-no-request-mapping-service.json' , group: 'noRequestMapping'],
+    [contract: 'declaration-fancy-pet-service.json'                          , group: 'fancyPetstore'],
+    [contract: 'declaration-feature-demonstration-service.json'              , group: 'featureService'],
+    [contract: 'declaration-feature-demonstration-service-codeGen.json'      , group: 'featureService-codeGen'],
+    [contract: 'declaration-inherited-service-impl.json'                     , group: 'inheritedService'],
+    [contract: 'declaration-pet-grooming-service.json'                       , group: 'petGroomingService'],
+    [contract: 'declaration-pet-service.json'                                , group: 'petService'],
+    [contract: 'declaration-groovy-service.json'                             , group: 'groovyService'],
+    [contract: 'declaration-enum-service.json'                               , group: 'enumService']]
   }
 
   def "should list swagger resources"() {
@@ -104,7 +97,6 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   }
 
   @Configuration
-  @EnableCaching
   @EnableSwagger2
   @ComponentScan([
       "springfox.documentation.spring.web.dummy.controllers",
@@ -115,14 +107,6 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   static class Config {
 
     @Bean
-    @Autowired
-    public CacheManager cacheManager(List<Cache> caches) {
-      def cacheManager = new SimpleCacheManager()
-      cacheManager.caches = caches
-      return cacheManager;
-    }
-
-    @Bean
     public Docket petstore(List<SecurityScheme> authorizationTypes) {
       return new Docket(DocumentationType.SWAGGER_2)
           .groupName("petstore")
@@ -130,7 +114,7 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
           .securitySchemes(authorizationTypes)
           .produces(['application/xml', 'application/json'] as Set)
           .select()
-          .paths(regex("/api/.*"))
+            .paths(regex("/api/.*"))
           .build()
     }
 

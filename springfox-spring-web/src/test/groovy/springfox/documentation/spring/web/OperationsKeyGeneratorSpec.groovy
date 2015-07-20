@@ -62,7 +62,7 @@ class OperationsKeyGeneratorSpec extends Specification {
     when:
       def key = sut.generate(null, null, context)
     then:
-      key == "test.getFoo.DefaultGenericTypeNamingStrategy"
+      key == "test.springfox.documentation.spring.web.dummy.models.Example.getFoo.DefaultGenericTypeNamingStrategy"
   }
 
 }

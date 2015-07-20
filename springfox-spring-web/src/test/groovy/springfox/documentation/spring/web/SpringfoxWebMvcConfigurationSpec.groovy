@@ -2,15 +2,16 @@ package springfox.documentation.spring.web
 
 import spock.lang.Specification
 
-class SpringMvcDocumentationConfigurationSpec extends Specification {
+class SpringfoxWebMvcConfigurationSpec extends Specification {
   def "method coverage test" () {
+    given:
+      def config = new SpringfoxWebMvcConfiguration()
     expect:
-      new SpringMvcDocumentationConfiguration().with {
+      config.with {
         defaults()
         resourceGroupCache()
         objectMapperConfigurer()
-        operationsCache()
-        operationsKeyGenerator()
+        jsonSerializer([])
       }
   }
 }

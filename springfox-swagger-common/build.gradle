@@ -27,15 +27,16 @@ dependencies {
   compile project(':springfox-spi')
   compile project(':springfox-schema')
   compile project(':springfox-spring-web')
-  testCompile project(':springfox-core')
-  testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts'))
-  testCompile(project(path: ':springfox-spring-web', configuration: 'testArtifacts')) {
-    exclude group: 'org.springframework', module: 'spring-web'
-  }
   compile libs.core
   compile libs.spring
+
   provided libs.springProvided
   provided libs.clientProvided
+
+  testCompile project(':springfox-core')
+  testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts'))
+  testCompile(project(path: ':springfox-spring-web', configuration: 'testArtifacts'))
+
   testCompile libs.test
   testCompile 'org.skyscreamer:jsonassert:1.2.3'
 }

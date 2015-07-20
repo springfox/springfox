@@ -26,8 +26,8 @@ import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+import springfox.documentation.annotations.Cacheable;
 import springfox.documentation.schema.property.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
@@ -57,10 +57,9 @@ public class ModelDependencyProvider {
     this.nameExtractor = nameExtractor;
   }
 
-  @Cacheable(value = "modelDependencies", key = ModelCacheKeys.MODEL_CONTEXT_SPEL)
+  @Cacheable(value = "modelDependencies", keyGenerator = ModelContextKeyGenerator.class)
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
-    return
-            from(resolvedDependencies(modelContext))
+    return from(resolvedDependencies(modelContext))
             .filter(ignorableTypes(modelContext))
             .filter(not(baseTypes(modelContext)))
             .toSet();
@@ -131,7 +130,7 @@ public class ModelDependencyProvider {
 
   private FluentIterable<ModelProperty> nonTrivialProperties(ModelContext modelContext, ResolvedType resolvedType) {
     return from(propertiesFor(modelContext, resolvedType))
-            .filter(not(baseProperty(modelContext)));
+        .filter(not(baseProperty(modelContext)));
   }
 
   private Predicate<? super ModelProperty> baseProperty(final ModelContext modelContext) {

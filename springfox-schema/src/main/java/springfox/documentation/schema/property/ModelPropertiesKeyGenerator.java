@@ -24,15 +24,13 @@ import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.stereotype.Component;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Method;
 
 import static com.google.common.collect.Lists.*;
-import static org.slf4j.LoggerFactory.getLogger;
+import static org.slf4j.LoggerFactory.*;
 
-@Component
 public class ModelPropertiesKeyGenerator implements KeyGenerator {
   private static final Logger LOG = getLogger(ModelPropertiesKeyGenerator.class);
 

@@ -18,16 +18,12 @@
  */
 
 package springfox.test.contract.swaggertests
+
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.cache.Cache
-import org.springframework.cache.CacheManager
-import org.springframework.cache.annotation.EnableCaching
-import org.springframework.cache.support.SimpleCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -75,40 +71,45 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
   def 'should honor api declaration contract [#contractFile] at endpoint [#declarationPath]'() {
     given:
       RESTClient http = new RESTClient("http://localhost:$port")
-      String contract = fileContents("/contract/swagger/$contractFile")
-    when:
-      def response = http.get(
-              path: "/api-docs${declarationPath}",
-              contentType: TEXT, //Allow access to the raw response body
-              headers: [Accept: 'application/json']
-      )
-    then:
-      String raw = response.data.text
-      String actual = JsonOutput.prettyPrint(raw)
-      response.status == 200
-      //Uncomment this to see a better json diff when tests fail
-//      actual == contract
-//      println(actual)
-
-      JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
-
-//    and: "both json docs are the same length"
-//      contract.length() == actual.length()
-
-    where:
-      contractFile                                                  | declarationPath
-      'declaration-business-service.json'                           | '/default/business-service'
-      'declaration-concrete-controller.json'                        | '/default/concrete-controller'
-      'declaration-controller-with-no-request-mapping-service.json' | '/default/controller-with-no-request-mapping-service'
-      'declaration-fancy-pet-service.json'                          | '/default/fancy-pet-service'
-      'declaration-feature-demonstration-service.json'              | '/default/feature-demonstration-service'
-      'declaration-inherited-service-impl.json'                     | '/default/inherited-service-impl'
-      'declaration-pet-grooming-service.json'                       | '/default/pet-grooming-service'
-      'declaration-pet-service.json'                                | '/default/pet-service'
-      'declaration-root-controller.json'                            | '/default/root-controller'
-      'declaration-groovy-service.json'                             | '/default/groovy-service'
+    expect:
+      testCases().each {
+        String contract = fileContents("/contract/swagger/$it.contract")
+        def response = http.get(
+            path: "/api-docs$it.declarationPath",
+            contentType: TEXT, //Allow access to the raw response body
+            headers: [Accept: 'application/json']
+        )
+        response.status == 200
+        //Uncomment this to see a better json diff when tests fail
+        //println(actual)
+        JSONAssert.assertEquals(contract, JsonOutput.prettyPrint(response.data.text), NON_EXTENSIBLE)
+        true
+      }
   }
 
+  def testCases() {
+    [
+        [contract: 'declaration-business-service.json',
+        declarationPath: '/default/business-service'],
+        [contract: 'declaration-concrete-controller.json',
+         declarationPath: '/default/concrete-controller'],
+        [contract: 'declaration-controller-with-no-request-mapping-service.json',
+         declarationPath:  '/default/controller-with-no-request-mapping-service'],
+        [contract: 'declaration-fancy-pet-service.json',
+         declarationPath:  '/default/fancy-pet-service'],
+        [contract: 'declaration-feature-demonstration-service.json',
+         declarationPath: '/default/feature-demonstration-service'],
+        [contract: 'declaration-inherited-service-impl.json',
+         declarationPath:  '/default/inherited-service-impl'],
+        [contract: 'declaration-pet-grooming-service.json',
+         declarationPath:  '/default/pet-grooming-service'],
+        [contract: 'declaration-pet-service.json',
+         declarationPath:  '/default/pet-service'],
+        [contract: 'declaration-root-controller.json',
+         declarationPath:  '/default/root-controller'],
+        [contract: 'declaration-groovy-service.json',
+         declarationPath: '/default/groovy-service']]
+  }
 
   def "should list swagger resources"() {
     given:
@@ -126,7 +127,6 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
   }
 
   @Configuration
-  @EnableCaching
   @EnableSwagger
   @ComponentScan([
       "springfox.documentation.spring.web.dummy.controllers",
@@ -135,14 +135,6 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
   ])
   @Import(SecuritySupport)
   static class Config {
-
-    @Bean
-    @Autowired
-    public CacheManager cacheManager(List<Cache> caches) {
-      def cacheManager = new SimpleCacheManager()
-      cacheManager.caches = caches
-      return cacheManager;
-    }
 
     @Bean
     SecurityContext securityContext() {

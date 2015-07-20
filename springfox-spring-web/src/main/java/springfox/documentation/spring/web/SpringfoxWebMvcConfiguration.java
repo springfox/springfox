@@ -19,12 +19,10 @@
 
 package springfox.documentation.spring.web;
 
-import org.springframework.cache.Cache;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.plugin.core.config.EnablePluginRegistries;
 import springfox.documentation.schema.configuration.ModelsConfiguration;
@@ -50,7 +48,8 @@ import java.util.List;
     "springfox.documentation.spring.web.readers.operation",
     "springfox.documentation.spring.web.readers.parameter",
     "springfox.documentation.spring.web.plugins",
-    "springfox.documentation.spring.web.paths"
+    "springfox.documentation.spring.web.paths",
+    "springfox.documentation.spring.web.caching"
 })
 @EnablePluginRegistries({ DocumentationPlugin.class,
     ApiListingBuilderPlugin.class,
@@ -62,7 +61,8 @@ import java.util.List;
     DefaultsProviderPlugin.class,
     PathDecorator.class
 })
-public class SpringMvcDocumentationConfiguration {
+@EnableAspectJAutoProxy
+public class SpringfoxWebMvcConfiguration {
 
   @Bean
   public Defaults defaults() {
@@ -82,16 +82,6 @@ public class SpringMvcDocumentationConfiguration {
   @Bean
   public JsonSerializer jsonSerializer(List<JacksonModuleRegistrar> moduleRegistrars) {
     return new JsonSerializer(moduleRegistrars);
-  }
-
-  @Bean
-  public KeyGenerator operationsKeyGenerator() {
-    return new OperationsKeyGenerator();
-  }
-
-  @Bean
-  public Cache operationsCache() {
-    return new ConcurrentMapCache("operations");
   }
 
 }
