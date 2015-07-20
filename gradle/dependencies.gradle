@@ -34,9 +34,7 @@ ext {
           spring        : [
                   "org.springframework.plugin:spring-plugin-core:${springPluginVersion}",
                   "org.springframework.plugin:spring-plugin-metadata:${springPluginVersion}",
-                  "org.springframework.hateoas:spring-hateoas:${springHateoas}",
-                  "org.aspectj:aspectjrt:$aspectj",
-                  "org.aspectj:aspectjweaver:$aspectj"
+                  "org.springframework.hateoas:spring-hateoas:${springHateoas}"
           ],
           springProvided: [
                   "org.springframework:spring-core:$spring",
@@ -48,15 +46,16 @@ ext {
           clientProvided: [
                   "javax.servlet:javax.servlet-api:$servlet",
                   "com.fasterxml.jackson.core:jackson-core:${jackson}",
-                  "com.fasterxml.jackson.core:jackson-databind:${jackson}"
+                  "com.fasterxml.jackson.core:jackson-databind:${jackson}",
+                  'joda-time:joda-time:2.8'
           ],
           core          : [
                   "org.codehaus.groovy:groovy-all:${groovy}",
                   "com.google.guava:guava:${guava}",
                   "com.fasterxml:classmate:${classmate}",
                   "org.slf4j:slf4j-api:${slf4j}",
-                  'joda-time:joda-time:2.8'
-
+                  "org.aspectj:aspectjrt:$aspectj",
+                  "org.aspectj:aspectjweaver:$aspectj"
           ]
   ]
 }
