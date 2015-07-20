@@ -31,6 +31,7 @@ import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
@@ -66,6 +67,7 @@ public class DocumentationContextBuilder {
   private final List<SecurityContext> securityContexts = newArrayList();
   private final Set<Class> ignorableParameterTypes = newHashSet();
   private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
+  private final List<Parameter> globalOperationParameters = newArrayList();
   private final List<AlternateTypeRule> rules = newArrayList();
   private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
   private final Set<String> protocols = newHashSet();
@@ -102,6 +104,11 @@ public class DocumentationContextBuilder {
   public DocumentationContextBuilder additionalResponseMessages(
       Map<RequestMethod, List<ResponseMessage>> additionalResponseMessages) {
     this.responseMessageOverrides.putAll(additionalResponseMessages);
+    return this;
+  }
+  
+  public DocumentationContextBuilder additionalOperationParameters(List<Parameter> globalRequestParameters) {
+    this.globalOperationParameters.addAll(globalRequestParameters);
     return this;
   }
 
@@ -223,6 +230,7 @@ public class DocumentationContextBuilder {
         apiSelector,
         ignorableParameterTypes,
         responseMessages,
+        globalOperationParameters,
         resourceGroupingStrategy,
         pathProvider,
         securityContexts,

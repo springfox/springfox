@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.builders.OperationBuilder;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
@@ -79,6 +80,13 @@ public class OperationContext {
   public List<ResponseMessage> getGlobalResponseMessages(String forHttpMethod) {
     if (documentationContext.getGlobalResponseMessages().containsKey(RequestMethod.valueOf(forHttpMethod))) {
       return documentationContext.getGlobalResponseMessages().get(RequestMethod.valueOf(forHttpMethod));
+    }
+    return newArrayList();
+  }
+  
+  public List<Parameter> getGlobalOperationParameters() {
+    if (documentationContext.getGlobalRequestParameters() != null){
+      return documentationContext.getGlobalRequestParameters();
     }
     return newArrayList();
   }

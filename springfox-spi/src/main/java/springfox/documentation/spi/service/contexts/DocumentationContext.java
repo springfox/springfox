@@ -31,6 +31,7 @@ import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
@@ -51,6 +52,7 @@ public class DocumentationContext {
   private final AlternateTypeProvider alternateTypeProvider;
   private final Set<Class> ignorableParameterTypes;
   private final Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
+  private final List<Parameter> globalOperationParameters;
   private final ResourceGroupingStrategy resourceGroupingStrategy;
   private final PathProvider pathProvider;
   private final List<SecurityContext> securityContexts;
@@ -71,6 +73,7 @@ public class DocumentationContext {
       ApiSelector apiSelector,
       Set<Class> ignorableParameterTypes,
       Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
+      List<Parameter> globalOperationParameter,
       ResourceGroupingStrategy resourceGroupingStrategy,
       PathProvider pathProvider,
       List<SecurityContext> securityContexts,
@@ -93,6 +96,7 @@ public class DocumentationContext {
     this.apiSelector = apiSelector;
     this.ignorableParameterTypes = ignorableParameterTypes;
     this.globalResponseMessages = globalResponseMessages;
+    this.globalOperationParameters = globalOperationParameter;
     this.resourceGroupingStrategy = resourceGroupingStrategy;
     this.pathProvider = pathProvider;
     this.securityContexts = securityContexts;
@@ -135,6 +139,10 @@ public class DocumentationContext {
 
   public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {
     return globalResponseMessages;
+  }
+  
+  public List<Parameter> getGlobalRequestParameters() {
+    return globalOperationParameters;
   }
 
   public ResourceGroupingStrategy getResourceGroupingStrategy() {
