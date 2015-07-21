@@ -71,6 +71,11 @@
                 addApiKeyAuthorization();
             }
 
+            function log() {
+                if ('console' in window) {
+                    console.log.apply(console, arguments);
+                }
+            }
         });
     </script>
 </head>
