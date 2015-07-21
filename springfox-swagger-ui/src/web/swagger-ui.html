@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Swagger UI</title>
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
     <link href='webjars/springfox-swagger-ui/css/typography.css' media='screen' rel='stylesheet' type='text/css'/>
     <link href='webjars/springfox-swagger-ui/css/reset.css' media='screen' rel='stylesheet' type='text/css'/>
     <link href='webjars/springfox-swagger-ui/css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
@@ -23,54 +25,65 @@
     <script src='webjars/springfox-swagger-ui/lib/swagger-oauth.js' type='text/javascript'></script>
     <script type="text/javascript">
         $(function() {
+          var __ret = initializeSpringfox();
+          var security = __ret.security;
+          var validatorUrl = __ret.validatorUrl;
+
+          window.swaggerUi = new SwaggerUi({
+            validatorUrl: validatorUrl,
+            dom_id: "swagger-ui-container",
+            supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+            onComplete: function(swaggerApi, swaggerUi) {
+              if (typeof initOAuth == "function") {
+                if (security && security.clientId && security.appName && security.realm) {
+                  initOAuth(security);
+                }
+              }
+
+              $('pre code').each(function(i, e) {
+                hljs.highlightBlock(e)
+              });
+
+            },
+            onFailure: function(data) {
+              log("Unable to Load SwaggerUI");
+            },
+            docExpansion: "none",
+            apisSorter: "alpha"
+          });
+          function addApiKeyAuthorization() {
+            var key = encodeURIComponent($('#input_apiKey')[0].value);
+            log("key: " + key);
+            if (key && key.trim() != "") {
+              var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api_key", key, "query");
+              window.swaggerUi.api.clientAuthorizations.add("api_key", apiKeyAuth);
+              log("added key " + key);
+            }
+          }
+
+          $('#input_apiKey').change(addApiKeyAuthorization);
+
+          function log() {
+            if ('console' in window) {
+              console.log.apply(console, arguments);
+            }
+          }
+
+          function initializeSpringfox() {
             var security = {};
             var validatorUrl = null;
             window.springfox.securityConfig(function(data) {
-                security = data;
+              security = data;
             });
-
+            if (security && security.apiKey) {
+              $('#input_apiKey').val(security.apiKey);
+              addApiKeyAuthorization();
+            }
             window.springfox.uiConfig(function(data) {
-                validatorUrl = data.validatorUrl;
+              validatorUrl = data.validatorUrl;
             });
-            window.swaggerUi = new SwaggerUi({
-                validatorUrl: validatorUrl,
-                dom_id: "swagger-ui-container",
-                supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
-                onComplete: function(swaggerApi, swaggerUi) {
-                    if (typeof initOAuth == "function" && security) {
-                        if (security.clientId && security.appName && security.realm) {
-                            initOAuth(security);
-                        }
-                    }
-                    $('pre code').each(function(i, e) {
-                        hljs.highlightBlock(e)
-                    });
-                },
-                onFailure: function(data) {
-                    log("Unable to Load SwaggerUI");
-                },
-                docExpansion: "none",
-                sorter: "alpha"
-            });
-
-            function addApiKeyAuthorization() {
-                var key = $('#input_apiKey')[0].value;
-                log("key: " + key);
-                if (key && key.trim() != "") {
-                    log("added key " + key);
-                    window.authorizations.add("api_key", new ApiKeyAuthorization("api_key", key, "query"));
-                }
-            }
-
-            $('#input_apiKey').change(function() {
-                addApiKeyAuthorization();
-            });
-
-            if (security.apiKey) {
-                $('#input_apiKey').val(security.apiKey);
-                addApiKeyAuthorization();
-            }
-
+            return {security: security, validatorUrl: validatorUrl};
+          }
         });
     </script>
 </head>
@@ -79,13 +92,11 @@
 <div id='header'>
     <div class="swagger-ui-wrap">
         <a id="logo" href="http://swagger.io">swagger</a>
-
         <form id='api_selector'>
             <div class='input'>
                 <select id="select_baseUrl" name="select_baseUrl"/>
             </div>
-            <div class='input'><input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl"
-                                      type="text"/></div>
+            <div class='input'><input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl" type="text"/></div>
             <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
             <div class='input'><a id="explore" href="#">Explore</a></div>
         </form>
