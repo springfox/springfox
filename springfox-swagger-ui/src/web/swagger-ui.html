@@ -25,20 +25,12 @@
     <script src='webjars/springfox-swagger-ui/lib/swagger-oauth.js' type='text/javascript'></script>
     <script type="text/javascript">
         $(function() {
-          var __ret = initializeSpringfox();
-          var security = __ret.security;
-          var validatorUrl = __ret.validatorUrl;
+          initializeSpringfox();
 
           window.swaggerUi = new SwaggerUi({
-            validatorUrl: validatorUrl,
             dom_id: "swagger-ui-container",
             supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
             onComplete: function(swaggerApi, swaggerUi) {
-              if (typeof initOAuth == "function") {
-                if (security && security.clientId && security.appName && security.realm) {
-                  initOAuth(security);
-                }
-              }
 
               $('pre code').each(function(i, e) {
                 hljs.highlightBlock(e)
@@ -51,6 +43,7 @@
             docExpansion: "none",
             apisSorter: "alpha"
           });
+
           function addApiKeyAuthorization() {
             var key = encodeURIComponent($('#input_apiKey')[0].value);
             log("key: " + key);
@@ -71,18 +64,22 @@
 
           function initializeSpringfox() {
             var security = {};
-            var validatorUrl = null;
             window.springfox.securityConfig(function(data) {
               security = data;
+              if (security.apiKey) {
+                $('#input_apiKey').val(security.apiKey);
+                addApiKeyAuthorization();
+              }
+              if (typeof initOAuth == "function") {
+                if (security.clientId && security.appName && security.realm) {
+                  initOAuth(security);
+                }
+              }
             });
-            if (security && security.apiKey) {
-              $('#input_apiKey').val(security.apiKey);
-              addApiKeyAuthorization();
-            }
+
             window.springfox.uiConfig(function(data) {
-              validatorUrl = data.validatorUrl;
+              window.swaggerUi.validatorUrl = data.validatorUrl;
             });
-            return {security: security, validatorUrl: validatorUrl};
           }
         });
     </script>
