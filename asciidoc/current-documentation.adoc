@@ -263,30 +263,10 @@ plugin customization:
 
 === Caching
 
-By default caches have been defined for operations, models, model properties and model dependencies. To enable
-caching for performance:
-
-If the caching has not been implemented in the target application
-
-```java
-// In the application configuration add @EnableCaching
-
-   @EnableCaching
-   @EnableSwagger2
-   class YourApplicationConfig {
-
-    @Bean
-    @Autowired //<-- autowire all the caches that are available
-    public CacheManager cacheManager(List<Cache> caches) {
-      CacheManager cacheManager = new SimpleCacheManager(); //<-- create a cache manager
-      cacheManager.setCaches(caches); //<-- set the autowired caches
-      return cacheManager;
-    }
-  }
-```
-
-If the caching _HAS_ been implemented in the target application, make sure you pull in the caches int your applications
- predefined `CacheManager`.
+The caching feature that was introduced in 2.1.0 has been removed. Springfox no longer uses the cache abstraction to
+improve performance the api scanners and readers. It has been rolled into the library as an internal implementation
+detail as of 2.1.2. This is a runtime breaking change, however, since its not really breaking api compatibility change
+other than the introduction of configuration change in consuming applications, we're not incrementing the minor version.
 
 === Configuring Security Schemes and Contexts an Overview
 
