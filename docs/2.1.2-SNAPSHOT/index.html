@@ -1744,33 +1744,10 @@ plugin customization:</p>
 <div class="sect2">
 <h3 id="caching">5.6. Caching</h3>
 <div class="paragraph">
-<p>By default caches have been defined for operations, models, model properties and model dependencies. To enable
-caching for performance:</p>
-</div>
-<div class="paragraph">
-<p>If the caching has not been implemented in the target application</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// In the application configuration add @EnableCaching</span>
-
-   <span class="annotation">@EnableCaching</span>
-   <span class="annotation">@EnableSwagger2</span>
-   <span class="type">class</span> <span class="class">YourApplicationConfig</span> {
-
-    <span class="annotation">@Bean</span>
-    <span class="annotation">@Autowired</span> <span class="comment">//&lt;-- autowire all the caches that are available</span>
-    <span class="directive">public</span> CacheManager cacheManager(<span class="predefined-type">List</span>&lt;Cache&gt; caches) {
-      CacheManager cacheManager = <span class="keyword">new</span> SimpleCacheManager(); <span class="comment">//&lt;-- create a cache manager</span>
-      cacheManager.setCaches(caches); <span class="comment">//&lt;-- set the autowired caches</span>
-      <span class="keyword">return</span> cacheManager;
-    }
-  }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If the caching <em>HAS</em> been implemented in the target application, make sure you pull in the caches int your applications
- predefined <code>CacheManager</code>.</p>
+<p>The caching feature that was introduced in 2.1.0 has been removed. Springfox no longer uses the cache abstraction to
+improve performance the api scanners and readers. It has been rolled into the library as an internal implementation
+detail as of 2.1.2. This is a runtime breaking change, however, since its not really breaking api compatibility change
+other than the introduction of configuration change in consuming applications, we&#8217;re not incrementing the minor version.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1967,7 +1944,7 @@ spring services can serve it up.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-22 01:01:54 UTC
+Last updated 2015-07-22 02:31:58 UTC
 </div>
 </div>
 </body>
