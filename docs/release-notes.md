@@ -1,3 +1,13 @@
+# 2.1.2 Release notes
+This release is mostly a stabilization release due to issues related to the introduction of using the spring caching abstraction.
+
+## Bugfixes
+- #865 Weird behavior in version 2.1.1 due to RequestMapping value being named "rates" **bug** @EranIsraeli 
+- #864  api.getOperations returns null **bug** @EranIsraeli 
+- #863 Allow to toggle cache feature on / off *question/no longer applicable* @EranIsraeli
+- #858 Caching is not working for non-trivial use cases bug. Many thanks to @cbornet @cabbonizio @rkaltreider @kevinconaway for helping identifying problems and helping with the fix!
+- #851 Sending API key to endpoints in request header bug @jgraniero. Thanks @simon-ras for idenitifying the cause!
+
 # 2.1.1 Release notes
 
 ## Bugfixes
