@@ -19,6 +19,7 @@
 package springfox.gradlebuild.tasks
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.Project
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import org.gradle.api.tasks.TaskAction
@@ -34,15 +35,15 @@ class ReleaseTask extends DefaultTask {
 
   @TaskAction
   void exec() {
-    def command = "git push origin ${buildInfo.releaseTag}"
+    LOG.info("Pushing annotated tag ${buildInfo.releaseTag}")
     if (buildInfo.dryRun) {
-       LOG.info("Would have run: $command")
-      return
-    }
-    def proc = command.execute();
-    proc.waitFor();
-    if (proc.exitValue() == 0) {
-      LOG.info("Successfully executed: $command")
+      project.exec {
+        commandLine 'git', 'push', "--dry-run", "origin", "${buildInfo.releaseTag}"
+      }.assertNormalExitValue()
+    } else {
+      project.exec {
+        commandLine 'git', 'push', "origin", "${buildInfo.releaseTag}"
+      }.assertNormalExitValue()
     }
   }
 }

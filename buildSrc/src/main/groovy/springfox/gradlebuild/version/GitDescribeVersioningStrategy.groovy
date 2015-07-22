@@ -1,5 +1,6 @@
 package springfox.gradlebuild.version
 
+import org.gradle.api.Project
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import springfox.gradlebuild.BuildInfo
@@ -29,19 +30,12 @@ class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionPar
   }
 
   @Override
-  void persist(BuildInfo buildInfo) {
-    LOG.info("Executing GitDescribeVersioningStrategy#persist ...")
-    def command = "git tag -a ${buildInfo.releaseTag} -m 'Release(${buildInfo.nextVersion}) tagging project with tag ${buildInfo.releaseTag}'"
-    if (buildInfo.dryRun) {
-      LOG.info("Would have executed: $command")
-      return
-    }
-    def proc = command.execute();
-    proc.waitFor();
-    if (proc.exitValue() == 0) {
-      LOG.info("Successfully executed: $command\r\n${proc.text}")
-    } else {
-      LOG.error(proc.err.text)
+  void persist(Project project, BuildInfo buildInfo) {
+    LOG.info("Annotating ${buildInfo.releaseType} release with tag ${buildInfo.releaseTag}")
+    if (!buildInfo.dryRun) {
+      project.exec {
+        commandLine 'git', 'tag', '-a', "${buildInfo.releaseTag}", '-m', "Release of ${buildInfo.releaseTag}"
+      }.assertNormalExitValue()
     }
   }
 

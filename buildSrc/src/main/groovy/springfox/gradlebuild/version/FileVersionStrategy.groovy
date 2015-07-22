@@ -1,5 +1,6 @@
 package springfox.gradlebuild.version
 
+import org.gradle.api.Project
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import springfox.gradlebuild.BuildInfo
@@ -24,7 +25,7 @@ class FileVersionStrategy implements VersioningStrategy {
   }
 
   @Override
-  void persist(BuildInfo buildInfo) {
+  void persist(Project project, BuildInfo buildInfo) {
     def commitChangesCommand = "git commit -i '${versionFile.absolutePath}' -m 'Release(${buildInfo.nextVersion}) " +
       "tagging project with tag ${buildInfo.releaseTag}'"
     LOG.info("Saving $buildInfo.nextVersion.asText() to the version file ($versionFile.absolutePath)")
