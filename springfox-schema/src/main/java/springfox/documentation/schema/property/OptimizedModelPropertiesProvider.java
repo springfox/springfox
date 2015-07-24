@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
@@ -177,12 +178,21 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
           .transform(propertyFromBean(givenContext, jacksonProperty))
           .or(new ArrayList<ModelProperty>()));
     } else if (member instanceof AnnotatedField) {
-      properties.addAll(findField(type, jacksonProperty.getName())
+      properties.addAll(findField(type, jacksonProperty.getInternalName())
           .transform(propertyFromField(givenContext, jacksonProperty))
           .or(new ArrayList<ModelProperty>()));
     }
-    return properties;
+    return from(properties).filter(hiddenProperties()).toList();
 
+  }
+
+  private Predicate<? super ModelProperty> hiddenProperties() {
+    return new Predicate<ModelProperty>() {
+      @Override
+      public boolean apply(ModelProperty input) {
+        return !input.isHidden();
+      }
+    };
   }
 
   private Optional<ResolvedField> findField(ResolvedType resolvedType,
