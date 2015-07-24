@@ -34,7 +34,7 @@ Endorsed or approved by the Spring Framework Contributors
 
 ```
 
-- To get more output from any gralde commands/tasks append a `-i` (info) or `-d` (debug) e.g.
+- To get more output from any gradle commands/tasks append a `-i` (info) or `-d` (debug) e.g.
 ```bash
 ./gradlew build -i
 
@@ -54,13 +54,13 @@ Endorsed or approved by the Spring Framework Contributors
  ./gradlew asciidoc --daemon //Using the gradle daemon here makes sense if this is being executed a lot
 ```
 
-==== CI Enviroment
+==== CI Environment
 
 https://circleci.com/gh/springfox/springfox[Circle CI]
 
 === Releasing
 
-To release a non-snaphot version of Springfox:
+To release a non-snapshot version of Springfox:
 
 - Execute the the release commands:
 The below properties are required to run a release:
