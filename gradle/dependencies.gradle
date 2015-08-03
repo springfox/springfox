@@ -1,10 +1,10 @@
 ext {
-  swagger2Core = "1.5.0"
-  spring = "4.0.9.RELEASE"
-  groovy = "2.4.3"
+  swagger2Core = "1.5.2"
+  spring = "4.1.7.RELEASE"
+  groovy = "2.4.4"
   spock = "1.0-groovy-2.4"
   guava = "18.0"
-  springHateoas = "0.17.0.RELEASE"
+  springHateoas = "0.18.0.RELEASE"
   slf4j = "1.7.12"
   mockito = "1.10.19"
   servlet = "3.0.1"
@@ -14,12 +14,13 @@ ext {
   springPluginVersion = "1.2.0.RELEASE"
   jsonPath = "2.0.0"
   aspectj = "1.8.6"
+  joda = "2.8.1"
   libs = [
 
           test          : [
                   "org.springframework:spring-test:${spring}",
                   "cglib:cglib-nodep:3.1",
-                  "org.objenesis:objenesis:2.1",
+                  "org.objenesis:objenesis:2.2",
                   "org.mockito:mockito-all:${mockito}",
                   "com.jayway.jsonpath:json-path:${jsonPath}",
                   "org.slf4j:slf4j-simple:${slf4j}",
@@ -47,7 +48,7 @@ ext {
                   "javax.servlet:javax.servlet-api:$servlet",
                   "com.fasterxml.jackson.core:jackson-core:${jackson}",
                   "com.fasterxml.jackson.core:jackson-databind:${jackson}",
-                  'joda-time:joda-time:2.8'
+                  "joda-time:joda-time:$joda"
           ],
           core          : [
                   "org.codehaus.groovy:groovy-all:${groovy}",

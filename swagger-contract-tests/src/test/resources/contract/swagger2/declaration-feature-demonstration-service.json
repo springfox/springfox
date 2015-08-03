@@ -27,6 +27,24 @@
     ],
     "paths": {
         "/features/allMethodsAllowed": {
+            "head": {
+              "tags": [
+                "feature-demonstration-service"
+              ],
+              "summary": "allMethodAllowed",
+              "operationId": "allMethodAllowedUsingHEAD",
+              "consumes": [
+                "application/json"
+              ],
+              "produces": [
+                "*/*"
+              ],
+              "responses": {
+                "200": {
+                  "description": "OK"
+                }
+              }
+            },
             "get": {
                 "tags": [
                     "feature-demonstration-service"
@@ -475,7 +493,7 @@
                 "items": {
                   "type": "file"
                 },
-                "collectionFormat": "csv"
+                "collectionFormat": "multi"
               }
             ],
             "responses": {
