@@ -45,13 +45,15 @@ class ModelProviderSupport {
             OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, modelNameRegistry)
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
-    namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
+
+    def event = new ObjectMapperConfigured(this, objectMapper)
+    namingStrategy.onApplicationEvent(event)
 
     def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
         pluginsManager, typeNameExtractor)
-    def modelDependenciesProvider = modelDependencyProvider(typeResolver,
-            modelPropertiesProvider, typeNameExtractor)
+    modelPropertiesProvider.onApplicationEvent(event)
+    def modelDependenciesProvider = modelDependencyProvider(typeResolver, modelPropertiesProvider, typeNameExtractor)
     new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
             pluginsManager, typeNameExtractor)
   }
@@ -71,11 +73,14 @@ class ModelProviderSupport {
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver,  modelNameRegistry)
     def objectMapper = new ObjectMapper()
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
-    namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
+
+    def event = new ObjectMapperConfigured(this, objectMapper)
+    namingStrategy.onApplicationEvent(event)
 
     def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
         pluginsManager, typeNameExtractor)
+    modelPropertiesProvider.onApplicationEvent(event)
     modelDependencyProvider(typeResolver, modelPropertiesProvider, typeNameExtractor)
   }
 

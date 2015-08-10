@@ -50,11 +50,15 @@ class ModelProviderForServiceSupport {
     def objectMapper = new ObjectMapper()
     def typeNameExtractor = typeNameExtractor()
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
-    namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
+
+    def event = new ObjectMapperConfigured(this, objectMapper)
+    namingStrategy.onApplicationEvent(event)
 
     def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
         pluginsManager, typeNameExtractor)
+
+    modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider = new ModelDependencyProvider(typeResolver,
             modelPropertiesProvider, typeNameExtractor)
     new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
@@ -68,11 +72,14 @@ class ModelProviderForServiceSupport {
     def typeNameExtractor = typeNameExtractor()
     objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES)
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
-    namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
+
+    def event = new ObjectMapperConfigured(this, objectMapper)
+    namingStrategy.onApplicationEvent(event)
 
     def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
         pluginsManager, typeNameExtractor)
+    modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider = new ModelDependencyProvider(typeResolver,
             modelPropertiesProvider, typeNameExtractor)
     new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
