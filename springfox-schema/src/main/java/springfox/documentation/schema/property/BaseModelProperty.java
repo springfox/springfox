@@ -31,7 +31,7 @@ import static springfox.documentation.schema.ResolvedTypes.simpleQualifiedTypeNa
 public abstract class BaseModelProperty implements ModelProperty {
 
   private final String name;
-  private final AlternateTypeProvider alternateTypeProvider;
+  protected final AlternateTypeProvider alternateTypeProvider;
 
   public BaseModelProperty(String name, AlternateTypeProvider alternateTypeProvider) {
     this.name = name;

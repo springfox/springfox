@@ -87,7 +87,7 @@ class ModelProviderSupport {
   }
 
   ModelDependencyProvider modelDependencyProvider(TypeResolver resolver,
-      DefaultModelPropertiesProvider modelPropertiesProvider, 
+      DefaultModelPropertiesProvider modelPropertiesProvider,
       TypeNameExtractor typeNameExtractor) {
     new ModelDependencyProvider(resolver, modelPropertiesProvider, typeNameExtractor)
   }

@@ -47,7 +47,8 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
       TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, modelNameRegistry)
       OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver)
-          , new FieldProvider(typeResolver), typeResolver, namingStrategy, defaultSchemaPlugins(), typeNameExtractor)
+          , new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver,
+          namingStrategy, defaultSchemaPlugins(), typeNameExtractor)
       ResolvedType type = typeResolver.resolve(TypeWithSetterButNoGetter)
 
     and:
@@ -76,7 +77,8 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
       TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, modelNameRegistry)
       OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver)
-          , new FieldProvider(typeResolver), typeResolver, namingStrategy, defaultSchemaPlugins(), typeNameExtractor)
+          , new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
+          defaultSchemaPlugins(), typeNameExtractor)
       ResolvedType type = typeResolver.resolve(UnwrappedType)
 
     and:
@@ -105,7 +107,9 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
       TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, modelNameRegistry)
       OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver)
-          , new FieldProvider(typeResolver), typeResolver, namingStrategy, defaultSchemaPlugins(), typeNameExtractor)
+          , new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
+          defaultSchemaPlugins(),
+          typeNameExtractor)
       ResolvedType type = typeResolver.resolve(UnwrappedType)
 
     and:

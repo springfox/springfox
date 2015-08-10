@@ -57,8 +57,11 @@ import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static springfox.documentation.schema.Annotations.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
+import static springfox.documentation.schema.property.bean.Accessors.*;
+import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
@@ -123,12 +126,13 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
         ModelContext givenContext) {
 
     if (member instanceof AnnotatedMethod && Annotations.memberIsUnwrapped(member)) {
-      if (Accessors.isGetter(((AnnotatedMethod) member).getMember())) {
+      if (maybeAGetter(((AnnotatedMethod) member).getMember())) {
         LOG.debug("Evaluating unwrapped getter for member {}", ((AnnotatedMethod) member).getMember().getName());
         return propertiesFor(childProperty.getReturnType(), fromParent(givenContext, childProperty.getReturnType()));
       } else {
         LOG.debug("Evaluating unwrapped setter for member {}", ((AnnotatedMethod) member).getMember().getName());
-        return propertiesFor(childProperty.getArgumentType(0), fromParent(givenContext, childProperty.getArgumentType(0))
+        return propertiesFor(childProperty.getArgumentType(0),
+            fromParent(givenContext, childProperty.getArgumentType(0))
         );
       }
     } else {
@@ -156,8 +160,8 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
                                                       final AnnotatedMember member) {
     return Iterables.tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
       public boolean apply(ResolvedMethod accessorMethod) {
-        return BeanModelProperty.accessorMemberIs(accessorMethod, Annotations.memberName(member))
-            && propertyName.equals(Accessors.propertyName(accessorMethod.getRawMember()));
+        return accessorMemberIs(accessorMethod, memberName(member))
+            && propertyName.equals(propertyName(accessorMethod.getRawMember()));
       }
     });
   }
@@ -169,7 +173,7 @@ public class BeanModelPropertyProvider implements ModelPropertiesProvider {
     String propertyName = BeanPropertyDefinitions.name(beanPropertyDefinition, modelContext.isReturnType(),
         namingStrategy);
     BeanModelProperty beanModelProperty
-        = new BeanModelProperty(propertyName, childProperty, Accessors.isGetter(childProperty.getRawMember()),
+        = new BeanModelProperty(propertyName, childProperty, maybeAGetter(childProperty.getRawMember()),
         typeResolver, modelContext.getAlternateTypeProvider());
 
     LOG.debug("Adding property {} to model", propertyName);

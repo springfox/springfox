@@ -22,6 +22,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedField;
 import com.fasterxml.classmate.members.ResolvedMethod;
+import com.fasterxml.classmate.members.ResolvedParameterizedMember;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
@@ -30,13 +31,13 @@ import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
+import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +45,13 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import springfox.documentation.annotations.Cacheable;
 import springfox.documentation.builders.ModelPropertyBuilder;
-import springfox.documentation.schema.Annotations;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
-import springfox.documentation.schema.property.bean.Accessors;
 import springfox.documentation.schema.property.bean.AccessorsProvider;
 import springfox.documentation.schema.property.bean.BeanModelProperty;
+import springfox.documentation.schema.property.bean.ParameterModelProperty;
 import springfox.documentation.schema.property.field.FieldModelProperty;
 import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -68,6 +68,7 @@ import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
+import static springfox.documentation.schema.property.FactoryMethodProvider.*;
 import static springfox.documentation.schema.property.bean.Accessors.*;
 import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
@@ -78,6 +79,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private static final Logger LOG = LoggerFactory.getLogger(OptimizedModelPropertiesProvider.class);
   private final AccessorsProvider accessors;
   private final FieldProvider fields;
+  private final FactoryMethodProvider factoryMethods;
   private final TypeResolver typeResolver;
   private final BeanPropertyNamingStrategy namingStrategy;
   private final SchemaPluginsManager schemaPluginsManager;
@@ -86,14 +88,16 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
   @Autowired
   public OptimizedModelPropertiesProvider(AccessorsProvider accessors,
-        FieldProvider fields,
-        TypeResolver typeResolver,
-        BeanPropertyNamingStrategy namingStrategy,
-        SchemaPluginsManager schemaPluginsManager,
-        TypeNameExtractor typeNameExtractor) {
+                                          FieldProvider fields,
+                                          FactoryMethodProvider factoryMethods,
+                                          TypeResolver typeResolver,
+                                          BeanPropertyNamingStrategy namingStrategy,
+                                          SchemaPluginsManager schemaPluginsManager,
+                                          TypeNameExtractor typeNameExtractor) {
 
     this.accessors = accessors;
     this.fields = fields;
+    this.factoryMethods = factoryMethods;
     this.typeResolver = typeResolver;
     this.namingStrategy = namingStrategy;
     this.schemaPluginsManager = schemaPluginsManager;
@@ -181,6 +185,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       properties.addAll(findField(type, jacksonProperty.getInternalName())
           .transform(propertyFromField(givenContext, jacksonProperty))
           .or(new ArrayList<ModelProperty>()));
+    } else if (member instanceof AnnotatedParameter) {
+      ModelContext modelContext = ModelContext.fromParent(givenContext, type);
+      properties.addAll(fromFactoryMethod(type, jacksonProperty, (AnnotatedParameter) member, modelContext));
     }
     return from(properties).filter(hiddenProperties()).toList();
 
@@ -197,7 +204,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
   private Optional<ResolvedField> findField(ResolvedType resolvedType,
                                             final String fieldName) {
-    return Iterables.tryFind(fields.in(resolvedType), new Predicate<ResolvedField>() {
+    return tryFind(fields.in(resolvedType), new Predicate<ResolvedField>() {
       public boolean apply(ResolvedField input) {
         return fieldName.equals(input.getName());
       }
@@ -229,8 +236,34 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
                                           ModelContext modelContext) {
     String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
     BeanModelProperty beanModelProperty
-        = new BeanModelProperty(propertyName, childProperty, isGetter(childProperty.getRawMember()),
+        = new BeanModelProperty(propertyName, childProperty, maybeAGetter(childProperty.getRawMember()),
         typeResolver, modelContext.getAlternateTypeProvider());
+
+    LOG.debug("Adding property {} to model", propertyName);
+    ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
+        .name(beanModelProperty.getName())
+        .type(beanModelProperty.getType())
+        .qualifiedType(beanModelProperty.qualifiedTypeName())
+        .position(beanModelProperty.position())
+        .required(beanModelProperty.isRequired())
+        .isHidden(false)
+        .description(beanModelProperty.propertyDescription())
+        .allowableValues(beanModelProperty.allowableValues());
+    return schemaPluginsManager.property(
+        new ModelPropertyContext(propertyBuilder,
+            jacksonProperty,
+            typeResolver,
+            modelContext.getDocumentationType()))
+        .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+  }
+
+  private ModelProperty paramModelProperty(ResolvedParameterizedMember constructor,
+                                           BeanPropertyDefinition jacksonProperty,
+                                           AnnotatedParameter parameter, ModelContext modelContext) {
+    String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
+    ParameterModelProperty beanModelProperty
+        = new ParameterModelProperty(propertyName, parameter, constructor, modelContext
+        .getAlternateTypeProvider());
 
     LOG.debug("Adding property {} to model", propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
@@ -253,12 +286,29 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType,
                                                       final String propertyName,
                                                       final AnnotatedMember member) {
-    return Iterables.tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
+    return tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
       public boolean apply(ResolvedMethod accessorMethod) {
-        return BeanModelProperty.accessorMemberIs(accessorMethod, Annotations.memberName(member))
-            && propertyName.equals(Accessors.propertyName(accessorMethod.getRawMember()));
+        return accessorMethod.getRawMember().equals(member.getMember());
       }
     });
+  }
+
+  private List<ModelProperty> fromFactoryMethod(
+      final ResolvedType resolvedType,
+      final BeanPropertyDefinition beanProperty,
+      final AnnotatedParameter member,
+      final ModelContext givenContext) {
+    Optional<ModelProperty> property = factoryMethods.in(resolvedType, factoryMethodOf(member))
+        .transform(new Function<ResolvedParameterizedMember, ModelProperty>() {
+          @Override
+          public ModelProperty apply(ResolvedParameterizedMember input) {
+            return paramModelProperty(input, beanProperty, member, givenContext);
+          }
+        });
+    if (property.isPresent()) {
+      return newArrayList(property.get());
+    }
+    return newArrayList();
   }
 
   private BeanDescription beanDescription(ResolvedType type, ModelContext context) {

@@ -1210,6 +1210,10 @@
             "description": "",
             "id": "DateTimeZone",
             "properties": {
+                "id": {
+                  "required": false,
+                  "type": "string"
+                },
                 "fixed": {
                     "required": false,
                     "type": "boolean"
