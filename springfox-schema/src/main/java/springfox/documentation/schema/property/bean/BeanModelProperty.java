@@ -28,6 +28,8 @@ import org.slf4j.LoggerFactory;
 import springfox.documentation.schema.property.BaseModelProperty;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
+import static springfox.documentation.schema.property.bean.Accessors.*;
+
 
 public class BeanModelProperty extends BaseModelProperty {
   private static final Logger LOG = LoggerFactory.getLogger(BeanModelProperty.class);
@@ -65,11 +67,9 @@ public class BeanModelProperty extends BaseModelProperty {
   }
 
   public static ResolvedType paramOrReturnType(TypeResolver typeResolver, ResolvedMethod input) {
-    if (Accessors.isGetter(input.getRawMember())) {
+    if (maybeAGetter(input.getRawMember())) {
       LOG.debug("Evaluating unwrapped getter for member {}", input.getRawMember().getName());
-//      if (!givenContext.hasSeenBefore(input.getReturnType())) {
       return adjustedToClassmateBug(typeResolver, input.getReturnType());
-//      }
     } else {
       LOG.debug("Evaluating unwrapped setter for member {}", input.getRawMember().getName());
       return adjustedToClassmateBug(typeResolver, input.getArgumentType(0));
