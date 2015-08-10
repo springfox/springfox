@@ -18,21 +18,18 @@
  */
 
 package springfox.documentation.schema.mixins
-
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import springfox.documentation.schema.*
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
-import springfox.documentation.schema.plugins.SchemaPluginsManager
+import springfox.documentation.schema.property.FactoryMethodProvider
+import springfox.documentation.schema.property.ModelPropertiesProvider
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
+import springfox.documentation.schema.property.OptimizedModelPropertiesProvider
 import springfox.documentation.schema.property.bean.AccessorsProvider
-import springfox.documentation.schema.property.bean.BeanModelPropertyProvider
-import springfox.documentation.schema.property.constructor.ConstructorModelPropertyProvider
-import springfox.documentation.schema.property.field.FieldModelPropertyProvider
 import springfox.documentation.schema.property.field.FieldProvider
-import springfox.documentation.schema.property.DefaultModelPropertiesProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
@@ -43,8 +40,6 @@ class ModelProviderSupport {
   ModelProvider defaultModelProvider(ObjectMapper objectMapper = new ObjectMapper(),
                                      TypeResolver typeResolver = new TypeResolver()) {
 
-    def fields = new FieldProvider(typeResolver)
-
     def pluginsManager = defaultSchemaPlugins()
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
             OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
@@ -52,49 +47,23 @@ class ModelProviderSupport {
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
     namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
 
-    def modelPropertiesProvider = new DefaultModelPropertiesProvider(
-            beanProperty(typeResolver, namingStrategy, pluginsManager, typeNameExtractor, objectMapper),
-            fieldProperty(fields, namingStrategy, pluginsManager, typeNameExtractor, objectMapper),
-            constructorProperty(fields, namingStrategy, pluginsManager, typeNameExtractor, objectMapper))
+    def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
+        new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
+        pluginsManager, typeNameExtractor)
     def modelDependenciesProvider = modelDependencyProvider(typeResolver,
             modelPropertiesProvider, typeNameExtractor)
     new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
             pluginsManager, typeNameExtractor)
   }
 
-  def beanProperty(TypeResolver typeResolver, ObjectMapperBeanPropertyNamingStrategy namingStrategy,
-                   SchemaPluginsManager pluginsManager, TypeNameExtractor typeNameExtractor, ObjectMapper objectMapper) {
-    def modelPropertyProvider = new BeanModelPropertyProvider(new AccessorsProvider(typeResolver), typeResolver
-            , namingStrategy, pluginsManager, typeNameExtractor)
-    modelPropertyProvider.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
-    modelPropertyProvider
-  }
-
-  def fieldProperty(FieldProvider fields, ObjectMapperBeanPropertyNamingStrategy namingStrategy,
-                    SchemaPluginsManager pluginsManager, TypeNameExtractor typeNameExtractor, ObjectMapper objectMapper) {
-    def modelPropertyProvider = new FieldModelPropertyProvider(fields, namingStrategy,
-            pluginsManager, typeNameExtractor)
-    modelPropertyProvider.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
-    modelPropertyProvider
-  }
-
-  def constructorProperty(FieldProvider fields, ObjectMapperBeanPropertyNamingStrategy namingStrategy,
-                          SchemaPluginsManager pluginsManager, TypeNameExtractor typeNameExtractor, ObjectMapper objectMapper) {
-    def modelPropertyProvider =
-            new ConstructorModelPropertyProvider(fields, namingStrategy, pluginsManager, typeNameExtractor)
-    modelPropertyProvider.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
-    modelPropertyProvider
-  }
-
   ModelDependencyProvider modelDependencyProvider(TypeResolver resolver,
-      DefaultModelPropertiesProvider modelPropertiesProvider,
+      ModelPropertiesProvider modelPropertiesProvider,
       TypeNameExtractor typeNameExtractor) {
     new ModelDependencyProvider(resolver, modelPropertiesProvider, typeNameExtractor)
   }
 
   ModelDependencyProvider defaultModelDependencyProvider() {
     def typeResolver = new TypeResolver()
-    def fields = new FieldProvider(typeResolver)
 
     def pluginsManager = defaultSchemaPlugins()
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
@@ -104,10 +73,9 @@ class ModelProviderSupport {
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
     namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
 
-    def modelPropertiesProvider = new DefaultModelPropertiesProvider(
-            beanProperty(typeResolver, namingStrategy, pluginsManager, typeNameExtractor, objectMapper),
-            fieldProperty(fields, namingStrategy, pluginsManager, typeNameExtractor, objectMapper),
-            constructorProperty(fields, namingStrategy, pluginsManager, typeNameExtractor, objectMapper))
+    def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
+        new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
+        pluginsManager, typeNameExtractor)
     modelDependencyProvider(typeResolver, modelPropertiesProvider, typeNameExtractor)
   }
 
