@@ -20,17 +20,12 @@
 package springfox.documentation.schema.property;
 
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
-import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.PropertyName;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import springfox.documentation.spi.schema.contexts.ModelContext;
 
 public class BeanPropertyDefinitions {
   private BeanPropertyDefinitions() {
@@ -54,22 +49,6 @@ public class BeanPropertyDefinitions {
             : namingStrategy.nameForDeserialization(beanPropertyDefinition);
   }
 
-  public static Optional<BeanPropertyDefinition> jacksonPropertyWithSameInternalName(BeanDescription beanDescription,
-      BeanPropertyDefinition propertyDefinition) {
-
-    return FluentIterable.from(beanDescription.findProperties())
-            .firstMatch(withSameInternalName(propertyDefinition));
-  }
-
-  public static Predicate<springfox.documentation.schema.ModelProperty> ignorable(final ModelContext givenContext) {
-    return new Predicate<springfox.documentation.schema.ModelProperty>() {
-      @Override
-      public boolean apply(springfox.documentation.schema.ModelProperty input) {
-        return givenContext.hasSeenBefore(input.getType());
-      }
-    };
-  }
-
   public static Function<PropertyNamingStrategy, String> overTheWireName(final BeanPropertyDefinition beanProperty,
       final MapperConfig<?> config) {
 
@@ -77,17 +56,6 @@ public class BeanPropertyDefinitions {
       @Override
       public String apply(PropertyNamingStrategy strategy) {
         return getName(strategy, beanProperty, config);
-      }
-    };
-  }
-
-  private static Predicate<BeanPropertyDefinition> withSameInternalName(
-      final BeanPropertyDefinition propertyDefinition) {
-
-    return new Predicate<BeanPropertyDefinition>() {
-      @Override
-      public boolean apply(BeanPropertyDefinition input) {
-        return input.getInternalName().equals(propertyDefinition.getInternalName());
       }
     };
   }

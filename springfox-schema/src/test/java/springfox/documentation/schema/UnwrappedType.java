@@ -35,3 +35,31 @@ public class UnwrappedType {
     this.category = category;
   }
 }
+
+class UnwrappedTypeForField {
+  @JsonUnwrapped
+  private Category category;
+}
+
+class UnwrappedTypeForGetter {
+  private Category category;
+
+  @JsonUnwrapped
+  public Category getCategory() {
+    return category;
+  }
+
+}
+
+class UnwrappedTypeForSetter {
+  private Category category;
+
+  public Category getCategory() {
+    return category;
+  }
+
+  @JsonUnwrapped
+  public void setCategory(Category category) {
+    this.category = category;
+  }
+}

@@ -318,6 +318,9 @@
         },
         "DateTimeZone": {
             "properties": {
+                "id" : {
+                  "type": "string"
+                },
                 "fixed": {
                     "type": "boolean"
                 }

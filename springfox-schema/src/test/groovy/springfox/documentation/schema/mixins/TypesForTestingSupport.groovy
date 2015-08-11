@@ -41,6 +41,16 @@ class TypesForTestingSupport {
   static Class typeWithConstructorProperty() {
     TypeWithConstructorProperty
   }
+  static Class typeWithConstructorProperties() {
+    TypeWithConstructorProperties
+  }
+  static Class typeWithDelegatedConstructor() {
+    TypeWithDelegatedJsonCreatorConstructor
+  }
+
+  static Class typeWithJsonCreatorConstructor() {
+    TypeWithJsonCreatorConstructor
+  }
   static Class mapsContainer() {
     MapsContainer
   }

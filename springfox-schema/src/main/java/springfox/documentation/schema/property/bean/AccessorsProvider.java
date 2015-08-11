@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.schema.property.bean.Accessors.*;
 
 @Component
 public class AccessorsProvider {
@@ -46,7 +47,7 @@ public class AccessorsProvider {
     return new Predicate<ResolvedMethod>() {
       @Override
       public boolean apply(ResolvedMethod input) {
-        return Accessors.isGetter(input.getRawMember()) || Accessors.isSetter(input.getRawMember());
+        return maybeAGetter(input.getRawMember()) || maybeASetter(input.getRawMember());
       }
     };
   }
@@ -59,7 +60,7 @@ public class AccessorsProvider {
     }
     ResolvedTypeWithMembers typeWithMembers = resolver.resolve(resolvedType, null, null);
     return FluentIterable
-            .from(newArrayList(typeWithMembers.getMemberMethods()))
-            .filter(onlyGettersAndSetters()).toList();
+        .from(newArrayList(typeWithMembers.getMemberMethods()))
+        .filter(onlyGettersAndSetters()).toList();
   }
 }

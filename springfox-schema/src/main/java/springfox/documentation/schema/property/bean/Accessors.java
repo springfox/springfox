@@ -38,13 +38,15 @@ public class Accessors {
     throw new UnsupportedOperationException();
   }
 
-  public static boolean isGetter(Method method) {
+  public static boolean maybeAGetter(Method method) {
     if (method.getParameterTypes().length == 0) {
-      return isGetterThatIsNotAVoidMethod(method)
-              || isBooleanGetterMethod(method)
-              || getterAnnotation(method).isPresent();
+      return notAVoidMethod(method);
     }
     return false;
+  }
+
+  private static boolean notAVoidMethod(Method method) {
+    return !method.getReturnType().equals(void.class);
   }
 
   public static boolean isSetter(Method method) {
@@ -80,15 +82,6 @@ public class Accessors {
     return "";
   }
 
-  private static boolean isGetterThatIsNotAVoidMethod(Method method) {
-    return getter.matcher(method.getName()).find() &&
-            !method.getReturnType().equals(void.class);
-  }
-
-  private static boolean isBooleanGetterMethod(Method method) {
-    return isGetter.matcher(method.getName()).find() && method.getReturnType().equals(boolean.class);
-  }
-
   private static Optional<JsonGetter> getterAnnotation(Method method) {
     return Optional.fromNullable(AnnotationUtils.findAnnotation(method, JsonGetter.class));
   }
@@ -98,6 +91,10 @@ public class Accessors {
   }
 
   private static boolean isSetterMethod(Method method) {
-    return method.getParameterTypes().length == 1 && setter.matcher(method.getName()).find();
+    return maybeASetter(method) && setter.matcher(method.getName()).find();
+  }
+
+  public static boolean maybeASetter(Method method) {
+    return method.getParameterTypes().length == 1;
   }
 }
