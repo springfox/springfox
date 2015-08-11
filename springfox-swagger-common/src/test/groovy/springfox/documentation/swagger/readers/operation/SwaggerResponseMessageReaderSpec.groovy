@@ -88,6 +88,13 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
       annotatedResponse.message == "OK"
   }
 
+  def "Successful status series is inferred" () {
+    expect:
+      SwaggerResponseMessageReader.isSuccessful(status)
+    where:
+      status << [200, 204]
+  }
+
   def "Supports all documentation types"() {
     given:
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =

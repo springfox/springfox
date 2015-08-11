@@ -88,7 +88,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
             context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
         Optional<ModelRef> responseModel = Optional.absent();
         Optional<ResolvedType> type = resolvedType(null, apiResponse);
-        if (HttpStatus.valueOf(apiResponse.code()).is2xxSuccessful()) {
+        if (isSuccessful(apiResponse.code())) {
           type = type.or(operationResponse);
         }
         if (type.isPresent()) {
@@ -120,6 +120,10 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       }
     }
     return responseMessages;
+  }
+
+  static boolean isSuccessful(int code) {
+    return HttpStatus.Series.SUCCESSFUL.equals(HttpStatus.Series.valueOf(code));
   }
 
   private Optional<ResolvedType> resolvedType(ResolvedType resolvedType, ApiResponse apiResponse) {
