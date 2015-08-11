@@ -155,8 +155,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     return new Function<ResolvedField, List<ModelProperty>>() {
       @Override
       public List<ModelProperty> apply(ResolvedField input) {
-        if (any(input.getAnnotations(), ofType(JsonUnwrapped.class))) {
-          propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
+        List<Annotation> annotations = newArrayList(input.getRawMember().getAnnotations());
+        if (any(annotations, ofType(JsonUnwrapped.class))) {
+          return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
         }
         return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));
       }

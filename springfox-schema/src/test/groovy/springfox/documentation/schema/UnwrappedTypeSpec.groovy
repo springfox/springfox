@@ -21,8 +21,8 @@ package springfox.documentation.schema
 
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
+import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.schema.contexts.ModelContext
 
@@ -30,43 +30,104 @@ import static springfox.documentation.spi.DocumentationType.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport, ConfiguredObjectMapperSupport, AlternateTypesSupport])
 class UnwrappedTypeSpec extends Specification {
-  @Unroll("Unwrapped types are rendered correctly for #typeOfOM")
-  def "Unwrapped types are rendered correctly"() {
+  @Unroll
+  def "Unwrapped types are rendered correctly for fields"() {
     given:
-      def provider = defaultModelProvider(objectMapperToUse)
-    def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      Model asInput = provider.modelFor(ModelContext.inputParam(unwrappedType(), SWAGGER_12, alternateTypeProvider(),
+      def provider = defaultModelProvider(objectMapperThatUsesFields())
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    when:
+      Model asInput = provider.modelFor(ModelContext.inputParam(UnwrappedTypeForField, SWAGGER_12, alternateTypeProvider(),
               namingStrategy)).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(unwrappedType(), SWAGGER_12, alternateTypeProvider
-              (), namingStrategy)).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(UnwrappedTypeForField, SWAGGER_12, alternateTypeProvider(),
+          namingStrategy)).get()
 
-    expect:
-      asInput.getName() == "UnwrappedType"
+    then:
+      asInput.getName() == UnwrappedTypeForField.simpleName
       asInput.getProperties().size() == 1
-      asInput.getProperties().containsKey(property)
-      def modelProperty = asInput.getProperties().get(property)
-      modelProperty.type.erasedType == type
-      modelProperty.getQualifiedType() == qualifiedType
+      asInput.getProperties().containsKey("name" )
+      def modelProperty = asInput.getProperties().get("name" )
+      modelProperty.type.erasedType == String
+      modelProperty.getQualifiedType() == "java.lang.String"
       def item = modelProperty.getModelRef()
       item.type == "string"
       !item.collection
       item.itemType == null
 
-      asReturn.getName() == "UnwrappedType"
+      asReturn.getName() == UnwrappedTypeForField.simpleName
+      asReturn.getProperties().size() == 0
+
+  }
+
+  @Unroll
+  def "Unwrapped types are rendered correctly for getters"() {
+    given:
+      def provider = defaultModelProvider(objectMapperThatUsesGetters())
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    when:
+      Model asInput = provider.modelFor(ModelContext.inputParam(UnwrappedTypeForGetter, SWAGGER_12, alternateTypeProvider(),
+          namingStrategy)).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(UnwrappedTypeForGetter, SWAGGER_12, alternateTypeProvider(),
+          namingStrategy)).get()
+
+    then:
+      asInput.getName() == UnwrappedTypeForGetter.simpleName
+      asInput.getProperties().size() == 1
+      asInput.getProperties().containsKey("category")
+      def modelProperty = asInput.getProperties().get("category")
+      modelProperty.type.erasedType == Category
+      modelProperty.getQualifiedType() == "springfox.documentation.schema.Category"
+      def item = modelProperty.getModelRef()
+      item.type == "Category"
+      !item.collection
+      item.itemType == null
+
+      asReturn.getName() == UnwrappedTypeForGetter.simpleName
       asReturn.getProperties().size() == 1
-      asReturn.getProperties().containsKey(property)
-      def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.type.erasedType == type
-      retModelProperty.getQualifiedType() == qualifiedType
+      asReturn.getProperties().containsKey("name")
+      def retModelProperty = asReturn.getProperties().get("name")
+      retModelProperty.type.erasedType == String
+      retModelProperty.getQualifiedType() == "java.lang.String"
       def retItem = retModelProperty.getModelRef()
       retItem.type == "string"
       !retItem.collection
       retItem.itemType == null
 
-    where:
-      property    | type    | qualifiedType       | objectMapperToUse             | typeOfOM
-      "name"      | String  | "java.lang.String"  | objectMapperThatUsesFields()  | "fields"
-      "name"      | String  | "java.lang.String"  | objectMapperThatUsesGetters() | "getters"
-      "name"      | String  | "java.lang.String"  | objectMapperThatUsesSetters() | "setters"
   }
+
+  @Unroll
+  def "Unwrapped types are rendered correctly for setters"() {
+    given:
+      def provider = defaultModelProvider(objectMapperThatUsesSetters() )
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    when:
+      Model asInput = provider.modelFor(ModelContext.inputParam(UnwrappedTypeForSetter, SWAGGER_12, alternateTypeProvider(),
+          namingStrategy)).get()
+      Model asReturn = provider.modelFor(ModelContext.returnValue(UnwrappedTypeForSetter, SWAGGER_12, alternateTypeProvider(),
+        namingStrategy)).get()
+
+    then:
+      asInput.getName() == UnwrappedTypeForSetter.simpleName
+      asInput.getProperties().size() == 1
+      asInput.getProperties().containsKey("name")
+      def modelProperty = asInput.getProperties().get("name")
+      modelProperty.type.erasedType == String
+      modelProperty.getQualifiedType() == "java.lang.String"
+      def item = modelProperty.getModelRef()
+      item.type == "string"
+      !item.collection
+      item.itemType == null
+
+      asReturn.getName() == UnwrappedTypeForSetter.simpleName
+      asReturn.getProperties().size() == 1
+      asReturn.getProperties().containsKey("category")
+      def retModelProperty = asReturn.getProperties().get("category")
+      retModelProperty.type.erasedType == Category
+      retModelProperty.getQualifiedType() == "springfox.documentation.schema.Category"
+      def retItem = retModelProperty.getModelRef()
+      retItem.type == "Category"
+      !retItem.collection
+      retItem.itemType == null
+
+  }
+
 }
