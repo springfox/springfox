@@ -108,7 +108,7 @@ public class DocumentationContextBuilder {
   }
   
   public DocumentationContextBuilder additionalOperationParameters(List<Parameter> globalRequestParameters) {
-    this.globalOperationParameters.addAll(globalRequestParameters);
+    this.globalOperationParameters.addAll(nullToEmptyList(globalRequestParameters));
     return this;
   }
 

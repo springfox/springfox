@@ -185,7 +185,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    */
   public Docket globalOperationParameters(List<Parameter> operationParameters) {
-    this.globalOperationParameters.addAll(operationParameters);
+    this.globalOperationParameters.addAll(nullToEmptyList(operationParameters));
     return this;
   }
 

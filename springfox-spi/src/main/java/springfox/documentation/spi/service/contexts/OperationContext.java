@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationContext {
   private final OperationBuilder operationBuilder;
@@ -49,7 +50,7 @@ public class OperationContext {
   private final String requestMappingPattern;
 
   public OperationContext(OperationBuilder operationBuilder, RequestMethod requestMethod, HandlerMethod
-          handlerMethod, int operationIndex, RequestMappingInfo requestMappingInfo,
+      handlerMethod, int operationIndex, RequestMappingInfo requestMappingInfo,
                           DocumentationContext documentationContext, String requestMappingPattern) {
     this.operationBuilder = operationBuilder;
     this.requestMethod = requestMethod;
@@ -83,12 +84,9 @@ public class OperationContext {
     }
     return newArrayList();
   }
-  
+
   public List<Parameter> getGlobalOperationParameters() {
-    if (documentationContext.getGlobalRequestParameters() != null){
-      return documentationContext.getGlobalRequestParameters();
-    }
-    return newArrayList();
+    return nullToEmptyList(documentationContext.getGlobalRequestParameters());
   }
 
   public Optional<SecurityContext> securityContext() {
