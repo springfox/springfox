@@ -23,7 +23,9 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
+
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import springfox.documentation.PathProvider;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.AlternateTypeRule;
@@ -35,6 +37,7 @@ import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
@@ -77,6 +80,7 @@ public class Docket implements DocumentationPlugin {
   private boolean applyDefaultResponseMessages = true;
   private final List<SecurityContext> securityContexts = newArrayList();
   private final Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
+  private final List<Parameter> globalOperationParameters = newArrayList();
   private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
   private final Set<Class> ignorableParameterTypes = newHashSet();
   private final Set<String> protocols = newHashSet();
@@ -170,6 +174,18 @@ public class Docket implements DocumentationPlugin {
                                       List<ResponseMessage> responseMessages) {
 
     this.responseMessages.put(requestMethod, responseMessages);
+    return this;
+  }
+  
+  /**
+   * Adds default parameters which will be applied to all operations.
+   * 
+   * @param operationParameters
+   *          parameters which will be globally applied to all operations
+   * @return this Docket
+   */
+  public Docket globalOperationParameters(List<Parameter> operationParameters) {
+    this.globalOperationParameters.addAll(operationParameters);
     return this;
   }
 
@@ -404,6 +420,7 @@ public class Docket implements DocumentationPlugin {
         .selector(apiSelector)
         .applyDefaultResponseMessages(applyDefaultResponseMessages)
         .additionalResponseMessages(responseMessages)
+        .additionalOperationParameters(globalOperationParameters)
         .additionalIgnorableTypes(ignorableParameterTypes)
         .ruleBuilders(ruleBuilders)
         .groupName(groupName)

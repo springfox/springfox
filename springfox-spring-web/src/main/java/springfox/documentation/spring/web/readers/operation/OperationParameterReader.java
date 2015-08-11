@@ -61,6 +61,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {
+    context.operationBuilder().parameters(context.getGlobalOperationParameters());
     context.operationBuilder().parameters(readParameters(context));
   }
 
