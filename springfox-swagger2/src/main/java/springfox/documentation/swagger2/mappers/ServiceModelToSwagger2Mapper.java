@@ -65,6 +65,7 @@ public abstract class ServiceModelToSwagger2Mapper {
       @Mapping(target = "definitions", source = "apiListings"),
       @Mapping(target = "securityDefinitions", source = "resourceListing"),
       @Mapping(target = "securityRequirement", ignore = true),
+      @Mapping(target = "security", ignore = true),
       @Mapping(target = "swagger", ignore = true),
       @Mapping(target = "parameters", ignore = true),
       @Mapping(target = "host", ignore = true),
