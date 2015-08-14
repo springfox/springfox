@@ -97,6 +97,7 @@ class OperationBuilderSpec extends Specification {
       'produces'        | newHashSet('app/json')  | 'produces'
       'consumes'        | newHashSet('app/json')  | 'consumes'
       'protocols'       | newHashSet('https')     | 'protocol'
+      'tags'            | newHashSet('tag')       | 'tags'
       'position'        | 1                       | 'position'
       'hidden'          | true                    | 'hidden'
       'parameters'      | [new ParameterBuilder().name("p").build()]       | 'parameters'
@@ -125,6 +126,7 @@ class OperationBuilderSpec extends Specification {
       'produces'        | newHashSet('app/json')  | 'produces'
       'consumes'        | newHashSet('app/json')  | 'consumes'
       'protocols'       | newHashSet('https')     | 'protocol'
+      'tags'            | newHashSet('tag')       | 'tags'
       'parameters'      | [new ParameterBuilder().name("p").build()]       | 'parameters'
   }
 
