@@ -51,6 +51,7 @@ class ApiListingBuilderSpec extends Specification {
       'securityReferences'| [Mock(SecurityReference)]   | 'securityReferences'
       'apis'              | [Mock(ApiDescription)]  | 'apis'
       'models'            | [m1: Mock(Model)]       | 'models'
+      'tags'              | ["test"] as Set         | 'tags'
   }
 
   def "Setting properties on the builder with null values preserves existing values"() {
@@ -80,5 +81,6 @@ class ApiListingBuilderSpec extends Specification {
       'securityReferences'| [Mock(SecurityReference)]   | 'securityReferences'
       'apis'          | [Mock(ApiDescription)]  | 'apis'
       'models'        | [m1: Mock(Model)]       | 'models'
+      'tags'          | ["test"] as Set         | 'tags'
   }
 }

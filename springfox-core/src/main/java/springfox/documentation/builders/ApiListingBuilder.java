@@ -45,6 +45,7 @@ public class ApiListingBuilder {
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
   private Set<String> protocol = newHashSet();
+  private Set<String> tags = newTreeSet();
   private List<SecurityReference> securityReferences = newArrayList();
   private List<ApiDescription> apis = newArrayList();
   private Map<String, Model> models = newHashMap();
@@ -65,7 +66,7 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder apiVersion(String apiVersion) {
-    this.apiVersion = BuilderDefaults.defaultIfAbsent(apiVersion, this.apiVersion);
+    this.apiVersion = defaultIfAbsent(apiVersion, this.apiVersion);
     return this;
   }
 
@@ -76,7 +77,7 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder basePath(String basePath) {
-    this.basePath = BuilderDefaults.defaultIfAbsent(basePath, this.basePath);
+    this.basePath = defaultIfAbsent(basePath, this.basePath);
     return this;
   }
 
@@ -87,7 +88,7 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder resourcePath(String resourcePath) {
-    this.resourcePath = BuilderDefaults.defaultIfAbsent(resourcePath, this.resourcePath);
+    this.resourcePath = defaultIfAbsent(resourcePath, this.resourcePath);
     return this;
   }
 
@@ -195,7 +196,7 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder description(String description) {
-    this.description = BuilderDefaults.defaultIfAbsent(description, this.description);
+    this.description = defaultIfAbsent(description, this.description);
     return this;
   }
 
@@ -210,8 +211,19 @@ public class ApiListingBuilder {
     return this;
   }
 
+  /**
+   * Updates the tags
+   *
+   * @param tags
+   * @return
+   */
+  public ApiListingBuilder tags(Set<String> tags) {
+    this.tags = defaultIfAbsent(tags, this.tags);
+    return this;
+  }
+
   public ApiListing build() {
     return new ApiListing(apiVersion, basePath,
-        resourcePath, produces, consumes, protocol, securityReferences, apis, models, description, position);
+        resourcePath, produces, consumes, protocol, securityReferences, apis, models, description, position, tags);
   }
 }

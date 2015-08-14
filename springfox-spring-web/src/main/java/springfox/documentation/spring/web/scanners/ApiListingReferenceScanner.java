@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -41,6 +40,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Multimaps.*;
 
@@ -56,7 +56,7 @@ public class ApiListingReferenceScanner {
     ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
         = ArrayListMultimap.create();
     ApiSelector selector = context.getApiSelector();
-    Iterable<RequestHandler> matchingHandlers = FluentIterable.from(context.getRequestHandlers())
+    Iterable<RequestHandler> matchingHandlers = from(context.getRequestHandlers())
         .filter(selector.getRequestHandlerSelector());
     for (RequestHandler handler : matchingHandlers) {
       RequestMappingInfo requestMappingInfo = handler.getRequestMapping();

@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,19 +28,15 @@ import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.ResourceListing;
-import springfox.documentation.service.Tag;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Sets.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.service.Tags.*;
 
 @Component
 public class ApiDocumentationScanner {
@@ -85,32 +80,6 @@ public class ApiDocumentationScanner {
         .build();
     group.resourceListing(resourceListing);
     return group.build();
-  }
-
-  private Set<Tag> toTags(Multimap<String, ApiListing> apiListings) {
-    List<Tag> tags = from(nullToEmptyMultimap(apiListings).entries())
-        .transform(fromEntry()).toList();
-    TreeSet<Tag> tagSet = newTreeSet(byTagName());
-    tagSet.addAll(tags);
-    return tagSet;
-  }
-
-  private Comparator<Tag> byTagName() {
-    return new Comparator<Tag>() {
-      @Override
-      public int compare(Tag first, Tag second) {
-        return first.getName().compareTo(second.getName());
-      }
-    };
-  }
-
-  private Function<Map.Entry<String, ApiListing>, Tag> fromEntry() {
-    return new Function<Map.Entry<String, ApiListing>, Tag>() {
-      @Override
-      public Tag apply(Map.Entry<String, ApiListing> input) {
-        return new Tag(input.getKey(), input.getValue().getDescription());
-      }
-    };
   }
 
 }
