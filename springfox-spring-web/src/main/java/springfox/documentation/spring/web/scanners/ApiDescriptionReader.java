@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import springfox.documentation.builders.ApiDescriptionBuilder;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.ApiSelector;
@@ -59,26 +58,24 @@ public class ApiDescriptionReader {
 
     List<ApiDescription> apiDescriptionList = newArrayList();
     for (String path : matchingPaths(selector, patternsCondition)) {
-        String methodName = handlerMethod.getMethod().getName();
-        RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
+      String methodName = handlerMethod.getMethod().getName();
+      RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
 
       List<Operation> operations = operationReader.read(operationContext);
-      ApiDescriptionBuilder descriptionBuilder = operationContext.apiDescriptionBuilder();
-      descriptionBuilder.operations(operations);
-      operationContext.apiDescriptionBuilder().operations(operations);
-      operationContext.apiDescriptionBuilder().pathDecorator(
-          pluginsManager.decorator(new PathContext(outerContext, from(operations).first())));
-      descriptionBuilder.path(path);
-        descriptionBuilder.description(methodName);
-        descriptionBuilder.hidden(false);
-        apiDescriptionList.add(descriptionBuilder.build());
+      operationContext.apiDescriptionBuilder()
+          .operations(operations)
+          .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, from(operations).first())))
+          .path(path)
+          .description(methodName)
+          .hidden(false);
+      apiDescriptionList.add(operationContext.apiDescriptionBuilder().build());
     }
     return apiDescriptionList;
   }
 
-    private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
-        return natural().sortedCopy(from(patternsCondition.getPatterns())
-            .filter(selector.getPathSelector()));
-    }
+  private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
+    return natural().sortedCopy(from(patternsCondition.getPatterns())
+        .filter(selector.getPathSelector()));
+  }
 
 }

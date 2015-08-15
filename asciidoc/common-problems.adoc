@@ -46,3 +46,7 @@ onApplicationEvent call. I was able to fix it by removing second WebApplicationI
 A. Typically these are handled via `Docket#directModelSubstitute(LocalDateTime.class, String.class)`. If these
 are ISO 8601 dates that conform to a string format i.e. `yyyy-MM-dd'T'HH:mm'Z'`. However you won't have any format or
  validation info.
+
+*Q. How does one use @ModelAttribute annotation. It doesnt seem to render the model properties as scalar properties?*
+
+In order for @ModelAttribute annotated types to be infered the properties need to be bean properties.
