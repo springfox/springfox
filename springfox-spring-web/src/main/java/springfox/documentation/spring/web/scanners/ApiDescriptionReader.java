@@ -42,12 +42,15 @@ import static com.google.common.collect.Ordering.*;
 public class ApiDescriptionReader {
 
   private final ApiOperationReader operationReader;
-  private DocumentationPluginsManager pluginsManager;
+  private final DocumentationPluginsManager pluginsManager;
+  private final ApiDescriptionLookup lookup;
 
   @Autowired
-  public ApiDescriptionReader(ApiOperationReader operationReader, DocumentationPluginsManager pluginsManager) {
+  public ApiDescriptionReader(ApiOperationReader operationReader, DocumentationPluginsManager pluginsManager,
+                              ApiDescriptionLookup lookup) {
     this.operationReader = operationReader;
     this.pluginsManager = pluginsManager;
+    this.lookup = lookup;
   }
 
   public List<ApiDescription> read(RequestMappingContext outerContext) {
@@ -68,7 +71,9 @@ public class ApiDescriptionReader {
           .path(path)
           .description(methodName)
           .hidden(false);
-      apiDescriptionList.add(operationContext.apiDescriptionBuilder().build());
+      ApiDescription apiDescription = operationContext.apiDescriptionBuilder().build();
+      lookup.add(outerContext.getHandlerMethod().getMethod(), apiDescription);
+      apiDescriptionList.add(apiDescription);
     }
     return apiDescriptionList;
   }
