@@ -28,9 +28,9 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates that Swagger support should be enabled.
- * <p/>
+ *
  * This should be applied to a Spring java config and should have an accompanying '@Configuration' annotation.
- * <p/>
+ *
  * Loads all required beans defined in @see SpringSwaggerConfig
  *
  * @see springfox.documentation.spring.web.plugins.Docket

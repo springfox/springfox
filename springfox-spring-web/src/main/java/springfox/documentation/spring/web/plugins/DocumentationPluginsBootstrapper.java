@@ -43,9 +43,8 @@ import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 /**
  * After an application context refresh, builds and executes all DocumentationConfigurer instances found in the
- * application
- * context.
- * <p/>
+ * application context.
+ *
  * If no instances DocumentationConfigurer are found a default one is created and executed.
  */
 @Component

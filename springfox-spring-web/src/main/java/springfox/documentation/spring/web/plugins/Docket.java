@@ -143,7 +143,7 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Determines the generated, swagger specific, urls.
-   * <p/>
+   *
    * By default, relative urls are generated. If absolute urls are required, supply an implementation of
    * AbsoluteSwaggerPathProvider
    *
@@ -158,7 +158,7 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Overrides the default http response messages at the http request method level.
-   * <p/>
+   *
    * To set specific response messages for specific api operations use the swagger core annotations on
    * the appropriate controller methods.
    *
@@ -233,7 +233,7 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Provide an ordering schema for operations
-   * <p/>
+   *
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
    *
@@ -311,7 +311,7 @@ public class Docket implements DocumentationPlugin {
    * Controls how ApiListingReference's are sorted.
    * i.e the ordering of the api's within the swagger Resource Listing.
    * The default sort is Lexicographically by the ApiListingReference's path
-   * <p/>
+   *
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
    *
@@ -326,7 +326,7 @@ public class Docket implements DocumentationPlugin {
   /**
    * Controls how <code>com.wordnik.swagger.model.ApiDescription</code>'s are ordered.
    * The default sort is Lexicographically by the ApiDescription's path.
-   * <p/>
+   *
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
    *
@@ -379,7 +379,7 @@ public class Docket implements DocumentationPlugin {
   /**
    * Decides whether to use url templating for paths. This is especially useful when you have search api's that
    * might have multiple request mappings for each search use case.
-   * <p/>
+   *
    * This is an incubating feature that may not continue to be supported after the swagger specification is modified
    * to accomodate the usecase as described in issue #711
    *
