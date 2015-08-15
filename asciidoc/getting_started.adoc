@@ -88,13 +88,15 @@ dependencies {
 </dependency>
 ----
 
-==== Springfox-swagger2 with Spring Boot
+==== Springfox-swagger2 with Spring MVC and Spring Boot
 [[getting-started]]
 
 [source,java,linenums]
 ----
 include::../springfox-spring-config/src/main/java/springfox/springconfig/Swagger2SpringBoot.java[indent=0]
 ----
+
+===== Configuration explained
 <1> Enables Springfox swagger 2
 <2> Instructs spring where to scan for API controllers
 <3> `Docket`, Sringfox's, primary api configuration mechanism is initialized for swagger specification 2.0
