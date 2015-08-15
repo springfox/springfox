@@ -612,12 +612,24 @@ onApplicationEvent call. I was able to fix it by removing second WebApplicationI
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p><strong>Q. How do we use Java 8 types esply. LocalDateTime?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>Typically these are handled via <code>Docket#directModelSubstitute(LocalDateTime.class, String.class)</code>. If these
+are ISO 8601 dates that conform to a string format i.e. <code>yyyy-MM-dd&#8217;T&#8217;HH:mm&#8217;Z'</code>. However you won&#8217;t have any format or
+ validation info.</p>
+</li>
+</ol>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-08-15 02:42:42 UTC
+Last updated 2015-08-15 02:58:28 UTC
 </div>
 </div>
 </body>
