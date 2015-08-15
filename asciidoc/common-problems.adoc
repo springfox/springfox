@@ -14,3 +14,29 @@ A. It can be a little confusing :open_mouth:
 - Swagger.js and Swagger-ui - Are client libraries in javascript that can consume swagger specification
 - springfox-swagger-ui - the one that you're referring to, is just packaging swagger-ui in a convenient way so that
 spring services can serve it up.
+
+*Q. I use GSON and don't use Jackson, What should I do?*
+
+A. Thanks to https://github.com/chrishuttonch[@chrishuttonch] for describing the solution to https://github.com/springfox/springfox/issues/867[this issue]
+
+TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serialisers for the following classes:
+
+[source,java]
+----
+.registerTypeAdapter(springfox.documentation.service.ApiListing.class, new SwaggerApiListingJsonSerializer())
+.registerTypeAdapter(springfox.documentation.spring.web.json.Json.class, new SwaggerJsonSerializer())
+.registerTypeAdapter(springfox.documentation.swagger.web.SwaggerResource.class, new SwaggerResourceSerializer())
+.registerTypeAdapter(springfox.documentation.service.ResourceListing.class, new SwaggerResourceListingJsonSerializer())
+.registerTypeAdapter(springfox.documentation.swagger.web.SwaggerResource.class, new SwaggerResourceSerializer())
+.registerTypeAdapter(springfox.documentation.swagger.web.SecurityConfiguration.class, new SwaggerSecurityConfigurationSerializer())
+.registerTypeAdapter(springfox.documentation.swagger.web.UiConfiguration.class, new SwaggerUiConfigurationSerializer());
+----
+
+*Q. I get an NPE during application startup in a spring-boot app?*
+
+A. Thanks to https://github.com/shasti421[@shasti421] for providing the solution
+
+TIP: Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
+refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
+onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
+ related to https://github.com/spring-projects/spring-boot/issues/221[spring-boot issue #221]
