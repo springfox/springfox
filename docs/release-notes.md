@@ -1,3 +1,56 @@
+# 2.2.0 Release notes
+Thank you as usual for everyone who contributed in some for or the other to make this product better!! This release 
+sneaks in some features we're incubating to provide hypermedia support.
+
+### Features
+- #866 Missing REST API descriptions in JSON @EranIsraeli
+- #861 Springfox #845: Configuration for global Operation-Parameters @GitVhaos
+- #834 OAUTH problem @dorukokan
+- #801 Allowable Values for enumerations on response models do not render options @GitVhaos
+- #766 springfox-swagger2 doesn't respect ApiModelProperty#position @olkulyk
+- #755 o.s.data.domain.Pageable - automatically add @ApiImplicitParams? @steve-oakey
+- #750 Same RequestMapping URL's containing different RequestParam gets overridden @rajeshkamal  
+- #723 Models annotated with static JsonCreator factory methods do not render properly @who
+- #679 Reuse documentation across methods/types @hestad
+- #675 Tags in @ApiOperation are not rendered @who
+- #590 swagger2asciidoc converter @RobWin
+- #293 ModelProperty doesn't have a field for Min/Max @Charlie-IAS
+ 
+### Bug fixes 
+- #911 Documentation generate empty model when input is an interface but not always @Richou
+- #905 Uncaught TypeError: Cannot read property 'clientAuthorizations' of null @mongofish
+- #903 fix for issue #870. "click to authenticate" button not clickable @sloppycoder
+- #901 SpringFox no more compatible with Spring 3.2.x ? @Abdennebi  2.2.0
+- #897 Does springfox-swagger2:2.1.2 work with Scala? @cer
+- #885 Issue Related to #586 - Empty properties when using @JsonProperty but not using @JsonCreator @jreckner
+- #873 @ApiModelProperty hidden not working @ wind57
+- #737 Api annotation value should remain as-is @RobWin 
+
+#### Questions
+- #916 Error while deploying on cloud foundry -::0 can't find referenced pointcut model @brajput24  
+- #915 ignored values in annotations @iiyam  
+- #910 Support for Spring Boot Management endpoints @sbuettner  
+- #908 Response 200 always added to POST / DELETE @tatabatyo
+- #902 @ApiImplicitParam: "array" dataType is getting resolved into "type":"ref" @anny-ts
+- #896 How to hide a parameter/field from an object annotated with @ModelAttribute @jmarinco
+- #893 Docket.ignoredParameterTypes() removes classes completly @thomseno  
+- #892 Error at Spring Boot when testing @Ivan-Masli-GDP
+- #889 Can I set some flag to use the non minified swagger ui for debugging? has-workaround @mrgreen7  
+- #874 springfox-staticdocs usage @EranIsraeli
+- #872 Range not respected by swagger ui for validation @wind57
+- #795 New to Springfox @Cpruce
+- #914 Does swagger2 have any support for java.time introduced in java8 can-use-for-docs @zhukboh
+- #912 @BeanParam-type request parameters aren't handled properly @ejain
+- #909 Bad URL when using "try it out!" swagger ui functionality with RequestParam (query param) @Fabrice-Deshayes-aka-Xtream  
+- #907 @ApiModelProperty(allowableValues = "range[min, max]") not working @pn279j  
+- #899 Swagger 2.1.2 deployment Error - Error creating bean with name 'apiDescriptionReader' @GLE81  
+- #898 Is there a way to load my own ApiModelProperty annotation? @awenblue  
+- #887 Question regarding query params @rcruzper  
+- #882 I cannot get "definitions object" generated @lelininkas  
+- #880 2.1.0 - nickname not getting honored as operationId @rajeshkamal  
+- #877 Swagger Annotations Not Working, Using Springfox not-reproducable @samillm  
+- #187 Custom Schemas for Models @anthonyroach
+
 # 2.1.2 Release notes
 This release is mostly a stabilization release due to issues related to the introduction of using the spring caching abstraction.
 
