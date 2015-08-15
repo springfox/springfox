@@ -227,7 +227,7 @@ public class OperationBuilder {
    * @return
    */
   public OperationBuilder tags(Set<String> tags) {
-    this.tags.addAll(nullToEmptySet(tags));
+    this.tags = nullToEmptySet(tags);
     return this;
   }
   

@@ -34,8 +34,7 @@ class OperationTagsReaderSpec extends DocumentationContextSpec {
               context(), "/anyPath")
 
     and:
-      OperationTagsReader sut = new OperationTagsReader()
-      sut.pluginsManager = defaultWebPlugins()
+      OperationTagsReader sut = new OperationTagsReader(new DefaultTagsProvider(defaultWebPlugins()))
 
     when:
       sut.apply(operationContext)

@@ -120,13 +120,13 @@ class OperationBuilderSpec extends Specification {
       'method'          | HttpMethod.PUT          | 'method'
       'summary'         | 'method1 summary'       | 'summary'
       'notes'           | 'method1 notes'         | 'notes'
-      'responseModel'    | new ModelRef('string')  | 'responseModel'
+      'responseModel'   | new ModelRef('string')  | 'responseModel'
       'deprecated'      | 'deprecated'            | 'deprecated'
       'uniqueId'        | 'method1'               | 'uniqueId'
       'produces'        | newHashSet('app/json')  | 'produces'
       'consumes'        | newHashSet('app/json')  | 'consumes'
       'protocols'       | newHashSet('https')     | 'protocol'
-      'tags'            | newHashSet('tag')       | 'tags'
+      'tags'            | newHashSet()            | 'tags'
       'parameters'      | [new ParameterBuilder().name("p").build()]       | 'parameters'
   }
 

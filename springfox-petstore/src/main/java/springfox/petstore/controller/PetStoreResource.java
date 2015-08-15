@@ -48,7 +48,8 @@ public class PetStoreResource {
   @ApiOperation(
           value = "Find purchase order by ID",
           notes = "For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions",
-          response = Order.class)
+          response = Order.class,
+          tags = {"Pet Store"})
   @ApiResponses(value = {
           @ApiResponse(code = 400, message = "Invalid ID supplied"),
           @ApiResponse(code = 404, message = "Order not found")})

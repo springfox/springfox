@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
 import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import springfox.documentation.spring.web.dummy.DummyControllerWithTags
 import springfox.documentation.spring.web.dummy.controllers.PetGroomingService
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController
@@ -63,6 +64,12 @@ class RequestMappingSupport {
 
   HandlerMethod dummyControllerHandlerMethod(String methodName = "dummyMethod", parameterTypes = null) {
     def clazz = new DummyController()
+    Class c = clazz.getClass();
+    new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
+  }
+
+  HandlerMethod dummyOperationWithTags(String methodName = "dummyMethod", parameterTypes = null) {
+    def clazz = new DummyControllerWithTags()
     Class c = clazz.getClass();
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }

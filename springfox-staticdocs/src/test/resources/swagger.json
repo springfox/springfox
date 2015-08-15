@@ -386,7 +386,7 @@
         "/stores/order/{orderId}": {
             "get": {
                 "tags": [
-                    "store"
+                    "Pet Store"
                 ],
                 "summary": "Find purchase order by ID",
                 "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions",

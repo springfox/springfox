@@ -19,7 +19,11 @@
 package springfox.documentation.spring.web.dummy;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Api(tags = {"Tag1", "Tag2"})
 public class DummyControllerWithTags {
+  @ApiOperation(value = "dummyMethod", tags = {"Tag3", "Tag4"})
+  public void dummyMethod() {
+  }
 }
