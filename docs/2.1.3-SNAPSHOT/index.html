@@ -871,7 +871,7 @@ dependencies {
 </div>
 </div>
 <div class="sect3">
-<h4 id="springfox-swagger2-with-spring-boot">2.1.3. Springfox-swagger2 with Spring Boot</h4>
+<h4 id="springfox-swagger2-with-spring-mvc-and-spring-boot">2.1.3. Springfox-swagger2 with Spring MVC and Spring Boot</h4>
 <div id="getting-started" class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
@@ -1141,6 +1141,8 @@ dependencies {
 </tr></table></code></pre>
 </div>
 </div>
+<div class="sect4">
+<h5 id="configuration-explained">Configuration explained</h5>
 <div class="colist arabic">
 <table>
 <tr>
@@ -1242,6 +1244,7 @@ select operations to be protected by one of the specified security schemes.</td>
 </div>
 <div class="paragraph">
 <p>There are plenty of more options to configure the <code>Docket</code>. This should provide a good start.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="swagger-ui">Swagger UI</h5>
@@ -1939,12 +1942,70 @@ spring services can serve it up.</p>
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p><strong>Q. I use GSON and don&#8217;t use Jackson, What should I do?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>Thanks to <a href="https://github.com/chrishuttonch">@chrishuttonch</a> for describing the solution to <a href="https://github.com/springfox/springfox/issues/867">this issue</a></p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serialisers for the following classes:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">.registerTypeAdapter(springfox.documentation.service.ApiListing.class, <span class="keyword">new</span> SwaggerApiListingJsonSerializer())
+.registerTypeAdapter(springfox.documentation.spring.web.json.Json.class, <span class="keyword">new</span> SwaggerJsonSerializer())
+.registerTypeAdapter(springfox.documentation.swagger.web.SwaggerResource.class, <span class="keyword">new</span> SwaggerResourceSerializer())
+.registerTypeAdapter(springfox.documentation.service.ResourceListing.class, <span class="keyword">new</span> SwaggerResourceListingJsonSerializer())
+.registerTypeAdapter(springfox.documentation.swagger.web.SwaggerResource.class, <span class="keyword">new</span> SwaggerResourceSerializer())
+.registerTypeAdapter(springfox.documentation.swagger.web.SecurityConfiguration.class, <span class="keyword">new</span> SwaggerSecurityConfigurationSerializer())
+.registerTypeAdapter(springfox.documentation.swagger.web.UiConfiguration.class, <span class="keyword">new</span> SwaggerUiConfigurationSerializer());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Q. I get an NPE during application startup in a spring-boot app?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>Thanks to <a href="https://github.com/shasti421">@shasti421</a> for providing the solution</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
+refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
+onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
+ related to <a href="https://github.com/spring-projects/spring-boot/issues/221">spring-boot issue #221</a>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-08-15 02:22:33 UTC
+Last updated 2015-08-15 02:42:42 UTC
 </div>
 </div>
 </body>
