@@ -24,7 +24,7 @@ class ApiListingTagReaderSpec extends Specification {
     and:
       ApiListingContext context = Mock(ApiListingContext)
     when:
-      context.group >> new ResourceGroup("test", clazz)
+      context.resourceGroup >> new ResourceGroup("test", clazz)
     and:
       context.apiListingBuilder() >> new ApiListingBuilder(Ordering.from(Orderings.apiPathCompatator()))
     then:

@@ -118,7 +118,7 @@ public class ApiListingScanner {
               .position(position++);
 
       ApiListingContext apiListingContext
-          = new ApiListingContext(context.getDocumentationType(), resourceGroup, apiListingBuilder, resourceGroup);
+          = new ApiListingContext(context.getDocumentationType(), resourceGroup, apiListingBuilder);
       apiListingMap.put(resourceGroup.getGroupName(), pluginsManager.apiListing(apiListingContext));
     }
     return apiListingMap;

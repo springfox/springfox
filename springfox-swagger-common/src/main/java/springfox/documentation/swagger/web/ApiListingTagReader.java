@@ -40,12 +40,12 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 public class ApiListingTagReader implements ApiListingBuilderPlugin {
   @Override
   public void apply(ApiListingContext apiListingContext) {
-    Class<?> controllerClass = apiListingContext.getGroup().getControllerClass();
+    Class<?> controllerClass = apiListingContext.getResourceGroup().getControllerClass();
     Set<String> tagSet = Optional.fromNullable(AnnotationUtils.findAnnotation(controllerClass, Api.class))
         .transform(tags())
         .or(Sets.<String>newTreeSet());
     if (tagSet.isEmpty()) {
-      tagSet.add(apiListingContext.getGroup().getGroupName());
+      tagSet.add(apiListingContext.getResourceGroup().getGroupName());
     }
     apiListingContext.apiListingBuilder().tags(tagSet);
   }
