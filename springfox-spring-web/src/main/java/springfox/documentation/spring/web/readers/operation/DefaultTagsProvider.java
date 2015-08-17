@@ -30,6 +30,8 @@ import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.Set;
 
+import static com.google.common.collect.FluentIterable.*;
+
 @Component
 public class DefaultTagsProvider {
   private final DocumentationPluginsManager pluginsManager;
@@ -44,9 +46,7 @@ public class DefaultTagsProvider {
         = pluginsManager.resourceGroupingStrategy(context.getDocumentationType());
     Set<ResourceGroup> resourceGroups
         = groupingStrategy.getResourceGroups(context.getRequestMappingInfo(), context.getHandlerMethod());
-    FluentIterable<String> tags = FluentIterable
-        .from(resourceGroups)
-        .transform(toTags());
+    FluentIterable<String> tags = from(resourceGroups).transform(toTags());
     return tags.toSet();
   }
 

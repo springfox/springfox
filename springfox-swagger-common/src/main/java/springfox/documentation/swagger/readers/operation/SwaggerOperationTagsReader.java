@@ -21,6 +21,7 @@ package springfox.documentation.swagger.readers.operation;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -30,15 +31,17 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spring.web.readers.operation.DefaultTagsProvider;
-import springfox.documentation.swagger.annotations.Annotations;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Set;
 
+import static com.google.common.base.Optional.fromNullable;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static org.springframework.core.annotation.AnnotationUtils.*;
 import static springfox.documentation.service.Tags.*;
+import static springfox.documentation.swagger.annotations.Annotations.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -55,8 +58,7 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
   public void apply(OperationContext context) {
     Set<String> defaultTags = tagsProvider.tags(context);
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    Optional<ApiOperation> annotation = Annotations.findApiOperationAnnotation(handlerMethod.getMethod());
-    Set<String> tags = annotation.transform(toTags()).or(Sets.<String>newHashSet());
+    SetView<String> tags = Sets.union(operationTags(handlerMethod), controllerTags(handlerMethod));
     if (tags.isEmpty()) {
       context.operationBuilder().tags(defaultTags);
     } else {
@@ -64,10 +66,32 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
     }
   }
 
-  private Function<ApiOperation, Set<String>> toTags() {
+  private Set<String> controllerTags(HandlerMethod handlerMethod) {
+    Class<?> controller = handlerMethod.getMethod().getDeclaringClass();
+    Optional<Api> controllerAnnotation = fromNullable(findAnnotation(controller, Api.class));
+    return controllerAnnotation.transform(tagsFromController()).or(Sets.<String>newHashSet());
+  }
+
+  private Set<String> operationTags(HandlerMethod handlerMethod) {
+    Optional<ApiOperation> annotation = findApiOperationAnnotation(handlerMethod.getMethod());
+    return annotation.transform(tagsFromOperation()).or(Sets.<String>newHashSet());
+  }
+
+  private Function<ApiOperation, Set<String>> tagsFromOperation() {
     return new Function<ApiOperation, Set<String>>() {
       @Override
       public Set<String> apply(ApiOperation input) {
+        Set<String> tags = newTreeSet();
+        tags.addAll(from(newArrayList(input.tags())).filter(emptyTags()).toSet());
+        return tags;
+      }
+    };
+  }
+
+  private Function<Api, Set<String>> tagsFromController() {
+    return new Function<Api, Set<String>>() {
+      @Override
+      public Set<String> apply(Api input) {
         Set<String> tags = newTreeSet();
         tags.addAll(from(newArrayList(input.tags())).filter(emptyTags()).toSet());
         return tags;
