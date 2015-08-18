@@ -27,6 +27,7 @@ import springfox.documentation.spi.DocumentationType;
 
 import java.util.Set;
 
+@Deprecated
 public interface ResourceGroupingStrategy extends Plugin<DocumentationType> {
   /**
    * Gets the resource group for a particular request mapping.

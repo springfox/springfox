@@ -18,20 +18,16 @@
  */
 
 package springfox.documentation.spring.web.scanners
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.RequestHandler
 import springfox.documentation.annotations.ApiIgnore
-import springfox.documentation.service.ApiListingReference
 import springfox.documentation.service.ResourceGroup
-import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController
 import springfox.documentation.spring.web.mixins.AccessorAssertions
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-
-import javax.servlet.ServletContext
 
 import static com.google.common.base.Predicates.*
 import static springfox.documentation.builders.PathSelectors.*
@@ -72,30 +68,6 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       [requestMappingInfo("path")] | new SpringGroupingStrategy() | null      | "groupName is required"
   }
 
-  def "should group controller paths"() {
-    when:
-      RequestMappingInfo businessRequestMappingInfo = requestMappingInfo("/api/v1/businesses")
-      RequestMappingInfo accountsRequestMappingInfo = requestMappingInfo("/api/v1/accounts")
-
-      requestHandlers =
-              [
-                      new RequestHandler(businessRequestMappingInfo, dummyHandlerMethod()),
-                      new RequestHandler(accountsRequestMappingInfo, dummyHandlerMethod())
-              ]
-
-      contextBuilder.requestHandlers(requestHandlers)
-      plugin
-          .groupName("groupName")
-          .configure(contextBuilder)
-
-      ApiListingReferenceScanResult result = sut.scan(context())
-
-    then:
-      result.getApiListingReferences().size() == 1
-      ApiListingReference businessListingReference = result.getApiListingReferences()[0]
-      businessListingReference.getPath() ==
-              '/groupName/dummy-class'
-  }
 
   def "grouping of listing references using Spring grouping strategy"() {
     given:
@@ -117,11 +89,6 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       ApiListingReferenceScanResult result = sut.scan(context())
 
     then:
-      result.apiListingReferences.size() == 2
-      result.apiListingReferences.find({ it.getDescription() == 'Dummy Class' })
-      result.apiListingReferences.find({ it.getDescription() == 'Dummy Controller' })
-
-    and:
       result.resourceGroupRequestMappings.size() == 2
       result.resourceGroupRequestMappings[new ResourceGroup("dummy-controller", DummyController)].size() == 1
       result.resourceGroupRequestMappings[new ResourceGroup("dummy-class", DummyClass)].size() == 5
@@ -146,31 +113,9 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       ApiListingReferenceScanResult result = sut.scan(context())
 
     then:
-      result.apiListingReferences.size() == 2
-      result.apiListingReferences.find({ it.getDescription() == 'Dummy Class' })
-      result.apiListingReferences.find({ it.getDescription() == 'Dummy Controller' })
-
-    and:
       result.resourceGroupRequestMappings.size() == 2
       result.resourceGroupRequestMappings[new ResourceGroup("dummy-controller", DummyController)].size() == 1
       result.resourceGroupRequestMappings[new ResourceGroup("dummy-class", DummyClass)].size() == 5
   }
 
-  def "Relative Paths"() {
-    given:
-
-      requestHandlers = [
-        new RequestHandler(requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
-      ]
-    when:
-      contextBuilder.requestHandlers(requestHandlers)
-      plugin
-          .groupName("groupName")
-          .pathProvider(new RelativePathProvider(Mock(ServletContext)))
-      List<ApiListingReference> apiListingReferences = sut.scan(context()).apiListingReferences
-
-    then: "api-docs should not appear in the path"
-      ApiListingReference apiListingReference = apiListingReferences[0]
-      apiListingReference.getPath() == "/groupName/dummy-controller"
-  }
 }

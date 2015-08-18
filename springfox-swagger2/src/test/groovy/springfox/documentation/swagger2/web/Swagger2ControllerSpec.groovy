@@ -1,6 +1,7 @@
 package springfox.documentation.swagger2.web
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.collect.LinkedListMultimap
 import com.jayway.jsonpath.JsonPath
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
@@ -36,12 +37,15 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
   @Shared
   Swagger2Controller controller = new Swagger2Controller()
   ApiListingReferenceScanner listingReferenceScanner
+  ApiListingScanner listingScanner
 
   def setup() {
     controller.documentationCache = new DocumentationCache()
     controller.jsonSerializer = new JsonSerializer([new Swagger2JacksonModule()])
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingScanner = Mock(ApiListingScanner)
+    listingScanner.scan(_) >> LinkedListMultimap.create()
     controller.mapper = swagger2Mapper()
     def jackson2 = new MappingJackson2HttpMessageConverter()
 
@@ -60,7 +64,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
   def "should return the default or first swagger resource listing"() {
     given:
       ApiDocumentationScanner swaggerApiResourceListing =
-          new ApiDocumentationScanner(listingReferenceScanner, Mock(ApiListingScanner))
+          new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
       controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
     when:
       MvcResult result = mockMvc
@@ -81,7 +85,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
   def "Should omit port number if it is -1"() {
     given:
       ApiDocumentationScanner swaggerApiResourceListing =
-        new ApiDocumentationScanner(listingReferenceScanner, Mock(ApiListingScanner))
+        new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
       controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
     and:
       controller.hostNameOverride = "DEFAULT"

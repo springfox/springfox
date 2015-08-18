@@ -60,7 +60,7 @@ public class SpringGroupingStrategy implements ResourceGroupingStrategy {
 
   private Set<ResourceGroup> groups(HandlerMethod handlerMethod) {
     Class<?> controllerClazz = handlerMethod.getBeanType();
-    String controllerAsGroup = splitCamelCase(controllerClazz.getSimpleName(), "-");
+    String controllerAsGroup = splitCamelCase(controllerClazz.getSimpleName(), "-").toLowerCase();
     return newHashSet(new ResourceGroup(controllerAsGroup, controllerClazz));
   }
 

@@ -44,6 +44,7 @@ import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
+@Deprecated
 public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStrategy {
   private static final Logger LOG = LoggerFactory.getLogger(ClassOrApiAnnotationResourceGrouping.class);
 

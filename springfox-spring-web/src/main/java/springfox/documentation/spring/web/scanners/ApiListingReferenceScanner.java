@@ -25,23 +25,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.PathAdjuster;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Multimaps.*;
 
 @Component
@@ -52,7 +45,6 @@ public class ApiListingReferenceScanner {
   public ApiListingReferenceScanResult scan(DocumentationContext context) {
     LOG.info("Scanning for api listing references");
 
-    List<ApiListingReference> apiListingReferences = newArrayList();
     ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
         = ArrayListMultimap.create();
     ApiSelector selector = context.getApiSelector();
@@ -74,33 +66,7 @@ public class ApiListingReferenceScanner {
         resourceGroupRequestMappings.put(group, requestMappingContext);
       }
     }
-
-    for (ResourceGroup resourceGroup : resourceGroupRequestMappings.keySet()) {
-      String resourceGroupName = resourceGroup.getGroupName();
-      String listingDescription = getResourceDescription(resourceGroupRequestMappings.get(resourceGroup), context);
-      Integer position = resourceGroup.getPosition();
-      PathProvider pathProvider = context.getPathProvider();
-      String path = pathProvider.getResourceListingPath(context.getGroupName(), resourceGroupName);
-      LOG.info("Created resource listing Path: {} Description: {} Position: {}",
-          path, resourceGroupName, position);
-      PathAdjuster adjuster = new PathMappingAdjuster(context);
-      apiListingReferences.add(new ApiListingReference(adjuster.adjustedPath(path), listingDescription, position));
-    }
-    List<ApiListingReference> sorted = context.getListingReferenceOrdering().sortedCopy(apiListingReferences);
-    return new ApiListingReferenceScanResult(sorted, asMap(resourceGroupRequestMappings));
-  }
-
-  private String getResourceDescription(List<RequestMappingContext> requestMappings, DocumentationContext context) {
-    Iterator<RequestMappingContext> iterator = requestMappings.iterator();
-    if (!iterator.hasNext()) {
-      return null;
-    }
-
-    RequestMappingContext requestMapping = iterator.next();
-    ResourceGroupingStrategy resourceGroupingStrategy = context.getResourceGroupingStrategy();
-
-    return resourceGroupingStrategy
-        .getResourceDescription(requestMapping.getRequestMappingInfo(), requestMapping.getHandlerMethod());
+    return new ApiListingReferenceScanResult(asMap(resourceGroupRequestMappings));
   }
 
 }
