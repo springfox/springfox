@@ -56,8 +56,8 @@ public class ApiDocumentationScanner {
   public Documentation scan(DocumentationContext context) {
     ApiListingReferenceScanResult result = apiListingReferenceScanner.scan(context);
     List<ApiListingReference> apiListingReferences = result.getApiListingReferences();
-    ApiListingScanningContext listingContext = new ApiListingScanningContext(context, result
-        .getResourceGroupRequestMappings());
+    ApiListingScanningContext listingContext = new ApiListingScanningContext(context,
+        result.getResourceGroupRequestMappings());
 
     Multimap<String, ApiListing> apiListings = apiListingScanner.scan(listingContext);
     DocumentationBuilder group = new DocumentationBuilder()
