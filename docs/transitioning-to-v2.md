@@ -124,7 +124,7 @@ library always has a configured ObjectMapper that is customized to serialize swa
 
 In order to do this implement the ```ApplicationListener<ObjectMapperConfigured>``` interface. The event has a handle
  to the ObjectMapper that was configured. Configuring application specific ObjectMapper customizations in this 
- applicaiton event handler guarantees that application specific  customizations will be applied to each and every 
+ application event handler guarantees that application specific  customizations will be applied to each and every 
  ObjectMapper that is in play.
  
 If you encounter a NullPointerException during application startup like [this issue](https://github
