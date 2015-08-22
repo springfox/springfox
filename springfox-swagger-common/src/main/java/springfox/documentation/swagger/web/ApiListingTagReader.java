@@ -19,10 +19,8 @@
 package springfox.documentation.swagger.web;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import io.swagger.annotations.Api;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
@@ -30,9 +28,11 @@ import springfox.documentation.spi.service.contexts.ApiListingContext;
 
 import java.util.Set;
 
+import static com.google.common.base.Optional.*;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static org.springframework.core.annotation.AnnotationUtils.*;
 import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
@@ -41,7 +41,7 @@ public class ApiListingTagReader implements ApiListingBuilderPlugin {
   @Override
   public void apply(ApiListingContext apiListingContext) {
     Class<?> controllerClass = apiListingContext.getResourceGroup().getControllerClass();
-    Set<String> tagSet = Optional.fromNullable(AnnotationUtils.findAnnotation(controllerClass, Api.class))
+    Set<String> tagSet = fromNullable(findAnnotation(controllerClass, Api.class))
         .transform(tags())
         .or(Sets.<String>newTreeSet());
     if (tagSet.isEmpty()) {

@@ -90,7 +90,6 @@ public class ApiListingScanner {
       for (RequestMappingContext each : sortedByMethods(requestMappingsByResourceGroup.get(resourceGroup))) {
         models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
-        // Resource description will be the same for all handler methods
         listingDescription =
                 resourceGroupingStrategy.getResourceDescription(each.getRequestMappingInfo(), each.getHandlerMethod());
       }
