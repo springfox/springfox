@@ -21,6 +21,7 @@ package springfox.documentation.swagger.web;
 import com.google.common.base.Function;
 import com.google.common.collect.Sets;
 import io.swagger.annotations.Api;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
@@ -37,7 +38,8 @@ import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
-public class ApiListingTagReader implements ApiListingBuilderPlugin {
+@Order(value = SWAGGER_PLUGIN_ORDER)
+public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
   @Override
   public void apply(ApiListingContext apiListingContext) {
     Class<?> controllerClass = apiListingContext.getResourceGroup().getControllerClass();

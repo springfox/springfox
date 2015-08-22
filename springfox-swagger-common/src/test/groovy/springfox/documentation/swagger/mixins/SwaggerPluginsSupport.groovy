@@ -35,7 +35,7 @@ import springfox.documentation.swagger.readers.operation.SwaggerOperationModelsP
 import springfox.documentation.swagger.readers.parameter.SwaggerExpandedParameterBuilder
 import springfox.documentation.swagger.schema.ApiModelBuilder
 import springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder
-import springfox.documentation.swagger.web.ApiListingTagReader
+import springfox.documentation.swagger.web.SwaggerApiListingReader
 import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 
 import static com.google.common.collect.Lists.*
@@ -56,7 +56,7 @@ class SwaggerPluginsSupport {
   DocumentationPluginsManager swaggerServicePlugins(List<DefaultsProviderPlugin> swaggerDefaultsPlugins) {
     def resolver = new TypeResolver()
     def plugins = new DocumentationPluginsManager()
-    plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(resolver), new ApiListingTagReader()))
+    plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(resolver), new SwaggerApiListingReader()))
     plugins.documentationPlugins = create([])
     plugins.parameterExpanderPlugins =
         create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder()])

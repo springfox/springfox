@@ -9,10 +9,10 @@ import springfox.documentation.spi.service.contexts.Orderings
 import springfox.documentation.spring.web.dummy.DummyController
 import springfox.documentation.spring.web.dummy.DummyControllerWithTags
 
-class ApiListingTagReaderSpec extends Specification {
+class SwaggerApiListingReaderSpec extends Specification {
   def "ApiListingTagReaderSpec supports all documentation types" () {
     given:
-      ApiListingTagReader sut = new ApiListingTagReader()
+      SwaggerApiListingReader sut = new SwaggerApiListingReader()
     expect:
       sut.supports(DocumentationType.SWAGGER_12)
       sut.supports(DocumentationType.SWAGGER_2)
@@ -20,7 +20,7 @@ class ApiListingTagReaderSpec extends Specification {
 
   def "ApiListingTagReaderSpec extracts tags" () {
     given:
-      ApiListingTagReader sut = new ApiListingTagReader()
+      SwaggerApiListingReader sut = new SwaggerApiListingReader()
     and:
       ApiListingContext context = Mock(ApiListingContext)
     when:
