@@ -60,10 +60,6 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
         .or(className);
   }
 
-  private String stripSlashes(String stringWithSlashes) {
-    return stringWithSlashes.replace("/", "").replace("\\", "");
-  }
-
   @Override
   public Integer getResourcePosition(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
     Class<?> controllerClass = handlerMethod.getBeanType();

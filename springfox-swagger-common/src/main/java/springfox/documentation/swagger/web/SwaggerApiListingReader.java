@@ -19,6 +19,7 @@
 package springfox.documentation.swagger.web;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import io.swagger.annotations.Api;
 import org.springframework.core.annotation.Order;
@@ -43,13 +44,27 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
   @Override
   public void apply(ApiListingContext apiListingContext) {
     Class<?> controllerClass = apiListingContext.getResourceGroup().getControllerClass();
-    Set<String> tagSet = fromNullable(findAnnotation(controllerClass, Api.class))
+    Optional<Api> apiAnnotation = fromNullable(findAnnotation(controllerClass, Api.class));
+    String description = apiAnnotation.transform(valueExtractor()).orNull();
+
+    Set<String> tagSet = apiAnnotation
         .transform(tags())
         .or(Sets.<String>newTreeSet());
     if (tagSet.isEmpty()) {
       tagSet.add(apiListingContext.getResourceGroup().getGroupName());
     }
-    apiListingContext.apiListingBuilder().tags(tagSet);
+    apiListingContext.apiListingBuilder()
+        .description(description)
+        .tags(tagSet);
+  }
+
+  private Function<Api, String> valueExtractor() {
+    return new Function<Api, String>() {
+      @Override
+      public String apply(Api input) {
+        return input.value();
+      }
+    };
   }
 
   private Function<Api, Set<String>> tags() {
