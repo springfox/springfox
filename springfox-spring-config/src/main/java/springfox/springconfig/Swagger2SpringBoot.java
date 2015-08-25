@@ -118,9 +118,11 @@ public class Swagger2SpringBoot {
   SecurityConfiguration security() {
     return new SecurityConfiguration(//<19>
         "test-app-client-id",
+        "test-app-client-secret",
         "test-app-realm",
         "test-app",
-        "apiKey");
+        "apiKey",
+        "," /*scope separator*/);
   }
 
   @Bean

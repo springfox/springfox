@@ -18,7 +18,6 @@
  */
 
 package springfox.documentation.swagger.readers.parameter
-
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import spock.lang.Unroll
@@ -27,13 +26,13 @@ import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.readers.parameter.ParameterAllowableReader
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterAllowableReaderSpec extends DocumentationContextSpec {
@@ -110,5 +109,14 @@ class ParameterAllowableReaderSpec extends DocumentationContextSpec {
       [allowableValues: { -> "range[1,5]" }] as ApiParam                         | 1   | 5
       [allowableValues: { -> "range[1,1]" }] as ApiParam                         | 1   | 1
       [allowableValues: { -> "range[2," + Integer.MAX_VALUE + "]" }] as ApiParam | 2   | Integer.MAX_VALUE
+  }
+
+  def "supports all swagger types" () {
+    given:
+      ParameterAllowableReader sut = new ParameterAllowableReader()
+    expect:
+      sut.supports(documentationType)
+    where:
+      documentationType << [DocumentationType.SWAGGER_12, DocumentationType.SWAGGER_2]
   }
 }

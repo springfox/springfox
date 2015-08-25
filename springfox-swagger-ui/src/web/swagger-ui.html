@@ -75,10 +75,8 @@
                 $('#input_apiKey').val(security.apiKey);
                 addApiKeyAuthorization();
               }
-              if (typeof initOAuth == "function") {
-                if (security.clientId && security.appName && security.realm) {
-                  initOAuth(security);
-                }
+              if (typeof initOAuth == "function" && security) {
+                initOAuth(security);
               }
             });
 

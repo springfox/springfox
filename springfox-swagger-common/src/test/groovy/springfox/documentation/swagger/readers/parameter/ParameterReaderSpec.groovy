@@ -74,4 +74,13 @@ class ParameterReaderSpec extends DocumentationContextSpec {
     closureMap as ApiParam
   }
 
+  def "supports all swagger types" () {
+    given:
+      ParameterRequiredReader sut = new ParameterRequiredReader()
+    expect:
+      sut.supports(documentationType)
+    where:
+      documentationType << [DocumentationType.SWAGGER_12, DocumentationType.SWAGGER_2]
+  }
+
 }

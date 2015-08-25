@@ -26,19 +26,24 @@ public class SecurityConfiguration {
   public static final SecurityConfiguration DEFAULT = new SecurityConfiguration();
 
   private String clientId;
+  private String clientSecret;
   private String realm;
   private String appName;
   private String apiKey;
+  private String scopeSeparator;
 
   private SecurityConfiguration() {
-    this(null, null, null, null);
+    this(null, null, null, null, null, ",");
   }
 
-  public SecurityConfiguration(String clientId, String realm, String appName, String apiKey) {
+  public SecurityConfiguration(String clientId, String clientSecret, String realm, String appName, String apiKey,
+                               String scopeSeparator) {
     this.clientId = clientId;
+    this.clientSecret = clientSecret;
     this.realm = realm;
     this.appName = appName;
     this.apiKey = apiKey;
+    this.scopeSeparator = scopeSeparator;
   }
 
   @JsonProperty("clientId")
@@ -59,5 +64,15 @@ public class SecurityConfiguration {
   @JsonProperty("apiKey")
   public String getApiKey() {
     return apiKey;
+  }
+
+  @JsonProperty("clientSecret")
+  public String getClientSecret() {
+    return clientSecret;
+  }
+
+  @JsonProperty("apiKey")
+  public String scopeSeparator() {
+    return scopeSeparator;
   }
 }
