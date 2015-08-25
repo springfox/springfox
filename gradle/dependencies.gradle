@@ -10,11 +10,11 @@ ext {
   servlet = "3.0.1"
   classmate = "1.2.0"
   jackson = '2.5.3'
-  snakeyaml = '1.15'
+  snakeyaml = '1.16'
   springPluginVersion = "1.2.0.RELEASE"
   jsonPath = "2.0.0"
   aspectj = "1.8.6"
-  joda = "2.8.1"
+  joda = "2.8.2"
   libs = [
 
           test          : [
