@@ -55,7 +55,6 @@ ext {
                   "com.google.guava:guava:${guava}",
                   "com.fasterxml:classmate:${classmate}",
                   "org.slf4j:slf4j-api:${slf4j}",
-                  "org.aspectj:aspectjrt:$aspectj",
                   "org.aspectj:aspectjweaver:$aspectj"
           ]
   ]
