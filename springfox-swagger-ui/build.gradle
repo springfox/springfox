@@ -27,10 +27,10 @@ buildscript {
 apply plugin: 'de.undercouch.download'
 
 ext {
-  swaggerUiVersion = '2.1.1'
+  swaggerUiVersion = '2.1.2'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
-  downloadUrl = "https://github.com/wordnik/swagger-ui/archive/v${swaggerUiVersion}.zip"
+  downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
   destinationZip = "$buildDir/zip/${swaggerUiVersion}.zip"
   replacePath = 'window.location.origin + "\\${pageContext.request.contextPath}/api-docs"'
   artifactRepoBase = 'http://oss.jfrog.org/artifactory'

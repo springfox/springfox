@@ -155,10 +155,10 @@ application. The Swagger UI page should then be available at http://localhost:80
 image::springfox-swagger-ui.png[Swagger UI]
 
 The swagger ui version is specified in ./build.gradle where `swaggerUiVersion` is a git tag on the [swagger-ui repo]
-(https://github.com/wordnik/swagger-ui).
+(https://github.com/swagger-api/swagger-ui).
 
 All content is served from a webjar convention, relative url taking the following form:
-`webjars/${project.name}/${project.version}` e.g: `/webjars/springfox-swagger-ui/2.0.2-SNAPSHOT/swagger-ui.html`
+`webjars/springfox-swagger-ui/{releaseVersion}/swagger-ui.html`
 
 By default Spring Boot has sensible defaults for serving content from webjars. To configure vanilla spring web mvc
 apps to serve webjar content see the http://www.webjars.org/documentation#springmvc[webjar documentation]
