@@ -152,7 +152,7 @@ Pulling in the dependency creates a webjar containing the swagger-ui static cont
 `/swagger-resources` which lists all of the swagger resources and versions configured for a given
 application. The Swagger UI page should then be available at http://localhost:8080/swagger-ui.html[]
 
-image::springfox-swagger-ui.png[Swagger UI]
+image::images/springfox-swagger-ui.png[Swagger UI]
 
 The swagger ui version is specified in ./build.gradle where `swaggerUiVersion` is a git tag on the [swagger-ui repo]
 (https://github.com/swagger-api/swagger-ui).
