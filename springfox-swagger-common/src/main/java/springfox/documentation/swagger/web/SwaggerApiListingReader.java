@@ -31,6 +31,7 @@ import springfox.documentation.spi.service.contexts.ApiListingContext;
 import java.util.Set;
 
 import static com.google.common.base.Optional.*;
+import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
@@ -45,10 +46,9 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
   public void apply(ApiListingContext apiListingContext) {
     Class<?> controllerClass = apiListingContext.getResourceGroup().getControllerClass();
     Optional<Api> apiAnnotation = fromNullable(findAnnotation(controllerClass, Api.class));
-    String description = apiAnnotation.transform(valueExtractor()).orNull();
+    String description = emptyToNull(apiAnnotation.transform(descriptionExtractor()).orNull());
 
-    Set<String> tagSet = apiAnnotation
-        .transform(tags())
+    Set<String> tagSet = apiAnnotation.transform(tags())
         .or(Sets.<String>newTreeSet());
     if (tagSet.isEmpty()) {
       tagSet.add(apiListingContext.getResourceGroup().getGroupName());
@@ -58,11 +58,11 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
         .tags(tagSet);
   }
 
-  private Function<Api, String> valueExtractor() {
+  private Function<Api, String> descriptionExtractor() {
     return new Function<Api, String>() {
       @Override
       public String apply(Api input) {
-        return input.value();
+        return input.description();
       }
     };
   }
