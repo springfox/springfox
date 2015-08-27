@@ -45,6 +45,10 @@ public class Paths {
     );
   }
 
+  public static String stripSlashes(String stringWithSlashes) {
+    return stringWithSlashes.replace("/", "").replace("\\", "");
+  }
+
   public static String maybeChompLeadingSlash(String path) {
     if (isNullOrEmpty(path) || !path.startsWith("/")) {
       return path;

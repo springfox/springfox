@@ -19,23 +19,16 @@
 
 package springfox.documentation.spring.web;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
-import springfox.documentation.spring.web.paths.Paths;
 
 import java.util.Set;
 
-import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Sets.*;
-import static java.util.Arrays.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 /**
  * TODO - fix or remove
@@ -66,37 +59,12 @@ public class SpringGroupingStrategy implements ResourceGroupingStrategy {
   }
 
   private Set<ResourceGroup> groups(HandlerMethod handlerMethod) {
-    Class<?> controllerClass = handlerMethod.getBeanType();
-    String defaultGroup = String.format("%s", Paths.splitCamelCase(controllerClass.getSimpleName(), "-"));
-
-    Optional<RequestMapping> requestMapping
-            = Optional.fromNullable(AnnotationUtils.findAnnotation(controllerClass, RequestMapping.class));
-    if (requestMapping.isPresent()) {
-      Set<ResourceGroup> groups = newHashSet();
-      Iterable<String> groupNames = FluentIterable.from(asList(requestMapping.get().value()))
-              .filter(notNullOrEmpty());
-      for (String each : groupNames) {
-        String groupName = Paths.maybeChompLeadingSlash(Paths.firstPathSegment(each));
-        groups.add(new ResourceGroup(groupName, handlerMethod.getBeanType()));
-      }
-      if (groups.size() > 0) {
-        return groups;
-      }
-    }
-    return newHashSet(new ResourceGroup(Paths.maybeChompLeadingSlash(defaultGroup.toLowerCase()),
-            handlerMethod.getBeanType()));
-  }
-
-  private Predicate<String> notNullOrEmpty() {
-    return new Predicate<String>() {
-      @Override
-      public boolean apply(String input) {
-        return !isNullOrEmpty(input);
-      }
-    };
+    Class<?> controllerClazz = handlerMethod.getBeanType();
+    String controllerAsGroup = splitCamelCase(controllerClazz.getSimpleName(), "-").toLowerCase();
+    return newHashSet(new ResourceGroup(controllerAsGroup, controllerClazz));
   }
 
   private String getDescription(Class<?> controllerClass) {
-    return Paths.splitCamelCase(controllerClass.getSimpleName(), " ");
+    return splitCamelCase(controllerClass.getSimpleName(), " ");
   }
 }

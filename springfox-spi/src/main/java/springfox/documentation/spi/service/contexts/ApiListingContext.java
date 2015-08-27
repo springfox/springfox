@@ -27,16 +27,13 @@ public class ApiListingContext {
   private final DocumentationType documentationType;
   private final ResourceGroup resourceGroup;
   private final ApiListingBuilder apiListingBuilder;
-  private final ResourceGroup group;
 
   public ApiListingContext(DocumentationType documentationType,
                            ResourceGroup resourceGroup,
-                           ApiListingBuilder apiListingBuilder,
-                           ResourceGroup group) {
+                           ApiListingBuilder apiListingBuilder) {
     this.documentationType = documentationType;
     this.resourceGroup = resourceGroup;
     this.apiListingBuilder = apiListingBuilder;
-    this.group = group;
   }
 
   public DocumentationType getDocumentationType() {
@@ -51,7 +48,4 @@ public class ApiListingContext {
     return apiListingBuilder;
   }
 
-  public ResourceGroup getGroup() {
-    return group;
-  }
 }

@@ -22,7 +22,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import io.swagger.annotations.Api;
-import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
@@ -30,24 +30,41 @@ import springfox.documentation.spi.service.contexts.ApiListingContext;
 
 import java.util.Set;
 
+import static com.google.common.base.Optional.*;
+import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static org.springframework.core.annotation.AnnotationUtils.*;
 import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
-public class ApiListingTagReader implements ApiListingBuilderPlugin {
+@Order(value = SWAGGER_PLUGIN_ORDER)
+public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
   @Override
   public void apply(ApiListingContext apiListingContext) {
-    Class<?> controllerClass = apiListingContext.getGroup().getControllerClass();
-    Set<String> tagSet = Optional.fromNullable(AnnotationUtils.findAnnotation(controllerClass, Api.class))
-        .transform(tags())
+    Class<?> controllerClass = apiListingContext.getResourceGroup().getControllerClass();
+    Optional<Api> apiAnnotation = fromNullable(findAnnotation(controllerClass, Api.class));
+    String description = emptyToNull(apiAnnotation.transform(descriptionExtractor()).orNull());
+
+    Set<String> tagSet = apiAnnotation.transform(tags())
         .or(Sets.<String>newTreeSet());
     if (tagSet.isEmpty()) {
-      tagSet.add(apiListingContext.getGroup().getGroupName());
+      tagSet.add(apiListingContext.getResourceGroup().getGroupName());
     }
-    apiListingContext.apiListingBuilder().tags(tagSet);
+    apiListingContext.apiListingBuilder()
+        .description(description)
+        .tags(tagSet);
+  }
+
+  private Function<Api, String> descriptionExtractor() {
+    return new Function<Api, String>() {
+      @Override
+      public String apply(Api input) {
+        return input.description();
+      }
+    };
   }
 
   private Function<Api, Set<String>> tags() {

@@ -44,6 +44,7 @@ import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
+@Deprecated
 public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStrategy {
   private static final Logger LOG = LoggerFactory.getLogger(ClassOrApiAnnotationResourceGrouping.class);
 
@@ -57,10 +58,6 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
           stripSlashes(extractAnnotation(controllerClass, descriptionOrValueExtractor())
               .or(""))))
         .or(className);
-  }
-
-  private String stripSlashes(String stringWithSlashes) {
-    return stringWithSlashes.replace("/", "").replace("\\", "");
   }
 
   @Override

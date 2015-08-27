@@ -10,7 +10,7 @@ import springfox.documentation.spring.web.readers.operation.CachingOperationName
 import springfox.documentation.spring.web.readers.operation.DefaultTagsProvider
 
 @Mixin([RequestMappingSupport, ServicePluginsSupport, ServicePluginsSupport])
-class OperationTagsReaderSpec extends DocumentationContextSpec {
+class SwaggerOperationTagsReaderSpec extends DocumentationContextSpec {
   def "should have correct tags"() {
     given:
     OperationContext operationContext =
@@ -31,6 +31,6 @@ class OperationTagsReaderSpec extends DocumentationContextSpec {
     handlerMethod                                        | tags
     dummyHandlerMethod('methodWithConcreteResponseBody') | ["dummy-class"]
     dummyControllerHandlerMethod()                       | ["dummy-controller"]
-    dummyOperationWithTags()                             | ["Tag3", "Tag4"]
+    dummyOperationWithTags()                             | ["Tag1", "Tag2", "Tag3", "Tag4"]
   }
 }
