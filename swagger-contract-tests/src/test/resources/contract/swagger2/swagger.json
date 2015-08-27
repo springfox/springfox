@@ -17,15 +17,15 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "pet",
+            "name": "pet-controller",
             "description": "Operations about pets"
         },
         {
-            "name": "store",
+            "name": "pet-store-resource",
             "description": "Operations about store"
         },
         {
-            "name": "user",
+            "name": "user-controller",
             "description": "Operations about user"
         }
     ],
@@ -37,7 +37,7 @@
         "/api/pet": {
             "post": {
                 "tags": [
-                    "pet"
+                    "pet-controller"
                 ],
                 "summary": "Add a new pet to the store",
                 "operationId": "addPetUsingPOST",
@@ -81,7 +81,7 @@
             },
             "put": {
                 "tags": [
-                    "pet"
+                    "pet-controller"
                 ],
                 "summary": "Update an existing pet",
                 "operationId": "updatePetUsingPUT",
@@ -133,7 +133,7 @@
         "/api/pet/findByStatus": {
             "get": {
                 "tags": [
-                    "pet"
+                    "pet-controller"
                 ],
                 "summary": "Finds Pets by status",
                 "description": "Multiple status values can be provided with comma seperated strings",
@@ -187,7 +187,7 @@
         "/api/pet/findByTags": {
             "get": {
                 "tags": [
-                    "pet"
+                    "pet-controller"
                 ],
                 "summary": "Finds Pets by tags",
                 "description": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
@@ -236,7 +236,7 @@
         "/api/pet/{petId}": {
             "get": {
                 "tags": [
-                    "pet"
+                    "pet-controller"
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
@@ -287,7 +287,7 @@
         "/api/store/order": {
             "post": {
                 "tags": [
-                    "store"
+                    "pet-store-resource"
                 ],
                 "summary": "Place an order for a pet",
                 "operationId": "placeOrderUsingPOST",
@@ -361,7 +361,7 @@
             },
             "delete": {
                 "tags": [
-                    "store"
+                    "pet-store-resource"
                 ],
                 "summary": "Delete purchase order by ID",
                 "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors",
@@ -400,7 +400,7 @@
         "/api/user": {
             "post": {
                 "tags": [
-                    "user"
+                    "user-controller"
                 ],
                 "summary": "Create user",
                 "description": "This can only be done by the logged in user.",
@@ -435,7 +435,7 @@
         "/api/user/createWithArray": {
             "post": {
                 "tags": [
-                    "user"
+                    "user-controller"
                 ],
                 "summary": "Creates list of users with given input array",
                 "operationId": "createUsersWithArrayInputUsingPOST",
@@ -472,7 +472,7 @@
         "/api/user/createWithList": {
             "post": {
                 "tags": [
-                    "user"
+                    "user-controller"
                 ],
                 "summary": "Creates list of users with given input array",
                 "operationId": "createUsersWithListInputUsingPOST",
@@ -509,7 +509,7 @@
         "/api/user/login": {
             "get": {
                 "tags": [
-                    "user"
+                    "user-controller"
                 ],
                 "summary": "Logs user into the system",
                 "operationId": "loginUserUsingGET",
@@ -551,7 +551,7 @@
         "/api/user/logout": {
             "get": {
                 "tags": [
-                    "user"
+                    "user-controller"
                 ],
                 "summary": "Logs out current logged in user session",
                 "operationId": "logoutUserUsingGET",
@@ -574,7 +574,7 @@
         "/api/user/{username}": {
             "get": {
                 "tags": [
-                    "user"
+                    "user-controller"
                 ],
                 "summary": "Get user by user name",
                 "operationId": "getUserByNameUsingGET",
@@ -610,7 +610,7 @@
             },
             "put": {
                 "tags": [
-                    "user"
+                    "user-controller"
                 ],
                 "summary": "Updated user",
                 "description": "This can only be done by the logged in user.",
@@ -656,7 +656,7 @@
             },
             "delete": {
                 "tags": [
-                    "user"
+                    "user-controller"
                 ],
                 "summary": "Delete user",
                 "description": "This can only be done by the logged in user.",

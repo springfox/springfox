@@ -138,7 +138,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
     then:
       result.resourceGroupRequestMappings.size() == 2
-      result.resourceGroupRequestMappings[new ResourceGroup("group-name", DummyController, 2)].size() == 1
+      result.resourceGroupRequestMappings[new ResourceGroup("dummy-controller", DummyController)].size() == 1
       result.resourceGroupRequestMappings[new ResourceGroup("dummy-class", DummyClass)].size() == 5
   }
 

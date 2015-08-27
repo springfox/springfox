@@ -19,7 +19,7 @@ class SwaggerOperationTagsReaderSpec extends DocumentationContextSpec {
         context(), "/anyPath")
 
     and:
-      SwaggerOperationTagsReader sut = new SwaggerOperationTagsReader(new DefaultTagsProvider(defaultWebPlugins()))
+      SwaggerOperationTagsReader sut = new SwaggerOperationTagsReader(new DefaultTagsProvider())
 
     when:
     sut.apply(operationContext)

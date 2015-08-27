@@ -27,15 +27,13 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResourceGroup;
-import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
-import java.util.Set;
-
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Multimaps.*;
+import static springfox.documentation.spring.web.ControllerNamingUtils.*;
 
 @Component
 public class ApiListingReferenceScanner {
@@ -53,18 +51,13 @@ public class ApiListingReferenceScanner {
     for (RequestHandler handler : matchingHandlers) {
       RequestMappingInfo requestMappingInfo = handler.getRequestMapping();
       HandlerMethod handlerMethod = handler.getHandlerMethod();
-      ResourceGroupingStrategy resourceGroupingStrategy = context.getResourceGroupingStrategy();
-      Set<ResourceGroup> resourceGroups
-          = resourceGroupingStrategy.getResourceGroups(requestMappingInfo, handlerMethod);
-      String handlerMethodName = handlerMethod.getMethod().getName();
+      ResourceGroup resourceGroup = new ResourceGroup(controllerNameAsGroup(handlerMethod),
+          handlerMethod.getBeanType(), 0);
 
       RequestMappingContext requestMappingContext
           = new RequestMappingContext(context, requestMappingInfo, handlerMethod);
 
-      LOG.info("Request mapping: {} belongs to groups: [{}] ", handlerMethodName, resourceGroups);
-      for (ResourceGroup group : resourceGroups) {
-        resourceGroupRequestMappings.put(group, requestMappingContext);
-      }
+      resourceGroupRequestMappings.put(resourceGroup, requestMappingContext);
     }
     return new ApiListingReferenceScanResult(asMap(resourceGroupRequestMappings));
   }

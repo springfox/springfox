@@ -18,44 +18,17 @@
  */
 package springfox.documentation.spring.web.readers.operation;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import springfox.documentation.service.ResourceGroup;
-import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
-import java.util.Set;
-
-import static com.google.common.collect.FluentIterable.*;
+import static com.google.common.collect.ImmutableSet.*;
+import static com.google.common.collect.Sets.*;
+import static springfox.documentation.spring.web.ControllerNamingUtils.*;
 
 @Component
 public class DefaultTagsProvider {
-  private final DocumentationPluginsManager pluginsManager;
-
-  @Autowired
-  public DefaultTagsProvider(DocumentationPluginsManager pluginsManager) {
-    this.pluginsManager = pluginsManager;
-  }
-
   public ImmutableSet<String> tags(OperationContext context) {
-    ResourceGroupingStrategy groupingStrategy
-        = pluginsManager.resourceGroupingStrategy(context.getDocumentationType());
-    Set<ResourceGroup> resourceGroups
-        = groupingStrategy.getResourceGroups(context.getRequestMappingInfo(), context.getHandlerMethod());
-    FluentIterable<String> tags = from(resourceGroups).transform(toTags());
-    return tags.toSet();
-  }
-
-  private Function<ResourceGroup, String> toTags() {
-    return new Function<ResourceGroup, String>() {
-      @Override
-      public String apply(ResourceGroup input) {
-        return input.getGroupName();
-      }
-    };
+    return copyOf(newHashSet(controllerNameAsGroup(context.getHandlerMethod())));
   }
 }
