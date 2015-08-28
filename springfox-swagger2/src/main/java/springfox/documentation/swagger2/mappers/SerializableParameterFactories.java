@@ -21,6 +21,7 @@ package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
+import io.swagger.models.parameters.AbstractSerializableParameter;
 import io.swagger.models.parameters.CookieParameter;
 import io.swagger.models.parameters.FormParameter;
 import io.swagger.models.parameters.HeaderParameter;
@@ -67,6 +68,8 @@ public class SerializableParameterFactories {
       toReturn.setType("array");
       toReturn.setItems(Properties.property(paramModel.getItemType()));
     } else {
+      //TODO: remove this downcast when swagger-core fixes its problem
+      ((AbstractSerializableParameter)toReturn).setDefaultValue(source.getDefaultValue());
       Property property = Properties.property(paramModel.getType());
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());
