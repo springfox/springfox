@@ -29,6 +29,7 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import static com.google.common.collect.Sets.*;
 
@@ -62,6 +63,7 @@ public class Types {
           .put(BigDecimal.class, "double")
           .put(BigInteger.class, "long")
           .put(Currency.class, "string")
+          .put(UUID.class, "string")
           .build();
 
   public static String typeNameFor(Type type) {
