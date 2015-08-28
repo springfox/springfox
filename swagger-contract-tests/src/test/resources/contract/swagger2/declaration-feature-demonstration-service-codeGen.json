@@ -371,6 +371,68 @@
                 }
             }
         },
+        "/features/modelAttributes": {
+          "get": {
+            "tags": [
+              "feature-demonstration-service"
+            ],
+            "summary": "getModelAttribute",
+            "operationId": "getModelAttributeUsingGET_1",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "*/*"
+            ],
+            "parameters": [
+              {
+                "name": "complexProp.name",
+                "in": "query",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "name": "stringProp",
+                "in": "query",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "name": "intProp",
+                "in": "query",
+                "required": false,
+                "type": "integer",
+                "format": "int32"
+              },
+              {
+                "name": "listProp",
+                "in": "query",
+                "required": false,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "collectionFormat": "multi"
+              },
+              {
+                "name": "arrayProp",
+                "in": "query",
+                "required": false,
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "collectionFormat": "multi"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
         "/features/status": {
             "post": {
                 "tags": [

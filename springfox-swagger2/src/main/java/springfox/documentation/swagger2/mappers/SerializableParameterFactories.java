@@ -64,7 +64,7 @@ public class SerializableParameterFactories {
     toReturn.setAccess(source.getParamAccess());
     toReturn.setRequired(source.isRequired());
     if (paramModel.isCollection()) {
-      toReturn.setCollectionFormat("csv");
+      toReturn.setCollectionFormat("multi");
       toReturn.setType("array");
       toReturn.setItems(Properties.property(paramModel.getItemType()));
     } else {

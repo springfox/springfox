@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import springfox.documentation.service.Parameter
+import springfox.documentation.spring.web.dummy.models.ModelAttributeExample
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -57,6 +58,18 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
       parameters.find { it.name == 'allCapsSet' }
       parameters.find { it.name == 'nestedType.name' }
       parameters.find { it.name == 'localDateTime' }
+  }
+
+  def "should expand lists and nested types"() {
+    when:
+      sut.expand("", ModelAttributeExample, parameters, context());
+    then:
+      parameters.size() == 5
+      parameters.find { it.name == 'stringProp' }
+      parameters.find { it.name == 'intProp' }
+      parameters.find { it.name == 'listProp' }
+      parameters.find { it.name == 'arrayProp' }
+      parameters.find { it.name == 'complexProp.name' }
   }
 
   def "should expand parameters when parent name is not empty"() {

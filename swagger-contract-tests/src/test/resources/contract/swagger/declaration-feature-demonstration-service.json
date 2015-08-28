@@ -973,6 +973,88 @@
             "path": "/features/mapProperty"
         },
         {
+          "description": "getModelAttribute",
+          "operations": [
+            {
+              "method": "GET",
+              "summary": "getModelAttribute",
+              "nickname": "getModelAttributeUsingGET",
+              "produces": [
+                "*/*"
+              ],
+              "consumes": [
+                "application/json"
+              ],
+              "parameters": [
+                {
+                  "allowMultiple": false,
+                  "name": "complexProp.name",
+                  "paramType": "query",
+                  "type": "string",
+                  "required": false
+                },
+                {
+                  "allowMultiple": false,
+                  "name": "stringProp",
+                  "paramType": "query",
+                  "type": "string",
+                  "required": false
+                },
+                {
+                  "allowMultiple": false,
+                  "name": "intProp",
+                  "paramType": "query",
+                  "format": "int32",
+                  "type": "integer",
+                  "required": false
+                },
+                {
+                  "allowMultiple": true,
+                  "name": "listProp",
+                  "paramType": "query",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "required": false
+                },
+                {
+                  "allowMultiple": true,
+                  "name": "arrayProp",
+                  "paramType": "query",
+                  "items": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "type": "array",
+                  "required": false
+                }
+              ],
+              "responseMessages": [
+                {
+                  "code": 200,
+                  "message": "OK"
+                },
+                {
+                  "code": 401,
+                  "message": "Unauthorized"
+                },
+                {
+                  "code": 403,
+                  "message": "Forbidden"
+                },
+                {
+                  "code": 404,
+                  "message": "Not Found"
+                }
+              ],
+              "deprecated": "false",
+              "type": "void"
+            }
+          ],
+          "path": "/features/modelAttributes"
+        },
+        {
             "path": "/features/status",
             "description": "updateBaz",
             "operations": [

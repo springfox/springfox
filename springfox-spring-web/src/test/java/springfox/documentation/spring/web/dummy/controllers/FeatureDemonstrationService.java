@@ -29,6 +29,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
+import springfox.documentation.spring.web.dummy.models.ModelAttributeExample;
 import springfox.documentation.spring.web.dummy.models.ModelWithMapProperty;
 import springfox.documentation.spring.web.dummy.models.NestedType;
 import springfox.documentation.spring.web.dummy.models.Pet;
@@ -145,5 +147,10 @@ public class FeatureDemonstrationService {
   @ApiOperation(value = "Add a new contact with file attachment")
   public ResponseEntity<Void> addFiles( @RequestPart("files") MultipartFile[] files) {
     return new ResponseEntity<Void>(HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/modelAttributes", method = RequestMethod.GET)
+  public void getModelAttribute(@ModelAttribute ModelAttributeExample example) {
+    //No-op
   }
 }

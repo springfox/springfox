@@ -119,9 +119,14 @@ public class ModelAttributeParameterExpander {
     return new Predicate<ModelAttributeField>() {
       @Override
       public boolean apply(ModelAttributeField input) {
-        return Collection.class.isAssignableFrom(input.getFieldType());
+        Class<?> fieldType = input.getFieldType();
+        return isCollection(fieldType);
       }
     };
+  }
+
+  private boolean isCollection(Class<?> fieldType) {
+    return Collection.class.isAssignableFrom(fieldType) || fieldType.isArray();
   }
 
   private Predicate<ModelAttributeField> isMap() {
