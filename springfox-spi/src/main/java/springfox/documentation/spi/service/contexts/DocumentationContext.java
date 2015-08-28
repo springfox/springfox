@@ -145,6 +145,10 @@ public class DocumentationContext {
     return globalOperationParameters;
   }
 
+  /**
+   * @deprecated  @since 2.2.0 - only here for backward compatibiltiy
+   */
+  @Deprecated
   public ResourceGroupingStrategy getResourceGroupingStrategy() {
     return resourceGroupingStrategy;
   }

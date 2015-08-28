@@ -112,6 +112,10 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+  /**
+   @deprecated  @since 2.2.0 - only here for backward compatibiltiy
+   */
+  @Deprecated
   public DocumentationContextBuilder withResourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
     this.resourceGroupingStrategy = resourceGroupingStrategy;
     return this;
