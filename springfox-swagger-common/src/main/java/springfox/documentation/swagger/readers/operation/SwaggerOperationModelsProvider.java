@@ -34,6 +34,7 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.ArrayList;
@@ -41,7 +42,6 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
@@ -70,7 +70,7 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
 
   private void collectFromApiOperation(RequestMappingContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    ResolvedType returnType = handlerReturnType(typeResolver, handlerMethod);
+    ResolvedType returnType = new HandlerMethodResolver(typeResolver).methodReturnType(handlerMethod);
     returnType = context.alternateFor(returnType);
     Optional<ResolvedType> returnParameter = findApiOperationAnnotation(handlerMethod.getMethod())
         .transform(resolvedTypeFromOperation(typeResolver, returnType));

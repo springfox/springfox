@@ -39,8 +39,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static springfox.documentation.schema.ResolvedTypes.resolvedTypeSignature;
-import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -66,7 +65,7 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
   }
 
   private void collectFromReturnType(RequestMappingContext context) {
-    ResolvedType modelType = handlerReturnType(typeResolver, context.getHandlerMethod());
+    ResolvedType modelType = new HandlerMethodResolver(typeResolver).methodReturnType(context.getHandlerMethod());
     modelType = context.alternateFor(modelType);
     LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
     context.operationModelsBuilder().addReturn(modelType);
@@ -81,14 +80,11 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
 
     HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(typeResolver);
     List<ResolvedMethodParameter> parameterTypes = handlerMethodResolver.methodParameters(handlerMethod);
-    Annotation[][] annotations = method.getParameterAnnotations();
-
-    for (int i = 0; i < annotations.length; i++) {
-      Annotation[] pAnnotations = annotations[i];
-      for (Annotation annotation : pAnnotations) {
+    for (ResolvedMethodParameter parameterType : parameterTypes) {
+      Annotation[] parameterAnnotations = parameterType.getMethodParameter().getParameterAnnotations();
+      for (Annotation annotation : parameterAnnotations) {
         if (annotation instanceof RequestBody || annotation instanceof RequestPart) {
-          ResolvedMethodParameter pType = parameterTypes.get(i);
-          ResolvedType modelType = context.alternateFor(pType.getResolvedParameterType());
+          ResolvedType modelType = context.alternateFor(parameterType.getResolvedParameterType());
           LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
           context.operationModelsBuilder().addInputParam(modelType);
         }

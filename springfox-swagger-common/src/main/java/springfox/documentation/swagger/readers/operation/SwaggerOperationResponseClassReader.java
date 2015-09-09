@@ -33,10 +33,10 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
-import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
 import static springfox.documentation.spring.web.readers.operation.ModelRefs.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 
@@ -58,7 +58,7 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
   public void apply(OperationContext context) {
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    ResolvedType returnType = handlerReturnType(typeResolver, handlerMethod);
+    ResolvedType returnType = new HandlerMethodResolver(typeResolver).methodReturnType(handlerMethod);
     returnType = context.alternateFor(returnType);
     returnType = findApiOperationAnnotation(handlerMethod.getMethod())
         .transform(resolvedTypeFromOperation(typeResolver, returnType))

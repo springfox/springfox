@@ -33,7 +33,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.spring.web.HandlerMethodReturnTypes;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -52,7 +51,7 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    ResolvedType returnType = HandlerMethodReturnTypes.handlerReturnType(typeResolver, handlerMethod);
+    ResolvedType returnType = new HandlerMethodResolver(typeResolver).methodReturnType(handlerMethod);
     returnType = context.alternateFor(returnType);
     ModelContext modelContext = ModelContext.returnValue(returnType, context.getDocumentationType(),
             context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());

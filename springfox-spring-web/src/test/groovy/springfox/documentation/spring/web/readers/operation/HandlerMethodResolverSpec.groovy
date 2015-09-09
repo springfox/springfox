@@ -34,7 +34,6 @@ import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.dummy.models.Parent
 import springfox.documentation.spring.web.mixins.HandlerMethodsSupport
 
-import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
@@ -48,42 +47,34 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
       def resolvedParameters = sut.methodParameters(handlerMethod)
               .collect() { it.resolvedParameterType.getErasedType().simpleName }
               .sort()
-      def resolvedReturnType = sut.methodReturnType(handlerMethod.method, handlerMethod.getBeanType()).erasedType.simpleName
+      def resolvedReturnType = sut.methodReturnType(handlerMethod).erasedType.simpleName
     expect:
       parameters == resolvedParameters
       returnType == resolvedReturnType
     where:
       handlerMethod     | returnType      | parameters
-      methodWithChild() | "Void"          | ["Child", "Integer"]
+      methodWithChild() | "void"          | ["Child", "Integer"]
       methodWithParent()| "ResponseEntity"| ["Integer", "Parent"]
   }
 
   def "When method was not resolvable calling methodParameters returns empty list" () {
     given:
       def sut = new HandlerMethodResolver(new TypeResolver()) {
-        @Override
-        def ResolvedMethod getResolvedMethod(Method methodToResolve, Class<?> beanType) {
-          return null;
-        }
       }
     when:
+      def handlerMethod = unresolvableMethod()
+    and:
       def parameters = sut.methodParameters(handlerMethod)
     then:
       parameters.size() == 0
-    where:
-      handlerMethod << [methodWithChild(),  methodWithParent()]
   }
 
   def "When method was not resolvable calling methodReturnType returns return type as resolved" () {
     given:
       def sut = new HandlerMethodResolver(new TypeResolver()) {
-        @Override
-        def ResolvedMethod getResolvedMethod(Method methodToResolve, Class<?> beanType) {
-          return null;
-        }
       }
     when:
-      def returnType = sut.methodReturnType(handlerMethod.method, handlerMethod.getBeanType())
+      def returnType = sut.methodReturnType(handlerMethod)
     then:
       expectedReturnType.equals(returnType.erasedType.simpleName)
     where:
@@ -122,23 +113,6 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
         return ['methodWithNoArgs', 'methodWithOneArgs', 'methodWithTwoArgs'].contains(input.name)
       }
     }
-  }
-
-
-  def "When method was resolved with incorrect number of arguments it returns empty list" () {
-    given:
-      def sut = new HandlerMethodResolver(new TypeResolver()) {
-        @Override
-        def ResolvedMethod getResolvedMethod(Method methodToResolve, Class<?> beanType) {
-          return resolvedMethod();
-        }
-      }
-    when:
-      def parameters = sut.methodParameters(handlerMethod)
-    then:
-      parameters.size() == 0
-    where:
-      handlerMethod << [methodWithChild(),  methodWithParent()]
   }
 
   def "Is able to determine if both types are void" () {
