@@ -67,6 +67,13 @@
             }
           }
 
+          function oAuthIsDefined(security) {
+            return security.clientId
+                && security.clientSecret
+                && security.appName
+                && security.realm;
+          }
+
           function initializeSpringfox() {
             var security = {};
             window.springfox.securityConfig(function(data) {
@@ -75,7 +82,7 @@
                 $('#input_apiKey').val(security.apiKey);
                 addApiKeyAuthorization();
               }
-              if (typeof initOAuth == "function" && security) {
+              if (typeof initOAuth == "function" && oAuthIsDefined(security)) {
                 initOAuth(security);
               }
             });
