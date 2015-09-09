@@ -95,7 +95,8 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     }
     context.getParameterBuilder()
         .name(name)
-        .description(null).defaultValue(null)
+        .description(null)
+        .defaultValue(null)
         .required(Boolean.FALSE)
         .allowMultiple(isCollection)
         .type(resolved)
