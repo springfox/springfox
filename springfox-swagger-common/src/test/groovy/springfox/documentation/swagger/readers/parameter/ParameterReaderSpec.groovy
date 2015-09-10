@@ -58,7 +58,7 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       sut.supports(DocumentationType.SWAGGER_2)
     where:
       sut                              | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation                      | reqParamAnnot | expected
-//      new ParameterDescriptionReader() | 'description'  | 'getParameterName'    | 'someName'        | null                                    | null          | 'someName'
+      new ParameterDescriptionReader() | 'description'  | 'getParameterName'    | 'someName'        | null                                    | null          | null
       new ParameterDescriptionReader() | 'description'  | 'none'                | 'any'             | apiParam([value: { -> 'AnDesc' }])      | null          | 'AnDesc'
       swaggerDefaultReader()           | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: { -> 'defl' }]) | null          | 'defl'
       new ParameterAccessReader()      | 'paramAccess'  | 'none'                | 'any'             | apiParam([access: { -> 'myAccess' }])   | null          | 'myAccess'
