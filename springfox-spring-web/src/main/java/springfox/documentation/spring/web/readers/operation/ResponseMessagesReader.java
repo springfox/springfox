@@ -39,7 +39,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.spring.web.HandlerMethodReturnTypes;
 
 import java.util.List;
 
@@ -76,7 +75,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
 
   private void applyReturnTypeOverride(OperationContext context) {
 
-    ResolvedType returnType = HandlerMethodReturnTypes.handlerReturnType(typeResolver, context.getHandlerMethod());
+    ResolvedType returnType = new HandlerMethodResolver(typeResolver).methodReturnType(context.getHandlerMethod());
     returnType = context.alternateFor(returnType);
     int httpStatusCode = httpStatusCode(context.getHandlerMethod());
     String message = message(context.getHandlerMethod());

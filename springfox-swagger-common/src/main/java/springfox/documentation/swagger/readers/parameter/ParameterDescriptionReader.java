@@ -38,11 +38,9 @@ public class ParameterDescriptionReader implements ParameterBuilderPlugin {
   public void apply(ParameterContext context) {
     MethodParameter methodParameter = context.methodParameter();
     ApiParam apiParam = methodParameter.getParameterAnnotation(ApiParam.class);
-    String description = methodParameter.getParameterName();
     if (null != apiParam && hasText(apiParam.value())) {
-      description = apiParam.value();
+      context.parameterBuilder().description(apiParam.value());
     }
-    context.parameterBuilder().description(description);
   }
 
   @Override

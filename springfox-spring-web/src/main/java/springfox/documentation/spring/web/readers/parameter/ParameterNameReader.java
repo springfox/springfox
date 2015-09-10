@@ -21,8 +21,10 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
+import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -45,15 +47,22 @@ import static java.lang.String.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterNameReader implements ParameterBuilderPlugin {
 
+  private final ParameterNameDiscoverer parameterNameDiscover = new DefaultParameterNameDiscoverer();
+
   @Override
   public void apply(ParameterContext context) {
     MethodParameter methodParameter = context.methodParameter();
+    String discoveredName
+        = parameterNameDiscover.getParameterNames(methodParameter.getMethod())[methodParameter.getParameterIndex()];
     String name = findParameterNameFromAnnotations(methodParameter);
-    String parameterName = methodParameter.getParameterName();
     if (isNullOrEmpty(name)) {
-      name = isNullOrEmpty(parameterName) ? format("param%s", methodParameter.getParameterIndex()) : parameterName;
+      name = isNullOrEmpty(discoveredName)
+                       ? format("param%s", methodParameter.getParameterIndex())
+                       : discoveredName;
     }
-    context.parameterBuilder().name(name);
+    context.parameterBuilder()
+        .name(name)
+        .description(name);
   }
 
   @Override
