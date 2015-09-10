@@ -19,17 +19,12 @@
 
 package springfox.documentation.service;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-
-import static com.google.common.base.Optional.*;
-import static com.google.common.collect.Lists.*;
 
 public class ResourceListing {
   private final String apiVersion;
   private final List<ApiListingReference> apis;
-  private final LinkedHashMap<String, SecurityScheme> securitySchemes;
+  private final List<SecurityScheme> securitySchemes;
   private final ApiInfo info;
 
   public ResourceListing(String apiVersion,
@@ -39,17 +34,8 @@ public class ResourceListing {
 
     this.apiVersion = apiVersion;
     this.apis = apis;
-    this.securitySchemes = initializeSecuritySchemes(securitySchemes);
+    this.securitySchemes = securitySchemes;
     this.info = info;
-  }
-
-  private LinkedHashMap<String, SecurityScheme> initializeSecuritySchemes(List<SecurityScheme> securitySchemes) {
-    LinkedHashMap<String, SecurityScheme> mapped = new LinkedHashMap<String, SecurityScheme>();
-    List<SecurityScheme> emptyList = newArrayList();
-    for (SecurityScheme securityScheme : fromNullable(securitySchemes).or(emptyList)) {
-      mapped.put(securityScheme.getType(), securityScheme);
-    }
-    return mapped;
   }
 
   public String getApiVersion() {
@@ -61,7 +47,7 @@ public class ResourceListing {
   }
 
   public List<SecurityScheme> getSecuritySchemes() {
-    return new ArrayList<SecurityScheme>(securitySchemes.values());
+    return securitySchemes;
   }
 
   public ApiInfo getInfo() {
