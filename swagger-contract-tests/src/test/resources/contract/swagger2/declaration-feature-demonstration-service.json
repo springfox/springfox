@@ -205,7 +205,8 @@
                         "description": "input",
                         "required": false,
                         "schema": {
-                            "type": "double"
+                            "type": "number",
+                            "format": "double"
                         }
                     }
                 ],
