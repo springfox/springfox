@@ -205,7 +205,8 @@
                         "description": "input",
                         "required": false,
                         "schema": {
-                            "type": "double"
+                            "type": "number",
+                            "format": "double"
                         }
                     }
                 ],
@@ -215,6 +216,37 @@
                     }
                 }
             }
+        },
+        "/features/boolean": {
+          "post": {
+            "tags": [
+              "feature-demonstration-service"
+            ],
+            "summary": "updateBoolean",
+            "operationId": "updateBooleanUsingPOST",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "*/*"
+            ],
+            "parameters": [
+              {
+                "in": "body",
+                "name": "input",
+                "description": "input",
+                "required": false,
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
         },
         "/features/date": {
             "post": {

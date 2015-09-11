@@ -122,6 +122,12 @@ public class FeatureDemonstrationService {
     //No-op
   }
 
+  //boolean transformation
+  @RequestMapping(value = "/boolean", method = RequestMethod.POST)
+  public void updateBoolean(Boolean input) {
+    //No-op
+  }
+
   @RequestMapping
   @ApiOperation(value = "all")
   public HttpEntity<String> all() {

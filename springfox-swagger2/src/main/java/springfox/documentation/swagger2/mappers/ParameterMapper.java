@@ -25,6 +25,7 @@ import io.swagger.models.ModelImpl;
 import io.swagger.models.RefModel;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
+import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelRef;
 
@@ -59,8 +60,10 @@ public class ParameterMapper {
       return baseModel;
     }
     if (isBaseType(modelRef.getType())) {
+      Property property = Properties.property(modelRef.getType());
       ModelImpl baseModel = new ModelImpl();
-      baseModel.setType(modelRef.getType());
+      baseModel.setType(property.getType());
+      baseModel.setFormat(property.getFormat());
       return baseModel;
     }
     return new RefModel(modelRef.getType());
