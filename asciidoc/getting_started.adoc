@@ -116,14 +116,15 @@ parameter. In this example `ResponseEntity<T>` with `T`. `alternateTypeRules` al
 <12> Allows globally overriding response messages for different http methods. In this example we override the 500
 error code for all `GET`s ...
 <13> ...and indicate that it will use the response model `Error` (which will be defined elsewhere)
-<14> Sets up the security schemes used to protect the apis. Supported schemes are ApiKey, BasicAuth and OAuth
-<15> Provides a way to globally set up security contexts for operation. The idea here is that we provide a way to
+<14> Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in method signature (for example authenticaton information).
+<15> Sets up the security schemes used to protect the apis. Supported schemes are ApiKey, BasicAuth and OAuth
+<16> Provides a way to globally set up security contexts for operation. The idea here is that we provide a way to
 select operations to be protected by one of the specified security schemes.
-<16> Here we use ApiKey as the security schema that is identified by the name `mykey`
-<17> Selector for the paths this security context applies to.
-<18> Here we same key defined in the security scheme `mykey`
-<19> Optional swagger-ui security configuration for oauth and apiKey settings
-<20> Optional swagger-ui ui configuration currently only supports the validation url
+<17> Here we use ApiKey as the security schema that is identified by the name `mykey`
+<18> Selector for the paths this security context applies to.
+<19> Here we same key defined in the security scheme `mykey`
+<20> Optional swagger-ui security configuration for oauth and apiKey settings
+<21> Optional swagger-ui ui configuration currently only supports the validation url
 
 There are plenty of more options to configure the `Docket`. This should provide a good start.
 
