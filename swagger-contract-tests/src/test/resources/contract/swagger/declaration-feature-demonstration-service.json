@@ -717,6 +717,58 @@
             ]
         },
         {
+          "description": "updateBoolean",
+          "operations": [
+            {
+              "method": "POST",
+              "summary": "updateBoolean",
+              "nickname": "updateBooleanUsingPOST",
+              "produces": [
+                "*/*"
+              ],
+              "consumes": [
+                "application/json"
+              ],
+              "parameters": [
+                {
+                  "allowMultiple": false,
+                  "defaultValue": "",
+                  "description": "input",
+                  "name": "body",
+                  "paramType": "body",
+                  "type": "boolean",
+                  "required": false
+                }
+              ],
+              "responseMessages": [
+                {
+                  "code": 200,
+                  "message": "OK"
+                },
+                {
+                  "code": 201,
+                  "message": "Created"
+                },
+                {
+                  "code": 401,
+                  "message": "Unauthorized"
+                },
+                {
+                  "code": 403,
+                  "message": "Forbidden"
+                },
+                {
+                  "code": 404,
+                  "message": "Not Found"
+                }
+              ],
+              "deprecated": "false",
+              "type": "void"
+            }
+          ],
+          "path": "/features/boolean"
+        },
+        {
             "path": "/features/date",
             "description": "updateDate",
             "operations": [
