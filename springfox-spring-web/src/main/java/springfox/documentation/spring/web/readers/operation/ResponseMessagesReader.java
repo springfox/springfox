@@ -127,6 +127,9 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     String reasonPhrase = HttpStatus.OK.getReasonPhrase();
     if (responseStatus.isPresent()) {
       reasonPhrase = responseStatus.get().reason();
+      if (reasonPhrase.isEmpty()) {
+        reasonPhrase = responseStatus.get().value().getReasonPhrase();
+      }
     }
     return reasonPhrase;
   }

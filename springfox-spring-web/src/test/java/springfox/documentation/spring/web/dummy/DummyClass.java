@@ -277,6 +277,11 @@ public class DummyClass {
   }
 
   @ResponseBody
+  @ResponseStatus(value = HttpStatus.NO_CONTENT)
+  public void methodWithResponseStatusAnnotationAndEmptyReason() {
+  }
+
+  @ResponseBody
   public DummyModels.AnnotatedBusinessModel methodWithModelPropertyAnnotations() {
     return null;
   }

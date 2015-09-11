@@ -134,4 +134,19 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
       responseMessage.getResponseModel().type == 'BusinessModel'
       responseMessage.getMessage() == "Accepted request"
   }
+
+  def "Methods with return type containing ResponseStatus annotation and empty reason message"() {
+    given:
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
+              RequestMethod.GET, dummyHandlerMethod('methodWithResponseStatusAnnotationAndEmptyReason'), 0,
+              requestMappingInfo('/somePath'), context(), "")
+    when:
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
+      def responseMessages = operation.responseMessages
+    then:
+      ResponseMessage responseMessage = responseMessages.find { it.code == 204 }
+      responseMessage.getCode() == HttpStatus.NO_CONTENT.value()
+      responseMessage.getMessage() == HttpStatus.NO_CONTENT.reasonPhrase
+  }
 }
