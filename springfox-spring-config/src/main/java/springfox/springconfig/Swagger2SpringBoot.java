@@ -85,8 +85,16 @@ public class Swagger2SpringBoot {
                 .message("500 message")
                 .responseModel(new ModelRef("Error"))//<13>
                 .build()))
-        .securitySchemes(newArrayList(apiKey()))//<14>
-        .securityContexts(newArrayList(securityContext()))//<15>
+        .globalOperationParameters(//<14>
+            newArrayList(new ParameterBuilder() 
+                .name("someGlobalParameter")
+                .description("Description of someGlobalParameter")
+                .modelRef(new ModelRef("string"))
+                .parameterType("query")
+                .required(true)
+                .build()))
+        .securitySchemes(newArrayList(apiKey()))//<15>
+        .securityContexts(newArrayList(securityContext()))//<16>
         ;
   }
 
@@ -94,13 +102,13 @@ public class Swagger2SpringBoot {
   private TypeResolver typeResolver;
 
   private ApiKey apiKey() {
-    return new ApiKey("mykey", "api_key", "header");//<16>
+    return new ApiKey("mykey", "api_key", "header");//<17>
   }
 
   private SecurityContext securityContext() {
     return SecurityContext.builder()
         .securityReferences(defaultAuth())
-        .forPaths(PathSelectors.regex("/anyPath.*"))//<17>
+        .forPaths(PathSelectors.regex("/anyPath.*"))//<18>
         .build();
   }
 
@@ -110,12 +118,12 @@ public class Swagger2SpringBoot {
     AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
     authorizationScopes[0] = authorizationScope;
     return newArrayList(
-        new SecurityReference("mykey", authorizationScopes));//<18>
+        new SecurityReference("mykey", authorizationScopes));//<19>
   }
 
   @Bean
   SecurityConfiguration security() {
-    return new SecurityConfiguration(//<19>
+    return new SecurityConfiguration(//<20>
         "test-app-client-id",
         "test-app-realm",
         "test-app",
@@ -124,7 +132,8 @@ public class Swagger2SpringBoot {
 
   @Bean
   UiConfiguration uiConfig() {
-    return new UiConfiguration(//<20>
+    return new UiConfiguration(//<21>
         "validatorUrl");
   }
+  
 }
