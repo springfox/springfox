@@ -23,10 +23,12 @@ import io.swagger.models.auth.OAuth2Definition;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import springfox.documentation.service.AuthorizationCodeGrant;
 import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.ClientCredentialsGrant;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.GrantType;
 import springfox.documentation.service.ImplicitGrant;
 import springfox.documentation.service.OAuth;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 
 class OAuth2AuthFactory implements SecuritySchemeFactory {
   @Override
@@ -41,10 +43,10 @@ class OAuth2AuthFactory implements SecuritySchemeFactory {
         definition.implicit(((ImplicitGrant) each).getLoginEndpoint().getUrl());
       } else if ("application".equals(each.getType())) {
 //          NOTE: swagger 1 doesn't support this
-        definition.application(each.getType());
+        definition.application(((ClientCredentialsGrant) each).getTokenUrl());
       } else if ("password".equals(each.getType())) {
 //          NOTE: swagger 1 doesn't support this
-        definition.password(each.getType());
+        definition.password(((ResourceOwnerPasswordCredentialsGrant) each).getTokenUrl());
       } else {
         throw new IllegalArgumentException(String.format("Security scheme of type %s not supported",
             input.getClass().getSimpleName()));

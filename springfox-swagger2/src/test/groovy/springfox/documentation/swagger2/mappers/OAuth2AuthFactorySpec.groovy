@@ -4,8 +4,10 @@ import io.swagger.models.auth.OAuth2Definition
 import spock.lang.Specification
 import springfox.documentation.service.AuthorizationCodeGrant
 import springfox.documentation.service.AuthorizationScope
+import springfox.documentation.service.ClientCredentialsGrant
 import springfox.documentation.service.GrantType
 import springfox.documentation.service.OAuth
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.TokenEndpoint
 import springfox.documentation.service.TokenRequestEndpoint
@@ -34,7 +36,7 @@ class OAuth2AuthFactorySpec extends Specification {
 
   def "Maps application grant" () {
     given:
-      List<GrantType> grants = newArrayList(new GrantType("application"))
+      List<GrantType> grants = newArrayList(new ClientCredentialsGrant("token:uri"))
       List<AuthorizationScope> scopes = newArrayList()
       SecurityScheme security = new OAuth("oauth", newArrayList(scopes), newArrayList(grants))
     and:
@@ -44,11 +46,12 @@ class OAuth2AuthFactorySpec extends Specification {
     then:
       securityDefintion.type == "oauth2"
       ((OAuth2Definition)securityDefintion).getFlow() == "application"
+      ((OAuth2Definition)securityDefintion).tokenUrl == "token:uri"
   }
 
   def "Maps password grant" () {
     given:
-      List<GrantType> grants = newArrayList(new GrantType("password"))
+      List<GrantType> grants = newArrayList(new ResourceOwnerPasswordCredentialsGrant("token:uri"))
       List<AuthorizationScope> scopes = newArrayList()
       SecurityScheme security = new OAuth("oauth", newArrayList(scopes), newArrayList(grants))
     and:
@@ -58,6 +61,7 @@ class OAuth2AuthFactorySpec extends Specification {
     then:
       securityDefintion.type == "oauth2"
       ((OAuth2Definition)securityDefintion).getFlow() == "password"
+      ((OAuth2Definition)securityDefintion).tokenUrl == "token:uri"
   }
 
   def "Throws exception when it receives an unknown grant" () {
