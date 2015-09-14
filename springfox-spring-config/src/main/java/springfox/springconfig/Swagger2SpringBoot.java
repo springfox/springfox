@@ -33,6 +33,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiKey;
