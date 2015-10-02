@@ -31,7 +31,9 @@ import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
+import springfox.documentation.spring.web.readers.operation.OperationReader;
 
+import java.lang.reflect.Proxy;
 import java.util.List;
 
 import static com.google.common.collect.FluentIterable.from;
@@ -41,16 +43,22 @@ import static com.google.common.collect.Ordering.*;
 @Component
 public class ApiDescriptionReader {
 
-  private final ApiOperationReader operationReader;
+  private final OperationReader operationReader;
   private final DocumentationPluginsManager pluginsManager;
   private final ApiDescriptionLookup lookup;
 
   @Autowired
   public ApiDescriptionReader(ApiOperationReader operationReader, DocumentationPluginsManager pluginsManager,
                               ApiDescriptionLookup lookup) {
-    this.operationReader = operationReader;
+    this.operationReader = applyCachingProxy(operationReader);
     this.pluginsManager = pluginsManager;
     this.lookup = lookup;
+  }
+
+  private OperationReader applyCachingProxy(ApiOperationReader operationReader) {
+    return (OperationReader) Proxy.newProxyInstance(getClass().getClassLoader(),
+        new Class<?>[] { OperationReader.class },
+        new ApiOperationCachingInvocationHandler(operationReader));
   }
 
   public List<ApiDescription> read(RequestMappingContext outerContext) {

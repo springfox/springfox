@@ -28,13 +28,11 @@ import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
 import java.lang.reflect.Method;
 
 import static com.google.common.collect.Lists.*;
-import static org.slf4j.LoggerFactory.getLogger;
+import static org.slf4j.LoggerFactory.*;
 
 public class OperationsKeyGenerator implements KeyGenerator {
   private static final Logger LOG = getLogger(OperationsKeyGenerator.class);
 
-  public static final String OPERATION_KEY_SPEL
-      = "T(springfox.documentation.spring.web.OperationsKeyGenerator).operationKey(#outerContext)";
   public static String operationKey(RequestMappingContext context) {
     return new OperationsKeyGenerator().generate(ApiOperationReader.class, null, context).toString();
   }
