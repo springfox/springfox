@@ -299,7 +299,7 @@ public class Docket implements DocumentationPlugin {
    *
    * @param apply flag to determine if the default response messages are used
    *              true   - the default response messages are added to the global response messages
-   *              false  - the default response messages are added to the global response messages
+   *              false  - the default response messages are not added to the global response messages
    * @return this Docket
    */
   public Docket useDefaultResponseMessages(boolean apply) {
