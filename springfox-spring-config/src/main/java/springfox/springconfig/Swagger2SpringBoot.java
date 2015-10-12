@@ -33,6 +33,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiKey;
@@ -88,6 +89,14 @@ public class Swagger2SpringBoot {
         .securitySchemes(newArrayList(apiKey()))//<14>
         .securityContexts(newArrayList(securityContext()))//<15>
         .enableUrlTemplating(true)//<21>
+        .globalOperationParameters(//<22>
+            newArrayList(new ParameterBuilder() 
+                .name("someGlobalParameter")
+                .description("Description of someGlobalParameter")
+                .modelRef(new ModelRef("string"))
+                .parameterType("query")
+                .required(true)
+                .build()))
         ;
   }
 
