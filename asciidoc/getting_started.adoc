@@ -88,13 +88,15 @@ dependencies {
 </dependency>
 ----
 
-==== Springfox-swagger2 with Spring Boot
+==== Springfox-swagger2 with Spring MVC and Spring Boot
 [[getting-started]]
 
 [source,java,linenums]
 ----
 include::../springfox-spring-config/src/main/java/springfox/springconfig/Swagger2SpringBoot.java[indent=0]
 ----
+
+===== Configuration explained
 <1> Enables Springfox swagger 2
 <2> Instructs spring where to scan for API controllers
 <3> `Docket`, Sringfox's, primary api configuration mechanism is initialized for swagger specification 2.0
@@ -102,7 +104,7 @@ include::../springfox-spring-config/src/main/java/springfox/springconfig/Swagger
 via swagger.
 <5> `apis()` allows selection of `RequestHandler`'s using a predicate. The example here uses an `any` predicate
 (default). Out of the box predicates provided are `any`, `none`, `withClassAnnotation`, `withMethodAnnotation` and
-`basPackage`.
+`basePackage`.
 <6> `paths()` allows selection of `Path`'s using a predicate. The example here uses an `any` predicate (default)
 <7> The selector requires to be built after configuring the api and path selectors. Out of the box we provide
 predicates for `regex`, `ant`, `any`, `none`
@@ -116,15 +118,24 @@ parameter. In this example `ResponseEntity<T>` with `T`. `alternateTypeRules` al
 <12> Allows globally overriding response messages for different http methods. In this example we override the 500
 error code for all `GET`s ...
 <13> ...and indicate that it will use the response model `Error` (which will be defined elsewhere)
-<14> Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in spring controller method signature (for example authenticaton information). Parameters added here will be part of every API Operation in the generated swagger specification.
-<15> Sets up the security schemes used to protect the apis. Supported schemes are ApiKey, BasicAuth and OAuth
-<16> Provides a way to globally set up security contexts for operation. The idea here is that we provide a way to
+<14> Sets up the security schemes used to protect the apis. Supported schemes are ApiKey, BasicAuth and OAuth
+<15> Provides a way to globally set up security contexts for operation. The idea here is that we provide a way to
 select operations to be protected by one of the specified security schemes.
-<17> Here we use ApiKey as the security schema that is identified by the name `mykey`
-<18> Selector for the paths this security context applies to.
-<19> Here we same key defined in the security scheme `mykey`
-<20> Optional swagger-ui security configuration for oauth and apiKey settings
-<21> Optional swagger-ui ui configuration currently only supports the validation url
+<16> Here we use ApiKey as the security schema that is identified by the name `mykey`
+<17> Selector for the paths this security context applies to.
+<18> Here we same key defined in the security scheme `mykey`
+<19> Optional swagger-ui security configuration for oauth and apiKey settings
+<20> Optional swagger-ui ui configuration currently only supports the validation url
+<21> * _Incubating_ * setting this flag signals to the processor that the paths generated should try and use
+https://tools.ietf.org/html/rfc6570#section-3.2.8[form style query expansion]. As a result we could distinguish paths
+ that have the same path stem but different query string combinations. An example of this would be two apis:
+* http://example.org/findCustomersBy?name=Test to find customers by name. Per https://tools.ietf.org/html/rfc6570[RFC
+ 6570] This would be represented as http://example.org/findCustomersBy{?name}
+* http://example.org/findCustomersBy?zip=76051 to find customers by zip. Per https://tools.ietf.org/html/rfc6570[RFC
+  6570] This would be represented as http://example.org/findCustomersBy{?zip}
+<22> Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation 
+of the api, but aren`t needed in spring controller method signature (for example authenticaton information). Parameters 
+added here will be part of every API Operation in the generated swagger specification.
 
 There are plenty of more options to configure the `Docket`. This should provide a good start.
 
@@ -144,13 +155,13 @@ Pulling in the dependency creates a webjar containing the swagger-ui static cont
 `/swagger-resources` which lists all of the swagger resources and versions configured for a given
 application. The Swagger UI page should then be available at http://localhost:8080/swagger-ui.html[]
 
-image::springfox-swagger-ui.png[Swagger UI]
+image::images/springfox-swagger-ui.png[Swagger UI]
 
 The swagger ui version is specified in ./build.gradle where `swaggerUiVersion` is a git tag on the [swagger-ui repo]
-(https://github.com/wordnik/swagger-ui).
+(https://github.com/swagger-api/swagger-ui).
 
 All content is served from a webjar convention, relative url taking the following form:
-`webjars/${project.name}/${project.version}` e.g: `/webjars/springfox-swagger-ui/2.0.2-SNAPSHOT/swagger-ui.html`
+`webjars/springfox-swagger-ui/{releaseVersion}/swagger-ui.html`
 
 By default Spring Boot has sensible defaults for serving content from webjars. To configure vanilla spring web mvc
 apps to serve webjar content see the http://www.webjars.org/documentation#springmvc[webjar documentation]
