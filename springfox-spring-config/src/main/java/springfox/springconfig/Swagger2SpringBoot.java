@@ -86,30 +86,31 @@ public class Swagger2SpringBoot {
                 .message("500 message")
                 .responseModel(new ModelRef("Error"))//<13>
                 .build()))
-        .globalOperationParameters(//<14>
+        .globalOperationParameters(//<22>
             newArrayList(new ParameterBuilder() 
                 .name("someGlobalParameter")
                 .description("Description of someGlobalParameter")
                 .modelRef(new ModelRef("string"))
                 .parameterType("query")
                 .required(true)
-                .build()))
-        .securitySchemes(newArrayList(apiKey()))//<15>
-        .securityContexts(newArrayList(securityContext()))//<16>
-        ;
+                .build()))       
+         .securitySchemes(newArrayList(apiKey()))//<14>
+             .securityContexts(newArrayList(securityContext()))//<15>
+             .enableUrlTemplating(true)//<21>
+         ;
   }
 
   @Autowired
   private TypeResolver typeResolver;
 
   private ApiKey apiKey() {
-    return new ApiKey("mykey", "api_key", "header");//<17>
+    return new ApiKey("mykey", "api_key", "header");//<16>
   }
 
   private SecurityContext securityContext() {
     return SecurityContext.builder()
         .securityReferences(defaultAuth())
-        .forPaths(PathSelectors.regex("/anyPath.*"))//<18>
+.forPaths(PathSelectors.regex("/anyPath.*"))//<17>
         .build();
   }
 
@@ -119,22 +120,22 @@ public class Swagger2SpringBoot {
     AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
     authorizationScopes[0] = authorizationScope;
     return newArrayList(
-        new SecurityReference("mykey", authorizationScopes));//<19>
+new SecurityReference("mykey", authorizationScopes));//<18>
   }
 
   @Bean
   SecurityConfiguration security() {
-    return new SecurityConfiguration(//<20>
+    return new SecurityConfiguration(//<19>
         "test-app-client-id",
+ "test-app-client-secret",
         "test-app-realm",
         "test-app",
-        "apiKey");
+ "apiKey", "," /* scope separator */);
   }
 
   @Bean
   UiConfiguration uiConfig() {
-    return new UiConfiguration(//<21>
+    return new UiConfiguration(//<20>
         "validatorUrl");
   }
-  
 }
