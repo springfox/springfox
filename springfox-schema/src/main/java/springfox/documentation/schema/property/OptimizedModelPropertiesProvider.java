@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-import springfox.documentation.annotations.Cacheable;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -111,7 +110,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
 
   @Override
-  @Cacheable(value = "modelProperties", keyGenerator = ModelPropertiesKeyGenerator.class)
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
     List<ModelProperty> properties = newArrayList();
     BeanDescription beanDescription = beanDescription(type, givenContext);

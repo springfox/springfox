@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import springfox.documentation.annotations.Cacheable;
 import springfox.documentation.schema.property.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
@@ -62,7 +61,6 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   }
 
   @Override
-  @Cacheable(value = "modelDependencies", keyGenerator = ModelContextKeyGenerator.class)
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
     return from(resolvedDependencies(modelContext))
             .filter(ignorableTypes(modelContext))
