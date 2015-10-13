@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
@@ -40,6 +41,7 @@ import static com.google.common.collect.Lists.*;
 import static java.util.Arrays.asList;
 
 @Component
+@Qualifier("default")
 public class ApiOperationReader implements OperationReader {
 
   private static final Set<RequestMethod> allRequestMethods

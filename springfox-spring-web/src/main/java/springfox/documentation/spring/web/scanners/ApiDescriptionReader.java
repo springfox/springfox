@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.scanners;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
@@ -30,10 +31,8 @@ import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
-import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
 import springfox.documentation.spring.web.readers.operation.OperationReader;
 
-import java.lang.reflect.Proxy;
 import java.util.List;
 
 import static com.google.common.collect.FluentIterable.from;
@@ -48,17 +47,13 @@ public class ApiDescriptionReader {
   private final ApiDescriptionLookup lookup;
 
   @Autowired
-  public ApiDescriptionReader(ApiOperationReader operationReader, DocumentationPluginsManager pluginsManager,
-                              ApiDescriptionLookup lookup) {
-    this.operationReader = applyCachingProxy(operationReader);
+  public ApiDescriptionReader(
+      @Qualifier("cachedOperations") OperationReader operationReader,
+      DocumentationPluginsManager pluginsManager,
+      ApiDescriptionLookup lookup) {
+    this.operationReader = operationReader;
     this.pluginsManager = pluginsManager;
     this.lookup = lookup;
-  }
-
-  private OperationReader applyCachingProxy(ApiOperationReader operationReader) {
-    return (OperationReader) Proxy.newProxyInstance(getClass().getClassLoader(),
-        new Class<?>[] { OperationReader.class },
-        new ApiOperationCachingInvocationHandler(operationReader));
   }
 
   public List<ApiDescription> read(RequestMappingContext outerContext) {

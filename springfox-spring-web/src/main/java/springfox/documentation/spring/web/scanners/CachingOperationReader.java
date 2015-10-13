@@ -19,31 +19,28 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.google.common.base.Equivalence;
-import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.FluentIterable;
-import org.springframework.util.ReflectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.OperationCachingEquivalence;
-import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
+import springfox.documentation.spring.web.readers.operation.OperationReader;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.collect.Lists.*;
+@Component
+@Qualifier("cachedOperations")
+public class CachingOperationReader implements OperationReader {
 
-public class ApiOperationCachingInvocationHandler implements InvocationHandler {
-
-  private final ApiOperationReader delegate;
   private final LoadingCache<Equivalence.Wrapper<RequestMappingContext>, List<Operation>> cache;
 
-  public ApiOperationCachingInvocationHandler(ApiOperationReader operationReader) {
-    delegate = operationReader;
+  @Autowired
+  public CachingOperationReader(@Qualifier("default") final OperationReader delegate) {
     cache = CacheBuilder.newBuilder()
         .maximumSize(1000)
         .expireAfterWrite(24, TimeUnit.HOURS)
@@ -56,19 +53,7 @@ public class ApiOperationCachingInvocationHandler implements InvocationHandler {
   }
 
   @Override
-  public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
-    Optional<RequestMappingContext> context = FluentIterable.from(newArrayList(nullToEmptyArray(args)))
-        .filter(RequestMappingContext.class).first();
-    if (context.isPresent()) {
-      return cache.get(new OperationCachingEquivalence().wrap(context.get()));
-    }
-    return ReflectionUtils.invokeMethod(method, delegate, args);
-  }
-
-  private Object[] nullToEmptyArray(Object[] params) {
-    if (params == null) {
-      return new Object[0];
-    }
-    return params;
+  public List<Operation> read(RequestMappingContext outerContext) {
+    return cache.getUnchecked(new OperationCachingEquivalence().wrap(outerContext));
   }
 }
