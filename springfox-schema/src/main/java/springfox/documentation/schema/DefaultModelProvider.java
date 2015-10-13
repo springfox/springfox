@@ -28,6 +28,7 @@ import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import springfox.documentation.annotations.Cacheable;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
@@ -47,6 +48,7 @@ import static springfox.documentation.schema.Types.*;
 
 
 @Component
+@Qualifier("default")
 public class DefaultModelProvider implements ModelProvider {
   private static final Logger LOG = LoggerFactory.getLogger(DefaultModelProvider.class);
   private final TypeResolver resolver;
@@ -57,8 +59,8 @@ public class DefaultModelProvider implements ModelProvider {
 
   @Autowired
   public DefaultModelProvider(TypeResolver resolver,
-                              ModelPropertiesProvider propertiesProvider,
-                              ModelDependencyProvider dependencyProvider,
+                              @Qualifier("cachedModelProperties") ModelPropertiesProvider propertiesProvider,
+                              @Qualifier("cachedModelDependencies") ModelDependencyProvider dependencyProvider,
                               SchemaPluginsManager schemaPluginsManager,
                               TypeNameExtractor typeNameExtractor) {
     this.resolver = resolver;

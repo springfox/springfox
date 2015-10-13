@@ -32,7 +32,7 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin
 class SchemaSpecification extends Specification {
   TypeNameExtractor typeNameExtractor
   ModelProvider modelProvider
-  ModelDependencyProvider modelDependencyProvider
+  DefaultModelDependencyProvider modelDependencyProvider
   DocumentationType documentationType = DocumentationType.SWAGGER_12
   def setup() {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =

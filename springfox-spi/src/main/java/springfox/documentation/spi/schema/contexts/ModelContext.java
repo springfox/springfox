@@ -203,12 +203,19 @@ public class ModelContext {
     return Objects.equal(type, that.type) &&
         Objects.equal(documentationType, that.documentationType) &&
         Objects.equal(returnType, that.returnType) &&
-        Objects.equal(genericNamingStrategy.getClass().getName(), that.genericNamingStrategy.getClass().getName());
+        Objects.equal(namingStrategy(), that.namingStrategy());
 
+  }
+
+  private String namingStrategy() {
+    if (genericNamingStrategy != null) {
+      return genericNamingStrategy.getClass().getName();
+    }
+    return "";
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(type, documentationType, returnType, genericNamingStrategy.getClass().getName());
+    return Objects.hashCode(type, documentationType, returnType, namingStrategy());
   }
 }

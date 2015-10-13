@@ -52,7 +52,7 @@ public class CachingAspect {
   public void propertiesFor() {
   }
 
-  @Pointcut("execution(* springfox.documentation.schema.ModelDependencyProvider.dependentModels(..))")
+  @Pointcut("execution(* springfox.documentation.schema.DefaultModelDependencyProvider.dependentModels(..))")
   public void dependenciesFor() {
   }
 

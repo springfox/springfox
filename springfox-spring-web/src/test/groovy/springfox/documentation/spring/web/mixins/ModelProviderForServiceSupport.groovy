@@ -59,7 +59,7 @@ class ModelProviderForServiceSupport {
         pluginsManager, typeNameExtractor)
 
     modelPropertiesProvider.onApplicationEvent(event)
-    def modelDependenciesProvider = new ModelDependencyProvider(typeResolver,
+    def modelDependenciesProvider = new DefaultModelDependencyProvider(typeResolver,
             modelPropertiesProvider, typeNameExtractor)
     new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
             pluginsManager, typeNameExtractor)
@@ -80,7 +80,7 @@ class ModelProviderForServiceSupport {
         new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
         pluginsManager, typeNameExtractor)
     modelPropertiesProvider.onApplicationEvent(event)
-    def modelDependenciesProvider = new ModelDependencyProvider(typeResolver,
+    def modelDependenciesProvider = new DefaultModelDependencyProvider(typeResolver,
             modelPropertiesProvider, typeNameExtractor)
     new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
             pluginsManager, typeNameExtractor)

@@ -74,7 +74,7 @@ import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Primary
-@Component(value = "optimized")
+@Component("optimized")
 public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider {
   private static final Logger LOG = LoggerFactory.getLogger(OptimizedModelPropertiesProvider.class);
   private final AccessorsProvider accessors;

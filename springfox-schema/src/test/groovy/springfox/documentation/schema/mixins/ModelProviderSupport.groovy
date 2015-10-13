@@ -58,13 +58,13 @@ class ModelProviderSupport {
             pluginsManager, typeNameExtractor)
   }
 
-  ModelDependencyProvider modelDependencyProvider(TypeResolver resolver,
+  DefaultModelDependencyProvider modelDependencyProvider(TypeResolver resolver,
       ModelPropertiesProvider modelPropertiesProvider,
       TypeNameExtractor typeNameExtractor) {
-    new ModelDependencyProvider(resolver, modelPropertiesProvider, typeNameExtractor)
+    new DefaultModelDependencyProvider(resolver, modelPropertiesProvider, typeNameExtractor)
   }
 
-  ModelDependencyProvider defaultModelDependencyProvider() {
+  DefaultModelDependencyProvider defaultModelDependencyProvider() {
     def typeResolver = new TypeResolver()
 
     def pluginsManager = defaultSchemaPlugins()
