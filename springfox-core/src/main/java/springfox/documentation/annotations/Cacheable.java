@@ -33,12 +33,14 @@ import java.lang.annotation.Target;
  * returned instance is used as the cache value.
  *
  * @since 2.1.1
+ *
+ * @since 2.2.2 this is no longer is an aspect, but just serves as a marker for cached items
+ *
  */
 @Target({ ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-@Incubating("2.1.1")
 public @interface Cacheable {
   String value();
 
