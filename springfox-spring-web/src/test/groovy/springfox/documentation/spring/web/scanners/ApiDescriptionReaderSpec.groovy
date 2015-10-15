@@ -74,15 +74,18 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         Paths.sanitizeRequestMappingPattern(mappingPattern) == expected
 
       where:
-        mappingPattern             | expected
-        ""                         | "/"
-        "/"                        | "/"
-        "/businesses"              | "/businesses"
-        "/{businessId:\\w+}"       | "/{businessId}"
-        "/businesses/{businessId}" | "/businesses/{businessId}"
-        "/foo/bar:{baz}"           | "/foo/bar:{baz}"
-        "/foo:{foo}/bar:{baz}"     | "/foo:{foo}/bar:{baz}"
-        "/foo/bar:{baz:\\w+}"      | "/foo/bar:{baz}"
+        mappingPattern                                  | expected
+        ""                                              | "/"
+        "/"                                             | "/"
+        "/businesses"                                   | "/businesses"
+        "/{businessId:\\w+}"                            | "/{businessId}"
+        "/{businessId:\\d{3}}"                          | "/{businessId}"
+        "/{businessId:\\d{3}}/{productId:\\D{3}\\d{3}}" | "/{businessId}/{productId}"
+        "/businesses/{businessId}"                      | "/businesses/{businessId}"
+        "/businesses/{businessId}/add"                  | "/businesses/{businessId}/add"
+        "/foo/bar:{baz}"                                | "/foo/bar:{baz}"
+        "/foo:{foo}/bar:{baz}"                          | "/foo:{foo}/bar:{baz}"
+        "/foo/bar:{baz:\\w+}"                           | "/foo/bar:{baz}"
 
    }
 }
