@@ -99,7 +99,7 @@ include::../springfox-spring-config/src/main/java/springfox/springconfig/Swagger
 ===== Configuration explained
 <1> Enables Springfox swagger 2
 <2> Instructs spring where to scan for API controllers
-<3> `Docket`, Sringfox's, primary api configuration mechanism is initialized for swagger specification 2.0
+<3> `Docket`, Springfox's, primary api configuration mechanism is initialized for swagger specification 2.0
 <4> `select()` returns an instance of `ApiSelectorBuilder` to give fine grained control over the endpoints exposed
 via swagger.
 <5> `apis()` allows selection of `RequestHandler`'s using a predicate. The example here uses an `any` predicate
