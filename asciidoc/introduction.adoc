@@ -116,5 +116,5 @@ Please see the https://github.com/springfox/springfox/wiki[wiki] for some guidel
 
 === Support
 
-If you find issues or bugs please use the github issue https://github.com/springfox/springfox/issues[springfox project]
+If you find issues or bugs please submit them via the https://github.com/springfox/springfox/issues[Springfox Github project]
 
