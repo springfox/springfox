@@ -29,6 +29,6 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import java.util.List;
 
 public interface ModelPropertiesProvider extends ApplicationListener<ObjectMapperConfigured> {
-  @Cacheable(value = "modelProperties", keyGenerator = ModelPropertiesKeyGenerator.class)
+  @Cacheable(value = "modelProperties")
   List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext);
 }

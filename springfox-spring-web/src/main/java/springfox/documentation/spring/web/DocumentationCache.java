@@ -19,29 +19,15 @@
 
 package springfox.documentation.spring.web;
 
-import org.springframework.cache.Cache;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.support.SimpleCacheManager;
 import springfox.documentation.service.Documentation;
 
 import java.util.Collections;
 import java.util.Map;
 
-import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 
 public class DocumentationCache {
   private Map<String, Documentation> documentationLookup = newLinkedHashMap();
-  private SimpleCacheManager cacheManager = new SimpleCacheManager();
-
-  public DocumentationCache() {
-    ConcurrentMapCache operationsCache = new ConcurrentMapCache("operations");
-    ConcurrentMapCache modelsCache = new ConcurrentMapCache("models");
-    ConcurrentMapCache modelPropertiesCache = new ConcurrentMapCache("modelProperties");
-    ConcurrentMapCache modelDependenciesCache = new ConcurrentMapCache("modelDependencies");
-    cacheManager.setCaches(newArrayList(operationsCache, modelDependenciesCache, modelsCache, modelPropertiesCache));
-    cacheManager.afterPropertiesSet();
-  }
 
   public void addDocumentation(Documentation documentation) {
     documentationLookup.put(documentation.getGroupName(), documentation);
@@ -53,10 +39,6 @@ public class DocumentationCache {
 
   public Map<String, Documentation> all() {
     return Collections.unmodifiableMap(documentationLookup);
-  }
-
-  public Cache getCache(String cacheName) {
-    return cacheManager.getCache(cacheName);
   }
 
 }

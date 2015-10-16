@@ -34,22 +34,25 @@ import java.util.concurrent.TimeUnit;
 @Qualifier("cachedModelDependencies")
 public class CachingModelDependencyProvider implements ModelDependencyProvider {
   private final LoadingCache<ModelContext, Set<ResolvedType>> cache;
+  private final ModelDependencyProvider delegate;
 
   @Autowired
   public CachingModelDependencyProvider(@Qualifier("default") final ModelDependencyProvider delegate) {
+    this.delegate = delegate;
     cache = CacheBuilder.newBuilder()
         .maximumSize(1000)
         .expireAfterWrite(24, TimeUnit.HOURS)
-        .build(
-            new CacheLoader<ModelContext, Set<ResolvedType>>() {
-              public Set<ResolvedType> load(ModelContext key) {
-                return delegate.dependentModels(key);
-              }
-            });
+        .build(new CacheLoader<ModelContext, Set<ResolvedType>>() {
+          public Set<ResolvedType> load(ModelContext key) {
+            return delegate.dependentModels(key);
+          }
+        });
   }
 
   @Override
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
+//      return delegate.dependentModels(modelContext);
     return cache.getUnchecked(modelContext);
   }
+
 }

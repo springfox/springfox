@@ -25,6 +25,6 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import java.util.Set;
 
 public interface ModelDependencyProvider {
-  @Cacheable(value = "modelDependencies", keyGenerator = ModelContextKeyGenerator.class)
+  @Cacheable(value = "modelDependencies")
   Set<ResolvedType> dependentModels(ModelContext modelContext);
 }

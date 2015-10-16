@@ -18,8 +18,6 @@
  */
 package springfox.documentation.annotations;
 
-import org.springframework.cache.interceptor.KeyGenerator;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -43,6 +41,4 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Cacheable {
   String value();
-
-  Class<? extends KeyGenerator> keyGenerator();
 }
