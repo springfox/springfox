@@ -167,6 +167,7 @@ class DocketSpec extends DocumentationContextSpec {
       'operationOrdering'     | operationOrdering()                             | 'operationOrdering'
       'produces'              | ['application/json'] as Set                     | 'produces'
       'consumes'              | ['application/json'] as Set                     | 'consumes'
+      'host'                  | 'someHost'                                      | 'host'
       'protocols'             | ['application/json'] as Set                     | 'protocols'
   }
 
@@ -229,6 +230,7 @@ class DocketSpec extends DocumentationContextSpec {
       null != pluginContext.apiDescriptionOrdering
       null != pluginContext.produces
       null != pluginContext.protocols
+      null != pluginContext.host
       null != pluginContext.consumes
 
   }

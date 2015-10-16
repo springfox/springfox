@@ -214,6 +214,7 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
+  @Incubating("2.3")
   public Docket host(String host) {
     this.host = defaultIfAbsent(host, this.host);
     return this;

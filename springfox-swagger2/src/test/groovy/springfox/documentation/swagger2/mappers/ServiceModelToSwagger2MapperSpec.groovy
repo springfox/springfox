@@ -54,7 +54,8 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
           .basePath("base:uri")
           .consumes(["application/json"] as Set)
           .name("doc-group")
-          .schemes(["HTTPS"] as Set)
+          .host("test")
+          .schemes(["https"] as Set)
           .tags([new Tag("tag", "tag description")] as Set)
           .build()
     when:
@@ -65,6 +66,8 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
       mapped.basePath == documentation.basePath
       mapped.consumes.containsAll(documentation.consumes)
       mapped.produces.isEmpty()
+      mapped.schemes.first().toValue() == documentation.schemes.first()
+      mapped.host == documentation.host
       mapped.definitions.isEmpty()
       mapped.tags.first().name == "tag"
       mapped.tags.first().description == "tag description"
