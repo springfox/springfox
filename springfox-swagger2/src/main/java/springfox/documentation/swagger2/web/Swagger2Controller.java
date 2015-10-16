@@ -40,6 +40,7 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 import java.net.URI;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 @Controller
@@ -73,7 +74,9 @@ public class Swagger2Controller {
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
-    swagger.host(hostName());
+    if (isNullOrEmpty(swagger.getHost())) {
+      swagger.host(hostName());
+    }
     return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
   }
 

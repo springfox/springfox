@@ -41,6 +41,7 @@ public class DocumentationBuilder {
   private String basePath;
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
+  private String host;
   private Set<String> schemes = newHashSet();
 
   /**
@@ -110,6 +111,17 @@ public class DocumentationBuilder {
   }
 
   /**
+   * Updates the host (name or ip) serving this api.
+   *
+   * @param host - new host
+   * @return this
+   */
+  public DocumentationBuilder host(String host) {
+    this.host = defaultIfAbsent(host, this.host);
+    return this;
+  }
+
+  /**
    * Updates the schemes this api supports
    *
    * @param schemes - new schemes
@@ -142,6 +154,6 @@ public class DocumentationBuilder {
   }
 
   public Documentation build() {
-    return new Documentation(groupName, basePath, tags, apiListings, resourceListing, produces, consumes, schemes);
+    return new Documentation(groupName, basePath, tags, apiListings, resourceListing, produces, consumes, host, schemes);
   }
 }

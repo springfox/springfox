@@ -34,6 +34,7 @@ class ApiListingSupport {
           "/relative-path-to-endpoint",
           [] as Set,
           [] as Set,
+          "",
           [] as Set,
           authorizations,
           [],

@@ -79,6 +79,7 @@ public class ApiListingScanner {
       DocumentationContext documentationContext = context.getDocumentationContext();
       Set<String> produces = new LinkedHashSet<String>(documentationContext.getProduces());
       Set<String> consumes = new LinkedHashSet<String>(documentationContext.getConsumes());
+      String host = documentationContext.getHost();
       Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
       Set<ApiDescription> apiDescriptions = newHashSet();
 
@@ -103,6 +104,7 @@ public class ApiListingScanner {
               .resourcePath(resourcePath)
               .produces(produces)
               .consumes(consumes)
+              .host(host)
               .protocols(protocols)
               .securityReferences(securityReferences)
               .apis(sortedApis)

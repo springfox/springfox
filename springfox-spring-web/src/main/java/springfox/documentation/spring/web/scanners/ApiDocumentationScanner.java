@@ -72,6 +72,7 @@ public class ApiDocumentationScanner {
         .apiListingsByResourceGroupName(apiListings)
         .produces(context.getProduces())
         .consumes(context.getConsumes())
+        .host(context.getHost())
         .schemes(context.getProtocols())
         .basePath(context.getPathProvider().getApplicationBasePath())
         .tags(toTags(apiListings));

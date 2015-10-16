@@ -62,6 +62,7 @@ public class DocumentationContext {
   private final Ordering<Operation> operationOrdering;
   private Set<String> produces;
   private Set<String> consumes;
+  private String host;
   private Set<String> protocols;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final Optional<String> pathMapping;
@@ -84,6 +85,7 @@ public class DocumentationContext {
       Ordering<Operation> operationOrdering,
       Set<String> produces,
       Set<String> consumes,
+      String host,
       Set<String> protocols,
       GenericTypeNamingStrategy genericsNamingStrategy,
       Optional<String> pathMapping,
@@ -106,6 +108,7 @@ public class DocumentationContext {
     this.operationOrdering = operationOrdering;
     this.produces = produces;
     this.consumes = consumes;
+    this.host = host;
     this.protocols = protocols;
     this.genericsNamingStrategy = genericsNamingStrategy;
     this.pathMapping = pathMapping;
@@ -187,6 +190,10 @@ public class DocumentationContext {
 
   public Set<String> getConsumes() {
     return consumes;
+  }
+
+  public String getHost() {
+    return host;
   }
 
   public Set<String> getProtocols() {
