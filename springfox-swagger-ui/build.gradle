@@ -19,12 +19,11 @@ buildscript {
     jcenter()
   }
 
-  dependencies {
-    classpath 'de.undercouch:gradle-download-task:1.2'
-  }
 }
 
-apply plugin: 'de.undercouch.download'
+plugins {
+  id "de.undercouch.download" version "2.0.0"
+}
 
 ext {
   swaggerUiVersion = '2.1.2'
