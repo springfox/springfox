@@ -27,7 +27,7 @@ dependencies:
     - ~/.gradle
 test:
   override:
-  - ./gradlew clean check --daemon
+  - ./gradlew clean check
 
 deployment:
  staging:
