@@ -16,19 +16,15 @@
  *
  *
  */
+package springfox.documentation.spring.web.readers.operation;
 
-package springfox.documentation.schema.property;
-
-import com.fasterxml.classmate.ResolvedType;
-import org.springframework.context.ApplicationListener;
 import springfox.documentation.annotations.Cacheable;
-import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.schema.configuration.ObjectMapperConfigured;
-import springfox.documentation.spi.schema.contexts.ModelContext;
+import springfox.documentation.service.Operation;
+import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
 import java.util.List;
 
-public interface ModelPropertiesProvider extends ApplicationListener<ObjectMapperConfigured> {
-  @Cacheable(value = "modelProperties")
-  List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext);
+public interface OperationReader {
+  @Cacheable(value = "operations")
+  List<Operation> read(RequestMappingContext outerContext);
 }

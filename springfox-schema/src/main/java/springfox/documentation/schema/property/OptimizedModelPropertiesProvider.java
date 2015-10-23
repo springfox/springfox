@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-import springfox.documentation.annotations.Cacheable;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -74,7 +73,7 @@ import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Primary
-@Component(value = "optimized")
+@Component("optimized")
 public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider {
   private static final Logger LOG = LoggerFactory.getLogger(OptimizedModelPropertiesProvider.class);
   private final AccessorsProvider accessors;
@@ -111,7 +110,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
 
   @Override
-  @Cacheable(value = "modelProperties", keyGenerator = ModelPropertiesKeyGenerator.class)
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
     List<ModelProperty> properties = newArrayList();
     BeanDescription beanDescription = beanDescription(type, givenContext);

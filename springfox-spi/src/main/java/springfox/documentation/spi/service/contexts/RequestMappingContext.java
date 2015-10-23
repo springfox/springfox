@@ -32,7 +32,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
 
-public class RequestMappingContext {
+public class RequestMappingContext  {
   private final RequestMappingInfo requestMappingInfo;
   private final HandlerMethod handlerMethod;
   private final OperationModelContextsBuilder operationModelContextsBuilder;
@@ -131,4 +131,5 @@ public class RequestMappingContext {
     return new RequestMappingContext(documentationContext, requestMappingInfo, handlerMethod,
             operationModelContextsBuilder, requestMappingPattern, knownModels);
   }
+
 }

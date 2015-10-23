@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.scanners;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
@@ -30,7 +31,7 @@ import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
-import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
+import springfox.documentation.spring.web.readers.operation.OperationReader;
 
 import java.util.List;
 
@@ -41,13 +42,15 @@ import static com.google.common.collect.Ordering.*;
 @Component
 public class ApiDescriptionReader {
 
-  private final ApiOperationReader operationReader;
+  private final OperationReader operationReader;
   private final DocumentationPluginsManager pluginsManager;
   private final ApiDescriptionLookup lookup;
 
   @Autowired
-  public ApiDescriptionReader(ApiOperationReader operationReader, DocumentationPluginsManager pluginsManager,
-                              ApiDescriptionLookup lookup) {
+  public ApiDescriptionReader(
+      @Qualifier("cachedOperations") OperationReader operationReader,
+      DocumentationPluginsManager pluginsManager,
+      ApiDescriptionLookup lookup) {
     this.operationReader = operationReader;
     this.pluginsManager = pluginsManager;
     this.lookup = lookup;
