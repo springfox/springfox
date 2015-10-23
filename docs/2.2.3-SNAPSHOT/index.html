@@ -748,7 +748,7 @@ The below properties are required to run a release:</p>
 <div class="sect2">
 <h3 id="support">1.6. Support</h3>
 <div class="paragraph">
-<p>If you find issues or bugs please use the github issue <a href="https://github.com/springfox/springfox/issues">springfox project</a></p>
+<p>If you find issues or bugs please submit them via the <a href="https://github.com/springfox/springfox/issues">Springfox Github project</a></p>
 </div>
 </div>
 </div>
@@ -1008,6 +1008,15 @@ dependencies {
 131
 132
 133
+134
+135
+136
+137
+138
+139
+<strong>140</strong>
+141
+142
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
@@ -1044,6 +1053,7 @@ dependencies {
 <span class="keyword">import</span> <span class="include">springfox.documentation.builders.PathSelectors</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.builders.RequestHandlerSelectors</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.builders.ResponseMessageBuilder</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.builders.ParameterBuilder</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.schema.ModelRef</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.schema.WildcardType</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.service.ApiKey</span>;
@@ -1099,6 +1109,14 @@ dependencies {
         .securitySchemes(newArrayList(apiKey()))<i class="conum" data-value="14"></i><b>(14)</b>
         .securityContexts(newArrayList(securityContext()))<i class="conum" data-value="15"></i><b>(15)</b>
         .enableUrlTemplating(<span class="predefined-constant">true</span>)<i class="conum" data-value="21"></i><b>(21)</b>
+        .globalOperationParameters(<i class="conum" data-value="22"></i><b>(22)</b>
+            newArrayList(<span class="keyword">new</span> ParameterBuilder()
+                .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">someGlobalParameter</span><span class="delimiter">&quot;</span></span>)
+                .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Description of someGlobalParameter</span><span class="delimiter">&quot;</span></span>)
+                .modelRef(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
+                .parameterType(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
+                .required(<span class="predefined-constant">true</span>)
+                .build()))
         ;
   }
 
@@ -1159,7 +1177,7 @@ dependencies {
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td><code>Docket</code>, Sringfox&#8217;s, primary api configuration mechanism is initialized for swagger specification 2.0</td>
+<td><code>Docket</code>, Springfox&#8217;s, primary api configuration mechanism is initialized for swagger specification 2.0</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
@@ -1243,6 +1261,10 @@ select operations to be protected by one of the specified security schemes.</td>
 <td>* <em>Incubating</em> * setting this flag signals to the processor that the paths generated should try and use
 <a href="https://tools.ietf.org/html/rfc6570#section-3.2.8">form style query expansion</a>. As a result we could distinguish paths
  that have the same path stem but different query string combinations. An example of this would be two apis:</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="22"></i><b>22</b></td>
+<td>Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in spring controller method signature (for example authenticaton information). Parameters added here will be part of every API Operation in the generated swagger specification.</td>
 </tr>
 </table>
 </div>
@@ -2027,7 +2049,7 @@ are ISO 8601 dates that conform to a string format i.e. <code>yyyy-MM-dd&#8217;T
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-09-11 04:06:51 UTC
+Last updated 2015-10-23 03:32:59 UTC
 </div>
 </div>
 </body>
