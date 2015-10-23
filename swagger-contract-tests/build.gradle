@@ -21,6 +21,9 @@ configurations {
   //Logback causing spring boot errors
   all*.exclude group: 'ch.qos.logback'
 }
+
+mainClassName = 'com.foo.Bar'
+
 ext {
   limits = [
       'instruction': 89.5,
