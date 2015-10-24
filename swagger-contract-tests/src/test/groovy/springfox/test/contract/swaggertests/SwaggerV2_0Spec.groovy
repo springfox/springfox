@@ -18,17 +18,19 @@
  */
 
 package springfox.test.contract.swaggertests
-
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.boot.test.TestRestTemplate
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Unroll
 import springfox.documentation.service.SecurityScheme
@@ -36,7 +38,6 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
-import static groovyx.net.http.ContentType.*
 import static springfox.documentation.builders.PathSelectors.*
 
 @ContextConfiguration(loader = SpringApplicationContextLoader, classes = Config)
@@ -45,20 +46,19 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
   @Unroll
   def 'should honor swagger resource listing #groupName'() {
     given:
-      RESTClient http = new RESTClient("http://localhost:$port")
+      def http = new TestRestTemplate()
+      RequestEntity<Void> request = RequestEntity.get(
+          new URI("http://localhost:$port/v2/api-docs?group=$groupName"))
+        .accept(MediaType.APPLICATION_JSON)
+        .build()
       String contract = fileContents("/contract/swagger2/$contractFile")
 
     when:
-      def response = http.get(
-          path: '/v2/api-docs',
-          query: [group: groupName],
-          contentType: TEXT, //Allows to access the raw response body
-          headers: [Accept: 'application/json']
-      )
+      def response = http.exchange(request, String)
     then:
-      String raw = response.data.text
+      String raw = response.body
       String actual = JsonOutput.prettyPrint(raw)
-      response.status == 200
+      response.statusCode == HttpStatus.OK
 //      println(actual)
 
       def withPortReplaced = contract.replaceAll("__PORT__", "$port")
@@ -82,21 +82,30 @@ class SwaggerV2_0Spec extends SwaggerAppSpec implements FileAccess {
 
   def "should list swagger resources"() {
     given:
-      RESTClient http = new RESTClient("http://localhost:$port")
+      def http = new TestRestTemplate()
+      RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
+        .accept(MediaType.APPLICATION_JSON)
+        .build()
     when:
-      def response = http.get(path: '/swagger-resources', contentType: TEXT, headers: [Accept: 'application/json'])
+      def response = http.exchange(request, String)
       def slurper = new JsonSlurper()
-      def result = slurper.parseText(response.data.text)
-      println "Results: "
-      result.each {
-        println it
-      }
+      def result = slurper.parseText(response.body)
     then:
-      result.find { it.name == 'petstore' && it.location == '/v2/api-docs?group=petstore' && it.swaggerVersion == '2.0' }
       result.find {
-        it.name == 'businessService' && it.location == '/v2/api-docs?group=businessService' && it.swaggerVersion == '2.0'
+        it.name == 'petstore' &&
+        it.location == '/v2/api-docs?group=petstore' &&
+        it.swaggerVersion == '2.0'
       }
-      result.find { it.name == 'concrete' && it.location == '/v2/api-docs?group=concrete' && it.swaggerVersion == '2.0' }
+      result.find {
+        it.name == 'businessService' &&
+        it.location == '/v2/api-docs?group=businessService' &&
+        it.swaggerVersion == '2.0'
+      }
+      result.find {
+        it.name == 'concrete' &&
+        it.location == '/v2/api-docs?group=concrete' &&
+        it.swaggerVersion == '2.0'
+      }
   }
 
   @Configuration

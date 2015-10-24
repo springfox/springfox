@@ -24,14 +24,16 @@ package springfox.test.contract.swaggertests
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import groovy.json.JsonSlurper
-import groovyx.net.http.RESTClient
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.boot.test.TestRestTemplate
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import org.springframework.http.MediaType
+import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
@@ -43,8 +45,6 @@ import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 import springfox.test.contract.swagger.SwaggerApplication
 import springfox.test.contract.swagger.listeners.ObjectMapperEventListener
-
-import static groovyx.net.http.ContentType.*
 
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
@@ -60,19 +60,17 @@ class ObjectMapperSanityCheck extends Specification {
   def "should produce valid swagger json regardless of object mapper configuration"() {
 
     given: "A customized object mapper always serializing empty attributes"
-      RESTClient http = new RESTClient("http://localhost:$port")
+      def http = new TestRestTemplate()
+      RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/v2/api-docs?group=default"))
+        .accept(MediaType.APPLICATION_JSON)
+        .build()
 
     when: "swagger json is produced"
-      def response = http.get(
-              path: '/v2/api-docs',
-              query: [group: 'default'],
-              contentType: TEXT, //Allows to access the raw response body
-              headers: [Accept: 'application/json']
-      )
+      def response = http.exchange(request, String)
 
     then: "There should not be a null schemes element"
       def slurper = new JsonSlurper()
-      def swagger = slurper.parseText(response.data.text)
+      def swagger = slurper.parseText(response.body)
       !swagger.containsKey('schemes')
   }
 

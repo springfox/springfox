@@ -18,16 +18,18 @@
  */
 
 package springfox.test.contract.swaggertests
-
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-import groovyx.net.http.RESTClient
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.boot.test.TestRestTemplate
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Unroll
 import springfox.documentation.service.AuthorizationScope
@@ -39,7 +41,6 @@ import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger1.annotations.EnableSwagger
 
 import static com.google.common.collect.Lists.*
-import static groovyx.net.http.ContentType.*
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static springfox.documentation.builders.PathSelectors.*
 
@@ -50,19 +51,17 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
 
   def 'should honor swagger resource listing'() {
     given:
-      RESTClient http = new RESTClient("http://localhost:$port")
+      def http = new TestRestTemplate()
+      RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/api-docs"))
+          .accept(MediaType.APPLICATION_JSON)
+          .build()
       String contract = fileContents('/contract/swagger/resource-listing.json')
 
     when:
-      def response = http.get(
-              path: '/api-docs',
-              contentType: TEXT, //Allows to access the raw response body
-              headers: [Accept: 'application/json']
-      )
+      def response = http.exchange(request, String)
     then:
-      String raw = response.data.text
-      String actual = JsonOutput.prettyPrint(raw)
-      response.status == 200
+      String actual = JsonOutput.prettyPrint(response.body)
+      response.statusCode == HttpStatus.OK
 //      println(actual)
 
       JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
@@ -71,18 +70,17 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
   @Unroll
   def 'should honor api declaration contract [#contractFile] at endpoint [#declarationPath]'() {
     given:
-      RESTClient http = new RESTClient("http://localhost:$port")
+      def http = new TestRestTemplate()
+      RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/api-docs${declarationPath}"))
+        .accept(MediaType.APPLICATION_JSON)
+        .build()
       String contract = fileContents("/contract/swagger/$contractFile")
     when:
-      def response = http.get(
-              path: "/api-docs${declarationPath}",
-              contentType: TEXT, //Allow access to the raw response body
-              headers: [Accept: 'application/json']
-      )
+      def response = http.exchange(request, String)
     then:
-      String raw = response.data.text
+      String raw = response.body
       String actual = JsonOutput.prettyPrint(raw)
-      response.status == 200
+      response.statusCode == HttpStatus.OK
       //Uncomment this to see a better json diff when tests fail
 //      actual == contract
 //      println(actual)
@@ -109,17 +107,20 @@ class SwaggerV1_2Spec extends SwaggerAppSpec implements FileAccess {
 
   def "should list swagger resources"() {
     given:
-      RESTClient http = new RESTClient("http://localhost:$port")
+      def http = new TestRestTemplate()
+      RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
+        .accept(MediaType.APPLICATION_JSON)
+        .build()
     when:
-      def response = http.get(path: '/swagger-resources', contentType: TEXT, headers: [Accept: 'application/json'])
+    def response = http.exchange(request, String)
       def slurper = new JsonSlurper()
-      def result = slurper.parseText(response.data.text)
-      println "Results: "
-      result.each {
-        println it
-      }
+      def result = slurper.parseText(response.body)
     then:
-      result.find { it.name == 'default' && it.location == '/api-docs' && it.swaggerVersion == '1.2' }
+      result.find {
+        it.name == 'default' &&
+        it.location == '/api-docs' &&
+        it.swaggerVersion == '1.2'
+      }
   }
 
   @Configuration
