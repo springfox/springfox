@@ -32,7 +32,7 @@
                     "business-service"
                 ],
                 "summary": "Find a business by its id",
-                "operationId": "findBusinessByIdUsingGET",
+                "operationId": "findBusinessByIdUsingGET_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -65,7 +65,7 @@
                     "business-service"
                 ],
                 "summary": "businessesByCategories",
-                "operationId": "businessesByCategoriesUsingGET",
+                "operationId": "businessesByCategoriesUsingGET_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -108,7 +108,7 @@
               "business-service"
             ],
             "summary": "businessAsString",
-            "operationId": "businessAsStringUsingPOST",
+            "operationId": "businessAsStringUsingPOST_1",
             "consumes": [
               "application/json"
             ],
@@ -131,7 +131,7 @@
                     "business-service"
                 ],
                 "summary": "Find a business by its id",
-                "operationId": "findBusinessByIdUsingGET_1",
+                "operationId": "findBusinessByIdUsingGET_3",
                 "consumes": [
                     "application/json"
                 ],
@@ -171,7 +171,7 @@
                     "business-service"
                 ],
                 "summary": "getResponseEntity",
-                "operationId": "getResponseEntityUsingGET",
+                "operationId": "getResponseEntityUsingGET_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -204,7 +204,7 @@
                     "business-service"
                 ],
                 "summary": "businessTypeEcho",
-                "operationId": "businessTypeEchoUsingPOST",
+                "operationId": "businessTypeEchoUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -238,7 +238,7 @@
                     "business-service"
                 ],
                 "summary": "getVanillaPathVariable",
-                "operationId": "getVanillaPathVariableUsingGET",
+                "operationId": "getVanillaPathVariableUsingGET_1",
                 "consumes": [
                     "application/json"
                 ],

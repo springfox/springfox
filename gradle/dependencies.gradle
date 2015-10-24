@@ -7,7 +7,7 @@ ext {
   springHateoas = "0.18.0.RELEASE"
   slf4j = "1.7.12"
   mockito = "1.10.19"
-  servlet = "3.0.1"
+  servlet = "3.1.0"
   classmate = "1.2.0"
   jackson = '2.5.3'
   snakeyaml = '1.16'

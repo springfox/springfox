@@ -32,7 +32,7 @@
           "enum-service"
         ],
         "summary": "Example with response entity collection",
-        "operationId": "getResponseEntityCollectionUsingGET",
+        "operationId": "getResponseEntityCollectionUsingGET_1",
         "consumes": [
           "application/json"
         ],
@@ -62,7 +62,7 @@
           "enum-service"
         ],
         "summary": "Example with response entity single value",
-        "operationId": "getResponseEntityValueUsingGET",
+        "operationId": "getResponseEntityValueUsingGET_1",
         "consumes": [
           "application/json"
         ],
@@ -89,7 +89,7 @@
           "enum-service"
         ],
         "summary": "Example with wrapped enum collection",
-        "operationId": "getCollectionValueUsingGET",
+        "operationId": "getCollectionValueUsingGET_1",
         "consumes": [
           "application/json"
         ],

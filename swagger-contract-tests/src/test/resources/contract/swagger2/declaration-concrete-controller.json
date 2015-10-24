@@ -31,7 +31,7 @@
                 "tags": [
                     "concrete-controller"
                 ],
-                "operationId": "createUsingPUT",
+                "operationId": "createUsingPUT_1",
                 "summary": "create",
                 "consumes": [
                     "application/json"
@@ -62,7 +62,7 @@
                 "tags": [
                     "concrete-controller"
                 ],
-                "operationId": "getUsingGET",
+                "operationId": "getUsingGET_1",
                 "summary": "get",
                 "consumes": [
                     "application/json"

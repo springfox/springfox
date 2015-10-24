@@ -36,7 +36,7 @@
                     "pet-service"
                 ],
                 "summary": "petEntities",
-                "operationId": "petEntitiesUsingPOST",
+                "operationId": "petEntitiesUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -71,7 +71,7 @@
                     "pet-service"
                 ],
                 "summary": "echo",
-                "operationId": "echoUsingPOST",
+                "operationId": "echoUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -112,7 +112,7 @@
                 ],
                 "summary": "Find Pet by status",
                 "description": "Multiple status values can be provided with comma seperated strings",
-                "operationId": "findPetsByStatusUsingGET",
+                "operationId": "findPetsByStatusUsingGET_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -154,7 +154,7 @@
                 ],
                 "summary": "Find Pet by tags",
                 "description": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
-                "operationId": "findPetsByTagsUsingGET",
+                "operationId": "findPetsByTagsUsingGET_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -190,7 +190,7 @@
                     "pet-grooming-service"
                 ],
                 "summary": "canGroom",
-                "operationId": "canGroomUsingGET",
+                "operationId": "canGroomUsingGET_3",
                 "consumes": [
                     "application/json"
                 ],
@@ -222,7 +222,7 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_1",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_4",
                 "consumes": [
                     "application/json"
                 ],
@@ -252,7 +252,7 @@
                     "pet-service"
                 ],
                 "summary": "nameToNickNamesMap",
-                "operationId": "nameToNickNamesMapUsingPOST",
+                "operationId": "nameToNickNamesMapUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -278,7 +278,7 @@
                     "pet-service"
                 ],
                 "summary": "siblings",
-                "operationId": "siblingsUsingPOST",
+                "operationId": "siblingsUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -315,7 +315,7 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToAny",
-                "operationId": "transformPetNameToPetMapToAnyUsingPOST",
+                "operationId": "transformPetNameToPetMapToAnyUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -352,7 +352,7 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToGenericOpenMap",
-                "operationId": "transformPetNameToPetMapToGenericOpenMapUsingPOST",
+                "operationId": "transformPetNameToPetMapToGenericOpenMapUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -389,7 +389,7 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToOpenMap",
-                "operationId": "transformPetNameToPetMapToOpenMapUsingPOST",
+                "operationId": "transformPetNameToPetMapToOpenMapUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -426,7 +426,7 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_2",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_5",
                 "consumes": [
                     "application/json"
                 ],
@@ -456,7 +456,7 @@
                     "pet-service"
                 ],
                 "summary": "method",
-                "operationId": "methodUsingGET",
+                "operationId": "methodUsingGET_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -492,7 +492,7 @@
                     "pet-service"
                 ],
                 "summary": "petByName",
-                "operationId": "petByNameUsingPOST",
+                "operationId": "petByNameUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -525,7 +525,7 @@
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
-                "operationId": "getPetByIdUsingGET_2",
+                "operationId": "getPetByIdUsingGET_4",
                 "consumes": [
                     "application/json"
                 ],
@@ -557,7 +557,7 @@
                     "pet-service"
                 ],
                 "summary": "updatePic",
-                "operationId": "updatePicUsingPOST",
+                "operationId": "updatePicUsingPOST_1",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -593,7 +593,7 @@
                     "pet-service"
                 ],
                 "summary": "updatePic",
-                "operationId": "updatePicUsingGET",
+                "operationId": "updatePicUsingGET_1",
                 "consumes": [
                     "application/json"
                 ],
