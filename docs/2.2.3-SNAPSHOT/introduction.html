@@ -607,9 +607,20 @@ as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a
 </div>
 <div class="sect3">
 <h4 id="building-reference-documentation">Building reference documentation</h4>
+<div class="paragraph">
+<p>To view the docs in a browser run:</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"> .<span class="regexp"><span class="delimiter">/</span><span class="content">gradlew asciidoc --daemon </span><span class="delimiter">/</span></span>/Using the gradle daemon here makes sense <span class="keyword">if</span> <span class="local-variable">this</span> is being executed a lot</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">./gradlew docs</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When frequently generating the docs use the Gradle daemon as follows</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash"> ./gradlew asciidoc --daemon</code></pre>
 </div>
 </div>
 </div>
@@ -716,7 +727,7 @@ The below properties are required to run a release:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-10-24 13:10:04 UTC
+Last updated 2015-10-24 13:27:27 UTC
 </div>
 </div>
 </body>
