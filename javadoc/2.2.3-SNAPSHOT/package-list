@@ -14,7 +14,6 @@ springfox.documentation.spi.schema.contexts
 springfox.documentation.spi.service
 springfox.documentation.spi.service.contexts
 springfox.documentation.spring.web
-springfox.documentation.spring.web.caching
 springfox.documentation.spring.web.json
 springfox.documentation.spring.web.paths
 springfox.documentation.spring.web.plugins
