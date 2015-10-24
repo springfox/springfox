@@ -69,5 +69,14 @@ task allJavadoc(type: Javadoc) {
   destinationDir = file("${buildDir}/docs/javadoc")
 }
 
+
+task docs {
+  dependsOn asciidoctor
+  doLast {
+    println asciidoctor.properties
+    Class.forName("java.awt.Desktop").newInstance().browse(file("${asciidoctor.outputDir}/index.html").toURI())
+  }
+}
+
 publishDocs.dependsOn asciidoctor
 publishDocs.dependsOn allJavadoc

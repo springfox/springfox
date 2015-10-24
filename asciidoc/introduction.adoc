@@ -49,11 +49,15 @@ Endorsed or approved by the Spring Framework Contributors
 ```
 
 ==== Building reference documentation
-
-```groovy
- ./gradlew asciidoc --daemon //Using the gradle daemon here makes sense if this is being executed a lot
+To view the docs in a browser run:
+```bash
+./gradlew docs
 ```
 
+When frequently generating the docs use the Gradle daemon as follows
+```bash
+ ./gradlew asciidoc --daemon
+```
 ==== CI Environment
 
 https://circleci.com/gh/springfox/springfox[Circle CI]
