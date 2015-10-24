@@ -88,5 +88,5 @@ subprojects {
 apply from: "$rootDir/gradle/documentation.gradle"
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.7'
+  gradleVersion = '2.8'
 }
