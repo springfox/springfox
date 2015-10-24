@@ -31,7 +31,7 @@
                 "tags": [
                     "fancy-pet-service"
                 ],
-                "operationId": "createObjectUsingPOST",
+                "operationId": "createObjectUsingPOST_2",
                 "summary": "createObject",
                 "consumes": [
                     "application/json"

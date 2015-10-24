@@ -31,7 +31,7 @@
                 "tags": [
                     "inherited-service-impl"
                 ],
-                "operationId": "getSomethingUsingGET",
+                "operationId": "getSomethingUsingGET_1",
                 "summary": "getSomething",
                 "consumes": [
                     "application/json"

@@ -32,7 +32,7 @@
                 "feature-demonstration-service"
               ],
               "summary": "allMethodAllowed",
-              "operationId": "allMethodAllowedUsingHEAD_1",
+              "operationId": "allMethodAllowedUsingHEAD_2",
               "consumes": [
                 "application/json"
               ],
@@ -50,7 +50,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingGET_1",
+                "operationId": "allMethodAllowedUsingGET_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -68,7 +68,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingPOST_1",
+                "operationId": "allMethodAllowedUsingPOST_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -86,7 +86,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingPUT_1",
+                "operationId": "allMethodAllowedUsingPUT_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -104,7 +104,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingDELETE_1",
+                "operationId": "allMethodAllowedUsingDELETE_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -122,7 +122,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingOPTIONS_1",
+                "operationId": "allMethodAllowedUsingOPTIONS_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -140,7 +140,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingPATCH_1",
+                "operationId": "allMethodAllowedUsingPATCH_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -160,7 +160,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getBare",
-                "operationId": "getBareUsingPOST_1",
+                "operationId": "getBareUsingPOST_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -191,7 +191,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBigDecimal",
-                "operationId": "updateBigDecimalUsingPOST_1",
+                "operationId": "updateBigDecimalUsingPOST_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -223,7 +223,7 @@
               "feature-demonstration-service"
             ],
             "summary": "updateBoolean",
-            "operationId": "updateBooleanUsingPOST_1",
+            "operationId": "updateBooleanUsingPOST_2",
             "consumes": [
               "application/json"
             ],
@@ -254,7 +254,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateDate",
-                "operationId": "updateDateUsingPOST_1",
+                "operationId": "updateDateUsingPOST_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -285,7 +285,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEffective",
-                "operationId": "getEffectiveUsingGET_1",
+                "operationId": "getEffectiveUsingGET_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -308,7 +308,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEffectives",
-                "operationId": "getEffectivesUsingGET_1",
+                "operationId": "getEffectivesUsingGET_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -334,7 +334,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "listOfMaps",
-                "operationId": "listOfMapsUsingGET_1",
+                "operationId": "listOfMapsUsingGET_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -360,7 +360,7 @@
               "feature-demonstration-service"
             ],
             "summary": "mapOfMapOfExample",
-            "operationId": "mapOfMapOfExampleUsingGET_1",
+            "operationId": "mapOfMapOfExampleUsingGET_2",
             "consumes": [
               "application/json"
             ],
@@ -386,7 +386,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "modelWithMapProperty",
-                "operationId": "modelWithMapPropertyUsingGET_1",
+                "operationId": "modelWithMapPropertyUsingGET_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -409,7 +409,7 @@
               "feature-demonstration-service"
             ],
             "summary": "getModelAttribute",
-            "operationId": "getModelAttributeUsingGET_1",
+            "operationId": "getModelAttributeUsingGET_2",
             "consumes": [
               "application/json"
             ],
@@ -471,7 +471,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBaz",
-                "operationId": "updateBazUsingPOST_1",
+                "operationId": "updateBazUsingPOST_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -502,7 +502,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBazes",
-                "operationId": "updateBazesUsingPOST_1",
+                "operationId": "updateBazesUsingPOST_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -534,7 +534,7 @@
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
-                "operationId": "getPetByIdUsingGET_1",
+                "operationId": "getPetByIdUsingGET_3",
                 "consumes": [
                     "application/json"
                 ],
@@ -570,7 +570,7 @@
               "feature-demonstration-service"
             ],
             "summary": "Add a new contact with file attachment",
-            "operationId": "addFilesUsingPOST_1",
+            "operationId": "addFilesUsingPOST_2",
             "consumes": [
               "application/json"
             ],

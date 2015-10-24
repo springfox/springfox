@@ -40,7 +40,7 @@
                     "pet-controller"
                 ],
                 "summary": "Add a new pet to the store",
-                "operationId": "addPetUsingPOST",
+                "operationId": "addPetUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -84,7 +84,7 @@
                     "pet-controller"
                 ],
                 "summary": "Update an existing pet",
-                "operationId": "updatePetUsingPUT",
+                "operationId": "updatePetUsingPUT_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -137,7 +137,7 @@
                 ],
                 "summary": "Finds Pets by status",
                 "description": "Multiple status values can be provided with comma seperated strings",
-                "operationId": "findPetsByStatusUsingGET_1",
+                "operationId": "findPetsByStatusUsingGET_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -191,7 +191,7 @@
                 ],
                 "summary": "Finds Pets by tags",
                 "description": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
-                "operationId": "findPetsByTagsUsingGET_1",
+                "operationId": "findPetsByTagsUsingGET_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -240,7 +240,7 @@
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
-                "operationId": "getPetByIdUsingGET_3",
+                "operationId": "getPetByIdUsingGET_5",
                 "consumes": [
                     "application/json"
                 ],
