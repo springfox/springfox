@@ -70,6 +70,7 @@ public class DocumentationContextBuilder {
   private final List<Parameter> globalOperationParameters = newArrayList();
   private final List<AlternateTypeRule> rules = newArrayList();
   private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
+  private String host;
   private final Set<String> protocols = newHashSet();
   private final Set<String> produces = newHashSet();
   private final Set<String> consumes = newHashSet();
@@ -205,6 +206,11 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+  public DocumentationContextBuilder host(String host) {
+    this.host = defaultIfAbsent(host, this.host);
+    return this;
+  }
+
   public DocumentationContextBuilder protocols(Set<String> protocols) {
     this.protocols.addAll(protocols);
     return this;
@@ -245,6 +251,7 @@ public class DocumentationContextBuilder {
         operationOrdering,
         produces,
         consumes,
+        host,
         protocols,
         genericsNamingStrategy,
         pathMapping, isUrlTemplatesEnabled);

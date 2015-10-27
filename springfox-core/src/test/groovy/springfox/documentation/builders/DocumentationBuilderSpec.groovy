@@ -49,6 +49,7 @@ class DocumentationBuilderSpec extends Specification {
       'basePath'                        | 'urn:some-path'                | 'basePath'
       'produces'                        | ['application/json'] as Set    | 'produces'
       'consumes'                        | ['application/json'] as Set    | 'consumes'
+      'host'                            | 'host1'                        | 'host'
       'schemes'                         | ['http']  as Set               | 'schemes'
       'tags'                            | ['pet'] as Set                 | 'tags'
   }
@@ -84,6 +85,7 @@ class DocumentationBuilderSpec extends Specification {
       'basePath'                        | 'urn:some-path'                 | 'basePath'
       'produces'                        | ['application/json'] as Set     | 'produces'
       'consumes'                        | ['application/json'] as Set     | 'consumes'
+      'host'                            | 'host1'                         | 'host'
       'schemes'                         | ['http']  as Set                | 'schemes'
       'tags'                            | ['pet'] as Set                  | 'tags'
   }

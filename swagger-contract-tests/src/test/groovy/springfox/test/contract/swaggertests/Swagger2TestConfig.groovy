@@ -22,6 +22,8 @@ public class Swagger2TestConfig {
         .select()
         .paths(regex("/api/.*"))
         .build()
+        .host("petstore.swagger.io")
+        .protocols(['http', 'https'] as Set)
   }
 
   @Bean

@@ -61,7 +61,8 @@ public abstract class ServiceModelToSwagger2Mapper {
   @Mappings({
       @Mapping(target = "info", source = "resourceListing.info"),
       @Mapping(target = "paths", source = "apiListings"),
-      @Mapping(target = "schemes", source = "from.schemes"),
+      @Mapping(target = "host", source = "host"),
+      @Mapping(target = "schemes", source = "schemes"),
       @Mapping(target = "definitions", source = "apiListings"),
       @Mapping(target = "securityDefinitions", source = "resourceListing"),
       @Mapping(target = "securityRequirement", ignore = true),
@@ -69,7 +70,6 @@ public abstract class ServiceModelToSwagger2Mapper {
       @Mapping(target = "swagger", ignore = true),
       @Mapping(target = "parameters", ignore = true),
       @Mapping(target = "responses", ignore = true),
-      @Mapping(target = "host", ignore = true),
       @Mapping(target = "externalDocs", ignore = true),
       @Mapping(target = "vendorExtensions", ignore = true)
   })

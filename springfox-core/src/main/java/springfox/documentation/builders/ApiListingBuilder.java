@@ -44,6 +44,7 @@ public class ApiListingBuilder {
 
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
+  private String host;
   private Set<String> protocol = newHashSet();
   private Set<String> tags = newTreeSet();
   private List<SecurityReference> securityReferences = newArrayList();
@@ -142,6 +143,18 @@ public class ApiListingBuilder {
 
 
   /**
+   * Updates the host
+   *
+   * @param host - new host
+   * @return this
+   */
+  public ApiListingBuilder host(String host) {
+    this.host = defaultIfAbsent(host, this.host);
+    return this;
+  }
+
+
+  /**
    * Appends to the exiting collection of supported protocols
    *
    * @param protocols - new protocols
@@ -224,6 +237,6 @@ public class ApiListingBuilder {
 
   public ApiListing build() {
     return new ApiListing(apiVersion, basePath,
-        resourcePath, produces, consumes, protocol, securityReferences, apis, models, description, position, tags);
+        resourcePath, produces, consumes, host, protocol, securityReferences, apis, models, description, position, tags);
   }
 }

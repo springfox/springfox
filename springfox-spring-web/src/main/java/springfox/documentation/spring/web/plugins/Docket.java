@@ -83,6 +83,7 @@ public class Docket implements DocumentationPlugin {
   private final List<Parameter> globalOperationParameters = newArrayList();
   private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
   private final Set<Class> ignorableParameterTypes = newHashSet();
+  private String host = "";
   private final Set<String> protocols = newHashSet();
   private final Set<String> produces = newHashSet();
   private final Set<String> consumes = newHashSet();
@@ -210,6 +211,12 @@ public class Docket implements DocumentationPlugin {
 
   public Docket consumes(Set<String> consumes) {
     this.consumes.addAll(consumes);
+    return this;
+  }
+
+  @Incubating("2.3")
+  public Docket host(String host) {
+    this.host = defaultIfAbsent(host, this.host);
     return this;
   }
 
@@ -432,6 +439,7 @@ public class Docket implements DocumentationPlugin {
         .operationOrdering(operationOrdering)
         .produces(produces)
         .consumes(consumes)
+        .host(host)
         .protocols(protocols)
         .genericsNaming(genericsNamingStrategy)
         .pathMapping(pathMapping)
