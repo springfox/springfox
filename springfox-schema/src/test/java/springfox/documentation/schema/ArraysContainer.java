@@ -20,6 +20,7 @@
 package springfox.documentation.schema;
 
 public class ArraysContainer {
+  private ToSubstitute[] substituted;
   private ComplexType[] complexTypes;
   private ExampleEnum[] enums;
   private Integer[] integers;
@@ -77,6 +78,22 @@ public class ArraysContainer {
 
   public void setBytes(byte[] bytes) {
     this.bytes = bytes;
+  }
+
+  public ToSubstitute[] getSubstituted() {
+    return substituted;
+  }
+
+  public void setSubstituted(ToSubstitute[] substituted) {
+    this.substituted = substituted;
+  }
+
+  public Integer[] getIntegers() {
+    return integers;
+  }
+
+  public void setIntegers(Integer[] integers) {
+    this.integers = integers;
   }
 }
 

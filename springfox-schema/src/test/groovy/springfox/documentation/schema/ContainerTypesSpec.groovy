@@ -63,6 +63,7 @@ class ContainerTypesSpec extends SchemaSpecification {
       "aliasOfIntegers" | List      | "int"         | "java.lang.Integer"
       "strings"         | ArrayList | "string"      | "java.lang.String"
       "objects"         | List      | "object"      | "java.lang.Object"
+      "substituted"     | List      | "Substituted" | "springfox.documentation.schema.Substituted"
   }
 
   def "Model properties are inferred correctly"() {
@@ -136,6 +137,7 @@ class ContainerTypesSpec extends SchemaSpecification {
       "strings"         | String[]      | "string"      | "java.lang.String"
       "objects"         | Object[]      | "object"      | "java.lang.Object"
       "bytes"           | byte[]        | "byte"        | "byte"
+      "substituted"     | Substituted[] | "Substituted" | "springfox.documentation.schema.Substituted"
   }
 
   @Ignore("Should move this to the swagger 1.2 module")

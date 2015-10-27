@@ -22,11 +22,14 @@ import com.fasterxml.classmate.TypeResolver
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.service.contexts.Defaults
 
+import static springfox.documentation.schema.AlternateTypeRules.newRule
+
 class AlternateTypesSupport {
 
   def defaultRules(TypeResolver resolver = new TypeResolver()) {
     def rules = new Defaults().defaultRules(resolver);
-//    rules.add(newMapRule(WildcardType, WildcardType))
+    rules.add(newRule(resolver.arrayType(ToSubstitute), resolver.arrayType(Substituted)))
+    rules.add(newRule(resolver.resolve(List, ToSubstitute), resolver.resolve(List, Substituted)))
     rules
   }
 
