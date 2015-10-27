@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.scanners
 
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.ApiDescription
+import springfox.documentation.service.Operation
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -46,7 +47,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         )
         RequestMappingContext mappingContext = new RequestMappingContext(context(), requestMappingInfo,
                 dummyHandlerMethod())
-        operationReader.read(_) >> []
+        operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
       when:
         def descriptionList = sut.read(mappingContext)
 

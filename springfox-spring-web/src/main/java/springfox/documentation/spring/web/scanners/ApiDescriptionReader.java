@@ -68,15 +68,17 @@ public class ApiDescriptionReader {
       RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
 
       List<Operation> operations = operationReader.read(operationContext);
-      operationContext.apiDescriptionBuilder()
-          .operations(operations)
-          .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, from(operations).first())))
-          .path(path)
-          .description(methodName)
-          .hidden(false);
-      ApiDescription apiDescription = operationContext.apiDescriptionBuilder().build();
-      lookup.add(outerContext.getHandlerMethod().getMethod(), apiDescription);
-      apiDescriptionList.add(apiDescription);
+      if (operations.size() > 0) {
+        operationContext.apiDescriptionBuilder()
+            .operations(operations)
+            .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, from(operations).first())))
+            .path(path)
+            .description(methodName)
+            .hidden(false);
+        ApiDescription apiDescription = operationContext.apiDescriptionBuilder().build();
+        lookup.add(outerContext.getHandlerMethod().getMethod(), apiDescription);
+        apiDescriptionList.add(apiDescription);
+      }
     }
     return apiDescriptionList;
   }

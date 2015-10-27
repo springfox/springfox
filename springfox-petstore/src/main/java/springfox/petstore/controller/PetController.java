@@ -165,6 +165,27 @@ public class PetController {
     return Responses.ok(petData.findPetByTags(tags));
   }
 
+  @RequestMapping(value = "/findPetsHidden", method = GET)
+  @ApiOperation(
+      value = "Finds Pets (hidden)",
+      notes = "Hidden method",
+      response = Pet.class,
+      responseContainer = "List",
+      hidden = true,
+      authorizations = @Authorization(value = "petstore_auth", scopes = {
+          @AuthorizationScope(scope = "write:pets", description = ""),
+          @AuthorizationScope(scope = "read:pets", description = "")
+      }))
+  @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid tag value")})
+  public ResponseEntity<List<Pet>> findPetsHidden(
+      @ApiParam(
+          value = "Tags to filter by",
+          required = true,
+          allowMultiple = true)
+      @RequestParam("tags") String tags) {
+    return Responses.ok(petData.findPetByTags(tags));
+  }
+
   static class PetRepository extends MapBackedRepository<Long, Pet> {
     public List<Pet> findPetByStatus(String status) {
       return where(Pets.statusIs(status));
