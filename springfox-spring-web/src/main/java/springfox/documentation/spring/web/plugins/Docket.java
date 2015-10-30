@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 
@@ -471,7 +472,9 @@ public class Docket implements DocumentationPlugin {
 
       @Override
       public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return AlternateTypeRules.newRule(typeResolver.resolve(clazz), typeResolver.resolve(with));
+        return AlternateTypeRules.newRule(
+            typeResolver.resolve(clazz),
+            typeResolver.resolve(with));
       }
     };
   }
@@ -480,8 +483,9 @@ public class Docket implements DocumentationPlugin {
     return new Function<TypeResolver, AlternateTypeRule>() {
       @Override
       public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return AlternateTypeRules.newRule(typeResolver.resolve(clz, WildcardType.class), typeResolver.resolve
-            (WildcardType.class));
+        return AlternateTypeRules.newRule(
+            typeResolver.resolve(clz, WildcardType.class),
+            typeResolver.resolve(WildcardType.class));
       }
     };
   }
