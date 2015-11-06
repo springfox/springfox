@@ -53,6 +53,6 @@ public class AlternateTypeRules {
   public static AlternateTypeRule newMapRule(Class<?> key, Class<?> value) {
     TypeResolver resolver = new TypeResolver();
     return new AlternateTypeRule(resolver.resolve(Map.class, key, value),
-            resolver.resolve(List.class, resolver.resolve(Entry.class, key, value)));
+            resolver.resolve(List.class, resolver.resolve(Map.Entry.class, key, value)));
   }
 }
