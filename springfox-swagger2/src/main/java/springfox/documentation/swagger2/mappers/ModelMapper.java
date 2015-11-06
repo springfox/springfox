@@ -19,11 +19,23 @@
 
 package springfox.documentation.swagger2.mappers;
 
+import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.newTreeMap;
+import static springfox.documentation.schema.Maps.isMapType;
+import static springfox.documentation.swagger2.mappers.Properties.property;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.mapstruct.Mapper;
+
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Multimap;
+
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.properties.AbstractNumericProperty;
@@ -32,21 +44,12 @@ import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
-import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-
-import static com.google.common.collect.Maps.*;
-import static springfox.documentation.schema.Maps.*;
-import static springfox.documentation.swagger2.mappers.Properties.*;
 
 @Mapper
 public abstract class ModelMapper {
@@ -71,7 +74,7 @@ public abstract class ModelMapper {
     ModelImpl model = new ModelImpl()
         .description(source.getDescription())
         .discriminator(source.getDiscriminator())
-        .example("")
+        .example(source.getExample())
         .name(source.getName());
     TreeMap<String, Property> sorted = newTreeMap();
     sorted.putAll(mapProperties(source.getProperties()));
@@ -122,6 +125,7 @@ public abstract class ModelMapper {
       property.setName(source.getName());
       property.setRequired(source.isRequired());
       property.setReadOnly(source.isReadOnly());
+      property.setExample(source.getExample());
     }
     return property;
   }

@@ -19,17 +19,26 @@
 
 package springfox.documentation.swagger.schema;
 
-import com.google.common.base.Optional;
-import io.swagger.annotations.ApiModelProperty;
+import static springfox.documentation.schema.Annotations.findPropertyAnnotation;
+import static springfox.documentation.swagger.schema.ApiModelProperties.findApiModePropertyAnnotation;
+import static springfox.documentation.swagger.schema.ApiModelProperties.toAllowableValues;
+import static springfox.documentation.swagger.schema.ApiModelProperties.toDescription;
+import static springfox.documentation.swagger.schema.ApiModelProperties.toExample;
+import static springfox.documentation.swagger.schema.ApiModelProperties.toHidden;
+import static springfox.documentation.swagger.schema.ApiModelProperties.toIsReadOnly;
+import static springfox.documentation.swagger.schema.ApiModelProperties.toIsRequired;
+import static springfox.documentation.swagger.schema.ApiModelProperties.toType;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.google.common.base.Optional;
+
+import io.swagger.annotations.ApiModelProperty;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
-
-import static springfox.documentation.schema.Annotations.*;
-import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -52,7 +61,8 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
               .readOnly(annotation.transform(toIsReadOnly()).or(false))
               .description(annotation.transform(toDescription()).orNull())
               .isHidden(annotation.transform(toHidden()).or(false))
-              .type(annotation.transform(toType(context.getResolver())).orNull());
+              .type(annotation.transform(toType(context.getResolver())).orNull())
+              .example(annotation.transform(toExample()).orNull());
     }
   }
 
