@@ -71,7 +71,7 @@ public class SecurityConfiguration {
     return clientSecret;
   }
 
-  @JsonProperty("apiKey")
+  @JsonProperty("scopeSeparator")
   public String scopeSeparator() {
     return scopeSeparator;
   }
