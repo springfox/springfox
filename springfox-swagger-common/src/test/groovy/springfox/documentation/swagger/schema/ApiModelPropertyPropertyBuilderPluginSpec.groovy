@@ -63,7 +63,6 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       enriched.isRequired() == required
       enriched.description == description
       enriched.readOnly == readOnly
-      enriched.example == example
       !enriched.isHidden()
     where:
       property    | required | description              | allowableValues | readOnly
@@ -89,7 +88,6 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       enriched.isRequired() == required
       enriched.description == description
       enriched.readOnly == readOnly
-      enriched.example == example
       !enriched.isHidden()
     where:
       property    | required | description              | allowableValues | readOnly
@@ -115,7 +113,6 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       enriched.allowableValues?.values == allowableValues
       enriched.isRequired() == required
       enriched.description == description
-      enriched.example == example
       enriched.isHidden()
     where:
       property    | required | description              | allowableValues
@@ -145,7 +142,6 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       enriched.allowableValues?.values == null
       !enriched.isRequired()
       enriched.description == ""
-      enriched.example == ""
       !enriched.isHidden()
       enriched.type.getErasedType() == dataType
       enriched.modelRef.type == modelRef
@@ -180,7 +176,6 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       enriched.allowableValues?.values == null
       !enriched.isRequired()
       enriched.description == ""
-      enriched.example == ""
       !enriched.isHidden()
       enriched.type.getErasedType() == dataType
       enriched.modelRef.type == modelRef
