@@ -164,7 +164,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder ruleBuilders(List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders) {
-    rules.addAll(from(ruleBuilders)
+    rules.addAll(0, from(ruleBuilders)
         .transform(evaluator(typeResolver))
         .toList());
     return this;

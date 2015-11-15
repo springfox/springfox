@@ -21,12 +21,9 @@ package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
-import com.google.common.base.Functions;
 import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
-
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import springfox.documentation.PathProvider;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.AlternateTypeRule;
@@ -178,12 +175,11 @@ public class Docket implements DocumentationPlugin {
     this.responseMessages.put(requestMethod, responseMessages);
     return this;
   }
-  
+
   /**
    * Adds default parameters which will be applied to all operations.
-   * 
-   * @param operationParameters
-   *          parameters which will be globally applied to all operations
+   *
+   * @param operationParameters parameters which will be globally applied to all operations
    * @return this Docket
    */
   public Docket globalOperationParameters(List<Parameter> operationParameters) {

@@ -18,13 +18,14 @@
  */
 
 package springfox.documentation.schema
-
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.hateoas.Resources
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.schema.AlternateTypeProvider
+import springfox.documentation.spi.service.contexts.Defaults
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 
@@ -69,6 +70,42 @@ class AlternateTypeProviderSpec extends Specification {
       newRule(nestedGenericType(WildcardType), WildcardType)  | nestedGenericType(SimpleType)   | SimpleType
       mismatchedNestedGenericRule()                           | nestedGenericType(SimpleType)   | nestedGenericType(nestedGenericType(SimpleType))
       newRule(genericClassOfType(WildcardType), WildcardType) | nestedGenericType(SimpleType)   | resolver.resolve(ResponseEntity, SimpleType)
+      hateoasResourcesRule()                                  | resources(SimpleTypeResource)   | resolver.resolve(List, SimpleType)
+  }
+
+  @Unroll
+  def "Alternate types are provided for specified types when default rules are applied"() {
+    given:
+      def resolver = new TypeResolver()
+      def resolvedSource = resolver.resolve(source)
+      def sut = new AlternateTypeProvider(new Defaults().defaultRules(resolver))
+      sut.addRule(rule)
+    expect:
+      sut.alternateFor(resolvedSource) == resolver.resolve(expectedAlternate)
+
+    where:
+      rule                                                    | source                          | expectedAlternate
+
+      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(SimpleType)  | SimpleType
+      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(ComplexType) | genericClassOfType(ComplexType)
+      newRule(genericClassOfType(WildcardType), SimpleType)   | genericClassOfType(SimpleType)  | SimpleType
+      newRule(genericClassOfType(WildcardType), ComplexType)  | genericClassOfType(SimpleType)  | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(SimpleType)  | SimpleType
+      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(ComplexType) | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | ComplexType                     | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | Void                            | Void
+      newRule(nestedGenericType(WildcardType), WildcardType)  | nestedGenericType(String)       | String
+      newRule(nestedGenericType(WildcardType), WildcardType)  | nestedGenericType(SimpleType)   | SimpleType
+      mismatchedNestedGenericRule()                           | nestedGenericType(SimpleType)   | nestedGenericType(nestedGenericType(SimpleType))
+      newRule(genericClassOfType(WildcardType), WildcardType) | nestedGenericType(SimpleType)   | resolver.resolve(ResponseEntity, SimpleType)
+      hateoasResourcesRule()                                  | resources(SimpleTypeResource)   | resolver.resolve(List, SimpleType)
+  }
+
+  AlternateTypeRule hateoasResourcesRule() {
+    def typeResolver = new TypeResolver()
+    newRule(
+        typeResolver.resolve(Resources.class, SimpleTypeResource.class),
+        typeResolver.resolve(List.class, SimpleType.class))
   }
 
   private AlternateTypeRule mismatchedNestedGenericRule() {
