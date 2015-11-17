@@ -128,3 +128,23 @@ A.  This is a known limitation of swagger-spec. There is a work around for it bu
     up the PR and the https://github.com/swagger-api/swagger-spec/issues/291[underlying issue]
 
     UPDATE: This https://github.com/swagger-api/swagger-js/pull/541[PR] has been closed!
+
+*Q. How would one partition apis based on versions?*
+
+A.  Excerpted from an explanation for https://github.com/springfox/springfox/issues/963[issue 963]...
+
+    (springfox) uses the context path as the starting point.
+
+    What you really need to is to define a dynamic servlet registration and create 2 dockets .. one for **api** and one for **api/v2**. This [SO post](http://stackoverflow.com/questions/23049736/working-with-multiple-dispatcher-servlets-in-a-spring-application) might help
+
+    ```java
+    ...
+      Dynamic servlet = servletContext.addServlet("v1Dispatcher", new DispatcherServlet(ctx1));
+            servlet.addMapping("/api");
+            servlet.setLoadOnStartup(1);
+
+      Dynamic servlet = servletContext.addServlet("v2Dispatcher", new DispatcherServlet(ctx2));
+            servlet.addMapping("/api/v2");
+            servlet.setLoadOnStartup(1);
+
+    ```
