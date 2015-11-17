@@ -224,3 +224,7 @@ A.  Use the `protocols` method to configure the docket to indicate supported sch
     docket.protocols(newHashSet("http", "https"))
 ----
 
+
+*Q. How does one use springfox in a project with xml spring configuration?*
+
+A. There is a demo application that describes https://github.com/springfox/springfox-demos/tree/master/spring-xml-swagger[how java-xml] configuration needs to be setup.
