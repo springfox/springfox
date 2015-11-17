@@ -194,7 +194,7 @@ A.  Excerpted from https://github.com/springfox/springfox/issues/983[issue 983].
 
 *Q. How does one create rules to substitute list and array items?*
 
-    If the following types...
+A.  If the following types...
 [source,java]
 ----
     ToSubstitute[] array;
@@ -215,3 +215,12 @@ A.  Excerpted from https://github.com/springfox/springfox/issues/983[issue 983].
     rules.add(newRule(resolver.arrayType(ToSubstitute), resolver.arrayType(Substituted)))
     rules.add(newRule(resolver.resolve(List, ToSubstitute), resolver.resolve(List, Substituted)))
 ----
+
+*Q. How does one configure a docket with multiple protocols/schemes?*
+
+A.  Use the `protocols` method to configure the docket to indicate supported schemes.
+[source,java]
+----
+    docket.protocols(newHashSet("http", "https"))
+----
+
