@@ -192,3 +192,26 @@ A.  Excerpted from https://github.com/springfox/springfox/issues/983[issue 983].
     Kinda tricky to get working, but it works.  Perhaps there is a better way to remap swagger-ui.html or let it pass
     through the dispatcherServlet.
 
+*Q. How does one create rules to substitute list and array items?*
+
+    If the following types...
+[source,java]
+----
+    ToSubstitute[] array;
+    List<ToSubstitute> list;
+----
+
+    Need to look like this over the wire...
+[source,java]
+----
+    Substituted[] array;
+    List<Substituted> list;
+----
+
+
+    This is how the rules need to be configured
+[source,java]
+----
+    rules.add(newRule(resolver.arrayType(ToSubstitute), resolver.arrayType(Substituted)))
+    rules.add(newRule(resolver.resolve(List, ToSubstitute), resolver.resolve(List, Substituted)))
+----
