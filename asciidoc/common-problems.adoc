@@ -124,6 +124,14 @@ A. This is because of how plugins work and how their priority layers information
 
    So if you choose to augment the definitions with @ApiParam then you need to be explicit and set the value to true.
 
+*Q. How does one write a plugin to for e.g. make default all types required and only some not required?*
+A.  To do this, you'd have to
+    - add an alternate type rule for `Optional<T>` see `genericModelSubstitutes` in docket
+    - implement your own https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/schema/ModelPropertyBuilderPlugin.java#L26[ModelPropertyBuilderPlugin]
+    - and override the read only property if you find an `Optional` type. See https://github.com/springfox/springfox/blob/master/springfox-swagger-common/src/main/java/springfox/documentation/swagger/schema/ApiModelPropertyPropertyBuilder.java#L35[here] for an example.
+
+    Keep in mind that you need the plugin to fire after this plugin... so order it accordingly
+
 *Q. Why are all my operations not showing in the UI?*
 
 A.  This is a known limitation of swagger-spec. There is a work around for it but, swagger-ui won't play nice with it.
@@ -181,7 +189,6 @@ A.  Excerpted from https://github.com/springfox/springfox/issues/983[issue 983].
     			<servlet-name>RestServlet</servlet-name>
     				<url-pattern>/*</url-pattern>
     		</servlet-mapping>
-   [source,java]
 ----
 
     Also had to let the webjar through the dispatcher servlet:
@@ -195,6 +202,7 @@ A.  Excerpted from https://github.com/springfox/springfox/issues/983[issue 983].
 *Q. How does one create rules to substitute list and array items?*
 
 A.  If the following types...
+
 [source,java]
 ----
     ToSubstitute[] array;
@@ -202,6 +210,7 @@ A.  If the following types...
 ----
 
     Need to look like this over the wire...
+
 [source,java]
 ----
     Substituted[] array;
@@ -210,6 +219,7 @@ A.  If the following types...
 
 
     This is how the rules need to be configured
+
 [source,java]
 ----
     rules.add(newRule(resolver.arrayType(ToSubstitute), resolver.arrayType(Substituted)))
@@ -219,6 +229,7 @@ A.  If the following types...
 *Q. How does one configure a docket with multiple protocols/schemes?*
 
 A.  Use the `protocols` method to configure the docket to indicate supported schemes.
+
 [source,java]
 ----
     docket.protocols(newHashSet("http", "https"))
