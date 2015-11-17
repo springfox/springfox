@@ -239,3 +239,13 @@ A.  Use the `protocols` method to configure the docket to indicate supported sch
 *Q. How does one use springfox in a project with xml spring configuration?*
 
 A. There is a demo application that describes https://github.com/springfox/springfox-demos/tree/master/spring-xml-swagger[how java-xml] configuration needs to be setup.
+
+*Q. How does one override the host name?*
+
+A.  This should be available in v2.3 thanks https://github.com/springfox/springfox/pull/1011[to this PR] by @cbornet.
+ It is still in incubation but host name can be configured per docket
+
+ [source,java]
+ ----
+     docket.host("http://maybe-an-api-gateway.host");
+ ----
