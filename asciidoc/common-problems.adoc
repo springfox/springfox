@@ -135,9 +135,11 @@ A.  Excerpted from an explanation for https://github.com/springfox/springfox/iss
 
     (springfox) uses the context path as the starting point.
 
-    What you really need to is to define a dynamic servlet registration and create 2 dockets .. one for **api** and one for **api/v2**. This [SO post](http://stackoverflow.com/questions/23049736/working-with-multiple-dispatcher-servlets-in-a-spring-application) might help
+    What you really need to is to define a dynamic servlet registration and create 2 dockets .. one for **api** and
+    one for **api/v2**. This [SO post](http://stackoverflow.com/questions/23049736/working-with-multiple-dispatcher-servlets-in-a-spring-application) might help
 
-    ```java
+[source,xml]
+----
     ...
       Dynamic servlet = servletContext.addServlet("v1Dispatcher", new DispatcherServlet(ctx1));
             servlet.addMapping("/api");
@@ -146,5 +148,44 @@ A.  Excerpted from an explanation for https://github.com/springfox/springfox/iss
       Dynamic servlet = servletContext.addServlet("v2Dispatcher", new DispatcherServlet(ctx2));
             servlet.addMapping("/api/v2");
             servlet.setLoadOnStartup(1);
+----
 
-    ```
+*Q. How does one configure swagger-ui for non-springboot applications?*
+
+A.  Excerpted from https://github.com/springfox/springfox/issues/983[issue 983]...
+    I was able to get it working by modifying the dispatcherServlet to listen on /* , but this prevented swagger-ui.html
+    from being served.  To fix this to let the swagger-ui.html bypass the dispatcherServlet i had to create a new
+    servlet mapping:
+
+[source,xml]
+----
+    <servlet>
+    			<servlet-name>RestServlet</servlet-name>
+    			<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    			<init-param>
+    				<param-name>contextConfigLocation</param-name>
+    				<param-value></param-value>
+    			</init-param>
+    			<load-on-startup>1</load-on-startup>
+    		</servlet>
+
+    		<servlet-mapping>
+    			<servlet-name>default</servlet-name>
+    				<url-pattern>/swagger-ui.html</url-pattern>
+    		</servlet-mapping>
+
+    		<servlet-mapping>
+    			<servlet-name>RestServlet</servlet-name>
+    				<url-pattern>/*</url-pattern>
+    		</servlet-mapping>
+   [source,java]
+----
+
+    Also had to let the webjar through the dispatcher servlet:
+
+
+    `<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>`
+
+    Kinda tricky to get working, but it works.  Perhaps there is a better way to remap swagger-ui.html or let it pass
+    through the dispatcherServlet.
+
