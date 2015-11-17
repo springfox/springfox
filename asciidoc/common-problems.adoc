@@ -104,7 +104,10 @@ and set the order of the other bean to lowest precedence.
 
 *Q. How do I use this library to aggregate swagger-enabled resources from multiple services?*
 
-A. Logical explanation of how one might go about doing this is available in the https://groups.google.com/forum/#!searchin/swagger-swaggersocket/multiple/swagger-swaggersocket/g8fgSGUCrYs/A8Ms_lFOoN4J[swagger google group]
+A.  Logical explanation of how one might go about doing this is available in the https://groups.google.com/forum/#!searchin/swagger-swaggersocket/multiple/swagger-swaggersocket/g8fgSGUCrYs/A8Ms_lFOoN4J[swagger google group]
+
+    Additionally https://github.com/springfox/springfox/issues/1001#issuecomment-147609243[this comment] further
+    discusses issues with doing this.
 
 *Q. Why are my api params marked as required=false?*
 
