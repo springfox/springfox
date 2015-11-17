@@ -1986,20 +1986,13 @@ spring services can serve it up.</p>
 <ol class="upperalpha" type="A">
 <li>
 <p>Thanks to <a href="https://github.com/chrishuttonch">@chrishuttonch</a> for describing the solution to <a href="https://github.com/springfox/springfox/issues/867">this issue</a></p>
+<div class="literalblock">
+<div class="content">
+<pre>TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serialisers for the following classes:</pre>
+</div>
+</div>
 </li>
 </ol>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serialisers for the following classes:
-</td>
-</tr>
-</table>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2019,23 +2012,16 @@ I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none o
 <ol class="upperalpha" type="A">
 <li>
 <p>Thanks to <a href="https://github.com/shasti421">@shasti421</a> for providing the solution</p>
-</li>
-</ol>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
+<div class="literalblock">
+<div class="content">
+<pre>TIP: Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
 refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
 onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
- related to <a href="https://github.com/spring-projects/spring-boot/issues/221">spring-boot issue #221</a>
-</td>
-</tr>
-</table>
+ related to https://github.com/spring-projects/spring-boot/issues/221[spring-boot issue #221]</pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p><strong>Q. How do we use Java 8 types esply. LocalDateTime?</strong></p>
@@ -2045,22 +2031,354 @@ onApplicationEvent call. I was able to fix it by removing second WebApplicationI
 <li>
 <p>Typically these are handled via <code>Docket#directModelSubstitute(LocalDateTime.class, String.class)</code>. If these
 are ISO 8601 dates that conform to a string format i.e. <code>yyyy-MM-dd&#8217;T&#8217;HH:mm&#8217;Z'</code>. However you won&#8217;t have any format or
- validation info.</p>
+validation info.</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
 <p><strong>Q. How does one use @ModelAttribute annotation. It doesn&#8217;t seem to render the model properties as scalar properties?</strong></p>
 </div>
-<div class="paragraph">
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
 <p>In order for @ModelAttribute annotated types to be inferred the properties need to be bean properties.</p>
+<div class="literalblock">
+<div class="content">
+<pre>If the intent is immutability and passing in an object, the preferred approach is to make that a request body, in which
+case the immutability will follow the rules laid out by jackson to determine what constitutes a request "view" of the
+request object.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>getters/setters are a clean way to indicate what values can come in to a operation. While it may not be apparent in a
+trivial model with one level nesting; the design choice will become clear when we realize that model attributes can be
+arbitrarily nested. Consider (pseudo code in c# for brevity)</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="csharp">Person {String firstName {get;set;}, String lastName {get;set;}, Category category {get;set;}}
+Category {String name {get;set;}, String description {get;}}</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>So one could set properties
+firstName
+lastName
+category.name</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Now we don't want category to be able to set description via the operation, how do we control/specify that?</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>it makes it hard to reason about which fields in an objects are not intended to be mutated. This is the reason we
+chose to limit it to objects that expose getters and setters.</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+I know spring supports fields as well, and it will fall back to fields if setters are not found
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><strong>Q. How should we resolve multiple object mappers available as beans especially when using spring-hateoas?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>The idea is to provide a <code>@Primary</code> ObjectMapper.</p>
+<div class="literalblock">
+<div class="content">
+<pre>Based on answer provided by @prabhat1790 in https://github.com/springfox/springfox/issues/890[issue #890]</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">  <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="predefined-type">String</span> SPRING_HATEOAS_OBJECT_MAPPER = <span class="string"><span class="delimiter">&quot;</span><span class="content">_halObjectMapper</span><span class="delimiter">&quot;</span></span>;
+
+  <span class="annotation">@Autowired</span>
+  <span class="annotation">@Qualifier</span>(SPRING_HATEOAS_OBJECT_MAPPER)
+  <span class="directive">private</span> ObjectMapper springHateoasObjectMapper;
+
+  <span class="annotation">@Primary</span>
+  <span class="annotation">@Bean</span>
+  <span class="annotation">@Order</span>(value=Ordered.HIGHEST_PRECEDENCE)
+  <span class="annotation">@DependsOn</span>(SPRING_HATEOAS_OBJECT_MAPPER)
+  <span class="directive">public</span> ObjectMapper objectMapper() {
+    <span class="keyword">return</span> springHateoasObjectMapper;
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and set the order of the other bean to lowest precedence.</p>
+</div>
+<div class="paragraph">
+<p><strong>Q. How do I use this library to aggregate swagger-enabled resources from multiple services?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>Logical explanation of how one might go about doing this is available in the <a href="https://groups.google.com/forum/#!searchin/swagger-swaggersocket/multiple/swagger-swaggersocket/g8fgSGUCrYs/A8Ms_lFOoN4J">swagger google group</a></p>
+<div class="literalblock">
+<div class="content">
+<pre>Additionally https://github.com/springfox/springfox/issues/1001#issuecomment-147609243[this comment] further
+discusses issues with doing this.</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Q. Why are my api params marked as required=false?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>This is because of how plugins work and how their priority layers information</p>
+<div class="literalblock">
+<div class="content">
+<pre>@PathVariables are always marked as required.
+@ApiParam is an optional annotation to describe additional meta-information like description etc.
+@ApiParam#required() is defaulted to false, unless you set it to true.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Springfox uses plugins to layer information. There are a set of plugins that are spring specific that apply the
+inferred values on to the internal service models. The swagger annotation related metadata is layered on top of the
+spring-mvc descriptions. By definition, plugins don't know and should not know about each other or previously
+inferred values (in your case required attribute).</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>So if you choose to augment the definitions with @ApiParam then you need to be explicit and set the value to true.</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Q. How does one write a plugin to for e.g. make default all types required and only some not required?</strong>
+A.  To do this, you&#8217;d have to
+    - add an alternate type rule for <code>Optional&lt;T&gt;</code> see <code>genericModelSubstitutes</code> in docket
+    - implement your own <a href="https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/schema/ModelPropertyBuilderPlugin.java#L26">ModelPropertyBuilderPlugin</a>
+    - and override the read only property if you find an <code>Optional</code> type. See <a href="https://github.com/springfox/springfox/blob/master/springfox-swagger-common/src/main/java/springfox/documentation/swagger/schema/ApiModelPropertyPropertyBuilder.java#L35">here</a> for an example.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Keep in mind that you need the plugin to fire after this plugin... so order it accordingly</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Q. Why are all my operations not showing in the UI?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>This is a known limitation of swagger-spec. There is a work around for it but, swagger-ui won&#8217;t play nice with it.
+I have a <a href="https://github.com/swagger-api/swagger-js/pull/541">PR</a> which address that issue. Would be great if you vote
+up the PR and the <a href="https://github.com/swagger-api/swagger-spec/issues/291">underlying issue</a></p>
+<div class="literalblock">
+<div class="content">
+<pre>UPDATE: This https://github.com/swagger-api/swagger-js/pull/541[PR] has been closed!</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Q. How would one partition apis based on versions?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>Excerpted from an explanation for <a href="https://github.com/springfox/springfox/issues/963">issue 963</a>&#8230;&#8203;</p>
+<div class="literalblock">
+<div class="content">
+<pre>(springfox) uses the context path as the starting point.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>What you really need to is to define a dynamic servlet registration and create 2 dockets .. one for **api** and
+one for **api/v2**. This [SO post](http://stackoverflow.com/questions/23049736/working-with-multiple-dispatcher-servlets-in-a-spring-application) might help</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml">    ...
+      Dynamic servlet = servletContext.addServlet(&quot;v1Dispatcher&quot;, new DispatcherServlet(ctx1));
+            servlet.addMapping(&quot;/api&quot;);
+            servlet.setLoadOnStartup(1);
+
+      Dynamic servlet = servletContext.addServlet(&quot;v2Dispatcher&quot;, new DispatcherServlet(ctx2));
+            servlet.addMapping(&quot;/api/v2&quot;);
+            servlet.setLoadOnStartup(1);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Q. How does one configure swagger-ui for non-springboot applications?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>Excerpted from <a href="https://github.com/springfox/springfox/issues/983">issue 983</a>&#8230;&#8203;
+I was able to get it working by modifying the dispatcherServlet to listen on /* , but this prevented swagger-ui.html
+from being served.  To fix this to let the swagger-ui.html bypass the dispatcherServlet i had to create a new
+servlet mapping:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml">    <span class="tag">&lt;servlet&gt;</span>
+                            <span class="tag">&lt;servlet-name&gt;</span>RestServlet<span class="tag">&lt;/servlet-name&gt;</span>
+                            <span class="tag">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="tag">&lt;/servlet-class&gt;</span>
+                            <span class="tag">&lt;init-param&gt;</span>
+                                    <span class="tag">&lt;param-name&gt;</span>contextConfigLocation<span class="tag">&lt;/param-name&gt;</span>
+                                    <span class="tag">&lt;param-value&gt;</span><span class="tag">&lt;/param-value&gt;</span>
+                            <span class="tag">&lt;/init-param&gt;</span>
+                            <span class="tag">&lt;load-on-startup&gt;</span>1<span class="tag">&lt;/load-on-startup&gt;</span>
+                    <span class="tag">&lt;/servlet&gt;</span>
+
+                    <span class="tag">&lt;servlet-mapping&gt;</span>
+                            <span class="tag">&lt;servlet-name&gt;</span>default<span class="tag">&lt;/servlet-name&gt;</span>
+                                    <span class="tag">&lt;url-pattern&gt;</span>/swagger-ui.html<span class="tag">&lt;/url-pattern&gt;</span>
+                    <span class="tag">&lt;/servlet-mapping&gt;</span>
+
+                    <span class="tag">&lt;servlet-mapping&gt;</span>
+                            <span class="tag">&lt;servlet-name&gt;</span>RestServlet<span class="tag">&lt;/servlet-name&gt;</span>
+                                    <span class="tag">&lt;url-pattern&gt;</span>/*<span class="tag">&lt;/url-pattern&gt;</span>
+                    <span class="tag">&lt;/servlet-mapping&gt;</span></code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Also had to let the webjar through the dispatcher servlet:</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>`&lt;mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/&gt;`</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Kinda tricky to get working, but it works.  Perhaps there is a better way to remap swagger-ui.html or let it pass
+through the dispatcherServlet.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Q. How does one create rules to substitute list and array items?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>If the following types&#8230;&#8203;</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">    ToSubstitute<span class="type">[]</span> array;
+    <span class="predefined-type">List</span>&lt;ToSubstitute&gt; list;</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Need to look like this over the wire...</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">    Substituted<span class="type">[]</span> array;
+    <span class="predefined-type">List</span>&lt;Substituted&gt; list;</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>This is how the rules need to be configured</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">    rules.add(newRule(resolver.arrayType(ToSubstitute), resolver.arrayType(Substituted)))
+    rules.add(newRule(resolver.resolve(<span class="predefined-type">List</span>, ToSubstitute), resolver.resolve(<span class="predefined-type">List</span>, Substituted)))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Q. How does one configure a docket with multiple protocols/schemes?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>Use the <code>protocols</code> method to configure the docket to indicate supported schemes.</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">    docket.protocols(newHashSet(<span class="string"><span class="delimiter">&quot;</span><span class="content">http</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">https</span><span class="delimiter">&quot;</span></span>))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Q. How does one use springfox in a project with xml spring configuration?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>There is a demo application that describes <a href="https://github.com/springfox/springfox-demos/tree/master/spring-xml-swagger">how java-xml</a> configuration needs to be setup.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Q. How does one override the host name?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>This should be available in v2.3 thanks <a href="https://github.com/springfox/springfox/pull/1011">to this PR</a> by @cbornet.
+It is still in incubation but host name can be configured per docket</p>
+<div class="literalblock">
+<div class="content">
+<pre>[source,java]
+----
+    docket.host("http://maybe-an-api-gateway.host");
+----</pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-11-16 15:01:35 UTC
+Last updated 2015-11-17 02:21:34 UTC
 </div>
 </div>
 </body>
