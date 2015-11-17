@@ -76,3 +76,25 @@ it makes it hard to reason about which fields in an objects are not intended to 
 to limit it to objects that expose getters and setters.
 
 NOTE: I know spring supports fields as well, and it will fall back to fields if setters are not found
+
+*Q. How should we resolve multiple object mappers available as beans especially when using spring-hateoas?*
+
+The idea is to provide a `@Primary` ObjectMapper.
+
+Based on answer provided by @prabhat1790 in [issue #890](https://github.com/springfox/springfox/issues/890)
+```java
+  private static final String SPRING_HATEOAS_OBJECT_MAPPER = "_halObjectMapper";
+
+  @Autowired
+  @Qualifier(SPRING_HATEOAS_OBJECT_MAPPER)
+  private ObjectMapper springHateoasObjectMapper;
+
+  @Primary
+  @Bean
+  @Order(value=Ordered.HIGHEST_PRECEDENCE)
+  @DependsOn(SPRING_HATEOAS_OBJECT_MAPPER)
+  public ObjectMapper objectMapper() {
+    return springHateoasObjectMapper;
+  }
+```
+and set the order of the other bean to lowest precedence
