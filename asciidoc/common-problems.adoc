@@ -120,3 +120,11 @@ A. This is because of how plugins work and how their priority layers information
    inferred values (in your case required attribute).
 
    So if you choose to augment the definitions with @ApiParam then you need to be explicit and set the value to true.
+
+*Q. Why are all my operations not showing in the UI?*
+
+A.  This is a known limitation of swagger-spec. There is a work around for it but, swagger-ui won't play nice with it.
+    I have a https://github.com/swagger-api/swagger-js/pull/541[PR] which address that issue. Would be great if you vote
+    up the PR and the https://github.com/swagger-api/swagger-spec/issues/291[underlying issue]
+
+    UPDATE: This https://github.com/swagger-api/swagger-js/pull/541[PR] has been closed!
