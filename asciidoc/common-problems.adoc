@@ -8,18 +8,18 @@ A. https://github.com/springfox/springfox/issues/822[Reference #822]
 
 A. It can be a little confusing :open_mouth:
 
-- Swagger Spec is a specification
-- Swagger Api - an implementation of that specification that supports jax-rs, restlet, jersey etc.
-- Springfox libraries in general - is another implementation of the specification focused on the spring based ecosystem
-- Swagger.js and Swagger-ui - Are client libraries in javascript that can consume swagger specification
-- springfox-swagger-ui - the one that you're referring to, is just packaging swagger-ui in a convenient way so that
-spring services can serve it up.
+  - Swagger Spec is a specification
+  - Swagger Api - an implementation of that specification that supports jax-rs, restlet, jersey etc.
+  - Springfox libraries in general - is another implementation of the specification focused on the spring based ecosystem
+  - Swagger.js and Swagger-ui - Are client libraries in javascript that can consume swagger specification
+  - springfox-swagger-ui - the one that you're referring to, is just packaging swagger-ui in a convenient way so that
+  spring services can serve it up.
 
 *Q. I use GSON and don't use Jackson, What should I do?*
 
 A. Thanks to https://github.com/chrishuttonch[@chrishuttonch] for describing the solution to https://github.com/springfox/springfox/issues/867[this issue]
 
-TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serialisers for the following classes:
+  TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serialisers for the following classes:
 
 [source,java]
 ----
@@ -36,28 +36,28 @@ TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that n
 
 A. Thanks to https://github.com/shasti421[@shasti421] for providing the solution
 
-TIP: Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
-refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
-onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
- related to https://github.com/spring-projects/spring-boot/issues/221[spring-boot issue #221]
+  TIP: Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
+  refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
+  onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
+   related to https://github.com/spring-projects/spring-boot/issues/221[spring-boot issue #221]
 
 *Q. How do we use Java 8 types esply. LocalDateTime?*
 
 A. Typically these are handled via `Docket#directModelSubstitute(LocalDateTime.class, String.class)`. If these
-are ISO 8601 dates that conform to a string format i.e. `yyyy-MM-dd'T'HH:mm'Z'`. However you won't have any format or
- validation info.
+  are ISO 8601 dates that conform to a string format i.e. `yyyy-MM-dd'T'HH:mm'Z'`. However you won't have any format or
+  validation info.
 
 *Q. How does one use @ModelAttribute annotation. It doesn't seem to render the model properties as scalar properties?*
 
-In order for @ModelAttribute annotated types to be inferred the properties need to be bean properties.
+A. In order for @ModelAttribute annotated types to be inferred the properties need to be bean properties.
 
-If the intent is immutability and passing in an object, the preferred approach is to make that a request body, in which
-case the immutability will follow the rules laid out by jackson to determine what constitutes a request "view" of the
-request object.
+  If the intent is immutability and passing in an object, the preferred approach is to make that a request body, in which
+  case the immutability will follow the rules laid out by jackson to determine what constitutes a request "view" of the
+  request object.
 
-getters/setters are a clean way to indicate what values can come in to a operation. While it may not be apparent in a
-trivial model with one level nesting; the design choice will become clear when we realize that model attributes can be
-arbitrarily nested. Consider (pseudo code in c# for brevity)
+  getters/setters are a clean way to indicate what values can come in to a operation. While it may not be apparent in a
+  trivial model with one level nesting; the design choice will become clear when we realize that model attributes can be
+  arbitrarily nested. Consider (pseudo code in c# for brevity)
 
 [source,csharp]
 ----
@@ -65,23 +65,23 @@ Person {String firstName {get;set;}, String lastName {get;set;}, Category catego
 Category {String name {get;set;}, String description {get;}}
 ----
 
-So one could set properties
-firstName
-lastName
-category.name
+  So one could set properties
+  firstName
+  lastName
+  category.name
 
-Now we don't want category to be able to set description via the operation, how do we control/specify that?
+  Now we don't want category to be able to set description via the operation, how do we control/specify that?
 
-it makes it hard to reason about which fields in an objects are not intended to be mutated. This is the reason we chose
-to limit it to objects that expose getters and setters.
+  it makes it hard to reason about which fields in an objects are not intended to be mutated. This is the reason we
+  chose to limit it to objects that expose getters and setters.
 
 NOTE: I know spring supports fields as well, and it will fall back to fields if setters are not found
 
 *Q. How should we resolve multiple object mappers available as beans especially when using spring-hateoas?*
 
-The idea is to provide a `@Primary` ObjectMapper.
+A. The idea is to provide a `@Primary` ObjectMapper.
 
-Based on answer provided by @prabhat1790 in https://github.com/springfox/springfox/issues/890[issue #890]
+  Based on answer provided by @prabhat1790 in https://github.com/springfox/springfox/issues/890[issue #890]
 
 [source,java]
 ----
@@ -104,4 +104,19 @@ and set the order of the other bean to lowest precedence.
 
 *Q. How do I use this library to aggregate swagger-enabled resources from multiple services?*
 
-A Logical explanation of how one might go about doing this is available in the https://groups.google.com/forum/#!searchin/swagger-swaggersocket/multiple/swagger-swaggersocket/g8fgSGUCrYs/A8Ms_lFOoN4J[swagger google group]
+A. Logical explanation of how one might go about doing this is available in the https://groups.google.com/forum/#!searchin/swagger-swaggersocket/multiple/swagger-swaggersocket/g8fgSGUCrYs/A8Ms_lFOoN4J[swagger google group]
+
+*Q. Why are my api params marked as required=false?*
+
+A. This is because of how plugins work and how their priority layers information
+
+   @PathVariables are always marked as required.
+   @ApiParam is an optional annotation to describe additional meta-information like description etc.
+   @ApiParam#required() is defaulted to false, unless you set it to true.
+
+   Springfox uses plugins to layer information. There are a set of plugins that are spring specific that apply the
+   inferred values on to the internal service models. The swagger annotation related metadata is layered on top of the
+   spring-mvc descriptions. By definition, plugins don't know and should not know about each other or previously
+   inferred values (in your case required attribute).
+
+   So if you choose to augment the definitions with @ApiParam then you need to be explicit and set the value to true.
