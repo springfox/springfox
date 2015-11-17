@@ -50,3 +50,29 @@ are ISO 8601 dates that conform to a string format i.e. `yyyy-MM-dd'T'HH:mm'Z'`.
 *Q. How does one use @ModelAttribute annotation. It doesn't seem to render the model properties as scalar properties?*
 
 In order for @ModelAttribute annotated types to be inferred the properties need to be bean properties.
+Couple of observations
+
+If the intent is immutability and passing in an object, the preferred approach is to make that a request body, in which
+case the immutability will follow the rules laid out by jackson to determine what constitutes a request "view" of the
+request object.
+
+getters/setters are a clean way to indicate what values can come in to a operation. While it may not be apparent in a
+trivial model with one level nesting; the design choice will become clear when we realize that model attributes can be
+arbitrarily nested. Consider (pseudo code in c# for brevity)
+
+```c#
+Person {String firstName {get;set;}, String lastName {get;set;}, Category category {get;set;}}
+Category {String name {get;set;}, String description {get;}}
+```
+
+So one could set properties
+firstName
+lastName
+category.name
+
+Now we don't want category to be able to set description via the operation, how do we control/specify that?
+
+it makes it hard to reason about which fields in an objects are not intended to be mutated. This is the reason we chose
+to limit it to objects that expose getters and setters.
+
+NOTE: I know spring supports fields as well, and it will fall back to fields if setters are not found
