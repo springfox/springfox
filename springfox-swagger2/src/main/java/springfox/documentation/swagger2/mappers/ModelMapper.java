@@ -117,6 +117,16 @@ public abstract class ModelMapper {
         ((AbstractNumericProperty) property).minimum(Double.valueOf(range.getMin()));
       }
     }
+
+    if (property instanceof StringProperty) {
+      AllowableValues allowableValues = source.getAllowableValues();
+      if (allowableValues instanceof AllowableRangeValues) {
+        AllowableRangeValues range = (AllowableRangeValues) allowableValues;
+        ((StringProperty) property).maxLength(Integer.valueOf(range.getMax()));
+        ((StringProperty) property).minLength(Integer.valueOf(range.getMin()));
+      }
+    }
+
     if (property != null) {
       property.setDescription(source.getDescription());
       property.setName(source.getName());
