@@ -45,6 +45,7 @@ class ModelBuilderSpec extends Specification {
       'type'          | new TypeResolver().resolve(String)    | 'type'
       'subTypes'      | ["String"]                            | 'subTypes'
       'properties'    | [p1: Mock(ModelProperty)]             | 'properties'
+      'example'       | 'example1'                            | 'example'
   }
 
   def "Setting builder properties to null values preserves existing values"() {
@@ -69,5 +70,6 @@ class ModelBuilderSpec extends Specification {
       'type'          | new TypeResolver().resolve(String)    | 'type'
       'subTypes'      | ["String"]                            | 'subTypes'
       'properties'    | [p1: Mock(ModelProperty)]             | 'properties'
+      'example'       | 'example1'                            | 'example'
   }
 }

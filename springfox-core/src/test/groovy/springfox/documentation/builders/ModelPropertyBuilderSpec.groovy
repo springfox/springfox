@@ -44,6 +44,7 @@ class ModelPropertyBuilderSpec extends Specification {
       'readOnly'          | true                                  | 'readOnly'
       'isHidden'          | true                                  | 'hidden'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
+      'example'           | 'example1'                            | 'example'
   }
 
   def "Setting builder properties to null values preserves existing values"() {
@@ -64,6 +65,7 @@ class ModelPropertyBuilderSpec extends Specification {
       'qualifiedType'     | 'com.Model1'                          | 'qualifiedType'
       'description'       | 'model1 desc'                         | 'description'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
+      'example'           | 'example1'                            | 'example'
   }
 
   def "When allowable list value is empty builder sets the value to null"() {
