@@ -7,9 +7,9 @@ ext {
 }
 
 dependencies {
-  compile( 'org.mapstruct:mapstruct:1.0.0.CR2' )
+  compile( 'org.mapstruct:mapstruct:1.0.0.Final' )
   compile( "org.springframework:spring-context:$spring" )
-  mapstruct( 'org.mapstruct:mapstruct-processor:1.0.0.CR2' )
+  mapstruct( 'org.mapstruct:mapstruct-processor:1.0.0.Final' )
 }
 
 sourceSets.main {
