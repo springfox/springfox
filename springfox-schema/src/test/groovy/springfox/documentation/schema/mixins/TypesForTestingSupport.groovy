@@ -188,4 +188,12 @@ class TypesForTestingSupport {
   static ResolvedType resources(def clazz) {
     resolver.resolve(Resources, clazz)
   }
+
+  static ResolvedType customMapOpen() {
+    resolver.resolve(CustomMap)
+  }
+
+  static ResolvedType customMapOfType(def clazz) {
+    resolver.resolve(CustomMap, clazz)
+  }
 }
