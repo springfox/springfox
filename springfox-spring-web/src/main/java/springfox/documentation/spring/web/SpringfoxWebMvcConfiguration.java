@@ -22,7 +22,6 @@ package springfox.documentation.spring.web;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.plugin.core.config.EnablePluginRegistries;
 import springfox.documentation.schema.configuration.ModelsConfiguration;
@@ -48,8 +47,7 @@ import java.util.List;
     "springfox.documentation.spring.web.readers.operation",
     "springfox.documentation.spring.web.readers.parameter",
     "springfox.documentation.spring.web.plugins",
-    "springfox.documentation.spring.web.paths",
-    "springfox.documentation.spring.web.caching"
+    "springfox.documentation.spring.web.paths"
 })
 @EnablePluginRegistries({ DocumentationPlugin.class,
     ApiListingBuilderPlugin.class,
@@ -61,7 +59,6 @@ import java.util.List;
     DefaultsProviderPlugin.class,
     PathDecorator.class
 })
-@EnableAspectJAutoProxy
 public class SpringfoxWebMvcConfiguration {
 
   @Bean
