@@ -21,6 +21,7 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
+
 import springfox.documentation.service.AllowableValues;
 
 public class ModelProperty {
@@ -34,10 +35,11 @@ public class ModelProperty {
   private final String description;
   private final AllowableValues allowableValues;
   private ModelRef modelRef;
+  private final String example;
 
   public ModelProperty(String name, ResolvedType type, String qualifiedType,
                        int position, Boolean required, Boolean isHidden, Boolean readOnly,
-                       String description, AllowableValues allowableValues) {
+                       String description, AllowableValues allowableValues, String example) {
     this.name = name;
     this.type = type;
     this.qualifiedType = qualifiedType;
@@ -47,6 +49,7 @@ public class ModelProperty {
     this.readOnly = readOnly;
     this.description = description;
     this.allowableValues = allowableValues;
+    this.example = example;
   }
 
   public String getName() {
@@ -92,5 +95,9 @@ public class ModelProperty {
   public ModelProperty updateModelRef(Function<? super ResolvedType, ModelRef> modelRefFactory) {
     modelRef = modelRefFactory.apply(type);
     return this;
+  }
+
+  public String getExample() {
+    return example;
   }
 }

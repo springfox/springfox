@@ -19,16 +19,18 @@
 
 package springfox.documentation.builders;
 
-import com.fasterxml.classmate.ResolvedType;
-import springfox.documentation.schema.Model;
-import springfox.documentation.schema.ModelProperty;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMap;
+import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyMap;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import com.fasterxml.classmate.ResolvedType;
+
+import springfox.documentation.schema.Model;
+import springfox.documentation.schema.ModelProperty;
 
 public class ModelBuilder {
   private String id;
@@ -38,6 +40,7 @@ public class ModelBuilder {
   private String baseModel;
   private String discriminator;
   private ResolvedType modelType;
+  private String example;
 
   private Map<String, ModelProperty> properties = newHashMap();
   private List<String> subTypes = newArrayList();
@@ -133,6 +136,17 @@ public class ModelBuilder {
   }
 
   /**
+   * Updates the Example for the model
+   *
+   * @param example - example of the model
+   * @return this
+   */
+  public ModelBuilder example(String example) {
+    this.example = defaultIfAbsent(example, this.example);
+    return this;
+  }
+
+  /**
    * Represents the type information with full fidelity of generics
    *
    * @param modelType - resolved type that represents the model
@@ -144,6 +158,6 @@ public class ModelBuilder {
   }
 
   public Model build() {
-    return new Model(id, name, modelType, qualifiedType, properties, description, baseModel, discriminator, subTypes);
+    return new Model(id, name, modelType, qualifiedType, properties, description, baseModel, discriminator, subTypes, example);
   }
 }

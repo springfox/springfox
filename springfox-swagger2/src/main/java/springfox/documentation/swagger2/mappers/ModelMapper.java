@@ -73,7 +73,7 @@ public abstract class ModelMapper {
     ModelImpl model = new ModelImpl()
         .description(source.getDescription())
         .discriminator(source.getDiscriminator())
-        .example("")
+        .example(source.getExample())
         .name(source.getName());
     TreeMap<String, Property> sorted = newTreeMap();
     sorted.putAll(mapProperties(source.getProperties()));
@@ -103,7 +103,7 @@ public abstract class ModelMapper {
 
   private Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {
     if (source.getType().getTypeParameters() != null && source.getType().getTypeParameters().size() > 0) {
-      return Optional.of((Class)source.getType().getTypeParameters().get(1).getErasedType());
+      return Optional.of((Class) source.getType().getTypeParameters().get(1).getErasedType());
     }
     return Optional.absent();
   }
@@ -131,6 +131,7 @@ public abstract class ModelMapper {
       property.setName(source.getName());
       property.setRequired(source.isRequired());
       property.setReadOnly(source.isReadOnly());
+      property.setExample(source.getExample());
     }
     return property;
   }

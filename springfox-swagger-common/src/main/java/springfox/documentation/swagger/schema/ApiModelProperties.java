@@ -19,6 +19,15 @@
 
 package springfox.documentation.swagger.schema;
 
+import static com.google.common.collect.Lists.newArrayList;
+import static org.springframework.util.StringUtils.hasText;
+
+import java.lang.reflect.AnnotatedElement;
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.core.annotation.AnnotationUtils;
+
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
@@ -26,18 +35,11 @@ import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
-
-import java.lang.reflect.AnnotatedElement;
-import java.util.Collections;
-import java.util.List;
-
-import static com.google.common.collect.Lists.*;
-import static org.springframework.util.StringUtils.*;
 
 public final class ApiModelProperties {
 
@@ -127,6 +129,19 @@ public final class ApiModelProperties {
       @Override
       public Boolean apply(ApiModelProperty annotation) {
         return annotation.hidden();
+      }
+    };
+  }
+
+  public static Function<ApiModelProperty, String> toExample() {
+    return new Function<ApiModelProperty, String>() {
+      @Override
+      public String apply(ApiModelProperty annotation) {
+        String example = "";
+        if (!Strings.isNullOrEmpty(annotation.example())) {
+          example = annotation.example();
+        }
+        return example;
       }
     };
   }
