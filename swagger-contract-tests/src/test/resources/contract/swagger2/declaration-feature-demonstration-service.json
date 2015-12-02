@@ -516,7 +516,7 @@
                         "description": "enumType",
                         "required": false,
                         "schema": {
-                            "$ref": "#/definitions/Collection«string»"
+                            "$ref": "#/definitions/Collection\u00abstring\u00bb"
                         }
                     }
                 ],

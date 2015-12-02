@@ -26,7 +26,8 @@ ext {
                   "org.slf4j:slf4j-simple:${slf4j}",
                   "org.yaml:snakeyaml:${snakeyaml}",
                   "org.spockframework:spock-spring:${spock}",
-                  "org.spockframework:spock-core:${spock}"
+                  "org.spockframework:spock-core:${spock}",
+                  "org.codehaus.groovy:groovy-all:${groovy}",
           ],
           swagger2Core  : [
                   "io.swagger:swagger-annotations:${swagger2Core}",
@@ -42,7 +43,8 @@ ext {
                   "org.springframework:spring-web:$spring",
                   "org.springframework:spring-webmvc:$spring",
                   "org.springframework:spring-context:$spring",
-                  "org.springframework:spring-aop:${spring}"
+                  "org.springframework:spring-aop:${spring}",
+                  "org.aspectj:aspectjweaver:$aspectj"
           ],
           clientProvided: [
                   "javax.servlet:javax.servlet-api:$servlet",
@@ -51,11 +53,9 @@ ext {
                   "joda-time:joda-time:$joda"
           ],
           core          : [
-                  "org.codehaus.groovy:groovy-all:${groovy}",
                   "com.google.guava:guava:${guava}",
                   "com.fasterxml:classmate:${classmate}",
                   "org.slf4j:slf4j-api:${slf4j}",
-                  "org.aspectj:aspectjweaver:$aspectj"
           ]
   ]
 }
