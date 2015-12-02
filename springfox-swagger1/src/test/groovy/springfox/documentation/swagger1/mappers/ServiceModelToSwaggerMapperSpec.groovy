@@ -79,6 +79,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                           .required(true)
                           .build()])
                         .position(1)
+                        .codegenMethodNameStem("")
                         .protocols(newHashSet("https"))
                         .responseModel(new ModelRef("string"))
                         .responseMessages(newHashSet(response))

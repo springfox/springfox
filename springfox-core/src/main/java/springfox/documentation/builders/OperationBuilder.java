@@ -20,10 +20,12 @@
 package springfox.documentation.builders;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.OperationNameGenerator;
+import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
@@ -45,6 +47,7 @@ public class OperationBuilder {
   private String summary;
   private String notes;
   private String uniqueId;
+  private String codeGenMethodNameStem;
   private int position;
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
@@ -103,6 +106,22 @@ public class OperationBuilder {
    */
   public OperationBuilder uniqueId(String uniqueId) {
     this.uniqueId = defaultIfAbsent(uniqueId, this.uniqueId);
+    return this;
+  }
+
+  /**
+   * This is an optional override that provides a custom method name stem, such that the method name
+   * that is generated for the purposes of code-gen can be customized. However it must be kept in mind
+   * that in-order the guarantee uniqueness of the name for code-gen the algoritm will still try to
+   * append and indexer at the end of it e.g. someMethod_1, someMethod_2 etc. to preserve uniqueness in
+   * the case there are duplicate names.
+   *
+   * @param codeGenMethodNameStem - provides a stem for the operation name as it will be used for code generation
+   * @return this
+   */
+  @Incubating("2.3.0")
+  public OperationBuilder codegenMethodNameStem(String codeGenMethodNameStem) {
+    this.codeGenMethodNameStem = defaultIfAbsent(codeGenMethodNameStem, this.codeGenMethodNameStem);
     return this;
   }
 
@@ -243,10 +262,15 @@ public class OperationBuilder {
   }
 
   public Operation build() {
-    String uniqueOperationId = nameGenerator.startingWith(String.format("%sUsing%s", uniqueId, method));
+    String uniqueOperationId = nameGenerator.startingWith(uniqueOperationIdStem());
     return new Operation(method, summary, notes, responseModel, uniqueOperationId, position, tags, produces,
         consumes, protocol, securityReferences, parameters, responseMessages, deprecated, isHidden,
         vendorExtensions);
+  }
+
+  private String uniqueOperationIdStem() {
+    String defaultStem = String.format("%sUsing%s", uniqueId, method);
+    return Optional.fromNullable(emptyToNull(codeGenMethodNameStem)).or(defaultStem);
   }
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {

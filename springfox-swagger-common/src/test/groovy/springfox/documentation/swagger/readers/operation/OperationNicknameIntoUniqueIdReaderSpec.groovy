@@ -29,6 +29,6 @@ class OperationNicknameIntoUniqueIdReaderSpec extends DocumentationContextSpec {
     where:
       handlerMethod                                 | expected
       dummyHandlerMethod('methodWithHttpGETMethod') | 'nullUsingGET'
-      dummyHandlerMethod('methodWithNickName')      | 'uniqueUsingGET'
+      dummyHandlerMethod('methodWithNickName')      | 'unique'
   }
 }

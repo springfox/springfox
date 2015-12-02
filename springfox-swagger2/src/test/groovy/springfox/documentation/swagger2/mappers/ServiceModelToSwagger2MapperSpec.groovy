@@ -190,6 +190,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                          .required(true)
                          .build()])
         .position(1)
+        .codegenMethodNameStem("")
         .protocols(newHashSet("HTTPS"))
         .responseModel(new ModelRef("string"))
         .responseMessages(newHashSet(response))
