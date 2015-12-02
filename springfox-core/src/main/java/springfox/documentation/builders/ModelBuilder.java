@@ -19,18 +19,16 @@
 
 package springfox.documentation.builders;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.newHashMap;
-import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyMap;
+import com.fasterxml.classmate.ResolvedType;
+import springfox.documentation.schema.Model;
+import springfox.documentation.schema.ModelProperty;
 
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.classmate.ResolvedType;
-
-import springfox.documentation.schema.Model;
-import springfox.documentation.schema.ModelProperty;
+import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Maps.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelBuilder {
   private String id;
@@ -158,6 +156,7 @@ public class ModelBuilder {
   }
 
   public Model build() {
-    return new Model(id, name, modelType, qualifiedType, properties, description, baseModel, discriminator, subTypes, example);
+    return new Model(id, name, modelType, qualifiedType, properties, description, baseModel, discriminator, subTypes,
+        example);
   }
 }

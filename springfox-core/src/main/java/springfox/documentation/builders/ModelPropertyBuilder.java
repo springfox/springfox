@@ -19,15 +19,13 @@
 
 package springfox.documentation.builders;
 
-import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
-import static springfox.documentation.builders.BuilderDefaults.replaceIfMoreSpecific;
-import static springfox.documentation.schema.Enums.emptyListValuesToNull;
-
 import com.fasterxml.classmate.ResolvedType;
-
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
+
+import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.schema.Enums.*;
 
 public class ModelPropertyBuilder {
   private ResolvedType type;
@@ -99,6 +97,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelProperty build() {
-    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, readOnly, description, allowableValues, example);
+    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, readOnly, description,
+        allowableValues, example);
   }
 }

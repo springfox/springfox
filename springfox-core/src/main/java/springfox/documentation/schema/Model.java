@@ -19,10 +19,10 @@
 
 package springfox.documentation.schema;
 
+import com.fasterxml.classmate.ResolvedType;
+
 import java.util.List;
 import java.util.Map;
-
-import com.fasterxml.classmate.ResolvedType;
 
 public class Model {
 
@@ -37,8 +37,17 @@ public class Model {
   private final List<String> subTypes;
   private final String example;
 
-  public Model(String id, String name, ResolvedType type, String qualifiedType, Map<String, ModelProperty> properties, String
-          description, String baseModel, String discriminator, List<String> subTypes, String example) {
+  public Model(
+      String id,
+      String name,
+      ResolvedType type,
+      String qualifiedType,
+      Map<String, ModelProperty> properties,
+      String description,
+      String baseModel,
+      String discriminator,
+      List<String> subTypes,
+      String example) {
 
     this.id = id;
     this.name = name;
