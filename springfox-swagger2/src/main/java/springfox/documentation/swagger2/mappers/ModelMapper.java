@@ -21,6 +21,7 @@ package springfox.documentation.swagger2.mappers;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.types.ResolvedInterfaceType;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -101,11 +102,17 @@ public abstract class ModelMapper {
     return type instanceof ResolvedInterfaceType;
   }
 
-  private Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {
-    if (source.getType().getTypeParameters() != null && source.getType().getTypeParameters().size() > 0) {
-      return Optional.of((Class) source.getType().getTypeParameters().get(1).getErasedType());
+  @VisibleForTesting
+  Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {
+    Optional<ResolvedType> mapInterface = findMapInterface(source.getType());
+    if (mapInterface.isPresent()) {
+      return Optional.of((Class) mapInterface.get().getTypeParameters().get(1).getErasedType());
     }
     return Optional.absent();
+  }
+
+  private Optional<ResolvedType> findMapInterface(ResolvedType type) {
+    return  Optional.fromNullable(type.findSupertype(Map.class));
   }
 
   public Property mapProperty(ModelProperty source) {

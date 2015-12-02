@@ -138,6 +138,41 @@ class ModelMapperSpec extends SchemaSpecification {
       ((AbstractNumericProperty)mappedIntObject).maximum == 2000
   }
 
+  def "Properties that are Map subclasses that close closed generic types are supported"() {
+    given:
+      def model = Mock(Model)
+    and:
+      model.type >> customMapOfType(SimpleType)
+    when:
+      def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+    then:
+      valueClass.isPresent()
+      valueClass.get() == SimpleType
+  }
+
+  def "Properties that are Map subclasses that close the open generic types are supported"() {
+    given:
+      def model = Mock(Model)
+    and:
+      model.type >> customMapOpen()
+    when:
+      def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+    then:
+      valueClass.isPresent()
+      valueClass.get() == Object
+  }
+
+  def "Properties that are not maps will have the value class absent"() {
+    given:
+      def model = Mock(Model)
+    and:
+      model.type >> genericClassWithTypeErased()
+    when:
+      def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+    then:
+      !valueClass.isPresent()
+  }
+
   ModelProperty updatedIntObject(ModelProperty modelProperty) {
     ModelPropertyBuilder builder = new ModelPropertyBuilder()
     def newModel = builder
