@@ -37,6 +37,7 @@ public class ModelPropertyBuilder {
   private AllowableValues allowableValues;
   private String name;
   private boolean isHidden;
+  private String example;
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -73,6 +74,11 @@ public class ModelPropertyBuilder {
     return this;
   }
 
+  public ModelPropertyBuilder example(String example) {
+    this.example = defaultIfAbsent(example, this.example);
+    return this;
+  }
+
   public ModelPropertyBuilder allowableValues(AllowableValues allowableValues) {
     if (allowableValues != null) {
       if (allowableValues instanceof AllowableListValues) {
@@ -91,6 +97,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelProperty build() {
-    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, readOnly, description, allowableValues);
+    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, readOnly, description,
+        allowableValues, example);
   }
 }

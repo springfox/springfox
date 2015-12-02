@@ -130,4 +130,17 @@ public final class ApiModelProperties {
       }
     };
   }
+
+  public static Function<ApiModelProperty, String> toExample() {
+    return new Function<ApiModelProperty, String>() {
+      @Override
+      public String apply(ApiModelProperty annotation) {
+        String example = "";
+        if (!Strings.isNullOrEmpty(annotation.example())) {
+          example = annotation.example();
+        }
+        return example;
+      }
+    };
+  }
 }

@@ -43,16 +43,17 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
     }
     if (context.getBeanPropertyDefinition().isPresent()) {
       annotation = annotation.or(findPropertyAnnotation(
-              context.getBeanPropertyDefinition().get(), ApiModelProperty.class));
+          context.getBeanPropertyDefinition().get(), ApiModelProperty.class));
     }
     if (annotation.isPresent()) {
       context.getBuilder()
-              .allowableValues(annotation.transform(toAllowableValues()).orNull())
-              .required(annotation.transform(toIsRequired()).or(false))
-              .readOnly(annotation.transform(toIsReadOnly()).or(false))
-              .description(annotation.transform(toDescription()).orNull())
-              .isHidden(annotation.transform(toHidden()).or(false))
-              .type(annotation.transform(toType(context.getResolver())).orNull());
+          .allowableValues(annotation.transform(toAllowableValues()).orNull())
+          .required(annotation.transform(toIsRequired()).or(false))
+          .readOnly(annotation.transform(toIsReadOnly()).or(false))
+          .description(annotation.transform(toDescription()).orNull())
+          .isHidden(annotation.transform(toHidden()).or(false))
+          .type(annotation.transform(toType(context.getResolver())).orNull())
+          .example(annotation.transform(toExample()).orNull());
     }
   }
 
