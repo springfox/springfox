@@ -188,4 +188,44 @@ class ModelMapperSpec extends SchemaSpecification {
     newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
   }
 
+
+  def "models with allowable ranges are serialized correctly for string property" (){
+    given:
+      Model model = modelProvider.modelFor(inputParam(simpleType(),
+          DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy)).get()
+      def modelMap = newHashMap()
+    and:
+      modelMap.put("test", model)
+    and: "we add a fake allowable range"
+      def stringObject = model.properties.get("aString")
+      model.properties.put("aString", updatedStringObject(stringObject))
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    then:
+      mapped.containsKey("test")
+    and: "Required values contains the modified property"
+      def mappedModel = mapped.get("test")
+      mappedModel.properties.size() == model.properties.size()
+      mappedModel.getRequired().size() == 1
+      mappedModel.getRequired().contains("aString")
+    and: "Range expectations are mapped correctly"
+      def mappedStringObject = mappedModel.properties.get("aString")
+      ((StringProperty)mappedStringObject).minLength == 1
+      ((StringProperty)mappedStringObject).maxLength == 255
+  }
+
+  ModelProperty updatedStringObject(ModelProperty modelProperty) {
+    ModelPropertyBuilder builder = new ModelPropertyBuilder()
+    def newModel = builder
+        .allowableValues(new AllowableRangeValues("1", "255"))
+        .description(modelProperty.description)
+        .isHidden(modelProperty.hidden)
+        .required(true)
+        .name(modelProperty.name)
+        .position(modelProperty.position)
+        .type(modelProperty.type)
+      .build()
+    newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
+  }
+
 }
