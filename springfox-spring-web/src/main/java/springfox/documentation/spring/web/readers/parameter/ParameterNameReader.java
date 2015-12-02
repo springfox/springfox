@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
 import org.springframework.core.ParameterNameDiscoverer;
@@ -47,7 +47,8 @@ import static java.lang.String.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterNameReader implements ParameterBuilderPlugin {
 
-  private final ParameterNameDiscoverer parameterNameDiscover = new DefaultParameterNameDiscoverer();
+  public static final String SPRING4_DISCOVERER = "org.springframework.core.DefaultParameterNameDiscoverer";
+  private final ParameterNameDiscoverer parameterNameDiscover = parameterNameDiscoverer();
 
   @Override
   public void apply(ParameterContext context) {
@@ -78,6 +79,16 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
             .or(first(methodAnnotations, RequestParam.class).transform(requestParamValue()))
             .or(first(methodAnnotations, RequestHeader.class).transform(requestHeaderValue()))
             .orNull();
+  }
+
+  private ParameterNameDiscoverer parameterNameDiscoverer() {
+    ParameterNameDiscoverer dicoverer;
+    try {
+      dicoverer = (ParameterNameDiscoverer) Class.forName(SPRING4_DISCOVERER).newInstance();
+    } catch (Exception e) {
+      dicoverer = new LocalVariableTableParameterNameDiscoverer();
+    }
+    return dicoverer;
   }
 
   private <T> Optional<T> first(List<Annotation> methodAnnotations, Class<T> ofType) {

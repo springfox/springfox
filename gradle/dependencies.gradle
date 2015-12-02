@@ -1,32 +1,34 @@
 ext {
   swagger2Core = "1.5.4"
-  spring = "4.1.7.RELEASE"
-  groovy = "2.4.4"
+  spring = "4.1.8.RELEASE"
+  groovy = "2.4.5"
   spock = "1.0-groovy-2.4"
   guava = "18.0"
   springHateoas = "0.18.0.RELEASE"
-  slf4j = "1.7.12"
+  slf4j = "1.7.13"
   mockito = "1.10.19"
   servlet = "3.1.0"
   classmate = "1.2.0"
-  jackson = '2.5.3'
+  jackson = '2.6.3'
   snakeyaml = '1.16'
   springPluginVersion = "1.2.0.RELEASE"
-  jsonPath = "2.0.0"
-  aspectj = "1.8.6"
-  joda = "2.8.2"
+  jsonPath = "2.1.0"
+  joda = "2.9.1"
+  cglib = "3.2.0"
+  objenesis = "2.2"
   libs = [
 
           test          : [
                   "org.springframework:spring-test:${spring}",
-                  "cglib:cglib-nodep:3.1",
-                  "org.objenesis:objenesis:2.2",
+                  "cglib:cglib-nodep:$cglib",
+                  "org.objenesis:objenesis:$objenesis",
                   "org.mockito:mockito-all:${mockito}",
                   "com.jayway.jsonpath:json-path:${jsonPath}",
                   "org.slf4j:slf4j-simple:${slf4j}",
                   "org.yaml:snakeyaml:${snakeyaml}",
                   "org.spockframework:spock-spring:${spock}",
-                  "org.spockframework:spock-core:${spock}"
+                  "org.spockframework:spock-core:${spock}",
+                  "org.codehaus.groovy:groovy-all:${groovy}",
           ],
           swagger2Core  : [
                   "io.swagger:swagger-annotations:${swagger2Core}",
@@ -42,7 +44,6 @@ ext {
                   "org.springframework:spring-web:$spring",
                   "org.springframework:spring-webmvc:$spring",
                   "org.springframework:spring-context:$spring",
-                  "org.springframework:spring-aop:${spring}"
           ],
           clientProvided: [
                   "javax.servlet:javax.servlet-api:$servlet",
@@ -51,11 +52,9 @@ ext {
                   "joda-time:joda-time:$joda"
           ],
           core          : [
-                  "org.codehaus.groovy:groovy-all:${groovy}",
                   "com.google.guava:guava:${guava}",
                   "com.fasterxml:classmate:${classmate}",
                   "org.slf4j:slf4j-api:${slf4j}",
-                  "org.aspectj:aspectjweaver:$aspectj"
           ]
   ]
 }
