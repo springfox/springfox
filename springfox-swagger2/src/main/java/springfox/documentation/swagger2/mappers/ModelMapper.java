@@ -19,6 +19,8 @@
 
 package springfox.documentation.swagger2.mappers;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.types.ResolvedInterfaceType;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -81,6 +83,9 @@ public abstract class ModelMapper {
         .transform(propertyName());
     model.setRequired(requiredFields.toList());
     model.setSimple(false);
+    if (isInterface(source.getType())) {
+      model.setType(ModelImpl.OBJECT);
+    }
     if (isMapType(source.getType())) {
       Optional<Class> clazz = typeOfValue(source);
       if (clazz.isPresent()) {
@@ -90,6 +95,10 @@ public abstract class ModelMapper {
       }
     }
     return model;
+  }
+
+  private boolean isInterface(ResolvedType type) {
+    return type instanceof ResolvedInterfaceType;
   }
 
   private Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {

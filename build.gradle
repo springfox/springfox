@@ -33,6 +33,10 @@ subprojects {
   apply plugin: 'groovy' //gradle groovy plugin extends the java plugin
   apply plugin: 'com.github.adrianbk.jvmsrc'
   apply plugin: 'checkstyle'
+
+  javadoc {
+    options.encoding = 'UTF-8'
+  }
   //Commented PMD and Findbugs as its taking too much time for very little value
   //Perhaps run every 20 CI builds (mod of ci build number)
 //  apply from: "$rootDir/gradle/code-quality.gradle"
@@ -83,6 +87,7 @@ subprojects {
       )
     }
   }
+
 }
 
 apply from: "$rootDir/gradle/documentation.gradle"
