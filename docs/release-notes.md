@@ -1,8 +1,98 @@
+# 2.3.0 Release notes
+
+[Full Changelog](https://github.com/springfox/springfox/compare/2.2.2...HEAD)
+As usual thank you for all your support, especially @RobWin for also hanging out on the gitter
+channel and helping answering questions!
+
+**Highlights of this release are:**
+- Stable spring 3.2.x support, Spring 4.2.x compatibility and spring boot 1.3 support 
+- Global operation parameter configuration
+- Ability to supply examples
+- Better swagger-codegen support for generating unique method names
+- swagger-ui configuration options and stability
+- Docket level overriding of host name
+
+**Features:**
+
+- Disable appending of Using\<Method\> [\#1066](https://github.com/springfox/springfox/issues/1066)
+- @ApiModelProperty example field is ignored [\#998](https://github.com/springfox/springfox/issues/998)
+- Configuration for global Operation-Parameters [\#845](https://github.com/springfox/springfox/issues/845)
+- OAuth password grant\_type support [\#789](https://github.com/springfox/springfox/issues/789)
+
+**Pull requests from the community:** :bow:
+
+- Updated Swagger2Markup version to 0.9.1 [\#1065](https://github.com/springfox/springfox/pull/1065) ([RobWin](https://github.com/RobWin))
+- Fix issue \#767, duplicate @JsonProperty [\#1045](https://github.com/springfox/springfox/pull/1045) ([glarfs](https://github.com/glarfs))
+- Fixing logging error [\#1042](https://github.com/springfox/springfox/pull/1042) ([AndreTurgeon](https://github.com/AndreTurgeon))
+- Added a fix for 'example' field in @ApiModelProperty annotation [\#1041](https://github.com/springfox/springfox/pull/1041) ([jrhowell](https://github.com/jrhowell))
+- Fix 2 minor typos in the documentation [\#1013](https://github.com/springfox/springfox/pull/1013) ([erikthered](https://github.com/erikthered))
+- Add host\(\) method to docket [\#1011](https://github.com/springfox/springfox/pull/1011) ([cbornet](https://github.com/cbornet))
+- Springfox \#845: Configuration for global Operation-Parameters. \(Documentation\) [\#1005](https://github.com/springfox/springfox/pull/1005) ([GitVhaos](https://github.com/GitVhaos))
+- fix javadoc [\#1002](https://github.com/springfox/springfox/pull/1002) ([n0mer](https://github.com/n0mer))
+- Fix handling of RequestMapping that include regex with quantifier\(s\) [\#993](https://github.com/springfox/springfox/pull/993) ([erikthered](https://github.com/erikthered))
+- Proper handling of @ResponseStatus with default reason\(\). [\#970](https://github.com/springfox/springfox/pull/970) ([acourtneybrown](https://github.com/acourtneybrown))
+- Fix generation of "schema" section for a "body" parameter to contain correct "type" & "format" [\#968](https://github.com/springfox/springfox/pull/968) ([acourtneybrown](https://github.com/acourtneybrown))
+- Allow security scheme of same type in resource listing [\#967](https://github.com/springfox/springfox/pull/967) ([cbornet](https://github.com/cbornet))
+- Add ResourceOwnerPasswordCredentialsGrant and ClientCredentialsGrant [\#966](https://github.com/springfox/springfox/pull/966) ([cbornet](https://github.com/cbornet))
+- DOC - Fixing path to Swagger UI image [\#932](https://github.com/springfox/springfox/pull/932) ([HNygard](https://github.com/HNygard))
+- Updated swagger2markup version [\#930](https://github.com/springfox/springfox/pull/930) ([RobWin](https://github.com/RobWin))
+- fix async bug [\#1078](https://github.com/springfox/springfox/pull/1078) ([rockytriton](https://github.com/rockytriton))
+- Fixing typo [\#922](https://github.com/springfox/springfox/pull/922) ([phchang](https://github.com/phchang))
+
+**Bug Fixes:**
+
+- UiConfiguration setting validatorUrl doesn't actually work. [\#1077](https://github.com/springfox/springfox/issues/1077)
+- Springfox generates empty types in the definitions \(which swagger-codegen struggles with\) [\#1063](https://github.com/springfox/springfox/issues/1063)
+- ArrayIndexOutOfBoundsException when using custom Maps [\#1062](https://github.com/springfox/springfox/issues/1062)
+- Swagger is not compatible with Spring 4.2.3 [\#1055](https://github.com/springfox/springfox/issues/1055)
+- ClassCastException in Eclipse [\#1054](https://github.com/springfox/springfox/issues/1054)
+- Provide custom resource grouping strategy [\#1039](https://github.com/springfox/springfox/issues/1039)
+- @Api\(hidden = true\) does not hide [\#995](https://github.com/springfox/springfox/issues/995)
+- Extra closing curly brace on endpoints defined with a regex containing a quantifier [\#991](https://github.com/springfox/springfox/issues/991)
+- Multiple oauth security schemes not supported [\#959](https://github.com/springfox/springfox/issues/959)
+- NullPointerException when extending controller classes with multiple parameterized types [\#953](https://github.com/springfox/springfox/issues/953)
+- Regression disabling schema validator [\#951](https://github.com/springfox/springfox/issues/951)
+- Sending API key to endpoints in request header [\#943](https://github.com/springfox/springfox/issues/943)
+- Provide default descriptions for non-200 status codes [\#941](https://github.com/springfox/springfox/issues/941)
+- General maintenance [\#939](https://github.com/springfox/springfox/issues/939)
+- tags parameter in @Api is ignored by ApiOperation reader/mapper [\#934](https://github.com/springfox/springfox/issues/934)
+- defaultValue parameter in RequestParam is ignored [\#933](https://github.com/springfox/springfox/issues/933)
+- @ModelAttribute Generates Different Output than @RequestBody [\#929](https://github.com/springfox/springfox/issues/929)
+- Change links in docs [\#928](https://github.com/springfox/springfox/issues/928)
+- java.net.UUID [\#925](https://github.com/springfox/springfox/issues/925)
+- Documentation not generated in latest versions of springfox with spring 3.x [\#921](https://github.com/springfox/springfox/issues/921)
+- Retire ResourceGroupingStrategy in favor of the available tag support [\#919](https://github.com/springfox/springfox/issues/919)
+- Support Java 8 "-parameters" [\#900](https://github.com/springfox/springfox/issues/900)
+- "click to authenticate" button not clickable [\#870](https://github.com/springfox/springfox/issues/870)
+- @RequestPart that are in the body aren't represented correctly [\#836](https://github.com/springfox/springfox/issues/836)
+- Post release tasks [\#708](https://github.com/springfox/springfox/issues/708)
+- DOC - Fixing path to Swagger UI image [\#932](https://github.com/springfox/springfox/pull/932) ([HNygard](https://github.com/HNygard))
+- Updated swagger2markup version [\#930](https://github.com/springfox/springfox/pull/930) ([RobWin](https://github.com/RobWin))
+
+**Closed issues:**
+
+- How to override @RequestBody annotated method parameter description? [\#1069](https://github.com/springfox/springfox/issues/1069)
+- Content-Type not being set [\#1029](https://github.com/springfox/springfox/issues/1029)
+- Support for custom Optional class [\#1027](https://github.com/springfox/springfox/issues/1027)
+- java.io.FileNotFoundException: Jar URL cannot be resolved to absolute file path  [\#1026](https://github.com/springfox/springfox/issues/1026)
+- Docket documentation [\#1010](https://github.com/springfox/springfox/issues/1010)
+- Everything on logs seem fine, but get 404 when I try to access the ui [\#1009](https://github.com/springfox/springfox/issues/1009)
+- Method with @PathVariable Map attributes being ignored [\#999](https://github.com/springfox/springfox/issues/999)
+- Swagger produce IllegalArgumentException while using Spring HATEOAS classes [\#997](https://github.com/springfox/springfox/issues/997)
+- Are query parameter templates for "path" entries valid? [\#986](https://github.com/springfox/springfox/issues/986)
+- Want to convert Springfox-2.0.1 source into Eclipse Maven project [\#974](https://github.com/springfox/springfox/issues/974)
+- @ApiResponse maps to wrong ApiModel-definition name using "globalResponseMessage" [\#961](https://github.com/springfox/springfox/issues/961)
+- Hiding injected Spring parameters from the API [\#960](https://github.com/springfox/springfox/issues/960)
+- How to hide a property in an @ApiModel? [\#955](https://github.com/springfox/springfox/issues/955)
+- springfox-swagger2 dependency issue [\#946](https://github.com/springfox/springfox/issues/946)
+- SpringMvc error [\#940](https://github.com/springfox/springfox/issues/940)
+
 # 2.2.0 Release notes
 Thank you as usual for everyone who contributed in some for or the other to make this product better!! This release 
 sneaks in some features we're incubating to provide hypermedia support.
 
 ### Features
+
 - #866 Missing REST API descriptions in JSON @EranIsraeli
 - #861 Springfox #845: Configuration for global Operation-Parameters @GitVhaos
 - #834 OAUTH problem @dorukokan
