@@ -33,7 +33,9 @@ public class Swagger12TestConfig {
   }
 
   @Bean
-  public Docket testCases(List<SecurityScheme> securitySchemes, List<SecurityContext> securityContexts) {
+  public Docket testCases(
+      List<SecurityScheme> securitySchemes,
+      List<SecurityContext> securityContexts) {
     return new Docket(DocumentationType.SWAGGER_12)
         .groupName("default")
         .select()

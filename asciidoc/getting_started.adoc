@@ -134,6 +134,7 @@ https://tools.ietf.org/html/rfc6570#section-3.2.8[form style query expansion]. A
 * http://example.org/findCustomersBy?zip=76051 to find customers by zip. Per https://tools.ietf.org/html/rfc6570[RFC
   6570] This would be represented as http://example.org/findCustomersBy{?zip}
 <22> Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in spring controller method signature (for example authenticaton information). Parameters added here will be part of every API Operation in the generated swagger specification.
+<23> How do you want to transport the api key via a HEADER (header) or QUERY_PARAM (query)?
 
 There are plenty of more options to configure the `Docket`. This should provide a good start.
 

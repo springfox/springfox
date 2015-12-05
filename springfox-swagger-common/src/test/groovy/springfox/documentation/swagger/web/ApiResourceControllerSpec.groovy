@@ -23,7 +23,14 @@ class ApiResourceControllerSpec extends Specification {
       swagger1Url = "/v1"
       swagger2Url = "/v2"
       documentationCache = cache
-      securityConfiguration = new SecurityConfiguration("client", "client-secret","real", "test", "key", ",")
+      securityConfiguration = new SecurityConfiguration(
+          "client",
+          "client-secret",
+          "real",
+          "test",
+          "key",
+          ApiKeyVehicle.HEADER,
+          ",")
       uiConfiguration = new UiConfiguration("/validate")
       swagger1Available = true
       swagger2Available = true
@@ -40,7 +47,8 @@ class ApiResourceControllerSpec extends Specification {
     expect:
       mockMvc.perform(get("/configuration/security")
         .accept(MediaType.APPLICATION_JSON))
-        .andExpect(content().string("{\"clientId\":\"client\",\"clientSecret\":\"client-secret\",\"realm\":\"real\",\"appName\":\"test\",\"apiKey\":\"key\",\"scopeSeparator\":\",\"}"))
+        .andExpect(content().string("{\"clientId\":\"client\",\"clientSecret\":\"client-secret\",\"realm\":\"real\"," +
+          "\"appName\":\"test\",\"apiKey\":\"key\",\"apiKeyVehicle\":\"header\",\"scopeSeparator\":\",\"}"))
   }
 
   def "UI Configuration is available" (){
@@ -73,7 +81,8 @@ class ApiResourceControllerSpec extends Specification {
     when:
       mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES)
     then:
-      mapper.writer().writeValueAsString(sut.securityConfiguration) == "{\"clientId\":\"client\",\"clientSecret\":\"client-secret\",\"realm\":\"real\",\"appName\":\"test\",\"apiKey\":\"key\",\"scopeSeparator\":\",\"}"
+      mapper.writer().writeValueAsString(sut.securityConfiguration) == "{\"clientId\":\"client\"," +
+          "\"clientSecret\":\"client-secret\",\"realm\":\"real\",\"appName\":\"test\",\"apiKey\":\"key\",\"apiKeyVehicle\":\"header\",\"scopeSeparator\":\",\"}"
       mapper.writer().writeValueAsString(sut.uiConfiguration) == "{\"validatorUrl\":\"/validate\"}"
       mapper.writer().writeValueAsString(sut.swaggerResources().body) == "[{\"name\":\"test\"," +
           "\"location\":\"/v1?group=test\",\"swaggerVersion\":\"1.2\"},{\"name\":\"test\",\"location\":\"/v2?group=test\",\"swaggerVersion\":\"2.0\"}]"

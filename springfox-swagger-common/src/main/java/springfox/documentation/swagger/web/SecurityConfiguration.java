@@ -30,19 +30,21 @@ public class SecurityConfiguration {
   private String realm;
   private String appName;
   private String apiKey;
+  private ApiKeyVehicle apiKeyVehicle;
   private String scopeSeparator;
 
-  private SecurityConfiguration() {
-    this(null, null, null, null, null, ",");
+  private SecurityConfiguration(){
+    this(null, null, null, null, null, ApiKeyVehicle.HEADER, ",");
   }
 
   public SecurityConfiguration(String clientId, String clientSecret, String realm, String appName, String apiKey,
-                               String scopeSeparator) {
+                               ApiKeyVehicle apiKeyVehicle, String scopeSeparator) {
     this.clientId = clientId;
     this.clientSecret = clientSecret;
     this.realm = realm;
     this.appName = appName;
     this.apiKey = apiKey;
+    this.apiKeyVehicle = apiKeyVehicle;
     this.scopeSeparator = scopeSeparator;
   }
 
@@ -74,5 +76,10 @@ public class SecurityConfiguration {
   @JsonProperty("scopeSeparator")
   public String scopeSeparator() {
     return scopeSeparator;
+  }
+
+  @JsonProperty("apiKeyVehicle")
+  public String getApiKeyVehicle() {
+    return apiKeyVehicle.getValue();
   }
 }
