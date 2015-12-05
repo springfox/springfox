@@ -1028,6 +1028,8 @@ dependencies {
 <strong>140</strong>
 141
 142
+143
+144
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
@@ -1073,6 +1075,7 @@ dependencies {
 <span class="keyword">import</span> <span class="include">springfox.documentation.spi.DocumentationType</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.spi.service.contexts.SecurityContext</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.spring.web.plugins.Docket</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.ApiKeyVehicle</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.SecurityConfiguration</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.UiConfiguration</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.swagger2.annotations.EnableSwagger2</span>;
@@ -1162,6 +1165,7 @@ dependencies {
         <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-realm</span><span class="delimiter">&quot;</span></span>,
         <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app</span><span class="delimiter">&quot;</span></span>,
         <span class="string"><span class="delimiter">&quot;</span><span class="content">apiKey</span><span class="delimiter">&quot;</span></span>,
+        ApiKeyVehicle.HEADER, <i class="conum" data-value="23"></i><b>(23)</b>
         <span class="string"><span class="delimiter">&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span> <span class="comment">/*scope separator*/</span>);
   }
 
@@ -1276,6 +1280,10 @@ select operations to be protected by one of the specified security schemes.</td>
 <tr>
 <td><i class="conum" data-value="22"></i><b>22</b></td>
 <td>Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in spring controller method signature (for example authenticaton information). Parameters added here will be part of every API Operation in the generated swagger specification.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="23"></i><b>23</b></td>
+<td>How do you want to transport the api key via a HEADER (header) or QUERY_PARAM (query)?</td>
 </tr>
 </table>
 </div>
@@ -2378,7 +2386,7 @@ It is still in incubation but host name can be configured per docket</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-12-02 19:13:17 UTC
+Last updated 2015-12-05 00:43:19 UTC
 </div>
 </div>
 </body>
