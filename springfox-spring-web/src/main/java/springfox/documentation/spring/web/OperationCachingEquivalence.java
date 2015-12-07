@@ -19,9 +19,9 @@
 package springfox.documentation.spring.web;
 
 import com.google.common.base.Equivalence;
+import com.google.common.base.Objects;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
-import java.util.Objects;
 
 public class OperationCachingEquivalence extends Equivalence<RequestMappingContext> {
   @Override
@@ -32,9 +32,9 @@ public class OperationCachingEquivalence extends Equivalence<RequestMappingConte
     if (eitherOfThemIsNull(first, second)) {
       return false;
     }
-    return Objects.equals(first.getHandlerMethod().getMethod(), second.getHandlerMethod().getMethod())
-        && Objects.equals(first.getRequestMappingPattern(), second.getRequestMappingPattern())
-        && Objects.equals(first.getDocumentationContext().getGenericsNamingStrategy(),
+    return Objects.equal(first.getHandlerMethod().getMethod(), second.getHandlerMethod().getMethod())
+        && Objects.equal(first.getRequestMappingPattern(), second.getRequestMappingPattern())
+        && Objects.equal(first.getDocumentationContext().getGenericsNamingStrategy(),
         second.getDocumentationContext().getGenericsNamingStrategy());
   }
 
@@ -48,7 +48,7 @@ public class OperationCachingEquivalence extends Equivalence<RequestMappingConte
 
   @Override
   protected int doHash(RequestMappingContext requestMappingContext) {
-    return Objects.hash(requestMappingContext.getHandlerMethod().getMethod(),
+    return Objects.hashCode(requestMappingContext.getHandlerMethod().getMethod(),
         requestMappingContext.getRequestMappingPattern(),
         requestMappingContext.getDocumentationContext().getGenericsNamingStrategy());
   }
