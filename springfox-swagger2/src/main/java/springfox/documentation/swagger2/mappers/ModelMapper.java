@@ -38,10 +38,7 @@ import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMap;
 import static springfox.documentation.schema.Maps.isMapType;
@@ -72,8 +69,9 @@ public abstract class ModelMapper {
         .example(source.getExample())
         .name(source.getName());
 
-    Map<String, Property> modelProperties = mapProperties(source.getProperties());
-    model.setProperties(getPropertyMapSortedByPositionProperty(modelProperties));
+    SortedMap<String, ModelProperty> sortedProperties = getPropertyMapSortedByPositionProperty(source.getProperties());
+    Map<String, Property> modelProperties = mapProperties(sortedProperties);
+    model.setProperties(modelProperties);
 
     FluentIterable<String> requiredFields = FluentIterable.from(source.getProperties().values())
         .filter(requiredProperty())
@@ -94,30 +92,27 @@ public abstract class ModelMapper {
     return model;
   }
 
+  private Map<String, Property> mapProperties(SortedMap<String, ModelProperty> properties) {
+    Map<String,Property> mappedProperties = new LinkedHashMap<String, Property>();
+    for(Map.Entry<String, ModelProperty> propertyEntry : properties.entrySet()) {
+      mappedProperties.put(propertyEntry.getKey(), mapProperty(propertyEntry.getValue()));
+    }
+    return mappedProperties;
+  }
+
   /**
-   * Returns a {@link TreeMap} where the keys are sorted by their respective property position values in descending order.
+   * Returns a {@link TreeMap} where the keys are sorted by their respective property position values in ascending order.
    * @param modelProperties
    * @return
      */
-  private Map<String,Property> getPropertyMapSortedByPositionProperty(final Map<String,Property> modelProperties) {
-    Map<String,Property> sortedMap = new TreeMap<String,Property>(new Comparator<String>() {
+  private SortedMap<String,ModelProperty> getPropertyMapSortedByPositionProperty(final Map<String,ModelProperty> modelProperties) {
+    SortedMap<String,ModelProperty> sortedMap = new TreeMap<String,ModelProperty>(new Comparator<String>() {
       @Override
       public int compare(String k1, String k2) {
-        Property p1 = modelProperties.get(k1);
-        Property p2 = modelProperties.get(k2);
-        if(p1 != null && p2 != null) {
-          int res = getValueOrZero(p1.getPosition()).compareTo(getValueOrZero(p2.getPosition()));
-          return res != 0? res : k1.compareTo(k2);
-        }
-        else if(p1 == null && p2 != null) {
-          return -1;
-        }
-        else if(p1 != null) {
-          return 1;
-        }
-        else {
-          return k1.compareTo(k2);
-        }
+        ModelProperty p1 = modelProperties.get(k1);
+        ModelProperty p2 = modelProperties.get(k2);
+        int res = getValueOrZero(p1.getPosition()).compareTo(getValueOrZero(p2.getPosition()));
+        return res != 0? res : k1.compareTo(k2);
       }
     });
     sortedMap.putAll(modelProperties);
@@ -179,7 +174,6 @@ public abstract class ModelMapper {
       property.setRequired(source.isRequired());
       property.setReadOnly(source.isReadOnly());
       property.setExample(source.getExample());
-      property.setPosition(source.getPosition());
     }
     return property;
   }
@@ -220,8 +214,6 @@ public abstract class ModelMapper {
     }
     return mapModels(definitions);
   }
-
-  protected abstract Map<String, Property> mapProperties(Map<String, ModelProperty> properties);
 
   private Function<ModelProperty, String> propertyName() {
     return new Function<ModelProperty, String>() {
