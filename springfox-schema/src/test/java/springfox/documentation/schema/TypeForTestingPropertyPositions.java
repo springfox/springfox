@@ -1,4 +1,3 @@
-
 /*
  *
  *  Copyright 2015 the original author or authors.
@@ -18,7 +17,7 @@
  *
  */
  
- package springfox.documentation.schema;
+package springfox.documentation.schema;
 
 public class TypeForTestingPropertyPositions {
     private String a;
