@@ -29,12 +29,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Multimap;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
-import io.swagger.models.properties.AbstractNumericProperty;
-import io.swagger.models.properties.ArrayProperty;
-import io.swagger.models.properties.MapProperty;
-import io.swagger.models.properties.ObjectProperty;
-import io.swagger.models.properties.Property;
-import io.swagger.models.properties.StringProperty;
+import io.swagger.models.properties.*;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelRef;
@@ -43,13 +38,14 @@ import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static com.google.common.collect.Maps.*;
-import static springfox.documentation.schema.Maps.*;
-import static springfox.documentation.swagger2.mappers.Properties.*;
+import static com.google.common.collect.Maps.newHashMap;
+import static springfox.documentation.schema.Maps.isMapType;
+import static springfox.documentation.swagger2.mappers.Properties.property;
 
 @Mapper
 public abstract class ModelMapper {
@@ -70,15 +66,15 @@ public abstract class ModelMapper {
   }
 
   public Model mapProperties(springfox.documentation.schema.Model source) {
-
     ModelImpl model = new ModelImpl()
         .description(source.getDescription())
         .discriminator(source.getDiscriminator())
         .example(source.getExample())
         .name(source.getName());
-    TreeMap<String, Property> sorted = newTreeMap();
-    sorted.putAll(mapProperties(source.getProperties()));
-    model.setProperties(sorted);
+
+    Map<String, Property> modelProperties = mapProperties(source.getProperties());
+    model.setProperties(getPropertyMapSortedByPositionProperty(modelProperties));
+
     FluentIterable<String> requiredFields = FluentIterable.from(source.getProperties().values())
         .filter(requiredProperty())
         .transform(propertyName());
@@ -96,6 +92,40 @@ public abstract class ModelMapper {
       }
     }
     return model;
+  }
+
+  /**
+   * Returns a {@link TreeMap} where the keys are sorted by their respective property position values in descending order.
+   * @param modelProperties
+   * @return
+     */
+  private Map<String,Property> getPropertyMapSortedByPositionProperty(final Map<String,Property> modelProperties) {
+    Map<String,Property> sortedMap = new TreeMap<String,Property>(new Comparator<String>() {
+      @Override
+      public int compare(String k1, String k2) {
+        Property p1 = modelProperties.get(k1);
+        Property p2 = modelProperties.get(k2);
+        if(p1 != null && p2 != null) {
+          int res = getValueOrZero(p1.getPosition()).compareTo(getValueOrZero(p2.getPosition()));
+          return res != 0? res : k1.compareTo(k2);
+        }
+        else if(p1 == null && p2 != null) {
+          return -1;
+        }
+        else if(p1 != null) {
+          return 1;
+        }
+        else {
+          return k1.compareTo(k2);
+        }
+      }
+    });
+    sortedMap.putAll(modelProperties);
+    return sortedMap;
+  }
+
+  private Integer getValueOrZero(Integer value) {
+    return value != null? value : 0;
   }
 
   private boolean isInterface(ResolvedType type) {
@@ -149,6 +179,7 @@ public abstract class ModelMapper {
       property.setRequired(source.isRequired());
       property.setReadOnly(source.isReadOnly());
       property.setExample(source.getExample());
+      property.setPosition(source.getPosition());
     }
     return property;
   }
