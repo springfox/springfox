@@ -9,7 +9,7 @@ ext {
   mockito = "1.10.19"
   servlet = "3.1.0"
   classmate = "1.2.0"
-  jackson = '2.6.3'
+  jackson = '2.6.4'
   snakeyaml = '1.16'
   springPluginVersion = "1.2.0.RELEASE"
   jsonPath = "2.1.0"
@@ -29,6 +29,7 @@ ext {
                   "org.spockframework:spock-spring:${spock}",
                   "org.spockframework:spock-core:${spock}",
                   "org.codehaus.groovy:groovy-all:${groovy}",
+                  "org.springframework.hateoas:spring-hateoas:${springHateoas}"
           ],
           swagger2Core  : [
                   "io.swagger:swagger-annotations:${swagger2Core}",
@@ -37,7 +38,6 @@ ext {
           spring        : [
                   "org.springframework.plugin:spring-plugin-core:${springPluginVersion}",
                   "org.springframework.plugin:spring-plugin-metadata:${springPluginVersion}",
-                  "org.springframework.hateoas:spring-hateoas:${springHateoas}"
           ],
           springProvided: [
                   "org.springframework:spring-core:$spring",

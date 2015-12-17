@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
@@ -38,10 +39,10 @@ import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
-import java.net.URI;
+import javax.servlet.http.HttpServletRequest;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static com.google.common.base.Strings.*;
+import static springfox.documentation.swagger2.web.HostNameProvider.componentsFrom;
 
 @Controller
 @ApiIgnore
@@ -66,7 +67,8 @@ public class Swagger2Controller {
   public
   @ResponseBody
   ResponseEntity<Json> getDocumentation(
-          @RequestParam(value = "group", required = false) String swaggerGroup) {
+      @RequestParam(value = "group", required = false) String swaggerGroup,
+      HttpServletRequest servletRequest) {
 
     String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
@@ -75,14 +77,14 @@ public class Swagger2Controller {
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     if (isNullOrEmpty(swagger.getHost())) {
-      swagger.host(hostName());
+      swagger.host(hostName(servletRequest));
     }
     return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
   }
 
-  private String hostName() {
+  private String hostName(HttpServletRequest servletRequest) {
     if ("DEFAULT".equals(hostNameOverride)) {
-      URI uri = linkTo(Swagger2Controller.class).toUri();
+      UriComponents uri = componentsFrom(servletRequest);
       String host = uri.getHost();
       int port = uri.getPort();
       if (port > -1) {

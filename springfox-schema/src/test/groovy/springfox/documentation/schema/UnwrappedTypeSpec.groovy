@@ -18,15 +18,14 @@
  */
 
 package springfox.documentation.schema
-
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
-import springfox.documentation.spi.schema.contexts.ModelContext
 
 import static springfox.documentation.spi.DocumentationType.*
+import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport, ConfiguredObjectMapperSupport, AlternateTypesSupport])
 class UnwrappedTypeSpec extends Specification {
@@ -36,10 +35,20 @@ class UnwrappedTypeSpec extends Specification {
       def provider = defaultModelProvider(objectMapperThatUsesFields())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
     when:
-      Model asInput = provider.modelFor(ModelContext.inputParam(UnwrappedTypeForField, SWAGGER_12, alternateTypeProvider(),
-              namingStrategy)).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(UnwrappedTypeForField, SWAGGER_12, alternateTypeProvider(),
-          namingStrategy)).get()
+      Model asInput = provider.modelFor(
+          inputParam(
+              UnwrappedTypeForField,
+              SWAGGER_12,
+              alternateTypeProvider(),
+              namingStrategy))
+          .get()
+      Model asReturn = provider.modelFor(
+          returnValue(
+              UnwrappedTypeForField,
+              SWAGGER_12,
+              alternateTypeProvider(),
+              namingStrategy))
+          .get()
 
     then:
       asInput.getName() == UnwrappedTypeForField.simpleName
@@ -52,9 +61,17 @@ class UnwrappedTypeSpec extends Specification {
       item.type == "string"
       !item.collection
       item.itemType == null
-
+    and:
       asReturn.getName() == UnwrappedTypeForField.simpleName
-      asReturn.getProperties().size() == 0
+      asReturn.getProperties().size() == 1
+      asReturn.getProperties().containsKey("name" )
+      def returnProperty = asReturn.getProperties().get("name" )
+      returnProperty.type.erasedType == String
+      returnProperty.getQualifiedType() == "java.lang.String"
+      def returnItem = modelProperty.getModelRef()
+      returnItem.type == "string"
+      !returnItem.collection
+      returnItem.itemType == null
 
   }
 
@@ -64,9 +81,9 @@ class UnwrappedTypeSpec extends Specification {
       def provider = defaultModelProvider(objectMapperThatUsesGetters())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
     when:
-      Model asInput = provider.modelFor(ModelContext.inputParam(UnwrappedTypeForGetter, SWAGGER_12, alternateTypeProvider(),
+      Model asInput = provider.modelFor(inputParam(UnwrappedTypeForGetter, SWAGGER_12, alternateTypeProvider(),
           namingStrategy)).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(UnwrappedTypeForGetter, SWAGGER_12, alternateTypeProvider(),
+      Model asReturn = provider.modelFor(returnValue(UnwrappedTypeForGetter, SWAGGER_12, alternateTypeProvider(),
           namingStrategy)).get()
 
     then:
@@ -100,9 +117,9 @@ class UnwrappedTypeSpec extends Specification {
       def provider = defaultModelProvider(objectMapperThatUsesSetters() )
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
     when:
-      Model asInput = provider.modelFor(ModelContext.inputParam(UnwrappedTypeForSetter, SWAGGER_12, alternateTypeProvider(),
+      Model asInput = provider.modelFor(inputParam(UnwrappedTypeForSetter, SWAGGER_12, alternateTypeProvider(),
           namingStrategy)).get()
-      Model asReturn = provider.modelFor(ModelContext.returnValue(UnwrappedTypeForSetter, SWAGGER_12, alternateTypeProvider(),
+      Model asReturn = provider.modelFor(returnValue(UnwrappedTypeForSetter, SWAGGER_12, alternateTypeProvider(),
         namingStrategy)).get()
 
     then:
