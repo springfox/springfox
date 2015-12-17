@@ -196,4 +196,8 @@ class TypesForTestingSupport {
   static ResolvedType customMapOfType(def clazz) {
     resolver.resolve(CustomMap, clazz)
   }
+
+  def ResolvedType typeForTestingPropertyPositions() {
+    resolver.resolve(TypeForTestingPropertyPositions)
+  }
 }

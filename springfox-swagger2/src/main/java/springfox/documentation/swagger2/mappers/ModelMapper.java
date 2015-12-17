@@ -44,7 +44,9 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import static com.google.common.collect.Maps.*;
@@ -70,15 +72,16 @@ public abstract class ModelMapper {
   }
 
   public Model mapProperties(springfox.documentation.schema.Model source) {
-
     ModelImpl model = new ModelImpl()
         .description(source.getDescription())
         .discriminator(source.getDiscriminator())
         .example(source.getExample())
         .name(source.getName());
-    TreeMap<String, Property> sorted = newTreeMap();
-    sorted.putAll(mapProperties(source.getProperties()));
-    model.setProperties(sorted);
+
+    SortedMap<String, ModelProperty> sortedProperties = sort(source.getProperties());
+    Map<String, Property> modelProperties = mapProperties(sortedProperties);
+    model.setProperties(modelProperties);
+
     FluentIterable<String> requiredFields = FluentIterable.from(source.getProperties().values())
         .filter(requiredProperty())
         .transform(propertyName());
@@ -98,6 +101,28 @@ public abstract class ModelMapper {
     return model;
   }
 
+  private Map<String, Property> mapProperties(SortedMap<String, ModelProperty> properties) {
+    Map<String, Property> mappedProperties = new LinkedHashMap<String, Property>();
+    for (Map.Entry<String, ModelProperty> propertyEntry : properties.entrySet()) {
+      mappedProperties.put(propertyEntry.getKey(), mapProperty(propertyEntry.getValue()));
+    }
+    return mappedProperties;
+  }
+
+  /**
+   * Returns a {@link TreeMap} where the keys are sorted by their respective property position values in ascending
+   * order.
+   *
+   * @param modelProperties
+   * @return
+   */
+  private SortedMap<String, ModelProperty> sort(Map<String, ModelProperty> modelProperties) {
+
+    SortedMap<String, ModelProperty> sortedMap = new TreeMap<String, ModelProperty>(defaultOrdering(modelProperties));
+    sortedMap.putAll(modelProperties);
+    return sortedMap;
+  }
+
   private boolean isInterface(ResolvedType type) {
     return type instanceof ResolvedInterfaceType;
   }
@@ -112,7 +137,7 @@ public abstract class ModelMapper {
   }
 
   private Optional<ResolvedType> findMapInterface(ResolvedType type) {
-    return  Optional.fromNullable(type.findSupertype(Map.class));
+    return Optional.fromNullable(type.findSupertype(Map.class));
   }
 
   public Property mapProperty(ModelProperty source) {
@@ -189,8 +214,6 @@ public abstract class ModelMapper {
     }
     return mapModels(definitions);
   }
-
-  protected abstract Map<String, Property> mapProperties(Map<String, ModelProperty> properties);
 
   private Function<ModelProperty, String> propertyName() {
     return new Function<ModelProperty, String>() {

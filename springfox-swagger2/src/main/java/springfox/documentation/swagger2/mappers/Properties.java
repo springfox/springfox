@@ -21,6 +21,7 @@ package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Ordering;
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.DateProperty;
 import io.swagger.models.properties.DateTimeProperty;
@@ -35,7 +36,9 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
+import springfox.documentation.schema.ModelProperty;
 
+import java.util.Comparator;
 import java.util.Map;
 
 import static com.google.common.base.Functions.*;
@@ -113,6 +116,30 @@ class Properties {
       @Override
       public Property apply(String input) {
         return new FileProperty();
+      }
+    };
+  }
+
+  public static Ordering<String> defaultOrdering(Map<String, ModelProperty> properties) {
+    return Ordering.from(byPosition(properties)).compound(byName());
+  }
+
+  private static Comparator<String> byName() {
+    return new Comparator<String>() {
+      @Override
+      public int compare(String first, String second) {
+        return first.compareTo(second);
+      }
+    };
+  }
+
+  private static Comparator<String> byPosition(final Map<String, ModelProperty> modelProperties) {
+    return new Comparator<String>() {
+      @Override
+      public int compare(String first, String second) {
+        ModelProperty p1 = modelProperties.get(first);
+        ModelProperty p2 = modelProperties.get(second);
+        return Integer.compare(p1.getPosition(), p2.getPosition());
       }
     };
   }
