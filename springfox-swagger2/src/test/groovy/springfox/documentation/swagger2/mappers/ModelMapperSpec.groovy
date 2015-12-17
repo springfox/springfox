@@ -1,6 +1,5 @@
 package springfox.documentation.swagger2.mappers
 
-import com.fasterxml.classmate.TypeResolver
 import io.swagger.models.properties.AbstractNumericProperty
 import io.swagger.models.properties.ObjectProperty
 import io.swagger.models.properties.RefProperty
@@ -15,15 +14,13 @@ import springfox.documentation.spi.DocumentationType
 import static com.google.common.base.Functions.*
 import static com.google.common.base.Suppliers.*
 import static com.google.common.collect.Maps.*
+import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ModelMapperSpec extends SchemaSpecification {
 
   def namingStrategy = new CodeGenGenericTypeNamingStrategy()
-  def resolver = new TypeResolver()
-  def resolvedTypeOfPropertyPositionModel = resolver.resolve(TypeForTestingPropertyPositions)
-  def resolvedTypeOfPropertyPositionProperty = resolver.resolve(String)
 
   def "models are serialized correctly" (){
     given:
@@ -236,47 +233,70 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "model property positions affect the serialization order" () {
     given:
-    Map<String, ModelProperty> properties = [
-      'a': createModelPropertyWithPosition('a', 3),
-      'b': createModelPropertyWithPosition('b', 2),
-      'c': createModelPropertyWithPosition('c', 1),
-      'd': createModelPropertyWithPosition('d', 0),
-      'e': createModelPropertyWithPosition('e', 4),
-    ]
-    Model model = createModel(properties)
+      def properties = [
+        'a': createModelPropertyWithPosition('a', 3),
+        'b': createModelPropertyWithPosition('b', 2),
+        'c': createModelPropertyWithPosition('c', 1),
+        'd': createModelPropertyWithPosition('d', 0),
+        'e': createModelPropertyWithPosition('e', 4),
+      ]
+      Model model = createModel(properties)
     when:
-    def mapped = Mappers.getMapper(ModelMapper).mapModels([test: model])
+      def mapped = Mappers.getMapper(ModelMapper).mapModels([test: model])
     then:
-    mapped
-    ['d', 'c', 'b', 'a', 'e'] == mapped['test'].properties.keySet().toList()
+      mapped != null
+      ['d', 'c', 'b', 'a', 'e'] == mapped['test'].properties.keySet().toList()
   }
 
   def "model property positions affect the serialization order with same positions" () {
     given:
-    Map<String, ModelProperty> properties = [
-      'a': createModelPropertyWithPosition('a', 0),
-      'b': createModelPropertyWithPosition('b', 0),
-      'c': createModelPropertyWithPosition('c', 0),
-      'd': createModelPropertyWithPosition('d', 0),
-      'e': createModelPropertyWithPosition('e', 0),
-    ]
-    Model model = createModel(properties)
+      def properties = [
+        'a': createModelPropertyWithPosition('a', 0),
+        'b': createModelPropertyWithPosition('b', 0),
+        'c': createModelPropertyWithPosition('c', 0),
+        'd': createModelPropertyWithPosition('d', 0),
+        'e': createModelPropertyWithPosition('e', 0),
+      ]
+      Model model = createModel(properties)
     when:
-    def mapped = Mappers.getMapper(ModelMapper).mapModels([test: model])
+      def mapped = Mappers.getMapper(ModelMapper).mapModels([test: model])
     then:
-    mapped
-    ['a', 'b', 'c', 'd', 'e'] == mapped['test'].properties.keySet().toList()
+      mapped != null
+      ['a', 'b', 'c', 'd', 'e'] == mapped['test'].properties.keySet().toList()
   }
 
   ModelProperty createModelPropertyWithPosition(String name, int position) {
-    new ModelProperty(name, resolvedTypeOfPropertyPositionProperty, ResolvedTypes.simpleQualifiedTypeName(resolvedTypeOfPropertyPositionProperty), position, false, false, false, '', null, '').with {
-      it.updateModelRef({ rt -> new ModelRef(ResolvedTypes.simpleQualifiedTypeName(resolvedTypeOfPropertyPositionProperty), null) })
+    def stringProperty = resolver.resolve(String)
+    new ModelProperty(
+        name,
+        resolver.resolve(stringProperty),
+        simpleQualifiedTypeName(stringProperty),
+        position,
+        false,
+        false,
+        false,
+        '',
+        null,
+        '').with {
+      it.updateModelRef({ rt -> new ModelRef(simpleQualifiedTypeName(stringProperty), null) })
       it
     }
   }
 
   Model createModel(properties) {
-    new Model('test', 'test', resolvedTypeOfPropertyPositionModel, ResolvedTypes.simpleQualifiedTypeName(resolvedTypeOfPropertyPositionModel), properties, '', '', '', null, '')
+    def modelType = typeForTestingPropertyPositions()
+    def model = new Model(
+        'test',
+        'test',
+        modelType,
+        simpleQualifiedTypeName(modelType),
+        properties,
+        '',
+        '',
+        '',
+        null,
+        '')
+    model
   }
 
 }
