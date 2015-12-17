@@ -43,7 +43,6 @@ import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -79,7 +78,7 @@ public abstract class ModelMapper {
         .example(source.getExample())
         .name(source.getName());
 
-    SortedMap<String, ModelProperty> sortedProperties = getPropertyMapSortedByPositionProperty(source.getProperties());
+    SortedMap<String, ModelProperty> sortedProperties = sort(source.getProperties());
     Map<String, Property> modelProperties = mapProperties(sortedProperties);
     model.setProperties(modelProperties);
 
@@ -117,24 +116,11 @@ public abstract class ModelMapper {
    * @param modelProperties
    * @return
    */
-  private SortedMap<String, ModelProperty> getPropertyMapSortedByPositionProperty(
-      final Map<String, ModelProperty> modelProperties) {
+  private SortedMap<String, ModelProperty> sort(Map<String, ModelProperty> modelProperties) {
 
-    SortedMap<String, ModelProperty> sortedMap = new TreeMap<String, ModelProperty>(new Comparator<String>() {
-      @Override
-      public int compare(String k1, String k2) {
-        ModelProperty p1 = modelProperties.get(k1);
-        ModelProperty p2 = modelProperties.get(k2);
-        int res = getValueOrZero(p1.getPosition()).compareTo(getValueOrZero(p2.getPosition()));
-        return res != 0 ? res : k1.compareTo(k2);
-      }
-    });
+    SortedMap<String, ModelProperty> sortedMap = new TreeMap<String, ModelProperty>(defaultOrdering(modelProperties));
     sortedMap.putAll(modelProperties);
     return sortedMap;
-  }
-
-  private Integer getValueOrZero(Integer value) {
-    return value != null ? value : 0;
   }
 
   private boolean isInterface(ResolvedType type) {
