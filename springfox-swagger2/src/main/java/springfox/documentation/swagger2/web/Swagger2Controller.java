@@ -24,7 +24,6 @@ import io.swagger.models.Swagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +42,7 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.google.common.base.Strings.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 import static springfox.documentation.swagger2.web.HostNameProvider.*;
 
 @Controller
