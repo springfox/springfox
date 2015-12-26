@@ -1,5 +1,5 @@
 ext {
-  swagger2Core = "1.5.4"
+  swagger2Core = "1.5.5"
   spring = "4.1.8.RELEASE"
   groovy = "2.4.5"
   spock = "1.0-groovy-2.4"
