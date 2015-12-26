@@ -63,7 +63,7 @@ public class Swagger2Controller {
 
   @ApiIgnore
   @RequestMapping(value = "${springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
-          method = RequestMethod.GET)
+          method = RequestMethod.GET,produces={"application/json"})
   public
   @ResponseBody
   ResponseEntity<Json> getDocumentation(
