@@ -1,4 +1,5 @@
 package springfox.test.contract.swaggertests
+
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import springfox.documentation.service.SecurityScheme
@@ -6,6 +7,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
+import static com.google.common.base.Predicates.*
 import static springfox.documentation.builders.PathSelectors.*
 
 @Configuration
@@ -20,8 +22,23 @@ public class Swagger2TestConfig {
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-        .paths(regex("/api/.*"))
-        .build()
+          .paths(and(regex("/api/.*"), not(regex("/api/store/search.*"))))
+          .build()
+        .host("petstore.swagger.io")
+        .protocols(['http', 'https'] as Set)
+  }
+
+  @Bean
+  public Docket petstoreWithUriTemplating(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("petstoreTemplated")
+        .useDefaultResponseMessages(false)
+        .securitySchemes(authorizationTypes)
+        .produces(['application/xml', 'application/json'] as Set)
+        .select()
+          .paths(regex("/api/store/search.*"))
+          .build()
+        .enableUrlTemplating(true)
         .host("petstore.swagger.io")
         .protocols(['http', 'https'] as Set)
   }

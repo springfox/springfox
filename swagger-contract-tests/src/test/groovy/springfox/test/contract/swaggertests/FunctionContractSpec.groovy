@@ -61,6 +61,7 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     where:
     contractFile                                                  | groupName
     'swagger.json'                                                | 'petstore'
+    'swaggerTemplated.json'                                       | 'petstoreTemplated'
     'declaration-business-service.json'                           | 'businessService'
     'declaration-concrete-controller.json'                        | 'concrete'
     'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
