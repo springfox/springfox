@@ -68,7 +68,6 @@ import static com.google.common.collect.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
 import static springfox.documentation.schema.property.FactoryMethodProvider.*;
-import static springfox.documentation.schema.property.bean.Accessors.*;
 import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
@@ -177,7 +176,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
                                           ModelContext givenContext) {
     List<ModelProperty> properties = newArrayList();
     if (member instanceof AnnotatedMethod) {
-      properties.addAll(findAccessorMethod(type, jacksonProperty.getInternalName(), member)
+      properties.addAll(findAccessorMethod(type, member)
           .transform(propertyFromBean(givenContext, jacksonProperty))
           .or(new ArrayList<ModelProperty>()));
     } else if (member instanceof AnnotatedField) {
@@ -235,8 +234,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
                                           ModelContext modelContext) {
     String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
     BeanModelProperty beanModelProperty
-        = new BeanModelProperty(propertyName, childProperty, maybeAGetter(childProperty.getRawMember()),
-        typeResolver, modelContext.getAlternateTypeProvider());
+        = new BeanModelProperty(propertyName, childProperty, typeResolver, modelContext.getAlternateTypeProvider());
 
     LOG.debug("Adding property {} to model", propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
@@ -282,9 +280,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
   }
 
-  private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType,
-                                                      final String propertyName,
-                                                      final AnnotatedMember member) {
+  private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType, final AnnotatedMember member) {
     return tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
       public boolean apply(ResolvedMethod accessorMethod) {
         return accessorMethod.getRawMember().equals(member.getMember());

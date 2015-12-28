@@ -36,7 +36,6 @@ import springfox.documentation.schema.property.bean.BeanModelProperty
 
 import static com.google.common.collect.Lists.*
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*
-import static springfox.documentation.schema.property.bean.Accessors.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -55,7 +54,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
       String propName = name(propertyDefinition, true, namingStrategy)
-      def sut = new BeanModelProperty(propName, method, maybeAGetter(method.getRawMember()),
+      def sut = new BeanModelProperty(propName, method,
               new TypeResolver(), alternateTypeProvider())
 
 
@@ -87,7 +86,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
       String propName = name(propertyDefinition, true, namingStrategy)
-      def sut = new BeanModelProperty(propName, method, maybeAGetter(method.getRawMember()),
+      def sut = new BeanModelProperty(propName, method,
               new TypeResolver(), alternateTypeProvider())
 
     expect:
@@ -123,7 +122,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
       String propName = name(propertyDefinition, true, namingStrategy)
-      def sut = new BeanModelProperty(propName, method, maybeAGetter(method.getRawMember()),
+      def sut = new BeanModelProperty(propName, method,
               new TypeResolver(), alternateTypeProvider())
 
     expect:
