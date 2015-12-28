@@ -25,6 +25,7 @@ public class MapsContainer {
   private Map<ExampleEnum, SimpleType> enumToSimpleType;
   private Map<String, SimpleType> stringToSimpleType;
   private Map<Category, SimpleType> complexToSimpleType;
+  private Map<String, Map<String, SimpleType>> mapOfmapOfStringToSimpleType;
 
   public Map<ExampleEnum, SimpleType> getEnumToSimpleType() {
     return enumToSimpleType;
@@ -48,5 +49,13 @@ public class MapsContainer {
 
   public void setComplexToSimpleType(Map<Category, SimpleType> complexToSimpleType) {
     this.complexToSimpleType = complexToSimpleType;
+  }
+
+  public Map<String, Map<String, SimpleType>> getMapOfmapOfStringToSimpleType() {
+    return mapOfmapOfStringToSimpleType;
+  }
+
+  public void setMapOfmapOfStringToSimpleType(Map<String, Map<String, SimpleType>> mapOfmapOfStringToSimpleType) {
+    this.mapOfmapOfStringToSimpleType = mapOfmapOfStringToSimpleType;
   }
 }

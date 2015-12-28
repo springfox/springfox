@@ -22,7 +22,7 @@ import com.fasterxml.classmate.TypeResolver
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.service.contexts.Defaults
 
-import static springfox.documentation.schema.AlternateTypeRules.newRule
+import static springfox.documentation.schema.AlternateTypeRules.*
 
 class AlternateTypesSupport {
 
@@ -35,5 +35,11 @@ class AlternateTypesSupport {
 
   AlternateTypeProvider alternateTypeProvider() {
     new AlternateTypeProvider(defaultRules())
+  }
+
+  AlternateTypeProvider alternateRulesWithWildcardMap() {
+    def rules = defaultRules()
+    rules.add(newMapRule(WildcardType, WildcardType))
+    new AlternateTypeProvider(rules)
   }
 }

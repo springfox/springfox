@@ -32,6 +32,7 @@ import java.util.List;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 public class ResolvedTypes {
@@ -43,10 +44,10 @@ public class ResolvedTypes {
   public static String simpleQualifiedTypeName(ResolvedType type) {
     if (type instanceof ResolvedPrimitiveType) {
       Type primitiveType = type.getErasedType();
-      return Types.typeNameFor(primitiveType);
+      return typeNameFor(primitiveType);
     }
     if (type instanceof ResolvedArrayType) {
-      return Types.typeNameFor(type.getArrayElementType().getErasedType());
+      return typeNameFor(type.getArrayElementType().getErasedType());
     }
 
     return type.getErasedType().getName();
@@ -71,8 +72,9 @@ public class ResolvedTypes {
     });
   }
 
-  public static Function<? super ResolvedType, ModelRef> modelRefFactory(final ModelContext parentContext,
-                                                                         final TypeNameExtractor typeNameExtractor) {
+  public static Function<? super ResolvedType, ModelRef> modelRefFactory(
+      final ModelContext parentContext,
+      final TypeNameExtractor typeNameExtractor) {
 
     return new Function<ResolvedType, ModelRef>() {
       @Override
