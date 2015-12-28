@@ -57,7 +57,7 @@
                 }
             }
         },
-        "/foo/get-t": {
+        "/foo/get-t/{id}": {
             "get": {
                 "tags": [
                     "concrete-controller"
@@ -69,6 +69,15 @@
                 ],
                 "produces": [
                     "*/*"
+                ],
+                "parameters": [
+                  {
+                    "in": "path",
+                    "name": "id",
+                    "description": "id",
+                    "required": true,
+                    "type": "string"
+                  }
                 ],
                 "responses": {
                     "405": {

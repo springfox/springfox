@@ -37,7 +37,7 @@ class AnnotationsSpec extends Specification {
 
   def "ApiResponses annotations should be looked up through the entire inheritance hierarchy"() {
     given:
-      AnnotatedElement annotatedElement = ConcreteController.getMethod("get")
+      AnnotatedElement annotatedElement = ConcreteController.getMethod("get", Object)
     expect:
       findApiResponsesAnnotations(annotatedElement).isPresent()
   }

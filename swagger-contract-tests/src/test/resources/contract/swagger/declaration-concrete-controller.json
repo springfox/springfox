@@ -61,7 +61,7 @@
             ]
         },
         {
-            "path": "/foo/get-t",
+            "path": "/foo/get-t/{id}",
             "description": "get",
             "operations": [
                 {
@@ -74,7 +74,17 @@
                     "consumes": [
                         "application/json"
                     ],
-                    "parameters": [],
+                    "parameters": [
+                      {
+                        "allowMultiple": false,
+                        "defaultValue": "",
+                        "description": "id",
+                        "name": "id",
+                        "paramType": "path",
+                        "type": "string",
+                        "required": true
+                      }
+                    ],
                     "responseMessages": [
                         {
                             "code": 200,
