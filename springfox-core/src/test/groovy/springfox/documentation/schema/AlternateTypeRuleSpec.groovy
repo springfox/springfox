@@ -117,7 +117,7 @@ class AlternateTypeRuleSpec extends Specification {
       sut.alternateFor(testType).equals(testType)
     where:
       original                    | alternate              | testType
-      resolve(List, WildcardType) | resolve(List, String)  | resolve(List, String)
+      resolve(List, String)       | resolve(List, Date)    | resolve(List, Integer)
   }
 
   ResolvedType resolve(Class clazz, Type ... typeBindings) {

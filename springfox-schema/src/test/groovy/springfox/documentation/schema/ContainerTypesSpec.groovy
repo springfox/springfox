@@ -137,7 +137,7 @@ class ContainerTypesSpec extends SchemaSpecification {
       "objects"         | Object[]      | "object"      | "java.lang.Object"
       "bytes"           | byte[]        | "byte"        | "byte"
       "substituted"     | Substituted[] | "Substituted" | "springfox.documentation.schema.Substituted"
-      "arrayOfArrayOfInts"| int[][]     | "Array"       | "Array"
+      "arrayOfArrayOfInts"| List[]      | "List"        | "List"
       "arrayOfListOfStrings"| List[]    | "List"        | "Array"
   }
 
