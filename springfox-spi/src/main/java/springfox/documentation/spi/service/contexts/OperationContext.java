@@ -23,6 +23,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,6 +40,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.service.MediaTypes.*;
 
 public class OperationContext {
   private final OperationBuilder operationBuilder;
@@ -127,10 +129,13 @@ public class OperationContext {
   }
 
   public Set<MediaType> produces() {
-    return requestMappingInfo.getProducesCondition().getProducibleMediaTypes();
+    return Sets.union(requestMappingInfo.getProducesCondition().getProducibleMediaTypes(),
+        toMediaTypes(documentationContext.getProduces()));
   }
 
   public Set<MediaType> consumes() {
-    return requestMappingInfo.getConsumesCondition().getConsumableMediaTypes();
+    return Sets.union(requestMappingInfo.getConsumesCondition().getConsumableMediaTypes(),
+        toMediaTypes(documentationContext.getConsumes()));
   }
+
 }

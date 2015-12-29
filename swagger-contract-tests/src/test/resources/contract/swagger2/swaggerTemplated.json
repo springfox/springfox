@@ -41,6 +41,7 @@
           "application/json"
         ],
         "produces": [
+          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -76,6 +77,7 @@
           "application/json"
         ],
         "produces": [
+          "application/xml",
           "application/json"
         ],
         "parameters": [

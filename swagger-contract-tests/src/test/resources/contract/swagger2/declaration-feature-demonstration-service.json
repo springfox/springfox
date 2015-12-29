@@ -37,7 +37,8 @@
                 "application/json"
               ],
               "produces": [
-                "*/*"
+                "application/xml",
+                "application/json"
               ],
               "responses": {
                 "200": {
@@ -55,7 +56,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -73,7 +75,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -91,7 +94,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -109,7 +113,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -127,7 +132,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -145,7 +151,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -165,7 +172,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "parameters": [
                     {
@@ -196,7 +204,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "parameters": [
                     {
@@ -228,7 +237,8 @@
               "application/json"
             ],
             "produces": [
-              "*/*"
+              "application/xml",
+              "application/json"
             ],
             "parameters": [
               {
@@ -259,7 +269,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "parameters": [
                     {
@@ -290,7 +301,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -313,7 +325,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -339,7 +352,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -365,7 +379,8 @@
               "application/json"
             ],
             "produces": [
-              "*/*"
+              "application/xml",
+              "application/json"
             ],
             "responses": {
               "200": {
@@ -391,7 +406,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -414,7 +430,8 @@
               "application/json"
             ],
             "produces": [
-              "*/*"
+              "application/xml",
+              "application/json"
             ],
             "parameters": [
               {
@@ -476,7 +493,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "parameters": [
                     {
@@ -507,7 +525,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "parameters": [
                     {
@@ -539,7 +558,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
                 ],
                 "parameters": [
                     {
@@ -575,7 +595,8 @@
               "application/json"
             ],
             "produces": [
-              "*/*"
+              "application/xml",
+              "application/json"
             ],
             "parameters": [
               {

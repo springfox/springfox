@@ -53,7 +53,7 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     String raw = response.body
     String actual = JsonOutput.prettyPrint(raw)
     response.statusCode == HttpStatus.OK
-//      println(actual)
+      println(actual)
 
     def withPortReplaced = contract.replaceAll("__PORT__", "$port")
     JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)

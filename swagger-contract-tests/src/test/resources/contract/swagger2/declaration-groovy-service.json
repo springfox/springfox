@@ -37,7 +37,7 @@
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "application/json","application/xml"
         ],
         "responses": {
           "200": {
@@ -58,7 +58,8 @@
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "application/json",
+          "application/xml"
         ],
         "parameters": [
           {

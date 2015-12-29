@@ -299,7 +299,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "application/json"
+                  "application/xml",
+                  "application/json"
                 ],
                 "parameters": [
                     {
@@ -337,7 +338,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "application/json"
+                  "application/xml",
+                  "application/json"
                 ],
                 "parameters": [
                     {
@@ -374,7 +376,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "application/json"
+                  "application/xml",
+                  "application/json"
                 ],
                 "parameters": [
                     {
@@ -413,6 +416,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "application/json"
                 ],
                 "parameters": [
@@ -447,6 +451,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "application/json"
                 ],
                 "parameters": [
@@ -484,6 +489,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "application/json"
                 ],
                 "parameters": [
@@ -521,6 +527,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "application/json"
                 ],
                 "parameters": [
@@ -563,6 +570,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "application/json"
                 ],
                 "responses": {
@@ -586,6 +594,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "application/json"
                 ],
                 "parameters": [
@@ -623,6 +632,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "application/json"
                 ],
                 "parameters": [
@@ -669,6 +679,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "application/json"
                 ],
                 "parameters": [
