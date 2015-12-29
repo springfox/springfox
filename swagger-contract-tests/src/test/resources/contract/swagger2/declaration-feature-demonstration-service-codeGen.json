@@ -38,7 +38,7 @@
               ],
               "produces": [
                 "application/json",
-              "application/xml"
+                    "application/xml"
               ],
               "responses": {
                 "200": {
@@ -57,7 +57,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "responses": {
                     "200": {
@@ -76,7 +76,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "responses": {
                     "200": {
@@ -95,7 +95,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                          "application/xml"
                 ],
                 "responses": {
                     "200": {
@@ -114,7 +114,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "responses": {
                     "200": {
@@ -133,7 +133,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "responses": {
                     "200": {
@@ -152,7 +152,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "responses": {
                     "200": {
@@ -173,7 +173,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -205,7 +205,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -270,7 +270,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -302,7 +302,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "responses": {
                     "200": {
@@ -326,7 +326,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "responses": {
                     "200": {
@@ -353,7 +353,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "responses": {
                     "200": {
@@ -380,7 +380,7 @@
             ],
             "produces": [
               "application/json",
-              "application/xml"
+                    "application/xml"
             ],
             "responses": {
               "200": {
@@ -407,7 +407,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "responses": {
                     "200": {
@@ -431,7 +431,7 @@
             ],
             "produces": [
               "application/json",
-              "application/xml"
+                    "application/xml"
             ],
             "parameters": [
               {
@@ -494,7 +494,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -526,7 +526,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -559,7 +559,7 @@
                 ],
                 "produces": [
                     "application/json",
-              "application/xml"
+                    "application/xml"
                 ],
                 "parameters": [
                     {
