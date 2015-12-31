@@ -91,7 +91,7 @@ class OperationBuilderSpec extends Specification {
       'method'          | HttpMethod.GET          | 'method'
       'summary'         | 'method1 summary'       | 'summary'
       'notes'           | 'method1 notes'         | 'notes'
-      'responseModel'    | new ModelRef('string')  | 'responseModel'
+      'responseModel'    | new ModelRef('string') | 'responseModel'
       'deprecated'      | 'deprecated'            | 'deprecated'
       'uniqueId'        | 'method1'               | 'uniqueId'
       'produces'        | newHashSet('app/json')  | 'produces'
@@ -99,7 +99,7 @@ class OperationBuilderSpec extends Specification {
       'protocols'       | newHashSet('https')     | 'protocol'
       'tags'            | newHashSet('tag')       | 'tags'
       'position'        | 1                       | 'position'
-      'hidden'          | true                    | 'hidden'
+      'hidden'          | true                          | 'hidden'
       'parameters'      | [new ParameterBuilder().name("p").build()]       | 'parameters'
   }
 
@@ -116,18 +116,18 @@ class OperationBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod     | value                   | property
-      'method'          | HttpMethod.PUT          | 'method'
-      'summary'         | 'method1 summary'       | 'summary'
-      'notes'           | 'method1 notes'         | 'notes'
-      'responseModel'   | new ModelRef('string')  | 'responseModel'
-      'deprecated'      | 'deprecated'            | 'deprecated'
-      'uniqueId'        | 'method1'               | 'uniqueId'
-      'produces'        | newHashSet('app/json')  | 'produces'
-      'consumes'        | newHashSet('app/json')  | 'consumes'
-      'protocols'       | newHashSet('https')     | 'protocol'
-      'tags'            | newHashSet()            | 'tags'
-      'parameters'      | [new ParameterBuilder().name("p").build()]       | 'parameters'
+      builderMethod     | value                  | property
+      'method'          | HttpMethod.PUT         | 'method'
+      'summary'         | 'method1 summary'      | 'summary'
+      'notes'           | 'method1 notes'        | 'notes'
+      'responseModel'   | new ModelRef('string') | 'responseModel'
+      'deprecated'      | 'deprecated'           | 'deprecated'
+      'uniqueId'        | 'method1'              | 'uniqueId'
+      'produces'        | newHashSet('app/json') | 'produces'
+      'consumes'        | newHashSet('app/json') | 'consumes'
+      'protocols'       | newHashSet('https')    | 'protocol'
+      'tags'            | newHashSet()           | 'tags'
+      'parameters'      | [new ParameterBuilder().name("p").build()] | 'parameters'
   }
 
   def "Operation authorizations are converted to a map by type"() {

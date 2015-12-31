@@ -137,8 +137,8 @@ class DocketSpec extends DocumentationContextSpec {
 
     where:
       method                    | args                               | expectedSize
-      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 9
-      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 8
+      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 10
+      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 9
   }
 
   def "Basic property checks"() {

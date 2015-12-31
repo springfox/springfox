@@ -19,22 +19,17 @@
 
 package springfox.documentation.schema;
 
-import com.fasterxml.classmate.ResolvedType;
+import springfox.documentation.service.AllowableValues;
 
-public class ResolvedArray {
-  private final int dimensions;
-  private final ResolvedType elementType;
+public interface ModelReference {
+  String getType();
 
-  public ResolvedArray(int dimensions, ResolvedType elementType) {
-    this.dimensions = dimensions;
-    this.elementType = elementType;
-  }
+  boolean isCollection();
 
-  public int getDimensions() {
-    return dimensions;
-  }
+  boolean isMap();
 
-  public ResolvedType getElementType() {
-    return elementType;
-  }
+  @Deprecated
+  String getItemType();
+
+  AllowableValues getAllowableValues();
 }

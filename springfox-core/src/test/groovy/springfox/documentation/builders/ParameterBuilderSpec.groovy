@@ -43,17 +43,17 @@ class ParameterBulderSpec extends Specification {
       }
 
     where:
-      builderMethod     | value                                 | property
-      'name'            | 'param1'                              | 'name'
-      'description'     | 'param1 desc'                         | 'description'
-      'defaultValue'    | 'default'                             | 'defaultValue'
-      'modelRef'        | new ModelRef('string')                | 'modelRef'
-      'parameterType'   | 'string'                              | 'paramType'
-      'parameterAccess' | 'public'                              | 'paramAccess'
-      'allowMultiple'   | true                                  | 'allowMultiple'
-      'required'        | true                                  | 'required'
-      'allowableValues' | new AllowableListValues([], "LIST")   | 'allowableValues'
-      'type'            | Mock(ResolvedType)                    | 'type'
+      builderMethod     | value                               | property
+      'name'            | 'param1'                            | 'name'
+      'description'     | 'param1 desc'                       | 'description'
+      'defaultValue'    | 'default'                           | 'defaultValue'
+      'modelRef'        | new ModelRef('string')              | 'modelRef'
+      'parameterType'   | 'string'                            | 'paramType'
+      'parameterAccess' | 'public'                            | 'paramAccess'
+      'allowMultiple'   | true                                | 'allowMultiple'
+      'required'        | true                                | 'required'
+      'allowableValues' | new AllowableListValues([], "LIST") | 'allowableValues'
+      'type'            | Mock(ResolvedType)                  | 'type'
   }
 
   @Unroll
@@ -73,14 +73,14 @@ class ParameterBulderSpec extends Specification {
       }
 
     where:
-      builderMethod     | value                                 | property
-      'name'            | 'param1'                              | 'name'
-      'description'     | 'param1 desc'                         | 'description'
-      'defaultValue'    | 'default'                             | 'defaultValue'
-      'modelRef'        | new ModelRef('string')                | 'modelRef'
-      'parameterType'   | 'string'                              | 'paramType'
-      'parameterAccess' | 'public'                              | 'paramAccess'
-      'allowableValues' | new AllowableListValues([], "LIST")   | 'allowableValues'
-      'type'            | Mock(ResolvedType)                    | 'type'
+      builderMethod     | value                               | property
+      'name'            | 'param1'                            | 'name'
+      'description'     | 'param1 desc'                       | 'description'
+      'defaultValue'    | 'default'                           | 'defaultValue'
+      'modelRef'        | new ModelRef('string')              | 'modelRef'
+      'parameterType'   | 'string'                            | 'paramType'
+      'parameterAccess' | 'public'                            | 'paramAccess'
+      'allowableValues' | new AllowableListValues([], "LIST") | 'allowableValues'
+      'type'            | Mock(ResolvedType)                  | 'type'
   }
 }

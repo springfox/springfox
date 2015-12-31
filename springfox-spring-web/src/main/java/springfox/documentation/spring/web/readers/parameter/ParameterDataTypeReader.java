@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Maps;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
@@ -38,7 +39,7 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 
 import java.io.File;
 
-import static springfox.documentation.spi.schema.contexts.ModelContext.fromParent;
+import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -76,7 +77,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     }
     
   }
-  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
+  private ModelReference modelRef(ResolvedType type, ModelContext modelContext) {
     if (Collections.isContainerType(type)) {
       ResolvedType collectionElementType = Collections.collectionElementType(type);
       if (collectionElementType != null) {

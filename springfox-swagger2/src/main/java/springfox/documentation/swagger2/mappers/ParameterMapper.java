@@ -27,7 +27,7 @@ import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 
 import static springfox.documentation.schema.Types.*;
 
@@ -50,7 +50,7 @@ public class ParameterMapper {
     return parameter;
   }
 
-  Model fromModelRef(ModelRef modelRef) {
+  Model fromModelRef(ModelReference modelRef) {
     if (modelRef.isCollection()) {
       return new ArrayModel().items(Properties.property(modelRef.getItemType()));
     }

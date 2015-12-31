@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
@@ -86,7 +86,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       for (ApiResponse apiResponse : apiResponseAnnotations) {
         ModelContext modelContext = returnValue(apiResponse.response(), context.getDocumentationType(),
             context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
-        Optional<ModelRef> responseModel = Optional.absent();
+        Optional<ModelReference> responseModel = Optional.absent();
         Optional<ResolvedType> type = resolvedType(null, apiResponse);
         if (isSuccessful(apiResponse.code())) {
           type = type.or(operationResponse);
@@ -108,7 +108,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           context.getAlternateTypeProvider(),
           context.getDocumentationContext().getGenericsNamingStrategy());
       ResolvedType resolvedType = context.alternateFor(operationResponse.get());
-      ModelRef responseModel = modelRef(resolvedType, modelContext, typeNameExtractor);
+      ModelReference responseModel = modelRef(resolvedType, modelContext, typeNameExtractor);
       context.operationBuilder().responseModel(responseModel);
       ResponseMessage defaultMessage = new ResponseMessageBuilder()
           .code(httpStatusCode(handlerMethod))

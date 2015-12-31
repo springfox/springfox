@@ -22,7 +22,12 @@ package springfox.documentation.schema;
 import com.google.common.base.Optional;
 import springfox.documentation.service.AllowableValues;
 
-public class ModelRef {
+/**
+ * In favor of richer types of refs
+ * deprecated @since 2.3.0, until we have richer ways to represent references
+ */
+@Deprecated
+public class ModelRef implements ModelReference {
   private final String type;
   private final boolean isMap;
   private final Optional<String> itemType;
@@ -55,22 +60,27 @@ public class ModelRef {
     this(type, null, null);
   }
 
+  @Override
   public String getType() {
     return type;
   }
-  
+
+  @Override
   public boolean isCollection() {
     return itemType.isPresent() && !isMap;
   }
 
+  @Override
   public boolean isMap() {
     return itemType.isPresent() && isMap;
   }
 
+  @Override
   public String getItemType() {
     return itemType.orNull();
   }
 
+  @Override
   public AllowableValues getAllowableValues() {
     return allowableValues.orNull();
   }

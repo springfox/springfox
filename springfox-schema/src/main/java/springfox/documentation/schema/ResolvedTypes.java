@@ -72,13 +72,13 @@ public class ResolvedTypes {
     });
   }
 
-  public static Function<? super ResolvedType, ModelRef> modelRefFactory(
+  public static Function<ResolvedType, ? extends ModelReference> modelRefFactory(
       final ModelContext parentContext,
       final TypeNameExtractor typeNameExtractor) {
 
-    return new Function<ResolvedType, ModelRef>() {
+    return new Function<ResolvedType, ModelReference>() {
       @Override
-      public ModelRef apply(ResolvedType type) {
+      public ModelReference apply(ResolvedType type) {
         if (isContainerType(type)) {
           ResolvedType collectionElementType = collectionElementType(type);
           String elementTypeName = typeNameExtractor.typeName(fromParent(parentContext, collectionElementType));

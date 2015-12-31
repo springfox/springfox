@@ -29,7 +29,7 @@ import io.swagger.models.parameters.PathParameter;
 import io.swagger.models.parameters.QueryParameter;
 import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.models.properties.Property;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.Parameter;
 
@@ -58,7 +58,7 @@ public class SerializableParameterFactories {
     if (toReturn == null) {
       return Optional.absent();
     }
-    ModelRef paramModel = source.getModelRef();
+    ModelReference paramModel = source.getModelRef();
     toReturn.setName(source.getName());
     toReturn.setDescription(source.getDescription());
     toReturn.setAccess(source.getParamAccess());

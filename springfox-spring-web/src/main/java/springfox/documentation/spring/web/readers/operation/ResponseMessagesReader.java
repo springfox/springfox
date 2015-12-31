@@ -33,6 +33,7 @@ import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Maps;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
@@ -79,7 +80,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     returnType = context.alternateFor(returnType);
     int httpStatusCode = httpStatusCode(context.getHandlerMethod());
     String message = message(context.getHandlerMethod());
-    ModelRef modelRef = null;
+    ModelReference modelRef = null;
     if (!isVoid(returnType)) {
       ModelContext modelContext = ModelContext.returnValue(returnType,
               context.getDocumentationType(), context.getAlternateTypeProvider(),
@@ -95,7 +96,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   }
 
 
-  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
+  private ModelReference modelRef(ResolvedType type, ModelContext modelContext) {
     if (Collections.isContainerType(type)) {
       ResolvedType collectionElementType = Collections.collectionElementType(type);
       String elementTypeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, collectionElementType));

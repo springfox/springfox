@@ -35,7 +35,7 @@ import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListing;
@@ -125,7 +125,7 @@ public abstract class ServiceModelToSwagger2Mapper {
     HashMap<String, Response> responses = newHashMap();
     for (ResponseMessage responseMessage : from) {
       Property responseProperty;
-      ModelRef modelRef = responseMessage.getResponseModel();
+      ModelReference modelRef = responseMessage.getResponseModel();
       responseProperty = modelRefToProperty(modelRef);
       Response response = new Response()
           .description(responseMessage.getMessage())
