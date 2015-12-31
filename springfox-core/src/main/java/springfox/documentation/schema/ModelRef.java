@@ -84,4 +84,9 @@ public class ModelRef implements ModelReference {
   public AllowableValues getAllowableValues() {
     return allowableValues.orNull();
   }
+
+  @Override
+  public Optional<ModelReference> nestedModel() {
+    return Optional.absent();
+  }
 }

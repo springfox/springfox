@@ -28,6 +28,7 @@ import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.service.AllowableListValues;
 
 import static springfox.documentation.schema.Types.*;
 
@@ -52,7 +53,8 @@ public class ParameterMapper {
 
   Model fromModelRef(ModelReference modelRef) {
     if (modelRef.isCollection()) {
-      return new ArrayModel().items(Properties.property(modelRef.getItemType()));
+      return new ArrayModel()
+          .items(Properties.property(modelRef.getItemType()));
     }
     if (modelRef.isMap()) {
       ModelImpl baseModel = new ModelImpl();
@@ -64,9 +66,12 @@ public class ParameterMapper {
       ModelImpl baseModel = new ModelImpl();
       baseModel.setType(property.getType());
       baseModel.setFormat(property.getFormat());
+      if (modelRef.getAllowableValues() instanceof AllowableListValues) {
+        AllowableListValues allowableValues = (AllowableListValues) modelRef.getAllowableValues();
+        baseModel.setEnum(allowableValues.getValues());
+      }
       return baseModel;
     }
     return new RefModel(modelRef.getType());
   }
-
 }

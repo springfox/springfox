@@ -34,6 +34,8 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
+
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationResponseClassReader implements OperationBuilderPlugin {
@@ -57,7 +59,8 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
             context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting spring response class to:" + responseTypeName);
-    context.operationBuilder().responseModel(ModelRefs.modelRef(returnType, modelContext, nameExtractor));
+
+    context.operationBuilder().responseModel(modelRefFactory(modelContext, nameExtractor).apply(returnType));
   }
 
   @Override

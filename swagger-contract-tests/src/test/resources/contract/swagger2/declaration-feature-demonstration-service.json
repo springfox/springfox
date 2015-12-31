@@ -485,7 +485,11 @@
                         "description": "enumType",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                              "ONE",
+                              "TWO"
+                            ]
                         }
                     }
                 ],

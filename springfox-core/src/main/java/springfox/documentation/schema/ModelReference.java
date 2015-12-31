@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema;
 
+import com.google.common.base.Optional;
 import springfox.documentation.service.AllowableValues;
 
 public interface ModelReference {
@@ -28,8 +29,9 @@ public interface ModelReference {
 
   boolean isMap();
 
-  @Deprecated
   String getItemType();
 
   AllowableValues getAllowableValues();
+
+  Optional<ModelReference> nestedModel();
 }

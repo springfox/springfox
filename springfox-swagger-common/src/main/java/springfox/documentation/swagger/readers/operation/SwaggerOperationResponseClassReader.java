@@ -21,7 +21,6 @@ package springfox.documentation.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +35,8 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
-import static springfox.documentation.spring.web.readers.operation.ModelRefs.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 
 @Component
@@ -73,8 +72,9 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
 
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting response class to:" + responseTypeName);
+
     context.operationBuilder()
-            .responseModel(modelRef(Optional.of(returnType), modelContext, nameExtractor).orNull());
+            .responseModel(modelRefFactory(modelContext, nameExtractor).apply(returnType));
   }
 
   private boolean canSkip(OperationContext context, ResolvedType returnType) {

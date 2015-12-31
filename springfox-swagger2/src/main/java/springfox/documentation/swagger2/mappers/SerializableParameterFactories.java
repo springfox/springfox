@@ -38,7 +38,8 @@ import java.util.Map;
 import static com.google.common.base.Functions.*;
 
 public class SerializableParameterFactories {
-  public static final Map<String, SerializableParameterFactory> factory = ImmutableMap.<String, SerializableParameterFactory>builder()
+  public static final Map<String, SerializableParameterFactory> factory = ImmutableMap.<String,
+      SerializableParameterFactory>builder()
       .put("header", new HeaderSerializableParameterFactory())
       .put("form", new FormSerializableParameterFactory())
       .put("path", new PathSerializableParameterFactory())
@@ -51,7 +52,8 @@ public class SerializableParameterFactories {
   }
 
   static Optional<io.swagger.models.parameters.Parameter> create(Parameter source) {
-    SerializableParameterFactory factory = forMap(SerializableParameterFactories.factory, new NullSerializableParameterFactory())
+    SerializableParameterFactory factory = forMap(SerializableParameterFactories.factory, new
+        NullSerializableParameterFactory())
         .apply(source.getParamType().toLowerCase());
 
     SerializableParameter toReturn = factory.create(source);
@@ -69,13 +71,13 @@ public class SerializableParameterFactories {
       toReturn.setItems(Properties.property(paramModel.getItemType()));
     } else {
       //TODO: remove this downcast when swagger-core fixes its problem
-      ((AbstractSerializableParameter)toReturn).setDefaultValue(source.getDefaultValue());
+      ((AbstractSerializableParameter) toReturn).setDefaultValue(source.getDefaultValue());
       Property property = Properties.property(paramModel.getType());
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());
     }
     maybeAddAlllowableValues(source, toReturn);
-    return Optional.of((io.swagger.models.parameters.Parameter)toReturn);
+    return Optional.of((io.swagger.models.parameters.Parameter) toReturn);
   }
 
   private static void maybeAddAlllowableValues(Parameter source, SerializableParameter toReturn) {
