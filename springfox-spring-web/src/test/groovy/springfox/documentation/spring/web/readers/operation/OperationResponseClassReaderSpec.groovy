@@ -81,13 +81,13 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
       }
 
     where:
-      handlerMethod                                                        | expectedClass          | allowableValues
-      dummyHandlerMethod('methodWithConcreteResponseBody')                 | 'BusinessModel'        | null
-      dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'FunkyBusiness'        | null
-      dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»'    | null
-      dummyHandlerMethod('methodWithListOfBusinesses')                     | 'List[BusinessModel]'  | null
-      dummyHandlerMethod('methodWithMapReturn')                            | 'Map'                  | null
-      dummyHandlerMethod('methodWithEnumResponse')                         | 'string'               | ['ONE', 'TWO']
+      handlerMethod                                                        | expectedClass              | allowableValues
+      dummyHandlerMethod('methodWithConcreteResponseBody')                 | 'BusinessModel'            |  null
+      dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'FunkyBusiness'            |  null
+      dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»'        | null
+      dummyHandlerMethod('methodWithListOfBusinesses')                     | 'List[BusinessModel]'      | null
+      dummyHandlerMethod('methodWithMapReturn')                            | 'Map«string,BusinessModel»'| null
+      dummyHandlerMethod('methodWithEnumResponse')                         | 'string'                   | ['ONE', 'TWO']
   }
 
 }

@@ -112,7 +112,7 @@ public class Defaults {
 
     rules.add(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
             typeResolver.resolve(WildcardType.class)));
-    rules.add(twoDimensionalArrayRule(typeResolver));
+//    rules.add(twoDimensionalArrayRule(typeResolver));
     return rules;
   }
 

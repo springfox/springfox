@@ -34,4 +34,6 @@ public interface ModelReference {
   AllowableValues getAllowableValues();
 
   Optional<ModelReference> nestedModel();
+
+  Optional<ModelReference> itemModel();
 }

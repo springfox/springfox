@@ -24,7 +24,6 @@ import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
@@ -32,9 +31,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.Types.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 public class ResolvedTypes {
 
@@ -77,32 +74,7 @@ public class ResolvedTypes {
       final ModelContext parentContext,
       final TypeNameExtractor typeNameExtractor) {
 
-    return new Function<ResolvedType, ModelReference>() {
-      @Override
-      public ModelReference apply(ResolvedType type) {
-        if (isContainerType(type)) {
-          ResolvedType collectionElementType = collectionElementType(type);
-          //noinspection ConstantConditions
-          if (MultipartFile.class.isAssignableFrom(collectionElementType.getErasedType())) {
-            return new ModelRef(containerType(type), "File");
-          }
-          String elementTypeName = typeNameExtractor.typeName(fromParent(parentContext, collectionElementType));
-          return new ModelRef(containerType(type), elementTypeName, allowableValues(collectionElementType));
-        }
-        if (isMapType(type)) {
-          String elementTypeName = typeNameExtractor.typeName(fromParent(parentContext, springfox
-              .documentation.schema.Maps.mapValueType(type)));
-          return new ModelRef("Map", elementTypeName, true);
-        }
-        if (Void.class.equals(type.getErasedType()) || Void.TYPE.equals(type.getErasedType())) {
-          return new ModelRef("void");
-        }
-        if (MultipartFile.class.isAssignableFrom(type.getErasedType())) {
-          return new ModelRef("File");
-        }
-        String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-        return new ModelRef(typeName, allowableValues(type));
-      }
-    };
+    return new ModelReferenceProvider(typeNameExtractor, parentContext);
   }
+
 }
