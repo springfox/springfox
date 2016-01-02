@@ -34,7 +34,7 @@ public class ContainerDataType implements SwaggerDataType {
 
   public ContainerDataType(String innerType, boolean uniqueItems) {
     Preconditions.checkNotNull(innerType);
-    Preconditions.checkArgument(!innerType.equals("array"), "Nested arrays not supported");
+    Preconditions.checkArgument(!innerType.equalsIgnoreCase("array"), "Nested arrays not supported");
     items = new DataType(innerType);
     this.uniqueItems = uniqueItems ? true : null;
   }

@@ -16,22 +16,16 @@
  *
  *
  */
+package springfox.documentation.spring.web.dummy.models;
 
-package springfox.documentation.schema;
+public class ModelWithArrayOfArrays {
+  private int[][] arrayOfArrayOfInts;
 
-import com.google.common.base.Optional;
-import springfox.documentation.service.AllowableValues;
+  public int[][] getArrayOfArrayOfInts() {
+    return arrayOfArrayOfInts;
+  }
 
-public interface ModelReference {
-  String getType();
-
-  boolean isCollection();
-
-  boolean isMap();
-
-  String getItemType();
-
-  AllowableValues getAllowableValues();
-
-  Optional<ModelReference> itemModel();
+  public void setArrayOfArrayOfInts(int[][] arrayOfArrayOfInts) {
+    this.arrayOfArrayOfInts = arrayOfArrayOfInts;
+  }
 }

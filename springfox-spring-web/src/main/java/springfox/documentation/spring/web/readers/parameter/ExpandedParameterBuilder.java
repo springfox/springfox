@@ -76,8 +76,8 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     if (isCollection) {
       resolved = fieldType(context).or(resolved);
       String itemTypeName = typeNameFor(collectionElementType(resolved).getErasedType());
-      typeName = itemTypeName;
-      itemModel = new ModelRef(itemTypeName, new ModelRef(itemTypeName));
+      typeName = containerType(resolved);
+      itemModel = new ModelRef(itemTypeName);
     }
     context.getParameterBuilder()
         .name(name)

@@ -193,8 +193,8 @@ public abstract class ModelMapper {
     }
     Property responseProperty;
     if (modelRef.isCollection()) {
-      String itemType = modelRef.getItemType();
-      responseProperty = new ArrayProperty(addEnumValues(property(itemType), modelRef.getAllowableValues()));
+      responseProperty = new ArrayProperty(
+          addEnumValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
     } else if (modelRef.isMap()) {
       String itemType = modelRef.getItemType();
       responseProperty = new MapProperty(property(itemType));

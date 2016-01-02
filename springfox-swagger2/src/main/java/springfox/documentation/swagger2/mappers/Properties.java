@@ -22,6 +22,7 @@ package springfox.documentation.swagger2.mappers;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
+import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.DateProperty;
 import io.swagger.models.properties.DateTimeProperty;
@@ -37,6 +38,7 @@ import io.swagger.models.properties.RefProperty;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
 import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.ModelReference;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -142,5 +144,12 @@ class Properties {
         return Integer.compare(p1.getPosition(), p2.getPosition());
       }
     };
+  }
+
+  public static Property itemTypeProperty(ModelReference paramModel) {
+    if (paramModel.isCollection()) {
+      return new ArrayProperty(itemTypeProperty(paramModel.itemModel().get()));
+    }
+    return property(paramModel.getType());
   }
 }

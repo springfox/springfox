@@ -36,6 +36,7 @@ import springfox.documentation.service.Parameter;
 import java.util.Map;
 
 import static com.google.common.base.Functions.*;
+import static springfox.documentation.swagger2.mappers.Properties.*;
 
 public class SerializableParameterFactories {
   public static final Map<String, SerializableParameterFactory> factory = ImmutableMap.<String,
@@ -68,11 +69,11 @@ public class SerializableParameterFactories {
     if (paramModel.isCollection()) {
       toReturn.setCollectionFormat("multi");
       toReturn.setType("array");
-      toReturn.setItems(Properties.property(paramModel.getItemType()));
+      toReturn.setItems(itemTypeProperty(paramModel.itemModel().get()));
     } else {
       //TODO: remove this downcast when swagger-core fixes its problem
       ((AbstractSerializableParameter) toReturn).setDefaultValue(source.getDefaultValue());
-      Property property = Properties.property(paramModel.getType());
+      Property property = property(paramModel.getType());
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());
     }

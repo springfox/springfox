@@ -31,14 +31,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
+import springfox.documentation.spring.web.dummy.models.Business;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
 import springfox.documentation.spring.web.dummy.models.ModelAttributeExample;
+import springfox.documentation.spring.web.dummy.models.ModelWithArrayOfArrays;
 import springfox.documentation.spring.web.dummy.models.ModelWithMapProperty;
 import springfox.documentation.spring.web.dummy.models.NestedType;
 import springfox.documentation.spring.web.dummy.models.Pet;
@@ -157,6 +160,16 @@ public class FeatureDemonstrationService {
 
   @RequestMapping(value = "/modelAttributes", method = RequestMethod.GET)
   public void getModelAttribute(@ModelAttribute ModelAttributeExample example) {
+    //No-op
+  }
+
+  @RequestMapping(value = "/arrayOfArrays", method = RequestMethod.POST)
+  public int[][] arrayOfArrays(@RequestBody Business.BusinessType[][] arrayOfEnums) {
+    return new int[0][0];
+  }
+
+  @RequestMapping(value = "/propertyWithArrayOfArrays", method = RequestMethod.POST)
+  public void propertyWithArrayOfArrays(@RequestBody ModelWithArrayOfArrays model) {
     //No-op
   }
 }

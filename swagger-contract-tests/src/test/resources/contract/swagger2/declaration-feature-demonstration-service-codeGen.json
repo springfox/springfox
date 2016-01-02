@@ -154,6 +154,53 @@
                 }
             }
         },
+        "/features/arrayOfArrays": {
+          "post": {
+            "tags": [
+              "feature-demonstration-service"
+            ],
+            "summary": "arrayOfArrays",
+            "operationId": "arrayOfArraysUsingPOST_1",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "*/*"
+            ],
+            "parameters": [
+              {
+                "in": "body",
+                "name": "arrayOfEnums",
+                "description": "arrayOfEnums",
+                "required": true,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
+          }
+      },
         "/features/bare": {
             "post": {
                 "tags": [
@@ -465,6 +512,37 @@
             }
           }
         },
+        "/features/propertyWithArrayOfArrays": {
+          "post": {
+            "tags": [
+              "feature-demonstration-service"
+            ],
+            "summary": "propertyWithArrayOfArrays",
+            "operationId": "propertyWithArrayOfArraysUsingPOST_1",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "*/*"
+            ],
+            "parameters": [
+              {
+                "in": "body",
+                "name": "model",
+                "description": "model",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/ModelWithArrayOfArrays"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+       },
         "/features/status": {
             "post": {
                 "tags": [
@@ -836,6 +914,20 @@
             "additionalProperties": {
                 "type": "string"
             }
+        },
+        "ModelWithArrayOfArrays": {
+          "properties": {
+            "arrayOfArrayOfInts": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
         },
         "ModelWithMapProperty": {
             "properties": {

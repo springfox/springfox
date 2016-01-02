@@ -1,4 +1,5 @@
 package springfox.test.contract.swaggertests
+
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import springfox.documentation.service.AuthorizationScope
@@ -9,6 +10,7 @@ import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger1.annotations.EnableSwagger
 
+import static com.google.common.base.Predicates.*
 import static com.google.common.collect.Lists.*
 import static springfox.documentation.builders.PathSelectors.*
 
@@ -39,7 +41,11 @@ public class Swagger12TestConfig {
     return new Docket(DocumentationType.SWAGGER_12)
         .groupName("default")
         .select()
-          .paths(regex("^((?!/api).)*\$")) //Not beginning with /api
+          .paths(and(
+              regex("^((?!/api).)*\$"),//Not beginning with /api
+              not(regex("^\\/features\\/.*Arrays\$")) //Not operations that use 2d arrays
+            )
+          )
           .build()
         .securitySchemes(securitySchemes)
         .securityContexts(securityContexts)

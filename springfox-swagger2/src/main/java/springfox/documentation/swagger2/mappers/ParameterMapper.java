@@ -31,7 +31,7 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableListValues;
 
 import static springfox.documentation.schema.Types.*;
-import static springfox.documentation.swagger2.mappers.Properties.property;
+import static springfox.documentation.swagger2.mappers.Properties.*;
 
 
 @Mapper
@@ -55,7 +55,7 @@ public class ParameterMapper {
   Model fromModelRef(ModelReference modelRef) {
     if (modelRef.isCollection()) {
       return new ArrayModel()
-          .items(property(modelRef.getItemType()));
+          .items(itemTypeProperty(modelRef.itemModel().get()));
     }
     if (modelRef.isMap()) {
       ModelImpl baseModel = new ModelImpl();

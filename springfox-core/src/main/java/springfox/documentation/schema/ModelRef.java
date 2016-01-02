@@ -82,11 +82,6 @@ public class ModelRef implements ModelReference {
   }
 
   @Override
-  public Optional<ModelReference> nestedModel() {
-    return Optional.absent();
-  }
-
-  @Override
   public Optional<ModelReference> itemModel() {
     return itemModel;
   }
