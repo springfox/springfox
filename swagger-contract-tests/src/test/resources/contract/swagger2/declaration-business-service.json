@@ -224,7 +224,11 @@
                         "description": "business",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                              "PRODUCT",
+                              "SERVICE"
+                            ]
                         }
                     }
                 ],
@@ -232,7 +236,11 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                              "PRODUCT",
+                              "SERVICE"
+                            ]
                         }
                     }
                 }

@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
@@ -43,8 +43,8 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
-import static springfox.documentation.spring.web.readers.operation.ModelRefs.*;
 import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 
@@ -86,13 +86,14 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       for (ApiResponse apiResponse : apiResponseAnnotations) {
         ModelContext modelContext = returnValue(apiResponse.response(), context.getDocumentationType(),
             context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
-        Optional<ModelRef> responseModel = Optional.absent();
+        Optional<ModelReference> responseModel = Optional.absent();
         Optional<ResolvedType> type = resolvedType(null, apiResponse);
         if (isSuccessful(apiResponse.code())) {
           type = type.or(operationResponse);
         }
         if (type.isPresent()) {
-          responseModel = Optional.of(modelRef(context.alternateFor(type.get()), modelContext, typeNameExtractor));
+
+          responseModel = Optional.of(modelRefFactory(modelContext, typeNameExtractor).apply(context.alternateFor(type.get())));
         }
         responseMessages.add(new ResponseMessageBuilder()
             .code(apiResponse.code())
@@ -108,7 +109,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           context.getAlternateTypeProvider(),
           context.getDocumentationContext().getGenericsNamingStrategy());
       ResolvedType resolvedType = context.alternateFor(operationResponse.get());
-      ModelRef responseModel = modelRef(resolvedType, modelContext, typeNameExtractor);
+
+      ModelReference responseModel = modelRefFactory(modelContext, typeNameExtractor).apply(resolvedType);
       context.operationBuilder().responseModel(responseModel);
       ResponseMessage defaultMessage = new ResponseMessageBuilder()
           .code(httpStatusCode(handlerMethod))

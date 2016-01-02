@@ -19,10 +19,10 @@
 
 package springfox.documentation.schema
 
-import spock.lang.Ignore
+import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
-import static Collections.*
+import static springfox.documentation.schema.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -102,7 +102,8 @@ class ContainerTypesSpec extends SchemaSpecification {
       "objects"         | "Set" | "object"      | "java.lang.Object"
   }
 
-  def "Model properties of type Arrays are inferred correctly"() {
+  @Unroll
+  def "Model properties of type Arrays are inferred correctly for #property"() {
     given:
       def sut = typeWithArrays()
       Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
@@ -138,14 +139,15 @@ class ContainerTypesSpec extends SchemaSpecification {
       "objects"         | Object[]      | "object"      | "java.lang.Object"
       "bytes"           | byte[]        | "byte"        | "byte"
       "substituted"     | Substituted[] | "Substituted" | "springfox.documentation.schema.Substituted"
+      "arrayOfArrayOfInts"| int[][]     | "Array"       | "Array"
+      "arrayOfListOfStrings"| List[]    | "List"        | "Array"
   }
 
-  @Ignore("Should move this to the swagger 1.2 module")
   def "Model properties of type Map are inferred correctly"() {
     given:
       def sut = mapsContainer()
-      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
-      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateRulesWithWildcardMap(), namingStrategy)).get()
+      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateRulesWithWildcardMap(), namingStrategy)).get()
 
     expect:
       asInput.getName() == "MapsContainer"
@@ -155,7 +157,7 @@ class ContainerTypesSpec extends SchemaSpecification {
       modelProperty.getModelRef()
       ModelRef item = modelProperty.getModelRef()
       item.type == "List"
-      item.itemType == itemRef 
+      item.itemType == itemRef
       item.collection
 
       asReturn.getName() == "MapsContainer"
@@ -175,15 +177,14 @@ class ContainerTypesSpec extends SchemaSpecification {
       "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
   }
 
-  @Ignore("Should move this to the swagger 1.2 module")
   def "Model properties of type Map are inferred correctly on generic host"() {
     given:
       def sut = genericTypeOfMapsContainer()
 
-      def modelContext = inputParam(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)
+      def modelContext = inputParam(sut, SWAGGER_12, alternateRulesWithWildcardMap(), namingStrategy)
       Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
 
-      def returnContext = returnValue(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)
+      def returnContext = returnValue(sut, SWAGGER_12, alternateRulesWithWildcardMap(), namingStrategy)
       Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
 
     expect:
@@ -212,5 +213,6 @@ class ContainerTypesSpec extends SchemaSpecification {
       "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
       "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
       "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
+      "mapOfmapOfStringToSimpleType" | List | "Entry«string,Map«string,SimpleType»»" | "springfox.documentation.schema.Entry"
   }
 }

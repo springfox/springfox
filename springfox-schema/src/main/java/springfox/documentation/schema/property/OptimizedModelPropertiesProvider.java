@@ -68,7 +68,6 @@ import static com.google.common.collect.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
 import static springfox.documentation.schema.property.FactoryMethodProvider.*;
-import static springfox.documentation.schema.property.bean.Accessors.*;
 import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
@@ -86,13 +85,14 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private ObjectMapper objectMapper;
 
   @Autowired
-  public OptimizedModelPropertiesProvider(AccessorsProvider accessors,
-                                          FieldProvider fields,
-                                          FactoryMethodProvider factoryMethods,
-                                          TypeResolver typeResolver,
-                                          BeanPropertyNamingStrategy namingStrategy,
-                                          SchemaPluginsManager schemaPluginsManager,
-                                          TypeNameExtractor typeNameExtractor) {
+  public OptimizedModelPropertiesProvider(
+      AccessorsProvider accessors,
+      FieldProvider fields,
+      FactoryMethodProvider factoryMethods,
+      TypeResolver typeResolver,
+      BeanPropertyNamingStrategy namingStrategy,
+      SchemaPluginsManager schemaPluginsManager,
+      TypeNameExtractor typeNameExtractor) {
 
     this.accessors = accessors;
     this.fields = fields;
@@ -126,8 +126,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     return properties;
   }
 
-  private Function<ResolvedMethod, List<ModelProperty>> propertyFromBean(final ModelContext givenContext,
-                                                                         final BeanPropertyDefinition jacksonProperty) {
+  private Function<ResolvedMethod, List<ModelProperty>> propertyFromBean(
+      final ModelContext givenContext,
+      final BeanPropertyDefinition jacksonProperty) {
+
     return new Function<ResolvedMethod, List<ModelProperty>>() {
       @Override
       public List<ModelProperty> apply(ResolvedMethod input) {
@@ -148,8 +150,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     return any(newArrayList(input.getRawMember().getDeclaredAnnotations()), ofType(JsonUnwrapped.class));
   }
 
-  private Function<ResolvedField, List<ModelProperty>> propertyFromField(final ModelContext givenContext,
-                                                                         final BeanPropertyDefinition jacksonProperty) {
+  private Function<ResolvedField, List<ModelProperty>> propertyFromField(
+      final ModelContext givenContext,
+      final BeanPropertyDefinition jacksonProperty) {
+
     return new Function<ResolvedField, List<ModelProperty>>() {
       @Override
       public List<ModelProperty> apply(ResolvedField input) {
@@ -172,12 +176,15 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   }
 
   @VisibleForTesting
-  List<ModelProperty> candidateProperties(ResolvedType type, AnnotatedMember member,
-                                          BeanPropertyDefinition jacksonProperty,
-                                          ModelContext givenContext) {
+  List<ModelProperty> candidateProperties(
+      ResolvedType type,
+      AnnotatedMember member,
+      BeanPropertyDefinition jacksonProperty,
+      ModelContext givenContext) {
+
     List<ModelProperty> properties = newArrayList();
     if (member instanceof AnnotatedMethod) {
-      properties.addAll(findAccessorMethod(type, jacksonProperty.getInternalName(), member)
+      properties.addAll(findAccessorMethod(type, member)
           .transform(propertyFromBean(givenContext, jacksonProperty))
           .or(new ArrayList<ModelProperty>()));
     } else if (member instanceof AnnotatedField) {
@@ -231,12 +238,14 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
   }
 
-  private ModelProperty beanModelProperty(ResolvedMethod childProperty, BeanPropertyDefinition jacksonProperty,
-                                          ModelContext modelContext) {
+  private ModelProperty beanModelProperty(
+      ResolvedMethod childProperty,
+      BeanPropertyDefinition jacksonProperty,
+      ModelContext modelContext) {
+
     String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
     BeanModelProperty beanModelProperty
-        = new BeanModelProperty(propertyName, childProperty, maybeAGetter(childProperty.getRawMember()),
-        typeResolver, modelContext.getAlternateTypeProvider());
+        = new BeanModelProperty(propertyName, childProperty, typeResolver, modelContext.getAlternateTypeProvider());
 
     LOG.debug("Adding property {} to model", propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
@@ -256,9 +265,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
   }
 
-  private ModelProperty paramModelProperty(ResolvedParameterizedMember constructor,
-                                           BeanPropertyDefinition jacksonProperty,
-                                           AnnotatedParameter parameter, ModelContext modelContext) {
+  private ModelProperty paramModelProperty(
+      ResolvedParameterizedMember constructor,
+      BeanPropertyDefinition jacksonProperty,
+      AnnotatedParameter parameter,
+      ModelContext modelContext) {
+
     String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
     ParameterModelProperty beanModelProperty
         = new ParameterModelProperty(propertyName, parameter, constructor, modelContext
@@ -282,9 +294,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
   }
 
-  private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType,
-                                                      final String propertyName,
-                                                      final AnnotatedMember member) {
+  private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType, final AnnotatedMember member) {
     return tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
       public boolean apply(ResolvedMethod accessorMethod) {
         return accessorMethod.getRawMember().equals(member.getMember());
@@ -297,6 +307,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       final BeanPropertyDefinition beanProperty,
       final AnnotatedParameter member,
       final ModelContext givenContext) {
+
     Optional<ModelProperty> property = factoryMethods.in(resolvedType, factoryMethodOf(member))
         .transform(new Function<ResolvedParameterizedMember, ModelProperty>() {
           @Override

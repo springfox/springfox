@@ -48,7 +48,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
       enumType()                      | []
       typeWithLists()                 | ["List", "Category",  "ComplexType", "Substituted"].sort()
       typeWithSets()                  | ["Set", "Category",  "ComplexType"].sort()
-      typeWithArrays()                | ["Array", "Category", "ComplexType", "Substituted"].sort()
+      typeWithArrays()                | ["Array", "Category", "ComplexType", "List", "Substituted"].sort()
       genericClass()                  | ["List", "SimpleType"].sort()
       genericClassWithListField()     | ["List", "SimpleType"].sort()
       genericClassWithGenericField()  | ["HttpHeaders", "List", "ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
@@ -82,7 +82,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
       inheritedComplexType()          | ["Category"]
       typeWithLists()                 | ["List", "Category",  "ComplexType", "Substituted"].sort()
       typeWithSets()                  | ["Set", "Category",  "ComplexType"].sort()
-      typeWithArrays()                | ["Array", "Category", "ComplexType", "Substituted"].sort()
+      typeWithArrays()                | ["Array", "Category", "ComplexType", "List", "Substituted"].sort()
       genericClass()                  | ["List", "SimpleType"].sort()
       genericClassWithListField()     | ["List", "SimpleType"].sort()
       genericClassWithGenericField()  | ["HttpHeaders", "List", "ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()

@@ -31,6 +31,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
@@ -46,6 +47,7 @@ import java.util.List;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 
 @Component
@@ -68,30 +70,14 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
                   : String.format("%s.%s", context.getParentName(), context.getField().getName());
 
     boolean isCollection = isCollection(context.getField().getType());
-    String itemType = null;
     String typeName = context.getDataTypeName();
-    Optional<Type> itemClazz;
+    ModelReference itemModel = null;
     ResolvedType resolved = resolver.resolve(context.getField().getType());
     if (isCollection) {
-      ParameterizedType parameterized;
-      try {
-        if (context.getField().getType().isArray()) {
-          resolved = resolver.arrayType(context.getField().getType().getComponentType());
-          itemType = simpleTypeName(context.getField().getType().getComponentType());
-          typeName = "Array";
-        } else {
-          parameterized = (ParameterizedType) context.getField().getGenericType();
-          itemClazz = FluentIterable.from(newArrayList(parameterized.getActualTypeArguments())).first();
-          itemType = itemClazz.transform(simpleTypeName()).orNull();
-          if (itemClazz.isPresent()) {
-            resolved = resolver.resolve(context.getField().getType(), itemClazz.get());
-          }
-        }
-      } catch (Exception e) {
-        LOG.error("Unable to extract parameterized model attribute", e);
-        itemType = "string";
-      }
-
+      resolved = fieldType(context).or(resolved);
+      String itemTypeName = typeNameFor(collectionElementType(resolved).getErasedType());
+      typeName = containerType(resolved);
+      itemModel = new ModelRef(itemTypeName);
     }
     context.getParameterBuilder()
         .name(name)
@@ -100,19 +86,28 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         .required(Boolean.FALSE)
         .allowMultiple(isCollection)
         .type(resolved)
-        .modelRef(new ModelRef(typeName, itemType))
+        .modelRef(new ModelRef(typeName, itemModel))
         .allowableValues(allowable)
         .parameterType("query")
         .parameterAccess(null);
   }
 
-  private Function<? super Type, String> simpleTypeName() {
-    return new Function<Type, String>() {
-      @Override
-      public String apply(Type input) {
-        return simpleTypeName((Class<?>) input);
+  private Optional<ResolvedType> fieldType(ParameterExpansionContext context) {
+    ParameterizedType parameterized;
+    try {
+      if (context.getField().getType().isArray()) {
+        return Optional.<ResolvedType>of(resolver.arrayType(context.getField().getType().getComponentType()));
+      } else {
+        parameterized = (ParameterizedType) context.getField().getGenericType();
+        Optional<Type> itemClazz = FluentIterable.from(newArrayList(parameterized.getActualTypeArguments())).first();
+        if (itemClazz.isPresent()) {
+          return Optional.of(resolver.resolve(context.getField().getType(), itemClazz.get()));
+        }
       }
-    };
+    } catch (Exception e) {
+      LOG.warn("Unable to extract parameterized model attribute");
+    }
+    return Optional.absent();
   }
 
   @Override
@@ -132,13 +127,6 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
 
   private boolean isCollection(Class<?> fieldType) {
     return Collection.class.isAssignableFrom(fieldType) || fieldType.isArray();
-  }
-
-  private String simpleTypeName(Class<?> erasedType) {
-    if (erasedType.isEnum()) {
-      return "string";
-    }
-    return Optional.fromNullable(typeNameFor(erasedType)).or("");
   }
 
   private List<String> getEnumValues(final Class<?> subject) {

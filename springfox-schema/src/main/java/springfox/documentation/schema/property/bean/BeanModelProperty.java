@@ -21,7 +21,6 @@ package springfox.documentation.schema.property.bean;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.fasterxml.classmate.members.ResolvedMember;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,23 +33,19 @@ import static springfox.documentation.schema.property.bean.Accessors.*;
 public class BeanModelProperty extends BaseModelProperty {
   private static final Logger LOG = LoggerFactory.getLogger(BeanModelProperty.class);
   private final ResolvedMethod method;
-  private final boolean isGetter;
   private TypeResolver typeResolver;
 
 
-  public BeanModelProperty(String propertyName, ResolvedMethod method,
-                           boolean isGetter, TypeResolver typeResolver,
-                           AlternateTypeProvider alternateTypeProvider) {
+  public BeanModelProperty(
+      String propertyName,
+      ResolvedMethod method,
+      TypeResolver typeResolver,
+      AlternateTypeProvider alternateTypeProvider) {
 
     super(propertyName, alternateTypeProvider);
 
     this.method = method;
-    this.isGetter = isGetter;
     this.typeResolver = typeResolver;
-  }
-
-  public static boolean accessorMemberIs(ResolvedMember method, String methodName) {
-    return method.getRawMember().getName().equals(methodName);
   }
 
   @Override

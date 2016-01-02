@@ -27,9 +27,11 @@ import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
+import springfox.documentation.service.AllowableListValues;
 
 import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.swagger2.mappers.Properties.*;
 
 
 @Mapper
@@ -50,23 +52,27 @@ public class ParameterMapper {
     return parameter;
   }
 
-  Model fromModelRef(ModelRef modelRef) {
+  Model fromModelRef(ModelReference modelRef) {
     if (modelRef.isCollection()) {
-      return new ArrayModel().items(Properties.property(modelRef.getItemType()));
+      return new ArrayModel()
+          .items(itemTypeProperty(modelRef.itemModel().get()));
     }
     if (modelRef.isMap()) {
       ModelImpl baseModel = new ModelImpl();
-      baseModel.additionalProperties(Properties.property(modelRef.getItemType()));
+      baseModel.additionalProperties(property(modelRef.getItemType()));
       return baseModel;
     }
     if (isBaseType(modelRef.getType())) {
-      Property property = Properties.property(modelRef.getType());
+      Property property = property(modelRef.getType());
       ModelImpl baseModel = new ModelImpl();
       baseModel.setType(property.getType());
       baseModel.setFormat(property.getFormat());
+      if (modelRef.getAllowableValues() instanceof AllowableListValues) {
+        AllowableListValues allowableValues = (AllowableListValues) modelRef.getAllowableValues();
+        baseModel.setEnum(allowableValues.getValues());
+      }
       return baseModel;
     }
     return new RefModel(modelRef.getType());
   }
-
 }

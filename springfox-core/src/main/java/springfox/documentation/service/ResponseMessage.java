@@ -19,14 +19,14 @@
 
 package springfox.documentation.service;
 
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 
 public class ResponseMessage {
   private final int code;
   private final String message;
-  private final ModelRef responseModel;
+  private final ModelReference responseModel;
 
-  public ResponseMessage(int code, String message, ModelRef responseModel) {
+  public ResponseMessage(int code, String message, ModelReference responseModel) {
     this.code = code;
     this.message = message;
     this.responseModel = responseModel;
@@ -40,7 +40,7 @@ public class ResponseMessage {
     return message;
   }
 
-  public ModelRef getResponseModel() {
+  public ModelReference getResponseModel() {
     return responseModel;
   }
 

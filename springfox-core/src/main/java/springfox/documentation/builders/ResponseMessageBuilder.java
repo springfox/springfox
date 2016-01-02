@@ -19,13 +19,13 @@
 
 package springfox.documentation.builders;
 
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.ResponseMessage;
 
 public class ResponseMessageBuilder {
   private int code;
   private String message;
-  private ModelRef responseModel;
+  private ModelReference responseModel;
 
   /**
    * Updates the http response code
@@ -55,7 +55,7 @@ public class ResponseMessageBuilder {
    * @param responseModel - model reference
    * @return this
    */
-  public ResponseMessageBuilder responseModel(ModelRef responseModel) {
+  public ResponseMessageBuilder responseModel(ModelReference responseModel) {
     this.responseModel = BuilderDefaults.defaultIfAbsent(responseModel, this.responseModel);
     return this;
   }

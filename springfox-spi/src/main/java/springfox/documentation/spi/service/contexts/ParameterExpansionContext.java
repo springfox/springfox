@@ -33,8 +33,13 @@ public class ParameterExpansionContext {
   private final DocumentationType documentationType;
   private ParameterBuilder parameterBuilder;
 
-  public ParameterExpansionContext(String dataTypeName, String parentName, Field field, DocumentationType
-          documentationType, ParameterBuilder parameterBuilder) {
+  public ParameterExpansionContext(
+      String dataTypeName,
+      String parentName,
+      Field field,
+      DocumentationType documentationType,
+      ParameterBuilder parameterBuilder) {
+
     this.dataTypeName = dataTypeName;
     this.parentName = parentName;
     this.field = field;

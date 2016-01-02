@@ -20,15 +20,10 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.schema.Collections;
-import springfox.documentation.schema.Maps;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
@@ -36,20 +31,17 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
-import java.io.File;
-
-import static springfox.documentation.spi.schema.contexts.ModelContext.fromParent;
+import static springfox.documentation.schema.ResolvedTypes.*;
+import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private final TypeNameExtractor nameExtractor;
-  private final TypeResolver resolver;
 
   @Autowired
-  public ParameterDataTypeReader(TypeNameExtractor nameExtractor, TypeResolver resolver) {
+  public ParameterDataTypeReader(TypeNameExtractor nameExtractor) {
     this.nameExtractor = nameExtractor;
-    this.resolver = resolver;
   }
 
   @Override
@@ -62,36 +54,12 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     ResolvedMethodParameter methodParameter = context.resolvedMethodParameter();
     ResolvedType parameterType = methodParameter.getResolvedParameterType();
     parameterType = context.alternateFor(parameterType);
-    //Multi-part file trumps any other annotations
-    if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
-      context.parameterBuilder()
-              .type(resolver.resolve(File.class))
-              .modelRef(new ModelRef("File"));
-    } else {
-      ModelContext modelContext = ModelContext.inputParam(parameterType, context.getDocumentationType(),
-              context.getAlternateTypeProvider(), context.getGenericNamingStrategy());
-      context.parameterBuilder()
-              .type(parameterType)
-              .modelRef(modelRef(parameterType, modelContext));
-    }
-    
-  }
-  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
-    if (Collections.isContainerType(type)) {
-      ResolvedType collectionElementType = Collections.collectionElementType(type);
-      if (collectionElementType != null) {
-        if (MultipartFile.class.isAssignableFrom(collectionElementType.getErasedType())) {
-          return new ModelRef(Collections.containerType(type), "File");
-        }
-      }
-      String elementTypeName = nameExtractor.typeName(fromParent(modelContext, collectionElementType));
-      return new ModelRef(Collections.containerType(type), elementTypeName);
-    }
-    if (Maps.isMapType(type)) {
-      String elementTypeName = nameExtractor.typeName(fromParent(modelContext, Maps.mapValueType(type)));
-      return new ModelRef("Map", elementTypeName, true);
-    }
-    String typeName = nameExtractor.typeName(fromParent(modelContext, type));
-    return new ModelRef(typeName);
+    ModelContext modelContext = inputParam(parameterType,
+        context.getDocumentationType(),
+        context.getAlternateTypeProvider(),
+        context.getGenericNamingStrategy());
+    context.parameterBuilder()
+            .type(parameterType)
+            .modelRef(modelRefFactory(modelContext, nameExtractor).apply(parameterType));
   }
 }

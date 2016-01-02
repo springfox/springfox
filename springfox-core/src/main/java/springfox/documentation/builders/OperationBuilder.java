@@ -26,7 +26,7 @@ import com.google.common.collect.Maps;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.annotations.Incubating;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
@@ -58,7 +58,7 @@ public class OperationBuilder {
   private Set<String> tags = newHashSet();
   private String deprecated;
   private boolean isHidden;
-  private ModelRef responseModel;
+  private ModelReference responseModel;
   private List<VendorExtension> vendorExtensions = newArrayList();
 
   public OperationBuilder(OperationNameGenerator nameGenerator) {
@@ -234,7 +234,7 @@ public class OperationBuilder {
    * @param responseType = response type model reference
    * @return this
    */
-  public OperationBuilder responseModel(ModelRef responseType) {
+  public OperationBuilder responseModel(ModelReference responseType) {
     this.responseModel = defaultIfAbsent(responseType, this.responseModel);
     return this;
   }
@@ -249,7 +249,7 @@ public class OperationBuilder {
     this.tags = nullToEmptySet(tags);
     return this;
   }
-  
+
   /**
    * Updates the operation extensions
    *
@@ -263,8 +263,22 @@ public class OperationBuilder {
 
   public Operation build() {
     String uniqueOperationId = nameGenerator.startingWith(uniqueOperationIdStem());
-    return new Operation(method, summary, notes, responseModel, uniqueOperationId, position, tags, produces,
-        consumes, protocol, securityReferences, parameters, responseMessages, deprecated, isHidden,
+    return new Operation(
+        method,
+        summary,
+        notes,
+        responseModel,
+        uniqueOperationId,
+        position,
+        tags,
+        produces,
+        consumes,
+        protocol,
+        securityReferences,
+        parameters,
+        responseMessages,
+        deprecated,
+        isHidden,
         vendorExtensions);
   }
 
@@ -281,7 +295,7 @@ public class OperationBuilder {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
         String message = defaultIfAbsent(emptyToNull(each.getMessage()), responseMessage.getMessage());
-        ModelRef responseWithModel = defaultIfAbsent(each.getResponseModel(), responseMessage.getResponseModel());
+        ModelReference responseWithModel = defaultIfAbsent(each.getResponseModel(), responseMessage.getResponseModel());
         merged.remove(responseMessage);
         merged.add(new ResponseMessageBuilder()
             .code(each.getCode())

@@ -22,7 +22,7 @@ package springfox.documentation.service;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import org.springframework.http.HttpMethod;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 
 import java.util.Collection;
 import java.util.List;
@@ -36,7 +36,7 @@ public class Operation {
   private final HttpMethod method;
   private final String summary;
   private final String notes;
-  private final ModelRef responseModel;
+  private final ModelReference responseModel;
   private final String uniqueId;
   private final int position;
   private final Set<String> tags;
@@ -50,12 +50,24 @@ public class Operation {
   private final String deprecated;
   private final List<VendorExtension> vendorExtensions;
 
-  public Operation(HttpMethod method, String summary, String notes, ModelRef responseModel,
-                   String uniqueId, int position,
-                   Set<String> tags, Set<String> produces, Set<String> consumes, Set<String> protocol,
-                   List<SecurityReference> securityReferences, List<Parameter> parameters,
-                   Set<ResponseMessage> responseMessages, String deprecated, boolean isHidden,
-                   Collection<VendorExtension> vendorExtensions) {
+  public Operation(
+      HttpMethod method,
+      String summary,
+      String notes,
+      ModelReference responseModel,
+      String uniqueId,
+      int position,
+      Set<String> tags,
+      Set<String> produces,
+      Set<String> consumes,
+      Set<String> protocol,
+      List<SecurityReference> securityReferences,
+      List<Parameter> parameters,
+      Set<ResponseMessage> responseMessages,
+      String deprecated,
+      boolean isHidden,
+      Collection<VendorExtension> vendorExtensions) {
+
     this.method = method;
     this.summary = summary;
     this.notes = notes;
@@ -78,7 +90,7 @@ public class Operation {
     return isHidden;
   }
 
-  public ModelRef getResponseModel() {
+  public ModelReference getResponseModel() {
     return responseModel;
   }
 

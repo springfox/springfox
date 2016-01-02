@@ -31,8 +31,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Maps.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
+import static springfox.documentation.schema.Types.*;
 
 public class ResolvedTypes {
 
@@ -43,10 +42,10 @@ public class ResolvedTypes {
   public static String simpleQualifiedTypeName(ResolvedType type) {
     if (type instanceof ResolvedPrimitiveType) {
       Type primitiveType = type.getErasedType();
-      return Types.typeNameFor(primitiveType);
+      return typeNameFor(primitiveType);
     }
     if (type instanceof ResolvedArrayType) {
-      return Types.typeNameFor(type.getArrayElementType().getErasedType());
+      return typeNameFor(type.getArrayElementType().getErasedType());
     }
 
     return type.getErasedType().getName();
@@ -71,25 +70,11 @@ public class ResolvedTypes {
     });
   }
 
-  public static Function<? super ResolvedType, ModelRef> modelRefFactory(final ModelContext parentContext,
-                                                                         final TypeNameExtractor typeNameExtractor) {
+  public static Function<ResolvedType, ? extends ModelReference> modelRefFactory(
+      final ModelContext parentContext,
+      final TypeNameExtractor typeNameExtractor) {
 
-    return new Function<ResolvedType, ModelRef>() {
-      @Override
-      public ModelRef apply(ResolvedType type) {
-        if (isContainerType(type)) {
-          ResolvedType collectionElementType = collectionElementType(type);
-          String elementTypeName = typeNameExtractor.typeName(fromParent(parentContext, collectionElementType));
-          return new ModelRef(Collections.containerType(type), elementTypeName);
-        }
-        if (isMapType(type)) {
-          String elementTypeName = typeNameExtractor.typeName(fromParent(parentContext, springfox
-              .documentation.schema.Maps.mapValueType(type)));
-          return new ModelRef("Map", elementTypeName, true);
-        }
-        String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-        return new ModelRef(typeName);
-      }
-    };
+    return new ModelReferenceProvider(typeNameExtractor, parentContext);
   }
+
 }

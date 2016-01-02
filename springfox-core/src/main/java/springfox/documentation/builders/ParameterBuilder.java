@@ -21,7 +21,7 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
 
@@ -37,11 +37,12 @@ public class ParameterBuilder {
   private String paramType;
   private String paramAccess;
   private ResolvedType type;
-  private ModelRef modelRef;
+  private ModelReference modelRef;
 
 
   /**
    * Copy builder
+   *
    * @param other parameter to copy from
    * @return this
    */
@@ -165,14 +166,23 @@ public class ParameterBuilder {
    * @param modelRef
    * @return
    */
-  public ParameterBuilder modelRef(ModelRef modelRef) {
+  public ParameterBuilder modelRef(ModelReference modelRef) {
     this.modelRef = defaultIfAbsent(modelRef, this.modelRef);
     return this;
   }
 
 
   public Parameter build() {
-    return new Parameter(name, description, defaultValue, required, allowMultiple,
-        modelRef, Optional.fromNullable(type), allowableValues, paramType, paramAccess);
+    return new Parameter(
+        name,
+        description,
+        defaultValue,
+        required,
+        allowMultiple,
+        modelRef,
+        Optional.fromNullable(type),
+        allowableValues,
+        paramType,
+        paramAccess);
   }
 }

@@ -19,6 +19,8 @@
 
 package springfox.documentation.schema;
 
+import java.util.List;
+
 public class ArraysContainer {
   private ToSubstitute[] substituted;
   private ComplexType[] complexTypes;
@@ -27,6 +29,9 @@ public class ArraysContainer {
   private String[] strings;
   private Object[] objects;
   private byte[] bytes;
+  //Unsupported types
+  private int[][] arrayOfArrayOfInts;
+  private List<String>[] arrayOfListOfStrings;
 
   ArraysContainer(ComplexType[] complexTypes) {
     this.complexTypes = complexTypes;
@@ -94,6 +99,22 @@ public class ArraysContainer {
 
   public void setIntegers(Integer[] integers) {
     this.integers = integers;
+  }
+
+  public int[][] getArrayOfArrayOfInts() {
+    return arrayOfArrayOfInts;
+  }
+
+  public void setArrayOfArrayOfInts(int[][] arrayOfArrayOfInts) {
+    this.arrayOfArrayOfInts = arrayOfArrayOfInts;
+  }
+
+  public List<String>[] getArrayOfListOfStrings() {
+    return arrayOfListOfStrings;
+  }
+
+  public void setArrayOfListOfStrings(List<String>[] arrayOfListOfStrings) {
+    this.arrayOfListOfStrings = arrayOfListOfStrings;
   }
 }
 

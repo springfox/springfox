@@ -22,12 +22,7 @@ import org.joda.time.LocalDate
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 import springfox.documentation.schema.*
-import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.mixins.ModelProviderSupport
-import springfox.documentation.schema.AlternateTypeRule
-import springfox.documentation.schema.AlternateTypesSupport
-import springfox.documentation.schema.Model
-import springfox.documentation.schema.ModelProvider
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static springfox.documentation.schema.AlternateTypeRules.*
@@ -69,7 +64,7 @@ class AlternatePropertiesSpec extends Specification {
       modelProperty.type.erasedType == Void
       modelProperty.getQualifiedType() == "java.lang.Void"
       def item = modelProperty.getModelRef()
-      item.type == "Void"
+      item.type == "void"
       !item.collection
       item.itemType == null
   }

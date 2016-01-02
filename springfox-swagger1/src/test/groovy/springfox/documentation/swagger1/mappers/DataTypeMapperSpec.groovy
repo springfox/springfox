@@ -34,10 +34,10 @@ class DataTypeMapperSpec extends Specification {
     then:
       mapped == typeName
     where:
-      modelRef                        | typeName 
-      new ModelRef("void")            | "void"
-      new ModelRef("List", "String")  | "array"
-      null                            | null
+      modelRef                                      | typeName
+      new ModelRef("void")                          | "void"
+      new ModelRef("List", new ModelRef("String"))  | "array"
+      null                                          | null
   }
 
   def "Maps type name of model ref for typeFromModelRef"() {
@@ -49,10 +49,10 @@ class DataTypeMapperSpec extends Specification {
       mapped?.absoluteType == typeName
     
     where:
-      modelRef                        | typeName
-      new ModelRef("void")            | "void"
-      new ModelRef("List", "String")  | "array"
-      null                            | null
+      modelRef                                      | typeName
+      new ModelRef("void")                          | "void"
+      new ModelRef("List", new ModelRef("String"))  | "array"
+      null                                          | null
   }
 
   def "Maps model ref for operationTypeFromModelRef"() {
@@ -64,9 +64,9 @@ class DataTypeMapperSpec extends Specification {
       mapped?.absoluteType == typeName
 
     where:
-      modelRef                        | typeName
-      new ModelRef("void")            | "void"
-      new ModelRef("List", "String")  | "array"
-      null                            | null
+      modelRef                                      | typeName
+      new ModelRef("void")                          | "void"
+      new ModelRef("List", new ModelRef("String"))  | "array"
+      null                                          | null
   }
 }

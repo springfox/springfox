@@ -37,7 +37,7 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
@@ -187,14 +187,14 @@ public abstract class ModelMapper {
     return property;
   }
 
-  static Property modelRefToProperty(ModelRef modelRef) {
+  static Property modelRefToProperty(ModelReference modelRef) {
     if (modelRef == null || "void".equalsIgnoreCase(modelRef.getType())) {
       return null;
     }
     Property responseProperty;
     if (modelRef.isCollection()) {
-      String itemType = modelRef.getItemType();
-      responseProperty = new ArrayProperty(addEnumValues(property(itemType), modelRef.getAllowableValues()));
+      responseProperty = new ArrayProperty(
+          addEnumValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
     } else if (modelRef.isMap()) {
       String itemType = modelRef.getItemType();
       responseProperty = new MapProperty(property(itemType));

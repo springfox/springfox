@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.core.MethodParameter
+
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.method.HandlerMethod
@@ -36,6 +37,7 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyModels
+import springfox.documentation.spring.web.dummy.models.Business
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -48,7 +50,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
   def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
 
-  ParameterDataTypeReader sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
+  ParameterDataTypeReader sut = new ParameterDataTypeReader(typeNameExtractor)
 
   def "Should support all documentation types"() {
     expect:
@@ -73,26 +75,27 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       parameterContext.parameterBuilder().build().modelRef.type == expected
     where:
       paramType                       | expected
-      char.class                      | "string"
-      String.class                    | "string"
-      Integer.class                   | "int"
-      int.class                       | "int"
-      Long.class                      | "long"
-      BigInteger.class                | "long"
-      long.class                      | "long"
-      Float.class                     | "float"
-      float.class                     | "float"
-      Double.class                    | "double"
-      double.class                    | "double"
-      Byte.class                      | "byte"
-      BigDecimal.class                | "double"
-      byte.class                      | "byte"
-      Boolean.class                   | "boolean"
-      boolean.class                   | "boolean"
-      Date.class                      | "date-time"
-      DummyModels.FunkyBusiness.class | "FunkyBusiness"
-      Void.class                      | "Void"
-      MultipartFile.class             | "File"
+      char                            | "string"
+      String                          | "string"
+      Integer                         | "int"
+      int                             | "int"
+      Long                            | "long"
+      BigInteger                      | "long"
+      long                            | "long"
+      Float                           | "float"
+      float                           | "float"
+      Double                          | "double"
+      double                          | "double"
+      Byte                            | "byte"
+      BigDecimal                      | "double"
+      byte                            | "byte"
+      Boolean                         | "boolean"
+      boolean                         | "boolean"
+      Date                            | "date-time"
+      DummyModels.FunkyBusiness       | "FunkyBusiness"
+      Void                            | "void"
+      MultipartFile                   | "File"
+      Business.BusinessType           | "string"
   }
 
   def "Container Parameter types"() {
@@ -110,7 +113,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
       def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
-      def sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
+      def sut = new ParameterDataTypeReader(typeNameExtractor)
       sut.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().modelRef.type == "List"

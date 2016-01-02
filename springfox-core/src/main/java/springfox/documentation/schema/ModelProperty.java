@@ -33,7 +33,7 @@ public class ModelProperty {
   private final Boolean readOnly;
   private final String description;
   private final AllowableValues allowableValues;
-  private ModelRef modelRef;
+  private ModelReference modelRef;
   private final String example;
 
   public ModelProperty(
@@ -92,7 +92,7 @@ public class ModelProperty {
     return allowableValues;
   }
 
-  public ModelRef getModelRef() {
+  public ModelReference getModelRef() {
     return modelRef;
   }
 
@@ -100,7 +100,7 @@ public class ModelProperty {
     return isHidden;
   }
 
-  public ModelProperty updateModelRef(Function<? super ResolvedType, ModelRef> modelRefFactory) {
+  public ModelProperty updateModelRef(Function<ResolvedType, ? extends ModelReference> modelRefFactory) {
     modelRef = modelRefFactory.apply(type);
     return this;
   }
