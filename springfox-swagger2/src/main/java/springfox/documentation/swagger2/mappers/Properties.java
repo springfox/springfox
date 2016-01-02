@@ -76,6 +76,17 @@ class Properties {
     return propertyLookup.apply(safeTypeName.toLowerCase()).apply(safeTypeName);
   }
 
+  public static Ordering<String> defaultOrdering(Map<String, ModelProperty> properties) {
+    return Ordering.from(byPosition(properties)).compound(byName());
+  }
+
+  public static Property itemTypeProperty(ModelReference paramModel) {
+    if (paramModel.isCollection()) {
+      return new ArrayProperty(itemTypeProperty(paramModel.itemModel().get()));
+    }
+    return property(paramModel.getType());
+  }
+
   private static <T extends Property> Function<String, T> newInstanceOf(final Class<T> clazz) {
     return new Function<String, T>() {
       @Override
@@ -122,10 +133,6 @@ class Properties {
     };
   }
 
-  public static Ordering<String> defaultOrdering(Map<String, ModelProperty> properties) {
-    return Ordering.from(byPosition(properties)).compound(byName());
-  }
-
   private static Comparator<String> byName() {
     return new Comparator<String>() {
       @Override
@@ -144,12 +151,5 @@ class Properties {
         return Integer.compare(p1.getPosition(), p2.getPosition());
       }
     };
-  }
-
-  public static Property itemTypeProperty(ModelReference paramModel) {
-    if (paramModel.isCollection()) {
-      return new ArrayProperty(itemTypeProperty(paramModel.itemModel().get()));
-    }
-    return property(paramModel.getType());
   }
 }

@@ -29,6 +29,10 @@ public class ModelRef implements ModelReference {
   private final Optional<ModelReference> itemModel;
   private final Optional<AllowableValues> allowableValues;
 
+  public ModelRef(String type) {
+    this(type, null, null);
+  }
+
   public ModelRef(String type, ModelReference itemType) {
     this(type, itemType, false);
   }
@@ -50,10 +54,6 @@ public class ModelRef implements ModelReference {
     this.isMap = isMap;
     this.allowableValues = Optional.fromNullable(allowableValues);
     this.itemModel = Optional.fromNullable(itemModel);
-  }
-
-  public ModelRef(String type) {
-    this(type, null, null);
   }
 
   @Override

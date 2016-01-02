@@ -1,6 +1,7 @@
 package springfox.documentation.swagger2.mappers
 
 import io.swagger.models.properties.*
+import springfox.documentation.schema.ModelRef
 
 import static springfox.documentation.swagger2.mappers.Properties.*
 
@@ -26,6 +27,19 @@ class PropertiesSpec extends Specification {
       byteProp instanceof StringProperty
       byteProp.format == "byte"
   }
+
+  def "Nested collection properties are supported" () {
+    when:
+      def prop = itemTypeProperty(ref)
+    then:
+      prop == expected
+    where:
+      ref                                                                | expected
+      new ModelRef("string")                                             | new StringProperty()
+      new ModelRef("List", new ModelRef("string"))                       | new ArrayProperty(new StringProperty())
+      new ModelRef("List", new ModelRef("List", new ModelRef("string"))) | new ArrayProperty(new ArrayProperty(new StringProperty()))
+  }
+
   def "Properties are inferred given the type as a string"() {
     expect:
       property(typeName).class.isAssignableFrom(expected)
