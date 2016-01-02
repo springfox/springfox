@@ -22,8 +22,6 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeBindings;
 import com.fasterxml.classmate.TypeResolver;
-import com.fasterxml.classmate.types.ResolvedArrayType;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
@@ -43,15 +41,6 @@ public class WildcardType {
 
   public static boolean hasWildcards(ResolvedType type) {
     return any(type.getTypeBindings().getTypeParameters(), thatAreWildcards());
-  }
-
-  public static Optional<ResolvedArray> arrayElementType(int level, ResolvedType maybeArrayType) {
-    if (maybeArrayType instanceof ResolvedArrayType) {
-      ResolvedType elementType = maybeArrayType.getArrayElementType();
-      return Optional.of(arrayElementType(level + 1, elementType)
-          .or(new ResolvedArray(level + 1, elementType)));
-    }
-    return Optional.absent();
   }
 
   public static boolean exactMatch(ResolvedType first, ResolvedType second) {

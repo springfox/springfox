@@ -20,7 +20,6 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.TypeResolver;
-import springfox.documentation.annotations.Incubating;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -57,13 +56,4 @@ public class AlternateTypeRules {
             resolver.resolve(List.class, resolver.resolve(Entry.class, key, value)));
   }
 
-  /**
-   * Rule that transforms two dimensional arrays to list of list of array element type
-   * @return the alternate type rule
-   * @param resolver
-   */
-  @Incubating("2.3.0")
-  public static AlternateTypeRule twoDimensionalArrayRule(TypeResolver resolver) {
-    return new TwoDimensionalArraySubstitutionRule(resolver);
-  }
 }
