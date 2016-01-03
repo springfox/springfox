@@ -515,7 +515,7 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="answers-to-common-questions-and-problems">Answers to common questions and problems</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><strong>Q. Why does springfox ignore the http status code in the return value of a controller method?</strong></p>
+<p><a id="q1"></a><strong>Q. Why does springfox ignore the http status code in the return value of a controller method?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -525,7 +525,7 @@ table.CodeRay td.code>pre{padding:0}
 </ol>
 </div>
 <div class="paragraph">
-<p><strong>Q. What is the relationship between swagger-ui and springfox-swagger-ui?</strong></p>
+<p><a id="q2"></a><strong>Q. What is the relationship between swagger-ui and springfox-swagger-ui?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -555,19 +555,26 @@ spring services can serve it up.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p><strong>Q. I use GSON and don&#8217;t use Jackson, What should I do?</strong></p>
+<p><a id="q3"></a><strong>Q. I use GSON and don&#8217;t use Jackson, What should I do?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
 <p>Thanks to <a href="https://github.com/chrishuttonch">@chrishuttonch</a> for describing the solution to <a href="https://github.com/springfox/springfox/issues/867">this issue</a></p>
-<div class="literalblock">
-<div class="content">
-<pre>TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serialisers for the following classes:</pre>
-</div>
-</div>
 </li>
 </ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serialisers for the following classes:
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -581,25 +588,32 @@ spring services can serve it up.</p>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>Q. I get an NPE during application startup in a spring-boot app?</strong></p>
+<p><a id="q4"></a><strong>Q. I get an NPE during application startup in a spring-boot app?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
 <p>Thanks to <a href="https://github.com/shasti421">@shasti421</a> for providing the solution</p>
-<div class="literalblock">
-<div class="content">
-<pre>TIP: Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
-refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
-onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
- related to https://github.com/spring-projects/spring-boot/issues/221[spring-boot issue #221]</pre>
-</div>
-</div>
 </li>
 </ol>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
+  refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
+  onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
+   related to <a href="https://github.com/spring-projects/spring-boot/issues/221">spring-boot issue #221</a>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p><strong>Q. How do we use Java 8 types esply. LocalDateTime?</strong></p>
+<p><a id="q5"></a><strong>Q. How do we use Java 8 types esply. LocalDateTime?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -611,7 +625,8 @@ validation info.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p><strong>Q. How does one use @ModelAttribute annotation. It doesn&#8217;t seem to render the model properties as scalar properties?</strong></p>
+<p><a id="q6"></a><strong>Q. How does one use @ModelAttribute annotation. It doesn&#8217;t seem to render the model properties as scalar
+properties?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -672,7 +687,7 @@ I know spring supports fields as well, and it will fall back to fields if setter
 </table>
 </div>
 <div class="paragraph">
-<p><strong>Q. How should we resolve multiple object mappers available as beans especially when using spring-hateoas?</strong></p>
+<p><a id="q7"></a><strong>Q. How should we resolve multiple object mappers available as beans especially when using spring-hateoas?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -707,7 +722,7 @@ I know spring supports fields as well, and it will fall back to fields if setter
 <p>and set the order of the other bean to lowest precedence.</p>
 </div>
 <div class="paragraph">
-<p><strong>Q. How do I use this library to aggregate swagger-enabled resources from multiple services?</strong></p>
+<p><a id="q8"></a><strong>Q. How do I use this library to aggregate swagger-enabled resources from multiple services?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -723,7 +738,7 @@ discusses issues with doing this.</pre>
 </ol>
 </div>
 <div class="paragraph">
-<p><strong>Q. Why are my api params marked as required=false?</strong></p>
+<p><a id="q9"></a><strong>Q. Why are my api params marked as required=false?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -753,7 +768,7 @@ inferred values (in your case required attribute).</pre>
 </ol>
 </div>
 <div class="paragraph">
-<p><strong>Q. How does one write a plugin to for e.g. make default all types required and only some not required?</strong>
+<p><a id="q10"></a><strong>Q. How does one write a plugin to for e.g. make default all types required and only some not required?</strong>
 A.  To do this, you&#8217;d have to
     - add an alternate type rule for <code>Optional&lt;T&gt;</code> see <code>genericModelSubstitutes</code> in docket
     - implement your own <a href="https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/schema/ModelPropertyBuilderPlugin.java#L26">ModelPropertyBuilderPlugin</a>
@@ -765,7 +780,7 @@ A.  To do this, you&#8217;d have to
 </div>
 </div>
 <div class="paragraph">
-<p><strong>Q. Why are all my operations not showing in the UI?</strong></p>
+<p><a id="q11"></a><strong>Q. Why are all my operations not showing in the UI?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -782,7 +797,7 @@ up the PR and the <a href="https://github.com/swagger-api/swagger-spec/issues/29
 </ol>
 </div>
 <div class="paragraph">
-<p><strong>Q. How would one partition apis based on versions?</strong></p>
+<p><a id="q12"></a><strong>Q. How would one partition apis based on versions?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -815,7 +830,7 @@ one for **api/v2**. This [SO post](http://stackoverflow.com/questions/23049736/w
 </div>
 </div>
 <div class="paragraph">
-<p><strong>Q. How does one configure swagger-ui for non-springboot applications?</strong></p>
+<p><a id="q13"></a><strong>Q. How does one configure swagger-ui for non-springboot applications?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -867,7 +882,7 @@ through the dispatcherServlet.</pre>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>Q. How does one create rules to substitute list and array items?</strong></p>
+<p><a id="q14"></a><strong>Q. How does one create rules to substitute list and array items?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -905,7 +920,7 @@ through the dispatcherServlet.</pre>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>Q. How does one configure a docket with multiple protocols/schemes?</strong></p>
+<p><a id="q15"></a><strong>Q. How does one configure a docket with multiple protocols/schemes?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -920,7 +935,7 @@ through the dispatcherServlet.</pre>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>Q. How does one use springfox in a project with xml spring configuration?</strong></p>
+<p><a id="q16"></a><strong>Q. How does one use springfox in a project with xml spring configuration?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -930,7 +945,7 @@ through the dispatcherServlet.</pre>
 </ol>
 </div>
 <div class="paragraph">
-<p><strong>Q. How does one override the host name?</strong></p>
+<p><a id="q17"></a><strong>Q. How does one override the host name?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -953,7 +968,7 @@ It is still in incubation but host name can be configured per docket</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-01-02 23:47:57 UTC
+Last updated 2016-01-03 01:19:55 UTC
 </div>
 </div>
 </body>
