@@ -1180,6 +1180,29 @@ dependencies {
 </div>
 <div class="sect4">
 <h5 id="configuration-explained">Configuration explained</h5>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This library extensively uses <a href="https://github.com/google/guava">googles guava library</a>. For e.g. when you
+see <code>newArrayList(&#8230;&#8203;)</code> its actually the guava equivalent of creating an normal array list and adding item(s) to it.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">//This guava code snippet</span>
+<span class="predefined-type">List</span>&lt;Something&gt; guavaList = newArrayList(<span class="keyword">new</span> Something);
+
+<span class="comment">//... is equivalent to</span>
+<span class="predefined-type">List</span>&lt;Something&gt; list = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;Something&gt;();
+list.add(<span class="keyword">new</span> Something());</code></pre>
+</div>
+</div>
 <div class="colist arabic">
 <table>
 <tr>
@@ -2369,7 +2392,7 @@ It is still in incubation but host name can be configured per docket</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-01-03 01:42:41 UTC
+Last updated 2016-01-03 14:02:32 UTC
 </div>
 </div>
 </body>
