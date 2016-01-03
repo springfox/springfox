@@ -1,10 +1,10 @@
 == Answers to common questions and problems
 
-*Q. Why does springfox ignore the http status code in the return value of a controller method?*
+[[q1]]*Q. Why does springfox ignore the http status code in the return value of a controller method?*
 
 A. https://github.com/springfox/springfox/issues/822[Reference #822]
 
-*Q. What is the relationship between swagger-ui and springfox-swagger-ui?*
+[[q2]]*Q. What is the relationship between swagger-ui and springfox-swagger-ui?*
 
 A. It can be a little confusing :open_mouth:
 
@@ -15,11 +15,11 @@ A. It can be a little confusing :open_mouth:
   - springfox-swagger-ui - the one that you're referring to, is just packaging swagger-ui in a convenient way so that
   spring services can serve it up.
 
-*Q. I use GSON and don't use Jackson, What should I do?*
+[[q3]]*Q. I use GSON and don't use Jackson, What should I do?*
 
 A. Thanks to https://github.com/chrishuttonch[@chrishuttonch] for describing the solution to https://github.com/springfox/springfox/issues/867[this issue]
 
-  TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serialisers for the following classes:
+TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serialisers for the following classes:
 
 [source,java]
 ----
@@ -32,22 +32,23 @@ A. Thanks to https://github.com/chrishuttonch[@chrishuttonch] for describing the
 .registerTypeAdapter(springfox.documentation.swagger.web.UiConfiguration.class, new SwaggerUiConfigurationSerializer());
 ----
 
-*Q. I get an NPE during application startup in a spring-boot app?*
+[[q4]]*Q. I get an NPE during application startup in a spring-boot app?*
 
 A. Thanks to https://github.com/shasti421[@shasti421] for providing the solution
 
-  TIP: Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
+TIP: Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
   refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
   onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
    related to https://github.com/spring-projects/spring-boot/issues/221[spring-boot issue #221]
 
-*Q. How do we use Java 8 types esply. LocalDateTime?*
+[[q5]]*Q. How do we use Java 8 types esply. LocalDateTime?*
 
 A. Typically these are handled via `Docket#directModelSubstitute(LocalDateTime.class, String.class)`. If these
   are ISO 8601 dates that conform to a string format i.e. `yyyy-MM-dd'T'HH:mm'Z'`. However you won't have any format or
   validation info.
 
-*Q. How does one use @ModelAttribute annotation. It doesn't seem to render the model properties as scalar properties?*
+[[q6]]*Q. How does one use @ModelAttribute annotation. It doesn't seem to render the model properties as scalar
+properties?*
 
 A. In order for @ModelAttribute annotated types to be inferred the properties need to be bean properties.
 
@@ -77,7 +78,7 @@ Category {String name {get;set;}, String description {get;}}
 
 NOTE: I know spring supports fields as well, and it will fall back to fields if setters are not found
 
-*Q. How should we resolve multiple object mappers available as beans especially when using spring-hateoas?*
+[[q7]]*Q. How should we resolve multiple object mappers available as beans especially when using spring-hateoas?*
 
 A. The idea is to provide a `@Primary` ObjectMapper.
 
@@ -102,14 +103,14 @@ A. The idea is to provide a `@Primary` ObjectMapper.
 
 and set the order of the other bean to lowest precedence.
 
-*Q. How do I use this library to aggregate swagger-enabled resources from multiple services?*
+[[q8]]*Q. How do I use this library to aggregate swagger-enabled resources from multiple services?*
 
 A.  Logical explanation of how one might go about doing this is available in the https://groups.google.com/forum/#!searchin/swagger-swaggersocket/multiple/swagger-swaggersocket/g8fgSGUCrYs/A8Ms_lFOoN4J[swagger google group]
 
     Additionally https://github.com/springfox/springfox/issues/1001#issuecomment-147609243[this comment] further
     discusses issues with doing this.
 
-*Q. Why are my api params marked as required=false?*
+[[q9]]*Q. Why are my api params marked as required=false?*
 
 A. This is because of how plugins work and how their priority layers information
 
@@ -124,7 +125,7 @@ A. This is because of how plugins work and how their priority layers information
 
    So if you choose to augment the definitions with @ApiParam then you need to be explicit and set the value to true.
 
-*Q. How does one write a plugin to for e.g. make default all types required and only some not required?*
+[[q10]]*Q. How does one write a plugin to for e.g. make default all types required and only some not required?*
 A.  To do this, you'd have to
     - add an alternate type rule for `Optional<T>` see `genericModelSubstitutes` in docket
     - implement your own https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/schema/ModelPropertyBuilderPlugin.java#L26[ModelPropertyBuilderPlugin]
@@ -132,7 +133,7 @@ A.  To do this, you'd have to
 
     Keep in mind that you need the plugin to fire after this plugin... so order it accordingly
 
-*Q. Why are all my operations not showing in the UI?*
+[[q11]]*Q. Why are all my operations not showing in the UI?*
 
 A.  This is a known limitation of swagger-spec. There is a work around for it but, swagger-ui won't play nice with it.
     I have a https://github.com/swagger-api/swagger-js/pull/541[PR] which address that issue. Would be great if you vote
@@ -140,7 +141,7 @@ A.  This is a known limitation of swagger-spec. There is a work around for it bu
 
     UPDATE: This https://github.com/swagger-api/swagger-js/pull/541[PR] has been closed!
 
-*Q. How would one partition apis based on versions?*
+[[q12]]*Q. How would one partition apis based on versions?*
 
 A.  Excerpted from an explanation for https://github.com/springfox/springfox/issues/963[issue 963]...
 
@@ -161,7 +162,7 @@ A.  Excerpted from an explanation for https://github.com/springfox/springfox/iss
             servlet.setLoadOnStartup(1);
 ----
 
-*Q. How does one configure swagger-ui for non-springboot applications?*
+[[q13]]*Q. How does one configure swagger-ui for non-springboot applications?*
 
 A.  Excerpted from https://github.com/springfox/springfox/issues/983[issue 983]...
     I was able to get it working by modifying the dispatcherServlet to listen on /* , but this prevented swagger-ui.html
@@ -199,7 +200,7 @@ A.  Excerpted from https://github.com/springfox/springfox/issues/983[issue 983].
     Kinda tricky to get working, but it works.  Perhaps there is a better way to remap swagger-ui.html or let it pass
     through the dispatcherServlet.
 
-*Q. How does one create rules to substitute list and array items?*
+[[q14]]*Q. How does one create rules to substitute list and array items?*
 
 A.  If the following types...
 
@@ -226,7 +227,7 @@ A.  If the following types...
     rules.add(newRule(resolver.resolve(List, ToSubstitute), resolver.resolve(List, Substituted)))
 ----
 
-*Q. How does one configure a docket with multiple protocols/schemes?*
+[[q15]]*Q. How does one configure a docket with multiple protocols/schemes?*
 
 A.  Use the `protocols` method to configure the docket to indicate supported schemes.
 
@@ -236,11 +237,11 @@ A.  Use the `protocols` method to configure the docket to indicate supported sch
 ----
 
 
-*Q. How does one use springfox in a project with xml spring configuration?*
+[[q16]]*Q. How does one use springfox in a project with xml spring configuration?*
 
 A. There is a demo application that describes https://github.com/springfox/springfox-demos/tree/master/spring-xml-swagger[how java-xml] configuration needs to be setup.
 
-*Q. How does one override the host name?*
+[[q17]]*Q. How does one override the host name?*
 
 A.  This should be available in v2.3 thanks https://github.com/springfox/springfox/pull/1011[to this PR] by @cbornet.
  It is still in incubation but host name can be configured per docket
