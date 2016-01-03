@@ -6,14 +6,14 @@ A. https://github.com/springfox/springfox/issues/822[Reference #822]
 
 [[q2]]*Q. What is the relationship between swagger-ui and springfox-swagger-ui?*
 
-A. It can be a little confusing :open_mouth:
+A. It can be a little confusing
 
-  - Swagger Spec is a specification
-  - Swagger Api - an implementation of that specification that supports jax-rs, restlet, jersey etc.
-  - Springfox libraries in general - is another implementation of the specification focused on the spring based ecosystem
-  - Swagger.js and Swagger-ui - Are client libraries in javascript that can consume swagger specification
-  - springfox-swagger-ui - the one that you're referring to, is just packaging swagger-ui in a convenient way so that
-  spring services can serve it up.
+- Swagger Spec is a specification
+- Swagger Api - an implementation of that specification that supports jax-rs, restlet, jersey etc.
+- Springfox libraries in general - is another implementation of the specification focused on the spring based ecosystem
+- Swagger.js and Swagger-ui - Are client libraries in javascript that can consume swagger specification
+- springfox-swagger-ui - the one that you're referring to, is just packaging swagger-ui in a convenient way so that
+spring services can serve it up.
 
 [[q3]]*Q. I use GSON and don't use Jackson, What should I do?*
 
@@ -37,28 +37,27 @@ TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that n
 A. Thanks to https://github.com/shasti421[@shasti421] for providing the solution
 
 TIP: Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
-  refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
-  onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
-   related to https://github.com/spring-projects/spring-boot/issues/221[spring-boot issue #221]
+refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
+onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
+related to https://github.com/spring-projects/spring-boot/issues/221[spring-boot issue #221]
 
 [[q5]]*Q. How do we use Java 8 types esply. LocalDateTime?*
 
 A. Typically these are handled via `Docket#directModelSubstitute(LocalDateTime.class, String.class)`. If these
-  are ISO 8601 dates that conform to a string format i.e. `yyyy-MM-dd'T'HH:mm'Z'`. However you won't have any format or
-  validation info.
+are ISO 8601 dates that conform to a string format i.e. `yyyy-MM-dd'T'HH:mm'Z'`. However you won't have any format or
+validation info.
 
 [[q6]]*Q. How does one use @ModelAttribute annotation. It doesn't seem to render the model properties as scalar
 properties?*
 
-A. In order for @ModelAttribute annotated types to be inferred the properties need to be bean properties.
+A. In order for @ModelAttribute annotated types to be inferred the properties need to be bean properties. If the
+intent is immutability and passing in an object, the preferred approach is to make that a request body, in which
+case the immutability will follow the rules laid out by jackson to determine what constitutes a request "view" of the
+request object.
 
-  If the intent is immutability and passing in an object, the preferred approach is to make that a request body, in which
-  case the immutability will follow the rules laid out by jackson to determine what constitutes a request "view" of the
-  request object.
-
-  getters/setters are a clean way to indicate what values can come in to a operation. While it may not be apparent in a
-  trivial model with one level nesting; the design choice will become clear when we realize that model attributes can be
-  arbitrarily nested. Consider (pseudo code in c# for brevity)
+Getters/setters are a clean way to indicate what values can come in to a operation. While it may not be apparent in a
+trivial model with one level nesting; the design choice will become clear when we realize that model attributes can be
+arbitrarily nested. Consider (pseudo code in c# for brevity)
 
 [source,csharp]
 ----
@@ -66,23 +65,20 @@ Person {String firstName {get;set;}, String lastName {get;set;}, Category catego
 Category {String name {get;set;}, String description {get;}}
 ----
 
-  So one could set properties
-  firstName
-  lastName
-  category.name
+So one could set properties
+- firstName
+- lastName
+- category.name
 
-  Now we don't want category to be able to set description via the operation, how do we control/specify that?
-
-  it makes it hard to reason about which fields in an objects are not intended to be mutated. This is the reason we
-  chose to limit it to objects that expose getters and setters.
+Now we don't want category to be able to set description via the operation, how do we control/specify that? it makes
+it hard to reason about which fields in an objects are not intended to be mutated. This is the reason we chose to
+limit it to objects that expose getters and setters.
 
 NOTE: I know spring supports fields as well, and it will fall back to fields if setters are not found
 
 [[q7]]*Q. How should we resolve multiple object mappers available as beans especially when using spring-hateoas?*
 
-A. The idea is to provide a `@Primary` ObjectMapper.
-
-  Based on answer provided by @prabhat1790 in https://github.com/springfox/springfox/issues/890[issue #890]
+A. The idea is to provide a `@Primary` ObjectMapper. Based on answer provided by @prabhat1790 in https://github.com/springfox/springfox/issues/890[issue #890]
 
 [source,java]
 ----
@@ -105,50 +101,50 @@ and set the order of the other bean to lowest precedence.
 
 [[q8]]*Q. How do I use this library to aggregate swagger-enabled resources from multiple services?*
 
-A.  Logical explanation of how one might go about doing this is available in the https://groups.google.com/forum/#!searchin/swagger-swaggersocket/multiple/swagger-swaggersocket/g8fgSGUCrYs/A8Ms_lFOoN4J[swagger google group]
-
-    Additionally https://github.com/springfox/springfox/issues/1001#issuecomment-147609243[this comment] further
-    discusses issues with doing this.
+A.  Logical explanation of how one might go about doing this is available in the https://groups.google
+.com/forum/#!searchin/swagger-swaggersocket/multiple/swagger-swaggersocket/g8fgSGUCrYs/A8Ms_lFOoN4J[swagger google
+group] Additionally https://github.com/springfox/springfox/issues/1001#issuecomment-147609243[this comment] further
+discusses issues with doing this.
 
 [[q9]]*Q. Why are my api params marked as required=false?*
 
 A. This is because of how plugins work and how their priority layers information
 
-   @PathVariables are always marked as required.
-   @ApiParam is an optional annotation to describe additional meta-information like description etc.
-   @ApiParam#required() is defaulted to false, unless you set it to true.
+- @PathVariables are always marked as required.
+- @ApiParam is an optional annotation to describe additional meta-information like description etc.
+- @ApiParam#required() is defaulted to false, unless you set it to true.
 
-   Springfox uses plugins to layer information. There are a set of plugins that are spring specific that apply the
-   inferred values on to the internal service models. The swagger annotation related metadata is layered on top of the
-   spring-mvc descriptions. By definition, plugins don't know and should not know about each other or previously
-   inferred values (in your case required attribute).
+Springfox uses plugins to layer information. There are a set of plugins that are spring specific that apply the
+inferred values on to the internal service models. The swagger annotation related metadata is layered on top of the
+spring-mvc descriptions. By definition, plugins don't know and should not know about each other or previously
+inferred values (in your case required attribute).
 
-   So if you choose to augment the definitions with @ApiParam then you need to be explicit and set the value to true.
+So if you choose to augment the definitions with @ApiParam then you need to be explicit and set the value to true.
 
 [[q10]]*Q. How does one write a plugin to for e.g. make default all types required and only some not required?*
 A.  To do this, you'd have to
-    - add an alternate type rule for `Optional<T>` see `genericModelSubstitutes` in docket
-    - implement your own https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/schema/ModelPropertyBuilderPlugin.java#L26[ModelPropertyBuilderPlugin]
-    - and override the read only property if you find an `Optional` type. See https://github.com/springfox/springfox/blob/master/springfox-swagger-common/src/main/java/springfox/documentation/swagger/schema/ApiModelPropertyPropertyBuilder.java#L35[here] for an example.
+- add an alternate type rule for `Optional<T>` see `genericModelSubstitutes` in docket
+- implement your own https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/schema/ModelPropertyBuilderPlugin.java#L26[ModelPropertyBuilderPlugin]
+- and override the read only property if you find an `Optional` type. See https://github.com/springfox/springfox/blob/master/springfox-swagger-common/src/main/java/springfox/documentation/swagger/schema/ApiModelPropertyPropertyBuilder.java#L35[here] for an example.
 
-    Keep in mind that you need the plugin to fire after this plugin... so order it accordingly
+Keep in mind that you need the plugin to fire after this plugin... so order it accordingly
 
 [[q11]]*Q. Why are all my operations not showing in the UI?*
 
 A.  This is a known limitation of swagger-spec. There is a work around for it but, swagger-ui won't play nice with it.
-    I have a https://github.com/swagger-api/swagger-js/pull/541[PR] which address that issue. Would be great if you vote
-    up the PR and the https://github.com/swagger-api/swagger-spec/issues/291[underlying issue]
+I have a https://github.com/swagger-api/swagger-js/pull/541[PR] which address that issue. Would be great if you vote
+up the PR and the https://github.com/swagger-api/swagger-spec/issues/291[underlying issue]
 
-    UPDATE: This https://github.com/swagger-api/swagger-js/pull/541[PR] has been closed!
+WARNING: This https://github.com/swagger-api/swagger-js/pull/541[PR] has been closed!
 
 [[q12]]*Q. How would one partition apis based on versions?*
 
 A.  Excerpted from an explanation for https://github.com/springfox/springfox/issues/963[issue 963]...
 
-    (springfox) uses the context path as the starting point.
+(springfox) uses the context path as the starting point.
 
-    What you really need to is to define a dynamic servlet registration and create 2 dockets .. one for **api** and
-    one for **api/v2**. This [SO post](http://stackoverflow.com/questions/23049736/working-with-multiple-dispatcher-servlets-in-a-spring-application) might help
+What you really need to is to define a dynamic servlet registration and create 2 dockets .. one for **api** and
+one for **api/v2**. This [SO post](http://stackoverflow.com/questions/23049736/working-with-multiple-dispatcher-servlets-in-a-spring-application) might help
 
 [source,xml]
 ----
@@ -165,40 +161,39 @@ A.  Excerpted from an explanation for https://github.com/springfox/springfox/iss
 [[q13]]*Q. How does one configure swagger-ui for non-springboot applications?*
 
 A.  Excerpted from https://github.com/springfox/springfox/issues/983[issue 983]...
-    I was able to get it working by modifying the dispatcherServlet to listen on /* , but this prevented swagger-ui.html
-    from being served.  To fix this to let the swagger-ui.html bypass the dispatcherServlet i had to create a new
-    servlet mapping:
+I was able to get it working by modifying the dispatcherServlet to listen on /* , but this prevented swagger-ui.html
+from being served.  To fix this to let the swagger-ui.html bypass the dispatcherServlet i had to create a new
+servlet mapping:
 
 [source,xml]
 ----
-    <servlet>
-    			<servlet-name>RestServlet</servlet-name>
-    			<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    			<init-param>
-    				<param-name>contextConfigLocation</param-name>
-    				<param-value></param-value>
-    			</init-param>
-    			<load-on-startup>1</load-on-startup>
-    		</servlet>
+        <servlet>
+          <servlet-name>RestServlet</servlet-name>
+          <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+          <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value></param-value>
+          </init-param>
+          <load-on-startup>1</load-on-startup>
+        </servlet>
 
-    		<servlet-mapping>
-    			<servlet-name>default</servlet-name>
-    				<url-pattern>/swagger-ui.html</url-pattern>
-    		</servlet-mapping>
+        <servlet-mapping>
+          <servlet-name>default</servlet-name>
+            <url-pattern>/swagger-ui.html</url-pattern>
+        </servlet-mapping>
 
-    		<servlet-mapping>
-    			<servlet-name>RestServlet</servlet-name>
-    				<url-pattern>/*</url-pattern>
-    		</servlet-mapping>
+        <servlet-mapping>
+          <servlet-name>RestServlet</servlet-name>
+            <url-pattern>/*</url-pattern>
+        </servlet-mapping>
 ----
 
-    Also had to let the webjar through the dispatcher servlet:
+Also had to let the webjar through the dispatcher servlet:
 
+`<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>`
 
-    `<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>`
-
-    Kinda tricky to get working, but it works.  Perhaps there is a better way to remap swagger-ui.html or let it pass
-    through the dispatcherServlet.
+Tricky to get working, but it works.  Perhaps there is a better way to remap swagger-ui.html or let it pass
+through the dispatcherServlet.
 
 [[q14]]*Q. How does one create rules to substitute list and array items?*
 
@@ -210,7 +205,7 @@ A.  If the following types...
     List<ToSubstitute> list;
 ----
 
-    Need to look like this over the wire...
+Need to look like this over the wire...
 
 [source,java]
 ----
@@ -218,8 +213,7 @@ A.  If the following types...
     List<Substituted> list;
 ----
 
-
-    This is how the rules need to be configured
+This is how the rules need to be configured
 
 [source,java]
 ----
@@ -244,9 +238,9 @@ A. There is a demo application that describes https://github.com/springfox/sprin
 [[q17]]*Q. How does one override the host name?*
 
 A.  This should be available in v2.3 thanks https://github.com/springfox/springfox/pull/1011[to this PR] by @cbornet.
- It is still in incubation but host name can be configured per docket
+It is still in incubation but host name can be configured per docket
 
- [source,java]
- ----
+[source,java]
+----
      docket.host("http://maybe-an-api-gateway.host");
- ----
+----
