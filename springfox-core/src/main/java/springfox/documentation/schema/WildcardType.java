@@ -22,15 +22,14 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeBindings;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 
@@ -114,28 +113,21 @@ public class WildcardType {
 
   private static List<ResolvedType> breadthFirstSearch(ResolvedType replacingType, ResolvedType wildcardType) {
     TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
-    TypeBindings bindingsToMatch = adjustedTypeBindings(replacingType);
+    TypeBindings replacingBindings = replacingType.getTypeBindings();
 
     List<ResolvedType> bindings = newArrayList();
-    for (int index = 0; index < bindingsToMatch.size(); index++) {
+    int index = 0;
+    for (TypeVariable each : replacingType.getErasedType().getTypeParameters()) {
+      ResolvedType boundType = Optional.fromNullable(replacingBindings.findBoundType(each.getName()))
+          .or(new TypeResolver().resolve(Object.class));
       if (isWildcardType(wildcardTypeBindings.getBoundType(index))) {
-        bindings.add(bindingsToMatch.getBoundType(index));
+        bindings.add(boundType);
       } else {
-        bindings.addAll(breadthFirstSearch(bindingsToMatch.getBoundType(index),
+        bindings.addAll(breadthFirstSearch(boundType,
             wildcardTypeBindings.getBoundType(index)));
       }
+      index++;
     }
     return bindings;
-  }
-
-  private static TypeBindings adjustedTypeBindings(ResolvedType replacingType) {
-    TypeBindings typeBindings = replacingType.getTypeBindings();
-    TypeVariable[] typeVariables = replacingType.getErasedType().getTypeParameters();
-    FluentIterable<TypeVariable> remaining = from(newArrayList(typeVariables))
-        .skip(replacingType.getTypeBindings().size());
-    for (TypeVariable each : remaining) {
-      typeBindings = typeBindings.withAdditionalBinding(each.getName(), new TypeResolver().resolve(Object.class));
-    }
-    return typeBindings;
   }
 }
