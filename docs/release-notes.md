@@ -24,6 +24,7 @@ Big thank you to  @wxjlibra, @abaile33 for reporting bugs and Thanks @sbuettner 
 
 - Could not define global consumes and produces set #1115
 - Support for showing controller methods with defaulted @RequestMapping#params values with different values is incorrect #1114
+- Better Support for 2 dimensional arrays #956
 
 
 # 2.3.0 Release notes
