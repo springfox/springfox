@@ -61,11 +61,17 @@ arbitrarily nested. Consider (pseudo code in c# for brevity)
 
 [source,csharp]
 ----
-Person {String firstName {get;set;}, String lastName {get;set;}, Category category {get;set;}}
-Category {String name {get;set;}, String description {get;}}
+
+Person {String firstName {get;set;}
+String lastName {get;set;}
+Category category {get;set;}
+Category {String name {get;set;}
+String description {get;}
+
 ----
 
-So one could set properties
+So one could set properties:
+
 - firstName
 - lastName
 - category.name
@@ -101,8 +107,7 @@ and set the order of the other bean to lowest precedence.
 
 [[q8]]*Q. How do I use this library to aggregate swagger-enabled resources from multiple services?*
 
-A.  Logical explanation of how one might go about doing this is available in the https://groups.google
-.com/forum/#!searchin/swagger-swaggersocket/multiple/swagger-swaggersocket/g8fgSGUCrYs/A8Ms_lFOoN4J[swagger google
+A.  Logical explanation of how one might go about doing this is available in the https://groups.google.com/forum/#!searchin/swagger-swaggersocket/multiple/swagger-swaggersocket/g8fgSGUCrYs/A8Ms_lFOoN4J[swagger google
 group] Additionally https://github.com/springfox/springfox/issues/1001#issuecomment-147609243[this comment] further
 discusses issues with doing this.
 
@@ -122,6 +127,7 @@ inferred values (in your case required attribute).
 So if you choose to augment the definitions with @ApiParam then you need to be explicit and set the value to true.
 
 [[q10]]*Q. How does one write a plugin to for e.g. make default all types required and only some not required?*
+
 A.  To do this, you'd have to
 - add an alternate type rule for `Optional<T>` see `genericModelSubstitutes` in docket
 - implement your own https://github.com/springfox/springfox/blob/master/springfox-spi/src/main/java/springfox/documentation/spi/schema/ModelPropertyBuilderPlugin.java#L26[ModelPropertyBuilderPlugin]
@@ -144,9 +150,9 @@ A.  Excerpted from an explanation for https://github.com/springfox/springfox/iss
 (springfox) uses the context path as the starting point.
 
 What you really need to is to define a dynamic servlet registration and create 2 dockets .. one for **api** and
-one for **api/v2**. This [SO post](http://stackoverflow.com/questions/23049736/working-with-multiple-dispatcher-servlets-in-a-spring-application) might help
+one for **api/v2**. This http://stackoverflow.com/questions/23049736/working-with-multiple-dispatcher-servlets-in-a-spring-application[SO post] might help
 
-[source,xml]
+[source,java]
 ----
     ...
       Dynamic servlet = servletContext.addServlet("v1Dispatcher", new DispatcherServlet(ctx1));
@@ -161,6 +167,7 @@ one for **api/v2**. This [SO post](http://stackoverflow.com/questions/23049736/w
 [[q13]]*Q. How does one configure swagger-ui for non-springboot applications?*
 
 A.  Excerpted from https://github.com/springfox/springfox/issues/983[issue 983]...
+
 I was able to get it working by modifying the dispatcherServlet to listen on /* , but this prevented swagger-ui.html
 from being served.  To fix this to let the swagger-ui.html bypass the dispatcherServlet i had to create a new
 servlet mapping:
