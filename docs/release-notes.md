@@ -1,3 +1,31 @@
+# 2.3.1 Release Notes
+
+[Full Changelog](https://github.com/springfox/springfox/compare/2.3.0...HEAD)
+Big thank you to  @wxjlibra, @abaile33 for reporting bugs and Thanks @sbuettner and @vmarusic for the PRs!
+
+**Maintenance:**
+
+- Remove runtime dependency on `spring-hateoas` #1104 
+- Fix the accidental reference to `java.util.Objects` class so that java 6 is still supported
+- Upgraded gradle to 2.10
+- Upgraded to swagger 1.5.5
+- Fix Documentation Formatting
+- Upgraded jdk to 8 for building
+- Upgrade Classmate to 1.3.1 #1079
+- Document use of google guava in code examples #1117
+
+
+**Pull Requests:**
+
+- v2/api-docs does not support application/json media type by default  #1110
+- Add support for api model property positions.  feature PR #1101 
+
+**Bug Fixes:**
+
+- Could not define global consumes and produces set #1115
+- Support for showing controller methods with defaulted @RequestMapping#params values with different values is incorrect #1114
+
+
 # 2.3.0 Release notes
 
 [Full Changelog](https://github.com/springfox/springfox/compare/2.2.2...HEAD)
