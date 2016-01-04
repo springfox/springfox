@@ -29,8 +29,7 @@ import static com.google.common.collect.Maps.*;
 
 /**
  * Given a handler method this class serves to lookup the api description. The overall goal of this abstraction is to
- * serve the purpose of looking up a given description by an implmentation of
- * {@link org.springframework.hateoas.mvc.ControllerLinkBuilder}
+ * serve the purpose of looking up a given description.
  */
 @Component
 @Incubating("2.2.0")
