@@ -53,10 +53,10 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     MethodParameter methodParameter = context.methodParameter();
-    String discoveredName
-        = parameterNameDiscover.getParameterNames(methodParameter.getMethod())[methodParameter.getParameterIndex()];
     String name = findParameterNameFromAnnotations(methodParameter);
     if (isNullOrEmpty(name)) {
+      String[] discoveredNames = parameterNameDiscover.getParameterNames(methodParameter.getMethod());
+      String discoveredName = (discoveredNames == null) ? null : discoveredNames[methodParameter.getParameterIndex()];
       name = isNullOrEmpty(discoveredName)
                        ? format("param%s", methodParameter.getParameterIndex())
                        : discoveredName;
