@@ -67,7 +67,7 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
   }
 
   private Set<String> controllerTags(HandlerMethod handlerMethod) {
-    Class<?> controller = handlerMethod.getMethod().getDeclaringClass();
+    Class<?> controller = handlerMethod.getBeanType();
     Optional<Api> controllerAnnotation = fromNullable(findAnnotation(controller, Api.class));
     return controllerAnnotation.transform(tagsFromController()).or(Sets.<String>newHashSet());
   }
