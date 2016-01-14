@@ -118,12 +118,22 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
       LOG.debug("Reading property {}", each.getKey());
       BeanPropertyDefinition jacksonProperty = each.getValue();
-      Optional<AnnotatedMember> annotatedMember = Optional.fromNullable(jacksonProperty.getPrimaryMember());
+      Optional<AnnotatedMember> annotatedMember
+          = Optional.fromNullable(safeGetPrimaryMember(jacksonProperty));
       if (annotatedMember.isPresent()) {
         properties.addAll(candidateProperties(type, annotatedMember.get(), jacksonProperty, givenContext));
       }
     }
     return properties;
+  }
+
+  private AnnotatedMember safeGetPrimaryMember(BeanPropertyDefinition jacksonProperty) {
+    try {
+      return jacksonProperty.getPrimaryMember();
+    } catch (IllegalArgumentException e) {
+      LOG.warn(String.format("Unable to get unique property. %s", e.getMessage()));
+      return null;
+    }
   }
 
   private Function<ResolvedMethod, List<ModelProperty>> propertyFromBean(

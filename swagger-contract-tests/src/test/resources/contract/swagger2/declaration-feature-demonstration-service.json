@@ -562,6 +562,38 @@
             }
           }
         },
+        "/features/propertyWithObjectNode": {
+          "post": {
+            "tags": [
+              "feature-demonstration-service"
+            ],
+            "summary": "propertyWithObjectNode",
+            "operationId": "propertyWithObjectNodeUsingPOST_1",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "application/xml",
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "in": "body",
+                "name": "model",
+                "description": "model",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/ModelWithObjectNode"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
         "/features/status": {
             "post": {
                 "tags": [
@@ -926,11 +958,21 @@
                 }
             }
         },
+        "ModelWithObjectNode": {
+          "properties": {
+            "anyObject": {
+              "$ref": "#/definitions/ObjectNode"
+            }
+          }
+        },
         "Map\u00abstring,string\u00bb": {
             "type": "object",
             "additionalProperties": {
                 "type": "string"
             }
+        },
+        "ObjectNode": {
+
         },
         "Map\u00abstring,Example\u00bb": {
           "type": "object",

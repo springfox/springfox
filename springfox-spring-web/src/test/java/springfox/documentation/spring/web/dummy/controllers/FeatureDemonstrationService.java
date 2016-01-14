@@ -43,6 +43,7 @@ import springfox.documentation.spring.web.dummy.models.Example;
 import springfox.documentation.spring.web.dummy.models.ModelAttributeExample;
 import springfox.documentation.spring.web.dummy.models.ModelWithArrayOfArrays;
 import springfox.documentation.spring.web.dummy.models.ModelWithMapProperty;
+import springfox.documentation.spring.web.dummy.models.ModelWithObjectNode;
 import springfox.documentation.spring.web.dummy.models.NestedType;
 import springfox.documentation.spring.web.dummy.models.Pet;
 
@@ -61,16 +62,16 @@ public class FeatureDemonstrationService {
   //Uses alternate listing path
   @RequestMapping(value = "/{petId}", method = RequestMethod.GET)
   @ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. "
-          + "ID > 10 or nonintegers will simulate API error conditions",
-          response = Pet.class,
-          extensions = {
-            @Extension(properties = @ExtensionProperty(name="x-test1", value="value1")),
-            @Extension(name="test2", properties = @ExtensionProperty(name="name2", value="value2"))
-          }
+      + "ID > 10 or nonintegers will simulate API error conditions",
+      response = Pet.class,
+      extensions = {
+          @Extension(properties = @ExtensionProperty(name = "x-test1", value = "value1")),
+          @Extension(name = "test2", properties = @ExtensionProperty(name = "name2", value = "value2"))
+      }
   )
   public Pet getPetById(
-          @ApiParam(value = "ID of pet that needs to be fetched", allowableValues = "range[1,5]", required = true)
-          @PathVariable("petId") String petId) {
+      @ApiParam(value = "ID of pet that needs to be fetched", allowableValues = "range[1,5]", required = true)
+      @PathVariable("petId") String petId) {
     throw new RuntimeException("NotImplementedException");
   }
 
@@ -90,8 +91,8 @@ public class FeatureDemonstrationService {
   @RequestMapping(value = "/effectives", method = RequestMethod.GET)
   private ResponseEntity<List<Example>> getEffectives() {
     return new ResponseEntity<List<Example>>(newArrayList(new Example("Hello", 1, EnumType.ONE,
-            new NestedType("test"))),
-            HttpStatus.OK);
+        new NestedType("test"))),
+        HttpStatus.OK);
   }
 
   //No request body annotation or swagger annotation
@@ -154,7 +155,7 @@ public class FeatureDemonstrationService {
 
   @RequestMapping(value = "addFiles", method = RequestMethod.POST)
   @ApiOperation(value = "Add a new contact with file attachment")
-  public ResponseEntity<Void> addFiles( @RequestPart("files") MultipartFile[] files) {
+  public ResponseEntity<Void> addFiles(@RequestPart("files") MultipartFile[] files) {
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
@@ -170,6 +171,11 @@ public class FeatureDemonstrationService {
 
   @RequestMapping(value = "/propertyWithArrayOfArrays", method = RequestMethod.POST)
   public void propertyWithArrayOfArrays(@RequestBody ModelWithArrayOfArrays model) {
+    //No-op
+  }
+
+  @RequestMapping(value = "/propertyWithObjectNode", method = RequestMethod.POST)
+  public void propertyWithObjectNode(@RequestBody ModelWithObjectNode model) {
     //No-op
   }
 }

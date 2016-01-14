@@ -1107,6 +1107,58 @@
           "path": "/features/modelAttributes"
         },
         {
+          "description": "propertyWithObjectNode",
+          "operations": [
+            {
+              "method": "POST",
+              "summary": "propertyWithObjectNode",
+              "nickname": "propertyWithObjectNodeUsingPOST",
+              "produces": [
+                "*/*"
+              ],
+              "consumes": [
+                "application/json"
+              ],
+              "parameters": [
+                {
+                  "allowMultiple": false,
+                  "defaultValue": "",
+                  "description": "model",
+                  "name": "body",
+                  "paramType": "body",
+                  "type": "ModelWithObjectNode",
+                  "required": true
+                }
+              ],
+              "responseMessages": [
+                {
+                  "code": 200,
+                  "message": "OK"
+                },
+                {
+                  "code": 201,
+                  "message": "Created"
+                },
+                {
+                  "code": 401,
+                  "message": "Unauthorized"
+                },
+                {
+                  "code": 403,
+                  "message": "Forbidden"
+                },
+                {
+                  "code": 404,
+                  "message": "Not Found"
+                }
+              ],
+              "deprecated": "false",
+              "type": "void"
+            }
+          ],
+          "path": "/features/propertyWithObjectNode"
+        },
+        {
             "path": "/features/status",
             "description": "updateBaz",
             "operations": [
@@ -1412,6 +1464,13 @@
             }
           }
         },
+        "ObjectNode": {
+          "description": "",
+          "id": "ObjectNode",
+          "properties": {
+
+          }
+        },
         "Entry\u00abstring,Example\u00bb": {
           "description": "",
           "id": "Entry\u00abstring,Example\u00bb",
@@ -1419,6 +1478,16 @@
             "key": {
               "required": false,
               "type": "Example"
+            }
+          }
+        },
+        "ModelWithObjectNode": {
+          "description": "",
+          "id": "ModelWithObjectNode",
+          "properties": {
+            "anyObject": {
+              "required": false,
+              "type": "ObjectNode"
             }
           }
         },

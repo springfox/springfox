@@ -562,6 +562,38 @@
             }
           }
        },
+       "/features/propertyWithObjectNode": {
+          "post": {
+            "tags": [
+              "feature-demonstration-service"
+            ],
+            "summary": "propertyWithObjectNode",
+            "operationId": "propertyWithObjectNodeUsingPOST_2",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "application/xml",
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "in": "body",
+                "name": "model",
+                "description": "model",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/ModelWithObjectNode"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
         "/features/status": {
             "post": {
                 "tags": [
@@ -720,6 +752,9 @@
         }
     },
     "definitions": {
+        "ObjectNode": {
+
+        },
         "MapOfstringAndExample": {
           "type": "object",
           "additionalProperties": {
@@ -758,6 +793,13 @@
                     "$ref": "#/definitions/DateTimeFieldType"
                 }
             }
+        },
+        "ModelWithObjectNode": {
+          "properties": {
+            "anyObject": {
+              "$ref": "#/definitions/ObjectNode"
+            }
+          }
         },
         "Example": {
             "properties": {
