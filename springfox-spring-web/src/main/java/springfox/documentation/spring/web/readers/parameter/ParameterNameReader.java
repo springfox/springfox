@@ -53,17 +53,23 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     MethodParameter methodParameter = context.methodParameter();
-    String discoveredName
-        = parameterNameDiscover.getParameterNames(methodParameter.getMethod())[methodParameter.getParameterIndex()];
     String name = findParameterNameFromAnnotations(methodParameter);
     if (isNullOrEmpty(name)) {
-      name = isNullOrEmpty(discoveredName)
-                       ? format("param%s", methodParameter.getParameterIndex())
-                       : discoveredName;
+      Optional<String> discoveredName = discoveredName(methodParameter);
+      name = discoveredName.isPresent()
+             ? discoveredName.get()
+             : format("param%s", methodParameter.getParameterIndex());
     }
     context.parameterBuilder()
         .name(name)
         .description(name);
+  }
+
+  private Optional<String> discoveredName(MethodParameter methodParameter) {
+    String[] discoveredNames = parameterNameDiscover.getParameterNames(methodParameter.getMethod());
+    return discoveredNames != null && methodParameter.getParameterIndex() < discoveredNames.length
+           ? Optional.fromNullable(emptyToNull(discoveredNames[methodParameter.getParameterIndex()]))
+           : Optional.<String>absent();
   }
 
   @Override
@@ -74,11 +80,11 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   private String findParameterNameFromAnnotations(MethodParameter methodParameter) {
     List<Annotation> methodAnnotations = newArrayList(methodParameter.getParameterAnnotations());
     return from(methodAnnotations)
-            .filter(PathVariable.class).first().transform(pathVariableValue())
-            .or(first(methodAnnotations, ModelAttribute.class).transform(modelAttributeValue()))
-            .or(first(methodAnnotations, RequestParam.class).transform(requestParamValue()))
-            .or(first(methodAnnotations, RequestHeader.class).transform(requestHeaderValue()))
-            .orNull();
+        .filter(PathVariable.class).first().transform(pathVariableValue())
+        .or(first(methodAnnotations, ModelAttribute.class).transform(modelAttributeValue()))
+        .or(first(methodAnnotations, RequestParam.class).transform(requestParamValue()))
+        .or(first(methodAnnotations, RequestHeader.class).transform(requestHeaderValue()))
+        .orNull();
   }
 
   private ParameterNameDiscoverer parameterNameDiscoverer() {
