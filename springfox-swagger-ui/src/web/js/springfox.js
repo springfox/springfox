@@ -16,7 +16,75 @@ $(function() {
     }
   };
   window.springfox = springfox;
-  window.oAuthRedirectUrl = springfox.baseUrl() + '/webjars/springfox-swagger-ui/o2c.html'
+  window.oAuthRedirectUrl = springfox.baseUrl() + '/webjars/springfox-swagger-ui/o2c.html';
+
+  window.springfox.uiConfig(function(data) {
+    window.swaggerUi = new SwaggerUi({
+      dom_id: "swagger-ui-container",
+      validatorUrl: data.validatorUrl,
+      supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+      onComplete: function(swaggerApi, swaggerUi) {
+
+        initializeSpringfox();
+
+        if (window.SwaggerTranslator) {
+          window.SwaggerTranslator.translate();
+        }
+
+        $('pre code').each(function(i, e) {
+          hljs.highlightBlock(e)
+        });
+
+      },
+      onFailure: function(data) {
+        log("Unable to Load SwaggerUI");
+      },
+      docExpansion: "none",
+      apisSorter: "alpha",
+      showRequestHeaders: false
+    });
+
+    initializeBaseUrl();
+
+    function addApiKeyAuthorization() {
+      var key = encodeURIComponent($('#input_apiKey')[0].value);
+      if (key && key.trim() != "") {
+        var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api_key", key, window.apiKeyVehicle);
+        window.swaggerUi.api.clientAuthorizations.add("api_key", apiKeyAuth);
+        log("added key " + key);
+      }
+    }
+
+    $('#input_apiKey').change(addApiKeyAuthorization);
+
+    function log() {
+      if ('console' in window) {
+        console.log.apply(console, arguments);
+      }
+    }
+
+    function oAuthIsDefined(security) {
+      return security.clientId
+          && security.clientSecret
+          && security.appName
+          && security.realm;
+    }
+
+    function initializeSpringfox() {
+      var security = {};
+      window.springfox.securityConfig(function(data) {
+        security = data;
+        window.apiKeyVehicle = security.apiKeyVehicle || 'query';
+        if (security.apiKey) {
+          $('#input_apiKey').val(security.apiKey);
+          addApiKeyAuthorization();
+        }
+        if (typeof initOAuth == "function" && oAuthIsDefined(security)) {
+          initOAuth(security);
+        }
+      });
+    }
+  });
 
   $('#select_baseUrl').change(function() {
     window.swaggerUi.headerView.trigger('update-swagger-ui', {
@@ -32,7 +100,7 @@ $(function() {
     return withRelativePath + location;
   }
 
-  $(document).ready(function() {
+  function initializeBaseUrl() {
     var relativeLocation = springfox.baseUrl();
 
     $('#input_baseUrl').hide();
@@ -50,7 +118,7 @@ $(function() {
       $urlDropdown.change();
     });
 
-  });
+  }
 
 });
 
