@@ -11,8 +11,14 @@ class BuildInfo {
   boolean dryRun
   private final String buildSuffix
 
-  BuildInfo(SemanticVersion currentVersion, SemanticVersion nextVersion, String releaseType, String releaseTag,
-            boolean dryRun, String buildSuffix) {
+  BuildInfo(
+      SemanticVersion currentVersion,
+      SemanticVersion nextVersion,
+      String releaseType,
+      String releaseTag,
+      boolean dryRun,
+      String buildSuffix) {
+
     this.buildSuffix = buildSuffix
     this.dryRun = dryRun
     this.currentVersion = currentVersion

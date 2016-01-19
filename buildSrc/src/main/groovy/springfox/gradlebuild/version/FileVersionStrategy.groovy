@@ -1,12 +1,9 @@
 package springfox.gradlebuild.version
 
 import org.gradle.api.Project
-import org.gradle.api.logging.Logger
-import org.gradle.api.logging.Logging
 import springfox.gradlebuild.BuildInfo
 
 class FileVersionStrategy implements VersioningStrategy {
-  private static Logger LOG = Logging.getLogger(FileVersionStrategy.class);
   private final File versionFile
   private final String buildNumberSuffix
 
@@ -17,32 +14,38 @@ class FileVersionStrategy implements VersioningStrategy {
 
   @Override
   SemanticVersion current() {
-    def props = new Properties()
+    SemanticVersion version
     versionFile.withInputStream() { stream ->
-      props.load(stream)
+
+      def versionLine = stream.readLines().first()
+      def (major, minor, patch) = versionLine.replace(buildNumberSuffix, "").split("\\.")
+      version = new SemanticVersion(
+          major.toInteger(),
+          minor.toInteger(),
+          patch.toInteger(),
+          buildNumberSuffix)
     }
-    new SemanticVersion(props.major.toInteger(), props.minor.toInteger(), props.patch.toInteger(), buildNumberSuffix)
+    version
+
   }
 
   @Override
   void persist(Project project, BuildInfo buildInfo) {
     def commitChangesCommand = "git commit -i '${versionFile.absolutePath}' -m 'Release(${buildInfo.nextVersion}) " +
       "tagging project with tag ${buildInfo.releaseTag}'"
-    LOG.info("Saving $buildInfo.nextVersion.asText() to the version file ($versionFile.absolutePath)")
+    project.logger.info("Saving ${buildInfo.nextVersion.asText()} to the version file (${versionFile.absolutePath})")
     if (buildInfo.dryRun) {
-      LOG.info("Will execute command: $commitChangesCommand")
+      project.logger.info("Will execute command: $commitChangesCommand")
       return
     }
-    def properties = new Properties()
-    properties.major = "${buildInfo.nextVersion.major}".toString()
-    properties.minor = "${buildInfo.nextVersion.minor}".toString()
-    properties.patch = "${buildInfo.nextVersion.patch}".toString()
-    properties.store(versionFile.newWriter(), null)
+    versionFile.withOutputStream {
+      it.write("${buildInfo.nextVersion.major}.${buildInfo.nextVersion.minor}.${buildInfo.nextVersion.patch}$buildNumberSuffix".bytes)
+    }
 
     def proc = commitChangesCommand.execute();
     proc.waitFor();
     if (proc.exitValue() != 0) {
-      LOG.error("Unable to save the file and commit changes to repo!")
+      project.logger.error("Unable to save the file and commit changes to repo!")
     }
   }
 }

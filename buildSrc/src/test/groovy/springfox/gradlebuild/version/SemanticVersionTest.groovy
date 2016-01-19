@@ -19,7 +19,10 @@
 
 package springfox.gradlebuild.version
 
+import org.gradle.api.Project
+import org.gradle.api.logging.Logger
 import spock.lang.Specification
+import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.DirectoryBacked
 
 class SemanticVersionTest extends Specification implements DirectoryBacked {
@@ -48,21 +51,36 @@ class SemanticVersionTest extends Specification implements DirectoryBacked {
       ReleaseType.PATCH | '1.1.2'
   }
 
-  def "should load from a prop file"() {
+  def "should load from a file"() {
     File tempDir = directory(this)
     File propFile = new File("${tempDir.absolutePath}/p.properties")
-    propFile.createNewFile()
-    propFile << '''
-major=1
-minor=1
-patch=1
-'''
+    propFile.newWriter().withWriter {
+      it << '''1.1.1-SNAPSHOT'''
+    }
 
     expect:
       def semanticVersion = new FileVersionStrategy(propFile, "-SNAPSHOT").current()
       semanticVersion.major == 1
       semanticVersion.minor == 1
       semanticVersion.patch == 1
+      semanticVersion.buildSuffix == "-SNAPSHOT"
+  }
+
+  def "should write to a file"() {
+    def version = new SemanticVersion(1, 1, 1, "-SNAPSHOT")
+    File tempDir = directory(this)
+    File propFile = new File("${tempDir.absolutePath}/p.properties")
+    Project project = Mock(Project)
+    project.logger >> Mock(Logger)
+    new FileVersionStrategy(propFile, "-SNAPSHOT").persist(
+        project,
+        new BuildInfo(version, version.next(ReleaseType.PATCH), "PATCH", "1.1.1", false, "-SNAPSHOT"))
+
+    expect:
+      def semanticVersion = new FileVersionStrategy(propFile, "-SNAPSHOT").current()
+      semanticVersion.major == 1
+      semanticVersion.minor == 1
+      semanticVersion.patch == 2
       semanticVersion.buildSuffix == "-SNAPSHOT"
   }
 }
