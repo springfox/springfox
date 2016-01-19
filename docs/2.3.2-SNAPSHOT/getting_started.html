@@ -782,6 +782,11 @@ dependencies {
 142
 143
 144
+145
+146
+147
+148
+149
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
@@ -924,7 +929,12 @@ dependencies {
   <span class="annotation">@Bean</span>
   UiConfiguration uiConfig() {
     <span class="keyword">return</span> <span class="keyword">new</span> UiConfiguration(<i class="conum" data-value="20"></i><b>(20)</b>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">validatorUrl</span><span class="delimiter">&quot;</span></span>);
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">validatorUrl</span><span class="delimiter">&quot;</span></span>,<span class="comment">// url</span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">none</span><span class="delimiter">&quot;</span></span>,       <span class="comment">// docExpansion          =&gt; none | list</span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">alpha</span><span class="delimiter">&quot;</span></span>,      <span class="comment">// apiSorter             =&gt; alpha</span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">schema</span><span class="delimiter">&quot;</span></span>,     <span class="comment">// defaultModelRendering =&gt; schema</span>
+        <span class="predefined-constant">false</span>,        <span class="comment">// enableJsonEditor      =&gt; true | false</span>
+        <span class="predefined-constant">true</span>);        <span class="comment">// showRequestHeaders    =&gt; true | false</span>
   }
 }</pre></td>
 </tr></table></code></pre>
@@ -1115,7 +1125,7 @@ apps to serve webjar content see the <a href="http://www.webjars.org/documentati
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-01-14 14:30:36 UTC
+Last updated 2016-01-19 01:17:09 UTC
 </div>
 </div>
 </body>
