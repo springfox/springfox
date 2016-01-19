@@ -39,9 +39,11 @@ $(function() {
       onFailure: function(data) {
         log("Unable to Load SwaggerUI");
       },
-      docExpansion: "none",
-      apisSorter: "alpha",
-      showRequestHeaders: false
+      docExpansion: data.docExpansion || 'none',
+      jsonEditor: data.jsonEditor || false,
+      apisSorter: data.apisSorter || 'alpha',
+      defaultModelRendering: data.defaultModelRendering || 'schema',
+      showRequestHeaders: data.showRequestHeaders || true
     });
 
     initializeBaseUrl();

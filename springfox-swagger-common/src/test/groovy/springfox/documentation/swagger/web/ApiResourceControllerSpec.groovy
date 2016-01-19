@@ -55,7 +55,7 @@ class ApiResourceControllerSpec extends Specification {
     expect:
     mockMvc.perform(get("/configuration/ui")
         .accept(MediaType.APPLICATION_JSON))
-        .andExpect(content().string("{\"validatorUrl\":\"/validate\"}"))
+        .andExpect(content().string("{\"validatorUrl\":\"/validate\",\"docExpansion\":\"none\",\"apisSorter\":\"alpha\",\"defaultModelRendering\":\"schema\",\"jsonEditor\":false,\"showRequestHeaders\":true}"))
   }
 
   def "Cache is available" (){
@@ -83,7 +83,7 @@ class ApiResourceControllerSpec extends Specification {
     then:
       mapper.writer().writeValueAsString(sut.securityConfiguration) == "{\"clientId\":\"client\"," +
           "\"clientSecret\":\"client-secret\",\"realm\":\"real\",\"appName\":\"test\",\"apiKey\":\"key\",\"apiKeyVehicle\":\"header\",\"scopeSeparator\":\",\"}"
-      mapper.writer().writeValueAsString(sut.uiConfiguration) == "{\"validatorUrl\":\"/validate\"}"
+      mapper.writer().writeValueAsString(sut.uiConfiguration) == "{\"validatorUrl\":\"/validate\",\"docExpansion\":\"none\",\"apisSorter\":\"alpha\",\"defaultModelRendering\":\"schema\",\"jsonEditor\":false,\"showRequestHeaders\":true}"
       mapper.writer().writeValueAsString(sut.swaggerResources().body) == "[{\"name\":\"test\"," +
           "\"location\":\"/v1?group=test\",\"swaggerVersion\":\"1.2\"},{\"name\":\"test\",\"location\":\"/v2?group=test\",\"swaggerVersion\":\"2.0\"}]"
   }
