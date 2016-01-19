@@ -1035,6 +1035,7 @@ dependencies {
 147
 148
 149
+<strong>150</strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
@@ -1171,6 +1172,7 @@ dependencies {
         <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app</span><span class="delimiter">&quot;</span></span>,
         <span class="string"><span class="delimiter">&quot;</span><span class="content">apiKey</span><span class="delimiter">&quot;</span></span>,
         ApiKeyVehicle.HEADER, <i class="conum" data-value="23"></i><b>(23)</b>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">api_key</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="24"></i><b>(24)</b>
         <span class="string"><span class="delimiter">&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span> <span class="comment">/*scope separator*/</span>);
   }
 
@@ -1317,6 +1319,12 @@ select operations to be protected by one of the specified security schemes.</td>
 <tr>
 <td><i class="conum" data-value="23"></i><b>23</b></td>
 <td>How do you want to transport the api key via a HEADER (header) or QUERY_PARAM (query)?</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="24"></i><b>24</b></td>
+<td>What header key needs to be used to send the api key. By default this value is set to <em><em>api_key</em></em>. Depending
+on how the security is setup the name of the header used may need to be different. Overriding this value is a way to
+override the default behavior.</td>
 </tr>
 </table>
 </div>
@@ -2432,7 +2440,7 @@ It is still in incubation but host name can be configured per docket</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-01-19 01:17:09 UTC
+Last updated 2016-01-19 19:10:34 UTC
 </div>
 </div>
 </body>
