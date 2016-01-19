@@ -139,6 +139,11 @@ public class Swagger2SpringBoot {
   @Bean
   UiConfiguration uiConfig() {
     return new UiConfiguration(//<20>
-        "validatorUrl");
+        "validatorUrl",// url
+        "none",       // docExpansion          => none | list
+        "alpha",      // apiSorter             => alpha
+        "schema",     // defaultModelRendering => schema
+        false,        // enableJsonEditor      => true | false
+        true);        // showRequestHeaders    => true | false
   }
 }
