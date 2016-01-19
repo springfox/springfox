@@ -51,8 +51,8 @@ $(function() {
     function addApiKeyAuthorization() {
       var key = encodeURIComponent($('#input_apiKey')[0].value);
       if (key && key.trim() != "") {
-        var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api_key", key, window.apiKeyVehicle);
-        window.swaggerUi.api.clientAuthorizations.add("api_key", apiKeyAuth);
+        var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization(window.apiKeyName, key, window.apiKeyVehicle);
+        window.swaggerUi.api.clientAuthorizations.add(window.apiKeyName, apiKeyAuth);
         log("added key " + key);
       }
     }
@@ -77,6 +77,7 @@ $(function() {
       window.springfox.securityConfig(function(data) {
         security = data;
         window.apiKeyVehicle = security.apiKeyVehicle || 'query';
+        window.apiKeyName = security.apiKeyName || 'api_key';
         if (security.apiKey) {
           $('#input_apiKey').val(security.apiKey);
           addApiKeyAuthorization();

@@ -133,6 +133,7 @@ public class Swagger2SpringBoot {
         "test-app",
         "apiKey",
         ApiKeyVehicle.HEADER, //<23>
+        "api_key", //<24>
         "," /*scope separator*/);
   }
 

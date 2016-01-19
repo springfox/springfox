@@ -30,6 +30,7 @@ class ApiResourceControllerSpec extends Specification {
           "test",
           "key",
           ApiKeyVehicle.HEADER,
+          "api_key",
           ",")
       uiConfiguration = new UiConfiguration("/validate")
       swagger1Available = true
@@ -48,7 +49,7 @@ class ApiResourceControllerSpec extends Specification {
       mockMvc.perform(get("/configuration/security")
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(content().string("{\"clientId\":\"client\",\"clientSecret\":\"client-secret\",\"realm\":\"real\"," +
-          "\"appName\":\"test\",\"apiKey\":\"key\",\"apiKeyVehicle\":\"header\",\"scopeSeparator\":\",\"}"))
+          "\"appName\":\"test\",\"apiKey\":\"key\",\"apiKeyVehicle\":\"header\",\"scopeSeparator\":\",\",\"apiKeyName\":\"api_key\"}"))
   }
 
   def "UI Configuration is available" (){
@@ -82,7 +83,7 @@ class ApiResourceControllerSpec extends Specification {
       mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES)
     then:
       mapper.writer().writeValueAsString(sut.securityConfiguration) == "{\"clientId\":\"client\"," +
-          "\"clientSecret\":\"client-secret\",\"realm\":\"real\",\"appName\":\"test\",\"apiKey\":\"key\",\"apiKeyVehicle\":\"header\",\"scopeSeparator\":\",\"}"
+          "\"clientSecret\":\"client-secret\",\"realm\":\"real\",\"appName\":\"test\",\"apiKey\":\"key\",\"apiKeyVehicle\":\"header\",\"scopeSeparator\":\",\",\"apiKeyName\":\"api_key\"}"
       mapper.writer().writeValueAsString(sut.uiConfiguration) == "{\"validatorUrl\":\"/validate\",\"docExpansion\":\"none\",\"apisSorter\":\"alpha\",\"defaultModelRendering\":\"schema\",\"jsonEditor\":false,\"showRequestHeaders\":true}"
       mapper.writer().writeValueAsString(sut.swaggerResources().body) == "[{\"name\":\"test\"," +
           "\"location\":\"/v1?group=test\",\"swaggerVersion\":\"1.2\"},{\"name\":\"test\",\"location\":\"/v2?group=test\",\"swaggerVersion\":\"2.0\"}]"
