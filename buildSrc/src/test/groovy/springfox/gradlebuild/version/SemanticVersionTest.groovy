@@ -62,7 +62,7 @@ class SemanticVersionTest extends Specification implements DirectoryBacked {
       def semanticVersion = new FileVersionStrategy(propFile, "-SNAPSHOT").current()
       semanticVersion.major == 1
       semanticVersion.minor == 1
-      semanticVersion.patch == 1
+      semanticVersion.patch == 0
       semanticVersion.buildSuffix == "-SNAPSHOT"
   }
 
@@ -80,7 +80,7 @@ class SemanticVersionTest extends Specification implements DirectoryBacked {
       def semanticVersion = new FileVersionStrategy(propFile, "-SNAPSHOT").current()
       semanticVersion.major == 1
       semanticVersion.minor == 1
-      semanticVersion.patch == 2
+      semanticVersion.patch == 1
       semanticVersion.buildSuffix == "-SNAPSHOT"
   }
 }

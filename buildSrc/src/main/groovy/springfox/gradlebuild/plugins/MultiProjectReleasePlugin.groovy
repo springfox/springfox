@@ -28,9 +28,8 @@ import springfox.gradlebuild.BintrayCredentials
 import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.BuildInfoFactory
 import springfox.gradlebuild.tasks.*
-import springfox.gradlebuild.version.GitDescribeVersioningStrategy
+import springfox.gradlebuild.version.FileVersionStrategy
 import springfox.gradlebuild.version.VersioningStrategy
-
 /**
  * Much of what this plugin does is inspired by:
  * https://www.youtube.com/watch?v=Y6SVoXFsw7I ( GradleSummit2014 - Releasing With Gradle - René Groeschke)
@@ -50,7 +49,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
   @Override
   void apply(Project project) {
-    versioningStrategy = GitDescribeVersioningStrategy.create(buildNumberFormat(project))
+    versioningStrategy = new FileVersionStrategy(new File("${project.projectDir}/.version"), "-SNAPSHOT")
     BuildInfo versioningInfo = createBuildInfo(project, versioningStrategy)
     releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask)
     releaseTask.buildInfo = versioningInfo

@@ -22,7 +22,7 @@ class FileVersionStrategy implements VersioningStrategy {
       version = new SemanticVersion(
           major.toInteger(),
           minor.toInteger(),
-          patch.toInteger(),
+          patch.toInteger() - 1,
           buildNumberSuffix)
     }
     version
