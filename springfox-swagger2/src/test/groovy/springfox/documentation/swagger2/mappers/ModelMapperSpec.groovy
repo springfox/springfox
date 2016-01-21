@@ -1,5 +1,6 @@
 package springfox.documentation.swagger2.mappers
 
+import io.swagger.models.ComposedModel
 import io.swagger.models.properties.AbstractNumericProperty
 import io.swagger.models.properties.ObjectProperty
 import io.swagger.models.properties.RefProperty
@@ -295,7 +296,53 @@ class ModelMapperSpec extends SchemaSpecification {
         '',
         '',
         null,
-        '')
+        '',
+        null)
+    model
+  }
+
+  def "Inherited complex type are supported"() {
+    given:
+      Model model = createInheritedModel()
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels([test: model])
+    then:
+      mapped != null
+     !((ComposedModel)mapped['test']).interfaces.empty
+     "#/definitions/ComplexType".equals(((ComposedModel)mapped['test']).interfaces.get(0).$ref)
+     !((ComposedModel)mapped['test']).child.properties.empty
+     ['inheritedProperty'] == ((ComposedModel)mapped['test']).child.properties.keySet().toList()
+    }
+
+  Model createInheritedModel() {
+
+    def modelParentType = typeForComplexType()
+    def modelParent = new Model(
+            'ComplexType',
+            'ComplexType',
+            modelParentType,
+            simpleQualifiedTypeName(modelParentType),
+            ['inheritedProperty' : createModelPropertyWithPosition('name', 0)],
+            '',
+            '',
+            'name',
+            null,
+            '',
+            null)
+
+    def modelType = typeForInheritedComplexType()
+    def model = new Model(
+            'InheritedComplexType',
+            'InheritedComplexType',
+            modelType,
+            simpleQualifiedTypeName(modelType),
+            ['inheritedProperty' : createModelPropertyWithPosition('inheritedProperty', 0)],
+            '',
+            '',
+            '',
+            null,
+            '',
+            modelParent)
     model
   }
 

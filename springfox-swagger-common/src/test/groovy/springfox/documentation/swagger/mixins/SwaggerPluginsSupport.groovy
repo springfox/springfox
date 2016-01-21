@@ -21,6 +21,8 @@ package springfox.documentation.swagger.mixins
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.PluginRegistry
+import springfox.documentation.schema.mixins.ModelProviderSupport
+import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
@@ -42,13 +44,14 @@ import static com.google.common.collect.Lists.*
 import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
 
 @SuppressWarnings("GrMethodMayBeStatic")
+@Mixin([ModelProviderSupport, SchemaPluginsSupport])
 class SwaggerPluginsSupport {
   SchemaPluginsManager swaggerSchemaPlugins() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
         create(newArrayList(new ApiModelPropertyPropertyBuilder()))
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-        create(newArrayList(new ApiModelBuilder(new TypeResolver())))
+        create(newArrayList(new ApiModelBuilder(new TypeResolver(), defaultModelProvider())))
 
     new SchemaPluginsManager(propRegistry, modelRegistry)
   }
