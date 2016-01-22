@@ -200,4 +200,12 @@ class TypesForTestingSupport {
   def ResolvedType typeForTestingPropertyPositions() {
     resolver.resolve(TypeForTestingPropertyPositions)
   }
+
+  def ResolvedType typeForInheritedComplexType() {
+    resolver.resolve(InheritedComplexType)
+  }
+
+  def ResolvedType typeForComplexType() {
+    resolver.resolve(ComplexType)
+  }
 }

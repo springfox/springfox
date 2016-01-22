@@ -39,6 +39,7 @@ public class ModelBuilder {
   private String discriminator;
   private ResolvedType modelType;
   private String example;
+  private Model parent;
 
   private Map<String, ModelProperty> properties = newHashMap();
   private List<String> subTypes = newArrayList();
@@ -155,8 +156,19 @@ public class ModelBuilder {
     return this;
   }
 
+  /**
+   * Represents the parent type information with full fidelity of generics
+   *
+   * @param parent - resolved type that represents the parent model
+   * @return this
+   */
+  public ModelBuilder parent(Model parent) {
+    this.parent = defaultIfAbsent(parent, this.parent);
+    return this;
+  }
+
   public Model build() {
     return new Model(id, name, modelType, qualifiedType, properties, description, baseModel, discriminator, subTypes,
-        example);
+        example, parent);
   }
 }

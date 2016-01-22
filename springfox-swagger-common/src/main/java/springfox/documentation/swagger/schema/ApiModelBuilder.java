@@ -20,11 +20,16 @@
 package springfox.documentation.swagger.schema;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Optional;
 import io.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import springfox.documentation.schema.Model;
+import springfox.documentation.schema.ModelProvider;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -36,10 +41,13 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class ApiModelBuilder implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
+  private final ModelProvider modelProvider;
 
   @Autowired
-  public ApiModelBuilder(TypeResolver typeResolver) {
+  public ApiModelBuilder(TypeResolver typeResolver,
+                         @Qualifier("cachedModels") ModelProvider modelProvider) {
     this.typeResolver = typeResolver;
+    this.modelProvider = modelProvider;
   }
 
 
@@ -48,6 +56,19 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
     ApiModel annotation = AnnotationUtils.findAnnotation(forClass(context), ApiModel.class);
     if (annotation != null) {
       context.getBuilder().description(annotation.description());
+      if(StringUtils.hasText(annotation.discriminator())){
+        context.getBuilder().discriminator(annotation.discriminator());
+      }
+
+      // default parent is Void
+      if (!annotation.parent().isAssignableFrom(Void.class)) {
+        Optional<Model> parentModel = modelProvider.modelFor(ModelContext.fromParent(context, this.typeResolver.resolve(annotation.parent())));
+
+        // parent model exist because @ApiModel not required on model
+        // if(parentModel.isPresent()) {
+          context.getBuilder().parent(parentModel.get());
+        // }
+      }
     }
   }
 

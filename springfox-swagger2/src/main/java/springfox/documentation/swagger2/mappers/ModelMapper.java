@@ -27,8 +27,10 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Multimap;
+import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
+import io.swagger.models.RefModel;
 import io.swagger.models.properties.AbstractNumericProperty;
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.MapProperty;
@@ -43,6 +45,7 @@ import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -64,7 +67,12 @@ public abstract class ModelMapper {
 
     for (java.util.Map.Entry<String, springfox.documentation.schema.Model> entry : from.entrySet()) {
       String key = entry.getKey();
-      Model value = mapProperties(entry.getValue());
+      Model value;
+      if(null != entry.getValue().getParent()) {
+        value = mapComposedProperties(entry.getValue());
+      } else {
+        value = mapProperties(entry.getValue());
+      }
       map.put(key, value);
     }
 
@@ -98,6 +106,21 @@ public abstract class ModelMapper {
         model.additionalProperties(new ObjectProperty());
       }
     }
+    return model;
+  }
+
+  public Model mapComposedProperties(springfox.documentation.schema.Model source) {
+    ComposedModel model = new ComposedModel()
+      .interfaces(Collections.singletonList(new RefModel(source.getParent().getName())))
+      .child(mapProperties(source));
+
+    model.setDescription(source.getDescription());
+    model.setExample(source.getExample());
+    model.setTitle(source.getName());
+
+    SortedMap<String, ModelProperty> sortedProperties = sort(source.getProperties());
+    Map<String, Property> modelProperties = mapProperties(sortedProperties);
+    model.setProperties(modelProperties);
     return model;
   }
 
