@@ -32,44 +32,19 @@ class GenericTypeSpec extends SchemaSpecification {
   @Unroll
   def "Generic property on a generic types is inferred correctly for types"() {
     given:
-
       def inputContext = inputParam(modelType, documentationType, alternateTypeProvider(), namingStrategy)
-      Model asInput = modelProvider.modelFor(inputContext).get()
-
       def returnContext = returnValue(modelType, documentationType, alternateTypeProvider(), namingStrategy)
+    when:
+      Model asInput = modelProvider.modelFor(inputContext).get()
+    and:
       Model asReturn = modelProvider.modelFor(returnContext).get()
-    expect:
+    then:
       asInput.getName() == expectedModelName(modelNamePart)
-      asInput.getProperties().containsKey("genericField")
-      def modelProperty = asInput.getProperties().get("genericField")
-      def typeName = typeNameExtractor.typeName(fromParent(inputContext, modelProperty.getType()))
-      typeName == propertyType
-      modelProperty.getQualifiedType() == qualifiedType
-      def item = modelProperty.getModelRef()
-      item.type == propertyType
-      if (!propertyType.startsWith("List") && !propertyType.startsWith("Array")) {
-        assert !item.collection
-        assert item.itemType == null
-      } else {
-        assert item.collection
-        assert item.itemType == collectionElementType(modelProperty.type).erasedType.simpleName
-      }
-    
-
+      verifyModelProperty(asInput, propertyType, qualifiedType, "genericField")
+    and:
       asReturn.getName() == expectedModelName(modelNamePart)
-      asReturn.getProperties().containsKey("genericField")
-      def retModelProperty = asReturn.getProperties().get("genericField")
-      typeNameExtractor.typeName(fromParent(returnContext, retModelProperty.getType())) == propertyType
-      retModelProperty.getQualifiedType() == qualifiedType
-      def retItem = retModelProperty.getModelRef()
-      retItem.type == propertyType
-      if (!propertyType.startsWith("List") && !propertyType.startsWith("Array")) {
-        assert !retItem.collection
-        assert retItem.itemType == null
-      } else {
-        assert retItem.collection
-        assert retItem.itemType == collectionElementType(retModelProperty.type).erasedType.simpleName
-      }
+      verifyModelProperty(asInput, propertyType, qualifiedType, "genericField")
+
     
     where:
       modelType                       | propertyType                                  | modelNamePart                                 | qualifiedType
@@ -86,53 +61,25 @@ class GenericTypeSpec extends SchemaSpecification {
   @Unroll
   def "Void generic type bindings are rendered correctly"() {
     given:
+      def inputContext = inputParam(modelType, documentationType, alternateTypeProvider(), namingStrategy)
 
-    def inputContext = inputParam(modelType, documentationType, alternateTypeProvider(), namingStrategy)
-    Model asInput = modelProvider.modelFor(inputContext).get()
+      def returnContext = returnValue(modelType, documentationType, alternateTypeProvider(), namingStrategy)
+    when:
+      Model asInput = modelProvider.modelFor(inputContext).get()
+      Model asReturn = modelProvider.modelFor(returnContext).get()
 
-    def returnContext = returnValue(modelType, documentationType, alternateTypeProvider(), namingStrategy)
-    Model asReturn = modelProvider.modelFor(returnContext).get()
-    expect:
-    asInput.getName() == "GenericTypeBoundToMultiple«Void,Void»"
-    asInput.getProperties().containsKey(propertyName)
-    def modelProperty = asInput.getProperties().get(propertyName)
-    def typeName = typeNameExtractor.typeName(fromParent(inputContext, modelProperty.getType()))
-    typeName == propertyType
-    modelProperty.getQualifiedType() == qualifiedType
-    def item = modelProperty.getModelRef()
-    item.type == maybeTransformVoid(propertyType)
-    if (!propertyType.startsWith("List") && !propertyType.startsWith("Array")) {
-      assert !item.collection
-      assert item.itemType == null
-    } else {
-      assert item.collection
-      assert item.itemType == maybeTransformVoid(collectionElementType(modelProperty.type).erasedType.simpleName)
-    }
+    then:
+      asInput.getName() == "GenericTypeBoundToMultiple«Void,Void»"
+      verifyModelProperty(asInput, propertyType, qualifiedType, propertyName)
 
-
-    asReturn.getName() == "GenericTypeBoundToMultiple«Void,Void»"
-    asReturn.getProperties().containsKey(propertyName)
-    def retModelProperty = asReturn.getProperties().get(propertyName)
-    typeNameExtractor.typeName(fromParent(returnContext, retModelProperty.getType())) == propertyType
-    retModelProperty.getQualifiedType() == qualifiedType
-    def retItem = retModelProperty.getModelRef()
-    retItem.type == maybeTransformVoid(propertyType)
-    if (!propertyType.startsWith("List") && !propertyType.startsWith("Array")) {
-      assert !retItem.collection
-      assert retItem.itemType == null
-    } else {
-      assert retItem.collection
-      assert retItem.itemType == maybeTransformVoid(collectionElementType(retModelProperty.type).erasedType.simpleName)
-    }
+    and:
+      asReturn.getName() == "GenericTypeBoundToMultiple«Void,Void»"
+      verifyModelProperty(asReturn, propertyType, qualifiedType, propertyName)
 
     where:
-    modelType            | propertyName | propertyType  | qualifiedType
-    typeWithVoidLists()  | "a"          | "Void"        | "java.lang.Void"
-    typeWithVoidLists()  | "listOfB"    | "List"        | "java.util.List<java.lang.Void>"
-  }
-
-  def maybeTransformVoid(propertyType) {
-    "void".equalsIgnoreCase(propertyType) ? propertyType.toLowerCase() : propertyType
+      modelType            | propertyName | propertyType  | qualifiedType
+      typeWithVoidLists()  | "a"          | "Void"        | "java.lang.Void"
+      typeWithVoidLists()  | "listOfB"    | "List"        | "java.util.List<java.lang.Void>"
   }
 
   @Unroll
@@ -171,5 +118,24 @@ class GenericTypeSpec extends SchemaSpecification {
     } else {
       "GenericType"
     }
+  }
+
+  void verifyModelProperty(Model model, String propertyType, qualifiedPropertyType, propertyName) {
+    assert model.getProperties().containsKey(propertyName)
+    ModelProperty modelProperty = model.properties.get(propertyName)
+    modelProperty.qualifiedType == qualifiedPropertyType
+    def item = modelProperty.modelRef
+    assert item.type == maybeTransformVoid(propertyType)
+    if (!propertyType.startsWith("List") && !propertyType.startsWith("Array")) {
+      assert !item.collection
+      assert item.itemType == null
+    } else {
+      assert item.collection
+      assert item.itemType == maybeTransformVoid(collectionElementType(modelProperty.type).erasedType.simpleName)
+    }
+  }
+
+  def maybeTransformVoid(propertyType) {
+    "void".equalsIgnoreCase(propertyType) ? propertyType.toLowerCase() : propertyType
   }
 }
