@@ -49,6 +49,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
@@ -103,7 +104,8 @@ public abstract class ModelMapper {
 
   private Map<String, Property> mapProperties(SortedMap<String, ModelProperty> properties) {
     Map<String, Property> mappedProperties = new LinkedHashMap<String, Property>();
-    for (Map.Entry<String, ModelProperty> propertyEntry : properties.entrySet()) {
+    SortedMap<String, ModelProperty> nonVoidProperties = filterEntries(properties, not(voidProperties()));
+    for (Map.Entry<String, ModelProperty> propertyEntry : nonVoidProperties.entrySet()) {
       mappedProperties.put(propertyEntry.getKey(), mapProperty(propertyEntry.getValue()));
     }
     return mappedProperties;

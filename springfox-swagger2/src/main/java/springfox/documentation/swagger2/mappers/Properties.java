@@ -19,7 +19,9 @@
 
 package springfox.documentation.swagger2.mappers;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
@@ -46,6 +48,8 @@ import java.util.Map;
 
 import static com.google.common.base.Functions.*;
 import static com.google.common.base.Strings.*;
+import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.Types.*;
 
 class Properties {
   private static final Map<String, Function<String, ? extends Property>> typeFactory
@@ -152,5 +156,24 @@ class Properties {
         return Ints.compare(p1.getPosition(), p2.getPosition());
       }
     };
+  }
+
+  static Predicate<Map.Entry<String, ModelProperty>> voidProperties() {
+    return new Predicate<Map.Entry<String, ModelProperty>>() {
+      @Override
+      public boolean apply(Map.Entry<String, ModelProperty> input) {
+        return isVoid(input.getValue().getType())
+            || collectionOfVoid(input.getValue().getType())
+            || arrayTypeOfVoid(input.getValue().getType().getArrayElementType());
+      }
+    };
+  }
+
+  private static boolean arrayTypeOfVoid(ResolvedType arrayElementType) {
+    return arrayElementType != null && isVoid(arrayElementType);
+  }
+
+  private static boolean collectionOfVoid(ResolvedType type) {
+    return isContainerType(type) && isVoid(collectionElementType(type));
   }
 }

@@ -40,6 +40,26 @@ class ModelMapperSpec extends SchemaSpecification {
       typeToTest  << [simpleType(), mapsContainer(), enumType(), typeWithLists()]
   }
 
+  def "void properties or collection of voids are filtered in the model" (){
+    given:
+      Model model = modelProvider.modelFor(
+          inputParam(
+              typeWithVoidLists(),
+              DocumentationType.SWAGGER_2,
+              alternateTypeProvider(),
+              namingStrategy))
+          .get()
+      def modelMap = newHashMap()
+    and:
+      modelMap.put("test", model)
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    then:
+      def mappedModel = mapped.get("test")
+      model.properties.size() == 3
+      mappedModel.properties == null
+  }
+
   def "model dependences are inferred correctly for list of map of string to string" (){
     given:
       Map<String, Model> modelMap = modelProvider.dependencies(inputParam(listOfMapOfStringToString(),
@@ -175,6 +195,8 @@ class ModelMapperSpec extends SchemaSpecification {
     then:
       !valueClass.isPresent()
   }
+
+
 
   ModelProperty updatedIntObject(ModelProperty modelProperty) {
     ModelPropertyBuilder builder = new ModelPropertyBuilder()

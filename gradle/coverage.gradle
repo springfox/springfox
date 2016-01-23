@@ -22,7 +22,9 @@ jacocoTestReport {
     classDirectories = files(classDirectories.files.collect {
       fileTree(dir: it, exclude: [
           'springfox/documentation/swagger2/web/ForwardedHeader.*',
-          'springfox/documentation/swagger2/web/HostNameProvider.*'
+          'springfox/documentation/swagger2/web/HostNameProvider.*',
+          'springfox/documentation/swagger1/mappers/*Impl.*',
+          'springfox/documentation/swagger2/mappers/*Impl.*'
       ])
     })
   }

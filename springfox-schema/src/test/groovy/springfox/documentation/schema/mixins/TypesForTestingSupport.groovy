@@ -200,4 +200,8 @@ class TypesForTestingSupport {
   def ResolvedType typeForTestingPropertyPositions() {
     resolver.resolve(TypeForTestingPropertyPositions)
   }
+
+  def ResolvedType typeWithVoidLists() {
+    resolver.resolve(GenericTypeBoundToMultiple, Void.class, Void.class)
+  }
 }
