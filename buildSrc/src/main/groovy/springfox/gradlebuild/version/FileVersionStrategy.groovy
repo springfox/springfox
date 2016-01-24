@@ -3,7 +3,9 @@ package springfox.gradlebuild.version
 import org.gradle.api.Project
 import springfox.gradlebuild.BuildInfo
 
-class FileVersionStrategy implements VersioningStrategy {
+class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport {
+
+
   private final File versionFile
   private final String buildNumberSuffix
 
@@ -31,21 +33,32 @@ class FileVersionStrategy implements VersioningStrategy {
 
   @Override
   void persist(Project project, BuildInfo buildInfo) {
-    def commitChangesCommand = "git commit -i '${versionFile.absolutePath}' -m 'Release(${buildInfo.nextVersion}) " +
-      "tagging project with tag ${buildInfo.releaseTag}'"
-    project.logger.info("Saving ${buildInfo.nextVersion.asText()} to the version file (${versionFile.absolutePath})")
+    updateVersionFile(project, buildInfo)
+    commitToRepository(project, buildInfo)
+    createAnnotatedTag(project, buildInfo)
+  }
+
+  def commitToRepository(Project project, buildInfo) {
+    def commitChanges = """git commit -i '${versionFile.absolutePath}' \
+-m 'Releasing version (${buildInfo.nextVersion}) tagging project with tag ${buildInfo.releaseTag}'"""
     if (buildInfo.dryRun) {
-      project.logger.info("Will execute command: $commitChangesCommand")
+      project.logger.info("Will execute command: $commitChanges")
+      return
+    }
+    def proc = commitChanges.execute();
+    proc.waitFor();
+    if (proc.exitValue() != 0) {
+      project.logger.error("Unable to save the file and commit changes to repo!")
+    }
+  }
+
+  def updateVersionFile(project, buildInfo) {
+    if (buildInfo.dryRun) {
+      project.logger.info("Saving ${buildInfo.nextVersion.asText()} to the version file (${versionFile.absolutePath})")
       return
     }
     versionFile.withOutputStream {
       it.write("${buildInfo.nextVersion.major}.${buildInfo.nextVersion.minor}.${buildInfo.nextVersion.patch}$buildNumberSuffix".bytes)
-    }
-
-    def proc = commitChangesCommand.execute();
-    proc.waitFor();
-    if (proc.exitValue() != 0) {
-      project.logger.error("Unable to save the file and commit changes to repo!")
     }
   }
 }

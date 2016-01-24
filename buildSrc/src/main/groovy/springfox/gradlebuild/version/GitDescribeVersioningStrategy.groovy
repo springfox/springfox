@@ -1,13 +1,10 @@
 package springfox.gradlebuild.version
 
 import org.gradle.api.Project
-import org.gradle.api.logging.Logger
-import org.gradle.api.logging.Logging
 import springfox.gradlebuild.BuildInfo
 
-class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionParser  {
+class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionParser, GitTaggingSupport  {
 
-  private static Logger LOG = Logging.getLogger(GitDescribeVersioningStrategy.class);
   private final String buildNumberFormat
 
   GitDescribeVersioningStrategy(String buildNumberFormat) {
@@ -31,12 +28,7 @@ class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionPar
 
   @Override
   void persist(Project project, BuildInfo buildInfo) {
-    LOG.info("Annotating ${buildInfo.releaseType} release with tag ${buildInfo.releaseTag}")
-    if (!buildInfo.dryRun) {
-      project.exec {
-        commandLine 'git', 'tag', '-a', "${buildInfo.releaseTag}", '-m', "Release of ${buildInfo.releaseTag}"
-      }.assertNormalExitValue()
-    }
+    createAnnotatedTag(project, buildInfo)
   }
 
   static VersioningStrategy create(String buildNumberFormat) {

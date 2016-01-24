@@ -49,7 +49,9 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
   @Override
   void apply(Project project) {
-    versioningStrategy = new FileVersionStrategy(new File("${project.projectDir}/.version"), "-SNAPSHOT")
+    versioningStrategy = new FileVersionStrategy(
+        new File("${project.projectDir}/.version"),
+        buildNumberFormat(project))
     BuildInfo versioningInfo = createBuildInfo(project, versioningStrategy)
     releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask)
     releaseTask.buildInfo = versioningInfo
