@@ -35,7 +35,7 @@ class ReleaseTask extends DefaultTask {
   void exec() {
     LOG.info("Pushing annotated tag ${buildInfo.releaseTag}")
     if (buildInfo.dryRun) {
-      project.logger.info("Would have executed -> git push origin ${buildInfo.releaseTag}")
+      project.logger.warn("Would have executed -> git push origin ${buildInfo.releaseTag}")
     } else {
       project.exec {
         commandLine 'git', 'push', "origin", "${buildInfo.releaseTag}"

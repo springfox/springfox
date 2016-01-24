@@ -42,7 +42,7 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport {
     def commitChanges = """git commit -i '${versionFile.absolutePath}' \
 -m 'Releasing version (${buildInfo.nextVersion}) tagging project with tag ${buildInfo.releaseTag}'"""
     if (buildInfo.dryRun) {
-      project.logger.info("Will execute command: $commitChanges")
+      project.logger.warn("Will execute command: $commitChanges")
       return
     }
     def proc = commitChanges.execute();
@@ -54,7 +54,8 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport {
 
   def updateVersionFile(project, buildInfo) {
     if (buildInfo.dryRun) {
-      project.logger.info("Saving ${buildInfo.nextVersion.asText()} to the version file (${versionFile.absolutePath})")
+      project.logger.warn(
+          "Would have saved ${buildInfo.nextVersion.asText()} to the version file (${versionFile.absolutePath})")
       return
     }
     versionFile.withOutputStream {
