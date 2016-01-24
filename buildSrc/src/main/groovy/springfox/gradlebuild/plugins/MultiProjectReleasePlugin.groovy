@@ -22,8 +22,6 @@ package springfox.gradlebuild.plugins
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.logging.Logger
-import org.gradle.api.logging.Logging
 import springfox.gradlebuild.BintrayCredentials
 import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.BuildInfoFactory
@@ -37,7 +35,6 @@ import springfox.gradlebuild.version.VersioningStrategy
  */
 public class MultiProjectReleasePlugin implements Plugin<Project> {
 
-  private static Logger LOG = Logging.getLogger(MultiProjectReleasePlugin.class);
   ReleaseTask releaseTask
   BumpAndTagTask bumpAndTagTask
   CheckCleanWorkspaceTask checkCleanWorkspaceTask
@@ -74,7 +71,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     configureSnapshotTaskGraph(project)
     configureReleaseTaskGraph(project)
     project.tasks.showPublishInfo << {
-      LOG.info "======= Project version: $project.version, $versioningInfo"
+      project.logger.info "======= Project version: $project.version, $versioningInfo"
     }
   }
 
@@ -87,7 +84,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
       evaluatedProject.subprojects.each { p ->
         p.tasks.findByPath('publish').each { t ->
-          LOG.info("Releasing version: $p.version for task $t.name")
+          project.logger.info("Releasing version: $p.version for task $t.name")
           snapshotTask.dependsOn(t)
         }
       }
@@ -112,7 +109,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
       evaluatedProject.subprojects.each { p ->
         p.tasks.findByPath('bintrayUpload').each { t ->
-          LOG.info("Releasing version: $p.version for task $t.name")
+          project.logger.info("Releasing version: $p.version for task $t.name")
           iPublishTask.dependsOn(t)
         }
       }
@@ -148,7 +145,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       releaseRepos = {
         //Only snapshots - bintray plugin takes care of non-snapshot releases
         if (isSnapshotBuild) {
-          LOG.info("Setting up maven repo for snapshot build: $buildInfo")
+          project.logger.info("Setting up maven repo for snapshot build: $buildInfo")
           maven {
             name 'jfrogOss'
             url "${artifactRepoBase}/${repoPrefix}-${type}-local"

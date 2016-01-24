@@ -21,6 +21,7 @@ package springfox.gradlebuild.version
 
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
+import org.gradle.process.ExecResult
 import spock.lang.Specification
 import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.DirectoryBacked
@@ -71,6 +72,9 @@ class SemanticVersionTest extends Specification implements DirectoryBacked {
     File tempDir = directory(this)
     File propFile = new File("${tempDir.absolutePath}/p.properties")
     Project project = Mock(Project)
+    ExecResult result = Mock(ExecResult)
+    project.exec(_) >> result
+    result.assertNormalExitValue() >> result
     project.logger >> Mock(Logger)
     new FileVersionStrategy(propFile, "-SNAPSHOT").persist(
         project,
