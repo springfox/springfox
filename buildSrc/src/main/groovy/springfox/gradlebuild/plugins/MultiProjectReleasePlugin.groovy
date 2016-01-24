@@ -176,7 +176,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     project.hasProperty('buildNumberFormat') ? project.property('buildNumberFormat') : '-SNAPSHOT'
   }
 
-  static boolean dryRun(Project project) {
+  public static boolean dryRun(Project project) {
     project.hasProperty('dryRun') ? Boolean.valueOf(project.property('dryRun')) : false
   }
 

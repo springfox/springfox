@@ -22,6 +22,8 @@ package springfox.gradlebuild.tasks
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
+import static springfox.gradlebuild.plugins.MultiProjectReleasePlugin.dryRun
+
 class CheckCleanWorkspaceTask extends DefaultTask {
   public static final String TASK_NAME = "checkCleanWorkspace"
   String description = "Checks workspace is clean"
@@ -29,6 +31,10 @@ class CheckCleanWorkspaceTask extends DefaultTask {
 
   @TaskAction
   void check() {
+    if (dryRun(project)) {
+      project.logger.warn("Would have checked the workspace is clean!")
+      return
+    }
     def sout = new ByteArrayOutputStream()
     project.exec {
       commandLine "git", "status", "--porcelain"

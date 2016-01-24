@@ -19,6 +19,8 @@ package springfox.gradlebuild.tasks
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
+import static springfox.gradlebuild.plugins.MultiProjectReleasePlugin.dryRun
+
 class CheckGitBranchTask extends DefaultTask {
 
   public static final String TASK_NAME = "checkGitBranchTask"
@@ -28,6 +30,10 @@ class CheckGitBranchTask extends DefaultTask {
   @TaskAction
   void check() {
     String requiredBranch = "master"
+    if (dryRun(project)) {
+      project.logger.warn("Would have checked the branch is master!")
+      return
+    }
     project.exec {
       commandLine "git", "fetch"
     }
