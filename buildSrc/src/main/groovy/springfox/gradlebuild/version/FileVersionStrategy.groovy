@@ -35,7 +35,11 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
 
   @Override
   SemanticVersion nextVersion(SemanticVersion buildVersion, ReleaseType releaseType, boolean isReleaseBuild) {
-    buildVersion.next(releaseType, isReleaseBuild ? buildNumberSuffix : "")
+    new SemanticVersion(
+        buildVersion.major,
+        buildVersion.minor,
+        buildVersion.patch,
+        isReleaseBuild ? buildNumberSuffix : "")
   }
 
   @Override
@@ -45,7 +49,7 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
     createAnnotatedTag(project, buildInfo)
   }
 
-  def commitToRepository(Project project, buildInfo) {
+  def commitToRepository(Project project, BuildInfo buildInfo) {
     def commitChanges = """git commit -i '${versionFile.absolutePath}' \
 -m 'Releasing version (${buildInfo.nextVersion}) tagging project with tag ${buildInfo.releaseTag}'"""
     if (buildInfo.dryRun) {
@@ -66,7 +70,7 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
       return
     }
     versionFile.withOutputStream {
-      it.write("${buildInfo.nextVersion.major}.${buildInfo.nextVersion.minor}.${buildInfo.nextVersion.patch}$buildNumberSuffix".bytes)
+      it.write("${buildInfo.buildVersion.asText()}".bytes)
     }
   }
 }

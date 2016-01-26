@@ -123,8 +123,8 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   }
 
   def configureVersionAndPublications(Project project, BuildInfo buildInfo) {
-    project.version = "${buildInfo.nextVersion.asText()}${buildInfo.buildSuffix}"
-    project.ext.currentVersion = "${buildInfo.currentVersion.asText()}"
+    project.version = "${buildInfo.buildVersion.asText()}"
+    project.ext.buildInfo = buildInfo
 
     configurePublications(project, buildInfo)
   }

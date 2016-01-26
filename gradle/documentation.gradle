@@ -8,13 +8,27 @@ asciidoctor {
   backends = ['html5']
 
   attributes 'source-highlighter': 'coderay',
-          'springfox-current-version': project.version.toString(),
-          'springfox-released-version': project.ext.currentVersion,
+          'springfox-current-version': latestSnapshotVersion(project),
+          'springfox-released-version': latestReleasedVersion(project),
           toc: 'left',
           idprefix: '',
           idseparator: '-',
           icons: 'font',
           encoding: 'utf-8'
+}
+
+def latestSnapshotVersion(project) {
+  if (project.rootProject.buildInfo.isReleaseBuild) {
+    return project.rootProject.buildInfo.nextVersion.asText()
+  }
+  return project.version.toString()
+}
+
+def latestReleasedVersion(project) {
+  if (project.rootProject.buildInfo.isReleaseBuild) {
+    return project.version.toString()
+  }
+  return project.rootProject.buildInfo.currentVersion.asText()
 }
 
 task publishDocs(type: Exec) {
@@ -26,7 +40,7 @@ task publishDocs(type: Exec) {
 
   if (project.hasProperty('updateMode')) {
     symlink = 'current'
-    docVersion = project.ext.currentVersion
+    docVersion = project.rootProject.buildInfo.currentVersion.asText()
   } else {
     symlink = isSnapshot(project) ? 'snapshot' : 'current'
   }
