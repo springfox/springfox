@@ -3,9 +3,7 @@ package springfox.gradlebuild.version
 import org.gradle.api.Project
 import springfox.gradlebuild.BuildInfo
 
-class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport {
-
-
+class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitVersionParser {
   private final File versionFile
   private final String buildNumberSuffix
 
@@ -15,7 +13,7 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport {
   }
 
   @Override
-  SemanticVersion current() {
+  SemanticVersion buildVersion(ReleaseType releaseType, boolean isReleaseBuild) {
     SemanticVersion version
     versionFile.withInputStream() { stream ->
 
@@ -24,11 +22,20 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport {
       version = new SemanticVersion(
           major.toInteger(),
           minor.toInteger(),
-          patch.toInteger() - 1,
-          buildNumberSuffix)
+          patch.toInteger(),
+          isReleaseBuild ? "" : buildNumberSuffix)
     }
     version
+  }
 
+  @Override
+  SemanticVersion current() {
+    parseTransform(lastAnnotatedTag(), "")
+  }
+
+  @Override
+  SemanticVersion nextVersion(SemanticVersion buildVersion, ReleaseType releaseType, boolean isReleaseBuild) {
+    buildVersion.next(releaseType, isReleaseBuild ? buildNumberSuffix : "")
   }
 
   @Override

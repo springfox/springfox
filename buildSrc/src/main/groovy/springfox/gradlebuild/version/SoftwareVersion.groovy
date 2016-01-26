@@ -20,7 +20,7 @@
 package springfox.gradlebuild.version
 
 interface SoftwareVersion {
-  SoftwareVersion next(ReleaseType releaseType)
+  SoftwareVersion next(ReleaseType releaseType, String buildSuffix)
 
   String asText()
 

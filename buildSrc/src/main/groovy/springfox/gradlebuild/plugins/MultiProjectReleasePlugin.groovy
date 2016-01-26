@@ -27,6 +27,7 @@ import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.BuildInfoFactory
 import springfox.gradlebuild.tasks.*
 import springfox.gradlebuild.version.FileVersionStrategy
+import springfox.gradlebuild.version.ReleaseType
 import springfox.gradlebuild.version.VersioningStrategy
 /**
  * Much of what this plugin does is inspired by:
@@ -51,13 +52,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
         buildNumberFormat(project))
     BuildInfo versioningInfo = createBuildInfo(project, versioningStrategy)
     releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask)
-    releaseTask.buildInfo = versioningInfo
-
     bumpAndTagTask = project.task(BumpAndTagTask.TASK_NAME, type: BumpAndTagTask)
-
-    bumpAndTagTask.buildInfo  = versioningInfo
-    bumpAndTagTask.versioning = this.versioningStrategy
-
     snapshotTask = project.task(SnapshotTask.TASK_NAME, type: SnapshotTask)
     credentialCheck = project.task(BintrayCredentialsCheckTask.TASK_NAME, type: BintrayCredentialsCheckTask)
     checkCleanWorkspaceTask = project.task(CheckCleanWorkspaceTask.TASK_NAME, type: CheckCleanWorkspaceTask)
@@ -168,8 +163,8 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     buildInfoFactory.create(project)
   }
 
-  static String releaseType(Project project) {
-    project.hasProperty('releaseType') ? project.property('releaseType') : 'PATCH'
+  static ReleaseType releaseType(Project project) {
+    project.hasProperty('releaseType') ? ReleaseType.valueOf(project.property('releaseType')) : ReleaseType.PATCH
   }
 
   static String buildNumberFormat(Project project) {

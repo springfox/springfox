@@ -12,18 +12,13 @@ class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionPar
   }
 
   @Override
+  SemanticVersion buildVersion(ReleaseType releaseType, boolean isReleaseBuild) {
+    current().next(releaseType, buildNumberFormat)
+  }
+
+  @Override
   SemanticVersion current() {
-    def proc = "git describe --exact-match".execute();
-    proc.waitFor();
-    if (proc.exitValue() == 0) {
-      parseTransform(proc.text.trim(), buildNumberFormat)
-    }
-    proc = "git describe".execute();
-    proc.waitFor();
-    if (proc.exitValue() == 0) {
-      return parseTransform(proc.text.trim(), buildNumberFormat)
-    }
-    return new SemanticVersion(0, 0, 0, "")
+    parseTransform(lastAnnotatedTag(), buildNumberFormat)
   }
 
   @Override
@@ -35,4 +30,8 @@ class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionPar
     return new GitDescribeVersioningStrategy(buildNumberFormat)
   }
 
+  @Override
+  SemanticVersion nextVersion(SemanticVersion buildVersion, ReleaseType releaseType, boolean isReleaseBuild) {
+    buildVersion.next(releaseType, buildNumberFormat)
+  }
 }
