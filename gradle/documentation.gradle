@@ -1,3 +1,4 @@
+import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.utils.ProjectDefinitions
 
 apply plugin: "org.asciidoctor.convert"
@@ -37,14 +38,24 @@ task publishDocs(type: Exec) {
 
   String symlink = 'snapshot'
   String docVersion = project.version
+  BuildInfo buildInfo = project.rootProject.buildInfo
 
   if (project.hasProperty('updateMode')) {
     symlink = 'current'
-    docVersion = project.rootProject.buildInfo.currentVersion.asText()
+    docVersion = buildInfo.currentVersion.asText()
   } else {
     symlink = isSnapshot(project) ? 'snapshot' : 'current'
   }
-
+  project.logger.info("""Publishing docs with ...
+        latest snapshot version: ${latestSnapshotVersion(project)}
+        latest release version: ${latestReleasedVersion(project)}
+        symlink: ${symlink}
+        docVersion: ${docVersion}
+        project version: ${project.version}
+""")
+  if (buildInfo.dryRun) {
+    return
+  }
   String gitChanges = ""
   ['build/asciidoc/*'    : "docs",
    'build/docs/javadoc/*': "javadoc"].each { source, destination ->
