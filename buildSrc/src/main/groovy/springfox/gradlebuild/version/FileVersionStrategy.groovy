@@ -1,12 +1,9 @@
 package springfox.gradlebuild.version
 
 import org.gradle.api.Project
-import org.gradle.api.logging.Logger
-import org.gradle.api.logging.Logging
 import springfox.gradlebuild.BuildInfo
 
-class FileVersionStrategy implements VersioningStrategy {
-  private static Logger LOG = Logging.getLogger(FileVersionStrategy.class);
+class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitVersionParser {
   private final File versionFile
   private final String buildNumberSuffix
 
@@ -16,33 +13,60 @@ class FileVersionStrategy implements VersioningStrategy {
   }
 
   @Override
-  SemanticVersion current() {
-    def props = new Properties()
+  SemanticVersion buildVersion(ReleaseType releaseType, boolean isReleaseBuild) {
+    SemanticVersion version
     versionFile.withInputStream() { stream ->
-      props.load(stream)
+
+      def versionLine = stream.readLines().first()
+      def (major, minor, patch) = versionLine.replace(buildNumberSuffix, "").split("\\.")
+      version = new SemanticVersion(
+          major.toInteger(),
+          minor.toInteger(),
+          patch.toInteger(),
+          isReleaseBuild ? "" : buildNumberSuffix)
     }
-    new SemanticVersion(props.major.toInteger(), props.minor.toInteger(), props.patch.toInteger(), buildNumberSuffix)
+    version
+  }
+
+  @Override
+  SemanticVersion current() {
+    parseTransform(lastAnnotatedTag(), "")
+  }
+
+  @Override
+  SemanticVersion nextVersion(SemanticVersion buildVersion, ReleaseType releaseType, boolean isReleaseBuild) {
+    buildVersion.next(releaseType, isReleaseBuild ? buildNumberSuffix : "")
   }
 
   @Override
   void persist(Project project, BuildInfo buildInfo) {
-    def commitChangesCommand = "git commit -i '${versionFile.absolutePath}' -m 'Release(${buildInfo.nextVersion}) " +
-      "tagging project with tag ${buildInfo.releaseTag}'"
-    LOG.info("Saving $buildInfo.nextVersion.asText() to the version file ($versionFile.absolutePath)")
+    updateVersionFile(project, buildInfo)
+    commitToRepository(project, buildInfo)
+    createAnnotatedTag(project, buildInfo)
+  }
+
+  def commitToRepository(Project project, BuildInfo buildInfo) {
+    def commitChanges = """git commit -i '${versionFile.absolutePath}' \
+-m 'Releasing version (${buildInfo.nextVersion}) tagging project with tag ${buildInfo.releaseTag}'"""
     if (buildInfo.dryRun) {
-      LOG.info("Will execute command: $commitChangesCommand")
+      project.logger.warn("Will execute command: $commitChanges")
       return
     }
-    def properties = new Properties()
-    properties.major = "${buildInfo.nextVersion.major}".toString()
-    properties.minor = "${buildInfo.nextVersion.minor}".toString()
-    properties.patch = "${buildInfo.nextVersion.patch}".toString()
-    properties.store(versionFile.newWriter(), null)
-
-    def proc = commitChangesCommand.execute();
+    def proc = commitChanges.execute();
     proc.waitFor();
     if (proc.exitValue() != 0) {
-      LOG.error("Unable to save the file and commit changes to repo!")
+      project.logger.error("Unable to save the file and commit changes to repo!")
+    }
+  }
+
+  def updateVersionFile(project, buildInfo) {
+    if (buildInfo.dryRun) {
+      project.logger.warn(
+          "Would have saved ${buildInfo.nextVersion.asText()} to the version file (${versionFile.absolutePath})")
+      return
+    }
+    versionFile.withOutputStream {
+      it.write("${buildInfo.buildVersion.asText()}".bytes)
     }
   }
 }

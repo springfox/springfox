@@ -23,19 +23,17 @@ import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import org.gradle.api.tasks.TaskAction
 import springfox.gradlebuild.BuildInfo
-import springfox.gradlebuild.version.VersioningStrategy
 
 class BumpAndTagTask extends DefaultTask {
   private static Logger LOG = Logging.getLogger(BumpAndTagTask.class);
   public static final String TASK_NAME = 'bumpAndTag'
   String description = 'Bumps the version file and tags the release'
   String group = 'release'
-  BuildInfo buildInfo
-  VersioningStrategy versioning
 
   @TaskAction
   void exec() {
-    LOG.info("Bumping the version and tagging after release using (${versioning.class.simpleName})")
-    versioning.persist(project, buildInfo)
+    BuildInfo buildInfo = project.rootProject.buildInfo
+    LOG.info("Bumping the version and tagging after release using (${buildInfo.versioningStrategy.class.simpleName})")
+    buildInfo.versioningStrategy.persist(project, buildInfo)
   }
 }

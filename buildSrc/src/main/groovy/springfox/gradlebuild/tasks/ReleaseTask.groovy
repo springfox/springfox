@@ -19,27 +19,22 @@
 package springfox.gradlebuild.tasks
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.Project
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import org.gradle.api.tasks.TaskAction
-import springfox.gradlebuild.BuildInfo
-
 // git status --porcelain
 class ReleaseTask extends DefaultTask {
   private static Logger LOG = Logging.getLogger(ReleaseTask.class);
   public static final String TASK_NAME = 'release'
   String description = 'non snapshot release flow'
   String group = 'release'
-  BuildInfo buildInfo
 
   @TaskAction
   void exec() {
+    def buildInfo = project.rootProject.buildInfo
     LOG.info("Pushing annotated tag ${buildInfo.releaseTag}")
     if (buildInfo.dryRun) {
-      project.exec {
-        commandLine 'git', 'push', "--dry-run", "origin", "${buildInfo.releaseTag}"
-      }.assertNormalExitValue()
+      project.logger.warn("Would have executed -> git push origin ${buildInfo.releaseTag}")
     } else {
       project.exec {
         commandLine 'git', 'push', "origin", "${buildInfo.releaseTag}"

@@ -1,24 +1,32 @@
 package springfox.gradlebuild
+
 import com.google.common.base.MoreObjects
-import com.google.common.base.Strings
+import springfox.gradlebuild.version.ReleaseType
 import springfox.gradlebuild.version.SemanticVersion
+import springfox.gradlebuild.version.VersioningStrategy
 
 class BuildInfo {
-  SemanticVersion currentVersion
-  SemanticVersion nextVersion
-  String releaseType
-  String releaseTag
-  boolean dryRun
-  private final String buildSuffix
+  private final SemanticVersion buildVersion
+  private final ReleaseType releaseType
+  private final boolean dryRun
+  private final VersioningStrategy versioningStrategy
+  private final boolean isReleaseBuild
+  private final SemanticVersion currentVersion
 
-  BuildInfo(SemanticVersion currentVersion, SemanticVersion nextVersion, String releaseType, String releaseTag,
-            boolean dryRun, String buildSuffix) {
-    this.buildSuffix = buildSuffix
-    this.dryRun = dryRun
+  BuildInfo(
+      SemanticVersion currentVersion,
+      SemanticVersion buildVersion,
+      ReleaseType releaseType,
+      boolean isReleaseBuild,
+      boolean dryRun,
+      VersioningStrategy versioningStrategy) {
+
     this.currentVersion = currentVersion
-    this.nextVersion = nextVersion
+    this.buildVersion = buildVersion
+    this.isReleaseBuild = isReleaseBuild
+    this.dryRun = dryRun
     this.releaseType = releaseType
-    this.releaseTag = releaseTag
+    this.versioningStrategy = versioningStrategy
   }
 
   boolean getDryRun() {
@@ -29,35 +37,39 @@ class BuildInfo {
     return currentVersion
   }
 
+  SemanticVersion getBuildVersion() {
+    buildVersion
+  }
+
   SemanticVersion getNextVersion() {
-    return nextVersion
+    versioningStrategy.nextVersion(buildVersion, releaseType, isReleaseBuild)
   }
 
   String getReleaseType() {
-    return releaseType
+    releaseType
   }
 
   String getReleaseTag() {
-    return releaseTag
-  }
-
-  String getBuildSuffix() {
-    return buildSuffix
+    versioningStrategy.nextVersion(buildVersion, releaseType, isReleaseBuild).asText()
   }
 
   boolean getIsReleaseBuild() {
-    Strings.isNullOrEmpty(buildSuffix)
+    isReleaseBuild
+  }
+
+  VersioningStrategy getVersioningStrategy() {
+    versioningStrategy
   }
 
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
-        .add("currentVersion", currentVersion)
+        .add("releaseVersion", currentVersion)
+        .add("buildVersion", buildVersion)
         .add("nextVersion", nextVersion)
         .add("releaseType", releaseType)
         .add("releaseTag", releaseTag)
         .add("dryRun", dryRun)
-        .add("buildSuffix", buildSuffix)
         .toString();
   }
 }
