@@ -34,7 +34,7 @@ deployment:
     owner: springfox
     commands:
       - ./gradlew snapshot -PbintrayUsername=${bintrayUsername} -PbintrayPassword=${bintrayPassword} -i -x check
-      - ./gradlew publishDocs
+      - ./gradlew publishDocs -i
       - ./gradlew coveralls
 notify:
   webhooks:
