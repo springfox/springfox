@@ -38,6 +38,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -124,7 +126,16 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         properties.addAll(candidateProperties(type, annotatedMember.get(), jacksonProperty, givenContext));
       }
     }
-    return properties;
+    return FluentIterable.from(properties).toSortedSet(byPropertyName()).asList();
+  }
+
+  private Comparator<ModelProperty> byPropertyName() {
+    return new Comparator<ModelProperty>() {
+      @Override
+      public int compare(ModelProperty first, ModelProperty second) {
+        return first.getName().compareTo(second.getName());
+      }
+    };
   }
 
   private AnnotatedMember safeGetPrimaryMember(BeanPropertyDefinition jacksonProperty) {
