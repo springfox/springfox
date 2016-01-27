@@ -52,11 +52,14 @@ public class WildcardType {
     }
     TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
     TypeBindings bindingsToMatch = toMatch.getTypeBindings();
+    if (wildcardTypeBindings.size() != bindingsToMatch.size()) {
+      return false;
+    }
     for (int index = 0; index < bindingsToMatch.size(); index++) {
       ResolvedType wildcardTypeBindingsBoundType = wildcardTypeBindings.getBoundType(index);
       ResolvedType bindingsToMatchBoundType = bindingsToMatch.getBoundType(index);
 
-      if (!wildcardTypeBindingsBoundType.getErasedType().equals(WildcardType.class)
+      if (!WildcardType.class.equals(wildcardTypeBindingsBoundType.getErasedType())
               && !wildcardMatch(bindingsToMatchBoundType, wildcardTypeBindingsBoundType)) {
         return false;
       }

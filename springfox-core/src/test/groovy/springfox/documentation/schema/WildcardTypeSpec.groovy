@@ -71,6 +71,8 @@ class WildcardTypeSpec extends Specification {
       nestedGenericType(WildcardType)    | nestedGenericType(String)        | true
       nestedGenericType(String)          | nestedGenericType(WildcardType)  | false
       resolve(List, WildcardType)        | resolve(ArrayList, String)       | false
+      resolve(List)                      | resolve(ArrayList, String)       | false
+      resolve(ArrayList, String)         | resolve(List)                    | false
   }
 
   def "wildcard matches fail when the type bindings are not of the same size" () {
