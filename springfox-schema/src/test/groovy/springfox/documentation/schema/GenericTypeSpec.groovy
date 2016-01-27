@@ -34,16 +34,17 @@ class GenericTypeSpec extends SchemaSpecification {
     given:
       def inputContext = inputParam(modelType, documentationType, alternateTypeProvider(), namingStrategy)
       def returnContext = returnValue(modelType, documentationType, alternateTypeProvider(), namingStrategy)
+      def propertyLookup = ["GenericType": "genericField", "Resource": "content"]
     when:
       Model asInput = modelProvider.modelFor(inputContext).get()
     and:
       Model asReturn = modelProvider.modelFor(returnContext).get()
     then:
-      asInput.getName() == expectedModelName(modelNamePart)
-      verifyModelProperty(asInput, propertyType, qualifiedType, "genericField")
+      asInput.getName() == expectedModelName(modelNamePart, modelType.erasedType.simpleName)
+      verifyModelProperty(asInput, propertyType, qualifiedType, propertyLookup[modelType.erasedType.simpleName])
     and:
-      asReturn.getName() == expectedModelName(modelNamePart)
-      verifyModelProperty(asInput, propertyType, qualifiedType, "genericField")
+      asReturn.getName() == expectedModelName(modelNamePart, modelType.erasedType.simpleName)
+      verifyModelProperty(asInput, propertyType, qualifiedType, propertyLookup[modelType.erasedType.simpleName])
 
     
     where:
@@ -56,6 +57,7 @@ class GenericTypeSpec extends SchemaSpecification {
       genericCollectionWithEnum()     | "Collection«string»"                          | "Collection«string»"                          | "java.util.Collection<springfox.documentation.schema.ExampleEnum>"
       genericTypeWithPrimitiveArray() | "Array"                                       | "Array«byte»"                                 | "byte"
       genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
+      genericResource()               | "SubclassOfResourceSupport"                   | "SubclassOfResourceSupport"                   | null
   }
 
   @Unroll
@@ -112,11 +114,11 @@ class GenericTypeSpec extends SchemaSpecification {
       genericCollectionWithEnum()    | "List"           | "java.util.List<java.lang.String>"
   }
 
-  def expectedModelName(String modelName) {
+  def expectedModelName(String modelName, String hostType = "GenericType") {
     if (!isNullOrEmpty(modelName)) {
-      String.format("GenericType«%s»", modelName)
+      "$hostType«$modelName»"
     } else {
-      "GenericType"
+      hostType
     }
   }
 
