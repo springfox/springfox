@@ -35,11 +35,7 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
 
   @Override
   SemanticVersion nextVersion(SemanticVersion buildVersion, ReleaseType releaseType, boolean isReleaseBuild) {
-    new SemanticVersion(
-        buildVersion.major,
-        buildVersion.minor,
-        buildVersion.patch,
-        isReleaseBuild ? buildNumberSuffix : "")
+    buildVersion.next(releaseType, isReleaseBuild ? buildNumberSuffix : "")
   }
 
   @Override

@@ -46,16 +46,20 @@ task publishDocs(type: Exec) {
   } else {
     symlink = isSnapshot(project) ? 'snapshot' : 'current'
   }
-  project.logger.info("""Publishing docs with ...
+
+  def docPublishInfo = """Publishing docs with ...
         latest snapshot version: ${latestSnapshotVersion(project)}
         latest release version: ${latestReleasedVersion(project)}
         symlink: ${symlink}
         docVersion: ${docVersion}
         project version: ${project.version}
-""")
+"""
+  logger.info(docPublishInfo)
   if (buildInfo.dryRun) {
+    commandLine "sh", "-c", "echo this is a dry run!"
     return
   }
+
   String gitChanges = ""
   ['build/asciidoc/*'    : "docs",
    'build/docs/javadoc/*': "javadoc"].each { source, destination ->
@@ -68,6 +72,8 @@ task publishDocs(type: Exec) {
       git add $dir ${destination}/${symlink}
 """
   }
+
+
   commandLine "sh", "-c",
           """
   git config --local user.email "bot@springfox.io"
