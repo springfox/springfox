@@ -657,6 +657,7 @@
     },
     "definitions": {
         "Pet": {
+            "type": "object",
             "properties": {
                 "age": {
                     "type": "integer",

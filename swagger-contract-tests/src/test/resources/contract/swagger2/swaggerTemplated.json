@@ -121,7 +121,8 @@
   },
   "definitions": {
     "Category": {
-      "properties": {
+      "type": "object",
+            "properties": {
         "id": {
           "type": "integer",
           "format": "int64"
@@ -132,7 +133,8 @@
       }
     },
     "Tag": {
-      "properties": {
+      "type": "object",
+            "properties": {
         "id": {
           "type": "integer",
           "format": "int64"
@@ -143,7 +145,8 @@
       }
     },
     "Pet": {
-      "properties": {
+      "type": "object",
+            "properties": {
         "category": {
           "$ref": "#/definitions/Category"
         },

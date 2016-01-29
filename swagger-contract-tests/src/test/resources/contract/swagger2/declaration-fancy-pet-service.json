@@ -89,6 +89,7 @@
     },
     "definitions": {
         "Category": {
+            "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
@@ -96,6 +97,7 @@
             }
         },
         "FancyPet": {
+            "type": "object",
             "properties": {
                 "age": {
                     "type": "integer",

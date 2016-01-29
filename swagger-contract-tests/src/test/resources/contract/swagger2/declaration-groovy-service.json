@@ -99,7 +99,8 @@
   },
   "definitions": {
     "GroovyModel": {
-      "properties": {
+      "type": "object",
+            "properties": {
         "stringProp": {
           "type": "string"
         }

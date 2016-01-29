@@ -2954,6 +2954,7 @@
     },
     "definitions": {
         "User": {
+            "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
@@ -2988,6 +2989,7 @@
             }
         },
         "DateTimeField": {
+            "type": "object",
             "properties": {
                 "durationField": {
                     "$ref": "#/definitions/DurationField"
@@ -3021,6 +3023,7 @@
             }
         },
         "Biz": {
+            "type": "object",
             "properties": {
                 "businessType": {
                     "type": "string",
@@ -3049,6 +3052,7 @@
             }
         },
         "Entry«string,List«string»»": {
+            "type": "object",
             "properties": {
                 "key": {
                     "type": "array",
@@ -3060,6 +3064,7 @@
         },
         "Void": {},
         "Order": {
+            "type": "object",
             "properties": {
                 "complete": {
                     "type": "boolean"
@@ -3096,6 +3101,7 @@
             }
         },
         "LocalDateTime": {
+            "type": "object",
             "properties": {
                 "centuryOfEra": {
                     "type": "integer",
@@ -3186,6 +3192,7 @@
             }
         },
         "DurationField": {
+            "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
@@ -3206,6 +3213,7 @@
             }
         },
         "View": {
+            "type": "object",
             "properties": {
                 "contentType": {
                     "type": "string"
@@ -3213,6 +3221,7 @@
             }
         },
         "Category": {
+            "type": "object",
             "properties": {
                 "id": {
                     "type": "integer",
@@ -3224,6 +3233,7 @@
             }
         },
         "Example": {
+            "type": "object",
             "properties": {
                 "allCapsSet": {
                     "type": "array",
@@ -3268,6 +3278,7 @@
             }
         },
         "DateTimeZone": {
+            "type": "object",
             "properties": {
                 "fixed": {
                     "type": "boolean"
@@ -3275,6 +3286,7 @@
             }
         },
         "Pet": {
+            "type": "object",
             "properties": {
                 "age": {
                     "type": "integer",
@@ -3289,6 +3301,7 @@
             }
         },
         "LocalDate": {
+            "type": "object",
             "properties": {
                 "centuryOfEra": {
                     "type": "integer",
@@ -3359,6 +3372,7 @@
             }
         },
         "DurationFieldType": {
+            "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
@@ -3366,6 +3380,7 @@
             }
         },
         "Tag": {
+            "type": "object",
             "properties": {
                 "id": {
                     "type": "integer",
@@ -3377,6 +3392,7 @@
             }
         },
         "Entry«string,Pet»": {
+            "type": "object",
             "properties": {
                 "key": {
                     "$ref": "#/definitions/Pet"
@@ -3384,6 +3400,7 @@
             }
         },
         "ModelAndView": {
+            "type": "object",
             "properties": {
                 "empty": {
                     "type": "boolean"
@@ -3406,6 +3423,7 @@
             }
         },
         "NestedType": {
+            "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
@@ -3413,6 +3431,7 @@
             }
         },
         "ModelMap": {
+            "type": "object",
             "properties": {
                 "empty": {
                     "type": "boolean"
@@ -3420,6 +3439,7 @@
             }
         },
         "Chronology": {
+            "type": "object",
             "properties": {
                 "zone": {
                     "$ref": "#/definitions/DateTimeZone"
@@ -3427,6 +3447,7 @@
             }
         },
         "FancyPet": {
+            "type": "object",
             "properties": {
                 "age": {
                     "type": "integer",
@@ -3441,6 +3462,7 @@
             }
         },
         "DateTimeFieldType": {
+            "type": "object",
             "properties": {
                 "durationType": {
                     "$ref": "#/definitions/DurationFieldType"

@@ -753,6 +753,7 @@
     },
     "definitions": {
         "DateTimeField": {
+            "type": "object",
             "properties": {
                 "durationField": {
                     "$ref": "#/definitions/DurationField"
@@ -786,6 +787,7 @@
             }
         },
         "Example": {
+            "type": "object",
             "properties": {
                 "allCapsSet": {
                     "type": "array",
@@ -838,6 +840,7 @@
             }
         },
         "DateTimeZone": {
+            "type": "object",
             "properties": {
                 "id": {
                   "type": "string"
@@ -848,6 +851,7 @@
             }
         },
         "Pet": {
+            "type": "object",
             "properties": {
                 "age": {
                     "type": "integer",
@@ -862,6 +866,7 @@
             }
         },
         "DurationFieldType": {
+            "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
@@ -869,6 +874,7 @@
             }
         },
         "LocalDateTime": {
+            "type": "object",
             "properties": {
                 "centuryOfEra": {
                     "type": "integer",
@@ -959,6 +965,7 @@
             }
         },
         "ModelWithObjectNode": {
+          "type": "object",
           "properties": {
             "anyObject": {
               "$ref": "#/definitions/ObjectNode"
@@ -972,7 +979,7 @@
             }
         },
         "ObjectNode": {
-
+          "type": "object"
         },
         "Map\u00abstring,Example\u00bb": {
           "type": "object",
@@ -981,7 +988,8 @@
           }
         },
         "ModelWithArrayOfArrays": {
-          "properties": {
+          "type": "object",
+            "properties": {
             "arrayOfArrayOfInts": {
               "type": "array",
               "items": {
@@ -995,6 +1003,7 @@
           }
         },
         "ModelWithMapProperty": {
+            "type": "object",
             "properties": {
                 "params": {
                     "type": "object",
@@ -1007,6 +1016,7 @@
             "description": "Describes model with map property"
         },
         "NestedType": {
+            "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
@@ -1014,6 +1024,7 @@
             }
         },
         "DurationField": {
+            "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
@@ -1034,6 +1045,7 @@
             }
         },
         "Chronology": {
+            "type": "object",
             "properties": {
                 "zone": {
                     "$ref": "#/definitions/DateTimeZone"
@@ -1041,6 +1053,7 @@
             }
         },
         "DateTimeFieldType": {
+            "type": "object",
             "properties": {
                 "durationType": {
                     "$ref": "#/definitions/DurationFieldType"

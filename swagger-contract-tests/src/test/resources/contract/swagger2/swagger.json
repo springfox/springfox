@@ -726,6 +726,7 @@
     },
     "definitions": {
         "User": {
+            "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
@@ -764,6 +765,7 @@
               "id",
               "name"
             ],
+            "type": "object",
             "properties": {
                 "id": {
                     "type": "integer",
@@ -775,6 +777,7 @@
             }
         },
         "Pet": {
+            "type": "object",
             "properties": {
                 "category": {
                     "$ref": "#/definitions/Category"
@@ -814,6 +817,7 @@
             }
         },
         "Tag": {
+            "type": "object",
             "properties": {
                 "id": {
                     "type": "integer",
@@ -825,6 +829,7 @@
             }
         },
         "Order": {
+            "type": "object",
             "properties": {
                 "complete": {
                     "type": "boolean"

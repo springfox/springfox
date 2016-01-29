@@ -129,6 +129,7 @@
   },
   "definitions": {
     "EnumCollection": {
+      "type": "object",
       "properties": {
         "types": {
           "type": "array",

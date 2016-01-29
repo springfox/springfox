@@ -149,6 +149,7 @@
     },
     "definitions": {
         "Resource\u00abPet\u00bb": {
+          "type": "object",
           "properties": {
             "_links": {
               "type": "array",
@@ -169,6 +170,7 @@
           }
         },
         "HttpEntity\u00abResource\u00abPet\u00bb\u00bb": {
+          "type": "object",
           "properties": {
             "body": {
               "$ref": "#/definitions/Resource\u00abPet\u00bb"
@@ -176,6 +178,7 @@
           }
         },
         "Pet": {
+            "type": "object",
             "properties": {
                 "age": {
                     "type": "integer",
@@ -190,6 +193,7 @@
             }
         },
         "Link": {
+          "type": "object",
           "properties": {
             "href": {
               "type": "string"
