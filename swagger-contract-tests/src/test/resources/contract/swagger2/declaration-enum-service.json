@@ -109,7 +109,6 @@
         }
       }
     }
-
   },
   "securityDefinitions": {
     "petstore_auth": {
