@@ -40,6 +40,8 @@ public class BeanvalidationModelPropertyBuilderPlugin implements ModelPropertyBu
 		AnnotatedField field = beanDef.getField();
 		
 		if (field!=null) {
+			
+			// add support for @NotNull
 			addRequiredForNotNull(mybuilder, field);
 		
 			AllowableValues myvalues = null;
@@ -51,7 +53,6 @@ public class BeanvalidationModelPropertyBuilderPlugin implements ModelPropertyBu
 				myvalues = createAllowableValuesFromMinMaxForNumbers(field, myMin, myMax);
 			}
 			
-			
 			// add support for @Size
 			Size mySize = field.getAnnotation(Size.class);
 			
@@ -59,7 +60,6 @@ public class BeanvalidationModelPropertyBuilderPlugin implements ModelPropertyBu
 				myvalues = createAllowableValuesFromSizeForStrings(field, mySize);
 					
 			}
-			
 			
 			if (myvalues!=null) {
 				mybuilder.allowableValues(myvalues);
