@@ -46,19 +46,22 @@ public class BeanvalidationModelPropertyBuilderPlugin implements ModelPropertyBu
 		
 			AllowableValues myvalues = null;
 			
-			// add support for @Min/@Max
-			Min myMin = field.getAnnotation(Min.class);
-			Max myMax = field.getAnnotation(Max.class);
-			if (myMin!=null || myMax!=null) {
-				myvalues = createAllowableValuesFromMinMaxForNumbers(field, myMin, myMax);
-			}
-			
 			// add support for @Size
 			Size mySize = field.getAnnotation(Size.class);
 			
 			if (mySize!=null) {
 				myvalues = createAllowableValuesFromSizeForStrings(field, mySize);
 					
+			} else {
+				// add support for @Min/@Max
+				Min myMin = field.getAnnotation(Min.class);
+				Max myMax = field.getAnnotation(Max.class);
+				if (myMin!=null || myMax!=null) {
+					myvalues = createAllowableValuesFromMinMaxForNumbers(field, myMin, myMax);
+				} else {
+					
+				}
+				
 			}
 			
 			if (myvalues!=null) {
