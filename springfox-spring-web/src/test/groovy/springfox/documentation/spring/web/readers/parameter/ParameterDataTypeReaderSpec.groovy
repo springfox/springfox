@@ -21,11 +21,13 @@ package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.core.MethodParameter
-
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
+import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
@@ -50,7 +52,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
   def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
 
-  ParameterDataTypeReader sut = new ParameterDataTypeReader(typeNameExtractor)
+  ParameterDataTypeReader sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
 
   def "Should support all documentation types"() {
     expect:
@@ -59,7 +61,8 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       sut.supports(DocumentationType.SWAGGER_2)
   }
 
-  def "Parameter types"() {
+  @Unroll
+  def "Parameter types #paramType"() {
     given:
       ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter,
               new TypeResolver().resolve(paramType))
@@ -68,34 +71,47 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
               new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
                   Mock(OperationContext))
       methodParameter.getParameterType() >> paramType
+      methodParameter.getParameterAnnotations() >> annotations
 
     when:
       sut.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().modelRef.type == expected
     where:
-      paramType                       | expected
-      char                            | "string"
-      String                          | "string"
-      Integer                         | "int"
-      int                             | "int"
-      Long                            | "long"
-      BigInteger                      | "long"
-      long                            | "long"
-      Float                           | "float"
-      float                           | "float"
-      Double                          | "double"
-      double                          | "double"
-      Byte                            | "byte"
-      BigDecimal                      | "double"
-      byte                            | "byte"
-      Boolean                         | "boolean"
-      boolean                         | "boolean"
-      Date                            | "date-time"
-      DummyModels.FunkyBusiness       | "FunkyBusiness"
-      Void                            | "void"
-      MultipartFile                   | "File"
-      Business.BusinessType           | "string"
+      paramType                   | annotations          | expected
+      char                        | []                   | "string"
+      String                      | []                   | "string"
+      Integer                     | []                   | "int"
+      int                         | []                   | "int"
+      Long                        | []                   | "long"
+      Long                        | [Mock(PathVariable)] | "long"
+      Long                        | [Mock(RequestParam)] | "long"
+      Long[]                      | [Mock(PathVariable)] | "string"
+      Long[]                      | [Mock(RequestParam)] | "Array"
+      BigInteger                  | []                   | "long"
+      long                        | []                   | "long"
+      Float                       | []                   | "float"
+      float                       | []                   | "float"
+      Double                      | []                   | "double"
+      double                      | []                   | "double"
+      Byte                        | []                   | "byte"
+      BigDecimal                  | []                   | "double"
+      byte                        | []                   | "byte"
+      Boolean                     | []                   | "boolean"
+      boolean                     | []                   | "boolean"
+      Date                        | []                   | "date-time"
+      DummyModels.FunkyBusiness   | []                   | "FunkyBusiness"
+      DummyModels.FunkyBusiness   | [Mock(PathVariable)] | "string"
+      DummyModels.FunkyBusiness   | [Mock(RequestParam)] | "string"
+      DummyModels.FunkyBusiness[] | [Mock(PathVariable)] | "string"
+      DummyModels.FunkyBusiness[] | [Mock(RequestParam)] | "string"
+      Void                        | []                   | "void"
+      MultipartFile               | []                   | "File"
+      Business.BusinessType       | []                   | "string"
+      Business.BusinessType       | [Mock(PathVariable)] | "string"
+      Business.BusinessType       | [Mock(RequestParam)] | "string"
+      Business.BusinessType[]     | [Mock(PathVariable)] | "string"
+      Business.BusinessType[]     | [Mock(RequestParam)] | "Array"
   }
 
   def "Container Parameter types"() {
@@ -113,7 +129,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
       def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
-      def sut = new ParameterDataTypeReader(typeNameExtractor)
+      def sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
       sut.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().modelRef.type == "List"
