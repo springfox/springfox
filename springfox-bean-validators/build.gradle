@@ -1,20 +1,25 @@
-ext {
-  jdkVersion = 1.6
+configurations {
+  testArtifacts.extendsFrom testRuntime
 }
-compileJava.options.encoding = 'UTF-8'
 
-buildscript {
-  repositories {
-    jcenter()
-  }
+task testJar(type: Jar) {
+  classifier "test"
+  from sourceSets.test.output
+  exclude '**/*log4j.xml*', '**/*simplelogger.properties*'
 }
-repositories {
-  jcenter()
+
+artifacts {
+  testArtifacts testJar
 }
 
 dependencies {
+  compile libs.core
   compile libs.spring
-  compile libs.springProvided
-  compile libs.swagger2Core
-  compile "javax.validation.validation-api:1.1.0.Final"
+  compile project(':springfox-spi')
+
+  provided libs.springProvided
+  provided 'javax.validation:validation-api:1.1.0.Final'
+
+  testCompile project(':springfox-core')
+  testCompile libs.test
 }
