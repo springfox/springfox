@@ -20,7 +20,6 @@
 package springfox.documentation.swagger2.mappers;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.types.ResolvedInterfaceType;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -88,9 +87,7 @@ public abstract class ModelMapper {
         .transform(propertyName());
     model.setRequired(requiredFields.toList());
     model.setSimple(false);
-    if (isInterface(source.getType())) {
-      model.setType(ModelImpl.OBJECT);
-    }
+    model.setType(ModelImpl.OBJECT);
     if (isMapType(source.getType())) {
       Optional<Class> clazz = typeOfValue(source);
       if (clazz.isPresent()) {
@@ -123,10 +120,6 @@ public abstract class ModelMapper {
     SortedMap<String, ModelProperty> sortedMap = new TreeMap<String, ModelProperty>(defaultOrdering(modelProperties));
     sortedMap.putAll(modelProperties);
     return sortedMap;
-  }
-
-  private boolean isInterface(ResolvedType type) {
-    return type instanceof ResolvedInterfaceType;
   }
 
   @VisibleForTesting

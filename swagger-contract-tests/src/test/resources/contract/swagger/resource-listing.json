@@ -1,124 +1,124 @@
 {
-    "apiVersion": "1.0",
-    "apis": [
-        {
-            "description": "Basic Error Controller",
-            "path": "/default/basic-error-controller",
-            "position": 0
-        },
-        {
-            "description": "Services to demonstrate path variable resolution",
-            "path": "/default/business-service",
-            "position": 0
-        },
-        {
-            "description": "Concrete Controller",
-            "path": "/default/concrete-controller",
-            "position": 0
-        },
-        {
-            "description": "Controller With No Request Mapping Service",
-            "path": "/default/controller-with-no-request-mapping-service",
-            "position": 0
-        },
-        {
-            "description": "Endpoint Mvc Adapter",
-            "path": "/default/endpoint-mvc-adapter",
-            "position": 0
-        },
-        {
-            "description": "Service that return enums",
-            "path": "/default/enum-service",
-            "position": 0
-        },
-        {
-            "description": "Environment Mvc Endpoint",
-            "path": "/default/environment-mvc-endpoint",
-            "position": 0
-        },
-        {
-            "description": "Operations about fancy pets",
-            "path": "/default/fancy-pet-service",
-            "position": 0
-        },
-        {
-            "description": "Demonstration of features",
-            "path": "/default/feature-demonstration-service",
-            "position": 0
-        },
-        {
-            "description": "Health Mvc Endpoint",
-            "path": "/default/health-mvc-endpoint",
-            "position": 0
-        },
-        {
-            "description": "Inherited Service Impl",
-            "path": "/default/inherited-service-impl",
-            "position": 0
-        },
-        {
-            "description": "Metrics Mvc Endpoint",
-            "path": "/default/metrics-mvc-endpoint",
-            "position": 0
-        },
-        {
-            "description": "Grooming operations for pets",
-            "path": "/default/pet-grooming-service",
-            "position": 0
-        },
-        {
-            "description": "Operations about pets",
-            "path": "/default/pet-service",
-            "position": 0
-        },
-        {
-            "description": "Root Controller",
-            "path": "/default/root-controller",
-            "position": 0
-        },
-        {
-            "description": "Groovy Service",
-            "path": "/default/groovy-service",
-            "position": 0
-        }
-    ],
-    "authorizations": {
-        "oauth2": {
-            "grantTypes": {
-                "implicit": {
-                    "loginEndpoint": {
-                        "url": "http://petstore.swagger.io/api/oauth/dialog"
-                    },
-                    "type": "implicit"
-                }
-            },
-            "name": "petstore_auth",
-            "scopes": [
-                {
-                    "description": "modify pets in your account",
-                    "scope": "write:pets"
-                },
-                {
-                    "description": "read your pets",
-                    "scope": "read:pets"
-                }
-            ],
-            "type": "oauth2"
-        },
-        "apiKey": {
-            "keyname": "api_key",
-            "name": "api_key",
-            "passAs": "header",
-            "type": "apiKey"
-        }
+  "apiVersion": "1.0",
+  "apis": [
+    {
+      "description": "Basic Error Controller",
+      "path": "/default/basic-error-controller",
+      "position": 0
     },
-    "info": {
-        "contact": "Contact Email",
-        "description": "Api Documentation",
-        "license": "Apache 2.0",
-        "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
-        "termsOfServiceUrl": "urn:tos",
-        "title": "Api Documentation"
+    {
+      "description": "Services to demonstrate path variable resolution",
+      "path": "/default/business-service",
+      "position": 0
     },
-    "swaggerVersion": "1.2"
+    {
+      "description": "Concrete Controller",
+      "path": "/default/concrete-controller",
+      "position": 0
+    },
+    {
+      "description": "Controller With No Request Mapping Service",
+      "path": "/default/controller-with-no-request-mapping-service",
+      "position": 0
+    },
+    {
+      "description": "Endpoint Mvc Adapter",
+      "path": "/default/endpoint-mvc-adapter",
+      "position": 0
+    },
+    {
+      "description": "Service that return enums",
+      "path": "/default/enum-service",
+      "position": 0
+    },
+    {
+      "description": "Environment Mvc Endpoint",
+      "path": "/default/environment-mvc-endpoint",
+      "position": 0
+    },
+    {
+      "description": "Operations about fancy pets",
+      "path": "/default/fancy-pet-service",
+      "position": 0
+    },
+    {
+      "description": "Demonstration of features",
+      "path": "/default/feature-demonstration-service",
+      "position": 0
+    },
+    {
+      "description": "Health Mvc Endpoint",
+      "path": "/default/health-mvc-endpoint",
+      "position": 0
+    },
+    {
+      "description": "Inherited Service Impl",
+      "path": "/default/inherited-service-impl",
+      "position": 0
+    },
+    {
+      "description": "Metrics Mvc Endpoint",
+      "path": "/default/metrics-mvc-endpoint",
+      "position": 0
+    },
+    {
+      "description": "Grooming operations for pets",
+      "path": "/default/pet-grooming-service",
+      "position": 0
+    },
+    {
+      "description": "Operations about pets",
+      "path": "/default/pet-service",
+      "position": 0
+    },
+    {
+      "description": "Root Controller",
+      "path": "/default/root-controller",
+      "position": 0
+    },
+    {
+      "description": "Groovy Service",
+      "path": "/default/groovy-service",
+      "position": 0
+    }
+  ],
+  "authorizations": {
+    "oauth2": {
+      "grantTypes": {
+        "implicit": {
+          "loginEndpoint": {
+            "url": "http://petstore.swagger.io/api/oauth/dialog"
+          },
+          "type": "implicit"
+        }
+      },
+      "name": "petstore_auth",
+      "scopes": [
+        {
+          "description": "modify pets in your account",
+          "scope": "write:pets"
+        },
+        {
+          "description": "read your pets",
+          "scope": "read:pets"
+        }
+      ],
+      "type": "oauth2"
+    },
+    "apiKey": {
+      "keyname": "api_key",
+      "name": "api_key",
+      "passAs": "header",
+      "type": "apiKey"
+    }
+  },
+  "info": {
+    "contact": "Contact Email",
+    "description": "Api Documentation",
+    "license": "Apache 2.0",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "termsOfServiceUrl": "urn:tos",
+    "title": "Api Documentation"
+  },
+  "swaggerVersion": "1.2"
 }

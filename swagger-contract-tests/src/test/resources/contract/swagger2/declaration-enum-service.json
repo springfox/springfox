@@ -109,7 +109,6 @@
         }
       }
     }
-
   },
   "securityDefinitions": {
     "petstore_auth": {
@@ -129,6 +128,7 @@
   },
   "definitions": {
     "EnumCollection": {
+      "type": "object",
       "properties": {
         "types": {
           "type": "array",
