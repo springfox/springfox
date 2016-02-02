@@ -1,4 +1,4 @@
-package springfox.beanvalidation.plugins;
+package springfox.bean.validators.plugins;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
