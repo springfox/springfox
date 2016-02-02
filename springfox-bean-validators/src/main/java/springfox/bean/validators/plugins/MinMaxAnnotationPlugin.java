@@ -18,6 +18,7 @@
  */
 package springfox.bean.validators.plugins;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,14 +49,24 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<Min> min = validatorFromBean(context, Min.class)
-        .or(validatorFromField(context, Min.class));
-    Optional<Max> max = validatorFromBean(context, Max.class)
-        .or(validatorFromField(context, Max.class));
+    Optional<Min> min = extractMin(context);
+    Optional<Max> max = extractMax(context);
 
     // add support for @Min/@Max
     context.getBuilder().allowableValues(createAllowableValuesFromMinMaxForNumbers(min, max));
 
+  }
+
+  @VisibleForTesting
+  Optional<Min> extractMin(ModelPropertyContext context) {
+    return validatorFromBean(context, Min.class)
+        .or(validatorFromField(context, Min.class));
+  }
+
+  @VisibleForTesting
+  Optional<Max> extractMax(ModelPropertyContext context) {
+    return validatorFromBean(context, Max.class)
+        .or(validatorFromField(context, Max.class));
   }
 
 
