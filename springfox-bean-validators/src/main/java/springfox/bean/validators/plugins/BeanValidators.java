@@ -18,12 +18,51 @@
  */
 package springfox.bean.validators.plugins;
 
+import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
+import com.google.common.base.Optional;
+import com.google.common.collect.FluentIterable;
 import org.springframework.core.Ordered;
+import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 
 public class BeanValidators {
   public final static int BEAN_VALIDATOR_PLUGIN_ORDER = Ordered.HIGHEST_PRECEDENCE + 500;
+
   private BeanValidators() {
     throw new UnsupportedOperationException();
+  }
+
+  public static <T extends Annotation> Optional<T> validatorFromBean(
+      ModelPropertyContext context,
+      Class<T> annotationType) {
+
+    Optional<BeanPropertyDefinition> propertyDefinition = context.getBeanPropertyDefinition();
+    Optional<T> notNull = Optional.absent();
+    if (propertyDefinition.isPresent()) {
+      notNull = FluentIterable
+          .from(propertyDefinition.get().getGetter().annotations())
+          .filter(annotationType)
+          .first()
+          .or(FluentIterable
+              .from(propertyDefinition.get().getField().annotations())
+              .filter(annotationType)
+              .first());
+    }
+    return notNull;
+  }
+
+  public static <T extends Annotation> Optional<T> validatorFromField(
+      ModelPropertyContext context,
+      Class<T> annotationType) {
+
+    Optional<AnnotatedElement> annotatedElement = context.getAnnotatedElement();
+    Optional<T> notNull = Optional.absent();
+    if (annotatedElement.isPresent()) {
+      notNull = Optional.fromNullable(annotatedElement.get().getAnnotation(annotationType));
+    }
+    return notNull;
   }
 
 }
