@@ -122,6 +122,9 @@ This config class must then be defined in your xml application context.
 <!-- Required so springfox can access spring's RequestMappingHandlerMapping  -->
 <mvc:annotation-driven/>
 
+<!-- Required to enable Spring post processing on @Configuration classes. -->
+<context:annotation-config/>
+
 <bean class="com.yourapp.configuration.MySwaggerConfig"/>
 ```
 
