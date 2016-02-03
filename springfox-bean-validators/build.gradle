@@ -1,0 +1,25 @@
+configurations {
+  testArtifacts.extendsFrom testRuntime
+}
+
+task testJar(type: Jar) {
+  classifier "test"
+  from sourceSets.test.output
+  exclude '**/*log4j.xml*', '**/*simplelogger.properties*'
+}
+
+artifacts {
+  testArtifacts testJar
+}
+
+dependencies {
+  compile libs.core
+  compile libs.spring
+  compile project(':springfox-spi')
+
+  provided libs.springProvided
+  provided 'javax.validation:validation-api:1.1.0.Final'
+
+  testCompile project(':springfox-core')
+  testCompile libs.test
+}

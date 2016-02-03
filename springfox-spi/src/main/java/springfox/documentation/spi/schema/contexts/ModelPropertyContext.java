@@ -34,8 +34,12 @@ public class ModelPropertyContext {
   private final Optional<AnnotatedElement> annotatedElement;
   private final DocumentationType documentationType;
 
-  public ModelPropertyContext(ModelPropertyBuilder builder, AnnotatedElement annotatedElement,
-                              TypeResolver resolver, DocumentationType documentationType) {
+  public ModelPropertyContext(
+      ModelPropertyBuilder builder,
+      AnnotatedElement annotatedElement,
+      TypeResolver resolver,
+      DocumentationType documentationType) {
+
     this.builder = builder;
     this.resolver = resolver;
     this.annotatedElement = Optional.fromNullable(annotatedElement);
@@ -43,8 +47,11 @@ public class ModelPropertyContext {
     this.documentationType = documentationType;
   }
 
-  public ModelPropertyContext(ModelPropertyBuilder builder, BeanPropertyDefinition beanPropertyDefinition,
-                              TypeResolver resolver, DocumentationType documentationType) {
+  public ModelPropertyContext(
+      ModelPropertyBuilder builder,
+      BeanPropertyDefinition beanPropertyDefinition,
+      TypeResolver resolver,
+      DocumentationType documentationType) {
 
     this.builder = builder;
     this.resolver = resolver;
