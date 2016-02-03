@@ -714,6 +714,9 @@ This config class must then be defined in your xml application context.</p>
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="comment">&lt;!-- Required so springfox can access spring's RequestMappingHandlerMapping  --&gt;</span>
 <span class="tag">&lt;mvc:annotation-driven</span><span class="tag">/&gt;</span>
 
+<span class="comment">&lt;!-- Required to enable Spring post processing on @Configuration classes. --&gt;</span>
+<span class="tag">&lt;context:annotation-config</span><span class="tag">/&gt;</span>
+
 <span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.yourapp.configuration.MySwaggerConfig</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span></code></pre>
 </div>
 </div>
@@ -1036,7 +1039,7 @@ in the demo application.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-02-03 14:57:53 UTC
+Last updated 2016-02-03 21:46:53 UTC
 </div>
 </div>
 </body>
