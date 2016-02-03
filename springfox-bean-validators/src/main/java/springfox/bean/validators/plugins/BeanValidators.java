@@ -18,7 +18,9 @@
  */
 package springfox.bean.validators.plugins;
 
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import org.springframework.core.Ordered;
@@ -41,14 +43,8 @@ public class BeanValidators {
     Optional<BeanPropertyDefinition> propertyDefinition = context.getBeanPropertyDefinition();
     Optional<T> notNull = Optional.absent();
     if (propertyDefinition.isPresent()) {
-      notNull = FluentIterable
-          .from(propertyDefinition.get().getGetter().annotations())
-          .filter(annotationType)
-          .first()
-          .or(FluentIterable
-              .from(propertyDefinition.get().getField().annotations())
-              .filter(annotationType)
-              .first());
+      notNull = annotationFrom(propertyDefinition.get().getGetter(), annotationType)
+                .or(annotationFrom(propertyDefinition.get().getField(), annotationType));
     }
     return notNull;
   }
@@ -61,6 +57,21 @@ public class BeanValidators {
     Optional<T> notNull = Optional.absent();
     if (annotatedElement.isPresent()) {
       notNull = Optional.fromNullable(annotatedElement.get().getAnnotation(annotationType));
+    }
+    return notNull;
+  }
+
+  @VisibleForTesting
+  static <T extends Annotation> Optional<T> annotationFrom(
+      AnnotatedMember nullableMember,
+      Class<T> annotationType) {
+
+    Optional<AnnotatedMember> member = Optional.fromNullable(nullableMember);
+    Optional<T> notNull = Optional.absent();
+    if (member.isPresent()) {
+      notNull = FluentIterable.from(member.get().annotations())
+          .filter(annotationType)
+          .first();
     }
     return notNull;
   }
