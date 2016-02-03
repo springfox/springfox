@@ -1,3 +1,4 @@
+springfox.bean.validators.configuration
 springfox.bean.validators.plugins
 springfox.documentation
 springfox.documentation.annotations
