@@ -62,20 +62,16 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   private AllowableValues createAllowableValuesFromSizeForStrings(Size size) {
-    AllowableRangeValues range = null;
     LOG.debug("@Size detected: adding MinLength/MaxLength to field");
-
-    if (size.min() > 0 && size.max() < Integer.MAX_VALUE) {
-      range = new AllowableRangeValues(Integer.toString(size.min()), Integer.toString(size.max()));
-    } else if (size.min() > 0) {
-      LOG.debug("@Size min detected: adding AllowableRangeValues to field");
-      range = new AllowableRangeValues(Integer.toString(size.min()), Integer.toString(Integer.MAX_VALUE));
-    } else if (size.max() < Integer.MAX_VALUE) {
-      LOG.debug("@Size max detected: adding AllowableRangeValues to field");
-      range = new AllowableRangeValues(Integer.toString(0), Integer.toString(size.max()));
-    }
-    return range;
+    return new AllowableRangeValues(minValue(size), maxValue(size));
   }
 
+  private String minValue(Size size) {
+    return String.valueOf(Math.max(size.min(), 0));
+  }
+
+  private String maxValue(Size size) {
+    return String.valueOf(Math.max(0, Math.min(size.max(), Integer.MAX_VALUE)));
+  }
 
 }
