@@ -155,6 +155,53 @@ override the default behavior.
 
 There are plenty of more options to configure the `Docket`. This should provide a good start.
 
+===== Support for JSR-303
+In version greater than 2.3.2, support for bean validation annotations was added, specifically for @NotNull, @Min,
+@Max, and @Size.
+
+In order to use it
+
+<1> add the `springfox-bean-validators` dependency.
+
+====== Gradle
+[source,groovy]
+[subs="verbatim,attributes"]
+----
+dependencies {
+    compile "io.springfox:springfox-bean-validators:2.3.2+"
+}
+----
+
+====== Maven
+[source,xml]
+[subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-bean-validators</artifactId>
+    <version>2.3.2+</version>
+</dependency>
+----
+
+<2> Import the configuration from the `springfox-bean-validators` module as shown below
+
+====== java config
+[source,java]
+[subs="verbatim,attributes"]
+----
+//For java config
+@Import({ ... springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class, ...})
+----
+
+====== xml config
+Import the bean in your xml configuration by defining a bean of the following type
+
+[source,xml]
+[subs="verbatim,attributes"]
+----
+<bean class="springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration" />
+----
+
 ===== Swagger UI
 The `springfox-swagger-ui` http://www.webjars.org/[web jar] ships with https://github.com/swagger-api/swagger-ui[Swagger UI]. To include it in a standard
 Spring Boot application you can add the dependency as follows:
