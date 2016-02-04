@@ -572,7 +572,6 @@
           "parameters": [
             {
               "allowMultiple": true,
-              "defaultValue": "",
               "description": "files",
               "name": "files",
               "paramType": "form",
@@ -628,7 +627,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "example",
               "name": "body",
               "paramType": "body",
@@ -680,7 +678,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "input",
               "name": "body",
               "paramType": "body",
@@ -732,7 +729,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "input",
               "name": "body",
               "paramType": "body",
@@ -785,7 +781,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "localDate",
               "name": "body",
               "paramType": "body",
@@ -1119,7 +1114,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "model",
               "name": "body",
               "paramType": "body",
@@ -1176,7 +1170,6 @@
                 "ONE",
                 "TWO"
               ],
-              "defaultValue": "",
               "description": "enumType",
               "name": "body",
               "paramType": "body",
@@ -1228,7 +1221,6 @@
           "parameters": [
             {
               "allowMultiple": true,
-              "defaultValue": "",
               "description": "enumType",
               "name": "body",
               "paramType": "body",
@@ -1283,7 +1275,6 @@
               "allowMultiple": false,
               "maximum": "5",
               "minimum": "1",
-              "defaultValue": "",
               "description": "ID of pet that needs to be fetched",
               "name": "petId",
               "paramType": "path",

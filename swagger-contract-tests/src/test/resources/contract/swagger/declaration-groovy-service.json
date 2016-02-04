@@ -57,7 +57,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "model",
               "name": "body",
               "paramType": "body",

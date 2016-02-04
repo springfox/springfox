@@ -29,7 +29,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "ID of business",
               "name": "otherId",
               "paramType": "path",
@@ -82,7 +81,6 @@
                 "PRODUCT",
                 "SERVICE"
               ],
-              "defaultValue": "",
               "description": "types",
               "name": "types",
               "paramType": "query",
@@ -182,7 +180,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "ID of business",
               "name": "businessId",
               "paramType": "path",
@@ -240,7 +237,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "businessId",
               "name": "businessId",
               "paramType": "path",
@@ -293,7 +289,6 @@
                 "PRODUCT",
                 "SERVICE"
               ],
-              "defaultValue": "",
               "description": "business",
               "name": "body",
               "paramType": "body",
@@ -347,7 +342,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "businessId",
               "name": "businessId",
               "paramType": "path",

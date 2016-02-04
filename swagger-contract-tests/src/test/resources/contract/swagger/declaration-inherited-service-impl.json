@@ -25,7 +25,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "parameter",
               "name": "body",
               "paramType": "body",

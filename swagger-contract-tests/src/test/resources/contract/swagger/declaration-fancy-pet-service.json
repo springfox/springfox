@@ -25,7 +25,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "pet",
               "name": "body",
               "paramType": "body",
@@ -77,7 +76,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "object",
               "name": "body",
               "paramType": "body",
@@ -131,7 +129,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "object",
               "name": "body",
               "paramType": "body",
@@ -140,7 +137,6 @@
             },
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "someId",
               "name": "someId",
               "paramType": "path",

@@ -26,7 +26,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "Pet object that needs to be added to the store",
               "name": "body",
               "paramType": "body",
@@ -82,7 +81,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "Pet object that needs to be added to the store",
               "name": "body",
               "paramType": "body",
@@ -185,7 +183,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "name",
               "name": "name",
               "paramType": "path",
@@ -241,7 +238,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "someInput",
               "name": "body",
               "paramType": "body",
@@ -354,7 +350,6 @@
           "parameters": [
             {
               "allowMultiple": true,
-              "defaultValue": "",
               "description": "Tags to filter by",
               "name": "tags",
               "paramType": "query",
@@ -451,7 +446,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "pet",
               "name": "body",
               "paramType": "body",
@@ -507,7 +501,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "someInput",
               "name": "body",
               "paramType": "body",
@@ -560,7 +553,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "someInput",
               "name": "body",
               "paramType": "body",
@@ -613,7 +605,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "someInput",
               "name": "body",
               "paramType": "body",
@@ -666,7 +657,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "a",
               "name": "a",
               "paramType": "path",
@@ -675,7 +665,6 @@
             },
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "b",
               "name": "b",
               "paramType": "path",
@@ -723,7 +712,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "name",
               "name": "name",
               "paramType": "path",
@@ -779,7 +767,6 @@
               "allowMultiple": false,
               "maximum": "5",
               "minimum": "1",
-              "defaultValue": "",
               "description": "ID of pet that needs to be fetched",
               "name": "petId",
               "paramType": "path",
@@ -828,7 +815,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "petId",
               "name": "petId",
               "paramType": "path",
@@ -837,7 +823,6 @@
             },
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "pic",
               "name": "pic",
               "paramType": "form",
@@ -889,7 +874,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "petId",
               "name": "petId",
               "paramType": "path",
@@ -898,7 +882,6 @@
             },
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "picId",
               "name": "picId",
               "paramType": "path",

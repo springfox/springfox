@@ -25,7 +25,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "toCreate",
               "name": "body",
               "paramType": "body",
@@ -76,7 +75,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "id",
               "name": "id",
               "paramType": "path",
@@ -130,7 +128,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "id",
               "name": "id",
               "paramType": "path",
