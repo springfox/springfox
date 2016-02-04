@@ -43,7 +43,7 @@ public class ParameterDefaultReader implements ParameterBuilderPlugin {
     String defaultValue = findAnnotatedDefaultValue(methodParameter);
     boolean isSkip = ValueConstants.DEFAULT_NONE.equals(defaultValue);
     if (!isSkip) {
-      context.parameterBuilder().defaultValue(nullToEmpty(defaultValue));
+      context.parameterBuilder().defaultValue(defaultValue);
     }
   }
 
