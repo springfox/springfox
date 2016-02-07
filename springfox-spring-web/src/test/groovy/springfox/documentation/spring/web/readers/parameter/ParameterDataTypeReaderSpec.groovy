@@ -75,8 +75,13 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
 
     when:
       sut.apply(parameterContext)
+
     then:
-      parameterContext.parameterBuilder().build().modelRef.type == expected
+      def modelRef = parameterContext.parameterBuilder().build().modelRef
+      modelRef.type == expected
+      if ("object".equals(expected)) {
+        assert modelRef.itemType == "string"
+      }
     where:
       paramType                   | annotations          | expected
       char                        | []                   | "string"
@@ -112,6 +117,27 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       Business.BusinessType       | [Mock(RequestParam)] | "string"
       Business.BusinessType[]     | [Mock(PathVariable)] | "string"
       Business.BusinessType[]     | [Mock(RequestParam)] | "Array"
+  }
+
+  def "RequestParam Map types"() {
+    given:
+      ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter,
+          new TypeResolver().resolve(Map, String, String))
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      ParameterContext parameterContext =
+          new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
+              Mock(OperationContext))
+      methodParameter.getParameterType() >> Map
+      methodParameter.getParameterAnnotations() >> [Mock(RequestParam)]
+
+    when:
+      sut.apply(parameterContext)
+
+    then:
+      def modelRef = parameterContext.parameterBuilder().build().modelRef
+      modelRef.type == ""
+      modelRef.isMap()
+      modelRef.itemType == "string"
   }
 
   def "Container Parameter types"() {
