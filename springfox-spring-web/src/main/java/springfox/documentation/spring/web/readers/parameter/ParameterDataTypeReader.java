@@ -40,6 +40,7 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import java.lang.annotation.Annotation;
 
 import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
@@ -73,6 +74,8 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
       if (annotation instanceof PathVariable && treatAsAString(parameterType)) {
         parameterType = resolver.resolve(String.class);
         modelRef = new ModelRef("string");
+      } else if (annotation instanceof RequestParam && isMapType(parameterType)) {
+        modelRef = new ModelRef("", new ModelRef("string"), true);
       } else if (annotation instanceof RequestParam && treatRequestParamAsString(parameterType)) {
         parameterType = resolver.resolve(String.class);
         modelRef = new ModelRef("string");
