@@ -129,7 +129,9 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
     when:
       def mapped = sut.mapApiInfo(apiInfo)
     then:
-      mapped.contact.name == apiInfo.contact
+      mapped.contact.name == apiInfo.contact.name
+      mapped.contact.email == apiInfo.contact.name
+      mapped.contact.url == apiInfo.contact.url
       mapped.description  == apiInfo.description
       mapped.license.name == apiInfo.license
       mapped.license.url == apiInfo.licenseUrl

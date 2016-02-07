@@ -20,6 +20,7 @@
 package springfox.documentation.builders
 
 import spock.lang.Specification
+import springfox.documentation.service.Contact
 
 class ApiInfoBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
@@ -33,13 +34,13 @@ class ApiInfoBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod       | value                   | property
-      'version'           | '1.0'                   | 'version'
-      'title'             | 'title'                 | 'title'
-      'termsOfServiceUrl' | 'urn:tos'               | 'termsOfServiceUrl'
-      'description'       | 'test'                  | 'description'
-      'contact'           | 'Contact'               | 'contact'
-      'license'           | 'license'               | 'license'
-      'licenseUrl'        | 'urn:license'           | 'licenseUrl'
+      builderMethod       | value                      | property
+      'version'           | '1.0'                      | 'version'
+      'title'             | 'title'                    | 'title'
+      'termsOfServiceUrl' | 'urn:tos'                  | 'termsOfServiceUrl'
+      'description'       | 'test'                     | 'description'
+      'contact'           | new Contact("a", "b", "c") | 'contact'
+      'license'           | 'license'                  | 'license'
+      'licenseUrl'        | 'urn:license'              | 'licenseUrl'
   }
 }

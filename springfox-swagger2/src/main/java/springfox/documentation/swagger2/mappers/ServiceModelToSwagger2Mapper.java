@@ -84,6 +84,8 @@ public abstract class ServiceModelToSwagger2Mapper {
   })
   protected abstract Info mapApiInfo(ApiInfo from);
 
+  protected abstract Contact map(springfox.documentation.service.Contact from);
+
   @Mappings({
       @Mapping(target = "description", source = "notes"),
       @Mapping(target = "operationId", source = "uniqueId"),
@@ -103,10 +105,6 @@ public abstract class ServiceModelToSwagger2Mapper {
 
   protected List<Scheme> mapSchemes(List<String> from) {
     return from(from).transform(toScheme()).toList();
-  }
-
-  protected Contact mapContact(String contact) {
-    return new Contact().name(contact);
   }
 
   protected List<Map<String, List<String>>> mapAuthorizations(
