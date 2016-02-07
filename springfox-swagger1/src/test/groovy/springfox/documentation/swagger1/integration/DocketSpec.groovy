@@ -18,6 +18,7 @@
  */
 
 package springfox.documentation.swagger1.integration
+
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
@@ -54,7 +55,11 @@ class DocketSpec extends DocumentationContextSpec {
       pluginContext.apiInfo.getTitle() == "Api Documentation"
       pluginContext.apiInfo.getDescription() == "Api Documentation"
       pluginContext.apiInfo.getTermsOfServiceUrl() == 'urn:tos'
-      pluginContext.apiInfo.getContact() == 'Contact Email'
+
+      def contact = pluginContext.apiInfo.getContact()
+      contact.name == ''
+      contact.email == ''
+      contact.url == ''
       pluginContext.apiInfo.getLicense() == 'Apache 2.0'
       pluginContext.apiInfo.getLicenseUrl() == "http://www.apache.org/licenses/LICENSE-2.0"
       pluginContext.apiInfo.version == "1.0"

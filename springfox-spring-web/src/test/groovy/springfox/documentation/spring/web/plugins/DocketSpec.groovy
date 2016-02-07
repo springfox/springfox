@@ -55,7 +55,7 @@ class DocketSpec extends DocumentationContextSpec {
       pluginContext.apiInfo.getTitle() == "Api Documentation"
       pluginContext.apiInfo.getDescription() == "Api Documentation"
       pluginContext.apiInfo.getTermsOfServiceUrl() == 'urn:tos'
-      pluginContext.apiInfo.getContact() == 'Contact Email'
+      pluginContext.apiInfo.getContact() == ApiInfo.DEFAULT_CONTACT
       pluginContext.apiInfo.getLicense() == 'Apache 2.0'
       pluginContext.apiInfo.getLicenseUrl() ==  "http://www.apache.org/licenses/LICENSE-2.0"
       pluginContext.apiInfo.version == "1.0"

@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger1.mappers;
 
+import io.swagger.models.Contact;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -41,7 +42,12 @@ public interface ServiceModelToSwaggerMapper {
   //Api related
   ApiDescription toSwaggerApiDescription(springfox.documentation.service.ApiDescription from);
 
+  @Mappings({
+      @Mapping(target = "contact", source = "contact.name")
+  })
   ApiInfo toSwaggerApiInfo(springfox.documentation.service.ApiInfo from);
+
+  Contact map(springfox.documentation.service.Contact from);
 
   @Mappings({
           @Mapping(target = "responseModel", source = "responseModel", qualifiedBy = DataTypeMapper.ResponseTypeName

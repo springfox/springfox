@@ -178,7 +178,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mapped.apiVersion == built.apiVersion
       mapped.authorizations == built.securitySchemes
       mapped.swaggerVersion == "1.2"
-      mapped.info.contact == built.info.contact
+      mapped.info.contact == built.info.contact.name
       mapped.info.description == built.info.description
       mapped.info.license == built.info.license
       mapped.info.licenseUrl == built.info.licenseUrl
@@ -212,7 +212,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mapped.apiVersion == built.apiVersion
       mapped.authorizations == built.securitySchemes
       mapped.swaggerVersion == "1.2"
-      mapped.info.contact == built.info.contact
+      mapped.info.contact == built.info.contact.name
       mapped.info.description == built.info.description
       mapped.info.license == built.info.license
       mapped.info.licenseUrl == built.info.licenseUrl
