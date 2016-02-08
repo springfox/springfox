@@ -160,6 +160,7 @@ class DocketSpec extends DocumentationContextSpec {
       'securityContexts'| validContexts()                                 | 'securityContexts'
       'groupName'       | 'someGroup'                                    | 'groupName'
       'apiInfo'         | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
+      'apiInfo'         | ApiInfo.DEFAULT                                | 'apiInfo'
   }
 
   def validContexts() {

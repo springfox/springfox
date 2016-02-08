@@ -33,11 +33,11 @@ public class ApiInfo {
   private final String licenseUrl;
   private final Contact contact;
 
-  @Deprecated
   /**
    * Deprecated in favor of richer contact object
    * @deprecated @since 2.4.0
    */
+  @Deprecated
   public ApiInfo(
       String title,
       String description,
