@@ -33,6 +33,7 @@ import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
+import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
@@ -81,6 +82,8 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       modelRef.type == expected
       if ("object".equals(expected)) {
         assert modelRef.itemType == "string"
+        def allowable = modelRef.allowableValues as AllowableListValues
+        assert allowable.values.size() == 2
       }
     where:
       paramType                   | annotations          | expected

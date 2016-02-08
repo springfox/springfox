@@ -53,8 +53,8 @@ public class SerializableParameterFactories {
   }
 
   static Optional<io.swagger.models.parameters.Parameter> create(Parameter source) {
-    SerializableParameterFactory factory = forMap(SerializableParameterFactories.factory, new
-        NullSerializableParameterFactory())
+    SerializableParameterFactory factory = forMap(SerializableParameterFactories.factory,
+        new NullSerializableParameterFactory())
         .apply(source.getParamType().toLowerCase());
 
     SerializableParameter toReturn = factory.create(source);
@@ -70,6 +70,7 @@ public class SerializableParameterFactories {
       toReturn.setCollectionFormat("multi");
       toReturn.setType("array");
       toReturn.setItems(itemTypeProperty(paramModel.itemModel().get()));
+      maybeAddAllowableValues(toReturn, paramModel);
     } else {
       //TODO: remove this downcast when swagger-core fixes its problem
       ((AbstractSerializableParameter) toReturn).setDefaultValue(source.getDefaultValue());
@@ -77,11 +78,17 @@ public class SerializableParameterFactories {
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());
     }
-    maybeAddAlllowableValues(source, toReturn);
+    maybeAddAllowableValues(toReturn, source);
     return Optional.of((io.swagger.models.parameters.Parameter) toReturn);
   }
 
-  private static void maybeAddAlllowableValues(Parameter source, SerializableParameter toReturn) {
+  private static void maybeAddAllowableValues(SerializableParameter toReturn, ModelReference paramModel) {
+    if (paramModel.getAllowableValues() instanceof AllowableListValues) {
+      toReturn.setEnum(((AllowableListValues) paramModel.getAllowableValues()).getValues());
+    }
+  }
+
+  private static void maybeAddAllowableValues(SerializableParameter toReturn, Parameter source) {
     if (source.getAllowableValues() instanceof AllowableListValues) {
       AllowableListValues allowableValues = (AllowableListValues) source.getAllowableValues();
       toReturn.setEnum(allowableValues.getValues());

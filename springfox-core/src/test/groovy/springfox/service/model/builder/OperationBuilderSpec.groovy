@@ -27,6 +27,7 @@ import springfox.documentation.builders.ResponseMessageBuilder
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.ResponseMessage
 import springfox.documentation.service.SecurityReference
+import springfox.documentation.service.VendorExtension
 
 import static com.google.common.collect.Sets.*
 
@@ -87,20 +88,34 @@ class OperationBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod     | value                   | property
-      'method'          | HttpMethod.GET          | 'method'
-      'summary'         | 'method1 summary'       | 'summary'
-      'notes'           | 'method1 notes'         | 'notes'
-      'responseModel'    | new ModelRef('string') | 'responseModel'
-      'deprecated'      | 'deprecated'            | 'deprecated'
-      'uniqueId'        | 'method1'               | 'uniqueId'
-      'produces'        | newHashSet('app/json')  | 'produces'
-      'consumes'        | newHashSet('app/json')  | 'consumes'
-      'protocols'       | newHashSet('https')     | 'protocol'
-      'tags'            | newHashSet('tag')       | 'tags'
-      'position'        | 1                       | 'position'
-      'hidden'          | true                          | 'hidden'
-      'parameters'      | [new ParameterBuilder().name("p").build()]       | 'parameters'
+      builderMethod     | value                                      | property
+      'method'          | HttpMethod.GET                             | 'method'
+      'summary'         | 'method1 summary'                          | 'summary'
+      'notes'           | 'method1 notes'                            | 'notes'
+      'responseModel'   | new ModelRef('string')                     | 'responseModel'
+      'deprecated'      | 'deprecated'                               | 'deprecated'
+      'uniqueId'        | 'method1'                                  | 'uniqueId'
+      'produces'        | newHashSet('app/json')                     | 'produces'
+      'consumes'        | newHashSet('app/json')                     | 'consumes'
+      'protocols'       | newHashSet('https')                        | 'protocol'
+      'tags'            | newHashSet('tag')                          | 'tags'
+      'position'        | 1                                          | 'position'
+      'hidden'          | true                                       | 'hidden'
+      'extensions'      | [Mock(VendorExtension)]                    | 'vendorExtensions'
+      'hidden'          | true                                       | 'hidden'
+      'parameters'      | [new ParameterBuilder().name("p").build()] | 'parameters'
+  }
+
+  def "Unique id takes into account the codegen method name stem"() {
+    given:
+      def sut = new OperationBuilder(nameGenerator)
+    when:
+      nameGenerator.startingWith("abc") >> "abcmethod1"
+      sut.codegenMethodNameStem("abc")
+    and:
+      def built = sut.build()
+    then:
+      built.uniqueId == "abcmethod1"
   }
 
   def "Setting builder properties to null values preserves existing values"() {
