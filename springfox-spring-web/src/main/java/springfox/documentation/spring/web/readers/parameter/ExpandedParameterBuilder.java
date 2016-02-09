@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableListValues;
@@ -75,9 +76,15 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     ResolvedType resolved = resolver.resolve(context.getField().getType());
     if (isCollection) {
       resolved = fieldType(context).or(resolved);
-      String itemTypeName = typeNameFor(collectionElementType(resolved).getErasedType());
+      ResolvedType elementType = collectionElementType(resolved);
+      String itemTypeName = typeNameFor(elementType.getErasedType());
+      AllowableValues itemAllowables = null;
+      if (elementType.getErasedType().isEnum()) {
+        itemAllowables = Enums.allowableValues(elementType.getErasedType());
+        itemTypeName = "string";
+      }
       typeName = containerType(resolved);
-      itemModel = new ModelRef(itemTypeName);
+      itemModel = new ModelRef(itemTypeName, itemAllowables);
     }
     context.getParameterBuilder()
         .name(name)

@@ -111,7 +111,7 @@ public class ModelAttributeParameterExpander {
   private Predicate<ModelAttributeField> simpleType() {
     return or(
             or(belongsToJavaPackage(),
-                    or(isCollection(), isMap())),
+              or(isCollection(), isMap())),
             isEnum());
   }
 

@@ -69,10 +69,12 @@ public class SerializableParameterFactories {
     if (paramModel.isCollection()) {
       toReturn.setCollectionFormat("multi");
       toReturn.setType("array");
-      toReturn.setItems(itemTypeProperty(paramModel.itemModel().get()));
-      maybeAddAllowableValues(toReturn, paramModel);
+      Property itemProperty = itemTypeProperty(paramModel.itemModel().get());
+      toReturn.setItems(itemProperty);
+      //TODO: swagger-core enable this when Property allows enums to be set
+//      maybeAddAllowableValues(itemProperty, paramModel);
     } else {
-      //TODO: remove this downcast when swagger-core fixes its problem
+      //TODO: swagger-core remove this downcast when swagger-core fixes its problem
       ((AbstractSerializableParameter) toReturn).setDefaultValue(source.getDefaultValue());
       Property property = property(paramModel.getType());
       toReturn.setType(property.getType());
@@ -82,11 +84,12 @@ public class SerializableParameterFactories {
     return Optional.of((io.swagger.models.parameters.Parameter) toReturn);
   }
 
-  private static void maybeAddAllowableValues(SerializableParameter toReturn, ModelReference paramModel) {
-    if (paramModel.getAllowableValues() instanceof AllowableListValues) {
-      toReturn.setEnum(((AllowableListValues) paramModel.getAllowableValues()).getValues());
-    }
-  }
+  //TODO: swagger-core enable this when Property allows enums to be set
+//  private static void maybeAddAllowableValues(SerializableParameter toReturn, ModelReference paramModel) {
+//    if (paramModel.getAllowableValues() instanceof AllowableListValues) {
+//      toReturn.setEnum(((AllowableListValues) paramModel.getAllowableValues()).getValues());
+//    }
+//  }
 
   private static void maybeAddAllowableValues(SerializableParameter toReturn, Parameter source) {
     if (source.getAllowableValues() instanceof AllowableListValues) {

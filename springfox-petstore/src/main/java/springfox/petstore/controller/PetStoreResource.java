@@ -34,7 +34,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import springfox.petstore.model.Order;
 import springfox.petstore.model.Pet;
 import springfox.petstore.repository.MapBackedRepository;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import static org.springframework.http.MediaType.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -96,12 +95,12 @@ public class PetStoreResource {
   @RequestMapping(value="search", method = RequestMethod.GET, produces = "application/json", params = "x=TX")
   @ResponseStatus(value = HttpStatus.OK)
   public ResponseEntity<Pet> getPetInTx() {
-    throw new NotImplementedException();
+    throw new UnsupportedOperationException();
   }
 
   @RequestMapping(value="search", method = RequestMethod.GET, produces = "application/json", params = "x=CA")
   @ResponseStatus(value = HttpStatus.OK)
   public ResponseEntity<Pet> getPetInCA() {
-    throw new NotImplementedException();
+    throw new UnsupportedOperationException();
   }
 }
