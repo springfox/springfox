@@ -53,7 +53,7 @@ import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
-@Mapper(uses = { EnumMapper.class })
+@Mapper
 public abstract class ModelMapper {
   public Map<String, Model> mapModels(Map<String, springfox.documentation.schema.Model> from) {
     if (from == null) {
