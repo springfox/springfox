@@ -118,7 +118,6 @@ public abstract class ServiceModelToSwagger2Mapper {
     return security;
   }
 
-
   protected Map<String, Response> mapResponseMessages(Set<ResponseMessage> from) {
     HashMap<String, Response> responses = newHashMap();
     for (ResponseMessage responseMessage : from) {

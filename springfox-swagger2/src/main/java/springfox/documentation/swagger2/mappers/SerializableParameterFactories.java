@@ -30,12 +30,12 @@ import io.swagger.models.parameters.QueryParameter;
 import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.models.properties.Property;
 import springfox.documentation.schema.ModelReference;
-import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.Parameter;
 
 import java.util.Map;
 
 import static com.google.common.base.Functions.*;
+import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
 public class SerializableParameterFactories {
@@ -66,13 +66,15 @@ public class SerializableParameterFactories {
     toReturn.setDescription(source.getDescription());
     toReturn.setAccess(source.getParamAccess());
     toReturn.setRequired(source.isRequired());
+    maybeAddEnumValues(toReturn, source);
     if (paramModel.isCollection()) {
       toReturn.setCollectionFormat("multi");
       toReturn.setType("array");
-      Property itemProperty = itemTypeProperty(paramModel.itemModel().get());
+      ModelReference paramItemModelRef = paramModel.itemModel().get();
+      Property itemProperty
+          = maybeAddEnumValues(itemTypeProperty(paramItemModelRef), paramItemModelRef.getAllowableValues());
       toReturn.setItems(itemProperty);
-      //TODO: swagger-core enable this when Property allows enums to be set
-//      maybeAddAllowableValues(itemProperty, paramModel);
+      maybeAddEnumValues(toReturn, paramItemModelRef);
     } else {
       //TODO: swagger-core remove this downcast when swagger-core fixes its problem
       ((AbstractSerializableParameter) toReturn).setDefaultValue(source.getDefaultValue());
@@ -80,23 +82,9 @@ public class SerializableParameterFactories {
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());
     }
-    maybeAddAllowableValues(toReturn, source);
     return Optional.of((io.swagger.models.parameters.Parameter) toReturn);
   }
 
-  //TODO: swagger-core enable this when Property allows enums to be set
-//  private static void maybeAddAllowableValues(SerializableParameter toReturn, ModelReference paramModel) {
-//    if (paramModel.getAllowableValues() instanceof AllowableListValues) {
-//      toReturn.setEnum(((AllowableListValues) paramModel.getAllowableValues()).getValues());
-//    }
-//  }
-
-  private static void maybeAddAllowableValues(SerializableParameter toReturn, Parameter source) {
-    if (source.getAllowableValues() instanceof AllowableListValues) {
-      AllowableListValues allowableValues = (AllowableListValues) source.getAllowableValues();
-      toReturn.setEnum(allowableValues.getValues());
-    }
-  }
 
   static class CookieSerializableParameterFactory implements SerializableParameterFactory {
     @Override

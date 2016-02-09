@@ -81,13 +81,17 @@
             "required": true,
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "PRODUCT",
+                "SERVICE"
+              ]
             },
             "collectionFormat": "multi",
             "enum": [
               "PRODUCT",
               "SERVICE"
-            ],
+            ]
           }
         ],
         "responses": {

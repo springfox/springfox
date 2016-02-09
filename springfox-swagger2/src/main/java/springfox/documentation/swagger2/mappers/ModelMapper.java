@@ -37,7 +37,6 @@ import io.swagger.models.properties.StringProperty;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelReference;
-import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
@@ -51,9 +50,10 @@ import java.util.TreeMap;
 import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
-@Mapper
+@Mapper(uses = { EnumMapper.class })
 public abstract class ModelMapper {
   public Map<String, Model> mapModels(Map<String, springfox.documentation.schema.Model> from) {
     if (from == null) {
@@ -138,11 +138,11 @@ public abstract class ModelMapper {
   public Property mapProperty(ModelProperty source) {
     Property property = modelRefToProperty(source.getModelRef());
 
-    addEnumValues(property, source.getAllowableValues());
+    maybeAddEnumValues(property, source.getAllowableValues());
 
     if (property instanceof ArrayProperty) {
       ArrayProperty arrayProperty = (ArrayProperty) property;
-      addEnumValues(arrayProperty.getItems(), source.getAllowableValues());
+      maybeAddEnumValues(arrayProperty.getItems(), source.getAllowableValues());
     }
 
     if (property instanceof AbstractNumericProperty) {
@@ -173,14 +173,6 @@ public abstract class ModelMapper {
     return property;
   }
 
-  private static Property addEnumValues(Property property, AllowableValues allowableValues) {
-    if (property instanceof StringProperty && allowableValues instanceof AllowableListValues) {
-      StringProperty stringProperty = (StringProperty) property;
-      AllowableListValues listValues = (AllowableListValues) allowableValues;
-      stringProperty.setEnum(listValues.getValues());
-    }
-    return property;
-  }
 
   static Property modelRefToProperty(ModelReference modelRef) {
     if (modelRef == null || "void".equalsIgnoreCase(modelRef.getType())) {
@@ -189,7 +181,7 @@ public abstract class ModelMapper {
     Property responseProperty;
     if (modelRef.isCollection()) {
       responseProperty = new ArrayProperty(
-          addEnumValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
+          maybeAddEnumValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
     } else if (modelRef.isMap()) {
       String itemType = modelRef.getItemType();
       responseProperty = new MapProperty(property(itemType));
@@ -197,7 +189,7 @@ public abstract class ModelMapper {
       responseProperty = property(modelRef.getType());
     }
 
-    addEnumValues(responseProperty, modelRef.getAllowableValues());
+    maybeAddEnumValues(responseProperty, modelRef.getAllowableValues());
 
     return responseProperty;
   }

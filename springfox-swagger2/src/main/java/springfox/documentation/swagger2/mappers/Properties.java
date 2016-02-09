@@ -50,25 +50,26 @@ import static com.google.common.base.Functions.*;
 import static com.google.common.base.Strings.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddEnumValues;
 
 class Properties {
   private static final Map<String, Function<String, ? extends Property>> typeFactory
       = ImmutableMap.<String, Function<String, ? extends Property>>builder()
-          .put("int", newInstanceOf(IntegerProperty.class))
-          .put("long", newInstanceOf(LongProperty.class))
-          .put("float", newInstanceOf(FloatProperty.class))
-          .put("double", newInstanceOf(DoubleProperty.class))
-          .put("string", newInstanceOf(StringProperty.class))
-          .put("boolean", newInstanceOf(BooleanProperty.class))
-          .put("date", newInstanceOf(DateProperty.class))
-          .put("date-time", newInstanceOf(DateTimeProperty.class))
-          .put("bigdecimal", newInstanceOf(DecimalProperty.class))
-          .put("biginteger", newInstanceOf(DecimalProperty.class))
-          .put("uuid", newInstanceOf(UUIDProperty.class))
-          .put("object", newInstanceOf(ObjectProperty.class))
-          .put("byte", bytePropertyFactory())
-          .put("file", filePropertyFactory())
-        .build();
+      .put("int", newInstanceOf(IntegerProperty.class))
+      .put("long", newInstanceOf(LongProperty.class))
+      .put("float", newInstanceOf(FloatProperty.class))
+      .put("double", newInstanceOf(DoubleProperty.class))
+      .put("string", newInstanceOf(StringProperty.class))
+      .put("boolean", newInstanceOf(BooleanProperty.class))
+      .put("date", newInstanceOf(DateProperty.class))
+      .put("date-time", newInstanceOf(DateTimeProperty.class))
+      .put("bigdecimal", newInstanceOf(DecimalProperty.class))
+      .put("biginteger", newInstanceOf(DecimalProperty.class))
+      .put("uuid", newInstanceOf(UUIDProperty.class))
+      .put("object", newInstanceOf(ObjectProperty.class))
+      .put("byte", bytePropertyFactory())
+      .put("file", filePropertyFactory())
+      .build();
 
   private Properties() {
     throw new UnsupportedOperationException();
@@ -83,7 +84,8 @@ class Properties {
 
   public static Property itemTypeProperty(ModelReference paramModel) {
     if (paramModel.isCollection()) {
-      return new ArrayProperty(itemTypeProperty(paramModel.itemModel().get()));
+      return new ArrayProperty(
+          maybeAddEnumValues(itemTypeProperty(paramModel.itemModel().get()), paramModel.getAllowableValues()));
     }
     return property(paramModel.getType());
   }
