@@ -70,7 +70,7 @@ class DocketSpec extends DocumentationContextSpec {
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
     when:
       plugin
-              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
+              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null, [] as Map)])
               .useDefaultResponseMessages(true)
               .configure(contextBuilder)
 
@@ -89,7 +89,7 @@ class DocketSpec extends DocumentationContextSpec {
   def "Swagger global response messages should not be used for a particular RequestMethod"() {
     when:
       new Docket(DocumentationType.SWAGGER_12)
-              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
+              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null, [] as Map)])
               .useDefaultResponseMessages(false)
               .configure(contextBuilder)
 

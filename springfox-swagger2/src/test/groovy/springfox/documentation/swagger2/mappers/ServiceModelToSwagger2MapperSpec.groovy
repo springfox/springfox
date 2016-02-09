@@ -1,4 +1,5 @@
 package springfox.documentation.swagger2.mappers
+
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.base.Functions

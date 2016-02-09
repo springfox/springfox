@@ -28,6 +28,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ResponseHeader;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -53,6 +54,10 @@ public class Annotations {
 
   public static Optional<ApiResponses> findApiResponsesAnnotations(Method annotated) {
     return fromNullable(findAnnotation(annotated, ApiResponses.class));
+  }
+
+  public static Optional<ResponseHeader> findResponseHeader(Method annotated) {
+    return fromNullable(findAnnotation(annotated, ResponseHeader.class));
   }
 
 

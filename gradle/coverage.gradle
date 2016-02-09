@@ -25,6 +25,7 @@ jacocoTestReport {
           'springfox/documentation/swagger2/web/HostNameProvider.*',
           'springfox/documentation/swagger1/mappers/*Impl.*',
           'springfox/documentation/swagger2/mappers/*Impl.*',
+          'springfox/documentation/swagger2/configuration/*.*',
           'springfox/bean/validators/configuration/*Configuration.*'
       ])
     })

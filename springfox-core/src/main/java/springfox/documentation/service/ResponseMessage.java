@@ -21,15 +21,23 @@ package springfox.documentation.service;
 
 import springfox.documentation.schema.ModelReference;
 
+import java.util.Map;
+
 public class ResponseMessage {
   private final int code;
   private final String message;
   private final ModelReference responseModel;
+  private final Map<String, ModelReference> headers;
 
-  public ResponseMessage(int code, String message, ModelReference responseModel) {
+  public ResponseMessage(
+      int code,
+      String message,
+      ModelReference responseModel,
+      Map<String, ModelReference> headers) {
     this.code = code;
     this.message = message;
     this.responseModel = responseModel;
+    this.headers = headers;
   }
 
   public int getCode() {
@@ -42,6 +50,10 @@ public class ResponseMessage {
 
   public ModelReference getResponseModel() {
     return responseModel;
+  }
+
+  public Map<String, ModelReference> getHeaders() {
+    return headers;
   }
 
   @Override

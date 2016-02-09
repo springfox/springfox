@@ -301,6 +301,7 @@ public class OperationBuilder {
             .code(each.getCode())
             .message(message)
             .responseModel(responseWithModel)
+            .headers(each.getHeaders())
             .build());
       } else {
         merged.add(each);

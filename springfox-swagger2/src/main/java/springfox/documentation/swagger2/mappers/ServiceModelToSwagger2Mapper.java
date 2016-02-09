@@ -129,10 +129,19 @@ public abstract class ServiceModelToSwagger2Mapper {
           .description(responseMessage.getMessage())
           .schema(responseProperty);
       response.setExamples(Maps.<String, Object>newHashMap());
-      response.setHeaders(Maps.<String, Property>newHashMap());
+      response.setHeaders(transformEntries(responseMessage.getHeaders(), toPropertyEntry()));
       responses.put(String.valueOf(responseMessage.getCode()), response);
     }
     return responses;
+  }
+
+  private EntryTransformer<String, ModelReference, Property> toPropertyEntry() {
+    return new EntryTransformer<String, ModelReference, Property>() {
+      @Override
+      public Property transformEntry(String key, ModelReference value) {
+        return modelRefToProperty(value);
+      }
+    };
   }
 
   protected Map<String, Path> mapApiListings(Multimap<String, ApiListing> apiListings) {
