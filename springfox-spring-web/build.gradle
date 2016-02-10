@@ -2,6 +2,17 @@ configurations {
   testArtifacts.extendsFrom testRuntime
 }
 
+ext {
+  limits = [
+      'instruction': 97,
+      'branch'     : 91,
+      'line'       : 96.5,
+      'complexity' : 92,
+      'method'     : 96,
+      'class'      : 100
+  ]
+}
+
 dependencies {
   compile libs.core
   compile libs.spring

@@ -10,15 +10,14 @@ artifacts {
   testArtifacts testJar
 }
 
-//TODO: Improve branch and complexity coverage
 ext {
   limits = [
       'instruction': 96,
-      'branch'     : 82,
-      'line'       : 96,
-      'complexity' : 84,
+      'branch'     : 84,
+      'line'       : 96.5,
+      'complexity' : 87,
       'method'     : 95,
-      'class'      : 97.5
+      'class'      : 100
   ]
 }
 

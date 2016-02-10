@@ -12,6 +12,17 @@ artifacts {
   testArtifacts testJar
 }
 
+ext {
+  limits = [
+      'instruction': 100,
+      'branch'     : 100,
+      'line'       : 100,
+      'complexity' : 100,
+      'method'     : 100,
+      'class'      : 100
+  ]
+}
+
 dependencies {
   compile libs.core
   compile libs.spring
