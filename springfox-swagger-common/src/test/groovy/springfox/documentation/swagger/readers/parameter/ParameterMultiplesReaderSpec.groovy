@@ -21,6 +21,7 @@ package springfox.documentation.swagger.readers.parameter
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.base.Optional
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import spock.lang.Unroll
@@ -33,10 +34,9 @@ import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.readers.parameter.ParameterMultiplesReader
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
+class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
   @Unroll
   def "param multiples for swagger reader"() {
     given:
@@ -50,22 +50,30 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
           context(), genericNamingStrategy, Mock(OperationContext))
 
     when:
-      def operationCommand = new ParameterMultiplesReader();
+      def operationCommand = stubbedParamBuilder(apiParamAnnotation);
       operationCommand.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().isAllowMultiple() == expected
     where:
-      apiParamAnnotation                        | paramType                       | expected
-      [allowMultiple: { -> true }] as ApiParam  | null                            | true
-      [allowMultiple: { -> false }] as ApiParam | String[].class                  | false
-      [allowMultiple: { -> false }] as ApiParam | DummyClass.BusinessType[].class | false
-      null                                      | String[].class                  | false
-      null                                      | List.class                      | false
-      null                                      | Collection.class                | false
-      null                                      | Set.class                       | false
-      null                                      | Vector.class                    | false
-      null                                      | Object[].class                  | false
-      null                                      | Integer.class                   | false
-      null                                      | Iterable.class                  | false
+      apiParamAnnotation                | paramType                       | expected
+      apiParamWithAllowMultiple(false)  | String[].class                  | false
+      apiParamWithAllowMultiple(false)  | DummyClass.BusinessType[].class | false
+      null                              | String[].class                  | false
+      null                              | List.class                      | false
+      null                              | Collection.class                | false
+      null                              | Set.class                       | false
+      null                              | Vector.class                    | false
+      null                              | Object[].class                  | false
+      null                              | Integer.class                   | false
+      null                              | Iterable.class                  | false
+  }
+
+  def stubbedParamBuilder(ApiParam apiParamAnnotation) {
+    new ApiParamParameterBuilder() {
+      @Override
+      def Optional<ApiParam> findApiParam(MethodParameter methodParameter) {
+        Optional.fromNullable(apiParamAnnotation)
+      }
+    }
   }
 }

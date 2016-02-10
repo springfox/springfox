@@ -19,6 +19,9 @@
 
 package springfox.documentation.swagger.readers.parameter;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import io.swagger.annotations.ApiParam;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
@@ -31,19 +34,48 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
-import java.lang.annotation.Annotation;
-
 import static com.google.common.base.Strings.*;
+import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
+import static springfox.documentation.swagger.readers.parameter.ParameterAnnotationReader.*;
 
-@Component("swaggerParameterAllowableReader")
+@Component("swaggerParameterDescriptionReader")
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
-public class ParameterAllowableReader implements ParameterBuilderPlugin {
+public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
 
   @Override
   public void apply(ParameterContext context) {
     MethodParameter methodParameter = context.methodParameter();
+    Optional<ApiParam> apiParam = findApiParam(methodParameter);
+    context.parameterBuilder()
+        .allowableValues(allowableValues(
+            methodParameter,
+            apiParam.transform(toAllowableValue()).or("")));
+    if (apiParam.isPresent()) {
+      context.parameterBuilder().name(emptyToNull(apiParam.get().name()));
+      context.parameterBuilder().description(emptyToNull(apiParam.get().value()));
+      context.parameterBuilder().parameterAccess(emptyToNull(apiParam.get().access()));
+      context.parameterBuilder().defaultValue(emptyToNull(apiParam.get().defaultValue()));
+      context.parameterBuilder().allowMultiple(apiParam.get().allowMultiple());
+      context.parameterBuilder().required(apiParam.get().required());
+    }
+  }
+
+  @VisibleForTesting
+  Optional<ApiParam> findApiParam(MethodParameter methodParameter) {
+    return apiParam(methodParameter);
+  }
+
+  private Function<ApiParam, String> toAllowableValue() {
+    return new Function<ApiParam, String>() {
+      @Override
+      public String apply(ApiParam input) {
+        return input.allowableValues();
+      }
+    };
+  }
+
+  private AllowableValues allowableValues(MethodParameter methodParameter, String allowableValueString) {
     AllowableValues allowableValues = null;
-    String allowableValueString = findAnnotatedAllowableValues(methodParameter);
     if (!isNullOrEmpty(allowableValueString)) {
       allowableValues = ApiModelProperties.allowableValueFromString(allowableValueString);
     } else {
@@ -54,23 +86,11 @@ public class ParameterAllowableReader implements ParameterBuilderPlugin {
         allowableValues = Enums.allowableValues(methodParameter.getParameterType().getComponentType());
       }
     }
-    context.parameterBuilder().allowableValues(allowableValues);
+    return allowableValues;
   }
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return SwaggerPluginSupport.pluginDoesApply(delimiter);
-  }
-
-  private String findAnnotatedAllowableValues(MethodParameter methodParameter) {
-    Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
-    if (null != methodAnnotations) {
-      for (Annotation annotation : methodAnnotations) {
-        if (annotation instanceof ApiParam) {
-          return ((ApiParam) annotation).allowableValues();
-        }
-      }
-    }
-    return null;
+    return pluginDoesApply(delimiter);
   }
 }

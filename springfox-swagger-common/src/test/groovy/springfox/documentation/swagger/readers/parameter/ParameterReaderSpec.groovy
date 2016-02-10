@@ -18,9 +18,10 @@
  */
 
 package springfox.documentation.swagger.readers.parameter
+
+import com.google.common.base.Optional
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
-import org.springframework.web.bind.annotation.RequestParam
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -33,20 +34,20 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterReaderSpec extends DocumentationContextSpec {
+class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
   @Unroll("property #resultProperty expected: #expected")
   def "should set basic properties based on ApiParam annotation or a sensible default"() {
     given:
-      MethodParameter methodParameter = Stub(MethodParameter)
+      MethodParameter methodParameter = Mock(MethodParameter)
       methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
-      methodParameter.getParameterAnnotation(RequestParam.class) >> reqParamAnnot
-      methodParameter.getParameterAnnotations() >> [apiParamAnnotation, reqParamAnnot]
-      methodParameter."$springParameterMethod"() >> methodReturnValue
+      methodParameter.parameterName >> "someName"
+      methodParameter.parameterType >> Object
       def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       resolvedMethodParameter.methodParameter >> methodParameter
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
           context(), genericNamingStrategy, Mock(OperationContext))
+      def sut = stubbedParamBuilder(apiParamAnnotation)
     when:
       sut.apply(parameterContext)
 
@@ -57,30 +58,20 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       sut.supports(DocumentationType.SWAGGER_12)
       sut.supports(DocumentationType.SWAGGER_2)
     where:
-      sut                              | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation                      | reqParamAnnot | expected
-      new ParameterDescriptionReader() | 'description'  | 'getParameterName'    | 'someName'        | null                                    | null          | null
-      new ParameterDescriptionReader() | 'description'  | 'none'                | 'any'             | apiParam([value: { -> 'AnDesc' }])      | null          | 'AnDesc'
-      swaggerDefaultReader()           | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: { -> 'defl' }]) | null          | 'defl'
-      new ParameterAccessReader()      | 'paramAccess'  | 'none'                | 'any'             | apiParam([access: { -> 'myAccess' }])   | null          | 'myAccess'
+      resultProperty | apiParamAnnotation                     | reqParamAnnot | expected
+      'description'  | null                                   | null          | null
+      'name'         | apiParamWithNameAndValue("AnDesc", "") | null          | 'AnDesc'
+      'description'  | apiParamWithNameAndValue("", "AnDesc") | null          | 'AnDesc'
+      'defaultValue' | apiParamWithDefault('defl')            | null          | 'defl'
+      'paramAccess'  | apiParamWithAccess('myAccess')         | null          | 'myAccess'
   }
 
-
-  ParameterDefaultReader swaggerDefaultReader() {
-    new ParameterDefaultReader()
+  def stubbedParamBuilder(ApiParam apiParamAnnotation) {
+    new ApiParamParameterBuilder() {
+      @Override
+      def Optional<ApiParam> findApiParam(MethodParameter methodParameter) {
+        Optional.fromNullable(apiParamAnnotation)
+      }
+    }
   }
-
-
-  private ApiParam apiParam(Map closureMap) {
-    closureMap as ApiParam
-  }
-
-  def "supports all swagger types" () {
-    given:
-      ParameterRequiredReader sut = new ParameterRequiredReader()
-    expect:
-      sut.supports(documentationType)
-    where:
-      documentationType << [DocumentationType.SWAGGER_12, DocumentationType.SWAGGER_2]
-  }
-
 }

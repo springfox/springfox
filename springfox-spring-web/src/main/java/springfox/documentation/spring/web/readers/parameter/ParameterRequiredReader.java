@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -77,7 +78,8 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
     return requiredSet.contains(true);
   }
 
-  private boolean isOptional(MethodParameter methodParameter) {
+  @VisibleForTesting
+  boolean isOptional(MethodParameter methodParameter) {
     return methodParameter.getParameterType().getName().equals("java.util.Optional");
   }
 

@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger2.readers.parameter
+package springfox.documentation.swagger.readers.parameter
 
 import com.google.common.base.Optional
 import io.swagger.annotations.ApiParam
@@ -32,42 +32,47 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.base.Optional.*
-
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterNameReaderSpec extends DocumentationContextSpec {
+class ParameterNameReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
 
-  def "Should support only swagger 2 documentation types"() {
+  def "Should all swagger documentation types"() {
     given:
-      def sut = new ParameterNameReader()
+      def sut = new ApiParamParameterBuilder()
     expect:
       !sut.supports(DocumentationType.SPRING_WEB)
-      !sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_12)
       sut.supports(DocumentationType.SWAGGER_2)
   }
 
   def "param required"() {
     given:
-      ResolvedMethodParameter resolvedMethodParameter = Mock(ResolvedMethodParameter)
+      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), genericNamingStrategy, Mock(OperationContext))
+      def methodParameter = Mock(MethodParameter)
+      resolvedMethodParameter.methodParameter >> methodParameter
+      methodParameter.parameterType >> Object
+      ParameterContext parameterContext = new ParameterContext(
+          resolvedMethodParameter,
+          new ParameterBuilder(),
+          context(),
+          genericNamingStrategy,
+          Mock(OperationContext))
     when:
       def sut = nameReader(apiParam)
       sut.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().name == expectedName
     where:
-      apiParam                                                           | paramType | expectedName
-      [name: { -> "bodyParam" }, value: { -> "body Param" }] as ApiParam | "body"    | "bodyParam"
-      null                                                               | "body"    | null
+      apiParam                                            | paramType | expectedName
+      apiParamWithNameAndValue("bodyParam", "body Param") | "body"    | "bodyParam"
+      null                                                | "body"    | null
   }
 
   def nameReader(annotation) {
-    new ParameterNameReader() {
+    new ApiParamParameterBuilder() {
       @Override
-      def Optional<ApiParam> apiParam(MethodParameter mp) {
-        fromNullable(annotation)
+      def Optional<ApiParam> findApiParam(MethodParameter methodParameter) {
+        Optional.fromNullable(annotation)
       }
     }
   }
