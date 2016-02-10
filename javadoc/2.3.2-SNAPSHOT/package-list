@@ -39,7 +39,6 @@ springfox.documentation.swagger1.web
 springfox.documentation.swagger2.annotations
 springfox.documentation.swagger2.configuration
 springfox.documentation.swagger2.mappers
-springfox.documentation.swagger2.readers.parameter
 springfox.documentation.swagger2.web
 springfox.petstore
 springfox.petstore.controller
