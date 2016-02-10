@@ -26,10 +26,8 @@ import io.swagger.models.properties.IntegerProperty;
 import io.swagger.models.properties.LongProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
-import springfox.documentation.service.Parameter;
 
 import java.util.List;
 
@@ -44,17 +42,9 @@ public class EnumMapper {
     }
     return toReturn;
   }
-  static SerializableParameter maybeAddEnumValues(SerializableParameter toReturn, ModelReference paramModel) {
-    if (paramModel.getAllowableValues() instanceof AllowableListValues) {
-      toReturn.setEnum(((AllowableListValues) paramModel.getAllowableValues()).getValues());
-    }
-    return toReturn;
-  }
-
-  static SerializableParameter maybeAddEnumValues(SerializableParameter toReturn, Parameter source) {
-    if (source.getAllowableValues() instanceof AllowableListValues) {
-      AllowableListValues allowableValues = (AllowableListValues) source.getAllowableValues();
-      toReturn.setEnum(allowableValues.getValues());
+  static SerializableParameter maybeAddEnumValues(SerializableParameter toReturn, AllowableValues allowableValues) {
+    if (allowableValues instanceof AllowableListValues) {
+      toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
     }
     return toReturn;
   }
