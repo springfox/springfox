@@ -18,6 +18,8 @@
  */
 
 package springfox.documentation.spring.web.plugins
+
+import com.fasterxml.classmate.ResolvedType
 import com.google.common.base.Optional
 import com.google.common.collect.Ordering
 import org.joda.time.LocalDate
@@ -154,7 +156,7 @@ class DocketSpec extends DocumentationContextSpec {
       plugin."$builderMethod"(object)
 
     then:
-      context()."$property" == object
+      context()."$property" == object || (context()."$property" == [object] as Set)
 
     where:
       builderMethod           | object                                          | property
@@ -169,6 +171,8 @@ class DocketSpec extends DocumentationContextSpec {
       'consumes'              | ['application/json'] as Set                     | 'consumes'
       'host'                  | 'someHost'                                      | 'host'
       'protocols'             | ['application/json'] as Set                     | 'protocols'
+      'additionalModels'      | Mock(ResolvedType)                              | 'additionalModels'
+      'enableUrlTemplating'   | true                                            | 'isUriTemplatesEnabled'
   }
 
   def "Code generation strategy property is set"() {
@@ -232,6 +236,7 @@ class DocketSpec extends DocumentationContextSpec {
       null != pluginContext.protocols
       null != pluginContext.host
       null != pluginContext.consumes
+      null != pluginContext.additionalModels
 
   }
 

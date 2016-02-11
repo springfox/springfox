@@ -19,6 +19,7 @@
 
 package springfox.documentation.spi.service.contexts;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
@@ -60,15 +61,17 @@ public class DocumentationContext {
   private final Ordering<ApiListingReference> listingReferenceOrdering;
   private final Ordering<ApiDescription> apiDescriptionOrdering;
   private final Ordering<Operation> operationOrdering;
+  private final GenericTypeNamingStrategy genericsNamingStrategy;
+  private final Optional<String> pathMapping;
+  private final Set<ResolvedType> additionalModels;
   private Set<String> produces;
   private Set<String> consumes;
   private String host;
   private Set<String> protocols;
-  private final GenericTypeNamingStrategy genericsNamingStrategy;
-  private final Optional<String> pathMapping;
-  private boolean isUrlTemplatesEnabled;
+  private boolean isUriTemplatesEnabled;
 
-  public DocumentationContext(DocumentationType documentationType,
+  public DocumentationContext(
+      DocumentationType documentationType,
       List<RequestHandler> handlerMappings,
       ApiInfo apiInfo, String groupName,
       ApiSelector apiSelector,
@@ -89,7 +92,8 @@ public class DocumentationContext {
       Set<String> protocols,
       GenericTypeNamingStrategy genericsNamingStrategy,
       Optional<String> pathMapping,
-      boolean isUrlTemplatesEnabled) {
+      boolean isUriTemplatesEnabled,
+      Set<ResolvedType> additionalModels) {
 
     this.documentationType = documentationType;
     this.handlerMappings = handlerMappings;
@@ -112,7 +116,8 @@ public class DocumentationContext {
     this.protocols = protocols;
     this.genericsNamingStrategy = genericsNamingStrategy;
     this.pathMapping = pathMapping;
-    this.isUrlTemplatesEnabled = isUrlTemplatesEnabled;
+    this.isUriTemplatesEnabled = isUriTemplatesEnabled;
+    this.additionalModels = additionalModels;
     this.alternateTypeProvider = new AlternateTypeProvider(alternateTypeRules);
   }
 
@@ -210,6 +215,10 @@ public class DocumentationContext {
 
   @Incubating(value = "2.1.0")
   public boolean isUriTemplatesEnabled() {
-    return isUrlTemplatesEnabled;
+    return isUriTemplatesEnabled;
+  }
+
+  public Set<ResolvedType> getAdditionalModels() {
+    return additionalModels;
   }
 }

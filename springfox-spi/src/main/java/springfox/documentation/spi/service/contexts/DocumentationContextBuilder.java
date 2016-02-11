@@ -19,6 +19,7 @@
 
 package springfox.documentation.spi.service.contexts;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -50,6 +51,17 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationContextBuilder {
 
+  private final List<SecurityContext> securityContexts = newArrayList();
+  private final Set<Class> ignorableParameterTypes = newHashSet();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
+  private final List<Parameter> globalOperationParameters = newArrayList();
+  private final List<AlternateTypeRule> rules = newArrayList();
+  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
+  private final Set<String> protocols = newHashSet();
+  private final Set<String> produces = newHashSet();
+  private final Set<String> consumes = newHashSet();
+  private final Set<ResolvedType> additionalModels = newHashSet();
+
   private TypeResolver typeResolver;
   private List<RequestHandler> handlerMappings;
   private ApiInfo apiInfo;
@@ -61,19 +73,9 @@ public class DocumentationContextBuilder {
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private DocumentationType documentationType;
   private Ordering<Operation> operationOrdering;
-
   private boolean applyDefaultResponseMessages;
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
-  private final List<SecurityContext> securityContexts = newArrayList();
-  private final Set<Class> ignorableParameterTypes = newHashSet();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
-  private final List<Parameter> globalOperationParameters = newArrayList();
-  private final List<AlternateTypeRule> rules = newArrayList();
-  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
   private String host;
-  private final Set<String> protocols = newHashSet();
-  private final Set<String> produces = newHashSet();
-  private final Set<String> consumes = newHashSet();
   private GenericTypeNamingStrategy genericsNamingStrategy;
   private Optional<String> pathMapping;
   private boolean isUrlTemplatesEnabled;
@@ -231,6 +233,11 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+  public DocumentationContextBuilder additionalModels(Set<ResolvedType> additionalModels) {
+    this.additionalModels.addAll(additionalModels);
+    return this;
+  }
+
   public DocumentationContext build() {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
     return new DocumentationContext(documentationType,
@@ -254,7 +261,9 @@ public class DocumentationContextBuilder {
         host,
         protocols,
         genericsNamingStrategy,
-        pathMapping, isUrlTemplatesEnabled);
+        pathMapping,
+        isUrlTemplatesEnabled,
+        additionalModels);
   }
 
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>

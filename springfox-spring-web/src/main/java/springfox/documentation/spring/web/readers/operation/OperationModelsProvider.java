@@ -36,7 +36,6 @@ import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.List;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -57,6 +56,14 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
   public void apply(RequestMappingContext context) {
     collectFromReturnType(context);
     collectParameters(context);
+    collectGlobalModels(context);
+  }
+
+  private void collectGlobalModels(RequestMappingContext context) {
+    for (ResolvedType each : context.getDocumentationContext().getAdditionalModels()) {
+      context.operationModelsBuilder().addInputParam(each);
+      context.operationModelsBuilder().addReturn(each);
+    }
   }
 
   @Override
@@ -74,7 +81,6 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
   private void collectParameters(RequestMappingContext context) {
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    Method method = handlerMethod.getMethod();
 
     LOG.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
 
