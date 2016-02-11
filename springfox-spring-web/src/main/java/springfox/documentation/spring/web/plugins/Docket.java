@@ -64,7 +64,17 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 public class Docket implements DocumentationPlugin {
 
   public static final String DEFAULT_GROUP_NAME = "default";
+
   private final DocumentationType documentationType;
+  private final List<SecurityContext> securityContexts = newArrayList();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
+  private final List<Parameter> globalOperationParameters = newArrayList();
+  private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
+  private final Set<Class> ignorableParameterTypes = newHashSet();
+  private final Set<String> protocols = newHashSet();
+  private final Set<String> produces = newHashSet();
+  private final Set<String> consumes = newHashSet();
+
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
   private Ordering<ApiListingReference> apiListingReferenceOrdering;
@@ -76,15 +86,7 @@ public class Docket implements DocumentationPlugin {
   private boolean enabled = true;
   private GenericTypeNamingStrategy genericsNamingStrategy = new DefaultGenericTypeNamingStrategy();
   private boolean applyDefaultResponseMessages = true;
-  private final List<SecurityContext> securityContexts = newArrayList();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
-  private final List<Parameter> globalOperationParameters = newArrayList();
-  private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
-  private final Set<Class> ignorableParameterTypes = newHashSet();
   private String host = "";
-  private final Set<String> protocols = newHashSet();
-  private final Set<String> produces = newHashSet();
-  private final Set<String> consumes = newHashSet();
   private Optional<String> pathMapping = Optional.absent();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private boolean enableUrlTemplating = false;
