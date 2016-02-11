@@ -18,8 +18,10 @@
  */
 
 package springfox.documentation.builders
+
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
+import spock.lang.Unroll
 import springfox.documentation.service.AllowableListValues
 
 class ModelPropertyBuilderSpec extends Specification {
@@ -47,7 +49,8 @@ class ModelPropertyBuilderSpec extends Specification {
       'example'           | 'example1'                            | 'example'
   }
 
-  def "Setting builder properties to null values preserves existing values"() {
+  @Unroll
+  def "Setting builder property #property to null values preserves existing values"() {
     given:
       def sut = new ModelPropertyBuilder()
     when:
@@ -59,13 +62,29 @@ class ModelPropertyBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod   | value                                 | property
+      builderMethod       | value                                 | property
       'name'              | 'model1'                              | 'name'
       'type'              | new TypeResolver().resolve(String)    | 'type'
       'qualifiedType'     | 'com.Model1'                          | 'qualifiedType'
       'description'       | 'model1 desc'                         | 'description'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
       'example'           | 'example1'                            | 'example'
+  }
+
+  def "Setting builder allowableValue to empty or null values preserves existing values"() {
+    given:
+      def sut = new ModelPropertyBuilder()
+    when:
+      sut.allowableValues(currentValue)
+      sut.allowableValues(newValue)
+    and:
+      def built = sut.build()
+    then:
+      built.allowableValues == currentValue
+    where:
+      newValue                                 | currentValue
+      new AllowableListValues([], "LIST")      | new AllowableListValues(['a'], "LIST")
+      null                                     | new AllowableListValues(['a'], "LIST")
   }
 
   def "When allowable list value is empty builder sets the value to null"() {

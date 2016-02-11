@@ -59,7 +59,7 @@ public class OperationImplicitParametersReader implements OperationBuilderPlugin
     List<Parameter> parameters = Lists.newArrayList();
     if (null != annotation) {
       for (ApiImplicitParam param : annotation.value()) {
-        parameters.add(OperationImplicitParameterReader.getImplicitParameter(param));
+        parameters.add(OperationImplicitParameterReader.implicitParameter(param));
       }
     }
 

@@ -122,7 +122,7 @@ public class ParameterBuilder {
    * @return
    */
   public ParameterBuilder allowableValues(AllowableValues allowableValues) {
-    this.allowableValues = defaultIfAbsent(allowableValues, this.allowableValues);
+    this.allowableValues = emptyToNull(allowableValues, this.allowableValues);
     return this;
   }
 
