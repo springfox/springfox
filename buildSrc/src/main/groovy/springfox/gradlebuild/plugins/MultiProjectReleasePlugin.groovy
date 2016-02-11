@@ -118,7 +118,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
     iPublishTask.dependsOn iCheckTask
 
-    bumpAndTagTask.dependsOn iPublishTask
+    bumpAndTagTask.mustRunAfter iPublishTask
     releaseTask.dependsOn bumpAndTagTask
   }
 
