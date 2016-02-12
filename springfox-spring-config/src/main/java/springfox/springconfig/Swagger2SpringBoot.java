@@ -39,6 +39,7 @@ import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -98,6 +99,8 @@ public class Swagger2SpringBoot {
                 .parameterType("query")
                 .required(true)
                 .build()))
+        .tags(new Tag("Pet Service", "All apis relating to pets")) // <25>
+        .additionalModels(typeResolver.resolve(AdditionalModel.class)) //<26>
         ;
   }
 
