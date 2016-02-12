@@ -39,6 +39,7 @@ import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.DocumentationPlugin;
@@ -76,6 +77,7 @@ public class Docket implements DocumentationPlugin {
   private final Set<String> produces = newHashSet();
   private final Set<String> consumes = newHashSet();
   private final Set<ResolvedType> additionalModels = newHashSet();
+  private final Set<Tag> tags = newHashSet();
 
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
@@ -414,6 +416,18 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
+  /**
+   * Method to add global tags to the docket
+   * @param first     - atleast one tag is required to use this method
+   * @param remaining - remaining tags
+   * @return
+   */
+  public Docket tags(Tag first, Tag... remaining) {
+    tags.add(first);
+    tags.addAll(newHashSet(remaining));
+    return this;
+  }
+
   Docket selector(ApiSelector apiSelector) {
     this.apiSelector = apiSelector;
     return this;
@@ -460,6 +474,7 @@ public class Docket implements DocumentationPlugin {
         .pathMapping(pathMapping)
         .enableUrlTemplating(enableUrlTemplating)
         .additionalModels(additionalModels)
+        .tags(tags)
         .build();
   }
 

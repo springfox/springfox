@@ -19,6 +19,7 @@
 package springfox.documentation.service;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
@@ -26,6 +27,7 @@ import com.google.common.collect.Multimap;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -43,12 +45,12 @@ public class Tags {
     List<Tag> tags = from(allListings)
         .transformAndConcat(collectTags())
         .toList();
-    TreeSet<Tag> tagSet = newTreeSet(byTagName());
+    TreeSet<Tag> tagSet = newTreeSet(tagNameComparator());
     tagSet.addAll(tags);
     return tagSet;
   }
 
-  public static Comparator<Tag> byTagName() {
+  public static Comparator<Tag> tagNameComparator() {
     return new Comparator<Tag>() {
       @Override
       public int compare(Tag first, Tag second) {
@@ -57,11 +59,43 @@ public class Tags {
     };
   }
 
-  static Function<String, Tag> toTag(final ApiListing listing) {
+  public static Function<String, Tag> toTag(final Function<String, String> descriptor) {
     return new Function<String, Tag>() {
       @Override
-      public Tag apply(String input){
-        return new Tag(input, listing.getDescription());
+      public Tag apply(String input) {
+        return new Tag(input, descriptor.apply(input));
+      }
+    };
+  }
+
+  public static Function<String, String> descriptor(
+      final Map<String, Tag> tagLookup,
+      final String defaultDescription) {
+
+    return new Function<String, String>() {
+      @Override
+      public String apply(String input) {
+          return Optional.fromNullable(tagLookup.get(input))
+            .transform(toTagDescription())
+            .or(defaultDescription);
+      }
+    };
+  }
+
+  private static Function<Tag, String> toTagDescription() {
+    return new Function<Tag, String>() {
+      @Override
+      public String apply(Tag input) {
+        return input.getDescription();
+      }
+    };
+  }
+
+  public static Function<Tag, String> toTagName() {
+    return new Function<Tag, String>() {
+      @Override
+      public String apply(Tag input) {
+        return input.getName();
       }
     };
   }
@@ -70,7 +104,7 @@ public class Tags {
     return new Function<ApiListing, Iterable<Tag>>() {
       @Override
       public Iterable<Tag> apply(ApiListing input) {
-        return from(input.getTags()).filter(emptyTags()).transform(toTag(input)).toSet();
+        return input.getTags();
       }
     };
   }

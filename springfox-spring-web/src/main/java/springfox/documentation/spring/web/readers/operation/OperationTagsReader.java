@@ -39,7 +39,8 @@ public class OperationTagsReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {
-    context.operationBuilder().tags(tagsProvider.tags(context));
+    context.operationBuilder()
+        .tags(tagsProvider.tags(context));
   }
 
   @Override

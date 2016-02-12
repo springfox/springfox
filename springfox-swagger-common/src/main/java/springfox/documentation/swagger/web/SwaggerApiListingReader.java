@@ -55,7 +55,7 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
     }
     apiListingContext.apiListingBuilder()
         .description(description)
-        .tags(tagSet);
+        .tagNames(tagSet);
   }
 
   private Function<Api, String> descriptionExtractor() {

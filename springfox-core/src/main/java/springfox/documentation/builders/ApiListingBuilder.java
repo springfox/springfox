@@ -24,15 +24,18 @@ import springfox.documentation.schema.Model;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.Tag;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.service.Tags.*;
 
 public class ApiListingBuilder {
   private final Ordering<ApiDescription> descriptionOrdering;
@@ -40,16 +43,19 @@ public class ApiListingBuilder {
   private String basePath;
   private String resourcePath;
   private String description;
+  private String host;
   private int position;
 
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();
-  private String host;
   private Set<String> protocol = newHashSet();
-  private Set<String> tags = newTreeSet();
   private List<SecurityReference> securityReferences = newArrayList();
   private List<ApiDescription> apis = newArrayList();
-  private Map<String, Model> models = newHashMap();
+
+  private final Set<Tag> tags = newTreeSet(tagNameComparator());
+  private final Set<String> tagNames = newHashSet();
+  private final Map<String, Model> models = newHashMap();
+  private final Map<String, Tag> tagLookup = newHashMap();
 
   /**
    * Update the sorting order for api descriptions
@@ -227,16 +233,54 @@ public class ApiListingBuilder {
   /**
    * Updates the tags
    *
-   * @param tags
+   * @param tagNames - just the tag names
    * @return
    */
-  public ApiListingBuilder tags(Set<String> tags) {
-    this.tags = defaultIfAbsent(tags, this.tags);
+  public ApiListingBuilder tagNames(Set<String> tagNames) {
+    this.tagNames.addAll(nullToEmptySet(tagNames));
+    return this;
+  }
+
+  /**
+   * Updates the tags.
+   *
+   * @param tags - Tag with name and description
+   * @return - this
+   * BREAKING Change in 2.4.0
+   */
+  public ApiListingBuilder tags(Set<Tag> tags) {
+    this.tags.addAll(nullToEmptySet(tags));
+    return this;
+  }
+
+  /**
+   * Globally configured tags
+   * @param availableTags - tags available for services and operations
+   * @return this
+   */
+  public ApiListingBuilder availableTags(Set<Tag> availableTags) {
+    this.tagLookup.putAll(uniqueIndex(nullToEmptySet(availableTags), toTagName()));
     return this;
   }
 
   public ApiListing build() {
-    return new ApiListing(apiVersion, basePath,
-        resourcePath, produces, consumes, host, protocol, securityReferences, apis, models, description, position, tags);
+    this.tags.addAll(from(tagNames)
+        .filter(emptyTags())
+        .transform(toTag(descriptor(tagLookup, description)))
+        .toSet());
+    return new ApiListing(
+        apiVersion,
+        basePath,
+        resourcePath,
+        produces,
+        consumes,
+        host,
+        protocol,
+        securityReferences,
+        apis,
+        models,
+        description,
+        position,
+        tags);
   }
 }

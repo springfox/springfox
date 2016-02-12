@@ -109,10 +109,13 @@ public class ApiListingScanner {
               .securityReferences(securityReferences)
               .apis(sortedApis)
               .models(models)
-              .position(position++);
+              .position(position++)
+              .availableTags(documentationContext.getTags());
 
-      ApiListingContext apiListingContext
-          = new ApiListingContext(context.getDocumentationType(), resourceGroup, apiListingBuilder);
+      ApiListingContext apiListingContext = new ApiListingContext(
+          context.getDocumentationType(),
+          resourceGroup,
+          apiListingBuilder);
       apiListingMap.put(resourceGroup.getGroupName(), pluginsManager.apiListing(apiListingContext));
     }
     return apiListingMap;

@@ -35,6 +35,7 @@ import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
@@ -64,6 +65,7 @@ public class DocumentationContext {
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final Optional<String> pathMapping;
   private final Set<ResolvedType> additionalModels;
+  private final Set<Tag> tags;
   private Set<String> produces;
   private Set<String> consumes;
   private String host;
@@ -93,7 +95,8 @@ public class DocumentationContext {
       GenericTypeNamingStrategy genericsNamingStrategy,
       Optional<String> pathMapping,
       boolean isUriTemplatesEnabled,
-      Set<ResolvedType> additionalModels) {
+      Set<ResolvedType> additionalModels,
+      Set<Tag> tags) {
 
     this.documentationType = documentationType;
     this.handlerMappings = handlerMappings;
@@ -118,6 +121,7 @@ public class DocumentationContext {
     this.pathMapping = pathMapping;
     this.isUriTemplatesEnabled = isUriTemplatesEnabled;
     this.additionalModels = additionalModels;
+    this.tags = tags;
     this.alternateTypeProvider = new AlternateTypeProvider(alternateTypeRules);
   }
 
@@ -220,5 +224,9 @@ public class DocumentationContext {
 
   public Set<ResolvedType> getAdditionalModels() {
     return additionalModels;
+  }
+
+  public Set<Tag> getTags() {
+    return tags;
   }
 }

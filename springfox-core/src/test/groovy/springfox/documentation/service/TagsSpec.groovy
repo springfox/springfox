@@ -1,8 +1,10 @@
 package springfox.documentation.service
 
+import com.google.common.collect.FluentIterable
 import com.google.common.collect.LinkedListMultimap
 import spock.lang.Specification
 
+import static springfox.documentation.service.Tags.emptyTags
 import static springfox.documentation.service.Tags.toTags
 
 class TagsSpec extends Specification {
@@ -20,16 +22,11 @@ class TagsSpec extends Specification {
       toTags(listings).isEmpty()
   }
 
-  def "Inspects a class with an ApiListing with no Api annotations" () {
+  def "Empty tags predicate" () {
     given:
-      def listings = LinkedListMultimap.create()
-      def apiListing = Mock(ApiListing)
-    when:
-      listings.put("test", apiListing)
-    and:
-      apiListing.getTags() >> ["A", "B", ""]
-      apiListing.getDescription() >> "description"
-    then:
-      toTags(listings) == [new Tag("A", "description"), new Tag("B", "description")] as Set
+      def tags = ["", null, "test"]
+    expect:
+      FluentIterable.from(tags).filter(emptyTags()).size() == 1
   }
+
 }

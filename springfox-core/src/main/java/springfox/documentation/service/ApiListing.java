@@ -38,12 +38,23 @@ public class ApiListing {
   private final Map<String, Model> models;
   private final String description;
   private final int position;
-  private final Set<String> tags;
+  private final Set<Tag> tags;
 
-  public ApiListing(String apiVersion, String basePath, String resourcePath, Set<String>
-      produces, Set<String> consumes, String host, Set<String> protocols, List<SecurityReference> securityReferences,
-                    List<ApiDescription> apis, Map<String, Model> models, String description, int position,
-                    Set<String> tags) {
+  public ApiListing(
+      String apiVersion,
+      String basePath,
+      String resourcePath,
+      Set<String> produces,
+      Set<String> consumes,
+      String host,
+      Set<String> protocols,
+      List<SecurityReference> securityReferences,
+      List<ApiDescription> apis,
+      Map<String, Model> models,
+      String description,
+      int position,
+      Set<Tag> tags) {
+
     this.apiVersion = apiVersion;
     this.basePath = basePath;
     this.resourcePath = resourcePath;
@@ -107,7 +118,7 @@ public class ApiListing {
     return position;
   }
 
-  public Set<String> getTags() {
+  public Set<Tag> getTags() {
     return tags;
   }
 

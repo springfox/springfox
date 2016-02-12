@@ -222,7 +222,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .apiVersion("1.0")
         .securityReferences(null)
         .basePath("/base-path")
-        .tags(["some-group"] as Set)
+        .tags([new Tag("some-group", "")] as Set)
         .description("listing")
         .consumes([] as Set)
         .produces([] as Set)
