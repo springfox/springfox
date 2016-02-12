@@ -37,10 +37,17 @@ public class Documentation {
   private final String host;
   private final Set<String> schemes;
 
-  public Documentation(String groupName,
-                       String basePath, Set<Tag> tags,
-                       Multimap<String, ApiListing> apiListings,
-                       ResourceListing resourceListing, Set<String> produces, Set<String> consumes, String host, Set<String> schemes) {
+  public Documentation(
+      String groupName,
+      String basePath,
+      Set<Tag> tags,
+      Multimap<String, ApiListing> apiListings,
+      ResourceListing resourceListing,
+      Set<String> produces,
+      Set<String> consumes,
+      String host,
+      Set<String> schemes) {
+
     this.groupName = groupName;
     this.basePath = basePath;
     this.tags = tags;

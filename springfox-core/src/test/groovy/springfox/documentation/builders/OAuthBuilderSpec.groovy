@@ -38,6 +38,7 @@ class OAuthBuilderSpec extends Specification {
       builderMethod   | value                       | property
       'scopes'        | [Mock(AuthorizationScope)]  | 'scopes'
       'grantTypes'    | [Mock(GrantType)]           | 'grantTypes'
+      'name'          | "name"                      | 'name'
   }
 
   def "Setting builder properties to null values preserves existing values"() {
@@ -55,5 +56,6 @@ class OAuthBuilderSpec extends Specification {
       builderMethod   | value                       | property
       'scopes'        | [Mock(AuthorizationScope)]  | 'scopes'
       'grantTypes'    | [Mock(GrantType)]           | 'grantTypes'
+      'name'          | "name"                      | 'name'
   }
 }

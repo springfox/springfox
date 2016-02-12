@@ -28,9 +28,11 @@ public class ApiListingContext {
   private final ResourceGroup resourceGroup;
   private final ApiListingBuilder apiListingBuilder;
 
-  public ApiListingContext(DocumentationType documentationType,
-                           ResourceGroup resourceGroup,
-                           ApiListingBuilder apiListingBuilder) {
+  public ApiListingContext(
+      DocumentationType documentationType,
+      ResourceGroup resourceGroup,
+      ApiListingBuilder apiListingBuilder) {
+
     this.documentationType = documentationType;
     this.resourceGroup = resourceGroup;
     this.apiListingBuilder = apiListingBuilder;

@@ -131,6 +131,20 @@ public class BuilderDefaults {
     return replacement;
   }
 
+  /**
+   * Returns an empty list if the newValue is null
+   *
+   * @param newValue - a list
+   * @param <T>      - any type
+   * @return non-null list
+   */
+  public static <T> List<T> nullVarArgsToEmptyList(T ... args) {
+    if (args == null) {
+      return newArrayList();
+    }
+    return newArrayList(args);
+  }
+
   private static boolean isNotObject(ResolvedType defaultValue) {
     return defaultValue != null &&
         !Object.class.equals(defaultValue.getErasedType());

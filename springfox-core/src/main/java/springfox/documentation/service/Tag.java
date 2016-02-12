@@ -21,12 +21,15 @@ package springfox.documentation.service;
 
 import com.google.common.base.Objects;
 
+import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Strings.*;
+
 public class Tag {
   private final String name;
   private final String description;
 
   public Tag(String name, String description) {
-    this.name = name;
+    this.name = checkNotNull(emptyToNull(name));
     this.description = description;
   }
 

@@ -22,6 +22,8 @@ package springfox.documentation.builders
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDate
 import spock.lang.Specification
+import springfox.documentation.service.AllowableListValues
+import springfox.documentation.service.AllowableRangeValues
 
 import static BuilderDefaults.*
 
@@ -33,12 +35,32 @@ class BuilderDefaultsSpec extends Specification {
       thrown(UnsupportedOperationException)
   }
 
+  def "emptyToNull for allowable values check to see if its an empty list" () {
+    given:
+      def current = new AllowableListValues(["1", "2"], "List")
+      def emptyAllowable = new AllowableListValues([], "List")
+      def newValue = new AllowableListValues(["3", "4"], "List")
+      def range = new AllowableRangeValues("1", "2")
+    expect:
+      emptyToNull(newValue, current) == newValue
+      emptyToNull(emptyAllowable, current) == current
+      emptyToNull(newValue, null) == newValue
+      emptyToNull(emptyAllowable, null) == null
+      emptyToNull(null, current) == current
+      emptyToNull(null, null) == null
+      emptyToNull(emptyAllowable, current) == current
+      emptyToNull(emptyAllowable, null) == null
+      emptyToNull(range, null) == range
+      emptyToNull(range, current) == range
+  }
+
+
   def "defaultIfAbsent returns default value if newValue is null" () {
     expect:
-      defaultIfAbsent('newValue', 'oldValue') == 'newValue'
-      defaultIfAbsent('newValue', null) == 'newValue'
-      defaultIfAbsent(null, 'oldValue') == 'oldValue'
-      defaultIfAbsent(null, null) == null
+    defaultIfAbsent('newValue', 'oldValue') == 'newValue'
+    defaultIfAbsent('newValue', null) == 'newValue'
+    defaultIfAbsent(null, 'oldValue') == 'oldValue'
+    defaultIfAbsent(null, null) == null
   }
 
   def "replaceIfMoreSpecific returns default value if newValue is null or resolves to Object" () {

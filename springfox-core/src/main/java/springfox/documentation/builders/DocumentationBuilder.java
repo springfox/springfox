@@ -154,6 +154,15 @@ public class DocumentationBuilder {
   }
 
   public Documentation build() {
-    return new Documentation(groupName, basePath, tags, apiListings, resourceListing, produces, consumes, host, schemes);
+    return new Documentation(
+        groupName,
+        basePath,
+        tags,
+        apiListings,
+        resourceListing,
+        produces,
+        consumes,
+        host,
+        schemes);
   }
 }

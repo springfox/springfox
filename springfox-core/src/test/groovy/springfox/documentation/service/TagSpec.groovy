@@ -43,6 +43,10 @@ class TagSpec extends Specification {
       tag1 == tag3
       tag1 != tag4
       tag2 != tag5
+      !tag1.equals("")
+      !tag1.equals(tag2)
+      tag1.equals(tag3)
+      tag1.equals(tag1)
   }
 
   def "hashcode works as expected"() {
