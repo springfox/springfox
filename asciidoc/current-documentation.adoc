@@ -163,8 +163,9 @@ public class CustomJavaPluginConfig {
    @Bean //Don't forget the @Bean annotation
    public Docket customImplementation(){
       return new Docket()
-            .apiInfo(apiInfo())
-            .includePatterns(".*pet.*");
+            .apiInfo(apiInfo());
+            //... more options available
+
    }
 
    //...
