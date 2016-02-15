@@ -1,0 +1,28 @@
+group 'io.springfox'
+version '2.4.0-SNAPSHOT'
+
+ext {
+  limits = [
+      'instruction': 100,
+      'branch'     : 100,
+      'line'       : 100,
+      'complexity' : 100,
+      'method'     : 100,
+      'class'      : 100
+  ]
+}
+
+dependencies {
+  compile libs.core
+  compile libs.spring
+  compile project(':springfox-spi')
+
+  compile 'org.springframework.data:spring-data-rest-webmvc:2.4.2.RELEASE'
+  compile 'org.springframework.hateoas:spring-hateoas:0.19.0.RELEASE'
+
+  provided libs.springProvided
+
+  testCompile project(':springfox-core')
+  testCompile libs.test
+}
+
