@@ -45,7 +45,7 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
   ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(applicationContext)
   DocumentationPluginsBootstrapper bootstrapper =
           new DocumentationPluginsBootstrapper(pluginManager,
-          handlerProvider,
+          [handlerProvider],
           new DocumentationCache(),
           apiGroup,
           new TypeResolver(),
