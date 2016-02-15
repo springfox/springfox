@@ -788,6 +788,9 @@ dependencies {
 148
 149
 <strong>150</strong>
+151
+152
+153
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
@@ -830,6 +833,7 @@ dependencies {
 <span class="keyword">import</span> <span class="include">springfox.documentation.service.ApiKey</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.service.AuthorizationScope</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.service.SecurityReference</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.service.Tag</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.spi.DocumentationType</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.spi.service.contexts.SecurityContext</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.spring.web.plugins.Docket</span>;
@@ -889,6 +893,8 @@ dependencies {
                 .parameterType(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
                 .required(<span class="predefined-constant">true</span>)
                 .build()))
+        .tags(<span class="keyword">new</span> Tag(<span class="string"><span class="delimiter">&quot;</span><span class="content">Pet Service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">All apis relating to pets</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="25"></i><b>(25)</b>
+        .additionalModels(typeResolver.resolve(AdditionalModel.class)) <i class="conum" data-value="26"></i><b>(26)</b>
         ;
   }
 
@@ -1078,10 +1084,20 @@ select operations to be protected by one of the specified security schemes.</td>
 on how the security is setup the name of the header used may need to be different. Overriding this value is a way to
 override the default behavior.</td>
 </tr>
+<tr>
+<td><i class="conum" data-value="25"></i><b>25</b></td>
+<td>Adding tags is a way to define all the available tags that services/operations can opt into. Currently this only
+has name and description.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="26"></i><b>26</b></td>
+<td>Are there models in the application that are not "reachable"? Not reachable is when we have models that we would
+ like to be described but aren&#8217;t explicitly used in any operation. An example of this is an operation that returns a
+ model serialized as a string. We do want to communicate the expectation of the schema for the string. This is a way
+ to do exactly that.
+There are plenty of more options to configure the <code>Docket</code>. This should provide a good start.</td>
+</tr>
 </table>
-</div>
-<div class="paragraph">
-<p>There are plenty of more options to configure the <code>Docket</code>. This should provide a good start.</p>
 </div>
 </div>
 <div class="sect4">
@@ -1201,7 +1217,7 @@ apps to serve webjar content see the <a href="http://www.webjars.org/documentati
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-02-12 17:15:08 UTC
+Last updated 2016-02-15 00:58:33 UTC
 </div>
 </div>
 </body>

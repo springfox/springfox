@@ -815,8 +815,9 @@ This config class must then be defined in your xml application context.</p>
    <span class="annotation">@Bean</span> <span class="comment">//Don't forget the @Bean annotation</span>
    <span class="directive">public</span> Docket customImplementation(){
       <span class="keyword">return</span> <span class="keyword">new</span> Docket()
-            .apiInfo(apiInfo())
-            .includePatterns(<span class="string"><span class="delimiter">&quot;</span><span class="content">.*pet.*</span><span class="delimiter">&quot;</span></span>);
+            .apiInfo(apiInfo());
+            <span class="comment">//... more options available</span>
+
    }
 
    <span class="comment">//...</span>
@@ -1091,7 +1092,7 @@ in the demo application.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-02-12 17:15:08 UTC
+Last updated 2016-02-15 00:58:33 UTC
 </div>
 </div>
 </body>
