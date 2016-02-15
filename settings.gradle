@@ -7,6 +7,7 @@ include 'springfox-swagger-common'
 include 'springfox-swagger1'
 include 'springfox-swagger2'
 include 'springfox-bean-validators'
+include 'springfox-data-rest'
 include 'springfox-staticdocs'
 
 // Auxiliary projects that are not published
