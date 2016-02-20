@@ -70,7 +70,7 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
       return
     }
     versionFile.withOutputStream {
-      it.write("${buildInfo.buildVersion.asText()}".bytes)
+      it.write("${buildInfo.nextVersion.asText()}".bytes)
     }
   }
 }
