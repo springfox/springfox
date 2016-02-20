@@ -50,12 +50,7 @@ class BuildInfo {
   }
 
   String getReleaseTag() {
-    if (isReleaseBuild) {
-      buildVersion
-    } else {
-      def nextRelease = versioningStrategy.nextVersion(buildVersion, releaseType, isReleaseBuild)
-      new SemanticVersion(nextRelease.major, nextRelease.minor, nextRelease.patch, "")
-    }
+    currentVersion.next(releaseType, "")
   }
 
   boolean getIsReleaseBuild() {
