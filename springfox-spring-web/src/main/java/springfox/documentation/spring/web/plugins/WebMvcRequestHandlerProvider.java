@@ -67,7 +67,7 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
     return new Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler>() {
       @Override
       public RequestHandler apply(Map.Entry<RequestMappingInfo, HandlerMethod> input) {
-        return new RequestHandler(input.getKey(), input.getValue());
+        return new RequestHandler(input.getKey(), input.getValue())
       }
     };
   }
