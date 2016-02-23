@@ -215,4 +215,43 @@ class ContainerTypesSpec extends SchemaSpecification {
       "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
       "mapOfmapOfStringToSimpleType" | List | "Entry«string,Map«string,SimpleType»»" | "springfox.documentation.schema.Entry"
   }
+
+  def "Model properties of type Map are inferred correctly on generic host with default rules"() {
+    given:
+      def sut = genericTypeOfMapsContainer()
+
+      def modelContext = inputParam(sut, SWAGGER_2, alternateTypeProvider(), namingStrategy)
+      Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
+
+      def returnContext = returnValue(sut, SWAGGER_2, alternateTypeProvider(), namingStrategy)
+      Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
+
+    expect:
+      asInput.getName() == "MapsContainer"
+      asInput.getProperties().containsKey(property)
+      def modelProperty = asInput.getProperties().get(property)
+      modelProperty.type.erasedType == type
+      modelProperty.getModelRef()
+      ModelRef item = modelProperty.getModelRef()
+      item.type == itemType
+      item.itemType == itemRef
+      !item.collection
+
+      asReturn.getName() == "MapsContainer"
+      asReturn.getProperties().containsKey(property)
+      def retModelProperty = asReturn.getProperties().get(property)
+      retModelProperty.type.erasedType == type
+      retModelProperty.getModelRef()
+      def retItem = retModelProperty.getModelRef()
+      retItem.type == itemType
+      retItem.itemType == itemRef
+      !retItem.collection
+
+    where:
+      property                       | type   | itemRef                  | itemType
+      "enumToSimpleType"             | Map    | "SimpleType"             | "Map«string,SimpleType»"
+      "stringToSimpleType"           | Map    | "SimpleType"             | "Map«string,SimpleType»"
+      "complexToSimpleType"          | Map    | "SimpleType"             | "Map«Category,SimpleType»"
+      "mapOfmapOfStringToSimpleType" | Map    | "Map«string,SimpleType»" | "Map«string,Map«string,SimpleType»»"
+  }
 }

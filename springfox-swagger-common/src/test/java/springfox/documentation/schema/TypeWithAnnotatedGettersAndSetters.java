@@ -22,6 +22,8 @@ package springfox.documentation.schema;
 import io.swagger.annotations.ApiModelProperty;
 import org.joda.time.LocalDate;
 
+import java.util.Map;
+
 public class TypeWithAnnotatedGettersAndSetters {
   @ApiModelProperty(notes = "int Property Field", required = true)
   private int intProp;
@@ -32,6 +34,7 @@ public class TypeWithAnnotatedGettersAndSetters {
   private LocalDate validOverride;
   private LocalDate invalidOverride;
   private int readOnlyProp;
+  private Map<String, Map<String, Foo>> mapOfMaps;
 
   public int getIntProp() {
     return intProp;
@@ -65,7 +68,8 @@ public class TypeWithAnnotatedGettersAndSetters {
     return 0;
   }
 
-  @ApiModelProperty(value = "enum Prop Getter value", notes = "enum note", allowableValues = "ONE", required = true, readOnly = false)
+  @ApiModelProperty(value = "enum Prop Getter value", notes = "enum note", allowableValues = "ONE", required = true,
+      readOnly = false)
   public ExampleEnum getEnumProp() {
     return enumProp;
   }
@@ -92,5 +96,18 @@ public class TypeWithAnnotatedGettersAndSetters {
   @ApiModelProperty(dataType = "java.lang.String")
   public LocalDate getValidOverride() {
     return validOverride;
+  }
+
+  @ApiModelProperty
+  public Map<String, Map<String, Foo>> getMapOfMaps() {
+    return mapOfMaps;
+  }
+
+  public void setMapOfMaps(Map<String, Map<String, Foo>> mapOfMaps) {
+    this.mapOfMaps = mapOfMaps;
+  }
+
+  class Foo {
+    public Integer fooInt;
   }
 }

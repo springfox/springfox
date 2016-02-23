@@ -38,6 +38,7 @@ import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.Maps.isMapType;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
@@ -123,7 +124,9 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     List<ResolvedType> properties = newArrayList();
     for (ModelProperty property : nonTrivialProperties(modelContext, resolvedType)) {
       LOG.debug("Adding type {} for parameter {}", property.getType().getSignature(), property.getName());
-      properties.add(property.getType());
+      if (!isMapType(property.getType())) {
+        properties.add(property.getType());
+      }
       properties.addAll(maybeFromCollectionElementType(modelContext, property));
       properties.addAll(maybeFromMapValueType(modelContext, property));
       properties.addAll(maybeFromRegularType(modelContext, property));
@@ -146,7 +149,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   }
 
   private List<ResolvedType> maybeFromRegularType(ModelContext modelContext, ModelProperty property) {
-    if (isContainerType(property.getType()) || Maps.isMapType(property.getType())) {
+    if (isContainerType(property.getType()) || isMapType(property.getType())) {
       return newArrayList();
     }
     LOG.debug("Recursively resolving dependencies for type {}", resolvedTypeSignature(property.getType()).or("<null>"));
@@ -170,7 +173,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
 
   private List<ResolvedType> maybeFromMapValueType(ModelContext modelContext, ModelProperty property) {
     List<ResolvedType> dependencies = newArrayList();
-    if (Maps.isMapType(property.getType())) {
+    if (isMapType(property.getType())) {
       ResolvedType valueType = Maps.mapValueType(property.getType());
       String resolvedTypeSignature = resolvedTypeSignature(valueType).or("<null>");
       if (!isBaseType(ModelContext.fromParent(modelContext, valueType))) {

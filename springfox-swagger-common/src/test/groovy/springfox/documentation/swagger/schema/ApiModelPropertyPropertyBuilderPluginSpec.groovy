@@ -18,6 +18,7 @@
  */
 
 package springfox.documentation.swagger.schema
+
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -166,7 +167,7 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
               properties.find { it.name == property }.getter.annotated, resolver,
               DocumentationType.SWAGGER_12)
     when:
-      context.builder.type(resolver.resolve(LocalDate))
+      context.builder.type(resolver.resolve(dataType))
     and:
       sut.apply(context)
     and:
@@ -180,9 +181,9 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       enriched.type.getErasedType() == dataType
       enriched.modelRef.type == modelRef
     where:
-      property          | dataType    | modelRef
-      "validOverride"    | String     | "string"
-      "invalidOverride"  | LocalDate  | "LocalDate"
+      property            | dataType  | modelRef
+      "validOverride"     | String    | "string"
+      "invalidOverride"   | LocalDate | "LocalDate"
   }
 
   BeanDescription beanDescription(Class<TypeWithAnnotatedGettersAndSetters> clazz) {
