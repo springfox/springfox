@@ -57,12 +57,15 @@ task unzip(type: Copy) {
   into file("${buildDir}")
 }
 
-task sdoc(type: Copy) {
-  from("${projectDir}/src/web/js/springfox.js")
-  into("${buildDir}/${swaggerUiExplodedDir}")
-}
-
-task removeHtmlIndex(type: Delete) {
+task customizeSwaggerUi << {
+  copy {
+    from("${projectDir}/src/web/js/springfox.js")
+    into("${buildDir}/${swaggerUiExplodedDir}")
+  }
+  copy {
+    from("${projectDir}/src/web/fonts")
+    into("${buildDir}/${swaggerUiExplodedDir}/fonts")
+  }
   delete "${buildDir}/${swaggerUiExplodedDir}/index.html"
   delete "${buildDir}/${swaggerUiExplodedDir}/swagger-ui.js"
 }
@@ -94,7 +97,6 @@ task cleanup(type: Delete) {
 }
 
 clean.dependsOn(cleanup)
-compileJava.dependsOn(removeHtmlIndex)
-removeHtmlIndex.dependsOn(sdoc)
-sdoc.dependsOn(unzip)
+compileJava.dependsOn(customizeSwaggerUi)
+customizeSwaggerUi.dependsOn(unzip)
 unzip.dependsOn(swaggerUiDownload)
