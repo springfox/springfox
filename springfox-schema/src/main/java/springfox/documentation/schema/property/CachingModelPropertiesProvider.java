@@ -23,6 +23,8 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -33,10 +35,12 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.google.common.collect.Lists.*;
+
 @Component
 @Qualifier("cachedModelProperties")
 public class CachingModelPropertiesProvider implements ModelPropertiesProvider {
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(CachingModelPropertiesProvider.class);
   private final LoadingCache<ModelContext, List<ModelProperty>> cache;
 
   @Autowired
@@ -56,7 +60,13 @@ public class CachingModelPropertiesProvider implements ModelPropertiesProvider {
 
   @Override
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
-    return cache.getUnchecked(givenContext);
+    try {
+      return cache.get(givenContext);
+    } catch (Exception e) {
+      LOGGER.warn("Exception calculating properties for model({}) -> {}. {}",
+          type, givenContext.description(), e.getMessage());
+      return newArrayList();
+    }
   }
 
   @Override

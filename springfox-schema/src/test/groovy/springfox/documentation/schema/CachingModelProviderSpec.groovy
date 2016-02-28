@@ -45,6 +45,22 @@ class CachingModelProviderSpec extends Specification {
       sut.modelFor(context) == sut.modelFor(context)
   }
 
+  def "Cache misses do not not result in errors" () {
+    given:
+      def context = inputParam(
+          complexType(),
+          DocumentationType.SWAGGER_2,
+          new AlternateTypeProvider([]),
+          new CodeGenGenericTypeNamingStrategy())
+      def mock = Mock(ModelProvider) {
+        modelFor(context) >> { throw new NullPointerException() }
+      }
+    when:
+      def sut = new CachingModelProvider(mock)
+    then:
+      !sut.modelFor(context).isPresent()
+  }
+
   def aModel() {
     Mock(Model)
   }

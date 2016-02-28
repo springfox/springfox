@@ -47,6 +47,22 @@ class CachingModelPropertiesProviderSpec extends Specification {
       sut.propertiesFor(Mock(ResolvedType), context) == sut.propertiesFor(Mock(ResolvedType), context)
   }
 
+  def "When cache miss occurs" () {
+    given:
+      def context = inputParam(
+          complexType(),
+          DocumentationType.SWAGGER_2,
+          new AlternateTypeProvider([]),
+          new CodeGenGenericTypeNamingStrategy())
+      def mock = Mock(ModelPropertiesProvider) {
+        propertiesFor(_, context) >> { throw new NullPointerException("") }
+      }
+    when:
+      def sut = new CachingModelPropertiesProvider(new TypeResolver(), mock)
+    then:
+      0 == sut.propertiesFor(Mock(ResolvedType), context).size()
+  }
+
   def aProperty() {
     Mock(ModelProperty)
   }

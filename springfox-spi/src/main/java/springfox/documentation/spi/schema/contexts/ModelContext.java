@@ -21,6 +21,7 @@ package springfox.documentation.spi.schema.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.spi.DocumentationType;
@@ -43,9 +44,13 @@ public class ModelContext {
   private final AlternateTypeProvider alternateTypeProvider;
   private GenericTypeNamingStrategy genericNamingStrategy;
 
-  ModelContext(Type type, boolean returnType, DocumentationType documentationType,
-               AlternateTypeProvider alternateTypeProvider,
-               GenericTypeNamingStrategy genericNamingStrategy) {
+  ModelContext(
+      Type type,
+      boolean returnType,
+      DocumentationType documentationType,
+      AlternateTypeProvider alternateTypeProvider,
+      GenericTypeNamingStrategy genericNamingStrategy) {
+
     this.documentationType = documentationType;
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericNamingStrategy = genericNamingStrategy;
@@ -218,5 +223,12 @@ public class ModelContext {
   @Override
   public int hashCode() {
     return Objects.hashCode(type, documentationType, returnType, namingStrategy());
+  }
+
+  public String description() {
+    return MoreObjects.toStringHelper(ModelContext.class)
+        .add("type", this.getType())
+        .add("isReturnType", this.isReturnType())
+        .toString();
   }
 }

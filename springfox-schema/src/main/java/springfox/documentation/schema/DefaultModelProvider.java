@@ -58,10 +58,10 @@ public class DefaultModelProvider implements ModelProvider {
 
   @Autowired
   public DefaultModelProvider(TypeResolver resolver,
-                              @Qualifier("cachedModelProperties") ModelPropertiesProvider propertiesProvider,
-                              @Qualifier("cachedModelDependencies") ModelDependencyProvider dependencyProvider,
-                              SchemaPluginsManager schemaPluginsManager,
-                              TypeNameExtractor typeNameExtractor) {
+      @Qualifier("cachedModelProperties") ModelPropertiesProvider propertiesProvider,
+      @Qualifier("cachedModelDependencies") ModelDependencyProvider dependencyProvider,
+      SchemaPluginsManager schemaPluginsManager,
+      TypeNameExtractor typeNameExtractor) {
     this.resolver = resolver;
     this.propertiesProvider = propertiesProvider;
     this.dependencyProvider = dependencyProvider;

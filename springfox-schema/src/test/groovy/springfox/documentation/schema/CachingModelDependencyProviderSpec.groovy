@@ -45,6 +45,22 @@ class CachingModelDependencyProviderSpec extends Specification {
       sut.dependentModels(context) == sut.dependentModels(context)
   }
 
+  def "Cache misses are handled correctly" () {
+    given:
+      def context = inputParam(
+          complexType(),
+          DocumentationType.SWAGGER_2,
+          new AlternateTypeProvider([]),
+          new CodeGenGenericTypeNamingStrategy())
+      def mock = Mock(ModelDependencyProvider) {
+        dependentModels(context) >> { throw new NullPointerException() }
+      }
+    when:
+    def sut = new CachingModelDependencyProvider(mock)
+    then:
+    sut.dependentModels(context).size() == 0
+  }
+
   def aResolvedType() {
     new TypeResolver().resolve(complexType())
   }

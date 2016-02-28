@@ -22,6 +22,8 @@ import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -33,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @Qualifier("cachedModels")
 public class CachingModelProvider implements ModelProvider {
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(CachingModelProvider.class);
   private final LoadingCache<ModelContext, Optional<Model>> cache;
   private final ModelProvider delegate;
 
@@ -53,7 +55,12 @@ public class CachingModelProvider implements ModelProvider {
 
   @Override
   public Optional<Model> modelFor(ModelContext modelContext) {
-    return cache.getUnchecked(modelContext);
+    try {
+      return cache.get(modelContext);
+    } catch (Exception e) {
+      LOGGER.warn("Failed to get the model for -> {}. {}", modelContext.description(), e.getMessage());
+      return Optional.absent();
+    }
   }
 
   @Override

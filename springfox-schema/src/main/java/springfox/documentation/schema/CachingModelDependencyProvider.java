@@ -22,6 +22,8 @@ import com.fasterxml.classmate.ResolvedType;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -30,15 +32,16 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static com.google.common.collect.Sets.*;
+
 @Component
 @Qualifier("cachedModelDependencies")
 public class CachingModelDependencyProvider implements ModelDependencyProvider {
+  private static final Logger LOGGER = LoggerFactory.getLogger(CachingModelDependencyProvider.class);
   private final LoadingCache<ModelContext, Set<ResolvedType>> cache;
-  private final ModelDependencyProvider delegate;
 
   @Autowired
   public CachingModelDependencyProvider(@Qualifier("default") final ModelDependencyProvider delegate) {
-    this.delegate = delegate;
     cache = CacheBuilder.newBuilder()
         .maximumSize(1000)
         .expireAfterWrite(24, TimeUnit.HOURS)
@@ -51,8 +54,15 @@ public class CachingModelDependencyProvider implements ModelDependencyProvider {
 
   @Override
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
-//      return delegate.dependentModels(modelContext);
-    return cache.getUnchecked(modelContext);
+    try {
+      return cache.get(modelContext);
+    } catch (Exception e) {
+      LOGGER.warn("Exception calculating dependencies for model -> {}, {}",
+          modelContext.description(),
+          e.getMessage()
+      );
+      return newHashSet();
+    }
   }
 
 }
