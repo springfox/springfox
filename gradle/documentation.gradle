@@ -3,7 +3,7 @@ import springfox.gradlebuild.utils.ProjectDefinitions
 
 apply plugin: "org.asciidoctor.convert"
 asciidoctor {
-  sourceDir = file('asciidoc')
+  sourceDir = file('docs/asciidoc')
   logDocuments = true
   separateOutputDirs = false
   backends = ['html5']
