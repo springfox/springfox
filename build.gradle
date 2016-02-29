@@ -15,7 +15,7 @@ buildscript {
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     classpath "com.ofg:uptodate-gradle-plugin:1.5.2"
     classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2"
-    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.2"
+    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
   }
 }
 apply plugin: 'build-dashboard'
@@ -93,5 +93,5 @@ subprojects {
 apply from: "$rootDir/gradle/documentation.gradle"
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.9'
+  gradleVersion = '2.11'
 }
