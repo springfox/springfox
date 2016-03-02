@@ -43,9 +43,25 @@ related to https://github.com/spring-projects/spring-boot/issues/221[spring-boot
 
 [[q5]]*Q. How do we use Java 8 types esply. LocalDateTime?*
 
-A. Typically these are handled via `Docket#directModelSubstitute(LocalDateTime.class, String.class)`. If these
-are ISO 8601 dates that conform to a string format i.e. `yyyy-MM-dd'T'HH:mm'Z'`. However you won't have any format or
-validation info.
+A. The easiest way to to configure dates is via `Docket#directModelSubstitute(LocalDateTime.class, String.class)`. If
+these are ISO 8601 dates that conform to a string format i.e. `yyyy-MM-dd'T'HH:mm'Z'`. However you won't have any format or validation info.
+
+TIP: Use `java.sql.Date` works great for date precision and `java.util.Date` for date-time precision footnote:[thanks
+ https://github.com/springfox/springfox/issues/1161[@cbronet]]
+
+The way to correctly map the "Date" and "DateTime" types to their corresponding swagger types:
+
+* Substitute "Date" types (java.util.LocalDate, org.joda.time.LocalDate)  by java.sql.Date
+* Substitute "DateTime" types (java.util.ZonedDateTime, org.joda.time.LocalDateTime, ...) by java.util.Date
+
+[source,csharp]
+----
+docket
+.directModelSubstitute(LocalDate.class, java.sql.Date.class)
+.directModelSubstitute(LocalDateTime.class, java.util.Date.class)
+----
+
+
 
 [[q6]]*Q. How does one use @ModelAttribute annotation. It doesn't seem to render the model properties as scalar
 properties?*
