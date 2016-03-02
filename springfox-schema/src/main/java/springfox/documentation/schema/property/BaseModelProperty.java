@@ -25,8 +25,8 @@ import springfox.documentation.schema.ResolvedTypes;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
-import static com.google.common.base.Optional.fromNullable;
-import static springfox.documentation.schema.ResolvedTypes.simpleQualifiedTypeName;
+import static com.google.common.base.Optional.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
 
 public abstract class BaseModelProperty implements ModelProperty {
 

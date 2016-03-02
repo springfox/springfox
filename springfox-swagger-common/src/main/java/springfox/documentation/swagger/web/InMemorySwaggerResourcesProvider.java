@@ -31,6 +31,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static springfox.documentation.schema.ClassSupport.*;
+
 @Component
 public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvider {
   @Value("${springfox.documentation.swagger.v1.path:/api-docs}")
@@ -86,13 +88,5 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
       return base;
     }
     return base + "?group=" + swaggerGroup;
-  }
-
-  private Optional<? extends Class> classByName(String className) {
-    try {
-      return Optional.of(Class.forName(className));
-    } catch (ClassNotFoundException e) {
-      return Optional.absent();
-    }
   }
 }

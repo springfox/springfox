@@ -29,8 +29,11 @@ public class ParameterModelProperty extends BaseModelProperty {
   private final AnnotatedParameter parameter;
   private final ResolvedParameterizedMember constructor;
 
-  public ParameterModelProperty(String name, AnnotatedParameter parameter, ResolvedParameterizedMember constructor,
-                                AlternateTypeProvider alternateTypeProvider) {
+  public ParameterModelProperty(
+      String name,
+      AnnotatedParameter parameter,
+      ResolvedParameterizedMember constructor,
+      AlternateTypeProvider alternateTypeProvider) {
     super(name, alternateTypeProvider);
     this.parameter = parameter;
     this.constructor = constructor;

@@ -294,8 +294,11 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
     String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
     ParameterModelProperty beanModelProperty
-        = new ParameterModelProperty(propertyName, parameter, constructor, modelContext
-        .getAlternateTypeProvider());
+        = new ParameterModelProperty(
+            propertyName,
+            parameter,
+            constructor,
+            modelContext.getAlternateTypeProvider());
 
     LOG.debug("Adding property {} to model", propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
