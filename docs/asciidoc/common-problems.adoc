@@ -249,6 +249,33 @@ Also had to let the webjar through the dispatcher servlet:
 Tricky to get working, but it works.  Perhaps there is a better way to remap swagger-ui.html or let it pass
 through the dispatcherServlet.
 
+IMPORTANT: swagger-ui.html is the name of the swagger-ui page. While it cannot be changed one can configure the
+application such that landing on a particular url re-directs the browser to the real swagger-ui location.
+footnote:[Thanks https://github.com/springfox/springfox/issues/1080#issuecomment-169185653[@chornyi]]
+
+For e.g. One could move Swagger UI under `/documentation` using this code.
+[source,java]
+----
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addRedirectViewController("/documentation/v2/api-docs", "/v2/api-docs");
+		registry.addRedirectViewController("/documentation/configuration/ui", "/configuration/ui");
+		registry.addRedirectViewController("/documentation/configuration/security", "/configuration/security");
+		registry.addRedirectViewController("/documentation/swagger-resources", "/swagger-resources");
+		registry.addRedirectViewController("/documentation", "/documentation/swagger-ui.html");
+		registry.addRedirectViewController("/documentation/", "/documentation/swagger-ui.html");
+	}
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry
+			.addResourceHandler("/documentation/**").addResourceLocations("classpath:/META-INF/resources/");
+	}
+----
+
+However it still requires a redirect to `/documentation/swagger-ui.html` because the path name is
+https://github.com/springfox/springfox/blob/master/springfox-swagger-ui/src/web/js/springfox.js#L4[hard-coded].
+
 [[q14]]*Q. How does one create rules to substitute list and array items?*
 
 A.  If the following types...
