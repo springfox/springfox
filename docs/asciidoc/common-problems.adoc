@@ -298,3 +298,9 @@ It is still in incubation but host name can be configured per docket
 ----
      docket.host("http://maybe-an-api-gateway.host");
 ----
+
+[[q18]]*Q. Infinite loop when springfox tries to determine schema for objects with nested/complex constraints?*
+
+A.  If you have recursively defined objects, I would try and see if providing an alternate type might work or perhaps
+ even ignoring the offending classes for e.g. Order using the docket. ignoredParameterTypes(Order.class). This is
+ usually found in Hibernate domain objects that have bi-dectional dependencies on other objects.
