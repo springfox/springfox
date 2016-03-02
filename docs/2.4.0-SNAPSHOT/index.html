@@ -2005,12 +2005,85 @@ I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none o
 </div>
 </div>
 <div class="paragraph">
-<p><a id="q4"></a><strong>Q. I get an NPE during application startup in a spring-boot app?</strong></p>
+<p><a id="q4"></a><strong>Q. ObjectMapper weirdness in a spring-boot app?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
-<p>Thanks to <a href="https://github.com/shasti421">@shasti421</a> for providing the solution</p>
+<p>It is possible you&#8217;re experiencing one of the following issues</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>NPE During startup?</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
+refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
+onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
+related to <a href="https://github.com/spring-projects/spring-boot/issues/221">spring-boot issue #221</a> <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnote_1" title="View footnote.">1</a>]</sup>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Object Mapper Customizations Not Working?</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Sometimes there are multiple <code>ObjectMapper`s in play and it may result in the customizations not working
+<sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnote_2" title="View footnote.">2</a>]</sup> Spring Boot in `HttpMessageConverters</code> first adds the Spring Boot configured <code>MappingJackson2HttpMessageConverter</code> and then it adds the default <code>MappingJackson2HttpMessageConverter</code> from Spring MVC. This causes the <code>ObjectMapperConfigured</code> event to fire twice, first for the configured converter (which is actually used) and then for the default converter. So when you f.e. set a custom property naming strategy then in <code>ObjectMapperBeanPropertyNamingStrategy</code> this is overwritten by the second event. The following code fixes this:
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">MyWebAutoConfiguration</span> <span class="directive">extends</span> WebMvcConfigurerAdapter {
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">void</span> extendMessageConverters(<span class="predefined-type">List</span>&lt;HttpMessageConverter&lt;?&gt;&gt; converters) {
+        ObjectMapper objectMapper = <span class="predefined-constant">null</span>;
+        <span class="keyword">for</span> (HttpMessageConverter converter : converters) {
+            <span class="keyword">if</span> (converter <span class="keyword">instanceof</span> MappingJackson2HttpMessageConverter) {
+                MappingJackson2HttpMessageConverter jacksonConverter =
+                        ((MappingJackson2HttpMessageConverter) converter);
+
+                <span class="keyword">if</span> (objectMapper == <span class="predefined-constant">null</span>) {
+                    objectMapper = jacksonConverter.getObjectMapper();
+                } <span class="keyword">else</span> {
+                    jacksonConverter.setObjectMapper(objectMapper);
+                }
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a id="q5"></a><strong>Q. How do we use Java 8 types esply. LocalDateTime?</strong></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>The easiest way to to configure dates is via <code>Docket#directModelSubstitute(LocalDateTime.class, String.class)</code>. If
+these are ISO 8601 dates that conform to a string format i.e. <code>yyyy-MM-dd&#8217;T&#8217;HH:mm&#8217;Z'</code>. However you won&#8217;t have any format or validation info.</p>
 </li>
 </ol>
 </div>
@@ -2021,25 +2094,30 @@ I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none o
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
-refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
-onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
-related to <a href="https://github.com/spring-projects/spring-boot/issues/221">spring-boot issue #221</a>
+Use <code>java.sql.Date</code> works great for date precision and <code>java.util.Date</code> for date-time precision <sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnote_3" title="View footnote.">3</a>]</sup>
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p><a id="q5"></a><strong>Q. How do we use Java 8 types esply. LocalDateTime?</strong></p>
+<p>The way to correctly map the "Date" and "DateTime" types to their corresponding swagger types:</p>
 </div>
-<div class="olist upperalpha">
-<ol class="upperalpha" type="A">
+<div class="ulist">
+<ul>
 <li>
-<p>Typically these are handled via <code>Docket#directModelSubstitute(LocalDateTime.class, String.class)</code>. If these
-are ISO 8601 dates that conform to a string format i.e. <code>yyyy-MM-dd&#8217;T&#8217;HH:mm&#8217;Z'</code>. However you won&#8217;t have any format or
-validation info.</p>
+<p>Substitute "Date" types (java.util.LocalDate, org.joda.time.LocalDate)  by java.sql.Date</p>
 </li>
-</ol>
+<li>
+<p>Substitute "DateTime" types (java.util.ZonedDateTime, org.joda.time.LocalDateTime, &#8230;&#8203;) by java.util.Date</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="csharp">docket
+.directModelSubstitute(LocalDate.class, java.sql.Date.class)
+.directModelSubstitute(LocalDateTime.class, java.util.Date.class)</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p><a id="q6"></a><strong>Q. How does one use @ModelAttribute annotation. It doesn&#8217;t seem to render the model properties as scalar
@@ -2303,6 +2381,46 @@ servlet mapping:</p>
 <p>Tricky to get working, but it works.  Perhaps there is a better way to remap swagger-ui.html or let it pass
 through the dispatcherServlet.</p>
 </div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+swagger-ui.html is the name of the swagger-ui page. While it cannot be changed one can configure the
+application such that landing on a particular url re-directs the browser to the real swagger-ui location.
+<sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnote_4" title="View footnote.">4</a>]</sup>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For e.g. One could move Swagger UI under <code>/documentation</code> using this code.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">        <span class="annotation">@Override</span>
+        <span class="directive">public</span> <span class="type">void</span> addViewControllers(ViewControllerRegistry registry) {
+                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/v2/api-docs</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/api-docs</span><span class="delimiter">&quot;</span></span>);
+                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/configuration/ui</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/configuration/ui</span><span class="delimiter">&quot;</span></span>);
+                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/configuration/security</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/configuration/security</span><span class="delimiter">&quot;</span></span>);
+                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/swagger-resources</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-resources</span><span class="delimiter">&quot;</span></span>);
+                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/swagger-ui.html</span><span class="delimiter">&quot;</span></span>);
+                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/swagger-ui.html</span><span class="delimiter">&quot;</span></span>);
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="directive">public</span> <span class="type">void</span> addResourceHandlers(ResourceHandlerRegistry registry) {
+                registry
+                        .addResourceHandler(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/**</span><span class="delimiter">&quot;</span></span>).addResourceLocations(<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/META-INF/resources/</span><span class="delimiter">&quot;</span></span>);
+        }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However it still requires a redirect to <code>/documentation/swagger-ui.html</code> because the path name is
+<a href="https://github.com/springfox/springfox/blob/master/springfox-swagger-ui/src/web/js/springfox.js#L4">hard-coded</a>.</p>
+</div>
 <div class="paragraph">
 <p><a id="q14"></a><strong>Q. How does one create rules to substitute list and array items?</strong></p>
 </div>
@@ -2378,13 +2496,40 @@ It is still in incubation but host name can be configured per docket</p>
 <pre class="CodeRay highlight"><code data-lang="java">     docket.host(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://maybe-an-api-gateway.host</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><a id="q18"></a><strong>Q. Infinite loop when springfox tries to determine schema for objects with nested/complex constraints?</strong></p>
 </div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>If you have recursively defined objects, I would try and see if providing an alternate type might work or perhaps
+even ignoring the offending classes for e.g. Order using the docket. ignoredParameterTypes(Order.class). This is
+usually found in Hibernate domain objects that have bi-dectional dependencies on other objects.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnote_1">
+<a href="#_footnoteref_1">1</a>. Thanks to <a href="https://github.com/shasti421">@shasti421</a>
+</div>
+<div class="footnote" id="_footnote_2">
+<a href="#_footnoteref_2">2</a>. thanks <a href="https://github.com/springfox/springfox/issues/1140">Jaap-van-Hengstum</a>
+</div>
+<div class="footnote" id="_footnote_3">
+<a href="#_footnoteref_3">3</a>. thanks  <a href="https://github.com/springfox/springfox/issues/1161">@cbronet</a>
+</div>
+<div class="footnote" id="_footnote_4">
+<a href="#_footnoteref_4">4</a>. Thanks <a href="https://github.com/springfox/springfox/issues/1080#issuecomment-169185653">@chornyi</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 2.4.0-SNAPSHOT<br>
-Last updated 2016-03-02 02:59:36 UTC
+Last updated 2016-03-02 04:01:36 UTC
 </div>
 </div>
 </body>
