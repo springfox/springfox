@@ -32,14 +32,45 @@ TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that n
 .registerTypeAdapter(springfox.documentation.swagger.web.UiConfiguration.class, new SwaggerUiConfigurationSerializer());
 ----
 
-[[q4]]*Q. I get an NPE during application startup in a spring-boot app?*
+[[q4]]*Q. ObjectMapper weirdness in a spring-boot app?*
 
-A. Thanks to https://github.com/shasti421[@shasti421] for providing the solution
+A. It is possible you're experiencing one of the following issues
 
-TIP: Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
+. NPE During startup?
+[NOTE]
+Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
 refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
 onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
-related to https://github.com/spring-projects/spring-boot/issues/221[spring-boot issue #221]
+related to https://github.com/spring-projects/spring-boot/issues/221[spring-boot issue #221] footnote:[Thanks to https://github.com/shasti421[@shasti421]]
+
+. Object Mapper Customizations Not Working?
+[NOTE]
+Sometimes there are multiple `ObjectMapper`s in play and it may result in the customizations not working
+footnote:[thanks https://github.com/springfox/springfox/issues/1140[Jaap-van-Hengstum]] Spring Boot in `HttpMessageConverters` first adds the Spring Boot configured `MappingJackson2HttpMessageConverter` and then it adds the default `MappingJackson2HttpMessageConverter` from Spring MVC. This causes the `ObjectMapperConfigured` event to fire twice, first for the configured converter (which is actually used) and then for the default converter. So when you f.e. set a custom property naming strategy then in `ObjectMapperBeanPropertyNamingStrategy` this is overwritten by the second event. The following code fixes this:
+
+[source,java]
+----
+@Configuration
+public class MyWebAutoConfiguration extends WebMvcConfigurerAdapter {
+
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        ObjectMapper objectMapper = null;
+        for (HttpMessageConverter converter : converters) {
+            if (converter instanceof MappingJackson2HttpMessageConverter) {
+                MappingJackson2HttpMessageConverter jacksonConverter =
+                        ((MappingJackson2HttpMessageConverter) converter);
+
+                if (objectMapper == null) {
+                    objectMapper = jacksonConverter.getObjectMapper();
+                } else {
+                    jacksonConverter.setObjectMapper(objectMapper);
+                }
+            }
+        }
+    }
+}
+----
 
 [[q5]]*Q. How do we use Java 8 types esply. LocalDateTime?*
 
