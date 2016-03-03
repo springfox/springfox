@@ -55,10 +55,7 @@ task publishDocs(type: Exec) {
         project version: ${project.version}
 """
   project.logger.info(docPublishInfo)
-  if (buildInfo.dryRun) {
-    commandLine "sh", "-c", "echo this is a dry run!"
-    return
-  }
+
 
   String gitChanges = ""
   ['build/asciidoc/*'    : "docs",
@@ -73,6 +70,12 @@ task publishDocs(type: Exec) {
 """
   }
 
+  if (buildInfo.dryRun) {
+    logger.info("Will run the following command:")
+    logger.info(gitChanges)
+    commandLine "sh", "-c", "echo This is a dry run"
+    return
+  }
 
   commandLine "sh", "-c",
           """
