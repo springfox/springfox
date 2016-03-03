@@ -60,7 +60,7 @@ class ApiResourceControllerSpec extends Specification {
 
   def "security Configuration is available" (){
     expect:
-      mockMvc.perform(get("/configuration/security")
+      mockMvc.perform(get("/swagger-resources/configuration/security")
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(content().string("{\"clientId\":\"client\",\"clientSecret\":\"client-secret\",\"realm\":\"real\"," +
           "\"appName\":\"test\",\"apiKey\":\"key\",\"apiKeyVehicle\":\"header\",\"scopeSeparator\":\",\",\"apiKeyName\":\"api_key\"}"))
@@ -68,7 +68,7 @@ class ApiResourceControllerSpec extends Specification {
 
   def "UI Configuration is available" (){
     expect:
-    mockMvc.perform(get("/configuration/ui")
+    mockMvc.perform(get("/swagger-resources/configuration/ui")
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(content().string("{\"validatorUrl\":\"/validate\",\"docExpansion\":\"none\",\"apisSorter\":\"alpha\",\"defaultModelRendering\":\"schema\",\"jsonEditor\":false,\"showRequestHeaders\":true}"))
   }

@@ -31,6 +31,7 @@ import java.util.List;
 
 @Controller
 @ApiIgnore
+@RequestMapping("/swagger-resources")
 public class ApiResourceController {
 
 
@@ -60,7 +61,7 @@ public class ApiResourceController {
         Optional.fromNullable(uiConfiguration).or(UiConfiguration.DEFAULT), HttpStatus.OK);
   }
 
-  @RequestMapping(value = "/swagger-resources")
+  @RequestMapping
   @ResponseBody
   ResponseEntity<List<SwaggerResource>> swaggerResources() {
     return new ResponseEntity<List<SwaggerResource>>(swaggerResources.get(), HttpStatus.OK);
