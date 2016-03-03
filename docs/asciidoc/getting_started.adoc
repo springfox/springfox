@@ -93,7 +93,7 @@ dependencies {
 
 [source,java,linenums]
 ----
-include::../springfox-spring-config/src/main/java/springfox/springconfig/Swagger2SpringBoot.java[indent=0]
+include::../../springfox-spring-config/src/main/java/springfox/springconfig/Swagger2SpringBoot.java[indent=0]
 ----
 
 ===== Configuration explained
