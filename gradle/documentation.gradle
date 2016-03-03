@@ -44,7 +44,7 @@ task publishDocs(type: Exec) {
     symlink = 'current'
     docVersion = buildInfo.currentVersion.asText()
   } else {
-    symlink = isSnapshot(project) ? 'snapshot' : 'current'
+    symlink = project.rootProject.buildInfo.isReleaseBuild ? 'snapshot' : 'current'
   }
 
   def docPublishInfo = """Publishing docs with ...
