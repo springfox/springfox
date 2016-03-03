@@ -1,3 +1,53 @@
+# 2.4.0 Relase Notes
+
+[Full Changelog](https://github.com/springfox/springfox/compare/2.4.0...2.3.1)
+
+#### Features
+(#1145) Generated file is not compatible with Swagger specification if method parameter is Object and is used as path parameter @tjuchniewicz
+(#1122)	Default page served isn't configurable and lacks search / listAll functionality @porcoesphino
+(#1087) Change hardcoded "api_key" @JulianaRed
+(#1061) Add support @RequestParam of type Map<String, String> @matias2681
+(#1046) Control over swagger contact object @smwurster
+(#1037) Add support for multiple allowable values @smwurster
+(#1023) Provide a method for Model Properties to by sorted by configurable methods @nickpanaiotov
+(#969) Support alternate type resolution for @ModelAttribute annotated model fields @ejain
+(#937) Add support for @ResponseHeader @MarkVanVenrooij
+(#936) Add support for adding global tags to the docket @dilipkrish
+(#735) Support for adding additional models for request or response that are not inferred from operationshas-workaround @cabbonizio
+(#388) @ApiParam not working on Interface method declarations @charleslieferando
+(#356) Support for JSR-303 (Java Bean Validation) @omayevskiy
+
+#### Bugs
+(#1194) Swagger-ui does not render correctly in safari
+@dilipkrish 
+(#1193) NPE when Feign, Swagger and Spring Security are used - Brixton.BUILD-SNAPSHOT @varghgeorge 
+(#1186) Unwanted class with map of map attribute @cbornet 
+(#1174) Doc: includePatterns does not exist (anymore?) can-use-for-docs @vorburger 
+(#1147) Using parameterized types using Void resulting in invalid Swagger @nigelsim 
+(#1132) Api operations on abstract superclass not affected by @API tags @gionn 
+(#1129) Swagger2Controller.getDocumentation get IndexOutOfBoundsException @yqzhan2014
+(#1127) Setup base URL after Swagger UI is initialized #1126   @chornyi
+(#1126) Race condition and crash on Swagger UI startup @chornyi
+(#1125) Service description has no api's as the path regular expression does not match any of the service @irfandawood
+(#1051) Customised ObjectMapper not recognized @milanov
+(#953) NullPointerException when extending controller classes with multiple parameterized types @woemler 
+(#902) @ApiImplicitParam: "array" dataType is getting resolved into "type":"ref" @anny-ts
+
+#### Maintenance
+(#1180) Supply the text values for `@ApiOperation, @ApiResponse, @ApiParam, @ApiModelProperty from an external resource file, instead of hardcoding?  @joetconcur
+(#1168) Changelog not being updated question @jayanderson
+(#1161) Update documentation for JSR310 and Joda dates @cbornet
+(#1142) Fix the reference document not showing versions correctly in the gh pages @dilipkrish
+(#854) Rework the ModelRef design to not be a hacky project of the swagger models @dilipkrish
+
+#### PRs in this release!
+(#1189) Allow extension of ApiResourceController by making its methods public @gmarziou
+(#1165)	ParameterDefaultReader in swagger does not honor other annotations usage of DefaultValue  @ctruzzi
+(#1163) Updated the Docket XML Configuration Documentation  @kellydavid
+(#1159) Add basic Bean validation api (JSR-303) support  @jfiala
+(#1127) Setup base URL after Swagger UI is initialized #1126  @chornyi
+
+===================
 # 2.3.1 Release Notes
 
 [Full Changelog](https://github.com/springfox/springfox/compare/2.3.0...HEAD)
