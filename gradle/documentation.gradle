@@ -54,7 +54,7 @@ task publishDocs(type: Exec) {
         docVersion: ${docVersion}
         project version: ${project.version}
 """
-  logger.info(docPublishInfo)
+  project.logger.info(docPublishInfo)
   if (buildInfo.dryRun) {
     commandLine "sh", "-c", "echo this is a dry run!"
     return
