@@ -41,9 +41,9 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
   @Override
   void persist(Project project, BuildInfo buildInfo) {
     if (buildInfo.isReleaseBuild) {
+      createAnnotatedTag(project, buildInfo)
       updateVersionFile(project, buildInfo)
       commitToRepository(project, buildInfo)
-      createAnnotatedTag(project, buildInfo)
     } else {
       project.logger.warn("Should never be called when its a snapshot build")
     }

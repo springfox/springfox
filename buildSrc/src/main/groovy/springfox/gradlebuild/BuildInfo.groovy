@@ -50,7 +50,10 @@ class BuildInfo {
   }
 
   String getReleaseTag() {
-    currentVersion.next(releaseType, "")
+    if (isReleaseBuild) {
+      return "${buildVersion.major}.${buildVersion.minor}.${buildVersion.patch}"
+    }
+    ""
   }
 
   boolean getIsReleaseBuild() {
