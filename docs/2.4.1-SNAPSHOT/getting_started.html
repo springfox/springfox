@@ -647,8 +647,312 @@ dependencies {
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
   <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
 </pre></td>
-  <td class="code"><pre>Unresolved directive in getting_started.adoc - include::../springfox-spring-config/src/main/java/springfox/springconfig/Swagger2SpringBoot.java[indent=<span class="integer">0</span>]</pre></td>
+  <td class="code"><pre><span class="comment">/*
+ *
+ *  Copyright 2015 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */</span>
+
+<span class="keyword">package</span> <span class="namespace">springfox.springconfig</span>;
+
+<span class="keyword">import</span> <span class="include">com.fasterxml.classmate.TypeResolver</span>;
+<span class="keyword">import</span> <span class="include">org.joda.time.LocalDate</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.beans.factory.annotation.Autowired</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.SpringApplication</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.autoconfigure.SpringBootApplication</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.context.ApplicationContext</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.context.annotation.Bean</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.context.annotation.ComponentScan</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.http.ResponseEntity</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.web.bind.annotation.RequestMethod</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.web.context.request.async.DeferredResult</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.builders.PathSelectors</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.builders.RequestHandlerSelectors</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.builders.ResponseMessageBuilder</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.builders.ParameterBuilder</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.schema.ModelRef</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.schema.WildcardType</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.service.ApiKey</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.service.AuthorizationScope</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.service.SecurityReference</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.service.Tag</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.spi.DocumentationType</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.spi.service.contexts.SecurityContext</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.spring.web.plugins.Docket</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.ApiKeyVehicle</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.SecurityConfiguration</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.UiConfiguration</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger2.annotations.EnableSwagger2</span>;
+<span class="keyword">import</span> <span class="include">springfox.petstore.controller.PetController</span>;
+
+<span class="keyword">import</span> <span class="include">java.util.List</span>;
+
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">com.google.common.collect.Lists</span>.*;
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.schema.AlternateTypeRules</span>.*;
+
+<span class="annotation">@SpringBootApplication</span>
+<span class="annotation">@EnableSwagger2</span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="annotation">@ComponentScan</span>(basePackageClasses = {
+    PetController.class
+})<i class="conum" data-value="2"></i><b>(2)</b>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2SpringBoot</span> {
+
+  <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
+    ApplicationContext ctx = SpringApplication.run(Swagger2SpringBoot.class, args);
+  }
+
+
+  <span class="annotation">@Bean</span>
+  <span class="directive">public</span> Docket petApi() {
+    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)<i class="conum" data-value="3"></i><b>(3)</b>
+        .select()<i class="conum" data-value="4"></i><b>(4)</b>
+          .apis(RequestHandlerSelectors.any())<i class="conum" data-value="5"></i><b>(5)</b>
+          .paths(PathSelectors.any())<i class="conum" data-value="6"></i><b>(6)</b>
+          .build()<i class="conum" data-value="7"></i><b>(7)</b>
+        .pathMapping(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)<i class="conum" data-value="8"></i><b>(8)</b>
+        .directModelSubstitute(LocalDate.class,
+            <span class="predefined-type">String</span>.class)<i class="conum" data-value="9"></i><b>(9)</b>
+        .genericModelSubstitutes(ResponseEntity.class)
+        .alternateTypeRules(
+            newRule(typeResolver.resolve(DeferredResult.class,
+                    typeResolver.resolve(ResponseEntity.class, <span class="predefined-type">WildcardType</span>.class)),
+                typeResolver.resolve(<span class="predefined-type">WildcardType</span>.class)))<i class="conum" data-value="10"></i><b>(10)</b>
+        .useDefaultResponseMessages(<span class="predefined-constant">false</span>)<i class="conum" data-value="11"></i><b>(11)</b>
+        .globalResponseMessage(RequestMethod.GET,<i class="conum" data-value="12"></i><b>(12)</b>
+            newArrayList(<span class="keyword">new</span> ResponseMessageBuilder()
+                .code(<span class="integer">500</span>)
+                .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">500 message</span><span class="delimiter">&quot;</span></span>)
+                .responseModel(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error</span><span class="delimiter">&quot;</span></span>))<i class="conum" data-value="13"></i><b>(13)</b>
+                .build()))
+        .securitySchemes(newArrayList(apiKey()))<i class="conum" data-value="14"></i><b>(14)</b>
+        .securityContexts(newArrayList(securityContext()))<i class="conum" data-value="15"></i><b>(15)</b>
+        .enableUrlTemplating(<span class="predefined-constant">true</span>)<i class="conum" data-value="21"></i><b>(21)</b>
+        .globalOperationParameters(<i class="conum" data-value="22"></i><b>(22)</b>
+            newArrayList(<span class="keyword">new</span> ParameterBuilder()
+                .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">someGlobalParameter</span><span class="delimiter">&quot;</span></span>)
+                .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Description of someGlobalParameter</span><span class="delimiter">&quot;</span></span>)
+                .modelRef(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
+                .parameterType(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
+                .required(<span class="predefined-constant">true</span>)
+                .build()))
+        .tags(<span class="keyword">new</span> Tag(<span class="string"><span class="delimiter">&quot;</span><span class="content">Pet Service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">All apis relating to pets</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="25"></i><b>(25)</b>
+        .additionalModels(typeResolver.resolve(AdditionalModel.class)) <i class="conum" data-value="26"></i><b>(26)</b>
+        ;
+  }
+
+  <span class="annotation">@Autowired</span>
+  <span class="directive">private</span> TypeResolver typeResolver;
+
+  <span class="directive">private</span> ApiKey apiKey() {
+    <span class="keyword">return</span> <span class="keyword">new</span> ApiKey(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">api_key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>);<i class="conum" data-value="16"></i><b>(16)</b>
+  }
+
+  <span class="directive">private</span> SecurityContext securityContext() {
+    <span class="keyword">return</span> SecurityContext.builder()
+        .securityReferences(defaultAuth())
+        .forPaths(PathSelectors.regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/anyPath.*</span><span class="delimiter">&quot;</span></span>))<i class="conum" data-value="17"></i><b>(17)</b>
+        .build();
+  }
+
+  <span class="predefined-type">List</span>&lt;SecurityReference&gt; defaultAuth() {
+    AuthorizationScope authorizationScope
+        = <span class="keyword">new</span> AuthorizationScope(<span class="string"><span class="delimiter">&quot;</span><span class="content">global</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">accessEverything</span><span class="delimiter">&quot;</span></span>);
+    AuthorizationScope<span class="type">[]</span> authorizationScopes = <span class="keyword">new</span> AuthorizationScope[<span class="integer">1</span>];
+    authorizationScopes[<span class="integer">0</span>] = authorizationScope;
+    <span class="keyword">return</span> newArrayList(
+        <span class="keyword">new</span> SecurityReference(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>, authorizationScopes));<i class="conum" data-value="18"></i><b>(18)</b>
+  }
+
+  <span class="annotation">@Bean</span>
+  SecurityConfiguration security() {
+    <span class="keyword">return</span> <span class="keyword">new</span> SecurityConfiguration(<i class="conum" data-value="19"></i><b>(19)</b>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-client-id</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-client-secret</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-realm</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">apiKey</span><span class="delimiter">&quot;</span></span>,
+        ApiKeyVehicle.HEADER, <i class="conum" data-value="23"></i><b>(23)</b>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">api_key</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="24"></i><b>(24)</b>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span> <span class="comment">/*scope separator*/</span>);
+  }
+
+  <span class="annotation">@Bean</span>
+  UiConfiguration uiConfig() {
+    <span class="keyword">return</span> <span class="keyword">new</span> UiConfiguration(<i class="conum" data-value="20"></i><b>(20)</b>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">validatorUrl</span><span class="delimiter">&quot;</span></span>,<span class="comment">// url</span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">none</span><span class="delimiter">&quot;</span></span>,       <span class="comment">// docExpansion          =&gt; none | list</span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">alpha</span><span class="delimiter">&quot;</span></span>,      <span class="comment">// apiSorter             =&gt; alpha</span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">schema</span><span class="delimiter">&quot;</span></span>,     <span class="comment">// defaultModelRendering =&gt; schema</span>
+        <span class="predefined-constant">false</span>,        <span class="comment">// enableJsonEditor      =&gt; true | false</span>
+        <span class="predefined-constant">true</span>);        <span class="comment">// showRequestHeaders    =&gt; true | false</span>
+  }
+}</pre></td>
 </tr></table></code></pre>
 </div>
 </div>
@@ -921,7 +1225,7 @@ apps to serve webjar content see the <a href="http://www.webjars.org/documentati
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-03-02 19:37:34 CST
+Last updated 2016-03-03 03:59:48 UTC
 </div>
 </div>
 </body>
