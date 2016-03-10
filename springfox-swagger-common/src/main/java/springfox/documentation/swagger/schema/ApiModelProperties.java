@@ -56,7 +56,7 @@ public final class ApiModelProperties {
 
   public static AllowableValues allowableValueFromString(String allowableValueString) {
     AllowableValues allowableValues = new AllowableListValues(Lists.<String>newArrayList(), "LIST");
-    allowableValueString = allowableValueString.trim().replaceAll(" ", "");
+    allowableValueString = allowableValueString.trim();
     if (allowableValueString.startsWith("range[")) {
       allowableValueString = allowableValueString.replaceAll("range\\[", "").replaceAll("]", "");
       Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
@@ -66,7 +66,7 @@ public final class ApiModelProperties {
       Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
       allowableValues = new AllowableListValues(newArrayList(split), "LIST");
     } else if (hasText(allowableValueString)) {
-      List<String> singleVal = Collections.singletonList(allowableValueString.trim());
+      List<String> singleVal = Collections.singletonList(allowableValueString);
       allowableValues = new AllowableListValues(singleVal, "LIST");
     }
     return allowableValues;
