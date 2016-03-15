@@ -49,7 +49,7 @@ $(function() {
     initializeBaseUrl();
 
     function addApiKeyAuthorization() {
-      var key = encodeURIComponent($('#input_apiKey')[0].value);
+      var key = window.apiKeyVehicle == 'query ? encodeURIComponent($('#input_apiKey')[0].value) : $('#input_apiKey')[0].value;
       if (key && key.trim() != "") {
         var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization(window.apiKeyName, key, window.apiKeyVehicle);
         window.swaggerUi.api.clientAuthorizations.add(window.apiKeyName, apiKeyAuth);
