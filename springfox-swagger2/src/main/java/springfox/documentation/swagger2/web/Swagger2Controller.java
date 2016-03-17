@@ -20,6 +20,7 @@
 package springfox.documentation.swagger2.web;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Strings;
 import io.swagger.models.Swagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -80,16 +81,17 @@ public class Swagger2Controller {
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     if (isNullOrEmpty(swagger.getHost())) {
-      swagger.host(hostName(servletRequest));
+      final UriComponents uriComponents = componentsFrom(servletRequest);
+      swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
+      swagger.host(hostName(uriComponents));
     }
     return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
   }
 
-  private String hostName(HttpServletRequest servletRequest) {
+  private String hostName(UriComponents uriComponents) {
     if ("DEFAULT".equals(hostNameOverride)) {
-      UriComponents uri = componentsFrom(servletRequest);
-      String host = uri.getHost();
-      int port = uri.getPort();
+      String host = uriComponents.getHost();
+      int port = uriComponents.getPort();
       if (port > -1) {
         return String.format("%s:%d", host, port);
       }
