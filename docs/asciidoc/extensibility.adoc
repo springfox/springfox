@@ -1,12 +1,11 @@
 == Plugins
 === Introduction
-Any plugin or extensibility hook that is available https://github
-.com/springfox/springfox/tree/master/springfox-spi/src/main/java/springfox/documentation/spi[is available in the SPI
+Any plugin or extensibility hook that is available https://github.com/springfox/springfox/tree/master/springfox-spi/src/main/java/springfox/documentation/spi[is available in the SPI
 module]. In the `spi` module, anything that ends in `*Plugin` is generally an extensibility point that is meant for
 library consumers to consume.
 
 The bean validation (JSR-302) is a great example of a contribution to https://github.com/springfox/springfox/tree/master/springfox-bean-validators[support bean validations]. Its fairly simple and small in scope and should
-give an idea how one goes about creating a plugin. Its a set of plugins are act on `ModelProperty`ies, hence they
+give an idea how one goes about creating a plugin. Its a set of plugins are act on `ModelProperty`, hence they
 are  implementations of `ModelPropertyBuilderPlugin`.
 
 === Plugins Available For Extensibility
