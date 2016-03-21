@@ -94,4 +94,18 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
     then:
       1 * plugin.configure(_)
   }
+
+  def "bootstrapper only if the event is from the root context"() {
+    given: "ContextRefreshedEvent from a non-root application context."
+    ApplicationContext appCtx = Mock(ApplicationContext)
+    appCtx.getParent() >> Mock(ApplicationContext)
+    ContextRefreshedEvent rootAppCtxEvent = new ContextRefreshedEvent(appCtx)
+    pluginManager.documentationPlugins() >>  []
+
+    when:
+    bootstrapper.onApplicationEvent(rootAppCtxEvent)
+
+    then:
+    bootstrapper.initialized.get() == false
+  }
 }
