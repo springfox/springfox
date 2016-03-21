@@ -80,6 +80,13 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+
+    // run the bootstrapper only if the event is from the root context
+    if(contextRefreshedEvent.getApplicationContext().getParent() != null) {
+      log.info("contextRefreshedEvent {} not from root application context. So skipping this event.", contextRefreshedEvent);
+      return;
+    }
+
     if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
       List<DocumentationPlugin> plugins = pluginOrdering()
