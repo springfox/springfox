@@ -20,8 +20,6 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.TypeResolver
-import org.springframework.context.ApplicationContext
-import org.springframework.context.event.ContextRefreshedEvent
 import spock.lang.Specification
 import springfox.documentation.service.Documentation
 import springfox.documentation.spi.DocumentationType
@@ -36,13 +34,11 @@ import javax.servlet.ServletContext
 
 class DocumentationPluginsBootstrapperSpec extends Specification {
 
-  ApplicationContext applicationContext = Mock(ApplicationContext)
   DocumentationPluginsManager pluginManager = Mock(DocumentationPluginsManager)
   Documentation group = Mock(Documentation)
   ApiDocumentationScanner apiGroup = Mock(ApiDocumentationScanner)
   RequestHandlerProvider handlerProvider = Mock(RequestHandlerProvider)
 
-  ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(applicationContext)
   DocumentationPluginsBootstrapper bootstrapper =
           new DocumentationPluginsBootstrapper(pluginManager,
           [handlerProvider],
@@ -73,7 +69,7 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
       pluginManager.documentationPlugins() >>  [enabledPlugin, disabledPlugin]
 
     and:
-      bootstrapper.onApplicationEvent(contextRefreshedEvent)
+      bootstrapper.start()
 
     then:
       1 * enabledPlugin.configure(_)
@@ -89,7 +85,7 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
       plugin.isEnabled() >> true
 
     and:
-      bootstrapper.onApplicationEvent(contextRefreshedEvent)
+      bootstrapper.start()
 
     then:
       1 * plugin.configure(_)
