@@ -21,7 +21,6 @@ package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import io.swagger.models.Contact;
@@ -36,7 +35,7 @@ import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListing;
@@ -52,22 +51,27 @@ import java.util.Set;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.swagger2.mappers.ModelMapper.*;
 
-@Mapper(uses = { ModelMapper.class, ParameterMapper.class, SecurityMapper.class, LicenseMapper.class })
+@Mapper(uses = { ModelMapper.class, ParameterMapper.class, SecurityMapper.class, LicenseMapper.class,
+    VendorExtensionsMapper.class })
 public abstract class ServiceModelToSwagger2Mapper {
 
   @Mappings({
       @Mapping(target = "info", source = "resourceListing.info"),
       @Mapping(target = "paths", source = "apiListings"),
-      @Mapping(target = "schemes", source = "from.schemes"),
+      @Mapping(target = "host", source = "host"),
+      @Mapping(target = "schemes", source = "schemes"),
       @Mapping(target = "definitions", source = "apiListings"),
       @Mapping(target = "securityDefinitions", source = "resourceListing"),
       @Mapping(target = "securityRequirement", ignore = true),
+      @Mapping(target = "security", ignore = true),
       @Mapping(target = "swagger", ignore = true),
       @Mapping(target = "parameters", ignore = true),
-      @Mapping(target = "host", ignore = true),
-      @Mapping(target = "externalDocs", ignore = true)
+      @Mapping(target = "responses", ignore = true),
+      @Mapping(target = "externalDocs", ignore = true),
+      @Mapping(target = "vendorExtensions", ignore = true)
   })
   public abstract Swagger mapDocumentation(Documentation from);
 
@@ -80,13 +84,15 @@ public abstract class ServiceModelToSwagger2Mapper {
   })
   protected abstract Info mapApiInfo(ApiInfo from);
 
+  protected abstract Contact map(springfox.documentation.service.Contact from);
+
   @Mappings({
       @Mapping(target = "description", source = "notes"),
       @Mapping(target = "operationId", source = "uniqueId"),
       @Mapping(target = "schemes", source = "protocol"),
       @Mapping(target = "security", source = "securityReferences"),
       @Mapping(target = "responses", source = "responseMessages"),
-      @Mapping(target = "vendorExtensions", ignore = true),
+      @Mapping(target = "vendorExtensions", source = "vendorExtensions"),
       @Mapping(target = "externalDocs", ignore = true)
   })
   protected abstract Operation mapOperation(springfox.documentation.service.Operation from);
@@ -98,11 +104,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
   protected List<Scheme> mapSchemes(List<String> from) {
-    return FluentIterable.from(from).transform(toScheme()).toList();
-  }
-
-  protected Contact mapContact(String contact) {
-    return new Contact().name(contact);
+    return from(from).transform(toScheme()).toList();
   }
 
   protected List<Map<String, List<String>>> mapAuthorizations(
@@ -120,16 +122,25 @@ public abstract class ServiceModelToSwagger2Mapper {
     HashMap<String, Response> responses = newHashMap();
     for (ResponseMessage responseMessage : from) {
       Property responseProperty;
-      ModelRef modelRef = responseMessage.getResponseModel();
+      ModelReference modelRef = responseMessage.getResponseModel();
       responseProperty = modelRefToProperty(modelRef);
       Response response = new Response()
           .description(responseMessage.getMessage())
           .schema(responseProperty);
       response.setExamples(Maps.<String, Object>newHashMap());
-      response.setHeaders(Maps.<String, Property>newHashMap());
+      response.setHeaders(transformEntries(responseMessage.getHeaders(), toPropertyEntry()));
       responses.put(String.valueOf(responseMessage.getCode()), response);
     }
     return responses;
+  }
+
+  private EntryTransformer<String, ModelReference, Property> toPropertyEntry() {
+    return new EntryTransformer<String, ModelReference, Property>() {
+      @Override
+      public Property transformEntry(String key, ModelReference value) {
+        return modelRefToProperty(value);
+      }
+    };
   }
 
   protected Map<String, Path> mapApiListings(Multimap<String, ApiListing> apiListings) {
@@ -153,7 +164,7 @@ public abstract class ServiceModelToSwagger2Mapper {
 
   private Path mapOperations(ApiDescription api, Optional<Path> existingPath) {
     Path path = existingPath.or(new Path());
-    for (springfox.documentation.service.Operation each : api.getOperations()) {
+    for (springfox.documentation.service.Operation each : nullToEmptyList(api.getOperations())) {
       Operation operation = mapOperation(each);
       path.set(each.getMethod().toString().toLowerCase(), operation);
     }

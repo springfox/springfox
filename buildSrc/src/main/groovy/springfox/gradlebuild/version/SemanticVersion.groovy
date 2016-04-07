@@ -29,7 +29,7 @@ class SemanticVersion implements SoftwareVersion {
     this.patch = patch
   }
 
-  SemanticVersion next(ReleaseType releaseType) {
+  SemanticVersion next(ReleaseType releaseType, String buildSuffix) {
     if (releaseType == ReleaseType.MAJOR) {
       new SemanticVersion(major + 1, 0, 0, buildSuffix)
     } else if (releaseType == ReleaseType.MINOR) {
@@ -40,7 +40,7 @@ class SemanticVersion implements SoftwareVersion {
   }
 
   public String asText() {
-    "${major}.${minor}.${patch}"
+    "${major}.${minor}.${patch}$buildSuffix"
   }
 
   @Override

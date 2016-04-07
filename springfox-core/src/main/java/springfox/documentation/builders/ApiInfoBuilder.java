@@ -20,6 +20,7 @@
 package springfox.documentation.builders;
 
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 
 /**
  * Builds the api information
@@ -28,7 +29,7 @@ public class ApiInfoBuilder {
   private String title;
   private String description;
   private String termsOfServiceUrl;
-  private String contact;
+  private Contact contact;
   private String license;
   private String licenseUrl;
   private String version;
@@ -82,8 +83,21 @@ public class ApiInfoBuilder {
    *
    * @param contact - contact information
    * @return this
+   * @deprecated @since 2.4.0. Use the overload that takes in a contact instead
    */
+  @Deprecated
   public ApiInfoBuilder contact(String contact) {
+    this.contact = new Contact(contact, "", "");
+    return this;
+  }
+
+  /**
+   * Updates contact information for the person responsible for this API
+   *
+   * @param contact - contact information
+   * @return this
+   */
+  public ApiInfoBuilder contact(Contact contact) {
     this.contact = contact;
     return this;
   }

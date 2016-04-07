@@ -47,8 +47,7 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
   public void apply(ModelContext context) {
     ApiModel annotation = AnnotationUtils.findAnnotation(forClass(context), ApiModel.class);
     if (annotation != null) {
-      context.getBuilder()
-              .description(annotation.description());
+      context.getBuilder().description(annotation.description());
     }
   }
 

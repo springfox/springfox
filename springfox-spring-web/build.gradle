@@ -2,6 +2,17 @@ configurations {
   testArtifacts.extendsFrom testRuntime
 }
 
+ext {
+  limits = [
+      'instruction': 97,
+      'branch'     : 91,
+      'line'       : 96.5,
+      'complexity' : 92,
+      'method'     : 96,
+      'class'      : 100
+  ]
+}
+
 dependencies {
   compile libs.core
   compile libs.spring
@@ -14,9 +25,7 @@ dependencies {
   testCompile project(':springfox-core')
   testCompile libs.test
   testCompile libs.swagger2Core
-  testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts')) {
-    exclude group: 'org.springframework', module: 'spring-web'
-  }
+  testCompile project(path: ':springfox-schema', configuration: 'testArtifacts')
 }
 
 task testJar(type: Jar) {

@@ -21,7 +21,7 @@ package springfox.documentation.swagger1.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Qualifier;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.swagger1.dto.DataType;
 
 import java.lang.annotation.ElementType;
@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 @Mapper
 public class DataTypeMapper {
   @ResponseTypeName
-  public String responseTypeName(ModelRef modelRef) {
+  public String responseTypeName(ModelReference modelRef) {
     if (modelRef == null) {
       return null;
     }
@@ -43,7 +43,7 @@ public class DataTypeMapper {
   }
 
   @OperationType
-  public DataType operationTypeFromModelRef(ModelRef modelRef) {
+  public DataType operationTypeFromModelRef(ModelReference modelRef) {
     if (modelRef !=null) {
       return new DataType(operationTypeName(modelRef));
     }
@@ -51,7 +51,7 @@ public class DataTypeMapper {
   }
 
   @Type
-  public DataType typeFromModelRef(ModelRef modelRef) {
+  public DataType typeFromModelRef(ModelReference modelRef) {
     if (modelRef != null) {
       if (modelRef.isCollection()) {
         return new DataType(String.format("%s[%s]", modelRef.getType(), modelRef.getItemType()));
@@ -61,7 +61,7 @@ public class DataTypeMapper {
     return null;
   }
 
-  private String operationTypeName(ModelRef modelRef) {
+  private String operationTypeName(ModelReference modelRef) {
     if (modelRef == null) {
       return null;
     }

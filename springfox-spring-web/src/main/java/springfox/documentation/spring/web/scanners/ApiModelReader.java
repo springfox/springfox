@@ -25,6 +25,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.schema.Model;
@@ -48,7 +49,7 @@ public class ApiModelReader  {
   private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ApiModelReader(ModelProvider modelProvider,
+  public ApiModelReader(@Qualifier("cachedModels") ModelProvider modelProvider,
           TypeResolver typeResolver,
           DocumentationPluginsManager pluginsManager) {
     this.modelProvider = modelProvider;

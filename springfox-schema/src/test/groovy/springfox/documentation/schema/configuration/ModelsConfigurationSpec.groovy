@@ -27,6 +27,5 @@ class ModelsConfigurationSpec extends Specification {
       def config = new ModelsConfiguration()
     then:
       config.typeResolver() != null
-
   }
 }

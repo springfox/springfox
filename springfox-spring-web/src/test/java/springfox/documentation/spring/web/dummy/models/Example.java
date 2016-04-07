@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.dummy.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import org.joda.time.LocalDateTime;
@@ -37,11 +38,15 @@ public class Example extends Parent implements Serializable {
 
   private EnumType enumType;
 
+  @ApiModelProperty(value = "A read only string", readOnly = true)
+  private String readOnlyString;
+
   @ApiParam(value = "description of annotatedEnumType", required = false)
   private EnumType annotatedEnumType;
 
   private NestedType nestedType;
 
+  @JsonProperty("propertyWithNoGetterMethod")
   private String propertyWithNoGetterMethod;
   private String propertyWithNoSetterMethod;
 
@@ -122,6 +127,14 @@ public class Example extends Parent implements Serializable {
 
   public void setLocalDateTime(LocalDateTime localDateTime) {
     this.localDateTime = localDateTime;
+  }
+
+  public String getReadOnlyString() {
+    return readOnlyString;
+  }
+
+  public void setReadOnlyString(String readOnlyString) {
+    this.readOnlyString = readOnlyString;
   }
 }
 

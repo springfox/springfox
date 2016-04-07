@@ -1,986 +1,960 @@
 {
-    "apiVersion": "1.0",
-    "swaggerVersion": "1.2",
-    "basePath": "/",
-    "resourcePath": "/pets",
-    "produces": [
-
-    ],
-    "consumes": [
-
-    ],
-    "apis": [
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "/",
+  "resourcePath": "/pets",
+  "produces": [
+  ],
+  "consumes": [
+  ],
+  "apis": [
+    {
+      "path": "/pets",
+      "description": "addPet",
+      "operations": [
         {
-            "path": "/pets",
-            "description": "addPet",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "Add a new pet to the store",
-                    "nickname": "addPetUsingPOST",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "Pet object that needs to be added to the store",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "Pet",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        },
-                        {
-                            "code": 405,
-                            "message": "Invalid input",
-                            "responseModel": "Void"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "void"
-                }
-            ]
-        },
-        {
-            "path": "/pets",
-            "description": "updatePet",
-            "operations": [
-                {
-                    "method": "PUT",
-                    "summary": "Update an existing pet",
-                    "nickname": "updatePetUsingPUT",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "Pet object that needs to be added to the store",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "Pet",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 400,
-                            "message": "Invalid ID supplied",
-                            "responseModel": "Void"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Pet not found",
-                            "responseModel": "Void"
-                        },
-                        {
-                            "code": 405,
-                            "message": "Validation exception",
-                            "responseModel": "Void"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "void"
-                }
-            ]
-        },
-        {
-            "path": "/pets",
-            "description": "listPets",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "List all pets",
-                    "nickname": "listPetsUsingGET",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "array"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "array",
-                    "items": {
-                        "type": "Pet"
-                    }
-                }
-            ]
-        },
-        {
-            "path": "/pets/byName/{name}",
-            "description": "petEntities",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "petEntities",
-                    "nickname": "petEntitiesUsingPOST",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "name",
-                            "name": "name",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "array"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "array",
-                    "items": {
-                        "type": "Pet"
-                    }
-                }
-            ]
-        },
-        {
-            "path": "/pets/echo",
-            "description": "echo",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "echo",
-                    "nickname": "echoUsingPOST",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "someInput",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "List[Entry\u00abstring,Pet\u00bb]",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "array"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "List[Entry\u00abstring,Pet\u00bb]"
-                }
-            ]
-        },
-        {
-            "path": "/pets/findByStatus",
-            "description": "findPetsByStatus",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "Finds Pets by status",
-                    "notes": "Multiple status values can be provided with comma seperated strings",
-                    "nickname": "findPetsByStatusUsingGET",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": true,
-                            "enum": [
-                                "available",
-                                "pending",
-                                "sold"
-                            ],
-                            "defaultValue": "available",
-                            "description": "Status values that need to be considered for filter",
-                            "name": "status",
-                            "paramType": "query",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "Pet"
-                        },
-                        {
-                            "code": 400,
-                            "message": "Invalid status value",
-                            "responseModel": "Void"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "Pet"
-                }
-            ]
-        },
-        {
-            "path": "/pets/findByTags",
-            "description": "findPetsByTags",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "Finds Pets by tags",
-                    "notes": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
-                    "nickname": "findPetsByTagsUsingGET",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": true,
-                            "defaultValue": "",
-                            "description": "Tags to filter by",
-                            "name": "tags",
-                            "paramType": "query",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "Pet"
-                        },
-                        {
-                            "code": 400,
-                            "message": "Invalid tag value",
-                            "responseModel": "Void"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "true",
-                    "type": "Pet"
-                }
-            ]
-        },
-        {
-            "path": "/pets/nameToNickNamesMap",
-            "description": "nameToNickNamesMap",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "nameToNickNamesMap",
-                    "nickname": "nameToNickNamesMapUsingPOST",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "array"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "List[Entry\u00abstring,List\u00abstring\u00bb\u00bb]"
-                }
-            ]
-        },
-        {
-            "path": "/pets/siblings",
-            "description": "siblings",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "siblings",
-                    "nickname": "siblingsUsingPOST",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "pet",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "Pet",
-                            "required": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "array"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "array",
-                    "items": {
-                        "type": "Pet"
-                    }
-                }
-            ]
-        },
-        {
-            "path": "/pets/transformPetNameToPetMapToAny",
-            "description": "transformPetNameToPetMapToAny",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "transformPetNameToPetMapToAny",
-                    "nickname": "transformPetNameToPetMapToAnyUsingPOST",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "someInput",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "List[Entry\u00abstring,Pet\u00bb]",
-                            "required": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "object"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "object"
-                }
-            ]
-        },
-        {
-            "path": "/pets/transformPetNameToPetMapToGenericOpenMap",
-            "description": "transformPetNameToPetMapToGenericOpenMap",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "transformPetNameToPetMapToGenericOpenMap",
-                    "nickname": "transformPetNameToPetMapToGenericOpenMapUsingPOST",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "someInput",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "List[Entry\u00abstring,Pet\u00bb]",
-                            "required": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "object"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "object"
-                }
-            ]
-        },
-        {
-            "path": "/pets/transformPetNameToPetMapToOpenMap",
-            "description": "transformPetNameToPetMapToOpenMap",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "transformPetNameToPetMapToOpenMap",
-                    "nickname": "transformPetNameToPetMapToOpenMapUsingPOST",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "someInput",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "List[Entry\u00abstring,Pet\u00bb]",
-                            "required": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "object"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "object"
-                }
-            ]
-        },
-        {
-            "path": "/pets/{a}/{b}",
-            "description": "method",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "method",
-                    "nickname": "methodUsingGET",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "a",
-                            "name": "a",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        },
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "b",
-                            "name": "b",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "void"
-                }
-            ]
-        },
-        {
-            "path": "/pets/{name}",
-            "description": "petByName",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "petByName",
-                    "nickname": "petByNameUsingPOST",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "name",
-                            "name": "name",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "Pet"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "Pet"
-                }
-            ]
-        },
-        {
-            "path": "/pets/{petId}",
-            "description": "getPetById",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "Find pet by ID",
-                    "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
-                    "nickname": "getPetByIdUsingGET",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "maximum": "5",
-                            "minimum": "1",
-                            "defaultValue": "",
-                            "description": "ID of pet that needs to be fetched",
-                            "name": "petId",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "Pet"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "Pet"
-                }
-            ]
-        },
-        {
-            "path": "/pets/{petId}/pic",
-            "description": "updatePic",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "updatePic",
-                    "nickname": "updatePicUsingPOST",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "multipart/form-data"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "petId",
-                            "name": "petId",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        },
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "pic",
-                            "name": "pic",
-                            "paramType": "form",
-                            "type": "File",
-                            "required": false
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "void"
-                }
-            ]
-        },
-        {
-            "path": "/pets/{petId}/pic/{picId}",
-            "description": "updatePic",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "updatePic",
-                    "nickname": "updatePicUsingGET",
-                    "produces": [
-                        "*/*"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "petId",
-                            "name": "petId",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        },
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "picId",
-                            "name": "picId",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "void"
-                }
-            ]
+          "method": "POST",
+          "summary": "Add a new pet to the store",
+          "notes": "Add a new pet to the store",
+          "nickname": "addPetUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "Pet object that needs to be added to the store",
+              "name": "body",
+              "paramType": "body",
+              "type": "Pet",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            },
+            {
+              "code": 405,
+              "message": "Invalid input"
+            }
+          ],
+          "deprecated": "false",
+          "type": "void"
         }
-    ],
-    "models": {
-        "Pet": {
-            "description": "",
-            "id": "Pet",
-            "properties": {
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "id": {
-                    "required": false,
-                    "type": "string"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
+      ]
+    },
+    {
+      "path": "/pets",
+      "description": "updatePet",
+      "operations": [
+        {
+          "method": "PUT",
+          "summary": "Update an existing pet",
+          "nickname": "updatePetUsingPUT_1",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "Pet object that needs to be added to the store",
+              "name": "body",
+              "paramType": "body",
+              "type": "Pet",
+              "required": true
             }
-        },
-        "Entry\u00abstring,Pet\u00bb": {
-            "description": "",
-            "id": "Entry\u00abstring,Pet\u00bb",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "type": "Pet"
-                }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 400,
+              "message": "Invalid ID supplied"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Pet not found"
+            },
+            {
+              "code": 405,
+              "message": "Validation exception"
             }
-        },
-        "Entry\u00abstring,List\u00abstring\u00bb\u00bb": {
-            "description": "",
-            "id": "Entry\u00abstring,List\u00abstring\u00bb\u00bb",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
+          ],
+          "deprecated": "false",
+          "type": "void"
         }
+      ]
+    },
+    {
+      "path": "/pets",
+      "description": "listPets",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "List all pets",
+          "nickname": "listPetsUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "array"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "array",
+          "items": {
+            "type": "Pet"
+          }
+        }
+      ]
+    },
+    {
+      "path": "/pets/byName/{name}",
+      "description": "petEntities",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "petEntities",
+          "nickname": "petEntitiesUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "name",
+              "name": "name",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "array"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "array",
+          "items": {
+            "type": "Pet"
+          }
+        }
+      ]
+    },
+    {
+      "path": "/pets/echo",
+      "description": "echo",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "echo",
+          "nickname": "echoUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "someInput",
+              "name": "body",
+              "paramType": "body",
+              "type": "List[Entry\u00abstring,Pet\u00bb]",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "array"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "List[Entry\u00abstring,Pet\u00bb]"
+        }
+      ]
+    },
+    {
+      "path": "/pets/findByStatus",
+      "description": "findPetsByStatus",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Find Pet by status",
+          "notes": "Multiple status values can be provided with comma seperated strings",
+          "nickname": "findPetsByStatusUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "enum": [
+                "available",
+                "pending",
+                "sold"
+              ],
+              "defaultValue": "available",
+              "description": "Status values that need to be considered for filter",
+              "name": "status",
+              "paramType": "query",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 400,
+              "message": "Invalid status value"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet"
+        }
+      ]
+    },
+    {
+      "path": "/pets/findByTags",
+      "description": "findPetsByTags",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Find Pet by tags",
+          "notes": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
+          "nickname": "findPetsByTagsUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": true,
+              "description": "Tags to filter by",
+              "name": "tags",
+              "paramType": "query",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 400,
+              "message": "Invalid tag value"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "true",
+          "type": "Pet"
+        }
+      ]
+    },
+    {
+      "path": "/pets/nameToNickNamesMap",
+      "description": "nameToNickNamesMap",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "nameToNickNamesMap",
+          "nickname": "nameToNickNamesMapUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "array"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "List[Entry\u00abstring,List\u00abstring\u00bb\u00bb]"
+        }
+      ]
+    },
+    {
+      "path": "/pets/siblings",
+      "description": "siblings",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "siblings",
+          "nickname": "siblingsUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "pet",
+              "name": "body",
+              "paramType": "body",
+              "type": "Pet",
+              "required": false
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "array"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "array",
+          "items": {
+            "type": "Pet"
+          }
+        }
+      ]
+    },
+    {
+      "path": "/pets/transformPetNameToPetMapToAny",
+      "description": "transformPetNameToPetMapToAny",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "transformPetNameToPetMapToAny",
+          "nickname": "transformPetNameToPetMapToAnyUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "someInput",
+              "name": "body",
+              "paramType": "body",
+              "type": "List[Entry\u00abstring,Pet\u00bb]",
+              "required": false
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "object"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "object"
+        }
+      ]
+    },
+    {
+      "path": "/pets/transformPetNameToPetMapToGenericOpenMap",
+      "description": "transformPetNameToPetMapToGenericOpenMap",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "transformPetNameToPetMapToGenericOpenMap",
+          "nickname": "transformPetNameToPetMapToGenericOpenMapUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "someInput",
+              "name": "body",
+              "paramType": "body",
+              "type": "List[Entry\u00abstring,Pet\u00bb]",
+              "required": false
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "object"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "object"
+        }
+      ]
+    },
+    {
+      "path": "/pets/transformPetNameToPetMapToOpenMap",
+      "description": "transformPetNameToPetMapToOpenMap",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "transformPetNameToPetMapToOpenMap",
+          "nickname": "transformPetNameToPetMapToOpenMapUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "someInput",
+              "name": "body",
+              "paramType": "body",
+              "type": "List[Entry\u00abstring,Pet\u00bb]",
+              "required": false
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "object"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "object"
+        }
+      ]
+    },
+    {
+      "path": "/pets/{a}/{b}",
+      "description": "method",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "method",
+          "nickname": "methodUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "a",
+              "name": "a",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            },
+            {
+              "allowMultiple": false,
+              "description": "b",
+              "name": "b",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "void"
+        }
+      ]
+    },
+    {
+      "path": "/pets/{name}",
+      "description": "petByName",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "petByName",
+          "nickname": "petByNameUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "name",
+              "name": "name",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet"
+        }
+      ]
+    },
+    {
+      "path": "/pets/{petId}",
+      "description": "getPetById",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Find pet by ID",
+          "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+          "nickname": "getPetByIdUsingGET_1",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "maximum": "5",
+              "minimum": "1",
+              "description": "ID of pet that needs to be fetched",
+              "name": "petId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet"
+        }
+      ]
+    },
+    {
+      "path": "/pets/{petId}/pic",
+      "description": "updatePic",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "updatePic",
+          "nickname": "updatePicUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "multipart/form-data"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "petId",
+              "name": "petId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            },
+            {
+              "allowMultiple": false,
+              "description": "pic",
+              "name": "pic",
+              "paramType": "form",
+              "type": "File",
+              "required": false
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "void"
+        }
+      ]
+    },
+    {
+      "path": "/pets/{petId}/pic/{picId}",
+      "description": "updatePic",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "updatePic",
+          "nickname": "updatePicUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "petId",
+              "name": "petId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            },
+            {
+              "allowMultiple": false,
+              "description": "picId",
+              "name": "picId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "void"
+        }
+      ]
     }
+  ],
+  "models": {
+    "Pet": {
+      "description": "",
+      "id": "Pet",
+      "properties": {
+        "age": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
+        }
+      }
+    },
+    "Entry\u00abstring,Pet\u00bb": {
+      "description": "",
+      "id": "Entry\u00abstring,Pet\u00bb",
+      "properties": {
+        "key": {
+          "required": false,
+          "type": "Pet"
+        }
+      }
+    },
+    "Entry\u00abstring,List\u00abstring\u00bb\u00bb": {
+      "description": "",
+      "id": "Entry\u00abstring,List\u00abstring\u00bb\u00bb",
+      "properties": {
+        "key": {
+          "required": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
 }

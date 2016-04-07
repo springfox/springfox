@@ -60,13 +60,16 @@ class Swagger1ControllerSpec extends DocumentationContextSpec {
   @Shared
   Swagger1Controller controller = new Swagger1Controller()
   ApiListingReferenceScanner listingReferenceScanner
+  ApiListingScanner listingScanner
 
   def setup() {
     controller.documentationCache = new DocumentationCache()
 
     controller.jsonSerializer = new JsonSerializer([new SwaggerJacksonModule()])
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
+    listingScanner = Mock(ApiListingScanner)
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingScanner.scan(_) >> LinkedListMultimap.create()
     controller.mapper = serviceMapper()
     def jackson2 = new MappingJackson2HttpMessageConverter()
     jackson2.setSupportedMediaTypes([MediaType.ALL, MediaType.APPLICATION_JSON])
@@ -83,9 +86,8 @@ class Swagger1ControllerSpec extends DocumentationContextSpec {
   @Unroll("path: #path")
   def "should return the default or first swagger resource listing"() {
     given:
-      ApiDocumentationScanner swaggerApiResourceListing =
-              new ApiDocumentationScanner(listingReferenceScanner, Mock(ApiListingScanner))
-      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
+      ApiDocumentationScanner sut = new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
+      controller.documentationCache.addDocumentation(sut.scan(context()))
     when:
       MvcResult result = mockMvc
               .perform(get(path))

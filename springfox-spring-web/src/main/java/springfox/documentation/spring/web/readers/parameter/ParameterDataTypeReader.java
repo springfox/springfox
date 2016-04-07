@@ -21,14 +21,15 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.schema.Collections;
-import springfox.documentation.schema.Maps;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
@@ -36,13 +37,20 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
-import java.io.File;
+import java.lang.annotation.Annotation;
+
+import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
+import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private final TypeNameExtractor nameExtractor;
   private final TypeResolver resolver;
+
 
   @Autowired
   public ParameterDataTypeReader(TypeNameExtractor nameExtractor, TypeResolver resolver) {
@@ -60,31 +68,36 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     ResolvedMethodParameter methodParameter = context.resolvedMethodParameter();
     ResolvedType parameterType = methodParameter.getResolvedParameterType();
     parameterType = context.alternateFor(parameterType);
-    //Multi-part file trumps any other annotations
-    if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
-      context.parameterBuilder()
-              .type(resolver.resolve(File.class))
-              .modelRef(new ModelRef("File"));
-    } else {
-      ModelContext modelContext = ModelContext.inputParam(parameterType, context.getDocumentationType(),
-              context.getAlternateTypeProvider(), context.getGenericNamingStrategy());
-      context.parameterBuilder()
-              .type(parameterType)
-              .modelRef(modelRef(parameterType, modelContext));
+    Annotation[] methodAnnotations = methodParameter.getMethodParameter().getParameterAnnotations();
+    ModelReference modelRef = null;
+    for (Annotation annotation : methodAnnotations) {
+      if (annotation instanceof PathVariable && treatAsAString(parameterType)) {
+        parameterType = resolver.resolve(String.class);
+        modelRef = new ModelRef("string");
+      } else if (annotation instanceof RequestParam && isMapType(parameterType)) {
+        modelRef = new ModelRef("", new ModelRef("string"), true);
+      } else if (annotation instanceof RequestParam && treatRequestParamAsString(parameterType)) {
+        parameterType = resolver.resolve(String.class);
+        modelRef = new ModelRef("string");
+      }
     }
-    
+    ModelContext modelContext = inputParam(parameterType,
+        context.getDocumentationType(),
+        context.getAlternateTypeProvider(),
+        context.getGenericNamingStrategy());
+    context.parameterBuilder()
+            .type(parameterType)
+            .modelRef(Optional.fromNullable(modelRef)
+                .or(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
   }
-  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
-    if (Collections.isContainerType(type)) {
-      ResolvedType collectionElementType = Collections.collectionElementType(type);
-      String elementTypeName = nameExtractor.typeName(ModelContext.fromParent(modelContext, collectionElementType));
-      return new ModelRef(Collections.containerType(type), elementTypeName);
-    }
-    if (Maps.isMapType(type)) {
-      String elementTypeName = nameExtractor.typeName(ModelContext.fromParent(modelContext, Maps.mapValueType(type)));
-      return new ModelRef("Map", elementTypeName, true);
-    }
-    String typeName = nameExtractor.typeName(ModelContext.fromParent(modelContext, type));
-    return new ModelRef(typeName);
+
+  private boolean treatRequestParamAsString(ResolvedType parameterType) {
+    return treatAsAString(parameterType) && !isContainerType(parameterType)
+        || (isContainerType(parameterType) && treatAsAString(collectionElementType(parameterType)));
+  }
+
+  private boolean treatAsAString(ResolvedType parameterType) {
+    return !(isBaseType(typeNameFor(parameterType.getErasedType()))
+        || parameterType.getErasedType().isEnum());
   }
 }

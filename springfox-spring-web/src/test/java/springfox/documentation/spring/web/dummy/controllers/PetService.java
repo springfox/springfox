@@ -60,7 +60,7 @@ public class PetService {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  @ApiOperation(value = "Add a new pet to the store")
+  @ApiOperation(value = "Add a new pet to the store", notes = "Add a new pet to the store")
   @ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input") })
   public void addPet(
       @ApiParam(value = "Pet object that needs to be added to the store", required = true) Pet pet) {
@@ -77,8 +77,8 @@ public class PetService {
     throw new RuntimeException("NotImplementedException");
   }
 
-  @RequestMapping(value = "/findByStatus", method = RequestMethod.GET)
-  @ApiOperation(value = "Finds Pets by status",
+  @RequestMapping(value = "/findByStatus", method = RequestMethod.GET, params = {"status"})
+  @ApiOperation(value = "Find Pet by status",
       notes = "Multiple status values can be provided with comma seperated strings",
       response = Pet.class)
   @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid status value") })
@@ -90,7 +90,7 @@ public class PetService {
   }
 
   @RequestMapping(value = "/findByTags", method = RequestMethod.GET)
-  @ApiOperation(value = "Finds Pets by tags",
+  @ApiOperation(value = "Find Pet by tags",
       notes = "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
       response = Pet.class)
   @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid tag value") })

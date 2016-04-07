@@ -33,14 +33,17 @@ import org.springframework.web.context.request.async.DeferredResult;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.ApiKeyVehicle;
 import springfox.documentation.swagger.web.SecurityConfiguration;
 import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -87,6 +90,17 @@ public class Swagger2SpringBoot {
                 .build()))
         .securitySchemes(newArrayList(apiKey()))//<14>
         .securityContexts(newArrayList(securityContext()))//<15>
+        .enableUrlTemplating(true)//<21>
+        .globalOperationParameters(//<22>
+            newArrayList(new ParameterBuilder() 
+                .name("someGlobalParameter")
+                .description("Description of someGlobalParameter")
+                .modelRef(new ModelRef("string"))
+                .parameterType("query")
+                .required(true)
+                .build()))
+        .tags(new Tag("Pet Service", "All apis relating to pets")) // <25>
+        .additionalModels(typeResolver.resolve(AdditionalModel.class)) //<26>
         ;
   }
 
@@ -117,14 +131,23 @@ public class Swagger2SpringBoot {
   SecurityConfiguration security() {
     return new SecurityConfiguration(//<19>
         "test-app-client-id",
+        "test-app-client-secret",
         "test-app-realm",
         "test-app",
-        "apiKey");
+        "apiKey",
+        ApiKeyVehicle.HEADER, //<23>
+        "api_key", //<24>
+        "," /*scope separator*/);
   }
 
   @Bean
   UiConfiguration uiConfig() {
     return new UiConfiguration(//<20>
-        "validatorUrl");
+        "validatorUrl",// url
+        "none",       // docExpansion          => none | list
+        "alpha",      // apiSorter             => alpha
+        "schema",     // defaultModelRendering => schema
+        false,        // enableJsonEditor      => true | false
+        true);        // showRequestHeaders    => true | false
   }
 }

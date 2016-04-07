@@ -22,9 +22,12 @@ package springfox.documentation.spring.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.util.UriUtils;
 
 import java.io.UnsupportedEncodingException;
+
+import static springfox.documentation.spring.web.paths.Paths.splitCamelCase;
 
 public class ControllerNamingUtils {
   private static Logger log = LoggerFactory.getLogger(ControllerNamingUtils.class);
@@ -62,5 +65,13 @@ public class ControllerNamingUtils {
       log.error("Could not decode:" + path, e);
     }
     return path;
+  }
+
+
+  public static String controllerNameAsGroup(HandlerMethod handlerMethod) {
+    Class<?> controllerClass = handlerMethod.getBeanType();
+    return splitCamelCase(controllerClass.getSimpleName(), "-")
+        .replace("/", "")
+        .toLowerCase();
   }
 }

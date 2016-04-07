@@ -21,6 +21,7 @@ package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
+import io.swagger.models.parameters.AbstractSerializableParameter;
 import io.swagger.models.parameters.CookieParameter;
 import io.swagger.models.parameters.FormParameter;
 import io.swagger.models.parameters.HeaderParameter;
@@ -28,16 +29,18 @@ import io.swagger.models.parameters.PathParameter;
 import io.swagger.models.parameters.QueryParameter;
 import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.models.properties.Property;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.AllowableListValues;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Parameter;
 
 import java.util.Map;
 
 import static com.google.common.base.Functions.*;
+import static springfox.documentation.swagger2.mappers.EnumMapper.*;
+import static springfox.documentation.swagger2.mappers.Properties.*;
 
 public class SerializableParameterFactories {
-  public static final Map<String, SerializableParameterFactory> factory = ImmutableMap.<String, SerializableParameterFactory>builder()
+  public static final Map<String, SerializableParameterFactory> factory = ImmutableMap.<String,
+      SerializableParameterFactory>builder()
       .put("header", new HeaderSerializableParameterFactory())
       .put("form", new FormSerializableParameterFactory())
       .put("path", new PathSerializableParameterFactory())
@@ -50,37 +53,38 @@ public class SerializableParameterFactories {
   }
 
   static Optional<io.swagger.models.parameters.Parameter> create(Parameter source) {
-    SerializableParameterFactory factory = forMap(SerializableParameterFactories.factory, new NullSerializableParameterFactory())
+    SerializableParameterFactory factory = forMap(SerializableParameterFactories.factory,
+        new NullSerializableParameterFactory())
         .apply(source.getParamType().toLowerCase());
 
     SerializableParameter toReturn = factory.create(source);
     if (toReturn == null) {
       return Optional.absent();
     }
-    ModelRef paramModel = source.getModelRef();
+    ModelReference paramModel = source.getModelRef();
     toReturn.setName(source.getName());
     toReturn.setDescription(source.getDescription());
     toReturn.setAccess(source.getParamAccess());
     toReturn.setRequired(source.isRequired());
+    maybeAddEnumValues(toReturn, source.getAllowableValues());
     if (paramModel.isCollection()) {
-      toReturn.setCollectionFormat("csv");
+      toReturn.setCollectionFormat("multi");
       toReturn.setType("array");
-      toReturn.setItems(Properties.property(paramModel.getItemType()));
+      ModelReference paramItemModelRef = paramModel.itemModel().get();
+      Property itemProperty
+          = maybeAddEnumValues(itemTypeProperty(paramItemModelRef), paramItemModelRef.getAllowableValues());
+      toReturn.setItems(itemProperty);
+      maybeAddEnumValues(toReturn, paramItemModelRef.getAllowableValues());
     } else {
-      Property property = Properties.property(paramModel.getType());
+      //TODO: swagger-core remove this downcast when swagger-core fixes its problem
+      ((AbstractSerializableParameter) toReturn).setDefaultValue(source.getDefaultValue());
+      Property property = property(paramModel.getType());
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());
     }
-    maybeAddAlllowableValues(source, toReturn);
-    return Optional.of((io.swagger.models.parameters.Parameter)toReturn);
+    return Optional.of((io.swagger.models.parameters.Parameter) toReturn);
   }
 
-  private static void maybeAddAlllowableValues(Parameter source, SerializableParameter toReturn) {
-    if (source.getAllowableValues() instanceof AllowableListValues) {
-      AllowableListValues allowableValues = (AllowableListValues) source.getAllowableValues();
-      toReturn.setEnum(allowableValues.getValues());
-    }
-  }
 
   static class CookieSerializableParameterFactory implements SerializableParameterFactory {
     @Override

@@ -21,16 +21,32 @@ package springfox.documentation.swagger.readers.parameter;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import io.swagger.annotations.ApiParam;
 import org.springframework.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import static com.google.common.base.Optional.fromNullable;
+import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 
 public class ParameterAnnotationReader {
+
+  public static Optional<ApiParam> apiParam(MethodParameter methodParameter) {
+    return fromNullable(methodParameter.getParameterAnnotation(ApiParam.class))
+        .or(fromHierarchy(methodParameter, ApiParam.class));
+  }
+
+  public static <A extends Annotation> Optional<A> fromHierarchy(
+      MethodParameter methodParameter,
+      Class<A> annotationType) {
+    return fromNullable(searchOnInterfaces(methodParameter.getMethod(),
+        methodParameter.getParameterIndex(),
+        annotationType,
+        getParentInterfaces(methodParameter)));
+  }
+
   private static <A extends Annotation> Predicate<? super Annotation> annotationOfType(final Class<A> annotationType) {
     return new Predicate<Annotation>() {
       @Override
@@ -49,10 +65,11 @@ public class ParameterAnnotationReader {
   }
 
   @SuppressWarnings("unchecked")
-  private static <A extends Annotation> A searchOnInterfaces(Method method,
-                                              int parameterIndex,
-                                              Class<A> annotationType,
-                                              Class<?>[] interfaces) {
+  private static <A extends Annotation> A searchOnInterfaces(
+      Method method,
+      int parameterIndex,
+      Class<A> annotationType,
+      Class<?>[] interfaces) {
 
     A annotation = null;
     for (Class<?> interfaze : interfaces) {
@@ -72,14 +89,7 @@ public class ParameterAnnotationReader {
     return annotation;
   }
 
-  public <A extends Annotation> Optional<A> fromHierarchy(MethodParameter methodParameter, Class<A> annotationType) {
-    return fromNullable(searchOnInterfaces(methodParameter.getMethod(),
-        methodParameter.getParameterIndex(),
-        annotationType,
-        getParentInterfaces(methodParameter)));
-  }
-
-  Class<?>[] getParentInterfaces(MethodParameter methodParameter) {
+  private static Class<?>[] getParentInterfaces(MethodParameter methodParameter) {
     return methodParameter.getMethod().getDeclaringClass().getInterfaces();
   }
 }

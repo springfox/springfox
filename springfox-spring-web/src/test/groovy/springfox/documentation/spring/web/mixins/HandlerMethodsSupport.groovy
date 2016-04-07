@@ -32,6 +32,11 @@ trait HandlerMethodsSupport {
     new HandlerMethod(clazz, c.getMethod("methodToTest", Integer, DummyClass.Child))
   }
 
+
+  HandlerMethod unresolvableMethod() {
+   null
+  }
+
   ResolvedMethod resolvedMethod() {
     def typeResolver = new TypeResolver()
     ResolvedType dummy = typeResolver.resolve(DummyClass)

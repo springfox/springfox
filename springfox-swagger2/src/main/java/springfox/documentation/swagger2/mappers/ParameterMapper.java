@@ -25,10 +25,13 @@ import io.swagger.models.ModelImpl;
 import io.swagger.models.RefModel;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
+import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 
 import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddEnumValues;
+import static springfox.documentation.swagger2.mappers.Properties.*;
 
 
 @Mapper
@@ -46,24 +49,31 @@ public class ParameterMapper {
         .schema(fromModelRef(source.getModelRef()));
     parameter.setAccess(source.getParamAccess());
     parameter.setRequired(source.isRequired());
+
+    //TODO: swagger-core Body parameter does not have an enum property
     return parameter;
   }
 
-  Model fromModelRef(ModelRef modelRef) {
+  Model fromModelRef(ModelReference modelRef) {
     if (modelRef.isCollection()) {
-      return new ArrayModel().items(Properties.property(modelRef.getItemType()));
+      ModelReference itemModel = modelRef.itemModel().get();
+      return new ArrayModel()
+          .items(maybeAddEnumValues(itemTypeProperty(itemModel), itemModel.getAllowableValues()));
     }
     if (modelRef.isMap()) {
       ModelImpl baseModel = new ModelImpl();
-      baseModel.additionalProperties(Properties.property(modelRef.getItemType()));
+      ModelReference itemModel = modelRef.itemModel().get();
+      baseModel.additionalProperties(maybeAddEnumValues(itemTypeProperty(itemModel), itemModel.getAllowableValues()));
       return baseModel;
     }
     if (isBaseType(modelRef.getType())) {
+      Property property = property(modelRef.getType());
       ModelImpl baseModel = new ModelImpl();
-      baseModel.setType(modelRef.getType());
-      return baseModel;
+      baseModel.setType(property.getType());
+      baseModel.setFormat(property.getFormat());
+      return maybeAddEnumValues(baseModel, modelRef.getAllowableValues());
+
     }
     return new RefModel(modelRef.getType());
   }
-
 }

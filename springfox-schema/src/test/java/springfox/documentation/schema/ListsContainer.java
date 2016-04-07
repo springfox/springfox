@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListsContainer {
+  private List<ToSubstitute> substituted;
   private List<ComplexType> complexTypes;
   private List<ExampleEnum> enums;
   private List<Integer> integers;
@@ -71,5 +72,13 @@ public class ListsContainer {
 
   public void setObjects(List<Object> objects) {
     this.objects = objects;
+  }
+
+  public List<ToSubstitute> getSubstituted() {
+    return substituted;
+  }
+
+  public void setSubstituted(List<ToSubstitute> substituted) {
+    this.substituted = substituted;
   }
 }

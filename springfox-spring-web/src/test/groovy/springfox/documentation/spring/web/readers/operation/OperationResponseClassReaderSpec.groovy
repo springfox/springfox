@@ -57,7 +57,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
 
   def "should have correct response class"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
               context(), "/anyPath")
 
@@ -73,15 +73,21 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
           assert operation.responseModel.isMap()
           assert !isNullOrEmpty(operation.responseModel.itemType)
         }
+        if (allowableValues == null) {
+          assert operation.responseModel.getAllowableValues() == null
+        } else {
+          assert allowableValues == operation.responseModel.getAllowableValues().values
+        }
       }
 
     where:
-      handlerMethod                                                        | expectedClass
-      dummyHandlerMethod('methodWithConcreteResponseBody')                 | 'BusinessModel'
-      dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'FunkyBusiness'
-      dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»'
-      dummyHandlerMethod('methodWithListOfBusinesses')                     | 'List[BusinessModel]'
-      dummyHandlerMethod('methodWithMapReturn')                            | 'Map'
+      handlerMethod                                                        | expectedClass              | allowableValues
+      dummyHandlerMethod('methodWithConcreteResponseBody')                 | 'BusinessModel'            |  null
+      dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'FunkyBusiness'            |  null
+      dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»'        | null
+      dummyHandlerMethod('methodWithListOfBusinesses')                     | 'List[BusinessModel]'      | null
+      dummyHandlerMethod('methodWithMapReturn')                            | 'Map«string,BusinessModel»'| null
+      dummyHandlerMethod('methodWithEnumResponse')                         | 'string'                   | ['ONE', 'TWO']
   }
 
 }

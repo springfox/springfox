@@ -23,6 +23,7 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.lang.reflect.Type
 
@@ -51,7 +52,7 @@ class AlternateTypeRuleSpec extends Specification {
       resolve(List, Date)               | resolve(String)           | resolve(List, String)         | false
       resolve(List, WildcardType)       | resolve(String)           | resolve(List, String)         | true
       resolve(List, WildcardType)       | resolve(String)           | resolve(List, WildcardType)   | true
-      listOfListsOfType(WildcardType)   | listOfListsOfType(String) | listOfListsOfType(Date)       |  true
+      listOfListsOfType(WildcardType)   | listOfListsOfType(String) | listOfListsOfType(Date)       | true
       resolve(WildcardType)             | resolve(String)           | resolve(Date)                 | false
   }
 
@@ -59,7 +60,8 @@ class AlternateTypeRuleSpec extends Specification {
     resolve(List, resolve(List, clazz))
   }
 
-  def "Rules provide the correct alternate types given a test type" () {
+  @Unroll
+  def "Rules provide the correct alternate types given #testType." () {
     given:
       def sut = newRule(original, alternate)
     expect:
@@ -72,9 +74,9 @@ class AlternateTypeRuleSpec extends Specification {
       resolve(List, WildcardType) | resolve(Map, WildcardType, String)  | resolve(List, String)         | resolve(Map, String, String)
       resolve(List, WildcardType) | resolve(Map, WildcardType, String)  | resolve(List, Date)           | resolve(Map, Date, String)
       resolve(List, WildcardType) | resolve(Map, WildcardType, String)  | resolve(List, WildcardType)   | resolve(Map, WildcardType, String)
-      resolve(WildcardType)       | resolve(String)                     | resolve(Date)                 | resolve(WildcardType)
+      resolve(WildcardType)       | resolve(String)                     | resolve(Date)                 | resolve(Date)
       resolve(WildcardType)       | resolve(String)                     | resolve(WildcardType)         | resolve(String)
-      resolve(List, WildcardType) | resolve(String)                     | resolve(Date)                 | resolve(List, WildcardType)
+      resolve(List, WildcardType) | resolve(String)                     | resolve(Date)                 | resolve(Date)
       resolve(List, WildcardType) | resolve(WildcardType)               | resolve(List, Date)           | resolve(Date)
   }
 
@@ -94,23 +96,14 @@ class AlternateTypeRuleSpec extends Specification {
     given:
       def sut = newRule(original, alternate)
     expect:
-      sut.alternateFor(testType).equals(original)
-    where:
-      original                    | alternate              | testType
-      resolve(List, WildcardType) | resolve(List, String)  | resolve(String)
-  }
-
-  def "When the shape of the wildcard original type and the test type matches" () {
-    given:
-      def sut = newRule(original, alternate)
-    expect:
       sut.alternateFor(testType).equals(testType)
     where:
       original                    | alternate              | testType
-      resolve(List, WildcardType) | resolve(List, String)  | resolve(List, String)
+      resolve(List, WildcardType) | resolve(List, String)  | resolve(String)
+      resolve(List, String)       | resolve(List, Date)    | resolve(List, Integer)
   }
 
-  def "When the wildcard replacements dont match" () {
+  def "When the shape of the wildcard original type and the test type matches" () {
     given:
       def sut = newRule(original, alternate)
     expect:

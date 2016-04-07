@@ -18,6 +18,7 @@
  */
 
 package springfox.documentation.swagger1.integration
+
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
@@ -29,7 +30,7 @@ import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
-import springfox.documentation.spring.web.RelativePathProvider
+import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
@@ -54,7 +55,11 @@ class DocketSpec extends DocumentationContextSpec {
       pluginContext.apiInfo.getTitle() == "Api Documentation"
       pluginContext.apiInfo.getDescription() == "Api Documentation"
       pluginContext.apiInfo.getTermsOfServiceUrl() == 'urn:tos'
-      pluginContext.apiInfo.getContact() == 'Contact Email'
+
+      def contact = pluginContext.apiInfo.getContact()
+      contact.name == ''
+      contact.email == ''
+      contact.url == ''
       pluginContext.apiInfo.getLicense() == 'Apache 2.0'
       pluginContext.apiInfo.getLicenseUrl() == "http://www.apache.org/licenses/LICENSE-2.0"
       pluginContext.apiInfo.version == "1.0"
@@ -65,7 +70,7 @@ class DocketSpec extends DocumentationContextSpec {
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
     when:
       plugin
-              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
+              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null, [] as Map)])
               .useDefaultResponseMessages(true)
               .configure(contextBuilder)
 
@@ -84,7 +89,7 @@ class DocketSpec extends DocumentationContextSpec {
   def "Swagger global response messages should not be used for a particular RequestMethod"() {
     when:
       new Docket(DocumentationType.SWAGGER_12)
-              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
+              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null, [] as Map)])
               .useDefaultResponseMessages(false)
               .configure(contextBuilder)
 
@@ -137,8 +142,8 @@ class DocketSpec extends DocumentationContextSpec {
 
     where:
       method                    | args                               | expectedSize
-      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 9
-      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 8
+      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 10
+      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 9
   }
 
   def "Basic property checks"() {
@@ -155,6 +160,7 @@ class DocketSpec extends DocumentationContextSpec {
       'securityContexts'| validContexts()                                 | 'securityContexts'
       'groupName'       | 'someGroup'                                    | 'groupName'
       'apiInfo'         | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
+      'apiInfo'         | ApiInfo.DEFAULT                                | 'apiInfo'
   }
 
   def validContexts() {

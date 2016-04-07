@@ -21,6 +21,7 @@ package springfox.documentation.schema;
 
 import java.util.Currency;
 import java.util.Date;
+import java.util.UUID;
 
 public class SimpleType {
   byte aByte;
@@ -41,6 +42,7 @@ public class SimpleType {
   Float anObjectFloat;
   Double anObjectDouble;
   Currency currency;
+  UUID uuid;
 
   public Byte getAnObjectByte() {
     return anObjectByte;
@@ -184,5 +186,13 @@ public class SimpleType {
 
   public void setCurrency(Currency currency) {
     this.currency = currency;
+  }
+
+  public UUID getUuid() {
+    return uuid;
+  }
+
+  public void setUuid(UUID uuid) {
+    this.uuid = uuid;
   }
 }

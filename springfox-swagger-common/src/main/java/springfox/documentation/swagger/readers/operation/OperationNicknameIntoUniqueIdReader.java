@@ -40,6 +40,7 @@ public class OperationNicknameIntoUniqueIdReader implements OperationBuilderPlug
     if (null != methodAnnotation && StringUtils.hasText(methodAnnotation.nickname())) {
       // Populate the value of nickname annotation into uniqueId
       context.operationBuilder().uniqueId(methodAnnotation.nickname());
+      context.operationBuilder().codegenMethodNameStem(methodAnnotation.nickname());
     }
   }
 

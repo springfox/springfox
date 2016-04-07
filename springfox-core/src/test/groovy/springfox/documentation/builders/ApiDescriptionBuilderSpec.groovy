@@ -18,6 +18,8 @@
  */
 
 package springfox.documentation.builders
+
+import com.google.common.base.Function
 import com.google.common.collect.Ordering
 import spock.lang.Specification
 import springfox.documentation.service.Operation
@@ -34,7 +36,11 @@ class ApiDescriptionBuilderSpec extends Specification {
     and:
       def built = sut.build()
     then:
-      built."$property" == value
+      if (builderMethod.equals("pathDecorator")) {
+        assert built.path == ""
+      } else {
+        built."$property" == value
+      }
 
     where:
       builderMethod   | value             | property
@@ -42,6 +48,7 @@ class ApiDescriptionBuilderSpec extends Specification {
       'description'   | 'description'     | 'description'
       'operations'    | [Mock(Operation)] | 'operations'
       'hidden'        | true              | 'hidden'
+      'pathDecorator' | mock()            | 'path'
   }
 
   def "Setting properties on the builder with null values preserves previous value"() {
@@ -57,12 +64,26 @@ class ApiDescriptionBuilderSpec extends Specification {
     and:
       def built = sut.build()
     then:
-      built."$property" == value
+      if (builderMethod.equals("pathDecorator")) {
+        assert built.path == ""
+      } else {
+        built."$property" == value
+      }
 
     where:
       builderMethod   | value             | property
       'path'          | 'urn:some-path'   | 'path'
       'description'   | 'description'     | 'description'
       'operations'    | [Mock(Operation)] | 'operations'
+      'pathDecorator' | mock()            | 'path'
+  }
+
+  Function<String, String> mock() {
+    new Function<String, String>() {
+      @Override
+      String apply(String input) {
+        ""
+      }
+    }
   }
 }

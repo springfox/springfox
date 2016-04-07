@@ -21,48 +21,53 @@ package springfox.documentation.schema.property.bean;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.fasterxml.classmate.members.ResolvedMember;
 import com.fasterxml.classmate.members.ResolvedMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import springfox.documentation.schema.property.BaseModelProperty;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
+import static springfox.documentation.schema.property.bean.Accessors.*;
+
 
 public class BeanModelProperty extends BaseModelProperty {
-
+  private static final Logger LOG = LoggerFactory.getLogger(BeanModelProperty.class);
   private final ResolvedMethod method;
-  private final boolean isGetter;
   private TypeResolver typeResolver;
 
 
-  public BeanModelProperty(String propertyName, ResolvedMethod method,
-                           boolean isGetter, TypeResolver typeResolver,
-                           AlternateTypeProvider alternateTypeProvider) {
+  public BeanModelProperty(
+      String propertyName,
+      ResolvedMethod method,
+      TypeResolver typeResolver,
+      AlternateTypeProvider alternateTypeProvider) {
 
     super(propertyName, alternateTypeProvider);
 
     this.method = method;
-    this.isGetter = isGetter;
     this.typeResolver = typeResolver;
-  }
-
-  public static boolean accessorMemberIs(ResolvedMember method, String methodName) {
-    return method.getRawMember().getName().equals(methodName);
   }
 
   @Override
   protected ResolvedType realType() {
-    if (isGetter) {
-      if (method.getReturnType().getErasedType().getTypeParameters().length > 0) {
-        return method.getReturnType();
-      } else {
-        return typeResolver.resolve(method.getReturnType().getErasedType());
-      }
+    return paramOrReturnType(typeResolver, method);
+  }
+
+  private static ResolvedType adjustedToClassmateBug(TypeResolver typeResolver, ResolvedType resolvedType) {
+    if (resolvedType.getErasedType().getTypeParameters().length > 0) {
+      return resolvedType;
     } else {
-      if (method.getArgumentType(0).getErasedType().getTypeParameters().length > 0) {
-        return method.getArgumentType(0);
-      } else {
-        return typeResolver.resolve(method.getArgumentType(0).getErasedType());
-      }
+      return typeResolver.resolve(resolvedType.getErasedType());
+    }
+  }
+
+  public static ResolvedType paramOrReturnType(TypeResolver typeResolver, ResolvedMethod input) {
+    if (maybeAGetter(input.getRawMember())) {
+      LOG.debug("Evaluating unwrapped getter for member {}", input.getRawMember().getName());
+      return adjustedToClassmateBug(typeResolver, input.getReturnType());
+    } else {
+      LOG.debug("Evaluating unwrapped setter for member {}", input.getRawMember().getName());
+      return adjustedToClassmateBug(typeResolver, input.getArgumentType(0));
     }
   }
 }

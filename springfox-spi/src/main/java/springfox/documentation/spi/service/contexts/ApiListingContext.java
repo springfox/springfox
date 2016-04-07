@@ -26,11 +26,13 @@ import springfox.documentation.spi.DocumentationType;
 public class ApiListingContext {
   private final DocumentationType documentationType;
   private final ResourceGroup resourceGroup;
-  private ApiListingBuilder apiListingBuilder;
+  private final ApiListingBuilder apiListingBuilder;
 
-  public ApiListingContext(DocumentationType documentationType,
-                           ResourceGroup resourceGroup,
-                           ApiListingBuilder apiListingBuilder) {
+  public ApiListingContext(
+      DocumentationType documentationType,
+      ResourceGroup resourceGroup,
+      ApiListingBuilder apiListingBuilder) {
+
     this.documentationType = documentationType;
     this.resourceGroup = resourceGroup;
     this.apiListingBuilder = apiListingBuilder;
@@ -47,4 +49,5 @@ public class ApiListingContext {
   public ApiListingBuilder apiListingBuilder() {
     return apiListingBuilder;
   }
+
 }

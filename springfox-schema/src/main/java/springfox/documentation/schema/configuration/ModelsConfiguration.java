@@ -30,17 +30,16 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 
 @Configuration
 @ComponentScan(basePackages = {
-        "springfox.documentation.schema"
+    "springfox.documentation.schema"
 })
 @EnablePluginRegistries({
-        ModelBuilderPlugin.class,
-        ModelPropertyBuilderPlugin.class,
-        TypeNameProviderPlugin.class
+    ModelBuilderPlugin.class,
+    ModelPropertyBuilderPlugin.class,
+    TypeNameProviderPlugin.class
 })
 public class ModelsConfiguration {
   @Bean
   public TypeResolver typeResolver() {
     return new TypeResolver();
   }
-
 }

@@ -22,14 +22,18 @@ package springfox.documentation.swagger1.dto
 class ContainerDataTypeSpec extends InternalJsonSerializationSpec {
 
   def "should serialize a primitive"() {
+    given:
+      def type = new ContainerDataType("int", false)
     expect:
-      writePretty(new ContainerDataType("int", false)) == '''{
+      writePretty(type) == '''{
   "items" : {
     "format" : "int32",
     "type" : "integer"
   },
   "type" : "array"
 }'''
+    type.type == "array"
+    type.items.absoluteType == new DataType("int").absoluteType
   }
 
   def "should serialize a complex"() {

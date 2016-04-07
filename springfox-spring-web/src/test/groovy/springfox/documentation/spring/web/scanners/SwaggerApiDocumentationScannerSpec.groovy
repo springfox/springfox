@@ -18,21 +18,19 @@
  */
 
 package springfox.documentation.spring.web.scanners
-
-import springfox.documentation.spring.web.AbstractPathProvider
-import springfox.documentation.service.ApiInfo
-import springfox.documentation.service.ApiKey
-import springfox.documentation.service.ApiListingReference
-import springfox.documentation.service.Documentation
-import springfox.documentation.service.ResourceListing
+import com.google.common.collect.LinkedListMultimap
+import springfox.documentation.builders.ApiDescriptionBuilder
+import springfox.documentation.builders.ApiListingBuilder
+import springfox.documentation.service.*
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.RequestMappingContext
-import springfox.documentation.spring.web.RelativePathProvider
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.paths.AbstractPathProvider
+import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import static com.google.common.collect.Maps.*
-import static springfox.documentation.builders.PathSelectors.regex
+import static springfox.documentation.builders.PathSelectors.*
 
 @Mixin([RequestMappingSupport])
 class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
@@ -43,7 +41,8 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   def "default swagger resource"() {
     when: "I create a swagger resource"
-      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
+      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+      listingScanner.scan(_) >> LinkedListMultimap.create()
     and:
       Documentation scanned = swaggerApiResourceListing.scan(context())
 
@@ -71,7 +70,8 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
                 .build()
               .apiInfo(expected)
               .configure(contextBuilder)
-      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
+      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+      listingScanner.scan(_) >> LinkedListMultimap.create()
     and:
       Documentation scanned = swaggerApiResourceListing.scan(context())
     then:
@@ -96,7 +96,8 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
                 .build()
               .securitySchemes([apiKey])
               .configure(contextBuilder)
-      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([], newHashMap())
+      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+      listingScanner.scan(_) >> LinkedListMultimap.create()
     and:
       Documentation scanned = swaggerApiResourceListing.scan(context())
     then:
@@ -127,20 +128,21 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
       mockListingRef.path >> "/some/path"
     when:
       listingReferenceScanner.scan(_) >>
-              new ApiListingReferenceScanResult([mockListingRef], [resourceGroup: [requestMappingContext]])
+              new ApiListingReferenceScanResult([resourceGroup: [requestMappingContext]])
+      listingScanner.scan(_) >> LinkedListMultimap.create()
     and:
       Documentation scanned = swaggerApiResourceListing.scan(context())
       scanned.resourceListing != null
 
     then:
       scanned.groupName == "groupName"
-      1 * listingReferenceScanner.scan(_) >>
-              new ApiListingReferenceScanResult([mockListingRef], [resourceGroup: [requestMappingContext]])
+      1 * listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult([resourceGroup: [requestMappingContext]])
   }
 
   def "Should sort based on position"() {
     given:
-      def ordering = new Defaults().apiListingReferenceOrdering()
+      def defaults = new Defaults()
+      def ordering = defaults.apiListingReferenceOrdering()
       plugin
               .groupName("groupName")
               .select()
@@ -149,25 +151,41 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
               .apiListingReferenceOrdering(ordering)
               .configure(contextBuilder)
 
-      def refs = [
-            new ApiListingReference("/b", 'b', 1),
-            new ApiListingReference("/c", 'c', 2),
-            new ApiListingReference("/a", 'a', 2)
+      def listingsMap = LinkedListMultimap.create()
+      def listings = [
+          apiListing(defaults, 1, "/b"),
+          apiListing(defaults, 2, "/c"),
+          apiListing(defaults, 2, "/a"),
       ]
-      listingReferenceScanner.scan(_) >>
-              new ApiListingReferenceScanResult(refs, newHashMap())
+      listings.each {
+        listingsMap.put("test", it)
+      }
+      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+      listingScanner.scan(_) >> listingsMap
 
     when:
       Documentation scanned = swaggerApiResourceListing.scan(context())
-      def apis = scanned.resourceListing.getApis()
     then:
-      apis[index].position == position
-      apis[index].path == path
+      scanned.resourceListing.apis.size() == 1
+      scanned.resourceListing.apis.get(0).path == "/groupName/test"
+      scanned.resourceListing.apis.get(0).description == """Operation with path /b and position 1
+                                                           |Operation with path /c and position 2
+                                                           |Operation with path /a and position 2""".stripMargin()
 
     where:
       index | path  | position
-      0     | '/b' | 1
-      1     | '/a' | 2
-      2     | '/c' | 2
+      0     | '/b' | 0
+      1     | '/a' | 0
+      2     | '/c' | 0
+  }
+
+  def apiListing(Defaults defaults, int position, String path) {
+    new ApiListingBuilder(defaults.apiDescriptionOrdering())
+        .position(position)
+        .apis([new ApiDescriptionBuilder(defaults.operationOrdering())
+                   .path(path)
+                   .build()])
+        .description("Operation with path $path and position $position")
+        .build()
   }
 }

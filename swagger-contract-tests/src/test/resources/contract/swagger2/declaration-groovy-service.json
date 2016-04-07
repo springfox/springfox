@@ -6,7 +6,6 @@
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
     "contact": {
-      "name": "Contact Email"
     },
     "license": {
       "name": "Apache 2.0",
@@ -32,12 +31,13 @@
           "groovy-service"
         ],
         "summary": "groovyModel",
-        "operationId": "groovyModelUsingGET",
+        "operationId": "groovyModelUsingGET_1",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "application/json",
+          "application/xml"
         ],
         "responses": {
           "200": {
@@ -53,12 +53,13 @@
           "groovy-service"
         ],
         "summary": "updateGroovyModel",
-        "operationId": "updateGroovyModelUsingPUT",
+        "operationId": "updateGroovyModelUsingPUT_1",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "application/json",
+          "application/xml"
         ],
         "parameters": [
           {
@@ -97,6 +98,7 @@
   },
   "definitions": {
     "GroovyModel": {
+      "type": "object",
       "properties": {
         "stringProp": {
           "type": "string"

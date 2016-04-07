@@ -29,6 +29,7 @@ import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.spring.web.scanners.MediaTypeReader
 
 import static com.google.common.collect.Sets.*
@@ -52,7 +53,7 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
                         'producesRequestCondition': producesRequestCondition(produces)
                   ]
             )
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
               context(), "")
     when:

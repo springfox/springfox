@@ -1,11 +1,12 @@
 # Springfox
 
 [![Join the chat at https://gitter.im/springfox/springfox](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/springfox/springfox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[ ![Download](https://api.bintray.com/packages/springfox/maven-repo/springfox/images/download.svg) ](https://bintray.com/springfox/maven-repo/springfox/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/springfox/maven-repo/springfox/images/download.svg) ](https://bintray.com/springfox/maven-repo/springfox/_latestVersion) 
+[![Project Stats](https://www.openhub.net/p/springfox/widgets/project_thin_badge.gif)](https://www.openhub.net/p/springfox)
 
-| Unit  | Functional   | Coverage   |
-|---|---|---|
-|[![Circle CI](https://circleci.com/gh/springfox/springfox/tree/master.svg?style=svg)](https://circleci.com/gh/springfox/springfox/tree/master)|[![Build Status](https://travis-ci.org/adrianbk/swagger-springmvc-demo.svg?branch=master)](https://travis-ci.org/adrianbk/swagger-springmvc-demo) |[![Coverage Status](https://coveralls.io/repos/springfox/springfox/badge.svg)](https://coveralls.io/r/springfox/springfox) |
+| Build Status  | Coverage   |
+|---|---|
+|[![Circle CI](https://circleci.com/gh/springfox/springfox/tree/master.svg?style=svg)](https://circleci.com/gh/springfox/springfox/tree/master)|[![Coverage Status](https://coveralls.io/repos/springfox/springfox/badge.svg)](https://coveralls.io/r/springfox/springfox) |
 
 ### About
 For more information on this project visit the [Springfox Website] (http://springfox.io) or

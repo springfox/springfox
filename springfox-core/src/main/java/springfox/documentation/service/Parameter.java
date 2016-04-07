@@ -21,7 +21,7 @@ package springfox.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 
 public class Parameter {
   private final String name;
@@ -29,15 +29,24 @@ public class Parameter {
   private final String defaultValue;
   private final Boolean required;
   private final Boolean allowMultiple;
-  private final ModelRef modelRef;
+  private final ModelReference modelRef;
   private final Optional<ResolvedType> type;
   private final AllowableValues allowableValues;
   private final String paramType;
   private final String paramAccess;
 
-  public Parameter(String name, String description, String defaultValue, boolean required, boolean allowMultiple,
-                   ModelRef modelRef, Optional<ResolvedType> type,
-                   AllowableValues allowableValues, String paramType, String paramAccess) {
+  public Parameter(
+      String name,
+      String description,
+      String defaultValue,
+      boolean required,
+      boolean allowMultiple,
+      ModelReference modelRef,
+      Optional<ResolvedType> type,
+      AllowableValues allowableValues,
+      String paramType,
+      String paramAccess) {
+
     this.description = description;
     this.defaultValue = defaultValue;
     this.required = required;
@@ -86,7 +95,7 @@ public class Parameter {
     return paramAccess;
   }
 
-  public ModelRef getModelRef() {
+  public ModelReference getModelRef() {
     return modelRef;
   }
 }

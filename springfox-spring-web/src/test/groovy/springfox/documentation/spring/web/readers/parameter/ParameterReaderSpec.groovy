@@ -18,12 +18,13 @@
  */
 
 package springfox.documentation.spring.web.readers.parameter
-
+import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.annotation.RequestParam
-import spock.lang.Unroll
+import org.springframework.web.method.HandlerMethod
 import springfox.documentation.builders.ParameterBuilder
+import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -31,11 +32,9 @@ import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.service.ResolvedMethodParameter
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterReaderSpec extends DocumentationContextSpec {
-   @Unroll("property #resultProperty expected: #expected")
    def "should set basic properties based on ApiParam annotation or a sensible default"() {
     given:
       MethodParameter methodParameter = Stub(MethodParameter)
@@ -54,13 +53,43 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       parameterContext.parameterBuilder().build()."$resultProperty" == expected
     where:
       parameterPlugin                     | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation                     | reqParamAnnot                          | expected
-      new ParameterNameReader()           | 'name'         | 'getParameterName'    | 'someName'        | null                                   | null                                   | 'someName'
-      new ParameterNameReader()           | 'name'         | 'none'                | 'any'             | apiParam ([name: {-> 'AnName' }])      | null                                   | 'param0'
-      new ParameterNameReader()           | 'name'         | 'none'                | 'any'             | null                                   | reqParam([value: {-> 'ArName' }])      | 'ArName'
       new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | null                                   | null                                   | null
       new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: {-> 'defl' }]) | null                                   | null
       new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | null                                   | reqParam([defaultValue: {-> 'defr' }]) | 'defr'
    }
+
+  def "should set parameter name and description correctly"() {
+    given:
+      def bean = new ParamNameClazzSpecimen()
+      def resolvedBeanType = new TypeResolver().resolve(ParamNameClazzSpecimen)
+      HandlerMethod method = new HandlerMethod(bean, ParamNameClazzSpecimen.methods.find {it.name.equals(methodName)})
+      def resolvedMethodParameter  = new ResolvedMethodParameter(method.getMethodParameters().first(), resolvedBeanType)
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+        context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
+    when:
+      parameterPlugin.apply(parameterContext)
+
+    then:
+      parameterContext.parameterBuilder().build()."$resultProperty" == expected
+      parameterContext.parameterBuilder().build().description == expected
+    where:
+      parameterPlugin                     | resultProperty | methodName   | expected
+      new ParameterNameReader()           | 'name'         | "method1"    | 'someName'
+      new ParameterNameReader()           | 'name'         | "method2"    | 'someName'
+      new ParameterNameReader()           | 'name'         | "method3"    | 'ArName'
+  }
+
+  class ParamNameClazzSpecimen {
+    void method1(String someName) {
+
+    }
+    void method2(@ApiParam(name = "AnName") String someName) {
+
+    }
+    void method3(@RequestParam(value = "ArName") String someName) {
+
+    }
+  }
 
   def "ParameterNameReader supports all documentationTypes"() {
     given:

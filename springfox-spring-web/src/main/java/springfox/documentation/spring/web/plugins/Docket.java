@@ -19,12 +19,14 @@
 
 package springfox.documentation.spring.web.plugins;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
+import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy;
@@ -34,8 +36,10 @@ import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.DocumentationPlugin;
@@ -48,13 +52,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
-import static org.springframework.util.StringUtils.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 /**
  * A builder which is intended to be the primary interface into the swagger-springmvc framework.
@@ -63,28 +66,34 @@ import static org.springframework.util.StringUtils.*;
 public class Docket implements DocumentationPlugin {
 
   public static final String DEFAULT_GROUP_NAME = "default";
+
   private final DocumentationType documentationType;
-  private String groupName;
-  private ApiInfo apiInfo;
+  private final List<SecurityContext> securityContexts = newArrayList();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
+  private final List<Parameter> globalOperationParameters = newArrayList();
+  private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
+  private final Set<Class> ignorableParameterTypes = newHashSet();
+  private final Set<String> protocols = newHashSet();
+  private final Set<String> produces = newHashSet();
+  private final Set<String> consumes = newHashSet();
+  private final Set<ResolvedType> additionalModels = newHashSet();
+  private final Set<Tag> tags = newHashSet();
+
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
   private Ordering<ApiListingReference> apiListingReferenceOrdering;
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private Ordering<Operation> operationOrdering;
 
-  private AtomicBoolean initialized = new AtomicBoolean(false);
+  private ApiInfo apiInfo = ApiInfo.DEFAULT;
+  private String groupName = DEFAULT_GROUP_NAME;
   private boolean enabled = true;
   private GenericTypeNamingStrategy genericsNamingStrategy = new DefaultGenericTypeNamingStrategy();
   private boolean applyDefaultResponseMessages = true;
-  private final List<SecurityContext> securityContexts = newArrayList();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
-  private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
-  private final Set<Class> ignorableParameterTypes = newHashSet();
-  private final Set<String> protocols = newHashSet();
-  private final Set<String> produces = newHashSet();
-  private final Set<String> consumes = newHashSet();
+  private String host = "";
   private Optional<String> pathMapping = Optional.absent();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
+  private boolean enableUrlTemplating = false;
 
   public Docket(DocumentationType documentationType) {
     this.documentationType = documentationType;
@@ -97,7 +106,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    */
   public Docket apiInfo(ApiInfo apiInfo) {
-    this.apiInfo = apiInfo;
+    this.apiInfo = defaultIfAbsent(apiInfo, apiInfo);
     return this;
   }
 
@@ -133,7 +142,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    */
   public Docket groupName(String groupName) {
-    this.groupName = groupName;
+    this.groupName = defaultIfAbsent(groupName, this.groupName);
     return this;
   }
 
@@ -145,7 +154,7 @@ public class Docket implements DocumentationPlugin {
    *
    * @param pathProvider
    * @return this Docket
-   * @see springfox.documentation.spring.web.AbstractPathProvider
+   * @see springfox.documentation.spring.web.paths.AbstractPathProvider
    */
   public Docket pathProvider(PathProvider pathProvider) {
     this.pathProvider = pathProvider;
@@ -161,15 +170,26 @@ public class Docket implements DocumentationPlugin {
    * @param requestMethod    - http request method for which to apply the message
    * @param responseMessages - the message
    * @return this Docket
-   * @see com.wordnik.swagger.annotations.ApiResponse
+   * @see io.swagger.annotations.ApiResponse
    * and
-   * @see com.wordnik.swagger.annotations.ApiResponses
+   * @see io.swagger.annotations.ApiResponses
    * @see springfox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
    */
   public Docket globalResponseMessage(RequestMethod requestMethod,
                                       List<ResponseMessage> responseMessages) {
 
     this.responseMessages.put(requestMethod, responseMessages);
+    return this;
+  }
+
+  /**
+   * Adds default parameters which will be applied to all operations.
+   *
+   * @param operationParameters parameters which will be globally applied to all operations
+   * @return this Docket
+   */
+  public Docket globalOperationParameters(List<Parameter> operationParameters) {
+    this.globalOperationParameters.addAll(nullToEmptyList(operationParameters));
     return this;
   }
 
@@ -197,6 +217,12 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
+  @Incubating("2.3")
+  public Docket host(String host) {
+    this.host = defaultIfAbsent(host, this.host);
+    return this;
+  }
+
   public Docket protocols(Set<String> protocols) {
     this.protocols.addAll(protocols);
     return this;
@@ -217,9 +243,10 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Provide an ordering schema for operations
-   *
+   * <p/>
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
+   *
    * @param operationOrdering
    * @return
    */
@@ -282,7 +309,7 @@ public class Docket implements DocumentationPlugin {
    *
    * @param apply flag to determine if the default response messages are used
    *              true   - the default response messages are added to the global response messages
-   *              false  - the default response messages are added to the global response messages
+   *              false  - the default response messages are not added to the global response messages
    * @return this Docket
    */
   public Docket useDefaultResponseMessages(boolean apply) {
@@ -294,7 +321,7 @@ public class Docket implements DocumentationPlugin {
    * Controls how ApiListingReference's are sorted.
    * i.e the ordering of the api's within the swagger Resource Listing.
    * The default sort is Lexicographically by the ApiListingReference's path
-   *
+   * <p/>
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
    *
@@ -309,7 +336,7 @@ public class Docket implements DocumentationPlugin {
   /**
    * Controls how <code>com.wordnik.swagger.model.ApiDescription</code>'s are ordered.
    * The default sort is Lexicographically by the ApiDescription's path.
-   *
+   * <p/>
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
    *
@@ -349,11 +376,55 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Extensibility mechanism to add a servlet path mapping, if there is one, to the apis base path.
+   *
    * @param path - path that acts as a prefix to the api base path
    * @return this Docket
    */
   public Docket pathMapping(String path) {
     this.pathMapping = Optional.fromNullable(path);
+    return this;
+  }
+
+
+  /**
+   * Decides whether to use url templating for paths. This is especially useful when you have search api's that
+   * might have multiple request mappings for each search use case.
+   * <p/>
+   * This is an incubating feature that may not continue to be supported after the swagger specification is modified
+   * to accomodate the usecase as described in issue #711
+   *
+   * @param enabled
+   * @return
+   */
+  @Incubating("2.1.0")
+  public Docket enableUrlTemplating(boolean enabled) {
+    this.enableUrlTemplating = enabled;
+    return this;
+  }
+
+  /**
+   * Method to add additional models that are not part of any annotation or are perhaps implicit
+   *
+   * @param first     - at least one is required
+   * @param remaining - possible collection of more
+   * @return on-going docket
+   * @since 2.4.0
+   */
+  public Docket additionalModels(ResolvedType first, ResolvedType... remaining) {
+    additionalModels.add(first);
+    additionalModels.addAll(newHashSet(remaining));
+    return this;
+  }
+
+  /**
+   * Method to add global tags to the docket
+   * @param first     - atleast one tag is required to use this method
+   * @param remaining - remaining tags
+   * @return
+   */
+  public Docket tags(Tag first, Tag... remaining) {
+    tags.add(first);
+    tags.addAll(newHashSet(remaining));
     return this;
   }
 
@@ -364,6 +435,7 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Initiates a builder for api selection.
+   *
    * @return api selection builder. To complete building the api selector, the build method of the api selector
    * needs to be called, this will automatically fall back to building the docket when the build method is called.
    */
@@ -379,29 +451,31 @@ public class Docket implements DocumentationPlugin {
    * @see DocumentationPluginsBootstrapper
    */
   public DocumentationContext configure(DocumentationContextBuilder builder) {
-    if (initialized.compareAndSet(false, true)) {
-      configureDefaults();
-    }
     return builder
-            .apiInfo(apiInfo)
-            .selector(apiSelector)
-            .applyDefaultResponseMessages(applyDefaultResponseMessages)
-            .additionalResponseMessages(responseMessages)
-            .additionalIgnorableTypes(ignorableParameterTypes)
-            .ruleBuilders(ruleBuilders)
-            .groupName(groupName)
-            .pathProvider(pathProvider)
-            .securityContexts(securityContexts)
-            .securitySchemes(securitySchemes)
-            .apiListingReferenceOrdering(apiListingReferenceOrdering)
-            .apiDescriptionOrdering(apiDescriptionOrdering)
-            .operationOrdering(operationOrdering)
-            .produces(produces)
-            .consumes(consumes)
-            .protocols(protocols)
-            .genericsNaming(genericsNamingStrategy)
-            .pathMapping(pathMapping)
-            .build();
+        .apiInfo(apiInfo)
+        .selector(apiSelector)
+        .applyDefaultResponseMessages(applyDefaultResponseMessages)
+        .additionalResponseMessages(responseMessages)
+        .additionalOperationParameters(globalOperationParameters)
+        .additionalIgnorableTypes(ignorableParameterTypes)
+        .ruleBuilders(ruleBuilders)
+        .groupName(groupName)
+        .pathProvider(pathProvider)
+        .securityContexts(securityContexts)
+        .securitySchemes(securitySchemes)
+        .apiListingReferenceOrdering(apiListingReferenceOrdering)
+        .apiDescriptionOrdering(apiDescriptionOrdering)
+        .operationOrdering(operationOrdering)
+        .produces(produces)
+        .consumes(consumes)
+        .host(host)
+        .protocols(protocols)
+        .genericsNaming(genericsNamingStrategy)
+        .pathMapping(pathMapping)
+        .enableUrlTemplating(enableUrlTemplating)
+        .additionalModels(additionalModels)
+        .tags(tags)
+        .build();
   }
 
   @Override
@@ -428,7 +502,9 @@ public class Docket implements DocumentationPlugin {
 
       @Override
       public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return AlternateTypeRules.newRule(typeResolver.resolve(clazz), typeResolver.resolve(with));
+        return AlternateTypeRules.newRule(
+            typeResolver.resolve(clazz),
+            typeResolver.resolve(with));
       }
     };
   }
@@ -437,20 +513,10 @@ public class Docket implements DocumentationPlugin {
     return new Function<TypeResolver, AlternateTypeRule>() {
       @Override
       public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return AlternateTypeRules.newRule(typeResolver.resolve(clz, WildcardType.class), typeResolver.resolve
-                (WildcardType.class));
+        return AlternateTypeRules.newRule(
+            typeResolver.resolve(clz, WildcardType.class),
+            typeResolver.resolve(WildcardType.class));
       }
     };
   }
-
-  private void configureDefaults() {
-    if (!hasText(this.groupName)) {
-      this.groupName = DEFAULT_GROUP_NAME;
-    }
-
-    if (null == this.apiInfo) {
-      this.apiInfo = ApiInfo.DEFAULT;
-    }
-  }
-
 }

@@ -11,6 +11,17 @@ artifacts {
   testArtifacts testJar
 }
 
+ext {
+  limits = [
+      'instruction': 98,
+      'branch'     : 89,
+      'line'       : 96,
+      'complexity' : 91,
+      'method'     : 97,
+      'class'      : 100
+  ]
+}
+
 dependencies {
   compile project(':springfox-core')
   compile project(':springfox-spi')

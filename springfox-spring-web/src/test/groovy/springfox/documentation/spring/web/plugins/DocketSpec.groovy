@@ -18,25 +18,30 @@
  */
 
 package springfox.documentation.spring.web.plugins
+
+import com.fasterxml.classmate.ResolvedType
+import com.google.common.base.Optional
 import com.google.common.collect.Ordering
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.http.ResponseEntity
 import springfox.documentation.builders.PathSelectors
+import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
+import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.ApiInfo
-import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.ResponseMessage
+import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
-import springfox.documentation.spring.web.RelativePathProvider
+import springfox.documentation.spring.web.paths.RelativePathProvider
 
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
-import static com.google.common.collect.Lists.newArrayList
+import static com.google.common.collect.Lists.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*
@@ -52,7 +57,7 @@ class DocketSpec extends DocumentationContextSpec {
       pluginContext.apiInfo.getTitle() == "Api Documentation"
       pluginContext.apiInfo.getDescription() == "Api Documentation"
       pluginContext.apiInfo.getTermsOfServiceUrl() == 'urn:tos'
-      pluginContext.apiInfo.getContact() == 'Contact Email'
+      pluginContext.apiInfo.getContact() == ApiInfo.DEFAULT_CONTACT
       pluginContext.apiInfo.getLicense() == 'Apache 2.0'
       pluginContext.apiInfo.getLicenseUrl() ==  "http://www.apache.org/licenses/LICENSE-2.0"
       pluginContext.apiInfo.version == "1.0"
@@ -63,7 +68,7 @@ class DocketSpec extends DocumentationContextSpec {
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
     when:
       plugin
-              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
+              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null, [] as Map)])
               .useDefaultResponseMessages(true)
               .configure(contextBuilder)
 
@@ -92,7 +97,7 @@ class DocketSpec extends DocumentationContextSpec {
   def "Swagger global response messages should not be used for a particular RequestMethod"() {
     when:
       new Docket(DocumentationType.SWAGGER_12)
-              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null)])
+              .globalResponseMessage(GET, [new ResponseMessage(OK.value(), "blah", null, [] as Map)])
               .useDefaultResponseMessages(false)
               .configure(contextBuilder)
 
@@ -141,8 +146,8 @@ class DocketSpec extends DocumentationContextSpec {
 
     where:
       method                    | args                               | expectedSize
-      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 7
-      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 6
+      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 8
+      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 7
   }
 
 
@@ -151,7 +156,7 @@ class DocketSpec extends DocumentationContextSpec {
       plugin."$builderMethod"(object)
 
     then:
-      context()."$property" == object
+      context()."$property" == object || (context()."$property" == [object] as Set)
 
     where:
       builderMethod           | object                                          | property
@@ -164,7 +169,36 @@ class DocketSpec extends DocumentationContextSpec {
       'operationOrdering'     | operationOrdering()                             | 'operationOrdering'
       'produces'              | ['application/json'] as Set                     | 'produces'
       'consumes'              | ['application/json'] as Set                     | 'consumes'
+      'host'                  | 'someHost'                                      | 'host'
       'protocols'             | ['application/json'] as Set                     | 'protocols'
+      'additionalModels'      | Mock(ResolvedType)                              | 'additionalModels'
+      'enableUrlTemplating'   | true                                            | 'isUriTemplatesEnabled'
+  }
+
+  def "Code generation strategy property is set"() {
+    when:
+      plugin."$builderMethod"(object)
+
+    then:
+      context().genericsNamingStrategy.getClass() == strategy
+
+    where:
+      builderMethod           | object  | strategy
+      'forCodeGeneration'     | false   | DefaultGenericTypeNamingStrategy
+      'forCodeGeneration'     | true    | CodeGenGenericTypeNamingStrategy
+  }
+
+  def "Path mapping property is set"() {
+    when:
+    plugin."$builderMethod"(object)
+
+    then:
+    context().pathMapping == path
+
+    where:
+    builderMethod     | object  | path
+    'pathMapping'     | "/test" | Optional.of("/test")
+    'pathMapping'     | null    | Optional.absent()
   }
 
   Ordering<ApiDescription> apiDescriptionOrdering() {
@@ -200,7 +234,9 @@ class DocketSpec extends DocumentationContextSpec {
       null != pluginContext.apiDescriptionOrdering
       null != pluginContext.produces
       null != pluginContext.protocols
+      null != pluginContext.host
       null != pluginContext.consumes
+      null != pluginContext.additionalModels
 
   }
 

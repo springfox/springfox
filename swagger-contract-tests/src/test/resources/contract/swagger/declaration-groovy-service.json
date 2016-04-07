@@ -15,7 +15,6 @@
             "application/json"
           ],
           "parameters": [
-
           ],
           "responseMessages": [
             {
@@ -58,7 +57,6 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "defaultValue": "",
               "description": "model",
               "name": "body",
               "paramType": "body",
@@ -97,7 +95,6 @@
   ],
   "basePath": "/",
   "consumes": [
-
   ],
   "models": {
     "GroovyModel": {
@@ -112,7 +109,6 @@
     }
   },
   "produces": [
-
   ],
   "resourcePath": "/groovy/groovyModel",
   "swaggerVersion": "1.2"

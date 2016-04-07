@@ -14,11 +14,14 @@ import springfox.documentation.spi.DocumentationType
 import static com.google.common.base.Functions.*
 import static com.google.common.base.Suppliers.*
 import static com.google.common.collect.Maps.*
+import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ModelMapperSpec extends SchemaSpecification {
+
   def namingStrategy = new CodeGenGenericTypeNamingStrategy()
+
   def "models are serialized correctly" (){
     given:
       Model model = modelProvider.modelFor(inputParam(typeToTest,
@@ -35,6 +38,26 @@ class ModelMapperSpec extends SchemaSpecification {
       mappedModel.properties.size() == model.properties.size()
     where:
       typeToTest  << [simpleType(), mapsContainer(), enumType(), typeWithLists()]
+  }
+
+  def "void properties or collection of voids are filtered in the model" (){
+    given:
+      Model model = modelProvider.modelFor(
+          inputParam(
+              typeWithVoidLists(),
+              DocumentationType.SWAGGER_2,
+              alternateTypeProvider(),
+              namingStrategy))
+          .get()
+      def modelMap = newHashMap()
+    and:
+      modelMap.put("test", model)
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    then:
+      def mappedModel = mapped.get("test")
+      model.properties.size() == 3
+      mappedModel.properties == null
   }
 
   def "model dependences are inferred correctly for list of map of string to string" (){
@@ -138,6 +161,43 @@ class ModelMapperSpec extends SchemaSpecification {
       ((AbstractNumericProperty)mappedIntObject).maximum == 2000
   }
 
+  def "Properties that are Map subclasses that close closed generic types are supported"() {
+    given:
+      def model = Mock(Model)
+    and:
+      model.type >> customMapOfType(SimpleType)
+    when:
+      def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+    then:
+      valueClass.isPresent()
+      valueClass.get() == SimpleType
+  }
+
+  def "Properties that are Map subclasses that close the open generic types are supported"() {
+    given:
+      def model = Mock(Model)
+    and:
+      model.type >> customMapOpen()
+    when:
+      def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+    then:
+      valueClass.isPresent()
+      valueClass.get() == Object
+  }
+
+  def "Properties that are not maps will have the value class absent"() {
+    given:
+      def model = Mock(Model)
+    and:
+      model.type >> genericClassWithTypeErased()
+    when:
+      def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+    then:
+      !valueClass.isPresent()
+  }
+
+
+
   ModelProperty updatedIntObject(ModelProperty modelProperty) {
     ModelPropertyBuilder builder = new ModelPropertyBuilder()
     def newModel = builder
@@ -148,8 +208,117 @@ class ModelMapperSpec extends SchemaSpecification {
         .name(modelProperty.name)
         .position(modelProperty.position)
         .type(modelProperty.type)
+        .example(modelProperty.example)
       .build()
     newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
+  }
+
+
+  def "models with allowable ranges are serialized correctly for string property" (){
+    given:
+      Model model = modelProvider.modelFor(inputParam(simpleType(),
+          DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy)).get()
+      def modelMap = newHashMap()
+    and:
+      modelMap.put("test", model)
+    and: "we add a fake allowable range"
+      def stringObject = model.properties.get("aString")
+      model.properties.put("aString", updatedStringObject(stringObject))
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    then:
+      mapped.containsKey("test")
+    and: "Required values contains the modified property"
+      def mappedModel = mapped.get("test")
+      mappedModel.properties.size() == model.properties.size()
+      mappedModel.getRequired().size() == 1
+      mappedModel.getRequired().contains("aString")
+    and: "Range expectations are mapped correctly"
+      def mappedStringObject = mappedModel.properties.get("aString")
+      ((StringProperty)mappedStringObject).minLength == 1
+      ((StringProperty)mappedStringObject).maxLength == 255
+  }
+
+  ModelProperty updatedStringObject(ModelProperty modelProperty) {
+    ModelPropertyBuilder builder = new ModelPropertyBuilder()
+    def newModel = builder
+        .allowableValues(new AllowableRangeValues("1", "255"))
+        .description(modelProperty.description)
+        .isHidden(modelProperty.hidden)
+        .required(true)
+        .name(modelProperty.name)
+        .position(modelProperty.position)
+        .type(modelProperty.type)
+      .build()
+    newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
+  }
+
+  def "model property positions affect the serialization order" () {
+    given:
+      def properties = [
+        'a': createModelPropertyWithPosition('a', 3),
+        'b': createModelPropertyWithPosition('b', 2),
+        'c': createModelPropertyWithPosition('c', 1),
+        'd': createModelPropertyWithPosition('d', 0),
+        'e': createModelPropertyWithPosition('e', 4),
+      ]
+      Model model = createModel(properties)
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels([test: model])
+    then:
+      mapped != null
+      ['d', 'c', 'b', 'a', 'e'] == mapped['test'].properties.keySet().toList()
+  }
+
+  def "model property positions affect the serialization order with same positions" () {
+    given:
+      def properties = [
+        'a': createModelPropertyWithPosition('a', 0),
+        'b': createModelPropertyWithPosition('b', 0),
+        'c': createModelPropertyWithPosition('c', 0),
+        'd': createModelPropertyWithPosition('d', 0),
+        'e': createModelPropertyWithPosition('e', 0),
+      ]
+      Model model = createModel(properties)
+    when:
+      def mapped = Mappers.getMapper(ModelMapper).mapModels([test: model])
+    then:
+      mapped != null
+      ['a', 'b', 'c', 'd', 'e'] == mapped['test'].properties.keySet().toList()
+  }
+
+  ModelProperty createModelPropertyWithPosition(String name, int position) {
+    def stringProperty = resolver.resolve(String)
+    new ModelProperty(
+        name,
+        resolver.resolve(stringProperty),
+        simpleQualifiedTypeName(stringProperty),
+        position,
+        false,
+        false,
+        false,
+        '',
+        null,
+        '').with {
+      it.updateModelRef({ rt -> new ModelRef(simpleQualifiedTypeName(stringProperty)) })
+      it
+    }
+  }
+
+  Model createModel(properties) {
+    def modelType = typeForTestingPropertyPositions()
+    def model = new Model(
+        'test',
+        'test',
+        modelType,
+        simpleQualifiedTypeName(modelType),
+        properties,
+        '',
+        '',
+        '',
+        null,
+        '')
+    model
   }
 
 }

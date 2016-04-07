@@ -21,8 +21,10 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
+import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -45,15 +47,29 @@ import static java.lang.String.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterNameReader implements ParameterBuilderPlugin {
 
+  public static final String SPRING4_DISCOVERER = "org.springframework.core.DefaultParameterNameDiscoverer";
+  private final ParameterNameDiscoverer parameterNameDiscover = parameterNameDiscoverer();
+
   @Override
   public void apply(ParameterContext context) {
     MethodParameter methodParameter = context.methodParameter();
     String name = findParameterNameFromAnnotations(methodParameter);
-    String parameterName = methodParameter.getParameterName();
     if (isNullOrEmpty(name)) {
-      name = isNullOrEmpty(parameterName) ? format("param%s", methodParameter.getParameterIndex()) : parameterName;
+      Optional<String> discoveredName = discoveredName(methodParameter);
+      name = discoveredName.isPresent()
+             ? discoveredName.get()
+             : format("param%s", methodParameter.getParameterIndex());
     }
-    context.parameterBuilder().name(name);
+    context.parameterBuilder()
+        .name(name)
+        .description(name);
+  }
+
+  private Optional<String> discoveredName(MethodParameter methodParameter) {
+    String[] discoveredNames = parameterNameDiscover.getParameterNames(methodParameter.getMethod());
+    return discoveredNames != null && methodParameter.getParameterIndex() < discoveredNames.length
+           ? Optional.fromNullable(emptyToNull(discoveredNames[methodParameter.getParameterIndex()]))
+           : Optional.<String>absent();
   }
 
   @Override
@@ -64,11 +80,21 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   private String findParameterNameFromAnnotations(MethodParameter methodParameter) {
     List<Annotation> methodAnnotations = newArrayList(methodParameter.getParameterAnnotations());
     return from(methodAnnotations)
-            .filter(PathVariable.class).first().transform(pathVariableValue())
-            .or(first(methodAnnotations, ModelAttribute.class).transform(modelAttributeValue()))
-            .or(first(methodAnnotations, RequestParam.class).transform(requestParamValue()))
-            .or(first(methodAnnotations, RequestHeader.class).transform(requestHeaderValue()))
-            .orNull();
+        .filter(PathVariable.class).first().transform(pathVariableValue())
+        .or(first(methodAnnotations, ModelAttribute.class).transform(modelAttributeValue()))
+        .or(first(methodAnnotations, RequestParam.class).transform(requestParamValue()))
+        .or(first(methodAnnotations, RequestHeader.class).transform(requestHeaderValue()))
+        .orNull();
+  }
+
+  private ParameterNameDiscoverer parameterNameDiscoverer() {
+    ParameterNameDiscoverer dicoverer;
+    try {
+      dicoverer = (ParameterNameDiscoverer) Class.forName(SPRING4_DISCOVERER).newInstance();
+    } catch (Exception e) {
+      dicoverer = new LocalVariableTableParameterNameDiscoverer();
+    }
+    return dicoverer;
   }
 
   private <T> Optional<T> first(List<Annotation> methodAnnotations, Class<T> ofType) {

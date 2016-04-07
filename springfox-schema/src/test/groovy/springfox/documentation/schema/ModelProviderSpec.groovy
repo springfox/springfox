@@ -63,13 +63,13 @@ class ModelProviderSpec extends Specification {
       simpleType()                   | []
       complexType()                  | ["Category"]
       inheritedComplexType()         | ["Category"]
-      typeWithLists()                | ["Category", "ComplexType"].sort()
+      typeWithLists()                | ["Category", "ComplexType", "Substituted"].sort()
       typeWithSets()                 | ["Category", "ComplexType"].sort()
-      typeWithArrays()               | ["Category", "ComplexType"]
+      typeWithArrays()               | ["Category", "ComplexType", "Substituted"]
       genericClass()                 | ["SimpleType"]
       genericClassWithListField()    | ["SimpleType"]
-      genericClassWithGenericField() | ["HttpHeaders", "ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
-      genericClassWithDeepGenerics() | ["HttpHeaders", "ResponseEntityAlternative«List«SimpleType»»", "SimpleType"].sort()
+      genericClassWithGenericField() | ["ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
+      genericClassWithDeepGenerics() | ["ResponseEntityAlternative«List«SimpleType»»", "SimpleType"].sort()
       genericCollectionWithEnum()    | ["Collection«string»"]
       recursiveType()                | ["SimpleType"]
   }

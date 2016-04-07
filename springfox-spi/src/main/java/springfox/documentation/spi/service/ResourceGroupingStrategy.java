@@ -27,6 +27,11 @@ import springfox.documentation.spi.DocumentationType;
 
 import java.util.Set;
 
+/***
+ * Deprecated in lieu of using ApiListingBuilderPlugins instead
+ * @deprecated  @since 2.2.0 - only here for backward compatibility
+ */
+@Deprecated
 public interface ResourceGroupingStrategy extends Plugin<DocumentationType> {
   /**
    * Gets the resource group for a particular request mapping.

@@ -19,7 +19,9 @@
 
 package springfox.documentation.spring.web.dummy.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.joda.time.LocalDate;
 
 import java.util.Date;
@@ -27,6 +29,10 @@ import java.util.Date;
 
 @ApiModel(value = "Biz")
 public class Business {
+   @ApiModelProperty(hidden = true)
+   @JsonProperty(value = "_meta")
+   public String meta = "Hello";
+
    //not private - just for testing
    public int id;
    public String name;

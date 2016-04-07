@@ -33,8 +33,9 @@ public class ApiListingScanningContext {
   private final DocumentationContext documentationContext;
   private final Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup;
 
-  public ApiListingScanningContext(DocumentationContext documentationContext,
-                                   Map<ResourceGroup, List<RequestMappingContext>>  requestMappingsByResourceGroup) {
+  public ApiListingScanningContext(
+      DocumentationContext documentationContext,
+      Map<ResourceGroup, List<RequestMappingContext>>  requestMappingsByResourceGroup) {
     this.documentationContext = documentationContext;
     this.requestMappingsByResourceGroup = requestMappingsByResourceGroup;
   }

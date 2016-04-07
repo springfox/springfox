@@ -19,18 +19,17 @@ buildscript {
     jcenter()
   }
 
-  dependencies {
-    classpath 'de.undercouch:gradle-download-task:1.2'
-  }
 }
 
-apply plugin: 'de.undercouch.download'
+plugins {
+  id "de.undercouch.download" version "2.0.0"
+}
 
 ext {
-  swaggerUiVersion = '2.1.0'
+  swaggerUiVersion = '2.1.4'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
-  downloadUrl = "https://github.com/wordnik/swagger-ui/archive/v${swaggerUiVersion}.zip"
+  downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
   destinationZip = "$buildDir/zip/${swaggerUiVersion}.zip"
   replacePath = 'window.location.origin + "\\${pageContext.request.contextPath}/api-docs"'
   artifactRepoBase = 'http://oss.jfrog.org/artifactory'
@@ -58,14 +57,17 @@ task unzip(type: Copy) {
   into file("${buildDir}")
 }
 
-task sdoc(type: Copy) {
-  from("${projectDir}/src/web/swagger-ui.html")
-  from("${projectDir}/src/web/js/springfox.js")
-  into("${buildDir}/${swaggerUiExplodedDir}")
-}
-
-task removeHtmlIndex(type: Delete) {
+task customizeSwaggerUi << {
+  copy {
+    from("${projectDir}/src/web/js/springfox.js")
+    into("${buildDir}/${swaggerUiExplodedDir}")
+  }
+  copy {
+    from("${projectDir}/src/web/fonts")
+    into("${buildDir}/${swaggerUiExplodedDir}/fonts")
+  }
   delete "${buildDir}/${swaggerUiExplodedDir}/index.html"
+  delete "${buildDir}/${swaggerUiExplodedDir}/swagger-ui.js"
 }
 
 jar {
@@ -95,7 +97,6 @@ task cleanup(type: Delete) {
 }
 
 clean.dependsOn(cleanup)
-compileJava.dependsOn(removeHtmlIndex)
-removeHtmlIndex.dependsOn(sdoc)
-sdoc.dependsOn(unzip)
+compileJava.dependsOn(customizeSwaggerUi)
+customizeSwaggerUi.dependsOn(unzip)
 unzip.dependsOn(swaggerUiDownload)

@@ -19,20 +19,24 @@
 
 package springfox.documentation.spi.service.contexts;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springfox.documentation.PathProvider;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.Tag;
+import springfox.documentation.service.Tags;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
@@ -49,8 +53,20 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationContextBuilder {
 
+  private final List<SecurityContext> securityContexts = newArrayList();
+  private final Set<Class> ignorableParameterTypes = newHashSet();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
+  private final List<Parameter> globalOperationParameters = newArrayList();
+  private final List<AlternateTypeRule> rules = newArrayList();
+  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
+  private final Set<String> protocols = newHashSet();
+  private final Set<String> produces = newHashSet();
+  private final Set<String> consumes = newHashSet();
+  private final Set<ResolvedType> additionalModels = newHashSet();
+  private final Set<Tag> tags = newTreeSet(Tags.tagNameComparator());
+
   private TypeResolver typeResolver;
-  private List<RequestMappingHandlerMapping> handlerMappings;
+  private List<RequestHandler> handlerMappings;
   private ApiInfo apiInfo;
   private String groupName;
   private ResourceGroupingStrategy resourceGroupingStrategy;
@@ -60,25 +76,18 @@ public class DocumentationContextBuilder {
   private Ordering<ApiDescription> apiDescriptionOrdering;
   private DocumentationType documentationType;
   private Ordering<Operation> operationOrdering;
-
   private boolean applyDefaultResponseMessages;
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
-  private final List<SecurityContext> securityContexts = newArrayList();
-  private final Set<Class> ignorableParameterTypes = newHashSet();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
-  private final List<AlternateTypeRule> rules = newArrayList();
-  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
-  private final Set<String> protocols = newHashSet();
-  private final Set<String> produces = newHashSet();
-  private final Set<String> consumes = newHashSet();
+  private String host;
   private GenericTypeNamingStrategy genericsNamingStrategy;
   private Optional<String> pathMapping;
+  private boolean isUrlTemplatesEnabled;
 
   public DocumentationContextBuilder(DocumentationType documentationType) {
     this.documentationType = documentationType;
   }
 
-  public DocumentationContextBuilder handlerMappings(List<RequestMappingHandlerMapping> handlerMappings) {
+  public DocumentationContextBuilder requestHandlers(List<RequestHandler> handlerMappings) {
     this.handlerMappings = handlerMappings;
     return this;
   }
@@ -103,7 +112,16 @@ public class DocumentationContextBuilder {
     this.responseMessageOverrides.putAll(additionalResponseMessages);
     return this;
   }
+  
+  public DocumentationContextBuilder additionalOperationParameters(List<Parameter> globalRequestParameters) {
+    this.globalOperationParameters.addAll(nullToEmptyList(globalRequestParameters));
+    return this;
+  }
 
+  /**
+   @deprecated  @since 2.2.0 - only here for backward compatibiltiy
+   */
+  @Deprecated
   public DocumentationContextBuilder withResourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
     this.resourceGroupingStrategy = resourceGroupingStrategy;
     return this;
@@ -151,7 +169,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder ruleBuilders(List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders) {
-    rules.addAll(from(ruleBuilders)
+    rules.addAll(0, from(ruleBuilders)
         .transform(evaluator(typeResolver))
         .toList());
     return this;
@@ -193,6 +211,11 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+  public DocumentationContextBuilder host(String host) {
+    this.host = defaultIfAbsent(host, this.host);
+    return this;
+  }
+
   public DocumentationContextBuilder protocols(Set<String> protocols) {
     this.protocols.addAll(protocols);
     return this;
@@ -208,6 +231,21 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+  public DocumentationContextBuilder enableUrlTemplating(boolean isUrlTemplatesEnabled) {
+    this.isUrlTemplatesEnabled = isUrlTemplatesEnabled;
+    return this;
+  }
+
+  public DocumentationContextBuilder additionalModels(Set<ResolvedType> additionalModels) {
+    this.additionalModels.addAll(additionalModels);
+    return this;
+  }
+
+  public DocumentationContextBuilder tags(Set<Tag> tags) {
+    this.tags.addAll(tags);
+    return this;
+  }
+
   public DocumentationContext build() {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
     return new DocumentationContext(documentationType,
@@ -217,6 +255,7 @@ public class DocumentationContextBuilder {
         apiSelector,
         ignorableParameterTypes,
         responseMessages,
+        globalOperationParameters,
         resourceGroupingStrategy,
         pathProvider,
         securityContexts,
@@ -227,13 +266,17 @@ public class DocumentationContextBuilder {
         operationOrdering,
         produces,
         consumes,
+        host,
         protocols,
         genericsNamingStrategy,
-        pathMapping);
+        pathMapping,
+        isUrlTemplatesEnabled,
+        additionalModels,
+        tags);
   }
 
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>
-  evaluator(final TypeResolver typeResolver) {
+      evaluator(final TypeResolver typeResolver) {
 
     return new Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>() {
       @Override

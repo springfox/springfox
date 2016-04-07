@@ -14,4 +14,4 @@ private.txt
 classes/
 generated-src
 .env
-javadoc/
+out/

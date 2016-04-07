@@ -20,22 +20,23 @@
 package springfox.documentation.service;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.http.HttpMethod;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ModelReference;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 
 public class Operation {
   private final HttpMethod method;
   private final String summary;
   private final String notes;
-  private final ModelRef responseModel;
+  private final ModelReference responseModel;
   private final String uniqueId;
   private final int position;
   private final Set<String> tags;
@@ -47,12 +48,26 @@ public class Operation {
   private final List<Parameter> parameters;
   private final Set<ResponseMessage> responseMessages;
   private final String deprecated;
+  private final List<VendorExtension> vendorExtensions;
 
-  public Operation(HttpMethod method, String summary, String notes, ModelRef responseModel,
-                   String uniqueId, int position,
-                   Set<String> tags, Set<String> produces, Set<String> consumes, Set<String> protocol,
-                   List<SecurityReference> securityReferences, List<Parameter> parameters,
-                   Set<ResponseMessage> responseMessages, String deprecated, boolean isHidden) {
+  public Operation(
+      HttpMethod method,
+      String summary,
+      String notes,
+      ModelReference responseModel,
+      String uniqueId,
+      int position,
+      Set<String> tags,
+      Set<String> produces,
+      Set<String> consumes,
+      Set<String> protocol,
+      List<SecurityReference> securityReferences,
+      List<Parameter> parameters,
+      Set<ResponseMessage> responseMessages,
+      String deprecated,
+      boolean isHidden,
+      Collection<VendorExtension> vendorExtensions) {
+
     this.method = method;
     this.summary = summary;
     this.notes = notes;
@@ -68,13 +83,14 @@ public class Operation {
     this.parameters = parameters;
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
+    this.vendorExtensions = newArrayList(vendorExtensions);
   }
 
   public boolean isHidden() {
     return isHidden;
   }
 
-  public ModelRef getResponseModel() {
+  public ModelReference getResponseModel() {
     return responseModel;
   }
 
@@ -90,7 +106,7 @@ public class Operation {
     return new EntryTransformer<String, SecurityReference, List<AuthorizationScope>>() {
       @Override
       public List<AuthorizationScope> transformEntry(String key, SecurityReference value) {
-        return Lists.newArrayList(value.getScopes());
+        return newArrayList(value.getScopes());
       }
     };
   }
@@ -150,6 +166,11 @@ public class Operation {
 
   public String getDeprecated() {
     return deprecated;
+  }
+
+
+  public List<VendorExtension> getVendorExtensions() {
+    return vendorExtensions;
   }
 
 }

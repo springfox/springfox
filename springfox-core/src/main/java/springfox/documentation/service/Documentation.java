@@ -34,12 +34,20 @@ public class Documentation {
   private final ResourceListing resourceListing;
   private final Set<String> produces;
   private final Set<String> consumes;
+  private final String host;
   private final Set<String> schemes;
 
-  public Documentation(String groupName,
-                       String basePath, Set<Tag> tags,
-                       Multimap<String, ApiListing> apiListings,
-                       ResourceListing resourceListing, Set<String> produces, Set<String> consumes, Set<String> schemes) {
+  public Documentation(
+      String groupName,
+      String basePath,
+      Set<Tag> tags,
+      Multimap<String, ApiListing> apiListings,
+      ResourceListing resourceListing,
+      Set<String> produces,
+      Set<String> consumes,
+      String host,
+      Set<String> schemes) {
+
     this.groupName = groupName;
     this.basePath = basePath;
     this.tags = tags;
@@ -47,6 +55,7 @@ public class Documentation {
     this.resourceListing = resourceListing;
     this.produces = produces;
     this.consumes = consumes;
+    this.host = host;
     this.schemes = schemes;
   }
 
@@ -72,6 +81,10 @@ public class Documentation {
 
   public List<String> getProduces() {
     return newArrayList(produces);
+  }
+
+  public String getHost() {
+    return host;
   }
 
   public List<String> getSchemes() {

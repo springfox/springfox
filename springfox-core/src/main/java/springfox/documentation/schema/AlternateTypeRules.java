@@ -55,4 +55,5 @@ public class AlternateTypeRules {
     return new AlternateTypeRule(resolver.resolve(Map.class, key, value),
             resolver.resolve(List.class, resolver.resolve(Entry.class, key, value)));
   }
+
 }

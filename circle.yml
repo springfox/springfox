@@ -2,6 +2,7 @@ general:
   branches:
     ignore:
       - gh-pages
+
 machine:
   java:
     version: oraclejdk7
@@ -11,6 +12,12 @@ machine:
     CI_BRANCH: $CIRCLE_BRANCH
     CI_BUILD_NUMBER: $CIRCLE_BUILD_NUM
     CI_BUILD_URL: $CIRCLE_COMPARE_URL
+
+checkout:
+  post:
+    - git fetch --unshallow || true
+    - git fetch --tags
+
 dependencies:
   pre:
     - gem install asciidoctor
@@ -19,7 +26,7 @@ dependencies:
     - ~/.gradle
 test:
   override:
-  - ./gradlew clean check --daemon
+  - ./gradlew clean check
 
 deployment:
  staging:
@@ -27,7 +34,7 @@ deployment:
     owner: springfox
     commands:
       - ./gradlew snapshot -PbintrayUsername=${bintrayUsername} -PbintrayPassword=${bintrayPassword} -i -x check
-      - ./gradlew publishDocs
+      - ./gradlew publishDocs -i
       - ./gradlew coveralls
 notify:
   webhooks:

@@ -6,7 +6,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.11.RELEASE")
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.7.RELEASE")
   }
 }
 repositories {
@@ -15,11 +15,15 @@ repositories {
 
 apply plugin: 'war'
 apply plugin: 'spring-boot'
+apply plugin: 'com.ofg.uptodate'
 
 configurations {
   //Logback causing spring boot errors
   all*.exclude group: 'ch.qos.logback'
 }
+
+mainClassName = 'com.foo.Bar'
+
 ext {
   limits = [
       'instruction': 89.5,
@@ -35,29 +39,21 @@ dependencies {
   compile("org.springframework.boot:spring-boot-starter-web")
   compile("org.springframework.boot:spring-boot-starter-actuator")
 
-  compile 'javax.servlet.jsp.jstl:jstl:1.2'
-  compile 'taglibs:standard:1.1.2'
-  compile 'javax.servlet:jstl:1.2'
-
-  compile(project(':springfox-swagger1')) {
-    exclude group: 'org.springframework', module: 'spring-web'
-  }
-
-  providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
-  providedCompile 'org.apache.tomcat.embed:tomcat-embed-jasper'
 
   testCompile libs.test
-  testCompile 'org.skyscreamer:jsonassert:1.2.3'
-  testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
+  testCompile 'org.skyscreamer:jsonassert:1.3.0'
 
   compile(project(path: ':springfox-swagger1', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
+    exclude group: 'org.aspectj'
   }
   compile(project(path: ':springfox-swagger2', configuration: 'testArtifacts')) {
     exclude group: 'org.springframework', module: 'spring-web'
+    exclude group: 'org.aspectj'
   }
   compile(project(path: ':springfox-petstore')) {
     exclude group: 'org.springframework', module: 'spring-web'
+    exclude group: 'org.aspectj'
   }
 
   compile(project(path: ':springfox-swagger-ui')) {

@@ -23,7 +23,7 @@ import spock.lang.Specification
 import springfox.documentation.schema.TypeForTestingPropertyNames
 import springfox.documentation.schema.TypeWithGettersAndSetters
 
-import static Accessors.*
+import static springfox.documentation.schema.property.bean.Accessors.*
 
 class AccessorsSpec extends Specification {
   def "Cannot instantiate the Accessors helper"() {
@@ -81,19 +81,19 @@ class AccessorsSpec extends Specification {
       def method = sut.methods.find { it.name.equals(methodName) }
 
     then:
-      isGetter(method)
+      maybeAGetter(method)
 
     where:
       methodName << ["yetAnotherProp", "getAnotherProp"]
   }
 
-  def "Getters are identified correctly"() {
+  def "Getters (#methodName) are identified correctly"() {
     given:
       def sut = TypeWithGettersAndSetters
       def method = sut.methods.find { it.name.equals(methodName) }
 
     expect:
-      isGetter(method) == result
+      maybeAGetter(method) == result
 
     where:
       methodName      || result
@@ -102,9 +102,9 @@ class AccessorsSpec extends Specification {
       "isBoolProp"    || true
       "setBoolProp"   || false
       "getVoid"       || false
-      "isNotGetter"   || false
+      "isNotGetter"   || true
       "getWithParam"  || false
-      "setNotASetter" || false
+      "setNotASetter" || true
   }
 
   def "Setters are identified correctly"() {

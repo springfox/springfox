@@ -21,22 +21,25 @@ package springfox.documentation.spring.web.scanners
 
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.ApiDescription
+import springfox.documentation.service.Operation
 import springfox.documentation.spi.service.contexts.RequestMappingContext
-import springfox.documentation.spring.web.RelativePathProvider
+import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
-import springfox.documentation.spring.web.Paths
+import springfox.documentation.spring.web.paths.Paths
 
 import javax.servlet.ServletContext
 
-@Mixin([RequestMappingSupport])
+@Mixin([RequestMappingSupport, ServicePluginsSupport])
 class ApiDescriptionReaderSpec extends DocumentationContextSpec {
 
    def "should generate an api description for each request mapping pattern"() {
       given:
         def operationReader = Mock(ApiOperationReader)
-        ApiDescriptionReader sut = new ApiDescriptionReader(operationReader)
+        ApiDescriptionReader sut =
+            new ApiDescriptionReader(operationReader, defaultWebPlugins(), new ApiDescriptionLookup())
       and:
         plugin.pathProvider(pathProvider)
         RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
@@ -44,7 +47,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         )
         RequestMappingContext mappingContext = new RequestMappingContext(context(), requestMappingInfo,
                 dummyHandlerMethod())
-        operationReader.read(_) >> []
+        operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
       when:
         def descriptionList = sut.read(mappingContext)
 
@@ -56,9 +59,11 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
 
         apiDescription.getPath() == prefix + '/somePath/{businessId}'
         apiDescription.getDescription() == dummyHandlerMethod().method.name
+        !apiDescription.isHidden()
 
         secondApiDescription.getPath() == prefix + '/somePath/{businessId}'
         secondApiDescription.getDescription() == dummyHandlerMethod().method.name
+        !secondApiDescription.isHidden()
 
       where:
         pathProvider                                    | prefix
@@ -70,15 +75,18 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         Paths.sanitizeRequestMappingPattern(mappingPattern) == expected
 
       where:
-        mappingPattern             | expected
-        ""                         | "/"
-        "/"                        | "/"
-        "/businesses"              | "/businesses"
-        "/{businessId:\\w+}"       | "/{businessId}"
-        "/businesses/{businessId}" | "/businesses/{businessId}"
-        "/foo/bar:{baz}"           | "/foo/bar:{baz}"
-        "/foo:{foo}/bar:{baz}"     | "/foo:{foo}/bar:{baz}"
-        "/foo/bar:{baz:\\w+}"      | "/foo/bar:{baz}"
+        mappingPattern                                  | expected
+        ""                                              | "/"
+        "/"                                             | "/"
+        "/businesses"                                   | "/businesses"
+        "/{businessId:\\w+}"                            | "/{businessId}"
+        "/{businessId:\\d{3}}"                          | "/{businessId}"
+        "/{businessId:\\d{3}}/{productId:\\D{3}\\d{3}}" | "/{businessId}/{productId}"
+        "/businesses/{businessId}"                      | "/businesses/{businessId}"
+        "/businesses/{businessId}/add"                  | "/businesses/{businessId}/add"
+        "/foo/bar:{baz}"                                | "/foo/bar:{baz}"
+        "/foo:{foo}/bar:{baz}"                          | "/foo:{foo}/bar:{baz}"
+        "/foo/bar:{baz:\\w+}"                           | "/foo/bar:{baz}"
 
    }
 }

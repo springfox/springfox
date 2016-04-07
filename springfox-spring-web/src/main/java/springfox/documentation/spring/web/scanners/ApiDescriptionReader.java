@@ -19,33 +19,41 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import springfox.documentation.PathProvider;
-import springfox.documentation.builders.ApiDescriptionBuilder;
 import springfox.documentation.service.ApiDescription;
+import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.ApiSelector;
+import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-import springfox.documentation.spring.web.Paths;
-import springfox.documentation.spring.web.readers.operation.ApiOperationReader;
+import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
+import springfox.documentation.spring.web.readers.operation.OperationReader;
 
 import java.util.List;
 
-import static com.google.common.collect.FluentIterable.*;
+import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Ordering.*;
 
 @Component
 public class ApiDescriptionReader {
 
-  private final ApiOperationReader operationReader;
+  private final OperationReader operationReader;
+  private final DocumentationPluginsManager pluginsManager;
+  private final ApiDescriptionLookup lookup;
 
   @Autowired
-  public ApiDescriptionReader(ApiOperationReader operationReader) {
+  public ApiDescriptionReader(
+      @Qualifier("cachedOperations") OperationReader operationReader,
+      DocumentationPluginsManager pluginsManager,
+      ApiDescriptionLookup lookup) {
     this.operationReader = operationReader;
+    this.pluginsManager = pluginsManager;
+    this.lookup = lookup;
   }
 
   public List<ApiDescription> read(RequestMappingContext outerContext) {
@@ -53,30 +61,31 @@ public class ApiDescriptionReader {
     HandlerMethod handlerMethod = outerContext.getHandlerMethod();
     PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
     ApiSelector selector = outerContext.getDocumentationContext().getApiSelector();
-    PathProvider pathProvider = outerContext.getDocumentationContext().getPathProvider();
 
     List<ApiDescription> apiDescriptionList = newArrayList();
-    for (String pattern : matchingPaths(selector, patternsCondition)) {
-        String cleanedRequestMappingPath = Paths.sanitizeRequestMappingPattern(pattern);
-        String path = pathProvider.getOperationPath(cleanedRequestMappingPath);
-        String methodName = handlerMethod.getMethod().getName();
-        RequestMappingContext operationContext = outerContext.copyPatternUsing(cleanedRequestMappingPath);
-        PathMappingAdjuster adjuster = new PathMappingAdjuster(operationContext.getDocumentationContext());
-        apiDescriptionList.add(
-            new ApiDescriptionBuilder(outerContext.operationOrdering())
-                .path(adjuster.adjustedPath(path))
-                .description(methodName)
-                .operations(operationReader.read(operationContext))
-                .hidden(false)
-                .build());
+    for (String path : matchingPaths(selector, patternsCondition)) {
+      String methodName = handlerMethod.getMethod().getName();
+      RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
+
+      List<Operation> operations = operationReader.read(operationContext);
+      if (operations.size() > 0) {
+        operationContext.apiDescriptionBuilder()
+            .operations(operations)
+            .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, from(operations).first())))
+            .path(path)
+            .description(methodName)
+            .hidden(false);
+        ApiDescription apiDescription = operationContext.apiDescriptionBuilder().build();
+        lookup.add(outerContext.getHandlerMethod().getMethod(), apiDescription);
+        apiDescriptionList.add(apiDescription);
+      }
     }
     return apiDescriptionList;
   }
 
-    private FluentIterable<String> matchingPaths(ApiSelector selector,
-      PatternsRequestCondition patternsCondition) {
-        return from(patternsCondition.getPatterns())
-                .filter(selector.getPathSelector());
-    }
+  private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
+    return natural().sortedCopy(from(patternsCondition.getPatterns())
+        .filter(selector.getPathSelector()));
+  }
 
 }

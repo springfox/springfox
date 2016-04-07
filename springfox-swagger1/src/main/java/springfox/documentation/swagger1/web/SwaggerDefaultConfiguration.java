@@ -55,7 +55,8 @@ public class SwaggerDefaultConfiguration implements DefaultsProviderPlugin {
     rules.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
         typeResolver.resolve(Object.class)));
     rules.add(newMapRule(WildcardType.class, WildcardType.class));
-    return defaultConfiguration.create(documentationType)
+    return defaultConfiguration
+        .create(documentationType)
         .rules(rules);
   }
 

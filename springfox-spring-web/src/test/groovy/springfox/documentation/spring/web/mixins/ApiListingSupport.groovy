@@ -28,18 +28,19 @@ class ApiListingSupport {
 
    def apiListing(authorizations = [], models = null) {
       new ApiListing(
-              "1.0"
-              ,
-              "",
-              "/relative-path-to-endpoint",
-              [] as Set,
-              [] as Set,
-              [] as Set,
-              authorizations,
-              [],
-              models,
-              null,
-              1)
+          "1.0"
+          ,
+          "",
+          "/relative-path-to-endpoint",
+          [] as Set,
+          [] as Set,
+          "",
+          [] as Set,
+          authorizations,
+          [],
+          models,
+          null,
+          1, ["test"] as Set)
    }
 
    def apiListingReference() {

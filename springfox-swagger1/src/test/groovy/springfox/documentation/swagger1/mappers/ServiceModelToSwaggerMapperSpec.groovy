@@ -37,6 +37,7 @@ import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ApiListingReference
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.spi.service.contexts.Defaults
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.swagger1.mixins.MapperSupport
 
 import static com.google.common.collect.Sets.*
@@ -55,7 +56,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
               .message("Success")
               .responseModel(new ModelRef("string"))
               .build()
-      def operation1 = new OperationBuilder()
+      def operation1 = new OperationBuilder(new CachingOperationNameGenerator())
                         .authorizations([SecurityReference.builder()
                           .reference("basic")
                           .scopes(scope)
@@ -78,6 +79,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                           .required(true)
                           .build()])
                         .position(1)
+                        .codegenMethodNameStem("")
                         .protocols(newHashSet("https"))
                         .responseModel(new ModelRef("string"))
                         .responseMessages(newHashSet(response))
@@ -176,7 +178,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mapped.apiVersion == built.apiVersion
       mapped.authorizations == built.securitySchemes
       mapped.swaggerVersion == "1.2"
-      mapped.info.contact == built.info.contact
+      mapped.info.contact == built.info.contact.name
       mapped.info.description == built.info.description
       mapped.info.license == built.info.license
       mapped.info.licenseUrl == built.info.licenseUrl
@@ -210,7 +212,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
       mapped.apiVersion == built.apiVersion
       mapped.authorizations == built.securitySchemes
       mapped.swaggerVersion == "1.2"
-      mapped.info.contact == built.info.contact
+      mapped.info.contact == built.info.contact.name
       mapped.info.description == built.info.description
       mapped.info.license == built.info.license
       mapped.info.licenseUrl == built.info.licenseUrl

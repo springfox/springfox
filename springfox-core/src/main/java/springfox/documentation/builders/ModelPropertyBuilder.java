@@ -21,21 +21,21 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
 import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.schema.Enums.*;
 
 public class ModelPropertyBuilder {
   private ResolvedType type;
   private String qualifiedType;
   private int position;
   private Boolean required;
+  private Boolean readOnly;
   private String description;
   private AllowableValues allowableValues;
   private String name;
   private boolean isHidden;
+  private String example;
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -57,8 +57,13 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelPropertyBuilder required(boolean required) {
+  public ModelPropertyBuilder required(Boolean required) {
     this.required = required;
+    return this;
+  }
+
+  public ModelPropertyBuilder readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
     return this;
   }
 
@@ -67,24 +72,23 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelPropertyBuilder allowableValues(AllowableValues allowableValues) {
-    if (allowableValues != null) {
-      if (allowableValues instanceof AllowableListValues) {
-        this.allowableValues
-            = defaultIfAbsent(emptyListValuesToNull((AllowableListValues) allowableValues), this.allowableValues);
-      } else {
-        this.allowableValues = defaultIfAbsent(allowableValues, this.allowableValues);
-      }
-    }
+  public ModelPropertyBuilder example(String example) {
+    this.example = defaultIfAbsent(example, this.example);
     return this;
   }
 
-  public ModelPropertyBuilder isHidden(boolean isHidden) {
+  public ModelPropertyBuilder allowableValues(AllowableValues allowableValues) {
+    this.allowableValues = emptyToNull(allowableValues, this.allowableValues);
+    return this;
+  }
+
+  public ModelPropertyBuilder isHidden(Boolean isHidden) {
     this.isHidden = isHidden;
     return this;
   }
 
   public ModelProperty build() {
-    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, description, allowableValues);
+    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, readOnly, description,
+        allowableValues, example);
   }
 }

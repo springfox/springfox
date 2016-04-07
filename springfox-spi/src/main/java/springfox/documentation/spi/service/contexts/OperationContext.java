@@ -23,12 +23,14 @@ import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.builders.OperationBuilder;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
@@ -37,6 +39,8 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.service.MediaTypes.*;
 
 public class OperationContext {
   private final OperationBuilder operationBuilder;
@@ -48,7 +52,7 @@ public class OperationContext {
   private final String requestMappingPattern;
 
   public OperationContext(OperationBuilder operationBuilder, RequestMethod requestMethod, HandlerMethod
-          handlerMethod, int operationIndex, RequestMappingInfo requestMappingInfo,
+      handlerMethod, int operationIndex, RequestMappingInfo requestMappingInfo,
                           DocumentationContext documentationContext, String requestMappingPattern) {
     this.operationBuilder = operationBuilder;
     this.requestMethod = requestMethod;
@@ -81,6 +85,10 @@ public class OperationContext {
       return documentationContext.getGlobalResponseMessages().get(RequestMethod.valueOf(forHttpMethod));
     }
     return newArrayList();
+  }
+
+  public List<Parameter> getGlobalOperationParameters() {
+    return nullToEmptyList(documentationContext.getGlobalRequestParameters());
   }
 
   public Optional<SecurityContext> securityContext() {
@@ -121,10 +129,13 @@ public class OperationContext {
   }
 
   public Set<MediaType> produces() {
-    return requestMappingInfo.getProducesCondition().getProducibleMediaTypes();
+    return Sets.union(requestMappingInfo.getProducesCondition().getProducibleMediaTypes(),
+        toMediaTypes(documentationContext.getProduces()));
   }
 
   public Set<MediaType> consumes() {
-    return requestMappingInfo.getConsumesCondition().getConsumableMediaTypes();
+    return Sets.union(requestMappingInfo.getConsumesCondition().getConsumableMediaTypes(),
+        toMediaTypes(documentationContext.getConsumes()));
   }
+
 }

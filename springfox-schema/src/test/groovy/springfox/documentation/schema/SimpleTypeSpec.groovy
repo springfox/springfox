@@ -74,6 +74,7 @@ class SimpleTypeSpec extends SchemaSpecification {
       "anObjectFloat"   | Float   | "java.lang.Float"
       "anObjectDouble"  | Double  | "java.lang.Double"
       "currency"        | Currency| "java.util.Currency"
+      "uuid"            | UUID    | "java.util.UUID"
   }
 
   @Ignore

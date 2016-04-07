@@ -1,20 +1,35 @@
+import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.utils.ProjectDefinitions
 
 apply plugin: "org.asciidoctor.convert"
 asciidoctor {
-  sourceDir = file('asciidoc')
+  sourceDir = file('docs/asciidoc')
   logDocuments = true
   separateOutputDirs = false
   backends = ['html5']
 
   attributes 'source-highlighter': 'coderay',
-          'springfox-current-version': project.version.toString(),
-          'springfox-released-version': project.ext.currentVersion,
+          'springfox-current-version': latestSnapshotVersion(project),
+          'springfox-released-version': latestReleasedVersion(project),
           toc: 'left',
           idprefix: '',
           idseparator: '-',
           icons: 'font',
           encoding: 'utf-8'
+}
+
+def latestSnapshotVersion(project) {
+  if (project.rootProject.buildInfo.isReleaseBuild) {
+    return project.rootProject.buildInfo.nextVersion.asText()
+  }
+  return project.version.toString()
+}
+
+def latestReleasedVersion(project) {
+  if (project.rootProject.buildInfo.isReleaseBuild) {
+    return project.version.toString()
+  }
+  return project.rootProject.buildInfo.currentVersion.asText()
 }
 
 task publishDocs(type: Exec) {
@@ -23,13 +38,24 @@ task publishDocs(type: Exec) {
 
   String symlink = 'snapshot'
   String docVersion = project.version
+  BuildInfo buildInfo = project.rootProject.buildInfo
 
   if (project.hasProperty('updateMode')) {
     symlink = 'current'
-    docVersion = project.ext.currentVersion
+    docVersion = buildInfo.currentVersion.asText()
   } else {
-    symlink = isSnapshot(project) ? 'snapshot' : 'current'
+    symlink = project.rootProject.buildInfo.isReleaseBuild ? 'snapshot' : 'current'
   }
+
+  def docPublishInfo = """Publishing docs with ...
+        latest snapshot version: ${latestSnapshotVersion(project)}
+        latest release version: ${latestReleasedVersion(project)}
+        symlink: ${symlink}
+        docVersion: ${docVersion}
+        project version: ${project.version}
+"""
+  project.logger.info(docPublishInfo)
+
 
   String gitChanges = ""
   ['build/asciidoc/*'    : "docs",
@@ -43,6 +69,14 @@ task publishDocs(type: Exec) {
       git add $dir ${destination}/${symlink}
 """
   }
+
+  if (buildInfo.dryRun) {
+    logger.info("Will run the following command:")
+    logger.info(gitChanges)
+    commandLine "sh", "-c", "echo This is a dry run"
+    return
+  }
+
   commandLine "sh", "-c",
           """
   git config --local user.email "bot@springfox.io"
@@ -67,6 +101,15 @@ task allJavadoc(type: Javadoc) {
   source publishables.collect { it.sourceSets.main.allJava }
   classpath = files(publishables.collect { it.sourceSets.main.compileClasspath })
   destinationDir = file("${buildDir}/docs/javadoc")
+}
+
+
+task docs {
+  dependsOn asciidoctor
+  doLast {
+    println asciidoctor.properties
+    Class.forName("java.awt.Desktop").newInstance().browse(file("${asciidoctor.outputDir}/index.html").toURI())
+  }
 }
 
 publishDocs.dependsOn asciidoctor

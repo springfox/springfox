@@ -71,9 +71,11 @@ public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEve
     return newArrayList(converters);
   }
 
-  private Iterable<MappingJackson2HttpMessageConverter> jackson2Converters
-      (List<HttpMessageConverter<?>> messageConverters) {
-    return from(messageConverters).filter(MappingJackson2HttpMessageConverter.class);
+  private Iterable<MappingJackson2HttpMessageConverter> jackson2Converters(
+      List<HttpMessageConverter<?>> messageConverters) {
+    return reverse(from(messageConverters)
+        .filter(MappingJackson2HttpMessageConverter.class)
+        .toList());
   }
 
   private MappingJackson2HttpMessageConverter configuredMessageConverter() {

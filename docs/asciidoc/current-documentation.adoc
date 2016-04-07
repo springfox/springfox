@@ -1,0 +1,379 @@
+== Configuring Springfox
+
+:releaseVersion: {springfox-released-version}
+:snapshotVersion: {springfox-current-version}
+
+To enable support for swagger specification 1.2 use the ```@EnableSwagger``` annotation
+
+To enable support for swagger specification 2.0 use the ```@EnableSwagger2``` annotation
+
+To document the service we use a ```Docket```. This is changed to be more inline with the fact that expressing the
+contents of the documentation is agnostic of the format the documentation is rendered.
+
+Docket https://www.wordnik.com/words/docket[stands for] *A summary or other brief statement of the contents of a
+document; an abstract.*
+
+`Docket` helps configure a  subset of the services to be documented and groups them by name. Significant changes
+to this is the ability to provide an expressive predicate based for api selection.
+
+```java
+  import static springfox.documentation.builders.PathSelectors.*;
+  import static com.google.common.base.Predicates.*;
+
+  @Bean
+  public Docket swaggerSpringMvcPlugin() {
+    return new Docket(DocumentationType.SWAGGER_2)
+            .groupName("business-api")
+            .select()
+               //Ignores controllers annotated with @CustomIgnore
+              .apis(not(withClassAnnotation(CustomIgnore.class)) //Selection by RequestHandler
+              .paths(paths()) // and by paths
+              .build()
+            .apiInfo(apiInfo())
+            .securitySchemes(securitySchemes())
+            .securityContext(securityContext());
+  }
+
+  //Here is an example where we select any api that matches one of these paths
+  private Predicate<String> paths() {
+    return or(
+        regex("/business.*"),
+        regex("/some.*"),
+        regex("/contacts.*"),
+        regex("/pet.*"),
+        regex("/springsRestController.*"),
+        regex("/test.*"));
+  }
+
+```
+
+For a list of handy predicates Look at https://github.com/springfox/springfox/blob/master/springfox-core/src/main/java/springfox/documentation/builders/RequestHandlerSelectors.java[RequestHandlerSelectors]
+and https://github.com/springfox/springfox/blob/master/springfox-core/src/main/java/springfox/documentation/builders/PathSelectors.java[PathSelectors].
+
+=== Configuring the ObjectMapper
+
+A simple way to configure the object mapper is to listen for the ```ObjectMapperConfigured``` event. Regardless of
+whether there is a customized ObjectMapper in play with a corresponding MappingJackson2HttpMessageConverter, the
+library always has a configured ObjectMapper that is customized to serialize swagger 1.2 and swagger 2.0 types.
+
+In order to do this implement the ```ApplicationListener<ObjectMapperConfigured>``` interface. The event has a handle
+ to the ObjectMapper that was configured. Configuring application specific ObjectMapper customizations in this
+ applicaiton event handler guarantees that application specific  customizations will be applied to each and every
+ ObjectMapper that is in play.
+
+If you encounter a NullPointerException during application startup like https://github.com/springfox/springfox/issues/635[this issue]. Its because most likely the ```WebMvcConfigurerAdapter``` isn't working.
+These adapter especially in a non-spring-boot scenarios will only get loaded if the @EnableWebMvc
+http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurer.html[annotation is present].
+
+If using Spring Boot Web MVC, there is no need to use the @EnableWebMvc annotation, as the framework automatically detects Web MVC usage and configures itself as appropriate.
+In this scenario, Springfox will not correctly generate and expose the Swagger UI endpoint (`/swagger-ui.html`) if @EnableWebMvc is present in the application.
+
+Caveat to using the library is that it depends on Jackson for serialization, more importantly the `ObjectMapper`. A
+good example of where this breaks down is the following http://stackoverflow.com/a/30220562/19219[issue when using Gson serialization]
+
+=== Customizing the swagger endpoints.
+
+By default the swagger service descriptions are generated at the following urls
+
+[options="header,footer"]
+|=======================
+|Swagger version  | Documentation Url           | Group
+|1.2              | /api-docs                   | implicit *default* group
+|2.0              | /api-docs?group=external    | *external* group via docket.groupName()
+|2.0              | /v2/api-docs                | implicit *default* group
+|2.0              | /v2/api-docs?group=external | *external* group via docket.groupName()
+|=======================
+
+To customize these endpoints, loading a http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html[property source] with the following properties
+allows the properties to be  overridden
+
+[options="header,footer"]
+|=======================
+|Swagger version | Override property
+|1.2             | springfox.documentation.swagger.v1.path
+|2.0             | springfox.documentation.swagger.v2.path
+|=======================
+
+=== Overriding property datatypes
+
+Using the ```ApiModelProperty#dataType``` we can override the inferred data types. However it is restricted
+ to only allow data types to be specified with a fully qualified class name. For e.g. if we have the following
+ definition
+
+```java
+
+// if com.qualified.ReplaceWith is not a Class that can be created using Class.forName(...)
+// Original will be replaced with the new class
+@ApiModelProperty(dataType = "com.qualified.ReplacedWith")
+public Original getOriginal() { ... }
+
+// if ReplaceWith is not a Class that can be created using Class.forName(...) Original will be preserved
+@ApiModelProperty(dataType = "ReplaceWith")
+public Original getAnotherOriginal() { ... }
+```
+
+=== Docket XML Configuration
+
+To use the plugin you must create a spring java configuration class which uses spring's `@Configuration`.
+This config class must then be defined in your xml application context.
+
+
+```xml
+<!-- Required so springfox can access spring's RequestMappingHandlerMapping  -->
+<mvc:annotation-driven/>
+
+<!-- Required to enable Spring post processing on @Configuration classes. -->
+<context:annotation-config/>
+
+<bean class="com.yourapp.configuration.MySwaggerConfig"/>
+```
+
+```java
+
+@Configuration
+@EnableSwagger //Loads the spring beans required by the framework
+public class MySwaggerConfig {
+
+   /**
+    * Every Docket bean is picked up by the swagger-mvc framework - allowing for multiple
+    * swagger groups i.e. same code base multiple swagger resource listings.
+    */
+   @Bean
+   public Docket customDocket(){
+      return new Docket(); //some customization goes here
+   }
+
+}
+```
+
+
+=== Docket Spring Java Configuration
+
+- Use the `@EnableSwagger` or `@EnableSwagger2` annotation.
+- Define one or more Docket instances using springs `@Bean` annotation.
+
+```java
+@Configuration
+@EnableWebMvc //NOTE: Only needed in a non-springboot application
+@EnableSwagger2
+@ComponentScan("com.myapp.controllers")
+public class CustomJavaPluginConfig {
+
+
+   @Bean //Don't forget the @Bean annotation
+   public Docket customImplementation(){
+      return new Docket()
+            .apiInfo(apiInfo());
+            //... more options available
+
+   }
+
+   //...
+}
+```
+
+==== Swagger group
+
+A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
+within your application. The reason this concept was introduced was to support applications which require more than one
+Resource Listing. Why would you need more than one Resource Listing?
+- A single Spring Web MVC  application serves more than one API e.g. publicly facing and internally facing.
+- A single Spring Web MVC  application serves multiple versions of the same API. e.g. v1 and v2
+
+In most cases an application will not need more than one Resource Listing and the concept of swagger groups can be ignored.
+
+==== Configuring the output of _operationId_ in a Swagger 2.0 spec
+
+As defined https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-5[`operationId` was
+introduced] in the Swagger 2.0 spec, the `operationId` parameter, which was referred to as `nickname` in pre-2.0
+versions of the Swagger spec, provides the author a means by which to describe an API operation with a friendly name
+. This field is often used by consumers of a Swagger 2.0 spec in order to name functions in generated clients. An
+example of this can be seen in the https://github.com/swagger-api/swagger-codegen[swagger-codegen project].
+
+===== The default value of `operationId` according to Springfox
+
+By default, when using Springfox in Swagger 2.0 mode, the value of `operationID` will be rendered using the
+following structure: "`[java_method_name_here]Using[HTTP_verb_here]`". For example, if one has a method `getPets()`
+connected to an HTTP GET verb, Springfox will render `getPetsUsingGET` for the operationId.
+
+====== Given this annotated method ...
+
+```java
+@ApiOperation(value = "")
+@RequestMapping(value = "/pets", method = RequestMethod.GET)
+public Model getAllThePets() {
+    ...
+}
+```
+
+====== the default `operationId` will render looking like this:
+
+```json
+
+"paths": {
+  "/pets": {
+    "get": {
+            ...
+      "operationId":"getAllThePetsUsingGET"
+      ...
+    }
+  }
+}
+
+```
+
+===== Customizing the value of _operationId_
+
+In the event you wish to overide the default `operationId` which Springfox renders, you may do so by providing the
+`nickname` element in an `@ApiOperation` annotation.
+
+====== Given this annotated method ...
+
+```java
+@ApiOperation(value = "", nickname = "getMeAllThePetsPlease")
+@RequestMapping(value = "/pets", method = RequestMethod.GET)
+public Model getAllThePets() {
+    ...
+}
+```
+
+====== ... the customized *operationId* will render looking like this:
+
+```json
+
+"paths": {
+  "/pets": {
+    "get": {
+            ...
+      "operationId":"getMeAllThePetsPlease"
+      ...
+    }
+  }
+}
+
+```
+
+==== Changing how Generic Types are Named
+
+By default, types with generics will be labeled with '\u00ab'(<<), '\u00bb'(>>), and commas. This can be problematic
+with things like swagger-codegen. You can override this behavior by implementing your own `GenericTypeNamingStrategy`.
+For example, if you wanted `List<String>` to be encoded as 'ListOfString' and `Map<String, Object>`
+to be encoded as 'MapOfStringAndObject' you could set the `forCodeGeneration` customization option to `true` during
+plugin customization:
+
+```java
+ docket.forCodeGeneration(true|false);
+```
+
+=== Caching
+
+The caching feature that was introduced in 2.1.0 has been removed. Springfox no longer uses the cache abstraction to
+improve performance the api scanners and readers. It has been rolled into the library as an internal implementation
+detail as of 2.1.2. This is a runtime breaking change, however, since its not really breaking api compatibility change
+other than the introduction of configuration change in consuming applications, we're not incrementing the minor version.
+
+=== Configuring Security Schemes and Contexts an Overview
+
+The security provisions in SpringFox at a high level, without getting into the code, has different pieces
+that all work together in concert
+
+- The API itself needs to be protected. This is achieved by using, for simplicity sake, spring security and may also
+use a combination of servlet container and tomcat/jersey etc.
+- The security scheme which describes the techniques you've used to protect the api. Spring fox supports whatever
+schemes swagger specification supports (ApiKey, BasicAuth and OAuth2 (certain profiles))
+- Finally the security contexts which actually provides information on which api's are protected by which schemes. I
+think in your example, you're missing the last piece of the puzzle, the security context see  xref:getting-started[15].
+
+=== Extensibility
+
+The library provides a variety of extensibility hooks to enrich/ augment the schema and service models
+
+- For enriching models and properties (TODO)
+- For enriching services models (TODO)
+
+=== Example application
+
+For an examples for spring-boot, vanilla spring applications take a look https://github.com/springfox/springfox-demos[examples]
+in the demo application.
+
+== Configuring springfox-staticdocs
+
+Springfox-staticdocs is a module which brings together springfox and https://github.com/RobWin/swagger2markup[swagger2markup]. Swagger2Markup is a library which simplifies the generation of an up-to-date RESTful API documentation by combining documentation that’s been hand-written with auto-generated API documentation produced by Springfox. The result is intended to be an up-to-date, easy-to-read, on- and offline user guide. Swagger2Markup converts a Swagger JSON or YAML file into several AsciiDoc or GitHub Flavored Markdown documents which can be converted to HTML, PDF and EPUB. The output of Swagger2Markup can be used as an alternative to swagger-ui and can be served as static content.
+
+=== Usage guide
+
+Adding springfox-staticdocs to your project
+
+==== Maven
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>{releaseVersion}</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-staticdocs</artifactId>
+    <version>{releaseVersion}</version>
+    <scope>test</scope>
+</dependency>
+----
+
+==== Gradle
+
+[source,groovy]
+----
+dependencies {
+    ...
+    compile 'io.springfox:springfox-swagger2:{releaseVersion}'
+    testCompile 'io.springfox:springfox-staticdocs:{releaseVersion}'
+    ...
+}
+----
+
+==== Generate Markup during an unit test
+
+Spring's MVC Test framework can be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. The ResultHandler `Swagger2MarkupResultHandler` can be used to convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is part of `springfox-staticdocs`. That way you also verify that your Swagger endpoint is working. The following is an example with Spring Boot:
+
+[source,java]
+----
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
+public class Swagger2MarkupTest {
+
+    @Autowired
+    private WebApplicationContext context;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+    }
+
+    @Test
+    public void convertSwaggerToAsciiDoc() throws Exception {
+        this.mockMvc.perform(get("/v2/api-docs")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/asciidoc/generated").build())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void convertSwaggerToMarkdown() throws Exception {
+        this.mockMvc.perform(get("/v2/api-docs")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/markdown/generated")
+                    .withMarkupLanguage(MarkupLanguage.MARKDOWN).build())
+                .andExpect(status().isOk());
+    }
+}
+----
+
+If you want to combine the generated documentation with your hand-written documentation, then have a look at the user guide of https://github.com/RobWin/swagger2markup#combine-generated-documentation-with-your-hand-written-documentation[swagger2Markup]. You can also include generated CURL request, HTTP request and HTTP response example snippets from https://github.com/spring-projects/spring-restdocs[spring-restdocs] into the generated documentation.
+
+==== Generated HTML using Swagger2Markup and AsciidoctorJ
+image::asciidoc_html.PNG[asciidoc_html]

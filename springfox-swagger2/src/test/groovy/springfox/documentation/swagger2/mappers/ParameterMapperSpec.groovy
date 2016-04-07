@@ -23,15 +23,15 @@ class ParameterMapperSpec extends Specification {
       //TODO: check the schema property
 
     where:
-      parameterType  | modelRef                                       | parameterInstance
-      "header"       | new ModelRef("sometype")                       | SerializableParameter
-      "body"         | new ModelRef("sometype")                       | BodyParameter
-      "body"         | new ModelRef("date")                           | BodyParameter
-      "body"         | new ModelRef("sometype")                       | BodyParameter
-      "header"       | new ModelRef("sometype", "itemType")           | SerializableParameter
-      "body"         | new ModelRef("sometype", "itemType")           | BodyParameter
-      "header"       | new ModelRef("sometype", "itemType", true)     | SerializableParameter
-      "body"         | new ModelRef("sometype", "itemType", true)     | BodyParameter
+      parameterType  | modelRef                                                 | parameterInstance
+      "header"       | new ModelRef("sometype")                                 | SerializableParameter
+      "body"         | new ModelRef("sometype")                                 | BodyParameter
+      "body"         | new ModelRef("date")                                     | BodyParameter
+      "body"         | new ModelRef("sometype")                                 | BodyParameter
+      "header"       | new ModelRef("sometype", new ModelRef("itemType"))       | SerializableParameter
+      "body"         | new ModelRef("sometype", new ModelRef("itemType"))       | BodyParameter
+      "header"       | new ModelRef("sometype", new ModelRef("itemType"), true) | SerializableParameter
+      "body"         | new ModelRef("sometype", new ModelRef("itemType"), true) | BodyParameter
   }
 
   def parameter(def parameterType) {

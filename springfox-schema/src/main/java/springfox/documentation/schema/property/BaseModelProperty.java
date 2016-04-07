@@ -25,13 +25,13 @@ import springfox.documentation.schema.ResolvedTypes;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
-import static com.google.common.base.Optional.fromNullable;
-import static springfox.documentation.schema.ResolvedTypes.simpleQualifiedTypeName;
+import static com.google.common.base.Optional.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
 
 public abstract class BaseModelProperty implements ModelProperty {
 
   private final String name;
-  private final AlternateTypeProvider alternateTypeProvider;
+  protected final AlternateTypeProvider alternateTypeProvider;
 
   public BaseModelProperty(String name, AlternateTypeProvider alternateTypeProvider) {
     this.name = name;
@@ -73,6 +73,10 @@ public abstract class BaseModelProperty implements ModelProperty {
     return false;
   }
 
+  @Override
+  public boolean isReadOnly() {
+    return false;
+  }
 
   @Override
   public String propertyDescription() {

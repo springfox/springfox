@@ -22,7 +22,6 @@ package springfox.documentation.swagger1.web;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +39,13 @@ import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger1.dto.ApiListing;
 import springfox.documentation.swagger1.dto.ResourceListing;
-import springfox.documentation.swagger1.mappers.Mappers;
 import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper;
 
 import java.util.Collection;
 import java.util.Map;
 
+import static com.google.common.collect.Multimaps.*;
+import static springfox.documentation.swagger1.mappers.Mappers.*;
 import static springfox.documentation.swagger1.web.ApiListingMerger.*;
 
 @Controller
@@ -71,7 +71,7 @@ public class Swagger1Controller {
   }
 
   @ApiIgnore
-  @RequestMapping(value = {"/{swaggerGroup}/{apiDeclaration}"}, method = RequestMethod.GET)
+  @RequestMapping(value = { "/{swaggerGroup}/{apiDeclaration}" }, method = RequestMethod.GET)
   public
   @ResponseBody
   ResponseEntity<Json> getApiListing(@PathVariable String swaggerGroup, @PathVariable String apiDeclaration) {
@@ -86,13 +86,13 @@ public class Swagger1Controller {
     }
     Multimap<String, springfox.documentation.service.ApiListing> apiListingMap = documentation.getApiListings();
     Map<String, Collection<ApiListing>> dtoApiListings
-            = Multimaps.transformEntries(apiListingMap, Mappers.toApiListingDto(mapper)).asMap();
+        = transformEntries(apiListingMap, toApiListingDto(mapper)).asMap();
 
     Collection<ApiListing> apiListings = dtoApiListings.get(apiDeclaration);
-      return mergedApiListing(apiListings)
-          .transform(toJson())
-          .transform(toResponseEntity(Json.class))
-          .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
+    return mergedApiListing(apiListings)
+        .transform(toJson())
+        .transform(toResponseEntity(Json.class))
+        .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
   }
 
   private Function<ApiListing, Json> toJson() {
@@ -114,8 +114,8 @@ public class Swagger1Controller {
     ResourceListing resourceListing = mapper.toSwaggerResourceListing(listing);
 
     return Optional.fromNullable(jsonSerializer.toJson(resourceListing))
-            .transform(toResponseEntity(Json.class))
-            .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
+        .transform(toResponseEntity(Json.class))
+        .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
   }
 
   private <T> Function<T, ResponseEntity<T>> toResponseEntity(Class<T> clazz) {

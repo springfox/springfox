@@ -21,6 +21,7 @@ package springfox.documentation.swagger.readers.operation;
 
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -36,12 +37,14 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class OperationImplicitParameterReader implements OperationBuilderPlugin {
+  private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(OperationImplicitParameterReader.class);
 
   @Override
   public void apply(OperationContext context) {
@@ -59,23 +62,33 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
     ApiImplicitParam annotation = AnnotationUtils.findAnnotation(method, ApiImplicitParam.class);
     List<Parameter> parameters = Lists.newArrayList();
     if (null != annotation) {
-      parameters.add(OperationImplicitParameterReader.getImplicitParameter(annotation));
+      parameters.add(OperationImplicitParameterReader.implicitParameter(annotation));
     }
     return parameters;
   }
 
-  public static Parameter getImplicitParameter(ApiImplicitParam param) {
+  public static Parameter implicitParameter(ApiImplicitParam param) {
+    ModelRef modelRef = maybeGetModelRef(param);
     return new ParameterBuilder()
-            .name(param.name())
-            .description(param.value())
-            .defaultValue(param.defaultValue())
-            .required(param.required())
-            .allowMultiple(param.allowMultiple())
-            .modelRef(new ModelRef(param.dataType()))
-            .allowableValues(allowableValueFromString(param.allowableValues()))
-            .parameterType(param.paramType())
-            .parameterAccess(param.access())
-            .build();
+        .name(param.name())
+        .description(param.value())
+        .defaultValue(param.defaultValue())
+        .required(param.required())
+        .allowMultiple(param.allowMultiple())
+        .modelRef(modelRef)
+        .allowableValues(allowableValueFromString(param.allowableValues()))
+        .parameterType(param.paramType())
+        .parameterAccess(param.access())
+        .build();
+  }
+
+  static ModelRef maybeGetModelRef(ApiImplicitParam param) {
+    String baseType = param.dataType();
+    if (!isBaseType(param.dataType())) {
+      LOGGER.warn("Coercing to be of type string. This may not even be a scalar type in actuality");
+      baseType = "string";
+    }
+    return new ModelRef(baseType, allowableValueFromString(param.allowableValues()));
   }
 
 }

@@ -1,12 +1,10 @@
 package springfox.gradlebuild.version
 
-import org.gradle.api.logging.Logger
-import org.gradle.api.logging.Logging
+import org.gradle.api.Project
 import springfox.gradlebuild.BuildInfo
 
-class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionParser  {
+class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionParser, GitTaggingSupport  {
 
-  private static Logger LOG = Logging.getLogger(GitDescribeVersioningStrategy.class);
   private final String buildNumberFormat
 
   GitDescribeVersioningStrategy(String buildNumberFormat) {
@@ -14,36 +12,26 @@ class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionPar
   }
 
   @Override
-  SemanticVersion current() {
-    def proc = "git describe --exact-match".execute();
-    proc.waitFor();
-    if (proc.exitValue() == 0) {
-      parseTransform(proc.text.trim(), buildNumberFormat)
-    }
-    proc = "git describe".execute();
-    proc.waitFor();
-    if (proc.exitValue() == 0) {
-      return parseTransform(proc.text.trim(), buildNumberFormat)
-    }
-    return new SemanticVersion(0, 0, 0, "")
+  SemanticVersion buildVersion(ReleaseType releaseType, boolean isReleaseBuild) {
+    current().next(releaseType, buildNumberFormat)
   }
 
   @Override
-  void persist(BuildInfo buildInfo) {
-    def command = "git tag -a ${buildInfo.releaseTag} -m \"Release(${buildInfo.nextVersion}) tagging project with tag ${buildInfo.releaseTag}\""
-    if (buildInfo.dryRun) {
-      LOG.info("Would have executed: $command")
-      return
-    }
-    def proc = command.execute();
-    proc.waitFor();
-    if (proc.exitValue() == 0) {
-      LOG.info("Successfully executed: $command")
-    }
+  SemanticVersion current() {
+    parseTransform(lastAnnotatedTag(), buildNumberFormat)
+  }
+
+  @Override
+  void persist(Project project, BuildInfo buildInfo) {
+    createAnnotatedTag(project, buildInfo)
   }
 
   static VersioningStrategy create(String buildNumberFormat) {
     return new GitDescribeVersioningStrategy(buildNumberFormat)
   }
 
+  @Override
+  SemanticVersion nextVersion(SemanticVersion buildVersion, ReleaseType releaseType, boolean isReleaseBuild) {
+    buildVersion.next(releaseType, buildNumberFormat)
+  }
 }

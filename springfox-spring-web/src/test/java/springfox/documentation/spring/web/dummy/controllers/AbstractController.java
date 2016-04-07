@@ -21,19 +21,28 @@ package springfox.documentation.spring.web.dummy.controllers;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.hateoas.ResourceSupport;
+import org.springframework.http.HttpEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-public abstract class AbstractController<T> {
+public abstract class AbstractController<T extends ResourceSupport, ID> {
 
   @RequestMapping(value = "/create-t", method = RequestMethod.PUT)
   public void create(T toCreate) {
     throw new UnsupportedOperationException();
   }
 
-  @RequestMapping(value = "/get-t", method = RequestMethod.GET)
+  @RequestMapping(value = "/get-t/{id}", method = RequestMethod.GET)
   @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
-  public T get() {
+  public T get(@PathVariable("id")  ID id) {
+    throw new UnsupportedOperationException();
+  }
+
+  @RequestMapping(value = "/delete-t/{id}", method = RequestMethod.DELETE)
+  @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
+  public HttpEntity delete(@PathVariable("id")  ID id) {
     throw new UnsupportedOperationException();
   }
 }

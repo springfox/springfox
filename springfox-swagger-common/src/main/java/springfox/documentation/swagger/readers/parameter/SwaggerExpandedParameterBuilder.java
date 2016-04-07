@@ -31,7 +31,6 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
-import springfox.documentation.swagger.annotations.Annotations;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
@@ -42,6 +41,8 @@ import java.util.List;
 import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.swagger.annotations.Annotations.*;
+import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -49,11 +50,11 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<ApiModelProperty> apiModelPropertyOptional = ApiModelProperties.findApiModePropertyAnnotation(context.getField());
+    Optional<ApiModelProperty> apiModelPropertyOptional = findApiModePropertyAnnotation(context.getField());
     if (apiModelPropertyOptional.isPresent()) {
       fromApiModelProperty(context, apiModelPropertyOptional.get());
     }
-    Optional<ApiParam> apiParamOptional = Annotations.findApiParamAnnotation(context.getField());
+    Optional<ApiParam> apiParamOptional = findApiParamAnnotation(context.getField());
     if (apiParamOptional.isPresent()) {
       fromApiParam(context, apiParamOptional.get());
     }

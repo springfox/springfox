@@ -19,19 +19,23 @@
 
 package springfox.documentation.spi.service.contexts;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springfox.documentation.PathProvider;
+import springfox.documentation.RequestHandler;
+import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
@@ -43,13 +47,14 @@ import java.util.Set;
 
 public class DocumentationContext {
   private final DocumentationType documentationType;
-  private final List<RequestMappingHandlerMapping> handlerMappings;
+  private final List<RequestHandler> handlerMappings;
   private final ApiInfo apiInfo;
   private final String groupName;
   private final ApiSelector apiSelector;
   private final AlternateTypeProvider alternateTypeProvider;
   private final Set<Class> ignorableParameterTypes;
   private final Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
+  private final List<Parameter> globalOperationParameters;
   private final ResourceGroupingStrategy resourceGroupingStrategy;
   private final PathProvider pathProvider;
   private final List<SecurityContext> securityContexts;
@@ -57,31 +62,41 @@ public class DocumentationContext {
   private final Ordering<ApiListingReference> listingReferenceOrdering;
   private final Ordering<ApiDescription> apiDescriptionOrdering;
   private final Ordering<Operation> operationOrdering;
-  private Set<String> produces;
-  private Set<String> consumes;
-  private Set<String> protocols;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final Optional<String> pathMapping;
+  private final Set<ResolvedType> additionalModels;
+  private final Set<Tag> tags;
+  private Set<String> produces;
+  private Set<String> consumes;
+  private String host;
+  private Set<String> protocols;
+  private boolean isUriTemplatesEnabled;
 
-  public DocumentationContext(DocumentationType documentationType,
-        List<RequestMappingHandlerMapping> handlerMappings,
-        ApiInfo apiInfo, String groupName,
-        ApiSelector apiSelector,
-        Set<Class> ignorableParameterTypes,
-        Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
-        ResourceGroupingStrategy resourceGroupingStrategy,
-        PathProvider pathProvider,
-        List<SecurityContext> securityContexts,
-        List<? extends SecurityScheme> securitySchemes,
-        List<AlternateTypeRule> alternateTypeRules,
-        Ordering<ApiListingReference> listingReferenceOrdering,
-        Ordering<ApiDescription> apiDescriptionOrdering,
-        Ordering<Operation> operationOrdering,
-        Set<String> produces,
-        Set<String> consumes,
-        Set<String> protocols,
-        GenericTypeNamingStrategy genericsNamingStrategy,
-        Optional<String> pathMapping) {
+  public DocumentationContext(
+      DocumentationType documentationType,
+      List<RequestHandler> handlerMappings,
+      ApiInfo apiInfo, String groupName,
+      ApiSelector apiSelector,
+      Set<Class> ignorableParameterTypes,
+      Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
+      List<Parameter> globalOperationParameter,
+      ResourceGroupingStrategy resourceGroupingStrategy,
+      PathProvider pathProvider,
+      List<SecurityContext> securityContexts,
+      List<? extends SecurityScheme> securitySchemes,
+      List<AlternateTypeRule> alternateTypeRules,
+      Ordering<ApiListingReference> listingReferenceOrdering,
+      Ordering<ApiDescription> apiDescriptionOrdering,
+      Ordering<Operation> operationOrdering,
+      Set<String> produces,
+      Set<String> consumes,
+      String host,
+      Set<String> protocols,
+      GenericTypeNamingStrategy genericsNamingStrategy,
+      Optional<String> pathMapping,
+      boolean isUriTemplatesEnabled,
+      Set<ResolvedType> additionalModels,
+      Set<Tag> tags) {
 
     this.documentationType = documentationType;
     this.handlerMappings = handlerMappings;
@@ -90,6 +105,7 @@ public class DocumentationContext {
     this.apiSelector = apiSelector;
     this.ignorableParameterTypes = ignorableParameterTypes;
     this.globalResponseMessages = globalResponseMessages;
+    this.globalOperationParameters = globalOperationParameter;
     this.resourceGroupingStrategy = resourceGroupingStrategy;
     this.pathProvider = pathProvider;
     this.securityContexts = securityContexts;
@@ -99,9 +115,13 @@ public class DocumentationContext {
     this.operationOrdering = operationOrdering;
     this.produces = produces;
     this.consumes = consumes;
+    this.host = host;
     this.protocols = protocols;
     this.genericsNamingStrategy = genericsNamingStrategy;
     this.pathMapping = pathMapping;
+    this.isUriTemplatesEnabled = isUriTemplatesEnabled;
+    this.additionalModels = additionalModels;
+    this.tags = tags;
     this.alternateTypeProvider = new AlternateTypeProvider(alternateTypeRules);
   }
 
@@ -109,7 +129,7 @@ public class DocumentationContext {
     return documentationType;
   }
 
-  public List<RequestMappingHandlerMapping> getHandlerMappings() {
+  public List<RequestHandler> getRequestHandlers() {
     return handlerMappings;
   }
 
@@ -132,7 +152,15 @@ public class DocumentationContext {
   public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {
     return globalResponseMessages;
   }
+  
+  public List<Parameter> getGlobalRequestParameters() {
+    return globalOperationParameters;
+  }
 
+  /**
+   * @deprecated  @since 2.2.0 - only here for backward compatibiltiy
+   */
+  @Deprecated
   public ResourceGroupingStrategy getResourceGroupingStrategy() {
     return resourceGroupingStrategy;
   }
@@ -173,6 +201,10 @@ public class DocumentationContext {
     return consumes;
   }
 
+  public String getHost() {
+    return host;
+  }
+
   public Set<String> getProtocols() {
     return protocols;
   }
@@ -183,5 +215,18 @@ public class DocumentationContext {
 
   public Optional<String> getPathMapping() {
     return pathMapping;
+  }
+
+  @Incubating(value = "2.1.0")
+  public boolean isUriTemplatesEnabled() {
+    return isUriTemplatesEnabled;
+  }
+
+  public Set<ResolvedType> getAdditionalModels() {
+    return additionalModels;
+  }
+
+  public Set<Tag> getTags() {
+    return tags;
   }
 }

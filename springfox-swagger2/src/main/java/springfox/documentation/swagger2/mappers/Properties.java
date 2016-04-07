@@ -19,8 +19,13 @@
 
 package springfox.documentation.swagger2.mappers;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Ordering;
+import com.google.common.primitives.Ints;
+import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.DateProperty;
 import io.swagger.models.properties.DateTimeProperty;
@@ -35,30 +40,36 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
+import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.ModelReference;
 
+import java.util.Comparator;
 import java.util.Map;
 
 import static com.google.common.base.Functions.*;
 import static com.google.common.base.Strings.*;
+import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddEnumValues;
 
 class Properties {
   private static final Map<String, Function<String, ? extends Property>> typeFactory
       = ImmutableMap.<String, Function<String, ? extends Property>>builder()
-          .put("int", newInstanceOf(IntegerProperty.class))
-          .put("long", newInstanceOf(LongProperty.class))
-          .put("float", newInstanceOf(FloatProperty.class))
-          .put("double", newInstanceOf(DoubleProperty.class))
-          .put("string", newInstanceOf(StringProperty.class))
-          .put("boolean", newInstanceOf(BooleanProperty.class))
-          .put("date", newInstanceOf(DateProperty.class))
-          .put("date-time", newInstanceOf(DateTimeProperty.class))
-          .put("bigdecimal", newInstanceOf(DecimalProperty.class))
-          .put("biginteger", newInstanceOf(DecimalProperty.class))
-          .put("uuid", newInstanceOf(UUIDProperty.class))
-          .put("object", newInstanceOf(ObjectProperty.class))
-          .put("byte", bytePropertyFactory())
-          .put("file", filePropertyFactory())
-        .build();
+      .put("int", newInstanceOf(IntegerProperty.class))
+      .put("long", newInstanceOf(LongProperty.class))
+      .put("float", newInstanceOf(FloatProperty.class))
+      .put("double", newInstanceOf(DoubleProperty.class))
+      .put("string", newInstanceOf(StringProperty.class))
+      .put("boolean", newInstanceOf(BooleanProperty.class))
+      .put("date", newInstanceOf(DateProperty.class))
+      .put("date-time", newInstanceOf(DateTimeProperty.class))
+      .put("bigdecimal", newInstanceOf(DecimalProperty.class))
+      .put("biginteger", newInstanceOf(DecimalProperty.class))
+      .put("uuid", newInstanceOf(UUIDProperty.class))
+      .put("object", newInstanceOf(ObjectProperty.class))
+      .put("byte", bytePropertyFactory())
+      .put("file", filePropertyFactory())
+      .build();
 
   private Properties() {
     throw new UnsupportedOperationException();
@@ -69,6 +80,14 @@ class Properties {
     Function<String, Function<String, ? extends Property>> propertyLookup
         = forMap(typeFactory, voidOrRef(safeTypeName));
     return propertyLookup.apply(safeTypeName.toLowerCase()).apply(safeTypeName);
+  }
+
+  public static Property itemTypeProperty(ModelReference paramModel) {
+    if (paramModel.isCollection()) {
+      return new ArrayProperty(
+          maybeAddEnumValues(itemTypeProperty(paramModel.itemModel().get()), paramModel.getAllowableValues()));
+    }
+    return property(paramModel.getType());
   }
 
   private static <T extends Property> Function<String, T> newInstanceOf(final Class<T> clazz) {
@@ -83,6 +102,10 @@ class Properties {
         }
       }
     };
+  }
+
+  public static Ordering<String> defaultOrdering(Map<String, ModelProperty> properties) {
+    return Ordering.from(byPosition(properties)).compound(byName());
   }
 
   private static Function<String, ? extends Property> voidOrRef(final String typeName) {
@@ -115,5 +138,44 @@ class Properties {
         return new FileProperty();
       }
     };
+  }
+
+  private static Comparator<String> byName() {
+    return new Comparator<String>() {
+      @Override
+      public int compare(String first, String second) {
+        return first.compareTo(second);
+      }
+    };
+  }
+
+  private static Comparator<String> byPosition(final Map<String, ModelProperty> modelProperties) {
+    return new Comparator<String>() {
+      @Override
+      public int compare(String first, String second) {
+        ModelProperty p1 = modelProperties.get(first);
+        ModelProperty p2 = modelProperties.get(second);
+        return Ints.compare(p1.getPosition(), p2.getPosition());
+      }
+    };
+  }
+
+  static Predicate<Map.Entry<String, ModelProperty>> voidProperties() {
+    return new Predicate<Map.Entry<String, ModelProperty>>() {
+      @Override
+      public boolean apply(Map.Entry<String, ModelProperty> input) {
+        return isVoid(input.getValue().getType())
+            || collectionOfVoid(input.getValue().getType())
+            || arrayTypeOfVoid(input.getValue().getType().getArrayElementType());
+      }
+    };
+  }
+
+  private static boolean arrayTypeOfVoid(ResolvedType arrayElementType) {
+    return arrayElementType != null && isVoid(arrayElementType);
+  }
+
+  private static boolean collectionOfVoid(ResolvedType type) {
+    return isContainerType(type) && isVoid(collectionElementType(type));
   }
 }

@@ -46,13 +46,13 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
       simpleType()                    | []
       complexType()                   | ["Category"]
       enumType()                      | []
-      typeWithLists()                 | ["List", "Category",  "ComplexType"].sort()
+      typeWithLists()                 | ["List", "Category",  "ComplexType", "Substituted"].sort()
       typeWithSets()                  | ["Set", "Category",  "ComplexType"].sort()
-      typeWithArrays()                | ["Array", "Category", "ComplexType"].sort()
+      typeWithArrays()                | ["Array", "Category", "ComplexType", "List", "Substituted"].sort()
       genericClass()                  | ["List", "SimpleType"].sort()
       genericClassWithListField()     | ["List", "SimpleType"].sort()
-      genericClassWithGenericField()  | ["HttpHeaders", "List", "ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
-      genericClassWithDeepGenerics()  | ["HttpHeaders", "List", "ResponseEntityAlternative«List«SimpleType»»",
+      genericClassWithGenericField()  | ["List", "ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
+      genericClassWithDeepGenerics()  | ["List", "ResponseEntityAlternative«List«SimpleType»»",
                                          "SimpleType"].sort()
       genericCollectionWithEnum()     | ["Collection«string»", "List"].sort()
       recursiveType()                 | ["SimpleType"]
@@ -80,13 +80,13 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
       complexType()                   | ["Category"]
       enumType()                      | []
       inheritedComplexType()          | ["Category"]
-      typeWithLists()                 | ["List", "Category",  "ComplexType" ].sort()
+      typeWithLists()                 | ["List", "Category",  "ComplexType", "Substituted"].sort()
       typeWithSets()                  | ["Set", "Category",  "ComplexType"].sort()
-      typeWithArrays()                | ["Array", "Category", "ComplexType"].sort()
+      typeWithArrays()                | ["Array", "Category", "ComplexType", "List", "Substituted"].sort()
       genericClass()                  | ["List", "SimpleType"].sort()
       genericClassWithListField()     | ["List", "SimpleType"].sort()
-      genericClassWithGenericField()  | ["HttpHeaders", "List", "ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
-      genericClassWithDeepGenerics()  | ["HttpHeaders", "List", "ResponseEntityAlternative«List«SimpleType»»",
+      genericClassWithGenericField()  | ["List", "ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
+      genericClassWithDeepGenerics()  | ["List", "ResponseEntityAlternative«List«SimpleType»»",
                                          "SimpleType"].sort()
       genericCollectionWithEnum()     | ["Collection«string»", "List"].sort()
       recursiveType()                 | ["SimpleType"]

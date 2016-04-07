@@ -43,17 +43,17 @@ class ParameterBulderSpec extends Specification {
       }
 
     where:
-      builderMethod     | value                                 | property
-      'name'            | 'param1'                              | 'name'
-      'description'     | 'param1 desc'                         | 'description'
-      'defaultValue'    | 'default'                             | 'defaultValue'
-      'modelRef'        | new ModelRef('string')                | 'modelRef'
-      'parameterType'   | 'string'                              | 'paramType'
-      'parameterAccess' | 'public'                              | 'paramAccess'
-      'allowMultiple'   | true                                  | 'allowMultiple'
-      'required'        | true                                  | 'required'
-      'allowableValues' | new AllowableListValues([], "LIST")   | 'allowableValues'
-      'type'            | Mock(ResolvedType)                    | 'type'
+      builderMethod     | value                                  | property
+      'name'            | 'param1'                               | 'name'
+      'description'     | 'param1 desc'                          | 'description'
+      'defaultValue'    | 'default'                              | 'defaultValue'
+      'modelRef'        | new ModelRef('string')                 | 'modelRef'
+      'parameterType'   | 'string'                               | 'paramType'
+      'parameterAccess' | 'public'                               | 'paramAccess'
+      'allowMultiple'   | true                                   | 'allowMultiple'
+      'required'        | true                                   | 'required'
+      'allowableValues' | new AllowableListValues(['a'], "LIST") | 'allowableValues'
+      'type'            | Mock(ResolvedType)                     | 'type'
   }
 
   @Unroll
@@ -73,14 +73,29 @@ class ParameterBulderSpec extends Specification {
       }
 
     where:
-      builderMethod     | value                                 | property
-      'name'            | 'param1'                              | 'name'
-      'description'     | 'param1 desc'                         | 'description'
-      'defaultValue'    | 'default'                             | 'defaultValue'
-      'modelRef'        | new ModelRef('string')                | 'modelRef'
-      'parameterType'   | 'string'                              | 'paramType'
-      'parameterAccess' | 'public'                              | 'paramAccess'
-      'allowableValues' | new AllowableListValues([], "LIST")   | 'allowableValues'
-      'type'            | Mock(ResolvedType)                    | 'type'
+      builderMethod     | value                                  | property
+      'name'            | 'param1'                               | 'name'
+      'description'     | 'param1 desc'                          | 'description'
+      'defaultValue'    | 'default'                              | 'defaultValue'
+      'modelRef'        | new ModelRef('string')                 | 'modelRef'
+      'parameterType'   | 'string'                               | 'paramType'
+      'parameterAccess' | 'public'                               | 'paramAccess'
+      'allowableValues' | new AllowableListValues(['a'], "LIST") | 'allowableValues'
+      'type'            | Mock(ResolvedType)                     | 'type'
+  }
+  def "Setting builder allowableValue to empty or null values preserves existing values"() {
+    given:
+      def sut = new ParameterBuilder()
+    when:
+      sut.allowableValues(currentValue)
+      sut.allowableValues(newValue)
+    and:
+      def built = sut.build()
+    then:
+      built.allowableValues == currentValue
+    where:
+    newValue                                 | currentValue
+    new AllowableListValues([], "LIST")      | new AllowableListValues(['a'], "LIST")
+    null                                     | new AllowableListValues(['a'], "LIST")
   }
 }

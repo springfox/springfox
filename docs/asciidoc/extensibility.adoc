@@ -1,0 +1,70 @@
+== Plugins
+=== Introduction
+Any plugin or extensibility hook that is available https://github.com/springfox/springfox/tree/master/springfox-spi/src/main/java/springfox/documentation/spi[is available in the SPI
+module]. In the `spi` module, anything that ends in `*Plugin` is generally an extensibility point that is meant for
+library consumers to consume.
+
+The bean validation (JSR-302) is a great example of a contribution to https://github.com/springfox/springfox/tree/master/springfox-bean-validators[support bean validations]. Its fairly simple and small in scope and should
+give an idea how one goes about creating a plugin. Its a set of plugins are act on `ModelProperty`, hence they
+are  implementations of `ModelPropertyBuilderPlugin`.
+
+=== Plugins Available For Extensibility
+To explicitly state the extensibility points that are available:
+* At the schema level
+.Schema Plugins
+|===
+|Name| Description
+
+| `ModelBuilderPlugin`
+| for enriching models
+
+| `ModelPropertyBuilderPlugin`
+| for enriching model properties
+
+| `TypeNameProviderPlugin`
+| these are for overriding names for models
+|===
+
+
+.Service Plugins
+|===
+|Name| Description
+
+| `ApiListingBuilderPlugin`
+| for enriching api listings
+
+| `DefaultsProviderPlugin`
+| for providing your own defaults
+
+| `DocumentationPlugin`
+| for enriching the documentation context
+
+| `ExpandedParameterBuilderPlugin`
+| for parameter expansion used in the context of `@ModelAttribute`
+
+| `OperationBuilderPlugin`
+| for enriching operations
+
+| `OperationModelsProviderPlugin`
+| for providing additional models that you might load a different way
+
+| `ParameterBuilderPlugin`
+| for enriching parameters
+|===
+
+
+=== Steps To Create A Plugin
+
+TIP: The ___same___ patterns apply to all of the extensibility mechanisms
+
+1. Implement one of the above plugin interfaces
+2. Give the plugin an order for e.g. https://github.com/springfox/springfox/blob/master/springfox-swagger-common/src/main/java/springfox/documentation/swagger/readers/parameter/ApiParamParameterBuilder.java#L42[ApiParamParameterBuilder] has an
+ order specified in the bean. In general spring plugins get the highest priority, The swagger plugins (the ones that process all the `@Api...` annotations) layer information on top. So the order that you'd write will need to layer information at the end.
+3. Each plugin has
+     - a https://github.com/springfox/springfox/blob/master/springfox-swagger-common/src/main/java/springfox/documentation/swagger/readers/parameter/ApiParamParameterBuilder.java#L47[*context] and provides access to any information that the plugin might need to do its job
+     - a https://github.com/springfox/springfox/blob/master/springfox-swagger-common/src/main/java/springfox/documentation/swagger/readers/parameter/ApiParamParameterBuilder.java#L49[*builder] for the type of object that the plugin is intended to support for e.g. a `ModelPropertyBuilderPlugin` will have access to a `ModelPropertyBuilder`. This builder is what is used to build the model _after_ all the plugins have had access to contribute/enrich the underlying object.
+4. Update any builder properties your plugin cares about
+5. Register the plugin as a `@bean`, so that the plugin registry can pick it up.
+
+That is it!
+

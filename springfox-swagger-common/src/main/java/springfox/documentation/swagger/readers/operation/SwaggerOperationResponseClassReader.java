@@ -27,18 +27,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
-import static springfox.documentation.spring.web.HandlerMethodReturnTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 
 @Component
@@ -59,7 +57,7 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
   public void apply(OperationContext context) {
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    ResolvedType returnType = handlerReturnType(typeResolver, handlerMethod);
+    ResolvedType returnType = new HandlerMethodResolver(typeResolver).methodReturnType(handlerMethod);
     returnType = context.alternateFor(returnType);
     returnType = findApiOperationAnnotation(handlerMethod.getMethod())
         .transform(resolvedTypeFromOperation(typeResolver, returnType))
@@ -74,29 +72,13 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
 
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting response class to:" + responseTypeName);
+
     context.operationBuilder()
-            .responseModel(modelRef(returnType, modelContext));
+            .responseModel(modelRefFactory(modelContext, nameExtractor).apply(returnType));
   }
 
   private boolean canSkip(OperationContext context, ResolvedType returnType) {
     return context.getDocumentationContext().getIgnorableParameterTypes().contains(returnType);
-  }
-
-  private ModelRef modelRef(ResolvedType type, ModelContext modelContext) {
-    if (isContainerType(type)) {
-      ResolvedType collectionElementType = collectionElementType(type);
-      String elementTypeName = nameExtractor.typeName(fromParent(modelContext, collectionElementType));
-      return new ModelRef(containerType(type), elementTypeName);
-    }
-    if (isMapType(type)) {
-      String elementTypeName = nameExtractor.typeName(fromParent(modelContext, mapValueType(type)));
-      return new ModelRef("Map", elementTypeName, true);
-    }
-    if (Void.class.equals(type.getErasedType()) || Void.TYPE.equals(type.getErasedType())) {
-      new ModelRef("void");
-    }
-    String typeName = nameExtractor.typeName(fromParent(modelContext, type));
-    return new ModelRef(typeName);
   }
 
   @Override

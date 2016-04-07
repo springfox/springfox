@@ -18,6 +18,19 @@ jacocoTestReport {
     xml.enabled true
   }
 
+  afterEvaluate {
+    classDirectories = files(classDirectories.files.collect {
+      fileTree(dir: it, exclude: [
+          'springfox/documentation/swagger2/web/ForwardedHeader.*',
+          'springfox/documentation/swagger2/web/HostNameProvider.*',
+          'springfox/documentation/swagger1/mappers/*Impl.*',
+          'springfox/documentation/swagger2/mappers/*Impl.*',
+          'springfox/documentation/swagger2/configuration/*.*',
+          'springfox/bean/validators/configuration/*Configuration.*'
+      ])
+    })
+  }
+
   doLast {
     def report = file("${jacoco.reportsDir}/test/jacocoTestReport.xml")
     def htmlReport = file("${jacoco.reportsDir}/test/html/index.html")
@@ -69,7 +82,9 @@ jacocoTestReport {
         logger.quiet(it)
       }
       logger.quiet("---------------------------------------------------------------")
-      throw new GradleException("Code coverage failed")
+      if (!project.hasProperty("skipCoverage")) {
+        throw new GradleException("Code coverage failed")
+      }
     }
     if (canIncrease) {
       logger.quiet("------------------ Code Coverage Improved! -----------------------")

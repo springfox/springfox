@@ -1,628 +1,625 @@
 {
-    "apiVersion": "1.0",
-    "swaggerVersion": "1.2",
-    "basePath": "/",
-    "resourcePath": "/businesses",
-    "produces": [
-        "*/*",
-        "application/json"
-    ],
-    "consumes": [
-        "application/json"
-    ],
-    "apis": [
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "/",
+  "resourcePath": "/businesses",
+  "produces": [
+    "*/*",
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "apis": [
+    {
+      "path": "/businesses/aliased/{otherId}",
+      "description": "getAliasedPathVariable",
+      "operations": [
         {
-            "path": "/businesses/aliased/{otherId}",
-            "description": "getAliasedPathVariable",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "Find a business by its id",
-                    "nickname": "findBusinessById",
-                    "produces": [
-                        "*/*",
-                        "application/json"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "ID of business",
-                            "name": "otherId",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "string"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "string"
-                }
-            ]
-        },
-        {
-            "path": "/businesses/byTypes",
-            "description": "businessesByCategories",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "businessesByCategories",
-                    "nickname": "businessesByCategoriesUsingGET",
-                    "produces": [
-                        "application/json"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": true,
-                            "enum": [
-                                "PRODUCT",
-                                "SERVICE"
-                            ],
-                            "defaultValue": "",
-                            "description": "types",
-                            "name": "types",
-                            "paramType": "query",
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            },
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "array"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "array",
-                    "items": {
-                        "type": "Biz"
-                    }
-                }
-            ]
-        },
-        {
-          "description": "businessAsString",
-          "operations": [
+          "method": "GET",
+          "summary": "Find a business by its id",
+          "nickname": "findBusinessById",
+          "produces": [
+            "*/*",
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
             {
-              "method": "POST",
-              "summary": "businessAsString",
-              "nickname": "businessAsStringUsingPOST",
-              "produces": [
-                "application/json"
-              ],
-              "consumes": [
-                "application/json"
-              ],
-              "parameters": [
-
-              ],
-              "responseMessages": [
-                {
-                  "code": 200,
-                  "message": "Business",
-                  "responseModel": "Biz"
-                },
-                {
-                  "code": 201,
-                  "message": "Created"
-                },
-                {
-                  "code": 401,
-                  "message": "Unauthorized"
-                },
-                {
-                  "code": 403,
-                  "message": "Forbidden"
-                },
-                {
-                  "code": 404,
-                  "message": "Not Found"
-                }
-              ],
-              "deprecated": "false",
-              "type": "string"
+              "allowMultiple": false,
+              "description": "ID of business",
+              "name": "otherId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
             }
           ],
-          "path": "/businesses/demonstratesApiModelName"
-        },
-        {
-            "path": "/businesses/non-aliased/{businessId}",
-            "description": "getNonAliasedPathVariable",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "Find a business by its id",
-                    "nickname": "findBusinessById",
-                    "produces": [
-                        "*/*",
-                        "application/json"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "ID of business",
-                            "name": "businessId",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "string"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "string",
-                    "authorizations": {
-                        "oauth2": [
-                            {
-                                "description": "scope description",
-                                "scope": "scope"
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "path": "/businesses/responseEntity/{businessId}",
-            "description": "getResponseEntity",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "getResponseEntity",
-                    "nickname": "getResponseEntityUsingGET",
-                    "produces": [
-                        "*/*",
-                        "application/json"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "businessId",
-                            "name": "businessId",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "string"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "string"
-                }
-            ]
-        },
-        {
-            "path": "/businesses/typeEcho",
-            "description": "businessTypeEcho",
-            "operations": [
-                {
-                    "method": "POST",
-                    "summary": "businessTypeEcho",
-                    "nickname": "businessTypeEchoUsingPOST",
-                    "produces": [
-                        "application/json"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "enum": [
-                                "PRODUCT",
-                                "SERVICE"
-                            ],
-                            "defaultValue": "",
-                            "description": "business",
-                            "name": "body",
-                            "paramType": "body",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "string"
-                        },
-                        {
-                            "code": 201,
-                            "message": "Created"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "string"
-                }
-            ]
-        },
-        {
-            "path": "/businesses/vanilla/{businessId}",
-            "description": "getVanillaPathVariable",
-            "operations": [
-                {
-                    "method": "GET",
-                    "summary": "getVanillaPathVariable",
-                    "nickname": "getVanillaPathVariableUsingGET",
-                    "produces": [
-                        "*/*",
-                        "application/json"
-                    ],
-                    "consumes": [
-                        "application/json"
-                    ],
-                    "parameters": [
-                        {
-                            "allowMultiple": false,
-                            "defaultValue": "",
-                            "description": "businessId",
-                            "name": "businessId",
-                            "paramType": "path",
-                            "type": "string",
-                            "required": true
-                        }
-                    ],
-                    "responseMessages": [
-                        {
-                            "code": 200,
-                            "message": "OK",
-                            "responseModel": "string"
-                        },
-                        {
-                            "code": 401,
-                            "message": "Unauthorized"
-                        },
-                        {
-                            "code": 403,
-                            "message": "Forbidden"
-                        },
-                        {
-                            "code": 404,
-                            "message": "Not Found"
-                        }
-                    ],
-                    "deprecated": "false",
-                    "type": "string"
-                }
-            ]
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "string"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "string"
         }
-    ],
-    "models": {
-        "Biz": {
-            "description": "",
-            "id": "Biz",
-            "properties": {
-                "businessType": {
-                    "enum": [
-                        "PRODUCT",
-                        "SERVICE"
-                    ],
-                    "required": false,
-                    "type": "string"
-                },
-                "id": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "inception": {
-                    "required": false,
-                    "type": "LocalDate"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "owner": {
-                    "required": false,
-                    "type": "string"
-                },
-                "taxDate": {
-                    "format": "date-time",
-                    "required": false,
-                    "type": "string"
-                }
+      ]
+    },
+    {
+      "path": "/businesses/byTypes",
+      "description": "businessesByCategories",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "businessesByCategories",
+          "nickname": "businessesByCategoriesUsingGET",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": true,
+              "enum": [
+                "PRODUCT",
+                "SERVICE"
+              ],
+              "description": "types",
+              "name": "types",
+              "paramType": "query",
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "required": true
             }
-        },
-        "Chronology": {
-            "description": "",
-            "id": "Chronology",
-            "properties": {
-                "zone": {
-                    "required": false,
-                    "type": "DateTimeZone"
-                }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "array"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
             }
-        },
-        "DateTimeField": {
-            "description": "",
-            "id": "DateTimeField",
-            "properties": {
-                "durationField": {
-                    "required": false,
-                    "type": "DurationField"
-                },
-                "leapDurationField": {
-                    "required": false,
-                    "type": "DurationField"
-                },
-                "lenient": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "maximumValue": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "minimumValue": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "rangeDurationField": {
-                    "required": false,
-                    "type": "DurationField"
-                },
-                "supported": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "type": {
-                    "required": false,
-                    "type": "DateTimeFieldType"
-                }
-            }
-        },
-        "DateTimeFieldType": {
-            "description": "",
-            "id": "DateTimeFieldType",
-            "properties": {
-                "durationType": {
-                    "required": false,
-                    "type": "DurationFieldType"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "rangeDurationType": {
-                    "required": false,
-                    "type": "DurationFieldType"
-                }
-            }
-        },
-        "DateTimeZone": {
-            "description": "",
-            "id": "DateTimeZone",
-            "properties": {
-                "fixed": {
-                    "required": false,
-                    "type": "boolean"
-                }
-            }
-        },
-        "DurationField": {
-            "description": "",
-            "id": "DurationField",
-            "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                },
-                "precise": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "supported": {
-                    "required": false,
-                    "type": "boolean"
-                },
-                "type": {
-                    "required": false,
-                    "type": "DurationFieldType"
-                },
-                "unitMillis": {
-                    "format": "int64",
-                    "required": false,
-                    "type": "integer"
-                }
-            }
-        },
-        "DurationFieldType": {
-            "description": "",
-            "id": "DurationFieldType",
-            "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
-        "LocalDate": {
-            "description": "",
-            "id": "LocalDate",
-            "properties": {
-                "centuryOfEra": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "chronology": {
-                    "required": false,
-                    "type": "Chronology"
-                },
-                "dayOfMonth": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "dayOfWeek": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "dayOfYear": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "era": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "fields": {
-                    "items": {
-                        "type": "DateTimeField"
-                    },
-                    "required": false,
-                    "type": "array"
-                },
-                "fieldTypes": {
-                    "items": {
-                        "type": "DateTimeFieldType"
-                    },
-                    "required": false,
-                    "type": "array"
-                },
-                "monthOfYear": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "values": {
-                    "items": {
-                        "format": "int32",
-                        "type": "integer"
-                    },
-                    "required": false,
-                    "type": "array"
-                },
-                "weekOfWeekyear": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "weekyear": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "year": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "yearOfCentury": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                },
-                "yearOfEra": {
-                    "format": "int32",
-                    "required": false,
-                    "type": "integer"
-                }
-            }
+          ],
+          "deprecated": "false",
+          "type": "array",
+          "items": {
+            "type": "Biz"
+          }
         }
+      ]
+    },
+    {
+      "description": "businessAsString",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "businessAsString",
+          "nickname": "businessAsStringUsingPOST",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "Business",
+              "responseModel": "Biz"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "string"
+        }
+      ],
+      "path": "/businesses/demonstratesApiModelName"
+    },
+    {
+      "path": "/businesses/non-aliased/{businessId}",
+      "description": "getNonAliasedPathVariable",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Find a business by its id",
+          "nickname": "findBusinessById_1",
+          "produces": [
+            "*/*",
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "ID of business",
+              "name": "businessId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "string"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "string",
+          "authorizations": {
+            "oauth2": [
+              {
+                "description": "scope description",
+                "scope": "scope"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/businesses/responseEntity/{businessId}",
+      "description": "getResponseEntity",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "getResponseEntity",
+          "nickname": "getResponseEntityUsingGET",
+          "produces": [
+            "*/*",
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "businessId",
+              "name": "businessId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "string"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "path": "/businesses/typeEcho",
+      "description": "businessTypeEcho",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "businessTypeEcho",
+          "nickname": "businessTypeEchoUsingPOST",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "enum": [
+                "PRODUCT",
+                "SERVICE"
+              ],
+              "description": "business",
+              "name": "body",
+              "paramType": "body",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "string"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "path": "/businesses/vanilla/{businessId}",
+      "description": "getVanillaPathVariable",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "getVanillaPathVariable",
+          "nickname": "getVanillaPathVariableUsingGET",
+          "produces": [
+            "*/*",
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "businessId",
+              "name": "businessId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "string"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "string"
+        }
+      ]
     }
+  ],
+  "models": {
+    "Biz": {
+      "description": "",
+      "id": "Biz",
+      "properties": {
+        "businessType": {
+          "enum": [
+            "PRODUCT",
+            "SERVICE"
+          ],
+          "required": false,
+          "type": "string"
+        },
+        "id": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "inception": {
+          "required": false,
+          "type": "LocalDate"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
+        },
+        "owner": {
+          "required": false,
+          "type": "string"
+        },
+        "taxDate": {
+          "format": "date-time",
+          "required": false,
+          "type": "string"
+        }
+      }
+    },
+    "Chronology": {
+      "description": "",
+      "id": "Chronology",
+      "properties": {
+        "zone": {
+          "required": false,
+          "type": "DateTimeZone"
+        }
+      }
+    },
+    "DateTimeField": {
+      "description": "",
+      "id": "DateTimeField",
+      "properties": {
+        "durationField": {
+          "required": false,
+          "type": "DurationField"
+        },
+        "leapDurationField": {
+          "required": false,
+          "type": "DurationField"
+        },
+        "lenient": {
+          "required": false,
+          "type": "boolean"
+        },
+        "maximumValue": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "minimumValue": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
+        },
+        "rangeDurationField": {
+          "required": false,
+          "type": "DurationField"
+        },
+        "supported": {
+          "required": false,
+          "type": "boolean"
+        },
+        "type": {
+          "required": false,
+          "type": "DateTimeFieldType"
+        }
+      }
+    },
+    "DateTimeFieldType": {
+      "description": "",
+      "id": "DateTimeFieldType",
+      "properties": {
+        "durationType": {
+          "required": false,
+          "type": "DurationFieldType"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
+        },
+        "rangeDurationType": {
+          "required": false,
+          "type": "DurationFieldType"
+        }
+      }
+    },
+    "DateTimeZone": {
+      "description": "",
+      "id": "DateTimeZone",
+      "properties": {
+        "id": {
+          "required": false,
+          "type": "string"
+        },
+        "fixed": {
+          "required": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "DurationField": {
+      "description": "",
+      "id": "DurationField",
+      "properties": {
+        "name": {
+          "required": false,
+          "type": "string"
+        },
+        "precise": {
+          "required": false,
+          "type": "boolean"
+        },
+        "supported": {
+          "required": false,
+          "type": "boolean"
+        },
+        "type": {
+          "required": false,
+          "type": "DurationFieldType"
+        },
+        "unitMillis": {
+          "format": "int64",
+          "required": false,
+          "type": "integer"
+        }
+      }
+    },
+    "DurationFieldType": {
+      "description": "",
+      "id": "DurationFieldType",
+      "properties": {
+        "name": {
+          "required": false,
+          "type": "string"
+        }
+      }
+    },
+    "LocalDate": {
+      "description": "",
+      "id": "LocalDate",
+      "properties": {
+        "centuryOfEra": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "chronology": {
+          "required": false,
+          "type": "Chronology"
+        },
+        "dayOfMonth": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "dayOfWeek": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "dayOfYear": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "era": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "fields": {
+          "items": {
+            "type": "DateTimeField"
+          },
+          "required": false,
+          "type": "array"
+        },
+        "fieldTypes": {
+          "items": {
+            "type": "DateTimeFieldType"
+          },
+          "required": false,
+          "type": "array"
+        },
+        "monthOfYear": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "values": {
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "required": false,
+          "type": "array"
+        },
+        "weekOfWeekyear": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "weekyear": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "year": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "yearOfCentury": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        },
+        "yearOfEra": {
+          "format": "int32",
+          "required": false,
+          "type": "integer"
+        }
+      }
+    }
+  }
 }

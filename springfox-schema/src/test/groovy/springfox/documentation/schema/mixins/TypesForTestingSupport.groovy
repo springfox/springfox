@@ -21,6 +21,8 @@ package springfox.documentation.schema.mixins
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.hateoas.Resource
+import org.springframework.hateoas.Resources
 import org.springframework.http.ResponseEntity
 import org.springframework.ui.ModelMap
 import springfox.documentation.schema.*
@@ -41,6 +43,16 @@ class TypesForTestingSupport {
   static Class typeWithConstructorProperty() {
     TypeWithConstructorProperty
   }
+  static Class typeWithConstructorProperties() {
+    TypeWithConstructorProperties
+  }
+  static Class typeWithDelegatedConstructor() {
+    TypeWithDelegatedJsonCreatorConstructor
+  }
+
+  static Class typeWithJsonCreatorConstructor() {
+    TypeWithJsonCreatorConstructor
+  }
   static Class mapsContainer() {
     MapsContainer
   }
@@ -52,6 +64,9 @@ class TypesForTestingSupport {
   }
   static Class enumType() {
     ExampleWithEnums
+  }
+  static Class collectionEnumType() {
+    ExampleWithEnumCollection
   }
   static Class typeWithLists() {
     ListsContainer
@@ -169,5 +184,28 @@ class TypesForTestingSupport {
 
   static ResolvedType listOfModelMap() {
     resolver.resolve(List, ModelMap)
+  }
+
+  static ResolvedType resources(def clazz) {
+    resolver.resolve(Resources, clazz)
+  }
+
+  static ResolvedType customMapOpen() {
+    resolver.resolve(CustomMap)
+  }
+
+  static ResolvedType customMapOfType(def clazz) {
+    resolver.resolve(CustomMap, clazz)
+  }
+
+  def ResolvedType typeForTestingPropertyPositions() {
+    resolver.resolve(TypeForTestingPropertyPositions)
+  }
+
+  def ResolvedType typeWithVoidLists() {
+    resolver.resolve(GenericTypeBoundToMultiple, Void.class, Void.class)
+  }
+  def ResolvedType genericResource() {
+    resolver.resolve(Resource, SubclassOfResourceSupport.class)
   }
 }

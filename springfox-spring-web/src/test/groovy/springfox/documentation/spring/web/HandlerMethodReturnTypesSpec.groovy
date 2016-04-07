@@ -1,15 +1,15 @@
 package springfox.documentation.spring.web
-
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.base.Optional
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
-import springfox.documentation.spring.web.json.JacksonModuleRegistrar
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
 
+import static springfox.documentation.spring.web.readers.operation.HandlerMethodResolver.*
 /**
  * Created by mtalbot on 17/05/15.
  */
@@ -21,7 +21,7 @@ class HandlerMethodReturnTypesSpec extends Specification {
 
     def "Should return absent for type erased classes"() {
         expect:
-            HandlerMethodReturnTypes.useType(input) == expected
+            useType(input) == expected
 
         where:
         input                         || expected
@@ -32,7 +32,7 @@ class HandlerMethodReturnTypesSpec extends Specification {
 
     def "Should return the underlying type even if proxied"() {
         expect:
-            HandlerMethodReturnTypes.handlerReturnType(resolver, input) == expected
+            new HandlerMethodResolver(resolver).methodReturnType(input) == expected
 
         where:
         input                                                                             || expected

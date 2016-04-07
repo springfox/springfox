@@ -21,13 +21,17 @@ package springfox.documentation.swagger.annotations;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ResponseHeader;
 
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
@@ -44,17 +48,22 @@ public class Annotations {
     return fromNullable(getAnnotation(annotated, ApiParam.class));
   }
 
-  public static Optional<ApiOperation> findApiOperationAnnotation(AnnotatedElement annotated) {
-    return fromNullable(getAnnotation(annotated, ApiOperation.class));
+  public static Optional<ApiOperation> findApiOperationAnnotation(Method annotated) {
+    return fromNullable(findAnnotation(annotated, ApiOperation.class));
   }
 
-  public static Optional<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
-    return fromNullable(getAnnotation(annotated, ApiResponses.class));
+  public static Optional<ApiResponses> findApiResponsesAnnotations(Method annotated) {
+    return fromNullable(findAnnotation(annotated, ApiResponses.class));
+  }
+
+  public static Optional<ResponseHeader> findResponseHeader(Method annotated) {
+    return fromNullable(findAnnotation(annotated, ResponseHeader.class));
   }
 
 
   public static Function<ApiOperation, ResolvedType> resolvedTypeFromOperation(final TypeResolver typeResolver,
-                                                                               final ResolvedType defaultType) {
+      final ResolvedType defaultType) {
+
     return new Function<ApiOperation, ResolvedType>() {
       @Override
       public ResolvedType apply(ApiOperation annotation) {
@@ -63,8 +72,37 @@ public class Annotations {
     };
   }
 
-  private static ResolvedType getResolvedType(ApiOperation annotation, TypeResolver typeResolver, ResolvedType
-      defaultType) {
+  public static Function<ApiResponse, ResolvedType> resolvedTypeFromResponse(final TypeResolver typeResolver,
+      final ResolvedType defaultType) {
+
+    return new Function<ApiResponse, ResolvedType>() {
+      @Override
+      public ResolvedType apply(ApiResponse annotation) {
+        return getResolvedType(annotation, typeResolver, defaultType);
+      }
+    };
+  }
+
+  @VisibleForTesting
+  static ResolvedType getResolvedType(ApiOperation annotation,
+      TypeResolver typeResolver, ResolvedType defaultType) {
+
+    if (null != annotation && Void.class != annotation.response()) {
+      if ("List".compareToIgnoreCase(annotation.responseContainer()) == 0) {
+        return typeResolver.resolve(List.class, annotation.response());
+      } else if ("Set".compareToIgnoreCase(annotation.responseContainer()) == 0) {
+        return typeResolver.resolve(Set.class, annotation.response());
+      } else {
+        return typeResolver.resolve(annotation.response());
+      }
+    }
+    return defaultType;
+  }
+
+  @VisibleForTesting
+  static ResolvedType getResolvedType(ApiResponse annotation,
+      TypeResolver typeResolver, ResolvedType defaultType) {
+
     if (null != annotation && Void.class != annotation.response()) {
       if ("List".compareToIgnoreCase(annotation.responseContainer()) == 0) {
         return typeResolver.resolve(List.class, annotation.response());

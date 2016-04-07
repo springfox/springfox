@@ -22,10 +22,13 @@ package springfox.documentation.spring.web.dummy;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import io.swagger.annotations.AuthorizationScope;
+import io.swagger.annotations.Extension;
+import io.swagger.annotations.ExtensionProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -52,6 +55,12 @@ import java.util.Map;
 
 @RequestMapping(produces = {"application/json"}, consumes = {"application/json", "application/xml"})
 public class DummyClass {
+
+
+  @ApiParam
+  public void annotatedWithApiParam() {
+  }
+
   public void dummyMethod() {
   }
 
@@ -66,6 +75,10 @@ public class DummyClass {
 
   @ApiOperation(value = "description", httpMethod = "GET")
   public void methodWithHttpGETMethod() {
+  }
+
+  @ApiOperation(value = "description", nickname = "unique")
+  public void methodWithNickName() {
   }
 
   @ApiOperation(value = "description", httpMethod = "GET", hidden = true)
@@ -124,10 +137,19 @@ public class DummyClass {
   public void methodAnnotatedWithApiResponse() {
   }
 
+  @ApiOperation(value = "methodWithExtensions",
+      extensions = {
+          @Extension(properties = @ExtensionProperty(name="x-test1", value="value1")),
+          @Extension(name="test2", properties = @ExtensionProperty(name="name2", value="value2"))
+      }
+  )
+  public void methodWithExtensions() {
+  }
+
   @ApiOperation(value = "SomeVal",
-          authorizations = @Authorization(value = "oauth2",
-                  scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
-                  }))
+      authorizations = @Authorization(value = "oauth2",
+          scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
+          }))
   public void methodWithAuth() {
   }
 
@@ -252,6 +274,11 @@ public class DummyClass {
   @ResponseStatus(value = HttpStatus.ACCEPTED, reason = "Accepted request")
   public DummyModels.BusinessModel methodWithResponseStatusAnnotation() {
     return null;
+  }
+
+  @ResponseBody
+  @ResponseStatus(value = HttpStatus.NO_CONTENT)
+  public void methodWithResponseStatusAnnotationAndEmptyReason() {
   }
 
   @ResponseBody

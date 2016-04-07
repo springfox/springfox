@@ -1,4 +1,5 @@
 package springfox.documentation.swagger2.mappers
+
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.base.Functions
@@ -10,6 +11,7 @@ import springfox.documentation.builders.*
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.*
 import springfox.documentation.spi.service.contexts.Defaults
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 import static com.google.common.collect.Sets.*
 
@@ -42,6 +44,9 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
       mappedOperation.responses.size() == builtOperation.responseMessages.size()
       mappedOperation.responses.get("200").description == builtOperation.responseMessages.first().message
       mappedOperation.responses.get("200").schema.type == "string"
+      mappedOperation.vendorExtensions.size() == builtOperation.vendorExtensions.size()
+      mappedOperation.vendorExtensions.containsKey("x-test1")
+      mappedOperation.vendorExtensions.containsKey("x-test2")
   }
 
   def "Maps documentation to swagger models"() {
@@ -50,7 +55,8 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
           .basePath("base:uri")
           .consumes(["application/json"] as Set)
           .name("doc-group")
-          .schemes(["HTTPS"] as Set)
+          .host("test")
+          .schemes(["https"] as Set)
           .tags([new Tag("tag", "tag description")] as Set)
           .build()
     when:
@@ -61,6 +67,8 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
       mapped.basePath == documentation.basePath
       mapped.consumes.containsAll(documentation.consumes)
       mapped.produces.isEmpty()
+      mapped.schemes.first().toValue() == documentation.schemes.first()
+      mapped.host == documentation.host
       mapped.definitions.isEmpty()
       mapped.tags.first().name == "tag"
       mapped.tags.first().description == "tag description"
@@ -122,7 +130,9 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
     when:
       def mapped = sut.mapApiInfo(apiInfo)
     then:
-      mapped.contact.name == apiInfo.contact
+      mapped.contact.name == apiInfo.contact.name
+      mapped.contact.email == apiInfo.contact.name
+      mapped.contact.url == apiInfo.contact.url
       mapped.description  == apiInfo.description
       mapped.license.name == apiInfo.license
       mapped.license.url == apiInfo.licenseUrl
@@ -152,7 +162,14 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .message("Success")
         .responseModel(new ModelRef("string"))
         .build()
-    def operation1 = new OperationBuilder()
+
+    def first = new ObjectVendorExtension("")
+    first.with { addProperty(new StringVendorExtension("x-test1", "test1")) }
+
+    def second = new ObjectVendorExtension("x-test2")
+    second.with { addProperty(new StringVendorExtension("name2", "test2"))}
+
+    def operation1 = new OperationBuilder(new CachingOperationNameGenerator())
         .authorizations([SecurityReference.builder()
                              .reference("basic")
                              .scopes(scope)
@@ -163,6 +180,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .method(HttpMethod.GET)
         .uniqueId("op1")
         .notes("operation 1 notes")
+        .tags(newHashSet("sometag"))
         .parameters([new ParameterBuilder()
                          .allowableValues(new AllowableListValues(["FIRST", "SECOND"], "string"))
                          .allowMultiple(false)
@@ -175,9 +193,11 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                          .required(true)
                          .build()])
         .position(1)
+        .codegenMethodNameStem("")
         .protocols(newHashSet("HTTPS"))
         .responseModel(new ModelRef("string"))
         .responseMessages(newHashSet(response))
+        .extensions([first, second])
         .build()
     def description = new ApiDescriptionBuilder(defaults.operationOrdering())
         .description("test")
@@ -202,6 +222,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .apiVersion("1.0")
         .securityReferences(null)
         .basePath("/base-path")
+        .tags([new Tag("some-group", "")] as Set)
         .description("listing")
         .consumes([] as Set)
         .produces([] as Set)

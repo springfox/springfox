@@ -23,6 +23,8 @@ import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
+import springfox.documentation.service.AllowableListValues;
+import springfox.documentation.service.AllowableValues;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +34,7 @@ import java.util.Set;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.schema.Enums.*;
 
 public class BuilderDefaults {
   private BuilderDefaults() {
@@ -128,6 +131,20 @@ public class BuilderDefaults {
     return replacement;
   }
 
+  /**
+   * Returns an empty list if the newValue is null
+   *
+   * @param newValue - a list
+   * @param <T>      - any type
+   * @return non-null list
+   */
+  public static <T> List<T> nullVarArgsToEmptyList(T ... args) {
+    if (args == null) {
+      return newArrayList();
+    }
+    return newArrayList(args);
+  }
+
   private static boolean isNotObject(ResolvedType defaultValue) {
     return defaultValue != null &&
         !Object.class.equals(defaultValue.getErasedType());
@@ -136,5 +153,16 @@ public class BuilderDefaults {
   private static boolean isObject(ResolvedType replacement) {
     return replacement != null &&
         Object.class.equals(replacement.getErasedType());
+  }
+
+  public static AllowableValues emptyToNull(AllowableValues newValue, AllowableValues current) {
+    if (newValue != null) {
+      if (newValue instanceof AllowableListValues) {
+        return defaultIfAbsent(emptyListValuesToNull((AllowableListValues) newValue), current);
+      } else {
+        return defaultIfAbsent(newValue, current);
+      }
+    }
+    return current;
   }
 }

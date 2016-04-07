@@ -45,9 +45,10 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
     def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
     sut = new ResponseMessagesReader(new TypeResolver(), typeNameExtractor)
   }
+
   def "Should add default response messages"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               currentHttpMethod, handlerMethod, 0, requestMappingInfo('/somePath'),
               context(), "")
     when:
@@ -69,7 +70,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "swagger annotation should override when using default reader"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, dummyHandlerMethod('methodWithApiResponses'), 0, requestMappingInfo('/somePath'),
               context(), "")
     when:
@@ -87,7 +88,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "Methods with return type containing a model should override the success response code"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, dummyHandlerMethod('methodWithConcreteResponseBody'), 0, requestMappingInfo('/somePath'),
               context(), "")
     when:
@@ -103,7 +104,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "Methods with return type containing a container model should override the success response code"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, dummyHandlerMethod('methodWithListOfBusinesses'), 0, requestMappingInfo('/somePath'),
               context(), "")
     when:
@@ -120,7 +121,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "Methods with return type containing ResponseStatus annotation"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(),
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, dummyHandlerMethod('methodWithResponseStatusAnnotation'), 0,
               requestMappingInfo('/somePath'), context(), "")
     when:
@@ -132,5 +133,20 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
       responseMessage.getCode() == HttpStatus.ACCEPTED.value()
       responseMessage.getResponseModel().type == 'BusinessModel'
       responseMessage.getMessage() == "Accepted request"
+  }
+
+  def "Methods with return type containing ResponseStatus annotation and empty reason message"() {
+    given:
+      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
+              RequestMethod.GET, dummyHandlerMethod('methodWithResponseStatusAnnotationAndEmptyReason'), 0,
+              requestMappingInfo('/somePath'), context(), "")
+    when:
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
+      def responseMessages = operation.responseMessages
+    then:
+      ResponseMessage responseMessage = responseMessages.find { it.code == 204 }
+      responseMessage.getCode() == HttpStatus.NO_CONTENT.value()
+      responseMessage.getMessage() == HttpStatus.NO_CONTENT.reasonPhrase
   }
 }

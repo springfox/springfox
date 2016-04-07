@@ -19,40 +19,79 @@
 
 package springfox.documentation.schema;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import springfox.documentation.service.AllowableValues;
 
-public class ModelRef {
+public class ModelRef implements ModelReference {
   private final String type;
   private final boolean isMap;
-  private final Optional<String> itemType;
+  private final Optional<ModelReference> itemModel;
+  private final Optional<AllowableValues> allowableValues;
 
-  public ModelRef(String type, String itemType) {
+  public ModelRef(String type) {
+    this(type, null, null);
+  }
+
+  public ModelRef(String type, ModelReference itemType) {
     this(type, itemType, false);
   }
 
-  public ModelRef(String type, String itemType, boolean isMap) {
+  public ModelRef(String type, ModelReference itemType, AllowableValues allowableValues) {
+    this(type, itemType, allowableValues, false);
+  }
+
+  public ModelRef(String type, AllowableValues allowableValues) {
+    this(type, null, allowableValues);
+  }
+
+  public ModelRef(String type, ModelReference itemType, boolean isMap) {
+    this(type, itemType, null, isMap);
+  }
+
+  public ModelRef(String type, ModelReference itemModel, AllowableValues allowableValues, boolean isMap) {
     this.type = type;
     this.isMap = isMap;
-    this.itemType = Optional.fromNullable(itemType);
+    this.allowableValues = Optional.fromNullable(allowableValues);
+    this.itemModel = Optional.fromNullable(itemModel);
   }
 
-  public ModelRef(String type) {
-    this(type, null);
-  }
-
+  @Override
   public String getType() {
     return type;
   }
-  
+
+  @Override
   public boolean isCollection() {
-    return itemType.isPresent() && !isMap;
+    return itemModel.isPresent() && !isMap;
   }
 
-  public boolean isMap() {
-    return itemType.isPresent() && isMap;
+  @Override
+  public boolean isMap(){
+    return itemModel.isPresent() && isMap;
   }
 
+  @Override
   public String getItemType() {
-    return itemType.orNull();
+    return itemModel.transform(toName()).orNull();
+  }
+
+  @Override
+  public AllowableValues getAllowableValues() {
+    return allowableValues.orNull();
+  }
+
+  @Override
+  public Optional<ModelReference> itemModel() {
+    return itemModel;
+  }
+
+  private Function<? super ModelReference, String> toName() {
+    return new Function<ModelReference, String>() {
+      @Override
+      public String apply(ModelReference input) {
+        return input.getType();
+      }
+    };
   }
 }
