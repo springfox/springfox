@@ -51,10 +51,10 @@ public class ParameterSizeAnnotationPlugin implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     Optional<Size> size = extractAnnotation(context);
-    LOG.info("searching for @size: " + size.isPresent());
+    
     if (size.isPresent()) {
     	AllowableRangeValues values = SizeUtil.createAllowableValuesFromSizeForStrings(size.get());
-    	LOG.info("adding allowable Values @Size: " + values.getMin() + " - " + values.getMax());
+    	LOG.debug("adding allowable Values @Size: " + values.getMin() + " - " + values.getMax());
     	context.parameterBuilder().allowableValues(values);
     	
     	// TODO Additionally show @Size in the description until https://github.com/springfox/springfox/issues/1244 gets fixed
