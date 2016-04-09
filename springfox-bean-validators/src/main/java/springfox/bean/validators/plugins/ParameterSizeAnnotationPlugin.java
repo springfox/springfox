@@ -57,8 +57,6 @@ public class ParameterSizeAnnotationPlugin implements ParameterBuilderPlugin {
     	LOG.debug("adding allowable Values @Size: " + values.getMin() + " - " + values.getMax());
     	context.parameterBuilder().allowableValues(values);
     	
-    	// TODO Additionally show @Size in the description until https://github.com/springfox/springfox/issues/1244 gets fixed
-    	context.parameterBuilder().description("@Size: " + values.getMin() + " - " + values.getMax() + " (until #1244 gets fixed)");
     }
   }
 

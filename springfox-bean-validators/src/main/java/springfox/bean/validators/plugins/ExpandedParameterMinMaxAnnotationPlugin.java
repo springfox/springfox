@@ -64,10 +64,6 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
 			AllowableRangeValues values = MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max);
 			LOG.debug("adding allowable Values MinMax: " + values.getMin() + " - " + values.getMax());
 			context.getParameterBuilder().allowableValues(values);
-
-			// TODO Additionally show @Min/@Max in the description until
-			// https://github.com/springfox/springfox/issues/1244 gets fixed
-			context.getParameterBuilder().description("@Min: " + values.getMin() + " - @Max: " + values.getMax() + " (until #1244 gets fixed)");
 		}
 
 	}
@@ -88,7 +84,8 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
 		return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
 	}
 
-	public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context, Class<T> annotationType) {
+	public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context,
+			Class<T> annotationType) {
 
 		Optional<T> notNull = Optional.absent();
 		// if (propertyDefinition.isPresent()) {
@@ -100,7 +97,8 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
 		return notNull;
 	}
 
-	public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context, Class<T> annotationType) {
+	public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context,
+			Class<T> annotationType) {
 
 		Field field = context.getField();
 		Optional<T> notNull = Optional.absent();

@@ -20,6 +20,7 @@ package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+
 import io.swagger.models.ModelImpl;
 import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.models.properties.IntegerProperty;
@@ -27,6 +28,7 @@ import io.swagger.models.properties.LongProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 import springfox.documentation.service.AllowableListValues;
+import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 
 import java.util.List;
@@ -37,15 +39,32 @@ import static com.google.common.collect.Lists.*;
 
 public class EnumMapper {
   static ModelImpl maybeAddEnumValues(ModelImpl toReturn, AllowableValues allowableValues) {
+	  
     if (allowableValues instanceof AllowableListValues) {
       toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
     }
     return toReturn;
   }
   static SerializableParameter maybeAddEnumValues(SerializableParameter toReturn, AllowableValues allowableValues) {
+	  
     if (allowableValues instanceof AllowableListValues) {
       toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
     }
+    
+    // fix  @ApiParam - Allowable values not displayed in Swagger API docs #1244 
+    if (allowableValues instanceof AllowableRangeValues) {
+    	AllowableRangeValues allowableRangeValues = (AllowableRangeValues)allowableValues;
+    	if (allowableRangeValues.getMin()!=null) {
+    		toReturn.setMinimum(Double.valueOf(allowableRangeValues.getMin()));	
+    	}
+        
+        if (allowableRangeValues.getMax()!=null) {
+        	toReturn.setMaximum(Double.valueOf(((AllowableRangeValues) allowableValues).getMax()));	
+        }
+        
+        
+      }
+    
     return toReturn;
   }
 

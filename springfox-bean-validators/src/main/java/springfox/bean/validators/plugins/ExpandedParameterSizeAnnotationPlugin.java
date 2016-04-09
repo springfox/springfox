@@ -64,10 +64,6 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
 			values = new AllowableRangeValues(values.getMin(), values.getMax());
 			context.getParameterBuilder().allowableValues(values);
 
-			// TODO Additionally show @Size in the description until
-			// https://github.com/springfox/springfox/issues/1244 gets fixed
-			context.getParameterBuilder().description("@Size: " + values.getMin() + " - " + values.getMax() + " (until #1244 gets fixed)");
-
 		}
 	}
 
