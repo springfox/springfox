@@ -18,8 +18,11 @@
  */
 package springfox.bean.validators.plugins;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromBean;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromField;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,22 +30,18 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import springfox.bean.validators.util.MinMaxUtil;
-import springfox.documentation.service.AllowableRangeValues;
-import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-
-import static springfox.bean.validators.plugins.BeanValidators.*;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
+public class ModelPropertyMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
-	private static final Logger LOG = LoggerFactory.getLogger(MinMaxAnnotationPlugin.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ModelPropertyMinMaxAnnotationPlugin.class);
 
 	@Override
 	public boolean supports(DocumentationType delimiter) {

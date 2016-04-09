@@ -18,29 +18,21 @@
  */
 package springfox.bean.validators.plugins;
 
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromBean;
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromField;
-
-import javax.validation.constraints.Size;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import springfox.bean.validators.util.SizeUtil;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
+import javax.validation.constraints.NotNull;
+
+import static springfox.bean.validators.plugins.BeanValidators.*;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
-
-	private static final Logger LOG = LoggerFactory.getLogger(SizeAnnotationPlugin.class);
+public class ModelPropertyNotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
 	@Override
 	public boolean supports(DocumentationType delimiter) {
@@ -50,16 +42,13 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
 	@Override
 	public void apply(ModelPropertyContext context) {
-		Optional<Size> size = extractAnnotation(context);
-
-		if (size.isPresent()) {
-			context.getBuilder().allowableValues(SizeUtil.createAllowableValuesFromSizeForStrings(size.get()));
-		}
+		Optional<NotNull> notNull = extractAnnotation(context);
+		context.getBuilder().required(notNull.isPresent());
 	}
 
 	@VisibleForTesting
-	Optional<Size> extractAnnotation(ModelPropertyContext context) {
-		return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
+	Optional<NotNull> extractAnnotation(ModelPropertyContext context) {
+		return validatorFromBean(context, NotNull.class).or(validatorFromField(context, NotNull.class));
 	}
 
 }
