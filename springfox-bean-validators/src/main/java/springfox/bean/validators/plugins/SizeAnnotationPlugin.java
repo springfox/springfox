@@ -18,60 +18,48 @@
  */
 package springfox.bean.validators.plugins;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromBean;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromField;
+
+import javax.validation.constraints.Size;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.service.AllowableRangeValues;
-import springfox.documentation.service.AllowableValues;
+
+import springfox.bean.validators.util.SizeUtil;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import javax.validation.constraints.Size;
-
-import static springfox.bean.validators.plugins.BeanValidators.*;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
-  private static final Logger LOG = LoggerFactory.getLogger(SizeAnnotationPlugin.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SizeAnnotationPlugin.class);
 
-  @Override
-  public boolean supports(DocumentationType delimiter) {
-    // we simply support all documentationTypes!
-    return true;
-  }
+	@Override
+	public boolean supports(DocumentationType delimiter) {
+		// we simply support all documentationTypes!
+		return true;
+	}
 
-  @Override
-  public void apply(ModelPropertyContext context) {
-    Optional<Size> size = extractAnnotation(context);
+	@Override
+	public void apply(ModelPropertyContext context) {
+		Optional<Size> size = extractAnnotation(context);
 
-    if (size.isPresent()) {
-      context.getBuilder().allowableValues(createAllowableValuesFromSizeForStrings(size.get()));
-    }
-  }
+		if (size.isPresent()) {
+			context.getBuilder().allowableValues(SizeUtil.createAllowableValuesFromSizeForStrings(size.get()));
+		}
+	}
 
-  @VisibleForTesting
-  Optional<Size> extractAnnotation(ModelPropertyContext context) {
-    return validatorFromBean(context, Size.class)
-        .or(validatorFromField(context, Size.class));
-  }
-
-  private AllowableValues createAllowableValuesFromSizeForStrings(Size size) {
-    LOG.debug("@Size detected: adding MinLength/MaxLength to field");
-    return new AllowableRangeValues(minValue(size), maxValue(size));
-  }
-
-  private String minValue(Size size) {
-    return String.valueOf(Math.max(size.min(), 0));
-  }
-
-  private String maxValue(Size size) {
-    return String.valueOf(Math.max(0, Math.min(size.max(), Integer.MAX_VALUE)));
-  }
+	@VisibleForTesting
+	Optional<Size> extractAnnotation(ModelPropertyContext context) {
+		return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
+	}
 
 }
