@@ -55,7 +55,7 @@ public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParamet
 		Optional<NotNull> size = extractAnnotation(context);
 
 		if (size.isPresent()) {
-			LOG.info("myfield: " + myfield.getName() + " set to required!!");
+			LOG.debug("field: " + myfield.getName() + " set to required!!");
 			context.getParameterBuilder().required(true);
 
 		}
