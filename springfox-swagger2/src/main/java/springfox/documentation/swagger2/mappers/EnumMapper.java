@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+
 import io.swagger.models.ModelImpl;
 import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.models.properties.AbstractNumericProperty;

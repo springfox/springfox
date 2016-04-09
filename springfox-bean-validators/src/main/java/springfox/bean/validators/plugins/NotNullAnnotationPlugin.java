@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017 the original author or authors.
+ *  Copyright 2016-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
  */
 package springfox.bean.validators.plugins;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -41,8 +42,12 @@ public class NotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<NotNull> notNull = extractAnnotation(context, NotNull.class);
+    Optional<NotNull> notNull = extractAnnotation(context);
     context.getBuilder().required(notNull.isPresent());
   }
 
+  @VisibleForTesting
+  Optional<NotNull> extractAnnotation(ModelPropertyContext context) {
+    return validatorFromBean(context, NotNull.class).or(validatorFromField(context, NotNull.class));
+  }
 }
