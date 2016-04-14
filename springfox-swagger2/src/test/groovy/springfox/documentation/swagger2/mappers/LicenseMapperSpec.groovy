@@ -17,7 +17,7 @@ class LicenseMapperSpec extends Specification {
       mapped.url == apiInfo.licenseUrl
   }
 
-  def "No license is mapped from ApiInfo containing no license info" () {
+  def "No license is mapped when ApiInfo contains no license info" () {
     given:
       def apiInfo = new ApiInfoBuilder().title("Api Documentation").version("1.0").build();
     and:
@@ -26,5 +26,17 @@ class LicenseMapperSpec extends Specification {
       def mapped = sut.apiInfoToLicense(apiInfo)
     then:
       mapped == null
+  }
+
+  def "License is mapped when ApiInfo contains license url only" () {
+    given:
+      def apiInfo = new ApiInfoBuilder().title("Api Documentation").version("1.0")
+        .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0").build();
+    and:
+      def sut = new LicenseMapper()
+    when:
+      def mapped = sut.apiInfoToLicense(apiInfo)
+    then:
+      mapped.url == apiInfo.licenseUrl
   }
 }
