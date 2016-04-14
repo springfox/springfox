@@ -33,6 +33,9 @@ public class LicenseMapper {
 
   @License
   public io.swagger.models.License apiInfoToLicense(ApiInfo from) {
+    if (from.getLicense() == null && from.getLicenseUrl() == null) {
+      return null;
+    }
     return new io.swagger.models.License().name(from.getLicense()).url(from.getLicenseUrl());
   }
 
