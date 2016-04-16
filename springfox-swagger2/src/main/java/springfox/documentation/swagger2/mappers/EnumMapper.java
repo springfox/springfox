@@ -51,7 +51,7 @@ public class EnumMapper {
       toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
     }
     
-    // fix  @ApiParam - Allowable values not displayed in Swagger API docs #1244 
+    // @ApiParam - Allowable values not displayed in Swagger API docs #1244 
     if (allowableValues instanceof AllowableRangeValues) {
     	AllowableRangeValues allowableRangeValues = (AllowableRangeValues)allowableValues;
     	if (allowableRangeValues.getMin()!=null) {

@@ -47,9 +47,9 @@ public class ParameterDescriptionKeysAnnotationPlugin implements ParameterBuilde
     private static final Logger LOG = LoggerFactory.getLogger(ParameterDescriptionKeysAnnotationPlugin.class);
 
     @Autowired
+
     ApiDescriptionPropertiesReader propertiesReader;
     
-
     @Override
     public boolean supports(DocumentationType delimiter) {
         // we simply support all documentationTypes!
@@ -61,20 +61,20 @@ public class ParameterDescriptionKeysAnnotationPlugin implements ParameterBuilde
         LOG.info("*** apply parameter" );
         Optional<ApiParam> apiDescription = extractAnnotation(context);
            
-            if (apiDescription.isPresent()) {
-               ApiParam apiModelProperty = apiDescription.get();
-                
-                String descriptionValue = apiModelProperty.value();
-                LOG.info("*** searching for key: " + descriptionValue);
-                String description = propertiesReader.getProperty(descriptionValue);
-                
-                if (description!=null) {
-                    context.parameterBuilder().description(description);
-                }
-            }
+        if (apiDescription.isPresent()) {
+            ApiParam apiModelProperty = apiDescription.get();
+             
+             String descriptionValue = apiModelProperty.value();
+             LOG.info("*** searching for key: " + descriptionValue);
+             String description = propertiesReader.getProperty(descriptionValue);
+             
+             if (description!=null) {
+                 context.parameterBuilder().description(description);
+             }
+         }
+    }
         
 
-    }
 
     @VisibleForTesting
     Optional<ApiParam> extractAnnotation(ParameterContext context) {

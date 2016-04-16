@@ -68,7 +68,7 @@ public class ModelPropertyDescriptionKeysAnnotationPlugin implements ModelProper
                  context.getBuilder().description(description);
              }
          }
-         
+
     }
 
     @VisibleForTesting

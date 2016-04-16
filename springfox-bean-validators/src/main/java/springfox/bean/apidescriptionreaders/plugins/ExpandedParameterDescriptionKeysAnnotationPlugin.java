@@ -71,7 +71,6 @@ public class ExpandedParameterDescriptionKeysAnnotationPlugin implements Expande
                     context.getParameterBuilder().description(description);
                 }
             }
-
     }
 
     @VisibleForTesting
