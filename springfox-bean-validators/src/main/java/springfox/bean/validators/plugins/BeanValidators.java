@@ -18,16 +18,18 @@
  */
 package springfox.bean.validators.plugins;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
+
+import org.springframework.core.Ordered;
+
+import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
-import org.springframework.core.Ordered;
-import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
 
 public class BeanValidators {
   public final static int BEAN_VALIDATOR_PLUGIN_ORDER = Ordered.HIGHEST_PRECEDENCE + 500;

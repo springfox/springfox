@@ -18,17 +18,20 @@
  */
 package springfox.bean.validators.plugins;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromBean;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromField;
+
+import javax.validation.constraints.NotNull;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import javax.validation.constraints.NotNull;
-
-import static springfox.bean.validators.plugins.BeanValidators.*;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
