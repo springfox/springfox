@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016-2017 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ package springfox.bean.validators.plugins;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.util.MinMaxUtil;
@@ -34,14 +36,20 @@ import static springfox.bean.validators.plugins.BeanValidators.*;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
+public class ModelPropertyMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
+  /**
+   * support all documentationTypes
+   */
   @Override
   public boolean supports(DocumentationType delimiter) {
     // we simply support all documentationTypes!
     return true;
   }
 
+  /**
+   * read Min/Max annotations
+   */
   @Override
   public void apply(ModelPropertyContext context) {
     Optional<Min> min = extractMin(context);
@@ -49,13 +57,26 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
     // add support for @Min/@Max
     context.getBuilder().allowableValues(MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max));
+
   }
 
+  /**
+   * extract Min from bean or field
+   *
+   * @param context
+   * @return
+   */
   @VisibleForTesting
   Optional<Min> extractMin(ModelPropertyContext context) {
     return validatorFromBean(context, Min.class).or(validatorFromField(context, Min.class));
   }
 
+  /**
+   * extract Min from bean or field
+   *
+   * @param context
+   * @return
+   */
   @VisibleForTesting
   Optional<Max> extractMax(ModelPropertyContext context) {
     return validatorFromBean(context, Max.class).or(validatorFromField(context, Max.class));

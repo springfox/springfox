@@ -25,6 +25,7 @@ ext {
 
 dependencies {
   compile libs.core
+  compile libs.swagger2Core
   compile libs.spring
   compile project(':springfox-spi')
 

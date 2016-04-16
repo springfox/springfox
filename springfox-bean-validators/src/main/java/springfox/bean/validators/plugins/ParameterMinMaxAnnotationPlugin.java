@@ -44,8 +44,8 @@ public class ParameterMinMaxAnnotationPlugin implements ParameterBuilderPlugin {
       annotationType) {
 
     MethodParameter methodParam = context.methodParameter();
-    LOG.debug("methodParam.index: " + methodParam.getParameterIndex());
-    LOG.debug("methodParam.name: " + methodParam.getParameterName());
+    LOG.debug("methodParam.index: {}", methodParam.getParameterIndex());
+    LOG.debug("methodParam.name: {}", methodParam.getParameterName());
     T annotatedElement = methodParam.getParameterAnnotation(annotationType);
     Optional<T> notNull = Optional.absent();
     if (annotatedElement != null) {

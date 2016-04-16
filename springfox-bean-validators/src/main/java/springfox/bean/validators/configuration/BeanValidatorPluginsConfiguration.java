@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,10 +20,19 @@ package springfox.bean.validators.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.bean.validators.plugins.*;
+import springfox.bean.validators.plugins.DecimalMinMaxAnnotationPlugin;
+import springfox.bean.validators.plugins.MinMaxAnnotationPlugin;
+import springfox.bean.validators.plugins.ModelPropertyNotNullAnnotationPlugin;
+import springfox.bean.validators.plugins.PatternAnnotationPlugin;
+import springfox.bean.validators.plugins.SizeAnnotationPlugin;
 
 @Configuration
 public class BeanValidatorPluginsConfiguration {
+
+    /**
+     * define MinMax-Plugin
+     * @return
+     */
   @Bean
   public MinMaxAnnotationPlugin minMaxPlugin() {
     return new MinMaxAnnotationPlugin();
@@ -39,9 +48,13 @@ public class BeanValidatorPluginsConfiguration {
     return new SizeAnnotationPlugin();
   }
 
+  /**
+     * define Size-Plugin
+     * @return
+     */
   @Bean
-  public NotNullAnnotationPlugin notNullPlugin() {
-    return new NotNullAnnotationPlugin();
+  public ModelPropertyNotNullAnnotationPlugin notNullPlugin() {
+    return new ModelPropertyNotNullAnnotationPlugin();
   }
 
   @Bean

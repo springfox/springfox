@@ -22,42 +22,38 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.bean.validators.util.MinMaxUtil;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import static springfox.bean.validators.plugins.BeanValidators.*;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
+public class ModelPropertyNotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
+  /**
+   * support all documentationTypes
+   */
   @Override
   public boolean supports(DocumentationType delimiter) {
     // we simply support all documentationTypes!
     return true;
   }
 
+  /**
+   * read NotNull annotation
+   */
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<Min> min = extractMin(context);
-    Optional<Max> max = extractMax(context);
-
-    // add support for @Min/@Max
-    context.getBuilder().allowableValues(MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max));
+    Optional<NotNull> notNull = extractAnnotation(context);
+    context.getBuilder().required(notNull.isPresent());
   }
 
   @VisibleForTesting
-  Optional<Min> extractMin(ModelPropertyContext context) {
-    return validatorFromBean(context, Min.class).or(validatorFromField(context, Min.class));
-  }
-
-  @VisibleForTesting
-  Optional<Max> extractMax(ModelPropertyContext context) {
-    return validatorFromBean(context, Max.class).or(validatorFromField(context, Max.class));
+  Optional<NotNull> extractAnnotation(ModelPropertyContext context) {
+    return validatorFromBean(context, NotNull.class).or(validatorFromField(context, NotNull.class));
   }
 }

@@ -16,41 +16,44 @@
  *
  *
  */
-package springfox.bean.validators.plugins;
+package springfox.bean.apidescriptionreaders.plugins;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.bean.validators.util.SizeUtil;
-import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
-import javax.validation.constraints.Size;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 @Component
-@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterBuilderPlugin {
+//@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
+@Order(Ordered.LOWEST_PRECEDENCE)
+public class ExpandedParameterDescriptionKeysAnnotationPlugin implements ExpandedParameterBuilderPlugin {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterSizeAnnotationPlugin.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterDescriptionKeysAnnotationPlugin.class);
 
-  public static <T extends Annotation> Optional<T> validatorFromBean(
-      ParameterExpansionContext context, Class<T>
+  @Autowired
+  private ApiDescriptionPropertiesReader propertiesReader;
+
+
+  public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context, Class<T>
       annotationType) {
 
+    Field field = context.getField().getRawMember();
+
     Optional<T> notNull = Optional.absent();
-    // if (propertyDefinition.isPresent()) {
-    // notNull = annotationFrom(propertyDefinition.get().getGetter(),
-    // annotationType)
-    // .or(annotationFrom(propertyDefinition.get().getField(),
-    // annotationType));
-    // }
+    if (field != null) {
+      notNull = Optional.fromNullable(field.getAnnotation(annotationType));
+    }
     return notNull;
   }
 
@@ -60,7 +63,7 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
     Field field = context.getField().getRawMember();
     Optional<T> notNull = Optional.absent();
     if (field != null) {
-      LOG.debug("Annotation size present for " + field.getName() + "!!");
+      LOG.debug("Annotation size present for field " + field.getName() + "!!");
       notNull = Optional.fromNullable(field.getAnnotation(annotationType));
     }
 
@@ -75,26 +78,26 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
 
   @Override
   public void apply(ParameterExpansionContext context) {
-
+    LOG.info("*** apply expanded parameter");
+    Optional<ApiParam> apiDescription = extractAnnotation(context);
     Field myfield = context.getField().getRawMember();
-    LOG.debug("expandedparam.myfield: " + myfield.getName());
+    LOG.debug("myfield: " + myfield.getName());
 
-    Optional<Size> size = extractAnnotation(context);
+    if (apiDescription.isPresent()) {
+      ApiParam apiModelProperty = apiDescription.get();
 
-    if (size.isPresent()) {
-      AllowableRangeValues values = SizeUtil.createAllowableValuesFromSizeForStrings(size.get());
-      LOG.debug("adding allowable Values: " + values.getMin() + "-" + values.getMax());
+      String descriptionValue = apiModelProperty.value();
+      LOG.info("*** searching for key: " + descriptionValue);
+      String description = propertiesReader.getProperty(descriptionValue);
 
-      values = new AllowableRangeValues(values.getMin(), values.getMax());
-      context.getParameterBuilder().allowableValues(values);
-
+      if (description != null) {
+        context.getParameterBuilder().description(description);
+      }
     }
   }
 
   @VisibleForTesting
-  Optional<Size> extractAnnotation(ParameterExpansionContext context) {
-
-    return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
+  Optional<ApiParam> extractAnnotation(ParameterExpansionContext context) {
+    return validatorFromBean(context, ApiParam.class).or(validatorFromField(context, ApiParam.class));
   }
-
 }

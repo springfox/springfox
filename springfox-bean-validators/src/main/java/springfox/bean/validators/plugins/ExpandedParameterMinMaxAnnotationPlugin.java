@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,96 +18,88 @@
  */
 package springfox.bean.validators.plugins;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
-
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
 import springfox.bean.validators.util.MinMaxUtil;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParameterBuilderPlugin {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterMinMaxAnnotationPlugin.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterMinMaxAnnotationPlugin.class);
 
-	@Override
-	public boolean supports(DocumentationType delimiter) {
-		// we simply support all documentationTypes!
-		return true;
-	}
+  public static <T extends Annotation> Optional<T> validatorFromBean(
+      ParameterExpansionContext context,
+      Class<T> annotationType) {
 
-	@Override
-	public void apply(ParameterExpansionContext context) {
+    return Optional.absent();
+  }
 
-		Field myfield = context.getField();
-		LOG.debug("expandedparam.myfield: " + myfield.getName());
+  public static <T extends Annotation> Optional<T> validatorFromField(
+      ParameterExpansionContext context,
+      Class<T> annotationType) {
 
-		Optional<Min> min = extractMin(context);
-		Optional<Max> max = extractMax(context);
+    Field field = context.getField().getRawMember();
+    Optional<T> notNull = Optional.absent();
+    if (field != null) {
+      LOG.debug("Annotation size present for " + field.getName() + "!!");
+      notNull = Optional.fromNullable(field.getAnnotation(annotationType));
+    }
 
-		if (min.isPresent() || max.isPresent()) {
-			AllowableRangeValues values = MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max);
-			LOG.debug("adding allowable Values MinMax: " + values.getMin() + " - " + values.getMax());
-			context.getParameterBuilder().allowableValues(values);
-		}
+    return notNull;
+  }
 
-	}
+  @Override
+  public boolean supports(DocumentationType delimiter) {
+    // we simply support all documentationTypes!
+    return true;
+  }
 
-	@VisibleForTesting
-	Optional<Min> extractMin(ParameterExpansionContext context) {
-		return validatorFromField(context, Min.class);
-	}
+  @Override
+  public void apply(ParameterExpansionContext context) {
 
-	@VisibleForTesting
-	Optional<Max> extractMax(ParameterExpansionContext context) {
-		return validatorFromField(context, Max.class);
-	}
+    Field myfield = context.getField().getRawMember();
+    LOG.debug("expandedparam.myfield: " + myfield.getName());
 
-	@VisibleForTesting
-	Optional<Size> extractAnnotation(ParameterExpansionContext context) {
+    Optional<Min> min = extractMin(context);
+    Optional<Max> max = extractMax(context);
 
-		return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
-	}
+    if (min.isPresent() || max.isPresent()) {
+      AllowableRangeValues values = MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max);
+      LOG.debug("adding allowable Values MinMax: " + values.getMin() + " - " + values.getMax());
+      context.getParameterBuilder().allowableValues(values);
+    }
 
-	public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context,
-			Class<T> annotationType) {
+  }
 
-		Optional<T> notNull = Optional.absent();
-		// if (propertyDefinition.isPresent()) {
-		// notNull = annotationFrom(propertyDefinition.get().getGetter(),
-		// annotationType)
-		// .or(annotationFrom(propertyDefinition.get().getField(),
-		// annotationType));
-		// }
-		return notNull;
-	}
+  @VisibleForTesting
+  Optional<Min> extractMin(ParameterExpansionContext context) {
+    return validatorFromField(context, Min.class);
+  }
 
-	public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context,
-			Class<T> annotationType) {
+  @VisibleForTesting
+  Optional<Max> extractMax(ParameterExpansionContext context) {
+    return validatorFromField(context, Max.class);
+  }
 
-		Field field = context.getField();
-		Optional<T> notNull = Optional.absent();
-		if (field != null) {
-			LOG.debug("Annotation size present for " + field.getName() + "!!");
-			notNull = Optional.fromNullable(field.getAnnotation(annotationType));
-		}
+  @VisibleForTesting
+  Optional<Size> extractAnnotation(ParameterExpansionContext context) {
 
-		return notNull;
-	}
+    return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
+  }
 
 }

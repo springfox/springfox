@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,6 +29,9 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+/**
+ * Utility methods for BeanValidators
+ */
 public class BeanValidators {
   public final static int BEAN_VALIDATOR_PLUGIN_ORDER = Ordered.HIGHEST_PRECEDENCE + 500;
 
@@ -37,15 +40,15 @@ public class BeanValidators {
   }
 
   public static <T extends Annotation> Optional<T> extractAnnotation(
-          ModelPropertyContext context,
-          Class<T> annotationType) {
+      ModelPropertyContext context,
+      Class<T> annotationType) {
     return validatorFromBean(context, annotationType)
-            .or(validatorFromField(context, annotationType));
+        .or(validatorFromField(context, annotationType));
   }
 
   public static <T extends Annotation> Optional<T> validatorFromBean(
-          ModelPropertyContext context,
-          Class<T> annotationType) {
+      ModelPropertyContext context,
+      Class<T> annotationType) {
 
     Optional<BeanPropertyDefinition> propertyDefinition = context.getBeanPropertyDefinition();
     Optional<T> notNull = Optional.absent();
@@ -59,8 +62,8 @@ public class BeanValidators {
   }
 
   public static <T extends Annotation> Optional<T> validatorFromField(
-          ModelPropertyContext context,
-          Class<T> annotationType) {
+      ModelPropertyContext context,
+      Class<T> annotationType) {
     return findAnnotation(context.getAnnotatedElement(), annotationType);
   }
 
@@ -79,8 +82,8 @@ public class BeanValidators {
   }
 
   private static <T extends Annotation> Optional<T> findAnnotation(
-          Optional<? extends AnnotatedElement> annotatedElement,
-          Class<T> annotationType) {
+      Optional<? extends AnnotatedElement> annotatedElement,
+      Class<T> annotationType) {
     if (annotatedElement.isPresent()) {
       return Optional.fromNullable(AnnotationUtils.findAnnotation(annotatedElement.get(), annotationType));
     } else {

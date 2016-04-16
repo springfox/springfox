@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016-2017 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,32 +22,48 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.bean.validators.util.SizeUtil;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import static springfox.bean.validators.plugins.BeanValidators.*;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class NotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
-
+public class ModelPropertySizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
+  /**
+   * support all documentationTypes
+   */
   @Override
   public boolean supports(DocumentationType delimiter) {
     // we simply support all documentationTypes!
     return true;
   }
 
+  /**
+   * read Size annotation
+   */
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<NotNull> notNull = extractAnnotation(context);
-    context.getBuilder().required(notNull.isPresent());
+    Optional<Size> size = extractAnnotation(context);
+
+
+    if (size.isPresent()) {
+      context.getBuilder().allowableValues(SizeUtil.createAllowableValuesFromSizeForStrings(size.get()));
+    }
   }
 
+  /**
+   * extract Size from bean or field
+   *
+   * @param context
+   * @return
+   */
   @VisibleForTesting
-  Optional<NotNull> extractAnnotation(ModelPropertyContext context) {
-    return validatorFromBean(context, NotNull.class).or(validatorFromField(context, NotNull.class));
+  Optional<Size> extractAnnotation(ModelPropertyContext context) {
+    return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
   }
 }
