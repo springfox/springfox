@@ -41,60 +41,60 @@ import com.google.common.base.Optional;
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterBuilderPlugin {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterSizeAnnotationPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterSizeAnnotationPlugin.class);
 
-	@Override
-	public boolean supports(DocumentationType delimiter) {
-		// we simply support all documentationTypes!
-		return true;
-	}
+    @Override
+    public boolean supports(DocumentationType delimiter) {
+        // we simply support all documentationTypes!
+        return true;
+    }
 
-	@Override
-	public void apply(ParameterExpansionContext context) {
+    @Override
+    public void apply(ParameterExpansionContext context) {
 
-		Field myfield = context.getField();
-		LOG.debug("expandedparam.myfield: " + myfield.getName());
+        Field myfield = context.getField();
+        LOG.debug("expandedparam.myfield: " + myfield.getName());
 
-		Optional<Size> size = extractAnnotation(context);
+        Optional<Size> size = extractAnnotation(context);
 
-		if (size.isPresent()) {
-			AllowableRangeValues values = SizeUtil.createAllowableValuesFromSizeForStrings(size.get());
-			LOG.debug("adding allowable Values: " + values.getMin() + "-" + values.getMax());
+        if (size.isPresent()) {
+            AllowableRangeValues values = SizeUtil.createAllowableValuesFromSizeForStrings(size.get());
+            LOG.debug("adding allowable Values: " + values.getMin() + "-" + values.getMax());
 
-			values = new AllowableRangeValues(values.getMin(), values.getMax());
-			context.getParameterBuilder().allowableValues(values);
+            values = new AllowableRangeValues(values.getMin(), values.getMax());
+            context.getParameterBuilder().allowableValues(values);
 
-		}
-	}
+        }
+    }
 
-	@VisibleForTesting
-	Optional<Size> extractAnnotation(ParameterExpansionContext context) {
+    @VisibleForTesting
+    Optional<Size> extractAnnotation(ParameterExpansionContext context) {
 
-		return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
-	}
+        return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
+    }
 
-	public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context, Class<T> annotationType) {
+    public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context, Class<T> annotationType) {
 
-		Optional<T> notNull = Optional.absent();
-		// if (propertyDefinition.isPresent()) {
-		// notNull = annotationFrom(propertyDefinition.get().getGetter(),
-		// annotationType)
-		// .or(annotationFrom(propertyDefinition.get().getField(),
-		// annotationType));
-		// }
-		return notNull;
-	}
+        Optional<T> notNull = Optional.absent();
+        // if (propertyDefinition.isPresent()) {
+        // notNull = annotationFrom(propertyDefinition.get().getGetter(),
+        // annotationType)
+        // .or(annotationFrom(propertyDefinition.get().getField(),
+        // annotationType));
+        // }
+        return notNull;
+    }
 
-	public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context, Class<T> annotationType) {
+    public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context, Class<T> annotationType) {
 
-		Field field = context.getField();
-		Optional<T> notNull = Optional.absent();
-		if (field != null) {
-			LOG.debug("Annotation size present for " + field.getName() + "!!");
-			notNull = Optional.fromNullable(field.getAnnotation(annotationType));
-		}
+        Field field = context.getField();
+        Optional<T> notNull = Optional.absent();
+        if (field != null) {
+            LOG.debug("Annotation size present for " + field.getName() + "!!");
+            notNull = Optional.fromNullable(field.getAnnotation(annotationType));
+        }
 
-		return notNull;
-	}
+        return notNull;
+    }
 
 }

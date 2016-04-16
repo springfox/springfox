@@ -40,26 +40,26 @@ import com.google.common.base.Optional;
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ModelPropertySizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ModelPropertySizeAnnotationPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ModelPropertySizeAnnotationPlugin.class);
 
-	@Override
-	public boolean supports(DocumentationType delimiter) {
-		// we simply support all documentationTypes!
-		return true;
-	}
+    @Override
+    public boolean supports(DocumentationType delimiter) {
+        // we simply support all documentationTypes!
+        return true;
+    }
 
-	@Override
-	public void apply(ModelPropertyContext context) {
-		Optional<Size> size = extractAnnotation(context);
+    @Override
+    public void apply(ModelPropertyContext context) {
+        Optional<Size> size = extractAnnotation(context);
 
-		if (size.isPresent()) {
-			context.getBuilder().allowableValues(SizeUtil.createAllowableValuesFromSizeForStrings(size.get()));
-		}
-	}
+        if (size.isPresent()) {
+            context.getBuilder().allowableValues(SizeUtil.createAllowableValuesFromSizeForStrings(size.get()));
+        }
+    }
 
-	@VisibleForTesting
-	Optional<Size> extractAnnotation(ModelPropertyContext context) {
-		return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
-	}
+    @VisibleForTesting
+    Optional<Size> extractAnnotation(ModelPropertyContext context) {
+        return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
+    }
 
 }

@@ -1,3 +1,21 @@
+/*
+ *
+ *  Copyright 2015 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
 package springfox.bean.validators.plugins;
 
 import java.lang.annotation.Annotation;
@@ -23,46 +41,46 @@ import com.google.common.base.Optional;
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ParameterMinMaxAnnotationPlugin implements ParameterBuilderPlugin {
-	private static final Logger LOG = LoggerFactory.getLogger(ParameterMinMaxAnnotationPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ParameterMinMaxAnnotationPlugin.class);
 
-	public boolean supports(DocumentationType delimiter) {
-		// we simply support all documentationTypes!
-		return true;
-	}
+    public boolean supports(DocumentationType delimiter) {
+        // we simply support all documentationTypes!
+        return true;
+    }
 
-	public void apply(ParameterContext context) {
-		Optional<Min> min = extractMin(context);
-		Optional<Max> max = extractMax(context);
-		if (min.isPresent() || max.isPresent()) {
-			AllowableRangeValues values = MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max);
-			LOG.debug("adding allowable Values: " + values.getMin() + " - " + values.getMax());
-			context.parameterBuilder().allowableValues(values);
-			
-		}
-	}
+    public void apply(ParameterContext context) {
+        Optional<Min> min = extractMin(context);
+        Optional<Max> max = extractMax(context);
+        if (min.isPresent() || max.isPresent()) {
+            AllowableRangeValues values = MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max);
+            LOG.debug("adding allowable Values: " + values.getMin() + " - " + values.getMax());
+            context.parameterBuilder().allowableValues(values);
+            
+        }
+    }
 
-	@VisibleForTesting
-	Optional<Min> extractMin(ParameterContext context) {
-		return validatorFromField(context, Min.class);
-	}
+    @VisibleForTesting
+    Optional<Min> extractMin(ParameterContext context) {
+        return validatorFromField(context, Min.class);
+    }
 
-	@VisibleForTesting
-	Optional<Max> extractMax(ParameterContext context) {
-		return validatorFromField(context, Max.class);
-	}
+    @VisibleForTesting
+    Optional<Max> extractMax(ParameterContext context) {
+        return validatorFromField(context, Max.class);
+    }
 
-	public static <T extends Annotation> Optional<T> validatorFromField(ParameterContext context, Class<T> annotationType) {
+    public static <T extends Annotation> Optional<T> validatorFromField(ParameterContext context, Class<T> annotationType) {
 
-		MethodParameter methodParam = context.methodParameter();
-		LOG.debug("methodParam.index: " + methodParam.getParameterIndex());
-		LOG.debug("methodParam.name: " + methodParam.getParameterName());
+        MethodParameter methodParam = context.methodParameter();
+        LOG.debug("methodParam.index: " + methodParam.getParameterIndex());
+        LOG.debug("methodParam.name: " + methodParam.getParameterName());
 
-		T annotatedElement = methodParam.getParameterAnnotation(annotationType);
-		Optional<T> notNull = Optional.absent();
-		if (annotatedElement != null) {
-			notNull = Optional.fromNullable(annotatedElement);
-		}
-		return notNull;
-	}
+        T annotatedElement = methodParam.getParameterAnnotation(annotationType);
+        Optional<T> notNull = Optional.absent();
+        if (annotatedElement != null) {
+            notNull = Optional.fromNullable(annotatedElement);
+        }
+        return notNull;
+    }
 
 }

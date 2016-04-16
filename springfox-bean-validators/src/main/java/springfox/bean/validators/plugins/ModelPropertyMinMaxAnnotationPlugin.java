@@ -41,32 +41,32 @@ import com.google.common.base.Optional;
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ModelPropertyMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ModelPropertyMinMaxAnnotationPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ModelPropertyMinMaxAnnotationPlugin.class);
 
-	@Override
-	public boolean supports(DocumentationType delimiter) {
-		// we simply support all documentationTypes!
-		return true;
-	}
+    @Override
+    public boolean supports(DocumentationType delimiter) {
+        // we simply support all documentationTypes!
+        return true;
+    }
 
-	@Override
-	public void apply(ModelPropertyContext context) {
-		Optional<Min> min = extractMin(context);
-		Optional<Max> max = extractMax(context);
+    @Override
+    public void apply(ModelPropertyContext context) {
+        Optional<Min> min = extractMin(context);
+        Optional<Max> max = extractMax(context);
 
-		// add support for @Min/@Max
-		context.getBuilder().allowableValues(MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max));
+        // add support for @Min/@Max
+        context.getBuilder().allowableValues(MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max));
 
-	}
+    }
 
-	@VisibleForTesting
-	Optional<Min> extractMin(ModelPropertyContext context) {
-		return validatorFromBean(context, Min.class).or(validatorFromField(context, Min.class));
-	}
+    @VisibleForTesting
+    Optional<Min> extractMin(ModelPropertyContext context) {
+        return validatorFromBean(context, Min.class).or(validatorFromField(context, Min.class));
+    }
 
-	@VisibleForTesting
-	Optional<Max> extractMax(ModelPropertyContext context) {
-		return validatorFromBean(context, Max.class).or(validatorFromField(context, Max.class));
-	}
+    @VisibleForTesting
+    Optional<Max> extractMax(ModelPropertyContext context) {
+        return validatorFromBean(context, Max.class).or(validatorFromField(context, Max.class));
+    }
 
 }

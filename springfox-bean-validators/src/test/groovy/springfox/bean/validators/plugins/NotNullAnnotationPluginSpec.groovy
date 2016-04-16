@@ -62,7 +62,7 @@ class NotNullAnnotationPluginSpec extends Specification {
   @Unroll
   def "@NotNull annotations are reflected in the model properties that are BeanPropertyDefinitions"()  {
     given:
-      def sut = new NotNullAnnotationPlugin()
+      def sut = new ModelPropertyNotNullAnnotationPlugin()
       def beanProperty = beanProperty(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),

@@ -39,55 +39,55 @@ import com.google.common.base.Optional;
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParameterBuilderPlugin {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterNotNullAnnotationPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterNotNullAnnotationPlugin.class);
 
-	@Override
-	public boolean supports(DocumentationType delimiter) {
-		// we simply support all documentationTypes!
-		return true;
-	}
+    @Override
+    public boolean supports(DocumentationType delimiter) {
+        // we simply support all documentationTypes!
+        return true;
+    }
 
-	@Override
-	public void apply(ParameterExpansionContext context) {
-		Field myfield = context.getField();
-		LOG.debug("myfield: " + myfield.getName());
+    @Override
+    public void apply(ParameterExpansionContext context) {
+        Field myfield = context.getField();
+        LOG.debug("myfield: " + myfield.getName());
 
-		Optional<NotNull> size = extractAnnotation(context);
+        Optional<NotNull> size = extractAnnotation(context);
 
-		if (size.isPresent()) {
-			LOG.debug("field: " + myfield.getName() + " set to required!!");
-			context.getParameterBuilder().required(true);
+        if (size.isPresent()) {
+            LOG.debug("field: " + myfield.getName() + " set to required!!");
+            context.getParameterBuilder().required(true);
 
-		}
-	}
+        }
+    }
 
-	@VisibleForTesting
-	Optional<NotNull> extractAnnotation(ParameterExpansionContext context) {
+    @VisibleForTesting
+    Optional<NotNull> extractAnnotation(ParameterExpansionContext context) {
 
-		return validatorFromBean(context, NotNull.class).or(validatorFromField(context, NotNull.class));
-	}
+        return validatorFromBean(context, NotNull.class).or(validatorFromField(context, NotNull.class));
+    }
 
-	public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context, Class<T> annotationType) {
+    public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context, Class<T> annotationType) {
 
-		Field field = context.getField();
+        Field field = context.getField();
 
-		Optional<T> notNull = Optional.absent();
-		if (field != null) {
-			notNull = Optional.fromNullable(field.getAnnotation(annotationType));
-		}
-		return notNull;
-	}
+        Optional<T> notNull = Optional.absent();
+        if (field != null) {
+            notNull = Optional.fromNullable(field.getAnnotation(annotationType));
+        }
+        return notNull;
+    }
 
-	public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context, Class<T> annotationType) {
+    public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context, Class<T> annotationType) {
 
-		Field field = context.getField();
-		Optional<T> notNull = Optional.absent();
-		if (field != null) {
-			LOG.debug("Annotation size present for field " + field.getName() + "!!");
-			notNull = Optional.fromNullable(field.getAnnotation(annotationType));
-		}
+        Field field = context.getField();
+        Optional<T> notNull = Optional.absent();
+        if (field != null) {
+            LOG.debug("Annotation size present for field " + field.getName() + "!!");
+            notNull = Optional.fromNullable(field.getAnnotation(annotationType));
+        }
 
-		return notNull;
-	}
+        return notNull;
+    }
 
 }
