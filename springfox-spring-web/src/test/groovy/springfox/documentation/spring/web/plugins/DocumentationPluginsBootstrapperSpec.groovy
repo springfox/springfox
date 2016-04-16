@@ -20,6 +20,8 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.context.ApplicationContext
+import org.springframework.context.event.ContextRefreshedEvent
 import spock.lang.Specification
 import springfox.documentation.service.Documentation
 import springfox.documentation.spi.DocumentationType
