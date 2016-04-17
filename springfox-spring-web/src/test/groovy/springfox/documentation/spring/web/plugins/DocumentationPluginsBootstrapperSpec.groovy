@@ -20,8 +20,6 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.TypeResolver
-import org.springframework.context.ApplicationContext
-import org.springframework.context.event.ContextRefreshedEvent
 import spock.lang.Specification
 import springfox.documentation.service.Documentation
 import springfox.documentation.spi.DocumentationType
@@ -93,17 +91,36 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
       1 * plugin.configure(_)
   }
 
-  def "bootstrapper only if the event is from the root context"() {
-    given: "ContextRefreshedEvent from a non-root application context."
-    ApplicationContext appCtx = Mock(ApplicationContext)
-    appCtx.getParent() >> Mock(ApplicationContext)
-    ContextRefreshedEvent rootAppCtxEvent = new ContextRefreshedEvent(appCtx)
-    pluginManager.documentationPlugins() >>  []
-
+  def "Bootstrapper now supports starting and stopping"() {
+    given:
+      DocumentationPlugin plugin = Mock(DocumentationPlugin)
+      plugin.documentationType >> DocumentationType.SWAGGER_12
     when:
-    bootstrapper.onApplicationEvent(rootAppCtxEvent)
+      pluginManager.documentationPlugins() >>  [plugin]
+      plugin.isEnabled() >> true
+
+    and:
+      bootstrapper.start()
+      bootstrapper.stop()
+      bootstrapper.start()
 
     then:
-    bootstrapper.initialized.get() == false
+      2 * plugin.configure(_)
+  }
+
+  def "Starting the Bootstrapper only configures the plugin once"() {
+    given:
+      DocumentationPlugin plugin = Mock(DocumentationPlugin)
+      plugin.documentationType >> DocumentationType.SWAGGER_12
+    when:
+      pluginManager.documentationPlugins() >>  [plugin]
+      plugin.isEnabled() >> true
+
+    and:
+    bootstrapper.start()
+    bootstrapper.start()
+
+    then:
+      1 * plugin.configure(_)
   }
 }

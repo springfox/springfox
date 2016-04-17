@@ -136,6 +136,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   @Override
   public void stop() {
     initialized.getAndSet(false);
+    scanned.clear();
   }
 
   @Override
