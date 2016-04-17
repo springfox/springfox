@@ -60,30 +60,6 @@ public class HandlerMethodResolver {
     return resolvedMethod(handlerMethod).transform(toReturnType(typeResolver)).or(typeResolver.resolve(Void.TYPE));
   }
 
-  public Optional<ResolvedMethod> resolvedMethod(HandlerMethod handlerMethod) {
-    if (handlerMethod == null) {
-      return Optional.absent();
-    }
-    Class hostClass = useType(handlerMethod.getBeanType())
-        .or(handlerMethod.getMethod().getDeclaringClass());
-    ResolvedType beanType = typeResolver.resolve(hostClass);
-    MemberResolver resolver = new MemberResolver(typeResolver);
-    resolver.setIncludeLangObject(false);
-    ResolvedTypeWithMembers typeWithMembers = resolver.resolve(beanType, null, null);
-    Iterable<ResolvedMethod> filtered = filter(newArrayList(typeWithMembers.getMemberMethods()),
-        methodNamesAreSame(handlerMethod.getMethod()));
-    return resolveToMethodWithMaxResolvedTypes(filtered, handlerMethod.getMethod());
-  }
-
-  private static Function<ResolvedMethod, ResolvedType> toReturnType(final TypeResolver resolver) {
-    return new Function<ResolvedMethod, ResolvedType>() {
-      @Override
-      public ResolvedType apply(ResolvedMethod input) {
-        return fromNullable(input.getReturnType()).or(resolver.resolve(Void.TYPE));
-      }
-    };
-  }
-
   public static Optional<Class> useType(Class beanType) {
     if (Proxy.class.isAssignableFrom(beanType)) {
       return Optional.absent();
@@ -100,19 +76,11 @@ public class HandlerMethodResolver {
         .or(Lists.<ResolvedMethodParameter>newArrayList());
   }
 
-  private Function<ResolvedMethod, List<ResolvedMethodParameter>> toParameters(final HandlerMethod methodToResolve) {
-    return new Function<ResolvedMethod, List<ResolvedMethodParameter>>() {
-      @Override
-      public List<ResolvedMethodParameter> apply(ResolvedMethod input) {
-        List<ResolvedMethodParameter> parameters = newArrayList();
-        MethodParameter[] methodParameters = methodToResolve.getMethodParameters();
-        for (int i = 0; i < input.getArgumentCount(); i++) {
-          parameters.add(new ResolvedMethodParameter(methodParameters[i], input.getArgumentType(i)));
-        }
-        return parameters;
-      }
-    };
+  boolean contravariant(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
+    return isSubClass(candidateMethodReturnValue, returnValueOnMethod)
+        || isGenericTypeSubclass(candidateMethodReturnValue, returnValueOnMethod);
   }
+
 
   @VisibleForTesting
   static Ordering<ResolvedMethod> byArgumentCount() {
@@ -131,79 +99,6 @@ public class HandlerMethodResolver {
         && (Void.TYPE == returnType
                 || Void.class == returnType);
   }
-
-  private static Iterable<ResolvedMethod> methodsWithSameNumberOfParams(Iterable<ResolvedMethod> filtered,
-                                                                        final Method methodToResolve) {
-
-    return filter(filtered, new Predicate<ResolvedMethod>() {
-      @Override
-      public boolean apply(ResolvedMethod input) {
-        return input.getArgumentCount() == methodToResolve.getParameterTypes().length;
-      }
-    });
-  }
-
-  private static Predicate<ResolvedMethod> methodNamesAreSame(final Method methodToResolve) {
-    return new Predicate<ResolvedMethod>() {
-      @Override
-      public boolean apply(ResolvedMethod input) {
-        return input.getRawMember().getName().equals(methodToResolve.getName());
-      }
-    };
-  }
-
-  private Optional<ResolvedMethod> resolveToMethodWithMaxResolvedTypes(Iterable<ResolvedMethod> filtered,
-                                                                       Method methodToResolve) {
-
-    if (Iterables.size(filtered) > 1) {
-      Iterable<ResolvedMethod> covariantMethods = covariantMethods(filtered, methodToResolve);
-      if (Iterables.size(covariantMethods) == 0) {
-        return Optional.of(byArgumentCount().max(filtered));
-      } else if (Iterables.size(covariantMethods) == 1) {
-        return FluentIterable.from(covariantMethods).first();
-      } else {
-        return Optional.of(byArgumentCount().max(covariantMethods));
-      }
-    }
-    return FluentIterable.from(filtered).first();
-  }
-
-  private Iterable<ResolvedMethod> covariantMethods(Iterable<ResolvedMethod> filtered,
-                                                    final Method methodToResolve) {
-
-    return filter(methodsWithSameNumberOfParams(filtered, methodToResolve), onlyCovariantMethods(methodToResolve));
-  }
-
-  private Predicate<ResolvedMethod> onlyCovariantMethods(final Method methodToResolve) {
-    return new Predicate<ResolvedMethod>() {
-      @Override
-      public boolean apply(ResolvedMethod input) {
-        for (int index = 0; index < input.getArgumentCount(); index++) {
-          if (!covariant(input.getArgumentType(index), methodToResolve.getGenericParameterTypes()[index])) {
-            return false;
-          }
-        }
-        ResolvedType candidateMethodReturnValue = returnTypeOrVoid(input);
-        return bothAreVoids(candidateMethodReturnValue, methodToResolve.getGenericReturnType())
-            || contravariant(candidateMethodReturnValue, methodToResolve.getGenericReturnType());
-      }
-    };
-  }
-
-  private ResolvedType returnTypeOrVoid(ResolvedMethod input) {
-    ResolvedType returnType = input.getReturnType();
-    if (returnType == null) {
-      returnType = typeResolver.resolve(Void.class);
-    }
-    return returnType;
-  }
-
-  boolean contravariant(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
-    return isSubClass(candidateMethodReturnValue, returnValueOnMethod)
-        || isGenericTypeSubclass(candidateMethodReturnValue, returnValueOnMethod);
-  }
-
-
   @VisibleForTesting
   boolean isGenericTypeSubclass(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
     return returnValueOnMethod instanceof ParameterizedType &&
@@ -234,5 +129,121 @@ public class HandlerMethodResolver {
   boolean isSuperClass(ResolvedType candidateMethodArgument, Type argumentOnMethod) {
     return argumentOnMethod instanceof Class
         && ((Class<?>) argumentOnMethod).isAssignableFrom(candidateMethodArgument.getErasedType());
+  }
+
+  private Optional<ResolvedMethod> resolvedMethod(HandlerMethod handlerMethod) {
+    if (handlerMethod == null) {
+      return Optional.absent();
+    }
+    Class hostClass = useType(handlerMethod.getBeanType())
+        .or(handlerMethod.getMethod().getDeclaringClass());
+    ResolvedType beanType = typeResolver.resolve(hostClass);
+    MemberResolver resolver = new MemberResolver(typeResolver);
+    resolver.setIncludeLangObject(false);
+    ResolvedTypeWithMembers typeWithMembers = resolver.resolve(beanType, null, null);
+    Iterable<ResolvedMethod> filtered = filter(newArrayList(typeWithMembers.getMemberMethods()),
+        methodNamesAreSame(handlerMethod.getMethod()));
+    return resolveToMethodWithMaxResolvedTypes(filtered, handlerMethod.getMethod());
+  }
+
+  private static Function<ResolvedMethod, ResolvedType> toReturnType(final TypeResolver resolver) {
+    return new Function<ResolvedMethod, ResolvedType>() {
+      @Override
+      public ResolvedType apply(ResolvedMethod input) {
+        return fromNullable(input.getReturnType()).or(resolver.resolve(Void.TYPE));
+      }
+    };
+  }
+
+  private Function<ResolvedMethod, List<ResolvedMethodParameter>> toParameters(final HandlerMethod methodToResolve) {
+    return new Function<ResolvedMethod, List<ResolvedMethodParameter>>() {
+      @Override
+      public List<ResolvedMethodParameter> apply(ResolvedMethod input) {
+        List<ResolvedMethodParameter> parameters = newArrayList();
+        MethodParameter[] methodParameters = methodToResolve.getMethodParameters();
+        for (int i = 0; i < input.getArgumentCount(); i++) {
+          parameters.add(new ResolvedMethodParameter(methodParameters[i], input.getArgumentType(i)));
+        }
+        return parameters;
+      }
+    };
+  }
+
+  private static Iterable<ResolvedMethod> methodsWithSameNumberOfParams(
+      Iterable<ResolvedMethod> filtered,
+      final Method methodToResolve) {
+
+    return filter(filtered, new Predicate<ResolvedMethod>() {
+      @Override
+      public boolean apply(ResolvedMethod input) {
+        return input.getArgumentCount() == methodToResolve.getParameterTypes().length;
+      }
+    });
+  }
+
+  private static Predicate<ResolvedMethod> methodNamesAreSame(final Method methodToResolve) {
+    return new Predicate<ResolvedMethod>() {
+      @Override
+      public boolean apply(ResolvedMethod input) {
+        return input.getRawMember().getName().equals(methodToResolve.getName());
+      }
+    };
+  }
+
+  private Optional<ResolvedMethod> resolveToMethodWithMaxResolvedTypes(
+      Iterable<ResolvedMethod> filtered,
+      Method methodToResolve) {
+    if (Iterables.size(filtered) > 1) {
+      Iterable<ResolvedMethod> covariantMethods = covariantMethods(filtered, methodToResolve);
+      if (Iterables.size(covariantMethods) == 0) {
+        return FluentIterable.from(filtered)
+            .firstMatch(sameMethod(methodToResolve));
+      } else if (Iterables.size(covariantMethods) == 1) {
+        return FluentIterable.from(covariantMethods).first();
+      } else {
+        return Optional.of(byArgumentCount().max(covariantMethods));
+      }
+    }
+    return FluentIterable.from(filtered).first();
+  }
+
+  private Predicate<ResolvedMethod> sameMethod(final Method methodToResolve) {
+    return new Predicate<ResolvedMethod>() {
+      @Override
+      public boolean apply(ResolvedMethod input) {
+        return methodToResolve.equals(input.getRawMember());
+      }
+    };
+  }
+
+  private Iterable<ResolvedMethod> covariantMethods(
+      Iterable<ResolvedMethod> filtered,
+      final Method methodToResolve) {
+
+    return filter(methodsWithSameNumberOfParams(filtered, methodToResolve), onlyCovariantMethods(methodToResolve));
+  }
+
+  private Predicate<ResolvedMethod> onlyCovariantMethods(final Method methodToResolve) {
+    return new Predicate<ResolvedMethod>() {
+      @Override
+      public boolean apply(ResolvedMethod input) {
+        for (int index = 0; index < input.getArgumentCount(); index++) {
+          if (!covariant(input.getArgumentType(index), methodToResolve.getGenericParameterTypes()[index])) {
+            return false;
+          }
+        }
+        ResolvedType candidateMethodReturnValue = returnTypeOrVoid(input);
+        return bothAreVoids(candidateMethodReturnValue, methodToResolve.getGenericReturnType())
+            || contravariant(candidateMethodReturnValue, methodToResolve.getGenericReturnType());
+      }
+    };
+  }
+
+  private ResolvedType returnTypeOrVoid(ResolvedMethod input) {
+    ResolvedType returnType = input.getReturnType();
+    if (returnType == null) {
+      returnType = typeResolver.resolve(Void.class);
+    }
+    return returnType;
   }
 }

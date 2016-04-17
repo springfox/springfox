@@ -376,6 +376,21 @@ public class DummyClass {
 
     public void methodToTest(Integer integer, Child child) {
     }
+
+  }
+
+  public class MethodResolutionToDemonstrate1241 {
+    public DTO<String>[] loadDetails(String id) {
+      return null;
+    }
+
+    public DTO<String>[] loadDetails(String id, Date since) {
+      return null;
+    }
+  }
+
+  public class DTO<T> {
+
   }
 
   class Parent {
