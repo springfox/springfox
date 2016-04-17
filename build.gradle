@@ -1,7 +1,7 @@
 import springfox.gradlebuild.utils.ProjectDefinitions
 
 apply from: "$rootDir/gradle/dependencies.gradle"
-apply from: "$rootDir/gradle/idea.gradle"
+apply from: "$rootDir/gradle/ide.gradle"
 
 buildscript {
   repositories {

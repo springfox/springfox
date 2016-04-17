@@ -24,8 +24,7 @@ import com.google.common.base.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.DocumentationType;
@@ -51,7 +50,7 @@ import static springfox.documentation.spi.service.contexts.Orderings.*;
  * If no instances DocumentationConfigurer are found a default one is created and executed.
  */
 @Component
-public class DocumentationPluginsBootstrapper implements ApplicationListener<ContextRefreshedEvent> {
+public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   private static final Logger log = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
   private final DocumentationPluginsManager documentationPluginsManager;
   private final List<RequestHandlerProvider> handlerProviders;
@@ -76,32 +75,6 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
     this.scanned = scanned;
     this.resourceListing = resourceListing;
     this.defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, servletContext);
-  }
-
-  @Override
-  public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-
-    // run the bootstrapper only if the event is from the root context
-    if(contextRefreshedEvent.getApplicationContext().getParent() != null) {
-      log.info("contextRefreshedEvent {} not from root application context. So skipping this event.", contextRefreshedEvent);
-      return;
-    }
-
-    if (initialized.compareAndSet(false, true)) {
-      log.info("Context refreshed");
-      List<DocumentationPlugin> plugins = pluginOrdering()
-          .sortedCopy(documentationPluginsManager.documentationPlugins());
-      log.info("Found {} custom documentation plugin(s)", plugins.size());
-      for (DocumentationPlugin each : plugins) {
-        DocumentationType documentationType = each.getDocumentationType();
-        if (each.isEnabled()) {
-          scanDocumentation(buildContext(each));
-        } else {
-          log.info("Skipping initializing disabled plugin bean {} v{}",
-              documentationType.getName(), documentationType.getVersion());
-        }
-      }
-    }
   }
 
   private DocumentationContext buildContext(DocumentationPlugin each) {
@@ -131,4 +104,48 @@ public class DocumentationPluginsBootstrapper implements ApplicationListener<Con
     };
   }
 
+  @Override
+  public boolean isAutoStartup() {
+    return true;
+  }
+
+  @Override
+  public void stop(Runnable callback) {
+    callback.run();
+  }
+
+  @Override
+  public void start() {
+    if (initialized.compareAndSet(false, true)) {
+      log.info("Context refreshed");
+      List<DocumentationPlugin> plugins = pluginOrdering()
+          .sortedCopy(documentationPluginsManager.documentationPlugins());
+      log.info("Found {} custom documentation plugin(s)", plugins.size());
+      for (DocumentationPlugin each : plugins) {
+        DocumentationType documentationType = each.getDocumentationType();
+        if (each.isEnabled()) {
+          scanDocumentation(buildContext(each));
+        } else {
+          log.info("Skipping initializing disabled plugin bean {} v{}",
+              documentationType.getName(), documentationType.getVersion());
+        }
+      }
+    }
+  }
+
+  @Override
+  public void stop() {
+    initialized.getAndSet(false);
+    scanned.clear();
+  }
+
+  @Override
+  public boolean isRunning() {
+    return initialized.get();
+  }
+
+  @Override
+  public int getPhase() {
+    return Integer.MAX_VALUE;
+  }
 }

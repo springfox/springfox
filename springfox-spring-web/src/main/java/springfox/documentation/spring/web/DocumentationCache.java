@@ -41,4 +41,7 @@ public class DocumentationCache {
     return Collections.unmodifiableMap(documentationLookup);
   }
 
+  public void clear() {
+    documentationLookup.clear();
+  }
 }
