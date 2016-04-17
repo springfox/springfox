@@ -132,8 +132,9 @@ public class HandlerMethodResolver {
                 || Void.class == returnType);
   }
 
-  private static Iterable<ResolvedMethod> methodsWithSameNumberOfParams(Iterable<ResolvedMethod> filtered,
-                                                                        final Method methodToResolve) {
+  private static Iterable<ResolvedMethod> methodsWithSameNumberOfParams(
+      Iterable<ResolvedMethod> filtered,
+      final Method methodToResolve) {
 
     return filter(filtered, new Predicate<ResolvedMethod>() {
       @Override
@@ -152,13 +153,14 @@ public class HandlerMethodResolver {
     };
   }
 
-  private Optional<ResolvedMethod> resolveToMethodWithMaxResolvedTypes(Iterable<ResolvedMethod> filtered,
-                                                                       Method methodToResolve) {
-
+  private Optional<ResolvedMethod> resolveToMethodWithMaxResolvedTypes(
+      Iterable<ResolvedMethod> filtered,
+      Method methodToResolve) {
     if (Iterables.size(filtered) > 1) {
       Iterable<ResolvedMethod> covariantMethods = covariantMethods(filtered, methodToResolve);
       if (Iterables.size(covariantMethods) == 0) {
-        return Optional.of(byArgumentCount().max(filtered));
+        return FluentIterable.from(filtered)
+            .firstMatch(sameMethod(methodToResolve));
       } else if (Iterables.size(covariantMethods) == 1) {
         return FluentIterable.from(covariantMethods).first();
       } else {
@@ -168,8 +170,18 @@ public class HandlerMethodResolver {
     return FluentIterable.from(filtered).first();
   }
 
-  private Iterable<ResolvedMethod> covariantMethods(Iterable<ResolvedMethod> filtered,
-                                                    final Method methodToResolve) {
+  private Predicate<ResolvedMethod> sameMethod(final Method methodToResolve) {
+    return new Predicate<ResolvedMethod>() {
+      @Override
+      public boolean apply(ResolvedMethod input) {
+        return methodToResolve.equals(input.getRawMember());
+      }
+    };
+  }
+
+  private Iterable<ResolvedMethod> covariantMethods(
+      Iterable<ResolvedMethod> filtered,
+      final Method methodToResolve) {
 
     return filter(methodsWithSameNumberOfParams(filtered, methodToResolve), onlyCovariantMethods(methodToResolve));
   }

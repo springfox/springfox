@@ -32,6 +32,17 @@ trait HandlerMethodsSupport {
     new HandlerMethod(clazz, c.getMethod("methodToTest", Integer, DummyClass.Child))
   }
 
+  HandlerMethod loadDetailsWithOneParameter() {
+    def clazz = new DummyClass.MethodResolutionToDemonstrate1241()
+    Class c = clazz.getClass();
+    new HandlerMethod(clazz, c.getMethod("loadDetails", String))
+  }
+
+  HandlerMethod loadDetailsWithTwoParameter() {
+    def clazz = new DummyClass.MethodResolutionToDemonstrate1241()
+    Class c = clazz.getClass();
+    new HandlerMethod(clazz, c.getMethod("loadDetails", String, Date))
+  }
 
   HandlerMethod unresolvableMethod() {
    null

@@ -57,6 +57,23 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
       methodWithParent()| "ResponseEntity"| ["Integer", "Parent"]
   }
 
+
+  def "Overloaded methods are resolved correctly" () {
+    given:
+      def sut = new HandlerMethodResolver(new TypeResolver())
+      def resolvedParameters = sut.methodParameters(handlerMethod)
+          .collect() { it.resolvedParameterType.getErasedType().simpleName }
+          .sort()
+      def resolvedReturnType = sut.methodReturnType(handlerMethod).erasedType.simpleName
+    expect:
+      parameters == resolvedParameters
+      returnType == resolvedReturnType
+    where:
+      handlerMethod                 | returnType  | parameters
+      loadDetailsWithOneParameter() | "DTO[]"     | ["String"]
+      loadDetailsWithTwoParameter() | "DTO[]"     | ["Date", "String"]
+  }
+
   def "When method was not resolvable calling methodParameters returns empty list" () {
     given:
       def sut = new HandlerMethodResolver(new TypeResolver()) {
