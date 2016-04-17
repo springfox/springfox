@@ -19,8 +19,6 @@
 
 package springfox.documentation.schema.property;
 
-import com.fasterxml.jackson.databind.AnnotationIntrospector;
-import com.fasterxml.jackson.databind.PropertyName;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
@@ -41,15 +39,17 @@ public class BeanPropertyDefinitions {
     };
   }
 
-  public static String name(BeanPropertyDefinition beanPropertyDefinition,
-                            boolean forSerialization, BeanPropertyNamingStrategy namingStrategy) {
+  public static String name(
+      BeanPropertyDefinition beanPropertyDefinition,
+      boolean forSerialization, BeanPropertyNamingStrategy namingStrategy) {
 
     return forSerialization
-            ? namingStrategy.nameForSerialization(beanPropertyDefinition)
-            : namingStrategy.nameForDeserialization(beanPropertyDefinition);
+           ? namingStrategy.nameForSerialization(beanPropertyDefinition)
+           : namingStrategy.nameForDeserialization(beanPropertyDefinition);
   }
 
-  public static Function<PropertyNamingStrategy, String> overTheWireName(final BeanPropertyDefinition beanProperty,
+  public static Function<PropertyNamingStrategy, String> overTheWireName(
+      final BeanPropertyDefinition beanProperty,
       final MapperConfig<?> config) {
 
     return new Function<PropertyNamingStrategy, String>() {
@@ -60,14 +60,13 @@ public class BeanPropertyDefinitions {
     };
   }
 
-  private static String getName(PropertyNamingStrategy naming, BeanPropertyDefinition beanProperty,
-                                MapperConfig<?> config) {
+  private static String getName(
+      PropertyNamingStrategy naming,
+      BeanPropertyDefinition beanProperty,
+      MapperConfig<?> config) {
 
-    AnnotationIntrospector annotationIntrospector = config.isAnnotationProcessingEnabled()
-            ? config.getAnnotationIntrospector()
-            : null;
-    POJOPropertyBuilder prop
-            = new POJOPropertyBuilder(new PropertyName(beanProperty.getName()),  annotationIntrospector,  true);
+    PojoPropertyBuilderFactory factory = new PojoPropertyBuilderFactory();
+    POJOPropertyBuilder prop = factory.create(config, beanProperty);
     return naming.nameForField(config, prop.getField(), beanProperty.getName());
   }
 }
