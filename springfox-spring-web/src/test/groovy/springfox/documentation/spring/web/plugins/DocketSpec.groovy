@@ -31,8 +31,10 @@ import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.ApiInfo
+import springfox.documentation.service.Parameter
 import springfox.documentation.service.ResponseMessage
 import springfox.documentation.service.SecurityScheme
+import springfox.documentation.service.Tag
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
@@ -173,6 +175,8 @@ class DocketSpec extends DocumentationContextSpec {
       'protocols'             | ['application/json'] as Set                     | 'protocols'
       'additionalModels'      | Mock(ResolvedType)                              | 'additionalModels'
       'enableUrlTemplating'   | true                                            | 'isUriTemplatesEnabled'
+      'tags'                  | new Tag("test", "test")                         | 'tags'
+      'globalOperationParameters' | [Mock(Parameter)]                           | 'globalOperationParameters'
   }
 
   def "Code generation strategy property is set"() {
