@@ -16,3 +16,5 @@ What kind of issue is this?
  - [ ] Feature Request. Start by telling us what problem you’re trying to solve. Often a solution
        already exists! Don’t send pull requests to implement new features without first getting our
        support. Sometimes we leave features out on purpose to keep the project small.
+
+Please do consider ***starring*** this repository if you do like this project and find it useful. 
