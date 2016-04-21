@@ -36,6 +36,7 @@ public class Swagger2MarkupResultHandler implements ResultHandler {
     private final String outputDir;
     private final MarkupLanguage markupLanguage;
     private final String examplesFolderPath;
+    private final String encoding = "UTF-8";
 
     Swagger2MarkupResultHandler(String outputDir, MarkupLanguage markupLanguage, String examplesFolderPath) {
         this.outputDir = outputDir;
@@ -63,6 +64,7 @@ public class Swagger2MarkupResultHandler implements ResultHandler {
     @Override
     public void handle(MvcResult result) throws Exception {
         MockHttpServletResponse response = result.getResponse();
+        response.setCharacterEncoding(encoding);
         String swaggerJson = response.getContentAsString();
         Swagger2MarkupConverter.fromString(swaggerJson).withMarkupLanguage(markupLanguage)
                 .withExamples(examplesFolderPath).build().intoFolder(outputDir);
