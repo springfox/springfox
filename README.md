@@ -15,7 +15,7 @@ For more information on this project visit the [Springfox Website] (http://sprin
 ### Useful links
 - [Reference Documentation](http://springfox.io)
 - [Examples repository](https://github.com/springfox/springfox-demos)
-- [Contributing](https://github.com/springfox/springfox/wiki/Contribution-guidelines)
+- [Contribution Guidelines](https://github.com/springfox/springfox/wiki/Contribution-guidelines)
 - [Core contributors](http://springfox.github.io/springfox/contributors.html)
 - [Development and contribution guidelines](https://github.com/martypitt/swagger-springmvc/wiki/Development)
 - [Change log](docs/CHANGELOG.md)
