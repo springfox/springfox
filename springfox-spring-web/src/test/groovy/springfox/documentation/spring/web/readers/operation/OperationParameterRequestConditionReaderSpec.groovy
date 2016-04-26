@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.spring.web.readers
+package springfox.documentation.spring.web.readers.operation
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.bind.annotation.RequestMethod
@@ -30,8 +30,6 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
-import springfox.documentation.spring.web.readers.operation.OperationParameterRequestConditionReader
 
 @Mixin([RequestMappingSupport])
 class OperationParameterRequestConditionReaderSpec extends DocumentationContextSpec {
