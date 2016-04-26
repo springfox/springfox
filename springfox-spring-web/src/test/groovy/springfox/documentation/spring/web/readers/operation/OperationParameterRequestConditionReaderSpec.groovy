@@ -59,6 +59,7 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
     where:
       property        | expectedValue
       'name'          | 'test'
+      'defaultValue'  | 'testValue'
       'description'   | null
       'required'      | true
       'allowMultiple' | false
