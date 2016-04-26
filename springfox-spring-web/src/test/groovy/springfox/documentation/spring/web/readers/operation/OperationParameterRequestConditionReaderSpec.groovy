@@ -89,16 +89,14 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
   def "Should ignore a parameter request condition expression that is already present in the parameters"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
-      ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=3")
+      ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=testValue", "test=3")
       OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, 0,  requestMappingInfo('/parameter-conditions',
                       ["paramsCondition": paramCondition]),
               context(), "/anyPath")
 
     when:
-      OperationParameterRequestConditionReader operationParameterReader = 
-              new OperationParameterRequestConditionReader(new TypeResolver())
-      operationParameterReader.apply(operationContext)
+      sut.apply(operationContext)
 
     then:
       1 == operationContext.operationBuilder().build().parameters.size()
