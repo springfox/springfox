@@ -22,7 +22,7 @@ $(function() {
     window.swaggerUi = new SwaggerUi({
       dom_id: "swagger-ui-container",
       validatorUrl: data.validatorUrl,
-      supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+      supportedSubmitMethods: data.supportedSubmitMethods || ['get', 'post', 'put', 'delete', 'patch'],
       onComplete: function(swaggerApi, swaggerUi) {
 
         initializeSpringfox();
