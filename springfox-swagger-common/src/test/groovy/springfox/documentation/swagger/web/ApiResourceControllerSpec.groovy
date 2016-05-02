@@ -30,7 +30,7 @@ class ApiResourceControllerSpec extends Specification {
           ApiKeyVehicle.HEADER,
           "api_key",
           ",")
-      uiConfiguration = new UiConfiguration("/validate")
+      uiConfiguration = new UiConfiguration("/validate", UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
     }
     mockMvc = MockMvcBuilders.standaloneSetup(sut).build()
   }
