@@ -81,6 +81,15 @@ public final class ApiModelProperties {
     };
   }
 
+  public static Function<ApiModelProperty, Integer> toPosition() {
+    return new Function<ApiModelProperty, Integer>() {
+      @Override
+      public Integer apply(ApiModelProperty annotation) {
+        return annotation.position();
+      }
+    };
+  }
+
   public static Function<ApiModelProperty, Boolean> toIsReadOnly() {
     return new Function<ApiModelProperty, Boolean>() {
       @Override

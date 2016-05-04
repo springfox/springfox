@@ -53,6 +53,7 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
           .description(annotation.transform(toDescription()).orNull())
           .isHidden(annotation.transform(toHidden()).or(false))
           .type(annotation.transform(toType(context.getResolver())).orNull())
+          .position(annotation.transform(toPosition()).or(0))
           .example(annotation.transform(toExample()).orNull());
     }
   }
