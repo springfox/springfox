@@ -37,6 +37,7 @@ import io.swagger.models.properties.StringProperty;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.service.AllowablePatternValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
@@ -156,7 +157,10 @@ public abstract class ModelMapper {
 
     if (property instanceof StringProperty) {
       AllowableValues allowableValues = source.getAllowableValues();
-      if (allowableValues instanceof AllowableRangeValues) {
+      if (allowableValues instanceof AllowablePatternValues) {
+        AllowablePatternValues pattern = (AllowablePatternValues) allowableValues;
+        ((StringProperty) property).pattern(pattern.getRegexp());
+      } else if (allowableValues instanceof AllowableRangeValues) {
         AllowableRangeValues range = (AllowableRangeValues) allowableValues;
         ((StringProperty) property).maxLength(Integer.valueOf(range.getMax()));
         ((StringProperty) property).minLength(Integer.valueOf(range.getMin()));

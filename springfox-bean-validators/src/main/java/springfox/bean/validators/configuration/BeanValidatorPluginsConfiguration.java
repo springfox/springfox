@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.bean.validators.plugins.MinMaxAnnotationPlugin;
 import springfox.bean.validators.plugins.NotNullAnnotationPlugin;
+import springfox.bean.validators.plugins.PatternAnnotationPlugin;
 import springfox.bean.validators.plugins.SizeAnnotationPlugin;
 
 @Configuration
@@ -39,5 +40,10 @@ public class BeanValidatorPluginsConfiguration {
   @Bean
   public NotNullAnnotationPlugin notNullPlugin() {
     return new NotNullAnnotationPlugin();
+  }
+
+  @Bean
+  public PatternAnnotationPlugin patternPlugin() {
+    return new PatternAnnotationPlugin();
   }
 }
