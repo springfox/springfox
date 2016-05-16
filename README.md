@@ -18,9 +18,9 @@ For more information on this project visit the [Springfox Website] (http://sprin
 - [Contribution Guidelines](https://github.com/springfox/springfox/wiki/Contribution-guidelines)
 - [Core contributors](http://springfox.github.io/springfox/contributors.html)
 - [Development and contribution guidelines](https://github.com/martypitt/swagger-springmvc/wiki/Development)
-- [Change log](docs/CHANGELOG.md)
-- [Development Environment](docs/development-environment.md)
-- [Release Instructions](docs/RELEASING.md)
+- [Change log](docs/release-notes.md)
+- [Development Environment](http://springfox.github.io/springfox/docs/current/#development-environment)
+- [Release Instructions](http://springfox.github.io/springfox/docs/current/#releasing)
 
 ## Transitioning to 2.x
 Here is [some preliminary documentation](docs/transitioning-to-v2.md) to help transition to 2.x
