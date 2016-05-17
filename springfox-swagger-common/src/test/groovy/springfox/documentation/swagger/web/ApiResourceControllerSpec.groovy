@@ -30,7 +30,7 @@ class ApiResourceControllerSpec extends Specification {
           ApiKeyVehicle.HEADER,
           "api_key",
           ",")
-      uiConfiguration = new UiConfiguration("/validate")
+      uiConfiguration = new UiConfiguration("/validate", UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
     }
     mockMvc = MockMvcBuilders.standaloneSetup(sut).build()
   }
@@ -70,7 +70,7 @@ class ApiResourceControllerSpec extends Specification {
     expect:
     mockMvc.perform(get("/swagger-resources/configuration/ui")
         .accept(MediaType.APPLICATION_JSON))
-        .andExpect(content().string("{\"validatorUrl\":\"/validate\",\"docExpansion\":\"none\",\"apisSorter\":\"alpha\",\"defaultModelRendering\":\"schema\",\"jsonEditor\":false,\"showRequestHeaders\":true}"))
+        .andExpect(content().string("{\"validatorUrl\":\"/validate\",\"docExpansion\":\"none\",\"apisSorter\":\"alpha\",\"defaultModelRendering\":\"schema\",\"supportedSubmitMethods\":[\"get\",\"post\",\"put\",\"delete\",\"patch\"],\"jsonEditor\":false,\"showRequestHeaders\":true}"))
   }
 
   def "Cache is available" (){
@@ -99,7 +99,7 @@ class ApiResourceControllerSpec extends Specification {
     then:
       mapper.writer().writeValueAsString(sut.securityConfiguration) == "{\"clientId\":\"client\"," +
           "\"clientSecret\":\"client-secret\",\"realm\":\"real\",\"appName\":\"test\",\"apiKey\":\"key\",\"apiKeyVehicle\":\"header\",\"scopeSeparator\":\",\",\"apiKeyName\":\"api_key\"}"
-      mapper.writer().writeValueAsString(sut.uiConfiguration) == "{\"validatorUrl\":\"/validate\",\"docExpansion\":\"none\",\"apisSorter\":\"alpha\",\"defaultModelRendering\":\"schema\",\"jsonEditor\":false,\"showRequestHeaders\":true}"
+      mapper.writer().writeValueAsString(sut.uiConfiguration) == "{\"validatorUrl\":\"/validate\",\"docExpansion\":\"none\",\"apisSorter\":\"alpha\",\"defaultModelRendering\":\"schema\",\"supportedSubmitMethods\":[\"get\",\"post\",\"put\",\"delete\",\"patch\"],\"jsonEditor\":false,\"showRequestHeaders\":true}"
       mapper.writer().writeValueAsString(sut.swaggerResources().body) == "[{\"name\":\"test\"," +
           "\"location\":\"/v1?group=test\",\"swaggerVersion\":\"1.2\"},{\"name\":\"test\",\"location\":\"/v2?group=test\",\"swaggerVersion\":\"2.0\"}]"
   }

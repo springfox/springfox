@@ -27,11 +27,17 @@ public class UiConfiguration {
   private final String apiSorter;
   private final String defaultModelRendering;
 
+  private final String[] supportedSubmitMethods;
+
   private final boolean enableJsonEditor;
   private final boolean showRequestHeaders;
 
   public UiConfiguration(String validatorUrl) {
-    this(validatorUrl, "none", "alpha", "schema", false, true);
+    this(validatorUrl, "none", "alpha", "schema", Constants.DEFAULT_SUBMIT_METHODS, false, true);
+  }
+
+  public UiConfiguration(String validatorUrl, String[] supportedSubmitMethods) {
+    this(validatorUrl, "none", "alpha", "schema", supportedSubmitMethods, false, true);
   }
 
   public UiConfiguration(
@@ -39,6 +45,7 @@ public class UiConfiguration {
           String docExpansion,
           String apiSorter,
           String defaultModelRendering,
+          String[] supportedSubmitMethods,
           boolean enableJsonEditor,
           boolean showRequestHeaders) {
     this.validatorUrl = validatorUrl;
@@ -47,6 +54,7 @@ public class UiConfiguration {
     this.defaultModelRendering = defaultModelRendering;
     this.enableJsonEditor = enableJsonEditor;
     this.showRequestHeaders = showRequestHeaders;
+    this.supportedSubmitMethods = supportedSubmitMethods;
   }
 
   @JsonProperty("validatorUrl")
@@ -69,6 +77,11 @@ public class UiConfiguration {
     return defaultModelRendering;
   }
 
+  @JsonProperty("supportedSubmitMethods")
+  public String[] getSupportedSubmitMethods() {
+    return supportedSubmitMethods;
+  }
+
   @JsonProperty("jsonEditor")
   public boolean isEnableJsonEditor() {
     return enableJsonEditor;
@@ -77,5 +90,10 @@ public class UiConfiguration {
   @JsonProperty("showRequestHeaders")
   public boolean isShowRequestHeaders() {
     return showRequestHeaders;
+  }
+
+  public static class Constants {
+    public static final String[] DEFAULT_SUBMIT_METHODS = new String[] {"get", "post", "put", "delete", "patch"};
+    public static final String[] NO_SUBMIT_METHODS = new String[] {};
   }
 }

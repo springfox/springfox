@@ -147,6 +147,7 @@ public class Swagger2SpringBoot {
         "none",       // docExpansion          => none | list
         "alpha",      // apiSorter             => alpha
         "schema",     // defaultModelRendering => schema
+        UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS,
         false,        // enableJsonEditor      => true | false
         true);        // showRequestHeaders    => true | false
   }
