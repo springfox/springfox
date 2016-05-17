@@ -161,6 +161,9 @@ public abstract class ModelMapper {
         ((StringProperty) property).maxLength(Integer.valueOf(range.getMax()));
         ((StringProperty) property).minLength(Integer.valueOf(range.getMin()));
       }
+      if(source.getPattern() != null) {
+        ((StringProperty) property).setPattern(source.getPattern());
+      }
     }
 
     if (property != null) {
