@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.service.AllowablePatternValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
@@ -35,10 +36,18 @@ import javax.validation.constraints.Pattern;
 import static springfox.bean.validators.plugins.BeanValidators.*;
 
 /**
- * Created by Igor Sokolov on 5/15/16.
+ * Plugin to handle {@link Pattern} annotation.
+ * <p>
+ * If there are both annotations {@link Pattern} and {@link Pattern} assigned to one field or
+ * getter/setter then the current handler will <b>always</b>
+ * the result of {@link springfox.bean.validators.plugins.SizeAnnotationPlugin}.
+ * This is implemented through order annotation. It has +1 priority than all other plugins defined in
+ * {@link BeanValidatorPluginsConfiguration}. The behavior above can be examined in groovy unit test
+ * {@link springfox.bean.validators.plugins.PatternAnnotationPluginSpec}
+ *
  */
 @Component
-@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
+@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER + 1)
 public class PatternAnnotationPlugin implements ModelPropertyBuilderPlugin {
     private static final Logger LOG = LoggerFactory.getLogger(PatternAnnotationPlugin.class);
 

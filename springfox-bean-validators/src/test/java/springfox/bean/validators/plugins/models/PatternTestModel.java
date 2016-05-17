@@ -28,10 +28,15 @@ import javax.validation.constraints.Size;
 public class PatternTestModel {
     private String noAnnotation;
 
-    @Pattern(regexp = "^[A-Z]{3}$")
-    private String currencyCode; // three letter iso code
+    @Pattern(regexp = "^[A-Z]{3}$") // three letter iso code
+    private String currencyCode;
 
     @Size(min = 1, max = 4)
-    @Pattern(regexp = "^[A-Z]{2}$")
-    private String countryCode; // two letter iso code
+    @Pattern(regexp = "^[A-Z]{2}$") // two letter iso code
+    private String firstSizeThenPatternAnnotation;
+
+    @Pattern(regexp = "^[A-Z]{2}$") // two letter iso code
+    @Size(min = 2, max = 2)
+    private String firstPatternThenSizeAnnotation;
+
 }

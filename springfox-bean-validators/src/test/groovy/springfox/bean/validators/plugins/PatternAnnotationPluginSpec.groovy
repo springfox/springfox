@@ -56,10 +56,11 @@ class PatternAnnotationPluginSpec extends Specification {
             def range = property.allowableValues as AllowablePatternValues
             range?.regexp == expectedPattern
         where:
-            propertyName      | expectedPattern
-            "noAnnotation"    | null
-            "currencyCode"    | "^[A-Z]{3}\$"
-            "countryCode"     | "^[A-Z]{2}\$"
+            propertyName                        | expectedPattern
+            "noAnnotation"                      | null
+            "currencyCode"                      | "^[A-Z]{3}\$"
+            "firstSizeThenPatternAnnotation"    | "^[A-Z]{2}\$"
+            "firstPatternThenSizeAnnotation"    | "^[A-Z]{2}\$"
     }
 
 }
