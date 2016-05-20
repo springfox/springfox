@@ -84,8 +84,9 @@
         <module name="NoFinalizer"/>
 
     </module>
-    <module name="Header">
-        <property name="headerFile" value="config/apache-copyright.header"/>
-        <property name="fileExtensions" value="java, groovy"/>
+
+    <module name="RegexpHeader">
+        <property name="headerFile" value="config/apache-copyright.header" />
+        <property name="fileExtensions" value="java, groovy" />
     </module>
 </module>
