@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
+import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
@@ -32,17 +32,17 @@ import java.util.List;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 10)
-public class OperationParameterRequestConditionReader extends AbstractOperationParameterRequestConditionReader {
+public class OperationParameterHeadersConditionReader extends AbstractOperationParameterRequestConditionReader {
 
   @Autowired
-  public OperationParameterRequestConditionReader(TypeResolver resolver) {
+  public OperationParameterHeadersConditionReader(TypeResolver resolver) {
     super(resolver);
   }
 
   @Override
   public void apply(OperationContext context) {
-    ParamsRequestCondition paramsCondition = context.getRequestMappingInfo().getParamsCondition();
-    List<Parameter> parameters = getParameters(paramsCondition.getExpressions(), "query");
+    HeadersRequestCondition headersCondition = context.getRequestMappingInfo().getHeadersCondition();
+    List<Parameter> parameters = getParameters(headersCondition.getExpressions(), "header");
     context.operationBuilder().parameters(parameters);
   }
 }
