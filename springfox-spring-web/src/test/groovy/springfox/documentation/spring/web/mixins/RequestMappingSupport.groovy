@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.mixins
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition
+import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
 import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition
@@ -46,10 +47,11 @@ class RequestMappingSupport {
     ProducesRequestCondition producesRequestCondition = overrides['producesRequestCondition'] ?: producesRequestCondition()
     PatternsRequestCondition patternsRequestCondition = overrides['patternsRequestCondition'] ?: singlePatternRequestCondition
     ParamsRequestCondition paramsRequestCondition = overrides["paramsCondition"] ?: paramsRequestCondition()
+    HeadersRequestCondition headersRequestCondition = overrides["headersCondition"] ?: headersRequestCondition()
     RequestMethodsRequestCondition requestMethodsRequestCondition =
             overrides['requestMethodsRequestCondition'] ?: requestMethodsRequestCondition(RequestMethod.values())
 
-    new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, paramsRequestCondition, null, consumesRequestCondition, producesRequestCondition, null)
+    new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, paramsRequestCondition, headersRequestCondition, consumesRequestCondition, producesRequestCondition, null)
   }
 
   HandlerMethod dummyHandlerMethod(String methodName = "dummyMethod", Class<?>... parameterTypes = null) {
@@ -122,6 +124,10 @@ class RequestMappingSupport {
 
   ParamsRequestCondition paramsRequestCondition(String... params) {
     new ParamsRequestCondition(params)
+  }
+
+  HeadersRequestCondition headersRequestCondition(String... params) {
+    new HeadersRequestCondition(params)
   }
 
   ConsumesRequestCondition consumesRequestCondition(String... conditions) {

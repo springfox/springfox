@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.spring.web.readers
+package springfox.documentation.spring.web.readers.operation
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.bind.annotation.RequestMethod
@@ -30,8 +30,6 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
-import springfox.documentation.spring.web.readers.operation.OperationParameterRequestConditionReader
 
 @Mixin([RequestMappingSupport])
 class OperationParameterRequestConditionReaderSpec extends DocumentationContextSpec {
@@ -61,6 +59,7 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
     where:
       property        | expectedValue
       'name'          | 'test'
+      'defaultValue'  | 'testValue'
       'description'   | null
       'required'      | true
       'allowMultiple' | false
@@ -90,16 +89,14 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
   def "Should ignore a parameter request condition expression that is already present in the parameters"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
-      ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=3")
+      ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=testValue", "test=3")
       OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
               RequestMethod.GET, handlerMethod, 0,  requestMappingInfo('/parameter-conditions',
                       ["paramsCondition": paramCondition]),
               context(), "/anyPath")
 
     when:
-      OperationParameterRequestConditionReader operationParameterReader = 
-              new OperationParameterRequestConditionReader(new TypeResolver())
-      operationParameterReader.apply(operationContext)
+      sut.apply(operationContext)
 
     then:
       1 == operationContext.operationBuilder().build().parameters.size()
