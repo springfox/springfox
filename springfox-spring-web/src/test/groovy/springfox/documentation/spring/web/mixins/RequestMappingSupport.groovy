@@ -43,15 +43,27 @@ class RequestMappingSupport {
 
   RequestMappingInfo requestMappingInfo(String path, Map overrides = [:]) {
     PatternsRequestCondition singlePatternRequestCondition = patternsRequestCondition([path] as String[])
-    ConsumesRequestCondition consumesRequestCondition = overrides['consumesRequestCondition'] ?: consumesRequestCondition()
-    ProducesRequestCondition producesRequestCondition = overrides['producesRequestCondition'] ?: producesRequestCondition()
-    PatternsRequestCondition patternsRequestCondition = overrides['patternsRequestCondition'] ?: singlePatternRequestCondition
-    ParamsRequestCondition paramsRequestCondition = overrides["paramsCondition"] ?: paramsRequestCondition()
-    HeadersRequestCondition headersRequestCondition = overrides["headersCondition"] ?: headersRequestCondition()
+    ConsumesRequestCondition consumesRequestCondition =
+        overrides['consumesRequestCondition'] ?: consumesRequestCondition()
+    ProducesRequestCondition producesRequestCondition =
+        overrides['producesRequestCondition'] ?: producesRequestCondition()
+    PatternsRequestCondition patternsRequestCondition =
+        overrides['patternsRequestCondition'] ?: singlePatternRequestCondition
+    ParamsRequestCondition paramsRequestCondition =
+        overrides["paramsCondition"] ?: paramsRequestCondition()
+    HeadersRequestCondition headersRequestCondition =
+        overrides["headersCondition"] ?: headersRequestCondition()
     RequestMethodsRequestCondition requestMethodsRequestCondition =
             overrides['requestMethodsRequestCondition'] ?: requestMethodsRequestCondition(RequestMethod.values())
 
-    new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, paramsRequestCondition, headersRequestCondition, consumesRequestCondition, producesRequestCondition, null)
+    new RequestMappingInfo(
+        patternsRequestCondition,
+        requestMethodsRequestCondition,
+        paramsRequestCondition,
+        headersRequestCondition,
+        consumesRequestCondition,
+        producesRequestCondition,
+        null)
   }
 
   HandlerMethod dummyHandlerMethod(String methodName = "dummyMethod", Class<?>... parameterTypes = null) {
