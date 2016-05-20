@@ -36,6 +36,7 @@ public class ModelPropertyBuilder {
   private String name;
   private boolean isHidden;
   private String example;
+  private String pattern;
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -87,8 +88,13 @@ public class ModelPropertyBuilder {
     return this;
   }
 
+  public ModelPropertyBuilder pattern(String pattern) {
+    this.pattern = defaultIfAbsent(pattern, this.pattern);
+    return this;
+  }
+
   public ModelProperty build() {
     return new ModelProperty(name, type, qualifiedType, position, required, isHidden, readOnly, description,
-        allowableValues, example);
+        allowableValues, example, pattern);
   }
 }

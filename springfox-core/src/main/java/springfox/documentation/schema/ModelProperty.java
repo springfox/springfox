@@ -35,6 +35,7 @@ public class ModelProperty {
   private final AllowableValues allowableValues;
   private ModelReference modelRef;
   private final String example;
+  private final String pattern;
 
   public ModelProperty(
       String name,
@@ -46,7 +47,8 @@ public class ModelProperty {
       Boolean readOnly,
       String description,
       AllowableValues allowableValues,
-      String example) {
+      String example,
+      String pattern) {
 
     this.name = name;
     this.type = type;
@@ -58,6 +60,7 @@ public class ModelProperty {
     this.description = description;
     this.allowableValues = allowableValues;
     this.example = example;
+    this.pattern = pattern;
   }
 
   public String getName() {
@@ -107,5 +110,9 @@ public class ModelProperty {
 
   public String getExample() {
     return example;
+  }
+
+  public String getPattern() {
+    return pattern;
   }
 }
