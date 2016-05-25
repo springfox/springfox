@@ -1,5 +1,5 @@
 package springfox.test.contract.swaggertests
-import groovy.json.JsonOutput
+
 import groovy.json.JsonSlurper
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
@@ -51,12 +51,12 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     def response = http.exchange(request, String)
     then:
     String raw = response.body
-    String actual = JsonOutput.prettyPrint(raw)
     response.statusCode == HttpStatus.OK
+//    String actual = JsonOutput.prettyPrint(raw)
 //      println(actual)
 
     def withPortReplaced = contract.replaceAll("__PORT__", "$port")
-    JSONAssert.assertEquals(withPortReplaced, actual, JSONCompareMode.NON_EXTENSIBLE)
+    JSONAssert.assertEquals(withPortReplaced, raw, JSONCompareMode.NON_EXTENSIBLE)
 
     where:
     contractFile                                                  | groupName
@@ -114,11 +114,11 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     when:
     def response = http.exchange(request, String)
     then:
-    String actual = JsonOutput.prettyPrint(response.body)
     response.statusCode == HttpStatus.OK
+//    String actual = JsonOutput.prettyPrint(response.body)
 //      println(actual)
 
-    JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
+    JSONAssert.assertEquals(contract, response.body, NON_EXTENSIBLE)
   }
 
   @Unroll
@@ -133,13 +133,13 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     def response = http.exchange(request, String)
     then:
     String raw = response.body
-    String actual = JsonOutput.prettyPrint(raw)
     response.statusCode == HttpStatus.OK
     //Uncomment this to see a better json diff when tests fail
 //      actual == contract
+//    String actual = JsonOutput.prettyPrint(raw)
 //      println(actual)
 
-    JSONAssert.assertEquals(contract, actual, NON_EXTENSIBLE)
+    JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
 
 //    and: "both json docs are the same length"
 //      contract.length() == actual.length()
