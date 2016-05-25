@@ -22,6 +22,7 @@ package springfox.documentation.schema;
 import io.swagger.annotations.ApiModelProperty;
 import org.joda.time.LocalDate;
 
+import java.util.List;
 import java.util.Map;
 
 public class TypeWithAnnotatedGettersAndSetters {
@@ -34,6 +35,8 @@ public class TypeWithAnnotatedGettersAndSetters {
   private LocalDate validOverride;
   private LocalDate invalidOverride;
   private int readOnlyProp;
+  @ApiModelProperty(value = "Some description")
+  private List<String> listOfStrings;
   private Map<String, Map<String, Foo>> mapOfMaps;
 
   public int getIntProp() {
@@ -105,6 +108,15 @@ public class TypeWithAnnotatedGettersAndSetters {
 
   public void setMapOfMaps(Map<String, Map<String, Foo>> mapOfMaps) {
     this.mapOfMaps = mapOfMaps;
+  }
+
+  @ApiModelProperty(value = "Some description")
+  public List<String> getListOfStrings() {
+    return listOfStrings;
+  }
+
+  public void setListOfStrings(List<String> listOfStrings) {
+    this.listOfStrings = listOfStrings;
   }
 
   class Foo {

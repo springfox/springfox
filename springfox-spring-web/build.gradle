@@ -1,7 +1,3 @@
-configurations {
-  testArtifacts.extendsFrom testRuntime
-}
-
 ext {
   limits = [
       'instruction': 97,
@@ -20,19 +16,11 @@ dependencies {
   provided libs.clientProvided
 
   compile project(':springfox-spi')
-  compile project(':springfox-schema')
+  compile project(':springfox-schema').sourceSets.main.output
 
   testCompile project(':springfox-core')
   testCompile libs.test
   testCompile libs.swagger2Core
-  testCompile project(path: ':springfox-schema', configuration: 'testArtifacts')
-}
-
-task testJar(type: Jar) {
-  classifier "test"
-  from sourceSets.test.output
-  exclude '**/*log4j.xml*', '**/*simplelogger.properties*'
-}
-artifacts {
-  testArtifacts testJar
+  testCompile project(':springfox-core').sourceSets.test.output
+  testCompile project(':springfox-schema').sourceSets.test.output
 }

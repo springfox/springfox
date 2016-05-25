@@ -1,7 +1,7 @@
-apply from: "$rootDir/gradle/mapstruct.gradle"
-configurations {
-  testArtifacts.extendsFrom testRuntime
+plugins {
+  id "net.ltgt.apt" version "0.6"
 }
+
 ext {
   limits = [
       'instruction': 95,
@@ -13,30 +13,34 @@ ext {
   ]
 }
 
-task testJar(type: Jar) {
-  classifier "test"
-  from sourceSets.test.output
-  exclude '**/*log4j.xml*', '**/*simplelogger.properties*'
-}
-artifacts {
-  testArtifacts testJar
-}
-
 dependencies {
   compile libs.swagger2Core
   compile project(':springfox-spi')
   compile project(':springfox-schema')
   compile project(':springfox-swagger-common')
   compile project(':springfox-spring-web')
-  testCompile project(':springfox-core')
-  testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts'))
-  testCompile(project(path: ':springfox-swagger-common', configuration: 'testArtifacts'))
-  testCompile(project(path: ':springfox-spring-web', configuration: 'testArtifacts')) {
-    exclude group: 'org.springframework', module: 'spring-web'
-  }
+
   compile libs.core
   compile libs.spring
   provided libs.springProvided
   provided libs.clientProvided
+
+  compile 'org.mapstruct:mapstruct:1.0.0.Final'
+  apt 'org.mapstruct:mapstruct-processor:1.0.0.Final'
+
+  testCompile project(':springfox-core')
+  testCompile project(':springfox-core').sourceSets.test.output
+  testCompile project(':springfox-schema').sourceSets.test.output
+  testCompile project(':springfox-swagger-common').sourceSets.test.output
+  testCompile project(':springfox-spring-web').sourceSets.test.output
+
   testCompile libs.test
+}
+
+
+compileJava {
+  options.compilerArgs += [
+          "-Amapstruct.defaultComponentModel=spring",
+          "-Amapstruct.unmappedTargetPolicy=ERROR"
+  ]
 }

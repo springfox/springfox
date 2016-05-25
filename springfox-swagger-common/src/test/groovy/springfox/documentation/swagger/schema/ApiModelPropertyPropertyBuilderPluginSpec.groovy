@@ -70,7 +70,8 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       "intProp"   | true     | "int Property Field"     | null            | false
       "boolProp"  | false    | "bool Property Getter"   | null            | false
       "enumProp"  | true     | "enum Prop Getter value" | ["ONE"]         | false
-      "readOnlyProp" | false    | "readOnly property getter" | null          | true
+      "readOnlyProp" | false    | "readOnly property getter" | null       | true
+      "listOfStrings"| false    | "Some description"    | null            | false
   }
 
   def "ApiModelProperty annotated models get enriched with additional info given an annotated element" (){
@@ -95,7 +96,8 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       "intProp"   | null     | null                     | null            | null
       "boolProp"  | false    | "bool Property Getter"   | null            | false
       "enumProp"  | true     | "enum Prop Getter value" | ["ONE"]         | false
-      "readOnlyProp" | false    | "readOnly property getter" | null          | true
+      "readOnlyProp" | false    | "readOnly property getter" | null       | true
+      "listOfStrings"| false    | "Some description"    | null            | false
 
   }
 
@@ -191,5 +193,4 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
     objectMapper.getDeserializationConfig()
             .introspect(TypeFactory.defaultInstance().constructType(clazz))
   }
-
 }

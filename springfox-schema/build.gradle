@@ -1,16 +1,3 @@
-configurations {
-  testArtifacts.extendsFrom testRuntime
-}
-
-task testJar(type: Jar) {
-  classifier "test"
-  from sourceSets.test.output
-}
-
-artifacts {
-  testArtifacts testJar
-}
-
 ext {
   limits = [
       'instruction': 98,
@@ -26,7 +13,5 @@ dependencies {
   compile project(':springfox-core')
   compile project(':springfox-spi')
   testCompile libs.test
-  testCompile(project(path: ':springfox-core', configuration: 'testArtifacts')) {
-    exclude group: 'org.springframework', module: 'spring-web'
-  }
+  testCompile project(':springfox-core').sourceSets.test.output
 }
