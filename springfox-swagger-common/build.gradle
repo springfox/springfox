@@ -1,15 +1,3 @@
-configurations {
-  testArtifacts.extendsFrom testRuntime
-}
-task testJar(type: Jar) {
-  classifier "test"
-  from sourceSets.test.output
-  exclude '**/*log4j.xml*', '**/*simplelogger.properties*'
-}
-artifacts {
-  testArtifacts testJar
-}
-
 ext {
   limits = [
       'instruction': 96,
@@ -33,8 +21,9 @@ dependencies {
   provided libs.clientProvided
 
   testCompile project(':springfox-core')
-  testCompile(project(path: ':springfox-schema', configuration: 'testArtifacts'))
-  testCompile(project(path: ':springfox-spring-web', configuration: 'testArtifacts'))
+  testCompile project(':springfox-core').sourceSets.test.output
+  testCompile project(':springfox-schema').sourceSets.test.output
+  testCompile project(':springfox-spring-web').sourceSets.test.output
 
   testCompile libs.test
   testCompile 'org.skyscreamer:jsonassert:1.3.0'
