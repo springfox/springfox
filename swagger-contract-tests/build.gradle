@@ -46,14 +46,8 @@ dependencies {
   compile project(':springfox-swagger1')
   compile project(':springfox-swagger2')
   compile project(':springfox-spring-web').sourceSets.test.output
-//  compile project(':springfox-swagger2').sourceSets.test.output
   compile project(path: ':springfox-petstore')
 
-//  compile project(':springfox-swagger1')
-//  compile project(':springfox-swagger2')
-//  compile project(':springfox-petstore')
-//  compile project(':springfox-swagger1').sourceSets.test.output
-//  compile project(':springfox-swagger2').sourceSets.test.output
 
   compile(project(path: ':springfox-swagger-ui')) {
     exclude group: 'org.springframework', module: 'spring-web'
