@@ -22,11 +22,15 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.parameters.SerializableParameter;
+import io.swagger.models.properties.AbstractNumericProperty;
+import io.swagger.models.properties.DoubleProperty;
+import io.swagger.models.properties.FloatProperty;
 import io.swagger.models.properties.IntegerProperty;
 import io.swagger.models.properties.LongProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 import springfox.documentation.service.AllowableListValues;
+import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 
 import java.util.List;
@@ -36,20 +40,36 @@ import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 
 public class EnumMapper {
-  static ModelImpl maybeAddEnumValues(ModelImpl toReturn, AllowableValues allowableValues) {
-    if (allowableValues instanceof AllowableListValues) {
-      toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
-    }
-    return toReturn;
-  }
-  static SerializableParameter maybeAddEnumValues(SerializableParameter toReturn, AllowableValues allowableValues) {
+  static ModelImpl maybeAddAllowableValuesToParameter(ModelImpl toReturn, AllowableValues allowableValues) {
     if (allowableValues instanceof AllowableListValues) {
       toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
     }
     return toReturn;
   }
 
-  static Property maybeAddEnumValues(Property property, AllowableValues allowableValues) {
+  static SerializableParameter maybeAddAllowableValuesToParameter(
+      SerializableParameter toReturn,
+      AllowableValues allowableValues) {
+
+    if (allowableValues instanceof AllowableListValues) {
+      toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
+    }
+    if (allowableValues instanceof AllowableRangeValues) {
+      toReturn.setMinimum(safeDouble(((AllowableRangeValues) allowableValues).getMin()));
+      toReturn.setMaximum(safeDouble(((AllowableRangeValues) allowableValues).getMax()));
+    }
+    return toReturn;
+  }
+
+  static Double safeDouble(String doubleString) {
+    try {
+      return Double.valueOf(doubleString);
+    } catch (NumberFormatException e) {
+      return null;
+    }
+  }
+
+  static Property maybeAddAllowableValues(Property property, AllowableValues allowableValues) {
     if (allowableValues instanceof AllowableListValues) {
       if (property instanceof StringProperty) {
         StringProperty stringProperty = (StringProperty) property;
@@ -63,6 +83,22 @@ public class EnumMapper {
         LongProperty longProperty = (LongProperty) property;
         AllowableListValues listValues = (AllowableListValues) allowableValues;
         longProperty.setEnum(convert(listValues.getValues(), Long.class));
+      } else if (property instanceof DoubleProperty) {
+        DoubleProperty doubleProperty = (DoubleProperty) property;
+        AllowableListValues listValues = (AllowableListValues) allowableValues;
+        doubleProperty.setEnum(convert(listValues.getValues(), Double.class));
+      } else if (property instanceof FloatProperty) {
+        FloatProperty floatProperty = (FloatProperty) property;
+        AllowableListValues listValues = (AllowableListValues) allowableValues;
+        floatProperty.setEnum(convert(listValues.getValues(), Float.class));
+      }
+    }
+    if (allowableValues instanceof AllowableRangeValues) {
+      if (property instanceof AbstractNumericProperty) {
+        AbstractNumericProperty numeric = (AbstractNumericProperty) property;
+        AllowableRangeValues range = (AllowableRangeValues) allowableValues;
+        numeric.setMaximum(safeDouble(range.getMax()));
+        numeric.setMinimum(safeDouble(range.getMin()));
       }
     }
     return property;
@@ -79,9 +115,13 @@ public class EnumMapper {
       public Optional<T> apply(String input) {
         try {
           if (Integer.class.equals(toType)) {
-            return (Optional<T>) Optional.of(new Integer(input));
+            return (Optional<T>) Optional.of(Integer.valueOf(input));
           } else if (Long.class.equals(toType)) {
-            return (Optional<T>) Optional.of(new Long(input));
+            return (Optional<T>) Optional.of(Long.valueOf(input));
+          } else if (Double.class.equals(toType)) {
+            return (Optional<T>) Optional.of(Double.valueOf(input));
+          } else if (Float.class.equals(toType)) {
+            return (Optional<T>) Optional.of(Float.valueOf(input));
           }
         } catch (NumberFormatException ignored) {
         }

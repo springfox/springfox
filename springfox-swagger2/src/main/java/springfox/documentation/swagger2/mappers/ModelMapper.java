@@ -71,7 +71,7 @@ public abstract class ModelMapper {
     return map;
   }
 
-  public Model mapProperties(springfox.documentation.schema.Model source) {
+  private Model mapProperties(springfox.documentation.schema.Model source) {
     ModelImpl model = new ModelImpl()
         .description(source.getDescription())
         .discriminator(source.getDiscriminator())
@@ -135,14 +135,14 @@ public abstract class ModelMapper {
     return Optional.fromNullable(type.findSupertype(Map.class));
   }
 
-  public Property mapProperty(ModelProperty source) {
+  private Property mapProperty(ModelProperty source) {
     Property property = modelRefToProperty(source.getModelRef());
 
-    maybeAddEnumValues(property, source.getAllowableValues());
+    maybeAddAllowableValues(property, source.getAllowableValues());
 
     if (property instanceof ArrayProperty) {
       ArrayProperty arrayProperty = (ArrayProperty) property;
-      maybeAddEnumValues(arrayProperty.getItems(), source.getAllowableValues());
+      maybeAddAllowableValues(arrayProperty.getItems(), source.getAllowableValues());
     }
 
     if (property instanceof AbstractNumericProperty) {
@@ -184,7 +184,7 @@ public abstract class ModelMapper {
     Property responseProperty;
     if (modelRef.isCollection()) {
       responseProperty = new ArrayProperty(
-          maybeAddEnumValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
+          maybeAddAllowableValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
     } else if (modelRef.isMap()) {
       String itemType = modelRef.getItemType();
       responseProperty = new MapProperty(property(itemType));
@@ -192,12 +192,12 @@ public abstract class ModelMapper {
       responseProperty = property(modelRef.getType());
     }
 
-    maybeAddEnumValues(responseProperty, modelRef.getAllowableValues());
+    maybeAddAllowableValues(responseProperty, modelRef.getAllowableValues());
 
     return responseProperty;
   }
 
-  protected Map<String, Model> modelsFromApiListings(Multimap<String, ApiListing> apiListings) {
+  Map<String, Model> modelsFromApiListings(Multimap<String, ApiListing> apiListings) {
     Map<String, springfox.documentation.schema.Model> definitions = newHashMap();
     for (ApiListing each : apiListings.values()) {
       definitions.putAll(each.getModels());

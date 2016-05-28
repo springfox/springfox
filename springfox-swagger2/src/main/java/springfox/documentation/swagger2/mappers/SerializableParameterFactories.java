@@ -66,15 +66,15 @@ public class SerializableParameterFactories {
     toReturn.setDescription(source.getDescription());
     toReturn.setAccess(source.getParamAccess());
     toReturn.setRequired(source.isRequired());
-    maybeAddEnumValues(toReturn, source.getAllowableValues());
+    maybeAddAllowableValuesToParameter(toReturn, source.getAllowableValues());
     if (paramModel.isCollection()) {
       toReturn.setCollectionFormat("multi");
       toReturn.setType("array");
       ModelReference paramItemModelRef = paramModel.itemModel().get();
       Property itemProperty
-          = maybeAddEnumValues(itemTypeProperty(paramItemModelRef), paramItemModelRef.getAllowableValues());
+          = maybeAddAllowableValues(itemTypeProperty(paramItemModelRef), paramItemModelRef.getAllowableValues());
       toReturn.setItems(itemProperty);
-      maybeAddEnumValues(toReturn, paramItemModelRef.getAllowableValues());
+      maybeAddAllowableValuesToParameter(toReturn, paramItemModelRef.getAllowableValues());
     } else {
       //TODO: swagger-core remove this downcast when swagger-core fixes its problem
       ((AbstractSerializableParameter) toReturn).setDefaultValue(source.getDefaultValue());

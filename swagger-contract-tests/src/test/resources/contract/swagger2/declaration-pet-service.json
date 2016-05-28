@@ -550,7 +550,9 @@
             "in": "path",
             "description": "ID of pet that needs to be fetched",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "maximum": 5.0,
+            "minimum": 1.0
           }
         ],
         "responses": {

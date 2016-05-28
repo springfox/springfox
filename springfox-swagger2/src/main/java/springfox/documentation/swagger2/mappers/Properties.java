@@ -50,7 +50,7 @@ import static com.google.common.base.Functions.*;
 import static com.google.common.base.Strings.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
-import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddEnumValues;
+import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 
 class Properties {
   private static final Map<String, Function<String, ? extends Property>> typeFactory
@@ -85,7 +85,7 @@ class Properties {
   public static Property itemTypeProperty(ModelReference paramModel) {
     if (paramModel.isCollection()) {
       return new ArrayProperty(
-          maybeAddEnumValues(itemTypeProperty(paramModel.itemModel().get()), paramModel.getAllowableValues()));
+          maybeAddAllowableValues(itemTypeProperty(paramModel.itemModel().get()), paramModel.getAllowableValues()));
     }
     return property(paramModel.getType());
   }
@@ -104,7 +104,7 @@ class Properties {
     };
   }
 
-  public static Ordering<String> defaultOrdering(Map<String, ModelProperty> properties) {
+  static Ordering<String> defaultOrdering(Map<String, ModelProperty> properties) {
     return Ordering.from(byPosition(properties)).compound(byName());
   }
 
