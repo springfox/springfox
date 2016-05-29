@@ -83,6 +83,8 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
       }
       typeName = containerType(resolved);
       itemModel = new ModelRef(itemTypeName, itemAllowables);
+    } else if (resolved.getErasedType().isEnum()) {
+        typeName = "string";
     }
     context.getParameterBuilder()
         .name(name)
