@@ -25,7 +25,6 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
@@ -68,18 +67,12 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField());
-    String name = isNullOrEmpty(context.getParentName())
-            ? context.getField().getName()
-            : String.format("%s.%s", context.getParentName(), context.getField().getName());
     context.getParameterBuilder()
-            .name(name)
             .description(apiParam.value())
             .defaultValue(apiParam.defaultValue())
             .required(apiParam.required())
             .allowMultiple(apiParam.allowMultiple())
-            .modelRef(new ModelRef(context.getDataTypeName()))
             .allowableValues(allowable)
-            .parameterType("query")
             .parameterAccess(apiParam.access())
             .build();
   }
@@ -87,17 +80,10 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField());
-    String name = isNullOrEmpty(context.getParentName()) ? context.getField().getName() : String.format("%s.%s",
-            context.getParentName(),
-            context.getField().getName());
     context.getParameterBuilder()
-            .name(name)
             .description(apiModelProperty.value())
-            .defaultValue(null)
             .required(apiModelProperty.required())
-            .allowMultiple(Boolean.FALSE)
-            .modelRef(new ModelRef(context.getDataTypeName()))
-            .allowableValues(allowable).parameterType("query")
+            .allowableValues(allowable)
             .parameterAccess(apiModelProperty.access())
             .build();
   }

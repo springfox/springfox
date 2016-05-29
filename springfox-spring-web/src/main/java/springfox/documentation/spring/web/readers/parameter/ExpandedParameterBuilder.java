@@ -43,7 +43,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.base.Strings.*;
@@ -70,11 +69,10 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
                   ? context.getField().getName()
                   : String.format("%s.%s", context.getParentName(), context.getField().getName());
 
-    boolean isCollection = isCollection(context.getField().getType());
     String typeName = context.getDataTypeName();
     ModelReference itemModel = null;
     ResolvedType resolved = resolver.resolve(context.getField().getType());
-    if (isCollection) {
+    if (isContainerType(resolved)) {
       resolved = fieldType(context).or(resolved);
       ResolvedType elementType = collectionElementType(resolved);
       String itemTypeName = typeNameFor(elementType.getErasedType());
@@ -91,7 +89,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         .description(null)
         .defaultValue(null)
         .required(Boolean.FALSE)
-        .allowMultiple(isCollection)
+        .allowMultiple(isContainerType(resolved))
         .type(resolved)
         .modelRef(new ModelRef(typeName, itemModel))
         .allowableValues(allowable)
@@ -130,10 +128,6 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     }
 
     return allowable;
-  }
-
-  private boolean isCollection(Class<?> fieldType) {
-    return Collection.class.isAssignableFrom(fieldType) || fieldType.isArray();
   }
 
   private List<String> getEnumValues(final Class<?> subject) {
