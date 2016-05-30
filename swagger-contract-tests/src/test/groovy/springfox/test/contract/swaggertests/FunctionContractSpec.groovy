@@ -116,7 +116,8 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     def response = http.exchange(request, String)
     then:
     response.statusCode == HttpStatus.OK
-    println(prettyPrint(response.body))
+    //Uncomment this to see a better json diff when tests fail
+//    println(prettyPrint(response.body))
 
     JSONAssert.assertEquals(contract, response.body, NON_EXTENSIBLE)
   }
@@ -135,9 +136,7 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     String raw = response.body
     response.statusCode == HttpStatus.OK
     //Uncomment this to see a better json diff when tests fail
-//      actual == contract
-//    String actual = JsonOutput.prettyPrint(raw)
-//      println(actual)
+//    println(prettyPrint(response.body))
 
     JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
 
