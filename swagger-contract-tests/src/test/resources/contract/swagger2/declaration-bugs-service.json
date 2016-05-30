@@ -17,8 +17,8 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "bug-controller",
-      "description": "Bug Controller"
+      "name": "bugs-controller",
+      "description": "Bugs Controller"
     }
   ],
   "produces": [
@@ -29,7 +29,7 @@
     "/bugs/1306{?paramMap}": {
       "post": {
         "tags": [
-          "bug-controller"
+          "bugs-controller"
         ],
         "summary": "bug1306",
         "operationId": "bug1306UsingPOST_1",

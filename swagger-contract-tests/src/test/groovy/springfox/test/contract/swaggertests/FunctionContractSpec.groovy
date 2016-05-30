@@ -22,7 +22,6 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static groovy.json.JsonOutput.*
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 
 @WebAppConfiguration
@@ -53,7 +52,8 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     then:
     String raw = response.body
     response.statusCode == HttpStatus.OK
-    println(prettyPrint(raw))
+    //Uncomment this to see a better json diff when tests fail
+//    println(prettyPrint(raw))
 
     def withPortReplaced = contract.replaceAll("__PORT__", "$port")
     JSONAssert.assertEquals(withPortReplaced, raw, JSONCompareMode.NON_EXTENSIBLE)
@@ -178,9 +178,9 @@ public class FunctionContractSpec extends Specification implements FileAccess {
 
   @Configuration
   @ComponentScan([
-    "springfox.documentation.spring.web.dummy.controllers",
-    "springfox.test.contract.swagger",
-    "springfox.petstore.controller"
+      "springfox.documentation.spring.web.dummy.controllers",
+      "springfox.test.contract.swagger",
+      "springfox.petstore.controller"
   ])
   @Import([SecuritySupport, Swagger12TestConfig, Swagger2TestConfig])
   static class Config {
