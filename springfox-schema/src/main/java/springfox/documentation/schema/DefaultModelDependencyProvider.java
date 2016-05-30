@@ -38,7 +38,7 @@ import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Maps.isMapType;
+import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
@@ -64,9 +64,9 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   @Override
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
     return from(resolvedDependencies(modelContext))
-            .filter(ignorableTypes(modelContext))
-            .filter(not(baseTypes(modelContext)))
-            .toSet();
+        .filter(ignorableTypes(modelContext))
+        .filter(not(baseTypes(modelContext)))
+        .toSet();
   }
 
   private Predicate<ResolvedType> baseTypes(final ModelContext modelContext) {
