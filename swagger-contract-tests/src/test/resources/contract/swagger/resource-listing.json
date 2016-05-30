@@ -7,6 +7,11 @@
       "position": 0
     },
     {
+      "description": "Bug Controller",
+      "path": "/default/bug-controller",
+      "position": 0
+    },
+    {
       "description": "Services to demonstrate path variable resolution",
       "path": "/default/business-service",
       "position": 0

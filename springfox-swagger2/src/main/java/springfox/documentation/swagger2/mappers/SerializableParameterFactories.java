@@ -28,6 +28,7 @@ import io.swagger.models.parameters.HeaderParameter;
 import io.swagger.models.parameters.PathParameter;
 import io.swagger.models.parameters.QueryParameter;
 import io.swagger.models.parameters.SerializableParameter;
+import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.Property;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Parameter;
@@ -75,6 +76,10 @@ public class SerializableParameterFactories {
           = maybeAddAllowableValues(itemTypeProperty(paramItemModelRef), paramItemModelRef.getAllowableValues());
       toReturn.setItems(itemProperty);
       maybeAddAllowableValuesToParameter(toReturn, paramItemModelRef.getAllowableValues());
+    } else if (paramModel.isMap()) {
+      ModelReference paramItemModelRef = paramModel.itemModel().get();
+      Property itemProperty = new MapProperty(itemTypeProperty(paramItemModelRef));
+      toReturn.setItems(itemProperty);
     } else {
       //TODO: swagger-core remove this downcast when swagger-core fixes its problem
       ((AbstractSerializableParameter) toReturn).setDefaultValue(source.getDefaultValue());

@@ -62,6 +62,7 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     contractFile                                                  | groupName
     'swagger.json'                                                | 'petstore'
     'swaggerTemplated.json'                                       | 'petstoreTemplated'
+    'declaration-bugs-service.json'                               | 'bugs'
     'declaration-business-service.json'                           | 'businessService'
     'declaration-concrete-controller.json'                        | 'concrete'
     'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
@@ -115,8 +116,7 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     def response = http.exchange(request, String)
     then:
     response.statusCode == HttpStatus.OK
-//    String actual = JsonOutput.prettyPrint(response.body)
-//      println(actual)
+    println(prettyPrint(response.body))
 
     JSONAssert.assertEquals(contract, response.body, NON_EXTENSIBLE)
   }

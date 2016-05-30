@@ -129,6 +129,19 @@ public class Swagger2TestConfig {
   }
 
   @Bean
+  public Docket bugs(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("bugs")
+        .useDefaultResponseMessages(false)
+        .securitySchemes(authorizationTypes)
+        .produces(['application/xml', 'application/json'] as Set)
+        .enableUrlTemplating(true)
+        .select()
+        .paths(regex("/bugs/.*"))
+        .build()
+  }
+
+  @Bean
   public Docket petGrooming(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("petGroomingService")
