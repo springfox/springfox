@@ -38,7 +38,7 @@ import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Maps.isMapType;
+import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
@@ -64,9 +64,9 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   @Override
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
     return from(resolvedDependencies(modelContext))
-            .filter(ignorableTypes(modelContext))
-            .filter(not(baseTypes(modelContext)))
-            .toSet();
+        .filter(ignorableTypes(modelContext))
+        .filter(not(baseTypes(modelContext)))
+        .toSet();
   }
 
   private Predicate<ResolvedType> baseTypes(final ModelContext modelContext) {
@@ -101,8 +101,21 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
       return newArrayList();
     }
     List<ResolvedType> dependencies = newArrayList(resolvedTypeParameters(modelContext, resolvedType));
+    dependencies.addAll(resolvedArrayElementType(modelContext, resolvedType));
     dependencies.addAll(resolvedPropertiesAndFields(modelContext, resolvedType));
     return dependencies;
+  }
+
+  private List<? extends ResolvedType> resolvedArrayElementType(ModelContext modelContext, ResolvedType resolvedType) {
+    List<ResolvedType> parameters = newArrayList();
+    if (resolvedType.isArray()) {
+      ResolvedType elementType = resolvedType.getArrayElementType();
+      LOG.debug("Adding type for element {}", elementType.getSignature());
+      parameters.add(modelContext.alternateFor(elementType));
+      LOG.debug("Recursively resolving dependencies for element {}", elementType.getSignature());
+      parameters.addAll(resolvedDependencies(ModelContext.fromParent(modelContext, elementType)));
+    }
+    return parameters;
   }
 
   private List<? extends ResolvedType> resolvedTypeParameters(ModelContext modelContext, ResolvedType resolvedType) {
