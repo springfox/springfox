@@ -140,11 +140,13 @@ class DocketSpec extends DocumentationContextSpec {
 
   def "Model substitution registers new rules"() {
     when:
+      def isjdk8 = System.getProperty("java.version").startsWith("1.8")
+      def jdk8RuleCount = (isjdk8 ? 1 : 0)
       new Docket(DocumentationType.SWAGGER_12)
               ."${method}"(*args)
               .configure(contextBuilder)
     then:
-      context().alternateTypeProvider.rules.size() == expectedSize
+      context().alternateTypeProvider.rules.size() == expectedSize + jdk8RuleCount
 
     where:
       method                    | args                               | expectedSize

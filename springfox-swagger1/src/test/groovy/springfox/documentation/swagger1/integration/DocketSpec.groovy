@@ -132,13 +132,14 @@ class DocketSpec extends DocumentationContextSpec {
     when:
       def swaggerDefault = new SwaggerDefaultConfiguration(new Defaults(), new TypeResolver(), Mock(ServletContext))
               .create(DocumentationType.SWAGGER_12)
-
+      def isjdk8 = System.getProperty("java.version").startsWith("1.8")
+      def jdk8RuleCount = (isjdk8 ? 1 : 0)
     and:
       new Docket(DocumentationType.SWAGGER_12)
               ."${method}"(*args)
               .configure(swaggerDefault)
     then:
-      swaggerDefault.build().alternateTypeProvider.rules.size() == expectedSize
+      swaggerDefault.build().alternateTypeProvider.rules.size() == expectedSize + jdk8RuleCount
 
     where:
       method                    | args                               | expectedSize
