@@ -95,7 +95,7 @@ class PojoPropertyBuilderFactory {
           annotationIntrospector,
           forSerialization));
     } catch (Exception e) {
-      LOG.error("Unable to instantiate jackson 26 object", e);
+      LOG.debug("Unable to instantiate jackson 26 object", e);
     }
     return Optional.absent();
   }
