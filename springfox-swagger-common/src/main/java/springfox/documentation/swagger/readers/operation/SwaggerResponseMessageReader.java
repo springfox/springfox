@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -98,8 +98,12 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     if (apiResponses.isPresent()) {
       ApiResponse[] apiResponseAnnotations = apiResponses.get().value();
       for (ApiResponse apiResponse : apiResponseAnnotations) {
-        ModelContext modelContext = returnValue(apiResponse.response(), context.getDocumentationType(),
-            context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
+        ModelContext modelContext = returnValue(
+            apiResponse.response(),
+            context.getDocumentationType(),
+            context.getAlternateTypeProvider(),
+            context.getDocumentationContext().getGenericsNamingStrategy(),
+            context.getDocumentationContext().getIgnorableParameterTypes());
         Optional<ModelReference> responseModel = Optional.absent();
         Optional<ResolvedType> type = resolvedType(null, apiResponse);
         if (isSuccessful(apiResponse.code())) {
@@ -126,7 +130,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       ModelContext modelContext = returnValue(operationResponse.get(),
           context.getDocumentationType(),
           context.getAlternateTypeProvider(),
-          context.getDocumentationContext().getGenericsNamingStrategy());
+          context.getDocumentationContext().getGenericsNamingStrategy(),
+          context.getDocumentationContext().getIgnorableParameterTypes());
       ResolvedType resolvedType = context.alternateFor(operationResponse.get());
 
       ModelReference responseModel = modelRefFactory(modelContext, typeNameExtractor).apply(resolvedType);

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -50,9 +50,11 @@ public class RequestMappingContext  {
     this.requestMappingInfo = requestMappingInfo;
     this.handlerMethod = handlerMethod;
     this.requestMappingPattern = "";
-    this.operationModelContextsBuilder = new OperationModelContextsBuilder(context.getDocumentationType(),
-            context.getAlternateTypeProvider(),
-            context.getGenericsNamingStrategy());
+    this.operationModelContextsBuilder = new OperationModelContextsBuilder(
+        context.getDocumentationType(),
+        context.getAlternateTypeProvider(),
+        context.getGenericsNamingStrategy(),
+        context.getIgnorableParameterTypes());
     this.apiDescriptionBuilder = new ApiDescriptionBuilder(documentationContext.operationOrdering());
   }
 

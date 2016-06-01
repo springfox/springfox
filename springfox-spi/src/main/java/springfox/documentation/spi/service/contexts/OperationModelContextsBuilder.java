@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,25 +34,38 @@ public class OperationModelContextsBuilder {
   private final DocumentationType documentationType;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
+  private final ImmutableSet<Class> ignorableTypes;
   private final Set<ModelContext> contexts = newHashSet();
 
-  public OperationModelContextsBuilder(DocumentationType documentationType, AlternateTypeProvider alternateTypeProvider,
-                                       GenericTypeNamingStrategy genericsNamingStrategy) {
+  public OperationModelContextsBuilder(
+      DocumentationType documentationType,
+      AlternateTypeProvider alternateTypeProvider,
+      GenericTypeNamingStrategy genericsNamingStrategy,
+      ImmutableSet<Class> ignorableParameterTypes) {
     this.documentationType = documentationType;
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericsNamingStrategy = genericsNamingStrategy;
+    ignorableTypes = ignorableParameterTypes;
   }
 
   public OperationModelContextsBuilder addReturn(Type type) {
-    ModelContext returnValue
-        = ModelContext.returnValue(type, documentationType, alternateTypeProvider, genericsNamingStrategy);
+    ModelContext returnValue = ModelContext.returnValue(
+        type,
+        documentationType,
+        alternateTypeProvider,
+        genericsNamingStrategy,
+        ignorableTypes);
     this.contexts.add(returnValue);
     return this;
   }
 
   public OperationModelContextsBuilder addInputParam(Type type) {
-    ModelContext inputParam
-        = ModelContext.inputParam(type, documentationType, alternateTypeProvider, genericsNamingStrategy);
+    ModelContext inputParam = ModelContext.inputParam(
+        type,
+        documentationType,
+        alternateTypeProvider,
+        genericsNamingStrategy,
+        ignorableTypes);
     this.contexts.add(inputParam);
     return this;
   }
