@@ -149,7 +149,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           namingStrategy,
           defaultSchemaPlugins(),
           typeNameExtractor)
-      ResolvedType type = typeResolver.resolve UnwrappedType)
+      ResolvedType type = typeResolver.resolve(UnwrappedType)
 
     and:
     def objectMapperConfigured = new ObjectMapperConfigured(

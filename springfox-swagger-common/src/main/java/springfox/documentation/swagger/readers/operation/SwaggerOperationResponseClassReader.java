@@ -69,8 +69,8 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
     ModelContext modelContext = returnValue(returnType,
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),
-        context.getDocumentationContext().getGenericsNamingStrategy(),
-        context.getDocumentationContext().getIgnorableParameterTypes());
+        context.getGenericsNamingStrategy(),
+        context.getIgnorableParameterTypes());
 
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting response class to:" + responseTypeName);
@@ -80,7 +80,7 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
   }
 
   private boolean canSkip(OperationContext context, ResolvedType returnType) {
-    return context.getDocumentationContext().getIgnorableParameterTypes().contains(returnType);
+    return context.getIgnorableParameterTypes().contains(returnType.getErasedType());
   }
 
   @Override

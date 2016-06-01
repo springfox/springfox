@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,8 +34,7 @@ public class OperationCachingEquivalence extends Equivalence<RequestMappingConte
     }
     return Objects.equal(first.getHandlerMethod().getMethod(), second.getHandlerMethod().getMethod())
         && Objects.equal(first.getRequestMappingPattern(), second.getRequestMappingPattern())
-        && Objects.equal(first.getDocumentationContext().getGenericsNamingStrategy(),
-        second.getDocumentationContext().getGenericsNamingStrategy());
+        && Objects.equal(first.getGenericsNamingStrategy(), second.getGenericsNamingStrategy());
   }
 
   private boolean eitherOfThemIsNull(RequestMappingContext first, RequestMappingContext second) {
@@ -50,6 +49,6 @@ public class OperationCachingEquivalence extends Equivalence<RequestMappingConte
   protected int doHash(RequestMappingContext requestMappingContext) {
     return Objects.hashCode(requestMappingContext.getHandlerMethod().getMethod(),
         requestMappingContext.getRequestMappingPattern(),
-        requestMappingContext.getDocumentationContext().getGenericsNamingStrategy());
+        requestMappingContext.getGenericsNamingStrategy());
   }
 }

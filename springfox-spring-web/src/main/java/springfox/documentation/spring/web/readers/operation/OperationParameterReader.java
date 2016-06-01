@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -79,17 +79,19 @@ public class OperationParameterReader implements OperationBuilderPlugin {
 
     for (ResolvedMethodParameter methodParameter : methodParameters) {
 
-      if (!shouldIgnore(methodParameter, context.getDocumentationContext().getIgnorableParameterTypes())) {
+      if (!shouldIgnore(methodParameter, context.getIgnorableParameterTypes())) {
 
         ParameterContext parameterContext = new ParameterContext(methodParameter,
             new ParameterBuilder(),
             context.getDocumentationContext(),
-            context.getDocumentationContext().getGenericsNamingStrategy(),
+            context.getGenericsNamingStrategy(),
             context);
 
         if (shouldExpand(methodParameter)) {
-          expander.expand("", methodParameter.getResolvedParameterType().getErasedType(), parameters,
-                  context.getDocumentationContext());
+          expander.expand("",
+              methodParameter.getResolvedParameterType().getErasedType(),
+              parameters,
+              context.getDocumentationContext());
         } else {
           parameters.add(pluginsManager.parameter(parameterContext));
         }

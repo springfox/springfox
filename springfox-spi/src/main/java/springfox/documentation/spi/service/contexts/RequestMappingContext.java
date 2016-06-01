@@ -21,12 +21,14 @@ package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.builders.ApiDescriptionBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.Operation;
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.util.Map;
 
@@ -134,4 +136,15 @@ public class RequestMappingContext  {
             operationModelContextsBuilder, requestMappingPattern, knownModels);
   }
 
+  public ImmutableSet<Class> getIgnorableParameterTypes() {
+    return documentationContext.getIgnorableParameterTypes();
+  }
+
+  public GenericTypeNamingStrategy getGenericsNamingStrategy() {
+    return documentationContext.getGenericsNamingStrategy();
+  }
+
+  public ImmutableSet<ResolvedType> getAdditionalModels() {
+    return ImmutableSet.copyOf(documentationContext.getAdditionalModels());
+  }
 }

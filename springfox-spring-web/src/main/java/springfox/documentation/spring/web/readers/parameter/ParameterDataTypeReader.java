@@ -85,7 +85,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),
         context.getGenericNamingStrategy(),
-        context.getDocumentationContext().getIgnorableParameterTypes());
+        context.getIgnorableParameterTypes());
     context.parameterBuilder()
             .type(parameterType)
             .modelRef(Optional.fromNullable(modelRef)
