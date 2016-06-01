@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
@@ -32,10 +33,11 @@ class CachingModelDependencyProviderSpec extends Specification {
   def "Implementation caches the invocations" () {
     given:
       def context = inputParam(
-            complexType(),
-            DocumentationType.SWAGGER_2,
-            new AlternateTypeProvider([]),
-            new CodeGenGenericTypeNamingStrategy())
+          complexType(),
+          DocumentationType.SWAGGER_2,
+          new AlternateTypeProvider([]),
+          new CodeGenGenericTypeNamingStrategy(),
+          ImmutableSet.builder().build())
       def mock = Mock(ModelDependencyProvider) {
         dependentModels(context) >> newHashSet(aResolvedType())
       }
@@ -51,7 +53,8 @@ class CachingModelDependencyProviderSpec extends Specification {
           complexType(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
-          new CodeGenGenericTypeNamingStrategy())
+          new CodeGenGenericTypeNamingStrategy(),
+          ImmutableSet.builder().build())
       def mock = Mock(ModelDependencyProvider) {
         dependentModels(context) >> { throw new NullPointerException() }
       }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
  */
 
 package springfox.documentation.schema
+
+import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
@@ -40,21 +42,23 @@ class UnwrappedTypeSpec extends Specification {
               UnwrappedTypeForField,
               SWAGGER_12,
               alternateTypeProvider(),
-              namingStrategy))
+              namingStrategy,
+              ImmutableSet.builder().build()))
           .get()
       Model asReturn = provider.modelFor(
           returnValue(
               UnwrappedTypeForField,
               SWAGGER_12,
               alternateTypeProvider(),
-              namingStrategy))
+              namingStrategy,
+              ImmutableSet.builder().build()))
           .get()
 
     then:
       asInput.getName() == UnwrappedTypeForField.simpleName
       asInput.getProperties().size() == 1
-      asInput.getProperties().containsKey("name" )
-      def modelProperty = asInput.getProperties().get("name" )
+      asInput.getProperties().containsKey("name")
+      def modelProperty = asInput.getProperties().get("name")
       modelProperty.type.erasedType == String
       modelProperty.getQualifiedType() == "java.lang.String"
       def item = modelProperty.getModelRef()
@@ -64,8 +68,8 @@ class UnwrappedTypeSpec extends Specification {
     and:
       asReturn.getName() == UnwrappedTypeForField.simpleName
       asReturn.getProperties().size() == 1
-      asReturn.getProperties().containsKey("name" )
-      def returnProperty = asReturn.getProperties().get("name" )
+      asReturn.getProperties().containsKey("name")
+      def returnProperty = asReturn.getProperties().get("name")
       returnProperty.type.erasedType == String
       returnProperty.getQualifiedType() == "java.lang.String"
       def returnItem = modelProperty.getModelRef()
@@ -78,13 +82,24 @@ class UnwrappedTypeSpec extends Specification {
   @Unroll
   def "Unwrapped types are rendered correctly for getters"() {
     given:
-      def provider = defaultModelProvider(objectMapperThatUsesGetters())
+      def provider = defaultModelProvider(
+        objectMapperThatUsesGetters())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
     when:
-      Model asInput = provider.modelFor(inputParam(UnwrappedTypeForGetter, SWAGGER_12, alternateTypeProvider(),
-          namingStrategy)).get()
-      Model asReturn = provider.modelFor(returnValue(UnwrappedTypeForGetter, SWAGGER_12, alternateTypeProvider(),
-          namingStrategy)).get()
+      Model asInput = provider.modelFor(
+          inputParam(
+              UnwrappedTypeForGetter,
+              SWAGGER_12,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build())).get()
+      Model asReturn = provider.modelFor(
+          returnValue(
+              UnwrappedTypeForGetter,
+              SWAGGER_12,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build())).get()
 
     then:
       asInput.getName() == UnwrappedTypeForGetter.simpleName
@@ -114,13 +129,24 @@ class UnwrappedTypeSpec extends Specification {
   @Unroll
   def "Unwrapped types are rendered correctly for setters"() {
     given:
-      def provider = defaultModelProvider(objectMapperThatUsesSetters() )
+      def provider = defaultModelProvider(
+        objectMapperThatUsesSetters())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
     when:
-      Model asInput = provider.modelFor(inputParam(UnwrappedTypeForSetter, SWAGGER_12, alternateTypeProvider(),
-          namingStrategy)).get()
-      Model asReturn = provider.modelFor(returnValue(UnwrappedTypeForSetter, SWAGGER_12, alternateTypeProvider(),
-        namingStrategy)).get()
+      Model asInput = provider.modelFor(
+          inputParam(
+              UnwrappedTypeForSetter,
+              SWAGGER_12,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build())).get()
+      Model asReturn = provider.modelFor(
+          returnValue(
+              UnwrappedTypeForSetter,
+              SWAGGER_12,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build())).get()
 
     then:
       asInput.getName() == UnwrappedTypeForSetter.simpleName

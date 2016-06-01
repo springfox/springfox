@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ package springfox.documentation.schema.property.property
 
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.collect.ImmutableSet
 import spock.lang.Ignore
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
@@ -46,7 +47,12 @@ class BeanModelPropertySpec extends SchemaSpecification {
   def "Extracting information from resolved properties"() {
     given:
       Class typeToTest = TypeWithGettersAndSetters
-      def modelContext = inputParam(typeToTest, SWAGGER_12, alternateTypeProvider(), namingStrategy)
+      def modelContext = inputParam(
+          typeToTest,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -78,7 +84,12 @@ class BeanModelPropertySpec extends SchemaSpecification {
   def "Extracting information from ApiModelProperty annotation"() {
     given:
       Class typeToTest = TypeWithAnnotatedGettersAndSetters
-      def modelContext = inputParam(typeToTest, SWAGGER_12, alternateTypeProvider(), namingStrategy)
+      def modelContext = inputParam(
+          typeToTest,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -114,7 +125,12 @@ class BeanModelPropertySpec extends SchemaSpecification {
 
     given:
       Class typeToTest = typeForTestingJsonGetterAnnotation()
-      def modelContext = inputParam(typeToTest, SWAGGER_12, alternateTypeProvider(), namingStrategy)
+      def modelContext = inputParam(
+          typeToTest,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 

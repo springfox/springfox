@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema
 
+import com.google.common.collect.ImmutableSet
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -32,8 +33,18 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties of type List, are inferred correctly"() {
     given:
       def sut = typeWithLists()
-      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
-      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asInput = modelProvider.modelFor(inputParam(
+          sut,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
+      Model asReturn = modelProvider.modelFor(returnValue(
+          sut,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
 
     expect:
       asInput.getName() == "ListsContainer"
@@ -69,8 +80,18 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties are inferred correctly"() {
     given:
       def sut = typeWithSets()
-      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
-      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asInput = modelProvider.modelFor(inputParam(
+          sut,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
+      Model asReturn = modelProvider.modelFor(returnValue(
+          sut,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
 
     expect:
       asInput.getName() == "SetsContainer"
@@ -106,8 +127,18 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties of type Arrays are inferred correctly for #property"() {
     given:
       def sut = typeWithArrays()
-      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
-      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asInput = modelProvider.modelFor(inputParam(
+          sut,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
+      Model asReturn = modelProvider.modelFor(returnValue(
+          sut,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
 
     expect:
       asInput.getName() == "ArraysContainer"
@@ -146,8 +177,18 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties of type Map are inferred correctly"() {
     given:
       def sut = mapsContainer()
-      Model asInput = modelProvider.modelFor(inputParam(sut, SWAGGER_12, alternateRulesWithWildcardMap(), namingStrategy)).get()
-      Model asReturn = modelProvider.modelFor(returnValue(sut, SWAGGER_12, alternateRulesWithWildcardMap(), namingStrategy)).get()
+      Model asInput = modelProvider.modelFor(inputParam(
+          sut,
+          SWAGGER_12,
+          alternateRulesWithWildcardMap(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
+      Model asReturn = modelProvider.modelFor(returnValue(
+          sut,
+          SWAGGER_12,
+          alternateRulesWithWildcardMap(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
 
     expect:
       asInput.getName() == "MapsContainer"
@@ -181,10 +222,20 @@ class ContainerTypesSpec extends SchemaSpecification {
     given:
       def sut = genericTypeOfMapsContainer()
 
-      def modelContext = inputParam(sut, SWAGGER_12, alternateRulesWithWildcardMap(), namingStrategy)
+      def modelContext = inputParam(
+        sut,
+        SWAGGER_12,
+        alternateRulesWithWildcardMap(),
+        namingStrategy,
+        ImmutableSet.builder().build())
       Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
 
-      def returnContext = returnValue(sut, SWAGGER_12, alternateRulesWithWildcardMap(), namingStrategy)
+    def returnContext = returnValue(
+        sut,
+        SWAGGER_12,
+        alternateRulesWithWildcardMap(),
+        namingStrategy,
+        ImmutableSet.builder().build())
       Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
 
     expect:
@@ -220,10 +271,20 @@ class ContainerTypesSpec extends SchemaSpecification {
     given:
       def sut = genericTypeOfMapsContainer()
 
-      def modelContext = inputParam(sut, SWAGGER_2, alternateTypeProvider(), namingStrategy)
+      def modelContext = inputParam(
+          sut,
+          SWAGGER_2,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
       Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
 
-      def returnContext = returnValue(sut, SWAGGER_2, alternateTypeProvider(), namingStrategy)
+      def returnContext = returnValue(
+          sut,
+          SWAGGER_2,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
       Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
 
     expect:

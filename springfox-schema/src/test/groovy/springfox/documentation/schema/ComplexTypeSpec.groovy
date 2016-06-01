@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema
 
+import com.google.common.collect.ImmutableSet
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ModelProviderSupport
@@ -35,8 +36,18 @@ class ComplexTypeSpec extends Specification {
   def "complex type properties are inferred correctly"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(complexType(), SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
-      Model asReturn = provider.modelFor(returnValue(complexType(), SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asInput = provider.modelFor(inputParam(
+          complexType(),
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
+      Model asReturn = provider.modelFor(returnValue(
+          complexType(),
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
 
     expect:
       asInput.getName() == "ComplexType"
@@ -69,8 +80,18 @@ class ComplexTypeSpec extends Specification {
     given:
       def complexType = recursiveType()
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(complexType, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
-      Model asReturn = provider.modelFor(returnValue(complexType, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asInput = provider.modelFor(inputParam(
+          complexType,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
+      Model asReturn = provider.modelFor(returnValue(
+          complexType,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
 
     expect:
       asInput.getName() == "RecursiveType"
@@ -100,8 +121,18 @@ class ComplexTypeSpec extends Specification {
     given:
       def complexType = inheritedComplexType()
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(complexType, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
-      Model asReturn = provider.modelFor(returnValue(complexType, SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asInput = provider.modelFor(inputParam(
+          complexType,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
+      Model asReturn = provider.modelFor(returnValue(
+          complexType,
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
 
     expect:
       asInput.getName() == "InheritedComplexType"

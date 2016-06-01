@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
  */
 
 package springfox.documentation.schema.alternates
+
+import com.google.common.collect.ImmutableSet
 import org.joda.time.LocalDate
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
@@ -37,7 +39,12 @@ class AlternatePropertiesSpec extends Specification {
       def provider = alternateTypeProvider()
       provider.addRule(newRule(LocalDate, String))
       ModelProvider modelProvider = defaultModelProvider()
-      Model model = modelProvider.modelFor(inputParam(typeWithAlternateProperty(), SWAGGER_12, provider, namingStrategy)).get()
+      Model model = modelProvider.modelFor(inputParam(
+          typeWithAlternateProperty(),
+          SWAGGER_12,
+          provider,
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
     expect:
       model.getName() == "TypeWithAlternateProperty"
       model.getProperties().containsKey("localDate")
@@ -55,8 +62,12 @@ class AlternatePropertiesSpec extends Specification {
       def provider = alternateTypeProvider()
       provider.addRule(new AlternateTypeRule(resolver.resolve(ResponseEntity, Void), resolver.resolve(Void)))
       ModelProvider modelProvider = defaultModelProvider()
-      Model model = modelProvider.modelFor(inputParam(typeWithResponseEntityOfVoid(), SWAGGER_12,
-              alternateTypeProvider(), namingStrategy)).get()
+      Model model = modelProvider.modelFor(inputParam(
+          typeWithResponseEntityOfVoid(),
+          SWAGGER_12,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())).get()
     expect:
       model.getName() == "GenericType«ResponseEntity«Void»»"
       model.getProperties().containsKey("genericField")

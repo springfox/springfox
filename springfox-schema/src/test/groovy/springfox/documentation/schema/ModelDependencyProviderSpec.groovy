@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema
 
+import com.google.common.collect.ImmutableSet
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -31,12 +32,23 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
   @Unroll
   def "dependencies are inferred correctly" () {
     given:
-      def context = inputParam(modelType, documentationType, alternateTypeProvider(), namingStrategy)
+      def context = inputParam(
+          modelType,
+          documentationType,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
       def dependentTypes = modelDependencyProvider.dependentModels(context)
       def dependentTypeNames = dependentTypes.collect() {
-          typeNameExtractor.typeName(inputParam(it, documentationType, alternateTypeProvider(), namingStrategy))
-        }.unique()
-        .sort()
+        typeNameExtractor.typeName(
+            inputParam(
+                it,
+                documentationType,
+                alternateTypeProvider(),
+                namingStrategy,
+                ImmutableSet.builder().build()))
+      }.unique()
+          .sort()
 
     expect:
      dependencies == dependentTypeNames
@@ -65,11 +77,22 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
   @Unroll
   def "dependencies are inferred correctly for return parameters" () {
     given:
-      def context = returnValue(modelType, documentationType, alternateTypeProvider(), namingStrategy)
+      def context = returnValue(
+          modelType,
+          documentationType,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
       def dependentTypes = modelDependencyProvider.dependentModels(context)
       def dependentTypeNames = dependentTypes.collect() {
-            typeNameExtractor.typeName(returnValue(it, documentationType, alternateTypeProvider(), namingStrategy))
-          }.unique()
+        typeNameExtractor.typeName(
+            returnValue(
+                it,
+                documentationType,
+                alternateTypeProvider(),
+                namingStrategy,
+                ImmutableSet.builder().build()))
+      }.unique()
           .sort()
     expect:
       dependencies == dependentTypeNames

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,11 +19,12 @@
 
 package springfox.documentation.schema
 
+import com.google.common.collect.ImmutableSet
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static com.google.common.base.Strings.*
-import static springfox.documentation.schema.Collections.collectionElementType
+import static springfox.documentation.schema.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
@@ -32,9 +33,19 @@ class GenericTypeSpec extends SchemaSpecification {
   @Unroll
   def "Generic property on a generic types is inferred correctly for types"() {
     given:
-      def inputContext = inputParam(modelType, documentationType, alternateTypeProvider(), namingStrategy)
-      def returnContext = returnValue(modelType, documentationType, alternateTypeProvider(), namingStrategy)
-      def propertyLookup = ["GenericType": "genericField", "Resource": "content"]
+      def inputContext = inputParam(
+          modelType,
+          documentationType,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
+      def returnContext = returnValue(
+          modelType,
+          documentationType,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
+        def propertyLookup = ["GenericType": "genericField", "Resource": "content"]
     when:
       Model asInput = modelProvider.modelFor(inputContext).get()
     and:
@@ -63,9 +74,18 @@ class GenericTypeSpec extends SchemaSpecification {
   @Unroll
   def "Void generic type bindings are rendered correctly"() {
     given:
-      def inputContext = inputParam(modelType, documentationType, alternateTypeProvider(), namingStrategy)
-
-      def returnContext = returnValue(modelType, documentationType, alternateTypeProvider(), namingStrategy)
+      def inputContext = inputParam(
+          modelType,
+          documentationType,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
+      def returnContext = returnValue(
+          modelType,
+          documentationType,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
     when:
       Model asInput = modelProvider.modelFor(inputContext).get()
       Model asReturn = modelProvider.modelFor(returnContext).get()
@@ -87,10 +107,20 @@ class GenericTypeSpec extends SchemaSpecification {
   @Unroll
   def "Generic properties are inferred correctly even when they are not participating in the type bindings"() {
     given:
-      def inputContext = inputParam(modelType, documentationType, alternateTypeProvider(), namingStrategy)
-      Model asInput = modelProvider.modelFor(inputContext).get()
+      def inputContext = inputParam(
+          modelType,
+          documentationType,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
+        Model asInput = modelProvider.modelFor(inputContext).get()
 
-      def returnContext = returnValue(modelType, documentationType, alternateTypeProvider(), namingStrategy)
+      def returnContext = returnValue(
+          modelType,
+          documentationType,
+          alternateTypeProvider(),
+          namingStrategy,
+          ImmutableSet.builder().build())
       Model asReturn = modelProvider.modelFor(returnContext).get()
 
     expect:
