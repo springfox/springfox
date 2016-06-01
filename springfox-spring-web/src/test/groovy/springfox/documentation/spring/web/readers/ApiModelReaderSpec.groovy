@@ -24,19 +24,21 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Ignore
-import springfox.documentation.spring.web.dummy.DummyModels
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
-import springfox.documentation.spring.web.scanners.ApiModelReader
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.controllers.BusinessService
 import springfox.documentation.spring.web.dummy.controllers.PetService
 import springfox.documentation.spring.web.dummy.models.FoobarDto
+import springfox.documentation.spring.web.dummy.models.Monkey
+import springfox.documentation.spring.web.dummy.models.Pirate
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
+import springfox.documentation.spring.web.scanners.ApiModelReader
 
 import javax.servlet.http.HttpServletResponse
 
@@ -244,6 +246,26 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       Model model = models[modelName]
       Map modelProperties = model.getProperties()
       modelProperties.containsKey('visibleForSerialize')
+
+  }
+  def "Test to verify issue #1196"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestBidrectionalRecursiveTypes', Pirate)
+      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
+
+    when:
+      def models = sut.read(context)
+      Model pirate = models[Pirate.simpleName]
+      Model monkey = models[Monkey.simpleName]
+
+    then:
+      models.size() == 2
+    and:
+      pirate != null
+      monkey != null
+    and:
+      pirate.getProperties().containsKey('monkey')
+      monkey.getProperties().containsKey('pirate')
 
   }
 }
