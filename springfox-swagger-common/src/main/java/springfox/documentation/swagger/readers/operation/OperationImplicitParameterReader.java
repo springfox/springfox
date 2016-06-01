@@ -88,6 +88,9 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
       LOGGER.warn("Coercing to be of type string. This may not even be a scalar type in actuality");
       baseType = "string";
     }
+    if (param.allowMultiple()) {
+      return new ModelRef("", new ModelRef(baseType, allowableValueFromString(param.allowableValues())));
+    }
     return new ModelRef(baseType, allowableValueFromString(param.allowableValues()));
   }
 

@@ -53,7 +53,7 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     String raw = response.body
     response.statusCode == HttpStatus.OK
     //Uncomment this to see a better json diff when tests fail
-//    println(prettyPrint(raw))
+//    println(JsonOutput.prettyPrint(raw))
 
     def withPortReplaced = contract.replaceAll("__PORT__", "$port")
     JSONAssert.assertEquals(withPortReplaced, raw, JSONCompareMode.NON_EXTENSIBLE)
@@ -117,7 +117,7 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     then:
     response.statusCode == HttpStatus.OK
     //Uncomment this to see a better json diff when tests fail
-//    println(prettyPrint(response.body))
+//    println(JsonOutput.prettyPrint(response.body))
 
     JSONAssert.assertEquals(contract, response.body, NON_EXTENSIBLE)
   }
@@ -136,7 +136,7 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     String raw = response.body
     response.statusCode == HttpStatus.OK
     //Uncomment this to see a better json diff when tests fail
-//    println(prettyPrint(response.body))
+//    println(JsonOutput.prettyPrint(response.body))
 
     JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
 

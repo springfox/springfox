@@ -18,6 +18,8 @@
  */
 package springfox.documentation.spring.web.dummy.controllers;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,5 +34,13 @@ public class BugsController {
   @RequestMapping(value = "1306", method = RequestMethod.POST)
   public ResponseEntity<Void> bug1306(@RequestParam Map<String, String> paramMap) {
     return ResponseEntity.ok(null);
+  }
+
+  @ApiImplicitParams(
+      @ApiImplicitParam(dataType = "string", allowMultiple = true, paramType = "header")
+  )
+  @RequestMapping(value = "1209", method = RequestMethod.POST)
+  public ResponseEntity<String> bug1209() {
+    return ResponseEntity.ok("");
   }
 }

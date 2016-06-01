@@ -26,6 +26,41 @@
     "application/json"
   ],
   "paths": {
+    "/bugs/1209": {
+      "post": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "bug1209",
+        "operationId": "bug1209UsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/bugs/1306{?paramMap}": {
       "post": {
         "tags": [
