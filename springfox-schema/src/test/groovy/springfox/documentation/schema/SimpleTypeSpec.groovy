@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema
 
+import com.google.common.collect.ImmutableSet
 import spock.lang.Ignore
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -32,8 +33,20 @@ class SimpleTypeSpec extends SchemaSpecification {
   @Unroll
   def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:
-      Model asInput = modelProvider.modelFor(inputParam(simpleType(), SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
-      Model asReturn = modelProvider.modelFor(returnValue(simpleType(), SWAGGER_12, alternateTypeProvider(), namingStrategy)).get()
+      Model asInput = modelProvider.modelFor(
+          inputParam(
+              simpleType(),
+              SWAGGER_12,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build())).get()
+      Model asReturn = modelProvider.modelFor(
+          returnValue(
+              simpleType(),
+              SWAGGER_12,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build())).get()
 
     expect:
       asInput.getName() == "SimpleType"
@@ -80,10 +93,20 @@ class SimpleTypeSpec extends SchemaSpecification {
   @Ignore
   def "type with constructor all properties are inferred"() {
     given:
-      Model asInput = modelProvider.modelFor(inputParam(typeWithConstructor(), documentationType,
-              alternateTypeProvider(), namingStrategy)).get()
-      Model asReturn = modelProvider.modelFor(returnValue(typeWithConstructor(), documentationType,
-              alternateTypeProvider(), namingStrategy)).get()
+      Model asInput = modelProvider.modelFor(
+          inputParam(
+              typeWithConstructor(),
+              documentationType,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build())).get()
+      Model asReturn = modelProvider.modelFor(
+          returnValue(
+              typeWithConstructor(),
+              documentationType,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build())).get()
 
     expect:
       asInput.getName() == "TypeWithConstructor"
@@ -106,10 +129,20 @@ class SimpleTypeSpec extends SchemaSpecification {
 
   def "Types with properties aliased using JsonProperty annotation"() {
     given:
-      Model asInput = modelProvider.modelFor(inputParam(typeWithJsonPropertyAnnotation(), documentationType,
-              alternateTypeProvider(), namingStrategy)).get()
-      Model asReturn = modelProvider.modelFor(returnValue(typeWithJsonPropertyAnnotation(), documentationType,
-              alternateTypeProvider(), namingStrategy)).get()
+      Model asInput = modelProvider.modelFor(
+          inputParam(
+              typeWithJsonPropertyAnnotation(),
+              documentationType,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build())).get()
+      Model asReturn = modelProvider.modelFor(
+          returnValue(
+              typeWithJsonPropertyAnnotation(),
+              documentationType,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build())).get()
 
     expect:
       asInput.getName() == "TypeWithJsonProperty"
@@ -136,6 +169,4 @@ class SimpleTypeSpec extends SchemaSpecification {
       property             | type     | qualifiedType
       "some_odd_ball_name" | String   | "java.lang.String"
   }
-
-
 }

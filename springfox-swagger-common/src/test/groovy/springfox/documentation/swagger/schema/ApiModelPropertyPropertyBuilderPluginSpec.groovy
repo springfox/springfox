@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
+import com.google.common.collect.ImmutableSet
 import org.joda.time.LocalDate
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
@@ -52,9 +53,11 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
     given:
       ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
       def properties = beanDescription.findProperties()
-      def context = new ModelPropertyContext(new ModelPropertyBuilder(),
-              properties.find { it.name == property }, new TypeResolver(),
-              DocumentationType.SWAGGER_12)
+      def context = new ModelPropertyContext(
+          new ModelPropertyBuilder(),
+          properties.find { it.name == property },
+          new TypeResolver(),
+          DocumentationType.SWAGGER_12)
     when:
       sut.apply(context)
     and:
@@ -78,9 +81,11 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
     given:
       ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
       def properties = beanDescription.findProperties()
-      def context = new ModelPropertyContext(new ModelPropertyBuilder(),
-              properties.find { it.name == property }.getter.annotated, new TypeResolver(),
-              DocumentationType.SWAGGER_12)
+      def context = new ModelPropertyContext(
+          new ModelPropertyBuilder(),
+          properties.find { it.name == property }.getter.annotated,
+          new TypeResolver(),
+          DocumentationType.SWAGGER_12)
     when:
       sut.apply(context)
     and:
@@ -105,9 +110,11 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
     given:
       ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
       def properties = beanDescription.findProperties()
-      def context = new ModelPropertyContext(new ModelPropertyBuilder(),
-              properties.find { it.name == property }.getter.annotated, new TypeResolver(),
-              DocumentationType.SWAGGER_12)
+      def context = new ModelPropertyContext(
+          new ModelPropertyBuilder(),
+          properties.find { it.name == property }.getter.annotated,
+          new TypeResolver(),
+          DocumentationType.SWAGGER_12)
     when:
       sut.apply(context)
     and:
@@ -128,8 +135,12 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       def properties = beanDescription.findProperties()
 
       def resolver = new TypeResolver()
-      ModelContext modelContext = inputParam(resolver.resolve(TypeWithAnnotatedGettersAndSetters),
-        SWAGGER_12, alternateTypeProvider(), new DefaultGenericTypeNamingStrategy())
+      ModelContext modelContext = inputParam(
+          resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+          SWAGGER_12,
+          alternateTypeProvider(),
+          new DefaultGenericTypeNamingStrategy(),
+          ImmutableSet.builder().build())
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
       def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
@@ -160,8 +171,12 @@ class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
       def properties = beanDescription.findProperties()
 
       def resolver = new TypeResolver()
-      ModelContext modelContext = inputParam(resolver.resolve(TypeWithAnnotatedGettersAndSetters),
-          SWAGGER_12, alternateTypeProvider(), new DefaultGenericTypeNamingStrategy())
+      ModelContext modelContext = inputParam(
+          resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+          SWAGGER_12,
+          alternateTypeProvider(),
+          new DefaultGenericTypeNamingStrategy(),
+          ImmutableSet.builder().build())
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
       def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)

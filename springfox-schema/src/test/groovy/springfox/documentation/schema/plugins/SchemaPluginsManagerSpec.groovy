@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,29 +18,26 @@
  */
 
 package springfox.documentation.schema.plugins
+
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
-import springfox.documentation.schema.AlternateTypesSupport
-import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.schema.ExampleWithEnums
-import springfox.documentation.schema.TypeForTestingPropertyNames
-import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.*
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
-import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 import java.lang.reflect.AnnotatedElement
 
 import static com.google.common.collect.Lists.*
 import static springfox.documentation.spi.DocumentationType.*
-import static springfox.documentation.spi.schema.contexts.ModelContext.inputParam
+import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin(AlternateTypesSupport)
 class SchemaPluginsManagerSpec extends Specification {
@@ -80,7 +77,12 @@ class SchemaPluginsManagerSpec extends Specification {
   def "enriches model when plugins are found"() {
     given:
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def context = ModelContext.inputParam(TypeForTestingPropertyNames, SPRING_WEB, new AlternateTypeProvider([]), namingStrategy)
+      def context = inputParam(
+        TypeForTestingPropertyNames,
+        SPRING_WEB,
+        new AlternateTypeProvider([]),
+        namingStrategy,
+        ImmutableSet.builder().build())
     and:
       context.documentationType >> SPRING_WEB
     when:
@@ -91,7 +93,12 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def "enriches model name when plugins are found"() {
     given:
-      def context = inputParam(ExampleWithEnums, SPRING_WEB, alternateTypeProvider(), new DefaultGenericTypeNamingStrategy())
+      def context = inputParam(
+        ExampleWithEnums,
+        SPRING_WEB,
+        alternateTypeProvider(),
+        new DefaultGenericTypeNamingStrategy(),
+        ImmutableSet.builder().build())
     and:
       context.documentationType >> SPRING_WEB
     when:

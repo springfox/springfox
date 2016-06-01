@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema
 
+import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static springfox.documentation.spi.DocumentationType.*
@@ -29,7 +30,12 @@ class TypeNameExtractorSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
   def "Response class for container types are inferred correctly"() {
     given:
-      def context = returnValue(containerType, SWAGGER_12, alternateTypeProvider(), namingStrategy)
+      def context = returnValue(
+        containerType,
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
     expect:
       typeNameExtractor.typeName(context) == name
 
@@ -48,7 +54,12 @@ class TypeNameExtractorSpec extends SchemaSpecification {
   
   def "Input class for container types are inferred correctly"() {
     given:
-      def context = returnValue(containerType, SWAGGER_12, alternateTypeProvider(), namingStrategy)
+      def context = returnValue(
+        containerType,
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
     expect:
       typeNameExtractor.typeName(context) == name
 

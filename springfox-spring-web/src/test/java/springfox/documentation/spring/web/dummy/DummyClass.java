@@ -45,6 +45,7 @@ import springfox.documentation.spring.web.dummy.DummyModels.Ignorable;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
 import springfox.documentation.spring.web.dummy.models.FoobarDto;
+import springfox.documentation.spring.web.dummy.models.Pirate;
 import springfox.documentation.spring.web.dummy.models.Treeish;
 
 import javax.servlet.ServletRequest;
@@ -350,6 +351,10 @@ public class DummyClass {
   @ResponseBody
   public FoobarDto methodToTestFoobarDto(@RequestBody FoobarDto model) {
     return null;
+  }
+
+  @ResponseBody
+  public void methodToTestBidrectionalRecursiveTypes(@RequestBody Pirate model) {
   }
 
   public enum BusinessType {

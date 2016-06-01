@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package springfox.documentation.spi.service.contexts;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import org.springframework.http.HttpMethod;
@@ -34,6 +35,7 @@ import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.util.List;
 import java.util.Set;
@@ -138,4 +140,11 @@ public class OperationContext {
         toMediaTypes(documentationContext.getConsumes()));
   }
 
+  public ImmutableSet<Class> getIgnorableParameterTypes() {
+    return ImmutableSet.copyOf(documentationContext.getIgnorableParameterTypes());
+  }
+
+  public GenericTypeNamingStrategy getGenericsNamingStrategy() {
+    return documentationContext.getGenericsNamingStrategy();
+  }
 }

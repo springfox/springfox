@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
-import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
+import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -55,8 +55,12 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     HandlerMethod handlerMethod = context.getHandlerMethod();
     ResolvedType returnType = new HandlerMethodResolver(typeResolver).methodReturnType(handlerMethod);
     returnType = context.alternateFor(returnType);
-    ModelContext modelContext = ModelContext.returnValue(returnType, context.getDocumentationType(),
-            context.getAlternateTypeProvider(), context.getDocumentationContext().getGenericsNamingStrategy());
+    ModelContext modelContext = ModelContext.returnValue(
+        returnType,
+        context.getDocumentationType(),
+        context.getAlternateTypeProvider(),
+        context.getGenericsNamingStrategy(),
+        context.getIgnorableParameterTypes());
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting spring response class to:" + responseTypeName);
 

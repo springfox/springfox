@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,16 +18,17 @@
  */
 
 package springfox.documentation.schema
+
 import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.type.SimpleType
+import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
-
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
@@ -61,8 +62,14 @@ class ReturnTypesSpec extends Specification {
     expect:
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       def modelResponseClass = sut.typeName(
-              returnValue(new TypeResolver().resolve(GenericType.class, clazz), SWAGGER_12, alternateTypeProvider(),
-                      namingStrategy))
+          returnValue(
+              new TypeResolver().resolve(
+                  GenericType.class,
+                  clazz),
+              SWAGGER_12,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build()))
       modelResponseClass == expectedResponseClassName
 
     where:

@@ -1,5 +1,24 @@
+/*
+ *
+ *  Copyright 2015-2016 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
 package springfox.documentation.swagger2.mappers
 
+import com.google.common.collect.ImmutableSet
 import io.swagger.models.properties.AbstractNumericProperty
 import io.swagger.models.properties.ObjectProperty
 import io.swagger.models.properties.RefProperty
@@ -24,9 +43,14 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "models are serialized correctly" (){
     given:
-      Model model = modelProvider.modelFor(inputParam(typeToTest,
-            DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy)).get()
-      def modelMap = newHashMap()
+      Model model = modelProvider.modelFor(
+        inputParam(
+            typeToTest,
+            DocumentationType.SWAGGER_2,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build())).get()
+    def modelMap = newHashMap()
     and:
       modelMap.put("test", model)
     when:
@@ -47,7 +71,8 @@ class ModelMapperSpec extends SchemaSpecification {
               typeWithVoidLists(),
               DocumentationType.SWAGGER_2,
               alternateTypeProvider(),
-              namingStrategy))
+              namingStrategy,
+              ImmutableSet.builder().build()))
           .get()
       def modelMap = newHashMap()
     and:
@@ -62,8 +87,13 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "model dependences are inferred correctly for list of map of string to string" (){
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(inputParam(listOfMapOfStringToString(),
-        DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy))
+      Map<String, Model> modelMap = modelProvider.dependencies(
+        inputParam(
+            listOfMapOfStringToString(),
+            DocumentationType.SWAGGER_2,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build()))
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
@@ -75,8 +105,13 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "model dependencies are inferred correctly for list of ModelMap" (){
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(inputParam(listOfModelMap(),
-        DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy))
+      Map<String, Model> modelMap = modelProvider.dependencies(
+        inputParam(
+            listOfModelMap(),
+            DocumentationType.SWAGGER_2,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build()))
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
@@ -88,8 +123,13 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "model dependencies are inferred correctly for list of map of string to Simpletype" (){
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(inputParam(listOfMapOfStringToSimpleType(),
-        DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy))
+      Map<String, Model> modelMap = modelProvider.dependencies(
+        inputParam(
+            listOfMapOfStringToSimpleType(),
+            DocumentationType.SWAGGER_2,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build()))
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
@@ -102,8 +142,13 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "model dependencies are inferred correctly for list of erased map" (){
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(inputParam(listOfErasedMap(),
-        DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy))
+      Map<String, Model> modelMap = modelProvider.dependencies(
+        inputParam(
+            listOfErasedMap(),
+            DocumentationType.SWAGGER_2,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build()))
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
@@ -112,8 +157,14 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "when the source models contain a property that has a generic type with one of the type bindings as Void" (){
     given:
-      Model model = modelProvider.modelFor(inputParam(genericClassOfType(Void),
-          DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy)).get()
+      Model model = modelProvider.modelFor(
+        inputParam(
+            genericClassOfType(
+                Void),
+            DocumentationType.SWAGGER_2,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build())).get()
       def modelMap = newHashMap()
     and:
       modelMap.put("test", model)
@@ -138,8 +189,13 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "models with allowable ranges are serialized correctly" (){
     given:
-      Model model = modelProvider.modelFor(inputParam(simpleType(),
-          DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy)).get()
+      Model model = modelProvider.modelFor(
+        inputParam(
+            simpleType(),
+            DocumentationType.SWAGGER_2,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build())).get()
       def modelMap = newHashMap()
     and:
       modelMap.put("test", model)
@@ -216,8 +272,13 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "models with allowable ranges are serialized correctly for string property" (){
     given:
-      Model model = modelProvider.modelFor(inputParam(simpleType(),
-          DocumentationType.SWAGGER_2, alternateTypeProvider(), namingStrategy)).get()
+      Model model = modelProvider.modelFor(
+        inputParam(
+            simpleType(),
+            DocumentationType.SWAGGER_2,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build())).get()
       def modelMap = newHashMap()
     and:
       modelMap.put("test", model)

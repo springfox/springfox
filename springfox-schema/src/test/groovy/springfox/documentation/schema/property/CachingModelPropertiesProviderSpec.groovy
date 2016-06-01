@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package springfox.documentation.schema.property
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -33,10 +34,11 @@ class CachingModelPropertiesProviderSpec extends Specification {
   def "Implementation caches the invocations" () {
     given:
       def context = inputParam(
-            complexType(),
-            DocumentationType.SWAGGER_2,
-            new AlternateTypeProvider([]),
-            new CodeGenGenericTypeNamingStrategy())
+          complexType(),
+          DocumentationType.SWAGGER_2,
+          new AlternateTypeProvider([]),
+          new CodeGenGenericTypeNamingStrategy(),
+          ImmutableSet.builder().build())
       def property = aProperty()
       def mock = Mock(ModelPropertiesProvider) {
         propertiesFor(_, context) >> [ property ]
@@ -53,7 +55,8 @@ class CachingModelPropertiesProviderSpec extends Specification {
           complexType(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
-          new CodeGenGenericTypeNamingStrategy())
+          new CodeGenGenericTypeNamingStrategy(),
+          ImmutableSet.builder().build())
       def mock = Mock(ModelPropertiesProvider) {
         propertiesFor(_, context) >> { throw new NullPointerException("") }
       }

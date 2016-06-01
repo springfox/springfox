@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableSet;
 import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
@@ -43,17 +44,20 @@ public class ModelContext {
   private final ModelBuilder modelBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
   private GenericTypeNamingStrategy genericNamingStrategy;
+  private final ImmutableSet<Class> ignorableTypes;
 
   ModelContext(
       Type type,
       boolean returnType,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
-      GenericTypeNamingStrategy genericNamingStrategy) {
+      GenericTypeNamingStrategy genericNamingStrategy,
+      ImmutableSet<Class> ignorableTypes) {
 
     this.documentationType = documentationType;
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericNamingStrategy = genericNamingStrategy;
+    this.ignorableTypes = ignorableTypes;
     this.parentContext = null;
     this.type = type;
     this.returnType = returnType;
@@ -67,6 +71,7 @@ public class ModelContext {
     this.documentationType = parentContext.getDocumentationType();
     this.modelBuilder = new ModelBuilder();
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
+    this.ignorableTypes = parentContext.ignorableTypes;
   }
 
   /**
@@ -113,14 +118,23 @@ public class ModelContext {
    * @param documentationType     - for documenation type
    * @param alternateTypeProvider - alternate type provider
    * @param genericNamingStrategy - how generic types should be named
+   * @param ignorableTypes        - types that can be ignored
    * @return new context
    */
-  public static ModelContext inputParam(Type type,
-                                        DocumentationType documentationType,
-                                        AlternateTypeProvider alternateTypeProvider,
-                                        GenericTypeNamingStrategy genericNamingStrategy) {
+  public static ModelContext inputParam(
+      Type type,
+      DocumentationType documentationType,
+      AlternateTypeProvider alternateTypeProvider,
+      GenericTypeNamingStrategy genericNamingStrategy,
+      ImmutableSet<Class> ignorableTypes) {
 
-    return new ModelContext(type, false, documentationType, alternateTypeProvider, genericNamingStrategy);
+    return new ModelContext(
+        type,
+        false,
+        documentationType,
+        alternateTypeProvider,
+        genericNamingStrategy,
+        ignorableTypes);
   }
 
   /**
@@ -130,14 +144,23 @@ public class ModelContext {
    * @param documentationType     - for documenation type
    * @param alternateTypeProvider - alternate type provider
    * @param genericNamingStrategy - how generic types should be named
+   * @param ignorableTypes        - types that can be ignored
    * @return new context
    */
-  public static ModelContext returnValue(Type type,
-                                         DocumentationType documentationType,
-                                         AlternateTypeProvider alternateTypeProvider,
-                                         GenericTypeNamingStrategy genericNamingStrategy) {
+  public static ModelContext returnValue(
+      Type type,
+      DocumentationType documentationType,
+      AlternateTypeProvider alternateTypeProvider,
+      GenericTypeNamingStrategy genericNamingStrategy,
+      ImmutableSet<Class> ignorableTypes) {
 
-    return new ModelContext(type, true, documentationType, alternateTypeProvider, genericNamingStrategy);
+    return new ModelContext(
+        type,
+        true,
+        documentationType,
+        alternateTypeProvider,
+        genericNamingStrategy,
+        ignorableTypes);
   }
 
   /**
@@ -230,5 +253,9 @@ public class ModelContext {
         .add("type", this.getType())
         .add("isReturnType", this.isReturnType())
         .toString();
+  }
+
+  public boolean canIgnore(ResolvedType type) {
+    return ignorableTypes.contains(type.getErasedType());
   }
 }

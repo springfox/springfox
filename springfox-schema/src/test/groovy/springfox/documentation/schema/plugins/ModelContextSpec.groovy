@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema.plugins
 
+import com.google.common.collect.ImmutableSet
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -38,23 +39,56 @@ class ModelContextSpec extends Specification {
 
   def "ModelContext equals works as expected"() {
     given:
-      ModelContext context = inputParam(ExampleEnum, SWAGGER_12, provider, namingStrategy)
+      ModelContext context = inputParam(ExampleEnum, SWAGGER_12, provider, namingStrategy, ImmutableSet.builder().build())
     expect:
       context.equals(test) == expectedEquality
       context.equals(context)
     where:
-      test                                                               | expectedEquality
-      inputParam(ExampleEnum, SWAGGER_12, provider, namingStrategy)      | true
-      inputParam(ExampleWithEnums, SWAGGER_12, provider, namingStrategy) | false
-      returnValue(ExampleEnum, SWAGGER_12, provider, namingStrategy)     | false
-      ExampleEnum                                                        | false
+      test                         | expectedEquality
+      inputParam(ExampleEnum)      | true
+      inputParam(ExampleWithEnums) | false
+      returnValue(ExampleEnum)     | false
+      ExampleEnum                  | false
+  }
+
+  def inputParam(Class ofType) {
+    inputParam(
+        ofType,
+        SWAGGER_12,
+        provider,
+        namingStrategy,
+        ImmutableSet.builder().build())
+  }
+
+  def returnValue(Class ofType) {
+    returnValue(
+        ofType,
+        SWAGGER_12,
+        provider,
+        namingStrategy,
+        ImmutableSet.builder().build())
   }
 
   def "ModelContext hashcode generated takes into account immutable values"() {
     given:
-      ModelContext context = inputParam(ExampleEnum, SWAGGER_12, provider, namingStrategy)
-      ModelContext other = inputParam(ExampleEnum, SWAGGER_12, provider, namingStrategy)
-      ModelContext otherReturn = returnValue(ExampleEnum, SWAGGER_12, provider, namingStrategy)
+      ModelContext context = inputParam(
+          ExampleEnum,
+          SWAGGER_12,
+          provider,
+          namingStrategy,
+          ImmutableSet.builder().build())
+      ModelContext other = inputParam(
+          ExampleEnum,
+          SWAGGER_12,
+          provider,
+          namingStrategy,
+          ImmutableSet.builder().build())
+      ModelContext otherReturn = returnValue(
+          ExampleEnum,
+          SWAGGER_12,
+          provider,
+          namingStrategy,
+          ImmutableSet.builder().build())
     expect:
       context.hashCode() == other.hashCode()
       context.hashCode() != otherReturn.hashCode()

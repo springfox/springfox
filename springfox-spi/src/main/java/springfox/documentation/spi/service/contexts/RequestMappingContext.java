@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,12 +21,14 @@ package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.builders.ApiDescriptionBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.Operation;
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.util.Map;
 
@@ -50,9 +52,11 @@ public class RequestMappingContext  {
     this.requestMappingInfo = requestMappingInfo;
     this.handlerMethod = handlerMethod;
     this.requestMappingPattern = "";
-    this.operationModelContextsBuilder = new OperationModelContextsBuilder(context.getDocumentationType(),
-            context.getAlternateTypeProvider(),
-            context.getGenericsNamingStrategy());
+    this.operationModelContextsBuilder = new OperationModelContextsBuilder(
+        context.getDocumentationType(),
+        context.getAlternateTypeProvider(),
+        context.getGenericsNamingStrategy(),
+        context.getIgnorableParameterTypes());
     this.apiDescriptionBuilder = new ApiDescriptionBuilder(documentationContext.operationOrdering());
   }
 
@@ -132,4 +136,15 @@ public class RequestMappingContext  {
             operationModelContextsBuilder, requestMappingPattern, knownModels);
   }
 
+  public ImmutableSet<Class> getIgnorableParameterTypes() {
+    return documentationContext.getIgnorableParameterTypes();
+  }
+
+  public GenericTypeNamingStrategy getGenericsNamingStrategy() {
+    return documentationContext.getGenericsNamingStrategy();
+  }
+
+  public ImmutableSet<ResolvedType> getAdditionalModels() {
+    return ImmutableSet.copyOf(documentationContext.getAdditionalModels());
+  }
 }

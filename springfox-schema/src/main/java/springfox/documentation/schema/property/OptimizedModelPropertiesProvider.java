@@ -156,9 +156,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       @Override
       public List<ModelProperty> apply(ResolvedMethod input) {
         ResolvedType type = paramOrReturnType(typeResolver, input);
-        if (!givenContext.hasSeenBefore(type)) {
+        if (!givenContext.canIgnore(type)) {
           if (shouldUnwrap(input)) {
-            return propertiesFor(type, fromParent(givenContext, type));
+              return propertiesFor(type, fromParent(givenContext, type));
           }
           return newArrayList(beanModelProperty(input, jacksonProperty, givenContext));
         }
@@ -180,10 +180,13 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       @Override
       public List<ModelProperty> apply(ResolvedField input) {
         List<Annotation> annotations = newArrayList(input.getRawMember().getAnnotations());
-        if (any(annotations, ofType(JsonUnwrapped.class))) {
-          return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
+        if (!givenContext.canIgnore(input.getType())) {
+          if (any(annotations, ofType(JsonUnwrapped.class))) {
+              return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
+          }
+          return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));
         }
-        return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));
+        return newArrayList();
       }
     };
   }

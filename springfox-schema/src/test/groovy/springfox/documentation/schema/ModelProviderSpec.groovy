@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2106 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.collect.ImmutableSet
 import org.springframework.http.HttpHeaders
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -36,7 +37,12 @@ class ModelProviderSpec extends Specification {
   def "dependencies provider respects ignorables"() {
     given:
       ModelProvider sut = defaultModelProvider()
-      def context = inputParam(modelType, SWAGGER_12, alternateTypeProvider(), namingStrategy)
+      def context = inputParam(
+        modelType,
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
       context.seen(new TypeResolver().resolve(HttpHeaders))
       def dependentTypeNames = sut.dependencies(context).keySet().sort()
 
@@ -52,8 +58,13 @@ class ModelProviderSpec extends Specification {
   def "dependencies are inferred correctly by the model provider"() {
     given:
       ModelProvider provider = defaultModelProvider()
-      def dependentTypeNames = provider.dependencies(inputParam(modelType, SWAGGER_12,
-              alternateTypeProvider(), namingStrategy)).keySet().sort()
+      def dependentTypeNames = provider.dependencies(
+        inputParam(
+            modelType,
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build())).keySet().sort()
 
     expect:
       dependencies == dependentTypeNames

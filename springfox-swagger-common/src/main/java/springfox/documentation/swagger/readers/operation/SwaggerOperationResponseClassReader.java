@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -47,8 +47,9 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
   private final TypeNameExtractor nameExtractor;
 
   @Autowired
-  public SwaggerOperationResponseClassReader(TypeResolver typeResolver,
-                                             TypeNameExtractor nameExtractor) {
+  public SwaggerOperationResponseClassReader(
+      TypeResolver typeResolver,
+      TypeNameExtractor nameExtractor) {
     this.typeResolver = typeResolver;
     this.nameExtractor = nameExtractor;
   }
@@ -68,7 +69,8 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
     ModelContext modelContext = returnValue(returnType,
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),
-        context.getDocumentationContext().getGenericsNamingStrategy());
+        context.getGenericsNamingStrategy(),
+        context.getIgnorableParameterTypes());
 
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting response class to:" + responseTypeName);
@@ -78,7 +80,7 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
   }
 
   private boolean canSkip(OperationContext context, ResolvedType returnType) {
-    return context.getDocumentationContext().getIgnorableParameterTypes().contains(returnType);
+    return context.getIgnorableParameterTypes().contains(returnType.getErasedType());
   }
 
   @Override
