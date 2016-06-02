@@ -546,18 +546,23 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="sect2">
 <h3 id="goals">Goals</h3>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="ulist">
+<ul>
 <li>
 <p>To extend support for a number of the evolving standards targeted at JSON API specification and documentation
-such
-as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a> and <a href="http://jsonapi.org/">jsonapi</a>.</p>
+such as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a> and <a href="http://jsonapi.org/">jsonapi</a>.</p>
 </li>
 <li>
-<p>To extend support for spring technologies other than
-<a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">spring webmvc</a></p>
+<p>To extend support for spring technologies other than <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">spring webmvc</a></p>
 </li>
-</ol>
+<li>
+<p>Philosophically, we want to discourage using (swagger-core) annotations that are not material to the
+service description at runtime. For e.g. the jackson annotations should always trump or have more weight than
+<code>@ApiModelProperty</code> or for e.g. <code>@NotNull</code> or specifying @RequestParam#required should always win. Annotations are to
+to be used only to supplement documentation or override/tweak the resulting spec in cases where its not possible to
+infer service/schema characteristics.</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -596,6 +601,18 @@ as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">./gradlew build -i</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>To publish to local maven repository</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">./gradlew clean build publishToMavenLocal -i</code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -735,7 +752,7 @@ The below properties are required to run a release:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-06-01 23:14:36 UTC
+Last updated 2016-06-02 02:14:49 UTC
 </div>
 </div>
 </body>

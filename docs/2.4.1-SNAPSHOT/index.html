@@ -593,18 +593,23 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="sect2">
 <h3 id="goals">1.2. Goals</h3>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="ulist">
+<ul>
 <li>
 <p>To extend support for a number of the evolving standards targeted at JSON API specification and documentation
-such
-as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a> and <a href="http://jsonapi.org/">jsonapi</a>.</p>
+such as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a> and <a href="http://jsonapi.org/">jsonapi</a>.</p>
 </li>
 <li>
-<p>To extend support for spring technologies other than
-<a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">spring webmvc</a></p>
+<p>To extend support for spring technologies other than <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">spring webmvc</a></p>
 </li>
-</ol>
+<li>
+<p>Philosophically, we want to discourage using (swagger-core) annotations that are not material to the
+service description at runtime. For e.g. the jackson annotations should always trump or have more weight than
+<code>@ApiModelProperty</code> or for e.g. <code>@NotNull</code> or specifying @RequestParam#required should always win. Annotations are to
+to be used only to supplement documentation or override/tweak the resulting spec in cases where its not possible to
+infer service/schema characteristics.</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -643,6 +648,18 @@ as: <a href="http://swagger.io/">swagger</a>, <a href="http://raml.org/">RAML</a
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">./gradlew build -i</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>To publish to local maven repository</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">./gradlew clean build publishToMavenLocal -i</code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -1468,6 +1485,95 @@ https:// github.com/swagger-api/swagger-ui[swagger-ui repo].</p>
 <p>By default Spring Boot has sensible defaults for serving content from webjars. To configure vanilla spring web mvc
 apps to serve webjar content see the <a href="http://www.webjars.org/documentation#springmvc">webjar documentation</a></p>
 </div>
+<div class="paragraph">
+<p>Swagger-Ui that comes bundled with springfox uses <em>meta-urls</em> to configure itself and discover documented endpoints.
+The urls for the discovery are as shown below.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Url</th>
+<th class="tableblock halign-left valign-top">New Url in 2.5.+</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/configuration/ui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/swagger-resources/configuration/ui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Configuring swagger-ui options</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/configuration/security</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/swagger-resources/configuration/security</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Configuring swagger-ui security</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Since swagger ui is a static resource it needs to rely on <strong>known</strong> endpoints to configure itself at runtime. So these
+☝️ are <strong>*cool uris</strong> that cannot change. There is <a href="#q13">some customization</a> that is possible, but swagger-ui needs
+to be available at the root of the <em>webcontext</em>.</p>
+</div>
+<div class="paragraph">
+<p>Regarding [where swagger-ui itself is served](<a href="http://springfox.github.io/springfox/docs/current/#q13" class="bare">http://springfox.github.io/springfox/docs/current/#q13</a>) and [where the
+api docs are served](<a href="http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints" class="bare">http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints</a>) those are
+ totally configurable.</p>
+</div>
+<div class="sect5">
+<h6 id="rfc6570-support-strong-incubating-strong">RFC6570 support <strong>incubating</strong></h6>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<em>Keep in mind this is experimental</em>!
+In order to use this feature
+1. Add <code>springfox-swagger-ui-rfc6570</code> instead of <code>springfox-swagger-ui</code> as a dependency
+<a href="http://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui-rfc6570/0.9.4">experimental swagger-ui</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For gradle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox:springfox-swagger-ui-rfc6570:0.9.4</span><span class="delimiter">'</span></span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For maven:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>io.springfox:springfox-swagger-ui-rfc6570<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>0.9.4<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Enable url templating; (<a href="http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot">see #21</a>)</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1996,7 +2102,12 @@ in the demo application.</p>
 <h2 id="configuring-springfox-staticdocs">6. Configuring springfox-staticdocs</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Springfox-staticdocs is a module which brings together springfox and <a href="https://github.com/RobWin/swagger2markup">swagger2markup</a>. Swagger2Markup is a library which simplifies the generation of an up-to-date RESTful API documentation by combining documentation that’s been hand-written with auto-generated API documentation produced by Springfox. The result is intended to be an up-to-date, easy-to-read, on- and offline user guide. Swagger2Markup converts a Swagger JSON or YAML file into several AsciiDoc or GitHub Flavored Markdown documents which can be converted to HTML, PDF and EPUB. The output of Swagger2Markup can be used as an alternative to swagger-ui and can be served as static content.</p>
+<p>Springfox-staticdocs is a module which brings together springfox and <a href="https://github.com/RobWin/swagger2markup">swagger2markup</a>.
+Swagger2Markup is a library which simplifies the generation of an up-to-date RESTful API documentation by combining
+documentation that’s been hand-written with auto-generated API documentation produced by Springfox. The result is intended
+to be an up-to-date, easy-to-read, on- and offline user guide. Swagger2Markup converts a Swagger JSON or YAML file into
+several AsciiDoc or GitHub Flavored Markdown documents which can be converted to HTML, PDF and EPUB. The output of
+Swagger2Markup can be used as an alternative to swagger-ui and can be served as static content.</p>
 </div>
 <div class="sect2">
 <h3 id="usage-guide">6.1. Usage guide</h3>
@@ -2813,6 +2924,28 @@ usually found in Hibernate domain objects that have bi-dectional dependencies on
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p><a id="q19"></a>*Q. How are tags implemented in springfox?</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Tags which are first class constructs just like operations, models etc. and what you see on operations are
+references to those Tags. The typical workflow is to registers tags in a docket and use the tag definitions on
+operations(`@ApiOperation`)/controllers(`@Api`) to point to these registered tags (in the docket) by name.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>The convenience we have in place just to reduce the amount of boiler plate for the developer is to provide a default
+description that happens to be the same as the tag name. So in effect we are synthesizing a pseudo Tag by referencing
+one on the operation.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>By defining the Tag on the docket, we are referencing a real tag defined by you.</pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2834,7 +2967,7 @@ usually found in Hibernate domain objects that have bi-dectional dependencies on
 <div id="footer">
 <div id="footer-text">
 Version 2.4.1-SNAPSHOT<br>
-Last updated 2016-06-01 23:14:36 UTC
+Last updated 2016-06-02 02:14:49 UTC
 </div>
 </div>
 </body>

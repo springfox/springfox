@@ -1099,6 +1099,28 @@ usually found in Hibernate domain objects that have bi-dectional dependencies on
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p><a id="q19"></a>*Q. How are tags implemented in springfox?</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Tags which are first class constructs just like operations, models etc. and what you see on operations are
+references to those Tags. The typical workflow is to registers tags in a docket and use the tag definitions on
+operations(`@ApiOperation`)/controllers(`@Api`) to point to these registered tags (in the docket) by name.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>The convenience we have in place just to reduce the amount of boiler plate for the developer is to provide a default
+description that happens to be the same as the tag name. So in effect we are synthesizing a pseudo Tag by referencing
+one on the operation.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>By defining the Tag on the docket, we are referencing a real tag defined by you.</pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1119,7 +1141,7 @@ usually found in Hibernate domain objects that have bi-dectional dependencies on
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-06-01 23:14:36 UTC
+Last updated 2016-06-02 02:14:49 UTC
 </div>
 </div>
 </body>
