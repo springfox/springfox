@@ -39,6 +39,11 @@ Endorsed or approved by the Spring Framework Contributors
 ./gradlew build -i
 
 ```
+- To publish to local maven repository
+```bash
+./gradlew clean build publishToMavenLocal -i
+
+```
 
 ==== Pre-Commit Build
 
