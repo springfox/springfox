@@ -298,7 +298,12 @@ in the demo application.
 
 == Configuring springfox-staticdocs
 
-Springfox-staticdocs is a module which brings together springfox and https://github.com/RobWin/swagger2markup[swagger2markup]. Swagger2Markup is a library which simplifies the generation of an up-to-date RESTful API documentation by combining documentation that’s been hand-written with auto-generated API documentation produced by Springfox. The result is intended to be an up-to-date, easy-to-read, on- and offline user guide. Swagger2Markup converts a Swagger JSON or YAML file into several AsciiDoc or GitHub Flavored Markdown documents which can be converted to HTML, PDF and EPUB. The output of Swagger2Markup can be used as an alternative to swagger-ui and can be served as static content.
+Springfox-staticdocs is a module which brings together springfox and https://github.com/RobWin/swagger2markup[swagger2markup].
+Swagger2Markup is a library which simplifies the generation of an up-to-date RESTful API documentation by combining
+documentation that’s been hand-written with auto-generated API documentation produced by Springfox. The result is intended
+to be an up-to-date, easy-to-read, on- and offline user guide. Swagger2Markup converts a Swagger JSON or YAML file into
+several AsciiDoc or GitHub Flavored Markdown documents which can be converted to HTML, PDF and EPUB. The output of
+Swagger2Markup can be used as an alternative to swagger-ui and can be served as static content.
 
 === Usage guide
 
