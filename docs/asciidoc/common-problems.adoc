@@ -331,3 +331,15 @@ It is still in incubation but host name can be configured per docket
 A.  If you have recursively defined objects, I would try and see if providing an alternate type might work or perhaps
  even ignoring the offending classes for e.g. Order using the docket. ignoredParameterTypes(Order.class). This is
  usually found in Hibernate domain objects that have bi-dectional dependencies on other objects.
+
+[[q19]]*Q. How are tags implemented in springfox?
+
+ Tags which are first class constructs just like operations, models etc. and what you see on operations are
+ references to those Tags. The typical workflow is to registers tags in a docket and use the tag definitions on
+ operations(`@ApiOperation`)/controllers(`@Api`) to point to these registered tags (in the docket) by name.
+
+ The convenience we have in place just to reduce the amount of boiler plate for the developer is to provide a default
+ description that happens to be the same as the tag name. So in effect we are synthesizing a pseudo Tag by referencing
+ one on the operation.
+
+ By defining the Tag on the docket, we are referencing a real tag defined by you.
