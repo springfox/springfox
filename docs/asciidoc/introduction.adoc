@@ -12,12 +12,16 @@ _swagger-springmvc_. Much kudos goes to Marty.
 
 === Goals
 
-. To extend support for a number of the evolving standards targeted at JSON API specification and documentation
-such
-as: http://swagger.io/[swagger], http://raml.org/[RAML] and http://jsonapi.org/[jsonapi].
+- To extend support for a number of the evolving standards targeted at JSON API specification and documentation
+such as: http://swagger.io/[swagger], http://raml.org/[RAML] and http://jsonapi.org/[jsonapi].
 
-. To extend support for spring technologies other than
-http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html[spring webmvc]
+- To extend support for spring technologies other than http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html[spring webmvc]
+
+- Philosophically, we want to discourage using (swagger-core) annotations that are not material to the
+service description at runtime. For e.g. the jackson annotations should always trump or have more weight than
+`@ApiModelProperty` or for e.g. `@NotNull` or specifying @RequestParam#required should always win. Annotations are to
+to be used only to supplement documentation or override/tweak the resulting spec in cases where its not possible to
+infer service/schema characteristics.
 
 === What it's not
 
