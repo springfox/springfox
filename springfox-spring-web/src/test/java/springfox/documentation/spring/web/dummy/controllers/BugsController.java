@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
 import java.util.Map;
 
 @RestController
@@ -42,5 +43,10 @@ public class BugsController {
   @RequestMapping(value = "1209", method = RequestMethod.POST)
   public ResponseEntity<String> bug1209() {
     return ResponseEntity.ok("");
+  }
+
+  @RequestMapping(value = "1162", method = RequestMethod.POST)
+  public ResponseEntity<Date> bug1162() {
+    return ResponseEntity.ok(new Date(new java.util.Date().getTime()));
   }
 }

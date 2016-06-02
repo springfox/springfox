@@ -26,6 +26,31 @@
     "application/json"
   ],
   "paths": {
+    "/bugs/1162": {
+      "post": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "bug1162",
+        "operationId": "bug1162UsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      }
+    },
     "/bugs/1209": {
       "post": {
         "tags": [

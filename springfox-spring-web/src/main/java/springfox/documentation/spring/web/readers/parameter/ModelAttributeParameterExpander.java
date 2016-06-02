@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -69,8 +69,11 @@ public class ModelAttributeParameterExpander {
     this.resolver = resolver;
   }
 
-  public void expand(final String parentName, final Class<?> paramType,
-                     final List<Parameter> parameters, DocumentationContext documentationContext) {
+  public void expand(
+      final String parentName,
+      final Class<?> paramType,
+      final List<Parameter> parameters,
+      DocumentationContext documentationContext) {
 
     Set<String> beanPropNames = getBeanPropertyNames(paramType);
     Iterable<Field> fields = from(getInstanceFields(paramType))
@@ -93,8 +96,12 @@ public class ModelAttributeParameterExpander {
       String dataTypeName = Optional.fromNullable(typeNameFor(each.getFieldType()))
               .or(each.getFieldType().getSimpleName());
       LOG.debug("Building parameter for field: {}, with type: ", each, each.getFieldType());
-      ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(dataTypeName, parentName,
-              each.getField(), documentationContext.getDocumentationType(), new ParameterBuilder());
+      ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(
+          dataTypeName,
+          parentName,
+          each.getField(),
+          documentationContext.getDocumentationType(),
+          new ParameterBuilder());
       parameters.add(pluginsManager.expandParameter(parameterExpansionContext));
     }
   }

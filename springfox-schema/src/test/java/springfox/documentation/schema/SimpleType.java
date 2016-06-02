@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -43,6 +43,24 @@ public class SimpleType {
   Double anObjectDouble;
   Currency currency;
   UUID uuid;
+  Date aDate;
+  java.sql.Date aSqlDate;
+
+  public Date getaDate() {
+    return aDate;
+  }
+
+  public void setaDate(Date aDate) {
+    this.aDate = aDate;
+  }
+
+  public java.sql.Date getaSqlDate() {
+    return aSqlDate;
+  }
+
+  public void setaSqlDate(java.sql.Date aSqlDate) {
+    this.aSqlDate = aSqlDate;
+  }
 
   public Byte getAnObjectByte() {
     return anObjectByte;

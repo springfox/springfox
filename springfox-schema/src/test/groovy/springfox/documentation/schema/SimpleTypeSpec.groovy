@@ -88,6 +88,8 @@ class SimpleTypeSpec extends SchemaSpecification {
       "anObjectDouble"  | Double  | "java.lang.Double"
       "currency"        | Currency| "java.util.Currency"
       "uuid"            | UUID    | "java.util.UUID"
+      "aDate"           | Date    | "java.util.Date"
+      "aSqlDate"        | java.sql.Date   | "java.sql.Date"
   }
 
   @Ignore
