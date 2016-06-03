@@ -33,7 +33,7 @@ import java.util.Map;
 @RequestMapping("/bugs")
 public class BugsController {
   @RequestMapping(value = "1306", method = RequestMethod.POST)
-  public ResponseEntity<Void> bug1306(@RequestParam Map<String, String> paramMap) {
+  public ResponseEntity<Map<String, String>> bug1306(@RequestParam Map<String, String> paramMap) {
     return ResponseEntity.ok(null);
   }
 
