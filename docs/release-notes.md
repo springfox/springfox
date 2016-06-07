@@ -1,4 +1,66 @@
-# 2.4.0 Relase Notes
+# 2.5.0 Release Notes
+
+#### Features
+
+- (#1296) Support for JSR-303: @Pattern annotation @ashutosh-shirole  
+- (#1291) Make 'supportedSubmitMethods' configurable in springfox-swagger-ui @thomseno  
+- (#1287) Feature: Headers in @RequestMapping are not documented @ry4n-sc0tt  
+- (#1244) @ApiParam - Allowable values not displayed in Swagger API docs @jfiala  
+
+#### Bugs
+
+- (#1325) Missing @RequestParam on a boolean parameter causes Swagger page to not render that controller, and all controllers alphabetically after __has-workaround__ @Thunderforge  
+- (#1321)	Cannot fully change swagger and swagger ui path __has-workaround__ @nikit-cpp  
+- (#1133) Respect ApiModelProperty(hidden=true) on @ModelAttribute annotated models __has-workaround__ @cm325  
+- (#1317)	@ApiModelProperty(value="something") on bean annotated with @ModelAttribute changes dataType to "ref" @mpostelnicu  
+- (#1310)	'enum' query parameter type(annotated with @ModelAttribute) is 'ref'.  @namkee  
+- (#1306)	Maps as parameters were not rendered correctly @aqlu  
+- (#1285)	dataType="file" is not working in springfox 2.4.0 @HDBandit  
+- (#1282)	Missing model definitions in swagger json document when return type is array syntax (CustomModel[]) @namkee  
+- (#1280)	@ApiModelProperty.position not respected @marceloverdijk  
+- (#1268)	Compatible issue encountered with Spring Boot 1.4.0.M2 and Spring 4.3.RC @hantsy  
+- (#1260)	Not working proper with query params not-reproducable @Gaurav-Deshkar  
+- (#1258)	Fields not visible from children when implementing interfaces in parent request objects @stashthecode    2 of 2
+- (#1249)	Bug: Templated url are submited with the template part @anthofo  
+- (#1241)	Overloaded method resolution was incorrect causing ArrayIndexOutOfBoundsException @tdeverdiere  
+- (#1238)	Swagger UI showing incorrect URLs @martin3361  
+- (#1211)	ApiParam allowableValues string with spaces @pvpkiran  
+- (#1209)	Query parameters - complex data types are coerced to 'string' type, especially collections @jkasmann  
+- (#1207)	CachingModelPropertiesProvider - NullPointerException @bharatkaushik  
+- (#1203)	swagger-ui location /configuration/ui configurable?  @flexguse
+- (#1196)	Springfox not emitting attributes for definitions with some kinds of circular references @benfowler  
+
+#### PRs 
+
+- (#1331) Fix for #1282: Array dependent types not part of models  @namkee  
+- (#1319) Fix for #1318: fixing favicon images urls  @rubencepeda  
+- (#1316) Fix for #1296: Adding Pattern annotation support  @ashutosh-shirole  
+- (#1314) Fix for #1296: Support for JSR-303: @Pattern annotation  @igor-sokolov  
+- (#1233) Fix for #1207: Skip events from child application context @praveen12bnitt  
+- (#1295) Make 'supportedSubmitMethods' configurable in springfox-swagger-ui / Enable and disable the "Try it out!" functionality  @thomseno  
+- (#1292) Added support for documenting headers in @RequestMapping  @ry4n-sc0tt  
+- (#1284) Fix for broken contributing link in README  @ry4n-sc0tt  
+- (#1277) Set encoding to utf-8 for multilanguage support.  @catinred2  
+- (#1275) Added message about starring the repository  maintenance @dilipkrish  
+- (#1265) Don't include a license object when both license and licenseUrl are e…  @wgreven-ibr  
+- (#1239) Fix for the context refresh ordering issue. Support for spring-cloud brixton  @dilipkrish  
+- (#1218) Only encode the API key when passed in URL query  @franklloydteh  
+- (#1217) adds basePath from x-forwarded-prefix for reverse proxy scenarios  @matonthecat  
+- (#1213) Fixed some wrong asciidoc typos  @RobWin  
+
+#### Maintenance
+
+- (#1332) Support for jdk 8 build @dilipkrish  
+- (#1326) Simplify the gradle build @dilipkrish  
+- (#1322) Copyright check for license should allow for newer years @dilipkrish  
+- (#1276) character encoding error in springfox-staticdocs @catinred2  
+- (#1275) Added message about starring the repository  PR @dilipkrish  
+- (#1253) BeanPropertyDefinitions not compatible with Jackson 2.7.x @Stephan202  
+- (#1162) java.sql.Date creates an useless "Date" definition @cbornet  
+
+Not to mention all the [questions and suggestions](https://github.com/springfox/springfox/issues?utf8=✓&q=milestone%3A2.5.0+label%3Aquestion+is%3Aclosed+) by the community!! :metal: 
+
+# 2.4.0 Release Notes
 
 [Full Changelog](https://github.com/springfox/springfox/compare/2.4.0...2.3.1)
 
