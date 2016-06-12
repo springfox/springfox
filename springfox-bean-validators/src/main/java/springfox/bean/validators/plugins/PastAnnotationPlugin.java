@@ -26,7 +26,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
 import static springfox.bean.validators.plugins.BeanValidators.validatorFromBean;

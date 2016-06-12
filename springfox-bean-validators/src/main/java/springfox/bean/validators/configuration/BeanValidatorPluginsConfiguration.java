@@ -20,7 +20,13 @@ package springfox.bean.validators.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.bean.validators.plugins.*;
+import springfox.bean.validators.plugins.MinMaxAnnotationPlugin;
+import springfox.bean.validators.plugins.NotNullAnnotationPlugin;
+import springfox.bean.validators.plugins.PatternAnnotationPlugin;
+import springfox.bean.validators.plugins.SizeAnnotationPlugin;
+import springfox.bean.validators.plugins.PastAnnotationPlugin;
+import springfox.bean.validators.plugins.FutureAnnotationPlugin;
+
 
 @Configuration
 public class BeanValidatorPluginsConfiguration {
