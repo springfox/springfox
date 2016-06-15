@@ -35,18 +35,25 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterExpansionField;
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParameterBuilderPlugin {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterNotNullAnnotationPlugin.class);
 
+    /**
+     * support all documentationTypes
+     */
     @Override
     public boolean supports(DocumentationType delimiter) {
         // we simply support all documentationTypes!
         return true;
     }
 
+    /** 
+     * read NotNull annotation
+     */
     @Override
     public void apply(ParameterExpansionContext context) {
         Field myfield = context.getField();
@@ -61,33 +68,14 @@ public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParamet
         }
     }
 
+    /**
+     * extract NotNull from bean or field
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<NotNull> extractAnnotation(ParameterExpansionContext context) {
-
-        return validatorFromBean(context, NotNull.class).or(validatorFromField(context, NotNull.class));
-    }
-
-    public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context, Class<T> annotationType) {
-
-        Field field = context.getField();
-
-        Optional<T> notNull = Optional.absent();
-        if (field != null) {
-            notNull = Optional.fromNullable(field.getAnnotation(annotationType));
-        }
-        return notNull;
-    }
-
-    public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context, Class<T> annotationType) {
-
-        Field field = context.getField();
-        Optional<T> notNull = Optional.absent();
-        if (field != null) {
-            LOG.debug("Annotation size present for field " + field.getName() + "!!");
-            notNull = Optional.fromNullable(field.getAnnotation(annotationType));
-        }
-
-        return notNull;
+        return validatorFromParameterExpansionField(context, NotNull.class);
     }
 
 }

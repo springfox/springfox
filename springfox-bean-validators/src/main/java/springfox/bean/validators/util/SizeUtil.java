@@ -30,6 +30,11 @@ public class SizeUtil {
 
      private static final Logger LOG = LoggerFactory.getLogger(ParameterSizeAnnotationPlugin.class);
 
+     /**
+      * create AllowableRangeValues from size (depending on what is set)
+      * @param size
+      * @return
+      */
       public static AllowableRangeValues createAllowableValuesFromSizeForStrings(Size size) {
         LOG.debug("@Size detected: adding MinLength/MaxLength to field");
         return new AllowableRangeValues(minValue(size), maxValue(size));

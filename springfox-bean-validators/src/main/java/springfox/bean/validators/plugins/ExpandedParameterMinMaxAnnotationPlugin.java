@@ -36,6 +36,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterExpansionField;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
@@ -45,12 +46,18 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
 
     private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterMinMaxAnnotationPlugin.class);
 
+    /**
+     * support all documentationTypes
+     */
     @Override
     public boolean supports(DocumentationType delimiter) {
         // we simply support all documentationTypes!
         return true;
     }
 
+    /** 
+     * read Min/Max annotations
+     */
     @Override
     public void apply(ParameterExpansionContext context) {
 
@@ -68,46 +75,24 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
 
     }
 
+    /**
+     * extract Min annotation
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<Min> extractMin(ParameterExpansionContext context) {
-        return validatorFromField(context, Min.class);
+        return validatorFromParameterExpansionField(context, Min.class);
     }
 
+    /**
+     * extract Max annotation
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<Max> extractMax(ParameterExpansionContext context) {
-        return validatorFromField(context, Max.class);
-    }
-
-    @VisibleForTesting
-    Optional<Size> extractAnnotation(ParameterExpansionContext context) {
-
-        return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
-    }
-
-    public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context,
-            Class<T> annotationType) {
-
-        Optional<T> notNull = Optional.absent();
-        // if (propertyDefinition.isPresent()) {
-        // notNull = annotationFrom(propertyDefinition.get().getGetter(),
-        // annotationType)
-        // .or(annotationFrom(propertyDefinition.get().getField(),
-        // annotationType));
-        // }
-        return notNull;
-    }
-
-    public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context,
-            Class<T> annotationType) {
-
-        Field field = context.getField();
-        Optional<T> notNull = Optional.absent();
-        if (field != null) {
-            LOG.debug("Annotation size present for " + field.getName() + "!!");
-            notNull = Optional.fromNullable(field.getAnnotation(annotationType));
-        }
-
-        return notNull;
+        return validatorFromParameterExpansionField(context, Max.class);
     }
 
 }

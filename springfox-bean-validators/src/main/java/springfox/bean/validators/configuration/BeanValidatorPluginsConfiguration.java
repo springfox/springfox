@@ -27,16 +27,29 @@ import springfox.bean.validators.plugins.ModelPropertySizeAnnotationPlugin;
 
 @Configuration
 public class BeanValidatorPluginsConfiguration {
+	
+	/**
+	 * define MinMax-Plugin
+	 * @return
+	 */
   @Bean
   public ModelPropertyMinMaxAnnotationPlugin minMaxPlugin() {
     return new ModelPropertyMinMaxAnnotationPlugin();
   }
 
+  /**
+	 * define Size-Plugin
+	 * @return
+	 */
   @Bean
   public ModelPropertySizeAnnotationPlugin sizePlugin() {
     return new ModelPropertySizeAnnotationPlugin();
   }
 
+  /**
+   * define NotNull-Plugin
+   * @return
+   */
   @Bean
   public ModelPropertyNotNullAnnotationPlugin notNullPlugin() {
     return new ModelPropertyNotNullAnnotationPlugin();

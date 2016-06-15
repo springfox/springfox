@@ -18,8 +18,8 @@
  */
 package springfox.bean.apidescriptionreaders.plugins;
 
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromBean;
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromField;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyBean;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyField;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.slf4j.Logger;
@@ -46,12 +46,18 @@ public class ModelPropertyDescriptionKeysAnnotationPlugin implements ModelProper
     @Autowired
     ApiDescriptionPropertiesReader propertiesReader;
     
+    /**
+     * support all documentationTypes
+     */
     @Override
     public boolean supports(DocumentationType delimiter) {
         // we simply support all documentationTypes!
         return true;
     }
 
+    /**
+     * read description from Properties file if key is present
+     */
     @Override
     public void apply(ModelPropertyContext context) {
         LOG.info("apply model property");
@@ -71,9 +77,14 @@ public class ModelPropertyDescriptionKeysAnnotationPlugin implements ModelProper
 
     }
 
+    /**
+     * read ApiModelProperty-annotation from bean/field
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<ApiModelProperty> extractAnnotation(ModelPropertyContext context) {
-        return validatorFromBean(context, ApiModelProperty.class).or(validatorFromField(context, ApiModelProperty.class));
+        return validatorFromModelPropertyBean(context, ApiModelProperty.class).or(validatorFromModelPropertyField(context, ApiModelProperty.class));
     }
 
 }

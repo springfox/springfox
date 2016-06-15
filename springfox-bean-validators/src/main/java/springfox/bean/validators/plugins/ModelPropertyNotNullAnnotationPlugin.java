@@ -18,8 +18,8 @@
  */
 package springfox.bean.validators.plugins;
 
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromBean;
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromField;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyBean;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyField;
 
 import javax.validation.constraints.NotNull;
 
@@ -37,21 +37,32 @@ import com.google.common.base.Optional;
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ModelPropertyNotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
+	 /**
+     * support all documentationTypes
+     */
     @Override
     public boolean supports(DocumentationType delimiter) {
         // we simply support all documentationTypes!
         return true;
     }
 
+    /** 
+     * read NotNull annotation
+     */
     @Override
     public void apply(ModelPropertyContext context) {
         Optional<NotNull> notNull = extractAnnotation(context);
         context.getBuilder().required(notNull.isPresent());
     }
 
+    /** 
+     * extract NotNull from bean or field
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<NotNull> extractAnnotation(ModelPropertyContext context) {
-        return validatorFromBean(context, NotNull.class).or(validatorFromField(context, NotNull.class));
+        return validatorFromModelPropertyBean(context, NotNull.class).or(validatorFromModelPropertyField(context, NotNull.class));
     }
 
 }

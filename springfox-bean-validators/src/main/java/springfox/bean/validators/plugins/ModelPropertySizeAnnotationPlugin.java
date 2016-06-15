@@ -18,8 +18,8 @@
  */
 package springfox.bean.validators.plugins;
 
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromBean;
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromField;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyBean;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyField;
 
 import javax.validation.constraints.Size;
 
@@ -42,12 +42,18 @@ public class ModelPropertySizeAnnotationPlugin implements ModelPropertyBuilderPl
 
     private static final Logger LOG = LoggerFactory.getLogger(ModelPropertySizeAnnotationPlugin.class);
 
+    /**
+     * support all documentationTypes
+     */
     @Override
     public boolean supports(DocumentationType delimiter) {
         // we simply support all documentationTypes!
         return true;
     }
 
+    /** 
+     * read Size annotation
+     */
     @Override
     public void apply(ModelPropertyContext context) {
         Optional<Size> size = extractAnnotation(context);
@@ -57,9 +63,14 @@ public class ModelPropertySizeAnnotationPlugin implements ModelPropertyBuilderPl
         }
     }
 
+    /**
+     * extract Size from bean or field
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<Size> extractAnnotation(ModelPropertyContext context) {
-        return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
+        return validatorFromModelPropertyBean(context, Size.class).or(validatorFromModelPropertyField(context, Size.class));
     }
 
 }

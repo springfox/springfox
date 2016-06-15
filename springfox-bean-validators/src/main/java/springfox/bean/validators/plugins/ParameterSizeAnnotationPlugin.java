@@ -35,19 +35,25 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
-
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterField;
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ParameterSizeAnnotationPlugin implements ParameterBuilderPlugin {
 
   private static final Logger LOG = LoggerFactory.getLogger(ParameterSizeAnnotationPlugin.class);
 
+  /**
+   * support all documentationTypes
+   */
   @Override
   public boolean supports(DocumentationType delimiter) {
     // we simply support all documentationTypes!
     return true;
   }
 
+  /** 
+   * read Size annotation
+   */
   @Override
   public void apply(ParameterContext context) {
     Optional<Size> size = extractAnnotation(context);
@@ -62,26 +68,9 @@ public class ParameterSizeAnnotationPlugin implements ParameterBuilderPlugin {
 
   @VisibleForTesting
   Optional<Size> extractAnnotation(ParameterContext context) {
-    return validatorFromField(context, Size.class);
+    return validatorFromParameterField(context, Size.class);
   }
   
-
-  public static <T extends Annotation> Optional<T> validatorFromField(
-          ParameterContext context,
-      Class<T> annotationType) {
-      
-      MethodParameter methodParam = context.methodParameter();
-      LOG.debug("methodParam.index: " + methodParam.getParameterIndex());
-      LOG.debug("methodParam.name: " + methodParam.getParameterName());
-      
-      
-    T annotatedElement = methodParam.getParameterAnnotation(annotationType);
-    Optional<T> notNull = Optional.absent();
-    if (annotatedElement!=null) {
-      notNull = Optional.fromNullable(annotatedElement);
-    }
-    return notNull;
-  }
 
 
 }

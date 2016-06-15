@@ -26,6 +26,10 @@ import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 
+/**
+ * Reader to read api descriptions from a Properties file.
+ *
+ */
 @Component
 public class ApiDescriptionPropertiesReader {
 

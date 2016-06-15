@@ -36,19 +36,25 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
-
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterExpansionField;
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterBuilderPlugin {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterSizeAnnotationPlugin.class);
 
+    /**
+     * support all documentationTypes
+     */
     @Override
     public boolean supports(DocumentationType delimiter) {
         // we simply support all documentationTypes!
         return true;
     }
 
+    /** 
+     * read Size annotation
+     */
     @Override
     public void apply(ParameterExpansionContext context) {
 
@@ -67,34 +73,15 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
         }
     }
 
+    /**
+     * extract Size from bean or field
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<Size> extractAnnotation(ParameterExpansionContext context) {
-
-        return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
+        return validatorFromParameterExpansionField(context, Size.class);
     }
 
-    public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context, Class<T> annotationType) {
-
-        Optional<T> notNull = Optional.absent();
-        // if (propertyDefinition.isPresent()) {
-        // notNull = annotationFrom(propertyDefinition.get().getGetter(),
-        // annotationType)
-        // .or(annotationFrom(propertyDefinition.get().getField(),
-        // annotationType));
-        // }
-        return notNull;
-    }
-
-    public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context, Class<T> annotationType) {
-
-        Field field = context.getField();
-        Optional<T> notNull = Optional.absent();
-        if (field != null) {
-            LOG.debug("Annotation size present for " + field.getName() + "!!");
-            notNull = Optional.fromNullable(field.getAnnotation(annotationType));
-        }
-
-        return notNull;
-    }
 
 }

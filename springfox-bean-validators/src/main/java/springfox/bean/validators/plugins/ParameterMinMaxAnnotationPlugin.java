@@ -37,17 +37,23 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
-
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterField;
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ParameterMinMaxAnnotationPlugin implements ParameterBuilderPlugin {
     private static final Logger LOG = LoggerFactory.getLogger(ParameterMinMaxAnnotationPlugin.class);
 
+    /**
+     * support all documentationTypes
+     */
     public boolean supports(DocumentationType delimiter) {
         // we simply support all documentationTypes!
         return true;
     }
 
+    /** 
+     * read Min/Max annotations
+     */
     public void apply(ParameterContext context) {
         Optional<Min> min = extractMin(context);
         Optional<Max> max = extractMax(context);
@@ -59,28 +65,25 @@ public class ParameterMinMaxAnnotationPlugin implements ParameterBuilderPlugin {
         }
     }
 
+    /**
+     * extract Min from field
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<Min> extractMin(ParameterContext context) {
-        return validatorFromField(context, Min.class);
+        return validatorFromParameterField(context, Min.class);
     }
 
+    /**
+     * extract Max from field
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<Max> extractMax(ParameterContext context) {
-        return validatorFromField(context, Max.class);
+        return validatorFromParameterField(context, Max.class);
     }
 
-    public static <T extends Annotation> Optional<T> validatorFromField(ParameterContext context, Class<T> annotationType) {
-
-        MethodParameter methodParam = context.methodParameter();
-        LOG.debug("methodParam.index: " + methodParam.getParameterIndex());
-        LOG.debug("methodParam.name: " + methodParam.getParameterName());
-
-        T annotatedElement = methodParam.getParameterAnnotation(annotationType);
-        Optional<T> notNull = Optional.absent();
-        if (annotatedElement != null) {
-            notNull = Optional.fromNullable(annotatedElement);
-        }
-        return notNull;
-    }
 
 }

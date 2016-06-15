@@ -32,6 +32,13 @@ import com.google.common.base.Optional;
 public class MinMaxUtil {
     private static final Logger LOG = LoggerFactory.getLogger(ParameterMinMaxAnnotationPlugin.class);
 
+    /**
+     * create AllowableRange values from min/max/infinite depending on what is set
+     * 
+     * @param min
+     * @param max
+     * @return
+     */
     public static AllowableRangeValues createAllowableValuesFromMinMaxForNumbers(Optional<Min> min, Optional<Max> max) {
         AllowableRangeValues myvalues = null;
 
