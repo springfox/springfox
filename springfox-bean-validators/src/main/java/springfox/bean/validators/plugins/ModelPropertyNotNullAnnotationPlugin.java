@@ -37,7 +37,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ModelPropertyNotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
-	 /**
+     /**
      * support all documentationTypes
      */
     @Override
