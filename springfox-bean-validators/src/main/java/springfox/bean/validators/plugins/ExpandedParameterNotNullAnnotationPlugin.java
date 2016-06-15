@@ -18,7 +18,8 @@
  */
 package springfox.bean.validators.plugins;
 
-import java.lang.annotation.Annotation;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterExpansionField;
+
 import java.lang.reflect.Field;
 
 import javax.validation.constraints.NotNull;
@@ -28,14 +29,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
-import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterExpansionField;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
+import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParameterBuilderPlugin {

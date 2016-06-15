@@ -18,9 +18,8 @@
  */
 package springfox.bean.apidescriptionreaders.plugins;
 
-import io.swagger.annotations.ApiParam;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterExpansionField;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import org.slf4j.Logger;
@@ -30,14 +29,13 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
-import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterExpansionField;
+import io.swagger.annotations.ApiParam;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
+import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 @Component
 //@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)

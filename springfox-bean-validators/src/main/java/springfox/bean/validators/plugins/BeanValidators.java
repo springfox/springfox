@@ -27,16 +27,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
 
-import springfox.bean.apidescriptionreaders.plugins.ParameterDescriptionKeysAnnotationPlugin;
-import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-import springfox.documentation.spi.service.contexts.ParameterContext;
-import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
-
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
+
+import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+import springfox.documentation.spi.service.contexts.ParameterContext;
+import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 /**
  * Utility methods for BeanValidators

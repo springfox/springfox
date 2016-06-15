@@ -26,12 +26,12 @@ import javax.validation.constraints.NotNull;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
+
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)

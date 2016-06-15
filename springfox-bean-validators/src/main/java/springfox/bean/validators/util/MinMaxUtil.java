@@ -24,10 +24,10 @@ import javax.validation.constraints.Min;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Optional;
+
 import springfox.bean.validators.plugins.ParameterMinMaxAnnotationPlugin;
 import springfox.documentation.service.AllowableRangeValues;
-
-import com.google.common.base.Optional;
 
 public class MinMaxUtil {
     private static final Logger LOG = LoggerFactory.getLogger(ParameterMinMaxAnnotationPlugin.class);

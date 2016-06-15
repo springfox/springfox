@@ -20,7 +20,6 @@ package springfox.bean.apidescriptionreaders.plugins;
 
 import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyBean;
 import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyField;
-import io.swagger.annotations.ApiModelProperty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +28,13 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
+
+import io.swagger.annotations.ApiModelProperty;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
 
 @Component
 //@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)

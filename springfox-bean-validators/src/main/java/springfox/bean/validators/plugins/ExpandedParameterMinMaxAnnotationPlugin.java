@@ -18,27 +18,26 @@
  */
 package springfox.bean.validators.plugins;
 
-import java.lang.annotation.Annotation;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterExpansionField;
+
 import java.lang.reflect.Field;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
+
 import springfox.bean.validators.util.MinMaxUtil;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
-
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterExpansionField;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
