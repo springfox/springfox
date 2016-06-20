@@ -27,6 +27,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 import springfox.documentation.RequestHandler;
+import springfox.documentation.WebMvcRequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 
 import java.util.List;
@@ -66,8 +67,8 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
   private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
     return new Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler>() {
       @Override
-      public RequestHandler apply(Map.Entry<RequestMappingInfo, HandlerMethod> input) {
-        return new RequestHandler(input.getKey(), input.getValue())
+      public WebMvcRequestHandler apply(Map.Entry<RequestMappingInfo, HandlerMethod> input) {
+        return new WebMvcRequestHandler(input.getKey(), input.getValue());
       }
     };
   }
