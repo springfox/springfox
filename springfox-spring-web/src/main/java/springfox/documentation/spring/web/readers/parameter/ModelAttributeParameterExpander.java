@@ -42,6 +42,8 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -53,8 +55,11 @@ import java.util.Set;
 import static com.google.common.base.Predicates.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.FluentIterable.*;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.*;
 import static java.lang.reflect.Modifier.*;
+import static springfox.documentation.schema.Collections.collectionElementType;
+import static springfox.documentation.schema.Collections.isContainerType;
 import static springfox.documentation.schema.Types.*;
 
 @Component
@@ -183,19 +188,40 @@ public class ModelAttributeParameterExpander {
   }
 
   private String nestedParentName(String parentName, Field field) {
+	String name = field.getName();
+	if (isCollection(field.getType())) name += "[#ind]";
+	
     if (isNullOrEmpty(parentName)) {
-      return field.getName();
+      return name;
     }
-    return String.format("%s.%s", parentName, field.getName());
+    return String.format("%s.%s", parentName, name);
   }
 
   private Class<?> fieldType(AlternateTypeProvider alternateTypeProvider, Field field) {
     Class<?> type = field.getType();
     ResolvedType resolvedType = resolver.resolve(type);
+    
+    if (isContainerType(resolvedType)) {
+        try {
+    	    if (type.isArray()) {
+    	        resolvedType = resolver.arrayType(type.getComponentType());
+    	    } else {
+    	        ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+    	        Optional<Type> itemClazz = FluentIterable.from(newArrayList(parameterizedType.getActualTypeArguments())).first();
+    	          if (itemClazz.isPresent()) {
+    	        	  resolvedType = resolver.resolve(type, itemClazz.get());
+    	          }
+    	        }
+    	      } catch (Exception e) {
+    	    	  LOG.warn(String.format("Failed to get generic type of field (%s)", field.getName()), e);
+    	      }
+        resolvedType = collectionElementType(resolvedType);
+    }
+    
     ResolvedType alternativeType = alternateTypeProvider.alternateFor(resolvedType);
     Class<?> erasedType = alternativeType.getErasedType();
     if (type != erasedType) {
-      LOG.debug("Found alternative type [{}] for field: [{}-{}]", erasedType, field, type);
+      LOG.debug("Found alternative type [{}] for field: [{}-{}]", erasedType, field);
     }
     return erasedType;
   }
