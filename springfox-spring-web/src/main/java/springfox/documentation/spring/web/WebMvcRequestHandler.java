@@ -16,10 +16,11 @@
  *
  *
  */
-package springfox.documentation;
+package springfox.documentation.spring.web;
 
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import springfox.documentation.RequestHandler;
 
 public class WebMvcRequestHandler extends RequestHandler {
   public WebMvcRequestHandler(

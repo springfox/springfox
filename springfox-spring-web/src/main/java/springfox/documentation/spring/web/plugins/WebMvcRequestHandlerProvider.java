@@ -27,7 +27,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.WebMvcRequestHandler;
+import springfox.documentation.spring.web.WebMvcRequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 
 import java.util.List;
