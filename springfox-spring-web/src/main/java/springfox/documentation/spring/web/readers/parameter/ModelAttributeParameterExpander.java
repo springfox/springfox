@@ -188,9 +188,11 @@ public class ModelAttributeParameterExpander {
   }
 
   private String nestedParentName(String parentName, Field field) {
-	String name = field.getName();
-	if (isCollection(field.getType())) name += "[#ind]";
-	
+    String name = field.getName();
+    if (isCollection(field.getType())) {
+        name += "[#ind]";
+    }
+    
     if (isNullOrEmpty(parentName)) {
       return name;
     }
@@ -203,18 +205,18 @@ public class ModelAttributeParameterExpander {
     
     if (isContainerType(resolvedType)) {
         try {
-    	    if (type.isArray()) {
-    	        resolvedType = resolver.arrayType(type.getComponentType());
-    	    } else {
-    	        ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-    	        Optional<Type> itemClazz = FluentIterable.from(newArrayList(parameterizedType.getActualTypeArguments())).first();
-    	          if (itemClazz.isPresent()) {
-    	        	  resolvedType = resolver.resolve(type, itemClazz.get());
-    	          }
-    	        }
-    	      } catch (Exception e) {
-    	    	  LOG.warn(String.format("Failed to get generic type of field (%s)", field.getName()), e);
-    	      }
+            if (type.isArray()) {
+                resolvedType = resolver.arrayType(type.getComponentType());
+            } else {
+                ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                Optional<Type> itemClazz = FluentIterable.from(newArrayList(parameterizedType.getActualTypeArguments())).first();
+                  if (itemClazz.isPresent()) {
+                      resolvedType = resolver.resolve(type, itemClazz.get());
+                  }
+                }
+              } catch (Exception e) {
+                  LOG.warn(String.format("Failed to get generic type of field (%s)", field.getName()), e);
+              }
         resolvedType = collectionElementType(resolvedType);
     }
     
