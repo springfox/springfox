@@ -5,6 +5,8 @@ import springfox.documentation.service.ObjectVendorExtension
 import springfox.documentation.service.StringVendorExtension
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
@@ -13,9 +15,13 @@ import springfox.documentation.spring.web.readers.operation.CachingOperationName
 class VendorExtensionsReaderSpec extends DocumentationContextSpec {
   def "should read from annotations"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-        RequestMethod.GET, dummyHandlerMethod('methodWithExtensions'), 0, requestMappingInfo("somePath"),
-        context(), "/anyPath")
+      OperationContext operationContext = new OperationContext(
+          new OperationBuilder(new CachingOperationNameGenerator()),
+          RequestMethod.GET,
+          new RequestMappingContext(context(),
+              new WebMvcRequestHandler(
+                  requestMappingInfo("/somePath"),
+                  dummyHandlerMethod('methodWithExtensions'))), 0)
       VendorExtensionsReader sut = new VendorExtensionsReader()
     when:
       sut.apply(operationContext)

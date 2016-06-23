@@ -24,11 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition;
+import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 10)
@@ -41,8 +42,8 @@ public class OperationParameterHeadersConditionReader extends AbstractOperationP
 
   @Override
   public void apply(OperationContext context) {
-    HeadersRequestCondition headersCondition = context.getRequestMappingInfo().getHeadersCondition();
-    List<Parameter> parameters = getParameters(headersCondition.getExpressions(), "header");
+    Set<NameValueExpression<String>> headers = context.headers();
+    List<Parameter> parameters = getParameters(headers, "header");
     context.operationBuilder().parameters(parameters);
   }
 }

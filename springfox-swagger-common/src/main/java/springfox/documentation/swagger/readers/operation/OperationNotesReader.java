@@ -19,11 +19,11 @@
 
 package springfox.documentation.swagger.readers.operation;
 
+import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
@@ -35,10 +35,9 @@ public class OperationNotesReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
 
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    ApiOperation methodAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
-    if (null != methodAnnotation && StringUtils.hasText(methodAnnotation.notes())) {
-      context.operationBuilder().notes(methodAnnotation.notes());
+    Optional<ApiOperation> methodAnnotation = context.findAnnotation(ApiOperation.class);
+    if (methodAnnotation.isPresent() && StringUtils.hasText(methodAnnotation.get().notes())) {
+      context.operationBuilder().notes(methodAnnotation.get().notes());
     }
   }
 

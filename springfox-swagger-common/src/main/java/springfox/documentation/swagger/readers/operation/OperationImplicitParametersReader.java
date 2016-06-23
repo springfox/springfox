@@ -19,20 +19,18 @@
 
 package springfox.documentation.swagger.readers.operation;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
@@ -52,13 +50,11 @@ public class OperationImplicitParametersReader implements OperationBuilderPlugin
   }
 
   protected List<Parameter> readParameters(OperationContext context) {
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    Method method = handlerMethod.getMethod();
-    ApiImplicitParams annotation = AnnotationUtils.findAnnotation(method, ApiImplicitParams.class);
+    Optional<ApiImplicitParams> annotation = context.findAnnotation(ApiImplicitParams.class);
 
     List<Parameter> parameters = Lists.newArrayList();
-    if (null != annotation) {
-      for (ApiImplicitParam param : annotation.value()) {
+    if (annotation.isPresent()) {
+      for (ApiImplicitParam param : annotation.get().value()) {
         parameters.add(OperationImplicitParameterReader.implicitParameter(param));
       }
     }

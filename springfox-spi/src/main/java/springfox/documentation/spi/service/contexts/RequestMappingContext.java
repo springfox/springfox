@@ -20,37 +20,43 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.condition.NameValueExpression;
+import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
+import springfox.documentation.RequestHandler;
+import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.builders.ApiDescriptionBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.Operation;
+import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
+import java.lang.annotation.Annotation;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.*;
 
-public class RequestMappingContext  {
-  private final RequestMappingInfo requestMappingInfo;
-  private final HandlerMethod handlerMethod;
+public class RequestMappingContext {
   private final OperationModelContextsBuilder operationModelContextsBuilder;
   private final DocumentationContext documentationContext;
+  private final RequestHandler handler;
   private final String requestMappingPattern;
   private final ApiDescriptionBuilder apiDescriptionBuilder;
 
   private final Map<String, Model> modelMap = newHashMap();
 
-  public RequestMappingContext(DocumentationContext context,
-                               RequestMappingInfo requestMappingInfo,
-                               HandlerMethod handlerMethod) {
+  public RequestMappingContext(DocumentationContext context, RequestHandler handler) {
 
     this.documentationContext = context;
-    this.requestMappingInfo = requestMappingInfo;
-    this.handlerMethod = handlerMethod;
+    this.handler = handler;
     this.requestMappingPattern = "";
     this.operationModelContextsBuilder = new OperationModelContextsBuilder(
         context.getDocumentationType(),
@@ -60,42 +66,32 @@ public class RequestMappingContext  {
     this.apiDescriptionBuilder = new ApiDescriptionBuilder(documentationContext.operationOrdering());
   }
 
-  private RequestMappingContext(DocumentationContext context,
-                                RequestMappingInfo requestMappingInfo,
-                                HandlerMethod handlerMethod,
-                                OperationModelContextsBuilder operationModelContextsBuilder,
-                                String requestMappingPattern) {
+  private RequestMappingContext(
+      DocumentationContext context,
+      RequestHandler handler,
+      OperationModelContextsBuilder operationModelContextsBuilder,
+      String requestMappingPattern) {
 
     this.documentationContext = context;
-    this.requestMappingInfo = requestMappingInfo;
-    this.handlerMethod = handlerMethod;
+    this.handler = handler;
     this.operationModelContextsBuilder = operationModelContextsBuilder;
     this.requestMappingPattern = requestMappingPattern;
     this.apiDescriptionBuilder = new ApiDescriptionBuilder(documentationContext.operationOrdering());
   }
 
-  private RequestMappingContext(DocumentationContext context,
-                                RequestMappingInfo requestMappingInfo,
-                                HandlerMethod handlerMethod,
-                                OperationModelContextsBuilder operationModelContextsBuilder,
-                                String requestMappingPattern,
-                                Map<String, Model> knownModels) {
+  private RequestMappingContext(
+      DocumentationContext context,
+      RequestHandler handler,
+      OperationModelContextsBuilder operationModelContextsBuilder,
+      String requestMappingPattern,
+      Map<String, Model> knownModels) {
 
     documentationContext = context;
-    this.requestMappingInfo = requestMappingInfo;
-    this.handlerMethod = handlerMethod;
+    this.handler = handler;
     this.operationModelContextsBuilder = operationModelContextsBuilder;
     this.requestMappingPattern = requestMappingPattern;
     this.apiDescriptionBuilder = new ApiDescriptionBuilder(documentationContext.operationOrdering());
     modelMap.putAll(knownModels);
-  }
-
-  public RequestMappingInfo getRequestMappingInfo() {
-    return requestMappingInfo;
-  }
-
-  public HandlerMethod getHandlerMethod() {
-    return handlerMethod;
   }
 
   public DocumentationContext getDocumentationContext() {
@@ -127,13 +123,13 @@ public class RequestMappingContext  {
   }
 
   public RequestMappingContext copyPatternUsing(String requestMappingPattern) {
-    return new RequestMappingContext(documentationContext, requestMappingInfo, handlerMethod,
-            operationModelContextsBuilder, requestMappingPattern);
+    return new RequestMappingContext(documentationContext, handler, operationModelContextsBuilder,
+        requestMappingPattern);
   }
 
   public RequestMappingContext withKnownModels(Map<String, Model> knownModels) {
-    return new RequestMappingContext(documentationContext, requestMappingInfo, handlerMethod,
-            operationModelContextsBuilder, requestMappingPattern, knownModels);
+    return new RequestMappingContext(documentationContext, handler,
+        operationModelContextsBuilder, requestMappingPattern, knownModels);
   }
 
   public ImmutableSet<Class> getIgnorableParameterTypes() {
@@ -146,5 +142,71 @@ public class RequestMappingContext  {
 
   public ImmutableSet<ResolvedType> getAdditionalModels() {
     return ImmutableSet.copyOf(documentationContext.getAdditionalModels());
+  }
+
+  public PatternsRequestCondition getPatternsCondition() {
+    return handler.getPatternsCondition();
+  }
+
+  public String getName() {
+    return handler.getName();
+  }
+
+  public Set<RequestMethod> getMethodsCondition() {
+    return handler.supportedMethods();
+  }
+
+  public Set<? extends MediaType> produces() {
+    return handler.produces();
+  }
+
+  public Set<? extends MediaType> consumes() {
+    return handler.consumes();
+  }
+
+  public Set<NameValueExpression<String>> headers() {
+    return handler.headers();
+  }
+
+  public Set<NameValueExpression<String>> params() {
+    return handler.params();
+  }
+
+  public String getGroupName() {
+    return handler.groupName();
+  }
+
+  public List<ResolvedMethodParameter> getParameters() {
+    return handler.getParameters();
+  }
+
+  public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
+    return handler.findAnnotation(annotation);
+  }
+
+  public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
+    return handler.findControllerAnnotation(annotation);
+  }
+
+  public <T extends Annotation> List<T> findAnnotations(Class<T> annotation) {
+    List<T> annotations = newArrayList();
+    Optional<T> methodAnnotation = findAnnotation(annotation);
+    Optional<T> controllerAnnotation = findControllerAnnotation(annotation);
+    if (methodAnnotation.isPresent()) {
+      annotations.add(methodAnnotation.get());
+    }
+    if (controllerAnnotation.isPresent()) {
+      annotations.add(controllerAnnotation.get());
+    }
+    return annotations;
+  }
+
+  public ResolvedType getReturnType() {
+    return handler.getReturnType();
+  }
+
+
+  public RequestHandlerKey key() {
+    return handler.key();
   }
 }

@@ -18,6 +18,7 @@
  */
 
 package springfox.documentation.swagger.readers.operation
+
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
@@ -29,10 +30,12 @@ import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
+import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 
 @Mixin([RequestMappingSupport, SwaggerPluginsSupport])
 class SwaggerOperationResponseClassReaderSpec extends DocumentationContextSpec {
@@ -42,10 +45,13 @@ class SwaggerOperationResponseClassReaderSpec extends DocumentationContextSpec {
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
       def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
-
+      OperationContext operationContext = new OperationContext(
+          new OperationBuilder(new CachingOperationNameGenerator()),
+          RequestMethod.GET,
+          new RequestMappingContext(context(),
+              new WebMvcRequestHandler(
+                  requestMappingInfo("/somePath"),
+                  handlerMethod)), 0)
       SwaggerOperationResponseClassReader sut =
               new SwaggerOperationResponseClassReader(new TypeResolver(), typeNameExtractor)
 

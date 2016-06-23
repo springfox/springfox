@@ -52,7 +52,7 @@ class RequestHandlerSelectorsSpec extends Specification {
     when:
       def handlerMethod = new HandlerMethod(clazz, methodName)
     then:
-      withClassAnnotation(ApiIgnore).apply(new RequestHandler(reqMapping, handlerMethod)) == available
+      withClassAnnotation(ApiIgnore).apply(new MockRequestHandler(reqMapping, handlerMethod)) == available
     where:
       clazz                   | methodName  | available
       new WithAnnotation()    | "test"      | true
@@ -65,7 +65,7 @@ class RequestHandlerSelectorsSpec extends Specification {
     when:
       def handlerMethod = new HandlerMethod(clazz, methodName)
     then:
-      withMethodAnnotation(ApiIgnore).apply(new RequestHandler(reqMapping, handlerMethod)) == available
+      withMethodAnnotation(ApiIgnore).apply(new MockRequestHandler(reqMapping, handlerMethod)) == available
     where:
       clazz                   | methodName  | available
       new WithAnnotation()    | "test"      | true
@@ -79,7 +79,7 @@ class RequestHandlerSelectorsSpec extends Specification {
       def handlerMethod = new HandlerMethod(clazz, methodName)
     then:
       basePackage("springfox.documentation.builders")
-        .apply(new RequestHandler(reqMapping, handlerMethod)) == available
+        .apply(new MockRequestHandler(reqMapping, handlerMethod)) == available
     where:
       clazz                   | methodName  | available
       new WithAnnotation()    | "test"      | true

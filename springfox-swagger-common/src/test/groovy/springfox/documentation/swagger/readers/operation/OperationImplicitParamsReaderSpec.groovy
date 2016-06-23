@@ -24,6 +24,8 @@ import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -36,10 +38,14 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
 
   def "Should add implicit parameters"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
 
+      OperationContext operationContext = new OperationContext(
+          new OperationBuilder(new CachingOperationNameGenerator()),
+          RequestMethod.GET,
+          new RequestMappingContext(context(),
+              new WebMvcRequestHandler(
+                  requestMappingInfo("/somePath"),
+                  handlerMethod)), 0)
 
       def resolver = new TypeResolver()
 

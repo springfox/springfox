@@ -33,6 +33,8 @@ import springfox.documentation.service.Header
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.ResponseHeaderTestController
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
@@ -45,15 +47,12 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
   def "ApiResponse annotation should override when using swagger reader"() {
     given:
       OperationContext operationContext = new OperationContext(
-          new OperationBuilder(
-              new CachingOperationNameGenerator()),
-              RequestMethod.GET,
-              dummyHandlerMethod('methodWithApiResponses'),
-              0,
-              requestMappingInfo('/somePath'),
-              context(),
-              "")
-
+          new OperationBuilder(new CachingOperationNameGenerator()),
+          RequestMethod.GET,
+          new RequestMappingContext(context(),
+              new WebMvcRequestHandler(
+                  requestMappingInfo("somePath"),
+                  dummyHandlerMethod('methodWithApiResponses'))), 0)
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
 
@@ -82,11 +81,10 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
       OperationContext operationContext = new OperationContext(
           new OperationBuilder(new CachingOperationNameGenerator()),
           RequestMethod.GET,
-          dummyHandlerMethod('methodApiResponseClass'),
-          0,
-          requestMappingInfo('/somePath'),
-          context(),
-          "")
+          new RequestMappingContext(context(),
+              new WebMvcRequestHandler(
+                  requestMappingInfo("somePath"),
+                  dummyHandlerMethod('methodApiResponseClass'))), 0)
 
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
           OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
@@ -117,12 +115,10 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
       OperationContext operationContext = new OperationContext(
           new OperationBuilder(new CachingOperationNameGenerator()),
           RequestMethod.GET,
-          handlerMethodIn(ResponseHeaderTestController, methodName),
-          0,
-          requestMappingInfo('/somePath'),
-          context(),
-          "")
-
+          new RequestMappingContext(context(),
+              new WebMvcRequestHandler(
+                  requestMappingInfo("somePath"),
+                  handlerMethodIn(ResponseHeaderTestController, methodName))), 0)
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
           OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
 

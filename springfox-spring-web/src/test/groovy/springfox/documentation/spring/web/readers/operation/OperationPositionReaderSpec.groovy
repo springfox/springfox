@@ -20,21 +20,28 @@
 package springfox.documentation.spring.web.readers.operation
 
 import org.springframework.web.bind.annotation.RequestMethod
-import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
+import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 @Mixin([RequestMappingSupport])
 class OperationPositionReaderSpec extends DocumentationContextSpec {
 
    def "should have correct api position using default reader"() {
     given:
-          OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, contextCount, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
-
-      def operationPositionReader = new DefaultOperationReader();
+      OperationContext operationContext = new OperationContext(
+        new OperationBuilder(new CachingOperationNameGenerator()),
+        RequestMethod.GET,
+        new RequestMappingContext(
+            context(),
+            new WebMvcRequestHandler(
+                requestMappingInfo("/somePath"),
+                handlerMethod)),
+        contextCount)
+    def operationPositionReader = new DefaultOperationReader();
     when:
       operationPositionReader.apply(operationContext)
       def operation = operationContext.operationBuilder().build()

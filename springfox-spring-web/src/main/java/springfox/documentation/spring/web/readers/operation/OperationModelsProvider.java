@@ -29,7 +29,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
@@ -38,7 +37,8 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-import static springfox.documentation.schema.ResolvedTypes.*;
+import static springfox.documentation.schema.ResolvedTypes.resolvedTypeSignature;
+
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -72,7 +72,7 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
   }
 
   private void collectFromReturnType(RequestMappingContext context) {
-    ResolvedType modelType = new HandlerMethodResolver(typeResolver).methodReturnType(context.getHandlerMethod());
+    ResolvedType modelType = context.getReturnType();
     modelType = context.alternateFor(modelType);
     LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
     context.operationModelsBuilder().addReturn(modelType);
@@ -80,12 +80,10 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
 
   private void collectParameters(RequestMappingContext context) {
 
-    HandlerMethod handlerMethod = context.getHandlerMethod();
 
-    LOG.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+    LOG.debug("Reading parameters models for handlerMethod |{}|", context.getName());
 
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(typeResolver);
-    List<ResolvedMethodParameter> parameterTypes = handlerMethodResolver.methodParameters(handlerMethod);
+    List<ResolvedMethodParameter> parameterTypes = context.getParameters();
     for (ResolvedMethodParameter parameterType : parameterTypes) {
       Annotation[] parameterAnnotations = parameterType.getMethodParameter().getParameterAnnotations();
       for (Annotation annotation : parameterAnnotations) {
@@ -96,6 +94,6 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
         }
       }
     }
-    LOG.debug("Finished reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+    LOG.debug("Finished reading parameters models for handlerMethod |{}|", context.getName());
   }
 }

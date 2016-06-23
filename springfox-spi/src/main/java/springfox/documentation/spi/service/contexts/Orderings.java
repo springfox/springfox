@@ -102,8 +102,7 @@ public class Orderings {
   }
 
   private static String qualifiedMethodName(RequestMappingContext context) {
-    return String.format("%s.%s", context.getHandlerMethod().getBeanType().getName(),
-        context.getHandlerMethod().getMethod().getName());
+    return String.format("%s.%s", context.getGroupName(), context.getName());
   }
 
 
@@ -118,7 +117,7 @@ public class Orderings {
   }
 
   static PatternsRequestCondition patternsCondition(RequestHandler handler) {
-    return handler.getRequestMapping().getPatternsCondition();
+    return handler.getPatternsCondition();
   }
 
   public static Ordering<? super DocumentationPlugin> pluginOrdering() {

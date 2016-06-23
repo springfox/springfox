@@ -3,6 +3,7 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
@@ -13,8 +14,11 @@ class SwaggerOperationModelsProviderSpec extends DocumentationContextSpec {
       RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
           [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
       )
-      RequestMappingContext requestContext = new RequestMappingContext(context(), requestMappingInfo,
-          dummyHandlerMethod(operationName))
+      RequestMappingContext requestContext = new RequestMappingContext(
+          context(),
+          new WebMvcRequestHandler(
+              requestMappingInfo,
+              dummyHandlerMethod(operationName)))
       SwaggerOperationModelsProvider sut = new SwaggerOperationModelsProvider(new TypeResolver())
     when:
       sut.apply(requestContext)

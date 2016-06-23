@@ -19,11 +19,11 @@
 
 package springfox.documentation.swagger.readers.operation;
 
+import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
@@ -35,12 +35,14 @@ public class OperationNicknameIntoUniqueIdReader implements OperationBuilderPlug
   @Override
   public void apply(OperationContext context) {
 
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    ApiOperation methodAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
-    if (null != methodAnnotation && StringUtils.hasText(methodAnnotation.nickname())) {
-      // Populate the value of nickname annotation into uniqueId
-      context.operationBuilder().uniqueId(methodAnnotation.nickname());
-      context.operationBuilder().codegenMethodNameStem(methodAnnotation.nickname());
+    Optional<ApiOperation> methodAnnotation = context.findAnnotation(ApiOperation.class);
+    if (methodAnnotation.isPresent()) {
+      ApiOperation operation = methodAnnotation.get();
+      if (StringUtils.hasText(operation.nickname())) {
+        // Populate the value of nickname annotation into uniqueId
+        context.operationBuilder().uniqueId(operation.nickname());
+        context.operationBuilder().codegenMethodNameStem(operation.nickname());
+      }
     }
   }
 

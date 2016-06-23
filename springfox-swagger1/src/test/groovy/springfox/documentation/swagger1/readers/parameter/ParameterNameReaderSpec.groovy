@@ -56,7 +56,7 @@ class ParameterNameReaderSpec extends DocumentationContextSpec {
       def methodParameter = Mock(MethodParameter)
     and: "mocks are setup"
       operationContext.consumes() >> []
-      operationContext.handlerMethod >> HttpMethod.GET
+//      operationContext.handlerMethod >> HttpMethod.GET
       resolvedMethodParameter.resolvedParameterType >> new TypeResolver().resolve(String)
       resolvedMethodParameter.methodParameter >> methodParameter
       methodParameter.getParameterAnnotations() >> [apiParam]

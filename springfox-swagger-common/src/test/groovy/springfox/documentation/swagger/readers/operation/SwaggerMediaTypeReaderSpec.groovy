@@ -24,6 +24,8 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
@@ -33,17 +35,20 @@ import static com.google.common.collect.Sets.*
 @Mixin([RequestMappingSupport])
 class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec {
   def "handler method should override spring media types"() {
-    RequestMappingInfo requestMappingInfo =
+      RequestMappingInfo requestMappingInfo =
             requestMappingInfo('/somePath',
                     [
                             'consumesRequestCondition': consumesRequestCondition(['application/json'] as String[]),
                             'producesRequestCondition': producesRequestCondition(['application/json'] as String[])
                     ]
             )
-    OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-            RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
-            context(), "")
-
+      OperationContext operationContext = new OperationContext(
+          new OperationBuilder(new CachingOperationNameGenerator()),
+          RequestMethod.GET,
+          new RequestMappingContext(context(),
+              new WebMvcRequestHandler(
+                  requestMappingInfo,
+                  handlerMethod)), 0)
     when:
       def sut = new SwaggerMediaTypeReader()
       sut.apply(operationContext)

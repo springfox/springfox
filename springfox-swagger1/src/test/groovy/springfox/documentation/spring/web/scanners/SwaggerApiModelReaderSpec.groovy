@@ -26,6 +26,7 @@ import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.controllers.BusinessService
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -96,7 +97,11 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
   }
 
   def context(HandlerMethod handlerMethod) {
-    return new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
+    return new RequestMappingContext(
+        context(),
+        new WebMvcRequestHandler(
+            requestMappingInfo('/somePath'),
+            handlerMethod))
   }
 
   def "should only generate models for request parameters that are annotated with Springs RequestBody"() {
@@ -106,8 +111,12 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
               HttpServletResponse.class,
               DummyModels.AnnotatedBusinessModel.class
       )
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-              handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(
+          context(),
+          new WebMvcRequestHandler(
+              requestMappingInfo('/somePath'),
+              handlerMethod))
+
     when:
       def models = sut.read(context)
 
@@ -129,8 +138,11 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
     and:
       HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
       RequestMappingContext context =
-              new RequestMappingContext(pluginContext, requestMappingInfo('/businesses/responseEntity/{businessId}'),
-                      handlerMethod )
+              new RequestMappingContext(
+                  pluginContext,
+                  new WebMvcRequestHandler(
+                      requestMappingInfo('/businesses/responseEntity/{businessId}'),
+                      handlerMethod))
     when:
       def models = sut.read(context)
 
@@ -144,7 +156,11 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSameAnnotatedModelInReturnAndRequestBodyParam',
               DummyModels.AnnotatedBusinessModel
       )
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = new RequestMappingContext(
+          context(),
+          new WebMvcRequestHandler(
+              requestMappingInfo('/somePath'),
+              handlerMethod))
 
     when:
       def models = sut.read(context)

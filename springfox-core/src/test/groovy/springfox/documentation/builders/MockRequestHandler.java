@@ -16,10 +16,9 @@
  *
  *
  */
-package springfox.documentation.spring.web;
+package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
@@ -31,31 +30,29 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
-import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Set;
 
-public class WebMvcRequestHandler implements RequestHandler {
+public class MockRequestHandler implements RequestHandler {
   private final RequestMappingInfo requestMapping;
   private final HandlerMethod handlerMethod;
 
-  public WebMvcRequestHandler(
+  public MockRequestHandler(
       RequestMappingInfo requestMapping,
       HandlerMethod handlerMethod) {
     this.requestMapping = requestMapping;
     this.handlerMethod = handlerMethod;
   }
 
-  @Override
   public HandlerMethod getHandlerMethod() {
     return handlerMethod;
   }
 
   @Override
   public Class<?> declaringClass() {
-    return getHandlerMethod().getBeanType();
+    return getHandlerMethod().getMethod().getDeclaringClass();
   }
 
   @Override
@@ -70,72 +67,66 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public String groupName() {
-    return ControllerNamingUtils.controllerNameAsGroup(handlerMethod);
+    return null;
   }
 
   @Override
   public String getName() {
-    return handlerMethod.getMethod().getName();
+    return null;
   }
 
   @Override
   public Set<RequestMethod> supportedMethods() {
-    return requestMapping.getMethodsCondition().getMethods();
+    return null;
   }
 
   @Override
   public Set<? extends MediaType> produces() {
-    return requestMapping.getProducesCondition().getProducibleMediaTypes();
+    return null;
   }
 
   @Override
   public Set<? extends MediaType> consumes() {
-    return requestMapping.getConsumesCondition().getConsumableMediaTypes();
+    return null;
   }
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return requestMapping.getHeadersCondition().getExpressions();
+    return null;
   }
 
   @Override
   public Set<NameValueExpression<String>> params() {
-    return requestMapping.getParamsCondition().getExpressions();
+    return null;
   }
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation));
+    return null;
   }
 
   @Override
   public RequestHandlerKey key() {
-    return new RequestHandlerKey(
-        requestMapping.getPatternsCondition().getPatterns(),
-        requestMapping.getMethodsCondition().getMethods(),
-        requestMapping.getConsumesCondition().getConsumableMediaTypes(),
-        requestMapping.getProducesCondition().getProducibleMediaTypes());
+    return null;
   }
 
   @Override
   public List<ResolvedMethodParameter> getParameters() {
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
-    return handlerMethodResolver.methodParameters(getHandlerMethod());
+    return null;
   }
 
   @Override
   public ResolvedType getReturnType() {
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
-    return handlerMethodResolver.methodReturnType(getHandlerMethod());
+    return null;
   }
 
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getBeanType(), annotation));
+    return null;
   }
 
   @Override
   public RequestMappingInfo getRequestMapping() {
-    return requestMapping;
+    return null;
   }
 }

@@ -29,6 +29,8 @@ import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.dummy.models.Treeish
@@ -79,9 +81,9 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   @Unroll
   def "Should ignore ignorables"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
+      OperationContext operationContext = operationContext(
+          handlerMethod,
+          requestMappingInfo("/somePath"))
 
     when:
       sut.apply(operationContext)
@@ -97,12 +99,23 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
       dummyHandlerMethod('methodWithAnnotatedInteger', Integer.class)      | 0
   }
 
+  def operationContext(handlerMethod, requestMapping) {
+    new OperationContext(
+        new OperationBuilder(
+            new CachingOperationNameGenerator()),
+        RequestMethod.GET,
+        new RequestMappingContext(
+            context(),
+            new WebMvcRequestHandler(requestMapping, handlerMethod)),
+        0)
+  }
+
   def "Should expand ModelAttribute request params"() {
     given:
       plugin.directModelSubstitute(LocalDateTime, String)
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, dummyHandlerMethod('methodWithModelAttribute', Example.class), 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
+      OperationContext operationContext = operationContext(
+          dummyHandlerMethod('methodWithModelAttribute', Example .class),
+          requestMappingInfo("/somePath"))
 
     when:
       sut.apply(operationContext)
@@ -149,9 +162,9 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should expand ModelAttribute request param if param has treeish field"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class), 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
+      OperationContext operationContext = operationContext(
+          dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class),
+          requestMappingInfo("/somePath"))
 
     when:
       sut.apply(operationContext)
@@ -166,9 +179,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should not expand unannotated request params"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
+      OperationContext operationContext = operationContext(handlerMethod, requestMappingInfo("/somePath"))
 
     when:
       sut.apply(operationContext)
@@ -183,8 +194,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "OperationParameterReader supports all documentationTypes"() {
     given:
-      def sut = new OperationParameterReader(new TypeResolver(), Mock(ModelAttributeParameterExpander)
-      )
+      def sut = new OperationParameterReader(new TypeResolver(), Mock(ModelAttributeParameterExpander))
       sut.pluginsManager = defaultWebPlugins()
     expect:
       sut.supports(DocumentationType.SPRING_WEB)

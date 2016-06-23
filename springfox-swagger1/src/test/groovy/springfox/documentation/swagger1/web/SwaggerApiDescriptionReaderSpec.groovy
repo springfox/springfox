@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.Operation
 import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -48,8 +49,11 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
         RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
                 [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
         )
-        RequestMappingContext mappingContext = new RequestMappingContext(context(), requestMappingInfo,
-                dummyHandlerMethod())
+        RequestMappingContext mappingContext = new RequestMappingContext(
+            context(),
+            new WebMvcRequestHandler(
+                requestMappingInfo,
+                dummyHandlerMethod()))
         operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
       when:
         def descriptionList = sut.read(mappingContext)

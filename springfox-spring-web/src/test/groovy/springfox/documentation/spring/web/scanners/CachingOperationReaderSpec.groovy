@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.Operation
 import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.OperationReader
@@ -35,8 +36,11 @@ class CachingOperationReaderSpec extends DocumentationContextSpec {
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
 
       def context = context()
-      def requestMappingContext = new RequestMappingContext(context, requestMappingInfo,
-        dummyHandlerMethod("methodWithConcreteResponseBody"))
+      def requestMappingContext = new RequestMappingContext(
+          context,
+          new WebMvcRequestHandler(
+              requestMappingInfo,
+              dummyHandlerMethod("methodWithConcreteResponseBody")))
       def mock = Mock(OperationReader) {
         read(requestMappingContext) >> [anOperation()]
       }

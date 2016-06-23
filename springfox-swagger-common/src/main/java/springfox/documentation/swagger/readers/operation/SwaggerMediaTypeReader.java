@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.readers.operation;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.core.annotation.Order;
@@ -39,10 +40,10 @@ import static org.springframework.core.annotation.AnnotationUtils.*;
 public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
-    ApiOperation annotation = findAnnotation(context.getHandlerMethod().getMethod(), ApiOperation.class);
-    if (null != annotation) {
-      context.operationBuilder().consumes(asSet(nullToEmpty(annotation.consumes())));
-      context.operationBuilder().produces(asSet(nullToEmpty(annotation.produces())));
+    Optional<ApiOperation> annotation = context.findAnnotation(ApiOperation.class);
+    if (annotation.isPresent()) {
+      context.operationBuilder().consumes(asSet(nullToEmpty(annotation.get().consumes())));
+      context.operationBuilder().produces(asSet(nullToEmpty(annotation.get().produces())));
     }
   }
 

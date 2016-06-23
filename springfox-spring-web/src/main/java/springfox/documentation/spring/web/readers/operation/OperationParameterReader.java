@@ -26,7 +26,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -76,10 +75,8 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   }
 
   protected List<Parameter> readParameters(final OperationContext context) {
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(typeResolver);
 
-    List<ResolvedMethodParameter> methodParameters = handlerMethodResolver.methodParameters(handlerMethod);
+    List<ResolvedMethodParameter> methodParameters = context.getParameters();
     List<Parameter> parameters = newArrayList();
 
     for (ResolvedMethodParameter methodParameter : methodParameters) {

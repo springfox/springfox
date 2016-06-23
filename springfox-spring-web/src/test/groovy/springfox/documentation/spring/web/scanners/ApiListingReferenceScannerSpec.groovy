@@ -22,6 +22,7 @@ import springfox.documentation.RequestHandler
 import springfox.documentation.annotations.ApiIgnore
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spring.web.SpringGroupingStrategy
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController
 import springfox.documentation.spring.web.mixins.AccessorAssertions
@@ -73,12 +74,12 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
     given:
 
       requestHandlers = [
-          new RequestHandler(requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
       ]
 
     when:
@@ -98,12 +99,12 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
     given:
 
       requestHandlers = [
-        new RequestHandler(requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
-        new RequestHandler(requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
-        new RequestHandler(requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
-        new RequestHandler(requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
-        new RequestHandler(requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
-        new RequestHandler(requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
+        new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
+        new WebMvcRequestHandler(requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
       ]
 
     when:

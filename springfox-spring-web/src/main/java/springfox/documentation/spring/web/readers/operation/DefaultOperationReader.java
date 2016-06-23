@@ -31,7 +31,7 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 public class DefaultOperationReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
-    String operationName = context.getHandlerMethod().getMethod().getName();
+    String operationName = context.getName();
     context.operationBuilder()
             .uniqueId(operationName)
             .method(context.httpMethod())

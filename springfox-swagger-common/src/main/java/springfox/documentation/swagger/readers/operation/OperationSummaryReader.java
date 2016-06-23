@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.readers.operation;
 
+import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -34,9 +35,9 @@ public class OperationSummaryReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {
-    ApiOperation apiOperationAnnotation = context.getHandlerMethod().getMethodAnnotation(ApiOperation.class);
-    if (null != apiOperationAnnotation && StringUtils.hasText(apiOperationAnnotation.value())) {
-      context.operationBuilder().summary(apiOperationAnnotation.value());
+    Optional<ApiOperation> apiOperationAnnotation = context.findAnnotation(ApiOperation.class);
+    if (apiOperationAnnotation.isPresent() && StringUtils.hasText(apiOperationAnnotation.get().value())) {
+      context.operationBuilder().summary(apiOperationAnnotation.get().value());
     }
   }
 

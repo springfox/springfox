@@ -24,11 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition;
+import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 10)
@@ -41,8 +42,8 @@ public class OperationParameterRequestConditionReader extends AbstractOperationP
 
   @Override
   public void apply(OperationContext context) {
-    ParamsRequestCondition paramsCondition = context.getRequestMappingInfo().getParamsCondition();
-    List<Parameter> parameters = getParameters(paramsCondition.getExpressions(), "query");
+    Set<NameValueExpression<String>> params = context.params();
+    List<Parameter> parameters = getParameters(params, "query");
     context.operationBuilder().parameters(parameters);
   }
 }

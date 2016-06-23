@@ -21,21 +21,20 @@ package springfox.documentation.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
+import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 
@@ -57,10 +56,8 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
   @Override
   public void apply(OperationContext context) {
 
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    ResolvedType returnType = new HandlerMethodResolver(typeResolver).methodReturnType(handlerMethod);
-    returnType = context.alternateFor(returnType);
-    returnType = findApiOperationAnnotation(handlerMethod.getMethod())
+    ResolvedType returnType = context.alternateFor(context.getReturnType());
+    returnType = context.findAnnotation(ApiOperation.class)
         .transform(resolvedTypeFromOperation(typeResolver, returnType))
         .or(returnType);
     if (canSkip(context, returnType)) {

@@ -28,7 +28,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -40,9 +39,7 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 
 import java.util.List;
 
-import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Sets.*;
-import static org.springframework.core.annotation.AnnotationUtils.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 
@@ -54,8 +51,9 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   private final TypeNameExtractor typeNameExtractor;
 
   @Autowired
-  public ResponseMessagesReader(TypeResolver typeResolver,
-                                TypeNameExtractor typeNameExtractor) {
+  public ResponseMessagesReader(
+      TypeResolver typeResolver,
+      TypeNameExtractor typeNameExtractor) {
     this.typeResolver = typeResolver;
     this.typeNameExtractor = typeNameExtractor;
   }
@@ -74,10 +72,9 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
 
   private void applyReturnTypeOverride(OperationContext context) {
 
-    ResolvedType returnType = new HandlerMethodResolver(typeResolver).methodReturnType(context.getHandlerMethod());
-    returnType = context.alternateFor(returnType);
-    int httpStatusCode = httpStatusCode(context.getHandlerMethod());
-    String message = message(context.getHandlerMethod());
+    ResolvedType returnType = context.alternateFor(context.getReturnType());
+    int httpStatusCode = httpStatusCode(context);
+    String message = message(context);
     ModelReference modelRef = null;
     if (!isVoid(returnType)) {
       ModelContext modelContext = ModelContext.returnValue(returnType,
@@ -96,9 +93,8 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   }
 
 
-  public static int httpStatusCode(HandlerMethod handlerMethod) {
-    Optional<ResponseStatus> responseStatus
-        = fromNullable(getAnnotation(handlerMethod.getMethod(), ResponseStatus.class));
+  public static int httpStatusCode(OperationContext context) {
+    Optional<ResponseStatus> responseStatus = context.findAnnotation(ResponseStatus.class);
     int httpStatusCode = HttpStatus.OK.value();
     if (responseStatus.isPresent()) {
       httpStatusCode = responseStatus.get().value().value();
@@ -106,9 +102,8 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     return httpStatusCode;
   }
 
-  public static String message(HandlerMethod handlerMethod) {
-    Optional<ResponseStatus> responseStatus
-        = fromNullable(getAnnotation(handlerMethod.getMethod(), ResponseStatus.class));
+  public static String message(OperationContext context) {
+    Optional<ResponseStatus> responseStatus = context.findAnnotation(ResponseStatus.class);
     String reasonPhrase = HttpStatus.OK.getReasonPhrase();
     if (responseStatus.isPresent()) {
       reasonPhrase = responseStatus.get().reason();

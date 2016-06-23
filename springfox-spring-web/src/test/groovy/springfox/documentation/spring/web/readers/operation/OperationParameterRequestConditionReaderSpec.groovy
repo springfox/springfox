@@ -28,6 +28,8 @@ import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
@@ -41,9 +43,15 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
       ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=testValue")
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
               ["paramsCondition": paramCondition])
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
-              context(), "")
+      OperationContext operationContext = new OperationContext(
+          new OperationBuilder(new CachingOperationNameGenerator()),
+          RequestMethod.GET,
+          new RequestMappingContext(
+              context(),
+              new WebMvcRequestHandler(
+                  requestMappingInfo,
+                  handlerMethod)),
+          0)
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
@@ -73,9 +81,15 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
       ParamsRequestCondition paramCondition = new ParamsRequestCondition("!test")
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
               ["paramsCondition": paramCondition])
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
-              context(), "")
+      OperationContext operationContext = new OperationContext(
+          new OperationBuilder(new CachingOperationNameGenerator()),
+          RequestMethod.GET,
+          new RequestMappingContext(
+              context(),
+              new WebMvcRequestHandler(
+                  requestMappingInfo,
+                  handlerMethod)),
+          0)
 
     when:
       sut.apply(operationContext)
@@ -90,11 +104,15 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
       ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=testValue", "test=3")
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0,  requestMappingInfo('/parameter-conditions',
-                      ["paramsCondition": paramCondition]),
-              context(), "/anyPath")
-
+      OperationContext operationContext = new OperationContext(
+          new OperationBuilder(new CachingOperationNameGenerator()),
+          RequestMethod.GET,
+          new RequestMappingContext(
+              context(),
+              new WebMvcRequestHandler(
+                  requestMappingInfo('/parameter-conditions', ["paramsCondition": paramCondition]),
+                  handlerMethod)),
+          0)
     when:
       sut.apply(operationContext)
 

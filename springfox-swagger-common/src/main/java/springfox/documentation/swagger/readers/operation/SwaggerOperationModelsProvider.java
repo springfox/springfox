@@ -23,6 +23,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
@@ -30,11 +31,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.List;
@@ -70,10 +69,9 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
   }
 
   private void collectFromApiOperation(RequestMappingContext context) {
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    ResolvedType returnType = new HandlerMethodResolver(typeResolver).methodReturnType(handlerMethod);
+    ResolvedType returnType = context.getReturnType();
     returnType = context.alternateFor(returnType);
-    Optional<ResolvedType> returnParameter = findApiOperationAnnotation(handlerMethod.getMethod())
+    Optional<ResolvedType> returnParameter = context.findAnnotation(ApiOperation.class)
         .transform(resolvedTypeFromOperation(typeResolver, returnType));
     if (returnParameter.isPresent() && returnParameter.get() != returnType) {
       LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(returnParameter.get()).or("<null>"));
@@ -82,11 +80,8 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
   }
 
   private void collectApiResponses(RequestMappingContext context) {
-
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    List<ApiResponses> allApiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
-
-    LOG.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
+    List<ApiResponses> allApiResponses = context.findAnnotations(ApiResponses.class);
+    LOG.debug("Reading parameters models for handlerMethod |{}|", context.getName());
     Set<ResolvedType> seenTypes = newHashSet();
     for (ApiResponses apiResponses : allApiResponses) {
       List<ResolvedType> modelTypes = toResolvedTypes(context).apply(apiResponses);

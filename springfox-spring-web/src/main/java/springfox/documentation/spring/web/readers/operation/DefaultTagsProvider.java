@@ -24,11 +24,10 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 
 import static com.google.common.collect.ImmutableSet.*;
 import static com.google.common.collect.Sets.*;
-import static springfox.documentation.spring.web.ControllerNamingUtils.*;
 
 @Component
 public class DefaultTagsProvider {
   public ImmutableSet<String> tags(OperationContext context) {
-    return copyOf(newHashSet(controllerNameAsGroup(context.getHandlerMethod())));
+    return copyOf(newHashSet(context.getGroupName()));
   }
 }

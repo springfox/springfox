@@ -19,10 +19,11 @@
 package springfox.documentation.spring.web.scanners;
 
 import org.springframework.stereotype.Component;
+import springfox.documentation.RequestHandler;
+import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.ApiDescription;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
@@ -34,13 +35,13 @@ import static com.google.common.collect.Maps.*;
 @Component
 @Incubating("2.2.0")
 public class ApiDescriptionLookup {
-  private Map<Method, ApiDescription> cache = newHashMap();
+  private Map<RequestHandlerKey, ApiDescription> cache = newHashMap();
 
-  public void add(Method key, ApiDescription value) {
+  public void add(RequestHandlerKey key, ApiDescription value) {
     cache.put(key, value);
   }
 
-  public ApiDescription description(Method key) {
-    return cache.get(key);
+  public ApiDescription description(RequestHandler requestHandler) {
+    return cache.get(requestHandler.key());
   }
 }

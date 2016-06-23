@@ -32,22 +32,21 @@ public class OperationCachingEquivalence extends Equivalence<RequestMappingConte
     if (eitherOfThemIsNull(first, second)) {
       return false;
     }
-    return Objects.equal(first.getHandlerMethod().getMethod(), second.getHandlerMethod().getMethod())
-        && Objects.equal(first.getRequestMappingPattern(), second.getRequestMappingPattern())
+    return Objects.equal(first.key(), second.key())
         && Objects.equal(first.getGenericsNamingStrategy(), second.getGenericsNamingStrategy());
   }
 
   private boolean eitherOfThemIsNull(RequestMappingContext first, RequestMappingContext second) {
-    return first.getHandlerMethod() == null || second.getHandlerMethod() == null;
+    return first.key() == null || second.key() == null;
   }
 
   private boolean bothAreNull(RequestMappingContext first, RequestMappingContext second) {
-    return first.getHandlerMethod() == null && second.getHandlerMethod() == null;
+    return first.key() == null && second.key() == null;
   }
 
   @Override
   protected int doHash(RequestMappingContext requestMappingContext) {
-    return Objects.hashCode(requestMappingContext.getHandlerMethod().getMethod(),
+    return Objects.hashCode(requestMappingContext.key(),
         requestMappingContext.getRequestMappingPattern(),
         requestMappingContext.getGenericsNamingStrategy());
   }
