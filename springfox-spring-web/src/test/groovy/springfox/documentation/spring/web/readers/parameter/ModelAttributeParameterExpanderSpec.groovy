@@ -73,21 +73,21 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   }
   
   def "should expand complex types"() {
-      when:
-        sut.expand("", ModelAttributeComplexTypeExample, parameters, context());
-      then:
-        parameters.size() == 11
-        parameters.find { it.name == 'stringProp' }
-        parameters.find { it.name == 'intProp' }
-        parameters.find { it.name == 'listProp' }
-        parameters.find { it.name == 'arrayProp' }
-        parameters.find { it.name == 'complexProp.name' }
-        parameters.find { it.name == 'fancyPets[#ind].categories[#ind].name' }
-        parameters.find { it.name == 'fancyPets[#ind].id' }
-        parameters.find { it.name == 'fancyPets[#ind].name' }
-        parameters.find { it.name == 'fancyPets[#ind].age' }
-        parameters.find { it.name == 'categories[#ind].name' }
-        parameters.find { it.name == 'modelAttributeProperty' } 
+    when:
+      sut.expand("", ModelAttributeComplexTypeExample, parameters, context());
+    then:
+      parameters.size() == 11
+      parameters.find { it.name == 'stringProp' }
+      parameters.find { it.name == 'intProp' }
+      parameters.find { it.name == 'listProp' }
+      parameters.find { it.name == 'arrayProp' }
+      parameters.find { it.name == 'complexProp.name' }
+      parameters.find { it.name == 'fancyPets[#ind].categories[#ind].name' }
+      parameters.find { it.name == 'fancyPets[#ind].id' }
+      parameters.find { it.name == 'fancyPets[#ind].name' }
+      parameters.find { it.name == 'fancyPets[#ind].age' }
+      parameters.find { it.name == 'categories[#ind].name' }
+      parameters.find { it.name == 'modelAttributeProperty' } 
   }
 
   def "should expand parameters when parent name is not empty"() {
