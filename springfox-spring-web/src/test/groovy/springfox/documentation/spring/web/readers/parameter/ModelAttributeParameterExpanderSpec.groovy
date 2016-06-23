@@ -23,6 +23,7 @@ import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import springfox.documentation.service.Parameter
 import springfox.documentation.spring.web.dummy.models.ModelAttributeExample
+import springfox.documentation.spring.web.dummy.models.ModelAttributeComplexTypeExample
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
