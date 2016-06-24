@@ -22,21 +22,17 @@ package springfox.documentation.spring.web.readers.operation
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
-import org.springframework.web.bind.annotation.RequestMethod
-import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
-import springfox.documentation.spi.service.contexts.RequestMappingContext
-import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.base.Strings.isNullOrEmpty
+import static com.google.common.base.Strings.*
 
 @Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class OperationResponseClassReaderSpec extends DocumentationContextSpec {
@@ -59,15 +55,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
 
   def "should have correct response class"() {
     given:
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(
-              context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("/somePath"),
-                  handlerMethod)),
-          0)
+      OperationContext operationContext = operationContext(context(), handlerMethod)
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()

@@ -20,18 +20,13 @@
 package springfox.documentation.spring.web.readers
 
 import com.fasterxml.classmate.TypeResolver
-import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Shared
 import spock.lang.Unroll
-import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
-import springfox.documentation.spi.service.contexts.RequestMappingContext
-import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.spring.web.scanners.MediaTypeReader
 
 import static com.google.common.collect.Sets.*
@@ -55,15 +50,9 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
                         'producesRequestCondition': producesRequestCondition(produces)
                   ]
             )
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(
-              context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo,
-                  handlerMethod)),
-          0)
+    OperationContext operationContext =
+        operationContext(context(), handlerMethod, 0, requestMappingInfo)
+
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()

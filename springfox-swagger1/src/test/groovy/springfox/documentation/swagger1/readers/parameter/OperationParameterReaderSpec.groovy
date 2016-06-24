@@ -74,13 +74,8 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should ignore ignorables"() {
     given:
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("/somePath"),
-                  handlerMethod)), 0)
+      OperationContext operationContext =
+        operationContext(context(), handlerMethod)
 
     when:
       sut.apply(operationContext)
@@ -99,13 +94,10 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should read a request mapping method without APIParameter annotation"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSinglePathVariable', String.class)
-      OperationContext operationContext = new OperationContext(
-        new OperationBuilder(new CachingOperationNameGenerator()),
-        RequestMethod.GET,
-        new RequestMappingContext(context(),
-            new WebMvcRequestHandler(
-                requestMappingInfo("/somePath"),
-                handlerMethod)), 0)
+
+      OperationContext operationContext =
+        operationContext(context(), handlerMethod)
+
 
     when:
       sut.apply(operationContext)
@@ -124,13 +116,8 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should expand ModelAttribute request params"() {
     given:
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("/somePath"),
-                  dummyHandlerMethod('methodWithModelAttribute', Example.class))), 0)
+      OperationContext operationContext =
+        operationContext(context(), dummyHandlerMethod('methodWithModelAttribute', Example.class))
 
     when:
       sut.apply(operationContext)
@@ -197,13 +184,9 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should not expand unannotated request params"() {
     given:
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("/somePath"),
-                  handlerMethod)), 0)
+      OperationContext operationContext =
+        operationContext(context(), handlerMethod)
+
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()

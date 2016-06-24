@@ -18,19 +18,15 @@
  */
 
 package springfox.documentation.swagger.readers.operation
-import org.springframework.web.bind.annotation.RequestMethod
-import springfox.documentation.builders.OperationBuilder
+
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.service.AuthorizationScope
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
-import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spi.service.contexts.SecurityContext
-import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 import static com.google.common.collect.Lists.*
 
@@ -41,13 +37,8 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
 
   def "should read from annotations"() {
     given:
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("somePath"),
-                  dummyHandlerMethod('methodWithAuth'))), 0)
+    OperationContext operationContext =
+        operationContext(context(), dummyHandlerMethod('methodWithAuth'))
 
     when:
       sut.apply(operationContext)
@@ -71,13 +62,8 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
               .forPaths(PathSelectors.any())
               .build()
       plugin.securityContexts(newArrayList(securityContext))
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("somePath"),
-                  dummyHandlerMethod())), 0)
+      OperationContext operationContext =
+        operationContext(context(), dummyHandlerMethod())
 
     when:
       sut.apply(operationContext)
@@ -97,13 +83,9 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
               .forPaths(PathSelectors.any())
               .build()
       plugin.securityContexts(newArrayList(securityContext))
-      OperationContext operationContext = new OperationContext(
-        new OperationBuilder(new CachingOperationNameGenerator()),
-        RequestMethod.GET,
-        new RequestMappingContext(context(),
-            new WebMvcRequestHandler(
-                requestMappingInfo("somePath"),
-                dummyHandlerMethod('methodWithHttpGETMethod'))), 0)
+      OperationContext operationContext =
+        operationContext(context(), dummyHandlerMethod('methodWithHttpGETMethod'))
+
     when:
       sut.apply(operationContext)
       def authorizations = operationContext.operationBuilder().build().securityReferences

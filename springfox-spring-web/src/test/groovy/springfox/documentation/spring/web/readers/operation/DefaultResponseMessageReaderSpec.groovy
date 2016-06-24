@@ -18,12 +18,12 @@
  */
 
 package springfox.documentation.spring.web.readers.operation
+
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.http.HttpStatus
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.bind.annotation.RequestMethod
-import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
@@ -31,8 +31,6 @@ import springfox.documentation.service.ResponseMessage
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
-import springfox.documentation.spi.service.contexts.RequestMappingContext
-import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -50,15 +48,12 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "Should add default response messages"() {
     given:
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          currentHttpMethod,
-          new RequestMappingContext(
-              context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("somePath"),
-                  handlerMethod)),
-          0)
+      OperationContext operationContext =
+          operationContext(context(),
+              handlerMethod,
+              0,
+              requestMappingInfo("/somePath"),
+              currentHttpMethod)
     when:
       sut.apply(operationContext)
     and:
@@ -78,15 +73,9 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "swagger annotation should override when using default reader"() {
     given:
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(
-              context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("somePath"),
-                  dummyHandlerMethod('methodWithApiResponses'))),
-          0)
+      OperationContext operationContext =
+          operationContext(context(), dummyHandlerMethod('methodWithApiResponses'))
+
     when:
       sut.apply(operationContext)
     and:
@@ -102,15 +91,8 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "Methods with return type containing a model should override the success response code"() {
     given:
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(
-              context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("somePath"),
-                  dummyHandlerMethod('methodWithConcreteResponseBody'))),
-          0)
+      OperationContext operationContext = operationContext(context(), dummyHandlerMethod('methodWithConcreteResponseBody'))
+
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
@@ -124,15 +106,9 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "Methods with return type containing a container model should override the success response code"() {
     given:
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(
-              context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("somePath"),
-                  dummyHandlerMethod('methodWithListOfBusinesses'))),
-          0)
+      OperationContext operationContext =
+          operationContext(context(), dummyHandlerMethod('methodWithListOfBusinesses'))
+
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
@@ -147,15 +123,9 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "Methods with return type containing ResponseStatus annotation"() {
     given:
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(
-              context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("somePath"),
-                  dummyHandlerMethod('methodWithResponseStatusAnnotation'))),
-          0)
+      OperationContext operationContext =
+          operationContext(context(), dummyHandlerMethod('methodWithResponseStatusAnnotation'))
+
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
@@ -169,15 +139,9 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "Methods with return type containing ResponseStatus annotation and empty reason message"() {
     given:
-      OperationContext operationContext = new OperationContext(
-          new OperationBuilder(new CachingOperationNameGenerator()),
-          RequestMethod.GET,
-          new RequestMappingContext(
-              context(),
-              new WebMvcRequestHandler(
-                  requestMappingInfo("somePath"),
-                  dummyHandlerMethod('methodWithResponseStatusAnnotationAndEmptyReason'))),
-          0)
+      OperationContext operationContext =
+          operationContext(context(), dummyHandlerMethod('methodWithResponseStatusAnnotationAndEmptyReason'))
+
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()

@@ -28,6 +28,10 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
 import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyControllerWithTags
 import springfox.documentation.spring.web.dummy.controllers.PetGroomingService
 import springfox.documentation.spring.web.dummy.DummyClass
@@ -36,6 +40,7 @@ import springfox.documentation.spring.web.dummy.DummyControllerWithApiDescriptio
 import springfox.documentation.spring.web.dummy.controllers.FancyPetService
 import springfox.documentation.spring.web.dummy.controllers.PetService
 import springfox.documentation.spring.web.dummy.models.FancyPet
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 import javax.servlet.ServletContext
 
@@ -156,5 +161,22 @@ class RequestMappingSupport {
 
   ServletContext servletContext() {
     [getContextPath: { return "/context-path" }] as ServletContext
+  }
+
+  def operationContext(
+      context,
+      handlerMethod,
+      operationIndex = 0,
+      requestMapping =  requestMappingInfo("/somePath"),
+      httpMethod = RequestMethod.GET) {
+    new OperationContext(
+        new OperationBuilder(new CachingOperationNameGenerator()),
+        httpMethod,
+        new RequestMappingContext(
+            context,
+            new WebMvcRequestHandler(
+                requestMapping,
+                handlerMethod)),
+        operationIndex)
   }
 }

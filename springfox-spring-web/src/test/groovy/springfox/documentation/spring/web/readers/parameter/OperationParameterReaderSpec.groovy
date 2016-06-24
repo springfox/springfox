@@ -22,15 +22,11 @@ package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import org.springframework.validation.BindingResult
-import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Unroll
-import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
-import springfox.documentation.spi.service.contexts.RequestMappingContext
-import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.dummy.models.Treeish
@@ -38,7 +34,6 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 
 import javax.servlet.ServletContext
@@ -82,7 +77,9 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should ignore ignorables"() {
     given:
       OperationContext operationContext = operationContext(
+          context(),
           handlerMethod,
+          0,
           requestMappingInfo("/somePath"))
 
     when:
@@ -99,23 +96,15 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
       dummyHandlerMethod('methodWithAnnotatedInteger', Integer.class)      | 0
   }
 
-  def operationContext(handlerMethod, requestMapping) {
-    new OperationContext(
-        new OperationBuilder(
-            new CachingOperationNameGenerator()),
-        RequestMethod.GET,
-        new RequestMappingContext(
-            context(),
-            new WebMvcRequestHandler(requestMapping, handlerMethod)),
-        0)
-  }
-
   def "Should expand ModelAttribute request params"() {
     given:
       plugin.directModelSubstitute(LocalDateTime, String)
-      OperationContext operationContext = operationContext(
-          dummyHandlerMethod('methodWithModelAttribute', Example .class),
-          requestMappingInfo("/somePath"))
+      OperationContext operationContext =
+          operationContext(
+              context(),
+              dummyHandlerMethod('methodWithModelAttribute', Example .class),
+              0,
+              requestMappingInfo("/somePath"))
 
     when:
       sut.apply(operationContext)
@@ -162,9 +151,12 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should expand ModelAttribute request param if param has treeish field"() {
     given:
-      OperationContext operationContext = operationContext(
-          dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class),
-          requestMappingInfo("/somePath"))
+      OperationContext operationContext =
+          operationContext(
+              context(),
+              dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class),
+              0,
+              requestMappingInfo("/somePath"))
 
     when:
       sut.apply(operationContext)
@@ -179,7 +171,8 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should not expand unannotated request params"() {
     given:
-      OperationContext operationContext = operationContext(handlerMethod, requestMappingInfo("/somePath"))
+      OperationContext operationContext =
+          operationContext(context(), handlerMethod, 0, requestMappingInfo("/somePath"))
 
     when:
       sut.apply(operationContext)

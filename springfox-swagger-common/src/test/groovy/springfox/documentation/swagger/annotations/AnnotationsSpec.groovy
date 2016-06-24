@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiResponses
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.spring.web.dummy.DummyClass
+import springfox.documentation.spring.web.dummy.controllers.ConcreteController
 
 import java.lang.reflect.AnnotatedElement
 
