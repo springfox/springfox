@@ -69,10 +69,10 @@ public class RequestHandlerKey {
       return false;
     }
     RequestHandlerKey that = (RequestHandlerKey) o;
-    return Sets.difference(pathMappings, that.pathMappings).isEmpty() &&
-        Sets.difference(supportedMethods, that.supportedMethods).isEmpty() &&
-        Sets.difference(supportedMediaTypes, that.supportedMediaTypes).isEmpty() &&
-        Sets.difference(supportedMediaTypes, that.producibleMediaTypes).isEmpty();
+    return Sets.symmetricDifference(pathMappings, that.pathMappings).isEmpty() &&
+        Sets.symmetricDifference(supportedMethods, that.supportedMethods).isEmpty() &&
+        Sets.symmetricDifference(supportedMediaTypes, that.supportedMediaTypes).isEmpty() &&
+        Sets.symmetricDifference(producibleMediaTypes, that.producibleMediaTypes).isEmpty();
   }
 
   @Override
