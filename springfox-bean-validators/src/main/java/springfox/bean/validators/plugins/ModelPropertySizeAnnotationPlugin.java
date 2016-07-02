@@ -23,8 +23,6 @@ import static springfox.bean.validators.plugins.BeanValidators.validatorFromMode
 
 import javax.validation.constraints.Size;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -39,8 +37,6 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ModelPropertySizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ModelPropertySizeAnnotationPlugin.class);
 
     /**
      * support all documentationTypes

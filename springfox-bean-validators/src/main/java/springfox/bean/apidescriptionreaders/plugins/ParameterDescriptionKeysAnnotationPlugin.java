@@ -45,8 +45,7 @@ public class ParameterDescriptionKeysAnnotationPlugin implements ParameterBuilde
     private static final Logger LOG = LoggerFactory.getLogger(ParameterDescriptionKeysAnnotationPlugin.class);
 
     @Autowired
-
-    ApiDescriptionPropertiesReader propertiesReader;
+    private ApiDescriptionPropertiesReader propertiesReader;
     
     /**
      * support all documentationTypes

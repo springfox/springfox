@@ -24,8 +24,6 @@ import static springfox.bean.validators.plugins.BeanValidators.validatorFromMode
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +39,6 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ModelPropertyMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ModelPropertyMinMaxAnnotationPlugin.class);
 
     /**
      * support all documentationTypes

@@ -45,7 +45,7 @@ public class ExpandedParameterDescriptionKeysAnnotationPlugin implements Expande
     private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterDescriptionKeysAnnotationPlugin.class);
 
     @Autowired
-    ApiDescriptionPropertiesReader propertiesReader;
+    private ApiDescriptionPropertiesReader propertiesReader;
     
     /**
      * support all documentationTypes

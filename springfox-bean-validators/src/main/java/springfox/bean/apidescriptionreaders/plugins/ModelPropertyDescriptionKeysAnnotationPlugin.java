@@ -44,7 +44,7 @@ public class ModelPropertyDescriptionKeysAnnotationPlugin implements ModelProper
     private static final Logger LOG = LoggerFactory.getLogger(ModelPropertyDescriptionKeysAnnotationPlugin.class);
 
     @Autowired
-    ApiDescriptionPropertiesReader propertiesReader;
+    private ApiDescriptionPropertiesReader propertiesReader;
     
     /**
      * support all documentationTypes

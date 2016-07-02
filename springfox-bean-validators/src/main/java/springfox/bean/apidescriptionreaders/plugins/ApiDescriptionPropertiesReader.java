@@ -33,9 +33,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApiDescriptionPropertiesReader {
 
-    String propertyFilePath = "/api_description.properties";
+    private String propertyFilePath = "/api_description.properties";
     
-    Properties props = new Properties();
+    private Properties props = new Properties();
     
     @PostConstruct
     public void init() throws IOException {
