@@ -62,12 +62,12 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
 	@VisibleForTesting
 	Optional<Min> extractMin(ModelPropertyContext context) {
-		return validatorFromBean(context, Min.class).or(validatorFromField(context, Min.class));
+		return validatorFromModelPropertyBean(context, Min.class).or(validatorFromModelPropertyField(context, Min.class));
 	}
 
 	@VisibleForTesting
 	Optional<Max> extractMax(ModelPropertyContext context) {
-		return validatorFromBean(context, Max.class).or(validatorFromField(context, Max.class));
+		return validatorFromModelPropertyBean(context, Max.class).or(validatorFromModelPropertyField(context, Max.class));
 	}
 
 }
