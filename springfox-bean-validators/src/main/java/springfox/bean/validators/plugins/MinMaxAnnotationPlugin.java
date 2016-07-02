@@ -21,14 +21,10 @@ package springfox.bean.validators.plugins;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import springfox.bean.validators.util.MinMaxUtil;
-import springfox.documentation.service.AllowableRangeValues;
-import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
@@ -42,32 +38,30 @@ import static springfox.bean.validators.plugins.BeanValidators.*;
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
-	private static final Logger LOG = LoggerFactory.getLogger(MinMaxAnnotationPlugin.class);
+    @Override
+    public boolean supports(DocumentationType delimiter) {
+        // we simply support all documentationTypes!
+        return true;
+    }
 
-	@Override
-	public boolean supports(DocumentationType delimiter) {
-		// we simply support all documentationTypes!
-		return true;
-	}
+    @Override
+    public void apply(ModelPropertyContext context) {
+        Optional<Min> min = extractMin(context);
+        Optional<Max> max = extractMax(context);
 
-	@Override
-	public void apply(ModelPropertyContext context) {
-		Optional<Min> min = extractMin(context);
-		Optional<Max> max = extractMax(context);
+        // add support for @Min/@Max
+        context.getBuilder().allowableValues(MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max));
 
-		// add support for @Min/@Max
-		context.getBuilder().allowableValues(MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max));
+    }
 
-	}
+    @VisibleForTesting
+    Optional<Min> extractMin(ModelPropertyContext context) {
+        return validatorFromModelPropertyBean(context, Min.class).or(validatorFromModelPropertyField(context, Min.class));
+    }
 
-	@VisibleForTesting
-	Optional<Min> extractMin(ModelPropertyContext context) {
-		return validatorFromModelPropertyBean(context, Min.class).or(validatorFromModelPropertyField(context, Min.class));
-	}
-
-	@VisibleForTesting
-	Optional<Max> extractMax(ModelPropertyContext context) {
-		return validatorFromModelPropertyBean(context, Max.class).or(validatorFromModelPropertyField(context, Max.class));
-	}
+    @VisibleForTesting
+    Optional<Max> extractMax(ModelPropertyContext context) {
+        return validatorFromModelPropertyBean(context, Max.class).or(validatorFromModelPropertyField(context, Max.class));
+    }
 
 }
