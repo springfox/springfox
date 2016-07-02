@@ -40,8 +40,6 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ModelPropertySizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ModelPropertySizeAnnotationPlugin.class);
-
     /**
      * support all documentationTypes
      */
