@@ -1,7 +1,5 @@
 package springfox.documentation.schema
 
-import com.fasterxml.classmate.TypeResolver
-import com.google.common.base.Optional
 import spock.lang.Specification
 
 import static springfox.documentation.schema.ClassSupport.*
@@ -23,18 +21,6 @@ class ClassSupportSpec extends Specification {
       name                                | expectedFound
       "com.google.common.base.Optional"   | true
       "java.util.NonExistent"             | false
-  }
-
-  def "detects optional types" () {
-    given:
-      def resolver = new TypeResolver()
-      def optional = isOptional(resolver.resolve(type))
-    expect:
-      expectedOptional == optional
-    where:
-      type     | expectedOptional
-      Optional | true
-      String   | false
   }
 
 }

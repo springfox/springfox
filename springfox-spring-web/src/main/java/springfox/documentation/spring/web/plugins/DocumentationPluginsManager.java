@@ -153,10 +153,11 @@ public class DocumentationPluginsManager {
         Iterable<Function<String, String>> decorators
             = from(pathDecorators.getPluginsFor(context.documentationContext()))
             .transform(toDecorator(context));
+        String decorated = input;
         for (Function<String, String> decorator : decorators) {
-          input = decorator.apply(input);
+          decorated = decorator.apply(decorated);
         }
-        return input;
+        return decorated;
       }
     };
   }

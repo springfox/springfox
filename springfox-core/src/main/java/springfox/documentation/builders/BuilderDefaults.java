@@ -36,6 +36,9 @@ import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.schema.Enums.*;
 
+/**
+ * This is a utility class with useful methods for builders
+ */
 public class BuilderDefaults {
   private BuilderDefaults() {
     throw new UnsupportedOperationException();
@@ -124,17 +127,17 @@ public class BuilderDefaults {
    * @return most specific resolved type
    */
   public static ResolvedType replaceIfMoreSpecific(ResolvedType replacement, ResolvedType defaultValue) {
-    replacement = defaultIfAbsent(replacement, defaultValue);
+    ResolvedType toReturn = defaultIfAbsent(replacement, defaultValue);
     if (isObject(replacement) && isNotObject(defaultValue)) {
       return defaultValue;
     }
-    return replacement;
+    return toReturn;
   }
 
   /**
    * Returns an empty list if the newValue is null
    *
-   * @param newValue - a list
+   * @param args - a list
    * @param <T>      - any type
    * @return non-null list
    */
@@ -155,6 +158,12 @@ public class BuilderDefaults {
         Object.class.equals(replacement.getErasedType());
   }
 
+  /**
+   * Retains current allowable values if then new value is null
+   * @param newValue - new value
+   * @param current - existing values
+   * @return the appropriate value
+   */
   public static AllowableValues emptyToNull(AllowableValues newValue, AllowableValues current) {
     if (newValue != null) {
       if (newValue instanceof AllowableListValues) {

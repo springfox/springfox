@@ -18,20 +18,11 @@
  */
 package springfox.documentation.schema;
 
-import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 
 public class ClassSupport {
   private ClassSupport() {
     throw new UnsupportedOperationException();
-  }
-
-  public static boolean isOptional(ResolvedType resolvedType) {
-    if ("java.util.Optional".equals(resolvedType.getErasedType().getName()) ||
-        Optional.class.equals(resolvedType.getErasedType())) {
-      return true;
-    }
-    return false;
   }
 
   public static Optional<? extends Class> classByName(String className) {

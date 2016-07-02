@@ -44,12 +44,9 @@ public class Collections {
   }
 
   public static boolean isContainerType(ResolvedType type) {
-    if (List.class.isAssignableFrom(type.getErasedType()) ||
-            Set.class.isAssignableFrom(type.getErasedType()) ||
-            type.isArray()) {
-      return true;
-    }
-    return false;
+    return List.class.isAssignableFrom(type.getErasedType()) ||
+        Set.class.isAssignableFrom(type.getErasedType()) ||
+        type.isArray();
   }
 
   public static String containerType(ResolvedType type) {

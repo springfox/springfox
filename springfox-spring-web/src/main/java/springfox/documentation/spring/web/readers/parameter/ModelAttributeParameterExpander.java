@@ -194,7 +194,7 @@ public class ModelAttributeParameterExpander {
     ResolvedType resolvedType = resolver.resolve(type);
     ResolvedType alternativeType = alternateTypeProvider.alternateFor(resolvedType);
     Class<?> erasedType = alternativeType.getErasedType();
-    if (type != erasedType) {
+    if (!type.equals(erasedType)) {
       LOG.debug("Found alternative type [{}] for field: [{}-{}]", erasedType, field, type);
     }
     return erasedType;

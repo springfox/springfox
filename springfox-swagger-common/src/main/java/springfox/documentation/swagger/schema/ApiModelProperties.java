@@ -56,17 +56,17 @@ public final class ApiModelProperties {
 
   public static AllowableValues allowableValueFromString(String allowableValueString) {
     AllowableValues allowableValues = new AllowableListValues(Lists.<String>newArrayList(), "LIST");
-    allowableValueString = allowableValueString.trim();
-    if (allowableValueString.startsWith("range[")) {
-      allowableValueString = allowableValueString.replaceAll("range\\[", "").replaceAll("]", "");
-      Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
+    String trimmed = allowableValueString.trim();
+    if (trimmed.startsWith("range[")) {
+      trimmed = trimmed.replaceAll("range\\[", "").replaceAll("]", "");
+      Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(trimmed);
       List<String> ranges = newArrayList(split);
       allowableValues = new AllowableRangeValues(ranges.get(0), ranges.get(1));
-    } else if (allowableValueString.contains(",")) {
-      Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(allowableValueString);
+    } else if (trimmed.contains(",")) {
+      Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(trimmed);
       allowableValues = new AllowableListValues(newArrayList(split), "LIST");
-    } else if (hasText(allowableValueString)) {
-      List<String> singleVal = Collections.singletonList(allowableValueString);
+    } else if (hasText(trimmed)) {
+      List<String> singleVal = Collections.singletonList(trimmed);
       allowableValues = new AllowableListValues(singleVal, "LIST");
     }
     return allowableValues;

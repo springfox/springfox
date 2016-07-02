@@ -48,7 +48,7 @@ public class GenericWebContextLoader extends AbstractContextLoader {
     return new MockServletContext(warRootDir, resourceLoader) {
       // Required for DefaultServletHttpRequestHandler...
       public RequestDispatcher getNamedDispatcher(String path) {
-        return path.equals("default") ? new MockRequestDispatcher(path) : super.getNamedDispatcher(path);
+        return "default".equals(path) ? new MockRequestDispatcher(path) : super.getNamedDispatcher(path);
       }
     };
   }

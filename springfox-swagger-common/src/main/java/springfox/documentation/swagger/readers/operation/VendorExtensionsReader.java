@@ -104,10 +104,8 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private String ensurePrefixed(String name) {
-    if (!isNullOrEmpty(name)) {
-      if (!name.startsWith("x-")) {
-        name = "x-" + name;
-      }
+    if (!isNullOrEmpty(name) && !name.startsWith("x-")) {
+      return "x-" + name;
     }
     return name;
   }
