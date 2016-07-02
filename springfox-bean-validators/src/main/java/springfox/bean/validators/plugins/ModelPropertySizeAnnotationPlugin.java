@@ -18,28 +18,25 @@
  */
 package springfox.bean.validators.plugins;
 
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterExpansionField;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyBean;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyField;
 
-import java.lang.reflect.Field;
+import javax.validation.constraints.Size;
 
-import javax.validation.constraints.NotNull;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
+import springfox.bean.validators.util.SizeUtil;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
-import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
+import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
+import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParameterBuilderPlugin {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterNotNullAnnotationPlugin.class);
+public class ModelPropertySizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
     /**
      * support all documentationTypes
@@ -51,30 +48,25 @@ public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParamet
     }
 
     /** 
-     * read NotNull annotation
+     * read Size annotation
      */
     @Override
-    public void apply(ParameterExpansionContext context) {
-        Field myfield = context.getField();
-        LOG.debug("myfield: " + myfield.getName());
-
-        Optional<NotNull> size = extractAnnotation(context);
+    public void apply(ModelPropertyContext context) {
+        Optional<Size> size = extractAnnotation(context);
 
         if (size.isPresent()) {
-            LOG.debug("field: " + myfield.getName() + " set to required!!");
-            context.getParameterBuilder().required(true);
-
+            context.getBuilder().allowableValues(SizeUtil.createAllowableValuesFromSizeForStrings(size.get()));
         }
     }
 
     /**
-     * extract NotNull from bean or field
+     * extract Size from bean or field
      * @param context
      * @return
      */
     @VisibleForTesting
-    Optional<NotNull> extractAnnotation(ParameterExpansionContext context) {
-        return validatorFromParameterExpansionField(context, NotNull.class);
+    Optional<Size> extractAnnotation(ModelPropertyContext context) {
+        return validatorFromModelPropertyBean(context, Size.class).or(validatorFromModelPropertyField(context, Size.class));
     }
 
 }

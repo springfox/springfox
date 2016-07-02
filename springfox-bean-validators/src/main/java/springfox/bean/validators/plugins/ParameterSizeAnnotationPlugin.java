@@ -17,73 +17,58 @@
  *
  */
 package springfox.bean.validators.plugins;
-import java.lang.annotation.Annotation;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterField;
 
 import javax.validation.constraints.Size;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 
 import springfox.bean.validators.util.SizeUtil;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
-
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
-
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ParameterSizeAnnotationPlugin implements ParameterBuilderPlugin {
 
   private static final Logger LOG = LoggerFactory.getLogger(ParameterSizeAnnotationPlugin.class);
 
+  /**
+   * support all documentationTypes
+   */
   @Override
   public boolean supports(DocumentationType delimiter) {
     // we simply support all documentationTypes!
     return true;
   }
 
+  /** 
+   * read Size annotation
+   */
   @Override
   public void apply(ParameterContext context) {
     Optional<Size> size = extractAnnotation(context);
-    LOG.info("searching for @size: " + size.isPresent());
+    
     if (size.isPresent()) {
-    	AllowableRangeValues values = SizeUtil.createAllowableValuesFromSizeForStrings(size.get());
-    	LOG.info("adding allowable Values @Size: " + values.getMin() + " - " + values.getMax());
-    	context.parameterBuilder().allowableValues(values);
-    	
-    	// TODO Additionally show @Size in the description until https://github.com/springfox/springfox/issues/1244 gets fixed
-    	context.parameterBuilder().description("@Size: " + values.getMin() + " - " + values.getMax() + " (until #1244 gets fixed)");
+        AllowableRangeValues values = SizeUtil.createAllowableValuesFromSizeForStrings(size.get());
+        LOG.debug("adding allowable Values @Size: " + values.getMin() + " - " + values.getMax());
+        context.parameterBuilder().allowableValues(values);
+        
     }
   }
 
   @VisibleForTesting
   Optional<Size> extractAnnotation(ParameterContext context) {
-    return validatorFromField(context, Size.class);
+    return validatorFromParameterField(context, Size.class);
   }
   
-
-  public static <T extends Annotation> Optional<T> validatorFromField(
-		  ParameterContext context,
-      Class<T> annotationType) {
-	  
-	  MethodParameter methodParam = context.methodParameter();
-	  LOG.debug("methodParam.index: " + methodParam.getParameterIndex());
-	  LOG.debug("methodParam.name: " + methodParam.getParameterName());
-	  
-	  
-    T annotatedElement = methodParam.getParameterAnnotation(annotationType);
-    Optional<T> notNull = Optional.absent();
-    if (annotatedElement!=null) {
-      notNull = Optional.fromNullable(annotatedElement);
-    }
-    return notNull;
-  }
 
 
 }

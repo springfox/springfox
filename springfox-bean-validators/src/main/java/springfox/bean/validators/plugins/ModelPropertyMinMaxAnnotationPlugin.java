@@ -18,15 +18,12 @@
  */
 package springfox.bean.validators.plugins;
 
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterExpansionField;
-
-import java.lang.reflect.Field;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyBean;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyField;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -34,16 +31,14 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
 import springfox.bean.validators.util.MinMaxUtil;
-import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
-import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
+import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
+import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParameterBuilderPlugin {
+public class ModelPropertyMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterMinMaxAnnotationPlugin.class);
 
     /**
      * support all documentationTypes
@@ -58,40 +53,33 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
      * read Min/Max annotations
      */
     @Override
-    public void apply(ParameterExpansionContext context) {
-
-        Field myfield = context.getField();
-        LOG.debug("expandedparam.myfield: " + myfield.getName());
-
+    public void apply(ModelPropertyContext context) {
         Optional<Min> min = extractMin(context);
         Optional<Max> max = extractMax(context);
 
-        if (min.isPresent() || max.isPresent()) {
-            AllowableRangeValues values = MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max);
-            LOG.debug("adding allowable Values MinMax: " + values.getMin() + " - " + values.getMax());
-            context.getParameterBuilder().allowableValues(values);
-        }
+        // add support for @Min/@Max
+        context.getBuilder().allowableValues(MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max));
 
     }
 
     /**
-     * extract Min annotation
+     * extract Min from bean or field
      * @param context
      * @return
      */
     @VisibleForTesting
-    Optional<Min> extractMin(ParameterExpansionContext context) {
-        return validatorFromParameterExpansionField(context, Min.class);
+    Optional<Min> extractMin(ModelPropertyContext context) {
+        return validatorFromModelPropertyBean(context, Min.class).or(validatorFromModelPropertyField(context, Min.class));
     }
 
     /**
-     * extract Max annotation
+     * extract Min from bean or field
      * @param context
      * @return
      */
     @VisibleForTesting
-    Optional<Max> extractMax(ParameterExpansionContext context) {
-        return validatorFromParameterExpansionField(context, Max.class);
+    Optional<Max> extractMax(ModelPropertyContext context) {
+        return validatorFromModelPropertyBean(context, Max.class).or(validatorFromModelPropertyField(context, Max.class));
     }
 
 }

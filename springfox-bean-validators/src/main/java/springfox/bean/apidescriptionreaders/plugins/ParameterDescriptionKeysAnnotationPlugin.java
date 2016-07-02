@@ -18,26 +18,24 @@
  */
 package springfox.bean.apidescriptionreaders.plugins;
 
-import io.swagger.annotations.ApiParam;
-
-import java.lang.annotation.Annotation;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromParameterField;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
+
+import io.swagger.annotations.ApiParam;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
-
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
 
 @Component
 //@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -47,60 +45,68 @@ public class ParameterDescriptionKeysAnnotationPlugin implements ParameterBuilde
     private static final Logger LOG = LoggerFactory.getLogger(ParameterDescriptionKeysAnnotationPlugin.class);
 
     @Autowired
-	ApiDescriptionPropertiesReader propertiesReader;
-	
-
+    private ApiDescriptionPropertiesReader propertiesReader;
+    
+    /**
+     * support all documentationTypes
+     */
     @Override
     public boolean supports(DocumentationType delimiter) {
         // we simply support all documentationTypes!
         return true;
     }
 
+    /**
+     * read description from Properties file if key is present
+     */
     @Override
     public void apply(ParameterContext context) {
-    	LOG.info("*** apply parameter" );
-    	Optional<ApiParam> apiDescription = extractAnnotation(context);
-	   	
-	   	 if (apiDescription.isPresent()) {
-	   		ApiParam apiModelProperty = apiDescription.get();
-	   		 
-	   		 String descriptionValue = apiModelProperty.value();
-	   		 LOG.info("*** searching for key: " + descriptionValue);
-	   		 String description = propertiesReader.getProperty(descriptionValue);
-	   		 
-	   		 if (description!=null) {
-	   			 context.parameterBuilder().description(description);
-	   		 }
-	   	 }
-    	
-
+        LOG.info("*** apply parameter" );
+        Optional<ApiParam> apiDescription = extractAnnotation(context);
+           
+        if (apiDescription.isPresent()) {
+            ApiParam apiModelProperty = apiDescription.get();
+             
+             String descriptionValue = apiModelProperty.value();
+             LOG.info("*** searching for key: " + descriptionValue);
+             String description = propertiesReader.getProperty(descriptionValue);
+             
+             if (description!=null) {
+                 context.parameterBuilder().description(description);
+             }
+         }
     }
+        
 
+    /**
+     * read ApiParam-annotation from field
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<ApiParam> extractAnnotation(ParameterContext context) {
-        return validatorFromField(context, ApiParam.class);
+        return validatorFromParameterField(context, ApiParam.class);
     }
 
+    /**
+     * read RequestParam-annotation from field
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<RequestParam> extractRequestParamAnnotation(ParameterContext context) {
-        return validatorFromField(context, RequestParam.class);
+        return validatorFromParameterField(context, RequestParam.class);
     }
 
+    /**
+     * read PathVariable-annotation from field
+     * @param context
+     * @return
+     */
     @VisibleForTesting
     Optional<PathVariable> extractPathVariableAnnotation(ParameterContext context) {
-        return validatorFromField(context, PathVariable.class);
+        return validatorFromParameterField(context, PathVariable.class);
     }
 
-    public static <T extends Annotation> Optional<T> validatorFromField(ParameterContext context, Class<T> annotationType) {
-
-        MethodParameter methodParam = context.methodParameter();
-
-        T annotatedElement = methodParam.getParameterAnnotation(annotationType);
-        Optional<T> annotationValue = Optional.absent();
-        if (annotatedElement != null) {
-            annotationValue = Optional.fromNullable(annotatedElement);
-        }
-        return annotationValue;
-    }
 
 }
