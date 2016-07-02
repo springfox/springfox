@@ -18,17 +18,20 @@
  */
 package springfox.bean.validators.plugins;
 
-import com.google.common.base.Optional;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyBean;
+import static springfox.bean.validators.plugins.BeanValidators.validatorFromModelPropertyField;
+
+import javax.validation.constraints.Pattern;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.google.common.base.Optional;
+
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import javax.validation.constraints.Pattern;
-
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromBean;
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromField;
 
 /**
  * @author : ashutosh
@@ -44,8 +47,8 @@ public class PatternAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   Optional<Pattern> extractPattern(ModelPropertyContext context) {
-    return validatorFromBean(context, Pattern.class)
-        .or(validatorFromField(context, Pattern.class));
+    return validatorFromModelPropertyBean(context, Pattern.class)
+        .or(validatorFromModelPropertyField(context, Pattern.class));
   }
 
   private String createPatternValueFromAnnotation(Optional<Pattern> pattern) {

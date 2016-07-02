@@ -20,6 +20,7 @@ package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+
 import io.swagger.models.ModelImpl;
 import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.models.properties.AbstractNumericProperty;
@@ -40,12 +41,18 @@ import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 
 public class EnumMapper {
+<<<<<<< HEAD
   static ModelImpl maybeAddAllowableValuesToParameter(ModelImpl toReturn, AllowableValues allowableValues) {
+=======
+  static ModelImpl maybeAddEnumValues(ModelImpl toReturn, AllowableValues allowableValues) {
+	  
+>>>>>>> ae0f78d671ca565047555382634db5a98287574c
     if (allowableValues instanceof AllowableListValues) {
       toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
     }
     return toReturn;
   }
+<<<<<<< HEAD
 
   static SerializableParameter maybeAddAllowableValuesToParameter(
       SerializableParameter toReturn,
@@ -58,6 +65,28 @@ public class EnumMapper {
       toReturn.setMinimum(safeDouble(((AllowableRangeValues) allowableValues).getMin()));
       toReturn.setMaximum(safeDouble(((AllowableRangeValues) allowableValues).getMax()));
     }
+=======
+  static SerializableParameter maybeAddEnumValues(SerializableParameter toReturn, AllowableValues allowableValues) {
+	  
+    if (allowableValues instanceof AllowableListValues) {
+      toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
+    }
+    
+    // @ApiParam - Allowable values not displayed in Swagger API docs #1244 
+    if (allowableValues instanceof AllowableRangeValues) {
+    	AllowableRangeValues allowableRangeValues = (AllowableRangeValues)allowableValues;
+    	if (allowableRangeValues.getMin()!=null) {
+    		toReturn.setMinimum(Double.valueOf(allowableRangeValues.getMin()));	
+    	}
+        
+        if (allowableRangeValues.getMax()!=null) {
+        	toReturn.setMaximum(Double.valueOf(((AllowableRangeValues) allowableValues).getMax()));	
+        }
+        
+        
+      }
+    
+>>>>>>> ae0f78d671ca565047555382634db5a98287574c
     return toReturn;
   }
 

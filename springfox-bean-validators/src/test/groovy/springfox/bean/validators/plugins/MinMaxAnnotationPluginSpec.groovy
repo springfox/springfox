@@ -30,7 +30,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 class MinMaxAnnotationPluginSpec extends Specification {
   def "Always supported" () {
     expect:
-      new MinMaxAnnotationPlugin().supports(types)
+      new ModelPropertyMinMaxAnnotationPlugin().supports(types)
     where:
       types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
@@ -38,7 +38,7 @@ class MinMaxAnnotationPluginSpec extends Specification {
   @Unroll
   def "@Min/@Max annotations are reflected in the model #propertyName that are AnnotatedElements"()  {
     given:
-      def sut = new MinMaxAnnotationPlugin()
+      def sut = new ModelPropertyMinMaxAnnotationPlugin()
       def element = MinMaxTestModel.getDeclaredField(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),

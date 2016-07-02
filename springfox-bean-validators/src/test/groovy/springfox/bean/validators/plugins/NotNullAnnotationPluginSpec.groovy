@@ -31,7 +31,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 class NotNullAnnotationPluginSpec extends Specification {
   def "Always supported" () {
     expect:
-      new NotNullAnnotationPlugin().supports(types)
+      new ModelPropertyNotNullAnnotationPlugin().supports(types)
     where:
       types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
@@ -39,7 +39,7 @@ class NotNullAnnotationPluginSpec extends Specification {
   @Unroll
   def "@NotNull annotations are reflected in the model properties that are AnnotatedElements"()  {
     given:
-      def sut = new NotNullAnnotationPlugin()
+      def sut = new ModelPropertyNotNullAnnotationPlugin()
       def element = NullablityTestModel.getDeclaredField(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),
@@ -62,7 +62,7 @@ class NotNullAnnotationPluginSpec extends Specification {
   @Unroll
   def "@NotNull annotations are reflected in the model properties that are BeanPropertyDefinitions"()  {
     given:
-      def sut = new NotNullAnnotationPlugin()
+      def sut = new ModelPropertyNotNullAnnotationPlugin()
       def beanProperty = beanProperty(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),
