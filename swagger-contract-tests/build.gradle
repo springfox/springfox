@@ -15,7 +15,6 @@ repositories {
 
 apply plugin: 'war'
 apply plugin: 'spring-boot'
-apply plugin: 'com.ofg.uptodate'
 
 configurations {
   //Logback causing spring boot errors

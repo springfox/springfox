@@ -1,8 +1,3 @@
-import springfox.gradlebuild.utils.ProjectDefinitions
-
-apply from: "$rootDir/gradle/dependencies.gradle"
-apply from: "$rootDir/gradle/ide.gradle"
-
 buildscript {
   repositories {
     jcenter()
@@ -13,11 +8,16 @@ buildscript {
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.3.1"
     classpath "com.github.adrianbk:gradle-travisci-trigger-plugin:1.0.0"
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
-    classpath "com.ofg:uptodate-gradle-plugin:1.6.2"
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
     classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2"
     classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
   }
 }
+import springfox.gradlebuild.utils.ProjectDefinitions
+
+apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/ide.gradle"
+apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'build-dashboard'
 apply plugin: 'project-report'
 apply plugin: 'springfox-multi-release'
@@ -28,7 +28,6 @@ ext {
 }
 
 subprojects {
-  apply plugin: "com.ofg.uptodate"
   //Not strictly groovy projects but useful for the IDE to recognise groovy test sources
   apply plugin: 'groovy' //gradle groovy plugin extends the java plugin
   apply plugin: 'com.github.adrianbk.jvmsrc'
