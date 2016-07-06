@@ -166,7 +166,7 @@
       "description": "",
       "id": "Resource\u00abPet\u00bb",
       "properties": {
-        "_links": {
+        "links": {
           "required": false,
           "items": {
             "type": "Link"

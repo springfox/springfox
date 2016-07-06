@@ -117,7 +117,7 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     then:
     response.statusCode == HttpStatus.OK
     //Uncomment this to see a better json diff when tests fail
-//    println(JsonOutput.prettyPrint(response.body))
+    println(JsonOutput.prettyPrint(response.body))
 
     JSONAssert.assertEquals(contract, response.body, NON_EXTENSIBLE)
   }

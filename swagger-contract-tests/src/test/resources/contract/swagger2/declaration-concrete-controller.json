@@ -151,7 +151,7 @@
     "Resource\u00abPet\u00bb": {
       "type": "object",
       "properties": {
-        "_links": {
+        "links": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Link"
