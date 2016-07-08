@@ -83,11 +83,11 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
       parameters.find { it.name == 'listProp' }
       parameters.find { it.name == 'arrayProp' }
       parameters.find { it.name == 'complexProp.name' }
-      parameters.find { it.name == 'fancyPets[#ind].categories[#ind].name' }
-      parameters.find { it.name == 'fancyPets[#ind].id' }
-      parameters.find { it.name == 'fancyPets[#ind].name' }
-      parameters.find { it.name == 'fancyPets[#ind].age' }
-      parameters.find { it.name == 'categories[#ind].name' }
+      parameters.find { it.name == 'fancyPets[0].categories[0].name' }
+      parameters.find { it.name == 'fancyPets[0].id' }
+      parameters.find { it.name == 'fancyPets[0].name' }
+      parameters.find { it.name == 'fancyPets[0].age' }
+      parameters.find { it.name == 'categories[0].name' }
       parameters.find { it.name == 'modelAttributeProperty' } 
   }
 

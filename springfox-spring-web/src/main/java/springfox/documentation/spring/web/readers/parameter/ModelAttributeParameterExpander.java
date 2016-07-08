@@ -190,7 +190,7 @@ public class ModelAttributeParameterExpander {
   private String nestedParentName(String parentName, Field field) {
     String name = field.getName();
     if (isCollection(field.getType())) {
-        name += "[#ind]";
+        name += "[0]";
     }
     
     if (isNullOrEmpty(parentName)) {
@@ -209,7 +209,7 @@ public class ModelAttributeParameterExpander {
                 resolvedType = resolver.arrayType(type.getComponentType());
             } else {
                 ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-                Optional<Type> itemClazz = FluentIterable.from(newArrayList(parameterizedType.getActualTypeArguments())).first();
+                Optional<Type> itemClazz = from(newArrayList(parameterizedType.getActualTypeArguments())).first();
                   if (itemClazz.isPresent()) {
                       resolvedType = resolver.resolve(type, itemClazz.get());
                   }
