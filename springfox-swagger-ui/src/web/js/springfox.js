@@ -40,7 +40,7 @@ $(function() {
         log("Unable to Load SwaggerUI");
       },
       docExpansion: data.docExpansion || 'none',
-      jsonEditor: data.jsonEditor || false,
+      jsonEditor: JSON.parse(data.jsonEditor) || false,
       apisSorter: data.apisSorter || 'alpha',
       defaultModelRendering: data.defaultModelRendering || 'schema',
       showRequestHeaders: data.showRequestHeaders || true
