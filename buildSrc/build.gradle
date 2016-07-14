@@ -25,5 +25,6 @@ dependencies {
   compile localGroovy() //Gradle 2.3 -> Groovy 2.3.9
   compile "com.google.guava:guava:18.0"
   testCompile 'org.spockframework:spock-core:1.0-groovy-2.4@jar'
+  testCompile 'junit:junit:4.12'
 }
 
