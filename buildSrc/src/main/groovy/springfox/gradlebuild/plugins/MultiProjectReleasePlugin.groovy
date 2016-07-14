@@ -79,7 +79,6 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
       evaluatedProject.subprojects.each { p ->
         p.tasks.findByPath('publish').each { t ->
-          project.logger.info("Releasing version: $p.version for task $t.name")
           snapshotTask.dependsOn(t)
         }
       }
@@ -104,7 +103,6 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
 
       evaluatedProject.subprojects.each { p ->
         p.tasks.findByPath('bintrayUpload').each { t ->
-          project.logger.info("Releasing version: $p.version for task $t.name")
           iPublishTask.dependsOn(t)
         }
       }
