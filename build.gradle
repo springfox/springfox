@@ -9,11 +9,10 @@ buildscript {
     classpath "com.github.adrianbk:gradle-travisci-trigger-plugin:1.0.0"
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
     classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
-    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7"
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1"
     classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
   }
 }
-import springfox.gradlebuild.utils.ProjectDefinitions
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/ide.gradle"
@@ -39,7 +38,7 @@ subprojects {
   //Commented PMD and Findbugs as its taking too much time for very little value
   //Perhaps run every 20 CI builds (mod of ci build number)
 //  apply from: "$rootDir/gradle/code-quality.gradle"
-  if (ProjectDefinitions.publishable(it)) {
+  if (springfox.gradlebuild.utils.ProjectDefinitions.publishable(it)) {
     apply from: "$rootDir/gradle/coverage.gradle"
     apply from: "$rootDir/gradle/publishing.gradle"
   }
@@ -86,6 +85,7 @@ subprojects {
       )
     }
   }
+  task allDeps(type: DependencyReportTask) {}
 
 }
 

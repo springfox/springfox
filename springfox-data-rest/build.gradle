@@ -17,8 +17,8 @@ dependencies {
   compile libs.spring
   compile project(':springfox-spi')
 
-  compile 'org.springframework.data:spring-data-rest-webmvc:2.4.2.RELEASE'
-  compile 'org.springframework.hateoas:spring-hateoas:0.20.0.RELEASE'
+  compile "org.springframework.data:spring-data-rest-webmvc:2.5.2.RELEASE"
+  compile "org.springframework.hateoas:spring-hateoas:${springHateoas}"
 
   provided libs.springProvided
 

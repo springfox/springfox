@@ -26,5 +26,5 @@ dependencies {
   testCompile project(':springfox-spring-web').sourceSets.test.output
 
   testCompile libs.test
-  testCompile 'org.skyscreamer:jsonassert:1.3.0'
+  testCompile "org.skyscreamer:jsonassert:${jsonAssert}"
 }
