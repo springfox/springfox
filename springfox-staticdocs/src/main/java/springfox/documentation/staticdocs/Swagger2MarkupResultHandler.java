@@ -19,7 +19,6 @@
 
 package springfox.documentation.staticdocs;
 
-import com.google.common.collect.ImmutableMap;
 import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
