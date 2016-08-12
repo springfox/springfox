@@ -19,14 +19,22 @@
 
 package springfox.documentation.staticdocs;
 
-import io.github.robwin.markup.builder.MarkupLanguage;
-import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import com.google.common.collect.ImmutableMap;
+import io.github.swagger2markup.Swagger2MarkupConfig;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultHandler;
+
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Swagger2MarkupResultHandler implements ResultHandler {
@@ -66,8 +74,15 @@ public class Swagger2MarkupResultHandler implements ResultHandler {
         MockHttpServletResponse response = result.getResponse();
         response.setCharacterEncoding(encoding);
         String swaggerJson = response.getContentAsString();
-        Swagger2MarkupConverter.fromString(swaggerJson).withMarkupLanguage(markupLanguage)
-                .withExamples(examplesFolderPath).build().intoFolder(outputDir);
+
+        Map<String, String> properties = new HashMap<>();
+        properties.put("swagger2markup.markupLanguage", markupLanguage.toString());
+        properties.put("swagger2markup.extensions.springRestDocs.snippetBaseUri", examplesFolderPath);
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(properties).build();
+
+        Path outputPath = FileSystems.getDefault().getPath(outputDir);
+        Swagger2MarkupConverter.from(swaggerJson).withConfig(config)
+                .build().toFolder(outputPath);
     }
 
 

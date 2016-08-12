@@ -26,7 +26,8 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-  compile "io.github.robwin:swagger2markup:0.9.2"
+  compile "io.github.swagger2markup:swagger2markup:1.0.1"
+  compile "io.github.swagger2markup:swagger2markup-extension-commons:1.0.0"
   provided "org.springframework:spring-test:${spring}"
   provided libs.clientProvided
   provided libs.springProvided
