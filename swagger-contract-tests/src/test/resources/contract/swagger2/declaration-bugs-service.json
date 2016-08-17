@@ -45,7 +45,7 @@
             "description": "OK",
             "schema": {
               "type": "string",
-              "format": "date-time"
+              "format": "date"
             }
           }
         }

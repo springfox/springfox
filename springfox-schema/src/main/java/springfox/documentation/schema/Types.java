@@ -62,7 +62,7 @@ public class Types {
       .put(Character.TYPE, "string")
 
       .put(Date.class, "date-time")
-      .put(java.sql.Date.class, "date-time")
+      .put(java.sql.Date.class, "date")
       .put(String.class, "string")
       .put(Object.class, "object")
       .put(Long.class, "long")
