@@ -113,6 +113,7 @@ public class ApiModelReader  {
                 .baseModel(targetModelValue.getBaseModel())
                 .discriminator(targetModelValue.getDiscriminator())
                 .subTypes(targetModelValue.getSubTypes())
+                .example(targetModelValue.getExample())
                 .build();
 
         target.put(sourceModelKey, mergedModel);
