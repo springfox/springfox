@@ -17,6 +17,10 @@
   "basePath": "/",
   "tags": [
     {
+      "name": "foo",
+      "description": "Foo Description"
+    },
+    {
       "name": "bugs-controller",
       "description": "Bugs Controller"
     }
@@ -234,6 +238,30 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/Bug1376"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/1420": {
+      "get": {
+        "tags": [
+          "foo"
+        ],
+        "summary": "issue1420",
+        "operationId": "issue1420UsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
             }
           }
         }

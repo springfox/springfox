@@ -34,6 +34,7 @@ import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.PathAdjuster;
 import springfox.documentation.service.ResourceListing;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 
@@ -67,6 +68,8 @@ public class ApiDocumentationScanner {
         result.getResourceGroupRequestMappings());
 
     Multimap<String, ApiListing> apiListings = apiListingScanner.scan(listingContext);
+    Set<Tag> tags = toTags(apiListings);
+    tags.addAll(context.getTags());
     DocumentationBuilder group = new DocumentationBuilder()
         .name(context.getGroupName())
         .apiListingsByResourceGroupName(apiListings)
@@ -75,7 +78,7 @@ public class ApiDocumentationScanner {
         .host(context.getHost())
         .schemes(context.getProtocols())
         .basePath(context.getPathProvider().getApplicationBasePath())
-        .tags(toTags(apiListings));
+        .tags(tags);
 
     Set<ApiListingReference> apiReferenceSet = newTreeSet(listingReferencePathComparator());
     apiReferenceSet.addAll(apiListingReferences(apiListings, context));

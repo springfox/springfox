@@ -20,6 +20,7 @@ package springfox.documentation.spring.web.dummy.controllers;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,6 +69,12 @@ public class BugsController {
 
   @RequestMapping(value = "1376-input-property", method = RequestMethod.POST)
   public void issue1376Input(Bug1376 bug) throws MalformedURLException {
+  }
+
+  @RequestMapping(value = "1420", method = RequestMethod.GET)
+  @ApiOperation(tags = {"foo"}, value = "issue1420")
+  public String issue1420() {
+    return "1420";
   }
 
   class Bug1376 {
