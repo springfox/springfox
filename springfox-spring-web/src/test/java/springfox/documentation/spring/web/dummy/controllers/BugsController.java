@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.dummy.controllers;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -77,9 +78,14 @@ public class BugsController {
     return "1420";
   }
 
-  class Bug1376 {
-    URL url;
+  @RequestMapping(value = "1440", method = RequestMethod.GET)
+  public Resource<String> issue1440() {
+    return new Resource<String>("1420");
+  }
 
+  class Bug1376 {
+
+    URL url;
     public Bug1376(URL url) {
       this.url = url;
     }
@@ -91,5 +97,19 @@ public class BugsController {
     public void setUrl(URL url) {
       this.url = url;
     }
+
   }
+
+  public class LinkAlternate {
+    private String href;
+
+    public String getHref() {
+      return href;
+    }
+
+    public void setHref(String href) {
+      this.href = href;
+    }
+  }
+
 }

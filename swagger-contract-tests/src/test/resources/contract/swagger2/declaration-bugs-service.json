@@ -266,6 +266,30 @@
           }
         }
       }
+    },
+    "/bugs/1440": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "issue1440",
+        "operationId": "issue1440UsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Resource\u00abstring\u00bb"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -289,6 +313,25 @@
       "type": "object",
       "properties": {
         "url": {
+          "type": "string"
+        }
+      }
+    },
+    "Resource\u00abstring\u00bb": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/LinkAlternate"
+          }
+        }
+      }
+    },
+    "LinkAlternate": {
+      "type": "object",
+      "properties": {
+        "href": {
           "type": "string"
         }
       }

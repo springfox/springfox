@@ -27,6 +27,10 @@ import org.slf4j.LoggerFactory;
 import springfox.documentation.schema.property.BaseModelProperty;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.property.bean.Accessors.*;
 
 
@@ -48,14 +52,13 @@ public class BeanModelProperty extends BaseModelProperty {
     this.typeResolver = typeResolver;
   }
 
-  @Override
-  protected ResolvedType realType() {
-    return paramOrReturnType(typeResolver, method);
-  }
-
   private static ResolvedType adjustedToClassmateBug(TypeResolver typeResolver, ResolvedType resolvedType) {
     if (resolvedType.getErasedType().getTypeParameters().length > 0) {
-      return resolvedType;
+      List<ResolvedType> typeParms = newArrayList();
+      for (ResolvedType each : resolvedType.getTypeParameters()) {
+        typeParms.add(adjustedToClassmateBug(typeResolver, each));
+      }
+      return typeResolver.resolve(resolvedType, typeParms.toArray(new Type[typeParms.size()]));
     } else {
       return typeResolver.resolve(resolvedType.getErasedType());
     }
@@ -69,5 +72,10 @@ public class BeanModelProperty extends BaseModelProperty {
       LOG.debug("Evaluating unwrapped setter for member {}", input.getRawMember().getName());
       return adjustedToClassmateBug(typeResolver, input.getArgumentType(0));
     }
+  }
+
+  @Override
+  protected ResolvedType realType() {
+    return paramOrReturnType(typeResolver, method);
   }
 }

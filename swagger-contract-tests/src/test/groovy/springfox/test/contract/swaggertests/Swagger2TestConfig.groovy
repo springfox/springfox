@@ -1,20 +1,27 @@
 package springfox.test.contract.swaggertests
 
+import com.fasterxml.classmate.TypeResolver
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.hateoas.Link
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.Tag
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 import static com.google.common.base.Predicates.*
 import static springfox.documentation.builders.PathSelectors.*
-import static springfox.documentation.schema.AlternateTypeRules.newRule
+import static springfox.documentation.schema.AlternateTypeRules.*
 
 @Configuration
 @EnableSwagger2
 public class Swagger2TestConfig {
+
+  @Autowired
+  private TypeResolver resolver;
 
   @Bean
   public Docket petstore(List<SecurityScheme> authorizationTypes) {
@@ -139,7 +146,11 @@ public class Swagger2TestConfig {
         .tags(new Tag("foo", "Foo Description"))
         .produces(['application/xml', 'application/json'] as Set)
         .enableUrlTemplating(true)
-        .alternateTypeRules(newRule(URL.class, String.class))
+        .alternateTypeRules(
+          newRule(URL.class, String.class),
+          newRule(
+              resolver.resolve(List.class, Link.class),
+              resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
         .select()
         .paths(regex("/bugs/.*"))
         .build()
