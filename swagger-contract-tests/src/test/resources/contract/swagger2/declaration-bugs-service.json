@@ -126,6 +126,118 @@
           }
         }
       }
+    },
+    "/bugs/1376-bare": {
+      "post": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "issue1376Bare",
+        "operationId": "issue1376BareUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/1376-input-bare": {
+      "post": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "issue1376Input",
+        "operationId": "issue1376InputUsingPOST_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "url",
+            "description": "url",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1376-input-property": {
+      "post": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "issue1376Input",
+        "operationId": "issue1376InputUsingPOST_3",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "bug",
+            "description": "bug",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Bug1376"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1376-property": {
+      "post": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "issue1376Property",
+        "operationId": "issue1376PropertyUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Bug1376"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -142,6 +254,16 @@
       "type": "apiKey",
       "name": "api_key",
       "in": "header"
+    }
+  },
+  "definitions": {
+    "Bug1376": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      }
     }
   }
 }

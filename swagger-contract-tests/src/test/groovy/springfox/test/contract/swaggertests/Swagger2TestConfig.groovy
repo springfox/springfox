@@ -9,6 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 import static com.google.common.base.Predicates.*
 import static springfox.documentation.builders.PathSelectors.*
+import static springfox.documentation.schema.AlternateTypeRules.newRule
 
 @Configuration
 @EnableSwagger2
@@ -136,6 +137,7 @@ public class Swagger2TestConfig {
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
         .enableUrlTemplating(true)
+        .alternateTypeRules(newRule(URL.class, String.class))
         .select()
         .paths(regex("/bugs/.*"))
         .build()

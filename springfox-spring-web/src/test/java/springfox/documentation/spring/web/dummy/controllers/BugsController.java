@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Date;
 import java.util.Map;
 
@@ -48,5 +50,39 @@ public class BugsController {
   @RequestMapping(value = "1162", method = RequestMethod.POST)
   public ResponseEntity<Date> bug1162() {
     return ResponseEntity.ok(new Date(new java.util.Date().getTime()));
+  }
+
+  @RequestMapping(value = "1376-bare", method = RequestMethod.POST)
+  public URL issue1376Bare() throws MalformedURLException {
+    return new URL("http://example.org");
+  }
+
+  @RequestMapping(value = "1376-property", method = RequestMethod.POST)
+  public Bug1376 issue1376Property() throws MalformedURLException {
+    return new Bug1376(new URL("http://example.org"));
+  }
+
+  @RequestMapping(value = "1376-input-bare", method = RequestMethod.POST)
+  public void issue1376Input(URL url) throws MalformedURLException {
+  }
+
+  @RequestMapping(value = "1376-input-property", method = RequestMethod.POST)
+  public void issue1376Input(Bug1376 bug) throws MalformedURLException {
+  }
+
+  class Bug1376 {
+    URL url;
+
+    public Bug1376(URL url) {
+      this.url = url;
+    }
+
+    public URL getUrl() {
+      return url;
+    }
+
+    public void setUrl(URL url) {
+      this.url = url;
+    }
   }
 }
