@@ -43,7 +43,7 @@ class ServicePluginsSupport {
     def plugins = new DocumentationPluginsManager()
     plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(resolver), new ApiListingReader()))
     plugins.documentationPlugins = create([])
-    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver)])
+    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder()])
     plugins.parameterPlugins = create([new ParameterNameReader()])
     plugins.operationBuilderPlugins = create([])
     plugins.resourceGroupingStrategies = create([])

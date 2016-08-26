@@ -24,21 +24,21 @@ import io.swagger.annotations.ApiParam;
 
 public class ModelAttributeWithHiddenParametersExample extends ModelAttributeExample {
   @ApiParam(hidden=true)
-  private Category[] categories;
+  private Integer category;
   private String[] modelAttributeProperty;
   @ApiModelProperty(hidden=true)
   private String hiddenPropertry1;
   @ApiModelProperty(hidden=true)
   private String hiddenPropertry2;
   
-  public Category[] getCategories() {
-    return categories;
+  public Integer getCategory() {
+    return category;
   }
-  
-  public void setCategories(Category[] categories) {
-    this.categories = categories;
+
+  public void setCategory(Integer category) {
+    this.category = category;
   }
-  
+
   public String[] getModelAttributeProperty() {
     return modelAttributeProperty;
   }
