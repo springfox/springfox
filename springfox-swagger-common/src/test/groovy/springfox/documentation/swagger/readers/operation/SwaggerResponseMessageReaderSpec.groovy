@@ -170,6 +170,11 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
       status << [200, 204]
   }
 
+  def "Unknown integers are treated as failures" () {
+    expect:
+      !SwaggerResponseMessageReader.isSuccessful(1001)
+  }
+
   def "Supports all documentation types"() {
     given:
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =

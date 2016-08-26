@@ -150,7 +150,11 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
 
   static boolean isSuccessful(int code) {
-    return HttpStatus.Series.SUCCESSFUL.equals(HttpStatus.Series.valueOf(code));
+    try {
+      return HttpStatus.Series.SUCCESSFUL.equals(HttpStatus.Series.valueOf(code));
+    } catch (Exception ignored) {
+      return false;
+    }
   }
 
   private Optional<ResolvedType> resolvedType(ResolvedType resolvedType, ApiResponse apiResponse) {
