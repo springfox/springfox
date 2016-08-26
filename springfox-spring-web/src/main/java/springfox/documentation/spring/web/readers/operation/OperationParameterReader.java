@@ -97,6 +97,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
           if (!parameter.isHidden()) {
             parameters.add(parameter);
           }
+        }
       }
     }
     return parameters;
