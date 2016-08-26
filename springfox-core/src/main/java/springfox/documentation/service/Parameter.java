@@ -103,6 +103,6 @@ public class Parameter {
   }
   
   public Boolean isHidden() {
-	return hidden;
+    return hidden;
   }
 }

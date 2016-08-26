@@ -105,7 +105,7 @@ public class ModelAttributeParameterExpander {
           
           Parameter parameter = pluginsManager.expandParameter(parameterExpansionContext);
           if (!parameter.isHidden()) {
-    	    parameters.add(parameter);
+            parameters.add(parameter);
           }
   }
 
