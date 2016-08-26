@@ -22,6 +22,7 @@ package springfox.documentation.schema
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import spock.lang.Specification
+import spock.lang.Unroll
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -50,30 +51,35 @@ class ObjectMapperNamingStrategySpec extends Specification {
       "setDate"              | "date"
   }
 
-  def "rename setting snake_case strategy"() {
+  @Unroll
+  def "rename setting #strategy?.class.name"() {
     given:
       ObjectMapper objectMapper = new ObjectMapper();
-      objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+      if (strategy != null) {
+        objectMapper.setPropertyNamingStrategy(strategy)
+      }
       ObjectMapperBeanPropertyNamingStrategy sut = new ObjectMapperBeanPropertyNamingStrategy()
       sut.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
-      def beanPropertyDefinition = beanPropertyDefinition(simpleType(), beanAccessorMethod)
+      def beanPropertyDefinition = beanPropertyDefinition(typeWithJsonPropertyAnnotation(), beanAccessorMethod)
 
     expect:
       sut.nameForSerialization(beanPropertyDefinition) == name
       sut.nameForDeserialization(beanPropertyDefinition) == name
 
     where:
-      beanAccessorMethod     | name
-      "getAnObject"          | "an_object"
-      "setaByte"             | "a_byte"
-      "getAnObjectBoolean"   | "an_object_boolean"
-      "setDate"              | "date"
+      beanAccessorMethod     |strategy                                | name
+      "getSomeOddBallName"   |null                                    | "some_custom_odd_ball_name"
+      "getSomeOddBallName"   |PropertyNamingStrategy.SNAKE_CASE       | "some_custom_odd_ball_name"
+      "getSomeOddBallName"   |PropertyNamingStrategy.UPPER_CAMEL_CASE | "Some_custom_odd_ball_name"
+      "getSomeOddBallName"   |PropertyNamingStrategy.LOWER_CAMEL_CASE | "some_custom_odd_ball_name"
+      "getSomeOddBallName"   |PropertyNamingStrategy.LOWER_CASE       | "some_custom_odd_ball_name"
+      "getSomeOddBallName"   |PropertyNamingStrategy.KEBAB_CASE       | "some_custom_odd_ball_name"
   }
 
   def "rename setting CamelCase strategy"() {
     given:
       ObjectMapper objectMapper = new ObjectMapper();
-      objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE);
+      objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.UPPER_CAMEL_CASE);
       ObjectMapperBeanPropertyNamingStrategy sut = new ObjectMapperBeanPropertyNamingStrategy()
       sut.onApplicationEvent(new ObjectMapperConfigured(this, objectMapper))
 

@@ -22,7 +22,7 @@ package springfox.documentation.schema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TypeWithJsonProperty {
-  @JsonProperty("some_odd_ball_name")
+  @JsonProperty("some_custom_odd_ball_name")
   private String someOddBallName;
 
   public TypeWithJsonProperty(String someOddBallName) {

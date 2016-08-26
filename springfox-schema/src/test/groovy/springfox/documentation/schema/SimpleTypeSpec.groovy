@@ -168,7 +168,7 @@ class SimpleTypeSpec extends SchemaSpecification {
       retItem.itemType == null
 
     where:
-      property             | type     | qualifiedType
-      "some_odd_ball_name" | String   | "java.lang.String"
+      property                    | type     | qualifiedType
+      "some_custom_odd_ball_name" | String   | "java.lang.String"
   }
 }
