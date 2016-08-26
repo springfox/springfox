@@ -161,6 +161,7 @@ public class Defaults {
     ignored.add(BindingResult.class);
     ignored.add(ServletContext.class);
     ignored.add(UriComponentsBuilder.class);
+    ignored.add(ApiIgnore.class);
   }
 
   private void initResponseMessages() {
