@@ -74,6 +74,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
             .allowMultiple(apiParam.allowMultiple())
             .allowableValues(allowable)
             .parameterAccess(apiParam.access())
+            .hidden(apiParam.hidden())
             .build();
   }
 
@@ -85,6 +86,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
             .required(apiModelProperty.required())
             .allowableValues(allowable)
             .parameterAccess(apiModelProperty.access())
+            .hidden(apiModelProperty.hidden())
             .build();
   }
 

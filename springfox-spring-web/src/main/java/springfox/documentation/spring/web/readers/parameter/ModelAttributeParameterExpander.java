@@ -102,8 +102,11 @@ public class ModelAttributeParameterExpander {
           each.getField(),
           documentationContext.getDocumentationType(),
           new ParameterBuilder());
-      parameters.add(pluginsManager.expandParameter(parameterExpansionContext));
-    }
+          
+          Parameter parameter = pluginsManager.expandParameter(parameterExpansionContext);
+          if (!parameter.isHidden()) {
+    	    parameters.add(parameter);
+          }
   }
 
   private Predicate<ModelAttributeField> recursiveType(final Class<?> paramType) {

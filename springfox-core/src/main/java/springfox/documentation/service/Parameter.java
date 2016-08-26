@@ -34,6 +34,7 @@ public class Parameter {
   private final AllowableValues allowableValues;
   private final String paramType;
   private final String paramAccess;
+  private final Boolean hidden;
 
   public Parameter(
       String name,
@@ -45,7 +46,8 @@ public class Parameter {
       Optional<ResolvedType> type,
       AllowableValues allowableValues,
       String paramType,
-      String paramAccess) {
+      String paramAccess,
+      boolean hidden) {
 
     this.description = description;
     this.defaultValue = defaultValue;
@@ -57,6 +59,7 @@ public class Parameter {
     this.paramType = paramType;
     this.paramAccess = paramAccess;
     this.name = name;
+    this.hidden = hidden;
   }
 
   public Optional<ResolvedType> getType() {
@@ -97,5 +100,9 @@ public class Parameter {
 
   public ModelReference getModelRef() {
     return modelRef;
+  }
+  
+  public Boolean isHidden() {
+	return hidden;
   }
 }
