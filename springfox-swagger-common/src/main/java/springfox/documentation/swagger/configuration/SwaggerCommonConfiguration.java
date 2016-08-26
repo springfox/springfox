@@ -19,10 +19,10 @@
 
 package springfox.documentation.swagger.configuration;
 
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 @ComponentScan(basePackages = {
@@ -33,9 +33,9 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 public class SwaggerCommonConfiguration {
 
   @Bean
-  public static PropertySourcesPlaceholderConfigurer swaggerProperties() {
-    PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
-    propertySourcesPlaceholderConfigurer.setIgnoreUnresolvablePlaceholders(true);
-    return propertySourcesPlaceholderConfigurer;
+  public static PropertyPlaceholderConfigurer swaggerProperties() {
+    PropertyPlaceholderConfigurer propertiesPlaceholderConfigurer = new PropertyPlaceholderConfigurer();
+    propertiesPlaceholderConfigurer.setIgnoreUnresolvablePlaceholders(true);
+    return propertiesPlaceholderConfigurer;
   }
 }
