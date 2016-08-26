@@ -31,6 +31,7 @@ import springfox.documentation.spring.web.readers.parameter.ExpandedParameterBui
 import springfox.documentation.spring.web.readers.parameter.ParameterNameReader
 import springfox.documentation.spring.web.scanners.ApiListingReader
 import springfox.documentation.spring.web.scanners.MediaTypeReader
+import springfox.documentation.swagger.readers.parameter.SwaggerExpandedParameterBuilder
 
 import static com.google.common.collect.Lists.*
 import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
