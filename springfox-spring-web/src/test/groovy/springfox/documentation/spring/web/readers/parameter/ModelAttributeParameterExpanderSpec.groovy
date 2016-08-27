@@ -22,10 +22,9 @@ package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import springfox.documentation.service.Parameter
-import springfox.documentation.spring.web.dummy.models.ModelAttributeExample
-import springfox.documentation.spring.web.dummy.models.ModelAttributeWithHiddenParametersExample
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.dummy.models.Example
+import springfox.documentation.spring.web.dummy.models.ModelAttributeExample
+import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import java.beans.BeanInfo
@@ -59,19 +58,6 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
       parameters.find { it.name == 'allCapsSet' }
       parameters.find { it.name == 'nestedType.name' }
       parameters.find { it.name == 'localDateTime' }
-  }
-  
-  def "shouldn't expand hidden parameters"() {
-      when:
-        sut.expand("", ModelAttributeWithHiddenParametersExample, parameters, context());
-      then:
-        parameters.size() == 6
-        parameters.find { it.name == 'modelAttributeProperty' }
-        parameters.find { it.name == 'stringProp' }
-        parameters.find { it.name == 'intProp' }
-        parameters.find { it.name == 'listProp' }
-        parameters.find { it.name == 'arrayProp' }
-        parameters.find { it.name == 'complexProp.name' }
   }
 
   def "should expand lists and nested types"() {
