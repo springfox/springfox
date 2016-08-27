@@ -38,6 +38,7 @@ public class ParameterBuilder {
   private String paramAccess;
   private ResolvedType type;
   private ModelReference modelRef;
+  private boolean hidden; 
 
 
   /**
@@ -56,7 +57,8 @@ public class ParameterBuilder {
         .parameterAccess(other.getParamAccess())
         .parameterType(other.getParamType())
         .required(other.isRequired())
-        .type(other.getType().orNull());
+        .type(other.getType().orNull())
+        .hidden(other.isHidden());
   }
 
   /**
@@ -170,7 +172,17 @@ public class ParameterBuilder {
     this.modelRef = defaultIfAbsent(modelRef, this.modelRef);
     return this;
   }
-
+  
+  /**
+   * Updates if the parameter is hidden
+   *
+   * @param hidden - flag to indicate if the parameter is hidden
+   * @return this
+   */
+  public ParameterBuilder hidden(boolean hidden) {
+    this.hidden = hidden;
+    return this;
+  }
 
   public Parameter build() {
     return new Parameter(
@@ -183,6 +195,7 @@ public class ParameterBuilder {
         Optional.fromNullable(type),
         allowableValues,
         paramType,
-        paramAccess);
+        paramAccess,
+        hidden);
   }
 }

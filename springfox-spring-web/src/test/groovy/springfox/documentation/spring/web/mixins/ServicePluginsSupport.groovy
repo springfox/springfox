@@ -31,6 +31,7 @@ import springfox.documentation.spring.web.readers.parameter.ExpandedParameterBui
 import springfox.documentation.spring.web.readers.parameter.ParameterNameReader
 import springfox.documentation.spring.web.scanners.ApiListingReader
 import springfox.documentation.spring.web.scanners.MediaTypeReader
+import springfox.documentation.swagger.readers.parameter.SwaggerExpandedParameterBuilder
 
 import static com.google.common.collect.Lists.*
 import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
@@ -43,7 +44,7 @@ class ServicePluginsSupport {
     def plugins = new DocumentationPluginsManager()
     plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(resolver), new ApiListingReader()))
     plugins.documentationPlugins = create([])
-    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver)])
+    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder()])
     plugins.parameterPlugins = create([new ParameterNameReader()])
     plugins.operationBuilderPlugins = create([])
     plugins.resourceGroupingStrategies = create([])

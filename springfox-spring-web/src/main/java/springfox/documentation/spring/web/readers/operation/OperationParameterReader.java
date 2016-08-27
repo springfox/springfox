@@ -93,7 +93,10 @@ public class OperationParameterReader implements OperationBuilderPlugin {
               parameters,
               context.getDocumentationContext());
         } else {
-          parameters.add(pluginsManager.parameter(parameterContext));
+          Parameter parameter = pluginsManager.parameter(parameterContext);
+          if (!parameter.isHidden()) {
+            parameters.add(parameter);
+          }
         }
       }
     }
