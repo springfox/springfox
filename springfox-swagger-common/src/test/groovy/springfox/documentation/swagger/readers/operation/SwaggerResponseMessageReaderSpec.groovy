@@ -67,10 +67,13 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
       def responseMessages = operation.responseMessages
 
     then:
-      responseMessages.size() == 1
+      responseMessages.size() == 2
       def annotatedResponse = responseMessages.find { it.code == 413 }
       annotatedResponse != null
       annotatedResponse.message == "a message"
+      def classLevelResponse = responseMessages.find { it.code == 404 }
+      classLevelResponse != null
+      classLevelResponse.message == "Not Found"
   }
 
   def "ApiOperation annotation should provide response"() {
@@ -98,10 +101,13 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
       def responseMessages = operation.responseMessages
 
     then:
-      responseMessages.size() == 1
+      responseMessages.size() == 2
       def annotatedResponse = responseMessages.find { it.code == 200 }
       annotatedResponse != null
       annotatedResponse.message == "OK"
+      def classLevelResponse = responseMessages.find { it.code == 404 }
+      classLevelResponse != null
+      classLevelResponse.message == "Not Found"
   }
 
   @Unroll

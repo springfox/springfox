@@ -112,8 +112,9 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
       def models = sut.read(context)
 
     then:
-      models.size() == 1 // instead of 3
+      models.size() == 2 // instead of 3
       models.containsKey("BusinessModel")
+      models.containsKey("RestError") // from class-level annotation.
 
   }
 
@@ -149,7 +150,8 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
       def models = sut.read(context)
 
     then:
-      models.size() == 1
+      models.size() == 2
+      models.containsKey('RestError') // from class-level annotation.
 
       String modelName = DummyModels.AnnotatedBusinessModel.class.simpleName
       models.containsKey(modelName)

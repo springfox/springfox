@@ -28,9 +28,9 @@ class SwaggerOperationModelsProviderSpec extends DocumentationContextSpec {
       sut.supports(DocumentationType.SWAGGER_2)
     where:
       operationName                         | modelCount
-      'dummyMethod'                         | 0
-      'methodWithPosition'                  | 0
-      'methodApiResponseClass'              | 1
+      'dummyMethod'                         | 1
+      'methodWithPosition'                  | 1
+      'methodApiResponseClass'              | 2
       'methodAnnotatedWithApiResponse'      | 2
   }
 

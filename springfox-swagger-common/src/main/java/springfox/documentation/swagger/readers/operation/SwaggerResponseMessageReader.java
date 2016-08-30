@@ -48,6 +48,7 @@ import java.util.Set;
 import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import java.util.List;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.*;
@@ -92,37 +93,43 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       defaultHeaders.putAll(headers(defaultResponseHeaders.get()));
     }
 
-    Optional<ApiResponses> apiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
+    List<Optional<ApiResponses>> allApiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
     Set<ResponseMessage> responseMessages = newHashSet();
 
-    if (apiResponses.isPresent()) {
-      ApiResponse[] apiResponseAnnotations = apiResponses.get().value();
-      for (ApiResponse apiResponse : apiResponseAnnotations) {
-        ModelContext modelContext = returnValue(
-            apiResponse.response(),
-            context.getDocumentationType(),
-            context.getAlternateTypeProvider(),
-            context.getGenericsNamingStrategy(),
-            context.getIgnorableParameterTypes());
-        Optional<ModelReference> responseModel = Optional.absent();
-        Optional<ResolvedType> type = resolvedType(null, apiResponse);
-        if (isSuccessful(apiResponse.code())) {
-          type = type.or(operationResponse);
-        }
-        if (type.isPresent()) {
-          responseModel = Optional.of(
-              modelRefFactory(modelContext, typeNameExtractor)
-                  .apply(context.alternateFor(type.get())));
-        }
-        Map<String, ModelReference> headers = newHashMap(defaultHeaders);
-        headers.putAll(headers(apiResponse.responseHeaders()));
+    Map<Integer, ApiResponse> seenResponsesByCode = newHashMap();
+    for (Optional<ApiResponses> apiResponses : allApiResponses) {
+      if (apiResponses.isPresent()) {
+        ApiResponse[] apiResponseAnnotations = apiResponses.get().value();
+        for (ApiResponse apiResponse : apiResponseAnnotations) {
+          if (!seenResponsesByCode.containsKey(apiResponse.code())) {
+            seenResponsesByCode.put(apiResponse.code(), apiResponse);
+            ModelContext modelContext = returnValue(
+                    apiResponse.response(),
+                    context.getDocumentationType(),
+                    context.getAlternateTypeProvider(),
+                    context.getGenericsNamingStrategy(),
+                    context.getIgnorableParameterTypes());
+            Optional<ModelReference> responseModel = Optional.absent();
+            Optional<ResolvedType> type = resolvedType(null, apiResponse);
+            if (isSuccessful(apiResponse.code())) {
+              type = type.or(operationResponse);
+            }
+            if (type.isPresent()) {
+              responseModel = Optional.of(
+                      modelRefFactory(modelContext, typeNameExtractor)
+                      .apply(context.alternateFor(type.get())));
+            }
+            Map<String, ModelReference> headers = newHashMap(defaultHeaders);
+            headers.putAll(headers(apiResponse.responseHeaders()));
 
-        responseMessages.add(new ResponseMessageBuilder()
-            .code(apiResponse.code())
-            .message(apiResponse.message())
-            .responseModel(responseModel.orNull())
-            .headers(headers)
-            .build());
+            responseMessages.add(new ResponseMessageBuilder()
+                    .code(apiResponse.code())
+                    .message(apiResponse.message())
+                    .responseModel(responseModel.orNull())
+                    .headers(headers)
+                    .build());
+          }
+        }
       }
 
     }
