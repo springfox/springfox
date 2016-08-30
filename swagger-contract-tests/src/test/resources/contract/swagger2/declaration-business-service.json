@@ -6,13 +6,14 @@
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
     "contact": {
+
     },
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   },
-  "host": "localhost:__PORT__",
+  "host": "localhost:8080",
   "basePath": "/",
   "tags": [
     {
@@ -37,8 +38,8 @@
         ],
         "produces": [
           "application/xml",
-          "*/*",
-          "application/json"
+          "application/json",
+          "*/*"
         ],
         "parameters": [
           {
@@ -143,8 +144,8 @@
         ],
         "produces": [
           "application/xml",
-          "*/*",
-          "application/json"
+          "application/json",
+          "*/*"
         ],
         "parameters": [
           {
@@ -183,9 +184,9 @@
           "application/json"
         ],
         "produces": [
-          "*/*",
           "application/xml",
-          "application/json"
+          "application/json",
+          "*/*"
         ],
         "parameters": [
           {
@@ -260,9 +261,9 @@
           "application/json"
         ],
         "produces": [
-          "*/*",
           "application/xml",
-          "application/json"
+          "application/json",
+          "*/*"
         ],
         "parameters": [
           {
@@ -285,6 +286,11 @@
     }
   },
   "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    },
     "petstore_auth": {
       "type": "oauth2",
       "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
@@ -293,59 +299,9 @@
         "write:pets": "modify pets in your account",
         "read:pets": "read your pets"
       }
-    },
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
     }
   },
   "definitions": {
-    "DateTimeField": {
-      "type": "object",
-      "properties": {
-        "durationField": {
-          "$ref": "#/definitions/DurationField"
-        },
-        "leapDurationField": {
-          "$ref": "#/definitions/DurationField"
-        },
-        "lenient": {
-          "type": "boolean"
-        },
-        "maximumValue": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "minimumValue": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "name": {
-          "type": "string"
-        },
-        "rangeDurationField": {
-          "$ref": "#/definitions/DurationField"
-        },
-        "supported": {
-          "type": "boolean"
-        },
-        "type": {
-          "$ref": "#/definitions/DateTimeFieldType"
-        }
-      }
-    },
-    "DateTimeZone": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "fixed": {
-          "type": "boolean"
-        }
-      }
-    },
     "Biz": {
       "type": "object",
       "properties": {
@@ -380,6 +336,62 @@
       "properties": {
         "name": {
           "type": "string"
+        }
+      }
+    },
+    "DateTimeFieldType": {
+      "type": "object",
+      "properties": {
+        "durationType": {
+          "$ref": "#/definitions/DurationFieldType"
+        },
+        "name": {
+          "type": "string"
+        },
+        "rangeDurationType": {
+          "$ref": "#/definitions/DurationFieldType"
+        }
+      }
+    },
+    "Chronology": {
+      "type": "object",
+      "properties": {
+        "zone": {
+          "$ref": "#/definitions/DateTimeZone"
+        }
+      }
+    },
+    "DateTimeField": {
+      "type": "object",
+      "properties": {
+        "durationField": {
+          "$ref": "#/definitions/DurationField"
+        },
+        "leapDurationField": {
+          "$ref": "#/definitions/DurationField"
+        },
+        "lenient": {
+          "type": "boolean"
+        },
+        "maximumValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minimumValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "rangeDurationField": {
+          "$ref": "#/definitions/DurationField"
+        },
+        "supported": {
+          "type": "boolean"
+        },
+        "type": {
+          "$ref": "#/definitions/DateTimeFieldType"
         }
       }
     },
@@ -475,25 +487,14 @@
         }
       }
     },
-    "Chronology": {
+    "DateTimeZone": {
       "type": "object",
       "properties": {
-        "zone": {
-          "$ref": "#/definitions/DateTimeZone"
-        }
-      }
-    },
-    "DateTimeFieldType": {
-      "type": "object",
-      "properties": {
-        "durationType": {
-          "$ref": "#/definitions/DurationFieldType"
+        "fixed": {
+          "type": "boolean"
         },
-        "name": {
+        "id": {
           "type": "string"
-        },
-        "rangeDurationType": {
-          "$ref": "#/definitions/DurationFieldType"
         }
       }
     }

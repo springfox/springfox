@@ -1,15 +1,7 @@
 {
   "apiVersion": "1.0",
-  "swaggerVersion": "1.2",
-  "basePath": "/",
-  "resourcePath": "/pets",
-  "produces": [
-  ],
-  "consumes": [
-  ],
   "apis": [
     {
-      "path": "/pets",
       "description": "addPet",
       "operations": [
         {
@@ -62,10 +54,54 @@
           "deprecated": "false",
           "type": "void"
         }
-      ]
+      ],
+      "path": "/pets"
     },
     {
-      "path": "/pets",
+      "description": "listPets",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "List all pets",
+          "nickname": "listPetsUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "array"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "items": {
+            "type": "Pet"
+          },
+          "type": "array"
+        }
+      ],
+      "path": "/pets"
+    },
+    {
       "description": "updatePet",
       "operations": [
         {
@@ -121,53 +157,10 @@
           "deprecated": "false",
           "type": "void"
         }
-      ]
+      ],
+      "path": "/pets"
     },
     {
-      "path": "/pets",
-      "description": "listPets",
-      "operations": [
-        {
-          "method": "GET",
-          "summary": "List all pets",
-          "nickname": "listPetsUsingGET",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "array"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "array",
-          "items": {
-            "type": "Pet"
-          }
-        }
-      ]
-    },
-    {
-      "path": "/pets/byName/{name}",
       "description": "petEntities",
       "operations": [
         {
@@ -214,15 +207,15 @@
             }
           ],
           "deprecated": "false",
-          "type": "array",
           "items": {
             "type": "Pet"
-          }
+          },
+          "type": "array"
         }
-      ]
+      ],
+      "path": "/pets/byName/{name}"
     },
     {
-      "path": "/pets/echo",
       "description": "echo",
       "operations": [
         {
@@ -271,10 +264,10 @@
           "deprecated": "false",
           "type": "List[Entry\u00abstring,Pet\u00bb]"
         }
-      ]
+      ],
+      "path": "/pets/echo"
     },
     {
-      "path": "/pets/findByStatus",
       "description": "findPetsByStatus",
       "operations": [
         {
@@ -330,10 +323,10 @@
           "deprecated": "false",
           "type": "Pet"
         }
-      ]
+      ],
+      "path": "/pets/findByStatus"
     },
     {
-      "path": "/pets/findByTags",
       "description": "findPetsByTags",
       "operations": [
         {
@@ -383,10 +376,10 @@
           "deprecated": "true",
           "type": "Pet"
         }
-      ]
+      ],
+      "path": "/pets/findByTags"
     },
     {
-      "path": "/pets/nameToNickNamesMap",
       "description": "nameToNickNamesMap",
       "operations": [
         {
@@ -400,6 +393,7 @@
             "application/json"
           ],
           "parameters": [
+
           ],
           "responseMessages": [
             {
@@ -427,10 +421,10 @@
           "deprecated": "false",
           "type": "List[Entry\u00abstring,List\u00abstring\u00bb\u00bb]"
         }
-      ]
+      ],
+      "path": "/pets/nameToNickNamesMap"
     },
     {
-      "path": "/pets/siblings",
       "description": "siblings",
       "operations": [
         {
@@ -477,15 +471,15 @@
             }
           ],
           "deprecated": "false",
-          "type": "array",
           "items": {
             "type": "Pet"
-          }
+          },
+          "type": "array"
         }
-      ]
+      ],
+      "path": "/pets/siblings"
     },
     {
-      "path": "/pets/transformPetNameToPetMapToAny",
       "description": "transformPetNameToPetMapToAny",
       "operations": [
         {
@@ -534,10 +528,10 @@
           "deprecated": "false",
           "type": "object"
         }
-      ]
+      ],
+      "path": "/pets/transformPetNameToPetMapToAny"
     },
     {
-      "path": "/pets/transformPetNameToPetMapToGenericOpenMap",
       "description": "transformPetNameToPetMapToGenericOpenMap",
       "operations": [
         {
@@ -586,10 +580,10 @@
           "deprecated": "false",
           "type": "object"
         }
-      ]
+      ],
+      "path": "/pets/transformPetNameToPetMapToGenericOpenMap"
     },
     {
-      "path": "/pets/transformPetNameToPetMapToOpenMap",
       "description": "transformPetNameToPetMapToOpenMap",
       "operations": [
         {
@@ -638,10 +632,10 @@
           "deprecated": "false",
           "type": "object"
         }
-      ]
+      ],
+      "path": "/pets/transformPetNameToPetMapToOpenMap"
     },
     {
-      "path": "/pets/{a}/{b}",
       "description": "method",
       "operations": [
         {
@@ -693,10 +687,10 @@
           "deprecated": "false",
           "type": "void"
         }
-      ]
+      ],
+      "path": "/pets/{a}/{b}"
     },
     {
-      "path": "/pets/{name}",
       "description": "petByName",
       "operations": [
         {
@@ -745,10 +739,10 @@
           "deprecated": "false",
           "type": "Pet"
         }
-      ]
+      ],
+      "path": "/pets/{name}"
     },
     {
-      "path": "/pets/{petId}",
       "description": "getPetById",
       "operations": [
         {
@@ -796,10 +790,10 @@
           "deprecated": "false",
           "type": "Pet"
         }
-      ]
+      ],
+      "path": "/pets/{petId}"
     },
     {
-      "path": "/pets/{petId}/pic",
       "description": "updatePic",
       "operations": [
         {
@@ -855,10 +849,10 @@
           "deprecated": "false",
           "type": "void"
         }
-      ]
+      ],
+      "path": "/pets/{petId}/pic"
     },
     {
-      "path": "/pets/{petId}/pic/{picId}",
       "description": "updatePic",
       "operations": [
         {
@@ -910,10 +904,38 @@
           "deprecated": "false",
           "type": "void"
         }
-      ]
+      ],
+      "path": "/pets/{petId}/pic/{picId}"
     }
   ],
+  "basePath": "/",
+  "consumes": [
+
+  ],
   "models": {
+    "Entry\u00abstring,List\u00abstring\u00bb\u00bb": {
+      "description": "",
+      "id": "Entry\u00abstring,List\u00abstring\u00bb\u00bb",
+      "properties": {
+        "key": {
+          "required": false,
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "Entry\u00abstring,Pet\u00bb": {
+      "description": "",
+      "id": "Entry\u00abstring,Pet\u00bb",
+      "properties": {
+        "key": {
+          "required": false,
+          "type": "Pet"
+        }
+      }
+    },
     "Pet": {
       "description": "",
       "id": "Pet",
@@ -932,29 +954,11 @@
           "type": "string"
         }
       }
-    },
-    "Entry\u00abstring,Pet\u00bb": {
-      "description": "",
-      "id": "Entry\u00abstring,Pet\u00bb",
-      "properties": {
-        "key": {
-          "required": false,
-          "type": "Pet"
-        }
-      }
-    },
-    "Entry\u00abstring,List\u00abstring\u00bb\u00bb": {
-      "description": "",
-      "id": "Entry\u00abstring,List\u00abstring\u00bb\u00bb",
-      "properties": {
-        "key": {
-          "required": false,
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
     }
-  }
+  },
+  "produces": [
+
+  ],
+  "resourcePath": "/pets",
+  "swaggerVersion": "1.2"
 }

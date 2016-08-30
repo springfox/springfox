@@ -6,13 +6,14 @@
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
     "contact": {
+
     },
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   },
-  "host": "localhost:__PORT__",
+  "host": "localhost:8080",
   "basePath": "/",
   "tags": [
     {
@@ -25,13 +26,47 @@
     "application/json"
   ],
   "paths": {
+    "/features/addFiles": {
+      "post": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "Add a new contact with file attachment",
+        "operationId": "addFilesUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "files",
+            "in": "formData",
+            "description": "files",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "file"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/features/allMethodsAllowed": {
-      "head": {
+      "get": {
         "tags": [
           "feature-demonstration-service"
         ],
         "summary": "allMethodAllowed",
-        "operationId": "allMethodAllowedUsingHEAD_1",
+        "operationId": "allMethodAllowedUsingGET_1",
         "consumes": [
           "application/json"
         ],
@@ -45,12 +80,12 @@
           }
         }
       },
-      "get": {
+      "head": {
         "tags": [
           "feature-demonstration-service"
         ],
         "summary": "allMethodAllowed",
-        "operationId": "allMethodAllowedUsingGET_1",
+        "operationId": "allMethodAllowedUsingHEAD_1",
         "consumes": [
           "application/json"
         ],
@@ -704,40 +739,6 @@
           "name2": "value2"
         }
       }
-    },
-    "/features/addFiles": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "Add a new contact with file attachment",
-        "operationId": "addFilesUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "files",
-            "in": "formData",
-            "description": "files",
-            "required": true,
-            "type": "array",
-            "items": {
-              "type": "file"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
     }
   },
   "securityDefinitions": {
@@ -757,127 +758,6 @@
     }
   },
   "definitions": {
-    "DateTimeField": {
-      "type": "object",
-      "properties": {
-        "durationField": {
-          "$ref": "#/definitions/DurationField"
-        },
-        "leapDurationField": {
-          "$ref": "#/definitions/DurationField"
-        },
-        "lenient": {
-          "type": "boolean"
-        },
-        "maximumValue": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "minimumValue": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "name": {
-          "type": "string"
-        },
-        "rangeDurationField": {
-          "$ref": "#/definitions/DurationField"
-        },
-        "supported": {
-          "type": "boolean"
-        },
-        "type": {
-          "$ref": "#/definitions/DateTimeFieldType"
-        }
-      }
-    },
-    "Example": {
-      "type": "object",
-      "properties": {
-        "allCapsSet": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "annotatedEnumType": {
-          "type": "string",
-          "enum": [
-            "ONE",
-            "TWO"
-          ]
-        },
-        "bar": {
-          "type": "integer",
-          "format": "int32",
-          "description": "description of bar"
-        },
-        "enumType": {
-          "type": "string",
-          "enum": [
-            "ONE",
-            "TWO"
-          ]
-        },
-        "foo": {
-          "type": "string"
-        },
-        "localDateTime": {
-          "$ref": "#/definitions/LocalDateTime"
-        },
-        "nestedType": {
-          "$ref": "#/definitions/NestedType"
-        },
-        "parentBeanProperty": {
-          "type": "string"
-        },
-        "propertyWithNoSetterMethod": {
-          "type": "string"
-        },
-        "propertyWithNoGetterMethod": {
-          "type": "string"
-        },
-        "readOnlyString": {
-          "type": "string",
-          "description": "A read only string",
-          "readOnly": true
-        }
-      }
-    },
-    "DateTimeZone": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "fixed": {
-          "type": "boolean"
-        }
-      }
-    },
-    "Pet": {
-      "type": "object",
-      "properties": {
-        "age": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "DurationFieldType": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      }
-    },
     "LocalDateTime": {
       "type": "object",
       "properties": {
@@ -969,28 +849,18 @@
         }
       }
     },
-    "ModelWithObjectNode": {
+    "ModelWithMapProperty": {
       "type": "object",
       "properties": {
-        "anyObject": {
-          "$ref": "#/definitions/ObjectNode"
+        "params": {
+          "type": "object",
+          "description": "Map of params to be sent",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
-      }
-    },
-    "Map\u00abstring,string\u00bb": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
-      }
-    },
-    "ObjectNode": {
-      "type": "object"
-    },
-    "Map\u00abstring,Example\u00bb": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/definitions/Example"
-      }
+      },
+      "description": "Describes model with map property"
     },
     "ModelWithArrayOfArrays": {
       "type": "object",
@@ -1007,24 +877,162 @@
         }
       }
     },
-    "ModelWithMapProperty": {
+    "ObjectNode": {
+      "type": "object"
+    },
+    "Map\u00abstring,Example\u00bb": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Example"
+      }
+    },
+    "DateTimeField": {
       "type": "object",
       "properties": {
-        "params": {
-          "type": "object",
-          "description": "Map of params to be sent",
-          "additionalProperties": {
-            "type": "string"
-          }
+        "durationField": {
+          "$ref": "#/definitions/DurationField"
+        },
+        "leapDurationField": {
+          "$ref": "#/definitions/DurationField"
+        },
+        "lenient": {
+          "type": "boolean"
+        },
+        "maximumValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minimumValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "rangeDurationField": {
+          "$ref": "#/definitions/DurationField"
+        },
+        "supported": {
+          "type": "boolean"
+        },
+        "type": {
+          "$ref": "#/definitions/DateTimeFieldType"
         }
-      },
-      "description": "Describes model with map property"
+      }
     },
     "NestedType": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string"
+        }
+      }
+    },
+    "DateTimeZone": {
+      "type": "object",
+      "properties": {
+        "fixed": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "ModelWithObjectNode": {
+      "type": "object",
+      "properties": {
+        "anyObject": {
+          "$ref": "#/definitions/ObjectNode"
+        }
+      }
+    },
+    "Map\u00abstring,string\u00bb": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Example": {
+      "type": "object",
+      "properties": {
+        "allCapsSet": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "annotatedEnumType": {
+          "type": "string",
+          "enum": [
+            "ONE",
+            "TWO"
+          ]
+        },
+        "bar": {
+          "type": "integer",
+          "format": "int32",
+          "description": "description of bar"
+        },
+        "enumType": {
+          "type": "string",
+          "enum": [
+            "ONE",
+            "TWO"
+          ]
+        },
+        "foo": {
+          "type": "string"
+        },
+        "localDateTime": {
+          "$ref": "#/definitions/LocalDateTime"
+        },
+        "nestedType": {
+          "$ref": "#/definitions/NestedType"
+        },
+        "parentBeanProperty": {
+          "type": "string"
+        },
+        "propertyWithNoGetterMethod": {
+          "type": "string"
+        },
+        "propertyWithNoSetterMethod": {
+          "type": "string"
+        },
+        "readOnlyString": {
+          "type": "string",
+          "description": "A read only string",
+          "readOnly": true
+        }
+      }
+    },
+    "DurationFieldType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "DateTimeFieldType": {
+      "type": "object",
+      "properties": {
+        "durationType": {
+          "$ref": "#/definitions/DurationFieldType"
+        },
+        "name": {
+          "type": "string"
+        },
+        "rangeDurationType": {
+          "$ref": "#/definitions/DurationFieldType"
+        }
+      }
+    },
+    "Chronology": {
+      "type": "object",
+      "properties": {
+        "zone": {
+          "$ref": "#/definitions/DateTimeZone"
         }
       }
     },
@@ -1049,25 +1057,18 @@
         }
       }
     },
-    "Chronology": {
+    "Pet": {
       "type": "object",
       "properties": {
-        "zone": {
-          "$ref": "#/definitions/DateTimeZone"
-        }
-      }
-    },
-    "DateTimeFieldType": {
-      "type": "object",
-      "properties": {
-        "durationType": {
-          "$ref": "#/definitions/DurationFieldType"
+        "age": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "string"
         },
         "name": {
           "type": "string"
-        },
-        "rangeDurationType": {
-          "$ref": "#/definitions/DurationFieldType"
         }
       }
     }

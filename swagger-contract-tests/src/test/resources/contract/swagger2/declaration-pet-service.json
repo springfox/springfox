@@ -6,13 +6,14 @@
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
     "contact": {
+
     },
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   },
-  "host": "localhost:__PORT__",
+  "host": "localhost:8080",
   "basePath": "/",
   "tags": [
     {
@@ -40,8 +41,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -76,8 +77,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -118,8 +119,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -161,8 +162,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -185,39 +186,6 @@
           }
         },
         "deprecated": true
-      }
-    },
-    "/pets/grooming{?type}": {
-      "get": {
-        "tags": [
-          "pet-grooming-service"
-        ],
-        "summary": "canGroom",
-        "operationId": "canGroomUsingGET_3",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "name": "type",
-            "in": "query",
-            "description": "type",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        }
       }
     },
     "/pets/grooming/voidMethod/{input}": {
@@ -250,6 +218,39 @@
         }
       }
     },
+    "/pets/grooming{?type}": {
+      "get": {
+        "tags": [
+          "pet-grooming-service"
+        ],
+        "summary": "canGroom",
+        "operationId": "canGroomUsingGET_3",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "type",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
     "/pets/nameToNickNamesMap": {
       "post": {
         "tags": [
@@ -261,8 +262,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "responses": {
           "200": {
@@ -288,8 +289,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -326,8 +327,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -364,8 +365,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -402,8 +403,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -470,8 +471,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -507,8 +508,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -541,8 +542,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -576,8 +577,8 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -613,8 +614,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -641,6 +642,11 @@
     }
   },
   "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    },
     "petstore_auth": {
       "type": "oauth2",
       "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
@@ -649,11 +655,6 @@
         "write:pets": "modify pets in your account",
         "read:pets": "read your pets"
       }
-    },
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
     }
   },
   "definitions": {

@@ -1,15 +1,7 @@
 {
   "apiVersion": "1.0",
-  "swaggerVersion": "1.2",
-  "basePath": "/",
-  "resourcePath": "/",
-  "produces": [
-  ],
-  "consumes": [
-  ],
   "apis": [
     {
-      "path": "/",
       "description": "getAll",
       "operations": [
         {
@@ -22,7 +14,9 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [],
+          "parameters": [
+
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -43,12 +37,22 @@
             }
           ],
           "deprecated": "false",
-          "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "type": "array"
         }
-      ]
+      ],
+      "path": "/"
     }
-  ]
+  ],
+  "basePath": "/",
+  "consumes": [
+
+  ],
+  "produces": [
+
+  ],
+  "resourcePath": "/",
+  "swaggerVersion": "1.2"
 }
