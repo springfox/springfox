@@ -271,7 +271,10 @@
             "schema": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "#/definitions/List"
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               }
             }
           }
