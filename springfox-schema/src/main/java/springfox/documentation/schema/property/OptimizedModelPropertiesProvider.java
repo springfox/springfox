@@ -253,6 +253,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         = new FieldModelProperty(
             fieldName,
             childField,
+            typeResolver,
             modelContext.getAlternateTypeProvider(),
             jacksonProperty);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
@@ -262,7 +263,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .position(fieldModelProperty.position())
         .required(fieldModelProperty.isRequired())
         .description(fieldModelProperty.propertyDescription())
-        .allowableValues(fieldModelProperty.allowableValues());
+        .allowableValues(fieldModelProperty.allowableValues())
+        .example(fieldModelProperty.example());
     return schemaPluginsManager.property(
         new ModelPropertyContext(propertyBuilder,
             childField.getRawMember(),
@@ -294,7 +296,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .required(beanModelProperty.isRequired())
         .isHidden(false)
         .description(beanModelProperty.propertyDescription())
-        .allowableValues(beanModelProperty.allowableValues());
+        .allowableValues(beanModelProperty.allowableValues())
+        .example(beanModelProperty.example());
     return schemaPluginsManager.property(
         new ModelPropertyContext(propertyBuilder,
             jacksonProperty,
@@ -310,24 +313,26 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       ModelContext modelContext) {
 
     String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
-    ParameterModelProperty beanModelProperty
+    ParameterModelProperty parameterModelProperty
         = new ParameterModelProperty(
             propertyName,
             parameter,
             constructor,
+            typeResolver,
             modelContext.getAlternateTypeProvider(),
             jacksonProperty);
 
     LOG.debug("Adding property {} to model", propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
-        .name(beanModelProperty.getName())
-        .type(beanModelProperty.getType())
-        .qualifiedType(beanModelProperty.qualifiedTypeName())
-        .position(beanModelProperty.position())
-        .required(beanModelProperty.isRequired())
+        .name(parameterModelProperty.getName())
+        .type(parameterModelProperty.getType())
+        .qualifiedType(parameterModelProperty.qualifiedTypeName())
+        .position(parameterModelProperty.position())
+        .required(parameterModelProperty.isRequired())
         .isHidden(false)
-        .description(beanModelProperty.propertyDescription())
-        .allowableValues(beanModelProperty.allowableValues());
+        .description(parameterModelProperty.propertyDescription())
+        .allowableValues(parameterModelProperty.allowableValues())
+        .example(parameterModelProperty.example());
     return schemaPluginsManager.property(
         new ModelPropertyContext(propertyBuilder,
             jacksonProperty,

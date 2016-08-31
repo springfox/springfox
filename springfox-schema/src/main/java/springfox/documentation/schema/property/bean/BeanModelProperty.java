@@ -47,7 +47,7 @@ public class BeanModelProperty extends BaseModelProperty {
       TypeResolver typeResolver,
       AlternateTypeProvider alternateTypeProvider,
       BeanPropertyDefinition jacksonProperty) {
-    super(propertyName, alternateTypeProvider, jacksonProperty);
+    super(propertyName, typeResolver, alternateTypeProvider, jacksonProperty);
 
     this.method = method;
     this.typeResolver = typeResolver;
