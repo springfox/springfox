@@ -23,9 +23,6 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.collect.FluentIterable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -40,8 +37,6 @@ import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,7 +48,6 @@ import static springfox.documentation.schema.Types.*;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin {
-  private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterBuilder.class);
   private final TypeResolver resolver;
 
   @Autowired
@@ -63,7 +57,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    AllowableValues allowable = allowableValues(context.getField());
+    AllowableValues allowable = allowableValues(context.getField().getRawMember());
 
     String name = isNullOrEmpty(context.getParentName())
                   ? context.getField().getName()
@@ -100,21 +94,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   }
 
   private Optional<ResolvedType> fieldType(ParameterExpansionContext context) {
-    ParameterizedType parameterized;
-    try {
-      if (context.getField().getType().isArray()) {
-        return Optional.<ResolvedType>of(resolver.arrayType(context.getField().getType().getComponentType()));
-      } else {
-        parameterized = (ParameterizedType) context.getField().getGenericType();
-        Optional<Type> itemClazz = FluentIterable.from(newArrayList(parameterized.getActualTypeArguments())).first();
-        if (itemClazz.isPresent()) {
-          return Optional.of(resolver.resolve(context.getField().getType(), itemClazz.get()));
-        }
-      }
-    } catch (Exception e) {
-      LOG.warn("Unable to extract parameterized model attribute");
-    }
-    return Optional.absent();
+      return Optional.of(context.getField().getType());
   }
 
   @Override
