@@ -60,13 +60,18 @@ class BeanModelPropertySpec extends SchemaSpecification {
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
       String propName = name(propertyDefinition, true, namingStrategy)
-      def sut = new BeanModelProperty(propName, method,
-              new TypeResolver(), alternateTypeProvider())
+      def sut = new BeanModelProperty(
+          propName,
+          method,
+          new TypeResolver(),
+          alternateTypeProvider(),
+          propertyDefinition)
 
 
     expect:
       sut.propertyDescription() == null
       !sut.required
+      sut.isReadOnly()
       typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       sut.allowableValues() == null
@@ -97,12 +102,17 @@ class BeanModelPropertySpec extends SchemaSpecification {
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
       String propName = name(propertyDefinition, true, namingStrategy)
-      def sut = new BeanModelProperty(propName, method,
-              new TypeResolver(), alternateTypeProvider())
+      def sut = new BeanModelProperty(
+          propName,
+          method,
+          new TypeResolver(),
+          alternateTypeProvider(),
+          propertyDefinition)
 
     expect:
       sut.propertyDescription() == description
       sut.required == required
+      !sut.isReadOnly()
       typeNameExtractor.typeName(modelContext) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
 
@@ -138,8 +148,12 @@ class BeanModelPropertySpec extends SchemaSpecification {
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
       String propName = name(propertyDefinition, true, namingStrategy)
-      def sut = new BeanModelProperty(propName, method,
-              new TypeResolver(), alternateTypeProvider())
+      def sut = new BeanModelProperty(
+          propName,
+          method,
+          new TypeResolver(),
+          alternateTypeProvider(),
+          propertyDefinition)
 
     expect:
       typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName

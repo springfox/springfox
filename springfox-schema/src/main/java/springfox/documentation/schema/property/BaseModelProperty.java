@@ -20,6 +20,7 @@
 package springfox.documentation.schema.property;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
 import springfox.documentation.schema.ResolvedTypes;
 import springfox.documentation.service.AllowableValues;
@@ -32,10 +33,15 @@ public abstract class BaseModelProperty implements ModelProperty {
 
   private final String name;
   protected final AlternateTypeProvider alternateTypeProvider;
+  private final BeanPropertyDefinition jacksonProperty;
 
-  public BaseModelProperty(String name, AlternateTypeProvider alternateTypeProvider) {
+  public BaseModelProperty(
+      String name,
+      AlternateTypeProvider alternateTypeProvider,
+      BeanPropertyDefinition jacksonProperty) {
     this.name = name;
     this.alternateTypeProvider = alternateTypeProvider;
+    this.jacksonProperty = jacksonProperty;
   }
 
   protected abstract ResolvedType realType();
@@ -70,12 +76,12 @@ public abstract class BaseModelProperty implements ModelProperty {
 
   @Override
   public boolean isRequired() {
-    return false;
+    return jacksonProperty.isRequired();
   }
 
   @Override
   public boolean isReadOnly() {
-    return false;
+    return !jacksonProperty.hasSetter();
   }
 
   @Override

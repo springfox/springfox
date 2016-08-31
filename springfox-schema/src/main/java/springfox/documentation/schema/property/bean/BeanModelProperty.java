@@ -22,6 +22,7 @@ package springfox.documentation.schema.property.bean;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
+import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import springfox.documentation.schema.property.BaseModelProperty;
@@ -44,9 +45,9 @@ public class BeanModelProperty extends BaseModelProperty {
       String propertyName,
       ResolvedMethod method,
       TypeResolver typeResolver,
-      AlternateTypeProvider alternateTypeProvider) {
-
-    super(propertyName, alternateTypeProvider);
+      AlternateTypeProvider alternateTypeProvider,
+      BeanPropertyDefinition jacksonProperty) {
+    super(propertyName, alternateTypeProvider, jacksonProperty);
 
     this.method = method;
     this.typeResolver = typeResolver;

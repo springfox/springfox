@@ -54,7 +54,11 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
       String propName = name(beanPropertyDefinition, true,  namingStrategy)
-      def sut = new FieldModelProperty(propName, field, alternateTypeProvider())
+      def sut = new FieldModelProperty(
+          propName,
+          field,
+          alternateTypeProvider(),
+          beanPropertyDefinition)
 
     expect:
       sut.propertyDescription() == description

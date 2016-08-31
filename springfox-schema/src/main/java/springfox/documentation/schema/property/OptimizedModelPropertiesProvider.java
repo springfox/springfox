@@ -244,11 +244,17 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     });
   }
 
-  private ModelProperty fieldModelProperty(ResolvedField childField, BeanPropertyDefinition jacksonProperty,
-                                           ModelContext modelContext) {
+  private ModelProperty fieldModelProperty(
+      ResolvedField childField,
+      BeanPropertyDefinition jacksonProperty,
+      ModelContext modelContext) {
     String fieldName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
-    FieldModelProperty fieldModelProperty = new FieldModelProperty(fieldName, childField,
-        modelContext.getAlternateTypeProvider());
+    FieldModelProperty fieldModelProperty
+        = new FieldModelProperty(
+            fieldName,
+            childField,
+            modelContext.getAlternateTypeProvider(),
+            jacksonProperty);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
         .name(fieldModelProperty.getName())
         .type(fieldModelProperty.getType())
@@ -272,7 +278,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
     String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
     BeanModelProperty beanModelProperty
-        = new BeanModelProperty(propertyName, childProperty, typeResolver, modelContext.getAlternateTypeProvider());
+        = new BeanModelProperty(
+        propertyName,
+        childProperty,
+        typeResolver,
+        modelContext.getAlternateTypeProvider(),
+        jacksonProperty);
 
     LOG.debug("Adding property {} to model", propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
@@ -304,7 +315,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             propertyName,
             parameter,
             constructor,
-            modelContext.getAlternateTypeProvider());
+            modelContext.getAlternateTypeProvider(),
+            jacksonProperty);
 
     LOG.debug("Adding property {} to model", propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()

@@ -21,6 +21,7 @@ package springfox.documentation.schema.property.bean;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedParameterizedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
+import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import springfox.documentation.schema.property.BaseModelProperty;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
@@ -33,8 +34,8 @@ public class ParameterModelProperty extends BaseModelProperty {
       String name,
       AnnotatedParameter parameter,
       ResolvedParameterizedMember constructor,
-      AlternateTypeProvider alternateTypeProvider) {
-    super(name, alternateTypeProvider);
+      AlternateTypeProvider alternateTypeProvider, BeanPropertyDefinition jacksonProperty) {
+    super(name, alternateTypeProvider, jacksonProperty);
     this.parameter = parameter;
     this.constructor = constructor;
   }

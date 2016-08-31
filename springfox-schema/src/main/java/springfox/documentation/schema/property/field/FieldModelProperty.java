@@ -21,6 +21,7 @@ package springfox.documentation.schema.property.field;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedField;
+import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import springfox.documentation.schema.property.BaseModelProperty;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
@@ -28,9 +29,13 @@ public class FieldModelProperty extends BaseModelProperty {
 
   private final ResolvedField childField;
 
-  public FieldModelProperty(String fieldName, ResolvedField childField, AlternateTypeProvider alternateTypeProvider) {
+  public FieldModelProperty(
+      String fieldName,
+      ResolvedField childField,
+      AlternateTypeProvider alternateTypeProvider,
+      BeanPropertyDefinition jacksonProperty) {
 
-    super(fieldName, alternateTypeProvider);
+    super(fieldName, alternateTypeProvider, jacksonProperty);
     this.childField = childField;
   }
 
