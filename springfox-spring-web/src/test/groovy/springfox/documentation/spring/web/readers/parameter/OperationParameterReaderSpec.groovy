@@ -25,6 +25,7 @@ import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Unroll
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -62,7 +63,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
 
 
-    def expander = new ModelAttributeParameterExpander(typeResolver)
+    def expander = new ModelAttributeParameterExpander(new FieldProvider(typeResolver))
     expander.pluginsManager = pluginsManager
     sut = new OperationParameterReader(typeResolver, expander)
     sut.pluginsManager = pluginsManager
@@ -177,7 +178,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
     where:
       handlerMethod                                                    | expectedSize
-      dummyHandlerMethod('methodWithoutModelAttribute', Example.class) | 1
+      dummyHandlerMethod('methodWithoutModelAttribute', Example.class) | 9
   }
 
   def "OperationParameterReader supports all documentationTypes"() {

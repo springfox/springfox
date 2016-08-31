@@ -128,6 +128,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   private boolean shouldExpand(final ResolvedMethodParameter parameter, ResolvedType resolvedParamType) {
     return (!parameter.getMethodParameter().hasParameterAnnotations() || annotatedWithModelAttribute(parameter))
         && !isBaseType(typeNameFor(resolvedParamType.getErasedType()))
+        && !resolvedParamType.getErasedType().isEnum()
         && !isContainerType(resolvedParamType)
         && !isMapType(resolvedParamType);
 

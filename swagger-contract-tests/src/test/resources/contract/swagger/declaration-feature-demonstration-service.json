@@ -651,10 +651,88 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "description": "example",
-              "name": "body",
-              "paramType": "body",
-              "type": "Example",
+              "name": "nestedType.name",
+              "paramType": "query",
+              "type": "string",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "defaultValue": "",
+              "description": "description of allCapsSet",
+              "name": "allCapsSet",
+              "paramAccess": "",
+              "paramType": "query",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true,
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "name": "parentBeanProperty",
+              "paramType": "query",
+              "type": "string",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "enum": [
+                "man",
+                "chu"
+              ],
+              "defaultValue": "",
+              "description": "description of foo",
+              "name": "foo",
+              "paramAccess": "",
+              "paramType": "query",
+              "type": "string",
+              "required": true
+            },
+            {
+              "allowMultiple": false,
+              "description": "description of bar",
+              "name": "bar",
+              "paramAccess": "",
+              "paramType": "query",
+              "format": "int32",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "enum": [
+                "ONE",
+                "TWO"
+              ],
+              "name": "enumType",
+              "paramType": "query",
+              "type": "string",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "description": "A read only string",
+              "name": "readOnlyString",
+              "paramAccess": "",
+              "paramType": "query",
+              "type": "string",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "enum": [
+                "ONE",
+                "TWO"
+              ],
+              "defaultValue": "",
+              "description": "description of annotatedEnumType",
+              "name": "annotatedEnumType",
+              "paramAccess": "",
+              "paramType": "query",
+              "type": "string",
               "required": false
             }
           ],
@@ -703,8 +781,8 @@
             {
               "allowMultiple": false,
               "description": "input",
-              "name": "body",
-              "paramType": "body",
+              "name": "input",
+              "paramType": "query",
               "format": "double",
               "type": "number",
               "required": false
@@ -755,8 +833,8 @@
             {
               "allowMultiple": false,
               "description": "input",
-              "name": "body",
-              "paramType": "body",
+              "name": "input",
+              "paramType": "query",
               "type": "boolean",
               "required": false
             }
@@ -803,14 +881,7 @@
             "application/json"
           ],
           "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "localDate",
-              "name": "body",
-              "paramType": "body",
-              "type": "LocalDate",
-              "required": false
-            }
+
           ],
           "responseMessages": [
             {
@@ -924,6 +995,115 @@
         }
       ],
       "path": "/features/effectives"
+    },
+    {
+      "description": "updateListOfExamples",
+      "operations": [
+        {
+          "method": "PUT",
+          "summary": "updateListOfExamples",
+          "nickname": "updateListOfExamplesUsingPUT",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": true,
+              "description": "examples",
+              "name": "examples",
+              "paramType": "query",
+              "items": {
+                "type": "Example"
+              },
+              "type": "array",
+              "required": false
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "void"
+        }
+      ],
+      "path": "/features/examples"
+    },
+    {
+      "description": "updateListOfIntegers",
+      "operations": [
+        {
+          "method": "PUT",
+          "summary": "updateListOfIntegers",
+          "nickname": "updateListOfIntegersUsingPUT",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": true,
+              "description": "integers",
+              "name": "integers",
+              "paramType": "query",
+              "items": {
+                "format": "int32",
+                "type": "integer"
+              },
+              "type": "array",
+              "required": false
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "void"
+        }
+      ],
+      "path": "/features/integers"
     },
     {
       "description": "listOfMaps",
@@ -1070,21 +1250,6 @@
               "required": false
             },
             {
-              "allowMultiple": false,
-              "name": "stringProp",
-              "paramType": "query",
-              "type": "string",
-              "required": false
-            },
-            {
-              "allowMultiple": false,
-              "name": "intProp",
-              "paramType": "query",
-              "format": "int32",
-              "type": "integer",
-              "required": false
-            },
-            {
               "allowMultiple": true,
               "name": "listProp",
               "paramType": "query",
@@ -1103,6 +1268,21 @@
                 "type": "integer"
               },
               "type": "array",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "name": "stringProp",
+              "paramType": "query",
+              "type": "string",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "name": "intProp",
+              "paramType": "query",
+              "format": "int32",
+              "type": "integer",
               "required": false
             }
           ],
@@ -1202,8 +1382,8 @@
                 "TWO"
               ],
               "description": "enumType",
-              "name": "body",
-              "paramType": "body",
+              "name": "enumType",
+              "paramType": "query",
               "type": "string",
               "required": false
             }
@@ -1253,9 +1433,12 @@
             {
               "allowMultiple": true,
               "description": "enumType",
-              "name": "body",
-              "paramType": "body",
-              "type": "Collection\u00abstring\u00bb",
+              "name": "enumType",
+              "paramType": "query",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
               "required": false
             }
           ],

@@ -21,6 +21,7 @@ package springfox.documentation.swagger.readers.operation
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -43,7 +44,7 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
       def resolver = new TypeResolver()
 
       def plugins = defaultWebPlugins()
-      def expander = new ModelAttributeParameterExpander(resolver)
+      def expander = new ModelAttributeParameterExpander(new FieldProvider(resolver))
       expander.pluginsManager = plugins
       OperationParameterReader sut = new OperationParameterReader(resolver, expander)
       sut.pluginsManager = plugins

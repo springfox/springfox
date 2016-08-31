@@ -21,7 +21,7 @@
               "name": "body",
               "paramType": "body",
               "type": "Resource\u00abPet\u00bb",
-              "required": false
+              "required": true
             }
           ],
           "responseMessages": [
@@ -177,6 +177,10 @@
           "required": false,
           "format": "int32",
           "type": "integer"
+        },
+        "content": {
+          "required": false,
+          "type": "Pet"
         },
         "id": {
           "required": false,

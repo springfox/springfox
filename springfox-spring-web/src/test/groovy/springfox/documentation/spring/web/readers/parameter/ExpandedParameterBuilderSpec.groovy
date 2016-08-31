@@ -1,10 +1,12 @@
 package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
+import com.fasterxml.classmate.members.ResolvedField
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.ExampleEnum
+import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
 
@@ -66,7 +68,13 @@ class ExpandedParameterBuilderSpec extends Specification {
   }
 
   def named(String name) {
-    A.getField(name)
+    def resolver = new TypeResolver()
+    FieldProvider fieldProvider = new FieldProvider(resolver)
+    for (ResolvedField field : fieldProvider.in(resolver.resolve(A))) {
+      if (field.name == name) {
+        return field
+      }
+    }
   }
   class A {
     public List<ExampleEnum> enums;

@@ -440,10 +440,24 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "description": "pet",
-              "name": "body",
-              "paramType": "body",
-              "type": "Pet",
+              "name": "id",
+              "paramType": "query",
+              "type": "string",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "name": "name",
+              "paramType": "query",
+              "type": "string",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "name": "age",
+              "paramType": "query",
+              "format": "int32",
+              "type": "integer",
               "required": false
             }
           ],
@@ -499,7 +513,7 @@
               "name": "body",
               "paramType": "body",
               "type": "List[Entry\u00abstring,Pet\u00bb]",
-              "required": false
+              "required": true
             }
           ],
           "responseMessages": [
@@ -551,7 +565,7 @@
               "name": "body",
               "paramType": "body",
               "type": "List[Entry\u00abstring,Pet\u00bb]",
-              "required": false
+              "required": true
             }
           ],
           "responseMessages": [
@@ -603,7 +617,7 @@
               "name": "body",
               "paramType": "body",
               "type": "List[Entry\u00abstring,Pet\u00bb]",
-              "required": false
+              "required": true
             }
           ],
           "responseMessages": [
@@ -820,7 +834,7 @@
               "description": "pic",
               "name": "pic",
               "paramType": "form",
-              "type": "File",
+              "type": "file",
               "required": false
             }
           ],

@@ -24,6 +24,7 @@ import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -62,7 +63,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
             .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
             .configure(contextBuilder)
 
-    def expander = new ModelAttributeParameterExpander(typeResolver)
+    def expander = new ModelAttributeParameterExpander(new FieldProvider(new TypeResolver()))
     expander.pluginsManager = pluginsManager
 
     sut = new OperationParameterReader(typeResolver, expander)
@@ -192,6 +193,6 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
     where:
       handlerMethod                                                    | expectedSize
-      dummyHandlerMethod('methodWithoutModelAttribute', Example.class) | 1
+      dummyHandlerMethod('methodWithoutModelAttribute', Example.class) | 9
   }
 }

@@ -155,7 +155,7 @@
         }
       }
     },
-    "/bugs/1376-input-bare": {
+    "/bugs/1376-input-bare{?url}": {
       "post": {
         "tags": [
           "bugs-controller"
@@ -171,13 +171,11 @@
         ],
         "parameters": [
           {
-            "in": "body",
+            "in": "query",
             "name": "url",
             "description": "url",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
@@ -187,7 +185,7 @@
         }
       }
     },
-    "/bugs/1376-input-property": {
+    "/bugs/1376-input-property{?url}": {
       "post": {
         "tags": [
           "bugs-controller"
@@ -203,13 +201,10 @@
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "bug",
-            "description": "bug",
+            "name": "url",
+            "in": "query",
             "required": false,
-            "schema": {
-              "$ref": "#/definitions/Bug1376"
-            }
+            "type": "string"
           }
         ],
         "responses": {

@@ -24,13 +24,14 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 public abstract class AbstractController<T extends ResourceSupport, ID> {
 
   @RequestMapping(value = "/create-t", method = RequestMethod.PUT)
-  public void create(T toCreate) {
+  public void create(@RequestBody T toCreate) {
     throw new UnsupportedOperationException();
   }
 

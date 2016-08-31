@@ -128,18 +128,18 @@ public class PetService {
   }
 
   @RequestMapping(value = "/transformPetNameToPetMapToAny", method = RequestMethod.POST)
-  public Map<String, Object> transformPetNameToPetMapToAny(Map<String, Pet> someInput) {
+  public Map<String, Object> transformPetNameToPetMapToAny(@RequestBody Map<String, Pet> someInput) {
     throw new RuntimeException("NotImplementedException");
   }
 
   @RequestMapping(value = "/transformPetNameToPetMapToGenericOpenMap", method = RequestMethod.POST)
-  public Map<Object, Object> transformPetNameToPetMapToGenericOpenMap(Map<String, Pet> someInput) {
+  public Map<Object, Object> transformPetNameToPetMapToGenericOpenMap(@RequestBody Map<String, Pet> someInput) {
     throw new RuntimeException("NotImplementedException");
   }
 
 
   @RequestMapping(value = "/transformPetNameToPetMapToOpenMap", method = RequestMethod.POST)
-  public Map transformPetNameToPetMapToOpenMap(Map<String, Pet> someInput) {
+  public Map transformPetNameToPetMapToOpenMap(@RequestBody Map<String, Pet> someInput) {
     throw new RuntimeException("NotImplementedException");
   }
 

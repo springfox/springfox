@@ -45,7 +45,7 @@
             "in": "body",
             "name": "toCreate",
             "description": "toCreate",
-            "required": false,
+            "required": true,
             "schema": {
               "$ref": "#/definitions/Resource\u00abPet\u00bb"
             }
@@ -160,6 +160,9 @@
         "age": {
           "type": "integer",
           "format": "int32"
+        },
+        "content": {
+          "$ref": "#/definitions/Pet"
         },
         "id": {
           "type": "string"

@@ -263,13 +263,74 @@
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "example",
-            "description": "example",
+            "name": "nestedType.name",
+            "in": "query",
             "required": false,
-            "schema": {
-              "$ref": "#/definitions/Example"
-            }
+            "type": "string"
+          },
+          {
+            "name": "allCapsSet",
+            "in": "query",
+            "description": "description of allCapsSet",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "parentBeanProperty",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "foo",
+            "in": "query",
+            "description": "description of foo",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "man",
+              "chu"
+            ]
+          },
+          {
+            "name": "bar",
+            "in": "query",
+            "description": "description of bar",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "enumType",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ONE",
+              "TWO"
+            ]
+          },
+          {
+            "name": "readOnlyString",
+            "in": "query",
+            "description": "A read only string",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "annotatedEnumType",
+            "in": "query",
+            "description": "description of annotatedEnumType",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ONE",
+              "TWO"
+            ]
           }
         ],
         "responses": {
@@ -295,14 +356,12 @@
         ],
         "parameters": [
           {
-            "in": "body",
             "name": "input",
+            "in": "query",
             "description": "input",
             "required": false,
-            "schema": {
-              "type": "number",
-              "format": "double"
-            }
+            "type": "number",
+            "format": "double"
           }
         ],
         "responses": {
@@ -328,13 +387,11 @@
         ],
         "parameters": [
           {
-            "in": "body",
             "name": "input",
+            "in": "query",
             "description": "input",
             "required": false,
-            "schema": {
-              "type": "boolean"
-            }
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -360,13 +417,11 @@
         ],
         "parameters": [
           {
-            "in": "body",
             "name": "localDate",
+            "in": "query",
             "description": "localDate",
             "required": false,
-            "schema": {
-              "$ref": "#/definitions/LocalDate"
-            }
+            "type": "string"
           }
         ],
         "responses": {
@@ -423,6 +478,75 @@
                 "$ref": "#/definitions/Example"
               }
             }
+          }
+        }
+      }
+    },
+    "/features/examples": {
+      "put": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "updateListOfExamples",
+        "operationId": "updateListOfExamplesUsingPUT_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "examples",
+            "in": "query",
+            "description": "examples",
+            "required": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Example"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/features/integers": {
+      "put": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "updateListOfIntegers",
+        "operationId": "updateListOfIntegersUsingPUT_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "integers",
+            "in": "query",
+            "description": "integers",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -527,19 +651,6 @@
             "type": "string"
           },
           {
-            "name": "stringProp",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "intProp",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
             "name": "listProp",
             "in": "query",
             "required": false,
@@ -559,6 +670,19 @@
               "format": "int32"
             },
             "collectionFormat": "multi"
+          },
+          {
+            "name": "stringProp",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "intProp",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "responses": {
@@ -648,17 +772,15 @@
         ],
         "parameters": [
           {
-            "in": "body",
             "name": "enumType",
+            "in": "query",
             "description": "enumType",
             "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "ONE",
-                "TWO"
-              ]
-            }
+            "type": "string",
+            "enum": [
+              "ONE",
+              "TWO"
+            ]
           }
         ],
         "responses": {
@@ -684,13 +806,23 @@
         ],
         "parameters": [
           {
-            "in": "body",
             "name": "enumType",
+            "in": "query",
             "description": "enumType",
             "required": false,
-            "schema": {
-              "$ref": "#/definitions/Collection\u00abstring\u00bb"
-            }
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ONE",
+                "TWO"
+              ]
+            },
+            "collectionFormat": "multi",
+            "enum": [
+              "ONE",
+              "TWO"
+            ]
           }
         ],
         "responses": {

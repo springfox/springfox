@@ -18,8 +18,8 @@
             {
               "allowMultiple": false,
               "description": "parameter",
-              "name": "body",
-              "paramType": "body",
+              "name": "parameter",
+              "paramType": "query",
               "type": "string",
               "required": false
             }
