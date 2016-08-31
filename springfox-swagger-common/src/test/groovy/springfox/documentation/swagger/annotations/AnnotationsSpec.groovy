@@ -21,6 +21,7 @@ package springfox.documentation.swagger.annotations
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.spring.web.dummy.DummyClass
@@ -39,7 +40,7 @@ class AnnotationsSpec extends Specification {
     given:
       AnnotatedElement annotatedElement = ConcreteController.getMethod("get", Object)
     expect:
-      findApiResponsesAnnotations(annotatedElement).isPresent()
+      findApiResponsesAnnotations(annotatedElement).size() == 1
   }
 
   def "ApiParam annotations should be looked up through the entire inheritance hierarchy"() {
@@ -47,6 +48,17 @@ class AnnotationsSpec extends Specification {
       AnnotatedElement annotatedElement = DummyClass.getMethod("annotatedWithApiParam")
     expect:
       findApiParamAnnotation(annotatedElement).isPresent()
+  }
+
+  def "ApiResponses annotations should be looked up when annotated at class level"() {
+    given:
+      AnnotatedElement classLevel = DummyClass.class
+      AnnotatedElement methodLevel = DummyClass.getMethod("methodAnnotatedWithApiResponse")
+    expect:
+      findApiResponsesAnnotations(classLevel).size() == 1
+      findApiResponsesAnnotations(methodLevel).size() == 2
+      findApiResponsesAnnotations(methodLevel)[0]== methodLevel.getAnnotation(ApiResponses)
+      findApiResponsesAnnotations(methodLevel)[1] == classLevel.getAnnotation(ApiResponses)
   }
 
   def "Cannot instantiate the annotations helper"() {

@@ -55,6 +55,9 @@ import java.util.List;
 import java.util.Map;
 
 @RequestMapping(produces = {"application/json"}, consumes = {"application/json", "application/xml"})
+@ApiResponses({
+  @ApiResponse(code = 404, response = RestError.class, message = "Not Found")
+})
 public class DummyClass {
 
 

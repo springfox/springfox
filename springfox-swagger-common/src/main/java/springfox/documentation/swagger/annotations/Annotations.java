@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Optional.*;
+import static com.google.common.collect.Lists.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 public class Annotations {
@@ -52,8 +53,19 @@ public class Annotations {
     return fromNullable(findAnnotation(annotated, ApiOperation.class));
   }
 
-  public static Optional<ApiResponses> findApiResponsesAnnotations(Method annotated) {
-    return fromNullable(findAnnotation(annotated, ApiResponses.class));
+  public static List<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
+    List<ApiResponses> results = newArrayList();
+    ApiResponses currentLevel = getAnnotation(annotated, ApiResponses.class);
+    if (currentLevel != null) {
+      results.add(currentLevel);
+    }
+    if (annotated instanceof Method) {
+      ApiResponses parentLevel = findAnnotation(((Method)annotated).getDeclaringClass(), ApiResponses.class);
+      if (parentLevel != null) {
+        results.add(parentLevel);
+      }
+    }
+    return results;
   }
 
   public static Optional<ResponseHeader> findResponseHeader(Method annotated) {

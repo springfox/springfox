@@ -37,10 +37,11 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Sets.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
@@ -83,13 +84,18 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
   private void collectApiResponses(RequestMappingContext context) {
 
     HandlerMethod handlerMethod = context.getHandlerMethod();
-    Optional<ApiResponses> apiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
+    List<ApiResponses> allApiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
 
     LOG.debug("Reading parameters models for handlerMethod |{}|", handlerMethod.getMethod().getName());
-    List<ResolvedType> modelTypes = apiResponses.transform(toResolvedTypes(context))
-        .or(new ArrayList<ResolvedType>());
-    for (ResolvedType modelType : modelTypes) {
-      context.operationModelsBuilder().addReturn(modelType);
+    Set<ResolvedType> seenTypes = newHashSet();
+    for (ApiResponses apiResponses : allApiResponses) {
+      List<ResolvedType> modelTypes = toResolvedTypes(context).apply(apiResponses);
+      for (ResolvedType modelType : modelTypes) {
+        if (!seenTypes.contains(modelType)) {
+          seenTypes.add(modelType);
+          context.operationModelsBuilder().addReturn(modelType);
+        }
+      }
     }
   }
 
