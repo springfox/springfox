@@ -48,7 +48,6 @@ import springfox.documentation.spring.web.dummy.models.NestedType;
 import springfox.documentation.spring.web.dummy.models.Pet;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -108,9 +107,21 @@ public class FeatureDemonstrationService {
   }
 
 
-  //Generic ollection input
+  //Generic collection input
   @RequestMapping(value = "/statuses", method = RequestMethod.POST)
-  public void updateBazes(Collection<EnumType> enumType) {
+  public void updateBazes(List<EnumType> enumType) {
+    //No-op
+  }
+
+  //Generic collection input
+  @RequestMapping(value = "/integers", method = RequestMethod.PUT)
+  public void updateListOfIntegers(List<Integer> integers) {
+    //No-op
+  }
+
+  //Generic collection input
+  @RequestMapping(value = "/examples", method = RequestMethod.PUT)
+  public void updateListOfExamples(List<Example> examples) {
     //No-op
   }
 
@@ -147,6 +158,7 @@ public class FeatureDemonstrationService {
   public List<Map<String, String>> listOfMaps() {
     throw new UnsupportedOperationException();
   }
+
 
   @RequestMapping(value = "mapOfMapOfExample", method = RequestMethod.GET)
   public Map<String, Map<String, Example>> mapOfMapOfExample() {

@@ -22,6 +22,8 @@ package springfox.documentation.spring.web.readers.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -48,6 +50,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterDataTypeReader implements ParameterBuilderPlugin {
+  private static final Logger LOG = LoggerFactory.getLogger(ParameterDataTypeReader.class);
   private final TypeNameExtractor nameExtractor;
   private final TypeResolver resolver;
 
@@ -79,6 +82,14 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
       } else if (annotation instanceof RequestParam && treatRequestParamAsString(parameterType)) {
         parameterType = resolver.resolve(String.class);
         modelRef = new ModelRef("string");
+      }
+    }
+    if (methodAnnotations.length == 0) {
+      String typeName = typeNameFor(parameterType.getErasedType());
+      if (isBaseType(typeName)) {
+        modelRef = new ModelRef(typeName);
+      } else {
+        LOG.warn("Trying to infer dataType {}", parameterType);
       }
     }
     ModelContext modelContext = inputParam(parameterType,

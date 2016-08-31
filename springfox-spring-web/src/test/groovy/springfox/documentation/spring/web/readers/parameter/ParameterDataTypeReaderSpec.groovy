@@ -114,7 +114,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       DummyModels.FunkyBusiness[] | [Mock(PathVariable)] | "string"
       DummyModels.FunkyBusiness[] | [Mock(RequestParam)] | "string"
       Void                        | []                   | "void"
-      MultipartFile               | []                   | "File"
+      MultipartFile               | []                   | "file"
       Business.BusinessType       | []                   | "string"
       Business.BusinessType       | [Mock(PathVariable)] | "string"
       Business.BusinessType       | [Mock(RequestParam)] | "string"

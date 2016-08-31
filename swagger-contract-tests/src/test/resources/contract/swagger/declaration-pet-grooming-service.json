@@ -1,15 +1,7 @@
 {
   "apiVersion": "1.0",
-  "swaggerVersion": "1.2",
-  "basePath": "/",
-  "resourcePath": "/",
-  "produces": [
-  ],
-  "consumes": [
-  ],
   "apis": [
     {
-      "path": "/petgrooming",
       "description": "canGroom",
       "operations": [
         {
@@ -62,10 +54,10 @@
             ]
           }
         }
-      ]
+      ],
+      "path": "/petgrooming"
     },
     {
-      "path": "/petgrooming/voidMethod/{input}",
       "description": "groomingFunctionThatReturnsVoid",
       "operations": [
         {
@@ -118,10 +110,10 @@
             ]
           }
         }
-      ]
+      ],
+      "path": "/petgrooming/voidMethod/{input}"
     },
     {
-      "path": "/pets",
       "description": "canGroom",
       "operations": [
         {
@@ -166,10 +158,10 @@
           "deprecated": "false",
           "type": "boolean"
         }
-      ]
+      ],
+      "path": "/pets"
     },
     {
-      "path": "/pets/grooming",
       "description": "canGroom",
       "operations": [
         {
@@ -214,10 +206,10 @@
           "deprecated": "false",
           "type": "boolean"
         }
-      ]
+      ],
+      "path": "/pets/grooming"
     },
     {
-      "path": "/pets/grooming/voidMethod/{input}",
       "description": "groomingFunctionThatReturnsVoid",
       "operations": [
         {
@@ -262,10 +254,10 @@
           "deprecated": "false",
           "type": "void"
         }
-      ]
+      ],
+      "path": "/pets/grooming/voidMethod/{input}"
     },
     {
-      "path": "/pets/voidMethod/{input}",
       "description": "groomingFunctionThatReturnsVoid",
       "operations": [
         {
@@ -310,7 +302,17 @@
           "deprecated": "false",
           "type": "void"
         }
-      ]
+      ],
+      "path": "/pets/voidMethod/{input}"
     }
-  ]
+  ],
+  "basePath": "/",
+  "consumes": [
+
+  ],
+  "produces": [
+
+  ],
+  "resourcePath": "/",
+  "swaggerVersion": "1.2"
 }

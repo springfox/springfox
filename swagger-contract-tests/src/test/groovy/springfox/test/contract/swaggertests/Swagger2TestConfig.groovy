@@ -107,6 +107,7 @@ public class Swagger2TestConfig {
         .useDefaultResponseMessages(false)
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
+        .alternateTypeRules(newRule(org.joda.time.LocalDate.class, String.class))
         .select()
         .paths(regex("/features/.*"))
         .build()

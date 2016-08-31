@@ -20,23 +20,22 @@
 package springfox.documentation.spi.service.contexts;
 
 
+import com.fasterxml.classmate.members.ResolvedField;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.spi.DocumentationType;
-
-import java.lang.reflect.Field;
 
 public class ParameterExpansionContext {
 
   private final String dataTypeName;
   private final String parentName;
-  private final Field field;
+  private final ResolvedField field;
   private final DocumentationType documentationType;
   private ParameterBuilder parameterBuilder;
 
   public ParameterExpansionContext(
       String dataTypeName,
       String parentName,
-      Field field,
+      ResolvedField field,
       DocumentationType documentationType,
       ParameterBuilder parameterBuilder) {
 
@@ -55,7 +54,7 @@ public class ParameterExpansionContext {
     return parentName;
   }
 
-  public Field getField() {
+  public ResolvedField getField() {
     return field;
   }
 

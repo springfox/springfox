@@ -49,11 +49,12 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<ApiModelProperty> apiModelPropertyOptional = findApiModePropertyAnnotation(context.getField());
+    Optional<ApiModelProperty> apiModelPropertyOptional
+        = findApiModePropertyAnnotation(context.getField().getRawMember());
     if (apiModelPropertyOptional.isPresent()) {
       fromApiModelProperty(context, apiModelPropertyOptional.get());
     }
-    Optional<ApiParam> apiParamOptional = findApiParamAnnotation(context.getField());
+    Optional<ApiParam> apiParamOptional = findApiParamAnnotation(context.getField().getRawMember());
     if (apiParamOptional.isPresent()) {
       fromApiParam(context, apiParamOptional.get());
     }
@@ -66,7 +67,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField());
+    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
     context.getParameterBuilder()
             .description(apiParam.value())
             .defaultValue(apiParam.defaultValue())
@@ -80,7 +81,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField());
+    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
     context.getParameterBuilder()
             .description(apiModelProperty.value())
             .required(apiModelProperty.required())

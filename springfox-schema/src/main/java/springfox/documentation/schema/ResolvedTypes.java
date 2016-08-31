@@ -70,7 +70,7 @@ public class ResolvedTypes {
     });
   }
 
-  public static Function<ResolvedType, ? extends ModelReference> modelRefFactory(
+  public static Function<ResolvedType, ModelReference> modelRefFactory(
       final ModelContext parentContext,
       final TypeNameExtractor typeNameExtractor) {
 

@@ -75,7 +75,7 @@ public class DefaultModelProvider implements ModelProvider {
     if (isContainerType(propertiesHost)
         || isMapType(propertiesHost)
         || propertiesHost.getErasedType().isEnum()
-        || isBaseType(Types.typeNameFor(propertiesHost.getErasedType()))
+        || isBaseType(propertiesHost)
         || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
           + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));

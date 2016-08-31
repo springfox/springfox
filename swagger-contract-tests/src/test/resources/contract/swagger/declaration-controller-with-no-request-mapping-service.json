@@ -1,15 +1,7 @@
 {
   "apiVersion": "1.0",
-  "swaggerVersion": "1.2",
-  "basePath": "/",
-  "resourcePath": "/no-request-mapping",
-  "produces": [
-  ],
-  "consumes": [
-  ],
   "apis": [
     {
-      "path": "/no-request-mapping",
       "description": "exampleWithNoRequestMapping",
       "operations": [
         {
@@ -22,7 +14,9 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [],
+          "parameters": [
+
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -45,10 +39,220 @@
           "deprecated": "false",
           "type": "Example"
         }
-      ]
+      ],
+      "path": "/no-request-mapping"
     }
   ],
+  "basePath": "/",
+  "consumes": [
+
+  ],
   "models": {
+    "LocalDateTime": {
+      "description": "",
+      "id": "LocalDateTime",
+      "properties": {
+        "centuryOfEra": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "chronology": {
+          "required": false,
+          "type": "Chronology"
+        },
+        "dayOfMonth": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "dayOfWeek": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "dayOfYear": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "era": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "fieldTypes": {
+          "required": false,
+          "items": {
+            "type": "DateTimeFieldType"
+          },
+          "type": "array"
+        },
+        "fields": {
+          "required": false,
+          "items": {
+            "type": "DateTimeField"
+          },
+          "type": "array"
+        },
+        "hourOfDay": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "millisOfDay": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "millisOfSecond": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "minuteOfHour": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "monthOfYear": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "secondOfMinute": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "values": {
+          "required": false,
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "weekOfWeekyear": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "weekyear": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "year": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "yearOfCentury": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "yearOfEra": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "Example": {
+      "description": "",
+      "id": "Example",
+      "properties": {
+        "allCapsSet": {
+          "required": false,
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "annotatedEnumType": {
+          "enum": [
+            "ONE",
+            "TWO"
+          ],
+          "required": false,
+          "type": "string"
+        },
+        "bar": {
+          "description": "description of bar",
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "enumType": {
+          "enum": [
+            "ONE",
+            "TWO"
+          ],
+          "required": false,
+          "type": "string"
+        },
+        "foo": {
+          "required": false,
+          "type": "string"
+        },
+        "localDateTime": {
+          "required": false,
+          "type": "LocalDateTime"
+        },
+        "nestedType": {
+          "required": false,
+          "type": "NestedType"
+        },
+        "parentBeanProperty": {
+          "required": false,
+          "type": "string"
+        },
+        "propertyWithNoGetterMethod": {
+          "required": false,
+          "type": "string"
+        },
+        "propertyWithNoSetterMethod": {
+          "required": false,
+          "type": "string"
+        },
+        "readOnlyString": {
+          "description": "A read only string",
+          "required": false,
+          "type": "string"
+        }
+      }
+    },
+    "DurationFieldType": {
+      "description": "",
+      "id": "DurationFieldType",
+      "properties": {
+        "name": {
+          "required": false,
+          "type": "string"
+        }
+      }
+    },
+    "DateTimeFieldType": {
+      "description": "",
+      "id": "DateTimeFieldType",
+      "properties": {
+        "durationType": {
+          "required": false,
+          "type": "DurationFieldType"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
+        },
+        "rangeDurationType": {
+          "required": false,
+          "type": "DurationFieldType"
+        }
+      }
+    },
     "Chronology": {
       "description": "",
       "id": "Chronology",
@@ -76,13 +280,13 @@
           "type": "boolean"
         },
         "maximumValue": {
-          "format": "int32",
           "required": false,
+          "format": "int32",
           "type": "integer"
         },
         "minimumValue": {
-          "format": "int32",
           "required": false,
+          "format": "int32",
           "type": "integer"
         },
         "name": {
@@ -100,38 +304,6 @@
         "type": {
           "required": false,
           "type": "DateTimeFieldType"
-        }
-      }
-    },
-    "DateTimeFieldType": {
-      "description": "",
-      "id": "DateTimeFieldType",
-      "properties": {
-        "durationType": {
-          "required": false,
-          "type": "DurationFieldType"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        },
-        "rangeDurationType": {
-          "required": false,
-          "type": "DurationFieldType"
-        }
-      }
-    },
-    "DateTimeZone": {
-      "description": "",
-      "id": "DateTimeZone",
-      "properties": {
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "fixed": {
-          "required": false,
-          "type": "boolean"
         }
       }
     },
@@ -156,195 +328,8 @@
           "type": "DurationFieldType"
         },
         "unitMillis": {
+          "required": false,
           "format": "int64",
-          "required": false,
-          "type": "integer"
-        }
-      }
-    },
-    "DurationFieldType": {
-      "description": "",
-      "id": "DurationFieldType",
-      "properties": {
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "Example": {
-      "description": "",
-      "id": "Example",
-      "properties": {
-        "allCapsSet": {
-          "items": {
-            "type": "string"
-          },
-          "required": false,
-          "type": "array",
-          "uniqueItems": true
-        },
-        "annotatedEnumType": {
-          "enum": [
-            "ONE",
-            "TWO"
-          ],
-          "required": false,
-          "type": "string"
-        },
-        "bar": {
-          "description": "description of bar",
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "enumType": {
-          "enum": [
-            "ONE",
-            "TWO"
-          ],
-          "required": false,
-          "type": "string"
-        },
-        "foo": {
-          "required": false,
-          "type": "string"
-        },
-        "localDateTime": {
-          "required": false,
-          "type": "LocalDateTime"
-        },
-        "nestedType": {
-          "required": false,
-          "type": "NestedType"
-        },
-        "parentBeanProperty": {
-          "required": false,
-          "type": "string"
-        },
-        "propertyWithNoSetterMethod": {
-          "required": false,
-          "type": "string"
-        },
-        "propertyWithNoGetterMethod": {
-          "required": false,
-          "type": "string"
-        },
-        "readOnlyString": {
-          "description": "A read only string",
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "LocalDateTime": {
-      "description": "",
-      "id": "LocalDateTime",
-      "properties": {
-        "centuryOfEra": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "chronology": {
-          "required": false,
-          "type": "Chronology"
-        },
-        "dayOfMonth": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "dayOfWeek": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "dayOfYear": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "era": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "fields": {
-          "items": {
-            "type": "DateTimeField"
-          },
-          "required": false,
-          "type": "array"
-        },
-        "fieldTypes": {
-          "items": {
-            "type": "DateTimeFieldType"
-          },
-          "required": false,
-          "type": "array"
-        },
-        "hourOfDay": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "millisOfDay": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "millisOfSecond": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "minuteOfHour": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "monthOfYear": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "secondOfMinute": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "values": {
-          "items": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "required": false,
-          "type": "array"
-        },
-        "weekOfWeekyear": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "weekyear": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "year": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "yearOfCentury": {
-          "format": "int32",
-          "required": false,
-          "type": "integer"
-        },
-        "yearOfEra": {
-          "format": "int32",
-          "required": false,
           "type": "integer"
         }
       }
@@ -358,6 +343,25 @@
           "type": "string"
         }
       }
+    },
+    "DateTimeZone": {
+      "description": "",
+      "id": "DateTimeZone",
+      "properties": {
+        "fixed": {
+          "required": false,
+          "type": "boolean"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        }
+      }
     }
-  }
+  },
+  "produces": [
+
+  ],
+  "resourcePath": "/no-request-mapping",
+  "swaggerVersion": "1.2"
 }

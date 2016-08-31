@@ -6,13 +6,14 @@
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
     "contact": {
+
     },
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   },
-  "host": "localhost:__PORT__",
+  "host": "localhost:8080",
   "basePath": "/",
   "tags": [
     {
@@ -40,8 +41,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -76,8 +77,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -118,8 +119,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -161,8 +162,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -185,39 +186,6 @@
           }
         },
         "deprecated": true
-      }
-    },
-    "/pets/grooming{?type}": {
-      "get": {
-        "tags": [
-          "pet-grooming-service"
-        ],
-        "summary": "canGroom",
-        "operationId": "canGroomUsingGET_3",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json",
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "name": "type",
-            "in": "query",
-            "description": "type",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        }
       }
     },
     "/pets/grooming/voidMethod/{input}": {
@@ -250,6 +218,39 @@
         }
       }
     },
+    "/pets/grooming{?type}": {
+      "get": {
+        "tags": [
+          "pet-grooming-service"
+        ],
+        "summary": "canGroom",
+        "operationId": "canGroomUsingGET_3",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "type",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
     "/pets/nameToNickNamesMap": {
       "post": {
         "tags": [
@@ -261,8 +262,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "responses": {
           "200": {
@@ -277,7 +278,7 @@
         }
       }
     },
-    "/pets/siblings": {
+    "/pets/siblings{?id,name,age}": {
       "post": {
         "tags": [
           "pet-service"
@@ -288,18 +289,28 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "pet",
-            "description": "pet",
+            "name": "id",
+            "in": "query",
             "required": false,
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "age",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "responses": {
@@ -326,15 +337,15 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
             "in": "body",
             "name": "someInput",
             "description": "someInput",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "object",
               "additionalProperties": {
@@ -364,15 +375,15 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
             "in": "body",
             "name": "someInput",
             "description": "someInput",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "object",
               "additionalProperties": {
@@ -402,15 +413,15 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
             "in": "body",
             "name": "someInput",
             "description": "someInput",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "object",
               "additionalProperties": {
@@ -470,8 +481,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -507,8 +518,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -541,8 +552,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -576,8 +587,8 @@
           "multipart/form-data"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {
@@ -613,8 +624,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "parameters": [
           {

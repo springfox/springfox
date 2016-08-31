@@ -6,13 +6,14 @@
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
     "contact": {
+
     },
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   },
-  "host": "localhost:__PORT__",
+  "host": "localhost:8080",
   "basePath": "/",
   "tags": [
     {
@@ -30,21 +31,21 @@
         "tags": [
           "concrete-controller"
         ],
-        "operationId": "createUsingPUT_1",
         "summary": "create",
+        "operationId": "createUsingPUT_1",
         "consumes": [
           "application/json"
         ],
         "produces": [
           "application/xml",
-          "application/json",
+          "application/json"
         ],
         "parameters": [
           {
             "in": "body",
             "name": "toCreate",
             "description": "toCreate",
-            "required": false,
+            "required": true,
             "schema": {
               "$ref": "#/definitions/Resource\u00abPet\u00bb"
             }
@@ -98,8 +99,8 @@
         "tags": [
           "concrete-controller"
         ],
-        "operationId": "getUsingGET_1",
         "summary": "get",
+        "operationId": "getUsingGET_1",
         "consumes": [
           "application/json"
         ],
@@ -109,22 +110,22 @@
         ],
         "parameters": [
           {
-            "in": "path",
             "name": "id",
+            "in": "path",
             "description": "id",
             "required": true,
             "type": "string"
           }
         ],
         "responses": {
-          "405": {
-            "description": "Invalid input"
-          },
           "200": {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/Resource\u00abPet\u00bb"
             }
+          },
+          "405": {
+            "description": "Invalid input"
           }
         }
       }
@@ -159,6 +160,9 @@
         "age": {
           "type": "integer",
           "format": "int32"
+        },
+        "content": {
+          "$ref": "#/definitions/Pet"
         },
         "id": {
           "type": "string"

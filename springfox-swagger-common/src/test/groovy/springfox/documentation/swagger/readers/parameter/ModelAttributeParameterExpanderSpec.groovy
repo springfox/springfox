@@ -24,7 +24,7 @@ import org.joda.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Autowired
 import springfox.documentation.schema.AlternateTypeRule
 import springfox.documentation.schema.WildcardType
-import springfox.documentation.service.Parameter
+import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.DefaultsProviderPlugin
 import springfox.documentation.spi.service.contexts.Defaults
@@ -37,26 +37,25 @@ import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 
 import javax.servlet.ServletContext
 
-import static com.google.common.collect.Lists.newArrayList
+import static com.google.common.collect.Lists.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
 @Mixin([SwaggerPluginsSupport])
 class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
-  List<Parameter> parameters = []
   TypeResolver typeResolver
   ModelAttributeParameterExpander sut
 
   def setup() {
     typeResolver = new TypeResolver()
     plugin.alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-    sut = new ModelAttributeParameterExpander(typeResolver)
+    sut = new ModelAttributeParameterExpander(new FieldProvider(typeResolver))
     sut.pluginsManager = swaggerServicePlugins([new SwaggerDefaults(new Defaults(), new TypeResolver(),
         Mock(ServletContext))])
   }
 
   def "shouldn't expand hidden parameters"() {
       when:
-        sut.expand("", ModelAttributeWithHiddenParametersExample, parameters, context());
+        def parameters = sut.expand("", typeResolver.resolve(ModelAttributeWithHiddenParametersExample), context());
       then:
         parameters.size() == 6
         parameters.find { it.name == 'modelAttributeProperty' }

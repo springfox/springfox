@@ -21,10 +21,10 @@ package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
-import springfox.documentation.service.Parameter
+import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spring.web.dummy.models.Example
-import springfox.documentation.spring.web.dummy.models.ModelAttributeExample
 import springfox.documentation.spring.web.dummy.models.ModelAttributeComplexTypeExample
+import springfox.documentation.spring.web.dummy.models.ModelAttributeExample
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
@@ -35,25 +35,25 @@ import static springfox.documentation.schema.AlternateTypeRules.*
 
 @Mixin([ServicePluginsSupport])
 class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
-  List<Parameter> parameters = []
   TypeResolver typeResolver
   ModelAttributeParameterExpander sut
 
   def setup() {
     typeResolver = new TypeResolver()
     plugin.alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-    sut = new ModelAttributeParameterExpander(typeResolver)
+    sut = new ModelAttributeParameterExpander(new FieldProvider(typeResolver))
     sut.pluginsManager = defaultWebPlugins()
   }
 
   def "should expand parameters"() {
     when:
-      sut.expand("", Example, parameters, context());
+      def parameters = sut.expand("", typeResolver.resolve(Example), context());
     then:
       parameters.size() == 9
       parameters.find { it.name == 'parentBeanProperty' }
       parameters.find { it.name == 'foo' }
       parameters.find { it.name == 'bar' }
+      parameters.find { it.name == 'readOnlyString' }
       parameters.find { it.name == 'enumType' }
       parameters.find { it.name == 'annotatedEnumType' }
       parameters.find { it.name == 'allCapsSet' }
@@ -63,7 +63,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
   def "should expand lists and nested types"() {
     when:
-      sut.expand("", ModelAttributeExample, parameters, context());
+      def parameters = sut.expand("", typeResolver.resolve(ModelAttributeExample), context());
     then:
       parameters.size() == 5
       parameters.find { it.name == 'stringProp' }
@@ -75,7 +75,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   
   def "should expand complex types"() {
     when:
-      sut.expand("", ModelAttributeComplexTypeExample, parameters, context());
+      def parameters = sut.expand("", typeResolver.resolve(ModelAttributeComplexTypeExample), context());
     then:
       parameters.size() == 11
       parameters.find { it.name == 'stringProp' }
@@ -88,12 +88,12 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
       parameters.find { it.name == 'fancyPets[0].name' }
       parameters.find { it.name == 'fancyPets[0].age' }
       parameters.find { it.name == 'categories[0].name' }
-      parameters.find { it.name == 'modelAttributeProperty' } 
+      parameters.find { it.name == 'modelAttributeProperty' }
   }
 
   def "should expand parameters when parent name is not empty"() {
     when:
-      sut.expand("parent", Example, parameters, context());
+      def parameters = sut.expand("parent", typeResolver.resolve(Example), context());
     then:
       parameters.size() == 9
       parameters.find { it.name == 'parent.parentBeanProperty' }
@@ -109,7 +109,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   def "Should return empty set when there is an exception"() {
     given:
       ModelAttributeParameterExpander expander =
-              new ModelAttributeParameterExpander(typeResolver) {
+              new ModelAttributeParameterExpander(new FieldProvider(typeResolver)) {
         @Override
         def BeanInfo getBeanInfo(Class<?> clazz) throws IntrospectionException {
           throw new IntrospectionException("Fail");
@@ -117,7 +117,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
       }
       expander.pluginsManager = defaultWebPlugins()
     when:
-      expander.expand("", Example, parameters, context());
+      def parameters = expander.expand("", typeResolver.resolve(Example), context())
     then:
       parameters.size() == 0;
   }

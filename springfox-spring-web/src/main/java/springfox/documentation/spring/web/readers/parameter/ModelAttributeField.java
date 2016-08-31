@@ -19,22 +19,23 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
-import java.lang.reflect.Field;
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.members.ResolvedField;
 
 public class ModelAttributeField {
-  private final Class<?> fieldType;
-  private final Field field;
+  private final ResolvedType fieldType;
+  private final ResolvedField field;
 
-  public ModelAttributeField(Class<?> fieldType, Field field) {
+  public ModelAttributeField(ResolvedType fieldType, ResolvedField field) {
     this.fieldType = fieldType;
     this.field = field;
   }
 
-  public Class<?> getFieldType() {
+  public ResolvedType getFieldType() {
     return fieldType;
   }
 
-  public Field getField() {
+  public ResolvedField getField() {
     return field;
   }
 }

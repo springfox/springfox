@@ -233,8 +233,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     };
   }
 
-  private Optional<ResolvedField> findField(ResolvedType resolvedType,
-                                            final String fieldName) {
+  private Optional<ResolvedField> findField(
+      ResolvedType resolvedType,
+      final String fieldName) {
+
     return tryFind(fields.in(resolvedType), new Predicate<ResolvedField>() {
       public boolean apply(ResolvedField input) {
         return fieldName.equals(input.getName());

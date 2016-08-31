@@ -87,6 +87,10 @@ public class Types {
     return baseTypes.contains(typeName);
   }
 
+  public static boolean isBaseType(ResolvedType type) {
+    return baseTypes.contains(typeNameFor(type.getErasedType()));
+  }
+
   public static boolean isVoid(ResolvedType returnType) {
     return Void.class.equals(returnType.getErasedType()) || Void.TYPE.equals(returnType.getErasedType());
   }
