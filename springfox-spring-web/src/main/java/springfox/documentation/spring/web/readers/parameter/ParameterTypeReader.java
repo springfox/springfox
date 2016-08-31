@@ -70,7 +70,7 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
       if (annotation instanceof PathVariable) {
         return "path";
       } else if (annotation instanceof ModelAttribute) {
-        return "body";
+        return queryOrForm(parameterContext.getOperationContext());
       } else if (annotation instanceof RequestBody) {
         return "body";
       } else if (annotation instanceof RequestParam) {
@@ -80,6 +80,9 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
       } else if (annotation instanceof RequestPart) {
           return "form";
       }
+    }
+    if (methodAnnotations.length == 0) {
+      return queryOrForm(parameterContext.getOperationContext());
     }
     return "body";
   }
