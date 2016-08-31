@@ -53,8 +53,9 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   private DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public OperationParameterReader(TypeResolver typeResolver,
-                                  ModelAttributeParameterExpander expander) {
+  public OperationParameterReader(
+      TypeResolver typeResolver,
+      ModelAttributeParameterExpander expander) {
     this.typeResolver = typeResolver;
     this.expander = expander;
   }
