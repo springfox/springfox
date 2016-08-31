@@ -29,6 +29,7 @@ import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.schema.ModelReference
 import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.service.Header
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -148,13 +149,13 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
       "bothWithoutOverride"     | [["name": "header2", "type": new ModelRef("int")],["name": "header1", "type": new ModelRef("string")]]
   }
 
-  boolean headersMatch(Map<String, ModelReference> headers, def expectedHeaders) {
+  boolean headersMatch(Map<String, ModelReference> headers, List<Header> expectedHeaders) {
     if (headers.size() == expectedHeaders.size()) {
       def retValue = true
       headers.eachWithIndex { Map.Entry<String, ModelReference> entry, int i ->
         if (entry.key != expectedHeaders.get(i).name ||
-            entry.value.type != expectedHeaders.get(i).type.type ||
-            entry.value.itemType != expectedHeaders.get(i).type.itemType) {
+            entry.value.modelReference.type != expectedHeaders.get(i).type.type ||
+            entry.value.modelReference.itemType != expectedHeaders.get(i).type.itemType) {
           retValue &= false
         }
       }

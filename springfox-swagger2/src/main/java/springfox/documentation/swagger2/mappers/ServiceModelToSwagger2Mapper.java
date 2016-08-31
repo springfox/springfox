@@ -41,6 +41,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Documentation;
+import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 
 import java.util.HashMap;
@@ -134,11 +135,13 @@ public abstract class ServiceModelToSwagger2Mapper {
     return responses;
   }
 
-  private EntryTransformer<String, ModelReference, Property> toPropertyEntry() {
-    return new EntryTransformer<String, ModelReference, Property>() {
+  private EntryTransformer<String, Header, Property> toPropertyEntry() {
+    return new EntryTransformer<String, Header, Property>() {
       @Override
-      public Property transformEntry(String key, ModelReference value) {
-        return modelRefToProperty(value);
+      public Property transformEntry(String key, Header value) {
+        Property property = modelRefToProperty(value.getModelReference());
+        property.setDescription(value.getDescription());
+        return property;
       }
     };
   }

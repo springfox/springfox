@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ResponseHeader;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.service.Header;
 
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class ResponseHeaders {
     throw new UnsupportedOperationException();
   }
 
-  public static Function<ApiOperation, ResponseHeader[]> resposeHeaders() {
+  public static Function<ApiOperation, ResponseHeader[]> responseHeaders() {
     return new Function<ApiOperation, ResponseHeader[]>() {
       @Override
       public ResponseHeader[] apply(ApiOperation input) {
@@ -50,10 +51,10 @@ public class ResponseHeaders {
     };
   }
 
-  public static Map<String, ModelReference> headers(ResponseHeader[] responseHeaders) {
-    Map<String, ModelReference> headers = newHashMap();
+  public static Map<String, Header> headers(ResponseHeader[] responseHeaders) {
+    Map<String, Header> headers = newHashMap();
     for (ResponseHeader each : from(newArrayList(responseHeaders)).filter(not(emptyOrVoid()))) {
-      headers.put(each.name(), headerModel(each));
+      headers.put(each.name(), new Header(each.name(), each.description(), headerModel(each)));
     }
     return headers;
   }

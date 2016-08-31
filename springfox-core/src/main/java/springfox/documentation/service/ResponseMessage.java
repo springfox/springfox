@@ -27,13 +27,13 @@ public class ResponseMessage {
   private final int code;
   private final String message;
   private final ModelReference responseModel;
-  private final Map<String, ModelReference> headers;
+  private final Map<String, Header> headers;
 
   public ResponseMessage(
       int code,
       String message,
       ModelReference responseModel,
-      Map<String, ModelReference> headers) {
+      Map<String, Header> headers) {
     this.code = code;
     this.message = message;
     this.responseModel = responseModel;
@@ -52,7 +52,7 @@ public class ResponseMessage {
     return responseModel;
   }
 
-  public Map<String, ModelReference> getHeaders() {
+  public Map<String, Header> getHeaders() {
     return headers;
   }
 

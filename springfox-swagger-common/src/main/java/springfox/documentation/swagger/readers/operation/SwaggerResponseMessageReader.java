@@ -34,6 +34,7 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -86,8 +87,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     Optional<ApiOperation> operationAnnotation = findApiOperationAnnotation(handlerMethod.getMethod());
     Optional<ResolvedType> operationResponse =
         operationAnnotation.transform(resolvedTypeFromOperation(typeResolver, defaultResponse));
-    Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.transform(resposeHeaders());
-    Map<String, ModelReference> defaultHeaders = newHashMap();
+    Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.transform(responseHeaders());
+    Map<String, Header> defaultHeaders = newHashMap();
     if (defaultResponseHeaders.isPresent()) {
       defaultHeaders.putAll(headers(defaultResponseHeaders.get()));
     }
@@ -114,14 +115,14 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               modelRefFactory(modelContext, typeNameExtractor)
                   .apply(context.alternateFor(type.get())));
         }
-        Map<String, ModelReference> headers = newHashMap(defaultHeaders);
+        Map<String, Header> headers = newHashMap(defaultHeaders);
         headers.putAll(headers(apiResponse.responseHeaders()));
 
         responseMessages.add(new ResponseMessageBuilder()
             .code(apiResponse.code())
             .message(apiResponse.message())
             .responseModel(responseModel.orNull())
-            .headers(headers)
+            .headersWithDescription(headers)
             .build());
       }
 

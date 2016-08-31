@@ -27,7 +27,8 @@ jacocoTestReport {
           'springfox/documentation/swagger2/mappers/*Impl.*',
           'springfox/documentation/swagger2/configuration/*.*',
           'springfox/bean/validators/configuration/*Configuration.*',
-          'springfox/documentation/schema/property/PojoPropertyBuilderFactory.*'
+          'springfox/documentation/schema/property/PojoPropertyBuilderFactory.*',
+          'springfox/documentation/service/Header.*'
       ])
     })
   }

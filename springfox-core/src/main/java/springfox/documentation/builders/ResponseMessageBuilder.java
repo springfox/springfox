@@ -20,6 +20,7 @@
 package springfox.documentation.builders;
 
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 
 import java.util.Map;
@@ -31,7 +32,7 @@ public class ResponseMessageBuilder {
   private int code;
   private String message;
   private ModelReference responseModel;
-  private Map<String, ModelReference> headers = newHashMap();
+  private Map<String, Header> headers = newHashMap();
 
   /**
    * Updates the http response code
@@ -71,8 +72,31 @@ public class ResponseMessageBuilder {
    *
    * @param headers
    * @return this
+   * @deprecated Use the {@link ResponseMessageBuilder#headersWithDescription} instead
+   * @since 2.5.0
    */
+  @Deprecated
   public ResponseMessageBuilder headers(Map<String, ModelReference> headers) {
+    this.headers.putAll(transformEntries(nullToEmptyMap(headers), toHeaderEntry()));
+    return this;
+  }
+
+  private EntryTransformer<String, ModelReference, Header> toHeaderEntry() {
+    return new EntryTransformer<String, ModelReference, Header>() {
+      @Override
+      public Header transformEntry(String key, ModelReference value) {
+        return new Header(key, "", value);
+      }
+    };
+  }
+
+  /**
+   * Updates the response headers
+   *
+   * @param headers
+   * @return this
+   */
+  public ResponseMessageBuilder headersWithDescription(Map<String, Header> headers) {
     this.headers.putAll(nullToEmptyMap(headers));
     return this;
   }

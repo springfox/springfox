@@ -21,6 +21,9 @@ package springfox.documentation.builders
 
 import spock.lang.Specification
 import springfox.documentation.schema.ModelRef
+import springfox.documentation.service.Header
+
+import static com.google.common.collect.Maps.*
 
 class ResponseMessageBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
@@ -55,5 +58,44 @@ class ResponseMessageBuilderSpec extends Specification {
       builderMethod     | value                  | property
       'message'         | 'OK'                   | 'message'
       'responseModel'   | new ModelRef('String') | 'responseModel'
+  }
+
+
+  def "Deprecated headers transforms into headers with no description"() {
+    given:
+      def sut = new ResponseMessageBuilder()
+    when:
+      sut.headers(headers("header1", "header2"))
+      sut.headersWithDescription(headers("header3"))
+      sut.headers(null)
+      sut.headersWithDescription(null)
+    and:
+      def built = sut.build()
+      def expected = headersWithEmptyDescription("header1", "header2")
+      expected.putAll(headersWithDescription("header3"))
+    then:
+      expected.entrySet().each({
+        assert built.headers.containsKey(it.key)
+        assert built.headers.get(it.key).name == expected.get(it.key).name
+        assert built.headers.get(it.key).description == expected.get(it.key).description
+        assert built.headers.get(it.key).modelReference.type == expected.get(it.key).modelReference.type
+      })
+
+  }
+
+  def headers(String ... names) {
+    def map = newHashMap()
+    names.collect({map.put(it, new ModelRef("string"))})
+    map
+  }
+
+  def headersWithEmptyDescription(String ... names) {
+    headersWithDescription("", names)
+  }
+
+  def headersWithDescription(String description, String ... names) {
+    def map = newHashMap()
+    names.collect({map.put(it, new Header(it, description, new ModelRef("string")))})
+    map
   }
 }
