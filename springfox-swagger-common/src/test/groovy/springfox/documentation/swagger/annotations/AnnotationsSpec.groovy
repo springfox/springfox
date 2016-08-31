@@ -40,7 +40,7 @@ class AnnotationsSpec extends Specification {
     given:
       AnnotatedElement annotatedElement = ConcreteController.getMethod("get", Object)
     expect:
-      findApiResponsesAnnotations(annotatedElement)[0].isPresent()
+      findApiResponsesAnnotations(annotatedElement).size() == 1
   }
 
   def "ApiParam annotations should be looked up through the entire inheritance hierarchy"() {
@@ -55,11 +55,10 @@ class AnnotationsSpec extends Specification {
       AnnotatedElement classLevel = DummyClass.class
       AnnotatedElement methodLevel = DummyClass.getMethod("methodAnnotatedWithApiResponse")
     expect:
-      findApiResponsesAnnotations(classLevel)[0].isPresent()
-      findApiResponsesAnnotations(classLevel)[1].absent()
-      findApiResponsesAnnotations(methodLevel)[0].isPresent()
-      findApiResponsesAnnotations(methodLevel)[1].isPresent()
-      findApiResponsesAnnotations(methodLevel).findAll{it.isPresent()}.collect{it.get()}.containsAll([classLevel.getAnnotation(ApiResponses), methodLevel.getAnnotation(ApiResponses)])
+      findApiResponsesAnnotations(classLevel).size() == 1
+      findApiResponsesAnnotations(methodLevel).size() == 2
+      findApiResponsesAnnotations(methodLevel)[0]== methodLevel.getAnnotation(ApiResponses)
+      findApiResponsesAnnotations(methodLevel)[1] == classLevel.getAnnotation(ApiResponses)
   }
 
   def "Cannot instantiate the annotations helper"() {

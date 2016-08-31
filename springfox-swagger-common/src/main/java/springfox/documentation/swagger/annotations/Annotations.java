@@ -53,16 +53,19 @@ public class Annotations {
     return fromNullable(findAnnotation(annotated, ApiOperation.class));
   }
 
-  public static List<Optional<ApiResponses>> findApiResponsesAnnotations(AnnotatedElement annotated) {
-    return newArrayList(
-            fromNullable(getAnnotation(annotated, ApiResponses.class)),
-            fromNullable(annotated instanceof Method
-                    ?
-                    findAnnotation(((Method) annotated).getDeclaringClass(), ApiResponses.class)
-                    :
-                    (ApiResponses) null
-            )
-    );
+  public static List<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
+    List<ApiResponses> results = newArrayList();
+    ApiResponses currentLevel = getAnnotation(annotated, ApiResponses.class);
+    if (currentLevel != null) {
+      results.add(currentLevel);
+    }
+    if (annotated instanceof Method) {
+      ApiResponses parentLevel = findAnnotation(((Method)annotated).getDeclaringClass(), ApiResponses.class);
+      if (parentLevel != null) {
+        results.add(parentLevel);
+      }
+    }
+    return results;
   }
 
   public static Optional<ResponseHeader> findResponseHeader(Method annotated) {

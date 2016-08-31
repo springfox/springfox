@@ -93,45 +93,42 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       defaultHeaders.putAll(headers(defaultResponseHeaders.get()));
     }
 
-    List<Optional<ApiResponses>> allApiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
+    List<ApiResponses> allApiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
     Set<ResponseMessage> responseMessages = newHashSet();
 
     Map<Integer, ApiResponse> seenResponsesByCode = newHashMap();
-    for (Optional<ApiResponses> apiResponses : allApiResponses) {
-      if (apiResponses.isPresent()) {
-        ApiResponse[] apiResponseAnnotations = apiResponses.get().value();
-        for (ApiResponse apiResponse : apiResponseAnnotations) {
-          if (!seenResponsesByCode.containsKey(apiResponse.code())) {
-            seenResponsesByCode.put(apiResponse.code(), apiResponse);
-            ModelContext modelContext = returnValue(
-                    apiResponse.response(),
-                    context.getDocumentationType(),
-                    context.getAlternateTypeProvider(),
-                    context.getGenericsNamingStrategy(),
-                    context.getIgnorableParameterTypes());
-            Optional<ModelReference> responseModel = Optional.absent();
-            Optional<ResolvedType> type = resolvedType(null, apiResponse);
-            if (isSuccessful(apiResponse.code())) {
-              type = type.or(operationResponse);
-            }
-            if (type.isPresent()) {
-              responseModel = Optional.of(
-                      modelRefFactory(modelContext, typeNameExtractor)
-                      .apply(context.alternateFor(type.get())));
-            }
-            Map<String, ModelReference> headers = newHashMap(defaultHeaders);
-            headers.putAll(headers(apiResponse.responseHeaders()));
-
-            responseMessages.add(new ResponseMessageBuilder()
-                    .code(apiResponse.code())
-                    .message(apiResponse.message())
-                    .responseModel(responseModel.orNull())
-                    .headers(headers)
-                    .build());
+    for (ApiResponses apiResponses : allApiResponses) {
+      ApiResponse[] apiResponseAnnotations = apiResponses.value();
+      for (ApiResponse apiResponse : apiResponseAnnotations) {
+        if (!seenResponsesByCode.containsKey(apiResponse.code())) {
+          seenResponsesByCode.put(apiResponse.code(), apiResponse);
+          ModelContext modelContext = returnValue(
+                  apiResponse.response(),
+                  context.getDocumentationType(),
+                  context.getAlternateTypeProvider(),
+                  context.getGenericsNamingStrategy(),
+                  context.getIgnorableParameterTypes());
+          Optional<ModelReference> responseModel = Optional.absent();
+          Optional<ResolvedType> type = resolvedType(null, apiResponse);
+          if (isSuccessful(apiResponse.code())) {
+            type = type.or(operationResponse);
           }
+          if (type.isPresent()) {
+            responseModel = Optional.of(
+                    modelRefFactory(modelContext, typeNameExtractor)
+                    .apply(context.alternateFor(type.get())));
+          }
+          Map<String, ModelReference> headers = newHashMap(defaultHeaders);
+          headers.putAll(headers(apiResponse.responseHeaders()));
+
+          responseMessages.add(new ResponseMessageBuilder()
+                  .code(apiResponse.code())
+                  .message(apiResponse.message())
+                  .responseModel(responseModel.orNull())
+                  .headers(headers)
+                  .build());
         }
       }
-
     }
     if (operationResponse.isPresent()) {
       ModelContext modelContext = returnValue(operationResponse.get(),
