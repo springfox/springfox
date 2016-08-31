@@ -110,7 +110,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           type = type.or(operationResponse);
         }
         if (type.isPresent()) {
-          responseModel = Optional.of(
+          responseModel = (Optional<ModelReference>) Optional.of(
               modelRefFactory(modelContext, typeNameExtractor)
                   .apply(context.alternateFor(type.get())));
         }

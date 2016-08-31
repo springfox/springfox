@@ -20,30 +20,38 @@ package springfox.bean.validators.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.bean.validators.plugins.MinMaxAnnotationPlugin;
-import springfox.bean.validators.plugins.NotNullAnnotationPlugin;
-import springfox.bean.validators.plugins.PatternAnnotationPlugin;
-import springfox.bean.validators.plugins.SizeAnnotationPlugin;
+
+import springfox.bean.validators.plugins.ModelPropertyMinMaxAnnotationPlugin;
+import springfox.bean.validators.plugins.ModelPropertyNotNullAnnotationPlugin;
+import springfox.bean.validators.plugins.ModelPropertySizeAnnotationPlugin;
 
 @Configuration
 public class BeanValidatorPluginsConfiguration {
+    
+    /**
+     * define MinMax-Plugin
+     * @return
+     */
   @Bean
-  public MinMaxAnnotationPlugin minMaxPlugin() {
-    return new MinMaxAnnotationPlugin();
+  public ModelPropertyMinMaxAnnotationPlugin minMaxPlugin() {
+    return new ModelPropertyMinMaxAnnotationPlugin();
   }
 
+  /**
+     * define Size-Plugin
+     * @return
+     */
   @Bean
-  public SizeAnnotationPlugin sizePlugin() {
-    return new SizeAnnotationPlugin();
+  public ModelPropertySizeAnnotationPlugin sizePlugin() {
+    return new ModelPropertySizeAnnotationPlugin();
   }
 
+  /**
+   * define NotNull-Plugin
+   * @return
+   */
   @Bean
-  public NotNullAnnotationPlugin notNullPlugin() {
-    return new NotNullAnnotationPlugin();
-  }
-
-  @Bean
-  public PatternAnnotationPlugin patternPlugin() {
-    return new PatternAnnotationPlugin();
+  public ModelPropertyNotNullAnnotationPlugin notNullPlugin() {
+    return new ModelPropertyNotNullAnnotationPlugin();
   }
 }

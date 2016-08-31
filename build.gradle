@@ -33,7 +33,7 @@ subprojects {
   apply plugin: 'groovy' //gradle groovy plugin extends the java plugin
   apply plugin: 'com.github.adrianbk.jvmsrc'
   apply plugin: 'checkstyle'
-
+apply plugin: 'eclipse'
   javadoc {
     options.encoding = 'UTF-8'
   }

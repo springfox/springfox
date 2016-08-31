@@ -39,7 +39,7 @@ class PatternAndSizePluginSpec extends Specification{
   def "@Pattern annotations are reflected in the model properties that are AnnotatedElements"()  {
     given:
     def pat = new PatternAnnotationPlugin()
-    def sat = new SizeAnnotationPlugin()
+    def sat = new ModelPropertySizeAnnotationPlugin()
     def element = PatternAndSizeTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(),
@@ -65,7 +65,7 @@ class PatternAndSizePluginSpec extends Specification{
   def "@Pattern annotations are reflected in the model properties that are BeanPropertyDefinitions"()  {
     given:
     def pat = new PatternAnnotationPlugin()
-    def sat = new SizeAnnotationPlugin()
+    def sat = new ModelPropertySizeAnnotationPlugin()
     def beanProperty = beanProperty(propertyName)
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(),

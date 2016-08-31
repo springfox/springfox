@@ -30,7 +30,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 class SizeAnnotationPluginSpec extends Specification {
   def "Always supported" () {
     expect:
-      new SizeAnnotationPlugin().supports(types)
+      new ModelPropertySizeAnnotationPlugin().supports(types)
     where:
       types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
@@ -38,7 +38,7 @@ class SizeAnnotationPluginSpec extends Specification {
   @Unroll
   def "@Size annotations are reflected in the model #propertyName that are AnnotatedElements"()  {
     given:
-      def sut = new SizeAnnotationPlugin()
+      def sut = new ModelPropertySizeAnnotationPlugin()
       def element = SizeTestModel.getDeclaredField(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),
