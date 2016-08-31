@@ -48,6 +48,7 @@ class FieldModelPropertySpec extends SchemaSpecification {
       def sut = new FieldModelProperty(
           fieldName,
           field,
+          resolver,
           alternateTypeProvider(),
           jacksonProperty)
 
@@ -88,6 +89,7 @@ class FieldModelPropertySpec extends SchemaSpecification {
       def sut = new FieldModelProperty(
           fieldName,
           field,
+          resolver,
           alternateTypeProvider(),
           jacksonProperty)
 

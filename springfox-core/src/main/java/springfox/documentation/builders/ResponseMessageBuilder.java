@@ -22,9 +22,12 @@ package springfox.documentation.builders;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.VendorExtension;
 
+import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -33,6 +36,7 @@ public class ResponseMessageBuilder {
   private String message;
   private ModelReference responseModel;
   private Map<String, Header> headers = newHashMap();
+  private List<VendorExtension> vendorExtensions = newArrayList();
 
   /**
    * Updates the http response code
@@ -81,6 +85,7 @@ public class ResponseMessageBuilder {
     return this;
   }
 
+
   private EntryTransformer<String, ModelReference, Header> toHeaderEntry() {
     return new EntryTransformer<String, ModelReference, Header>() {
       @Override
@@ -95,13 +100,26 @@ public class ResponseMessageBuilder {
    *
    * @param headers
    * @return this
+   * @since 2.5.0
    */
   public ResponseMessageBuilder headersWithDescription(Map<String, Header> headers) {
     this.headers.putAll(nullToEmptyMap(headers));
     return this;
   }
 
+  /**
+   * Updates the response message extensions
+   *
+   * @param extensions - response message extensions
+   * @return this
+   * @since 2.5.0
+   */
+  public ResponseMessageBuilder vendorExtensions(List<VendorExtension> extensions) {
+    this.vendorExtensions.addAll(nullToEmptyList(extensions));
+    return this;
+  }
+
   public ResponseMessage build() {
-    return new ResponseMessage(code, message, responseModel, headers);
+    return new ResponseMessage(code, message, responseModel, headers, vendorExtensions);
   }
 }

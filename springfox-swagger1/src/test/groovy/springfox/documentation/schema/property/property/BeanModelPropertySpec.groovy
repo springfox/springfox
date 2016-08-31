@@ -23,6 +23,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.ImmutableSet
 import spock.lang.Ignore
+import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.service.AllowableListValues
@@ -44,7 +45,8 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class BeanModelPropertySpec extends SchemaSpecification {
 
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def "Extracting information from resolved properties"() {
+  @Unroll
+  def "Extracting information from resolved properties #methodName"() {
     given:
       Class typeToTest = TypeWithGettersAndSetters
       def modelContext = inputParam(

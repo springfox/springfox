@@ -57,6 +57,7 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
       def sut = new FieldModelProperty(
           propName,
           field,
+          resolver,
           alternateTypeProvider(),
           beanPropertyDefinition)
 

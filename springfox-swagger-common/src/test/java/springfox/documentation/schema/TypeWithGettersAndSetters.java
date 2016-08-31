@@ -61,4 +61,20 @@ public class TypeWithGettersAndSetters {
   public int setNotASetter() {
     return 0;
   }
+
+  public GenericType<byte[]> getGenericByteArray() {
+    return genericByteArray;
+  }
+
+  public void setGenericByteArray(GenericType<byte[]> genericByteArray) {
+    this.genericByteArray = genericByteArray;
+  }
+
+  public GenericType<Category[]> getGenericCategoryArray() {
+    return genericCategoryArray;
+  }
+
+  public void setGenericCategoryArray(GenericType<Category[]> genericCategoryArray) {
+    this.genericCategoryArray = genericCategoryArray;
+  }
 }

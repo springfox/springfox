@@ -23,6 +23,8 @@ import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import springfox.documentation.schema.ModelReference;
 
+import java.util.List;
+
 public class Parameter {
   private final String name;
   private final String description;
@@ -35,6 +37,7 @@ public class Parameter {
   private final String paramType;
   private final String paramAccess;
   private final Boolean hidden;
+  private final List<VendorExtension> vendorExtensions;
 
   public Parameter(
       String name,
@@ -47,7 +50,8 @@ public class Parameter {
       AllowableValues allowableValues,
       String paramType,
       String paramAccess,
-      boolean hidden) {
+      boolean hidden,
+      List<VendorExtension> vendorExtensions) {
 
     this.description = description;
     this.defaultValue = defaultValue;
@@ -60,6 +64,7 @@ public class Parameter {
     this.paramAccess = paramAccess;
     this.name = name;
     this.hidden = hidden;
+    this.vendorExtensions = vendorExtensions;
   }
 
   public Optional<ResolvedType> getType() {
@@ -104,5 +109,9 @@ public class Parameter {
   
   public Boolean isHidden() {
     return hidden;
+  }
+
+  public List<VendorExtension> getVendorExtentions() {
+    return vendorExtensions;
   }
 }

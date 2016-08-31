@@ -64,7 +64,7 @@ class ModelPropertyLookupSupport {
 
   BeanPropertyDefinition beanPropertyDefinitionByField(def typeToTest, def fieldName) {
     JavaType type = TypeFactory.defaultInstance().constructType(typeToTest)
-    BeanDescription beanDescription = mapper.getDeserializationConfig().introspectForBuilder(type)
+    BeanDescription beanDescription = mapper.getDeserializationConfig().introspect(type)
     Map<String, BeanPropertyDefinition> propertyDefinitionsByInternalName =
             beanDescription.findProperties()
                     .collectEntries {[ it.getInternalName(), it ]}

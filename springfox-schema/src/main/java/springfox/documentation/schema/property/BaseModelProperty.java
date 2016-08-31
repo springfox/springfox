@@ -22,6 +22,7 @@ package springfox.documentation.schema.property;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
 import springfox.documentation.schema.ResolvedTypes;
@@ -48,7 +49,12 @@ public abstract class BaseModelProperty implements ModelProperty {
     this.resolver = resolver;
     this.alternateTypeProvider = alternateTypeProvider;
     this.jacksonProperty = jacksonProperty;
-    jsonFormatAnnotation = Optional.fromNullable(jacksonProperty.getPrimaryMember().getAnnotation(JsonFormat.class));
+    AnnotatedMember primaryMember = jacksonProperty.getPrimaryMember();
+    if (primaryMember != null) {
+      jsonFormatAnnotation = Optional.fromNullable(primaryMember.getAnnotation(JsonFormat.class));
+    } else {
+      jsonFormatAnnotation = Optional.absent();
+    }
   }
 
   protected abstract ResolvedType realType();
@@ -112,6 +118,6 @@ public abstract class BaseModelProperty implements ModelProperty {
         return jsonFormatAnnotation.get().pattern();
       }
     }
-    return "";
+    return null;
   }
 }

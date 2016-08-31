@@ -257,7 +257,7 @@ public class OperationBuilder {
    * @return this
    */
   public OperationBuilder extensions(List<VendorExtension> extensions) {
-    this.vendorExtensions.addAll(extensions);
+    this.vendorExtensions.addAll(nullToEmptyList(extensions));
     return this;
   }
 

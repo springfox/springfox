@@ -21,6 +21,7 @@ package springfox.documentation.schema
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonUnwrapped
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember
@@ -97,6 +98,21 @@ class AnnotationsSpec extends Specification {
       'fieldWith2Setters'        | 'getFieldWith2Setters'
   }
 
+  def "Member unwrapped returns valid result"() {
+    given:
+      ObjectMapper mapper = new ObjectMapper()
+      BeanDescription beanDesc =
+          mapper.serializationConfig.introspect(TypeFactory.defaultInstance()
+              .constructType(AnnotationType))
+      BeanPropertyDefinition property = beanDesc.findProperties().find { it -> it.name == fieldName }
+    expect:
+      Annotations.memberIsUnwrapped(property?.getPrimaryMember()) == isUnwrapped
+    where:
+      fieldName                  | isUnwrapped
+      'fieldUnwrapped'           | true
+      null                       | false
+  }
+
   def "when member is null"() {
     expect:
       Annotations.memberName(null) == ""
@@ -118,6 +134,8 @@ class AnnotationsSpec extends Specification {
     private String fieldWithGetter
     private String fieldWithGetterAndSetter
     private String fieldWith2Setters;
+    @JsonUnwrapped
+    private Category fieldUnwrapped;
 
     @JsonProperty
     private String fieldWithNoAnnotations
@@ -151,5 +169,6 @@ class AnnotationsSpec extends Specification {
     void setFieldWithGetterAndSetter(String fieldWithGetterAndSetter) {
       this.fieldWithGetterAndSetter = fieldWithGetterAndSetter
     }
+
   }
 }
