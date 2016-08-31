@@ -4,7 +4,7 @@ Any plugin or extensibility hook that is available https://github.com/springfox/
 module]. In the `spi` module, anything that ends in `*Plugin` is generally an extensibility point that is meant for
 library consumers to consume.
 
-The bean validation (JSR-302) is a great example of a contribution to https://github.com/springfox/springfox/tree/master/springfox-bean-validators[support bean validations]. Its fairly simple and small in scope and should
+The bean validation (JSR-303) is a great example of a contribution to https://github.com/springfox/springfox/tree/master/springfox-bean-validators[support bean validations]. Its fairly simple and small in scope and should
 give an idea how one goes about creating a plugin. Its a set of plugins are act on `ModelProperty`, hence they
 are  implementations of `ModelPropertyBuilderPlugin`.
 
