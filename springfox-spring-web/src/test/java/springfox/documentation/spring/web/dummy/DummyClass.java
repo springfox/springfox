@@ -239,6 +239,16 @@ public class DummyClass {
   public void methodWithApiImplicitParamAndInteger(Integer integer) {
   }
 
+  @ApiImplicitParam(name = "Authentication", dataType = "Example", required = true, paramType = "header",
+      value = "Authentication token")
+  public void methodWithApiImplicitParamAndExample(Integer integer) {
+  }
+
+  @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
+      value = "Authentication token", allowMultiple = true)
+  public void methodWithApiImplicitParamAndAllowMultiple(Integer integer) {
+  }
+
   @ApiImplicitParams({
           @ApiImplicitParam(name = "lang", dataType = "string", required = true, paramType = "query",
                   value = "Language", defaultValue = "EN", allowableValues = "EN,FR"),

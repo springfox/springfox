@@ -162,46 +162,6 @@
 
   ],
   "models": {
-    "Resource\u00abPet\u00bb": {
-      "description": "",
-      "id": "Resource\u00abPet\u00bb",
-      "properties": {
-        "links": {
-          "required": false,
-          "items": {
-            "type": "Link"
-          },
-          "type": "array"
-        },
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "content": {
-          "required": false,
-          "type": "Pet"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "HttpEntity\u00abResource\u00abPet\u00bb\u00bb": {
-      "description": "",
-      "id": "HttpEntity\u00abResource\u00abPet\u00bb\u00bb",
-      "properties": {
-        "body": {
-          "required": false,
-          "type": "Resource\u00abPet\u00bb"
-        }
-      }
-    },
     "Pet": {
       "description": "",
       "id": "Pet",
@@ -236,6 +196,46 @@
         "templated": {
           "required": false,
           "type": "boolean"
+        }
+      }
+    },
+    "Resource\u00abPet\u00bb": {
+      "description": "",
+      "id": "Resource\u00abPet\u00bb",
+      "properties": {
+        "_links": {
+          "required": false,
+          "items": {
+            "type": "Link"
+          },
+          "type": "array"
+        },
+        "age": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "content": {
+          "required": false,
+          "type": "Pet"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
+        }
+      }
+    },
+    "HttpEntity\u00abResource\u00abPet\u00bb\u00bb": {
+      "description": "",
+      "id": "HttpEntity\u00abResource\u00abPet\u00bb\u00bb",
+      "properties": {
+        "body": {
+          "required": false,
+          "type": "Resource\u00abPet\u00bb"
         }
       }
     }

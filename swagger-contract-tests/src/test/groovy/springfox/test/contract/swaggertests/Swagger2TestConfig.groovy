@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.hateoas.Link
+import org.springframework.hateoas.config.EnableHypermediaSupport
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.Tag
 import springfox.documentation.spi.DocumentationType
@@ -18,6 +19,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*
 
 @Configuration
 @EnableSwagger2
+@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class Swagger2TestConfig {
 
   @Autowired

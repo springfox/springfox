@@ -18,15 +18,23 @@
  */
 package springfox.documentation.spring.web
 
+import com.fasterxml.classmate.ResolvedType
+import com.google.common.base.Optional
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.*
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
+import springfox.documentation.RequestHandler
+import springfox.documentation.RequestHandlerKey
+import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.mixins.HandlerMethodsSupport
+
+import java.lang.annotation.Annotation
 
 class OperationCachingEquivalenceSpec extends Specification implements HandlerMethodsSupport {
   def "Two request handlers backed by the same method must be equal" () {
@@ -55,6 +63,24 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
           new WebMvcRequestHandler(secondMapping, anyMethod))
     then:
       sut.doEquivalent(first, second)
+  }
+
+  def "One or the other is null" () {
+    given:
+      OperationCachingEquivalence sut = new OperationCachingEquivalence()
+      def first = new RequestMappingContext(
+          Mock(DocumentationContext),
+          requestHandler(firstKey))
+      def second = new RequestMappingContext(
+          Mock(DocumentationContext),
+          requestHandler(secondKey))
+    expect:
+      sut.doEquivalent(first, second) == outcome
+    where:
+      firstKey  | secondKey | outcome
+      null      | null      | true
+      "a"       | null      | false
+      null      | "b"       | false
   }
 
   def "Two request handlers backed by different methods must NOT be equal" () {
@@ -108,5 +134,93 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
         new ProducesRequestCondition(produces),
         custom
       )
+  }
+
+  def requestHandler(def handlerKey) {
+    new RequestHandler() {
+      @Override
+      Class<?> declaringClass() {
+        return null
+      }
+
+      @Override
+      boolean isAnnotatedWith(Class<? extends Annotation> annotation) {
+        return false
+      }
+
+      @Override
+      PatternsRequestCondition getPatternsCondition() {
+        return null
+      }
+
+      @Override
+      String groupName() {
+        return null
+      }
+
+      @Override
+      String getName() {
+        return null
+      }
+
+      @Override
+      Set<RequestMethod> supportedMethods() {
+        return null
+      }
+
+      @Override
+      Set<? extends MediaType> produces() {
+        return null
+      }
+
+      @Override
+      Set<? extends MediaType> consumes() {
+        return null
+      }
+
+      @Override
+      Set<NameValueExpression<String>> headers() {
+        return null
+      }
+
+      @Override
+      Set<NameValueExpression<String>> params() {
+        return null
+      }
+
+      @Override
+      def <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
+        return null
+      }
+
+      RequestHandlerKey key() {
+        handlerKey == null ? null : new RequestHandlerKey([] as Set, [] as Set, [] as Set, [] as Set)
+      }
+
+      @Override
+      List<ResolvedMethodParameter> getParameters() {
+        return null
+      }
+
+      @Override
+      ResolvedType getReturnType() {
+        return null
+      }
+
+      @Override
+      def <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
+        return null
+      }
+
+      @Override
+      RequestMappingInfo getRequestMapping() {
+        return null
+      }
+
+      @Override
+      HandlerMethod getHandlerMethod() {
+        return null
+      }
+    }
   }
 }

@@ -52,12 +52,12 @@ public class MockRequestHandler implements RequestHandler {
 
   @Override
   public Class<?> declaringClass() {
-    return getHandlerMethod().getMethod().getDeclaringClass();
+    return handlerMethod.getMethod().getDeclaringClass();
   }
 
   @Override
   public boolean isAnnotatedWith(Class<? extends Annotation> annotation) {
-    return null != AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation);
+    return null != AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation);
   }
 
   @Override

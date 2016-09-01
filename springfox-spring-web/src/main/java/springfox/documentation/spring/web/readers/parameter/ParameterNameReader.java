@@ -67,7 +67,8 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
 
   private Optional<String> discoveredName(MethodParameter methodParameter) {
     String[] discoveredNames = parameterNameDiscover.getParameterNames(methodParameter.getMethod());
-    return discoveredNames != null && methodParameter.getParameterIndex() < discoveredNames.length
+    int discoveredNameCount = Optional.fromNullable(discoveredNames).or(new String[0]).length;
+    return methodParameter.getParameterIndex() < discoveredNameCount
            ? Optional.fromNullable(emptyToNull(discoveredNames[methodParameter.getParameterIndex()]))
            : Optional.<String>absent();
   }

@@ -62,7 +62,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
     def expander = new ModelAttributeParameterExpander(new FieldProvider(typeResolver))
     expander.pluginsManager = pluginsManager
-    sut = new OperationParameterReader(typeResolver, expander)
+    sut = new OperationParameterReader(expander)
     sut.pluginsManager = pluginsManager
   }
 
@@ -187,7 +187,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "OperationParameterReader supports all documentationTypes"() {
     given:
-      def sut = new OperationParameterReader(new TypeResolver(), Mock(ModelAttributeParameterExpander))
+      def sut = new OperationParameterReader(Mock(ModelAttributeParameterExpander))
       sut.pluginsManager = defaultWebPlugins()
     expect:
       sut.supports(DocumentationType.SPRING_WEB)

@@ -20,7 +20,8 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -40,7 +41,8 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.base.Predicates.*;
+import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
@@ -49,17 +51,13 @@ import static springfox.documentation.schema.Types.*;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationParameterReader implements OperationBuilderPlugin {
-  private final TypeResolver typeResolver;
   private final ModelAttributeParameterExpander expander;
 
   @Autowired
   private DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public OperationParameterReader(
-      TypeResolver typeResolver,
-      ModelAttributeParameterExpander expander) {
-    this.typeResolver = typeResolver;
+  public OperationParameterReader(ModelAttributeParameterExpander expander) {
     this.expander = expander;
   }
 
@@ -74,7 +72,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     return true;
   }
 
-  protected List<Parameter> readParameters(final OperationContext context) {
+  private List<Parameter> readParameters(final OperationContext context) {
 
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
     List<Parameter> parameters = newArrayList();
@@ -96,14 +94,20 @@ public class OperationParameterReader implements OperationBuilderPlugin {
                   methodParameter.getResolvedParameterType(),
                   context.getDocumentationContext()));
         } else {
-          Parameter parameter = pluginsManager.parameter(parameterContext);
-          if (!parameter.isHidden()) {
-            parameters.add(parameter);
-          }
+          parameters.add(pluginsManager.parameter(parameterContext));
         }
       }
     }
-    return parameters;
+    return FluentIterable.from(parameters).filter(not(hiddenParams())).toList();
+  }
+
+  private Predicate<Parameter> hiddenParams() {
+    return new Predicate<Parameter>() {
+      @Override
+      public boolean apply(Parameter input) {
+        return input.isHidden();
+      }
+    };
   }
 
   private boolean shouldIgnore(
@@ -111,7 +115,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
       ResolvedType resolvedParameterType,
       final Set<Class> ignorableParamTypes) {
 
-    if (ignorableParamTypes.contains(resolvedParameterType)) {
+    if (ignorableParamTypes.contains(resolvedParameterType.getErasedType())) {
       return true;
     }
     for (Annotation annotation : parameter.getMethodParameter().getParameterAnnotations()) {

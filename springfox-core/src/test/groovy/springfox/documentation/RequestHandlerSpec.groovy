@@ -35,6 +35,7 @@ class RequestHandlerSpec extends Specification {
       sut.with {
         getPatternsCondition()
         getHandlerMethod()
+        getRequestMapping()
       }
   }
 }

@@ -68,7 +68,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     def expander = new ModelAttributeParameterExpander(new FieldProvider(new TypeResolver()))
     expander.pluginsManager = pluginsManager
 
-    sut = new OperationParameterReader(typeResolver, expander)
+    sut = new OperationParameterReader(expander)
     sut.pluginsManager = pluginsManager
   }
 

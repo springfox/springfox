@@ -55,12 +55,12 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public Class<?> declaringClass() {
-    return getHandlerMethod().getBeanType();
+    return handlerMethod.getBeanType();
   }
 
   @Override
   public boolean isAnnotatedWith(Class<? extends Annotation> annotation) {
-    return null != AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation);
+    return null != AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation);
   }
 
   @Override
@@ -105,7 +105,7 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation));
+    return Optional.fromNullable(AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation));
   }
 
   @Override
@@ -120,18 +120,18 @@ public class WebMvcRequestHandler implements RequestHandler {
   @Override
   public List<ResolvedMethodParameter> getParameters() {
     HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
-    return handlerMethodResolver.methodParameters(getHandlerMethod());
+    return handlerMethodResolver.methodParameters(handlerMethod);
   }
 
   @Override
   public ResolvedType getReturnType() {
     HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
-    return handlerMethodResolver.methodReturnType(getHandlerMethod());
+    return handlerMethodResolver.methodReturnType(handlerMethod);
   }
 
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getBeanType(), annotation));
+    return Optional.fromNullable(AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), annotation));
   }
 
   @Override

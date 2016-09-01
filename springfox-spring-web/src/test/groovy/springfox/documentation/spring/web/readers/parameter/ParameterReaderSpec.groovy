@@ -21,6 +21,9 @@ package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.method.HandlerMethod
 import springfox.documentation.builders.ParameterBuilder
@@ -77,17 +80,23 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       new ParameterNameReader()           | 'name'         | "method1"    | 'someName'
       new ParameterNameReader()           | 'name'         | "method2"    | 'someName'
       new ParameterNameReader()           | 'name'         | "method3"    | 'ArName'
+      new ParameterNameReader()           | 'name'         | "method4"    | 'header'
+      new ParameterNameReader()           | 'name'         | "method5"    | 'modelAttr'
+      new ParameterNameReader()           | 'name'         | "method6"    | 'pathVar'
   }
 
   class ParamNameClazzSpecimen {
     void method1(String someName) {
-
     }
     void method2(@ApiParam(name = "AnName") String someName) {
-
     }
     void method3(@RequestParam(value = "ArName") String someName) {
-
+    }
+    void method4(@RequestHeader(value = "header") String someName) {
+    }
+    void method5(@ModelAttribute(value = "modelAttr") String someName) {
+    }
+    void method6(@PathVariable(value = "pathVar") String someName) {
     }
   }
 

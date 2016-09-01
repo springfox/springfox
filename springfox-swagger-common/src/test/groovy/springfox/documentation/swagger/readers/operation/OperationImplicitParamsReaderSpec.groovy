@@ -42,7 +42,7 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
       def plugins = defaultWebPlugins()
       def expander = new ModelAttributeParameterExpander(new FieldProvider(resolver))
       expander.pluginsManager = plugins
-      OperationParameterReader sut = new OperationParameterReader(resolver, expander)
+      OperationParameterReader sut = new OperationParameterReader(expander)
       sut.pluginsManager = plugins
       OperationImplicitParametersReader operationImplicitParametersReader = new OperationImplicitParametersReader()
       OperationImplicitParameterReader operationImplicitParameterReader = new OperationImplicitParameterReader()
@@ -64,11 +64,13 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
       operationImplicitParameterReader.supports(DocumentationType.SWAGGER_12)
       operationImplicitParameterReader.supports(DocumentationType.SWAGGER_2)
     where:
-      handlerMethod                                                             | expectedSize
-      dummyHandlerMethod('dummyMethod')                                         | 0
-      dummyHandlerMethod('methodWithApiImplicitParam')                          | 1
-      dummyHandlerMethod('methodWithApiImplicitParamAndInteger', Integer.class) | 2
-      dummyHandlerMethod('methodWithApiImplicitParams', Integer.class)          | 3
-      handlerMethodIn(apiImplicitParamsClass(), 'methodWithApiImplicitParam')   | 2
+      handlerMethod                                                                     | expectedSize
+      dummyHandlerMethod('dummyMethod')                                                 | 0
+      dummyHandlerMethod('methodWithApiImplicitParam')                                  | 1
+      dummyHandlerMethod('methodWithApiImplicitParamAndInteger', Integer.class)         | 2
+      dummyHandlerMethod('methodWithApiImplicitParamAndExample', Integer.class)         | 2
+      dummyHandlerMethod('methodWithApiImplicitParamAndAllowMultiple', Integer.class)   | 2
+      dummyHandlerMethod('methodWithApiImplicitParams', Integer.class)                  | 3
+      handlerMethodIn(apiImplicitParamsClass(), 'methodWithApiImplicitParam')           | 2
   }
 }
