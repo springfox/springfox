@@ -1,5 +1,4 @@
 group 'io.springfox'
-version '2.4.0-SNAPSHOT'
 
 ext {
   limits = [
@@ -16,6 +15,7 @@ dependencies {
   compile libs.core
   compile libs.spring
   compile project(':springfox-spi')
+  compile project(':springfox-spring-web')
 
   compile "org.springframework.data:spring-data-rest-webmvc:2.5.2.RELEASE"
   compile "org.springframework.hateoas:spring-hateoas:${springHateoas}"

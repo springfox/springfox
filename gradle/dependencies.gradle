@@ -16,7 +16,7 @@ ext {
   spring = "4.2.7.RELEASE"
   springHateoas = "0.21.0.RELEASE"
   springPluginVersion = "1.2.0.RELEASE"
-  swagger2Core = "1.5.9"
+  swagger2Core = "1.5.10"
   springBoot = "1.3.6.RELEASE"
 
   libs = [
