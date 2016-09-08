@@ -18,8 +18,11 @@
  */
 package springfox.documentation.spring.data.rest;
 
+import com.fasterxml.classmate.TypeResolver;
+import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.ResourceMappings;
 import org.springframework.data.rest.webmvc.BasePathAwareHandlerMapping;
@@ -35,24 +38,31 @@ import springfox.documentation.spring.web.WebMvcRequestHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.spring.data.rest.EntityServices.*;
 
 @Component
 public class EntityServicesProvider implements RequestHandlerProvider {
   private final ResourceMappings mappings;
-  private final RepositoryRestConfiguration repositoryConfiguration;
+  private final Repositories repositories;
   private final RepositoryRestHandlerMapping restMappings;
   private final BasePathAwareHandlerMapping basePathAwareMappings;
+  private final TypeResolver typeResolver;
 
   @Autowired
   public EntityServicesProvider(
       ResourceMappings mappings,
       JpaHelper jpaHelper,
       RepositoryRestConfiguration repositoryConfiguration,
-      ApplicationContext applicationContext) {
+      ApplicationContext applicationContext,
+      Repositories repositories,
+      TypeResolver typeResolver) {
     this.mappings = mappings;
-    this.repositoryConfiguration = repositoryConfiguration;
+    this.repositories = repositories;
+    this.typeResolver = typeResolver;
     this.restMappings = new RepositoryRestHandlerMapping(mappings, repositoryConfiguration);
     restMappings.setJpaHelper(jpaHelper);
     restMappings.setApplicationContext(applicationContext);
@@ -67,12 +77,25 @@ public class EntityServicesProvider implements RequestHandlerProvider {
   @Override
   public List<RequestHandler> requestHandlers() {
     ArrayList<RequestHandler> requestHandlers = newArrayList();
-    for (Map.Entry<RequestMappingInfo, HandlerMethod> each: restMappings.getHandlerMethods().entrySet()) {
+    FluentIterable<Map.Entry<RequestMappingInfo, HandlerMethod>> entries = FluentIterable.from(allEntries());
+    for (Map.Entry<RequestMappingInfo, HandlerMethod> each : entries.filter(not(restDataServices()))) {
       requestHandlers.add(new WebMvcRequestHandler(each.getKey(), each.getValue()));
     }
-    for (Map.Entry<RequestMappingInfo, HandlerMethod> each: basePathAwareMappings.getHandlerMethods().entrySet()) {
+    for (Map.Entry<RequestMappingInfo, HandlerMethod> each : entries.filter(repositories())) {
+      requestHandlers.add(new WebMvcRequestHandler(each.getKey(), each.getValue()));
+    }
+    for (Map.Entry<RequestMappingInfo, HandlerMethod> each: entries.filter(entityServices())) {
+      EntityRequestHandlers entityRequestHandlers
+          = new EntityRequestHandlers(typeResolver, repositories, mappings, each.getKey(), each.getValue());
+      requestHandlers.addAll(entityRequestHandlers.entityServices());
+    }
+    for (Map.Entry<RequestMappingInfo, HandlerMethod> each : basePathAwareMappings.getHandlerMethods().entrySet()) {
       requestHandlers.add(new WebMvcRequestHandler(each.getKey(), each.getValue()));
     }
     return requestHandlers;
+  }
+
+  private Set<Map.Entry<RequestMappingInfo, HandlerMethod>> allEntries() {
+    return restMappings.getHandlerMethods().entrySet();
   }
 }
