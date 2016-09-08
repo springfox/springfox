@@ -186,19 +186,19 @@ public class EntityRequestHandler implements springfox.documentation.RequestHand
   }
 
   private ResolvedMethodParameter transformToDomainType(ResolvedMethodParameter input) {
-    return new ResolvedMethodParameter(input.getMethodParameter(), resolver.resolve(domainType));
+    return input.replaceResolvedParameterType(resolver.resolve(domainType));
   }
 
   private boolean isDomainParameter(ResolvedMethodParameter input) {
-    return PersistentEntityResource.class.equals(input.getResolvedParameterType().getErasedType());
+    return PersistentEntityResource.class.equals(input.getParameterType().getErasedType());
   }
 
   private ResolvedMethodParameter transformToId(ResolvedMethodParameter idParam) {
-    return new ResolvedMethodParameter(idParam.getMethodParameter(), resolver.resolve(idType));
+    return idParam.replaceResolvedParameterType(resolver.resolve(domainType));
   }
 
   private boolean isIdParameter(ResolvedMethodParameter input) {
-    return input.getMethodParameter().hasParameterAnnotation(BackendId.class);
+    return input.hasParameterAnnotation(BackendId.class);
   }
 
   @Override
