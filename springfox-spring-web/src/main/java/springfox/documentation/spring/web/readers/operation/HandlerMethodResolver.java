@@ -46,8 +46,7 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.google.common.base.Optional.*;
-import static com.google.common.base.Strings.emptyToNull;
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 
@@ -72,7 +71,7 @@ public class HandlerMethodResolver {
     if (Class.class.getName().equals(beanType.getName())) {
       return Optional.absent();
     }
-    return fromNullable(beanType);
+    return Optional.fromNullable(beanType);
   }
 
   public List<ResolvedMethodParameter> methodParameters(final HandlerMethod methodToResolve) {
@@ -155,7 +154,7 @@ public class HandlerMethodResolver {
     return new Function<ResolvedMethod, ResolvedType>() {
       @Override
       public ResolvedType apply(ResolvedMethod input) {
-        return fromNullable(input.getReturnType()).or(resolver.resolve(Void.TYPE));
+        return Optional.fromNullable(input.getReturnType()).or(resolver.resolve(Void.TYPE));
       }
     };
   }
