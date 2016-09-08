@@ -53,7 +53,7 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     Set<String> defaultTags = tagsProvider.tags(context);
-    SetView<String> tags = Sets.union(operationTags(context), controllerTags(context));
+    SetView<String> tags = union(operationTags(context), controllerTags(context));
     if (tags.isEmpty()) {
       context.operationBuilder().tags(defaultTags);
     } else {

@@ -34,6 +34,7 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
@@ -45,7 +46,6 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -54,6 +54,17 @@ import static com.google.common.collect.Sets.*;
 import static org.springframework.util.StringUtils.*;
 
 public class EntityRequestHandler implements springfox.documentation.RequestHandler {
+  private static final RequestBody SYNTHESIZED_REQUEST_BODY_ANNOTATION = new RequestBody() {
+    @Override
+    public Class<? extends Annotation> annotationType() {
+      return RequestBody.class;
+    }
+
+    @Override
+    public boolean required() {
+      return true;
+    }
+  };
   private final ResourceMetadata resource;
   private final ResourceType resourceType;
   private final Class<? extends Serializable> idType;
@@ -61,7 +72,7 @@ public class EntityRequestHandler implements springfox.documentation.RequestHand
   private final RequestMappingInfo requestMapping;
   private final HandlerMethod handlerMethod;
   private final TypeResolver resolver;
-  private static final ArrayList<MediaType> COLLECTION_COMPACT_MEDIA_TYPES = newArrayList(
+  private static final List<MediaType> COLLECTION_COMPACT_MEDIA_TYPES = newArrayList(
       MediaType.valueOf("application/x-spring-data-compact+json"),
       MediaType.valueOf("text/uri-list"));
 
@@ -186,7 +197,8 @@ public class EntityRequestHandler implements springfox.documentation.RequestHand
   }
 
   private ResolvedMethodParameter transformToDomainType(ResolvedMethodParameter input) {
-    return input.replaceResolvedParameterType(resolver.resolve(domainType));
+    return input.replaceResolvedParameterType(resolver.resolve(domainType))
+        .annotate(SYNTHESIZED_REQUEST_BODY_ANNOTATION);
   }
 
   private boolean isDomainParameter(ResolvedMethodParameter input) {
@@ -194,7 +206,7 @@ public class EntityRequestHandler implements springfox.documentation.RequestHand
   }
 
   private ResolvedMethodParameter transformToId(ResolvedMethodParameter idParam) {
-    return idParam.replaceResolvedParameterType(resolver.resolve(domainType));
+    return idParam.replaceResolvedParameterType(resolver.resolve(idType));
   }
 
   private boolean isIdParameter(ResolvedMethodParameter input) {
