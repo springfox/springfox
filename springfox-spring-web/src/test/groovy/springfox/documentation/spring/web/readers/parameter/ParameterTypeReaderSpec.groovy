@@ -21,8 +21,6 @@ package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import io.swagger.annotations.ApiParam
-import org.springframework.core.MethodParameter
 import org.springframework.http.HttpMethod
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -37,8 +35,6 @@ import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import java.lang.annotation.Annotation
-
 import static org.springframework.http.MediaType.*
 
 @Mixin([RequestMappingSupport])
@@ -47,13 +43,8 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
   @Unroll
   def "param type #annotation"() {
     given:
-      MethodParameter methodParameter = Stub(MethodParameter)
-      methodParameter.getParameterAnnotation(ApiParam.class) >> null
-      def annotations = annotation == null ? new Annotation[0] : [annotation]
-      methodParameter.getParameterAnnotations() >> annotations
-      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
-      resolvedMethodParameter.methodParameter >> methodParameter
-      resolvedMethodParameter.resolvedParameterType >> resolve(type)
+      def annotations = annotation == null ? [] : [annotation]
+      def resolvedMethodParameter = new ResolvedMethodParameter(0, "",  annotations, resolve(type))
       def operationContext = Mock(OperationContext)
     and:
       operationContext.consumes() >> consumes

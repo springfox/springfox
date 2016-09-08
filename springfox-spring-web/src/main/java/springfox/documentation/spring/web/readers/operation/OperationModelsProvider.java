@@ -34,10 +34,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 
-import static springfox.documentation.schema.ResolvedTypes.resolvedTypeSignature;
+import static springfox.documentation.schema.ResolvedTypes.*;
 
 
 @Component
@@ -85,14 +84,12 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
 
     List<ResolvedMethodParameter> parameterTypes = context.getParameters();
     for (ResolvedMethodParameter parameterType : parameterTypes) {
-      Annotation[] parameterAnnotations = parameterType.getMethodParameter().getParameterAnnotations();
-      for (Annotation annotation : parameterAnnotations) {
-        if (annotation instanceof RequestBody || annotation instanceof RequestPart) {
-          ResolvedType modelType = context.alternateFor(parameterType.getResolvedParameterType());
+        if (parameterType.hasParameterAnnotation(RequestBody.class)
+            || parameterType.hasParameterAnnotation(RequestPart.class)) {
+          ResolvedType modelType = context.alternateFor(parameterType.getParameterType());
           LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
           context.operationModelsBuilder().addInputParam(modelType);
         }
-      }
     }
     LOG.debug("Finished reading parameters models for handlerMethod |{}|", context.getName());
   }

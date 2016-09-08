@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Predicates.*;
-import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
@@ -78,7 +77,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     List<Parameter> parameters = newArrayList();
 
     for (ResolvedMethodParameter methodParameter : methodParameters) {
-      ResolvedType alternate = context.alternateFor(methodParameter.getResolvedParameterType());
+      ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());
       if (!shouldIgnore(methodParameter, alternate, context.getIgnorableParameterTypes())) {
 
         ParameterContext parameterContext = new ParameterContext(methodParameter,
@@ -91,7 +90,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
           parameters.addAll(
               expander.expand(
                   "",
-                  methodParameter.getResolvedParameterType(),
+                  methodParameter.getParameterType(),
                   context.getDocumentationContext()));
         } else {
           parameters.add(pluginsManager.parameter(parameterContext));
@@ -118,26 +117,37 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     if (ignorableParamTypes.contains(resolvedParameterType.getErasedType())) {
       return true;
     }
-    for (Annotation annotation : parameter.getMethodParameter().getParameterAnnotations()) {
-      if (ignorableParamTypes.contains(annotation.annotationType())) {
-        return true;
+    return FluentIterable.from(ignorableParamTypes)
+        .filter(isAnnotation())
+        .filter(parameterIsAnnotatedWithIt(parameter)).size() > 0;
+
+  }
+
+  private Predicate<Class> parameterIsAnnotatedWithIt(final ResolvedMethodParameter parameter) {
+    return new Predicate<Class>() {
+      @Override
+      public boolean apply(Class input) {
+        return parameter.hasParameterAnnotation(input);
       }
-    }
-    return false;
+    };
+  }
+
+  private Predicate<Class> isAnnotation() {
+    return new Predicate<Class>() {
+      @Override
+      public boolean apply(Class input) {
+        return Annotation.class.isAssignableFrom(input);
+      }
+    };
   }
 
   private boolean shouldExpand(final ResolvedMethodParameter parameter, ResolvedType resolvedParamType) {
-    return (!parameter.getMethodParameter().hasParameterAnnotations() || annotatedWithModelAttribute(parameter))
+    return (!parameter.hasParameterAnnotations() || parameter.hasParameterAnnotation(ModelAttribute.class))
         && !isBaseType(typeNameFor(resolvedParamType.getErasedType()))
         && !resolvedParamType.getErasedType().isEnum()
         && !isContainerType(resolvedParamType)
         && !isMapType(resolvedParamType);
 
-  }
-
-  private boolean annotatedWithModelAttribute(ResolvedMethodParameter parameter) {
-    return !from(newArrayList(parameter.getMethodParameter().getParameterAnnotations()))
-        .filter(ModelAttribute.class).isEmpty();
   }
 
 }

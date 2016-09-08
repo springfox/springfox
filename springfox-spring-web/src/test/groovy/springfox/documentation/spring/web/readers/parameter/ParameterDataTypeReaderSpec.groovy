@@ -20,12 +20,10 @@
 package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
-import org.springframework.core.MethodParameter
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.method.HandlerMethod
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
@@ -47,8 +45,6 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 @Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
-  HandlerMethod handlerMethod = Stub(HandlerMethod)
-  MethodParameter methodParameter = Stub(MethodParameter)
   PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
       OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
   def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
@@ -65,14 +61,12 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   @Unroll
   def "Parameter types #paramType"() {
     given:
-      ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter,
-              new TypeResolver().resolve(paramType))
+      ResolvedMethodParameter resolvedMethodParameter =
+          new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
               new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
                   Mock(OperationContext))
-      methodParameter.getParameterType() >> paramType
-      methodParameter.getParameterAnnotations() >> annotations
 
     when:
       sut.apply(parameterContext)
@@ -124,14 +118,12 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
 
   def "RequestParam Map types"() {
     given:
-      ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter,
-          new TypeResolver().resolve(Map, String, String))
+      ResolvedMethodParameter resolvedMethodParameter =
+          new ResolvedMethodParameter(0, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
           new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
               Mock(OperationContext))
-      methodParameter.getParameterType() >> Map
-      methodParameter.getParameterAnnotations() >> [Mock(RequestParam)]
 
     when:
       sut.apply(parameterContext)
@@ -145,14 +137,12 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
 
   def "Container Parameter types"() {
     given:
-      ResolvedMethodParameter resolvedMethodParameter = Mock(ResolvedMethodParameter)
-    def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      ResolvedMethodParameter resolvedMethodParameter =
+          new ResolvedMethodParameter(0, "", [], new TypeResolver().resolve(List, String))
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
               new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
                   Mock(OperationContext))
-      resolvedMethodParameter.getResolvedParameterType() >> new TypeResolver().resolve(List, String)
-      resolvedMethodParameter.getMethodParameter() >> methodParameter
-      methodParameter.getParameterType() >> List
 
     when:
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =

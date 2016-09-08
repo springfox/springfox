@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.google.common.annotations.VisibleForTesting;
-import org.springframework.core.MethodParameter;
+import com.google.common.base.Optional;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -30,11 +30,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ValueConstants;
+import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
-import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,7 +45,7 @@ import static com.google.common.base.Strings.*;
 public class ParameterRequiredReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
-    MethodParameter methodParameter = context.methodParameter();
+    ResolvedMethodParameter methodParameter = context.resolvedMethodParameter();
     context.parameterBuilder().required(getAnnotatedRequired(methodParameter));
   }
 
@@ -54,33 +54,43 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
     return true;
   }
 
-  private Boolean getAnnotatedRequired(MethodParameter methodParameter) {
+  private Boolean getAnnotatedRequired(ResolvedMethodParameter methodParameter) {
     Set<Boolean> requiredSet = new HashSet<Boolean>();
-    Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
 
     // when the type is Optional, the required property of @RequestParam/@RequestHeader doesn't matter,
     // since the value is always a non-null Optional after conversion
     boolean optional = isOptional(methodParameter);
 
-    for (Annotation annotation : methodAnnotations) {
-      if (annotation instanceof RequestParam) {
-        requiredSet.add(!optional && isRequired((RequestParam) annotation));
-      } else if (annotation instanceof RequestHeader) {
-        requiredSet.add(!optional && ((RequestHeader) annotation).required());
-      } else if (annotation instanceof PathVariable) {
-        requiredSet.add(true);
-      } else if (annotation instanceof RequestBody) {
-        requiredSet.add(!optional && ((RequestBody) annotation).required());
-      } else if (annotation instanceof RequestPart) {
-        requiredSet.add(!optional && ((RequestPart) annotation).required());
-      }
+    Optional<RequestParam> requestParam = methodParameter.findAnnotation(RequestParam.class);
+    if (requestParam.isPresent()) {
+      requiredSet.add(!optional && isRequired(requestParam.get()));
+    }
+
+    Optional<RequestHeader> requestHeader = methodParameter.findAnnotation(RequestHeader.class);
+    if (requestHeader.isPresent()) {
+      requiredSet.add(!optional && requestHeader.get().required());
+    }
+
+    Optional<PathVariable> pathVariable = methodParameter.findAnnotation(PathVariable.class);
+    if (pathVariable.isPresent()) {
+      requiredSet.add(true);
+    }
+
+    Optional<RequestBody> requestBody = methodParameter.findAnnotation(RequestBody.class);
+    if (requestBody.isPresent()) {
+      requiredSet.add(!optional && requestBody.get().required());
+    }
+
+    Optional<RequestPart> requestPart = methodParameter.findAnnotation(RequestPart.class);
+    if (requestPart.isPresent()) {
+      requiredSet.add(!optional && requestPart.get().required());
     }
     return requiredSet.contains(true);
   }
 
   @VisibleForTesting
-  boolean isOptional(MethodParameter methodParameter) {
-    return methodParameter.getParameterType().getName().equals("java.util.Optional");
+  boolean isOptional(ResolvedMethodParameter methodParameter) {
+    return "java.util.Optional".equals(methodParameter.getParameterType().getErasedType().getName());
   }
 
   private boolean isRequired(RequestParam annotation) {

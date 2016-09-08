@@ -91,7 +91,7 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
 
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
     for (ResolvedMethodParameter resolvedMethodParameter : methodParameters) {
-      if (MultipartFile.class.isAssignableFrom(resolvedMethodParameter.getResolvedParameterType().getErasedType())) {
+      if (MultipartFile.class.isAssignableFrom(resolvedMethodParameter.getParameterType().getErasedType())) {
         return true;
       }
     }

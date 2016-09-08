@@ -1432,6 +1432,10 @@
           "parameters": [
             {
               "allowMultiple": true,
+              "enum": [
+                "ONE",
+                "TWO"
+              ],
               "description": "enumType",
               "name": "enumType",
               "paramType": "query",
