@@ -33,8 +33,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
@@ -52,36 +50,15 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.spring.data.rest.SynthesizedAnnotations.*;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
 class EntityRequestHandler implements springfox.documentation.RequestHandler {
 
-  private static final RequestBody SYNTHESIZED_REQUEST_BODY_ANNOTATION = new RequestBody() {
-    @Override
-    public Class<? extends Annotation> annotationType() {
-      return RequestBody.class;
-    }
-
-    @Override
-    public boolean required() {
-      return true;
-    }
-  };
-
-  private static final PathVariable SYNTHESIZED_PATH_VARIABLE_ANNOTATION = new PathVariable() {
-    @Override
-    public Class<? extends Annotation> annotationType() {
-      return PathVariable.class;
-    }
-
-    @Override
-    public String value() {
-      return "id";
-    }
-  };
   private static final List<MediaType> COLLECTION_COMPACT_MEDIA_TYPES = newArrayList(
       MediaType.valueOf("application/x-spring-data-compact+json"),
       MediaType.valueOf("text/uri-list"));
+
   private final ResourceMetadata resource;
   private final ResourceType resourceType;
   private final Class<? extends Serializable> idType;
@@ -192,14 +169,14 @@ class EntityRequestHandler implements springfox.documentation.RequestHandler {
         } else if (isDomainParameter(input)) {
           return transformToDomainType(input);
         }
-        return input;
+        return input.annotate(API_IGNORE_ANNOTATION);
       }
     };
   }
 
   private ResolvedMethodParameter transformToDomainType(ResolvedMethodParameter input) {
     return input.replaceResolvedParameterType(resolver.resolve(domainType))
-        .annotate(SYNTHESIZED_REQUEST_BODY_ANNOTATION);
+        .annotate(REQUEST_BODY_ANNOTATION);
   }
 
   private boolean isDomainParameter(ResolvedMethodParameter input) {
@@ -208,7 +185,7 @@ class EntityRequestHandler implements springfox.documentation.RequestHandler {
 
   private ResolvedMethodParameter transformToId(ResolvedMethodParameter idParam) {
     return idParam.replaceResolvedParameterType(resolver.resolve(idType))
-        .annotate(SYNTHESIZED_PATH_VARIABLE_ANNOTATION);
+        .annotate(PATH_VARIABLE_ANNOTATION);
   }
 
   private boolean isIdParameter(ResolvedMethodParameter input) {

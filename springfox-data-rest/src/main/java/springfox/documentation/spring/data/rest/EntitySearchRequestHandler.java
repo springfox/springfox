@@ -23,6 +23,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
@@ -45,15 +46,14 @@ import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
-import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Iterables.any;
-import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Sets.*;
-import static springfox.documentation.spring.web.paths.Paths.splitCamelCase;
+import static springfox.documentation.spring.data.rest.SynthesizedAnnotations.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 class EntitySearchRequestHandler implements RequestHandler {
   private final TypeResolver resolver;
@@ -124,7 +124,7 @@ class EntitySearchRequestHandler implements RequestHandler {
       MediaType type = searchResource.getDescription().getType();
       producesCondition.combine(new ProducesRequestCondition(type.toString()));
     }
-    return  producesCondition.getProducibleMediaTypes();
+    return producesCondition.getProducibleMediaTypes();
   }
 
   @Override
@@ -158,8 +158,8 @@ class EntitySearchRequestHandler implements RequestHandler {
 
   @Override
   public List<ResolvedMethodParameter> getParameters() {
+    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(resolver);
     if (resourceType() == ResourceType.ITEM) {
-      HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(resolver);
       List<ResolvedMethodParameter> actualQueryParams
           = handlerMethodResolver.methodParameters(
           new HandlerMethod(searchResource.getMethod().getDeclaringClass(), searchResource.getMethod()));
@@ -169,17 +169,27 @@ class EntitySearchRequestHandler implements RequestHandler {
           .filter(maybeFilterSortParam(searchResource.isSortableResource()))
           .filter(maybeFilterPagingParam(searchResource.isPagingResource()))
           .toList();
-
       return FluentIterable.from(Iterables.concat(genericParams, actualQueryParams)).toList();
     } else {
-      return newArrayList();
+      return FluentIterable.from(handlerMethodResolver.methodParameters(handlerMethod))
+          .transform(toIgnorable())
+          .toList();
     }
+  }
+
+  private Function<ResolvedMethodParameter, ResolvedMethodParameter> toIgnorable() {
+    return new Function<ResolvedMethodParameter, ResolvedMethodParameter>() {
+      @Override
+      public ResolvedMethodParameter apply(ResolvedMethodParameter input) {
+        return input.annotate(API_IGNORE_ANNOTATION);
+      }
+    };
   }
 
   private Predicate<ResolvedMethodParameter> maybeFilterSortParam(final boolean sortableResource) {
     return new Predicate<ResolvedMethodParameter>() {
       @Override
-      public boolean apply(@Nullable ResolvedMethodParameter input) {
+      public boolean apply(ResolvedMethodParameter input) {
         boolean isSortParam = Sort.class.equals(input.getParameterType().getErasedType());
         return (sortableResource && isSortParam) || !isSortParam;
       }
@@ -189,7 +199,7 @@ class EntitySearchRequestHandler implements RequestHandler {
   private Predicate<ResolvedMethodParameter> maybeFilterPagingParam(final boolean pageableResource) {
     return new Predicate<ResolvedMethodParameter>() {
       @Override
-      public boolean apply(@Nullable ResolvedMethodParameter input) {
+      public boolean apply(ResolvedMethodParameter input) {
         boolean isPageableParam = Pageable.class.equals(input.getParameterType().getErasedType());
         return (pageableResource && isPageableParam) || !isPageableParam;
       }
@@ -202,7 +212,7 @@ class EntitySearchRequestHandler implements RequestHandler {
       MemberResolver memberResolver = new MemberResolver(resolver);
       ResolvedTypeWithMembers members = memberResolver.resolve(
           resolver.resolve(searchResource.getMethod().getDeclaringClass()), null, null);
-      for(ResolvedMethod resolvedMethod : members.getMemberMethods()) {
+      for (ResolvedMethod resolvedMethod : members.getMemberMethods()) {
         if (resolvedMethod.getRawMember().equals(searchResource.getMethod())) {
           return resolvedMethod.getReturnType();
         }
