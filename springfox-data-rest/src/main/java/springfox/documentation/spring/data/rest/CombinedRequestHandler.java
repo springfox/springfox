@@ -16,12 +16,10 @@
  *
  *
  */
-package springfox.documentation.spring.web;
+package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -31,116 +29,121 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
-import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Set;
 
-public class WebMvcRequestHandler implements RequestHandler {
-  private final RequestMappingInfo requestMapping;
-  private final HandlerMethod handlerMethod;
+import static com.google.common.collect.Sets.*;
 
-  public WebMvcRequestHandler(
-      RequestMappingInfo requestMapping,
-      HandlerMethod handlerMethod) {
-    this.requestMapping = requestMapping;
-    this.handlerMethod = handlerMethod;
-  }
+class CombinedRequestHandler implements RequestHandler {
+  private final RequestHandler first;
+  private final RequestHandler second;
 
-  @Override
-  public HandlerMethod getHandlerMethod() {
-    return handlerMethod;
-  }
-
-  @Override
-  public RequestHandler combine(RequestHandler other) {
-    return this;
+  CombinedRequestHandler(RequestHandler first, RequestHandler second) {
+    this.first = first;
+    this.second = second;
   }
 
   @Override
   public Class<?> declaringClass() {
-    return handlerMethod.getBeanType();
+    return first.declaringClass();
   }
 
   @Override
   public boolean isAnnotatedWith(Class<? extends Annotation> annotation) {
-    return null != AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation);
+    return first.isAnnotatedWith(annotation) || second.isAnnotatedWith(annotation);
   }
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    return requestMapping.getPatternsCondition();
+    Set<String> patterns = newHashSet(first.getPatternsCondition().getPatterns());
+    patterns.addAll(second.getPatternsCondition().getPatterns());
+    return new PatternsRequestCondition(patterns.toArray(new String[patterns.size()]));
   }
 
   @Override
   public String groupName() {
-    return ControllerNamingUtils.controllerNameAsGroup(handlerMethod);
+    return first.groupName();
   }
 
   @Override
   public String getName() {
-    return handlerMethod.getMethod().getName();
+    return first.getName();
   }
 
   @Override
   public Set<RequestMethod> supportedMethods() {
-    return requestMapping.getMethodsCondition().getMethods();
+    Set<RequestMethod> requestMethods = newHashSet(first.supportedMethods());
+    requestMethods.addAll(second.supportedMethods());
+    return requestMethods;
   }
 
   @Override
   public Set<? extends MediaType> produces() {
-    return requestMapping.getProducesCondition().getProducibleMediaTypes();
+    Set<MediaType> mediaTypes = newHashSet(first.produces());
+    mediaTypes.addAll(second.produces());
+    return mediaTypes;
   }
 
   @Override
   public Set<? extends MediaType> consumes() {
-    return requestMapping.getConsumesCondition().getConsumableMediaTypes();
+    Set<MediaType> mediaTypes = newHashSet(first.consumes());
+    mediaTypes.addAll(second.consumes());
+    return mediaTypes;
   }
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return requestMapping.getHeadersCondition().getExpressions();
+    return first.headers();
   }
 
   @Override
   public Set<NameValueExpression<String>> params() {
-    return requestMapping.getParamsCondition().getExpressions();
+    return first.params();
   }
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation));
+    return first.findAnnotation(annotation).or(second.findAnnotation(annotation));
   }
 
   @Override
   public RequestHandlerKey key() {
-    return new RequestHandlerKey(
-        requestMapping.getPatternsCondition().getPatterns(),
-        requestMapping.getMethodsCondition().getMethods(),
-        requestMapping.getConsumesCondition().getConsumableMediaTypes(),
-        requestMapping.getProducesCondition().getProducibleMediaTypes());
+      return new RequestHandlerKey(
+          getPatternsCondition().getPatterns(),
+          supportedMethods(),
+          consumes(),
+          produces());
   }
 
   @Override
   public List<ResolvedMethodParameter> getParameters() {
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
-    return handlerMethodResolver.methodParameters(handlerMethod);
+    return first.getParameters();
   }
 
   @Override
   public ResolvedType getReturnType() {
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
-    return handlerMethodResolver.methodReturnType(handlerMethod);
+    return first.getReturnType();
   }
 
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), annotation));
+    return first.findAnnotation(annotation).or(second.findAnnotation(annotation)) ;
   }
 
   @Override
   public RequestMappingInfo getRequestMapping() {
-    return requestMapping;
+    return first.getRequestMapping();
+  }
+
+  @Override
+  public HandlerMethod getHandlerMethod() {
+    return second.getHandlerMethod();
+  }
+
+  @Override
+  public RequestHandler combine(RequestHandler other) {
+    return new CombinedRequestHandler(this, other);
   }
 }

@@ -34,12 +34,14 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
@@ -51,9 +53,9 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
-import static org.springframework.util.StringUtils.*;
 
-public class EntityRequestHandler implements springfox.documentation.RequestHandler {
+class EntityRequestHandler implements springfox.documentation.RequestHandler {
+
   private static final RequestBody SYNTHESIZED_REQUEST_BODY_ANNOTATION = new RequestBody() {
     @Override
     public Class<? extends Annotation> annotationType() {
@@ -65,6 +67,21 @@ public class EntityRequestHandler implements springfox.documentation.RequestHand
       return true;
     }
   };
+
+  private static final PathVariable SYNTHESIZED_PATH_VARIABLE_ANNOTATION = new PathVariable() {
+    @Override
+    public Class<? extends Annotation> annotationType() {
+      return PathVariable.class;
+    }
+
+    @Override
+    public String value() {
+      return "id";
+    }
+  };
+  private static final List<MediaType> COLLECTION_COMPACT_MEDIA_TYPES = newArrayList(
+      MediaType.valueOf("application/x-spring-data-compact+json"),
+      MediaType.valueOf("text/uri-list"));
   private final ResourceMetadata resource;
   private final ResourceType resourceType;
   private final Class<? extends Serializable> idType;
@@ -72,9 +89,6 @@ public class EntityRequestHandler implements springfox.documentation.RequestHand
   private final RequestMappingInfo requestMapping;
   private final HandlerMethod handlerMethod;
   private final TypeResolver resolver;
-  private static final List<MediaType> COLLECTION_COMPACT_MEDIA_TYPES = newArrayList(
-      MediaType.valueOf("application/x-spring-data-compact+json"),
-      MediaType.valueOf("text/uri-list"));
 
   public EntityRequestHandler(
       TypeResolver resolver, ResourceMetadata resource,
@@ -114,7 +128,7 @@ public class EntityRequestHandler implements springfox.documentation.RequestHand
 
   @Override
   public String groupName() {
-    return capitalize(resource.getRel());
+    return resource.getDomainType().getSimpleName();
   }
 
   @Override
@@ -206,7 +220,8 @@ public class EntityRequestHandler implements springfox.documentation.RequestHand
   }
 
   private ResolvedMethodParameter transformToId(ResolvedMethodParameter idParam) {
-    return idParam.replaceResolvedParameterType(resolver.resolve(idType));
+    return idParam.replaceResolvedParameterType(resolver.resolve(idType))
+        .annotate(SYNTHESIZED_PATH_VARIABLE_ANNOTATION);
   }
 
   private boolean isIdParameter(ResolvedMethodParameter input) {
@@ -220,7 +235,7 @@ public class EntityRequestHandler implements springfox.documentation.RequestHand
           requestMapping.getProducesCondition().getProducibleMediaTypes())) {
         return resolver.resolve(Resources.class, Link.class);
       } else if (requestMapping.getMethodsCondition().getMethods().contains(RequestMethod.HEAD)
-              || requestMapping.getMethodsCondition().getMethods().contains(RequestMethod.OPTIONS)) {
+          || requestMapping.getMethodsCondition().getMethods().contains(RequestMethod.OPTIONS)) {
         return resolver.resolve(Void.TYPE);
       } else if (requestMapping.getMethodsCondition().getMethods().contains(RequestMethod.POST)) {
         return resolver.resolve(Resource.class, domainType);
@@ -237,10 +252,10 @@ public class EntityRequestHandler implements springfox.documentation.RequestHand
   }
 
   private ResourceType resourceType() {
-    if (requestMapping.getPatternsCondition().getPatterns().contains("/{repository}")) {
-      return ResourceType.COLLECTION;
-    } else {
+    if (requestMapping.getPatternsCondition().getPatterns().contains("/{search}")) {
       return ResourceType.ITEM;
+    } else {
+      return ResourceType.COLLECTION;
     }
   }
 
@@ -257,5 +272,10 @@ public class EntityRequestHandler implements springfox.documentation.RequestHand
   @Override
   public HandlerMethod getHandlerMethod() {
     return handlerMethod;
+  }
+
+  @Override
+  public RequestHandler combine(RequestHandler other) {
+    return this;
   }
 }

@@ -28,19 +28,18 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 
-public class EntityRequestHandlers {
+class EntityRequestHandlers {
   private final ResourceMappings restMappings;
   private final Repositories repositories;
   private final RequestMappingInfo requestMappingInfo;
   private final HandlerMethod handlerMethod;
   private final TypeResolver typeResolver;
 
-  public EntityRequestHandlers(
+  EntityRequestHandlers(
       TypeResolver typeResolver, Repositories repositories,
       ResourceMappings restMappings,
       RequestMappingInfo requestMappingInfo,
@@ -52,8 +51,8 @@ public class EntityRequestHandlers {
     this.handlerMethod = handlerMethod;
   }
 
-  List<RequestHandler> entityServices() {
-    ArrayList<RequestHandler> requestHandlers = newArrayList();
+  List<RequestHandler> operations() {
+    List<RequestHandler> requestHandlers = newArrayList();
     for (ResourceMetadata resource : restMappings) {
 
       Class<?> domainType = resource.getDomainType();
@@ -61,6 +60,7 @@ public class EntityRequestHandlers {
           = repositories.getRepositoryInformationFor(domainType);
       Class<? extends Serializable> idType = entity.getIdType();
       //TODO: cache the id/type combo
+
       requestHandlers.add(
           new EntityRequestHandler(
               typeResolver,

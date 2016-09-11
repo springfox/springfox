@@ -221,6 +221,11 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
       HandlerMethod getHandlerMethod() {
         return null
       }
+
+      @Override
+      RequestHandler combine(RequestHandler other) {
+        return null
+      }
     }
   }
 }

@@ -51,6 +51,11 @@ public class MockRequestHandler implements RequestHandler {
   }
 
   @Override
+  public RequestHandler combine(RequestHandler other) {
+    return this;
+  }
+
+  @Override
   public Class<?> declaringClass() {
     return handlerMethod.getMethod().getDeclaringClass();
   }

@@ -27,6 +27,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.lang.annotation.Annotation;
@@ -78,4 +79,13 @@ public interface RequestHandler {
    */
   @Deprecated
   HandlerMethod getHandlerMethod();
+
+  /**
+   * This is to merge two request handlers that are indistinguishable other than the media types supported
+   * @param other handler
+   * @since 2.5.0
+   * @return
+   */
+  @Incubating
+  RequestHandler combine(RequestHandler other);
 }
