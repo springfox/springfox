@@ -32,15 +32,16 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 
-class EntityRequestHandlers {
+class EntityRequestTemplate {
   private final ResourceMappings restMappings;
   private final Repositories repositories;
   private final RequestMappingInfo requestMappingInfo;
   private final HandlerMethod handlerMethod;
   private final TypeResolver typeResolver;
 
-  EntityRequestHandlers(
-      TypeResolver typeResolver, Repositories repositories,
+  EntityRequestTemplate(
+      TypeResolver typeResolver,
+      Repositories repositories,
       ResourceMappings restMappings,
       RequestMappingInfo requestMappingInfo,
       HandlerMethod handlerMethod) {

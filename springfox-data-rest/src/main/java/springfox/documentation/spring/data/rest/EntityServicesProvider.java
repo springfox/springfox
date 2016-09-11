@@ -92,14 +92,14 @@ class EntityServicesProvider implements RequestHandlerProvider {
       requestHandlers.add(new WebMvcRequestHandler(each.getKey(), each.getValue()));
     }
     for (Map.Entry<RequestMappingInfo, HandlerMethod> each : entries.filter(entityServices())) {
-      EntityRequestHandlers entityRequestHandlers
-          = new EntityRequestHandlers(typeResolver, repositories, mappings, each.getKey(), each.getValue());
-      requestHandlers.addAll(entityRequestHandlers.operations());
+      EntityRequestTemplate entityRequestTemplate
+          = new EntityRequestTemplate(typeResolver, repositories, mappings, each.getKey(), each.getValue());
+      requestHandlers.addAll(entityRequestTemplate.operations());
     }
     List<RequestHandler> searchHandlers = newArrayList();
     for (Map.Entry<RequestMappingInfo, HandlerMethod> each : entries.filter(entitySearchServices())) {
-      EntitySearchRequestHandlers entityRequestHandlers
-          = new EntitySearchRequestHandlers(typeResolver, mappings, each.getKey(), each.getValue());
+      EntitySearchRequestTemplate entityRequestHandlers
+          = new EntitySearchRequestTemplate(typeResolver, mappings, each.getKey(), each.getValue());
       searchHandlers.addAll(entityRequestHandlers.operations());
     }
     requestHandlers.addAll(maybeCombine(searchHandlers));

@@ -32,13 +32,13 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 
-class EntitySearchRequestHandlers {
+class EntitySearchRequestTemplate {
   private final TypeResolver resolver;
   private final ResourceMappings mappings;
   private final RequestMappingInfo requestMapping;
   private final HandlerMethod handlerMethod;
 
-  EntitySearchRequestHandlers(
+  EntitySearchRequestTemplate(
       TypeResolver resolver,
       ResourceMappings mappings,
       RequestMappingInfo requestMapping,
