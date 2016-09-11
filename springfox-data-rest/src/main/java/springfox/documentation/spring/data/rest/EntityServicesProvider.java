@@ -52,7 +52,7 @@ import static org.springframework.http.MediaType.*;
 import static springfox.documentation.spring.data.rest.EntityServices.*;
 
 @Component
-public class EntityServicesProvider implements RequestHandlerProvider {
+class EntityServicesProvider implements RequestHandlerProvider {
   private final ResourceMappings mappings;
   private final Repositories repositories;
   private final RepositoryRestHandlerMapping restMappings;
@@ -60,7 +60,7 @@ public class EntityServicesProvider implements RequestHandlerProvider {
   private final TypeResolver typeResolver;
 
   @Autowired
-  public EntityServicesProvider(
+  EntityServicesProvider(
       ResourceMappings mappings,
       JpaHelper jpaHelper,
       RepositoryRestConfiguration repositoryConfiguration,
@@ -115,7 +115,7 @@ public class EntityServicesProvider implements RequestHandlerProvider {
         .filter(and(compactHandlers(), getHandler()));
     FluentIterable<RequestHandler> nonCompacts = FluentIterable.from(searchHandlers)
         .filter(and(not(compactHandlers()), getHandler()));
-    for (RequestHandler compact: compacts) {
+    for (RequestHandler compact : compacts) {
       Optional<RequestHandler> found = nonCompacts.firstMatch(samePathMapping(compact.getPatternsCondition()));
       combined.add(combine(compact, found));
     }

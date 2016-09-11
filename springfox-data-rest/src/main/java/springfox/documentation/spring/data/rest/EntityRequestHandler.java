@@ -32,7 +32,6 @@ import org.springframework.data.rest.webmvc.support.BackendId;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,6 +52,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 class EntityRequestHandler implements springfox.documentation.RequestHandler {
 
@@ -128,7 +128,7 @@ class EntityRequestHandler implements springfox.documentation.RequestHandler {
 
   @Override
   public String groupName() {
-    return resource.getDomainType().getSimpleName();
+    return String.format("%s Entity", splitCamelCase(resource.getDomainType().getSimpleName(), ""));
   }
 
   @Override
@@ -138,20 +138,7 @@ class EntityRequestHandler implements springfox.documentation.RequestHandler {
 
   @Override
   public Set<RequestMethod> supportedMethods() {
-    return FluentIterable.from(resource
-        .getSupportedHttpMethods()
-        .getMethodsFor(resourceType))
-        .transform(toRequestMethod())
-        .toSet();
-  }
-
-  private Function<HttpMethod, RequestMethod> toRequestMethod() {
-    return new Function<HttpMethod, RequestMethod>() {
-      @Override
-      public RequestMethod apply(HttpMethod input) {
-        return RequestMethod.valueOf(input.name());
-      }
-    };
+    return requestMapping.getMethodsCondition().getMethods();
   }
 
   @Override

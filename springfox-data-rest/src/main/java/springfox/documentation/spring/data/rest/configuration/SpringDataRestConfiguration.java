@@ -20,9 +20,11 @@ package springfox.documentation.spring.data.rest.configuration;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import springfox.documentation.annotations.Incubating;
 
 @Configuration
 @ComponentScan(basePackages = "springfox.documentation.spring.data.rest")
+@Incubating("2.5.0")
 public class SpringDataRestConfiguration {
 
 }

@@ -53,6 +53,7 @@ import java.util.Set;
 import static com.google.common.collect.Iterables.any;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.spring.web.paths.Paths.splitCamelCase;
 
 class EntitySearchRequestHandler implements RequestHandler {
   private final TypeResolver resolver;
@@ -100,7 +101,7 @@ class EntitySearchRequestHandler implements RequestHandler {
 
   @Override
   public String groupName() {
-    return resource.getDomainType().getSimpleName();
+    return String.format("%s Entity Search", splitCamelCase(resource.getDomainType().getSimpleName(), ""));
   }
 
   @Override
