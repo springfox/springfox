@@ -2818,18 +2818,19 @@ application such that landing on a particular url re-directs the browser to the 
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">        <span class="annotation">@Override</span>
         <span class="directive">public</span> <span class="type">void</span> addViewControllers(ViewControllerRegistry registry) {
-                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/v2/api-docs</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/api-docs</span><span class="delimiter">&quot;</span></span>);
-                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/configuration/ui</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/configuration/ui</span><span class="delimiter">&quot;</span></span>);
-                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/configuration/security</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/configuration/security</span><span class="delimiter">&quot;</span></span>);
+
+                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/v2/api-docs</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/api-docs?group=restful-api</span><span class="delimiter">&quot;</span></span>);
+                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/swagger-resources/configuration/ui</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-resources/configuration/ui</span><span class="delimiter">&quot;</span></span>);
+                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/swagger-resources/configuration/security</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-resources/configuration/security</span><span class="delimiter">&quot;</span></span>);
                 registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/swagger-resources</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-resources</span><span class="delimiter">&quot;</span></span>);
-                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/swagger-ui.html</span><span class="delimiter">&quot;</span></span>);
-                registry.addRedirectViewController(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/swagger-ui.html</span><span class="delimiter">&quot;</span></span>);
         }
 
         <span class="annotation">@Override</span>
         <span class="directive">public</span> <span class="type">void</span> addResourceHandlers(ResourceHandlerRegistry registry) {
-                registry
-                        .addResourceHandler(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/**</span><span class="delimiter">&quot;</span></span>).addResourceLocations(<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/META-INF/resources/</span><span class="delimiter">&quot;</span></span>);
+                 registry.
+                         addResourceHandler(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/swagger-ui.html**</span><span class="delimiter">&quot;</span></span>).addResourceLocations(<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/META-INF/resources/swagger-ui.html</span><span class="delimiter">&quot;</span></span>);
+                registry.
+                        addResourceHandler(<span class="string"><span class="delimiter">&quot;</span><span class="content">/documentation/webjars/**</span><span class="delimiter">&quot;</span></span>).addResourceLocations(<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/META-INF/resources/webjars/</span><span class="delimiter">&quot;</span></span>);
         }</code></pre>
 </div>
 </div>
@@ -2967,7 +2968,7 @@ one on the operation.</pre>
 <div id="footer">
 <div id="footer-text">
 Version 2.5.1-SNAPSHOT<br>
-Last updated 2016-08-31 16:15:34 UTC
+Last updated 2016-09-12 03:52:18 UTC
 </div>
 </div>
 </body>
