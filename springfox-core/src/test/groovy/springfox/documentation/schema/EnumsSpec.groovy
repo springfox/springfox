@@ -53,4 +53,12 @@ class EnumsSpec extends Specification {
     then:
       thrown(UnsupportedOperationException)
   }
+
+  def "we shouldn't have duplicate enum representations"() {
+    given:
+    def expected = Arrays.asList("one", "two")
+    expect:
+    expected.equals(Enums.getEnumValues(DuplicateRepresentationEnum))
+  }
+
 }

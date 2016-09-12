@@ -27,11 +27,14 @@ import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static java.util.Arrays.asList;
 
 public class Enums {
 
@@ -48,7 +51,7 @@ public class Enums {
   }
 
   static List<String> getEnumValues(final Class<?> subject) {
-    return transform(Arrays.asList(subject.getEnumConstants()), new Function<Object, String>() {
+    return transformUnique(subject.getEnumConstants(), new Function<Object, String>() {
       @Override
       public String apply(Object input) {
         Optional<String> jsonValue = findJsonValueAnnotatedMethod(input)
@@ -72,6 +75,12 @@ public class Enums {
         return "";
       }
     };
+  }
+
+  private static <E> List<String> transformUnique(E[] values, Function<E, String> mapper) {
+    List<String> nonUniqueValues = transform(asList(values), mapper);
+    Set<String> uniqueValues = new LinkedHashSet<String>(nonUniqueValues);
+    return new ArrayList<String>(uniqueValues);
   }
 
   private static Optional<Method> findJsonValueAnnotatedMethod(Object enumConstant) {
