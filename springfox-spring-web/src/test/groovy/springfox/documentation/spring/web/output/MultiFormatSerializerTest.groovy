@@ -29,7 +29,7 @@ class MultiFormatSerializerTest extends Specification {
     given:
       MultiFormatSerializer sut = new MultiFormatSerializer([])
       def objectMapper = Mock(ObjectMapper)
-      sut.objectMapper = objectMapper
+      sut.mappers.put("json", objectMapper)
       String object = 'a string'
     when:
       sut.toJson(object)
@@ -37,18 +37,33 @@ class MultiFormatSerializerTest extends Specification {
       1 * objectMapper.writeValueAsString(object)
   }
 
+  def "should fallback to json"() {
+    given:
+      MultiFormatSerializer sut = new MultiFormatSerializer([])
+      def jsonMapper = Mock(ObjectMapper)
+      sut.mappers.put("json", jsonMapper)
+      String object = 'a string'
+    when:
+      sut.serialize(object, "xml")
+    then:
+      1 * jsonMapper.writeValueAsString(object)
+  }
+
   def "should serialize with custom registrars"() {
     given: "mocks"
       def registrar = Mock(JacksonModuleRegistrar)
-      def objectMapper = Mock(ObjectMapper)
+      def jsonMapper = Mock(ObjectMapper)
+      def yamlMapper = Mock(ObjectMapper)
       def object = 'a string'
     when:
       MultiFormatSerializer sut = new MultiFormatSerializer([registrar])
-      sut.objectMapper = objectMapper
+      sut.mappers.put("yaml", yamlMapper)
+      sut.mappers.put("json", jsonMapper)
     and:
-      sut.toJson(object)
+      sut.serialize(object, "yaml")
     then:
-      1 * objectMapper.writeValueAsString(object)
-      1 * registrar.maybeRegisterModule(_)
+      1 * yamlMapper.writeValueAsString(object)
+      0 * jsonMapper.writeValueAsString(object)
+      2 * registrar.maybeRegisterModule(_)
   }
 }

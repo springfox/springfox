@@ -71,6 +71,7 @@ public class Swagger2Controller {
   public
   @ResponseBody
   ResponseEntity<RawOutput> getDocumentation(
+      @RequestParam(value = "format", required = false) String format,
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
 
@@ -85,7 +86,7 @@ public class Swagger2Controller {
       swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
       swagger.host(hostName(uriComponents));
     }
-    return new ResponseEntity<RawOutput>(multiFormatSerializer.toJson(swagger), HttpStatus.OK);
+    return ResponseEntity.ok(multiFormatSerializer.serialize(swagger, format));
   }
 
   private String hostName(UriComponents uriComponents) {

@@ -18,6 +18,8 @@ dependencies {
   compile project(':springfox-spi')
   compile project(':springfox-schema').sourceSets.main.output
 
+  compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.5.4'
+
   testCompile project(':springfox-core')
   testCompile libs.test
   testCompile libs.swagger2Core

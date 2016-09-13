@@ -21,23 +21,56 @@ package springfox.documentation.spring.web.output;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MultiFormatSerializer {
-  private ObjectMapper objectMapper = new ObjectMapper();
+
+  private static final String FORMAT_JSON = "json";
+  private static final String FORMAT_YML = "yml";
+  private static final String FORMAT_YAML = "yaml";
+
+  private static final String FORMAT_DEFAULT = FORMAT_JSON;
+
+  private final Map<String, ObjectMapper> mappers = new HashMap<String, ObjectMapper>();
 
   public MultiFormatSerializer(List<JacksonModuleRegistrar> modules) {
+
+    ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+    ObjectMapper jsonMapper = new ObjectMapper();
+
     for (JacksonModuleRegistrar each : modules) {
-      each.maybeRegisterModule(objectMapper);
+      each.maybeRegisterModule(yamlMapper);
+      each.maybeRegisterModule(jsonMapper);
     }
+
+    mappers.put(FORMAT_YML, yamlMapper);
+    mappers.put(FORMAT_YAML, yamlMapper);
+    mappers.put(FORMAT_JSON, jsonMapper);
+
   }
 
   public RawOutput toJson(Object toSerialize) {
+    return serialize(toSerialize, FORMAT_JSON);
+  }
+
+  public RawOutput serialize(Object toSerialize, String format) {
+    ObjectMapper objectMapper = mappers.get(getActualFormat(format));
     try {
       return new RawOutput(objectMapper.writeValueAsString(toSerialize));
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Could not write JSON", e);
     }
   }
+
+  private String getActualFormat(String proposedFormat) {
+    if (mappers.containsKey(proposedFormat)) {
+      return proposedFormat;
+    }
+    return FORMAT_DEFAULT;
+  }
+
 }

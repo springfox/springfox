@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public class RawOutput {
+
   private final String value;
 
   public RawOutput(String value) {
@@ -33,4 +34,5 @@ public class RawOutput {
   public String value() {
     return value;
   }
+
 }
