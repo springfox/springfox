@@ -35,8 +35,8 @@ import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.Defaults;
-import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
-import springfox.documentation.spring.web.json.MultiFormatSerializer;
+import springfox.documentation.spring.web.output.JacksonModuleRegistrar;
+import springfox.documentation.spring.web.output.MultiFormatSerializer;
 
 import java.util.List;
 

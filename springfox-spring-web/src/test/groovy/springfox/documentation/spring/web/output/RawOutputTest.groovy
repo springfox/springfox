@@ -17,9 +17,10 @@
  *
  */
 
-package springfox.documentation.spring.web.json
+package springfox.documentation.spring.web.output
 
 import spock.lang.Specification
+import springfox.documentation.spring.web.output.RawOutput
 
 class RawOutputTest extends Specification {
 

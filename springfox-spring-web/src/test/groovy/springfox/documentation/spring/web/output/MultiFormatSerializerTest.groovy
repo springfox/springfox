@@ -17,10 +17,12 @@
  *
  */
 
-package springfox.documentation.spring.web.json
+package springfox.documentation.spring.web.output
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
+import springfox.documentation.spring.web.output.JacksonModuleRegistrar
+import springfox.documentation.spring.web.output.MultiFormatSerializer
 
 class MultiFormatSerializerTest extends Specification {
   def "should serialize"() {

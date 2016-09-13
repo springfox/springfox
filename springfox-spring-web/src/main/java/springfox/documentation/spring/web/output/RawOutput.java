@@ -16,11 +16,21 @@
  *
  *
  */
+package springfox.documentation.spring.web.output;
 
-package springfox.documentation.spring.web.json;
+import com.fasterxml.jackson.annotation.JsonRawValue;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+public class RawOutput {
+  private final String value;
 
-public interface JacksonModuleRegistrar {
-  void maybeRegisterModule(ObjectMapper objectMapper);
+  public RawOutput(String value) {
+    this.value = value;
+  }
+
+  @JsonValue
+  @JsonRawValue
+  public String value() {
+    return value;
+  }
 }

@@ -13,7 +13,7 @@ import org.springframework.web.servlet.View
 import spock.lang.Shared
 import spock.lang.Unroll
 import springfox.documentation.spring.web.DocumentationCache
-import springfox.documentation.spring.web.json.MultiFormatSerializer
+import springfox.documentation.spring.web.output.MultiFormatSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.JsonSupport

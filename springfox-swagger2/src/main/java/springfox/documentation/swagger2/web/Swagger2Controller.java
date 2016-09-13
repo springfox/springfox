@@ -35,8 +35,8 @@ import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.spring.web.json.RawOutput;
-import springfox.documentation.spring.web.json.MultiFormatSerializer;
+import springfox.documentation.spring.web.output.RawOutput;
+import springfox.documentation.spring.web.output.MultiFormatSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 

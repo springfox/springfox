@@ -17,27 +17,10 @@
  *
  */
 
-package springfox.documentation.spring.web.json;
+package springfox.documentation.spring.web.output;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.List;
-
-public class MultiFormatSerializer {
-  private ObjectMapper objectMapper = new ObjectMapper();
-
-  public MultiFormatSerializer(List<JacksonModuleRegistrar> modules) {
-    for (JacksonModuleRegistrar each : modules) {
-      each.maybeRegisterModule(objectMapper);
-    }
-  }
-
-  public RawOutput toJson(Object toSerialize) {
-    try {
-      return new RawOutput(objectMapper.writeValueAsString(toSerialize));
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException("Could not write JSON", e);
-    }
-  }
+public interface JacksonModuleRegistrar {
+  void maybeRegisterModule(ObjectMapper objectMapper);
 }
