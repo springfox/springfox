@@ -33,9 +33,9 @@ public class MultiFormatSerializer {
     }
   }
 
-  public Json toJson(Object toSerialize) {
+  public RawOutput toJson(Object toSerialize) {
     try {
-      return new Json(objectMapper.writeValueAsString(toSerialize));
+      return new RawOutput(objectMapper.writeValueAsString(toSerialize));
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Could not write JSON", e);
     }

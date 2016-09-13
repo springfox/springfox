@@ -21,10 +21,10 @@ package springfox.documentation.spring.web.json;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public class Json {
+public class RawOutput {
   private final String value;
 
-  public Json(String value) {
+  public RawOutput(String value) {
     this.value = value;
   }
 

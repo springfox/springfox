@@ -21,10 +21,10 @@ package springfox.documentation.spring.web.json
 
 import spock.lang.Specification
 
-class JsonTest extends Specification {
+class RawOutputTest extends Specification {
 
   def "should pass coverage"() {
     expect:
-      new Json("Something").value()
+      new RawOutput("Something").value()
   }
 }

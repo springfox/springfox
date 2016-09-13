@@ -35,7 +35,7 @@ import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.spring.web.json.Json;
+import springfox.documentation.spring.web.json.RawOutput;
 import springfox.documentation.spring.web.json.MultiFormatSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
@@ -70,14 +70,14 @@ public class Swagger2Controller {
       method = RequestMethod.GET, produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
   public
   @ResponseBody
-  ResponseEntity<Json> getDocumentation(
+  ResponseEntity<RawOutput> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
 
     String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
-      return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<RawOutput>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     if (isNullOrEmpty(swagger.getHost())) {
@@ -85,7 +85,7 @@ public class Swagger2Controller {
       swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
       swagger.host(hostName(uriComponents));
     }
-    return new ResponseEntity<Json>(multiFormatSerializer.toJson(swagger), HttpStatus.OK);
+    return new ResponseEntity<RawOutput>(multiFormatSerializer.toJson(swagger), HttpStatus.OK);
   }
 
   private String hostName(UriComponents uriComponents) {
