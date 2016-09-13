@@ -35,7 +35,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.json.Json;
-import springfox.documentation.spring.web.json.JsonSerializer;
+import springfox.documentation.spring.web.json.MultiFormatSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger1.dto.ApiListing;
 import springfox.documentation.swagger1.dto.ResourceListing;
@@ -60,7 +60,7 @@ public class Swagger1Controller {
   private ServiceModelToSwaggerMapper mapper;
 
   @Autowired
-  private JsonSerializer jsonSerializer;
+  private MultiFormatSerializer multiFormatSerializer;
 
   @ApiIgnore
   @RequestMapping(method = RequestMethod.GET)
@@ -99,7 +99,7 @@ public class Swagger1Controller {
     return new Function<ApiListing, Json>() {
       @Override
       public Json apply(ApiListing input) {
-        return jsonSerializer.toJson(input);
+        return multiFormatSerializer.toJson(input);
       }
     };
   }
@@ -113,7 +113,7 @@ public class Swagger1Controller {
     springfox.documentation.service.ResourceListing listing = documentation.getResourceListing();
     ResourceListing resourceListing = mapper.toSwaggerResourceListing(listing);
 
-    return Optional.fromNullable(jsonSerializer.toJson(resourceListing))
+    return Optional.fromNullable(multiFormatSerializer.toJson(resourceListing))
         .transform(toResponseEntity(Json.class))
         .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
   }

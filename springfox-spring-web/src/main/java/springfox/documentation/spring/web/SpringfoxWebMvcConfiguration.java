@@ -36,7 +36,7 @@ import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
-import springfox.documentation.spring.web.json.JsonSerializer;
+import springfox.documentation.spring.web.json.MultiFormatSerializer;
 
 import java.util.List;
 
@@ -77,8 +77,8 @@ public class SpringfoxWebMvcConfiguration {
   }
 
   @Bean
-  public JsonSerializer jsonSerializer(List<JacksonModuleRegistrar> moduleRegistrars) {
-    return new JsonSerializer(moduleRegistrars);
+  public MultiFormatSerializer jsonSerializer(List<JacksonModuleRegistrar> moduleRegistrars) {
+    return new MultiFormatSerializer(moduleRegistrars);
   }
 
 }

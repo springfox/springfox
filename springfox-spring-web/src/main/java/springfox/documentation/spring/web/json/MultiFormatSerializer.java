@@ -24,10 +24,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
-public class JsonSerializer {
+public class MultiFormatSerializer {
   private ObjectMapper objectMapper = new ObjectMapper();
 
-  public JsonSerializer(List<JacksonModuleRegistrar> modules) {
+  public MultiFormatSerializer(List<JacksonModuleRegistrar> modules) {
     for (JacksonModuleRegistrar each : modules) {
       each.maybeRegisterModule(objectMapper);
     }

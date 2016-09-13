@@ -36,7 +36,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.json.Json;
-import springfox.documentation.spring.web.json.JsonSerializer;
+import springfox.documentation.spring.web.json.MultiFormatSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
@@ -63,7 +63,7 @@ public class Swagger2Controller {
   private ServiceModelToSwagger2Mapper mapper;
 
   @Autowired
-  private JsonSerializer jsonSerializer;
+  private MultiFormatSerializer multiFormatSerializer;
 
   @ApiIgnore
   @RequestMapping(value = "${springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
@@ -85,7 +85,7 @@ public class Swagger2Controller {
       swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
       swagger.host(hostName(uriComponents));
     }
-    return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
+    return new ResponseEntity<Json>(multiFormatSerializer.toJson(swagger), HttpStatus.OK);
   }
 
   private String hostName(UriComponents uriComponents) {

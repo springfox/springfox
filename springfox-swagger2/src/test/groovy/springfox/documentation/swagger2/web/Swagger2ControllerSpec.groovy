@@ -13,7 +13,7 @@ import org.springframework.web.servlet.View
 import spock.lang.Shared
 import spock.lang.Unroll
 import springfox.documentation.spring.web.DocumentationCache
-import springfox.documentation.spring.web.json.JsonSerializer
+import springfox.documentation.spring.web.json.MultiFormatSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.JsonSupport
@@ -43,7 +43,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
 
   def setup() {
     controller.documentationCache = new DocumentationCache()
-    controller.jsonSerializer = new JsonSerializer([new Swagger2JacksonModule()])
+    controller.multiFormatSerializer = new MultiFormatSerializer([new Swagger2JacksonModule()])
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
     listingScanner = Mock(ApiListingScanner)
