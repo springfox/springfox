@@ -58,11 +58,12 @@ public class MultiFormatSerializer {
   }
 
   public RawOutput serialize(Object toSerialize, String format) {
-    ObjectMapper objectMapper = mappers.get(getActualFormat(format));
+    String actualFormat = getActualFormat(format);
+    ObjectMapper objectMapper = mappers.get(actualFormat);
     try {
       return new RawOutput(objectMapper.writeValueAsString(toSerialize));
     } catch (JsonProcessingException e) {
-      throw new RuntimeException("Could not write JSON", e);
+      throw new IllegalArgumentException("Could not write " + actualFormat, e);
     }
   }
 

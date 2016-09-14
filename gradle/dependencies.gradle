@@ -54,6 +54,9 @@ ext {
                   "com.fasterxml.jackson.core:jackson-databind:${jackson}",
                   "joda-time:joda-time:$joda"
           ],
+          client        : [
+                  "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson}",
+          ],
           core          : [
                   "com.google.guava:guava:${guava}",
                   "com.fasterxml:classmate:${classmate}",
