@@ -71,4 +71,13 @@ class EntityServices {
       }
     };
   }
+
+  static Predicate<Map.Entry<RequestMappingInfo, HandlerMethod>> entitySchemaService() {
+    return new Predicate<Map.Entry<RequestMappingInfo, HandlerMethod>>() {
+      @Override
+      public boolean apply(Map.Entry<RequestMappingInfo, HandlerMethod> input) {
+        return input.getValue().getBeanType().getSimpleName().equals("RepositorySchemaController");
+      }
+    };
+  }
 }

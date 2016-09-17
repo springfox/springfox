@@ -103,8 +103,19 @@ class EntityServicesProvider implements RequestHandlerProvider {
       searchHandlers.addAll(entityRequestHandlers.operations());
     }
     requestHandlers.addAll(maybeCombine(searchHandlers));
+
     for (Map.Entry<RequestMappingInfo, HandlerMethod> each : basePathAwareMappings.getHandlerMethods().entrySet()) {
-      requestHandlers.add(new WebMvcRequestHandler(each.getKey(), each.getValue()));
+      boolean schemaService = entitySchemaService().apply(each);
+      if (schemaService) {
+        requestHandlers.addAll(
+            new EntitySchemaTemplate(
+                typeResolver,
+                mappings,
+                each.getKey(),
+                each.getValue()).operations());
+      } else {
+        requestHandlers.add(new WebMvcRequestHandler(each.getKey(), each.getValue()));
+      }
     }
     return requestHandlers;
   }
