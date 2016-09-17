@@ -47,15 +47,14 @@ ext {
                   "org.springframework:spring-web:$spring",
                   "org.springframework:spring-webmvc:$spring",
                   "org.springframework:spring-context:$spring",
+                  "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
           ],
           clientProvided: [
                   "javax.servlet:javax.servlet-api:$servlet",
                   "com.fasterxml.jackson.core:jackson-core:${jackson}",
                   "com.fasterxml.jackson.core:jackson-databind:${jackson}",
-                  "joda-time:joda-time:$joda"
-          ],
-          client        : [
                   "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson}",
+                  "joda-time:joda-time:$joda",
           ],
           core          : [
                   "com.google.guava:guava:${guava}",

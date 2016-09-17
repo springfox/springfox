@@ -23,11 +23,12 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 import springfox.documentation.spring.web.output.JacksonModuleRegistrar
 import springfox.documentation.spring.web.output.MultiFormatSerializer
+import springfox.documentation.spring.web.output.formats.CustomFormatOutputMapper
 
 class MultiFormatSerializerTest extends Specification {
   def "should serialize"() {
     given:
-      MultiFormatSerializer sut = new MultiFormatSerializer([])
+      MultiFormatSerializer sut = new MultiFormatSerializer([], [])
       def objectMapper = Mock(ObjectMapper)
       sut.mappers.put("json", objectMapper)
       String object = 'a string'
@@ -39,7 +40,7 @@ class MultiFormatSerializerTest extends Specification {
 
   def "should fallback to json"() {
     given:
-      MultiFormatSerializer sut = new MultiFormatSerializer([])
+      MultiFormatSerializer sut = new MultiFormatSerializer([], [])
       def jsonMapper = Mock(ObjectMapper)
       sut.mappers.put("json", jsonMapper)
       String object = 'a string'
@@ -54,13 +55,22 @@ class MultiFormatSerializerTest extends Specification {
       def registrar = Mock(JacksonModuleRegistrar)
       def jsonMapper = Mock(ObjectMapper)
       def yamlMapper = Mock(ObjectMapper)
+
+      def jsonMapperConfigurer = Mock(CustomFormatOutputMapper) {
+        configureMapper() >> jsonMapper
+        getFormat() >> "json"
+      }
+
+      def yamlMapperConfigurer = Mock(CustomFormatOutputMapper) {
+        configureMapper() >> yamlMapper
+        getFormat() >> "yml"
+      }
+
       def object = 'a string'
     when:
-      MultiFormatSerializer sut = new MultiFormatSerializer([registrar])
-      sut.mappers.put("yaml", yamlMapper)
-      sut.mappers.put("json", jsonMapper)
+      MultiFormatSerializer sut = new MultiFormatSerializer([registrar], [jsonMapperConfigurer, yamlMapperConfigurer])
     and:
-      sut.serialize(object, "yaml")
+      sut.serialize(object, "yml")
     then:
       1 * yamlMapper.writeValueAsString(object)
       0 * jsonMapper.writeValueAsString(object)

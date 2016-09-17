@@ -11,7 +11,6 @@ ext {
 
 dependencies {
   compile libs.core
-  compile libs.client
   compile libs.spring
   provided libs.springProvided
   provided libs.clientProvided

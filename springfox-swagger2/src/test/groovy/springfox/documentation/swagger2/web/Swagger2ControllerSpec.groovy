@@ -17,6 +17,7 @@ import springfox.documentation.spring.web.output.MultiFormatSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.JsonSupport
+import springfox.documentation.spring.web.output.formats.JsonCustomFormatOutputProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.scanners.ApiDocumentationScanner
 import springfox.documentation.spring.web.scanners.ApiListingReferenceScanResult
@@ -43,7 +44,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
 
   def setup() {
     controller.documentationCache = new DocumentationCache()
-    controller.multiFormatSerializer = new MultiFormatSerializer([new Swagger2JacksonModule()])
+    controller.multiFormatSerializer = new MultiFormatSerializer([new Swagger2JacksonModule()], [new JsonCustomFormatOutputProvider()])
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
     listingScanner = Mock(ApiListingScanner)

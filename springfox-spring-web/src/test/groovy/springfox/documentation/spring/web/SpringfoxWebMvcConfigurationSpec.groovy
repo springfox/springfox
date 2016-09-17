@@ -10,8 +10,8 @@ class SpringfoxWebMvcConfigurationSpec extends Specification {
       config.with {
         defaults()
         resourceGroupCache()
-        objectMapperConfigurer()
-        jsonSerializer([])
+          objectMapperConfigurer()
+          jsonSerializer([], [])
       }
   }
 }

@@ -21,8 +21,9 @@ package springfox.documentation.spring.web.output;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import springfox.documentation.spring.web.output.formats.CustomFormatOutputMapper;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,26 +31,20 @@ import java.util.Map;
 public class MultiFormatSerializer {
 
   private static final String FORMAT_JSON = "json";
-  private static final String FORMAT_YML = "yml";
-  private static final String FORMAT_YAML = "yaml";
 
   private static final String FORMAT_DEFAULT = FORMAT_JSON;
 
   private final Map<String, ObjectMapper> mappers = new HashMap<String, ObjectMapper>();
 
-  public MultiFormatSerializer(List<JacksonModuleRegistrar> modules) {
+  public MultiFormatSerializer(List<JacksonModuleRegistrar> modules, Collection<CustomFormatOutputMapper> outputMappers) {
 
-    ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-    ObjectMapper jsonMapper = new ObjectMapper();
-
-    for (JacksonModuleRegistrar each : modules) {
-      each.maybeRegisterModule(yamlMapper);
-      each.maybeRegisterModule(jsonMapper);
+    for (CustomFormatOutputMapper mapperWrapper : outputMappers) {
+      ObjectMapper objectMapper = mapperWrapper.configureMapper();
+      for (JacksonModuleRegistrar each : modules) {
+        each.maybeRegisterModule(objectMapper);
+      }
+      mappers.put(mapperWrapper.getFormat(), objectMapper);
     }
-
-    mappers.put(FORMAT_YML, yamlMapper);
-    mappers.put(FORMAT_YAML, yamlMapper);
-    mappers.put(FORMAT_JSON, jsonMapper);
 
   }
 
