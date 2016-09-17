@@ -27,7 +27,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -169,7 +168,7 @@ class EntitySearchRequestHandler implements RequestHandler {
           .filter(maybeFilterSortParam(searchResource.isSortableResource()))
           .filter(maybeFilterPagingParam(searchResource.isPagingResource()))
           .toList();
-      return FluentIterable.from(Iterables.concat(genericParams, actualQueryParams)).toList();
+      return FluentIterable.from(concat(genericParams, actualQueryParams)).toList();
     } else {
       return FluentIterable.from(handlerMethodResolver.methodParameters(handlerMethod))
           .transform(toIgnorable())

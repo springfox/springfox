@@ -53,7 +53,7 @@ import static com.google.common.collect.Sets.*;
 import static springfox.documentation.spring.data.rest.SynthesizedAnnotations.*;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
-class EntityRequestHandler implements springfox.documentation.RequestHandler {
+class EntityRequestHandler implements RequestHandler {
 
   private static final List<MediaType> COLLECTION_COMPACT_MEDIA_TYPES = newArrayList(
       MediaType.valueOf("application/x-spring-data-compact+json"),
@@ -67,7 +67,7 @@ class EntityRequestHandler implements springfox.documentation.RequestHandler {
   private final HandlerMethod handlerMethod;
   private final TypeResolver resolver;
 
-  public EntityRequestHandler(
+  EntityRequestHandler(
       TypeResolver resolver, ResourceMetadata resource,
       Class<? extends Serializable> idType,
       Class<?> domainType,
