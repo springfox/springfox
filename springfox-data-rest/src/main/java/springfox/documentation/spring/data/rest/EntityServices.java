@@ -20,6 +20,7 @@ package springfox.documentation.spring.data.rest;
 
 import com.google.common.base.Predicate;
 import org.springframework.data.rest.webmvc.RepositoryController;
+import org.springframework.data.rest.webmvc.alps.AlpsController;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
@@ -77,6 +78,15 @@ class EntityServices {
       @Override
       public boolean apply(Map.Entry<RequestMappingInfo, HandlerMethod> input) {
         return input.getValue().getBeanType().getSimpleName().equals("RepositorySchemaController");
+      }
+    };
+  }
+
+  static Predicate<Map.Entry<RequestMappingInfo, HandlerMethod>> alpsProfileServices() {
+    return new Predicate<Map.Entry<RequestMappingInfo, HandlerMethod>>() {
+      @Override
+      public boolean apply(Map.Entry<RequestMappingInfo, HandlerMethod> input) {
+        return AlpsController.class.equals(input.getValue().getBeanType());
       }
     };
   }

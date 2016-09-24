@@ -30,6 +30,7 @@ import org.springframework.data.rest.core.mapping.ResourceMappings;
 import org.springframework.data.rest.core.mapping.ResourceType;
 import org.springframework.data.rest.webmvc.BasePathAwareHandlerMapping;
 import org.springframework.data.rest.webmvc.RepositoryRestHandlerMapping;
+import org.springframework.data.rest.webmvc.RestMediaTypes;
 import org.springframework.data.rest.webmvc.support.JpaHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -102,12 +103,13 @@ class EntityServicesProvider implements RequestHandlerProvider {
           = new EntitySearchRequestTemplate(typeResolver, mappings, each.getKey(), each.getValue());
       searchHandlers.addAll(entityRequestHandlers.operations());
     }
-    requestHandlers.addAll(maybeCombine(searchHandlers));
+    requestHandlers.addAll(maybeCombine(searchHandlers, compactHandlers()));
 
+    List<RequestHandler> metadataHandlers = newArrayList();
     for (Map.Entry<RequestMappingInfo, HandlerMethod> each : basePathAwareMappings.getHandlerMethods().entrySet()) {
-      boolean schemaService = entitySchemaService().apply(each);
-      if (schemaService) {
-        requestHandlers.addAll(
+      if (entitySchemaService().apply(each)
+          || alpsProfileServices().apply(each)) {
+        metadataHandlers.addAll(
             new EntitySchemaTemplate(
                 typeResolver,
                 mappings,
@@ -117,24 +119,38 @@ class EntityServicesProvider implements RequestHandlerProvider {
         requestHandlers.add(new WebMvcRequestHandler(each.getKey(), each.getValue()));
       }
     }
+    requestHandlers.addAll(maybeCombine(metadataHandlers, supportsAlps()));
+    requestHandlers.addAll(FluentIterable.from(metadataHandlers).filter(optionMethods()).toList());
     return requestHandlers;
   }
 
-  private Collection<RequestHandler> maybeCombine(List<RequestHandler> searchHandlers) {
+  private Predicate<RequestHandler> optionMethods() {
+    return new Predicate<RequestHandler>() {
+      @Override
+      public boolean apply(RequestHandler input) {
+        return input.supportedMethods().contains(RequestMethod.OPTIONS);
+      }
+    };
+  }
+
+  private Collection<RequestHandler> maybeCombine(
+      List<RequestHandler> metadataHandlers,
+      Predicate <RequestHandler> selector) {
     List<RequestHandler> combined = newArrayList();
-    Iterable<RequestHandler> compacts = FluentIterable.from(searchHandlers)
-        .filter(and(compactHandlers(), getHandler()));
-    FluentIterable<RequestHandler> nonCompacts = FluentIterable.from(searchHandlers)
-        .filter(and(not(compactHandlers()), getHandler()));
-    for (RequestHandler compact : compacts) {
-      Optional<RequestHandler> found = nonCompacts.firstMatch(samePathMapping(compact.getPatternsCondition()));
-      combined.add(combine(compact, found));
+    Iterable<RequestHandler> selected = FluentIterable.from(metadataHandlers)
+        .filter(and(selector, getHandler()));
+    FluentIterable<RequestHandler> selectedCompliment = FluentIterable.from(metadataHandlers)
+        .filter(and(not(selector), getHandler()));
+    for (RequestHandler each : selected) {
+      Optional<RequestHandler> found = selectedCompliment.firstMatch(samePathMapping(each.getPatternsCondition()));
+      combined.add(combine(each, found));
     }
-    combined.addAll(FluentIterable.from(searchHandlers)
+    combined.addAll(FluentIterable.from(metadataHandlers)
         .filter(EntitySearchRequestHandler.class)
         .filter(collectionHandlers()).toList());
     return combined;
   }
+
 
   private Predicate<EntitySearchRequestHandler> collectionHandlers() {
     return new Predicate<EntitySearchRequestHandler>() {
@@ -166,6 +182,15 @@ class EntityServicesProvider implements RequestHandlerProvider {
       @Override
       public boolean apply(RequestHandler input) {
         return input.key().getProducibleMediaTypes().contains(valueOf("application/x-spring-data-compact+json"));
+      }
+    };
+  }
+
+  private Predicate<RequestHandler> supportsAlps() {
+    return new Predicate<RequestHandler>() {
+      @Override
+      public boolean apply(RequestHandler input) {
+        return input.key().getSupportedMediaTypes().contains(RestMediaTypes.ALPS_JSON);
       }
     };
   }

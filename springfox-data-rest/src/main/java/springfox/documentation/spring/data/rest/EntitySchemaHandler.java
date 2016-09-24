@@ -26,6 +26,9 @@ import com.fasterxml.classmate.members.ResolvedMethod;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
+import org.springframework.data.rest.webmvc.RootResourceInformation;
+import org.springframework.hateoas.alps.Alps;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -83,7 +86,7 @@ class EntitySchemaHandler implements RequestHandler {
 
   @Override
   public String groupName() {
-    return "Entity Schemas";
+    return "Entity Metadata Services";
   }
 
   @Override
@@ -142,6 +145,10 @@ class EntitySchemaHandler implements RequestHandler {
         resolver.resolve(handlerMethod.getMethod().getDeclaringClass()), null, null);
     for (ResolvedMethod resolvedMethod : members.getMemberMethods()) {
       if (resolvedMethod.getRawMember().equals(handlerMethod.getMethod())) {
+        ResolvedType resourceInfo = resolver.resolve(HttpEntity.class, RootResourceInformation.class);
+        if (resourceInfo.equals(resolvedMethod.getReturnType())) {
+          return resolver.resolve(Alps.class);
+        }
         return resolvedMethod.getReturnType();
       }
     }
@@ -165,6 +172,6 @@ class EntitySchemaHandler implements RequestHandler {
 
   @Override
   public RequestHandler combine(RequestHandler other) {
-    return this;
+    return new CombinedRequestHandler(this, other);
   }
 }
