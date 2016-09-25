@@ -49,6 +49,7 @@ class ServicePluginsSupport {
     plugins.resourceGroupingStrategies = create([])
     plugins.operationModelsProviders = create([new OperationModelsProvider(resolver)])
     plugins.defaultsProviders = create([])
+    plugins.apiListingScanners = create([])
     plugins.pathDecorators = create([
         new OperationPathDecorator(),
         new PathSanitizer(),
@@ -78,6 +79,7 @@ class ServicePluginsSupport {
     plugins.operationModelsProviders = create([new OperationModelsProvider(resolver)])
     plugins.defaultsProviders = create(defaultProviderPlugins)
     plugins.pathDecorators = create(pathDecorators)
+    plugins.apiListingScanners = create([])
     return plugins
   }
 

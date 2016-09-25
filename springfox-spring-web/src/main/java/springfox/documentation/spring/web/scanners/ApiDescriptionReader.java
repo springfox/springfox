@@ -55,8 +55,6 @@ public class ApiDescriptionReader {
   }
 
   public List<ApiDescription> read(RequestMappingContext outerContext) {
-//    RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
-//    HandlerMethod handlerMethod = outerContext.getHandlerMethod();
     PatternsRequestCondition patternsCondition = outerContext.getPatternsCondition();
     ApiSelector selector = outerContext.getDocumentationContext().getApiSelector();
 

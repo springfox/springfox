@@ -30,6 +30,9 @@ To explicitly state the extensibility points that are available:
 |===
 |Name| Description
 
+| `ApiListingScannerPlugin`
+| for adding custom api descriptions
+
 | `ApiListingBuilderPlugin`
 | for enriching api listings
 

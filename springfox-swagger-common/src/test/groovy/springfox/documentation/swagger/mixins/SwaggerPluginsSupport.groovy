@@ -64,6 +64,7 @@ class SwaggerPluginsSupport {
                                        new ParameterNameReader()])
     plugins.operationBuilderPlugins = create([])
     plugins.resourceGroupingStrategies = create([new ClassOrApiAnnotationResourceGrouping()])
+    plugins.apiListingScanners = create([])
     plugins.operationModelsProviders = create([
         new OperationModelsProvider(resolver),
         new SwaggerOperationModelsProvider(resolver)])

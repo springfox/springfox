@@ -88,7 +88,7 @@ public class ApiListingScanner {
         models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
-
+      apiDescriptions.addAll(pluginsManager.additionalListings(context));
 
       List<ApiDescription> sortedApis = newArrayList(apiDescriptions);
       Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());

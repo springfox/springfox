@@ -20,10 +20,13 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
+import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
@@ -31,6 +34,7 @@ import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
+import springfox.documentation.spi.service.ApiListingScannerPlugin;
 import springfox.documentation.spi.service.DefaultsProviderPlugin;
 import springfox.documentation.spi.service.DocumentationPlugin;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
@@ -47,7 +51,9 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.SpringGroupingStrategy;
+import springfox.documentation.spring.web.scanners.ApiListingScanningContext;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -84,6 +90,10 @@ public class DocumentationPluginsManager {
   @Autowired
   @Qualifier("pathDecoratorRegistry")
   private PluginRegistry<PathDecorator, DocumentationContext> pathDecorators;
+
+  @Autowired(required = false)
+  @Qualifier("apiListingScannerPluginRegistry")
+  private PluginRegistry<ApiListingScannerPlugin, DocumentationType> apiListingScanners;
 
   public Iterable<DocumentationPlugin> documentationPlugins() throws IllegalStateException {
     List<DocumentationPlugin> plugins = documentationPlugins.getPlugins();
@@ -169,5 +179,21 @@ public class DocumentationPluginsManager {
         return input.decorator(context);
       }
     };
+  }
+
+  public Collection<ApiDescription> additionalListings(final ApiListingScanningContext context) {
+    final DocumentationType documentationType = context.getDocumentationContext().getDocumentationType();
+    return Optional.fromNullable(apiListingScanners)
+        .transform(new Function<PluginRegistry<ApiListingScannerPlugin,DocumentationType>, List<ApiDescription>>() {
+          @Override
+          public List<ApiDescription> apply(PluginRegistry<ApiListingScannerPlugin, DocumentationType> input) {
+            List<ApiDescription> additional = newArrayList();
+            for(ApiListingScannerPlugin each : input.getPluginsFor(documentationType)) {
+              additional.addAll(each.apply(context.getDocumentationContext()));
+            }
+            return additional;
+          }
+        })
+        .or(Lists.<ApiDescription>newArrayList());
   }
 }
