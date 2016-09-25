@@ -330,7 +330,7 @@ It is still in incubation but host name can be configured per docket
 [[q18]]*Q. Infinite loop when springfox tries to determine schema for objects with nested/complex constraints?*
 
 A. If you have recursively defined objects, I would try and see if providing an alternate type might work or perhaps
-even ignoring the offending classes e.g. oder using the docket. ignoredParameterTypes(Order.class). This is
+even ignoring the offending classes e.g. order using the docket. ignoredParameterTypes(Order.class). This is
 usually found in Hibernate domain objects that have bidirectional dependencies on other objects.
 
 [[q19]]*Q. How are tags implemented in springfox?*
