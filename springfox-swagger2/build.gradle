@@ -1,5 +1,5 @@
 plugins {
-  id "net.ltgt.apt" version "0.6"
+  id "net.ltgt.apt" version "0.9"
 }
 
 ext {

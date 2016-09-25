@@ -80,9 +80,12 @@ ext {
   }
 }
 
+def generatedSources = "$buildDir/generated/source/apt/main"
+
 task packageSources(type: Jar) {
   classifier = 'sources'
   from sourceSets.main.allSource
+  from generatedSources
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
