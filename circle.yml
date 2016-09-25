@@ -33,9 +33,9 @@ deployment:
     branch: master
     owner: springfox
     commands:
-      - ./gradlew snapshot -PbintrayUsername=${bintrayUsername} -PbintrayPassword=${bintrayPassword} -i -x check
-      - ./gradlew publishDocs -i
-      - ./gradlew coveralls
+      - ./gradlew snapshot -PbintrayUsername=${bintrayUsername} -PbintrayPassword=${bintrayPassword} -i -x check -Dorg.gradle.daemon=false
+      - ./gradlew publishDocs -i -Dorg.gradle.daemon=false
+      - ./gradlew coveralls -Dorg.gradle.daemon=false
 notify:
   webhooks:
     - url: https://webhooks.gitter.im/e/b30a7db820817acfc6d8
