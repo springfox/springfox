@@ -538,20 +538,20 @@ table.CodeRay td.code>pre{padding:0}
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
-<p>It can be a little confusing</p>
+<p>It can be a little confusing:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Swagger Spec is a specification</p>
+<p>Swagger Spec is a specification.</p>
 </li>
 <li>
 <p>Swagger Api - an implementation of that specification that supports jax-rs, restlet, jersey etc.</p>
 </li>
 <li>
-<p>Springfox libraries in general - is another implementation of the specification focused on the spring based ecosystem</p>
+<p>Springfox libraries in general - another implementation of the specification focused on the spring based ecosystem.</p>
 </li>
 <li>
-<p>Swagger.js and Swagger-ui - Are client libraries in javascript that can consume swagger specification</p>
+<p>Swagger.js and Swagger-ui - are client libraries in javascript that can consume swagger specification.</p>
 </li>
 <li>
 <p>springfox-swagger-ui - the one that you&#8217;re referring to, is just packaging swagger-ui in a convenient way so that
@@ -613,9 +613,9 @@ I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none o
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Running in debugger revealed that i had two instances of WebApplicationInitializers in my war. Spring is
-refreshing context with each one and is resulting in second instance of OptimizedModelPropertiesProvider without
-onApplicationEvent call. I was able to fix it by removing second WebApplicationInitializer in my code. Seems  this is
+Running in debugger revealed that I had two instances of WebApplicationInitializers in my war. Spring is
+refreshing context with each one and is resulting in second instance of <code>OptimizedModelPropertiesProvider</code> without
+<code>onApplicationEvent</code> call. I was able to fix it by removing second <code>WebApplicationInitializer</code> in my code. Seems this is
 related to <a href="https://github.com/spring-projects/spring-boot/issues/221">spring-boot issue #221</a> <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnote_1" title="View footnote.">1</a>]</sup>
 </td>
 </tr>
@@ -631,8 +631,8 @@ related to <a href="https://github.com/spring-projects/spring-boot/issues/221">s
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Sometimes there are multiple <code>ObjectMapper`s in play and it may result in the customizations not working
-<sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnote_2" title="View footnote.">2</a>]</sup> Spring Boot in `HttpMessageConverters</code> first adds the Spring Boot configured <code>MappingJackson2HttpMessageConverter</code> and then it adds the default <code>MappingJackson2HttpMessageConverter</code> from Spring MVC. This causes the <code>ObjectMapperConfigured</code> event to fire twice, first for the configured converter (which is actually used) and then for the default converter. So when you f.e. set a custom property naming strategy then in <code>ObjectMapperBeanPropertyNamingStrategy</code> this is overwritten by the second event. The following code fixes this:
+Sometimes there are multiple <code>ObjectMapper</code> in play and it may result in the customizations not working
+<sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnote_2" title="View footnote.">2</a>]</sup> Spring Boot in <code>HttpMessageConverters</code> first adds the Spring Boot configured <code>MappingJackson2HttpMessageConverter</code> and then it adds the default <code>MappingJackson2HttpMessageConverter</code> from Spring MVC. This causes the <code>ObjectMapperConfigured</code> event to fire twice, first for the configured converter (which is actually used) and then for the default converter. So when you f.e. set a custom property naming strategy then in <code>ObjectMapperBeanPropertyNamingStrategy</code> this is overwritten by the second event. The following code fixes this:
 </td>
 </tr>
 </table>
@@ -696,10 +696,10 @@ Use <code>java.sql.Date</code> works great for date precision and <code>java.uti
 <div class="ulist">
 <ul>
 <li>
-<p>Substitute "Date" types (java.util.LocalDate, org.joda.time.LocalDate)  by java.sql.Date</p>
+<p>Substitute "Date" types (java.util.LocalDate, org.joda.time.LocalDate) by java.sql.Date.</p>
 </li>
 <li>
-<p>Substitute "DateTime" types (java.util.ZonedDateTime, org.joda.time.LocalDateTime, &#8230;&#8203;) by java.util.Date</p>
+<p>Substitute "DateTime" types (java.util.ZonedDateTime, org.joda.time.LocalDateTime, &#8230;&#8203;) by java.util.Date.</p>
 </li>
 </ul>
 </div>
@@ -711,13 +711,13 @@ Use <code>java.sql.Date</code> works great for date precision and <code>java.uti
 </div>
 </div>
 <div class="paragraph">
-<p><a id="q6"></a><strong>Q. How does one use @ModelAttribute annotation. It doesn&#8217;t seem to render the model properties as scalar
+<p><a id="q6"></a><strong>Q. How does one use <code>@ModelAttribute</code> annotation. It doesn&#8217;t seem to render the model properties as scalar
 properties?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
-<p>In order for @ModelAttribute annotated types to be inferred the properties need to be bean properties. If the
+<p>In order for <code>@ModelAttribute</code> annotated types to be inferred the properties need to be bean properties. If the
 intent is immutability and passing in an object, the preferred approach is to make that a request body, in which
 case the immutability will follow the rules laid out by jackson to determine what constitutes a request "view" of the
 request object.</p>
@@ -727,7 +727,7 @@ request object.</p>
 <div class="paragraph">
 <p>Getters/setters are a clean way to indicate what values can come in to a operation. While it may not be apparent in a
 trivial model with one level nesting; the design choice will become clear when we realize that model attributes can be
-arbitrarily nested. Consider (pseudo code in c# for brevity)</p>
+arbitrarily nested. Consider (pseudo code in C# for brevity)</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -755,8 +755,8 @@ String description {get;}</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>Now we don&#8217;t want category to be able to set description via the operation, how do we control/specify that? it makes
-it hard to reason about which fields in an objects are not intended to be mutated. This is the reason we chose to
+<p>Now we don&#8217;t want category to be able to set description via the operation, how do we control/specify that? It makes
+it hard to reason about which fields in an object are not intended to be mutated. This is the reason we chose to
 limit it to objects that expose getters and setters.</p>
 </div>
 <div class="admonitionblock note">
@@ -766,7 +766,7 @@ limit it to objects that expose getters and setters.</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-I know spring supports fields as well, and it will fall back to fields if setters are not found
+I know spring supports fields as well, and it will fall back to fields if setters are not found.
 </td>
 </tr>
 </table>
@@ -814,7 +814,7 @@ discusses issues with doing this.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p><a id="q9"></a><strong>Q. Why are my api params marked as required=false?</strong></p>
+<p><a id="q9"></a><strong>Q. Why are my API params marked as required=false?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -823,13 +823,13 @@ discusses issues with doing this.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>@PathVariables are always marked as required.</p>
+<p><code>@PathVariables</code> are always marked as required.</p>
 </li>
 <li>
-<p>@ApiParam is an optional annotation to describe additional meta-information like description etc.</p>
+<p><code>@ApiParam is</code> an optional annotation to describe additional meta-information like description etc.</p>
 </li>
 <li>
-<p>@ApiParam#required() is defaulted to false, unless you set it to true.</p>
+<p><code>@ApiParam#required()</code> is defaulted to false, unless you set it to true.</p>
 </li>
 </ul>
 </div>
@@ -843,10 +843,10 @@ spring-mvc descriptions. By definition, plugins don&#8217;t know and should not 
 inferred values (in your case required attribute).</p>
 </div>
 <div class="paragraph">
-<p>So if you choose to augment the definitions with @ApiParam then you need to be explicit and set the value to true.</p>
+<p>So if you choose to augment the definitions with <code>@ApiParam</code> then you need to be explicit and set the value to true.</p>
 </div>
 <div class="paragraph">
-<p><a id="q10"></a><strong>Q. How does one write a plugin to for e.g. make default all types required and only some not required?</strong></p>
+<p><a id="q10"></a><strong>Q. How does one write a plugin to e.g. make default all types required and only some not required?</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -935,8 +935,8 @@ one for <strong>api/v2</strong>. This <a href="http://stackoverflow.com/question
 </ol>
 </div>
 <div class="paragraph">
-<p>I was able to get it working by modifying the dispatcherServlet to listen on /* , but this prevented swagger-ui.html
-from being served.  To fix this to let the swagger-ui.html bypass the dispatcherServlet i had to create a new
+<p>I was able to get it working by modifying the <code>dispatcherServlet</code> to listen on /* , but this prevented <code>swagger-ui.html</code>
+from being served. To fix this to let the <code>swagger-ui.html</code> bypass the <code>dispatcherServlet</code> i had to create a new
 servlet mapping:</p>
 </div>
 <div class="listingblock">
@@ -979,8 +979,8 @@ through the dispatcherServlet.</p>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-swagger-ui.html is the name of the swagger-ui page. While it cannot be changed one can configure the
-application such that landing on a particular url re-directs the browser to the real swagger-ui location.
+<code>swagger-ui.html</code> is the name of the swagger-ui page. While it cannot be changed one can configure the
+application such that landing on a particular URL re-directs the browser to the real swagger-ui location.
 <sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnote_4" title="View footnote.">4</a>]</sup>
 </td>
 </tr>
@@ -1010,7 +1010,7 @@ application such that landing on a particular url re-directs the browser to the 
 </div>
 </div>
 <div class="paragraph">
-<p>However it still requires a redirect to <code>/documentation/swagger-ui.html</code> because the path name is
+<p>However, it still requires a redirect to <code>/documentation/swagger-ui.html</code> because the path name is
 <a href="https://github.com/springfox/springfox/blob/master/springfox-swagger-ui/src/web/js/springfox.js#L4">hard-coded</a>.</p>
 </div>
 <div class="paragraph">
@@ -1095,32 +1095,26 @@ It is still in incubation but host name can be configured per docket</p>
 <ol class="upperalpha" type="A">
 <li>
 <p>If you have recursively defined objects, I would try and see if providing an alternate type might work or perhaps
-even ignoring the offending classes for e.g. Order using the docket. ignoredParameterTypes(Order.class). This is
-usually found in Hibernate domain objects that have bi-dectional dependencies on other objects.</p>
+even ignoring the offending classes e.g. order using the docket. ignoredParameterTypes(Order.class). This is
+usually found in Hibernate domain objects that have bidirectional dependencies on other objects.</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p><a id="q19"></a>*Q. How are tags implemented in springfox?</p>
+<p><a id="q19"></a><strong>Q. How are tags implemented in springfox?</strong></p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>Tags which are first class constructs just like operations, models etc. and what you see on operations are
-references to those Tags. The typical workflow is to registers tags in a docket and use the tag definitions on
-operations(`@ApiOperation`)/controllers(`@Api`) to point to these registered tags (in the docket) by name.</pre>
+<div class="paragraph">
+<p>Tags which are first class constructs just like operations, models etc. and what you see on operations are
+references to those Tags. The typical workflow is to register tags in a docket and use the tag definitions on
+operations(<code>@ApiOperation</code>)/controllers(<code>@Api</code>) to point to these registered tags (in the docket) by name.</p>
 </div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>The convenience we have in place just to reduce the amount of boiler plate for the developer is to provide a default
+<div class="paragraph">
+<p>The convenience we have in place just to reduce the amount of boiler plate for the developer is to provide a default
 description that happens to be the same as the tag name. So in effect we are synthesizing a pseudo Tag by referencing
-one on the operation.</pre>
+one on the operation.</p>
 </div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>By defining the Tag on the docket, we are referencing a real tag defined by you.</pre>
-</div>
+<div class="paragraph">
+<p>By defining the Tag on the docket, we are referencing a real tag defined by you.</p>
 </div>
 </div>
 </div>
@@ -1142,7 +1136,7 @@ one on the operation.</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-09-12 21:35:16 UTC
+Last updated 2016-09-25 00:06:29 UTC
 </div>
 </div>
 </body>
