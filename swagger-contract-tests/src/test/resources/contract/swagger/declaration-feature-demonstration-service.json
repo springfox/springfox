@@ -783,7 +783,6 @@
               "description": "input",
               "name": "input",
               "paramType": "query",
-              "format": "double",
               "type": "number",
               "required": false
             }

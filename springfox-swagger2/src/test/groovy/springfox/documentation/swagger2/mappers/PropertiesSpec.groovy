@@ -68,7 +68,7 @@ class PropertiesSpec extends Specification {
       "date"      | DateProperty
       "date-time" | DateTimeProperty
       "bigdecimal"| DecimalProperty
-      "biginteger"| DecimalProperty
+      "biginteger"| BaseIntegerProperty
       "uuid"      | UUIDProperty
       "object"    | ObjectProperty
       "byte"      | StringProperty
@@ -81,7 +81,7 @@ class PropertiesSpec extends Specification {
       "DATE"      | DateProperty
       "DATE-time" | DateTimeProperty
       "BIGDECIMAL"| DecimalProperty
-      "BIGINTEGER"| DecimalProperty
+      "BIGINTEGER"| BaseIntegerProperty
       "UUID"      | UUIDProperty
       "OBJECT"    | ObjectProperty
       "BYTE"      | StringProperty

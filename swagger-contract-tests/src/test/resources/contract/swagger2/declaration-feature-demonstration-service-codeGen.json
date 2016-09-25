@@ -360,8 +360,7 @@
             "in": "query",
             "description": "input",
             "required": false,
-            "type": "number",
-            "format": "double"
+            "type": "number"
           }
         ],
         "responses": {

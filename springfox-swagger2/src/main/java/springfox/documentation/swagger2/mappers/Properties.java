@@ -26,6 +26,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
 import io.swagger.models.properties.ArrayProperty;
+import io.swagger.models.properties.BaseIntegerProperty;
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.DateProperty;
 import io.swagger.models.properties.DateTimeProperty;
@@ -65,7 +66,7 @@ class Properties {
       .put("date", newInstanceOf(DateProperty.class))
       .put("date-time", newInstanceOf(DateTimeProperty.class))
       .put("bigdecimal", newInstanceOf(DecimalProperty.class))
-      .put("biginteger", newInstanceOf(DecimalProperty.class))
+      .put("biginteger", newInstanceOf(BaseIntegerProperty.class))
       .put("uuid", newInstanceOf(UUIDProperty.class))
       .put("object", newInstanceOf(ObjectProperty.class))
       .put("byte", bytePropertyFactory())

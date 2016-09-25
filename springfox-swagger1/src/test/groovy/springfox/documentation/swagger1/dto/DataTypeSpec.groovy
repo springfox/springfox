@@ -40,8 +40,8 @@ class DataTypeSpec extends InternalJsonSerializationSpec {
       "Date"       | { it.type == 'string' && it.format == 'date-time' }
       "DateTime"   | { it.type == 'string' && it.format == 'date-time' }
       "string"     | { it.type == 'string' && !it.format }
-      "BigDecimal" | { it.type == 'number' && !it.format }
-      "BigInteger" | { it.type == 'number' && !it.format }
+      "bigdecimal" | { it.type == 'number' && !it.format }
+      "biginteger" | { it.type == 'integer' && !it.format }
       "boolean"    | { it.type == 'boolean' && !it.format }
       "byte"       | { it.type == 'string' && it.format == 'byte' }
       "UUID"       | { it.type == 'string' && it.format == 'uuid' }

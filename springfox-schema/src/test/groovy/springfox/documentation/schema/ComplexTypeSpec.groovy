@@ -73,7 +73,7 @@ class ComplexTypeSpec extends Specification {
       "name"       | String       | "string"   | "java.lang.String"
       "age"        | Integer.TYPE | "int"      | "int"
       "category"   | Category     | "Category" | "springfox.documentation.schema.Category"
-      "customType" | BigDecimal   | "double"   | "java.math.BigDecimal"
+      "customType" | BigDecimal   | "bigdecimal"   | "java.math.BigDecimal"
   }
 
   def "recursive type properties are inferred correctly"() {
@@ -158,7 +158,7 @@ class ComplexTypeSpec extends Specification {
       "name"              | String       | "string"   | 'type'       | "java.lang.String"
       "age"               | Integer.TYPE | "int"      | 'type'       | "int"
       "category"          | Category     | "Category" | 'reference'  | "springfox.documentation.schema.Category"
-      "customType"        | BigDecimal   | "double"   | 'type'       | "java.math.BigDecimal"
+      "customType"        | BigDecimal   | "bigdecimal"   | 'type'       | "java.math.BigDecimal"
       "inheritedProperty" | String       | "string"   | 'type'       | "java.lang.String"
   }
 }
