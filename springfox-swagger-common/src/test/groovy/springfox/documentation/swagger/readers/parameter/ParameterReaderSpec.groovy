@@ -19,9 +19,8 @@
 
 package springfox.documentation.swagger.readers.parameter
 
-import com.google.common.base.Optional
+import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
-import org.springframework.core.MethodParameter
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -38,12 +37,9 @@ class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAn
   @Unroll("property #resultProperty expected: #expected")
   def "should set basic properties based on ApiParam annotation or a sensible default"() {
     given:
-      MethodParameter methodParameter = Mock(MethodParameter)
-      methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
-      methodParameter.parameterName >> "someName"
-      methodParameter.parameterType >> Object
-      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
-      resolvedMethodParameter.methodParameter >> methodParameter
+      def nonNullAnnotations = [apiParamAnnotation, reqParamAnnot].findAll { it != null }
+      def resolvedMethodParameter =
+          new ResolvedMethodParameter(0, "default", nonNullAnnotations, new TypeResolver().resolve(Object.class))
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
           context(), genericNamingStrategy, Mock(OperationContext))
@@ -68,10 +64,6 @@ class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAn
 
   def stubbedParamBuilder(ApiParam apiParamAnnotation) {
     new ApiParamParameterBuilder() {
-      @Override
-      def Optional<ApiParam> findApiParam(MethodParameter methodParameter) {
-        Optional.fromNullable(apiParamAnnotation)
-      }
     }
   }
 }

@@ -20,12 +20,9 @@
 package springfox.documentation.spring.web.readers.operation
 
 import com.fasterxml.classmate.TypeResolver
-import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition
-import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
-import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -42,9 +39,7 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
       HeadersRequestCondition headersCondition = new HeadersRequestCondition("test=testValue")
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
               ["headersCondition": headersCondition])
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
-              context(), "")
+      OperationContext operationContext = operationContext(context(), handlerMethod, 0, requestMappingInfo)
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
@@ -74,9 +69,7 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
       HeadersRequestCondition headersCondition = new HeadersRequestCondition("!test")
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
               ["headersCondition": headersCondition])
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0, requestMappingInfo,
-              context(), "")
+      OperationContext operationContext = operationContext(context(), handlerMethod, 0, requestMappingInfo)
 
     when:
       sut.apply(operationContext)
@@ -91,10 +84,10 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
       HeadersRequestCondition paramCondition = new HeadersRequestCondition("test=testValue", "test=3")
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0,  requestMappingInfo('/parameter-conditions',
-                      ["headersCondition": paramCondition]),
-              context(), "/anyPath")
+      OperationContext operationContext = operationContext(context(),
+        handlerMethod,
+        0,
+        requestMappingInfo('/parameter-conditions', ["headersCondition": paramCondition]))
 
     when:
       sut.apply(operationContext)

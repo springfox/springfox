@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -44,16 +43,16 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
   private final TypeNameExtractor nameExtractor;
 
   @Autowired
-  public OperationResponseClassReader(TypeResolver typeResolver,
-                                      TypeNameExtractor nameExtractor) {
+  public OperationResponseClassReader(
+      TypeResolver typeResolver,
+      TypeNameExtractor nameExtractor) {
     this.typeResolver = typeResolver;
     this.nameExtractor = nameExtractor;
   }
 
   @Override
   public void apply(OperationContext context) {
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    ResolvedType returnType = new HandlerMethodResolver(typeResolver).methodReturnType(handlerMethod);
+    ResolvedType returnType = context.getReturnType();
     returnType = context.alternateFor(returnType);
     ModelContext modelContext = ModelContext.returnValue(
         returnType,

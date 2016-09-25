@@ -162,6 +162,43 @@
 
   ],
   "models": {
+    "Pet": {
+      "description": "",
+      "id": "Pet",
+      "properties": {
+        "age": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
+        }
+      }
+    },
+    "Link": {
+      "description": "",
+      "id": "Link",
+      "properties": {
+        "href": {
+          "required": false,
+          "type": "string"
+        },
+        "rel": {
+          "required": false,
+          "type": "string"
+        },
+        "templated": {
+          "required": false,
+          "type": "boolean"
+        }
+      }
+    },
     "Resource\u00abPet\u00bb": {
       "description": "",
       "id": "Resource\u00abPet\u00bb",
@@ -199,43 +236,6 @@
         "body": {
           "required": false,
           "type": "Resource\u00abPet\u00bb"
-        }
-      }
-    },
-    "Pet": {
-      "description": "",
-      "id": "Pet",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "Link": {
-      "description": "",
-      "id": "Link",
-      "properties": {
-        "href": {
-          "required": false,
-          "type": "string"
-        },
-        "rel": {
-          "required": false,
-          "type": "string"
-        },
-        "templated": {
-          "required": false,
-          "type": "boolean"
         }
       }
     }

@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
@@ -39,8 +38,6 @@ import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
-import java.lang.annotation.Annotation;
-
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterTypeReader implements ParameterBuilderPlugin {
@@ -56,32 +53,28 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
   }
 
   public static String findParameterType(ParameterContext parameterContext) {
-    MethodParameter methodParameter = parameterContext.methodParameter();
     ResolvedMethodParameter resolvedMethodParameter = parameterContext.resolvedMethodParameter();
-    ResolvedType parameterType = resolvedMethodParameter.getResolvedParameterType();
+    ResolvedType parameterType = resolvedMethodParameter.getParameterType();
     parameterType = parameterContext.alternateFor(parameterType);
 
     //Multi-part file trumps any other annotations
     if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
       return "form";
     }
-    Annotation[] methodAnnotations = methodParameter.getParameterAnnotations();
-    for (Annotation annotation : methodAnnotations) {
-      if (annotation instanceof PathVariable) {
-        return "path";
-      } else if (annotation instanceof ModelAttribute) {
-        return queryOrForm(parameterContext.getOperationContext());
-      } else if (annotation instanceof RequestBody) {
-        return "body";
-      } else if (annotation instanceof RequestParam) {
-        return queryOrForm(parameterContext.getOperationContext());
-      } else if (annotation instanceof RequestHeader) {
-        return "header";
-      } else if (annotation instanceof RequestPart) {
-          return "form";
-      }
+    if (resolvedMethodParameter.hasParameterAnnotation(PathVariable.class)) {
+      return "path";
+    } else if (resolvedMethodParameter.hasParameterAnnotation(ModelAttribute.class)) {
+      return queryOrForm(parameterContext.getOperationContext());
+    } else if (resolvedMethodParameter.hasParameterAnnotation(RequestBody.class)) {
+      return "body";
+    } else if (resolvedMethodParameter.hasParameterAnnotation(RequestParam.class)) {
+      return queryOrForm(parameterContext.getOperationContext());
+    } else if (resolvedMethodParameter.hasParameterAnnotation(RequestHeader.class)) {
+      return "header";
+    } else if (resolvedMethodParameter.hasParameterAnnotation(RequestPart.class)) {
+        return "form";
     }
-    if (methodAnnotations.length == 0) {
+    if (!resolvedMethodParameter.hasParameterAnnotations()) {
       return queryOrForm(parameterContext.getOperationContext());
     }
     return "body";

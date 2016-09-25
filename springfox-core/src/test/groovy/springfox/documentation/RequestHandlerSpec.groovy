@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,17 +21,21 @@ package springfox.documentation
 
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import spock.lang.Ignore
 import spock.lang.Specification
+import springfox.documentation.builders.MockRequestHandler
 
+@Ignore("Because this needs to be moved to implementations")
 class RequestHandlerSpec extends Specification {
   def "tests getters and setters" (){
     given:
       def reqMapping = new RequestMappingInfo(null,null,null,null,null,null, null)
-      RequestHandler sut = new RequestHandler(reqMapping, Mock(HandlerMethod))
+      RequestHandler sut = new MockRequestHandler(reqMapping, Mock(HandlerMethod))
     expect:
       sut.with {
-        getRequestMapping()
+        getPatternsCondition()
         getHandlerMethod()
+        getRequestMapping()
       }
   }
 }

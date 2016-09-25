@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,16 +27,12 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
-import static org.springframework.core.annotation.AnnotationUtils.*;
-
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationDeprecatedReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
-    Optional<Deprecated> annotation = Optional.fromNullable(getAnnotation(
-        context.getHandlerMethod().getMethod(),
-        Deprecated.class));
+    Optional<Deprecated> annotation = context.findAnnotation(Deprecated.class);
     context.operationBuilder().deprecated(String.valueOf(annotation.isPresent()));
   }
 

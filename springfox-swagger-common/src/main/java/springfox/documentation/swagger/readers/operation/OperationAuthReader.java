@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.builders.AuthorizationScopeBuilder;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
@@ -52,7 +51,6 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
     Optional<SecurityContext> securityContext = context.securityContext();
 
-    HandlerMethod handlerMethod = context.getHandlerMethod();
     String requestMappingPattern = context.requestMappingPattern();
     List<SecurityReference> securityReferences = newArrayList();
 
@@ -60,10 +58,10 @@ public class OperationAuthReader implements OperationBuilderPlugin {
       securityReferences = securityContext.get().securityForPath(requestMappingPattern);
     }
 
-    ApiOperation apiOperationAnnotation = handlerMethod.getMethodAnnotation(ApiOperation.class);
+    Optional<ApiOperation> apiOperationAnnotation = context.findAnnotation(ApiOperation.class);
 
-    if (null != apiOperationAnnotation && null != apiOperationAnnotation.authorizations()) {
-      Authorization[] authorizationAnnotations = apiOperationAnnotation.authorizations();
+    if (apiOperationAnnotation.isPresent() && null != apiOperationAnnotation.get().authorizations()) {
+      Authorization[] authorizationAnnotations = apiOperationAnnotation.get().authorizations();
       if (authorizationAnnotations != null
               && authorizationAnnotations.length > 0
               && StringUtils.hasText(authorizationAnnotations[0].value())) {
@@ -98,7 +96,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
       }
     }
     if (securityReferences != null) {
-      LOG.debug("Authorization count {} for method {}", securityReferences.size(), handlerMethod.getMethod().getName());
+      LOG.debug("Authorization count {} for method {}", securityReferences.size(), context.getName());
       context.operationBuilder().authorizations(securityReferences);
     }
   }

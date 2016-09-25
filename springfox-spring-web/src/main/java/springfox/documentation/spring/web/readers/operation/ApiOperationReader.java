@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.service.Operation;
@@ -59,12 +57,9 @@ public class ApiOperationReader implements OperationReader {
 //  @Cacheable(value = "operations", keyGenerator = OperationsKeyGenerator.class)
   public List<Operation> read(RequestMappingContext outerContext) {
 
-    RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
-    String requestMappingPattern = outerContext.getRequestMappingPattern();
-    RequestMethodsRequestCondition requestMethodsRequestCondition = requestMappingInfo.getMethodsCondition();
     List<Operation> operations = newArrayList();
 
-    Set<RequestMethod> requestMethods = requestMethodsRequestCondition.getMethods();
+    Set<RequestMethod> requestMethods = outerContext.getMethodsCondition();
     Set<RequestMethod> supportedMethods = supportedMethods(requestMethods);
 
     //Setup response message list
@@ -72,10 +67,8 @@ public class ApiOperationReader implements OperationReader {
     for (RequestMethod httpRequestMethod : supportedMethods) {
       OperationContext operationContext = new OperationContext(new OperationBuilder(nameGenerator),
           httpRequestMethod,
-          outerContext.getHandlerMethod(),
-          currentCount,
-          requestMappingInfo,
-          outerContext.getDocumentationContext(), requestMappingPattern);
+          outerContext,
+          currentCount);
 
       Operation operation = pluginsManager.operation(operationContext);
       if (!operation.isHidden()) {

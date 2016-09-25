@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
@@ -35,13 +34,10 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Set;
 
-import static com.google.common.base.Optional.fromNullable;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
-import static org.springframework.core.annotation.AnnotationUtils.*;
 import static springfox.documentation.service.Tags.*;
-import static springfox.documentation.swagger.annotations.Annotations.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -57,8 +53,7 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     Set<String> defaultTags = tagsProvider.tags(context);
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    SetView<String> tags = Sets.union(operationTags(handlerMethod), controllerTags(handlerMethod));
+    SetView<String> tags = union(operationTags(context), controllerTags(context));
     if (tags.isEmpty()) {
       context.operationBuilder().tags(defaultTags);
     } else {
@@ -66,14 +61,13 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
     }
   }
 
-  private Set<String> controllerTags(HandlerMethod handlerMethod) {
-    Class<?> controller = handlerMethod.getBeanType();
-    Optional<Api> controllerAnnotation = fromNullable(findAnnotation(controller, Api.class));
+  private Set<String> controllerTags(OperationContext context) {
+    Optional<Api> controllerAnnotation = context.findControllerAnnotation(Api.class);
     return controllerAnnotation.transform(tagsFromController()).or(Sets.<String>newHashSet());
   }
 
-  private Set<String> operationTags(HandlerMethod handlerMethod) {
-    Optional<ApiOperation> annotation = findApiOperationAnnotation(handlerMethod.getMethod());
+  private Set<String> operationTags(OperationContext context) {
+    Optional<ApiOperation> annotation = context.findAnnotation(ApiOperation.class);
     return annotation.transform(tagsFromOperation()).or(Sets.<String>newHashSet());
   }
 

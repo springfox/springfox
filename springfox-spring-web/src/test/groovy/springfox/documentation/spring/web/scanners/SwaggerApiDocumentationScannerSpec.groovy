@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import springfox.documentation.builders.ApiListingBuilder
 import springfox.documentation.service.*
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.paths.AbstractPathProvider
 import springfox.documentation.spring.web.paths.RelativePathProvider
@@ -122,7 +123,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
               .configure(contextBuilder)
 
       RequestMappingContext requestMappingContext = new RequestMappingContext(context(),
-          requestMappingInfo("somePath/"), dummyHandlerMethod())
+          new WebMvcRequestHandler(requestMappingInfo("somePath/"), dummyHandlerMethod()))
     and:
       def mockListingRef = Mock(ApiListingReference)
       mockListingRef.path >> "/some/path"

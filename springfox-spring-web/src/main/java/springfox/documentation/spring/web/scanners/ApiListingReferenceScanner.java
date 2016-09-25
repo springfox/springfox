@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import com.google.common.collect.ArrayListMultimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.contexts.ApiSelector;
@@ -33,7 +31,6 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Multimaps.*;
-import static springfox.documentation.spring.web.ControllerNamingUtils.*;
 
 @Component
 public class ApiListingReferenceScanner {
@@ -49,13 +46,11 @@ public class ApiListingReferenceScanner {
     Iterable<RequestHandler> matchingHandlers = from(context.getRequestHandlers())
         .filter(selector.getRequestHandlerSelector());
     for (RequestHandler handler : matchingHandlers) {
-      RequestMappingInfo requestMappingInfo = handler.getRequestMapping();
-      HandlerMethod handlerMethod = handler.getHandlerMethod();
-      ResourceGroup resourceGroup = new ResourceGroup(controllerNameAsGroup(handlerMethod),
-          handlerMethod.getBeanType(), 0);
+      ResourceGroup resourceGroup = new ResourceGroup(handler.groupName(),
+          handler.declaringClass(), 0);
 
       RequestMappingContext requestMappingContext
-          = new RequestMappingContext(context, requestMappingInfo, handlerMethod);
+          = new RequestMappingContext(context, handler);
 
       resourceGroupRequestMappings.put(resourceGroup, requestMappingContext);
     }

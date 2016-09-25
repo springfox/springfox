@@ -33,7 +33,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.service.ResolvedMethodParameter;
 
@@ -44,12 +46,14 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.google.common.base.Optional.*;
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 
 public class HandlerMethodResolver {
 
+  private static final String SPRING4_DISCOVERER = "org.springframework.core.DefaultParameterNameDiscoverer";
+  private final ParameterNameDiscoverer parameterNameDiscover = parameterNameDiscoverer();
   private final TypeResolver typeResolver;
 
   public HandlerMethodResolver(TypeResolver typeResolver) {
@@ -67,7 +71,7 @@ public class HandlerMethodResolver {
     if (Class.class.getName().equals(beanType.getName())) {
       return Optional.absent();
     }
-    return fromNullable(beanType);
+    return Optional.fromNullable(beanType);
   }
 
   public List<ResolvedMethodParameter> methodParameters(final HandlerMethod methodToResolve) {
@@ -150,7 +154,7 @@ public class HandlerMethodResolver {
     return new Function<ResolvedMethod, ResolvedType>() {
       @Override
       public ResolvedType apply(ResolvedMethod input) {
-        return fromNullable(input.getReturnType()).or(resolver.resolve(Void.TYPE));
+        return Optional.fromNullable(input.getReturnType()).or(resolver.resolve(Void.TYPE));
       }
     };
   }
@@ -162,7 +166,10 @@ public class HandlerMethodResolver {
         List<ResolvedMethodParameter> parameters = newArrayList();
         MethodParameter[] methodParameters = methodToResolve.getMethodParameters();
         for (int i = 0; i < input.getArgumentCount(); i++) {
-          parameters.add(new ResolvedMethodParameter(methodParameters[i], input.getArgumentType(i)));
+          parameters.add(new ResolvedMethodParameter(
+              discoveredName(methodParameters[i]).or(String.format("param%s", i)),
+              methodParameters[i],
+              input.getArgumentType(i)));
         }
         return parameters;
       }
@@ -245,5 +252,25 @@ public class HandlerMethodResolver {
       returnType = typeResolver.resolve(Void.class);
     }
     return returnType;
+  }
+
+
+  private Optional<String> discoveredName(MethodParameter methodParameter) {
+    String[] discoveredNames = parameterNameDiscover.getParameterNames(methodParameter.getMethod());
+    int discoveredNameCount = Optional.fromNullable(discoveredNames).or(new String[0]).length;
+    return methodParameter.getParameterIndex() < discoveredNameCount
+           ? Optional.fromNullable(emptyToNull(discoveredNames[methodParameter.getParameterIndex()]))
+           : Optional.fromNullable(methodParameter.getParameterName());
+  }
+
+
+  private ParameterNameDiscoverer parameterNameDiscoverer() {
+    ParameterNameDiscoverer dicoverer;
+    try {
+      dicoverer = (ParameterNameDiscoverer) Class.forName(SPRING4_DISCOVERER).newInstance();
+    } catch (Exception e) {
+      dicoverer = new LocalVariableTableParameterNameDiscoverer();
+    }
+    return dicoverer;
   }
 }

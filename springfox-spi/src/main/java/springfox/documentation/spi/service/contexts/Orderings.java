@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ package springfox.documentation.spi.service.contexts;
 
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
+import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListingReference;
@@ -101,8 +102,7 @@ public class Orderings {
   }
 
   private static String qualifiedMethodName(RequestMappingContext context) {
-    return String.format("%s.%s", context.getHandlerMethod().getBeanType().getName(),
-        context.getHandlerMethod().getMethod().getName());
+    return String.format("%s.%s", context.getGroupName(), context.getName());
   }
 
 
@@ -110,10 +110,14 @@ public class Orderings {
     return Ordering.from(new Comparator<RequestHandler>() {
       @Override
       public int compare(RequestHandler first, RequestHandler second) {
-        return first.getRequestMapping().getPatternsCondition().toString()
-            .compareTo(second.getRequestMapping().getPatternsCondition().toString());
+        return patternsCondition(first).toString()
+            .compareTo(patternsCondition(second).toString());
       }
     });
+  }
+
+  static PatternsRequestCondition patternsCondition(RequestHandler handler) {
+    return handler.getPatternsCondition();
   }
 
   public static Ordering<? super DocumentationPlugin> pluginOrdering() {

@@ -19,13 +19,13 @@
 
 package springfox.documentation.swagger.readers.parameter;
 
-import com.google.common.annotations.VisibleForTesting;
+import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import io.swagger.annotations.ApiParam;
-import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
@@ -36,7 +36,6 @@ import springfox.documentation.swagger.schema.ApiModelProperties;
 
 import static com.google.common.base.Strings.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
-import static springfox.documentation.swagger.readers.parameter.ParameterAnnotationReader.*;
 
 @Component("swaggerParameterDescriptionReader")
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -44,11 +43,10 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
 
   @Override
   public void apply(ParameterContext context) {
-    MethodParameter methodParameter = context.methodParameter();
-    Optional<ApiParam> apiParam = findApiParam(methodParameter);
+    Optional<ApiParam> apiParam = context.resolvedMethodParameter().findAnnotation(ApiParam.class);
     context.parameterBuilder()
         .allowableValues(allowableValues(
-            methodParameter,
+            context.resolvedMethodParameter().getParameterType(),
             apiParam.transform(toAllowableValue()).or("")));
     if (apiParam.isPresent()) {
       context.parameterBuilder().name(emptyToNull(apiParam.get().name()));
@@ -60,11 +58,6 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
     }
   }
 
-  @VisibleForTesting
-  Optional<ApiParam> findApiParam(MethodParameter methodParameter) {
-    return apiParam(methodParameter);
-  }
-
   private Function<ApiParam, String> toAllowableValue() {
     return new Function<ApiParam, String>() {
       @Override
@@ -74,16 +67,16 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
     };
   }
 
-  private AllowableValues allowableValues(MethodParameter methodParameter, String allowableValueString) {
+  private AllowableValues allowableValues(ResolvedType parameterType, String allowableValueString) {
     AllowableValues allowableValues = null;
     if (!isNullOrEmpty(allowableValueString)) {
       allowableValues = ApiModelProperties.allowableValueFromString(allowableValueString);
     } else {
-      if (methodParameter.getParameterType().isEnum()) {
-        allowableValues = Enums.allowableValues(methodParameter.getParameterType());
+      if (parameterType.getErasedType().isEnum()) {
+        allowableValues = Enums.allowableValues(parameterType.getErasedType());
       }
-      if (methodParameter.getParameterType().isArray()) {
-        allowableValues = Enums.allowableValues(methodParameter.getParameterType().getComponentType());
+      if (Collections.isContainerType(parameterType)) {
+        allowableValues = Enums.allowableValues(Collections.collectionElementType(parameterType).getErasedType());
       }
     }
     return allowableValues;

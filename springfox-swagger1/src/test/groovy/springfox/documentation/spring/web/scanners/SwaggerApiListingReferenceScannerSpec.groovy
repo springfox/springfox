@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import springfox.documentation.RequestHandler
 import springfox.documentation.annotations.ApiIgnore
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spring.web.SpringGroupingStrategy
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController
 import springfox.documentation.spring.web.mixins.AccessorAssertions
@@ -77,8 +78,8 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
       requestHandlers =
               [
-                      new RequestHandler(businessRequestMappingInfo, dummyHandlerMethod()),
-                      new RequestHandler(accountsRequestMappingInfo, dummyHandlerMethod())
+                  new WebMvcRequestHandler(businessRequestMappingInfo, dummyHandlerMethod()),
+                  new WebMvcRequestHandler(accountsRequestMappingInfo, dummyHandlerMethod())
               ]
 
       contextBuilder.requestHandlers(requestHandlers)
@@ -99,12 +100,12 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     given:
 
       requestHandlers = [
-          new RequestHandler(requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
       ]
 
     when:
@@ -122,12 +123,12 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
   def "grouping of listing references using Class or Api Grouping Strategy"() {
     given:
       requestHandlers = [
-          new RequestHandler(requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
-          new RequestHandler(requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
       ]
 
     when:

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,9 +22,7 @@ package springfox.documentation.spring.web.scanners;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.ApiSelector;
@@ -57,14 +55,14 @@ public class ApiDescriptionReader {
   }
 
   public List<ApiDescription> read(RequestMappingContext outerContext) {
-    RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
-    HandlerMethod handlerMethod = outerContext.getHandlerMethod();
-    PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
+//    RequestMappingInfo requestMappingInfo = outerContext.getRequestMappingInfo();
+//    HandlerMethod handlerMethod = outerContext.getHandlerMethod();
+    PatternsRequestCondition patternsCondition = outerContext.getPatternsCondition();
     ApiSelector selector = outerContext.getDocumentationContext().getApiSelector();
 
     List<ApiDescription> apiDescriptionList = newArrayList();
     for (String path : matchingPaths(selector, patternsCondition)) {
-      String methodName = handlerMethod.getMethod().getName();
+      String methodName = outerContext.getName();
       RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
 
       List<Operation> operations = operationReader.read(operationContext);
@@ -76,7 +74,7 @@ public class ApiDescriptionReader {
             .description(methodName)
             .hidden(false);
         ApiDescription apiDescription = operationContext.apiDescriptionBuilder().build();
-        lookup.add(outerContext.getHandlerMethod().getMethod(), apiDescription);
+        lookup.add(outerContext.key(), apiDescription);
         apiDescriptionList.add(apiDescription);
       }
     }

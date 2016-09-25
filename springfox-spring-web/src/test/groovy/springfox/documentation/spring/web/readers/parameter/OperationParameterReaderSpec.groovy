@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,9 +22,7 @@ package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import org.springframework.validation.BindingResult
-import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Unroll
-import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
@@ -36,7 +34,6 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 
 import javax.servlet.ServletContext
@@ -65,7 +62,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
     def expander = new ModelAttributeParameterExpander(new FieldProvider(typeResolver))
     expander.pluginsManager = pluginsManager
-    sut = new OperationParameterReader(typeResolver, expander)
+    sut = new OperationParameterReader(expander)
     sut.pluginsManager = pluginsManager
   }
 
@@ -79,9 +76,11 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   @Unroll
   def "Should ignore ignorables"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
+      OperationContext operationContext = operationContext(
+          context(),
+          handlerMethod,
+          0,
+          requestMappingInfo("/somePath"))
 
     when:
       sut.apply(operationContext)
@@ -100,9 +99,12 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should expand ModelAttribute request params"() {
     given:
       plugin.directModelSubstitute(LocalDateTime, String)
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, dummyHandlerMethod('methodWithModelAttribute', Example.class), 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
+      OperationContext operationContext =
+          operationContext(
+              context(),
+              dummyHandlerMethod('methodWithModelAttribute', Example .class),
+              0,
+              requestMappingInfo("/somePath"))
 
     when:
       sut.apply(operationContext)
@@ -149,9 +151,12 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should expand ModelAttribute request param if param has treeish field"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class), 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
+      OperationContext operationContext =
+          operationContext(
+              context(),
+              dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class),
+              0,
+              requestMappingInfo("/somePath"))
 
     when:
       sut.apply(operationContext)
@@ -166,9 +171,8 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should not expand unannotated request params"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
+      OperationContext operationContext =
+          operationContext(context(), handlerMethod, 0, requestMappingInfo("/somePath"))
 
     when:
       sut.apply(operationContext)
@@ -183,8 +187,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "OperationParameterReader supports all documentationTypes"() {
     given:
-      def sut = new OperationParameterReader(new TypeResolver(), Mock(ModelAttributeParameterExpander)
-      )
+      def sut = new OperationParameterReader(Mock(ModelAttributeParameterExpander))
       sut.pluginsManager = defaultWebPlugins()
     expect:
       sut.supports(DocumentationType.SPRING_WEB)

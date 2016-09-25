@@ -21,7 +21,6 @@ package springfox.documentation.swagger.readers.parameter;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import io.swagger.annotations.ApiParam;
 import org.springframework.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
@@ -32,11 +31,6 @@ import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 
 public class ParameterAnnotationReader {
-
-  public static Optional<ApiParam> apiParam(MethodParameter methodParameter) {
-    return fromNullable(methodParameter.getParameterAnnotation(ApiParam.class))
-        .or(fromHierarchy(methodParameter, ApiParam.class));
-  }
 
   public static <A extends Annotation> Optional<A> fromHierarchy(
       MethodParameter methodParameter,

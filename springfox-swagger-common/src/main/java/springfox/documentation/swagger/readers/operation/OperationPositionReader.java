@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.readers.operation;
 
+import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,10 +38,10 @@ public class OperationPositionReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {
-    ApiOperation apiOperation = context.getHandlerMethod().getMethodAnnotation(ApiOperation.class);
-    if (null != apiOperation && apiOperation.position() > 0) {
-      context.operationBuilder().position(apiOperation.position());
-      log.debug("Added operation at position: {}", apiOperation.position());
+    Optional<ApiOperation> apiOperation = context.findAnnotation(ApiOperation.class);
+    if (apiOperation.isPresent() && apiOperation.get().position() > 0) {
+      context.operationBuilder().position(apiOperation.get().position());
+      log.debug("Added operation at position: {}", apiOperation.get().position());
     }
   }
 

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,13 +19,12 @@
 
 package springfox.documentation.swagger.readers.operation;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.Parameter;
@@ -34,7 +33,6 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import static springfox.documentation.schema.Types.*;
@@ -57,12 +55,10 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
   }
 
   protected List<Parameter> readParameters(OperationContext context) {
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    Method method = handlerMethod.getMethod();
-    ApiImplicitParam annotation = AnnotationUtils.findAnnotation(method, ApiImplicitParam.class);
+    Optional<ApiImplicitParam> annotation = context.findAnnotation(ApiImplicitParam.class);
     List<Parameter> parameters = Lists.newArrayList();
-    if (null != annotation) {
-      parameters.add(OperationImplicitParameterReader.implicitParameter(annotation));
+    if (annotation.isPresent()) {
+      parameters.add(OperationImplicitParameterReader.implicitParameter(annotation.get()));
     }
     return parameters;
   }

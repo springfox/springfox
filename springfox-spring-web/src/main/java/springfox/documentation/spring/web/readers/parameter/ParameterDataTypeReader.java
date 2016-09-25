@@ -39,8 +39,6 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
-import java.lang.annotation.Annotation;
-
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -69,22 +67,19 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     ResolvedMethodParameter methodParameter = context.resolvedMethodParameter();
-    ResolvedType parameterType = methodParameter.getResolvedParameterType();
+    ResolvedType parameterType = methodParameter.getParameterType();
     parameterType = context.alternateFor(parameterType);
-    Annotation[] methodAnnotations = methodParameter.getMethodParameter().getParameterAnnotations();
     ModelReference modelRef = null;
-    for (Annotation annotation : methodAnnotations) {
-      if (annotation instanceof PathVariable && treatAsAString(parameterType)) {
-        parameterType = resolver.resolve(String.class);
-        modelRef = new ModelRef("string");
-      } else if (annotation instanceof RequestParam && isMapType(parameterType)) {
-        modelRef = new ModelRef("", new ModelRef("string"), true);
-      } else if (annotation instanceof RequestParam && treatRequestParamAsString(parameterType)) {
-        parameterType = resolver.resolve(String.class);
-        modelRef = new ModelRef("string");
-      }
+    if (methodParameter.hasParameterAnnotation(PathVariable.class) && treatAsAString(parameterType)) {
+      parameterType = resolver.resolve(String.class);
+      modelRef = new ModelRef("string");
+    } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && isMapType(parameterType)) {
+      modelRef = new ModelRef("", new ModelRef("string"), true);
+    } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && treatRequestParamAsString(parameterType)) {
+      parameterType = resolver.resolve(String.class);
+      modelRef = new ModelRef("string");
     }
-    if (methodAnnotations.length == 0) {
+    if (!methodParameter.hasParameterAnnotations()) {
       String typeName = typeNameFor(parameterType.getErasedType());
       if (isBaseType(typeName)) {
         modelRef = new ModelRef(typeName);

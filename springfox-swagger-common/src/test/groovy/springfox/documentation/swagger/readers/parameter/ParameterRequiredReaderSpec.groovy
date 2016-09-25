@@ -19,9 +19,8 @@
 
 package springfox.documentation.swagger.readers.parameter
 
-import com.google.common.base.Optional
+import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
-import org.springframework.core.MethodParameter
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ResolvedMethodParameter
@@ -49,11 +48,11 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
   }
 
   def setupParameterContext(paramAnnotation) {
-    MethodParameter methodParameter = Mock(MethodParameter)
-    methodParameter.getParameterAnnotation(ApiParam) >> paramAnnotation
-    methodParameter.getParameterType() >> Object.class
-    def resolvedMethodParameter = Mock(ResolvedMethodParameter)
-    resolvedMethodParameter.methodParameter >> methodParameter
+    def resolvedMethodParameter = new ResolvedMethodParameter(
+        0,
+        "",
+        [paramAnnotation],
+        new TypeResolver().resolve(Object.class))
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     new ParameterContext(
         resolvedMethodParameter,
@@ -65,10 +64,6 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
 
   def stubbedParamBuilder(ApiParam apiParamAnnotation) {
     new ApiParamParameterBuilder() {
-      @Override
-      def Optional<ApiParam> findApiParam(MethodParameter methodParameter) {
-        Optional.fromNullable(apiParamAnnotation)
-      }
     }
   }
 }

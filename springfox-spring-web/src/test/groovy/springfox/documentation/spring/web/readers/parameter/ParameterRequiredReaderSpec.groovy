@@ -19,10 +19,12 @@
 
 package springfox.documentation.spring.web.readers.parameter
 
+import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.ValueConstants
+import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -37,14 +39,15 @@ import java.lang.annotation.Annotation
 @Mixin([RequestMappingSupport])
 class ParameterRequiredReaderSpec extends DocumentationContextSpec implements ParameterAnnotationSupport {
 
-  def "parameters required using default reader"() {
+  @Unroll
+  def "parameters required #paramAnnotations using default reader"() {
     given:
       MethodParameter methodParameter = Mock(MethodParameter)
       methodParameter.getParameterAnnotations() >> (paramAnnotations as Annotation[])
       methodParameter.getParameterType() >> Object.class
       methodParameter.getMethodAnnotation(PathVariable.class) >> paramAnnotations.find { it instanceof PathVariable }
-      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
-      resolvedMethodParameter.methodParameter >> methodParameter
+      def resolvedMethodParameter =
+          new ResolvedMethodParameter(0, "", paramAnnotations, new TypeResolver().resolve(Object.class))
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
           context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
     when:
@@ -78,10 +81,11 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
 
   def "should detect java.util.Optional parameters"() {
     given:
-      MethodParameter methodParameter = Mock(MethodParameter)
-      methodParameter.getParameterAnnotations() >> (paramAnnotations as Annotation[])
-      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
-      resolvedMethodParameter.methodParameter >> methodParameter
+      def resolvedMethodParameter = new ResolvedMethodParameter(
+        0,
+        "",
+        paramAnnotations,
+        new TypeResolver().resolve(Object.class))
       ParameterContext parameterContext = new ParameterContext(
           resolvedMethodParameter,
           new ParameterBuilder(),
@@ -92,7 +96,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
     when:
       def operationCommand = new ParameterRequiredReader() {
         @Override
-        def boolean isOptional(MethodParameter input) {
+        def boolean isOptional(ResolvedMethodParameter input) {
           true
         }
       }

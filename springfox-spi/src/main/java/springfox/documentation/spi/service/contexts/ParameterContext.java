@@ -51,8 +51,14 @@ public class ParameterContext {
     return resolvedMethodParameter;
   }
 
+  /**
+   * @deprecated Use {@link ParameterContext#resolvedMethodParameter()} instead
+   * @since 2.5.0 this has been deprecated
+   * @return
+   */
+  @Deprecated
   public MethodParameter methodParameter() {
-    return resolvedMethodParameter.getMethodParameter();
+    throw new UnsupportedOperationException("Please use resolvedMethodParameter instead");
   }
 
   public ParameterBuilder parameterBuilder() {

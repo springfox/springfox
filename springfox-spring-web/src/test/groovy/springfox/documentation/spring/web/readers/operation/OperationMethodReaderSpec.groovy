@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ package springfox.documentation.spring.web.readers.operation
 
 import org.springframework.http.HttpMethod
 import org.springframework.web.bind.annotation.RequestMethod
-import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -31,11 +30,14 @@ class OperationMethodReaderSpec extends DocumentationContextSpec {
 
 
   def "should return api method when using default reader"() {
-
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              currentHttpMethod, handlerMethod, 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
+      OperationContext operationContext =
+        operationContext(
+            context(),
+            dummyHandlerMethod('methodWithListOfBusinesses'),
+            0,
+            requestMappingInfo("/somePath"),
+            currentHttpMethod)
 
       def operationMethodReader = new DefaultOperationReader();
     when:

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class ApiSelectorBuilder {
     return new Predicate<RequestHandler>() {
       @Override
       public boolean apply(RequestHandler input) {
-        return Iterables.any(input.getRequestMapping().getPatternsCondition().getPatterns(), pathSelector);
+        return Iterables.any(input.getPatternsCondition().getPatterns(), pathSelector);
       }
     };
   }

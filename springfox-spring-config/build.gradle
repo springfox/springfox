@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-  compile("org.springframework.boot:spring-boot-starter-web:1.3.5.RELEASE")
+  compile("org.springframework.boot:spring-boot-starter-web:${springBoot}")
   compile(project(path: ':springfox-swagger1'))
   compile(project(path: ':springfox-petstore'))
   compile(project(path: ':springfox-swagger2'))

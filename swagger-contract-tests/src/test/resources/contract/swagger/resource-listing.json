@@ -27,18 +27,8 @@
       "position": 0
     },
     {
-      "description": "Endpoint Mvc Adapter",
-      "path": "/default/endpoint-mvc-adapter",
-      "position": 0
-    },
-    {
       "description": "Service that return enums",
       "path": "/default/enum-service",
-      "position": 0
-    },
-    {
-      "description": "Environment Mvc Endpoint",
-      "path": "/default/environment-mvc-endpoint",
       "position": 0
     },
     {
@@ -52,18 +42,13 @@
       "position": 0
     },
     {
-      "description": "Health Mvc Endpoint",
-      "path": "/default/health-mvc-endpoint",
+      "description": "Groovy Service",
+      "path": "/default/groovy-service",
       "position": 0
     },
     {
       "description": "Inherited Service Impl",
       "path": "/default/inherited-service-impl",
-      "position": 0
-    },
-    {
-      "description": "Metrics Mvc Endpoint",
-      "path": "/default/metrics-mvc-endpoint",
       "position": 0
     },
     {
@@ -80,14 +65,15 @@
       "description": "Root Controller",
       "path": "/default/root-controller",
       "position": 0
-    },
-    {
-      "description": "Groovy Service",
-      "path": "/default/groovy-service",
-      "position": 0
     }
   ],
   "authorizations": {
+    "apiKey": {
+      "keyname": "api_key",
+      "name": "api_key",
+      "passAs": "header",
+      "type": "apiKey"
+    },
     "oauth2": {
       "grantTypes": {
         "implicit": {
@@ -109,12 +95,6 @@
         }
       ],
       "type": "oauth2"
-    },
-    "apiKey": {
-      "keyname": "api_key",
-      "name": "api_key",
-      "passAs": "header",
-      "type": "apiKey"
     }
   },
   "info": {

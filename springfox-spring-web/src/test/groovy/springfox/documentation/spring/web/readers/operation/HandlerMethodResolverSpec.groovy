@@ -45,7 +45,7 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
     given:
       def sut = new HandlerMethodResolver(new TypeResolver())
       def resolvedParameters = sut.methodParameters(handlerMethod)
-              .collect() { it.resolvedParameterType.getErasedType().simpleName }
+              .collect() { it.parameterType.getErasedType().simpleName }
               .sort()
       def resolvedReturnType = sut.methodReturnType(handlerMethod).erasedType.simpleName
     expect:
@@ -62,7 +62,7 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
     given:
       def sut = new HandlerMethodResolver(new TypeResolver())
       def resolvedParameters = sut.methodParameters(handlerMethod)
-          .collect() { it.resolvedParameterType.getErasedType().simpleName }
+          .collect() { it.parameterType.getErasedType().simpleName }
           .sort()
       def resolvedReturnType = sut.methodReturnType(handlerMethod).erasedType.simpleName
     expect:

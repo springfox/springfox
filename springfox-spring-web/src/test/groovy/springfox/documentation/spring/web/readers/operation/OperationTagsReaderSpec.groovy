@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,8 +18,7 @@
  */
 
 package springfox.documentation.spring.web.readers.operation
-import org.springframework.web.bind.annotation.RequestMethod
-import springfox.documentation.builders.OperationBuilder
+
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
@@ -29,9 +28,8 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 class OperationTagsReaderSpec extends DocumentationContextSpec {
   def "should have correct tags"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-              RequestMethod.GET, handlerMethod, 0, requestMappingInfo("/somePath"),
-              context(), "/anyPath")
+      OperationContext operationContext =
+        operationContext(context(), handlerMethod)
 
     and:
       OperationTagsReader sut = new OperationTagsReader(new DefaultTagsProvider())

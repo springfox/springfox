@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -40,7 +39,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Map;
@@ -72,9 +70,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {
-    HandlerMethod handlerMethod = context.getHandlerMethod();
     context.operationBuilder()
-        .responseMessages(read(handlerMethod, context));
+        .responseMessages(read(context));
 
   }
 
@@ -83,9 +80,9 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     return SwaggerPluginSupport.pluginDoesApply(delimiter);
   }
 
-  protected Set<ResponseMessage> read(HandlerMethod handlerMethod, OperationContext context) {
-    ResolvedType defaultResponse = new HandlerMethodResolver(typeResolver).methodReturnType(handlerMethod);
-    Optional<ApiOperation> operationAnnotation = findApiOperationAnnotation(handlerMethod.getMethod());
+  protected Set<ResponseMessage> read(OperationContext context) {
+    ResolvedType defaultResponse = context.getReturnType();
+    Optional<ApiOperation> operationAnnotation = context.findAnnotation(ApiOperation.class);
     Optional<ResolvedType> operationResponse =
         operationAnnotation.transform(resolvedTypeFromOperation(typeResolver, defaultResponse));
     Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.transform(responseHeaders());
@@ -94,7 +91,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       defaultHeaders.putAll(headers(defaultResponseHeaders.get()));
     }
 
-    List<ApiResponses> allApiResponses = findApiResponsesAnnotations(handlerMethod.getMethod());
+    List<ApiResponses> allApiResponses = context.findAllAnnotations(ApiResponses.class);
     Set<ResponseMessage> responseMessages = newHashSet();
 
     Map<Integer, ApiResponse> seenResponsesByCode = newHashMap();
@@ -142,8 +139,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       ModelReference responseModel = modelRefFactory(modelContext, typeNameExtractor).apply(resolvedType);
       context.operationBuilder().responseModel(responseModel);
       ResponseMessage defaultMessage = new ResponseMessageBuilder()
-          .code(httpStatusCode(handlerMethod))
-          .message(message(handlerMethod))
+          .code(httpStatusCode(context))
+          .message(message(context))
           .responseModel(responseModel)
           .build();
       if (!responseMessages.contains(defaultMessage) && !"void".equals(responseModel.getType())) {

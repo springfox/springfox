@@ -6,7 +6,8 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.7.RELEASE")
+    classpath "io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE"
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.6.RELEASE")
   }
 }
 repositories {
@@ -15,14 +16,11 @@ repositories {
 
 apply plugin: 'war'
 apply plugin: 'spring-boot'
-apply plugin: 'com.ofg.uptodate'
 
 configurations {
   //Logback causing spring boot errors
   all*.exclude group: 'ch.qos.logback'
 }
-
-mainClassName = 'com.foo.Bar'
 
 ext {
   limits = [
@@ -37,11 +35,9 @@ ext {
 
 dependencies {
   compile("org.springframework.boot:spring-boot-starter-web")
-  compile("org.springframework.boot:spring-boot-starter-actuator")
-
 
   testCompile libs.test
-  testCompile 'org.skyscreamer:jsonassert:1.3.0'
+  testCompile "org.skyscreamer:jsonassert:${jsonAssert}"
 
   compile project(':springfox-swagger1')
   compile project(':springfox-swagger2')

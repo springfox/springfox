@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import spock.lang.Ignore
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.controllers.BusinessService
 import springfox.documentation.spring.web.dummy.controllers.PetService
@@ -56,7 +57,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Method return type model"() {
     given:
-      RequestMappingContext context = context(dummyHandlerMethod('methodWithConcreteResponseBody'))
+      RequestMappingContext context = requestMappingContext(dummyHandlerMethod('methodWithConcreteResponseBody'))
 
     when:
       def models = sut.read(context)
@@ -82,8 +83,11 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       item.itemType == null
   }
 
-  def context(HandlerMethod handlerMethod) {
-    return new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
+  def requestMappingContext(HandlerMethod handlerMethod) {
+    return new RequestMappingContext(
+        context(),
+        new WebMvcRequestHandler(requestMappingInfo('/somePath'),
+        handlerMethod))
   }
 
   def "should only generate models for request parameters that are annotated with Springs RequestBody"() {
@@ -93,8 +97,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
               HttpServletResponse.class,
               DummyModels.AnnotatedBusinessModel.class
       )
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-              handlerMethod)
+      RequestMappingContext context = requestMappingContext(handlerMethod)
     when:
       def models = sut.read(context)
 
@@ -112,8 +115,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
                 HttpServletResponse.class,
                 DummyModels.AnnotatedBusinessModel.class
         )
-        RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-                handlerMethod)
+        RequestMappingContext context = requestMappingContext(handlerMethod)
         when:
         def models = sut.read(context)
 
@@ -130,8 +132,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
                 HttpServletResponse.class,
                 DummyModels.AnnotatedBusinessModel.class
         )
-        RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-                handlerMethod)
+        RequestMappingContext context = requestMappingContext(handlerMethod)
         when:
         def models = sut.read(context)
 
@@ -144,7 +145,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def "Generates the correct models when there is a Map object in the input parameter"() {
     given:
       HandlerMethod handlerMethod = handlerMethodIn(PetService, 'echo', Map)
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/echo'), handlerMethod)
+      RequestMappingContext context = requestMappingContext(handlerMethod)
 
     when:
       def models = sut.read(context)
@@ -167,8 +168,10 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     and:
       HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
       RequestMappingContext context =
-              new RequestMappingContext(pluginContext, requestMappingInfo('/businesses/responseEntity/{businessId}'),
-                      handlerMethod )
+              new RequestMappingContext(pluginContext,
+                  new WebMvcRequestHandler(
+                      requestMappingInfo('/businesses/responseEntity/{businessId}'),
+                      handlerMethod))
     when:
       def models = sut.read(context)
 
@@ -182,8 +185,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
               DummyModels.ModelWithSerializeOnlyProperty
       )
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'),
-              handlerMethod)
+      RequestMappingContext context = requestMappingContext(handlerMethod)
 
     when:
       def models = sut.read(context)
@@ -208,7 +210,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
               DummyModels.ModelWithSerializeOnlyProperty
       )
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = requestMappingContext(handlerMethod)
     and:
       def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(),
               new TypeResolver(), defaultWebPlugins())
@@ -232,7 +234,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def "Test to verify issue #283"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestFoobarDto', FoobarDto)
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = requestMappingContext(handlerMethod)
 
     when:
       def models = sut.read(context)
@@ -251,7 +253,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def "Test to verify issue #1196"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestBidrectionalRecursiveTypes', Pirate)
-      RequestMappingContext context = new RequestMappingContext(context(), requestMappingInfo('/somePath'), handlerMethod)
+      RequestMappingContext context = requestMappingContext(handlerMethod)
 
     when:
       def models = sut.read(context)

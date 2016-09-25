@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.SpringGroupingStrategy
+import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.mixins.ApiDescriptionSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
@@ -73,8 +74,9 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
 
       def context = context()
-      RequestMappingContext requestMappingContext = new RequestMappingContext(context, requestMappingInfo,
-              dummyHandlerMethod("methodWithConcreteResponseBody"))
+      RequestMappingContext requestMappingContext = new RequestMappingContext(
+          context,
+          new WebMvcRequestHandler(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
       ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
       resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
@@ -97,8 +99,9 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
 
       def context = context()
-      def requestMappingContext = new RequestMappingContext(context, requestMappingInfo,
-              dummyHandlerMethod("methodWithConcreteResponseBody"))
+      def requestMappingContext = new RequestMappingContext(
+          context,
+          new WebMvcRequestHandler(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
       def resourceGroupRequestMappings = newHashMap()
       resourceGroupRequestMappings.put(new ResourceGroup("businesses", DummyClass), [requestMappingContext])
 

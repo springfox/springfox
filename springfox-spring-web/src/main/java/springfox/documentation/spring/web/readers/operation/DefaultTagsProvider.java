@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,11 +24,10 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 
 import static com.google.common.collect.ImmutableSet.*;
 import static com.google.common.collect.Sets.*;
-import static springfox.documentation.spring.web.ControllerNamingUtils.*;
 
 @Component
 public class DefaultTagsProvider {
   public ImmutableSet<String> tags(OperationContext context) {
-    return copyOf(newHashSet(controllerNameAsGroup(context.getHandlerMethod())));
+    return copyOf(newHashSet(context.getGroupName()));
   }
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ package springfox.documentation.builders;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.RequestHandler;
 
 import java.lang.annotation.Annotation;
@@ -59,7 +58,7 @@ public class RequestHandlerSelectors {
     return new Predicate<RequestHandler>() {
       @Override
       public boolean apply(RequestHandler input) {
-        return null != AnnotationUtils.findAnnotation(input.getHandlerMethod().getMethod(), annotation);
+        return input.isAnnotatedWith(annotation);
       }
     };
   }
@@ -96,7 +95,7 @@ public class RequestHandlerSelectors {
   }
 
   private static Class<?> declaringClass(RequestHandler input) {
-    return input.getHandlerMethod().getMethod().getDeclaringClass();
+    return input.declaringClass();
   }
 
 }

@@ -18,11 +18,16 @@
  */
 
 package springfox.documentation.spring.web.readers.parameter
+
+import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
-import org.springframework.core.MethodParameter
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.method.HandlerMethod
+import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -37,13 +42,8 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 class ParameterReaderSpec extends DocumentationContextSpec {
    def "should set basic properties based on ApiParam annotation or a sensible default"() {
     given:
-      MethodParameter methodParameter = Stub(MethodParameter)
-      methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
-      methodParameter.getParameterAnnotation(RequestParam.class) >> reqParamAnnot
-      methodParameter.getParameterAnnotations() >> [apiParamAnnotation, reqParamAnnot]
-      methodParameter."$springParameterMethod"() >> methodReturnValue
-      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
-      resolvedMethodParameter.methodParameter >> methodParameter
+      def resolvedMethodParameter =
+          new ResolvedMethodParameter(0, "", [apiParamAnnotation, reqParamAnnot], Mock(ResolvedType))
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
           context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
     when:
@@ -58,12 +58,14 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       new ParameterDefaultReader()        | 'defaultValue' | 'none'                | 'any'             | null                                   | reqParam([defaultValue: {-> 'defr' }]) | 'defr'
    }
 
-  def "should set parameter name and description correctly"() {
+  @Unroll
+  def "should set parameter name and description correctly for #methodName"() {
     given:
       def bean = new ParamNameClazzSpecimen()
       def resolvedBeanType = new TypeResolver().resolve(ParamNameClazzSpecimen)
       HandlerMethod method = new HandlerMethod(bean, ParamNameClazzSpecimen.methods.find {it.name.equals(methodName)})
-      def resolvedMethodParameter  = new ResolvedMethodParameter(method.getMethodParameters().first(), resolvedBeanType)
+      def resolvedMethodParameter  = new ResolvedMethodParameter("someName", method.getMethodParameters().first(),
+          resolvedBeanType)
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
         context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
     when:
@@ -77,17 +79,23 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       new ParameterNameReader()           | 'name'         | "method1"    | 'someName'
       new ParameterNameReader()           | 'name'         | "method2"    | 'someName'
       new ParameterNameReader()           | 'name'         | "method3"    | 'ArName'
+      new ParameterNameReader()           | 'name'         | "method4"    | 'header'
+      new ParameterNameReader()           | 'name'         | "method5"    | 'modelAttr'
+      new ParameterNameReader()           | 'name'         | "method6"    | 'pathVar'
   }
 
   class ParamNameClazzSpecimen {
     void method1(String someName) {
-
     }
     void method2(@ApiParam(name = "AnName") String someName) {
-
     }
     void method3(@RequestParam(value = "ArName") String someName) {
-
+    }
+    void method4(@RequestHeader(value = "header") String someName) {
+    }
+    void method5(@ModelAttribute(value = "modelAttr") String someName) {
+    }
+    void method6(@PathVariable(value = "pathVar") String someName) {
     }
   }
 

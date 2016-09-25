@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,14 +29,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.service.ObjectVendorExtension;
 import springfox.documentation.service.StringVendorExtension;
 import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.swagger.annotations.Annotations;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.List;
@@ -53,13 +51,12 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
 
-    HandlerMethod handlerMethod = context.getHandlerMethod();
-    Optional<ApiOperation> apiOperation = Annotations.findApiOperationAnnotation(handlerMethod.getMethod());
+    Optional<ApiOperation> apiOperation = context.findAnnotation(ApiOperation.class);
 
     if (apiOperation.isPresent()) {
       Extension[] extensionsAnnotations = apiOperation.get().extensions();
       List<VendorExtension> extensions = readExtensions(extensionsAnnotations);
-      LOG.debug("Extension count {} for method {}", extensions.size(), handlerMethod.getMethod().getName());
+      LOG.debug("Extension count {} for method {}", extensions.size(), context.getName());
       context.operationBuilder().extensions(extensions);
     }
   }

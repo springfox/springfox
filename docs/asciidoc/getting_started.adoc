@@ -160,6 +160,54 @@ override the default behavior.
  to do exactly that.
 There are plenty of more options to configure the `Docket`. This should provide a good start.
 
+===== Support for Spring Data Rest
+In version greater than 2.6.0, support for spring data rest was added.
+
+NOTE: This is still in ***incubation***.
+
+In order to use it
+
+<1> add the `springfox-data-rest` dependency.
+
+====== Gradle
+[source,groovy]
+[subs="verbatim,attributes"]
+----
+dependencies {
+    compile "io.springfox:springfox-data-rest:{releaseVersion}"
+}
+----
+
+====== Maven
+[source,xml]
+[subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-data-rest</artifactId>
+    <version>{releaseVersion}</version>
+</dependency>
+----
+
+<2> Import the configuration from the `springfox-data-rest` module as shown below
+
+====== java config
+[source,java]
+[subs="verbatim,attributes"]
+----
+//For java config
+@Import({ ... springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class, ...})
+----
+
+====== xml config
+Import the bean in your xml configuration by defining a bean of the following type
+
+[source,xml]
+[subs="verbatim,attributes"]
+----
+<bean class="springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class" />
+----
+
 ===== Support for JSR-303
 In version greater than 2.3.2, support for bean validation annotations was added, specifically for @NotNull, @Min,
 @Max, and @Size.
@@ -173,7 +221,7 @@ In order to use it
 [subs="verbatim,attributes"]
 ----
 dependencies {
-    compile "io.springfox:springfox-bean-validators:2.3.2+"
+    compile "io.springfox:springfox-bean-validators:{releaseVersion}"
 }
 ----
 
@@ -184,7 +232,7 @@ dependencies {
 <dependency>
     <groupId>io.springfox</groupId>
     <artifactId>springfox-bean-validators</artifactId>
-    <version>2.3.2+</version>
+    <version>{releaseVersion}</version>
 </dependency>
 ----
 

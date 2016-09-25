@@ -28,15 +28,16 @@ import com.google.common.collect.Sets;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Set;
 
@@ -47,22 +48,18 @@ import static springfox.documentation.service.MediaTypes.*;
 public class OperationContext {
   private final OperationBuilder operationBuilder;
   private final RequestMethod requestMethod;
-  private final HandlerMethod handlerMethod;
+  private final RequestMappingContext requestContext;
   private final int operationIndex;
-  private final RequestMappingInfo requestMappingInfo;
-  private final DocumentationContext documentationContext;
-  private final String requestMappingPattern;
 
-  public OperationContext(OperationBuilder operationBuilder, RequestMethod requestMethod, HandlerMethod
-      handlerMethod, int operationIndex, RequestMappingInfo requestMappingInfo,
-                          DocumentationContext documentationContext, String requestMappingPattern) {
+  public OperationContext(
+      OperationBuilder operationBuilder,
+      RequestMethod requestMethod,
+      RequestMappingContext requestContext,
+      int operationIndex) {
     this.operationBuilder = operationBuilder;
     this.requestMethod = requestMethod;
-    this.handlerMethod = handlerMethod;
+    this.requestContext = requestContext;
     this.operationIndex = operationIndex;
-    this.requestMappingInfo = requestMappingInfo;
-    this.documentationContext = documentationContext;
-    this.requestMappingPattern = requestMappingPattern;
   }
 
   public OperationBuilder operationBuilder() {
@@ -73,16 +70,12 @@ public class OperationContext {
     return HttpMethod.valueOf(requestMethod.toString());
   }
 
-  public HandlerMethod getHandlerMethod() {
-    return handlerMethod;
-  }
-
   public int operationIndex() {
     return operationIndex;
   }
 
-
   public List<ResponseMessage> getGlobalResponseMessages(String forHttpMethod) {
+    DocumentationContext documentationContext = getDocumentationContext();
     if (documentationContext.getGlobalResponseMessages().containsKey(RequestMethod.valueOf(forHttpMethod))) {
       return documentationContext.getGlobalResponseMessages().get(RequestMethod.valueOf(forHttpMethod));
     }
@@ -90,40 +83,36 @@ public class OperationContext {
   }
 
   public List<Parameter> getGlobalOperationParameters() {
-    return nullToEmptyList(documentationContext.getGlobalRequestParameters());
+    return nullToEmptyList(getDocumentationContext().getGlobalRequestParameters());
   }
 
   public Optional<SecurityContext> securityContext() {
-    return Iterables.tryFind(documentationContext.getSecurityContexts(), pathMatches());
+    return Iterables.tryFind(getDocumentationContext().getSecurityContexts(), pathMatches());
   }
 
   private Predicate<SecurityContext> pathMatches() {
     return new Predicate<SecurityContext>() {
       @Override
       public boolean apply(SecurityContext input) {
-        return input.securityForPath(requestMappingPattern) != null;
+        return input.securityForPath(requestMappingPattern()) != null;
       }
     };
   }
 
   public String requestMappingPattern() {
-    return requestMappingPattern;
-  }
-
-  public RequestMappingInfo getRequestMappingInfo() {
-    return requestMappingInfo;
+    return requestContext.getRequestMappingPattern();
   }
 
   public DocumentationContext getDocumentationContext() {
-    return documentationContext;
+    return requestContext.getDocumentationContext();
   }
 
   public DocumentationType getDocumentationType() {
-    return documentationContext.getDocumentationType();
+    return getDocumentationContext().getDocumentationType();
   }
 
   public AlternateTypeProvider getAlternateTypeProvider() {
-    return documentationContext.getAlternateTypeProvider();
+    return getDocumentationContext().getAlternateTypeProvider();
   }
 
   public ResolvedType alternateFor(ResolvedType resolved) {
@@ -131,20 +120,57 @@ public class OperationContext {
   }
 
   public Set<MediaType> produces() {
-    return Sets.union(requestMappingInfo.getProducesCondition().getProducibleMediaTypes(),
-        toMediaTypes(documentationContext.getProduces()));
+    return Sets.union(requestContext.produces(),
+        toMediaTypes(getDocumentationContext().getProduces()));
   }
 
   public Set<MediaType> consumes() {
-    return Sets.union(requestMappingInfo.getConsumesCondition().getConsumableMediaTypes(),
-        toMediaTypes(documentationContext.getConsumes()));
+    return Sets.union(requestContext.consumes(),
+        toMediaTypes(getDocumentationContext().getConsumes()));
   }
 
   public ImmutableSet<Class> getIgnorableParameterTypes() {
-    return ImmutableSet.copyOf(documentationContext.getIgnorableParameterTypes());
+    return ImmutableSet.copyOf(getDocumentationContext().getIgnorableParameterTypes());
   }
 
   public GenericTypeNamingStrategy getGenericsNamingStrategy() {
-    return documentationContext.getGenericsNamingStrategy();
+    return getDocumentationContext().getGenericsNamingStrategy();
+  }
+
+  public Set<NameValueExpression<String>> headers() {
+    return requestContext.headers();
+  }
+
+  public Set<NameValueExpression<String>> params() {
+    return requestContext.params();
+  }
+
+  public String getName() {
+    return requestContext.getName();
+  }
+
+  public String getGroupName() {
+    return requestContext.getGroupName();
+  }
+
+  public List<ResolvedMethodParameter> getParameters() {
+    return requestContext.getParameters();
+  }
+
+
+  public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
+    return requestContext.findAnnotation(annotation);
+  }
+
+  public ResolvedType getReturnType() {
+    return requestContext.getReturnType();
+  }
+
+  public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
+    return requestContext.findControllerAnnotation(annotation);
+  }
+
+  public <T extends Annotation> List<T > findAllAnnotations(Class<T> annotation) {
+    return requestContext.findAnnotations(annotation);
   }
 }

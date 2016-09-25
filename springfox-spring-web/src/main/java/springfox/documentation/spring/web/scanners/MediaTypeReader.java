@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ import springfox.documentation.spi.service.ApiListingBuilderPlugin;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.util.List;
 import java.util.Set;
@@ -90,11 +89,9 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
 
   private boolean handlerMethodHasFileParameter(OperationContext context) {
 
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(typeResolver);
-    List<ResolvedMethodParameter> methodParameters = handlerMethodResolver.methodParameters(context.getHandlerMethod());
-
+    List<ResolvedMethodParameter> methodParameters = context.getParameters();
     for (ResolvedMethodParameter resolvedMethodParameter : methodParameters) {
-      if (MultipartFile.class.isAssignableFrom(resolvedMethodParameter.getResolvedParameterType().getErasedType())) {
+      if (MultipartFile.class.isAssignableFrom(resolvedMethodParameter.getParameterType().getErasedType())) {
         return true;
       }
     }

@@ -21,7 +21,6 @@ package springfox.documentation.swagger.readers.parameter
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.base.Optional
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import spock.lang.Unroll
@@ -44,7 +43,7 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements A
       methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
       methodParameter.getParameterType() >> paramType
       ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
-      ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter, resolvedType)
+      ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter("", methodParameter, resolvedType)
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
           context(), genericNamingStrategy, Mock(OperationContext))
@@ -70,10 +69,6 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements A
 
   def stubbedParamBuilder(ApiParam apiParamAnnotation) {
     new ApiParamParameterBuilder() {
-      @Override
-      def Optional<ApiParam> findApiParam(MethodParameter methodParameter) {
-        Optional.fromNullable(apiParamAnnotation)
-      }
     }
   }
 }

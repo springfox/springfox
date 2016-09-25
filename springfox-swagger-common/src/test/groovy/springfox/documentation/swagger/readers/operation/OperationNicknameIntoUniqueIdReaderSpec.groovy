@@ -1,19 +1,34 @@
+/*
+ *
+ *  Copyright 2016 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
 package springfox.documentation.swagger.readers.operation
-import org.springframework.web.bind.annotation.RequestMethod
-import springfox.documentation.builders.OperationBuilder
+
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 @Mixin([RequestMappingSupport])
 class OperationNicknameIntoUniqueIdReaderSpec extends DocumentationContextSpec {
   def "should set various unique operation id based on swagger annotation"() {
     given:
-      OperationContext operationContext = new OperationContext(new OperationBuilder(new CachingOperationNameGenerator()),
-        RequestMethod.GET, handlerMethod, 0, requestMappingInfo("somePath"),
-        context(), "/anyPath")
+      OperationContext operationContext =
+        operationContext(context(), handlerMethod)
     and:
       def sut = new OperationNicknameIntoUniqueIdReader()
     when:

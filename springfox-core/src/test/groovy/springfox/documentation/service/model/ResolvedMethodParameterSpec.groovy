@@ -21,6 +21,9 @@ package springfox.documentation.service.model
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.core.MethodParameter
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
 import spock.lang.Specification
 import springfox.documentation.service.ResolvedMethodParameter
 
@@ -29,10 +32,73 @@ class ResolvedMethodParameterSpec extends Specification {
     given:
       def resolved = new TypeResolver().resolve(String)
       def methodParameter = Mock(MethodParameter)
+    and:
+      methodParameter.parameterIndex >> 1
+      methodParameter.parameterAnnotations >> []
     when:
-      def sut = new ResolvedMethodParameter(methodParameter, resolved)
+      def sut = new ResolvedMethodParameter("defaultName", methodParameter, resolved)
     then:
-      sut.methodParameter == methodParameter
-      sut.resolvedParameterType == resolved
+      sut.parameterIndex == 1
+      !sut.hasParameterAnnotations()
+      sut.parameterType == resolved
+      sut.defaultName().orNull() == "defaultName"
+  }
+
+  def "Finds annotations" () {
+    given:
+      def resolved = new TypeResolver().resolve(String)
+      def methodParameter = Mock(MethodParameter)
+    and:
+      methodParameter.parameterIndex >> 1
+      methodParameter.parameterAnnotations >> [[required: { -> true }] as RequestParam]
+    when:
+      def sut = new ResolvedMethodParameter("defaultName", methodParameter, resolved)
+    then:
+      sut.parameterIndex == 1
+      sut.hasParameterAnnotations()
+      sut.hasParameterAnnotation(RequestParam)
+      sut.findAnnotation(RequestParam).isPresent()
+    and:
+      !sut.hasParameterAnnotation(PathVariable)
+      !sut.findAnnotation(PathVariable).isPresent()
+  }
+
+  def "Replace types" () {
+    given:
+      def resolved = new TypeResolver().resolve(String)
+      def replaced = new TypeResolver().resolve(Integer)
+      def methodParameter = Mock(MethodParameter)
+    and:
+      methodParameter.parameterIndex >> 1
+      methodParameter.parameterAnnotations >> []
+    and:
+      def sut = new ResolvedMethodParameter("defaultName", methodParameter, resolved)
+    when:
+      def sutReplaced = sut.replaceResolvedParameterType(replaced)
+    then:
+      sut.parameterIndex == 1
+      sut.parameterType == resolved
+      sutReplaced.parameterType == replaced
+      sut.defaultName().orNull() == "defaultName"
+  }
+
+  def "Adding extra annotations" () {
+    given:
+      def resolved = new TypeResolver().resolve(String)
+      def methodParameter = Mock(MethodParameter)
+    and:
+      methodParameter.parameterIndex >> 1
+      methodParameter.parameterAnnotations >> []
+    when:
+      def sut = new ResolvedMethodParameter("defaultName", methodParameter, resolved)
+      def sutAnnotated = sut.annotate([required: { -> true }] as RequestBody)
+    then:
+      !sut.hasParameterAnnotations()
+      !sut.hasParameterAnnotation(RequestBody)
+      !sut.findAnnotation(RequestBody).isPresent()
+    and:
+      sutAnnotated.hasParameterAnnotations()
+      sutAnnotated.hasParameterAnnotation(RequestBody)
+      sutAnnotated.findAnnotation(RequestBody).isPresent()
   }
 }

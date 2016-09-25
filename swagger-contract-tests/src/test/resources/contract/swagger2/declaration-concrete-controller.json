@@ -82,14 +82,14 @@
           }
         ],
         "responses": {
+          "405": {
+            "description": "Invalid input"
+          },
           "200": {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/HttpEntity\u00abResource\u00abPet\u00bb\u00bb"
             }
-          },
-          "405": {
-            "description": "Invalid input"
           }
         }
       }
@@ -118,14 +118,14 @@
           }
         ],
         "responses": {
+          "405": {
+            "description": "Invalid input"
+          },
           "200": {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/Resource\u00abPet\u00bb"
             }
-          },
-          "405": {
-            "description": "Invalid input"
           }
         }
       }
@@ -172,11 +172,17 @@
         }
       }
     },
-    "HttpEntity\u00abResource\u00abPet\u00bb\u00bb": {
+    "Link": {
       "type": "object",
       "properties": {
-        "body": {
-          "$ref": "#/definitions/Resource\u00abPet\u00bb"
+        "href": {
+          "type": "string"
+        },
+        "rel": {
+          "type": "string"
+        },
+        "templated": {
+          "type": "boolean"
         }
       }
     },
@@ -195,17 +201,11 @@
         }
       }
     },
-    "Link": {
+    "HttpEntity\u00abResource\u00abPet\u00bb\u00bb": {
       "type": "object",
       "properties": {
-        "href": {
-          "type": "string"
-        },
-        "rel": {
-          "type": "string"
-        },
-        "templated": {
-          "type": "boolean"
+        "body": {
+          "$ref": "#/definitions/Resource\u00abPet\u00bb"
         }
       }
     }

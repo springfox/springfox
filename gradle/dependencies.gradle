@@ -1,21 +1,24 @@
 ext {
-  cglib = "3.2.2"
+  cglib = "3.2.4"
   classmate = "1.3.1"
-  groovy = "2.4.6"
+  groovy = "2.4.7"
   guava = "18.0"
   jackson = '2.7.4'
-  joda = "2.9.3"
+  joda = "2.9.4"
   jsonPath = "2.2.0"
+  jsonAssert = "1.3.0"
   mockito = "1.10.19"
   objenesis = "2.4"
   servlet = "3.1.0"
   slf4j = "1.7.21"
   snakeyaml = '1.17'
   spock = "1.0-groovy-2.4"
-  spring = "4.1.8.RELEASE"
-  springHateoas = "0.18.0.RELEASE"
+  spring = "4.2.7.RELEASE"
+  springHateoas = "0.21.0.RELEASE"
   springPluginVersion = "1.2.0.RELEASE"
-  swagger2Core = "1.5.9"
+  swagger2Core = "1.5.10"
+  springBoot = "1.3.6.RELEASE"
+
   libs = [
 
           test          : [

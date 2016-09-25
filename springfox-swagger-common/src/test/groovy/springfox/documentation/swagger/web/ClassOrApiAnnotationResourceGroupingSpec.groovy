@@ -21,6 +21,7 @@ package springfox.documentation.swagger.web
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 import spock.lang.Unroll
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 
 @Mixin(RequestMappingSupport)
@@ -33,11 +34,11 @@ class ClassOrApiAnnotationResourceGroupingSpec extends Specification {
       ClassOrApiAnnotationResourceGrouping strategy = new ClassOrApiAnnotationResourceGrouping()
       def group = strategy.getResourceGroups(requestMappingInfo, handlerMethod).first()
 
-
     expect:
       group.groupName == groupName
       group.position == position
       strategy.getResourceDescription(requestMappingInfo, handlerMethod) == description
+      strategy.supports(DocumentationType.SWAGGER_2)
 
     where:
       handlerMethod                                    | groupName              | description                    | position

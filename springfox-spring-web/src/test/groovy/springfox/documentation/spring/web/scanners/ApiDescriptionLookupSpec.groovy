@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@
 package springfox.documentation.spring.web.scanners
 
 import spock.lang.Specification
+import springfox.documentation.RequestHandler
+import springfox.documentation.RequestHandlerKey
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 
@@ -29,13 +31,19 @@ class ApiDescriptionLookupSpec extends Specification {
       ApiDescriptionLookup sut = new ApiDescriptionLookup()
     and:
       def apiDescription = Mock(ApiDescription)
-      def unknownMethod = dummyOperationWithTags().getMethod()
-      def knownMethod = dummyControllerHandlerMethod().getMethod()
-    when:
-      sut.add(knownMethod, apiDescription)
-    then:
-      sut.description(knownMethod) == apiDescription
+      def requestHandler = Mock(RequestHandler)
+      def requestHandlerKey = new RequestHandlerKey(
+          [] as Set,
+          [] as Set,
+          [] as Set,
+          [] as Set)
     and:
-      sut.description(unknownMethod) == null
+      requestHandler.key() >> requestHandlerKey
+    when:
+      sut.add(requestHandlerKey, apiDescription)
+    then:
+      sut.description(requestHandler) == apiDescription
+    and:
+      sut.description(Mock(RequestHandler)) == null
   }
 }

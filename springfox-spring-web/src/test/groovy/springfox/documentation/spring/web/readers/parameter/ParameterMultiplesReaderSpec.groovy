@@ -22,7 +22,7 @@ package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
-import org.springframework.core.MethodParameter
+import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -46,15 +46,18 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
       sut.supports(DocumentationType.SWAGGER_2)
   }
 
-  def "param multiples for default reader"() {
+  @Unroll
+  def "param multiples #apiParamAnnotation && #paramType for default reader"() {
     given:
-      MethodParameter methodParameter = Stub(MethodParameter)
-      methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
-      methodParameter.getParameterType() >> paramType
       ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
-      ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter(methodParameter, resolvedType)
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
+      ResolvedMethodParameter resolvedMethodParameter =
+          new ResolvedMethodParameter(0, "", [apiParamAnnotation], resolvedType)
+      ParameterContext parameterContext = new ParameterContext(
+          resolvedMethodParameter,
+          new ParameterBuilder(),
+          context(),
+          Mock(GenericTypeNamingStrategy),
+          Mock(OperationContext))
 
     when:
       sut.apply(parameterContext)
@@ -62,7 +65,8 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
       parameterContext.parameterBuilder().build().isAllowMultiple() == expected
     where:
       apiParamAnnotation                        | paramType                       | expected
-      [allowMultiple: { -> true }] as ApiParam  | null                            | false
+      [allowMultiple: { -> true }] as ApiParam  | String.class                    | false
+      [allowMultiple: { -> true }] as ApiParam  | String[].class                  | true
       [allowMultiple: { -> false }] as ApiParam | String[].class                  | true
       [allowMultiple: { -> false }] as ApiParam | DummyClass.BusinessType[].class | true
       null                                      | String[].class                  | true

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.readers.operation;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.core.annotation.Order;
@@ -32,17 +33,16 @@ import java.util.Set;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Sets.*;
-import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
-    ApiOperation annotation = findAnnotation(context.getHandlerMethod().getMethod(), ApiOperation.class);
-    if (null != annotation) {
-      context.operationBuilder().consumes(asSet(nullToEmpty(annotation.consumes())));
-      context.operationBuilder().produces(asSet(nullToEmpty(annotation.produces())));
+    Optional<ApiOperation> annotation = context.findAnnotation(ApiOperation.class);
+    if (annotation.isPresent()) {
+      context.operationBuilder().consumes(asSet(nullToEmpty(annotation.get().consumes())));
+      context.operationBuilder().produces(asSet(nullToEmpty(annotation.get().produces())));
     }
   }
 
