@@ -55,6 +55,11 @@ class SynthesizedAnnotations {
 
   static final ApiIgnore API_IGNORE_ANNOTATION = new ApiIgnore() {
     @Override
+    public String value() {
+      return "Parameter is ignored";
+    }
+
+    @Override
     public Class<? extends Annotation> annotationType() {
       return ApiIgnore.class;
     }

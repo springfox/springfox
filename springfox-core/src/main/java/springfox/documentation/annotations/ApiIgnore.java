@@ -27,4 +27,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.PARAMETER})
 public @interface ApiIgnore {
+  /**
+   * A brief description of why this parameter/operation is ignored
+   */
+  String value() default "";
 }
