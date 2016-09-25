@@ -19,7 +19,14 @@
 package springfox.documentation.spring.web.output.formats;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+
+import static java.util.Arrays.asList;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.parseMediaType;
 
 /**
  * @author Alexandru-Constantin Bledea
@@ -28,14 +35,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class JsonCustomFormatOutputProvider implements CustomFormatOutputMapper {
 
+  private static final String HAL_MEDIA_TYPE = "application/hal+json";
+
   @Override
   public ObjectMapper configureMapper() {
     return new ObjectMapper();
   }
 
   @Override
-  public String getFormat() {
-      return "json";
+  public Collection<MediaType> getFormats() {
+    return asList(APPLICATION_JSON, parseMediaType(HAL_MEDIA_TYPE));
   }
 
 }

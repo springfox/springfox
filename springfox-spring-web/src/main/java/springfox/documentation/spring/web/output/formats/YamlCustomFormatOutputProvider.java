@@ -20,6 +20,12 @@ package springfox.documentation.spring.web.output.formats;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import org.springframework.http.MediaType;
+
+import java.util.Collection;
+
+import static java.util.Arrays.asList;
+import static org.springframework.http.MediaType.parseMediaType;
 
 /**
  * @author Alexandru-Constantin Bledea
@@ -33,8 +39,11 @@ public class YamlCustomFormatOutputProvider implements CustomFormatOutputMapper 
   }
 
   @Override
-  public String getFormat() {
-    return "yml";
+  public Collection<MediaType> getFormats() {
+    return asList(
+            parseMediaType("application/yaml"),
+            parseMediaType("application/yml"),
+            parseMediaType("text/yaml"));
   }
 
 }

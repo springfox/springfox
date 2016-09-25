@@ -21,16 +21,19 @@ package springfox.documentation.spring.web.output
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
-import springfox.documentation.spring.web.output.JacksonModuleRegistrar
-import springfox.documentation.spring.web.output.MultiFormatSerializer
 import springfox.documentation.spring.web.output.formats.CustomFormatOutputMapper
 
+import static org.springframework.http.MediaType.*
+
 class MultiFormatSerializerTest extends Specification {
+
+  def APPLICATION_YAML = parseMediaType("application/yaml")
+
   def "should serialize"() {
     given:
       MultiFormatSerializer sut = new MultiFormatSerializer([], [])
       def objectMapper = Mock(ObjectMapper)
-      sut.mappers.put("json", objectMapper)
+      sut.mappers.put(APPLICATION_JSON, objectMapper)
       String object = 'a string'
     when:
       sut.toJson(object)
@@ -38,16 +41,60 @@ class MultiFormatSerializerTest extends Specification {
       1 * objectMapper.writeValueAsString(object)
   }
 
-  def "should fallback to json"() {
+  def "should not serialize unavailable types"() {
     given:
       MultiFormatSerializer sut = new MultiFormatSerializer([], [])
       def jsonMapper = Mock(ObjectMapper)
-      sut.mappers.put("json", jsonMapper)
+      sut.mappers.put(APPLICATION_JSON, jsonMapper)
       String object = 'a string'
     when:
-      sut.serialize(object, "xml")
+      sut.serialize(object, APPLICATION_XML)
     then:
-      1 * jsonMapper.writeValueAsString(object)
+      thrown(IllegalArgumentException)
+  }
+
+  def "should throw exception on impossible type"() {
+    given:
+      MultiFormatSerializer sut = new MultiFormatSerializer([], [])
+      def jsonMapper = new ObjectMapper()
+      sut.mappers.put(APPLICATION_JSON, jsonMapper)
+      def impossibleType = Mock(Map)
+    when:
+      sut.serialize(impossibleType, APPLICATION_JSON)
+    then:
+      thrown(IllegalArgumentException)
+  }
+
+  def "should find compatible types"() {
+    given:
+      MultiFormatSerializer sut = new MultiFormatSerializer([], [])
+      def jsonMapper = Mock(ObjectMapper)
+      sut.mappers.put(APPLICATION_JSON, jsonMapper)
+    expect:
+    APPLICATION_JSON == sut.findAvailableMediaType(parseMediaTypes("*/*"))
+  }
+
+  def "should return null on incompatible type"() {
+    given:
+      MultiFormatSerializer sut = new MultiFormatSerializer([], [])
+    expect:
+    null == sut.findAvailableMediaType([APPLICATION_JSON])
+  }
+
+  def "should return null on no compatible type"() {
+    given:
+      MultiFormatSerializer sut = new MultiFormatSerializer([], [])
+      def jsonMapper = Mock(ObjectMapper)
+      sut.mappers.put(APPLICATION_JSON, jsonMapper)
+    expect:
+    null == sut.findAvailableMediaType([APPLICATION_YAML])
+  }
+
+  def "should default to json"() {
+    given:
+      MultiFormatSerializer sut = new MultiFormatSerializer([], [])
+    expect:
+    APPLICATION_JSON == sut.findAvailableMediaType([])
   }
 
   def "should serialize with custom registrars"() {
@@ -58,19 +105,19 @@ class MultiFormatSerializerTest extends Specification {
 
       def jsonMapperConfigurer = Mock(CustomFormatOutputMapper) {
         configureMapper() >> jsonMapper
-        getFormat() >> "json"
+        getFormats() >> [APPLICATION_JSON]
       }
 
-      def yamlMapperConfigurer = Mock(CustomFormatOutputMapper) {
+    def yamlMapperConfigurer = Mock(CustomFormatOutputMapper) {
         configureMapper() >> yamlMapper
-        getFormat() >> "yml"
+        getFormats() >> [APPLICATION_YAML]
       }
 
       def object = 'a string'
     when:
       MultiFormatSerializer sut = new MultiFormatSerializer([registrar], [jsonMapperConfigurer, yamlMapperConfigurer])
     and:
-      sut.serialize(object, "yml")
+      sut.serialize(object, APPLICATION_YAML)
     then:
       1 * yamlMapper.writeValueAsString(object)
       0 * jsonMapper.writeValueAsString(object)

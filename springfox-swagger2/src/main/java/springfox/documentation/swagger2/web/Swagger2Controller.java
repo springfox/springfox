@@ -24,9 +24,12 @@ import com.google.common.base.Strings;
 import io.swagger.models.Swagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,23 +38,23 @@ import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.spring.web.output.RawOutput;
 import springfox.documentation.spring.web.output.MultiFormatSerializer;
+import springfox.documentation.spring.web.output.RawOutput;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
-import static com.google.common.base.Strings.*;
-import static org.springframework.http.MediaType.*;
-import static springfox.documentation.swagger2.web.HostNameProvider.*;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
+import static springfox.documentation.swagger2.web.HostNameProvider.componentsFrom;
 
 @Controller
 @ApiIgnore
 public class Swagger2Controller {
 
   public static final String DEFAULT_URL = "/v2/api-docs";
-  private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
   @Value("${springfox.documentation.swagger.v2.host:DEFAULT}")
   private String hostNameOverride;
@@ -67,11 +70,11 @@ public class Swagger2Controller {
 
   @ApiIgnore
   @RequestMapping(value = "${springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
-      method = RequestMethod.GET, produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
+      method = RequestMethod.GET)
   public
   @ResponseBody
   ResponseEntity<RawOutput> getDocumentation(
-      @RequestParam(value = "format", required = false) String format,
+      @RequestHeader HttpHeaders headers,
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
 
@@ -86,7 +89,17 @@ public class Swagger2Controller {
       swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
       swagger.host(hostName(uriComponents));
     }
-    return ResponseEntity.ok(multiFormatSerializer.serialize(swagger, format));
+    return respond(headers.getAccept(), swagger);
+  }
+
+  private ResponseEntity<RawOutput> respond(List<MediaType> acceptableFormats, Swagger swagger) {
+    MediaType availableMediaType = multiFormatSerializer.findAvailableMediaType(acceptableFormats);
+    if (null == availableMediaType) {
+      return new ResponseEntity<RawOutput>(UNSUPPORTED_MEDIA_TYPE);
+    }
+    return ResponseEntity.ok()
+            .contentType(availableMediaType)
+            .body(multiFormatSerializer.serialize(swagger, availableMediaType));
   }
 
   private String hostName(UriComponents uriComponents) {

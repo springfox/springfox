@@ -13,7 +13,7 @@ class JsonCustomFormatOutputProviderTest extends Specification {
     expect:
     def provider = new JsonCustomFormatOutputProvider()
     provider.configureMapper()
-    provider.getFormat()
+    provider.getFormats()
   }
 
 }

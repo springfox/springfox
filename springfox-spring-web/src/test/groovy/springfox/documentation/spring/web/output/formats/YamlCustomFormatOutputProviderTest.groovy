@@ -12,7 +12,7 @@ class YamlCustomFormatOutputProviderTest extends Specification {
     expect:
     def provider = new YamlCustomFormatOutputProvider()
     provider.configureMapper()
-    provider.getFormat()
+    provider.getFormats()
   }
 
 }

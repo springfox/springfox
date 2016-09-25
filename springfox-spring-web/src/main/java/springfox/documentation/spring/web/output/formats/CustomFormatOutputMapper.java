@@ -19,6 +19,9 @@
 package springfox.documentation.spring.web.output.formats;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.MediaType;
+
+import java.util.Collection;
 
 /**
  * @author Alexandru-Constantin Bledea
@@ -28,6 +31,6 @@ public interface CustomFormatOutputMapper {
 
   ObjectMapper configureMapper();
 
-  String getFormat();
+  Collection<MediaType> getFormats();
 
 }

@@ -21,20 +21,22 @@ package springfox.documentation.spring.web.output;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.MediaType;
 import springfox.documentation.spring.web.output.formats.CustomFormatOutputMapper;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 public class MultiFormatSerializer {
 
-  private static final String FORMAT_JSON = "json";
+  private static final MediaType DEFAULT_MEDIA_TYPE = APPLICATION_JSON;
 
-  private static final String FORMAT_DEFAULT = FORMAT_JSON;
-
-  private final Map<String, ObjectMapper> mappers = new HashMap<String, ObjectMapper>();
+  private final Map<MediaType, ObjectMapper> mappers = new HashMap<MediaType, ObjectMapper>();
 
   public MultiFormatSerializer(List<JacksonModuleRegistrar> modules, Collection<CustomFormatOutputMapper> outputMappers) {
 
@@ -43,30 +45,43 @@ public class MultiFormatSerializer {
       for (JacksonModuleRegistrar each : modules) {
         each.maybeRegisterModule(objectMapper);
       }
-      mappers.put(mapperWrapper.getFormat(), objectMapper);
+      for (MediaType mediaType : mapperWrapper.getFormats()) {
+        mappers.put(mediaType, objectMapper);
+      }
     }
 
   }
 
   public RawOutput toJson(Object toSerialize) {
-    return serialize(toSerialize, FORMAT_JSON);
+    return serialize(toSerialize, DEFAULT_MEDIA_TYPE);
   }
 
-  public RawOutput serialize(Object toSerialize, String format) {
-    String actualFormat = getActualFormat(format);
-    ObjectMapper objectMapper = mappers.get(actualFormat);
+  public RawOutput serialize(Object toSerialize, MediaType mediaType) {
+    ObjectMapper objectMapper = mappers.get(mediaType);
+    if (null == objectMapper) {
+      throw new IllegalArgumentException();
+    }
     try {
       return new RawOutput(objectMapper.writeValueAsString(toSerialize));
     } catch (JsonProcessingException e) {
-      throw new IllegalArgumentException("Could not write " + actualFormat, e);
+      throw new IllegalArgumentException("Failed to serialize object.", e);
     }
   }
 
-  private String getActualFormat(String proposedFormat) {
-    if (mappers.containsKey(proposedFormat)) {
-      return proposedFormat;
+  public MediaType findAvailableMediaType(Collection<MediaType> acceptableMediaTypes) {
+    if (acceptableMediaTypes.isEmpty()) {
+      return DEFAULT_MEDIA_TYPE;
     }
-    return FORMAT_DEFAULT;
+    List<MediaType> sortedMediaTypes = new ArrayList<MediaType>(acceptableMediaTypes);
+    MediaType.sortByQualityValue(sortedMediaTypes);
+    for (MediaType acceptableMediaType : sortedMediaTypes) {
+      for (MediaType availableMediaType : mappers.keySet()) {
+        if (acceptableMediaType.includes(availableMediaType)) {
+          return availableMediaType;
+        }
+      }
+    }
+    return null;
   }
 
 }
