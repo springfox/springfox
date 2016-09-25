@@ -2,7 +2,7 @@
 
 [[q1]]*Q. Why does springfox ignore the http status code in the return value of a controller method?*
 
-A. https://github.com/springfox/springfox/issues/822[Reference #822]
+A. https://github.com/springfox/springfox/issues/822#issuecomment-117372109[Reference #822]
 
 [[q2]]*Q. What is the relationship between swagger-ui and springfox-swagger-ui?*
 
