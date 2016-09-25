@@ -27,10 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.spring.web.dummy.models.Example;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -81,6 +83,16 @@ public class BugsController {
   @RequestMapping(value = "1440", method = RequestMethod.GET)
   public Resource<String> issue1440() {
     return new Resource<String>("1420");
+  }
+
+  @RequestMapping(value = "1475", method = RequestMethod.GET)
+  public Map<String, List<String>> mapOfLists() {
+    throw new UnsupportedOperationException();
+  }
+
+  @RequestMapping(value = "1475-example", method = RequestMethod.GET)
+  public Map<String, List<Example>> mapOfListOfExample() {
+    throw new UnsupportedOperationException();
   }
 
   class Bug1376 {

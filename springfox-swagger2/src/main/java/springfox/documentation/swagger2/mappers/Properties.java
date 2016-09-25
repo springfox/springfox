@@ -35,6 +35,7 @@ import io.swagger.models.properties.FileProperty;
 import io.swagger.models.properties.FloatProperty;
 import io.swagger.models.properties.IntegerProperty;
 import io.swagger.models.properties.LongProperty;
+import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
@@ -80,6 +81,16 @@ class Properties {
     Function<String, Function<String, ? extends Property>> propertyLookup
         = forMap(typeFactory, voidOrRef(safeTypeName));
     return propertyLookup.apply(safeTypeName.toLowerCase()).apply(safeTypeName);
+  }
+
+  public static Property property(final ModelReference modelRef) {
+    if (modelRef.isMap()) {
+      return new MapProperty(property(modelRef.itemModel().get()));
+    } else if (modelRef.isCollection()) {
+      return new ArrayProperty(
+          maybeAddAllowableValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
+    }
+    return property(modelRef.getType());
   }
 
   public static Property itemTypeProperty(ModelReference paramModel) {

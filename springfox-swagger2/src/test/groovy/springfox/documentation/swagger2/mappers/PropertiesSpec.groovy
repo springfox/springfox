@@ -28,6 +28,20 @@ class PropertiesSpec extends Specification {
       byteProp.format == "byte"
   }
 
+  def "List is represented as a string with a format" () {
+    when:
+      def listProp = property(new ModelRef("List", new ModelRef("string")))
+    then:
+      listProp instanceof ArrayProperty
+  }
+
+  def "Map is represented as a string with a format" () {
+    when:
+      def mapProp = property(new ModelRef("Map", new ModelRef("string"), true))
+    then:
+      mapProp instanceof MapProperty
+  }
+
   def "Nested collection properties are supported" () {
     when:
       def prop = itemTypeProperty(ref)

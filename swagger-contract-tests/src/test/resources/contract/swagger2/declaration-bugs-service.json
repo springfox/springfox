@@ -285,6 +285,66 @@
           }
         }
       }
+    },
+    "/bugs/1475": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "mapOfLists",
+        "operationId": "mapOfListsUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bugs/1475-example": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "mapOfListOfExample",
+        "operationId": "mapOfListOfExampleUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Example"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -328,6 +388,254 @@
       "properties": {
         "href": {
           "type": "string"
+        }
+      }
+    },
+    "DateTimeField": {
+      "type": "object",
+      "properties": {
+        "durationField": {
+          "$ref": "#/definitions/DurationField"
+        },
+        "leapDurationField": {
+          "$ref": "#/definitions/DurationField"
+        },
+        "lenient": {
+          "type": "boolean"
+        },
+        "maximumValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minimumValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "rangeDurationField": {
+          "$ref": "#/definitions/DurationField"
+        },
+        "supported": {
+          "type": "boolean"
+        },
+        "type": {
+          "$ref": "#/definitions/DateTimeFieldType"
+        }
+      }
+    },
+    "DateTimeZone": {
+      "type": "object",
+      "properties": {
+        "fixed": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "Example": {
+      "type": "object",
+      "properties": {
+        "allCapsSet": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "annotatedEnumType": {
+          "type": "string",
+          "enum": [
+            "ONE",
+            "TWO"
+          ]
+        },
+        "bar": {
+          "type": "integer",
+          "format": "int32",
+          "description": "description of bar"
+        },
+        "enumType": {
+          "type": "string",
+          "enum": [
+            "ONE",
+            "TWO"
+          ]
+        },
+        "foo": {
+          "type": "string"
+        },
+        "localDateTime": {
+          "$ref": "#/definitions/LocalDateTime"
+        },
+        "nestedType": {
+          "$ref": "#/definitions/NestedType"
+        },
+        "parentBeanProperty": {
+          "type": "string"
+        },
+        "propertyWithNoGetterMethod": {
+          "type": "string"
+        },
+        "propertyWithNoSetterMethod": {
+          "type": "string"
+        },
+        "readOnlyString": {
+          "type": "string",
+          "description": "A read only string",
+          "readOnly": true
+        }
+      }
+    },
+    "DurationFieldType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "LocalDateTime": {
+      "type": "object",
+      "properties": {
+        "centuryOfEra": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "chronology": {
+          "$ref": "#/definitions/Chronology"
+        },
+        "dayOfMonth": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "dayOfWeek": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "dayOfYear": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "era": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "fieldTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DateTimeFieldType"
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DateTimeField"
+          }
+        },
+        "hourOfDay": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "millisOfDay": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "millisOfSecond": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minuteOfHour": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "monthOfYear": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "secondOfMinute": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "weekOfWeekyear": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "weekyear": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "yearOfCentury": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "yearOfEra": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "NestedType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "DurationField": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "precise": {
+          "type": "boolean"
+        },
+        "supported": {
+          "type": "boolean"
+        },
+        "type": {
+          "$ref": "#/definitions/DurationFieldType"
+        },
+        "unitMillis": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "Chronology": {
+      "type": "object",
+      "properties": {
+        "zone": {
+          "$ref": "#/definitions/DateTimeZone"
+        }
+      }
+    },
+    "DateTimeFieldType": {
+      "type": "object",
+      "properties": {
+        "durationType": {
+          "$ref": "#/definitions/DurationFieldType"
+        },
+        "name": {
+          "type": "string"
+        },
+        "rangeDurationType": {
+          "$ref": "#/definitions/DurationFieldType"
         }
       }
     }

@@ -186,8 +186,7 @@ public abstract class ModelMapper {
       responseProperty = new ArrayProperty(
           maybeAddAllowableValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
     } else if (modelRef.isMap()) {
-      String itemType = modelRef.getItemType();
-      responseProperty = new MapProperty(property(itemType));
+      responseProperty = new MapProperty(property(modelRef.itemModel().get()));
     } else {
       responseProperty = property(modelRef.getType());
     }

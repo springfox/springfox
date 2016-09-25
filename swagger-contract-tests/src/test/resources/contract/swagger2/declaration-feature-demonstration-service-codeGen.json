@@ -589,7 +589,10 @@
             "schema": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "#/definitions/MapOfstringAndExample"
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/definitions/Example"
+                }
               }
             }
           }
@@ -979,10 +982,10 @@
           "type": "object",
           "description": "Map of params to be sent",
           "additionalProperties": {
-            "type": "string"
-          }
+          "type": "string"
         }
-      },
+      }
+    },
       "description": "Describes model with map property"
     },
     "ModelWithArrayOfArrays": {
@@ -1142,10 +1145,10 @@
       "properties": {
         "durationType": {
           "$ref": "#/definitions/DurationFieldType"
-        },
+      },
         "name": {
           "type": "string"
-        },
+    },
         "rangeDurationType": {
           "$ref": "#/definitions/DurationFieldType"
         }
