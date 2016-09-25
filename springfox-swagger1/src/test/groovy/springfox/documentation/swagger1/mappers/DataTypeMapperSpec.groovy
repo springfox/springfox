@@ -37,6 +37,7 @@ class DataTypeMapperSpec extends Specification {
       modelRef                                      | typeName
       new ModelRef("void")                          | "void"
       new ModelRef("List", new ModelRef("String"))  | "array"
+      new ModelRef("List", new ModelRef("byte"))    | "string"
       null                                          | null
   }
 
@@ -52,6 +53,7 @@ class DataTypeMapperSpec extends Specification {
       modelRef                                      | typeName
       new ModelRef("void")                          | "void"
       new ModelRef("List", new ModelRef("String"))  | "array"
+      new ModelRef("List", new ModelRef("byte"))    | "string"
       null                                          | null
   }
 
@@ -67,6 +69,7 @@ class DataTypeMapperSpec extends Specification {
       modelRef                                      | typeName
       new ModelRef("void")                          | "void"
       new ModelRef("List", new ModelRef("String"))  | "array"
+      new ModelRef("List", new ModelRef("byte"))    | "string"
       null                                          | null
   }
 }

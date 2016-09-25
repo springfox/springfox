@@ -34,9 +34,14 @@ class SerializableParameterFactoriesSpec extends Specification {
       mapped.required
       mapped instanceof SerializableParameter
       if (modelRef.isCollection()) {
-        ((SerializableParameter)mapped).collectionFormat == "csv"
-        ((SerializableParameter)mapped).type == "array"
-        ((SerializableParameter)mapped).items.name == modelRef.itemType
+        if (modelRef.itemType.equals("byte")) {
+          ((SerializableParameter) mapped).format == "byte"
+          ((SerializableParameter) mapped).type == "string"
+        } else {
+          ((SerializableParameter) mapped).collectionFormat == "csv"
+          ((SerializableParameter) mapped).type == "array"
+          ((SerializableParameter) mapped).items.name == modelRef.itemType
+        }
       } else {
         ((SerializableParameter)mapped).format == null
         ((SerializableParameter)mapped).type == "string"
@@ -46,6 +51,7 @@ class SerializableParameterFactoriesSpec extends Specification {
       "header"       | new ModelRef("sometype")
       "query"        | new ModelRef("sometype")
       "form"         | new ModelRef("sometype")
+      "form"         | new ModelRef("sometype", new ModelRef("byte"))
       "cookie"       | new ModelRef("sometype")
       "path"         | new ModelRef("sometype")
       "header"       | new ModelRef("sometype", new ModelRef("itemType"))

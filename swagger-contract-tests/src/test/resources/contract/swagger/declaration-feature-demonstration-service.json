@@ -296,6 +296,108 @@
       "path": "/features"
     },
     {
+      "description": "base64EncodedBody",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "base64EncodedBody",
+          "nickname": "base64EncodedBodyUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": true,
+              "description": "base64Encoded",
+              "name": "body",
+              "paramType": "body",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "void"
+        }
+      ],
+      "path": "/features/1430-body"
+    },
+    {
+      "description": "proper",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "proper",
+          "nickname": "properUsingPOST",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": true,
+              "description": "base64Encoded",
+              "name": "base64Encoded",
+              "paramType": "query",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "void"
+        }
+      ],
+      "path": "/features/1430-query"
+    },
+    {
       "description": "addFiles",
       "operations": [
         {

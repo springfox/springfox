@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -188,6 +189,16 @@ public class FeatureDemonstrationService {
 
   @RequestMapping(value = "/propertyWithObjectNode", method = RequestMethod.POST)
   public void propertyWithObjectNode(@RequestBody ModelWithObjectNode model) {
+    //No-op
+  }
+
+  @RequestMapping(value = "/1430-body", method = RequestMethod.POST)
+  public void base64EncodedBody(@RequestBody byte[] base64Encoded) {
+    //No-op
+  }
+
+  @RequestMapping(value = "/1430-query", method = RequestMethod.POST)
+  public void proper(@RequestParam byte[] base64Encoded) {
     //No-op
   }
 }

@@ -69,13 +69,18 @@ public class SerializableParameterFactories {
     toReturn.setRequired(source.isRequired());
     maybeAddAllowableValuesToParameter(toReturn, source.getAllowableValues());
     if (paramModel.isCollection()) {
-      toReturn.setCollectionFormat("multi");
-      toReturn.setType("array");
-      ModelReference paramItemModelRef = paramModel.itemModel().get();
-      Property itemProperty
-          = maybeAddAllowableValues(itemTypeProperty(paramItemModelRef), paramItemModelRef.getAllowableValues());
-      toReturn.setItems(itemProperty);
-      maybeAddAllowableValuesToParameter(toReturn, paramItemModelRef.getAllowableValues());
+      if (paramModel.getItemType().equals("byte")) {
+        toReturn.setType("string");
+        toReturn.setFormat("byte");
+      } else {
+        toReturn.setCollectionFormat("multi");
+        toReturn.setType("array");
+        ModelReference paramItemModelRef = paramModel.itemModel().get();
+        Property itemProperty
+            = maybeAddAllowableValues(itemTypeProperty(paramItemModelRef), paramItemModelRef.getAllowableValues());
+        toReturn.setItems(itemProperty);
+        maybeAddAllowableValuesToParameter(toReturn, paramItemModelRef.getAllowableValues());
+      }
     } else if (paramModel.isMap()) {
       ModelReference paramItemModelRef = paramModel.itemModel().get();
       Property itemProperty = new MapProperty(itemTypeProperty(paramItemModelRef));

@@ -26,6 +26,70 @@
     "application/json"
   ],
   "paths": {
+    "/features/1430-body": {
+      "post": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "base64EncodedBody",
+        "operationId": "base64EncodedBodyUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "base64Encoded",
+            "description": "base64Encoded",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "byte"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/features/1430-query": {
+      "post": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "proper",
+        "operationId": "properUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "base64Encoded",
+            "in": "query",
+            "description": "base64Encoded",
+            "required": true,
+            "type": "string",
+            "format": "byte"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/features/addFiles": {
       "post": {
         "tags": [

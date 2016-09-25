@@ -37,6 +37,9 @@ public class DataTypeMapper {
       return null;
     }
     if (modelRef.isCollection()) {
+      if (modelRef.getItemType().equals("byte")) {
+        return "string";
+      }
       return "array";
     }
     return modelRef.getType();
@@ -54,6 +57,9 @@ public class DataTypeMapper {
   public DataType typeFromModelRef(ModelReference modelRef) {
     if (modelRef != null) {
       if (modelRef.isCollection()) {
+        if (modelRef.getItemType().equals("byte")) {
+          return new DataType("string");
+        }
         return new DataType(String.format("%s[%s]", modelRef.getType(), modelRef.getItemType()));
       }
       return new DataType(modelRef.getType());
@@ -66,6 +72,9 @@ public class DataTypeMapper {
       return null;
     }
     if (modelRef.isCollection()) {
+      if (modelRef.getItemType().equals("byte")) {
+        return "string";
+      }
       return String.format("%s[%s]", modelRef.getType(), modelRef.getItemType());
     }
     return modelRef.getType();

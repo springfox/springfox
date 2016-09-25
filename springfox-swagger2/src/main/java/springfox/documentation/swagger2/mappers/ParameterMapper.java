@@ -56,6 +56,12 @@ public class ParameterMapper {
 
   Model fromModelRef(ModelReference modelRef) {
     if (modelRef.isCollection()) {
+      if (modelRef.getItemType().equals("byte")) {
+        ModelImpl baseModel = new ModelImpl();
+        baseModel.setType("string");
+        baseModel.setFormat("byte");
+        return EnumMapper.maybeAddAllowableValuesToParameter(baseModel, modelRef.getAllowableValues());
+      }
       ModelReference itemModel = modelRef.itemModel().get();
       return new ArrayModel()
           .items(maybeAddAllowableValues(itemTypeProperty(itemModel), itemModel.getAllowableValues()));
