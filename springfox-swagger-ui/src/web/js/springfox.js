@@ -48,16 +48,16 @@ $(function() {
 
     initializeBaseUrl();
 
-    function addApiKeyAuthorization() {
-      var key = (window.apiKeyVehicle == 'query') ? encodeURIComponent($('#input_apiKey')[0].value) : $('#input_apiKey')[0].value;
-      if (key && key.trim() != "") {
-        var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization(window.apiKeyName, key, window.apiKeyVehicle);
-        window.swaggerUi.api.clientAuthorizations.add(window.apiKeyName, apiKeyAuth);
-        log("added key " + key);
+    function addApiKeyAuthorization(security) {
+      var apiKeyVehicle = security.apiKeyVehicle || 'query';
+      var apiKeyName = security.apiKeyName || 'api_key';
+      var apiKey = security.apiKey || '';
+      if (apiKey && apiKey.trim() != "") {
+        var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization(apiKeyName, apiKey, apiKeyVehicle);
+        window.swaggerUi.api.clientAuthorizations.add(apiKeyName, apiKeyAuth);
+        log("added key " + apiKey);
       }
     }
-
-    $('#input_apiKey').change(addApiKeyAuthorization);
 
     function log() {
       if ('console' in window) {
@@ -76,12 +76,7 @@ $(function() {
       var security = {};
       window.springfox.securityConfig(function(data) {
         security = data;
-        window.apiKeyVehicle = security.apiKeyVehicle || 'query';
-        window.apiKeyName = security.apiKeyName || 'api_key';
-        if (security.apiKey) {
-          $('#input_apiKey').val(security.apiKey);
-          addApiKeyAuthorization();
-        }
+        addApiKeyAuthorization(security);
         if (typeof initOAuth == "function" && oAuthIsDefined(security)) {
           initOAuth(security);
         }
@@ -124,5 +119,4 @@ $(function() {
   }
 
 });
-
 
