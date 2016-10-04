@@ -322,9 +322,10 @@ For maven:
 <dependency>
     <groupId>io.springfox.ui</groupId>
     <artifactId>springfox-swagger-ui-rfc6570</artifactId>
-    <version>0.9.7</version>
+    <version>0.9.8</version>
 </dependency>
 ----
+NOTE: The newer version has changed the group id from `_io.springfox_` to `_io.springfox.ui_`!
 
 2. Enable url templating; (http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot[see #21])
 
