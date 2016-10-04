@@ -1,3 +1,54 @@
+# 2.6.0 Release Notes
+The one spring data rest support lands!
+
+#### PR's 
+
+Thank you for all your contributions!
+- (#1498) Add pathsGroupedBy configuration of Swagger2Markup @orevial 
+- (#1492) Intermediate push @davidnewcomb 
+- (#1486) remove duplicate enum values @apixandru 
+- (#1483) Update common-problems.adoc @qwang1990 
+- (#1477) Initial support for spring-data-rest @dilipkrish 
+- (#1476) Fix mistype in documentation @mvpotter 
+- (#1474) Merge method-level and class-level @ApiResponses annotations.  @sworisbreathing 
+- (#1470) Supporting for hidden attribute of @ApiParam and @ApiModelProperty annotations.  @MaksimOrlov 
+- (#1469) Fixing java.sql.Date to be a date in swagger instead of date-time @mtalbot 
+- (#1463) Add 'example' in merged model @wssccc 
+- (#1456) java.sql.Date should become a "date" in JSON Schema output, according to docs @ssevertson 
+- (#1448) Update to use swagger2markup version 1.0+ @ssevertson 
+- (#1445) upgrade to swagger-ui 2.2.0 @kevinchabreck 
+- (#1388) S3 maven repo @jongo593 
+- (#1386) #1373 - Modified how to set jsonEditor parameter @miborra 
+- (#1350) Complex type support by @ModelAttribute @MaksimOrlov 
+
+#### Features
+
+- (#1494) Define a reason for applying @ApiIgnore @gdrouet 
+- (#1465) Type-level @ApiResponses are ignored looking-for-contributions @sworisbreathing 
+- (#1444) Support for rendering parameters and model attributes when no annotations are present @tianchengbaihe 
+- (#1412) Mixing string and Properties parameters causes display error in 2.5.0 has-workaround @rherrick 
+- (#1395) Swagger ui dose not work when @RequestParam annotation dose not set to method parameter @azizkhani 
+- (#1335) Ability to add custom ApiDescriptions not described via request mappings @romanwozniak 
+- (#1294) Utilize the jackson property definition to determine additional model information @dilipkrish 
+- (#1286) Make 'supportedSubmitMethods' configurable to enable and disable the "Try it out!" functionality @mibeumer 
+- (#1271) @ResponseHeader description not generated in apidocs @basvanstratum 
+- (#1137) Support VendorExtensions described as swagger schema @MinosPong 
+- (#1021) Add @JsonFormat support for date and time @YLombardi 
+- (#699) Integration with Spring-Data-Rest @raranzueque 
+
+#### Bug fixes
+
+- (#1504) "infinity" in allowableValues property of @ApiModelProperty annotation @SomeoneToIgnore 
+- (#1485) Remove duplicate values in enum displays (case insensitive) @apixandru 
+- (#1475) Map<LocalDateTime, List<String>> not displayed correctly @jlaugesen 
+- (#1440) Springfox expects _links to be array, while Spring hateoas return _links as object @jiangchuan1220 
+- (#1436) Explicit value JsonProperty ignored when PropertyNamingStrategy is configured _not-reproducable_ @mborkunov 
+- (#1420) Result of adding tags to docket in swagger configuration @ChrisHartman 
+- (#1380) ApiResponses can not support custom status code such like 1010 @dockerlet 
+- (#1361) Request header "Content-Type" is not being sent with request _wontfix_ @manish2aug 
+- (#1353) RequestParam with a map crashes swagger-ui wontfix @BryceMehring 
+- (#1346) @ApiIgnore is not respected on a method (2.5.0-SNAPSHOT) @ben
+
 # 2.5.0 Release Notes
 
 #### Features
