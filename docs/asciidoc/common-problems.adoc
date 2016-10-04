@@ -344,3 +344,28 @@ description that happens to be the same as the tag name. So in effect we are syn
 one on the operation.
 
 By defining the Tag on the docket, we are referencing a real tag defined by you.
+
+
+[[q20]]*20. What can I try if configuration non-boot applications do not work as expected?*
+
+Thanks to https://github.com/Pyohwan[@Pyohwan]'s suggestion
+`@Configuration` annotation may not working with @EnableSwagger2.
+So shouldn't attach @Configration. So if you have a configuration class that pulls in the springfox configuration
+using the `@EnableSwagger2` like below, try removing the `@Configuration` on this class as shown below.
+
+```java
+@EnableSwagger2
+public class SwaggerConfig {
+...
+```
+
+and  use `@Import` annotation on `WebMvcConfigurerAdapter` or similar configuration class.
+```java
+@Configuration
+@EnableWebMvc
+@ComponentScan(...)
+@Import(SwaggerConfig.class)
+public class MvcConfig extends WebMvcConfigurerAdapter {
+...
+```
+
