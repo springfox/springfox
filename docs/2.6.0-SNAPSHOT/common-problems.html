@@ -1116,6 +1116,35 @@ one on the operation.</p>
 <div class="paragraph">
 <p>By defining the Tag on the docket, we are referencing a real tag defined by you.</p>
 </div>
+<div class="paragraph">
+<p><a id="q20"></a><strong>20. What can I try if configuration non-boot applications do not work as expected?</strong></p>
+</div>
+<div class="paragraph">
+<p>Thanks to <a href="https://github.com/Pyohwan">@Pyohwan</a>'s suggestion
+<code>@Configuration</code> annotation may not working with @EnableSwagger2.
+So shouldn&#8217;t attach @Configration. So if you have a configuration class that pulls in the springfox configuration
+using the <code>@EnableSwagger2</code> like below, try removing the <code>@Configuration</code> on this class as shown below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@EnableSwagger2</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">SwaggerConfig</span> {
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and  use <code>@Import</code> annotation on <code>WebMvcConfigurerAdapter</code> or similar configuration class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="annotation">@EnableWebMvc</span>
+<span class="annotation">@ComponentScan</span>(...)
+<span class="annotation">@Import</span>(SwaggerConfig.class)
+<span class="directive">public</span> <span class="type">class</span> <span class="class">MvcConfig</span> <span class="directive">extends</span> WebMvcConfigurerAdapter {
+...</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1136,7 +1165,7 @@ one on the operation.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-10-04 02:31:50 UTC
+Last updated 2016-10-04 02:40:33 UTC
 </div>
 </div>
 </body>
