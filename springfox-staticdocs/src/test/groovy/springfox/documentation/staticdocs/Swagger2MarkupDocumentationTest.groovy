@@ -21,6 +21,7 @@ package springfox.documentation.staticdocs
 
 import groovy.io.FileType
 import io.github.robwin.markup.builder.MarkupLanguage
+import io.github.robwin.swagger2markup.GroupBy
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.web.servlet.DefaultMvcResult
@@ -42,7 +43,7 @@ class Swagger2MarkupDocumentationTest extends Specification {
   def "should convert swagger json into three asciidoc files"() {
     given:
       Swagger2MarkupResultHandler resultHandler = Swagger2MarkupResultHandler.outputDirectory('build/docs/asciidoc')
-              .withMarkupLanguage(MarkupLanguage.ASCIIDOC).build()
+              .withMarkupLanguage(MarkupLanguage.ASCIIDOC).withPathsGroupedBy(GroupBy.TAGS).build()
     when:
       resultHandler.handle(new DefaultMvcResult(new MockHttpServletRequest(), response))
     then:

@@ -20,6 +20,7 @@
 package springfox.documentation.staticdocs;
 
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -35,13 +36,15 @@ public class Swagger2MarkupResultHandler implements ResultHandler {
 
     private final String outputDir;
     private final MarkupLanguage markupLanguage;
+    private final GroupBy pathsGroupedBy;
     private final String examplesFolderPath;
     private final String encoding = "UTF-8";
 
-    Swagger2MarkupResultHandler(String outputDir, MarkupLanguage markupLanguage, String examplesFolderPath) {
+    Swagger2MarkupResultHandler(String outputDir, MarkupLanguage markupLanguage, GroupBy pathsGroupedBy, String examplesFolderPath) {
         this.outputDir = outputDir;
         this.markupLanguage = markupLanguage;
         this.examplesFolderPath = examplesFolderPath;
+        this.pathsGroupedBy = pathsGroupedBy;
     }
 
     /**
@@ -67,6 +70,7 @@ public class Swagger2MarkupResultHandler implements ResultHandler {
         response.setCharacterEncoding(encoding);
         String swaggerJson = response.getContentAsString();
         Swagger2MarkupConverter.fromString(swaggerJson).withMarkupLanguage(markupLanguage)
+                .withPathsGroupedBy(this.pathsGroupedBy)
                 .withExamples(examplesFolderPath).build().intoFolder(outputDir);
     }
 
@@ -75,6 +79,7 @@ public class Swagger2MarkupResultHandler implements ResultHandler {
         private final String outputDir;
         private String examplesFolderPath;
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
+        private GroupBy pathsGroupedBy = GroupBy.AS_IS;
 
         Builder(String outputDir) {
             this.outputDir = outputDir;
@@ -90,7 +95,7 @@ public class Swagger2MarkupResultHandler implements ResultHandler {
          */
         public Swagger2MarkupResultHandler build() {
               return new Swagger2MarkupResultHandler(outputDir, markupLanguage,
-                    examplesFolderPath);
+                    pathsGroupedBy, examplesFolderPath);
         }
 
         /**
@@ -101,6 +106,17 @@ public class Swagger2MarkupResultHandler implements ResultHandler {
          */
         public Builder withMarkupLanguage(MarkupLanguage markupLanguage) {
             this.markupLanguage = markupLanguage;
+            return this;
+        }
+
+        /**
+         * Specifies how the paths should be grouped by in in the generated files
+         *
+         * @param pathsGroupedBy the parameter defining how the paths will be grouped in the generated files
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withPathsGroupedBy(GroupBy pathsGroupedBy) {
+            this.pathsGroupedBy = pathsGroupedBy;
             return this;
         }
 
