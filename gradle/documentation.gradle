@@ -70,15 +70,7 @@ task publishDocs(type: Exec) {
 """
   }
 
-  if (buildInfo.dryRun) {
-    logger.info("Will run the following command:")
-    logger.info(gitChanges)
-    commandLine "sh", "-c", "echo This is a dry run"
-    return
-  }
-
-  commandLine "sh", "-c",
-          """
+  def commands = """
   git config --local user.email "bot@springfox.io"
   git config --local user.name "Springfox Robot"
   git fetch origin +gh-pages:gh-pages
@@ -90,6 +82,15 @@ task publishDocs(type: Exec) {
   git config --local --unset user.email
   git config --local --unset user.name
 """
+
+  if (buildInfo.dryRun) {
+    logger.info("Will run the following command:")
+    logger.info(commands)
+    commandLine "sh", "-c", "echo This is a dry run"
+    return
+  }
+
+  commandLine "sh", "-c", commands
 }
 
 def isSnapshot(project) {
