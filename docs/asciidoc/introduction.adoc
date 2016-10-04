@@ -49,6 +49,10 @@ Endorsed or approved by the Spring Framework Contributors
 
 ```
 
+NOTE: This build is optimized for releasing software to bintray/sonatype. In order for gradle to figure out
+the version the gradle plugin relies on local folder being a cloned git repository. Downloading the source archive
+and building will NOT work!
+
 ==== Pre-Commit Build
 
 - Code quality (code coverage, checkstyle)
