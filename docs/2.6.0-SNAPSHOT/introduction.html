@@ -615,6 +615,20 @@ infer service/schema characteristics.</p>
 <pre class="CodeRay highlight"><code data-lang="bash">./gradlew clean build publishToMavenLocal -i</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This build is optimized for releasing software to bintray/sonatype. In order for gradle to figure out
+the version the gradle plugin relies on local folder being a cloned git repository. Downloading the source archive
+and building will NOT work!
+</td>
+</tr>
+</table>
+</div>
 <div class="sect3">
 <h4 id="pre-commit-build">Pre-Commit Build</h4>
 <div class="ulist">
@@ -752,7 +766,7 @@ The below properties are required to run a release:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-10-04 02:09:08 UTC
+Last updated 2016-10-04 02:31:50 UTC
 </div>
 </div>
 </body>
