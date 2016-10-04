@@ -1346,7 +1346,7 @@ api docs are served](<a href="http://springfox.github.io/springfox/docs/current/
 <em>Keep in mind this is experimental</em>!
 In order to use this feature
 1. Add <code>springfox-swagger-ui-rfc6570</code> instead of <code>springfox-swagger-ui</code> as a dependency
-<a href="http://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui-rfc6570/0.9.4">experimental swagger-ui</a>.
+<a href="http://mvnrepository.com/artifact/io.springfox.ui/springfox-swagger-ui-rfc6570/0.9.8">experimental swagger-ui</a>.
 </td>
 </tr>
 </table>
@@ -1357,7 +1357,7 @@ In order to use this feature
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox:springfox-swagger-ui-rfc6570:0.9.4</span><span class="delimiter">'</span></span>
+    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox.ui:springfox-swagger-ui-rfc6570:0.9.8</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -1367,11 +1367,23 @@ In order to use this feature
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>io.springfox:springfox-swagger-ui-rfc6570<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>0.9.4<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.springfox.ui<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger-ui-rfc6570<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>0.9.8<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The newer version has changed the group id from <code><em>io.springfox</em></code> to <code><em>io.springfox.ui</em></code>!
+</td>
+</tr>
+</table>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1395,7 +1407,7 @@ In order to use this feature
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-09-29 21:25:29 UTC
+Last updated 2016-10-04 02:05:19 UTC
 </div>
 </div>
 </body>
