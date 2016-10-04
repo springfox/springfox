@@ -304,14 +304,14 @@ api docs are served](http://springfox.github.io/springfox/docs/current/#customiz
 NOTE: _Keep in mind this is experimental_!
 In order to use this feature
 1. Add `springfox-swagger-ui-rfc6570` instead of `springfox-swagger-ui` as a dependency
-http://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui-rfc6570/0.9.4[experimental swagger-ui].
+http://mvnrepository.com/artifact/io.springfox.ui/springfox-swagger-ui-rfc6570/0.9.8[experimental swagger-ui].
 
 For gradle:
 [source,groovy]
 [subs="verbatim,attributes"]
 ----
 dependencies {
-    compile 'io.springfox:springfox-swagger-ui-rfc6570:0.9.4'
+    compile 'io.springfox.ui:springfox-swagger-ui-rfc6570:0.9.8'
 }
 ----
 
@@ -320,9 +320,9 @@ For maven:
 [subs="verbatim,attributes"]
 ----
 <dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>io.springfox:springfox-swagger-ui-rfc6570</artifactId>
-    <version>0.9.4</version>
+    <groupId>io.springfox.ui</groupId>
+    <artifactId>springfox-swagger-ui-rfc6570</artifactId>
+    <version>0.9.7</version>
 </dependency>
 ----
 
