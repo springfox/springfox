@@ -149,8 +149,8 @@ public abstract class ModelMapper {
       AllowableValues allowableValues = source.getAllowableValues();
       if (allowableValues instanceof AllowableRangeValues) {
         AllowableRangeValues range = (AllowableRangeValues) allowableValues;
-        ((AbstractNumericProperty) property).maximum(Double.valueOf(range.getMax()));
-        ((AbstractNumericProperty) property).minimum(Double.valueOf(range.getMin()));
+        ((AbstractNumericProperty) property).maximum(safeDouble(range.getMax()));
+        ((AbstractNumericProperty) property).minimum(safeDouble(range.getMin()));
       }
     }
 
@@ -158,8 +158,8 @@ public abstract class ModelMapper {
       AllowableValues allowableValues = source.getAllowableValues();
       if (allowableValues instanceof AllowableRangeValues) {
         AllowableRangeValues range = (AllowableRangeValues) allowableValues;
-        ((StringProperty) property).maxLength(Integer.valueOf(range.getMax()));
-        ((StringProperty) property).minLength(Integer.valueOf(range.getMin()));
+        ((StringProperty) property).maxLength(safeInteger(range.getMax()));
+        ((StringProperty) property).minLength(safeInteger(range.getMin()));
       }
       if(source.getPattern() != null) {
         ((StringProperty) property).setPattern(source.getPattern());
@@ -176,6 +176,13 @@ public abstract class ModelMapper {
     return property;
   }
 
+  static Integer safeInteger(String doubleString) {
+    try {
+      return Integer.valueOf(doubleString);
+    } catch (NumberFormatException e) {
+      return null;
+    }
+  }
 
   static Property modelRefToProperty(ModelReference modelRef) {
     if (modelRef == null || "void".equalsIgnoreCase(modelRef.getType())) {

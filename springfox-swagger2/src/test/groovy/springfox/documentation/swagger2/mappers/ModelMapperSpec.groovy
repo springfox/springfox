@@ -24,6 +24,7 @@ import io.swagger.models.properties.ObjectProperty
 import io.swagger.models.properties.RefProperty
 import io.swagger.models.properties.StringProperty
 import org.mapstruct.factory.Mappers
+import spock.lang.Unroll
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.schema.*
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -35,6 +36,7 @@ import static com.google.common.base.Suppliers.*
 import static com.google.common.collect.Maps.*
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
+import static springfox.documentation.swagger2.mappers.ModelMapper.safeInteger
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ModelMapperSpec extends SchemaSpecification {
@@ -250,6 +252,21 @@ class ModelMapperSpec extends SchemaSpecification {
       def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
     then:
       !valueClass.isPresent()
+  }
+
+  @Unroll
+  def "safe parses #stringValue" () {
+    when:
+      def safeParsed = safeInteger(stringValue)
+    then:
+      safeParsed == expected
+    where:
+      stringValue | expected
+      "0"         | 0
+      "infinity"  | null
+      "-infinity" | null
+      "1.0"       | null
+
   }
 
 

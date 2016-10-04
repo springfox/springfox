@@ -56,7 +56,7 @@ class MinMaxAnnotationPluginSpec extends Specification {
       propertyName      | expectedMin                   | expectedMax
       "noAnnotation"    | null                          | null
       "onlyMin"         | "10.0"                        | Double.MAX_VALUE.toString()
-      "onlyMax"         | Double.MIN_VALUE.toString()   | "20.0"
+      "onlyMax"         | (-Double.MAX_VALUE).toString()| "20.0"
       "both"            | "10.0"                        | "20.0"
   }
 }

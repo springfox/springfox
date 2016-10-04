@@ -85,7 +85,7 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
     } else if (max.isPresent()) {
       // use Min value until "infinity" works
       LOG.debug("@Max detected: adding AllowableRangeValues to field ");
-      myvalues = new AllowableRangeValues(Double.toString(Double.MIN_VALUE), Double.toString(max.get().value()));
+      myvalues = new AllowableRangeValues(Double.toString(-Double.MAX_VALUE), Double.toString(max.get().value()));
 
     }
     return myvalues;
