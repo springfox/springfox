@@ -16,15 +16,23 @@
  *
  *
  */
+package springfox.documentation.spring.web.autoconfigure;
 
-package springfox.documentation.spring.web.json
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
+import springfox.documentation.spring.web.output.formats.YamlCustomFormatOutputProvider;
 
-import spock.lang.Specification
+/**
+ * @author Alexandru-Constantin Bledea
+ * @since Sep 16, 2016
+ */
+@ConditionalOnClass(YAMLFactory.class)
+public class OutputProviderConfiguration {
 
-class JsonTest extends Specification {
+    @Bean
+    YamlCustomFormatOutputProvider yamlCustomFormatOutputProvider() {
+        return new YamlCustomFormatOutputProvider();
+    }
 
-  def "should pass coverage"() {
-    expect:
-      new Json("Something").value()
-  }
 }

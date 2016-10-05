@@ -24,7 +24,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
-import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
+import springfox.documentation.spring.web.output.JacksonModuleRegistrar;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 
 @Configuration

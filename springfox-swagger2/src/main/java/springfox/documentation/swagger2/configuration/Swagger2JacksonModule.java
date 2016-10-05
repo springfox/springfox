@@ -40,7 +40,7 @@ import io.swagger.models.Xml;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
-import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
+import springfox.documentation.spring.web.output.JacksonModuleRegistrar;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.*;
 

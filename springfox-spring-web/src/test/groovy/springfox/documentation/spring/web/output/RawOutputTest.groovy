@@ -17,10 +17,15 @@
  *
  */
 
-package springfox.documentation.spring.web.json;
+package springfox.documentation.spring.web.output
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import spock.lang.Specification
+import springfox.documentation.spring.web.output.RawOutput
 
-public interface JacksonModuleRegistrar {
-  void maybeRegisterModule(ObjectMapper objectMapper);
+class RawOutputTest extends Specification {
+
+  def "should pass coverage"() {
+    expect:
+      new RawOutput("Something").value()
+  }
 }

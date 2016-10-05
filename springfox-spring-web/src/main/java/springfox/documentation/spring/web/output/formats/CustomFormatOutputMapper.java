@@ -16,21 +16,21 @@
  *
  *
  */
-package springfox.documentation.spring.web.json;
+package springfox.documentation.spring.web.output.formats;
 
-import com.fasterxml.jackson.annotation.JsonRawValue;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.MediaType;
 
-public class Json {
-  private final String value;
+import java.util.Collection;
 
-  public Json(String value) {
-    this.value = value;
-  }
+/**
+ * @author Alexandru-Constantin Bledea
+ * @since Sep 14, 2016
+ */
+public interface CustomFormatOutputMapper {
 
-  @JsonValue
-  @JsonRawValue
-  public String value() {
-    return value;
-  }
+  ObjectMapper configureMapper();
+
+  Collection<MediaType> getFormats();
+
 }
