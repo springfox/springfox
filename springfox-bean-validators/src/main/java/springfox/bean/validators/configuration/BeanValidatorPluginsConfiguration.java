@@ -20,16 +20,18 @@ package springfox.bean.validators.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.bean.validators.plugins.MinMaxAnnotationPlugin;
-import springfox.bean.validators.plugins.NotNullAnnotationPlugin;
-import springfox.bean.validators.plugins.PatternAnnotationPlugin;
-import springfox.bean.validators.plugins.SizeAnnotationPlugin;
+import springfox.bean.validators.plugins.*;
 
 @Configuration
 public class BeanValidatorPluginsConfiguration {
   @Bean
   public MinMaxAnnotationPlugin minMaxPlugin() {
     return new MinMaxAnnotationPlugin();
+  }
+
+  @Bean
+  public DecimalMinMaxAnnotationPlugin decimalMinMaxPlugin() {
+    return new DecimalMinMaxAnnotationPlugin();
   }
 
   @Bean
