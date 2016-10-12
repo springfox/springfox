@@ -42,11 +42,20 @@ import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([ConfiguredObjectMapperSupport, AlternateTypesSupport, SchemaPluginsSupport])
-class ApiModelPropertyPropertyBuilderPluginSpec extends Specification {
+class ApiModelPropertyPropertyBuilderSpec extends Specification {
   BeanDescription beanDescription
 
   def setup() {
     beanDescription = beanDescription(TypeWithAnnotatedGettersAndSetters)
+  }
+
+  def "Should all swagger documentation types"() {
+    given:
+      def sut = new ApiModelPropertyPropertyBuilder()
+    expect:
+      !sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
   }
 
   def "ApiModelProperty annotated models get enriched with additional info given a bean property" (){

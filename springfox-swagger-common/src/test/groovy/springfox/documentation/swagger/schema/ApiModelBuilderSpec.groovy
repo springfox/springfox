@@ -31,6 +31,15 @@ import springfox.documentation.spi.schema.contexts.ModelContext
 class ApiModelBuilderSpec extends Specification {
   @Shared def resolver = new TypeResolver()
 
+  def "Should all swagger documentation types"() {
+    given:
+      def sut = new ApiModelBuilder(resolver)
+    expect:
+      !sut.supports(DocumentationType.SPRING_WEB)
+      sut.supports(DocumentationType.SWAGGER_12)
+      sut.supports(DocumentationType.SWAGGER_2)
+  }
+
   def "Api model builder parses ApiModel annotation as expected" () {
     given:
       ApiModelBuilder sut = new ApiModelBuilder(resolver)
