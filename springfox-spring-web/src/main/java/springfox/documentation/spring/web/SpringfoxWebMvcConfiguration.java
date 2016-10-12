@@ -19,8 +19,10 @@
 
 package springfox.documentation.spring.web;
 
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.plugin.core.config.EnablePluginRegistries;
@@ -79,6 +81,15 @@ public class SpringfoxWebMvcConfiguration {
   @Bean
   public JsonSerializer jsonSerializer(List<JacksonModuleRegistrar> moduleRegistrars) {
     return new JsonSerializer(moduleRegistrars);
+  }
+
+
+  @Bean
+  @Conditional(VanillaSpringMvcCondition.class)
+  public static PropertyPlaceholderConfigurer swaggerProperties() {
+    PropertyPlaceholderConfigurer properties = new PropertyPlaceholderConfigurer();
+    properties.setIgnoreUnresolvablePlaceholders(true);
+    return properties;
   }
 
 }

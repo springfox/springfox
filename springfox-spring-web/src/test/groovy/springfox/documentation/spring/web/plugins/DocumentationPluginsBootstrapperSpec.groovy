@@ -91,6 +91,35 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
       1 * plugin.configure(_)
   }
 
+  def "Documentation bootstrapper start parameters"() {
+    given:
+      DocumentationPlugin plugin = Mock(DocumentationPlugin)
+      plugin.documentationType >> DocumentationType.SWAGGER_12
+    when:
+      pluginManager.documentationPlugins() >>  [plugin]
+      plugin.isEnabled() >> true
+
+    then:
+      bootstrapper.autoStartup
+      !bootstrapper.isRunning()
+      bootstrapper.phase == Integer.MAX_VALUE
+  }
+
+  def "Documentation bootstrapper stop calls callback"() {
+    given:
+      DocumentationPlugin plugin = Mock(DocumentationPlugin)
+      plugin.documentationType >> DocumentationType.SWAGGER_12
+      def stopped = false
+    when:
+      pluginManager.documentationPlugins() >>  [plugin]
+      plugin.isEnabled() >> true
+
+    and:
+      bootstrapper.stop({stopped = true})
+    then:
+      stopped
+  }
+
   def "Bootstrapper now supports starting and stopping"() {
     given:
       DocumentationPlugin plugin = Mock(DocumentationPlugin)
