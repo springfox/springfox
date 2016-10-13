@@ -22,10 +22,18 @@ package springfox.documentation.service;
 public class AllowableRangeValues implements AllowableValues {
   private final String min;
   private final String max;
+  private final Boolean exclusiveMin;
+  private final Boolean exclusiveMax;
 
   public AllowableRangeValues(String min, String max) {
+    this(min, null, max, null);
+  }
+
+  public AllowableRangeValues(String min, Boolean exclusiveMin, String max, Boolean exclusiveMax) {
     this.min = min;
     this.max = max;
+    this.exclusiveMin = exclusiveMin;
+    this.exclusiveMax = exclusiveMax;
   }
 
   public String getMin() {
@@ -34,5 +42,13 @@ public class AllowableRangeValues implements AllowableValues {
 
   public String getMax() {
     return max;
+  }
+
+  public Boolean getExclusiveMin() {
+    return exclusiveMin;
+  }
+
+  public Boolean getExclusiveMax() {
+    return exclusiveMax;
   }
 }

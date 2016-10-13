@@ -51,12 +51,17 @@ class DecimalMinMaxAnnotationPluginSpec extends Specification {
     then:
       def range = property.allowableValues as AllowableRangeValues
       range?.max == expectedMax
+      range?.exclusiveMax == exclusiveMax
       range?.min == expectedMin
+      range?.exclusiveMin == exclusiveMin
     where:
-      propertyName      | expectedMin                   | expectedMax
-      "noAnnotation"    | null                          | null
-      "onlyMin"         | "10.5"                        | Double.MAX_VALUE.toString()
-      "onlyMax"         | (-Double.MAX_VALUE).toString()| "20.5"
-      "both"            | "10.5"                        | "20.5"
+      propertyName      | expectedMin                   | exclusiveMin | expectedMax                 | exclusiveMax
+      "noAnnotation"    | null                          | null         | null                        | null
+      "onlyMin"         | "10.5"                        | false        | Double.MAX_VALUE.toString() | false
+      "onlyMax"         | (-Double.MAX_VALUE).toString()| false        | "20.5"                      | false
+      "both"            | "10.5"                        | false        | "20.5"                      | false
+      "minExclusive"    | "10.5"                        | true         | Double.MAX_VALUE.toString() | false
+      "maxExclusive"    | (-Double.MAX_VALUE).toString()| false        | "20.5"                      | true
+      "bothExclusive"   | "10.5"                        | true         | "20.5"                      | true
   }
 }

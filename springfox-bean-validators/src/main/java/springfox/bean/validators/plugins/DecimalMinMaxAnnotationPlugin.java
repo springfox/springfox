@@ -71,26 +71,29 @@ public class DecimalMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin
   }
 
 
-  private AllowableValues createAllowableValuesFromDecimalMinMaxForNumbers(Optional<DecimalMin> min, Optional<DecimalMax> max) {
+  private AllowableValues createAllowableValuesFromDecimalMinMaxForNumbers(Optional<DecimalMin> decimalMin, Optional<DecimalMax> decimalMax) {
     AllowableRangeValues myvalues = null;
 
-    if (min.isPresent() && max.isPresent()) {
+    if (decimalMin.isPresent() && decimalMax.isPresent()) {
       LOG.debug("@DecimalMin+@DecimalMax detected: adding AllowableRangeValues to field ");
-      myvalues = new AllowableRangeValues(min.get().value(), max.get().value());
+      DecimalMin min = decimalMin.get();
+      DecimalMax max = decimalMax.get();
+      myvalues = new AllowableRangeValues(min.value(), !min.inclusive(), max.value(), !max.inclusive());
 
-    } else if (min.isPresent()) {
+    } else if (decimalMin.isPresent()) {
       LOG.debug("@DecimalMin detected: adding AllowableRangeValues to field ");
+      DecimalMin min = decimalMin.get();
       // use Max value until "infinity" works
-      myvalues = new AllowableRangeValues(min.get().value(), Double.toString(Double.MAX_VALUE));
+      myvalues = new AllowableRangeValues(min.value(), !min.inclusive(), Double.toString(Double.MAX_VALUE), false);
 
-    } else if (max.isPresent()) {
+    } else if (decimalMax.isPresent()) {
       // use Min value until "infinity" works
       LOG.debug("@DecimalMax detected: adding AllowableRangeValues to field ");
-      myvalues = new AllowableRangeValues(Double.toString(-Double.MAX_VALUE), max.get().value());
+      DecimalMax max = decimalMax.get();
+      myvalues = new AllowableRangeValues(Double.toString(-Double.MAX_VALUE), false, max.value(), !max.inclusive());
 
     }
     return myvalues;
   }
-
 
 }

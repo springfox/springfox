@@ -30,4 +30,11 @@ public class DecimalMinMaxTestModel {
   @DecimalMin("10.5")
   @DecimalMax("20.5")
   private int both;
+  @DecimalMin(value = "10.5", inclusive = false)
+  private int minExclusive;
+  @DecimalMax(value = "20.5", inclusive = false)
+  private int maxExclusive;
+  @DecimalMin(value = "10.5", inclusive = false)
+  @DecimalMax(value = "20.5", inclusive = false)
+  private int bothExclusive;
 }

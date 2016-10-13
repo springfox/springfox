@@ -51,12 +51,14 @@ class MinMaxAnnotationPluginSpec extends Specification {
     then:
       def range = property.allowableValues as AllowableRangeValues
       range?.max == expectedMax
+      range?.exclusiveMax == exclusiveMax
       range?.min == expectedMin
+      range?.exclusiveMin == exclusiveMin
     where:
-      propertyName      | expectedMin                   | expectedMax
-      "noAnnotation"    | null                          | null
-      "onlyMin"         | "10.0"                        | Double.MAX_VALUE.toString()
-      "onlyMax"         | (-Double.MAX_VALUE).toString()| "20.0"
-      "both"            | "10.0"                        | "20.0"
+      propertyName      | expectedMin                   | exclusiveMin | expectedMax                 | exclusiveMax
+      "noAnnotation"    | null                          | null         | null                        | null
+      "onlyMin"         | "10.0"                        | false        | Double.MAX_VALUE.toString() | false
+      "onlyMax"         | (-Double.MAX_VALUE).toString()| false        | "20.0"                      | false
+      "both"            | "10.0"                        | false        | "20.0"                      | false
   }
 }
