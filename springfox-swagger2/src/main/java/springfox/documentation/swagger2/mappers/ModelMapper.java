@@ -146,25 +146,27 @@ public abstract class ModelMapper {
     }
 
     if (property instanceof AbstractNumericProperty) {
+      AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
       AllowableValues allowableValues = source.getAllowableValues();
       if (allowableValues instanceof AllowableRangeValues) {
         AllowableRangeValues range = (AllowableRangeValues) allowableValues;
-        ((AbstractNumericProperty) property).maximum(safeDouble(range.getMax()));
-        ((AbstractNumericProperty) property).exclusiveMaximum(range.getExclusiveMax());
-        ((AbstractNumericProperty) property).minimum(safeDouble(range.getMin()));
-        ((AbstractNumericProperty) property).exclusiveMinimum(range.getExclusiveMin());
+        numericProperty.maximum(safeDouble(range.getMax()));
+        numericProperty.exclusiveMaximum(range.getExclusiveMax());
+        numericProperty.minimum(safeDouble(range.getMin()));
+        numericProperty.exclusiveMinimum(range.getExclusiveMin());
       }
     }
 
     if (property instanceof StringProperty) {
+      StringProperty stringProperty = (StringProperty) property;
       AllowableValues allowableValues = source.getAllowableValues();
       if (allowableValues instanceof AllowableRangeValues) {
         AllowableRangeValues range = (AllowableRangeValues) allowableValues;
-        ((StringProperty) property).maxLength(safeInteger(range.getMax()));
-        ((StringProperty) property).minLength(safeInteger(range.getMin()));
+        stringProperty.maxLength(safeInteger(range.getMax()));
+        stringProperty.minLength(safeInteger(range.getMin()));
       }
       if(source.getPattern() != null) {
-        ((StringProperty) property).setPattern(source.getPattern());
+        stringProperty.setPattern(source.getPattern());
       }
     }
 
