@@ -80,7 +80,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
 
   static ModelRef maybeGetModelRef(ApiImplicitParam param) {
     String baseType = param.dataType();
-    if (!isBaseType(param.dataType())) {
+    if (baseType.equals("")) {
       LOGGER.warn("Coercing to be of type string. This may not even be a scalar type in actuality");
       baseType = "string";
     }
