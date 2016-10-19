@@ -83,14 +83,12 @@ public class DecimalMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin
     } else if (decimalMin.isPresent()) {
       LOG.debug("@DecimalMin detected: adding AllowableRangeValues to field ");
       DecimalMin min = decimalMin.get();
-      // use Max value until "infinity" works
-      myvalues = new AllowableRangeValues(min.value(), !min.inclusive(), Double.toString(Double.MAX_VALUE), false);
+      myvalues = new AllowableRangeValues(min.value(), !min.inclusive(), null, null);
 
     } else if (decimalMax.isPresent()) {
-      // use Min value until "infinity" works
       LOG.debug("@DecimalMax detected: adding AllowableRangeValues to field ");
       DecimalMax max = decimalMax.get();
-      myvalues = new AllowableRangeValues(Double.toString(-Double.MAX_VALUE), false, max.value(), !max.inclusive());
+      myvalues = new AllowableRangeValues(null, null, max.value(), !max.inclusive());
 
     }
     return myvalues;

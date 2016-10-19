@@ -55,10 +55,10 @@ class MinMaxAnnotationPluginSpec extends Specification {
       range?.min == expectedMin
       range?.exclusiveMin == exclusiveMin
     where:
-      propertyName      | expectedMin                   | exclusiveMin | expectedMax                 | exclusiveMax
-      "noAnnotation"    | null                          | null         | null                        | null
-      "onlyMin"         | "10.0"                        | false        | Double.MAX_VALUE.toString() | false
-      "onlyMax"         | (-Double.MAX_VALUE).toString()| false        | "20.0"                      | false
-      "both"            | "10.0"                        | false        | "20.0"                      | false
+      propertyName      | expectedMin | exclusiveMin | expectedMax                 | exclusiveMax
+      "noAnnotation"    | null        | null         | null                        | null
+      "onlyMin"         | "10.0"      | false        | null                        | null
+      "onlyMax"         | null        | null         | "20.0"                      | false
+      "both"            | "10.0"      | false        | "20.0"                      | false
   }
 }
