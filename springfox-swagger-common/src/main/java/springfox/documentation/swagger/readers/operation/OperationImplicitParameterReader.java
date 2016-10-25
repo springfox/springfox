@@ -55,15 +55,6 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
     return SwaggerPluginSupport.pluginDoesApply(delimiter);
   }
 
-  private List<Parameter> readParameters(OperationContext context) {
-    Optional<ApiImplicitParam> annotation = context.findAnnotation(ApiImplicitParam.class);
-    List<Parameter> parameters = Lists.newArrayList();
-    if (annotation.isPresent()) {
-      parameters.add(OperationImplicitParameterReader.implicitParameter(annotation.get()));
-    }
-    return parameters;
-  }
-
   static Parameter implicitParameter(ApiImplicitParam param) {
     ModelRef modelRef = maybeGetModelRef(param);
     return new ParameterBuilder()
@@ -89,6 +80,15 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
       return new ModelRef("", new ModelRef(dataType, allowableValues));
     }
     return new ModelRef(dataType, allowableValues);
+  }
+
+  private List<Parameter> readParameters(OperationContext context) {
+    Optional<ApiImplicitParam> annotation = context.findAnnotation(ApiImplicitParam.class);
+    List<Parameter> parameters = Lists.newArrayList();
+    if (annotation.isPresent()) {
+      parameters.add(OperationImplicitParameterReader.implicitParameter(annotation.get()));
+    }
+    return parameters;
   }
 
 }
