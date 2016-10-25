@@ -30,4 +30,36 @@ public class MinMaxTestModel {
   @Min(10)
   @Max(20)
   private int both;
+
+  public int getNoAnnotation() {
+    return noAnnotation;
+  }
+
+  public void setNoAnnotation(int noAnnotation) {
+    this.noAnnotation = noAnnotation;
+  }
+
+  public int getOnlyMin() {
+    return onlyMin;
+  }
+
+  public void setOnlyMin(int onlyMin) {
+    this.onlyMin = onlyMin;
+  }
+
+  public int getOnlyMax() {
+    return onlyMax;
+  }
+
+  public void setOnlyMax(int onlyMax) {
+    this.onlyMax = onlyMax;
+  }
+
+  public int getBoth() {
+    return both;
+  }
+
+  public void setBoth(int both) {
+    this.both = both;
+  }
 }

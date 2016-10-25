@@ -39,4 +39,15 @@ public class NullablityTestModel {
     return notNullGetter;
   }
 
+  public void setNotNullString(String notNullString) {
+    this.notNullString = notNullString;
+  }
+
+  public void setString(String string) {
+    this.string = string;
+  }
+
+  public void setNotNullGetter(String notNullGetter) {
+    this.notNullGetter = notNullGetter;
+  }
 }

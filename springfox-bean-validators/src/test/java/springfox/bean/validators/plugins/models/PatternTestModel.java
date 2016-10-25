@@ -44,4 +44,16 @@ public class PatternTestModel {
   public String getGetterPatternString() {
     return getterPatternString;
   }
+
+  public void setPatternString(String patternString) {
+    this.patternString = patternString;
+  }
+
+  public void setNoPatternString(String noPatternString) {
+    this.noPatternString = noPatternString;
+  }
+
+  public void setGetterPatternString(String getterPatternString) {
+    this.getterPatternString = getterPatternString;
+  }
 }

@@ -37,4 +37,60 @@ public class DecimalMinMaxTestModel {
   @DecimalMin(value = "10.5", inclusive = false)
   @DecimalMax(value = "20.5", inclusive = false)
   private int bothExclusive;
+
+  public int getNoAnnotation() {
+    return noAnnotation;
+  }
+
+  public void setNoAnnotation(int noAnnotation) {
+    this.noAnnotation = noAnnotation;
+  }
+
+  public int getOnlyMin() {
+    return onlyMin;
+  }
+
+  public void setOnlyMin(int onlyMin) {
+    this.onlyMin = onlyMin;
+  }
+
+  public int getOnlyMax() {
+    return onlyMax;
+  }
+
+  public void setOnlyMax(int onlyMax) {
+    this.onlyMax = onlyMax;
+  }
+
+  public int getBoth() {
+    return both;
+  }
+
+  public void setBoth(int both) {
+    this.both = both;
+  }
+
+  public int getMinExclusive() {
+    return minExclusive;
+  }
+
+  public void setMinExclusive(int minExclusive) {
+    this.minExclusive = minExclusive;
+  }
+
+  public int getMaxExclusive() {
+    return maxExclusive;
+  }
+
+  public void setMaxExclusive(int maxExclusive) {
+    this.maxExclusive = maxExclusive;
+  }
+
+  public int getBothExclusive() {
+    return bothExclusive;
+  }
+
+  public void setBothExclusive(int bothExclusive) {
+    this.bothExclusive = bothExclusive;
+  }
 }

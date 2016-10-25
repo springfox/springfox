@@ -42,4 +42,12 @@ public class PatternAndSizeTestModel {
   public String getGetterString() {
     return getterString;
   }
+
+  public void setPropertyString(String propertyString) {
+    this.propertyString = propertyString;
+  }
+
+  public void setGetterString(String getterString) {
+    this.getterString = getterString;
+  }
 }
