@@ -37,4 +37,68 @@ public class SizeTestModel {
   private String bothZero;
   @Size(min = Integer.MAX_VALUE)
   private String bothMax;
+
+  public String getNoAnnotation() {
+    return noAnnotation;
+  }
+
+  public void setNoAnnotation(String noAnnotation) {
+    this.noAnnotation = noAnnotation;
+  }
+
+  public String getDefaultSize() {
+    return defaultSize;
+  }
+
+  public void setDefaultSize(String defaultSize) {
+    this.defaultSize = defaultSize;
+  }
+
+  public String getBelowZero() {
+    return belowZero;
+  }
+
+  public void setBelowZero(String belowZero) {
+    this.belowZero = belowZero;
+  }
+
+  public String getAboveMax() {
+    return aboveMax;
+  }
+
+  public void setAboveMax(String aboveMax) {
+    this.aboveMax = aboveMax;
+  }
+
+  public String getInverted() {
+    return inverted;
+  }
+
+  public void setInverted(String inverted) {
+    this.inverted = inverted;
+  }
+
+  public String getBothNegative() {
+    return bothNegative;
+  }
+
+  public void setBothNegative(String bothNegative) {
+    this.bothNegative = bothNegative;
+  }
+
+  public String getBothZero() {
+    return bothZero;
+  }
+
+  public void setBothZero(String bothZero) {
+    this.bothZero = bothZero;
+  }
+
+  public String getBothMax() {
+    return bothMax;
+  }
+
+  public void setBothMax(String bothMax) {
+    this.bothMax = bothMax;
+  }
 }

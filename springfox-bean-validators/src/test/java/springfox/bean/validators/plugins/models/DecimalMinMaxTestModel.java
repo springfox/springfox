@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2016 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,18 +18,25 @@
  */
 package springfox.bean.validators.plugins.models;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 
-public class MinMaxTestModel {
+public class DecimalMinMaxTestModel {
   private int noAnnotation;
-  @Min(10)
+  @DecimalMin("10.5")
   private int onlyMin;
-  @Max(20)
+  @DecimalMax("20.5")
   private int onlyMax;
-  @Min(10)
-  @Max(20)
+  @DecimalMin("10.5")
+  @DecimalMax("20.5")
   private int both;
+  @DecimalMin(value = "10.5", inclusive = false)
+  private int minExclusive;
+  @DecimalMax(value = "20.5", inclusive = false)
+  private int maxExclusive;
+  @DecimalMin(value = "10.5", inclusive = false)
+  @DecimalMax(value = "20.5", inclusive = false)
+  private int bothExclusive;
 
   public int getNoAnnotation() {
     return noAnnotation;
@@ -61,5 +68,29 @@ public class MinMaxTestModel {
 
   public void setBoth(int both) {
     this.both = both;
+  }
+
+  public int getMinExclusive() {
+    return minExclusive;
+  }
+
+  public void setMinExclusive(int minExclusive) {
+    this.minExclusive = minExclusive;
+  }
+
+  public int getMaxExclusive() {
+    return maxExclusive;
+  }
+
+  public void setMaxExclusive(int maxExclusive) {
+    this.maxExclusive = maxExclusive;
+  }
+
+  public int getBothExclusive() {
+    return bothExclusive;
+  }
+
+  public void setBothExclusive(int bothExclusive) {
+    this.bothExclusive = bothExclusive;
   }
 }
