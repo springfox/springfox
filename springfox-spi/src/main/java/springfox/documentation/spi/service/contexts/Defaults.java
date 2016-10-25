@@ -115,19 +115,23 @@ public class Defaults {
     rules.add(newRule(typeResolver.resolve(HttpEntity.class, WildcardType.class),
             typeResolver.resolve(WildcardType.class)));
     rules.add(newRule(typeResolver.resolve(Optional.class, WildcardType.class), WildcardType.class));
-    maybeAddJdk8Optional(typeResolver, rules);
+    maybeAddRuleForClassName(typeResolver, rules, "java.util.Optional", WildcardType.class);
+    maybeAddRuleForClassName(typeResolver, rules, "java.time.LocalDate", java.sql.Date.class);
+    maybeAddRuleForClassName(typeResolver, rules, "java.time.LocalDateTime", java.util.Date.class);
+    maybeAddRuleForClassName(typeResolver, rules, "java.time.Instant", java.util.Date.class);
+    maybeAddRuleForClassName(typeResolver, rules, "java.time.OffsetDateTime", java.util.Date.class);
+    maybeAddRuleForClassName(typeResolver, rules, "java.time.ZonedDateTime", java.util.Date.class);
     return rules;
   }
 
-  void maybeAddJdk8Optional(TypeResolver typeResolver, List<AlternateTypeRule> rules) {
-    Optional<? extends Class> optionClazz = ClassSupport.classByName("java.util.Optional");
-    if (optionClazz.isPresent()) {
+  void maybeAddRuleForClassName(TypeResolver typeResolver, List<AlternateTypeRule> rules, String className, Class clazz ) {
+    Optional<? extends Class> fromClazz = ClassSupport.classByName(className);
+    if (fromClazz.isPresent()) {
       rules.add(newRule(
-          typeResolver.resolve(optionClazz.get(), WildcardType.class),
-          WildcardType.class));
+          typeResolver.resolve(fromClazz.get()),
+          typeResolver.resolve(clazz)));
     }
   }
-
 
   private void init() {
     initIgnorableTypes();
