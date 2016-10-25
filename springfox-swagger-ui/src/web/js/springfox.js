@@ -28,6 +28,7 @@ $(function() {
       apisSorter: data.apisSorter || 'alpha',
       defaultModelRendering: data.defaultModelRendering || 'schema',
       showRequestHeaders: data.showRequestHeaders || true,
+      timeout: data.requestTimeout,
       onComplete: function(swaggerApi, swaggerUi) {
 
         initializeSpringfox();

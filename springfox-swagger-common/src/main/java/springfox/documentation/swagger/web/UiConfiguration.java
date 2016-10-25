@@ -26,6 +26,7 @@ public class UiConfiguration {
   private final String docExpansion;
   private final String apisSorter;
   private final String defaultModelRendering;
+  private final Long requestTimeout;
 
   private final String[] supportedSubmitMethods;
 
@@ -33,11 +34,11 @@ public class UiConfiguration {
   private final boolean showRequestHeaders;
 
   public UiConfiguration(String validatorUrl) {
-    this(validatorUrl, "none", "alpha", "schema", Constants.DEFAULT_SUBMIT_METHODS, false, true);
+    this(validatorUrl, "none", "alpha", "schema", Constants.DEFAULT_SUBMIT_METHODS, false, true, null);
   }
 
   public UiConfiguration(String validatorUrl, String[] supportedSubmitMethods) {
-    this(validatorUrl, "none", "alpha", "schema", supportedSubmitMethods, false, true);
+    this(validatorUrl, "none", "alpha", "schema", supportedSubmitMethods, false, true, null);
   }
 
   public UiConfiguration(
@@ -47,11 +48,13 @@ public class UiConfiguration {
       String defaultModelRendering,
       String[] supportedSubmitMethods,
       boolean jsonEditor,
-      boolean showRequestHeaders) {
+      boolean showRequestHeaders,
+      Long requestTimeout) {
     this.validatorUrl = validatorUrl;
     this.docExpansion = docExpansion;
     this.apisSorter = apisSorter;
     this.defaultModelRendering = defaultModelRendering;
+    this.requestTimeout = requestTimeout;
     this.jsonEditor = jsonEditor;
     this.showRequestHeaders = showRequestHeaders;
     this.supportedSubmitMethods = supportedSubmitMethods;
@@ -90,6 +93,11 @@ public class UiConfiguration {
   @JsonProperty("showRequestHeaders")
   public boolean isShowRequestHeaders() {
     return showRequestHeaders;
+  }
+
+  @JsonProperty("requestTimeout")
+  public Long getRequestTimeout() {
+    return requestTimeout;
   }
 
   public static class Constants {
