@@ -33,7 +33,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.List;
 
-import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
+import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -49,7 +49,7 @@ public class OperationImplicitParametersReader implements OperationBuilderPlugin
     return pluginDoesApply(delimiter);
   }
 
-  protected List<Parameter> readParameters(OperationContext context) {
+  private List<Parameter> readParameters(OperationContext context) {
     Optional<ApiImplicitParams> annotation = context.findAnnotation(ApiImplicitParams.class);
 
     List<Parameter> parameters = Lists.newArrayList();
