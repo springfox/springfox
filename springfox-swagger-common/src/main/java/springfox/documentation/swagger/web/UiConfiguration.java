@@ -21,15 +21,15 @@ package springfox.documentation.swagger.web;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UiConfiguration {
-  public static final UiConfiguration DEFAULT = new UiConfiguration(null);
+  static final UiConfiguration DEFAULT = new UiConfiguration(null);
   private final String validatorUrl;
   private final String docExpansion;
-  private final String apiSorter;
+  private final String apisSorter;
   private final String defaultModelRendering;
 
   private final String[] supportedSubmitMethods;
 
-  private final boolean enableJsonEditor;
+  private final boolean jsonEditor;
   private final boolean showRequestHeaders;
 
   public UiConfiguration(String validatorUrl) {
@@ -41,18 +41,18 @@ public class UiConfiguration {
   }
 
   public UiConfiguration(
-          String validatorUrl,
-          String docExpansion,
-          String apiSorter,
-          String defaultModelRendering,
-          String[] supportedSubmitMethods,
-          boolean enableJsonEditor,
-          boolean showRequestHeaders) {
+      String validatorUrl,
+      String docExpansion,
+      String apisSorter,
+      String defaultModelRendering,
+      String[] supportedSubmitMethods,
+      boolean jsonEditor,
+      boolean showRequestHeaders) {
     this.validatorUrl = validatorUrl;
     this.docExpansion = docExpansion;
-    this.apiSorter = apiSorter;
+    this.apisSorter = apisSorter;
     this.defaultModelRendering = defaultModelRendering;
-    this.enableJsonEditor = enableJsonEditor;
+    this.jsonEditor = jsonEditor;
     this.showRequestHeaders = showRequestHeaders;
     this.supportedSubmitMethods = supportedSubmitMethods;
   }
@@ -68,8 +68,8 @@ public class UiConfiguration {
   }
 
   @JsonProperty("apisSorter")
-  public String getApiSorter() {
-    return apiSorter;
+  public String getApisSorter() {
+    return apisSorter;
   }
 
   @JsonProperty("defaultModelRendering")
@@ -83,8 +83,8 @@ public class UiConfiguration {
   }
 
   @JsonProperty("jsonEditor")
-  public boolean isEnableJsonEditor() {
-    return enableJsonEditor;
+  public boolean isJsonEditor() {
+    return jsonEditor;
   }
 
   @JsonProperty("showRequestHeaders")
@@ -93,7 +93,7 @@ public class UiConfiguration {
   }
 
   public static class Constants {
-    public static final String[] DEFAULT_SUBMIT_METHODS = new String[] {"get", "post", "put", "delete", "patch"};
+    public static final String[] DEFAULT_SUBMIT_METHODS = new String[] { "get", "post", "put", "delete", "patch" };
     public static final String[] NO_SUBMIT_METHODS = new String[] {};
   }
 }
