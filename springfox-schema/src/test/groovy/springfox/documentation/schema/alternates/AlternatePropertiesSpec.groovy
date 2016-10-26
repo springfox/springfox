@@ -20,14 +20,12 @@
 package springfox.documentation.schema.alternates
 
 import com.google.common.collect.ImmutableSet
-import org.joda.time.LocalDate
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 import springfox.documentation.schema.*
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
-import static springfox.documentation.schema.AlternateTypeRules.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -37,7 +35,6 @@ class AlternatePropertiesSpec extends Specification {
   def "Nested properties that have alternate types defined are rendered correctly" () {
     given:
       def provider = alternateTypeProvider()
-      provider.addRule(newRule(LocalDate, String))
       ModelProvider modelProvider = defaultModelProvider()
       Model model = modelProvider.modelFor(inputParam(
           typeWithAlternateProperty(),
@@ -49,10 +46,10 @@ class AlternatePropertiesSpec extends Specification {
       model.getName() == "TypeWithAlternateProperty"
       model.getProperties().containsKey("localDate")
       def modelProperty = model.getProperties().get("localDate")
-      modelProperty.type.erasedType == String
-      modelProperty.getQualifiedType() == "java.lang.String"
+      modelProperty.type.erasedType == java.sql.Date
+      modelProperty.getQualifiedType() == "java.sql.Date"
       def item = modelProperty.getModelRef()
-      item.type == "string"
+      item.type == "date"
       !item.collection
       item.itemType == null
   }
