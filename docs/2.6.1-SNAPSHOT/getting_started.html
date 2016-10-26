@@ -800,6 +800,7 @@ dependencies {
 152
 153
 154
+155
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
@@ -952,7 +953,8 @@ dependencies {
         <span class="string"><span class="delimiter">&quot;</span><span class="content">schema</span><span class="delimiter">&quot;</span></span>,     <span class="comment">// defaultModelRendering =&gt; schema</span>
         UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS,
         <span class="predefined-constant">false</span>,        <span class="comment">// enableJsonEditor      =&gt; true | false</span>
-        <span class="predefined-constant">true</span>);        <span class="comment">// showRequestHeaders    =&gt; true | false</span>
+        <span class="predefined-constant">true</span>,         <span class="comment">// showRequestHeaders    =&gt; true | false</span>
+        <span class="integer">60000L</span>);      <span class="comment">// requestTimeout =&gt; in milliseconds, defaults to null (uses jquery xh timeout)</span>
   }
 }</pre></td>
 </tr></table></code></pre>
@@ -1346,7 +1348,7 @@ api docs are served](<a href="http://springfox.github.io/springfox/docs/current/
 <em>Keep in mind this is experimental</em>!
 In order to use this feature
 1. Add <code>springfox-swagger-ui-rfc6570</code> instead of <code>springfox-swagger-ui</code> as a dependency
-<a href="http://mvnrepository.com/artifact/io.springfox.ui/springfox-swagger-ui-rfc6570/0.9.8">experimental swagger-ui</a>.
+<a href="http://mvnrepository.com/artifact/io.springfox.ui/springfox-swagger-ui-rfc6570/1.0.0">experimental swagger-ui</a>.
 </td>
 </tr>
 </table>
@@ -1357,7 +1359,7 @@ In order to use this feature
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox.ui:springfox-swagger-ui-rfc6570:0.9.8</span><span class="delimiter">'</span></span>
+    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox.ui:springfox-swagger-ui-rfc6570:1.0.0</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -1369,7 +1371,7 @@ In order to use this feature
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
     <span class="tag">&lt;groupId&gt;</span>io.springfox.ui<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>springfox-swagger-ui-rfc6570<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>0.9.8<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;version&gt;</span>1.0.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -1407,7 +1409,7 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-10-25 20:05:51 UTC
+Last updated 2016-10-26 00:23:07 UTC
 </div>
 </div>
 </body>
