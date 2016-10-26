@@ -2,6 +2,7 @@
 
 :releaseVersion: {springfox-released-version}
 :snapshotVersion: {springfox-current-version}
+:springfoxRfc6570Version: {springfox-swagger-ui-rfc6570-version}
 
 === Dependencies
 The Springfox libraries are hosted on https://bintray.com/springfox/maven-repo/springfox/view[bintray] and jcenter.
@@ -304,14 +305,14 @@ api docs are served](http://springfox.github.io/springfox/docs/current/#customiz
 NOTE: _Keep in mind this is experimental_!
 In order to use this feature
 1. Add `springfox-swagger-ui-rfc6570` instead of `springfox-swagger-ui` as a dependency
-http://mvnrepository.com/artifact/io.springfox.ui/springfox-swagger-ui-rfc6570/0.9.8[experimental swagger-ui].
+http://mvnrepository.com/artifact/io.springfox.ui/springfox-swagger-ui-rfc6570/{springfoxRfc6570Version}[experimental swagger-ui].
 
 For gradle:
 [source,groovy]
 [subs="verbatim,attributes"]
 ----
 dependencies {
-    compile 'io.springfox.ui:springfox-swagger-ui-rfc6570:0.9.8'
+    compile 'io.springfox.ui:springfox-swagger-ui-rfc6570:{springfoxRfc6570Version}'
 }
 ----
 
@@ -322,7 +323,7 @@ For maven:
 <dependency>
     <groupId>io.springfox.ui</groupId>
     <artifactId>springfox-swagger-ui-rfc6570</artifactId>
-    <version>0.9.8</version>
+    <version>{springfoxRfc6570Version}</version>
 </dependency>
 ----
 NOTE: The newer version has changed the group id from `_io.springfox_` to `_io.springfox.ui_`!

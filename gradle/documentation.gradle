@@ -11,6 +11,7 @@ asciidoctor {
   attributes 'source-highlighter': 'coderay',
           'springfox-current-version': latestSnapshotVersion(project),
           'springfox-released-version': latestReleasedVersion(project),
+          'springfox-swagger-ui-rfc6570-version': "${rootProject.ext.springfoxRfc6570Version}",
           toc: 'left',
           idprefix: '',
           idseparator: '-',
@@ -108,6 +109,7 @@ task allJavadoc(type: Javadoc) {
 task docs {
   dependsOn asciidoctor
   doLast {
+    println asciidoctor.attributes
     println asciidoctor.properties
     Class.forName("java.awt.Desktop").newInstance().browse(file("${asciidoctor.outputDir}/index.html").toURI())
   }
