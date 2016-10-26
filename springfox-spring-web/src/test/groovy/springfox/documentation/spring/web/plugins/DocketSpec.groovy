@@ -160,8 +160,8 @@ class DocketSpec extends DocumentationContextSpec {
 
     where:
       method                    | args                               | expectedSize
-      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 8
-      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 7
+      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 15
+      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 14
   }
 
 
