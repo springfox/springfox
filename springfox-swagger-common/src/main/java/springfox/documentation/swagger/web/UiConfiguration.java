@@ -41,6 +41,72 @@ public class UiConfiguration {
     this(validatorUrl, "none", "alpha", "schema", supportedSubmitMethods, false, true, null);
   }
 
+  /**
+   * Use the default constructor instead (with requestTimeout)
+   * {@link UiConfiguration#UiConfiguration(String, String, String, String, String[], boolean, boolean, Long)} )}
+   *
+   * @deprecated @since 2.6.1
+   * @param validatorUrl - By default, Swagger-UI attempts to validate specs against swagger.io's online validator.
+   *        You can use this parameter to set a different validator URL, for example for locally
+   *        deployed validators (Validator Badge). Setting it to null will disable validation. This
+   *        parameter is relevant for Swagger 2.0 specs only.
+   * @param docExpansion - Controls how the API listing is displayed. It can be set to 'none' (default), 'list'
+   *        (shows operations for each resource), or 'full' (fully expanded: shows operations and their
+   *        details).
+   * @param apisSorter	Apply a sort to the API/tags list. It can be 'alpha' (sort by name) or a function (see Array
+   *        .prototype.sort() to know how sort function works). Default is the order returned by the
+   *        server unchanged.
+   * @param defaultModelRendering - Controls how models are shown when the API is first rendered. (The user can
+   *        always switch the rendering for a given model by clicking the 'Model' and 'Model
+   *        Schema' links.) It can be set to 'model' or 'schema', and the default is 'schema'.
+   * @param supportedSubmitMethods - An array of of the HTTP operations that will have the 'Try it out!' option. An
+   *        empty array disables all operations. This does not filter the operations from the display.
+   * @param jsonEditor - Enables a graphical view for editing complex bodies. Defaults to false.
+   * @param showRequestHeaders - Whether or not to show the headers that were sent when making a request via the 'Try
+   *        it out!' option. Defaults to false.
+   */
+  @Deprecated
+  public UiConfiguration(
+      String validatorUrl,
+      String docExpansion,
+      String apisSorter,
+      String defaultModelRendering,
+      String[] supportedSubmitMethods,
+      boolean jsonEditor,
+      boolean showRequestHeaders) {
+    this(
+        validatorUrl,
+        docExpansion,
+        apisSorter,
+        defaultModelRendering,
+        supportedSubmitMethods,
+        jsonEditor,
+        showRequestHeaders,
+        null);
+  }
+
+  /**
+   * Default constructor
+   * @param validatorUrl - By default, Swagger-UI attempts to validate specs against swagger.io's online validator.
+   *        You can use this parameter to set a different validator URL, for example for locally
+   *        deployed validators (Validator Badge). Setting it to null will disable validation. This
+   *        parameter is relevant for Swagger 2.0 specs only.
+   * @param docExpansion - Controls how the API listing is displayed. It can be set to 'none' (default), 'list'
+   *        (shows operations for each resource), or 'full' (fully expanded: shows operations and their
+   *        details).
+   * @param apisSorter	Apply a sort to the API/tags list. It can be 'alpha' (sort by name) or a function (see Array
+   *        .prototype.sort() to know how sort function works). Default is the order returned by the
+   *        server unchanged.
+   * @param defaultModelRendering - Controls how models are shown when the API is first rendered. (The user can
+   *        always switch the rendering for a given model by clicking the 'Model' and 'Model
+   *        Schema' links.) It can be set to 'model' or 'schema', and the default is 'schema'.
+   * @param supportedSubmitMethods - An array of of the HTTP operations that will have the 'Try it out!' option. An
+   *        empty array disables all operations. This does not filter the operations from the display.
+   * @param jsonEditor - Enables a graphical view for editing complex bodies. Defaults to false.
+   * @param showRequestHeaders - Whether or not to show the headers that were sent when making a request via the 'Try
+   *        it out!' option. Defaults to false.
+   * @param requestTimeout - XHR timeout
+   */
   public UiConfiguration(
       String validatorUrl,
       String docExpansion,
