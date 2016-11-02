@@ -20,15 +20,17 @@ package springfox.documentation.spring.web.readers.operation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import springfox.documentation.OperationNameGenerator;
+import springfox.documentation.NameGenerator;
 
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
 
 @Component
-public class CachingOperationNameGenerator implements OperationNameGenerator {
+@Qualifier("cachedOperation")
+public class CachingOperationNameGenerator implements NameGenerator {
   private static final Logger LOG = LoggerFactory.getLogger(CachingOperationNameGenerator.class);
   private Map<String, Integer> generated = newHashMap();
 

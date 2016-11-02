@@ -35,4 +35,43 @@ public class AllowableRangeValues implements AllowableValues {
   public String getMax() {
     return max;
   }
+  @Override
+  public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((min == null) ? 0 : min.hashCode());
+      result = prime * result + ((max == null) ? 0 : max.hashCode());
+      return result;
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+      if (this == obj) {
+          return true;
+      }
+      if (obj == null) {
+          return false;
+      }
+      if (getClass() != obj.getClass()) {
+          return false;
+      }
+      
+      AllowableRangeValues other = (AllowableRangeValues) obj;
+      
+      if (min == null) {
+          if (other.getMin() != null) {
+              return false;
+          }
+      } else if (!min.equals(other.getMin())) {
+          return false;
+      }
+      if (max == null) {
+          if (other.getMax() != null) {
+              return false;
+          }
+      } else if (!max.equals(other.getMax())) {
+          return false;
+      }
+      return true;
+  }
 }
