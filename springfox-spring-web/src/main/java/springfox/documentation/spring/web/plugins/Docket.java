@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.AlternateTypeRule;
-import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy;
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy;
 import springfox.documentation.schema.WildcardType;
@@ -58,6 +57,7 @@ import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.schema.AlternateTypeRules.*;
 
 /**
  * A builder which is intended to be the primary interface into the swagger-springmvc framework.
@@ -255,24 +255,6 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
-  private Function<AlternateTypeRule, Function<TypeResolver, AlternateTypeRule>> identityRuleBuilder() {
-    return new Function<AlternateTypeRule, Function<TypeResolver, AlternateTypeRule>>() {
-      @Override
-      public Function<TypeResolver, AlternateTypeRule> apply(AlternateTypeRule rule) {
-        return identityFunction(rule);
-      }
-    };
-  }
-
-  private Function<TypeResolver, AlternateTypeRule> identityFunction(final AlternateTypeRule rule) {
-    return new Function<TypeResolver, AlternateTypeRule>() {
-      @Override
-      public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return rule;
-      }
-    };
-  }
-
   /**
    * Directly substitutes a model class with the supplied substitute
    * e.g
@@ -385,7 +367,6 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
-
   /**
    * Decides whether to use url templating for paths. This is especially useful when you have search api's that
    * might have multiple request mappings for each search use case.
@@ -418,6 +399,7 @@ public class Docket implements DocumentationPlugin {
 
   /**
    * Method to add global tags to the docket
+   *
    * @param first     - atleast one tag is required to use this method
    * @param remaining - remaining tags
    * @return
@@ -425,11 +407,6 @@ public class Docket implements DocumentationPlugin {
   public Docket tags(Tag first, Tag... remaining) {
     tags.add(first);
     tags.addAll(newHashSet(remaining));
-    return this;
-  }
-
-  Docket selector(ApiSelector apiSelector) {
-    this.apiSelector = apiSelector;
     return this;
   }
 
@@ -497,14 +474,38 @@ public class Docket implements DocumentationPlugin {
     return documentationType.equals(delimiter);
   }
 
+  private Function<AlternateTypeRule, Function<TypeResolver, AlternateTypeRule>> identityRuleBuilder() {
+    return new Function<AlternateTypeRule, Function<TypeResolver, AlternateTypeRule>>() {
+      @Override
+      public Function<TypeResolver, AlternateTypeRule> apply(AlternateTypeRule rule) {
+        return identityFunction(rule);
+      }
+    };
+  }
+
+  private Function<TypeResolver, AlternateTypeRule> identityFunction(final AlternateTypeRule rule) {
+    return new Function<TypeResolver, AlternateTypeRule>() {
+      @Override
+      public AlternateTypeRule apply(TypeResolver typeResolver) {
+        return rule;
+      }
+    };
+  }
+
+  Docket selector(ApiSelector apiSelector) {
+    this.apiSelector = apiSelector;
+    return this;
+  }
+
   private Function<TypeResolver, AlternateTypeRule> newSubstitutionFunction(final Class clazz, final Class with) {
     return new Function<TypeResolver, AlternateTypeRule>() {
 
       @Override
       public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return AlternateTypeRules.newRule(
+        return newRule(
             typeResolver.resolve(clazz),
-            typeResolver.resolve(with));
+            typeResolver.resolve(with),
+            DIRECT_SUBSTITUTION_RULE_ORDER);
       }
     };
   }
@@ -513,9 +514,10 @@ public class Docket implements DocumentationPlugin {
     return new Function<TypeResolver, AlternateTypeRule>() {
       @Override
       public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return AlternateTypeRules.newRule(
+        return newRule(
             typeResolver.resolve(clz, WildcardType.class),
-            typeResolver.resolve(WildcardType.class));
+            typeResolver.resolve(WildcardType.class),
+            GENERIC_SUBSTITUTION_RULE_ORDER);
       }
     };
   }

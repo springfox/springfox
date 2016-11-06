@@ -20,12 +20,16 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.TypeResolver;
+import org.springframework.core.Ordered;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
 public class AlternateTypeRules {
+  public static final int DIRECT_SUBSTITUTION_RULE_ORDER = Ordered.HIGHEST_PRECEDENCE + 1000;
+  public static final int GENERIC_SUBSTITUTION_RULE_ORDER = Ordered.HIGHEST_PRECEDENCE + 500;
+
   private AlternateTypeRules() {
     throw new UnsupportedOperationException();
   }
@@ -38,8 +42,20 @@ public class AlternateTypeRules {
    * @return the alternate type rule
    */
   public static AlternateTypeRule newRule(Type original, Type alternate) {
+    return newRule(original, alternate, Ordered.LOWEST_PRECEDENCE);
+  }
+
+  /**
+   * Helper method to create a new alternate rule.
+   *
+   * @param original  the original
+   * @param alternate the alternate
+   * @param order the order in which the rule is applied. {@link org.springframework.core.Ordered}
+   * @return the alternate type rule
+   */
+  public static AlternateTypeRule newRule(Type original, Type alternate, int order) {
     TypeResolver resolver = new TypeResolver();
-    return new AlternateTypeRule(resolver.resolve(original), resolver.resolve(alternate));
+    return new AlternateTypeRule(resolver.resolve(original), resolver.resolve(alternate), order);
   }
 
   /**
@@ -52,8 +68,10 @@ public class AlternateTypeRules {
    */
   public static AlternateTypeRule newMapRule(Class<?> key, Class<?> value) {
     TypeResolver resolver = new TypeResolver();
-    return new AlternateTypeRule(resolver.resolve(Map.class, key, value),
-            resolver.resolve(List.class, resolver.resolve(Entry.class, key, value)));
+    return new AlternateTypeRule(
+            resolver.resolve(Map.class, key, value),
+            resolver.resolve(List.class, resolver.resolve(Entry.class, key, value)),
+            Ordered.LOWEST_PRECEDENCE);
   }
 
 }

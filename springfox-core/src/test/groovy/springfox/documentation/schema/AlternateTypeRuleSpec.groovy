@@ -21,13 +21,15 @@ package springfox.documentation.schema
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.core.OrderComparator
+import org.springframework.core.Ordered
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.lang.reflect.Type
 
-import static AlternateTypeRules.*
+import static springfox.documentation.schema.AlternateTypeRules.*
 
 class AlternateTypeRuleSpec extends Specification {
   @Shared TypeResolver resolver = new TypeResolver()
@@ -111,6 +113,26 @@ class AlternateTypeRuleSpec extends Specification {
     where:
       original                    | alternate              | testType
       resolve(List, WildcardType) | resolve(List, String)  | resolve(List, String)
+
+  }
+
+  def "Preserves ordering of rules" () {
+    given:
+      def rule1 = newRule(original, alternate)
+      def rule2 = newRule(original, alternate, Ordered.HIGHEST_PRECEDENCE)
+      def rule3 = newRule(original, alternate, Ordered.HIGHEST_PRECEDENCE + 1000)
+      def rule4 = new AlternateTypeRule(original, alternate)
+      def sut = [rule1, rule2, rule3, rule4]
+    and:
+      OrderComparator.sort(sut)
+    expect:
+      sut.get(0) == rule2
+      sut.get(1) == rule4
+      sut.get(2) == rule3
+      sut.get(3) == rule1
+    where:
+      original                    | alternate
+      resolve(List, WildcardType) | resolve(List, String)
   }
 
   ResolvedType resolve(Class clazz, Type ... typeBindings) {

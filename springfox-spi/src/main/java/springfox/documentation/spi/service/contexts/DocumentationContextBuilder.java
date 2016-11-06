@@ -24,6 +24,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
+import org.springframework.core.OrderComparator;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
@@ -169,7 +170,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder ruleBuilders(List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders) {
-    rules.addAll(0, from(ruleBuilders)
+    rules.addAll(from(ruleBuilders)
         .transform(evaluator(typeResolver))
         .toList());
     return this;
@@ -248,6 +249,7 @@ public class DocumentationContextBuilder {
 
   public DocumentationContext build() {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
+    OrderComparator.sort(rules);
     return new DocumentationContext(documentationType,
         handlerMappings,
         apiInfo,
