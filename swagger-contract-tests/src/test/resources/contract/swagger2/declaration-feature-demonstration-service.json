@@ -492,7 +492,8 @@
             "in": "query",
             "description": "localDate",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "format": "date"
           }
         ],
         "responses": {
