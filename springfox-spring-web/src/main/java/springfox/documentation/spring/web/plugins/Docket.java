@@ -233,7 +233,7 @@ public class Docket implements DocumentationPlugin {
    *
    * @param alternateTypeRules
    * @return this Docket
-   * @see AlternateTypeRules#newRule(java.lang.reflect.Type,
+   * @see springfox.documentation.schema.AlternateTypeRules#newRule(java.lang.reflect.Type,
    * java.lang.reflect.Type)
    */
   public Docket alternateTypeRules(AlternateTypeRule... alternateTypeRules) {
