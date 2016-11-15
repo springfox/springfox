@@ -31,6 +31,7 @@ import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
@@ -80,11 +81,13 @@ public class OperationParameterReader implements OperationBuilderPlugin {
       ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());
       if (!shouldIgnore(methodParameter, alternate, context.getIgnorableParameterTypes())) {
 
+    	ModelContext modelContext = context.getOperationModelContextsBuilder().inputParam(alternate, methodParameter);
         ParameterContext parameterContext = new ParameterContext(methodParameter,
             new ParameterBuilder(),
             context.getDocumentationContext(),
             context.getGenericsNamingStrategy(),
-            context);
+            context,
+            modelContext);
 
         if (shouldExpand(methodParameter, alternate)) {
           parameters.addAll(

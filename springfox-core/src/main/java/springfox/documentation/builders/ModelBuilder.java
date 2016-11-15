@@ -33,6 +33,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 public class ModelBuilder {
   private String id;
   private String name;
+  private Integer index;
   private String qualifiedType;
   private String description;
   private String baseModel;
@@ -62,6 +63,17 @@ public class ModelBuilder {
    */
   public ModelBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
+    return this;
+  }
+  
+  /**
+   * Updates the Index of the model
+   *
+   * @param index - index of the model
+   * @return this
+   */
+  public ModelBuilder index(Integer index) {
+    this.index = defaultIfAbsent(index, this.index);
     return this;
   }
 
@@ -156,7 +168,7 @@ public class ModelBuilder {
   }
 
   public Model build() {
-    return new Model(id, name, modelType, qualifiedType, properties, description, baseModel, discriminator, subTypes,
+    return new Model(id, name, index, modelType, qualifiedType, properties, description, baseModel, discriminator, subTypes,
         example);
   }
 }

@@ -19,7 +19,6 @@
 
 package springfox.documentation;
 
-import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -62,7 +61,7 @@ public interface RequestHandler {
 
   List<ResolvedMethodParameter> getParameters();
 
-  ResolvedType getReturnType();
+  ResolvedMethodParameter getReturnParameter();
 
   <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation);
 

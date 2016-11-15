@@ -18,7 +18,6 @@
  */
 package springfox.documentation.spring.web;
 
-import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -129,9 +128,9 @@ public class WebMvcRequestHandler implements RequestHandler {
   }
 
   @Override
-  public ResolvedType getReturnType() {
+  public ResolvedMethodParameter getReturnParameter() {
     HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
-    return handlerMethodResolver.methodReturnType(handlerMethod);
+    return new ResolvedMethodParameter(handlerMethodResolver.methodReturnType(handlerMethod));
   }
 
   @Override

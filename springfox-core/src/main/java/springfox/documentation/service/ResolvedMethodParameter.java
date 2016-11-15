@@ -20,8 +20,10 @@
 package springfox.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
+
 import org.springframework.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
@@ -31,20 +33,31 @@ import static com.google.common.collect.Lists.*;
 
 public class ResolvedMethodParameter {
   private final int parameterIndex;
+  private final boolean returnType;
   private final List<Annotation> annotations;
   private final String defaultName;
   private final ResolvedType parameterType;
 
   public ResolvedMethodParameter(String paramName, MethodParameter methodParameter, ResolvedType parameterType) {
     this(methodParameter.getParameterIndex(),
+    	false,
         paramName,
         newArrayList(methodParameter.getParameterAnnotations()),
         parameterType);
   }
+  
+  public ResolvedMethodParameter(ResolvedType parameterType) {
+	this(0,
+	    true,
+	    "",
+	    newArrayList(),
+	    parameterType);
+  }
 
-  public ResolvedMethodParameter(int parameterIndex, String defaultName, List<Annotation> annotations, ResolvedType
+  private ResolvedMethodParameter(int parameterIndex, boolean returnType, String defaultName, List<Annotation> annotations, ResolvedType
       parameterType) {
     this.parameterIndex = parameterIndex;
+    this.returnType = returnType;
     this.defaultName = defaultName;
     this.parameterType = parameterType;
     this.annotations = annotations;
@@ -65,9 +78,17 @@ public class ResolvedMethodParameter {
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
     return FluentIterable.from(annotations).filter(annotation).first();
   }
+  
+  public List<Annotation> getAnnotations() {
+	return annotations;  
+  }
 
   public int getParameterIndex() {
     return parameterIndex;
+  }
+  
+  public boolean isReturnType() {
+    return returnType;
   }
 
   public Optional<String> defaultName() {
@@ -75,12 +96,37 @@ public class ResolvedMethodParameter {
   }
 
   public ResolvedMethodParameter replaceResolvedParameterType(ResolvedType parameterType) {
-    return new ResolvedMethodParameter(parameterIndex, defaultName, annotations, parameterType);
+    return new ResolvedMethodParameter(parameterIndex, returnType, defaultName, annotations, parameterType);
   }
 
   public ResolvedMethodParameter annotate(Annotation annotation) {
     List<Annotation> annotations = newArrayList(this.annotations);
     annotations.add(annotation);
-    return new ResolvedMethodParameter(parameterIndex, defaultName, annotations, parameterType);
+    return new ResolvedMethodParameter(parameterIndex, returnType, defaultName, annotations, parameterType);
+  }
+ 
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(new Integer(parameterIndex), new Boolean(returnType), annotations, defaultName, parameterType);
+  }
+  
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ResolvedMethodParameter that = (ResolvedMethodParameter) o;
+    
+    return parameterIndex == that.getParameterIndex() &&
+    	returnType == that.isReturnType() &&	
+        Objects.equal(defaultName, that.defaultName()) &&
+        Objects.equal(returnType, that.returnType) &&
+        Objects.equal(parameterType, that.getParameterType()) &&
+        Objects.equal(annotations, that.getAnnotations());
   }
 }

@@ -35,7 +35,6 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
@@ -43,7 +42,6 @@ import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -87,15 +85,10 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         LOG.warn("Trying to infer dataType {}", parameterType);
       }
     }
-    ModelContext modelContext = inputParam(parameterType,
-        context.getDocumentationType(),
-        context.getAlternateTypeProvider(),
-        context.getGenericNamingStrategy(),
-        context.getIgnorableParameterTypes());
     context.parameterBuilder()
             .type(parameterType)
             .modelRef(Optional.fromNullable(modelRef)
-                .or(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
+                .or(modelRefFactory(context.getModelContext(), nameExtractor).apply(parameterType)));
   }
 
   private boolean treatRequestParamAsString(ResolvedType parameterType) {

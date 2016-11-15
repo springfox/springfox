@@ -72,16 +72,12 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
 
   private void applyReturnTypeOverride(OperationContext context) {
 
-    ResolvedType returnType = context.alternateFor(context.getReturnType());
+    ResolvedType returnType = context.alternateFor(context.getReturnParameter().getParameterType());
     int httpStatusCode = httpStatusCode(context);
     String message = message(context);
     ModelReference modelRef = null;
     if (!isVoid(returnType)) {
-      ModelContext modelContext = ModelContext.returnValue(returnType,
-          context.getDocumentationType(),
-          context.getAlternateTypeProvider(),
-          context.getGenericsNamingStrategy(),
-          context.getIgnorableParameterTypes());
+      ModelContext modelContext = context.getOperationModelContextsBuilder().inputParam(returnType, context.getReturnParameter());
       modelRef = modelRefFactory(modelContext, typeNameExtractor).apply(returnType);
     }
     ResponseMessage built = new ResponseMessageBuilder()

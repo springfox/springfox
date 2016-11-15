@@ -60,8 +60,8 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
 
   private void collectGlobalModels(RequestMappingContext context) {
     for (ResolvedType each : context.getAdditionalModels()) {
-      context.operationModelsBuilder().addInputParam(each);
-      context.operationModelsBuilder().addReturn(each);
+      context.operationModelsBuilder().inputType(each);
+      context.operationModelsBuilder().returnType(each);
     }
   }
 
@@ -71,10 +71,10 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
   }
 
   private void collectFromReturnType(RequestMappingContext context) {
-    ResolvedType modelType = context.getReturnType();
+    ResolvedType modelType = context.getReturnParameter().getParameterType();
     modelType = context.alternateFor(modelType);
     LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
-    context.operationModelsBuilder().addReturn(modelType);
+    context.operationModelsBuilder().inputParam(modelType, context.getReturnParameter());
   }
 
   private void collectParameters(RequestMappingContext context) {
@@ -88,7 +88,7 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
             || parameterType.hasParameterAnnotation(RequestPart.class)) {
           ResolvedType modelType = context.alternateFor(parameterType.getParameterType());
           LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
-          context.operationModelsBuilder().addInputParam(modelType);
+          context.operationModelsBuilder().inputParam(modelType, parameterType);
         }
     }
     LOG.debug("Finished reading parameters models for handlerMethod |{}|", context.getName());

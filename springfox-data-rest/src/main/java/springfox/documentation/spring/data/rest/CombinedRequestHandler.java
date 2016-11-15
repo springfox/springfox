@@ -18,7 +18,6 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -123,8 +122,8 @@ class CombinedRequestHandler implements RequestHandler {
   }
 
   @Override
-  public ResolvedType getReturnType() {
-    return first.getReturnType();
+  public ResolvedMethodParameter getReturnParameter() {
+    return first.getReturnParameter();
   }
 
   @Override

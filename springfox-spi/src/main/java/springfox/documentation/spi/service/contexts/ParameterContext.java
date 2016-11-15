@@ -27,6 +27,7 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
+import springfox.documentation.spi.schema.contexts.ModelContext;
 
 public class ParameterContext {
   private final ParameterBuilder parameterBuilder;
@@ -34,17 +35,20 @@ public class ParameterContext {
   private final DocumentationContext documentationContext;
   private final GenericTypeNamingStrategy genericNamingStrategy;
   private final OperationContext operationContext;
+  private final ModelContext modelContext;
 
   public ParameterContext(ResolvedMethodParameter resolvedMethodParameter,
                           ParameterBuilder parameterBuilder,
                           DocumentationContext documentationContext,
                           GenericTypeNamingStrategy genericNamingStrategy,
-                          OperationContext operationContext) {
+                          OperationContext operationContext,
+                          ModelContext modelContext) {
     this.parameterBuilder = parameterBuilder;
     this.resolvedMethodParameter = resolvedMethodParameter;
     this.documentationContext = documentationContext;
     this.genericNamingStrategy = genericNamingStrategy;
     this.operationContext = operationContext;
+    this.modelContext = modelContext;
   }
 
   public ResolvedMethodParameter resolvedMethodParameter() {
@@ -87,6 +91,10 @@ public class ParameterContext {
 
   public OperationContext getOperationContext() {
     return operationContext;
+  }
+  
+  public ModelContext getModelContext() {
+	  return modelContext;
   }
 
   public ImmutableSet<Class> getIgnorableParameterTypes() {

@@ -53,14 +53,14 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
       return new ModelRef("File");
     }
     String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-    return new ModelRef(typeName, allowableValues(type));
+    return new ModelRef(addModelIndex(typeName), allowableValues(type));
   }
 
   private Optional<ModelReference> mapReference(ResolvedType type) {
     if (isMapType(type)) {
       ResolvedType mapValueType = mapValueType(type);
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), true));
+      return Optional.<ModelReference>of(new ModelRef(addModelIndex(typeName), apply(mapValueType), true));
     }
     return Optional.absent();
   }
@@ -71,10 +71,18 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
       return Optional.<ModelReference>of(
           new ModelRef(
-              typeName,
+        	  addModelIndex(typeName),
               apply(collectionElementType),
               allowableValues(collectionElementType)));
     }
     return Optional.absent();
+  }
+  
+  private String addModelIndex(String name) {
+	Integer index = parentContext.getBuilder().build().getIndex();
+	if (index != null && index > 0) {
+	  name += "_" + index;
+	}
+	return name;
   }
 }

@@ -28,6 +28,7 @@ public class Model {
 
   private final String id;
   private final String name;
+  private final Integer index;
   private final ResolvedType type;
   private final String qualifiedType;
   private final Map<String, ModelProperty> properties;
@@ -40,6 +41,7 @@ public class Model {
   public Model(
       String id,
       String name,
+      Integer index,
       ResolvedType type,
       String qualifiedType,
       Map<String, ModelProperty> properties,
@@ -51,6 +53,7 @@ public class Model {
 
     this.id = id;
     this.name = name;
+    this.index = index;
     this.type = type;
     this.qualifiedType = qualifiedType;
     this.properties = properties;
@@ -68,6 +71,10 @@ public class Model {
   public String getName() {
     return name;
   }
+  
+  public Integer getIndex() {
+	    return index;
+	  }
 
   public String getQualifiedType() {
     return qualifiedType;
