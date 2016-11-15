@@ -55,13 +55,17 @@ public class EnumMapper {
       toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
     }
     if (allowableValues instanceof AllowableRangeValues) {
-      toReturn.setMinimum(safeDouble(((AllowableRangeValues) allowableValues).getMin()));
-      toReturn.setMaximum(safeDouble(((AllowableRangeValues) allowableValues).getMax()));
+      AllowableRangeValues range = (AllowableRangeValues) allowableValues;
+      toReturn.setMinimum(safeDouble(range.getMin()));
+      toReturn.setMaximum(safeDouble(range.getMax()));
     }
     return toReturn;
   }
 
   static Double safeDouble(String doubleString) {
+    if (doubleString == null){
+      return null;
+    }
     try {
       return Double.valueOf(doubleString);
     } catch (NumberFormatException e) {

@@ -29,6 +29,8 @@ public class ModelAttributeComplexTypeExample extends ModelAttributeExample {
     
     private String[] modelAttributeProperty;
 
+    private List<ModelAttributeComplexTypeExample> recursiveList;
+
     public List<FancyPet> getFancyPets() {
         return fancyPets;
     }
@@ -53,4 +55,11 @@ public class ModelAttributeComplexTypeExample extends ModelAttributeExample {
         this.modelAttributeProperty = modelAttributeProperty;
     }
 
+  public List<ModelAttributeComplexTypeExample> getRecursiveList() {
+    return recursiveList;
+  }
+
+  public void setRecursiveList(List<ModelAttributeComplexTypeExample> recursiveList) {
+    this.recursiveList = recursiveList;
+  }
 }

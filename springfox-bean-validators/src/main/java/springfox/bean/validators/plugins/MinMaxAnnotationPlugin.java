@@ -75,17 +75,15 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
     if (min.isPresent() && max.isPresent()) {
       LOG.debug("@Min+@Max detected: adding AllowableRangeValues to field ");
-      myvalues = new AllowableRangeValues(Double.toString(min.get().value()), Double.toString(max.get().value()));
+      myvalues = new AllowableRangeValues(Double.toString(min.get().value()), false, Double.toString(max.get().value()), false);
 
     } else if (min.isPresent()) {
       LOG.debug("@Min detected: adding AllowableRangeValues to field ");
-      // use Max value until "infinity" works
-      myvalues = new AllowableRangeValues(Double.toString(min.get().value()), Double.toString(Double.MAX_VALUE));
+      myvalues = new AllowableRangeValues(Double.toString(min.get().value()), false, null, null);
 
     } else if (max.isPresent()) {
-      // use Min value until "infinity" works
       LOG.debug("@Max detected: adding AllowableRangeValues to field ");
-      myvalues = new AllowableRangeValues(Double.toString(-Double.MAX_VALUE), Double.toString(max.get().value()));
+      myvalues = new AllowableRangeValues(null, null, Double.toString(max.get().value()), false);
 
     }
     return myvalues;

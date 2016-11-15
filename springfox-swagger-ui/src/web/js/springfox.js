@@ -23,6 +23,12 @@ $(function() {
       dom_id: "swagger-ui-container",
       validatorUrl: data.validatorUrl,
       supportedSubmitMethods: data.supportedSubmitMethods || ['get', 'post', 'put', 'delete', 'patch'],
+      docExpansion: data.docExpansion || 'none',
+      jsonEditor: JSON.parse(data.jsonEditor) || false,
+      apisSorter: data.apisSorter || 'alpha',
+      defaultModelRendering: data.defaultModelRendering || 'schema',
+      showRequestHeaders: data.showRequestHeaders || true,
+      timeout: data.requestTimeout,
       onComplete: function(swaggerApi, swaggerUi) {
 
         initializeSpringfox();
@@ -39,11 +45,6 @@ $(function() {
       onFailure: function(data) {
         log("Unable to Load SwaggerUI");
       },
-      docExpansion: data.docExpansion || 'none',
-      jsonEditor: JSON.parse(data.jsonEditor) || false,
-      apisSorter: data.apisSorter || 'alpha',
-      defaultModelRendering: data.defaultModelRendering || 'schema',
-      showRequestHeaders: data.showRequestHeaders || true
     });
 
     initializeBaseUrl();

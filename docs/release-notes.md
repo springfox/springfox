@@ -1,3 +1,39 @@
+# 2.6.1 Release Notes
+
+### Pull Requests
+=================
+- (#1546) Add native support for jdk8 jsr310 date types  @cbornet 
+- (#1529) Suggested fix for "Adding Models using ApiImplicitParam #468". Allow…  @jimhooker2002 
+- (#1517) Added bean validation support for @DecimalMin/@DecimalMax and made the min/max values explicit  @jamesbassett 
+- (#1515) Added conditional PropertyPlaceholderConfigurer bean @dilipkrish
+- (#1341) Adding @Past/@Future support to Bean Validators @boeboe 
+
+### Features
+============
+- (#1535) Class Support for @ApiImplicitParam @jimhooker2002 
+- (#1523) Make Swagger UI XmlHttpRequest timeout configurable?  @neildcruz19 
+- (#1521) Remove defaults for min / max in MinMaxAnnotationPlugin @jamesbassett 
+
+### Bug Fixes
+=============
+- (#1531) UI configuration problem when not using jackson @yangyang0507
+- (#1562) IndexOutOfBoundsException in ModelMapper @lhanson 
+- (#1558)  Coercing Optional<DateTimeZone> to String @kevinm416 
+- (#1555) Dead circulation @evencht 
+- (#1554) spec violation: springfox generates json without parameter type for @RequestParam Map<String, String> *wontfix* @nikit
+- (#1553) After updating to 2.6, stack overflow exception is occured @HanDDol 
+- (#1550) Custom endpoint not working @raderio 
+- (#1542) @EnableSwagger2 forces microservice to register as UNKNOWN to registry @martin3361 
+- (#1540) ApiImplicitParams documentation lacks Model and Model Schema for user-defined types @richmeyer7 
+- (#1538) SpringDataRestConfiguration ModelAttributeParameterExpander StackOverflowError @mpostelnicu 
+- (#1532) SpringFox and Eureka failing @sundarsy 
+- (#1528) The service does not work after using Swagger 2.6 in Spring Cloud @puras 
+- (#1525) 2.6.0 breaks the swagger documentation link @apixandru 
+- (#1514) Properties are not read anymore (regression) @cbornet 
+- (#1513) Respect ApiModelProperty(hidden=true) on @ModelAttribute annotated models, Cycles in Java classes cause infinite loop *has-workaround* @leelance 
+- (#1508) Update overrides the default behavior for the PropertyPlaceholderHelper @apixandru
+
+
 # 2.6.0 Release Notes
 The one spring data rest support lands!
 

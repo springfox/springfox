@@ -23,35 +23,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class SecurityConfiguration {
-  public static final SecurityConfiguration DEFAULT = new SecurityConfiguration();
+  static final SecurityConfiguration DEFAULT = new SecurityConfiguration();
 
   private final String clientId;
   private final String clientSecret;
   private final String realm;
   private final String appName;
-  private final String apiKeyValue;
+  private final String apiKey;
   private final ApiKeyVehicle apiKeyVehicle;
   private final String scopeSeparator;
   private final String apiKeyName;
 
-  private SecurityConfiguration(){
+  private SecurityConfiguration() {
     this(null, null, null, null, null, ApiKeyVehicle.HEADER, "api_key", ",");
   }
 
   public SecurityConfiguration(
-          String clientId,
-          String clientSecret,
-          String realm,
-          String appName,
-          String apiKeyValue,
-          ApiKeyVehicle apiKeyVehicle,
-          String apiKeyName,
-          String scopeSeparator) {
+      String clientId,
+      String clientSecret,
+      String realm,
+      String appName,
+      String apiKey,
+      ApiKeyVehicle apiKeyVehicle,
+      String apiKeyName,
+      String scopeSeparator) {
     this.clientId = clientId;
     this.clientSecret = clientSecret;
     this.realm = realm;
     this.appName = appName;
-    this.apiKeyValue = apiKeyValue;
+    this.apiKey = apiKey;
     this.apiKeyVehicle = apiKeyVehicle;
     this.apiKeyName = apiKeyName;
     this.scopeSeparator = scopeSeparator;
@@ -73,8 +73,8 @@ public class SecurityConfiguration {
   }
 
   @JsonProperty("apiKey")
-  public String getApiKeyValue() {
-    return apiKeyValue;
+  public String getApiKey() {
+    return apiKey;
   }
 
   @JsonProperty("apiKeyName")

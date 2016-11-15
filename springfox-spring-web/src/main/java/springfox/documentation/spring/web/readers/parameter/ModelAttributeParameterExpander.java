@@ -48,6 +48,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.base.Objects.*;
 import static com.google.common.base.Predicates.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.FluentIterable.*;
@@ -97,7 +98,7 @@ public class ModelAttributeParameterExpander {
     }
 
     FluentIterable<ModelAttributeField> collectionTypes = modelAttributes
-        .filter(isCollection());
+        .filter(and(isCollection(), not(recursiveCollectionItemType(paramType))));
     for (ModelAttributeField each : collectionTypes) {
       LOG.debug("Attempting to expand collection/array field: {}", each.getField());
 
@@ -118,6 +119,15 @@ public class ModelAttributeParameterExpander {
       parameters.add(simpleFields(parentName, documentationContext, each));
     }
     return FluentIterable.from(parameters).filter(not(hiddenParameters())).toList();
+  }
+
+  private Predicate<ModelAttributeField> recursiveCollectionItemType(final ResolvedType paramType) {
+    return new Predicate<ModelAttributeField>() {
+      @Override
+      public boolean apply(ModelAttributeField input) {
+        return equal(collectionElementType(input.getFieldType()), paramType);
+      }
+    };
   }
 
   private Predicate<Parameter> hiddenParameters() {
@@ -151,7 +161,7 @@ public class ModelAttributeParameterExpander {
     return new Predicate<ModelAttributeField>() {
       @Override
       public boolean apply(ModelAttributeField input) {
-        return input.getFieldType().equals(paramType);
+        return equal(input.getFieldType(), paramType);
       }
     };
   }

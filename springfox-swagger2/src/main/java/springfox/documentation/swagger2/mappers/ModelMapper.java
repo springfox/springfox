@@ -126,7 +126,10 @@ public abstract class ModelMapper {
   Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {
     Optional<ResolvedType> mapInterface = findMapInterface(source.getType());
     if (mapInterface.isPresent()) {
-      return Optional.of((Class) mapInterface.get().getTypeParameters().get(1).getErasedType());
+      if (mapInterface.get().getTypeParameters().size() > 0) {
+        return Optional.of((Class) mapInterface.get().getTypeParameters().get(1).getErasedType());
+      }
+      return Optional.of((Class) Object.class);
     }
     return Optional.absent();
   }
@@ -146,23 +149,27 @@ public abstract class ModelMapper {
     }
 
     if (property instanceof AbstractNumericProperty) {
+      AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
       AllowableValues allowableValues = source.getAllowableValues();
       if (allowableValues instanceof AllowableRangeValues) {
         AllowableRangeValues range = (AllowableRangeValues) allowableValues;
-        ((AbstractNumericProperty) property).maximum(safeDouble(range.getMax()));
-        ((AbstractNumericProperty) property).minimum(safeDouble(range.getMin()));
+        numericProperty.maximum(safeDouble(range.getMax()));
+        numericProperty.exclusiveMaximum(range.getExclusiveMax());
+        numericProperty.minimum(safeDouble(range.getMin()));
+        numericProperty.exclusiveMinimum(range.getExclusiveMin());
       }
     }
 
     if (property instanceof StringProperty) {
+      StringProperty stringProperty = (StringProperty) property;
       AllowableValues allowableValues = source.getAllowableValues();
       if (allowableValues instanceof AllowableRangeValues) {
         AllowableRangeValues range = (AllowableRangeValues) allowableValues;
-        ((StringProperty) property).maxLength(safeInteger(range.getMax()));
-        ((StringProperty) property).minLength(safeInteger(range.getMin()));
+        stringProperty.maxLength(safeInteger(range.getMax()));
+        stringProperty.minLength(safeInteger(range.getMin()));
       }
       if(source.getPattern() != null) {
-        ((StringProperty) property).setPattern(source.getPattern());
+        stringProperty.setPattern(source.getPattern());
       }
     }
 
