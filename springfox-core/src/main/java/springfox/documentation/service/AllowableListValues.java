@@ -21,6 +21,8 @@ package springfox.documentation.service;
 
 import java.util.List;
 
+import com.google.common.base.Objects;
+
 public class AllowableListValues implements AllowableValues {
   private final List<String> values;
   private final String valueType;
@@ -40,41 +42,22 @@ public class AllowableListValues implements AllowableValues {
   
   @Override
   public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((values == null) ? 0 : values.hashCode());
-      result = prime * result + ((valueType == null) ? 0 : valueType.hashCode());
-      return result;
+    return Objects.hashCode(values, valueType);
   }
   
   @Override
-  public boolean equals(Object obj) {
-      if (this == obj) {
-          return true;
-      }
-      if (obj == null) {
-          return false;
-      }
-      if (getClass() != obj.getClass()) {
-          return false;
-      }
-      
-      AllowableListValues other = (AllowableListValues) obj;
-      
-      if (values == null) {
-          if (other.getValues() != null) {
-              return false;
-          }
-      } else if (!values.equals(other.getValues())) {
-          return false;
-      }
-      if (valueType == null) {
-          if (other.getValueType() != null) {
-              return false;
-          }
-      } else if (!valueType.equals(other.getValueType())) {
-          return false;
-      }
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    AllowableListValues that = (AllowableListValues) o;
+
+    return Objects.equal(values, that.values) &&
+        Objects.equal(valueType, that.valueType);
   }
 }

@@ -20,6 +20,7 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Objects;
 
 import java.util.List;
 import java.util.Map;
@@ -110,115 +111,30 @@ public class Model {
   
   @Override
   public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((id == null) ? 0 : id.hashCode());
-      result = prime * result + ((name == null) ? 0 : name.hashCode());
-      result = prime * result + ((type == null) ? 0 : type.hashCode());
-      result = prime * result + ((qualifiedType == null) ? 0 : qualifiedType.hashCode());
-      result = prime * result + ((properties == null) ? 0 : properties.hashCode());
-      result = prime * result + ((description == null) ? 0 : description.hashCode());
-      result = prime * result + ((baseModel == null) ? 0 : baseModel.hashCode());   
-      result = prime * result + ((discriminator == null) ? 0 : discriminator.hashCode());
-      result = prime * result + ((subTypes == null) ? 0 : subTypes.hashCode());
-      result = prime * result + ((example == null) ? 0 : example.hashCode());
-      return result;
+    return Objects.hashCode(id, name, type, qualifiedType, properties, description, baseModel, discriminator, subTypes, example);
   }
-
+  
   @Override
-  public boolean equals(Object obj) {
-      if (this == obj) {
-          return true;
-      }
-      
-      if (obj == null) {
-          return false;
-      }
-      if (getClass() != obj.getClass()) {
-          return false;
-      }
-
-      Model other = (Model) obj;
-      
-      if (id == null) {
-          if (other.getId() != null) {
-              return false;
-          }
-      } else if (!id.equals(other.getId())) {
-          return false;
-      }
-      if (name == null) {
-          if (other.getName() != null) {
-              return false;
-          }
-      } else if (!name.equals(other.getName())) {
-          return false;
-      }
-
-      if (type == null) {
-          if (other.type != null) {
-              return false;
-          }
-      } else if (!type.equals(other.getType())) {
-          return false;
-      }
-      if (qualifiedType == null) {
-          if (other.getQualifiedType() != null) {
-              return false;
-          }
-      } else if (!qualifiedType.equals(other.getQualifiedType())) {
-          return false;
-      }
-      if (properties == null) {
-          if (other.properties != null) {
-              return false;
-          }
-      } else if (!properties.equals(other.properties)) {
-          return false;
-      }  
-      if (description == null) {
-          if (other.description != null) {
-              return false;
-          }
-      } else if (!description.equals(other.description)) {
-          return false;
-      }
-      if (baseModel == null) {
-          if (other.getBaseModel() != null) {
-              return false;
-          }
-      } else if (!baseModel.equals(other.getBaseModel())) {
-          return false;
-      }
-      if (discriminator == null) {
-          if (other.discriminator != null) {
-              return false;
-          }
-      } else if (!discriminator.equals(other.discriminator)) {
-          return false;
-      }
-      if (example == null) {
-          if (other.example != null) {
-              return false;
-          }
-      } else if (!example.equals(other.example)) {
-          return false;
-      }
-      if (subTypes == null) {
-          if (other.getSubTypes() != null) {
-              return false;
-          }
-      } else if (!subTypes.equals(other.getSubTypes())) {
-          return false;
-      }
-      if (example == null) {
-          if (other.getExample() != null) {
-              return false;
-          }
-      } else if (!example.equals(other.getExample())) {
-          return false;
-      }
-     
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Model that = (Model) o;
+
+    return Objects.equal(id, that.id) &&
+        Objects.equal(name, that.name) &&
+        Objects.equal(type, that.type) &&
+        Objects.equal(qualifiedType, that.qualifiedType) &&
+        Objects.equal(properties, that.properties) &&
+        Objects.equal(description, that.description) &&
+        Objects.equal(baseModel, that.baseModel) &&
+        Objects.equal(discriminator, that.discriminator) &&
+        Objects.equal(subTypes, that.subTypes) &&
+        Objects.equal(example, that.example);
   }
 }

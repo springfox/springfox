@@ -78,10 +78,6 @@ public class ResolvedMethodParameter {
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
     return FluentIterable.from(annotations).filter(annotation).first();
   }
-  
-  public List<Annotation> getAnnotations() {
-	return annotations;  
-  }
 
   public int getParameterIndex() {
     return parameterIndex;
@@ -107,7 +103,7 @@ public class ResolvedMethodParameter {
  
   @Override
   public int hashCode() {
-    return Objects.hashCode(new Integer(parameterIndex), new Boolean(returnType), annotations, defaultName, parameterType);
+    return Objects.hashCode(parameterIndex, returnType, annotations, defaultName, parameterType);
   }
   
   @Override
@@ -122,11 +118,10 @@ public class ResolvedMethodParameter {
 
     ResolvedMethodParameter that = (ResolvedMethodParameter) o;
     
-    return parameterIndex == that.getParameterIndex() &&
-    	returnType == that.isReturnType() &&	
-        Objects.equal(defaultName, that.defaultName()) &&
-        Objects.equal(returnType, that.returnType) &&
-        Objects.equal(parameterType, that.getParameterType()) &&
-        Objects.equal(annotations, that.getAnnotations());
+    return Objects.equal(parameterIndex, that.parameterIndex) &&
+    	Objects.equal(returnType, that.returnType) &&	
+    	Objects.equal(annotations, that.annotations) &&
+        Objects.equal(defaultName, that.defaultName) &&
+        Objects.equal(parameterType, that.parameterType);
   }
 }

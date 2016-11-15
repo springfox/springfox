@@ -20,6 +20,7 @@
 package springfox.documentation.schema;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 
 import springfox.documentation.service.AllowableValues;
@@ -98,53 +99,24 @@ public class ModelRef implements ModelReference {
   
   @Override
   public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((type == null) ? 0 : type.hashCode());
-      result = prime * result + (isMap ? 1231 : 1237);
-      result = prime * result + ((itemModel.isPresent()) ? 0 : itemModel.get().hashCode());
-      result = prime * result + ((allowableValues.isPresent()) ? 0 : allowableValues.get().hashCode());
-      return result;
+    return Objects.hashCode(type, isMap, itemModel, allowableValues);
   }
   
   @Override
-  public boolean equals(Object obj) {
-      if (this == obj) {
-          return true;
-      }
-      if (obj == null) {
-          return false;
-      }
-      if (getClass() != obj.getClass()) {
-          return false;
-      }
-      
-      ModelRef other = (ModelRef) obj;
-      
-      if (type == null) {
-          if (other.getType() != null) {
-              return false;
-          }
-      } else if (!type.equals(other.getType())) {
-          return false;
-      }
-      if (isMap != other.isMap) {
-          return false;
-      }
-      if (!itemModel.isPresent()) {
-          if (other.itemModel().isPresent()) {
-              return false;
-          }
-      } else if (!itemModel.get().equals(other.itemModel().get())) {
-          return false;
-      }
-      if (!allowableValues.isPresent()) {
-          if (other.getAllowableValues() != null) {
-              return false;
-          }
-      } else if (!allowableValues.get().equals(other.getAllowableValues())) {
-          return false;
-      }
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ModelRef that = (ModelRef) o;
+
+    return Objects.equal(type, that.type) &&
+        Objects.equal(isMap, that.isMap) &&
+        Objects.equal(itemModel, that.itemModel) &&
+        Objects.equal(allowableValues, that.allowableValues);
   }
 }

@@ -21,6 +21,8 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
+
 import springfox.documentation.service.AllowableValues;
 
 public class ModelProperty {
@@ -118,113 +120,32 @@ public class ModelProperty {
   
   @Override
   public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((name == null) ? 0 : name.hashCode());
-      result = prime * result + ((type == null) ? 0 : type.hashCode());
-      result = prime * result + ((qualifiedType == null) ? 0 : qualifiedType.hashCode());
-      result = prime * result + position;
-      result = prime * result + ((required == null) ? 0 : required.hashCode());
-      result = prime * result + (isHidden ? 1231 : 1237);
-      result = prime * result + ((readOnly == null) ? 0 : readOnly.hashCode());
-      result = prime * result + ((description == null) ? 0 : description.hashCode());
-      result = prime * result + ((allowableValues == null) ? 0 : allowableValues.hashCode());
-      result = prime * result + ((modelRef == null) ? 0 : modelRef.hashCode());
-      result = prime * result + ((example == null) ? 0 : example.hashCode());
-      result = prime * result + ((pattern == null) ? 0 : pattern.hashCode());
-      return result;
+    return Objects.hashCode(name, type, qualifiedType, position, required, isHidden, readOnly, description, allowableValues, modelRef, example, pattern);
   }
-
+  
   @Override
-  public boolean equals(Object obj) {
-      if (this == obj) {
-          return true;
-      }
-      if (obj == null) {
-          return false;
-      }
-      if (getClass() != obj.getClass()) {
-          return false;
-      }
-      
-      ModelProperty other = (ModelProperty) obj;
-      
-      if (name == null) {
-          if (other.name != null) {
-              return false;
-          }
-      } else if (!name.equals(other.name)) {
-          return false;
-      }
-      if (type == null) {
-          if (other.type != null) {
-              return false;
-          }
-      } else if (!type.equals(other.type)) {
-          return false;
-      }
-      if (qualifiedType == null) {
-          if (other.getQualifiedType() != null) {
-              return false;
-          }
-      } else if (!qualifiedType.equals(other.getQualifiedType())) {
-          return false;
-      }
-      if (position != other.getPosition()) {
-          return false;
-      }
-      if (required == null) {
-          if (other.isRequired() != null) {
-              return false;
-          }
-      } else if (!required.equals(other.isRequired())) {
-          return false;
-      }
-      if (isHidden != other.isHidden) {
-          return false;
-      }
-      if (readOnly == null) {
-          if (other.readOnly != null) {
-              return false;
-          }
-      } else if (!readOnly.equals(other.readOnly)) {
-          return false;
-      }
-      if (description == null) {
-          if (other.description != null) {
-              return false;
-          }
-      } else if (!description.equals(other.description)) {
-          return false;
-      }
-      if (allowableValues == null) {
-          if (other.getAllowableValues() != null) {
-              return false;
-          }
-      } else if (!allowableValues.equals(other.getAllowableValues())) {
-          return false;
-      }
-      if (modelRef == null) {
-          if (other.getModelRef() != null) {
-              return false;
-          }
-      } else if (!modelRef.equals(other.getModelRef())) {
-          return false;
-      }
-      if (example == null) {
-          if (other.example != null) {
-              return false;
-          }
-      } else if (!example.equals(other.example)) {
-          return false;
-      }
-      if (pattern == null) {
-          if (other.getPattern() != null) {
-              return false;
-          }
-      } else if (!pattern.equals(other.getPattern())) {
-          return false;
-      }
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ModelProperty that = (ModelProperty) o;
+
+    return Objects.equal(name, that.name) &&
+        Objects.equal(type, that.type) &&
+        Objects.equal(qualifiedType, that.qualifiedType) &&
+        Objects.equal(position, that.position) &&
+        Objects.equal(required, that.required) &&
+        Objects.equal(isHidden, that.isHidden) &&
+        Objects.equal(readOnly, that.readOnly) &&
+        Objects.equal(description, that.description) &&
+        Objects.equal(allowableValues, that.allowableValues) &&
+        Objects.equal(modelRef, that.modelRef) &&
+        Objects.equal(example, that.example) &&
+        Objects.equal(pattern, that.pattern);
   }
 }
