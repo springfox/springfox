@@ -81,17 +81,19 @@ public class DefaultModelProvider implements ModelProvider {
           + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
       return Optional.absent();
     }
+    /*
     ImmutableMap<String, ModelProperty> propertiesIndex
         = uniqueIndex(properties(modelContext, propertiesHost), byPropertyName());
     LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
         Joiner.on(", ").join(propertiesIndex.keySet()));
     Map<String, ModelProperty> properties = newTreeMap();
     properties.putAll(propertiesIndex);
-    return Optional.of(modelBuilder(propertiesHost, properties, modelContext));
+    */
+    return Optional.of(modelBuilder(propertiesHost, /*properties,*/ modelContext));
   }
 
   private Model modelBuilder(ResolvedType propertiesHost,
-                             Map<String, ModelProperty> properties,
+                             /*Map<String, ModelProperty> properties,*/
                              ModelContext modelContext) {
     String typeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, propertiesHost));
     modelContext.getBuilder()
@@ -100,7 +102,7 @@ public class DefaultModelProvider implements ModelProvider {
         .name(typeName)
         .index(0)
         .qualifiedType(simpleQualifiedTypeName(propertiesHost))
-        .properties(properties)
+       // .properties(properties)
         .description("")
         .baseModel("")
         .discriminator("")
@@ -111,9 +113,9 @@ public class DefaultModelProvider implements ModelProvider {
   @Override
   public Map<String, Model> dependencies(ModelContext modelContext) {
     Map<String, Model> models = newHashMap();
-    for (ResolvedType resolvedType : dependencyProvider.dependentModels(modelContext)) {
-      ModelContext parentContext = ModelContext.fromParent(modelContext, resolvedType);
-      Optional<Model> model = modelFor(parentContext).or(mapModel(parentContext, resolvedType));
+    for (ModelContext parentContext : dependencyProvider.dependentModels(modelContext)) {
+     // ModelContext parentContext = ModelContext.fromParent(modelContext, resolvedType);
+      Optional<Model> model = modelFor(parentContext).or(mapModel(parentContext, parentContext.resolvedType(resolver)));
       if (model.isPresent()) {
         models.put(model.get().getName(), model.get());
       }

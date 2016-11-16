@@ -18,7 +18,6 @@
  */
 package springfox.documentation.schema;
 
-import com.fasterxml.classmate.ResolvedType;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -38,22 +37,22 @@ import static com.google.common.collect.Sets.*;
 @Qualifier("cachedModelDependencies")
 public class CachingModelDependencyProvider implements ModelDependencyProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingModelDependencyProvider.class);
-  private final LoadingCache<ModelContext, Set<ResolvedType>> cache;
+  private final LoadingCache<ModelContext, Set<ModelContext>> cache;
 
   @Autowired
   public CachingModelDependencyProvider(@Qualifier("default") final ModelDependencyProvider delegate) {
     cache = CacheBuilder.newBuilder()
         .maximumSize(1000)
         .expireAfterWrite(24, TimeUnit.HOURS)
-        .build(new CacheLoader<ModelContext, Set<ResolvedType>>() {
-          public Set<ResolvedType> load(ModelContext key) {
+        .build(new CacheLoader<ModelContext, Set<ModelContext>>() {
+          public Set<ModelContext> load(ModelContext key) {
             return delegate.dependentModels(key);
           }
         });
   }
 
   @Override
-  public Set<ResolvedType> dependentModels(ModelContext modelContext) {
+  public Set<ModelContext> dependentModels(ModelContext modelContext) {
     try {
       return cache.get(modelContext);
     } catch (Exception e) {

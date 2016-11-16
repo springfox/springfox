@@ -46,7 +46,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.bean.AccessorsProvider;
@@ -68,7 +67,6 @@ import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
-import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
 import static springfox.documentation.schema.property.FactoryMethodProvider.*;
 import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
@@ -84,7 +82,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private final TypeResolver typeResolver;
   private final BeanPropertyNamingStrategy namingStrategy;
   private final SchemaPluginsManager schemaPluginsManager;
-  private final TypeNameExtractor typeNameExtractor;
   private ObjectMapper objectMapper;
 
   @Autowired
@@ -94,8 +91,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       FactoryMethodProvider factoryMethods,
       TypeResolver typeResolver,
       BeanPropertyNamingStrategy namingStrategy,
-      SchemaPluginsManager schemaPluginsManager,
-      TypeNameExtractor typeNameExtractor) {
+      SchemaPluginsManager schemaPluginsManager) {
 
     this.accessors = accessors;
     this.fields = fields;
@@ -103,7 +99,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     this.typeResolver = typeResolver;
     this.namingStrategy = namingStrategy;
     this.schemaPluginsManager = schemaPluginsManager;
-    this.typeNameExtractor = typeNameExtractor;
   }
 
   @Override
@@ -269,8 +264,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         new ModelPropertyContext(propertyBuilder,
             childField.getRawMember(),
             typeResolver,
-            modelContext.getDocumentationType()))
-        .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+            modelContext.getDocumentationType()));
   }
 
   private ModelProperty beanModelProperty(
@@ -302,8 +296,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         new ModelPropertyContext(propertyBuilder,
             jacksonProperty,
             typeResolver,
-            modelContext.getDocumentationType()))
-        .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+            modelContext.getDocumentationType()));
   }
 
   private ModelProperty paramModelProperty(
@@ -337,8 +330,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         new ModelPropertyContext(propertyBuilder,
             jacksonProperty,
             typeResolver,
-            modelContext.getDocumentationType()))
-        .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+            modelContext.getDocumentationType()));
   }
 
   private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType, final AnnotatedMember member) {

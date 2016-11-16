@@ -18,7 +18,6 @@
  */
 package springfox.documentation.schema;
 
-import com.fasterxml.classmate.ResolvedType;
 import springfox.documentation.annotations.Cacheable;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
@@ -26,5 +25,5 @@ import java.util.Set;
 
 public interface ModelDependencyProvider {
   @Cacheable(value = "modelDependencies")
-  Set<ResolvedType> dependentModels(ModelContext modelContext);
+  Set<ModelContext> dependentModels(ModelContext modelContext);
 }
