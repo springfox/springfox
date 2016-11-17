@@ -70,8 +70,9 @@ public class DefaultModelProvider implements ModelProvider {
   }
 
   @Override
-  public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
+  public Map<ModelContext, Model> modelsFor(ModelContext modelContext) {
     ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
+    Map<ModelContext, Model> models = newHashMap();
     if (isContainerType(propertiesHost)
         || isMapType(propertiesHost)
         || propertiesHost.getErasedType().isEnum()
@@ -79,7 +80,7 @@ public class DefaultModelProvider implements ModelProvider {
         || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
           + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
-      return Optional.absent();
+      return models;
     }
     /*
     ImmutableMap<String, ModelProperty> propertiesIndex
@@ -89,12 +90,24 @@ public class DefaultModelProvider implements ModelProvider {
     Map<String, ModelProperty> properties = newTreeMap();
     properties.putAll(propertiesIndex);
     */
-    return Optional.of(modelBuilder(propertiesHost, /*properties,*/ modelContext));
+    
+    for (ModelContext parentContext : dependencyProvider.dependentModels(modelContext)) {
+     // ModelContext parentContext = ModelContext.fromParent(modelContext, resolvedType);
+      Optional<Model> model = Optional.of(modelBuilder(parentContext)).or(mapModel(parentContext, parentContext.resolvedType(resolver)));
+      if (model.isPresent()) {
+        models.put(parentContext, model.get());
+      }
+    }
+    
+    models.put(modelContext, modelBuilder(/*propertiesHost,*/ /*properties,*/ modelContext));
+    
+    return models;
   }
 
-  private Model modelBuilder(ResolvedType propertiesHost,
+  private Model modelBuilder(//ResolvedType propertiesHost,
                              /*Map<String, ModelProperty> properties,*/
                              ModelContext modelContext) {
+	ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
     String typeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, propertiesHost));
     modelContext.getBuilder()
         .id(typeName)
@@ -110,6 +123,7 @@ public class DefaultModelProvider implements ModelProvider {
     return schemaPluginsManager.model(modelContext);
   }
 
+  /*
   @Override
   public Map<String, Model> dependencies(ModelContext modelContext) {
     Map<String, Model> models = newHashMap();
@@ -122,7 +136,8 @@ public class DefaultModelProvider implements ModelProvider {
     }
     return models;
   }
-
+*/
+  
   private Optional<Model> mapModel(ModelContext parentContext, ResolvedType resolvedType) {
     if (isMapType(resolvedType) && !parentContext.hasSeenBefore(resolvedType)) {
       String typeName = typeNameExtractor.typeName(parentContext);
@@ -141,7 +156,7 @@ public class DefaultModelProvider implements ModelProvider {
     }
     return Optional.absent();
   }
-
+/*
   private Function<ModelProperty, String> byPropertyName() {
     return new Function<ModelProperty, String>() {
       @Override
@@ -154,4 +169,5 @@ public class DefaultModelProvider implements ModelProvider {
   private List<ModelProperty> properties(ModelContext context, ResolvedType propertiesHost) {
     return propertiesProvider.propertiesFor(propertiesHost, context);
   }
+  */
 }

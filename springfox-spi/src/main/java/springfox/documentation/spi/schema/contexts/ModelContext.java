@@ -232,6 +232,7 @@ public class ModelContext {
     return Objects.equal(type, that.type) &&
         Objects.equal(documentationType, that.documentationType) &&
         Objects.equal(returnType, that.returnType) &&
+        Objects.equal(modelBuilder.build(), that.modelBuilder.build()) &&
         Objects.equal(namingStrategy(), that.namingStrategy());
 
   }
@@ -245,7 +246,7 @@ public class ModelContext {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(type, documentationType, returnType, namingStrategy());
+    return Objects.hashCode(type, documentationType, returnType, modelBuilder.build(), namingStrategy());
   }
 
   public String description() {
