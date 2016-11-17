@@ -24,7 +24,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.springframework.http.HttpMethod;
-import springfox.documentation.NameGenerator;
+import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Operation;
@@ -42,7 +42,7 @@ import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationBuilder {
-  private final NameGenerator nameGenerator;
+  private final OperationNameGenerator nameGenerator;
   private HttpMethod method = HttpMethod.GET;
   private String summary;
   private String notes;
@@ -61,7 +61,7 @@ public class OperationBuilder {
   private ModelReference responseModel;
   private List<VendorExtension> vendorExtensions = newArrayList();
 
-  public OperationBuilder(NameGenerator nameGenerator) {
+  public OperationBuilder(OperationNameGenerator nameGenerator) {
     this.nameGenerator = nameGenerator;
   }
 

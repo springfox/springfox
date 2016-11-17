@@ -21,10 +21,7 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +33,6 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
@@ -51,7 +47,6 @@ import static springfox.documentation.schema.Types.*;
 public class DefaultModelProvider implements ModelProvider {
   private static final Logger LOG = LoggerFactory.getLogger(DefaultModelProvider.class);
   private final TypeResolver resolver;
-  private final ModelPropertiesProvider propertiesProvider;
   private final ModelDependencyProvider dependencyProvider;
   private final SchemaPluginsManager schemaPluginsManager;
   private final TypeNameExtractor typeNameExtractor;
@@ -63,7 +58,6 @@ public class DefaultModelProvider implements ModelProvider {
       SchemaPluginsManager schemaPluginsManager,
       TypeNameExtractor typeNameExtractor) {
     this.resolver = resolver;
-    this.propertiesProvider = propertiesProvider;
     this.dependencyProvider = dependencyProvider;
     this.schemaPluginsManager = schemaPluginsManager;
     this.typeNameExtractor = typeNameExtractor;
@@ -82,31 +76,20 @@ public class DefaultModelProvider implements ModelProvider {
           + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
       return models;
     }
-    /*
-    ImmutableMap<String, ModelProperty> propertiesIndex
-        = uniqueIndex(properties(modelContext, propertiesHost), byPropertyName());
-    LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
-        Joiner.on(", ").join(propertiesIndex.keySet()));
-    Map<String, ModelProperty> properties = newTreeMap();
-    properties.putAll(propertiesIndex);
-    */
-    
     for (ModelContext parentContext : dependencyProvider.dependentModels(modelContext)) {
-     // ModelContext parentContext = ModelContext.fromParent(modelContext, resolvedType);
       Optional<Model> model = Optional.of(modelBuilder(parentContext)).or(mapModel(parentContext, parentContext.resolvedType(resolver)));
       if (model.isPresent()) {
         models.put(parentContext, model.get());
+        LOG.debug("Generated parameter model id: {}, name: {}, schema: {} models",
+          model.get().getId(),
+          model.get().getName());
       }
-    }
-    
-    models.put(modelContext, modelBuilder(/*propertiesHost,*/ /*properties,*/ modelContext));
-    
+    } 
+    models.put(modelContext, modelBuilder(modelContext));
     return models;
   }
 
-  private Model modelBuilder(//ResolvedType propertiesHost,
-                             /*Map<String, ModelProperty> properties,*/
-                             ModelContext modelContext) {
+  private Model modelBuilder(ModelContext modelContext) {
 	ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
     String typeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, propertiesHost));
     modelContext.getBuilder()
@@ -115,28 +98,12 @@ public class DefaultModelProvider implements ModelProvider {
         .name(typeName)
         .index(0)
         .qualifiedType(simpleQualifiedTypeName(propertiesHost))
-       // .properties(properties)
         .description("")
         .baseModel("")
         .discriminator("")
         .subTypes(new ArrayList<String>());
     return schemaPluginsManager.model(modelContext);
   }
-
-  /*
-  @Override
-  public Map<String, Model> dependencies(ModelContext modelContext) {
-    Map<String, Model> models = newHashMap();
-    for (ModelContext parentContext : dependencyProvider.dependentModels(modelContext)) {
-     // ModelContext parentContext = ModelContext.fromParent(modelContext, resolvedType);
-      Optional<Model> model = modelFor(parentContext).or(mapModel(parentContext, parentContext.resolvedType(resolver)));
-      if (model.isPresent()) {
-        models.put(model.get().getName(), model.get());
-      }
-    }
-    return models;
-  }
-*/
   
   private Optional<Model> mapModel(ModelContext parentContext, ResolvedType resolvedType) {
     if (isMapType(resolvedType) && !parentContext.hasSeenBefore(resolvedType)) {
@@ -156,18 +123,4 @@ public class DefaultModelProvider implements ModelProvider {
     }
     return Optional.absent();
   }
-/*
-  private Function<ModelProperty, String> byPropertyName() {
-    return new Function<ModelProperty, String>() {
-      @Override
-      public String apply(ModelProperty input) {
-        return input.getName();
-      }
-    };
-  }
-
-  private List<ModelProperty> properties(ModelContext context, ResolvedType propertiesHost) {
-    return propertiesProvider.propertiesFor(propertiesHost, context);
-  }
-  */
 }

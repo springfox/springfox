@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
-import springfox.documentation.NameGenerator;
+import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.OperationContext;
@@ -45,10 +45,10 @@ public class ApiOperationReader implements OperationReader {
   private static final Set<RequestMethod> allRequestMethods
       = new LinkedHashSet<RequestMethod>(asList(RequestMethod.values()));
   private final DocumentationPluginsManager pluginsManager;
-  private final NameGenerator nameGenerator;
+  private final OperationNameGenerator nameGenerator;
 
   @Autowired
-  public ApiOperationReader(DocumentationPluginsManager pluginsManager, @Qualifier("cachedOperation") NameGenerator nameGenerator) {
+  public ApiOperationReader(DocumentationPluginsManager pluginsManager, OperationNameGenerator nameGenerator) {
     this.pluginsManager = pluginsManager;
     this.nameGenerator = nameGenerator;
   }

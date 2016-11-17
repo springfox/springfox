@@ -18,7 +18,6 @@
  */
 package springfox.documentation.schema;
 
-import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -64,9 +63,4 @@ public class CachingModelProvider implements ModelProvider {
       return newHashMap();
     }
   }
-  /*
-  @Override
-  public Map<String, Model> dependencies(ModelContext modelContext) {
-    return delegate.dependencies(modelContext);
-  }*/
 }

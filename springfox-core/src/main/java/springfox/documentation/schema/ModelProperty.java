@@ -120,7 +120,8 @@ public class ModelProperty {
   
   @Override
   public int hashCode() {
-    return Objects.hashCode(name, type, qualifiedType, position, required, isHidden, readOnly, description, allowableValues, modelRefFactory.apply(type), example, pattern);
+    return Objects.hashCode(name, type, qualifiedType, position, required, isHidden, 
+                            readOnly, description, allowableValues, modelRefFactory.apply(type), example, pattern);
   }
   
   @Override

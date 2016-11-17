@@ -216,6 +216,10 @@ public class ModelContext {
   public void seen(ResolvedType resolvedType) {
     seenTypes.add(resolvedType);
   }
+  
+  public boolean isRootContext() {
+    return (parentContext == null);  
+  }
 
   @Override
   public boolean equals(Object o) {

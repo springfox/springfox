@@ -64,9 +64,6 @@ public class ApiModelReader  {
       markIgnorablesAsHasSeen(typeResolver, ignorableTypes, each);
       Map<ModelContext, Model> pModel = modelProvider.modelsFor(each);
       if (!pModel.isEmpty()) {
-        //LOG.debug("Generated parameter model id: {}, name: {}, schema: {} models",
-         //   pModel.get().getId(),
-          //  pModel.get().getName());
         compareModelMap(modelMap, pModel);
       } else {
         LOG.debug("Did not find any parameter models for {}", each.getType());
@@ -86,13 +83,17 @@ public class ApiModelReader  {
     	  Model modelSource = entrySource.getValue() , modelTarger = entryTarget.getValue();
      	  if (!deleteSame && !modelSource.equals(modelTarger) && modelSource.getName().equals(modelTarger.getName())) { 
     	    entrySource.setValue(entrySource.getKey().getBuilder().index(modelSource.getIndex() + 1).build());
-    	    changes = true;
-    	    break outer;
+    	    if (!entrySource.getKey().isRootContext()) {
+    	      changes = true;
+    	      break outer;
+    	    }
     	  }	
     	  if (!deleteSame && modelSource.equals(modelTarger) && !modelSource.getName().equals(modelTarger.getName())) {
       	    entrySource.setValue(entrySource.getKey().getBuilder().index(modelTarger.getIndex()).build());
-      	    changes = true;
-      	    break outer;
+      	    if (!entrySource.getKey().isRootContext()) {
+    	      changes = true;
+    	      break outer;
+    	    }
       	  }	
     	  if (deleteSame && modelSource.equals(modelTarger) && modelSource.getName().equals(modelTarger.getName())) {
     	    iterator.remove(); 

@@ -18,6 +18,6 @@
  */
 package springfox.documentation;
 
-public interface NameGenerator {
+public interface OperationNameGenerator {
   String startingWith(String prefix);
 }

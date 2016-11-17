@@ -29,7 +29,7 @@ public class Model {
 
   private final String id;
   private final String name;
-  private final int index;
+  private final Integer index;
   private final ResolvedType type;
   private final String qualifiedType;
   private final Map<String, ModelProperty> properties;
@@ -42,7 +42,7 @@ public class Model {
   public Model(
       String id,
       String name,
-      int index,
+      Integer index,
       ResolvedType type,
       String qualifiedType,
       Map<String, ModelProperty> properties,
@@ -66,16 +66,16 @@ public class Model {
   }
 
   public String getId() {
-    return (index > 0)?id + '_' + index:id;
+    return (index != null && index > 0)?id + '_' + index:id;
   }
 
   public String getName() {
-    return (index > 0)?name + '_' + index:name;
+    return (index != null && index > 0)?name + '_' + index:name;
   }
   
-  public int getIndex() {
-	    return index;
-	  }
+  public Integer getIndex() {
+        return index;
+      }
 
   public String getQualifiedType() {
     return qualifiedType;

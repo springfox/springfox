@@ -40,18 +40,18 @@ public class ResolvedMethodParameter {
 
   public ResolvedMethodParameter(String paramName, MethodParameter methodParameter, ResolvedType parameterType) {
     this(methodParameter.getParameterIndex(),
-    	false,
+        false,
         paramName,
         newArrayList(methodParameter.getParameterAnnotations()),
         parameterType);
   }
   
   public ResolvedMethodParameter(ResolvedType parameterType) {
-	this(0,
-	    true,
-	    "",
-	    newArrayList(),
-	    parameterType);
+    this(0,
+        true,
+        "",
+        newArrayList(new Annotation[0]),
+        parameterType);
   }
 
   private ResolvedMethodParameter(int parameterIndex, boolean returnType, String defaultName, List<Annotation> annotations, ResolvedType
@@ -119,8 +119,8 @@ public class ResolvedMethodParameter {
     ResolvedMethodParameter that = (ResolvedMethodParameter) o;
     
     return Objects.equal(parameterIndex, that.parameterIndex) &&
-    	Objects.equal(returnType, that.returnType) &&	
-    	Objects.equal(annotations, that.annotations) &&
+        Objects.equal(returnType, that.returnType) &&   
+        Objects.equal(annotations, that.annotations) &&
         Objects.equal(defaultName, that.defaultName) &&
         Objects.equal(parameterType, that.parameterType);
   }
