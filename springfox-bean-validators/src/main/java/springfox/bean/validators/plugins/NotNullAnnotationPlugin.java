@@ -18,7 +18,6 @@
  */
 package springfox.bean.validators.plugins;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -28,7 +27,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.NotNull;
 
-import static springfox.bean.validators.plugins.BeanValidators.*;
+import static springfox.bean.validators.plugins.BeanValidators.extractAnnotation;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -42,14 +41,8 @@ public class NotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<NotNull> notNull = extractAnnotation(context);
+    Optional<NotNull> notNull = extractAnnotation(context, NotNull.class);
     context.getBuilder().required(notNull.isPresent());
-  }
-
-  @VisibleForTesting
-  Optional<NotNull> extractAnnotation(ModelPropertyContext context) {
-    return validatorFromBean(context, NotNull.class)
-        .or(validatorFromField(context, NotNull.class));
   }
 
 }

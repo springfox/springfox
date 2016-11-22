@@ -18,7 +18,6 @@
  */
 package springfox.bean.validators.plugins;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.Size;
 
-import static springfox.bean.validators.plugins.BeanValidators.*;
+import static springfox.bean.validators.plugins.BeanValidators.extractAnnotation;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -48,17 +47,11 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<Size> size = extractAnnotation(context);
+    Optional<Size> size = extractAnnotation(context, Size.class);
 
     if (size.isPresent()) {
       context.getBuilder().allowableValues(createAllowableValuesFromSizeForStrings(size.get()));
     }
-  }
-
-  @VisibleForTesting
-  Optional<Size> extractAnnotation(ModelPropertyContext context) {
-    return validatorFromBean(context, Size.class)
-        .or(validatorFromField(context, Size.class));
   }
 
   private AllowableValues createAllowableValuesFromSizeForStrings(Size size) {
