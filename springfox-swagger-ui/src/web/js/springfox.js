@@ -68,7 +68,6 @@ $(function() {
 
     function oAuthIsDefined(security) {
       return security.clientId
-          && security.clientSecret
           && security.appName
           && security.realm;
     }
