@@ -32,7 +32,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-import static springfox.bean.validators.plugins.BeanValidators.extractAnnotation;
+import static springfox.bean.validators.plugins.BeanValidators.*;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -53,26 +53,34 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
     // add support for @Min/@Max
     context.getBuilder().allowableValues(createAllowableValuesFromMinMaxForNumbers(min, max));
-
   }
 
   private AllowableValues createAllowableValuesFromMinMaxForNumbers(Optional<Min> min, Optional<Max> max) {
-    AllowableRangeValues myvalues = null;
+    AllowableRangeValues allowableValues = null;
 
     if (min.isPresent() && max.isPresent()) {
       LOG.debug("@Min+@Max detected: adding AllowableRangeValues to field ");
-      myvalues = new AllowableRangeValues(Double.toString(min.get().value()), false, Double.toString(max.get().value()), false);
-
+      allowableValues = new AllowableRangeValues(
+          Double.toString(min.get().value()),
+          false,
+          Double.toString(max.get().value()),
+          false);
     } else if (min.isPresent()) {
       LOG.debug("@Min detected: adding AllowableRangeValues to field ");
-      myvalues = new AllowableRangeValues(Double.toString(min.get().value()), false, null, null);
-
+      allowableValues = new AllowableRangeValues(
+          Double.toString(min.get().value()),
+          false,
+          null,
+          null);
     } else if (max.isPresent()) {
       LOG.debug("@Max detected: adding AllowableRangeValues to field ");
-      myvalues = new AllowableRangeValues(null, null, Double.toString(max.get().value()), false);
-
+      allowableValues = new AllowableRangeValues(
+          null,
+          null,
+          Double.toString(max.get().value()),
+          false);
     }
-    return myvalues;
+    return allowableValues;
   }
 
 

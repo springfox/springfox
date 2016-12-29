@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 
-import static springfox.bean.validators.plugins.BeanValidators.extractAnnotation;
+import static springfox.bean.validators.plugins.BeanValidators.*;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -56,7 +56,9 @@ public class DecimalMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin
 
   }
 
-  private AllowableValues createAllowableValuesFromDecimalMinMaxForNumbers(Optional<DecimalMin> decimalMin, Optional<DecimalMax> decimalMax) {
+  private AllowableValues createAllowableValuesFromDecimalMinMaxForNumbers(
+      Optional<DecimalMin> decimalMin,
+      Optional<DecimalMax> decimalMax) {
     AllowableRangeValues myvalues = null;
 
     if (decimalMin.isPresent() && decimalMax.isPresent()) {

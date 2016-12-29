@@ -25,7 +25,7 @@ class BeanValidatorsSpec extends Specification {
 
   def "When AnnotatedElement is null"() {
     when:
-    def context = new ModelPropertyContext(
+      def context = new ModelPropertyContext(
             new ModelPropertyBuilder(),
             (AnnotatedElement) null,
             new TypeResolver(),
@@ -37,102 +37,102 @@ class BeanValidatorsSpec extends Specification {
 
   def "When BeanPropertyDefinition has no field/getter"() {
     when:
-    def context = new ModelPropertyContext(
+      def context = new ModelPropertyContext(
             new ModelPropertyBuilder(),
             Mock(BeanPropertyDefinition),
             new TypeResolver(),
             DocumentationType.SWAGGER_12)
-    def annotation = BeanValidators.extractAnnotation(context, NotNull)
+      def annotation = BeanValidators.extractAnnotation(context, NotNull)
     then:
-    !annotation.isPresent()
+      !annotation.isPresent()
   }
 
   @Unroll
   def "@NotNull annotations are reflected in the model #propertyName that are AnnotatedElements"()  {
     given:
-    def property = BeanValidatorsTestModel.getDeclaredField(propertyName)
-    def context = new ModelPropertyContext(
-            new ModelPropertyBuilder(),
-            property,
-            new TypeResolver(),
-            DocumentationType.SWAGGER_12)
+      def property = BeanValidatorsTestModel.getDeclaredField(propertyName)
+      def context = new ModelPropertyContext(
+              new ModelPropertyBuilder(),
+              property,
+              new TypeResolver(),
+              DocumentationType.SWAGGER_12)
     when:
-    def annotation = BeanValidators.extractAnnotation(context, NotNull)
+      def annotation = BeanValidators.extractAnnotation(context, NotNull)
     then:
-    annotation.isPresent() == present
+      annotation.isPresent() == present
     where:
-    propertyName                       | present
-    "noAnnotation"                     | false
-    "annotationOnField"                | true
-    "annotationOnGetter"               | false
-    "compositeAnnotationOnField"       | true
-    "compositeAnnotationOnGetter"      | false
-    "extraCompositeAnnotationOnField"  | true
-    "extraCompositeAnnotationOnGetter" | false
+      propertyName                       | present
+      "noAnnotation"                     | false
+      "annotationOnField"                | true
+      "annotationOnGetter"               | false
+      "compositeAnnotationOnField"       | true
+      "compositeAnnotationOnGetter"      | false
+      "extraCompositeAnnotationOnField"  | true
+      "extraCompositeAnnotationOnGetter" | false
   }
 
   @Unroll
   def "@NotNull annotations are reflected in the model #propertyName that are BeanPropertyDefinitions"()  {
     given:
-    def property = beanProperty(propertyName)
-    def context = new ModelPropertyContext(
+      def property = beanProperty(propertyName)
+      def context = new ModelPropertyContext(
             new ModelPropertyBuilder(),
             property,
             new TypeResolver(),
             DocumentationType.SWAGGER_12)
     when:
-    def annotation = BeanValidators.extractAnnotation(context, NotNull)
+      def annotation = BeanValidators.extractAnnotation(context, NotNull)
     then:
-    annotation.isPresent() == present
+      annotation.isPresent() == present
     where:
-    propertyName                       | present
-    "noAnnotation"                     | false
-    "annotationOnField"                | true
-    "annotationOnGetter"               | true
-    "compositeAnnotationOnField"       | true
-    "compositeAnnotationOnGetter"      | true
-    "extraCompositeAnnotationOnField"  | true
-    "extraCompositeAnnotationOnGetter" | true
+      propertyName                       | present
+      "noAnnotation"                     | false
+      "annotationOnField"                | true
+      "annotationOnGetter"               | true
+      "compositeAnnotationOnField"       | true
+      "compositeAnnotationOnGetter"      | true
+      "extraCompositeAnnotationOnField"  | true
+      "extraCompositeAnnotationOnGetter" | true
   }
 
   @Unroll
   def "Constraints can be overridden for #propertyName as an AnnotatedElement"()  {
     given:
-    def property = BeanValidatorsTestModel.getDeclaredField(propertyName)
-    def context = new ModelPropertyContext(
+      def property = BeanValidatorsTestModel.getDeclaredField(propertyName)
+      def context = new ModelPropertyContext(
             new ModelPropertyBuilder(),
             property,
             new TypeResolver(),
             DocumentationType.SWAGGER_12)
     when:
-    def annotation = BeanValidators.extractAnnotation(context, Pattern)
+      def annotation = BeanValidators.extractAnnotation(context, Pattern)
     then:
       def value = annotation.isPresent() ? annotation.get().regexp() : null
       value == overriddenValue
     where:
-    propertyName         | overriddenValue
-    "override"           | "overridden"
-    "overrideOnGetter"   | null
+      propertyName         | overriddenValue
+      "override"           | "overridden"
+      "overrideOnGetter"   | null
   }
 
   @Unroll
   def "Constraints can be overridden for #propertyName as a BeanPropertyDefinition"()  {
     given:
-    def property = beanProperty(propertyName)
-    def context = new ModelPropertyContext(
+      def property = beanProperty(propertyName)
+      def context = new ModelPropertyContext(
             new ModelPropertyBuilder(),
             property,
             new TypeResolver(),
             DocumentationType.SWAGGER_12)
     when:
-    def annotation = BeanValidators.extractAnnotation(context, Pattern)
+      def annotation = BeanValidators.extractAnnotation(context, Pattern)
     then:
-    def value = annotation.isPresent() ? annotation.get().regexp() : null
-    value == overriddenValue
+      def value = annotation.isPresent() ? annotation.get().regexp() : null
+      value == overriddenValue
     where:
-    propertyName         | overriddenValue
-    "override"           | "overridden"
-    "overrideOnGetter"   | "overriddenOnGetter"
+      propertyName         | overriddenValue
+      "override"           | "overridden"
+      "overrideOnGetter"   | "overriddenOnGetter"
   }
 
   def beanProperty(property) {
