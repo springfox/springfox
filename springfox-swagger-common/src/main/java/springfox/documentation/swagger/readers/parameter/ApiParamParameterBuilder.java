@@ -55,6 +55,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
       context.parameterBuilder().defaultValue(emptyToNull(apiParam.get().defaultValue()));
       context.parameterBuilder().allowMultiple(apiParam.get().allowMultiple());
       context.parameterBuilder().required(apiParam.get().required());
+      context.parameterBuilder().hidden(apiParam.get().hidden());
     }
   }
 

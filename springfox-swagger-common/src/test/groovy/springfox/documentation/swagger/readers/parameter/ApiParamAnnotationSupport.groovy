@@ -10,7 +10,8 @@ trait ApiParamAnnotationSupport {
       access: { -> ""},
       defaultValue: { -> ""},
       allowMultiple: { -> true},
-      required: { -> true}] as ApiParam
+      required: { -> true},
+      hidden: { -> false}] as ApiParam
   }
 
   ApiParam apiParamWithAllowMultiple(allowableMultiple) {
@@ -20,7 +21,8 @@ trait ApiParamAnnotationSupport {
       access: { -> ""},
       defaultValue: { -> ""},
       allowMultiple: { -> allowableMultiple},
-      required: { -> true}] as ApiParam
+      required: { -> true},
+      hidden: { -> false}] as ApiParam
   }
 
   ApiParam apiParamWithRequired(required) {
@@ -30,7 +32,8 @@ trait ApiParamAnnotationSupport {
       access: { -> ""},
       defaultValue: { -> ""},
       allowMultiple: { -> false},
-      required: { -> required}] as ApiParam
+      required: { -> required},
+      hidden: { -> false}] as ApiParam
   }
 
   ApiParam apiParamWithNameAndValue(name, value) {
@@ -40,7 +43,8 @@ trait ApiParamAnnotationSupport {
       access: { -> ""},
       defaultValue: { -> ""},
       allowMultiple: { -> false},
-      required: { -> false}] as ApiParam
+      required: { -> false},
+      hidden: { -> false}] as ApiParam
   }
 
   ApiParam apiParamWithDefault(defaultValue) {
@@ -50,7 +54,8 @@ trait ApiParamAnnotationSupport {
       access: { -> ""},
       defaultValue: { -> defaultValue},
       allowMultiple: { -> false},
-      required: { -> false}] as ApiParam
+      required: { -> false},
+      hidden: { -> false}] as ApiParam
   }
 
   ApiParam apiParamWithAccess(access) {
@@ -60,7 +65,19 @@ trait ApiParamAnnotationSupport {
       access: { -> access},
       defaultValue: { -> ""},
       allowMultiple: { -> false},
-      required: { -> false}] as ApiParam
+      required: { -> false},
+      hidden: { -> false}] as ApiParam
+  }
+
+  ApiParam apiParamWithHidden(hidden) {
+    [ allowableValues: { ->  ""},
+      name: { -> ""},
+      value: { -> ""},
+      access: { -> ""},
+      defaultValue: { -> ""},
+      allowMultiple: { -> false},
+      required: { -> false},
+      hidden: { -> hidden}] as ApiParam
   }
 
 }
