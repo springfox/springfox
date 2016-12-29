@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -49,17 +49,17 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
 
   def "parameters hidden using default reader"() {
     given:
-    def parameterContext = setupParameterContext(paramAnnotation)
+      def parameterContext = setupParameterContext(paramAnnotation)
     when:
-    def operationCommand = stubbedParamBuilder(paramAnnotation);
-    operationCommand.apply(parameterContext)
+      def operationCommand = stubbedParamBuilder(paramAnnotation);
+      operationCommand.apply(parameterContext)
     then:
-    parameterContext.parameterBuilder().build().isHidden() == expected
+      parameterContext.parameterBuilder().build().isHidden() == expected
     where:
-    paramAnnotation             | expected
-    apiParamWithHidden(false)   | false
-    apiParamWithHidden(true)    | true
-    null                        | false
+      paramAnnotation             | expected
+      apiParamWithHidden(false)   | false
+      apiParamWithHidden(true)    | true
+      null                        | false
   }
 
   def setupParameterContext(paramAnnotation) {
