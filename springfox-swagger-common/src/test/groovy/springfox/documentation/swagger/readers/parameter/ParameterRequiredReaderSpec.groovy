@@ -47,6 +47,21 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
       null                        | false
   }
 
+  def "parameters hidden using default reader"() {
+    given:
+    def parameterContext = setupParameterContext(paramAnnotation)
+    when:
+    def operationCommand = stubbedParamBuilder(paramAnnotation);
+    operationCommand.apply(parameterContext)
+    then:
+    parameterContext.parameterBuilder().build().isHidden() == expected
+    where:
+    paramAnnotation             | expected
+    apiParamWithHidden(false)   | false
+    apiParamWithHidden(true)    | true
+    null                        | false
+  }
+
   def setupParameterContext(paramAnnotation) {
     def resolvedMethodParameter = new ResolvedMethodParameter(
         0,
