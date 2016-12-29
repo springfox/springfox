@@ -27,8 +27,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.Pattern;
 
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromBean;
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromField;
+import static springfox.bean.validators.plugins.BeanValidators.extractAnnotation;
 
 /**
  * @author : ashutosh
@@ -39,13 +38,8 @@ import static springfox.bean.validators.plugins.BeanValidators.validatorFromFiel
 public class PatternAnnotationPlugin implements ModelPropertyBuilderPlugin {
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<Pattern> pattern = extractPattern(context);
+    Optional<Pattern> pattern = extractAnnotation(context, Pattern.class);
     context.getBuilder().pattern(createPatternValueFromAnnotation(pattern));
-  }
-
-  Optional<Pattern> extractPattern(ModelPropertyContext context) {
-    return validatorFromBean(context, Pattern.class)
-        .or(validatorFromField(context, Pattern.class));
   }
 
   private String createPatternValueFromAnnotation(Optional<Pattern> pattern) {
