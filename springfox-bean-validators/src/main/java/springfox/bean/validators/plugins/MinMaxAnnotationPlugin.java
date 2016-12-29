@@ -18,7 +18,6 @@
  */
 package springfox.bean.validators.plugins;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,44 +48,39 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<Min> min = extractMin(context);
-    Optional<Max> max = extractMax(context);
+    Optional<Min> min = extractAnnotation(context, Min.class);
+    Optional<Max> max = extractAnnotation(context, Max.class);
 
     // add support for @Min/@Max
     context.getBuilder().allowableValues(createAllowableValuesFromMinMaxForNumbers(min, max));
-
   }
-
-  @VisibleForTesting
-  Optional<Min> extractMin(ModelPropertyContext context) {
-    return validatorFromBean(context, Min.class)
-        .or(validatorFromField(context, Min.class));
-  }
-
-  @VisibleForTesting
-  Optional<Max> extractMax(ModelPropertyContext context) {
-    return validatorFromBean(context, Max.class)
-        .or(validatorFromField(context, Max.class));
-  }
-
 
   private AllowableValues createAllowableValuesFromMinMaxForNumbers(Optional<Min> min, Optional<Max> max) {
-    AllowableRangeValues myvalues = null;
+    AllowableRangeValues allowableValues = null;
 
     if (min.isPresent() && max.isPresent()) {
       LOG.debug("@Min+@Max detected: adding AllowableRangeValues to field ");
-      myvalues = new AllowableRangeValues(Double.toString(min.get().value()), false, Double.toString(max.get().value()), false);
-
+      allowableValues = new AllowableRangeValues(
+          Double.toString(min.get().value()),
+          false,
+          Double.toString(max.get().value()),
+          false);
     } else if (min.isPresent()) {
       LOG.debug("@Min detected: adding AllowableRangeValues to field ");
-      myvalues = new AllowableRangeValues(Double.toString(min.get().value()), false, null, null);
-
+      allowableValues = new AllowableRangeValues(
+          Double.toString(min.get().value()),
+          false,
+          null,
+          null);
     } else if (max.isPresent()) {
       LOG.debug("@Max detected: adding AllowableRangeValues to field ");
-      myvalues = new AllowableRangeValues(null, null, Double.toString(max.get().value()), false);
-
+      allowableValues = new AllowableRangeValues(
+          null,
+          null,
+          Double.toString(max.get().value()),
+          false);
     }
-    return myvalues;
+    return allowableValues;
   }
 
 

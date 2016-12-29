@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  */
 package springfox.bean.validators.plugins;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,17 +47,11 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<Size> size = extractAnnotation(context);
+    Optional<Size> size = extractAnnotation(context, Size.class);
 
     if (size.isPresent()) {
       context.getBuilder().allowableValues(createAllowableValuesFromSizeForStrings(size.get()));
     }
-  }
-
-  @VisibleForTesting
-  Optional<Size> extractAnnotation(ModelPropertyContext context) {
-    return validatorFromBean(context, Size.class)
-        .or(validatorFromField(context, Size.class));
   }
 
   private AllowableValues createAllowableValuesFromSizeForStrings(Size size) {

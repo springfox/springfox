@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  */
 package springfox.bean.validators.plugins;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +32,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromBean;
-import static springfox.bean.validators.plugins.BeanValidators.validatorFromField;
+import static springfox.bean.validators.plugins.BeanValidators.*;
 
 @Component
 @Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -50,28 +48,17 @@ public class DecimalMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin
 
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<DecimalMin> min = extractMin(context);
-    Optional<DecimalMax> max = extractMax(context);
+    Optional<DecimalMin> min = extractAnnotation(context, DecimalMin.class);
+    Optional<DecimalMax> max = extractAnnotation(context, DecimalMax.class);
 
     // add support for @DecimalMin/@DecimalMax
     context.getBuilder().allowableValues(createAllowableValuesFromDecimalMinMaxForNumbers(min, max));
 
   }
 
-  @VisibleForTesting
-  Optional<DecimalMin> extractMin(ModelPropertyContext context) {
-    return validatorFromBean(context, DecimalMin.class)
-        .or(validatorFromField(context, DecimalMin.class));
-  }
-
-  @VisibleForTesting
-  Optional<DecimalMax> extractMax(ModelPropertyContext context) {
-    return validatorFromBean(context, DecimalMax.class)
-        .or(validatorFromField(context, DecimalMax.class));
-  }
-
-
-  private AllowableValues createAllowableValuesFromDecimalMinMaxForNumbers(Optional<DecimalMin> decimalMin, Optional<DecimalMax> decimalMax) {
+  private AllowableValues createAllowableValuesFromDecimalMinMaxForNumbers(
+      Optional<DecimalMin> decimalMin,
+      Optional<DecimalMax> decimalMax) {
     AllowableRangeValues myvalues = null;
 
     if (decimalMin.isPresent() && decimalMax.isPresent()) {
