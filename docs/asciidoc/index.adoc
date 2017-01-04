@@ -3,7 +3,7 @@ Dilip Krishnan; Adrian Kelly;
 v{springfox-current-version}
 :numbered:
 :toc:
-:toclevels: 2
+:toclevels: 3
 :imagesdir: ./images
 
 include::introduction.adoc[]

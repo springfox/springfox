@@ -282,7 +282,7 @@ use a combination of servlet container and tomcat/jersey etc.
 - The security scheme which describes the techniques you've used to protect the api. Spring fox supports whatever
 schemes swagger specification supports (ApiKey, BasicAuth and OAuth2 (certain profiles))
 - Finally the security contexts which actually provides information on which api's are protected by which schemes. I
-think in your example, you're missing the last piece of the puzzle, the security context see  xref:getting-started[15].
+think in your example, you're missing the last piece of the puzzle, the security context see  xref:getting-started-spring-boot[15].
 
 === Extensibility
 

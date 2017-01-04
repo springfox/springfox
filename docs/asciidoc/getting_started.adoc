@@ -89,8 +89,9 @@ dependencies {
 </dependency>
 ----
 
-==== Springfox-swagger2 with Spring MVC and Spring Boot
-[[getting-started]]
+== Quick start guides
+==== Springfox Spring MVC and Spring Boot
+[[getting-started-spring-boot]]
 
 [source,java,linenums]
 ----
@@ -161,7 +162,7 @@ override the default behavior.
  to do exactly that.
 There are plenty of more options to configure the `Docket`. This should provide a good start.
 
-===== Support for Spring Data Rest
+==== Springfox Spring Data Rest
 In version greater than 2.6.0, support for spring data rest was added.
 
 NOTE: This is still in ***incubation***.
@@ -209,7 +210,7 @@ Import the bean in your xml configuration by defining a bean of the following ty
 <bean class="springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class" />
 ----
 
-===== Support for JSR-303
+==== Springfox Support for JSR-303
 In version greater than 2.3.2, support for bean validation annotations was added, specifically for @NotNull, @Min,
 @Max, and @Size.
 
@@ -256,7 +257,7 @@ Import the bean in your xml configuration by defining a bean of the following ty
 <bean class="springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration" />
 ----
 
-===== Swagger UI
+==== Springfox Swagger UI
 The `springfox-swagger-ui` http://www.webjars.org/[web jar] ships with https://github.com/swagger-api/swagger-ui[Swagger UI]. To include it in a standard
 Spring Boot application you can add the dependency as follows:
 
@@ -301,7 +302,7 @@ Regarding [where swagger-ui itself is served](http://springfox.github.io/springf
 api docs are served](http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints) those are
  totally configurable.
 
-====== RFC6570 support *incubating*
+==== Springfox RFC6570 support *incubating*
 NOTE: _Keep in mind this is experimental_!
 In order to use this feature
 1. Add `springfox-swagger-ui-rfc6570` instead of `springfox-swagger-ui` as a dependency
