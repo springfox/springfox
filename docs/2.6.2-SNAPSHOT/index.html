@@ -526,56 +526,96 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#history">1.1. History</a></li>
 <li><a href="#goals">1.2. Goals</a></li>
 <li><a href="#what-it-s-not">1.3. What it&#8217;s not</a></li>
-<li><a href="#development-environment">1.4. Development Environment</a></li>
-<li><a href="#releasing">1.5. Releasing</a></li>
+<li><a href="#development-environment">1.4. Development Environment</a>
+<ul class="sectlevel3">
+<li><a href="#pre-commit-build">1.4.1. Pre-Commit Build</a></li>
+<li><a href="#building-reference-documentation">1.4.2. Building reference documentation</a></li>
+<li><a href="#ci-environment">1.4.3. CI Environment</a></li>
+</ul>
+</li>
+<li><a href="#releasing">1.5. Releasing</a>
+<ul class="sectlevel3">
+<li><a href="#snapshot">1.5.1. Snapshot</a></li>
+<li><a href="#override-deploy">1.5.2. Override deploy</a></li>
+<li><a href="#updating-documentation">1.5.3. Updating documentation</a></li>
+<li><a href="#contributing">1.5.4. Contributing</a></li>
+</ul>
+</li>
 <li><a href="#support">1.6. Support</a></li>
 </ul>
 </li>
 <li><a href="#getting-started">2. Getting Started</a>
 <ul class="sectlevel2">
-<li><a href="#dependencies">2.1. Dependencies</a></li>
-<li><a href="#springfox-samples">2.2. Springfox samples</a></li>
+<li><a href="#dependencies">2.1. Dependencies</a>
+<ul class="sectlevel3">
+<li><a href="#gradle">2.1.1. Gradle</a></li>
+<li><a href="#maven">2.1.2. Maven</a></li>
 </ul>
 </li>
-<li><a href="#architecture">3. Architecture</a>
+</ul>
+</li>
+<li><a href="#quick-start-guides">3. Quick start guides</a>
+<ul class="sectlevel3">
+<li><a href="#springfox-spring-mvc-and-spring-boot">3.1. Springfox Spring MVC and Spring Boot</a></li>
+<li><a href="#springfox-spring-data-rest">3.2. Springfox Spring Data Rest</a></li>
+<li><a href="#springfox-support-for-jsr-303">3.3. Springfox Support for JSR-303</a></li>
+<li><a href="#springfox-swagger-ui">3.4. Springfox Swagger UI</a></li>
+<li><a href="#springfox-rfc6570-support-strong-incubating-strong">3.5. Springfox RFC6570 support <strong>incubating</strong></a></li>
+<li><a href="#springfox-samples">3.6. Springfox samples</a></li>
+</ul>
+</li>
+<li><a href="#architecture">4. Architecture</a>
 <ul class="sectlevel2">
-<li><a href="#background">3.1. Background</a></li>
-<li><a href="#component-model">3.2. Component Model</a></li>
+<li><a href="#background">4.1. Background</a></li>
+<li><a href="#component-model">4.2. Component Model</a></li>
 </ul>
 </li>
-<li><a href="#swagger">4. Swagger</a>
+<li><a href="#swagger">5. Swagger</a>
 <ul class="sectlevel2">
-<li><a href="#swagger-1-2-vs-swagger-2-0">4.1. Swagger 1.2 vs Swagger 2.0</a></li>
-<li><a href="#moving-from-swagger-springmvc">4.2. Moving from swagger-springmvc?</a></li>
-<li><a href="#springfox-configuration-and-demo-applications">4.3. Springfox configuration and demo applications</a></li>
+<li><a href="#swagger-1-2-vs-swagger-2-0">5.1. Swagger 1.2 vs Swagger 2.0</a></li>
+<li><a href="#moving-from-swagger-springmvc">5.2. Moving from swagger-springmvc?</a></li>
+<li><a href="#springfox-configuration-and-demo-applications">5.3. Springfox configuration and demo applications</a></li>
 </ul>
 </li>
-<li><a href="#configuring-springfox">5. Configuring Springfox</a>
+<li><a href="#configuring-springfox">6. Configuring Springfox</a>
 <ul class="sectlevel2">
-<li><a href="#configuring-the-objectmapper">5.1. Configuring the ObjectMapper</a></li>
-<li><a href="#customizing-the-swagger-endpoints">5.2. Customizing the swagger endpoints.</a></li>
-<li><a href="#overriding-property-datatypes">5.3. Overriding property datatypes</a></li>
-<li><a href="#docket-xml-configuration">5.4. Docket XML Configuration</a></li>
-<li><a href="#docket-spring-java-configuration">5.5. Docket Spring Java Configuration</a></li>
-<li><a href="#caching">5.6. Caching</a></li>
-<li><a href="#configuring-security-schemes-and-contexts-an-overview">5.7. Configuring Security Schemes and Contexts an Overview</a></li>
-<li><a href="#extensibility">5.8. Extensibility</a></li>
-<li><a href="#example-application">5.9. Example application</a></li>
+<li><a href="#configuring-the-objectmapper">6.1. Configuring the ObjectMapper</a></li>
+<li><a href="#customizing-the-swagger-endpoints">6.2. Customizing the swagger endpoints.</a></li>
+<li><a href="#overriding-property-datatypes">6.3. Overriding property datatypes</a></li>
+<li><a href="#docket-xml-configuration">6.4. Docket XML Configuration</a></li>
+<li><a href="#docket-spring-java-configuration">6.5. Docket Spring Java Configuration</a>
+<ul class="sectlevel3">
+<li><a href="#swagger-group">6.5.1. Swagger group</a></li>
+<li><a href="#configuring-the-output-of-em-operationid-em-in-a-swagger-2-0-spec">6.5.2. Configuring the output of <em>operationId</em> in a Swagger 2.0 spec</a></li>
+<li><a href="#changing-how-generic-types-are-named">6.5.3. Changing how Generic Types are Named</a></li>
 </ul>
 </li>
-<li><a href="#configuring-springfox-staticdocs">6. Configuring springfox-staticdocs</a>
+<li><a href="#caching">6.6. Caching</a></li>
+<li><a href="#configuring-security-schemes-and-contexts-an-overview">6.7. Configuring Security Schemes and Contexts an Overview</a></li>
+<li><a href="#extensibility">6.8. Extensibility</a></li>
+<li><a href="#example-application">6.9. Example application</a></li>
+</ul>
+</li>
+<li><a href="#configuring-springfox-staticdocs">7. Configuring springfox-staticdocs</a>
 <ul class="sectlevel2">
-<li><a href="#usage-guide">6.1. Usage guide</a></li>
+<li><a href="#usage-guide">7.1. Usage guide</a>
+<ul class="sectlevel3">
+<li><a href="#maven-4">7.1.1. Maven</a></li>
+<li><a href="#gradle-4">7.1.2. Gradle</a></li>
+<li><a href="#generate-markup-during-an-unit-test">7.1.3. Generate Markup during an unit test</a></li>
+<li><a href="#generated-html-using-swagger2markup-and-asciidoctorj">7.1.4. Generated HTML using Swagger2Markup and AsciidoctorJ</a></li>
 </ul>
 </li>
-<li><a href="#plugins">7. Plugins</a>
+</ul>
+</li>
+<li><a href="#plugins">8. Plugins</a>
 <ul class="sectlevel2">
-<li><a href="#introduction-2">7.1. Introduction</a></li>
-<li><a href="#plugins-available-for-extensibility">7.2. Plugins Available For Extensibility</a></li>
-<li><a href="#steps-to-create-a-plugin">7.3. Steps To Create A Plugin</a></li>
+<li><a href="#introduction-2">8.1. Introduction</a></li>
+<li><a href="#plugins-available-for-extensibility">8.2. Plugins Available For Extensibility</a></li>
+<li><a href="#steps-to-create-a-plugin">8.3. Steps To Create A Plugin</a></li>
 </ul>
 </li>
-<li><a href="#answers-to-common-questions-and-problems">8. Answers to common questions and problems</a></li>
+<li><a href="#answers-to-common-questions-and-problems">9. Answers to common questions and problems</a></li>
 </ul>
 </div>
 </div>
@@ -932,9 +972,15 @@ dependencies {
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="quick-start-guides">3. Quick start guides</h2>
+<div class="sectionbody">
 <div class="sect3">
-<h4 id="springfox-swagger2-with-spring-mvc-and-spring-boot">2.1.3. Springfox-swagger2 with Spring MVC and Spring Boot</h4>
-<div id="getting-started" class="listingblock">
+<h4 id="springfox-spring-mvc-and-spring-boot">3.1. Springfox Spring MVC and Spring Boot</h4>
+<div id="getting-started-spring-boot" class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
   <td class="line-numbers"><pre>1
@@ -1403,8 +1449,9 @@ There are plenty of more options to configure the <code>Docket</code>. This shou
 </table>
 </div>
 </div>
-<div class="sect4">
-<h5 id="support-for-spring-data-rest">Support for Spring Data Rest</h5>
+</div>
+<div class="sect3">
+<h4 id="springfox-spring-data-rest">3.2. Springfox Spring Data Rest</h4>
 <div class="paragraph">
 <p>In version greater than 2.6.0, support for spring data rest was added.</p>
 </div>
@@ -1482,8 +1529,8 @@ This is still in <strong><strong>incubation</strong></strong>.
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="support-for-jsr-303">Support for JSR-303</h5>
+<div class="sect3">
+<h4 id="springfox-support-for-jsr-303">3.3. Springfox Support for JSR-303</h4>
 <div class="paragraph">
 <p>In version greater than 2.3.2, support for bean validation annotations was added, specifically for @NotNull, @Min,
 @Max, and @Size.</p>
@@ -1550,8 +1597,8 @@ This is still in <strong><strong>incubation</strong></strong>.
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="swagger-ui">Swagger UI</h5>
+<div class="sect3">
+<h4 id="springfox-swagger-ui">3.4. Springfox Swagger UI</h4>
 <div class="paragraph">
 <p>The <code>springfox-swagger-ui</code> <a href="http://www.webjars.org/">web jar</a> ships with <a href="https://github.com/swagger-api/swagger-ui">Swagger UI</a>. To include it in a standard
 Spring Boot application you can add the dependency as follows:</p>
@@ -1627,8 +1674,9 @@ to be available at the root of the <em>webcontext</em>.</p>
 api docs are served](<a href="http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints" class="bare">http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints</a>) those are
  totally configurable.</p>
 </div>
-<div class="sect5">
-<h6 id="rfc6570-support-strong-incubating-strong">RFC6570 support <strong>incubating</strong></h6>
+</div>
+<div class="sect3">
+<h4 id="springfox-rfc6570-support-strong-incubating-strong">3.5. Springfox RFC6570 support <strong>incubating</strong></h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1686,11 +1734,8 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 </ol>
 </div>
 </div>
-</div>
-</div>
-</div>
 <div class="sect2">
-<h3 id="springfox-samples">2.2. Springfox samples</h3>
+<h3 id="springfox-samples">3.6. Springfox samples</h3>
 <div class="paragraph">
 <p>The <a href="https://github.com/springfox/springfox-demos">springfox-demos</a> repository contains a number of samples.</p>
 </div>
@@ -1698,10 +1743,10 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 </div>
 </div>
 <div class="sect1">
-<h2 id="architecture">3. Architecture</h2>
+<h2 id="architecture">4. Architecture</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="background">3.1. Background</h3>
+<h3 id="background">4.1. Background</h3>
 <div class="paragraph">
 <p>When we started work on 2.0 swagger specification we realized that we&#8217;re rewriting the logic to infer the service
  models and the schema. So we decided to take a step back and break it out into a two step process. First infer the service
@@ -1711,7 +1756,7 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 </div>
 </div>
 <div class="sect2">
-<h3 id="component-model">3.2. Component Model</h3>
+<h3 id="component-model">4.2. Component Model</h3>
 <div class="paragraph">
 <p>The different SpringFox modules are split up as shown below.</p>
 </div>
@@ -1765,7 +1810,7 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 </div>
 </div>
 <div class="sect1">
-<h2 id="swagger">4. Swagger</h2>
+<h2 id="swagger">5. Swagger</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Springfox supports both version <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md">1.2</a> and version
@@ -1778,7 +1823,7 @@ Where possible, the Swagger 2.0 specification is preferable.</p>
 'swaggered'. Springfox is aware of the Swagger-Core Annotations and will favor those annotations over inferred defaults.</p>
 </div>
 <div class="sect2">
-<h3 id="swagger-1-2-vs-swagger-2-0">4.1. Swagger 1.2 vs Swagger 2.0</h3>
+<h3 id="swagger-1-2-vs-swagger-2-0">5.1. Swagger 1.2 vs Swagger 2.0</h3>
 <div class="paragraph">
 <p>One major difference between the two swagger specification is the composition of the generated swagger documentation.</p>
 </div>
@@ -1791,7 +1836,7 @@ implication of producing <a href="https://github.com/swagger-api/swagger-spec/bl
 </div>
 </div>
 <div class="sect2">
-<h3 id="moving-from-swagger-springmvc">4.2. Moving from swagger-springmvc?</h3>
+<h3 id="moving-from-swagger-springmvc">5.2. Moving from swagger-springmvc?</h3>
 <div class="paragraph">
 <p>Here is <a href="https://github.com/springfox/springfox/blob/master/docs/transitioning-to-v2.md">a guide</a> to help with the
 transition from 1.0.2 to 2.0.</p>
@@ -1801,7 +1846,7 @@ transition from 1.0.2 to 2.0.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="springfox-configuration-and-demo-applications">4.3. Springfox configuration and demo applications</h3>
+<h3 id="springfox-configuration-and-demo-applications">5.3. Springfox configuration and demo applications</h3>
 <div class="paragraph">
 <p>The <a href="https://github.com/springfox/springfox-demos">springfox-demos</a> repository contains a number of sample Spring application
 which can be used a reference.</p>
@@ -1810,7 +1855,7 @@ which can be used a reference.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuring-springfox">5. Configuring Springfox</h2>
+<h2 id="configuring-springfox">6. Configuring Springfox</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To enable support for swagger specification 1.2 use the <code><code>@EnableSwagger</code></code> annotation</p>
@@ -1866,7 +1911,7 @@ to this is the ability to provide an expressive predicate based for api selectio
 and <a href="https://github.com/springfox/springfox/blob/master/springfox-core/src/main/java/springfox/documentation/builders/PathSelectors.java">PathSelectors</a>.</p>
 </div>
 <div class="sect2">
-<h3 id="configuring-the-objectmapper">5.1. Configuring the ObjectMapper</h3>
+<h3 id="configuring-the-objectmapper">6.1. Configuring the ObjectMapper</h3>
 <div class="paragraph">
 <p>A simple way to configure the object mapper is to listen for the <code><code>ObjectMapperConfigured</code></code> event. Regardless of
 whether there is a customized ObjectMapper in play with a corresponding MappingJackson2HttpMessageConverter, the
@@ -1893,7 +1938,7 @@ good example of where this breaks down is the following <a href="http://stackove
 </div>
 </div>
 <div class="sect2">
-<h3 id="customizing-the-swagger-endpoints">5.2. Customizing the swagger endpoints.</h3>
+<h3 id="customizing-the-swagger-endpoints">6.2. Customizing the swagger endpoints.</h3>
 <div class="paragraph">
 <p>By default the swagger service descriptions are generated at the following urls</p>
 </div>
@@ -1965,7 +2010,7 @@ allows the properties to be  overridden</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="overriding-property-datatypes">5.3. Overriding property datatypes</h3>
+<h3 id="overriding-property-datatypes">6.3. Overriding property datatypes</h3>
 <div class="paragraph">
 <p>Using the <code><code>ApiModelProperty#dataType</code></code> we can override the inferred data types. However it is restricted
  to only allow data types to be specified with a fully qualified class name. For e.g. if we have the following
@@ -1985,7 +2030,7 @@ allows the properties to be  overridden</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="docket-xml-configuration">5.4. Docket XML Configuration</h3>
+<h3 id="docket-xml-configuration">6.4. Docket XML Configuration</h3>
 <div class="paragraph">
 <p>To use the plugin you must create a spring java configuration class which uses spring&#8217;s <code>@Configuration</code>.
 This config class must then be defined in your xml application context.</p>
@@ -2021,7 +2066,7 @@ This config class must then be defined in your xml application context.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="docket-spring-java-configuration">5.5. Docket Spring Java Configuration</h3>
+<h3 id="docket-spring-java-configuration">6.5. Docket Spring Java Configuration</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2054,7 +2099,7 @@ This config class must then be defined in your xml application context.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="swagger-group">5.5.1. Swagger group</h4>
+<h4 id="swagger-group">6.5.1. Swagger group</h4>
 <div class="paragraph">
 <p>A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
 within your application. The reason this concept was introduced was to support applications which require more than one
@@ -2067,7 +2112,7 @@ Resource Listing. Why would you need more than one Resource Listing?
 </div>
 </div>
 <div class="sect3">
-<h4 id="configuring-the-output-of-em-operationid-em-in-a-swagger-2-0-spec">5.5.2. Configuring the output of <em>operationId</em> in a Swagger 2.0 spec</h4>
+<h4 id="configuring-the-output-of-em-operationid-em-in-a-swagger-2-0-spec">6.5.2. Configuring the output of <em>operationId</em> in a Swagger 2.0 spec</h4>
 <div class="paragraph">
 <p>As defined <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-5"><code>operationId</code> was
 introduced</a> in the Swagger 2.0 spec, the <code>operationId</code> parameter, which was referred to as <code>nickname</code> in pre-2.0
@@ -2148,7 +2193,7 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 </div>
 </div>
 <div class="sect3">
-<h4 id="changing-how-generic-types-are-named">5.5.3. Changing how Generic Types are Named</h4>
+<h4 id="changing-how-generic-types-are-named">6.5.3. Changing how Generic Types are Named</h4>
 <div class="paragraph">
 <p>By default, types with generics will be labeled with '\u00ab'(&lt;&lt;), '\u00bb'(&gt;&gt;), and commas. This can be problematic
 with things like swagger-codegen. You can override this behavior by implementing your own <code>GenericTypeNamingStrategy</code>.
@@ -2164,7 +2209,7 @@ plugin customization:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="caching">5.6. Caching</h3>
+<h3 id="caching">6.6. Caching</h3>
 <div class="paragraph">
 <p>The caching feature that was introduced in 2.1.0 has been removed. Springfox no longer uses the cache abstraction to
 improve performance the api scanners and readers. It has been rolled into the library as an internal implementation
@@ -2173,7 +2218,7 @@ other than the introduction of configuration change in consuming applications, w
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuring-security-schemes-and-contexts-an-overview">5.7. Configuring Security Schemes and Contexts an Overview</h3>
+<h3 id="configuring-security-schemes-and-contexts-an-overview">6.7. Configuring Security Schemes and Contexts an Overview</h3>
 <div class="paragraph">
 <p>The security provisions in SpringFox at a high level, without getting into the code, has different pieces
 that all work together in concert</p>
@@ -2190,13 +2235,13 @@ schemes swagger specification supports (ApiKey, BasicAuth and OAuth2 (certain pr
 </li>
 <li>
 <p>Finally the security contexts which actually provides information on which api&#8217;s are protected by which schemes. I
-think in your example, you&#8217;re missing the last piece of the puzzle, the security context see  <a href="#getting-started">15</a>.</p>
+think in your example, you&#8217;re missing the last piece of the puzzle, the security context see  <a href="#getting-started-spring-boot">15</a>.</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="extensibility">5.8. Extensibility</h3>
+<h3 id="extensibility">6.8. Extensibility</h3>
 <div class="paragraph">
 <p>The library provides a variety of extensibility hooks to enrich/ augment the schema and service models</p>
 </div>
@@ -2212,7 +2257,7 @@ think in your example, you&#8217;re missing the last piece of the puzzle, the se
 </div>
 </div>
 <div class="sect2">
-<h3 id="example-application">5.9. Example application</h3>
+<h3 id="example-application">6.9. Example application</h3>
 <div class="paragraph">
 <p>For an examples for spring-boot, vanilla spring applications take a look <a href="https://github.com/springfox/springfox-demos">examples</a>
 in the demo application.</p>
@@ -2221,7 +2266,7 @@ in the demo application.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuring-springfox-staticdocs">6. Configuring springfox-staticdocs</h2>
+<h2 id="configuring-springfox-staticdocs">7. Configuring springfox-staticdocs</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Springfox-staticdocs is a module which brings together springfox and <a href="https://github.com/RobWin/swagger2markup">swagger2markup</a>.
@@ -2232,12 +2277,12 @@ several AsciiDoc or GitHub Flavored Markdown documents which can be converted to
 Swagger2Markup can be used as an alternative to swagger-ui and can be served as static content.</p>
 </div>
 <div class="sect2">
-<h3 id="usage-guide">6.1. Usage guide</h3>
+<h3 id="usage-guide">7.1. Usage guide</h3>
 <div class="paragraph">
 <p>Adding springfox-staticdocs to your project</p>
 </div>
 <div class="sect3">
-<h4 id="maven-4">6.1.1. Maven</h4>
+<h4 id="maven-4">7.1.1. Maven</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
@@ -2255,7 +2300,7 @@ Swagger2Markup can be used as an alternative to swagger-ui and can be served as 
 </div>
 </div>
 <div class="sect3">
-<h4 id="gradle-4">6.1.2. Gradle</h4>
+<h4 id="gradle-4">7.1.2. Gradle</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
@@ -2268,7 +2313,7 @@ Swagger2Markup can be used as an alternative to swagger-ui and can be served as 
 </div>
 </div>
 <div class="sect3">
-<h4 id="generate-markup-during-an-unit-test">6.1.3. Generate Markup during an unit test</h4>
+<h4 id="generate-markup-during-an-unit-test">7.1.3. Generate Markup during an unit test</h4>
 <div class="paragraph">
 <p>Spring&#8217;s MVC Test framework can be used to make a request to a <a href="https://github.com/springfox/springfox">springfox</a> Swagger endpoint during an unit test. The ResultHandler <code>Swagger2MarkupResultHandler</code> can be used to convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is part of <code>springfox-staticdocs</code>. That way you also verify that your Swagger endpoint is working. The following is an example with Spring Boot:</p>
 </div>
@@ -2313,7 +2358,7 @@ Swagger2Markup can be used as an alternative to swagger-ui and can be served as 
 </div>
 </div>
 <div class="sect3">
-<h4 id="generated-html-using-swagger2markup-and-asciidoctorj">6.1.4. Generated HTML using Swagger2Markup and AsciidoctorJ</h4>
+<h4 id="generated-html-using-swagger2markup-and-asciidoctorj">7.1.4. Generated HTML using Swagger2Markup and AsciidoctorJ</h4>
 <div class="imageblock">
 <div class="content">
 <img src="./images/asciidoc_html.PNG" alt="asciidoc_html">
@@ -2324,10 +2369,10 @@ Swagger2Markup can be used as an alternative to swagger-ui and can be served as 
 </div>
 </div>
 <div class="sect1">
-<h2 id="plugins">7. Plugins</h2>
+<h2 id="plugins">8. Plugins</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="introduction-2">7.1. Introduction</h3>
+<h3 id="introduction-2">8.1. Introduction</h3>
 <div class="paragraph">
 <p>Any plugin or extensibility hook that is available <a href="https://github.com/springfox/springfox/tree/master/springfox-spi/src/main/java/springfox/documentation/spi">is available in the SPI
 module</a>. In the <code>spi</code> module, anything that ends in <code>*Plugin</code> is generally an extensibility point that is meant for
@@ -2340,7 +2385,7 @@ are  implementations of <code>ModelPropertyBuilderPlugin</code>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="plugins-available-for-extensibility">7.2. Plugins Available For Extensibility</h3>
+<h3 id="plugins-available-for-extensibility">8.2. Plugins Available For Extensibility</h3>
 <div class="paragraph">
 <p>To explicitly state the extensibility points that are available:
 * At the schema level
@@ -2421,7 +2466,7 @@ are  implementations of <code>ModelPropertyBuilderPlugin</code>.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="steps-to-create-a-plugin">7.3. Steps To Create A Plugin</h3>
+<h3 id="steps-to-create-a-plugin">8.3. Steps To Create A Plugin</h3>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -2471,7 +2516,7 @@ order specified in the bean. In general spring plugins get the highest priority,
 </div>
 </div>
 <div class="sect1">
-<h2 id="answers-to-common-questions-and-problems">8. Answers to common questions and problems</h2>
+<h2 id="answers-to-common-questions-and-problems">9. Answers to common questions and problems</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a id="q1"></a><strong>Q. Why does springfox ignore the http status code in the return value of a controller method?</strong></p>
@@ -3117,7 +3162,7 @@ using the <code>@EnableSwagger2</code> like below, try removing the <code>@Confi
 <div id="footer">
 <div id="footer-text">
 Version 2.6.2-SNAPSHOT<br>
-Last updated 2017-01-04 22:52:09 UTC
+Last updated 2017-01-04 23:16:46 UTC
 </div>
 </div>
 </body>
