@@ -59,11 +59,11 @@ class ExpandedParameterBuilderSpec extends Specification {
       field            | paramType  | itemType
       "enums"          | "List"     | "string"
       "strings"        | "List"     | "string"
-      "integers"       | "List"     | "int"
+      "integers"       | "List"     | "integer"
       "uuids"          | "List"     | "string"
       "enumsArray"     | "Array"    | "string"
       "stringsArray"   | "Array"    | "string"
-      "integersArray"  | "Array"    | "int"
+      "integersArray"  | "Array"    | "integer"
       "uuidsArray"     | "Array"    | "string"
   }
 

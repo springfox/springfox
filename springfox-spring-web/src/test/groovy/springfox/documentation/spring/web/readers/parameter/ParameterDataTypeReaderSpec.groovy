@@ -83,8 +83,8 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       paramType                   | annotations          | expected
       char                        | []                   | "string"
       String                      | []                   | "string"
-      Integer                     | []                   | "int"
-      int                         | []                   | "int"
+      Integer                     | []                   | "integer"
+      int                         | []                   | "integer"
       Long                        | []                   | "long"
       Long                        | [Mock(PathVariable)] | "long"
       Long                        | [Mock(RequestParam)] | "long"
