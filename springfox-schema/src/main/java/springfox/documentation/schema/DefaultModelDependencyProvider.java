@@ -36,7 +36,6 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.FluentIterable.*;
@@ -68,11 +67,11 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   }
 
   @Override
-  public Set<ModelContext> dependentModels(ModelContext modelContext) {
+  public List<ModelContext> dependentModels(ModelContext modelContext) {
     return from(resolvedDependencies(modelContext))
         .filter(ignorableTypes(modelContext))
         .filter(not(baseTypes(modelContext)))
-        .toSet();
+        .toList();
   }
 
   private Predicate<ModelContext> baseTypes(final ModelContext modelContext) {
@@ -118,7 +117,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
       ResolvedType elementType = resolvedType.getArrayElementType();
       LOG.debug("Adding type for element {}", elementType.getSignature());
       elementType = modelContext.alternateFor(elementType);
-      ModelContext childContext = ModelContext.fromParent(modelContext, elementType);
+      ModelContext childContext = ModelContext.copy(modelContext, elementType);
       parameters.add(childContext);
       LOG.debug("Recursively resolving dependencies for element {}", elementType.getSignature());
       parameters.addAll(resolvedDependencies(childContext));
@@ -131,7 +130,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     for (ResolvedType parameter : resolvedType.getTypeParameters()) {
       LOG.debug("Adding type for parameter {}", parameter.getSignature());
       parameter = modelContext.alternateFor(parameter);
-      ModelContext childContext = ModelContext.fromParent(modelContext, parameter);
+      ModelContext childContext = ModelContext.copy(modelContext, parameter);
       parameters.add(childContext);
       LOG.debug("Recursively resolving dependencies for parameter {}", parameter.getSignature());
       parameters.addAll(resolvedDependencies(childContext));
@@ -153,16 +152,16 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     properties.putAll(propertiesIndex);
     modelContext.getBuilder().properties(properties);
     for (ModelProperty property : from(propertiesIndex.values())
-    	    .filter(not(baseProperty(modelContext)))) {
+            .filter(not(baseProperty(modelContext)))) {
       LOG.debug("Adding type {} for parameter {}", property.getType().getSignature(), property.getName());
+      ModelContext childContext = ModelContext.fromParent(modelContext, property.getType());
       if (!isMapType(property.getType())) {
-    	  ModelContext childContext = ModelContext.fromParent(modelContext, property.getType());
-    	  property.updateModelRefFactory(modelRefFactory(childContext, nameExtractor));
-    	  propertiesContexts.add(childContext);
+          property.updateModelRefFactory(modelRefFactory(childContext, nameExtractor));
+          propertiesContexts.add(childContext);
       }
       propertiesContexts.addAll(maybeFromCollectionElementType(modelContext, property));
       propertiesContexts.addAll(maybeFromMapValueType(modelContext, property));
-      propertiesContexts.addAll(maybeFromRegularType(modelContext, property));
+      propertiesContexts.addAll(maybeFromRegularType(childContext, property));
     }
     return propertiesContexts;
   }
@@ -180,10 +179,8 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     if (isContainerType(property.getType()) || isMapType(property.getType())) {
       return newArrayList();
     }
-    ModelContext childContext = ModelContext.fromParent(modelContext, property.getType());
-    property.updateModelRefFactory(modelRefFactory(childContext, nameExtractor));
     LOG.debug("Recursively resolving dependencies for type {}", resolvedTypeSignature(property.getType()).or("<null>"));
-    return newArrayList(resolvedDependencies(childContext));
+    return newArrayList(resolvedDependencies(modelContext));
   }
 
   private List<ModelContext> maybeFromCollectionElementType(ModelContext modelContext, ModelProperty property) {
@@ -222,11 +219,11 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   
   private Function<ModelProperty, String> byPropertyName() {
     return new Function<ModelProperty, String>() {
-	  @Override
-	  public String apply(ModelProperty input) {
-	    return input.getName();
-	  }
-	};
+      @Override
+      public String apply(ModelProperty input) {
+        return input.getName();
+      }
+    };
   }
   
   private List<ModelProperty> propertiesFor(ModelContext modelContext, ResolvedType resolvedType) {

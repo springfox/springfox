@@ -28,31 +28,31 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
-import java.util.Set;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.collect.Sets.*;
+import static com.google.common.collect.Lists.*;
 
 @Component
 @Qualifier("cachedModelDependencies")
 public class CachingModelDependencyProvider implements ModelDependencyProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingModelDependencyProvider.class);
-  private final LoadingCache<ModelContext, Set<ModelContext>> cache;
+  private final LoadingCache<ModelContext, List<ModelContext>> cache;
 
   @Autowired
   public CachingModelDependencyProvider(@Qualifier("default") final ModelDependencyProvider delegate) {
     cache = CacheBuilder.newBuilder()
         .maximumSize(1000)
         .expireAfterWrite(24, TimeUnit.HOURS)
-        .build(new CacheLoader<ModelContext, Set<ModelContext>>() {
-          public Set<ModelContext> load(ModelContext key) {
+        .build(new CacheLoader<ModelContext, List<ModelContext>>() {
+          public List<ModelContext> load(ModelContext key) {
             return delegate.dependentModels(key);
           }
         });
   }
 
   @Override
-  public Set<ModelContext> dependentModels(ModelContext modelContext) {
+  public List<ModelContext> dependentModels(ModelContext modelContext) {
     try {
       return cache.get(modelContext);
     } catch (Exception e) {
@@ -60,7 +60,7 @@ public class CachingModelDependencyProvider implements ModelDependencyProvider {
           modelContext.description(),
           e.getMessage()
       );
-      return newHashSet();
+      return newArrayList();
     }
   }
 

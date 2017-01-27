@@ -32,8 +32,8 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import static com.google.common.collect.Maps.*;
@@ -62,7 +62,7 @@ public class ApiModelReader  {
     Map<String, Model> modelMap = newHashMap(context.getModelMap());
     for (ModelContext each : modelContexts) {
       markIgnorablesAsHasSeen(typeResolver, ignorableTypes, each);
-      Map<ModelContext, Model> pModel = modelProvider.modelsFor(each);
+      List<ModelContext> pModel = modelProvider.modelsFor(each);
       if (!pModel.isEmpty()) {
         compareModelMap(modelMap, pModel);
       } else {
@@ -72,43 +72,43 @@ public class ApiModelReader  {
     return modelMap;
   }
 
-  private void compareModelMap(Map<String, Model> target, Map<ModelContext, Model> source) {
-	boolean changes, deleteSame = false;
-	while (true) {
+  private void compareModelMap(Map<String, Model> target, List<ModelContext> source) {     
+	boolean changes;
+	while (true) {	    
 	  changes = false;
-	  Iterator<Entry<ModelContext, Model>> iterator = source.entrySet().iterator();  
+	  Iterator<ModelContext> iterator = source.iterator();  
       outer:while (iterator.hasNext()) {
-    	Entry<ModelContext, Model> entrySource = iterator.next();
+    	ModelContext contextSource = iterator.next();
+    	Model modelSource = contextSource.getBuilder().build();
+        LOG.debug("Checking duplicate models for model: {}", modelSource.getId());
     	for (Map.Entry<String, Model> entryTarget : target.entrySet()) {
-    	  Model modelSource = entrySource.getValue() , modelTarger = entryTarget.getValue();
-     	  if (!deleteSame && !modelSource.equals(modelTarger) && modelSource.getName().equals(modelTarger.getName())) { 
-    	    entrySource.setValue(entrySource.getKey().getBuilder().index(modelSource.getIndex() + 1).build());
-    	    if (!entrySource.getKey().isRootContext()) {
+    	  Model modelTarger = entryTarget.getValue();
+     	  if (!modelSource.equals(modelTarger) && modelSource.getName().equals(modelTarger.getName())) { 
+     	    LOG.debug("Found duplicate for model: {}. Increasing index.", modelSource.getId());  
+     	    contextSource.getBuilder().index(modelSource.getIndex() + 1);
+    	    if (!contextSource.isRootContext()) {
     	      changes = true;
     	      break outer;
     	    }
     	  }	
-    	  if (!deleteSame && modelSource.equals(modelTarger) && !modelSource.getName().equals(modelTarger.getName())) {
-      	    entrySource.setValue(entrySource.getKey().getBuilder().index(modelTarger.getIndex()).build());
-      	    if (!entrySource.getKey().isRootContext()) {
+    	  if (modelSource.equals(modelTarger) && !modelSource.getName().equals(modelTarger.getName())) {
+    	    LOG.debug("Found same model for model: {}. But with different index. Adjusting the index.", modelSource.getId());  
+    	    contextSource.getBuilder().index(modelTarger.getIndex());
+      	    if (!contextSource.isRootContext()) {
     	      changes = true;
     	      break outer;
     	    }
       	  }	
-    	  if (deleteSame && modelSource.equals(modelTarger) && modelSource.getName().equals(modelTarger.getName())) {
-    	    iterator.remove(); 
-    	    continue outer;
-    	  }
         }        
 	  }  
-	  if (deleteSame) {
-		for (Model sourceModel : source.values()) {
-		  target.put(sourceModel.getId(), sourceModel);
-		}  
-		break;  
-	  }
 	  if (!changes) {
-	    deleteSame = true; 	  
+	    break;  
+	  }
+    }	
+	for (ModelContext sourceModelContext : source) {
+	  Model model = sourceModelContext.getBuilder().build();
+	  if (!target.containsKey(model.getId())) {
+	    target.put(model.getId(), model);
 	  }
     }
   }

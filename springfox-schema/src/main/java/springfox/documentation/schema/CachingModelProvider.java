@@ -28,16 +28,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
-import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Lists.newArrayList;
 
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
 @Qualifier("cachedModels")
 public class CachingModelProvider implements ModelProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingModelProvider.class);
-  private final LoadingCache<ModelContext, Map<ModelContext, Model>> cache;
+  private final LoadingCache<ModelContext, List<ModelContext>> cache;
   private final ModelProvider delegate;
 
   @Autowired
@@ -47,20 +47,20 @@ public class CachingModelProvider implements ModelProvider {
         .maximumSize(1000)
         .expireAfterWrite(24, TimeUnit.HOURS)
         .build(
-            new CacheLoader<ModelContext, Map<ModelContext, Model>>() {
-              public Map<ModelContext, Model> load(ModelContext key) {
+            new CacheLoader<ModelContext, List<ModelContext>>() {
+              public List<ModelContext> load(ModelContext key) {
                 return delegate.modelsFor(key);
               }
             });
   }
 
   @Override
-  public Map<ModelContext, Model> modelsFor(ModelContext modelContext) {
+  public List<ModelContext> modelsFor(ModelContext modelContext) {
     try {
       return cache.get(modelContext);
     } catch (Exception e) {
       LOGGER.warn("Failed to get the model for -> {}. {}", modelContext.description(), e.getMessage());
-      return newHashMap();
+      return newArrayList();
     }
   }
 }

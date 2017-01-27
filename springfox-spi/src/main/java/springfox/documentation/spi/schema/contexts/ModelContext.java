@@ -73,6 +73,16 @@ public class ModelContext {
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
     this.ignorableTypes = parentContext.ignorableTypes;
   }
+  
+  ModelContext(ModelContext parentContext, ResolvedType input, ModelBuilder modelBuilder) {
+      this.parentContext = parentContext;
+      this.type = input;
+      this.returnType = parentContext.isReturnType();
+      this.documentationType = parentContext.getDocumentationType();
+      this.modelBuilder = modelBuilder;
+      this.alternateTypeProvider = parentContext.alternateTypeProvider;
+      this.ignorableTypes = parentContext.ignorableTypes;
+    }
 
   /**
    * @return type behind this context
@@ -172,6 +182,16 @@ public class ModelContext {
   public static ModelContext fromParent(ModelContext context, ResolvedType input) {
     return new ModelContext(context, input);
   }
+  
+  /**
+   * Convenience method to provide an new context for an input parameter with the same ModelBuilder
+   *
+   * @param input - context for given input
+   * @return new context based on parent context for a given input
+   */
+  public static ModelContext copy(ModelContext context, ResolvedType input) {
+    return new ModelContext(context, input, context.getBuilder());
+  }
 
   /**
    * Answers the question, has the given type been processed?
@@ -236,7 +256,6 @@ public class ModelContext {
     return Objects.equal(type, that.type) &&
         Objects.equal(documentationType, that.documentationType) &&
         Objects.equal(returnType, that.returnType) &&
-        Objects.equal(modelBuilder.build(), that.modelBuilder.build()) &&
         Objects.equal(namingStrategy(), that.namingStrategy());
 
   }
@@ -250,7 +269,7 @@ public class ModelContext {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(type, documentationType, returnType, modelBuilder.build(), namingStrategy());
+    return Objects.hashCode(type, documentationType, returnType, namingStrategy());
   }
 
   public String description() {

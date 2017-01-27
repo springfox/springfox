@@ -208,16 +208,16 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       ModelContext givenContext) {
 
     List<ModelProperty> properties = newArrayList();
+    ModelContext modelContext = ModelContext.fromParent(givenContext, type);
     if (member instanceof AnnotatedMethod) {
       properties.addAll(findAccessorMethod(type, member)
-          .transform(propertyFromBean(givenContext, jacksonProperty))
+          .transform(propertyFromBean(modelContext, jacksonProperty))
           .or(new ArrayList<ModelProperty>()));
     } else if (member instanceof AnnotatedField) {
       properties.addAll(findField(type, jacksonProperty.getInternalName())
-          .transform(propertyFromField(givenContext, jacksonProperty))
+          .transform(propertyFromField(modelContext, jacksonProperty))
           .or(new ArrayList<ModelProperty>()));
     } else if (member instanceof AnnotatedParameter) {
-      ModelContext modelContext = ModelContext.fromParent(givenContext, type);
       properties.addAll(fromFactoryMethod(type, jacksonProperty, (AnnotatedParameter) member, modelContext));
     }
     return from(properties).filter(hiddenProperties()).toList();

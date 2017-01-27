@@ -22,6 +22,9 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +36,10 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-import static com.google.common.collect.Maps.*;
+import static com.google.common.base.Predicates.not;
+import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -64,33 +68,27 @@ public class DefaultModelProvider implements ModelProvider {
   }
 
   @Override
-  public Map<ModelContext, Model> modelsFor(ModelContext modelContext) {
-    ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
-    Map<ModelContext, Model> models = newHashMap();
-    if (isContainerType(propertiesHost)
-        || isMapType(propertiesHost)
-        || propertiesHost.getErasedType().isEnum()
-        || isBaseType(propertiesHost)
-        || modelContext.hasSeenBefore(propertiesHost)) {
-      LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
-          + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
-      return models;
+  public List<ModelContext> modelsFor(ModelContext modelContext) {
+    List<ModelContext> modelContexts = newArrayList();
+    if (shouldIgnore(modelContext)) {
+      return modelContexts;    
     }
-    for (ModelContext parentContext : dependencyProvider.dependentModels(modelContext)) {
+    for (ModelContext parentContext : FluentIterable.from(dependencyProvider.dependentModels(modelContext)).filter(shouldIgnore()).toList()) {
       Optional<Model> model = Optional.of(modelBuilder(parentContext)).or(mapModel(parentContext, parentContext.resolvedType(resolver)));
       if (model.isPresent()) {
-        models.put(parentContext, model.get());
+          modelContexts.add(parentContext);
         LOG.debug("Generated parameter model id: {}, name: {}, schema: {} models",
           model.get().getId(),
           model.get().getName());
-      }
-    } 
-    models.put(modelContext, modelBuilder(modelContext));
-    return models;
+      }    
+    }
+    modelBuilder(modelContext);
+    modelContexts.add(modelContext);
+    return modelContexts;
   }
 
   private Model modelBuilder(ModelContext modelContext) {
-	ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
+    ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
     String typeName = typeNameExtractor.typeName(ModelContext.fromParent(modelContext, propertiesHost));
     modelContext.getBuilder()
         .id(typeName)
@@ -123,4 +121,28 @@ public class DefaultModelProvider implements ModelProvider {
     }
     return Optional.absent();
   }
+  
+  private Predicate<ModelContext> shouldIgnore() {
+      return new Predicate<ModelContext>() {
+        @Override
+        public boolean apply(ModelContext input) {
+          return shouldIgnore(input);       
+        }      
+      };
+    }
+  
+  private boolean shouldIgnore(ModelContext context) {
+    ResolvedType propertiesHost = context.alternateFor(context.resolvedType(resolver));
+    if (isContainerType(propertiesHost)
+        || isMapType(propertiesHost)
+        || propertiesHost.getErasedType().isEnum()
+        || isBaseType(propertiesHost)
+        || context.hasSeenBefore(propertiesHost)) {
+      LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
+          + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));  
+      return true;
+    }
+    return false; 
+  }
+     
 }

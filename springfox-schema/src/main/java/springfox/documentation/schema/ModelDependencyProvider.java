@@ -21,9 +21,9 @@ package springfox.documentation.schema;
 import springfox.documentation.annotations.Cacheable;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
-import java.util.Set;
+import java.util.List;
 
 public interface ModelDependencyProvider {
   @Cacheable(value = "modelDependencies")
-  Set<ModelContext> dependentModels(ModelContext modelContext);
+  List<ModelContext> dependentModels(ModelContext modelContext);
 }
