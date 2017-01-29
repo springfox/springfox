@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.google.common.base.Predicates.not;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;

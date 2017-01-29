@@ -45,6 +45,7 @@ class ModelPropertyBuilderSpec extends Specification {
       'required'          | true                                  | 'required'
       'readOnly'          | true                                  | 'readOnly'
       'isHidden'          | true                                  | 'hidden'
+      'pattern'           | 'pattern'                             | 'pattern' 
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
       'example'           | 'example1'                            | 'example'
   }
@@ -67,6 +68,7 @@ class ModelPropertyBuilderSpec extends Specification {
       'type'              | new TypeResolver().resolve(String)    | 'type'
       'qualifiedType'     | 'com.Model1'                          | 'qualifiedType'
       'description'       | 'model1 desc'                         | 'description'
+      'pattern'           | 'pattern'                             | 'pattern'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
       'example'           | 'example1'                            | 'example'
   }

@@ -38,6 +38,7 @@ class ModelBuilderSpec extends Specification {
       builderMethod   | value                                 | property
       'id'            | 'model1'                              | 'id'
       'name'          | 'model1'                              | 'name'
+      'index'         | 0                                     | 'index'
       'qualifiedType' | 'com.Model1'                          | 'qualifiedType'
       'description'   | 'model1 desc'                         | 'description'
       'baseModel'     | 'baseModel1'                          | 'baseModel'
@@ -63,6 +64,7 @@ class ModelBuilderSpec extends Specification {
       builderMethod   | value                                 | property
       'id'            | 'model1'                              | 'id'
       'name'          | 'model1'                              | 'name'
+      'index'         | 0                                     | 'index'
       'qualifiedType' | 'com.Model1'                          | 'qualifiedType'
       'description'   | 'model1 desc'                         | 'description'
       'baseModel'     | 'baseModel1'                          | 'baseModel'
@@ -71,5 +73,26 @@ class ModelBuilderSpec extends Specification {
       'subTypes'      | ["String"]                            | 'subTypes'
       'properties'    | [p1: Mock(ModelProperty)]             | 'properties'
       'example'       | 'example1'                            | 'example'
+  }
+  
+  def "Setting index propertie change .id() and .name() methods"() {
+    given:
+      def sut = new ModelBuilder()
+    when:
+      sut.id = id
+      sut.name = name
+    and:
+      sut.index = index
+    
+      def built = sut.build()
+    then:
+      sut.build().getId() == expId
+      sut.build().getName() == expName
+
+    where:
+      id     | name   | index | expId    | expName 
+      "Test" | "Test" | 0     | "Test"   | "Test"
+      "Test" | "Test" | null  | "Test"   | "Test"
+      "Test" | "Test" | 1     | "Test_1" | "Test_1"
   }
 }

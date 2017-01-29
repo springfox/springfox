@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import spock.lang.Specification
+import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ResolvedMethodParameter
 
 class ResolvedMethodParameterSpec extends Specification {
@@ -36,12 +37,19 @@ class ResolvedMethodParameterSpec extends Specification {
       methodParameter.parameterIndex >> 1
       methodParameter.parameterAnnotations >> []
     when:
-      def sut = new ResolvedMethodParameter("defaultName", methodParameter, resolved)
+      def sut1 = new ResolvedMethodParameter("defaultName", methodParameter, resolved)
+      def sut2 = new ResolvedMethodParameter(resolved)
     then:
-      sut.parameterIndex == 1
-      !sut.hasParameterAnnotations()
-      sut.parameterType == resolved
-      sut.defaultName().orNull() == "defaultName"
+      sut1.parameterIndex == 1
+      sut1.returnType == false
+      !sut1.hasParameterAnnotations()
+      sut1.parameterType == resolved
+      sut1.defaultName().orNull() == "defaultName"
+      sut2.parameterIndex == 0
+      sut2.returnType == true
+      !sut2.hasParameterAnnotations()
+      sut2.parameterType == resolved
+      sut2.defaultName().orNull() == ""
   }
 
   def "Finds annotations" () {
@@ -55,6 +63,7 @@ class ResolvedMethodParameterSpec extends Specification {
       def sut = new ResolvedMethodParameter("defaultName", methodParameter, resolved)
     then:
       sut.parameterIndex == 1
+      sut.returnType == false
       sut.hasParameterAnnotations()
       sut.hasParameterAnnotation(RequestParam)
       sut.findAnnotation(RequestParam).isPresent()
@@ -100,5 +109,37 @@ class ResolvedMethodParameterSpec extends Specification {
       sutAnnotated.hasParameterAnnotations()
       sutAnnotated.hasParameterAnnotation(RequestBody)
       sutAnnotated.findAnnotation(RequestBody).isPresent()
+  }
+  
+  def "Class .equals() and .hashCode() test" () {
+    given:  
+      TypeResolver resolver = new TypeResolver()
+      
+      def methodParameter1 = Mock(MethodParameter)
+      def methodParameter2 = Mock(MethodParameter)
+    and:
+      methodParameter1.parameterIndex >> 1
+      methodParameter1.parameterAnnotations >> []
+      methodParameter2.parameterIndex >> index
+      methodParameter2.parameterAnnotations >> annotations
+    and:
+      def sut = new ResolvedMethodParameter("defaultName", methodParameter1, resolver.resolve(String))
+      def sutTest = (returnType)?new ResolvedMethodParameter(resolver.resolve(type)):new ResolvedMethodParameter(defaultName, methodParameter2, resolver.resolve(type))
+    expect:
+      sut.equals(sutTest) == expectedEquality
+      sut.equals(sut)
+      !sut.equals(null)
+      !sut.equals(new Object())
+    and:
+      (sut.hashCode() == sutTest.hashCode()) == expectedEquality
+      sut.hashCode() == sut.hashCode()
+    where:
+      index | returnType | annotations                               | defaultName    | type    | expectedEquality
+      1     | false      | []                                        | "defaultName"  | String  | true
+      2     | false      | []                                        | "defaultName"  | Integer | false
+      0     | true       | []                                        | "defaultName"  | Double  | false
+      1     | false      | [[required: { -> true }] as RequestParam] | "defaultName"  | String  | false
+      1     | false      | []                                        | "defaultName1" | String  | false
+      1     | false      | []                                        | "defaultName"  | Double  | false
   }
 }

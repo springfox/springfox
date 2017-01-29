@@ -121,7 +121,7 @@ public class ModelProperty {
   @Override
   public int hashCode() {
     return Objects.hashCode(name, type, qualifiedType, position, required, isHidden, 
-                            readOnly, description, allowableValues, modelRefFactory.apply(type), example, pattern);
+                            readOnly, description, allowableValues, getModelRef(), example, pattern);
   }
   
   @Override
@@ -135,7 +135,7 @@ public class ModelProperty {
     }
 
     ModelProperty that = (ModelProperty) o;
-
+    
     return Objects.equal(name, that.name) &&
         Objects.equal(type, that.type) &&
         Objects.equal(qualifiedType, that.qualifiedType) &&
@@ -145,7 +145,7 @@ public class ModelProperty {
         Objects.equal(readOnly, that.readOnly) &&
         Objects.equal(description, that.description) &&
         Objects.equal(allowableValues, that.allowableValues) &&
-        Objects.equal(modelRefFactory.apply(type), that.getModelRef()) &&
+        Objects.equal(getModelRef(), that.getModelRef()) &&
         Objects.equal(example, that.example) &&
         Objects.equal(pattern, that.pattern);
   }

@@ -71,7 +71,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
       return Optional.<ModelReference>of(
           new ModelRef(
-        	  addModelIndex(typeName),
+              addModelIndex(typeName),
               apply(collectionElementType),
               allowableValues(collectionElementType)));
     }
@@ -79,10 +79,10 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
   }
   
   private String addModelIndex(String name) {
-	Integer index = parentContext.getBuilder().build().getIndex();
-	if (index != null && index > 0) {
-	  name += "_" + index;
-	}
-	return name;
+    Integer index = parentContext.getBuilder().build().getIndex();
+    if (index != null && index > 0) {
+      name += "_" + index;
+    }
+    return name;
   }
 }
